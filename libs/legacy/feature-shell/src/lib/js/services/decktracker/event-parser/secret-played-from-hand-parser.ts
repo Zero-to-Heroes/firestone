@@ -3,8 +3,10 @@ import { BoardSecret, DeckCard, DeckState, GameState, ShortCard, ShortCardWithTu
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { COUNTERSPELLS } from '../../hs-utils';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { SecretConfigService } from '../secret-config.service';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
+import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -13,6 +15,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly secretConfig: SecretConfigService,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -56,9 +59,13 @@ export class SecretPlayedFromHandParser implements EventParser {
 		} as DeckCard);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
-		const handAfterCardsRemembered = isCardCountered
-			? newHand
-			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+		const handAfterCardsRemembered = rememberCardsInHand(
+			cardId,
+			isCardCountered,
+			newHand,
+			this.helper,
+			this.allCards,
+		);
 
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
@@ -114,8 +121,19 @@ export class SecretPlayedFromHandParser implements EventParser {
 					] as readonly ShortCardWithTurn[],
 			  });
 
+		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
+			cardWithZone.cardId,
+			cardWithZone.entityId,
+			isCardCountered,
+			deckAfterSpecialCaseUpdate,
+			!isPlayer ? currentState.playerDeck : currentState.opponentDeck,
+			this.allCards,
+			this.helper,
+			this.i18n,
+		);
 		return currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,
+			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeckAfterSpecialCaseUpdate,
 			cardsPlayedThisMatch: isCardCountered
 				? currentState.cardsPlayedThisMatch
 				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),

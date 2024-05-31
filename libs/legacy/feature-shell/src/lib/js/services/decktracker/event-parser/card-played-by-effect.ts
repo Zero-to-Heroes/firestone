@@ -3,8 +3,8 @@ import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
-	battlecryGlobalEffectCards,
 	COUNTERSPELLS,
+	battlecryGlobalEffectCards,
 	deathrattleGlobalEffectCards,
 	globalEffectCards,
 } from '../../hs-utils';
@@ -100,9 +100,16 @@ export class CardPlayedByEffectParser implements EventParser {
 			globalEffects: newGlobalEffects,
 		} as DeckState);
 		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
-		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
-			? [newPlayerDeck, opponentDeck]
-			: modifyDecksForSpecialCards(cardId, newPlayerDeck, opponentDeck, this.allCards, this.i18n);
+		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
+			cardId,
+			entityId,
+			isCardCountered,
+			newPlayerDeck,
+			opponentDeck,
+			this.allCards,
+			this.helper,
+			this.i18n,
+		);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,

@@ -181,13 +181,16 @@ export class CardPlayedFromHandParser implements EventParser {
 			}
 		}
 
-		const handAfterCardsRemembered = isCardCountered
-			? newHand
-			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+		const handAfterCardsRemembered = rememberCardsInHand(
+			cardId,
+			isCardCountered,
+			newHand,
+			this.helper,
+			this.allCards,
+		);
 		const handAfterCardsLinks = isCardCountered
 			? handAfterCardsRemembered
 			: processCardLinks(cardToAdd, handAfterCardsRemembered, this.helper, this.allCards);
-
 		const hardAfterGuessedInfo = addGuessedInfo(cardWithZone, handAfterCardsLinks, this.allCards);
 
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
@@ -227,9 +230,16 @@ export class CardPlayedFromHandParser implements EventParser {
 			turn: +currentState.currentTurn,
 			effectiveCost: gameEvent.additionalData.cost,
 		};
-		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
-			? [newPlayerDeck, opponentDeck]
-			: modifyDecksForSpecialCards(cardId, newPlayerDeck, opponentDeck, this.allCards, this.i18n);
+		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
+			cardToAdd.cardId,
+			cardToAdd.entityId,
+			isCardCountered,
+			newPlayerDeck,
+			opponentDeck,
+			this.allCards,
+			this.helper,
+			this.i18n,
+		);
 		const finalPlayerDeck = playerDeckAfterSpecialCaseUpdate.update({
 			cardsPlayedThisMatch: [
 				...newPlayerDeck.cardsPlayedThisMatch,
@@ -266,24 +276,30 @@ export class CardPlayedFromHandParser implements EventParser {
 
 export const rememberCardsInHand = (
 	cardId: string,
+	isCardCountered: boolean,
 	hand: readonly DeckCard[],
 	helper: DeckManipulationHelper,
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
-	const commanderSivaraCards = hand.filter((c) => c.cardId === CardIds.CommanderSivara_TSC_087);
-	const refCard = allCards.getCard(cardId);
 	let handAfterCardsRemembered = hand;
-	if (refCard?.type === 'Spell' && !!commanderSivaraCards.length) {
-		const newSivaraCards = commanderSivaraCards.map((c) =>
-			c.update({
-				// Only keep the first 3
-				relatedCardIds: [...c.relatedCardIds, cardId].slice(0, 3),
-			}),
-		);
-		for (const newCard of newSivaraCards) {
-			handAfterCardsRemembered = helper.replaceCardInZone(handAfterCardsRemembered, newCard);
+	if (!isCardCountered) {
+		const refCard = allCards.getCard(cardId);
+		if (refCard?.type === 'Spell') {
+			const commanderSivaraCards = hand.filter((c) => c.cardId === CardIds.CommanderSivara_TSC_087);
+			if (!!commanderSivaraCards.length) {
+				const newSivaraCards = commanderSivaraCards.map((c) =>
+					c.update({
+						// Only keep the first 3
+						relatedCardIds: [...c.relatedCardIds, cardId].slice(0, 3),
+					}),
+				);
+				for (const newCard of newSivaraCards) {
+					handAfterCardsRemembered = helper.replaceCardInZone(handAfterCardsRemembered, newCard);
+				}
+			}
 		}
 	}
+
 	return handAfterCardsRemembered;
 };
 

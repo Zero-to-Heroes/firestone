@@ -164,7 +164,7 @@ export class CreateCardInDeckParser implements EventParser {
 				// 	'setting related card ids',
 				// 	deck.hand.map((c) => c.cardId),
 				// );
-				return deck.hand.map((c) => c.cardId);
+				return deck.hand.map((c) => c.cardId ?? `${c.entityId}`);
 			default:
 				return existingCardIds ?? [];
 		}

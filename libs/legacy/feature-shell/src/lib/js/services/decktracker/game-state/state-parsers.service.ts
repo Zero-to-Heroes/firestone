@@ -272,11 +272,11 @@ export class GameStateParsersService {
 				new ListCardsPlayedFromInitialDeckParser(this.helper),
 			],
 			[GameEvent.SECRET_PLAYED]: [
-				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
+				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 				new ListCardsPlayedFromInitialDeckParser(this.helper),
 			],
 			[GameEvent.SECRET_PUT_IN_PLAY]: [
-				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
+				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 				new ListCardsPlayedFromInitialDeckParser(this.helper),
 			],
 			[GameEvent.SECRET_TRIGGERED]: [new SecretTriggeredParser(this.helper)],

@@ -45,9 +45,12 @@ export class PassiveTriggeredParser implements EventParser {
 
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			cardId,
+			entityId,
+			false,
 			newPlayerDeck,
 			opponentDeck,
 			this.allCards,
+			this.helper,
 			this.i18n,
 		);
 		if (playerDeckAfterSpecialCaseUpdate !== newPlayerDeck || opponentDeckAfterSpecialCaseUpdate !== opponentDeck) {

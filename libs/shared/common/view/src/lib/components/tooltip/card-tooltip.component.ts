@@ -270,21 +270,26 @@ export class CardTooltipComponent
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				([relatedCardIds, localized, isBgs, { locale, highRes }]) => {
-					return relatedCardIds.map((cardId) => {
-						const image = !!cardId
-							? localized
-								? this.i18n.getCardImage(cardId, {
-										isBgs: isBgs,
-										isHighRes: highRes,
-								  })
-								: this.i18n.getNonLocalizedCardImage(cardId)
-							: null;
-						return {
-							cardId: cardId,
-							image: image,
-							cardType: 'NORMAL',
-						};
-					});
+					return (
+						relatedCardIds
+							// Remove entity ids (eg in Fizzle's Snapshot card)
+							.filter((cardId) => isNaN(parseInt(cardId)))
+							.map((cardId) => {
+								const image = !!cardId
+									? localized
+										? this.i18n.getCardImage(cardId, {
+												isBgs: isBgs,
+												isHighRes: highRes,
+										  })
+										: this.i18n.getNonLocalizedCardImage(cardId)
+									: null;
+								return {
+									cardId: cardId,
+									image: image,
+									cardType: 'NORMAL',
+								};
+							})
+					);
 				},
 				null,
 				0,

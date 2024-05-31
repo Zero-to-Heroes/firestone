@@ -3,73 +3,105 @@ import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export const modifyDecksForSpecialCards = (
 	cardId: string,
+	entityId: number,
+	isCardCountered: boolean,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
 	allCards: CardsFacadeService,
+	helper: DeckManipulationHelper,
 	i18n: LocalizationFacadeService,
 ): [DeckState, DeckState] => {
-	switch (cardId) {
-		case CardIds.CelestialAlignment:
-			return [handleCelestialAlignment(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.Embiggen:
-			return [handleEmbiggen(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.DeckOfLunacy:
-			return [handleDeckOfLunacy(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.TheAzeriteMurlocToken_DEEP_999t5:
-			return [handleTheAzeriteMurloc(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.FrizzKindleroost:
-			return [handleFrizzKindleroost(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.TheFiresOfZinAzshari:
-			return [handleFiresOfZinAzshari(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.IncantersFlow:
-			return [handleIncantersFlow(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.LorthemarTheron_RLK_593:
-			return [handleLorthemarTheron(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.LunasPocketGalaxy:
-			return [handleLunasPocketGalaxy(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.PrinceLiam:
-			return [handlePrinceLiam(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.AldorAttendant:
-		case CardIds.LordaeronAttendantToken:
-			return [handleLibram(deckState, allCards, i18n, 1), opponentDeckState];
-		case CardIds.AldorTruthseeker:
-		case CardIds.RadiantLightspawn:
-			return [handleLibram(deckState, allCards, i18n, 2), opponentDeckState];
-		case CardIds.DeckOfChaos:
-			return [handleDeckOfChaos(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.ExploreUngoro:
-			return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.HemetJungleHunter:
-			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.LadyPrestor_SW_078:
-			return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.ArchVillainRafaam_CORE_DAL_422:
-		case CardIds.ArchVillainRafaam_DAL_422:
-		case CardIds.UnearthedRaptor_GoldenMonkeyToken:
-			return [handleArchVillainRafaam(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.OopsAllSpellsTavernBrawl:
-			return [handleOoopsAllSpells(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.ScepterOfSummoning:
-			console.log('[passive] will apply scepter of summoning for', deckState.deck.length, deckState.hero?.cardId);
-			return [handleScepterOfSummoning(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.SkulkingGeist_CORE_ICC_701:
-		case CardIds.SkulkingGeist_ICC_701:
-			return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.Steamcleaner:
-			return [
-				handleSteamcleaner(deckState, allCards, i18n),
-				handleSteamcleaner(opponentDeckState, allCards, i18n),
-			];
-		case CardIds.UpgradedPackMule:
-			return [handleUpgradedPackMule(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.WyrmrestPurifier:
-			return [handleWyrmrestPurifier(deckState, allCards, i18n), opponentDeckState];
-		default:
-			return [deckState, opponentDeckState];
+	deckState = trackFizzle(deckState, cardId, entityId, helper);
+	if (!isCardCountered) {
+		switch (cardId) {
+			case CardIds.CelestialAlignment:
+				return [handleCelestialAlignment(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.Embiggen:
+				return [handleEmbiggen(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.DeckOfLunacy:
+				return [handleDeckOfLunacy(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.TheAzeriteMurlocToken_DEEP_999t5:
+				return [handleTheAzeriteMurloc(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.FrizzKindleroost:
+				return [handleFrizzKindleroost(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.TheFiresOfZinAzshari:
+				return [handleFiresOfZinAzshari(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.IncantersFlow:
+				return [handleIncantersFlow(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.LorthemarTheron_RLK_593:
+				return [handleLorthemarTheron(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.LunasPocketGalaxy:
+				return [handleLunasPocketGalaxy(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.PrinceLiam:
+				return [handlePrinceLiam(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.AldorAttendant:
+			case CardIds.LordaeronAttendantToken:
+				return [handleLibram(deckState, allCards, i18n, 1), opponentDeckState];
+			case CardIds.AldorTruthseeker:
+			case CardIds.RadiantLightspawn:
+				return [handleLibram(deckState, allCards, i18n, 2), opponentDeckState];
+			case CardIds.DeckOfChaos:
+				return [handleDeckOfChaos(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.ExploreUngoro:
+				return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.HemetJungleHunter:
+				return [handleHemet(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.LadyPrestor_SW_078:
+				return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.ArchVillainRafaam_CORE_DAL_422:
+			case CardIds.ArchVillainRafaam_DAL_422:
+			case CardIds.UnearthedRaptor_GoldenMonkeyToken:
+				return [handleArchVillainRafaam(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.OopsAllSpellsTavernBrawl:
+				return [handleOoopsAllSpells(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.ScepterOfSummoning:
+				return [handleScepterOfSummoning(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.SkulkingGeist_CORE_ICC_701:
+			case CardIds.SkulkingGeist_ICC_701:
+				return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.Steamcleaner:
+				return [
+					handleSteamcleaner(deckState, allCards, i18n),
+					handleSteamcleaner(opponentDeckState, allCards, i18n),
+				];
+			case CardIds.UpgradedPackMule:
+				return [handleUpgradedPackMule(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.WyrmrestPurifier:
+				return [handleWyrmrestPurifier(deckState, allCards, i18n), opponentDeckState];
+			default:
+				return [deckState, opponentDeckState];
+		}
 	}
+	return [deckState, opponentDeckState];
+};
+
+const trackFizzle = (
+	deckState: DeckState,
+	cardId: string,
+	entityId: number,
+	helper: DeckManipulationHelper,
+): DeckState => {
+	const snapshots = deckState.deck.filter((card) => card.cardId === CardIds.PhotographerFizzle_FizzlesSnapshotToken);
+	if (!snapshots.length) {
+		return deckState;
+	}
+
+	let updatedDeck = deckState.deck;
+	for (const snapshot of snapshots) {
+		if (snapshot.relatedCardIds?.includes(`${entityId}`)) {
+			const updatedSnapshot = snapshot.update({
+				relatedCardIds: snapshot.relatedCardIds.map((id) => (id === `${entityId}` ? cardId : id)),
+			});
+			updatedDeck = helper.replaceCardInZone(updatedDeck, updatedSnapshot);
+		}
+	}
+	return deckState.update({
+		deck: updatedDeck,
+	});
 };
 
 // Some cards don't trigger automatically when played

@@ -49,9 +49,13 @@ export class QuestPlayedFromHandParser implements EventParser {
 		} as DeckCard);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
-		const handAfterCardsRemembered = isCardCountered
-			? newHand
-			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+		const handAfterCardsRemembered = rememberCardsInHand(
+			cardId,
+			isCardCountered,
+			newHand,
+			this.helper,
+			this.allCards,
+		);
 
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
