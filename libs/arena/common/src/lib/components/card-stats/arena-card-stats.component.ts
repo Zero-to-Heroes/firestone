@@ -249,7 +249,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		]).pipe(
 			filter(([stats]) => !!stats),
 			this.mapData(
-				([stats, [playerClass]]) =>
+				([stats, playerClass]) =>
 					stats?.stats
 						?.filter((s) => !playerClass?.length || playerClass === 'all' || s.playerClass === playerClass)
 						?.map((s) => s.totalGames)
