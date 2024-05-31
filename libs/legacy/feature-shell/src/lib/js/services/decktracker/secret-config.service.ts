@@ -72,7 +72,11 @@ export class SecretConfigService {
 		}
 
 		if (metadata.gameType === GameType.GT_ARENA) {
-			return 'arena';
+			if (!!creatorCardId?.length) {
+				return 'arena';
+			}
+			// Non-generated cards come from the draft pool, which is a curated list
+			return 'arena-deckbuilding';
 		}
 		if (metadata.gameType === GameType.GT_PVPDR || metadata.gameType === GameType.GT_PVPDR_PAID) {
 			return 'duels';
