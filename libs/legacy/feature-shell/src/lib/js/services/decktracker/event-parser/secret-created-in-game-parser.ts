@@ -27,18 +27,34 @@ export class SecretCreatedInGameParser implements EventParser {
 		const secretClass: string = gameEvent.additionalData.playerClass;
 
 		const dbCard = this.cards.getCard(cardId);
-		const card = DeckCard.create({
-			cardId: cardId,
-			entityId: entityId,
-			cardName: this.i18n.getCardName(cardId, dbCard.name),
-			manaCost: dbCard.cost,
-			rarity: dbCard.rarity,
-			creatorCardId: creatorCardId,
+		const existingCard = deck.otherZone.find((c) => Math.abs(c.entityId) === entityId);
+		// console.debug(
+		// 	'[secret-created] existingCard',
+		// 	existingCard,
+		// 	entityId,
+		// 	deck.otherZone.map((c) => c.entityId),
+		// );
+		const card = (
+			existingCard ??
+			DeckCard.create({
+				cardId: cardId,
+				entityId: entityId,
+				cardName: this.i18n.getCardName(cardId, dbCard.name),
+				manaCost: dbCard.cost,
+				rarity: dbCard.rarity,
+			} as DeckCard)
+		).update({
 			zone: 'SECRET',
 			putIntoPlay: true,
-		} as DeckCard);
+			creatorCardId: creatorCardId,
+			temporaryCard: false,
+		});
+		// console.debug('[secret-created] card to add', card);
 		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, card);
+		const newOtherZone: readonly DeckCard[] = !existingCard
+			? this.helper.addSingleCardToZone(previousOtherZone, card)
+			: this.helper.replaceCardInZone(previousOtherZone, card);
+		// console.debug('[secret-created] newOtherZone', newOtherZone);
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
 			secretClass,
