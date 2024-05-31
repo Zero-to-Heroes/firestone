@@ -209,6 +209,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			playerDeckProvider,
 			opponentDeckProvider,
 		);
+		// console.debug('cardsToHighlight in getHighlightedCards', cardsToHighlight);
 		return cardsToHighlight.map((i) => ({
 			cardId: i.cardId,
 			playTiming: i.deckCard?.playTiming ?? 0,
@@ -259,8 +260,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
 			side === 'duels' ? side : 'opponent',
 		);
+		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const oppCard of allOpponentCards) {
-			if (selector(oppCard)) {
+			const selectorOutput = selector(oppCard);
+			oppCard.highlight = selectorOutput;
+			if (selectorOutput) {
+				// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
 				result.push(oppCard);
 			}
 		}
