@@ -6,7 +6,7 @@ import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } f
 import { distinctUntilChanged, map } from 'rxjs';
 // import { PreferencesService } from '@firestone/shared/common/service';
 
-const ARENA_CLASS_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/classes/%timePeriod%/overview.gz.json`;
+const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/classes/%timePeriod%/overview.gz.json`;
 
 @Injectable()
 export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStatsService> {

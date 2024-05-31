@@ -8,8 +8,8 @@ import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } f
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
 
-const ARENA_CARD_MATCH_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/cards/%timePeriod%/%context%.gz.json`;
-const ARENA_CARD_DRAFT_STATS_URL = `https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/api/arena/stats/draft/%timePeriod%/%context%.gz.json`;
+const ARENA_CARD_MATCH_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/cards/%timePeriod%/%context%.gz.json`;
+const ARENA_CARD_DRAFT_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/draft/%timePeriod%/%context%.gz.json`;
 
 export const ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD = 6;
 
