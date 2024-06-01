@@ -8,6 +8,7 @@ import { ILocalizationService, waitForReady } from '@firestone/shared/framework/
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
+import { BgsHeroSelectionTooltipComponent } from '../hero-selection/bgs-hero-selection-tooltip.component';
 import {
 	BattlegroundsTribeDetailsTooltipComponent,
 	BgsTribesImpactDetails,
@@ -47,6 +48,15 @@ import {
 							{{ tribesImpact }}
 						</div>
 					</div>
+					<div class="item info-container">
+						<div
+							class="info"
+							inlineSVG="assets/svg/info.svg"
+							cachedComponentTooltip
+							[componentType]="heroTooltipComponentType"
+							[componentInput]="_hero"
+						></div>
+					</div>
 				</div>
 			</div>
 			<div class="element achievements" *ngIf="showAchievementsOverlay$ | async">
@@ -69,10 +79,12 @@ import {
 export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tribeDetailsComponentType: ComponentType<BattlegroundsTribeDetailsTooltipComponent> =
 		BattlegroundsTribeDetailsTooltipComponent;
+	heroTooltipComponentType: ComponentType<BgsHeroSelectionTooltipComponent> = BgsHeroSelectionTooltipComponent;
 
 	showTierOverlay$: Observable<boolean>;
 	showAchievementsOverlay$: Observable<boolean>;
 
+	_hero: BgsMetaHeroStatTierItem;
 	achievementsToDisplay: readonly InternalAchievement[] = [];
 	tier: BgsHeroTier;
 	averagePosition: string;
@@ -84,6 +96,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 	freeUsesTooltip: string;
 
 	@Input() set hero(value: BgsMetaHeroStatTierItem) {
+		this._hero = value;
 		this.tier = value?.tier;
 		this.averagePosition = value?.averagePosition?.toFixed(2);
 		const tribesImpactValue = !value.tribesFilter?.length

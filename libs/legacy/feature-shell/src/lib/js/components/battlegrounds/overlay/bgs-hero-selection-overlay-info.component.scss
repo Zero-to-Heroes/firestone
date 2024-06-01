@@ -130,6 +130,13 @@
 	text-align: center;
 }
 
+.info-container {
+	.info {
+		width: 15px;
+		aspect-ratio: 1;
+	}
+}
+
 bgs-hero-stats-info-premium {
 	height: 2vh;
 	font-size: 13px;
