@@ -1,4 +1,4 @@
-import { CardClass } from '@firestone-hs/reference-data';
+import { CardClass, getWhizbangHeroesTemplateDeckId, isKnownTwistList } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, HeroCard } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -7,6 +7,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { GameEvent } from '../../../models/game-event';
 import { AiDeckService } from '../ai-deck-service.service';
 import { DeckHandlerService } from '../deck-handler.service';
+import { DeckParserService } from '../deck-parser.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -19,6 +20,7 @@ export class OpponentPlayerParser implements EventParser {
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly memory: MemoryInspectionService,
+		private readonly deckParser: DeckParserService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -38,11 +40,33 @@ export class OpponentPlayerParser implements EventParser {
 		// Total cards before setting the decklist
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
 
-		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
-		const aiDeck = shouldLoadDecklist
-			? await this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
+		const prefs = await this.prefs.getPreferences();
+		console.debug('[debug] opponentLoadAiDecklist', currentState.metadata);
+		let aiDeckString = prefs.opponentLoadAiDecklist
+			? (await this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId))
+					?.deckstring
 			: null;
-		const aiDeckString = aiDeck?.deckstring;
+		if (
+			aiDeckString == null &&
+			isKnownTwistList(currentState.metadata.scenarioId) &&
+			prefs.opponentLoadKnownDecklist
+		) {
+			const deckTemplateId = getWhizbangHeroesTemplateDeckId(
+				currentState.metadata.scenarioId,
+				gameEvent.opponentPlayer.CardID,
+			);
+			console.debug('[debug] deckTemplateId', deckTemplateId);
+			const templateDeck = !!deckTemplateId
+				? await this.deckParser.getTemplateDeck(
+						-deckTemplateId,
+						currentState.metadata.scenarioId,
+						currentState.metadata.gameType,
+						currentState.metadata.formatType,
+				  )
+				: null;
+			console.debug('[debug] templateDeck', templateDeck);
+			aiDeckString = templateDeck?.deckstring;
+		}
 
 		// No deckstring, so don't change anything
 		if (!aiDeckString) {

@@ -30,14 +30,14 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			<div class="zone-name-container" *ngIf="zoneName$ | async as zoneName" (mousedown)="toggleZone()">
 				<div class="zone-name">
 					<span>{{ zoneName }} ({{ cardsInZone$ | async }})</span>
-					<div *ngIf="showWarning$ | async" class="warning">
+					<!-- <div *ngIf="showWarning$ | async" class="warning">
 						<svg
 							helpTooltip="The actual cards in this deck are randomly chosen from all the cards in the list below"
 							[bindTooltipToGameWindow]="true"
 						>
 							<use xlink:href="assets/svg/sprite.svg#attention" />
 						</svg>
-					</div>
+					</div> -->
 				</div>
 				<i class="collapse-caret {{ (open$ | async) ? 'open' : 'close' }}">
 					<svg class="svg-icon-fill">

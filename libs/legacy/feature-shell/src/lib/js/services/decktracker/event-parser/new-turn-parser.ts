@@ -109,7 +109,6 @@ export const buildTurnTimings = (
 
 	const lastPlayerTurn = currentState.playerDeck.turnTimings[currentState.playerDeck.turnTimings.length - 1];
 	const lastOpponentTurn = currentState.opponentDeck.turnTimings[currentState.opponentDeck.turnTimings.length - 1];
-	console.debug('[turn-start] buildTurnTimings', lastPlayerTurn, lastOpponentTurn, currentState);
 	if (!isPlayerActive || isPlayerActiveInPreviousTurn) {
 		// Close the previous turn
 		if (lastPlayerTurn) {
@@ -142,6 +141,5 @@ export const buildTurnTimings = (
 			];
 		}
 	}
-	console.debug('[turn-start] built timings', playerTurns, opponentTurns);
 	return [playerTurns, opponentTurns];
 };

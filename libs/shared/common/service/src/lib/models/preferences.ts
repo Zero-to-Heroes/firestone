@@ -284,6 +284,7 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayPosition: { left: number; top: number };
 	readonly opponentLoadAiDecklist: boolean = true;
+	readonly opponentLoadKnownDecklist: boolean = true;
 
 	readonly secretsHelper: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

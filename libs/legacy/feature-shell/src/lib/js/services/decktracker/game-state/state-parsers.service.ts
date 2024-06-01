@@ -243,6 +243,7 @@ export class GameStateParsersService {
 					this.prefs,
 					this.i18n,
 					this.memory,
+					this.deckParser,
 				),
 			],
 			[GameEvent.OVERLOADED_CRYSTALS_CHANGED]: [new OverloadParser()],

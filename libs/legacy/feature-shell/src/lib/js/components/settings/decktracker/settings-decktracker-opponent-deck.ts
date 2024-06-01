@@ -38,6 +38,12 @@ import { CounterSetting } from './model';
 				></preference-toggle>
 				<preference-toggle
 					[ngClass]="{ disabled: !value.opponentTracker }"
+					field="opponentLoadKnownDecklist"
+					[label]="'settings.decktracker.opponent-deck.known-decklist-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.known-decklist-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					field="opponentLoadAiDecklist"
 					[label]="'settings.decktracker.opponent-deck.ai-decklist-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.ai-decklist-tooltip' | owTranslate"
