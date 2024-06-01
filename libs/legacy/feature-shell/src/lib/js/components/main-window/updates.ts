@@ -53,6 +53,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `The mulligan guide overlay has been revamped! It has more data, is presented in a clearer way, and lets you customize what kind of data it uses. You can choose the target Rank Bracket (Legend, Top 2k Legend, Diamond-Legend), whether to get the data vs All Classes or you current opponent's class (mostly useful when the sample size is low. And you can sort the cards based on Impact or Keep rate. Also, it has colors!`,
 							},
+							{
+								type: 'feature',
+								text: `Your opponent decklist is now automotically imported in Twist`,
+							},
 						],
 					},
 					{
@@ -93,6 +97,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where some highlights were not properly working for the opponent.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the "extra gold next turn" counter would still use some old values.`,
+							},
+							{
+								type: 'feature',
+								text: `The "extra gold next turn" counter should stop updating while in combat.`,
 							},
 						],
 					},
