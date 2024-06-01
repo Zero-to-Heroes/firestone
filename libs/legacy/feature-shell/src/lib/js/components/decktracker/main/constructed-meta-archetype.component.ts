@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
 import { AnalyticsService, CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaArchetypeDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-details';
@@ -61,9 +62,11 @@ export class ConstructedMetaArchetypeComponent {
 	@Input() set archetype(value: EnhancedArchetypeStat) {
 		console.debug('setting archetype', value);
 		this.id = value.id;
-		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value.heroCardClass}.png`;
+		this.classIcon =
+			overrideClassIcon(value, this.allCards) ??
+			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value.heroCardClass}.png`;
 		this.classTooltip = this.i18n.translateString(`global.class.${value.heroCardClass}`);
-		this.name = value.name;
+		this.name = overrideDeckName(value, this.allCards) ?? value.name;
 		this.winrate = buildPercents(value.winrate);
 		this.totalGames = value.totalGames.toLocaleString(this.i18n.formatCurrentLocale());
 		this.coreCards = buildCardVariations(value.coreCards, [], this.allCards);

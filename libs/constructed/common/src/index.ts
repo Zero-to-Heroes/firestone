@@ -8,6 +8,7 @@ export * from './lib/models/deck-summary';
 export * from './lib/models/mulligan-advice';
 export * from './lib/services/constructed-archetype.service';
 export * from './lib/services/constructed-meta-decks-state-builder.service';
+export * from './lib/services/constructed-meta-stats-utils';
 export * from './lib/services/constructed-mulligan-guide-guardian.service';
 export * from './lib/services/constructed-mulligan-guide.service';
 export * from './lib/services/constructed-navigation.service';
