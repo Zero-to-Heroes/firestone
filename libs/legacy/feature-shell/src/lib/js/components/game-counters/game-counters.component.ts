@@ -140,6 +140,10 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				definition.prefValue$ ?? of(null),
 			]).pipe(
 				filter(([bgState, deckState, prefValue]) => !!bgState && !!deckState),
+				filter(
+					([bgState, deckState, prefValue]) =>
+						!definition.filter || definition.filter({ bgState, deckState }),
+				),
 				map(([bgState, deckState, prefValue]) => ({
 					counterInfo: definition.select({ deckState, bgState }),
 					prefValue: prefValue,

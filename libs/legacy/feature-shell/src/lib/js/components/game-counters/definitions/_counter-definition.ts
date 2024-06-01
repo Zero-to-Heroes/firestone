@@ -15,6 +15,7 @@ export interface CounterDefinition<U, T, P = any> {
 
 	select(state: U): T;
 	emit(info: T, prefValue?: P): NonFunctionProperties<CounterDefinition<U, T>>;
+	filter?(state: U): boolean;
 }
 
 // Use camelCase because it uses conventions to get the pref property names

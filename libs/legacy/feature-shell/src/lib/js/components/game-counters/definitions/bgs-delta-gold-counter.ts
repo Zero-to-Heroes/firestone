@@ -83,6 +83,10 @@ export class BgsGoldDeltaCounterDefinition
 		};
 	}
 
+	public filter(state: { deckState: GameState; bgState: BattlegroundsState }): boolean {
+		return state.bgState?.currentGame?.phase === 'recruit';
+	}
+
 	public emit(
 		input: {
 			extraGold: number;
