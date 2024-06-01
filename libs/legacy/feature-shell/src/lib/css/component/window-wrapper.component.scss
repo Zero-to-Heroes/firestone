@@ -46,8 +46,9 @@ body {
 	display: flex;
 	flex-direction: column;
 	// overflow: hidden;
-	background-size: 100%;
-	background-repeat: round;
+	// background-size: 100%;
+	background-size: cover;
+	// background-repeat: round;
 	background-image: var(--window-background-image);
 	outline: 1px solid var(--window-outline-color);
 	z-index: 1;
