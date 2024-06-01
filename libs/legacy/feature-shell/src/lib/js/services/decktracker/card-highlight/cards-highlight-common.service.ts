@@ -84,6 +84,7 @@ import {
 	pirate,
 	quickdraw,
 	race,
+	restoreHealth,
 	rush,
 	secret,
 	secretsTriggeredThisMatch,
@@ -453,6 +454,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.Assembly:
 			case CardIds.Assembly_Assembly:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.AuchenaiPhantasm:
+				return and(side(inputSide), or(inDeck, inHand), restoreHealth);
+			case CardIds.AuchenaiSoulpriestLegacy:
+			case CardIds.AuchenaiSoulpriestVanilla:
+				return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 			case CardIds.Aviana:
 			case CardIds.Aviana_WON_012:
 				return and(side(inputSide), or(inDeck, inHand), minion);
@@ -607,6 +613,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, neutral);
 			case CardIds.ClearancePromoter_TOY_390:
 				return and(side(inputSide), or(inHand, inDeck), spell);
+			case CardIds.ClericOfAnshe:
+				return highlightConditions(
+					and(side(inputSide), inDeck, spell),
+					and(side(inputSide), or(inDeck, inHand), restoreHealth),
+				);
 			case CardIds.ClericOfScales:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.ClickClocker:
@@ -661,6 +672,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.CreationProtocol:
 			case CardIds.CreationProtocol_CreationProtocolToken:
 				return and(side(inputSide), inDeck, minion);
+			case CardIds.CrystalStag:
+				return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 			case CardIds.CrushclawEnforcer:
 				return and(side(inputSide), inDeck, naga);
 			case CardIds.CrystalsmithCultist:
@@ -1648,6 +1661,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				return and(side(inputSide), inDeck, minion);
 			case CardIds.ShadowOfDemise:
 				return and(side(inputSide), or(inDeck, inHand), spell);
+			case CardIds.ShadowtouchedKvaldir_YOG_300:
+				return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 			case CardIds.ShadowVisions:
 				return and(side(inputSide), inDeck, spell);
 			case CardIds.SharkPuncher_WON_138:
