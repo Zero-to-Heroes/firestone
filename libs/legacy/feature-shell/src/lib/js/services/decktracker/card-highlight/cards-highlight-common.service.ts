@@ -1144,7 +1144,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			case CardIds.ItsRainingFin:
 				return and(side(inputSide), inDeck, murloc);
 			case CardIds.JaceDarkweaver:
-				return and(side(inputSide), spellPlayedThisMatch, spellSchool(SpellSchool.FEL));
+				return tooltip(and(side(inputSide), spellPlayedThisMatch, spellSchool(SpellSchool.FEL)));
 			case CardIds.JerryRigCarpenter:
 				return and(side(inputSide), inDeck, spell, chooseOne);
 			case CardIds.JewelOfNzoth:
