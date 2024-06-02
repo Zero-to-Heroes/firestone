@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -34,6 +35,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly prefs: PreferencesService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -63,9 +65,10 @@ export class ConstructedMetaArchetypeDetailsComponent
 					type: 'archetype',
 					archetypeId: stat.id,
 					name:
-						this.i18n.translateString(`archetype.${stat.name}`) === `archetype.${stat.name}`
+						overrideDeckName(stat, this.allCards) ??
+						(this.i18n.translateString(`archetype.${stat.name}`) === `archetype.${stat.name}`
 							? stat.name
-							: this.i18n.translateString(`archetype.${stat.name}`),
+							: this.i18n.translateString(`archetype.${stat.name}`)),
 					format: this.i18n.translateString(`global.format.${stat.format}`),
 					heroCardClass: stat.heroCardClass,
 					games: stat.totalGames,
@@ -74,6 +77,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 					cardsData: stat.cardsData.filter((c) => c.inStartingDeck > stat.totalGames / 50),
 					matchups: stat.matchupInfo,
 				};
+				console.debug('archetype', result);
 				return result;
 			}),
 		);

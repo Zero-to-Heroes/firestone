@@ -60,13 +60,13 @@ export class ConstructedMetaArchetypeComponent {
 	private id: number;
 
 	@Input() set archetype(value: EnhancedArchetypeStat) {
-		console.debug('setting archetype', value);
 		this.id = value.id;
 		this.classIcon =
 			overrideClassIcon(value, this.allCards) ??
 			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${value.heroCardClass}.png`;
 		this.classTooltip = this.i18n.translateString(`global.class.${value.heroCardClass}`);
 		this.name = overrideDeckName(value, this.allCards) ?? value.name;
+		console.debug('setting archetype', value, this.name, overrideDeckName(value, this.allCards));
 		this.winrate = buildPercents(value.winrate);
 		this.totalGames = value.totalGames.toLocaleString(this.i18n.formatCurrentLocale());
 		this.coreCards = buildCardVariations(value.coreCards, [], this.allCards);
