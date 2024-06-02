@@ -42,12 +42,12 @@ export class OpponentPlayerParser implements EventParser {
 
 		const prefs = await this.prefs.getPreferences();
 		console.debug('[debug] opponentLoadAiDecklist', currentState.metadata);
-		let aiDeckString = prefs.opponentLoadAiDecklist
+		let opponentDeckString = prefs.opponentLoadAiDecklist
 			? (await this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId))
 					?.deckstring
 			: null;
 		if (
-			aiDeckString == null &&
+			opponentDeckString == null &&
 			isKnownTwistList(currentState.metadata.scenarioId) &&
 			prefs.opponentLoadKnownDecklist
 		) {
@@ -65,11 +65,11 @@ export class OpponentPlayerParser implements EventParser {
 				  )
 				: null;
 			console.debug('[debug] templateDeck', templateDeck);
-			aiDeckString = templateDeck?.deckstring;
+			opponentDeckString = templateDeck?.deckstring;
 		}
 
 		// No deckstring, so don't change anything
-		if (!aiDeckString) {
+		if (!opponentDeckString) {
 			const newPlayerDeck = currentState.opponentDeck.update({
 				hero: newHero,
 			} as DeckState);
@@ -79,14 +79,14 @@ export class OpponentPlayerParser implements EventParser {
 			} as GameState);
 		}
 
-		console.log('[opponent-player] got AI deckstring', aiDeckString, currentState.metadata);
+		console.log('[opponent-player] got AI deckstring', opponentDeckString, currentState.metadata);
 		const board = await this.memory.getCurrentBoard();
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString), board);
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(opponentDeckString), board);
 
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can
 		let newDeck = decklist;
-		if (aiDeckString) {
+		if (opponentDeckString) {
 			for (const card of [
 				...currentState.opponentDeck.hand,
 				...currentState.opponentDeck.otherZone,
@@ -96,16 +96,18 @@ export class OpponentPlayerParser implements EventParser {
 			}
 		}
 
-		const hand = aiDeckString ? this.flagCards(currentState.opponentDeck.hand) : currentState.opponentDeck.hand;
-		const deck = aiDeckString ? this.flagCards(newDeck) : newDeck;
+		const hand = opponentDeckString
+			? this.flagCards(currentState.opponentDeck.hand)
+			: currentState.opponentDeck.hand;
+		const deck = opponentDeckString ? this.flagCards(newDeck) : newDeck;
 
 		const newPlayerDeck = currentState.opponentDeck.update({
 			hero: newHero,
-			deckstring: aiDeckString,
+			deckstring: opponentDeckString,
 			deckList: decklist,
 			deck: deck,
 			hand: hand,
-			otherZone: aiDeckString
+			otherZone: opponentDeckString
 				? this.flagCards(currentState.opponentDeck.otherZone)
 				: currentState.opponentDeck.otherZone,
 			showDecklistWarning: cardsInDeck < decklist.length,
