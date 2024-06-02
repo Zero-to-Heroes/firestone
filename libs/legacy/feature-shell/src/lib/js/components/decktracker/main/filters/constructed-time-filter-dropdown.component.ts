@@ -16,7 +16,7 @@ import { formatPatch } from '@legacy-import/src/lib/js/services/utils';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 
@@ -62,11 +62,23 @@ export class ConstructedTimeFilterDropdownComponent
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
+			this.patchesConfig.currentTwistMetaPatch$$,
 			this.nav.currentView$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksTimeFilter)),
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					formatFilter: prefs.constructedMetaDecksFormatFilter,
+					timeFilter: prefs.constructedMetaDecksTimeFilter,
+				})),
+				distinctUntilChanged((a, b) => a.formatFilter === b.formatFilter && a.timeFilter === b.timeFilter),
+			),
 		]).pipe(
-			filter(([patch, currentView, filter]) => !!currentView),
-			this.mapData(([patch, currentView, filter]) => {
+			filter(([constructedPatch, twistPatch, currentView, { formatFilter, timeFilter }]) => !!currentView),
+			map(([constructedPatch, twistPatch, currentView, { formatFilter, timeFilter }]) => ({
+				patch: formatFilter === 'twist' ? twistPatch : constructedPatch,
+				currentView: currentView,
+				filter: timeFilter,
+			})),
+			this.mapData(({ patch, currentView, filter }) => {
 				const options: FilterOption[] = ['current-season', 'past-20', 'past-7', 'past-3', 'last-patch'].map(
 					(option) =>
 						({

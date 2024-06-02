@@ -10,6 +10,7 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 	public config$$: SubscriberAwareBehaviorSubject<PatchesConfig | null>;
 	public currentBattlegroundsMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
 	public currentConstructedMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentTwistMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
 	public currentDuelsMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
 	public currentArenaMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
 	public currentArenaSeasonPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
@@ -26,6 +27,7 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 		this.config$$ = this.mainInstance.config$$;
 		this.currentBattlegroundsMetaPatch$$ = this.mainInstance.currentBattlegroundsMetaPatch$$;
 		this.currentConstructedMetaPatch$$ = this.mainInstance.currentConstructedMetaPatch$$;
+		this.currentTwistMetaPatch$$ = this.mainInstance.currentTwistMetaPatch$$;
 		this.currentDuelsMetaPatch$$ = this.mainInstance.currentDuelsMetaPatch$$;
 		this.currentArenaMetaPatch$$ = this.mainInstance.currentArenaMetaPatch$$;
 		this.currentArenaSeasonPatch$$ = this.mainInstance.currentArenaSeasonPatch$$;
@@ -35,6 +37,7 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 		this.config$$ = new SubscriberAwareBehaviorSubject<PatchesConfig | null>(null);
 		this.currentBattlegroundsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 		this.currentConstructedMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentTwistMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 		this.currentDuelsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 		this.currentArenaMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 		this.currentArenaSeasonPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
@@ -47,6 +50,9 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 			this.internalSubject$$.subscribe();
 		});
 		this.currentConstructedMetaPatch$$.onFirstSubscribe(() => {
+			this.internalSubject$$.subscribe();
+		});
+		this.currentTwistMetaPatch$$.onFirstSubscribe(() => {
 			this.internalSubject$$.subscribe();
 		});
 		this.currentDuelsMetaPatch$$.onFirstSubscribe(() => {
@@ -72,6 +78,11 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 			this.currentConstructedMetaPatch$$.next(
 				patchConfig?.patches
 					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
+					: null,
+			);
+			this.currentTwistMetaPatch$$.next(
+				patchConfig?.patches
+					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentTwistMetaPatch)
 					: null,
 			);
 			this.currentDuelsMetaPatch$$.next(
