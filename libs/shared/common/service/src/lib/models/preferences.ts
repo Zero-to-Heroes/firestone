@@ -203,7 +203,7 @@ export class Preferences implements IPreferences {
 	readonly decktrackerMulliganScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly constructedMulliganDeckWidgetPosition: { left: number; top: number };
-	readonly decktrackerMulliganRankBracket: 'competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond' =
+	readonly decktrackerMulliganRankBracket: 'competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond' | 'all' =
 		'legend-diamond';
 	readonly decktrackerMulliganOpponent: 'all' | string = 'all';
 

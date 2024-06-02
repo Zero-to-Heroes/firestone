@@ -86,4 +86,8 @@ export class CardsFacadeService {
 	public getService() {
 		return this.service;
 	}
+
+	public normalizeDeckList(decklist: string): string {
+		return this.service.normalizeDeckList(decklist);
+	}
 }

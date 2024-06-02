@@ -358,9 +358,10 @@ export class DeckParserService {
 			deckDefinition.cards.some((pair) => pair[0] == null),
 			deckDefinition.cards.some((pair) => isNaN(pair[0])),
 		);
-		const deckString = deckDefinition.cards.some((pair) => pair[0] == null || isNaN(pair[0]))
+		const rawDeckstring = deckDefinition.cards.some((pair) => pair[0] == null || isNaN(pair[0]))
 			? null
 			: encode(deckDefinition);
+		const deckString = this.allCards.normalizeDeckList(rawDeckstring);
 		console.log('[deck-parser] built deckstring', deckString);
 		const currentDeck: DeckInfo = {
 			deck: deckDefinition,
@@ -437,9 +438,10 @@ export class DeckParserService {
 			console.log('[deck-parser] deckstring', deckstringLogLine);
 			let match: RegExpExecArray;
 			const deckName = (match = this.deckNameRegex.exec(deckNameLogLine)) ? match[1] : undefined;
-			const deckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
+			const rawDeckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
 				? this.handler.normalizeDeckstring(match[1])
 				: undefined;
+			const deckstring = this.allCards.normalizeDeckList(rawDeckstring);
 			if (targetDeckName && deckName !== targetDeckName) {
 				console.log('[deck-parser] deck name does not match', deckName, targetDeckName);
 				return null;

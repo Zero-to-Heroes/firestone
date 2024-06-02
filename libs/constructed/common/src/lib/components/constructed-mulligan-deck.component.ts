@@ -234,11 +234,12 @@ export class ConstructedMulliganDeckComponent
 		const prefs = await this.prefs.getPreferences();
 		const currentRank = prefs.decktrackerMulliganRankBracket;
 		// Build an array based on all the possible values of the decktrackerMulliganRankBracket type
-		const ranks: ('competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond')[] = [
+		const ranks: ('competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond' | 'all')[] = [
 			'competitive',
 			'top-2000-legend',
 			'legend',
 			'legend-diamond',
+			'all',
 		];
 		const nextRank = ranks[(ranks.indexOf(currentRank) + 1) % ranks.length];
 		const newPrefs: Preferences = {
