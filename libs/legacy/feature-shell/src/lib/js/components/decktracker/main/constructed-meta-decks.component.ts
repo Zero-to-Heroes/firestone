@@ -57,14 +57,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						>
 						</sortable-table-label>
 						<sortable-table-label
-							class="cell dust"
-							[name]="'app.decktracker.meta.cost-header' | owTranslate"
-							[sort]="sort"
-							[criteria]="'cost'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
 							class="cell winrate"
 							[name]="'app.decktracker.meta.winrate-header' | owTranslate"
 							[sort]="sort"
@@ -77,6 +69,14 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 							[name]="'app.decktracker.meta.games-header' | owTranslate"
 							[sort]="sort"
 							[criteria]="'games'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell dust"
+							[name]="'app.decktracker.meta.cost-header' | owTranslate"
+							[sort]="sort"
+							[criteria]="'cost'"
 							(sortClick)="onSortClick($event)"
 						>
 						</sortable-table-label>

@@ -33,12 +33,6 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 					{{ deckName }}
 				</div>
 			</div>
-			<div class="dust cell">
-				<div class="dust-amount">
-					{{ dustCost }}
-				</div>
-				<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
-			</div>
 			<div class="winrate cell">
 				{{ winrate }}
 				<span
@@ -49,6 +43,12 @@ import { EnhancedDeckStat } from './constructed-meta-decks.component';
 				>
 			</div>
 			<div class="games cell">{{ totalGames }}</div>
+			<div class="dust cell">
+				<div class="dust-amount">
+					{{ dustCost }}
+				</div>
+				<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
+			</div>
 			<div class="cards cell">
 				<div class="removed-cards" *ngIf="removedCards?.length">
 					<div class="card removed" *ngFor="let card of removedCards; trackBy: trackByCard">
