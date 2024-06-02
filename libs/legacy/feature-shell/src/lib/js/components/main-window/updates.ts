@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.15.2',
+		version: '13.15.4',
 		force: false,
 		sections: [
 			// {
@@ -93,6 +93,26 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Fizzle's Snapshot will now remember cards as your opponent plays them (if they were in their hand when the Snapshot was created).`,
+							},
+							{
+								type: 'content',
+								text: `Add card highlights for Twist passives.`,
+							},
+							{
+								type: 'content',
+								text: `Twist passives are now added to the Global Effects section.`,
+							},
+							{
+								type: 'content',
+								text: `Jace Darkweaver now shows all the spells it will replay as related cards on mouse over.`,
+							},
+							{
+								type: 'ui',
+								text: `Improve the look and feel of the Twist meta decks page.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the mulligan guide would not work for Twist decks.`,
 							},
 							{
 								type: 'bug',
