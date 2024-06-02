@@ -127,7 +127,8 @@ export const baseCostEqual =
 	(input: SelectorInput): boolean =>
 		input.card?.cost === cost;
 
-export const notInInitialDeck = (input: SelectorInput): boolean => input.deckCard.creatorCardId != null;
+export const notInInitialDeck = (input: SelectorInput): boolean =>
+	input.deckCard.creatorCardId != null || input.deckCard.stolenFromOpponent;
 
 export const excludeEntityId =
 	(entityId: number) =>
