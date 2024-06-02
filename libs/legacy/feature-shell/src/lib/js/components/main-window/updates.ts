@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.15.4',
+		version: '13.15.5',
 		force: false,
 		sections: [
 			// {
@@ -105,6 +105,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'content',
 								text: `Jace Darkweaver now shows all the spells it will replay as related cards on mouse over.`,
+							},
+							{
+								type: 'content',
+								text: `The app now uses a different "latest patch" version for Twist vs Standard/Wild. This will let me update the Twist meta stats tab as needed :).`,
 							},
 							{
 								type: 'ui',
