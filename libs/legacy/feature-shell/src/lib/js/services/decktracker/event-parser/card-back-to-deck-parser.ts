@@ -37,7 +37,7 @@ export class CardBackToDeckParser implements EventParser {
 				: initialCardId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
-		// console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
+		console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
@@ -46,7 +46,16 @@ export class CardBackToDeckParser implements EventParser {
 		// When we have a deckstring / decklist, we show all the possible remaining options in the
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
-		const shouldKeepDeckAsIs = deck.deckstring && card?.inInitialDeck && !card?.cardId;
+		const shouldKeepDeckAsIs = deck.deckstring && (card?.inInitialDeck || !card?.creatorCardId) && !card?.cardId;
+		console.debug(
+			'[card-back-to-deck] shouldKeepDeckAsIs',
+			shouldKeepDeckAsIs,
+			card?.inInitialDeck,
+			card?.cardId,
+			deck,
+			card,
+			gameEvent,
+		);
 
 		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
 		// the enchantments, cost reduction, etc.
