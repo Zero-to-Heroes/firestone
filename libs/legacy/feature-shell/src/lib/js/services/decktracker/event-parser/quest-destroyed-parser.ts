@@ -1,4 +1,4 @@
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -25,9 +25,12 @@ export class QuestDestroyedParser implements EventParser {
 		});
 		const newOtherZone = this.helper.replaceCardInZone(deck.otherZone, newQuest);
 
+		const newGlobalEffects: readonly DeckCard[] = deck.globalEffects.filter((c) => c.entityId !== entityId);
+
 		const newPlayerDeck = deck.update({
 			otherZone: newOtherZone,
-		} as DeckState);
+			globalEffects: newGlobalEffects,
+		});
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

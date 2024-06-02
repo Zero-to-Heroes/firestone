@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -36,15 +36,21 @@ export class QuestCreatedInGameParser implements EventParser {
 			zone: 'SECRET',
 			putIntoPlay: true,
 		} as DeckCard);
+		// console.debug('[quest-created-in-game] created card', card, dbCard);
 		const previousOtherZone = deck.otherZone;
 		// Because when we discover a quest (BG), the quest is already in the otherZone, but with another "zone" attribute
 		const newOtherZone: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(previousOtherZone, card, true);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		if (globalEffectQuestlinesTriggers.includes(cardId as CardIds)) {
-			const globalEffectCard = this.cards.getCard(
-				globalEffectQuestlines.find((q) => q.questStepCreated === cardId).stepReward,
-			);
+		if (
+			globalEffectQuestlinesTriggers.includes(cardId as CardIds) ||
+			// For Twist passive abilities
+			dbCard.mechanics?.includes(GameTag[GameTag.OBJECTIVE])
+		) {
+			// console.debug('[quest-created-in-game] adding objective to global effects', card);
+			const stepCard = globalEffectQuestlines.find((q) => q.questStepCreated === cardId);
+			const globalEffectCard = !!stepCard?.stepReward ? this.cards.getCard(stepCard.stepReward) : dbCard;
+			// console.debug('[quest-created-in-game] globalEffectCard', globalEffectCard);
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
 				DeckCard.create({
@@ -56,6 +62,7 @@ export class QuestCreatedInGameParser implements EventParser {
 					zone: 'SECRET',
 				} as DeckCard),
 			);
+			// console.debug('[quest-created-in-game] newGlobalEffects', newGlobalEffects);
 		}
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
