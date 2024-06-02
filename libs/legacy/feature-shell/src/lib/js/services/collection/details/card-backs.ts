@@ -1,4 +1,5 @@
 import { CardBack, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { Events } from '../../events.service';
 import { CollectionStorageService } from '../collection-storage.service';
@@ -20,11 +21,12 @@ export class CardBacksInternalService extends AbstractCollectionInternalService<
 		protected readonly events: Events,
 		protected readonly scene: SceneService,
 		protected readonly memoryUpdates: MemoryUpdatesService,
+		protected readonly gameStatus: GameStatusService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly api: ApiRunner,
 	) {
-		super(events, scene, memoryUpdates);
+		super(events, scene, memoryUpdates, gameStatus);
 	}
 
 	protected async preInit(): Promise<void> {

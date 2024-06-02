@@ -10,6 +10,7 @@ import {
 
 import { PackInfo } from '@firestone/collection/view';
 import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Coin } from '../../models/coin';
@@ -46,6 +47,7 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 	private scene: SceneService;
 	private memoryUpdates: MemoryUpdatesService;
 	private packStatsService: PackStatsService;
+	private gameStatus: GameStatusService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'CollectionManager', () => !!this.collection$$);
@@ -68,11 +70,13 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 		this.scene = AppInjector.get(SceneService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.packStatsService = AppInjector.get(PackStatsService);
+		this.gameStatus = AppInjector.get(GameStatusService);
 
 		this.cardsIS = new CardsInternalService(
 			this.events,
 			this.scene,
 			this.memoryUpdates,
+			this.gameStatus,
 			this.memoryReading,
 			this.db,
 		);
@@ -80,6 +84,7 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 			this.events,
 			this.scene,
 			this.memoryUpdates,
+			this.gameStatus,
 			this.memoryReading,
 			this.db,
 			this.api,
@@ -88,6 +93,7 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 			this.events,
 			this.scene,
 			this.memoryUpdates,
+			this.gameStatus,
 			this.memoryReading,
 			this.db,
 		);
@@ -95,6 +101,7 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 			this.events,
 			this.scene,
 			this.memoryUpdates,
+			this.gameStatus,
 			this.memoryReading,
 			this.db,
 		);
@@ -102,6 +109,7 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 			this.events,
 			this.scene,
 			this.memoryUpdates,
+			this.gameStatus,
 			this.memoryReading,
 			this.db,
 			this.allCards,
