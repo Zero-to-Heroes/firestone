@@ -32,17 +32,20 @@ import { GameConfService } from '../services/game-conf.service';
 				<div class="manastorm-player">
 					<div class="aspect-ratio-wrapper ar-16x9">
 						<div class="aspect-ratio-inner">
-							<game
-								*ngIf="game"
-								[gameMode]="gameMode$ | async"
-								[playerId]="game.players[0].playerId"
-								[opponentId]="game.players[1].playerId"
-								[playerName]="game.players[0].name"
-								[opponentName]="game.players[1].name"
-								[currentAction]="currentAction$ | async"
-								[showHiddenCards]="showHiddenCards"
-							>
-							</game>
+							<ng-container *ngIf="{ currentAction: currentAction$ | async } as value">
+								<!-- Allow for an override by the action, for BG sims -->
+								<game
+									*ngIf="game"
+									[gameMode]="gameMode$ | async"
+									[playerId]="value.currentAction?.playerId ?? game.players[0].playerId"
+									[opponentId]="value.currentAction?.opponentId ?? game.players[1].playerId"
+									[playerName]="game.players[0].name"
+									[opponentName]="game.players[1].name"
+									[currentAction]="value.currentAction"
+									[showHiddenCards]="showHiddenCards"
+								>
+								</game>
+							</ng-container>
 							<div class="status" *ngIf="status">
 								Game is loading. The viewing experience will be optimal once loading is complete.
 								{{ status }}...
@@ -230,7 +233,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.cdr.detectChanges();
 		}
 		const game = await this.bgsSimulationParser.parse(bgsSimulation);
-		console.log('parsed bgs simulation');
+		console.debug('parsed bgs simulation', game);
 		const turn = 0;
 		const action = 0;
 		this.game = game;
@@ -341,7 +344,8 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			return;
 		}
 
-		this.currentAction$$.next(this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn]);
+		const currentAction = this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn];
+		this.currentAction$$.next(currentAction);
 		this.text$$.next(this.computeText());
 		// this.turnString = this.computeTurnString();
 		this.gameMode$$.next(this.computeGameMode());
