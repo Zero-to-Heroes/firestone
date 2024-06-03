@@ -108,7 +108,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'content',
-								text: `The app now uses a different "latest patch" version for Twist vs Standard/Wild. This will let me update the Twist meta stats tab as needed :).`,
+								text: `Update the order of cards in hand for Hearth Stonebrew's hands.`,
 							},
 							{
 								type: 'ui',
@@ -116,7 +116,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the mulligan guide would not work for Twist decks.`,
+								text: `Fix an issue where the mulligan guide would not work for the new Twist decks.`,
 							},
 							{
 								type: 'bug',
