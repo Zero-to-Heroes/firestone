@@ -26,7 +26,6 @@ import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-se
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
 import { ArenaMulliganDeckComponent } from './components/overlays/mulligan/arena-mulligan-deck.component';
 import { ArenaMulliganHandComponent } from './components/overlays/mulligan/arena-mulligan-hand.component';
-import { ArenaMulliganInfoPremiumComponent } from './components/overlays/mulligan/arena-mulligan-info-premium.component';
 import { ArenaPersonalStatsOverviewComponent } from './components/personal-stats/arena-personal-stats-overview.component';
 import { ArenaPersonalStatsComponent } from './components/personal-stats/arena-personal-stats.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
@@ -60,7 +59,6 @@ const components = [
 	ArenaRunVignetteComponent,
 	ArenaMulliganDeckComponent,
 	ArenaMulliganHandComponent,
-	ArenaMulliganInfoPremiumComponent,
 	ArenaPersonalStatsComponent,
 	ArenaPersonalStatsOverviewComponent,
 	ArenaHighWinsCardSearchComponent,

@@ -33,7 +33,10 @@ import {
 	takeUntil,
 } from 'rxjs';
 import { MulliganChartData } from '../models/mulligan-advice';
-import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
+import {
+	ConstructedMulliganGuideGuardianService,
+	DAILY_FREE_USES,
+} from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { buildColor } from './mulligan-deck-view.component';
 import { InternalMulliganAdvice } from './mulligan-hand-view.component';
@@ -48,9 +51,10 @@ import { InternalMulliganAdvice } from './mulligan-hand-view.component';
 				[showPremiumBanner]="showPremiumBanner$ | async"
 				[cardsInHandInfo]="cardsInHandInfo$ | async"
 				[impactWithFreeUsersHelpTooltip]="helpTooltip$ | async"
+				[premiumType]="'constructed'"
+				[freeUses]="freeUses"
 			>
-				<mulligan-info-premium></mulligan-info-premium
-			></mulligan-hand-view>
+			</mulligan-hand-view>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,6 +68,8 @@ export class ConstructedMulliganHandComponent
 	showHandInfo$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
+
+	freeUses = DAILY_FREE_USES;
 
 	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 	private noData$$ = new BehaviorSubject<boolean>(false);

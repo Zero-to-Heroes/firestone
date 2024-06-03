@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { DAILY_FREE_USES } from '../services/constructed-mulligan-guide-guardian.service';
 
 @Component({
 	selector: 'mulligan-info-premium',
@@ -20,9 +20,18 @@ import { DAILY_FREE_USES } from '../services/constructed-mulligan-guide-guardian
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MulliganInfoPremiumComponent {
-	helpTooltip = this.i18n.translateString('decktracker.overlay.mulligan.locked-premium-info-tooltip', {
-		value: DAILY_FREE_USES,
-	});
+	@Input() set dailyFreeUses(value: number) {
+		this.helpTooltip = this.i18n.translateString('decktracker.overlay.mulligan.locked-premium-info-tooltip', {
+			value: value,
+		})!;
+	}
+
+	@Input() set type(value: 'arena' | 'constructed') {
+		this.page = value === 'constructed' ? 'constructed-mulligan' : 'arena-mulligan';
+	}
+
+	helpTooltip: string;
+	page: string;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -32,7 +41,7 @@ export class MulliganInfoPremiumComponent {
 
 	showPremium() {
 		console.debug('show premium');
-		this.analytics.trackEvent('subscription-click', { page: 'constructed-mulligan' });
+		this.analytics.trackEvent('subscription-click', { page: this.page });
 		this.ow.openStore();
 	}
 }

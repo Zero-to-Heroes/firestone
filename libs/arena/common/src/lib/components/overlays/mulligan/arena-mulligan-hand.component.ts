@@ -34,7 +34,10 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import { ArenaMulliganGuideGuardianService } from '../../../services/arena-mulligan-guide-guardian.service';
+import {
+	ArenaMulliganGuideGuardianService,
+	DAILY_FREE_USES,
+} from '../../../services/arena-mulligan-guide-guardian.service';
 import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guide.service';
 
 @Component({
@@ -47,10 +50,10 @@ import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guid
 				[showPremiumBanner]="showPremiumBanner$ | async"
 				[cardsInHandInfo]="cardsInHandInfo$ | async"
 				[impactWithFreeUsersHelpTooltip]="helpTooltip$ | async"
+				[premiumType]="'arena'"
+				[freeUses]="freeUses"
 			>
-				<arena-mulligan-info-premium></arena-mulligan-info-premium>
-				></mulligan-hand-view
-			>
+			</mulligan-hand-view>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,6 +66,7 @@ export class ArenaMulliganHandComponent
 	showHandInfo$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
+	freeUses = DAILY_FREE_USES;
 
 	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 	private noData$$ = new BehaviorSubject<boolean>(false);

@@ -45,7 +45,10 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 					</ng-container>
 					<ng-container *ngIf="showPremiumBanner">
 						<div class="premium-container" *ngFor="let info of cardsInHandInfo">
-							<ng-content></ng-content>
+							<mulligan-info-premium
+								[type]="premiumType"
+								[dailyFreeUses]="freeUses"
+							></mulligan-info-premium>
 						</div>
 					</ng-container>
 				</ul>
@@ -59,6 +62,8 @@ export class MulliganHandViewComponent extends AbstractSubscriptionComponent {
 	@Input() showPremiumBanner: boolean | null;
 	@Input() cardsInHandInfo: readonly InternalMulliganAdvice[] | null;
 	@Input() impactWithFreeUsersHelpTooltip: string | null;
+	@Input() premiumType: 'arena' | 'constructed';
+	@Input() freeUses: number;
 
 	constructor(protected override readonly cdr: ChangeDetectorRef) {
 		super(cdr);
