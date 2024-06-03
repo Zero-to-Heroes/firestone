@@ -226,7 +226,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	}
 
 	public async loadNewDeckDetails(
-		deckstring: string | undefined,
+		deckstring: string | undefined | null,
 		format: GameFormat,
 		time: TimePeriod,
 		rank: RankBracket,

@@ -87,7 +87,7 @@ export class CardsFacadeService {
 		return this.service;
 	}
 
-	public normalizeDeckList(decklist: string): string {
-		return this.service.normalizeDeckList(decklist);
+	public normalizeDeckList(decklist: string | null | undefined): string | null {
+		return !!decklist?.length ? this.service.normalizeDeckList(decklist) : null;
 	}
 }

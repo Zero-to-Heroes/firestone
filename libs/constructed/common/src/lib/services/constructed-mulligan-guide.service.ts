@@ -206,7 +206,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format)]),
 			),
 			map(([gameState, playerRank, opponentClass, format]) => ({
-				deckString: gameState?.playerDeck?.deckstring,
+				deckString: this.allCards.normalizeDeckList(gameState?.playerDeck?.deckstring),
 				format: format,
 				playerRank: playerRank,
 				opponentClass: opponentClass,
