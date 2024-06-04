@@ -162,18 +162,25 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			}
 		});
 
-		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$]).pipe(
-			filter(([showWidget, format]) => showWidget),
+		const timeFrame$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganTime),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+
+		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$, timeFrame$]).pipe(
+			filter(([showWidget, format, timeFrame]) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
-			switchMap(([showWidget, format]) =>
-				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format)]),
+			switchMap(([showWidget, format, timeFrame]) =>
+				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
 			),
-			map(([gameState, playerRank, opponentClass, format]) => ({
+			map(([gameState, playerRank, opponentClass, format, timeFrame]) => ({
 				archetypeId: gameState?.playerDeck?.archetypeId,
 				format: format,
 				playerRank: playerRank,
 				opponentClass: opponentClass,
+				timeFrame: timeFrame,
 			})),
 			filter((info) => !!info.format),
 			distinctUntilChanged(
@@ -181,13 +188,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					a.archetypeId === b.archetypeId &&
 					a.format === b.format &&
 					a.playerRank === b.playerRank &&
+					a.timeFrame === b.timeFrame &&
 					a.opponentClass === b.opponentClass,
 			),
-			switchMap(({ archetypeId, format, playerRank, opponentClass }) => {
+			switchMap(({ archetypeId, format, playerRank, opponentClass, timeFrame }) => {
 				const result = this.archetypes.loadNewArchetypeDetails(
 					archetypeId as number,
 					toFormatType(format as any) as GameFormat,
-					'last-patch',
+					timeFrame,
 					playerRank,
 				);
 				// console.debug('[mulligan-guide] archetype result', result);
@@ -198,18 +206,19 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
 			// shareReplay(1),
 		);
-		const deckDetails$: Observable<DeckStat | null> = combineLatest([showWidget$, format$]).pipe(
-			filter(([showWidget, format]) => showWidget),
+		const deckDetails$: Observable<DeckStat | null> = combineLatest([showWidget$, format$, timeFrame$]).pipe(
+			filter(([showWidget, format, timeFrame]) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
-			switchMap(([showWidget, format]) =>
-				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format)]),
+			switchMap(([showWidget, format, timeFrame]) =>
+				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
 			),
-			map(([gameState, playerRank, opponentClass, format]) => ({
+			map(([gameState, playerRank, opponentClass, format, timeFrame]) => ({
 				deckString: this.allCards.normalizeDeckList(gameState?.playerDeck?.deckstring),
 				format: format,
 				playerRank: playerRank,
 				opponentClass: opponentClass,
+				timeFrame: timeFrame,
 			})),
 			filter((info) => !!info.format),
 			distinctUntilChanged(
@@ -217,13 +226,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					a.deckString === b.deckString &&
 					a.format === b.format &&
 					a.playerRank === b.playerRank &&
+					a.timeFrame === b.timeFrame &&
 					a.opponentClass === b.opponentClass,
 			),
-			switchMap(({ deckString, format, playerRank, opponentClass }) => {
+			switchMap(({ deckString, format, playerRank, opponentClass, timeFrame }) => {
 				const result = this.archetypes.loadNewDeckDetails(
 					deckString,
 					toFormatType(format as any) as GameFormat,
-					'last-patch',
+					timeFrame,
 					playerRank,
 				);
 				// console.debug('[mulligan-guide] archetype result', result);

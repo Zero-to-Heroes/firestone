@@ -206,6 +206,7 @@ export class Preferences implements IPreferences {
 	readonly decktrackerMulliganRankBracket: 'competitive' | 'top-2000-legend' | 'legend' | 'legend-diamond' | 'all' =
 		'legend-diamond';
 	readonly decktrackerMulliganOpponent: 'all' | string = 'all';
+	readonly decktrackerMulliganTime: 'last-patch' | 'past-3' | 'past-7' = 'last-patch';
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;

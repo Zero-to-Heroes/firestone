@@ -7,14 +7,12 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	Inject,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -51,10 +49,13 @@ import { buildColor } from './mulligan-deck-view.component';
 			[rankBracketLabel]="rankBracketLabel$ | async"
 			[opponentTooltip]="opponentTooltip$ | async"
 			[opponentLabel]="opponentLabel$ | async"
+			[timeTooltip]="timeTooltip$ | async"
+			[timeLabel]="timeLabel$ | async"
 			[formatLabel]="formatLabel$ | async"
 			[sampleSize]="sampleSize$ | async"
 			[cycleRanks]="cycleRanks"
 			[cycleOpponent]="cycleOpponent"
+			[cycleTime]="cycleTime"
 		>
 		</mulligan-deck-view>
 	`,
@@ -71,6 +72,8 @@ export class ConstructedMulliganDeckComponent
 	rankBracketTooltip$: Observable<string>;
 	opponentLabel$: Observable<string>;
 	opponentTooltip$: Observable<string>;
+	timeLabel$: Observable<string>;
+	timeTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
 	sampleSize$: Observable<string>;
 
@@ -84,15 +87,14 @@ export class ConstructedMulliganDeckComponent
 		private readonly guardian: ConstructedMulliganGuideGuardianService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
+		private readonly patches: PatchesConfigService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches);
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -184,6 +186,29 @@ export class ConstructedMulliganDeckComponent
 					})!,
 			),
 		);
+		this.timeLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(`app.decktracker.filters.time-filter.${prefs.decktrackerMulliganTime}`)!,
+			),
+		);
+		this.timeTooltip$ = combineLatest([
+			this.patches.currentConstructedMetaPatch$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganTime)),
+		]).pipe(
+			this.mapData(([patch, pref]) => {
+				const patchInfo = pref === 'last-patch' ? formatPatch(patch, this.i18n) : '';
+				const timeFrame = this.i18n.translateString(`app.decktracker.filters.time-filter.${pref}`);
+				return { timeFrame, patchInfo };
+			}),
+			this.mapData(
+				({ timeFrame, patchInfo }) =>
+					this.i18n.translateString(`decktracker.overlay.mulligan.deck-mulligan-filter-time-tooltip`, {
+						timeFrame: timeFrame,
+						patchInfo: patchInfo,
+					})!,
+			),
+		);
 		this.formatLabel$ = this.allDeckMulliganInfo$.pipe(
 			this.mapData((mulliganInfo) => this.i18n.translateString(`global.format.${mulliganInfo.format}`)!),
 		);
@@ -257,6 +282,18 @@ export class ConstructedMulliganDeckComponent
 		const newPrefs: Preferences = {
 			...prefs,
 			decktrackerMulliganOpponent: nextOpponent,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cycleTime = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentOpponent = prefs.decktrackerMulliganTime;
+		const options: readonly ('last-patch' | 'past-3' | 'past-7')[] = ['last-patch', 'past-3', 'past-7'];
+		const nextTime = options[(options.indexOf(currentOpponent) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganTime: nextTime,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};

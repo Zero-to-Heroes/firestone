@@ -149,6 +149,7 @@ export const addDaysToDate = (timeStamp: number, days: number): Date => {
 	return newDate;
 };
 
+/** @deprecated */
 export const formatPatch = (input: PatchInfo, i18n: LocalizationFacadeService): string => {
 	if (!input) {
 		return '';

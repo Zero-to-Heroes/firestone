@@ -43,6 +43,9 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 					<div class="filter opponent" (click)="cycleOpponent()" [helpTooltip]="opponentTooltip">
 						<div class="text">{{ opponentLabel }}</div>
 					</div>
+					<div class="filter time" (click)="cycleTime()" [helpTooltip]="timeTooltip">
+						<div class="text">{{ timeLabel }}</div>
+					</div>
 					<div class="format">{{ formatLabel }}</div>
 				</div>
 				<div class="sample-size">{{ sampleSize }}</div>
@@ -108,10 +111,13 @@ export class MulliganDeckViewComponent
 	@Input() rankBracketLabel: string | null;
 	@Input() opponentTooltip: string | null;
 	@Input() opponentLabel: string | null;
+	@Input() timeTooltip: string | null;
+	@Input() timeLabel: string | null;
 	@Input() formatLabel: string | null;
 	@Input() sampleSize: string | null;
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
+	@Input() cycleTime: () => void;
 
 	@Input() set deckMulliganInfo(value: MulliganDeckData | null) {
 		this.deckMulliganInfo$$.next(value);

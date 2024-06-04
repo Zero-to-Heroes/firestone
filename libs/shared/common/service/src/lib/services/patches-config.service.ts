@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	ILocalizationService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { PatchInfo, PatchesConfig } from '../models/patches';
 
 const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json';
@@ -103,3 +109,14 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 		});
 	}
 }
+
+export const formatPatch = (input: PatchInfo | null, i18n: ILocalizationService): string => {
+	if (!input) {
+		return '';
+	}
+	return i18n.translateString('global.patch', {
+		version: input.version,
+		number: input.number,
+		date: new Date(input.date).toLocaleDateString(i18n.formatCurrentLocale()),
+	});
+};
