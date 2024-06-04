@@ -13,7 +13,7 @@ import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, shareReplay, takeUntil } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -58,9 +58,20 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs, this.bgState);
 
+		const prefs$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) => ({
+					showAchievement: prefs.bgsShowHeroSelectionAchievements,
+					showStats: prefs.bgsShowHeroSelectionTiers,
+				}),
+				(a, b) => deepEqual(a, b),
+			),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
+			prefs$,
 			this.bgState.gameState$$.pipe(
 				this.mapData(
 					(state) => ({
@@ -74,14 +85,18 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 			),
 		]).pipe(
 			this.mapData(
-				([currentScene, displayFromPrefs, { inGame, isCurrentGame, gameEnded, heroSelectionDone }]) => {
+				([
+					currentScene,
+					{ showAchievement, showStats },
+					{ inGame, isCurrentGame, gameEnded, heroSelectionDone },
+				]) => {
 					return (
 						// (inGame && isCurrentGame && currentScene === SceneMode.GAMEPLAY) ||
 						inGame &&
 						isCurrentGame &&
 						!gameEnded &&
 						!heroSelectionDone &&
-						displayFromPrefs &&
+						(showAchievement || showStats) &&
 						currentScene === SceneMode.GAMEPLAY
 					);
 				},
@@ -89,10 +104,11 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 			this.handleReposition(),
 		);
 
-		const displayInfo$ = combineLatest([
-			this.showWidget$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
-		]).pipe(this.mapData(([showWidget, showFromPrefs]) => showWidget && showFromPrefs));
+		const displayInfo$ = combineLatest([this.showWidget$, prefs$]).pipe(
+			this.mapData(
+				([showWidget, { showAchievement, showStats }]) => showWidget && (showAchievement || showStats),
+			),
+		);
 		displayInfo$
 			.pipe(distinctUntilChanged(), pairwise(), takeUntil(this.destroyed$))
 			.subscribe(([wasDisplayed, isDisplayed]) => {

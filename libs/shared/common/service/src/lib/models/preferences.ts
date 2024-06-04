@@ -639,7 +639,6 @@ export class Preferences implements IPreferences {
 	readonly bgsUseRemoteSimulator = false;
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;
-	readonly bgsShowHeroSelectionTooltip: boolean = true;
 	readonly bgsShowHeroSelectionTiers: boolean = true;
 	readonly bgsShowNextOpponentRecapSeparately = true;
 	readonly bgsHideSimResultsOnRecruit: boolean = true;
