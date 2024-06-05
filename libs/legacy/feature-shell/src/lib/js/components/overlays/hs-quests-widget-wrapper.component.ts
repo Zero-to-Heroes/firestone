@@ -82,6 +82,7 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 						SceneMode.TOURNAMENT,
 						SceneMode.TAVERN_BRAWL,
 						SceneMode.COLLECTIONMANAGER,
+						SceneMode.DRAFT,
 					];
 					if (hearthstoneScenes.includes(currentScene)) {
 						return true;
