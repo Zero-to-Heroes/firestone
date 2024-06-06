@@ -11,10 +11,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { getBaseCardId } from '@firestone-hs/reference-data';
+import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
 import { MulliganDeckData, buildColor } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -24,6 +24,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import {
+	BehaviorSubject,
 	Observable,
 	combineLatest,
 	debounceTime,
@@ -43,8 +44,13 @@ import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guid
 		<mulligan-deck-view
 			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
 			[showMulliganOverview]="showMulliganOverview$ | async"
-			[showFilters]="false"
 			[sampleSize]="sampleSize$ | async"
+			[opponentTooltip]="opponentTooltip$ | async"
+			[opponentLabel]="opponentLabel$ | async"
+			[timeTooltip]="timeTooltip$ | async"
+			[timeLabel]="timeLabel$ | async"
+			[cycleOpponent]="cycleOpponent"
+			[cycleTime]="cycleTime"
 		>
 		</mulligan-deck-view>
 	`,
@@ -57,6 +63,12 @@ export class ArenaMulliganDeckComponent
 	allDeckMulliganInfo$: Observable<MulliganDeckData | null>;
 	showMulliganOverview$: Observable<boolean | null>;
 	sampleSize$: Observable<string>;
+	opponentLabel$: Observable<string>;
+	opponentTooltip$: Observable<string>;
+	timeLabel$: Observable<string>;
+	timeTooltip$: Observable<string>;
+
+	private opponentActualClass$$ = new BehaviorSubject<string | null>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -69,12 +81,13 @@ export class ArenaMulliganDeckComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
+		private readonly patches: PatchesConfigService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches);
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -132,6 +145,55 @@ export class ArenaMulliganDeckComponent
 			),
 		);
 
+		this.gameState.gameState$$
+			.pipe(
+				this.mapData((gameState) =>
+					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+				),
+			)
+			.subscribe(this.opponentActualClass$$);
+
+		this.opponentLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(`app.decktracker.meta.matchup-vs-tooltip`, {
+						className: this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`),
+					})!,
+			),
+		);
+		this.opponentTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`)),
+			this.mapData(
+				(opponentInfo) =>
+					this.i18n.translateString(`decktracker.overlay.mulligan.deck-mulligan-filter-opponent-tooltip`, {
+						opponent: opponentInfo,
+					})!,
+			),
+		);
+		this.timeLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(`app.decktracker.filters.time-filter.${prefs.decktrackerMulliganTime}`)!,
+			),
+		);
+		this.timeTooltip$ = combineLatest([
+			this.patches.currentArenaMetaPatch$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganTime)),
+		]).pipe(
+			this.mapData(([patch, pref]) => {
+				const patchInfo = pref === 'last-patch' ? formatPatch(patch, this.i18n) : '';
+				const timeFrame = this.i18n.translateString(`app.decktracker.filters.time-filter.${pref}`);
+				return { timeFrame, patchInfo };
+			}),
+			this.mapData(
+				({ timeFrame, patchInfo }) =>
+					this.i18n.translateString(`decktracker.overlay.mulligan.deck-mulligan-filter-time-tooltip`, {
+						timeFrame: timeFrame,
+						patchInfo: patchInfo,
+					})!,
+			),
+		);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -158,6 +220,30 @@ export class ArenaMulliganDeckComponent
 			this.cdr.detectChanges();
 		}
 	}
+
+	cycleOpponent = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentOpponent = prefs.decktrackerMulliganOpponent;
+		const options = ['all', this.opponentActualClass$$.value ?? 'all'];
+		const nextOpponent = options[(options.indexOf(currentOpponent) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganOpponent: nextOpponent,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cycleTime = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentOpponent = prefs.decktrackerMulliganTime;
+		const options: readonly ('last-patch' | 'past-3' | 'past-7')[] = ['last-patch', 'past-3', 'past-7'];
+		const nextTime = options[(options.indexOf(currentOpponent) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganTime: nextTime,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
 
 	private async getScalableElements(): Promise<HTMLElement[]> {
 		let elements = this.el.nativeElement.querySelectorAll('.scalable');

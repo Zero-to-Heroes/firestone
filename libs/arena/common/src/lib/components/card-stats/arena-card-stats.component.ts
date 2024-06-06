@@ -333,7 +333,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 					.map((token) => token.trim());
 		const result =
 			stats
-				?.filter((stat) => stat.matchStats?.drawn > 100)
+				?.filter((stat) => stat.matchStats?.stats?.drawn > 100)
 				.filter((stat) => this.hasCorrectCardClass(stat.cardId, cardClass))
 				.filter((stat) => this.hasCorrectCardType(stat.cardId, cardType))
 				.filter(
@@ -392,27 +392,27 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	private buildCardStat(stat: ArenaCombinedCardStat): ArenaCardStatInfo {
 		return {
 			cardId: stat.cardId,
-			drawnTotal: stat.matchStats.drawn,
+			drawnTotal: stat.matchStats.stats.drawn,
 			drawWinrate:
-				stat.matchStats.drawn > MIN_STATS_THRESHOLD
-					? stat.matchStats.drawnThenWin / stat.matchStats.drawn
+				stat.matchStats.stats.drawn > MIN_STATS_THRESHOLD
+					? stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn
 					: null,
 			mulliganWinrate:
-				stat.matchStats.inHandAfterMulligan > MIN_STATS_THRESHOLD
-					? stat.matchStats.inHandAfterMulliganThenWin / stat.matchStats.inHandAfterMulligan
+				stat.matchStats.stats.inHandAfterMulligan > MIN_STATS_THRESHOLD
+					? stat.matchStats.stats.inHandAfterMulliganThenWin / stat.matchStats.stats.inHandAfterMulligan
 					: null,
 			playOnCurveWinrate:
-				stat.matchStats.playedOnCurve > MIN_STATS_THRESHOLD
-					? stat.matchStats.playedOnCurveThenWin / stat.matchStats.playedOnCurve
+				stat.matchStats.stats.playedOnCurve > MIN_STATS_THRESHOLD
+					? stat.matchStats.stats.playedOnCurveThenWin / stat.matchStats.stats.playedOnCurve
 					: null,
-			deckTotal: stat.matchStats.decksWithCard,
+			deckTotal: stat.matchStats.stats.decksWithCard,
 			deckWinrate:
-				stat.matchStats.decksWithCard > MIN_STATS_THRESHOLD
-					? stat.matchStats.decksWithCardThenWin / stat.matchStats.decksWithCard
+				stat.matchStats.stats.decksWithCard > MIN_STATS_THRESHOLD
+					? stat.matchStats.stats.decksWithCardThenWin / stat.matchStats.stats.decksWithCard
 					: null,
 			totalOffered: stat.draftStats?.totalOffered,
 			totalPicked: stat.draftStats?.totalPicked,
-			totalPlayOnCurve: stat.matchStats?.playedOnCurve,
+			totalPlayOnCurve: stat.matchStats?.stats?.playedOnCurve,
 			pickRate: stat.draftStats?.pickRate,
 			totalOfferedHighWins: stat.draftStats?.totalOfferedHighWins,
 			totalPickedHighWins: stat.draftStats?.totalPickedHighWins,

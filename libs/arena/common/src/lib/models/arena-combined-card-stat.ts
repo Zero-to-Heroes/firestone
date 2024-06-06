@@ -1,4 +1,4 @@
-import { ArenaCardData, PlayerClass } from '@firestone-hs/arena-stats';
+import { ArenaCardStat, PlayerClass } from '@firestone-hs/arena-stats';
 
 export interface ArenaCombinedCardStats {
 	lastUpdated: Date;
@@ -8,7 +8,7 @@ export interface ArenaCombinedCardStats {
 
 export interface ArenaCombinedCardStat {
 	cardId: string;
-	matchStats: ArenaCardData;
+	matchStats: ArenaCardStat;
 	draftStats: ArenaDraftCardStat | null;
 }
 

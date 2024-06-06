@@ -36,17 +36,27 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 		<div class="mulligan-deck-overview scalable" *ngIf="showMulliganOverview">
 			<div class="widget-header">
 				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
-				<div class="filters" *ngIf="showFilters">
-					<div class="filter rank-bracket" (click)="cycleRanks()" [helpTooltip]="rankBracketTooltip">
+				<div class="filters">
+					<div
+						class="filter rank-bracket"
+						*ngIf="cycleRanks"
+						(click)="cycleRanks()"
+						[helpTooltip]="rankBracketTooltip"
+					>
 						<div class="text">{{ rankBracketLabel }}</div>
 					</div>
-					<div class="filter opponent" (click)="cycleOpponent()" [helpTooltip]="opponentTooltip">
+					<div
+						class="filter opponent"
+						*ngIf="cycleOpponent"
+						(click)="cycleOpponent()"
+						[helpTooltip]="opponentTooltip"
+					>
 						<div class="text">{{ opponentLabel }}</div>
 					</div>
-					<div class="filter time" (click)="cycleTime()" [helpTooltip]="timeTooltip">
+					<div class="filter time" *ngIf="cycleTime" (click)="cycleTime()" [helpTooltip]="timeTooltip">
 						<div class="text">{{ timeLabel }}</div>
 					</div>
-					<div class="format">{{ formatLabel }}</div>
+					<div class="format" *ngIf="formatLabel">{{ formatLabel }}</div>
 				</div>
 				<div class="sample-size">{{ sampleSize }}</div>
 			</div>

@@ -121,9 +121,9 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 				([options, stats, currentHeroWinrate]) =>
 					options?.map((option) => {
 						const stat = stats?.stats?.find((s) => s.cardId === option);
-						const drawnWinrate = !stat?.matchStats?.drawn
+						const drawnWinrate = !stat?.matchStats?.stats?.drawn
 							? null
-							: stat.matchStats.drawnThenWin / stat.matchStats.drawn;
+							: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
 						const pickRate = !stat?.draftStats?.pickRate ? null : stat.draftStats.pickRate;
 						const pickRateDelta = !stat?.draftStats?.pickRateImpact ? null : stat.draftStats.pickRateImpact;
 						const pickRateHighWins = !stat?.draftStats?.pickRateHighWins
@@ -133,9 +133,9 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 							currentHeroWinrate == null || drawnWinrate == null
 								? null
 								: drawnWinrate - currentHeroWinrate;
-						const deckWinrate = !stat?.matchStats?.decksWithCard
+						const deckWinrate = !stat?.matchStats?.stats?.decksWithCard
 							? null
-							: stat.matchStats.decksWithCardThenWin / stat.matchStats.decksWithCard;
+							: stat.matchStats.stats.decksWithCardThenWin / stat.matchStats.stats.decksWithCard;
 						const deckImpact =
 							currentHeroWinrate == null || deckWinrate == null ? null : deckWinrate - currentHeroWinrate;
 						console.debug('drawnImpact', drawnImpact, currentHeroWinrate, drawnWinrate);

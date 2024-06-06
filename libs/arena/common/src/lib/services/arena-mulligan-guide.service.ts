@@ -6,7 +6,7 @@ import { COIN_IDS, CardClass, CardIds, GameType, SceneMode, getBaseCardId } from
 import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -19,11 +19,11 @@ import {
 } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
+	Observable,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
 	filter,
-	from,
 	map,
 	shareReplay,
 	switchMap,
@@ -108,26 +108,63 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			shareReplay(1),
 		);
 
-		const opponentClass$ = from(['all'] as ('all' | string)[]);
+		const opponentActualClass$ = this.gameState.gameState$$.pipe(
+			map((gameState) =>
+				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+			),
+			distinctUntilChanged(),
+		);
+		const opponentClass$: Observable<'all' | string> = combineLatest([
+			opponentActualClass$,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.decktrackerMulliganOpponent),
+				distinctUntilChanged(),
+			),
+		]).pipe(
+			map(([opponentActualClass, opponentPref]) => (opponentPref === 'all' ? 'all' : opponentActualClass)),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+		opponentClass$.subscribe(async (opponentClass) => {
+			const prefs = await this.prefs.getPreferences();
+			const currentOpponentClassPref = prefs.decktrackerMulliganOpponent;
+			if (currentOpponentClassPref !== opponentClass) {
+				const newPrefs: Preferences = {
+					...prefs,
+					decktrackerMulliganOpponent: opponentClass,
+				};
+				await this.prefs.savePreferences(newPrefs);
+			}
+		});
+		// const opponentClass$ = from(['all'] as ('all' | string)[]);
+
+		const timeFrame$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganTime),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+
 		const playerClass$ = this.gameState.gameState$$.pipe(
 			map((gameState) => gameState?.playerDeck.hero?.classes?.[0]),
 			filter((playerClass) => !!playerClass),
 			distinctUntilChanged(),
 			tap((playerClass) => console.debug('[mulligan-arena-guide] playerClass', playerClass)),
 		);
-		const cardStats$ = combineLatest([showWidget$, playerClass$]).pipe(
+		const cardStats$ = combineLatest([showWidget$, playerClass$, timeFrame$]).pipe(
 			filter(([showWidget, _]) => showWidget),
-			switchMap(([showWidget, playerClass]) =>
+			switchMap(([showWidget, playerClass, timeFrame]) =>
 				this.cardStats.buildCardStats(
 					!!playerClass ? CardClass[playerClass].toLowerCase() : 'global',
-					'last-patch',
+					timeFrame,
 				),
 			),
 			tap((stats) => console.debug('[mulligan-arena-guide] card stats', stats)),
 		);
-		const classStats$ = combineLatest([showWidget$]).pipe(
+		const classStats$ = combineLatest([showWidget$, timeFrame$]).pipe(
 			filter(([showWidget]) => showWidget),
-			switchMap(([showWidget]) => combineLatest([this.classStats.buildClassStats('last-patch'), playerClass$])),
+			switchMap(([showWidget, timeFrame]) =>
+				combineLatest([this.classStats.buildClassStats(timeFrame), playerClass$]),
+			),
 			map(([classStats, playerClass]) =>
 				classStats?.stats?.find(
 					(stat) => stat.playerClass === CardClass[playerClass ?? CardClass.INVALID].toLowerCase(),
@@ -188,18 +225,28 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			map(({ cardsInHand, deckCards, cardStats, classStats, opponentClass }) => {
-				const classWinrate = !!classStats?.totalGames ? classStats.totalsWins / classStats.totalGames : 0;
+				const matchup = classStats?.matchups?.find((matchup) => matchup.opponentClass === opponentClass);
+				const classWinrate = !!matchup
+					? !!matchup.totalGames
+						? matchup.totalsWins / matchup.totalGames
+						: 0
+					: !!classStats?.totalGames
+					? classStats.totalsWins / classStats.totalGames
+					: 0;
 				const allDeckCards: readonly MulliganCardAdvice[] =
 					deckCards?.map((refCard) => {
 						const cardData = cardStats?.stats.find(
 							(card) => getBaseCardId(card.cardId) === getBaseCardId(refCard.id),
 						);
-						const rawImpact = !!cardData?.matchStats?.inHandAfterMulligan
-							? cardData.matchStats.inHandAfterMulliganThenWin / cardData.matchStats.inHandAfterMulligan -
-							  classWinrate
+						const matchup = cardData?.matchStats?.matchups?.find(
+							(matchup) => matchup.opponentClass === opponentClass,
+						);
+						const stats = !!matchup ? matchup.stats : cardData?.matchStats?.stats;
+						const rawImpact = stats?.inHandAfterMulligan
+							? stats.inHandAfterMulliganThenWin / stats.inHandAfterMulligan - classWinrate
 							: null;
-						const rawKeepRate = !!cardData?.matchStats?.inHandAfterMulligan
-							? cardData?.matchStats?.keptInMulligan / cardData.matchStats.inHandAfterMulligan
+						const rawKeepRate = stats?.inHandAfterMulligan
+							? stats?.keptInMulligan / stats.inHandAfterMulligan
 							: null;
 						const mulliganAdvice: MulliganCardAdvice = {
 							cardId: refCard.id,
@@ -213,7 +260,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					noData: !cardStats?.stats?.length,
 					cardsInHand: cardsInHand!,
 					allDeckCards: allDeckCards,
-					sampleSize: classStats?.totalGames ?? 0,
+					sampleSize: (!!matchup ? matchup.totalGames : classStats?.totalGames) ?? 0,
 					opponentClass: opponentClass,
 					format: 'wild',
 					rankBracket: 'all',

@@ -109,7 +109,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			const draftStat = draftStats.find((draftStat) => draftStat.cardId === stat.cardId);
 			const result: ArenaCombinedCardStat = {
 				cardId: stat.cardId,
-				matchStats: stat.stats,
+				matchStats: stat,
 				draftStats: this.buildDraftStats(draftStat),
 			};
 			return result;
