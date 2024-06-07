@@ -78,8 +78,9 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 					filter((collection) => !this.isMemoryInfoEmpty(collection)),
 					take(1),
 				)
-				.subscribe(async (newCount) => {
-					await this.performMemoryUpdate(newCount);
+				.subscribe(async (collection) => {
+					console.debug(`[collection-manager] [${this.type()}] initial collection`, collection?.length);
+					await this.performMemoryUpdate(collection);
 				});
 
 			this.collection$$.pipe(filter((collection) => !!collection?.length)).subscribe(async (collection) => {
@@ -88,8 +89,8 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 			});
 
 			const collectionFromDb = await this.localDbRetrieveOperation();
+			console.log(`[collection-manager] [${this.type()}] init collection from db`, collectionFromDb?.length);
 			if (collectionFromDb?.length) {
-				console.log(`[collection-manager] [${this.type()}] init collection from db`, collectionFromDb.length);
 				this.collection$$.next(collectionFromDb);
 			}
 			await this.postInit();
