@@ -9,26 +9,21 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 import { PersonalCommunitiesService } from '../services/personal-communities.service';
 
 @Component({
-	selector: 'my-communities',
-	styleUrls: [`./my-communities.component.scss`],
+	selector: 'community-details',
+	styleUrls: [`./community-details.component.scss`],
 	template: `
-		<div class="my-communities">
-			<ul class="communities-list">
-				<div
-					class="button community"
-					(click)="goIntoCommunity(community)"
-					*ngFor="let community of communities$ | async"
-				>
-					<div class="image"></div>
-					<div class="text">{{ community.name }}</div>
-				</div>
-			</ul>
+		<div class="community-details">
+			<div class="community-name">{{ communityName$ | async }}</div>
+			<div class="type">{{ typeStr$ | async }}</div>
+			<div class="total-members">{{ totalMembersStr$ | async }}</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyCommunitiesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	communities$: Observable<readonly Community[]>;
+export class CommunityDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	communityName$: Observable<string>;
+	typeStr$: Observable<string>;
+	totalMembersStr$: Observable<string>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -39,10 +34,16 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.personalCommunities);
+		await waitForReady(this.personalCommunities, this.nav);
 
-		this.communities$ = this.personalCommunities.communities$$.pipe(
-			this.mapData((communities) => communities ?? []),
+		this.communityName$ = this.personalCommunities.selectedCommunity$$.pipe(
+			this.mapData((community) => community?.name ?? ''),
+		);
+		this.typeStr$ = this.personalCommunities.selectedCommunity$$.pipe(
+			this.mapData((community) => `A ${community?.type ?? 0} community`),
+		);
+		this.totalMembersStr$ = this.personalCommunities.selectedCommunity$$.pipe(
+			this.mapData((community) => `${community?.numberOfMembers ?? 0} members`),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

@@ -5,6 +5,7 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { CommunitiesDesktopComponent } from './components/communities-desktop.component';
 import { CommunitiesJoinModalComponent } from './components/communities-join-modal.component';
 import { CommunitiesJoinComponent } from './components/communities-join.component';
+import { CommunityDetailsComponent } from './components/community-details.component';
 import { MyCommunitiesComponent } from './components/my-communities.component';
 import { CommunityBootstrapService } from './services/_community-bootstrap.service';
 import { CommunityJoinService } from './services/community-join.service';
@@ -16,6 +17,7 @@ const components = [
 	CommunitiesJoinComponent,
 	CommunitiesJoinModalComponent,
 	MyCommunitiesComponent,
+	CommunityDetailsComponent,
 ];
 
 @NgModule({

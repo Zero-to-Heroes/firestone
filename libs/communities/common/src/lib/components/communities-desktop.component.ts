@@ -11,6 +11,7 @@ import {
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, from } from 'rxjs';
+import { ComunitiesCategory } from '../models/navigation';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 
 @Component({
@@ -27,7 +28,7 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 						<nav class="menu-selection">
 							<li
 								*ngFor="let cat of categories$ | async"
-								[ngClass]="{ selected: cat.id === value.category }"
+								[ngClass]="{ selected: isSelected(cat, value.category) }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								{{ cat.name }}
@@ -41,6 +42,10 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 							class="content-section"
 							*ngIf="value.category === 'my-communities'"
 						></my-communities>
+						<community-details
+							class="content-section"
+							*ngIf="value.category === 'community-details'"
+						></community-details>
 					</div>
 				</with-loading>
 			</section>
@@ -52,7 +57,8 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	categories$: Observable<readonly Category[]>;
-	category$: Observable<string | null>;
+	category$: Observable<ComunitiesCategory | null>;
+	selectedCategoryId$: Observable<string | null>;
 	showAds$: Observable<boolean>;
 
 	constructor(
@@ -69,10 +75,11 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		this.loading$ = from([false]);
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
 		this.category$ = this.nav.category$$.pipe(this.mapData((info) => info));
+		this.selectedCategoryId$ = this.nav.selectedCommunity$$.pipe(this.mapData((info) => info));
 		this.categories$ = from([
 			[
-				{ id: 'manage', name: 'Manage' },
-				{ id: 'my-communities', name: 'My communities' },
+				{ id: 'manage' as ComunitiesCategory, name: 'Manage' },
+				{ id: 'my-communities' as ComunitiesCategory, name: 'My communities' },
 			],
 		]);
 
@@ -81,17 +88,25 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		}
 	}
 
+	isSelected(cat: Category, selected: ComunitiesCategory | null) {
+		switch (selected) {
+			case 'community-details':
+				return cat.id === 'my-communities';
+		}
+		return cat.id === selected;
+	}
+
 	showSidebar(value: any) {
 		return false;
 	}
 
-	selectCategory(id: string) {
+	selectCategory(id: ComunitiesCategory) {
 		console.log('selecting category', id);
 		this.nav.category$$.next(id);
 	}
 }
 
 interface Category {
-	id: string;
+	id: ComunitiesCategory;
 	name: string;
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AbstractFacadeService, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { ComunitiesCategory } from '../models/navigation';
 
 @Injectable()
 export class CommunityNavigationService extends AbstractFacadeService<CommunityNavigationService> {
-	public category$$: BehaviorSubject<string | null>;
+	public category$$: BehaviorSubject<ComunitiesCategory | null>;
 	public selectedCommunity$$: BehaviorSubject<string | null>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
@@ -17,7 +18,7 @@ export class CommunityNavigationService extends AbstractFacadeService<CommunityN
 	}
 
 	protected async init() {
-		this.category$$ = new BehaviorSubject<string | null>('manage');
+		this.category$$ = new BehaviorSubject<ComunitiesCategory | null>('manage');
 		this.selectedCommunity$$ = new BehaviorSubject<string | null>(null);
 	}
 }
