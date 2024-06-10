@@ -393,7 +393,10 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), restoreHealth),
 			);
 		case CardIds.ClericOfScales:
-			return and(side(inputSide), inDeck, spell);
+			return highlightConditions(
+				and(side(inputSide), inDeck, spell),
+				and(side(inputSide), or(inDeck, inHand), dragon),
+			);
 		case CardIds.ClickClocker:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.ClimacticNecroticExplosion:
@@ -1905,6 +1908,53 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.YshaarjTheDefiler:
 			return and(side(inputSide), cardsPlayedThisMatch, corrupted);
+
+		// Unsorted
+		case CardIds.BlackjackStunner:
+		case CardIds.CloakedHuntress_KAR_006:
+		case CardIds.CloakedHuntress_CORE_KAR_006:
+		case CardIds.PettingZoo:
+		case CardIds.CommanderRhyssa:
+		case CardIds.SparkjoyCheat:
+		case CardIds.Halkias:
+		case CardIds.OrionMansionManager:
+		case CardIds.ProfessorPutricide_ICC_204:
+		case CardIds.ProfessorPutricide_CORE_ICC_204:
+		case CardIds.SaygeSeerOfDarkmoon:
+		case CardIds.StarstrungBow:
+		case CardIds.ContractConjurer:
+		case CardIds.LesserEmeraldSpellstone:
+		case CardIds.LesserEmeraldSpellstone_EmeraldSpellstoneToken:
+		case CardIds.LesserEmeraldSpellstone_GreaterEmeraldSpellstoneToken:
+		case CardIds.CannonmasterSmythe_BAR_879:
+		case CardIds.PhaseStalker:
+		case CardIds.MedivhsValet:
+		case CardIds.ApexisSmuggler:
+		case CardIds.ArcaneFlakmage:
+		case CardIds.InconspicuousRider:
+		case CardIds.SecretkeeperVanilla:
+		case CardIds.SecretkeeperLegacy:
+			return and(side(inputSide), or(inHand, inDeck), spell, secret);
+		case CardIds.ArcaneBreath:
+		case CardIds.SandBreath_DRG_233:
+		case CardIds.TwilightWhelp:
+		case CardIds.CorrosiveBreath:
+		case CardIds.FiretreeWitchdoctor:
+		case CardIds.NetherspiteHistorian:
+		case CardIds.WyrmrestAgent:
+		case CardIds.BreathOfTheInfinite:
+		case CardIds.Duskbreaker_LOOT_410:
+		case CardIds.MoltenBreath:
+		case CardIds.CrazedNetherwing:
+		case CardIds.DragonfirePotion:
+		case CardIds.FyeTheSettingSun_WW_825:
+		case CardIds.Chronobreaker:
+		case CardIds.AlexstraszasChampion:
+		case CardIds.DragonmawSentinel:
+		case CardIds.DragonriderTalritha_DRG_235:
+		case CardIds.LightningBreath:
+		case CardIds.CandleBreath:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 	}
 	return null;
 };
