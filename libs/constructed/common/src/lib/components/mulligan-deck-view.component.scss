@@ -1,7 +1,14 @@
+:host {
+	max-height: 100%;
+	display: flex;
+	align-items: baseline;
+}
+
 .mulligan-deck-overview {
 	display: flex;
+	max-height: 100%;
+	justify-content: flex-start;
 	flex-direction: column;
-	justify-content: center;
 	align-items: stretch;
 	background: var(--color-7);
 	color: var(--color-2);
@@ -54,6 +61,8 @@
 .content {
 	display: flex;
 	flex-direction: column;
+	min-height: 0;
+	overflow: scroll;
 }
 
 .deck-header {
