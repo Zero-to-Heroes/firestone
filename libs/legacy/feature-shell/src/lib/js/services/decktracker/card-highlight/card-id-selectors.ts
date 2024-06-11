@@ -136,6 +136,7 @@ export const cardIdSelector = (
 		case CardIds.AdvancedTargetingMonocle:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.AegwynnTheGuardianCore:
+		case CardIds.AegwynnTheGuardian_LEG_CS3_001:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.AlakirTheWindsOfTime_WON_092h:
 			return highlightConditions(
@@ -1269,8 +1270,9 @@ export const cardIdSelector = (
 		case CardIds.OverlordSaurfang_BAR_334:
 			return and(side(inputSide), minion, inGraveyard, frenzy);
 		case CardIds.OverseerFrigidaraCore_RLK_224:
+		case CardIds.OverseerFrigidara_LEG_RLK_224:
 		case CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224:
-			return and(side(inputSide), inDeck, spell);
+			return highlightConditions(and(side(inputSide), inDeck, spell, frost), and(side(inputSide), inDeck, spell));
 		case CardIds.Owlonius_TOY_807:
 			return and(side(inputSide), or(inHand, inDeck), or(and(spell, dealsDamage), spellDamage));
 		case CardIds.PaintedCanvasaur_TOY_350:
@@ -1420,6 +1422,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RighteousReservesTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
+		case CardIds.RimefangSwordCore:
+		case CardIds.RimefangSword_LEG_RLK_710:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RingmasterWhatley:
 			return highlightConditions(
 				and(side(inputSide), inDeck, minion, dragon),
@@ -1463,6 +1468,7 @@ export const cardIdSelector = (
 		case CardIds.RoyalGreatswordTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, legendary);
 		case CardIds.RuneforgingCore:
+		case CardIds.Runeforging_LEG_RLK_715:
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.RunningWild:
 		case CardIds.RunningWild_RunningWild:
