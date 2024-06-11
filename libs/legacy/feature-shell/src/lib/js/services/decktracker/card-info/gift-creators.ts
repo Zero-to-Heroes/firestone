@@ -629,6 +629,7 @@ export const giftCreators = [
 	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
 	CardIds.SelectiveBreederCore,
+	CardIds.SelectiveBreeder_LEG_CS3_015,
 	CardIds.SendInTheScout_Si7ScoutTavernBrawl,
 	CardIds.SerpentWig_TSC_215,
 	CardIds.ServiceBell,
@@ -849,6 +850,7 @@ export const giftCreators = [
 	CardIds.YoggSaronUnleashed_TentacleSwarmToken_YOG_516t3,
 	CardIds.YseraLegacy,
 	CardIds.YseraTheDreamerCore,
+	CardIds.YseraTheDreamer_LEG_CS3_033,
 	CardIds.YseraVanilla,
 	CardIds.Zaqul_Story_11_Zaqul,
 	CardIds.Zaqul_TSC_959,

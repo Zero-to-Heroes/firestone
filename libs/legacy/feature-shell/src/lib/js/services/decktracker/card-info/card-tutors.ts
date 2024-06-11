@@ -144,6 +144,7 @@ export const tutors = [
 	CardIds.RollTheBones_CORE_ICC_201,
 	CardIds.RollTheBones_ICC_201,
 	CardIds.RuneforgingCore,
+	CardIds.Runeforging_LEG_RLK_715,
 	CardIds.RuniTimeExplorer_RuinsOfKoruneToken_WON_053t6,
 	CardIds.RushTheStage,
 	CardIds.SalhetsPride,
