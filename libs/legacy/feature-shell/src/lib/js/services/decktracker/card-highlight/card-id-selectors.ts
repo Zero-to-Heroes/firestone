@@ -1085,6 +1085,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell, frost);
 		case CardIds.LadyInWhite:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.LadyLiadrin:
+		case CardIds.LadyLiadrin_CORE_BT_334:
+			return tooltip(and(side(inputSide), spellPlayedThisMatch));
 		case CardIds.LadyVashj_VashjPrimeToken:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.LastStand:
