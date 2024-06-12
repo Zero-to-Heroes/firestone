@@ -13,14 +13,14 @@ const DK_BLOOD_HAND = [
 	CardIds.VampiricBlood_RLK_051,
 ];
 const DK_FROST_HAND = [
+	CardIds.SchoolTeacher,
 	CardIds.FrostwyrmsFury_RLK_063,
-	CardIds.FrostStrike,
 	CardIds.LadyDeathwhisper_RLK_713,
 	CardIds.GlacialAdvance_RLK_512,
-	CardIds.SchoolTeacher,
 	CardIds.HornOfWinter_RLK_042,
 	CardIds.ThassarianCore_RLK_223,
 	CardIds.HowlingBlast_RLK_015,
+	CardIds.FrostStrike,
 ];
 const DK_UNHOLY_HAND = [
 	CardIds.GraveStrengthCore_RLK_707,
@@ -36,51 +36,51 @@ const DEMONHUNTER_HAND = [
 	CardIds.TwinSliceToken_TOY_400t3,
 	CardIds.SkullOfGuldanToken_TOY_401t,
 	CardIds.WarglaivesOfAzzinothToken_TOY_400t7,
-	CardIds.ImprisonedAntaenToken_TOY_400t4,
-	CardIds.PriestessOfFuryToken_TOY_400t5,
 	CardIds.AltruisTheOutcastToken_TOY_401t2,
 	CardIds.MetamorphosisToken_TOY_400t6,
+	CardIds.ImprisonedAntaenToken_TOY_400t4,
+	CardIds.PriestessOfFuryToken_TOY_400t5,
 	CardIds.EyeBeamToken_TOY_400t8,
 ];
 const DRUID_HAND = [
+	CardIds.SpreadingPlague_CORE_ICC_054,
 	CardIds.TwigOfTheWorldTree,
 	CardIds.MalfurionThePestilent_ICC_832,
-	CardIds.BranchingPaths,
 	CardIds.KingTogwaggle,
 	CardIds.LesserJasperSpellstone,
 	CardIds.AzalinaSoulthief,
+	CardIds.BranchingPaths,
 	CardIds.NaturalizeLegacy,
-	CardIds.SpreadingPlague_CORE_ICC_054,
 ];
 const MAGE_HAND = [
 	CardIds.DoomsayerCore,
-	CardIds.ArchmageAntonidasLegacy,
-	CardIds.FrostboltLegacy,
+	CardIds.Alexstrasza_CORE_VAN_EX1_561,
+	CardIds.FrostNovaLegacy,
 	CardIds.FireballLegacy,
 	CardIds.IceLanceLegacy,
 	CardIds.IceBlockLegacy,
-	CardIds.Alexstrasza_CORE_VAN_EX1_561,
-	CardIds.FrostNovaLegacy,
+	CardIds.FrostboltLegacy,
+	CardIds.ArchmageAntonidasLegacy,
 ];
 const HUNTER_HAND = [
 	CardIds.LesserEmeraldSpellstone,
-	CardIds.CloakedHuntress_CORE_KAR_006,
-	CardIds.DeathstalkerRexxar_ICC_828,
 	CardIds.WanderingMonster,
+	CardIds.FreezingTrapCore,
 	CardIds.CatTrickCore,
 	CardIds.ExplosiveTrapLegacy_EX1_610,
 	CardIds.MisdirectionLegacy,
-	CardIds.FreezingTrapCore,
+	CardIds.DeathstalkerRexxar_ICC_828,
+	CardIds.CloakedHuntress_CORE_KAR_006,
 ];
 const PALADIN_HAND = [
 	CardIds.AldorTruthseeker,
 	CardIds.LibramOfHope,
-	CardIds.LadyLiadrin,
-	CardIds.PenFlinger,
-	CardIds.LibramOfJustice_BT_011,
-	CardIds.LibramOfJudgment,
 	CardIds.LibramOfWisdom_BT_025,
 	CardIds.AldorAttendant,
+	CardIds.LadyLiadrin,
+	CardIds.PenFlinger,
+	CardIds.LibramOfJudgment,
+	CardIds.LibramOfJustice_BT_011,
 ];
 const PRIEST_HAND = [
 	CardIds.KronxDragonhoof,
@@ -93,21 +93,21 @@ const PRIEST_HAND = [
 	CardIds.DiscipleOfGalakrond,
 ];
 const SHAMAN_HAND = [
-	CardIds.LifedrinkerCore,
-	CardIds.ZolaTheGorgonCore,
+	CardIds.SaroniteChainGang_CORE_ICC_466,
 	CardIds.HealingRain,
 	CardIds.GrumbleWorldshaker,
 	CardIds.GlacialShardCore,
-	CardIds.SaroniteChainGang_CORE_ICC_466,
+	CardIds.ZolaTheGorgonCore,
+	CardIds.LifedrinkerCore,
 	CardIds.Shudderwock_GIL_820,
 	CardIds.Volcano,
 ];
 const ROGUE_HAND = [
 	CardIds.YouthfulBrewmasterLegacy,
-	CardIds.BrannBronzebeard_LOE_077,
 	CardIds.VanishVanilla,
-	CardIds.PreparationLegacy,
+	CardIds.BrannBronzebeard_LOE_077,
 	CardIds.ColdlightOracleLegacy,
+	CardIds.PreparationLegacy,
 	CardIds.ShadowstepLegacy,
 	CardIds.AntiqueHealbot,
 	CardIds.GangUp,
@@ -125,12 +125,12 @@ const WARRIOR_HAND = [
 const WARLOCK_HAND = [
 	CardIds.DoomguardLegacy,
 	CardIds.SkullOfTheManari,
-	CardIds.CarnivorousCube,
-	CardIds.FacelessManipulator,
-	CardIds.Voidlord_LOOT_368,
 	CardIds.DefileCore,
+	CardIds.Voidlord_LOOT_368,
 	CardIds.DarkPact_LOOT_017,
+	CardIds.FacelessManipulator,
 	CardIds.BloodreaverGuldan_ICC_831,
+	CardIds.CarnivorousCube,
 ];
 const ALL_HANDS = [
 	DK_BLOOD_HAND,
