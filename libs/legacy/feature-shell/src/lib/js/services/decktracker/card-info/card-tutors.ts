@@ -233,4 +233,5 @@ export const tutors = [
 	CardIds.SketchArtist_TOY_916,
 	CardIds.TrinketArtist_TOY_882,
 	CardIds.PluckyPaintfin_TOY_517,
+	CardIds.PatchesThePirate_LockedAndLoaded_THD_025p,
 ];
