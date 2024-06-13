@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CommunityInfo } from '@firestone-hs/communities';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -6,7 +7,6 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { Community } from '../models/communities';
 import { PersonalCommunitiesService } from './personal-communities.service';
 
 const JOIN_COMMUNITY_URL = 'https://t2cgqsjooshgnnjqspi44vokqa0ywqmw.lambda-url.us-west-2.on.aws/';
@@ -41,9 +41,8 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 	private async joinCommunityInternal(code: string): Promise<boolean> {
 		console.debug('[communities] joining community', code);
 		const user = await this.user.getCurrentUser();
-		const result: Community | null = await this.api.callPostApi<Community>(JOIN_COMMUNITY_URL, {
+		const result: CommunityInfo | null = await this.api.callPostApi<CommunityInfo>(JOIN_COMMUNITY_URL, {
 			code: code,
-			userId: user?.userId,
 			userName: user?.username,
 		});
 		console.debug('[communities] result', result);

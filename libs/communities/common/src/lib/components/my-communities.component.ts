@@ -1,10 +1,10 @@
 /* eslint-disable @angular-eslint/template/eqeqeq */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { CommunityInfo } from '@firestone-hs/communities';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { Community } from '../models/communities';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 import { PersonalCommunitiesService } from '../services/personal-communities.service';
 
@@ -28,7 +28,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MyCommunitiesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	communities$: Observable<readonly Community[]>;
+	communities$: Observable<readonly CommunityInfo[]>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -50,7 +50,7 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 		}
 	}
 
-	goIntoCommunity(community: Community) {
+	goIntoCommunity(community: CommunityInfo) {
 		this.nav.selectedCommunity$$.next(community.id);
 		this.nav.category$$.next('community-details');
 	}
