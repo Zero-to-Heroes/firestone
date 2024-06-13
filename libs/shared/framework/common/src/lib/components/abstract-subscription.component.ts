@@ -17,13 +17,13 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 
 	protected mapData<T, R>(
 		extractor: (arg: T) => R,
-		equality: ((a: any, b: any) => boolean) | null = null,
+		equality: ((a: R, b: R) => boolean) | null = null,
 		debounceTimeMs = 100,
 	): UnaryFunction<Observable<T>, Observable<R>> {
 		return pipe(
 			debounceTime(debounceTimeMs),
-			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			map(extractor),
+			distinctUntilChanged(!!equality ? (a, b) => equality(a, b) : (a, b) => arraysEqual(a, b)),
 			tap((filter) =>
 				setTimeout(() => {
 					if (!(this.cdr as ViewRef)?.destroyed) {
