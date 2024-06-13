@@ -36,7 +36,7 @@ export class HolySpellsCounterDefinition implements CounterDefinition<GameState,
 		const holySpellsPlayed = cardsPlayedThisMatch
 			.map((c) => this.allCards.getCard(c.cardId))
 			.filter((c: ReferenceCard) => c?.type?.toUpperCase() === CardType[CardType.SPELL])
-			.filter((c: ReferenceCard) => c?.spellSchool.includes(SpellSchool[SpellSchool.HOLY])).length;
+			.filter((c: ReferenceCard) => c?.spellSchool?.toUpperCase() === SpellSchool[SpellSchool.HOLY]).length;
 		const tooltip = this.i18n.translateString(`counters.holy-spells.${this.side}`, {
 			value: holySpellsPlayed,
 		});
