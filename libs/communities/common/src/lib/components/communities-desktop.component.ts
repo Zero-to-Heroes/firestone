@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, from } from 'rxjs';
 import { ComunitiesCategory } from '../models/navigation';
 import { CommunityNavigationService } from '../services/community-navigation.service';
@@ -21,7 +21,10 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 		`./communities-desktop.component.scss`,
 	],
 	template: `
-		<div class="app-section communities" *ngIf="{ category: category$ | async } as value">
+		<div
+			class="app-section communities"
+			*ngIf="{ category: category$ | async, isLoggedIn: isLoggedIn$ | async } as value"
+		>
 			<section class="main divider">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="main-container">
@@ -34,18 +37,23 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 								{{ cat.name }}
 							</li>
 						</nav>
-						<communities-join
-							class="content-section"
-							*ngIf="value.category === 'manage'"
-						></communities-join>
-						<my-communities
-							class="content-section"
-							*ngIf="value.category === 'my-communities'"
-						></my-communities>
-						<community-details
-							class="content-section"
-							*ngIf="value.category === 'community-details'"
-						></community-details>
+						<ng-container *ngIf="value.isLoggedIn">
+							<communities-join
+								class="content-section"
+								*ngIf="value.category === 'manage'"
+							></communities-join>
+							<my-communities
+								class="content-section"
+								*ngIf="value.category === 'my-communities'"
+							></my-communities>
+							<community-details
+								class="content-section"
+								*ngIf="value.category === 'community-details'"
+							></community-details>
+						</ng-container>
+						<ng-container *ngIf="!value.isLoggedIn">
+							Please log in to use the community features
+						</ng-container>
 					</div>
 				</with-loading>
 			</section>
@@ -60,17 +68,19 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 	category$: Observable<ComunitiesCategory | null>;
 	selectedCategoryId$: Observable<string | null>;
 	showAds$: Observable<boolean>;
+	isLoggedIn$: Observable<boolean>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly nav: CommunityNavigationService,
+		private readonly user: UserService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.ads, this.nav);
+		await waitForReady(this.ads, this.nav, this.user);
 
 		this.loading$ = from([false]);
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
@@ -82,6 +92,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 				{ id: 'my-communities' as ComunitiesCategory, name: 'My communities' },
 			],
 		]);
+		this.isLoggedIn$ = this.user.user$$.pipe(this.mapData((user) => !!user?.username));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
