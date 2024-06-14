@@ -2,6 +2,11 @@
 	font-size: 14px;
 }
 
+.community-details {
+	display: flex;
+	flex-direction: column;
+}
+
 .overview {
 	display: flex;
 	flex-direction: column;
@@ -11,6 +16,7 @@
 	width: fit-content;
 	min-width: 350px;
 	padding: 15px;
+	margin-bottom: 30px;
 
 	.community-name {
 		color: var(--default-title-color);
@@ -31,4 +37,36 @@
 			margin-right: 5px;
 		}
 	}
+}
+
+.leaderboards {
+	display: flex;
+	flex-direction: column;
+
+	.header {
+		color: var(--default-title-color);
+		font-size: 16px;
+		margin-bottom: 10px;
+	}
+}
+
+.tabs {
+	display: flex;
+	font-size: 13px;
+
+	.tab {
+		// width: 120px;
+		padding-right: 20px;
+
+		&.selected .text,
+		&:hover .text {
+			color: var(--default-title-color);
+			border-bottom: 1px solid var(--default-title-color);
+		}
+	}
+}
+
+.leaderboard {
+	display: flex;
+	flex-direction: column;
 }
