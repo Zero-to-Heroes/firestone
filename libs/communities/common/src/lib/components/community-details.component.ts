@@ -33,9 +33,15 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					</div>
 				</ul>
 				<div class="leaderboard" *ngIf="leaderboard$ | async as leaderboard">
+					<div class="leaderboard-header">
+						<div class="cell rank">Rank</div>
+						<div class="cell player-rank">Rating</div>
+						<div class="cell player-name">Name</div>
+					</div>
 					<div class="leaderboard-entry" *ngFor="let entry of leaderboard">
-						<rank-image class="player-rank" [stat]="entry.playerRank"></rank-image>
-						<div class="player-name">{{ entry.playerName }}</div>
+						<div class="cell rank">{{ entry.rank }}</div>
+						<rank-image class="cell player-rank" [stat]="entry.playerRank"></rank-image>
+						<div class="cell player-name">{{ entry.playerName }}</div>
 					</div>
 				</div>
 			</div>
@@ -130,13 +136,14 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 
 		const gameMode: StatGameModeType = this.toGameMode(selectedTab);
 		const gameFormat: StatGameFormatType = this.toGameFormat(selectedTab);
-		return sourceLeaderboard.map((entry) => {
+		return sourceLeaderboard.map((entry, index) => {
 			const rankStat: GameStat = {
 				playerRank: entry.currentRank,
 				gameMode: gameMode,
 				gameFormat: gameFormat,
 			} as GameStat;
 			return {
+				rank: index + 1,
 				playerName: entry.displayName,
 				playerRank: rankStat,
 			};
@@ -196,6 +203,7 @@ interface Tab {
 }
 
 interface InternalLeaderboardEntry {
+	rank: number;
 	playerName: string;
 	playerRank: GameStat;
 }

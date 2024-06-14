@@ -69,4 +69,52 @@
 .leaderboard {
 	display: flex;
 	flex-direction: column;
+	margin-top: 20px;
+	min-height: 0;
+	overflow-y: scroll;
+	flex-grow: 1;
+	margin-bottom: 20px;
+}
+
+.leaderboard-header {
+	display: flex;
+	height: 50px;
+	color: var(--default-text-color);
+}
+
+.leaderboard-entry {
+	display: flex;
+	height: 40px;
+	min-height: 40px;
+	border-bottom: 1px solid var(--color-3);
+	align-items: center;
+	color: var(--color-1);
+
+	&:nth-child(even) {
+		background-color: rgba(255, 255, 255, 0.08);
+	}
+
+	.cell {
+		height: 100%;
+	}
+}
+
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&.rank {
+		width: 50px;
+	}
+
+	&.player-rank {
+		width: 80px;
+	}
+
+	&.player-name {
+		margin-left: 20px;
+		flex-grow: 1;
+		justify-content: flex-start;
+	}
 }
