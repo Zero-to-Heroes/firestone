@@ -29,7 +29,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 				<div class="header">Leaderboards</div>
 				<ul class="tabs">
 					<div class="tab" *ngFor="let tab of tabs$ | async" [ngClass]="{ selected: tab.selected }">
-						<div class="text">{{ tab.name }}</div>
+						<div class="text" (click)="selectTab(tab)">{{ tab.name }}</div>
 					</div>
 				</ul>
 				<div class="leaderboard" *ngIf="leaderboard$ | async as leaderboard">
@@ -44,6 +44,9 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						<div class="cell player-name">{{ entry.playerName }}</div>
 					</div>
 				</div>
+				<div class="leaderboard empty" *ngIf="!(leaderboard$ | async)?.length">
+					There are no players in this leaderboard yet
+				</div>
 			</div>
 		</div>
 	`,
@@ -54,7 +57,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 	communityDescription$: Observable<string>;
 	totalMembersStr$: Observable<string>;
 	tabs$: Observable<readonly Tab[]>;
-	leaderboard$: Observable<readonly InternalLeaderboardEntry[]>;
+	leaderboard$: Observable<readonly InternalLeaderboardEntry[] | null>;
 
 	private selectedTab$$ = new BehaviorSubject<string>('standard');
 
@@ -89,7 +92,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				console.debug('sourceLeaderboard', sourceLeaderboard);
 				const displayedLeaderboard = this.buildLeaderboard(sourceLeaderboard, selectedTab);
 				console.debug('displayedLeaderboard', displayedLeaderboard);
-				return displayedLeaderboard;
+				return !!displayedLeaderboard?.length ? displayedLeaderboard : null;
 			}),
 		);
 
@@ -107,6 +110,10 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	selectTab(tab: Tab) {
+		this.selectedTab$$.next(tab.id);
 	}
 
 	private buildTabName(tab: string): string {

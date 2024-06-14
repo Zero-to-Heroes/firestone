@@ -184,31 +184,6 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					<div class="menu-header" [owTranslate]="'app.menu.communities-header'"></div>
 				</div>
 			</button>
-
-			<li class="main-menu-separator"></li>
-
-			<!-- <button
-				*ngIf="enableMailboxTab$ | async"
-				[attr.tabindex]="tabIndex$ | async"
-				type="button"
-				class="menu-item mailbox"
-				[attr.aria-label]="'app.menu.mailbox-header' | owTranslate"
-				[ngClass]="{ selected: selectedModule === 'mailbox' }"
-				(click)="selectModule('mailbox')"
-			>
-				<div class="icon" inlineSVG="assets/svg/mailbox.svg"></div>
-				<div class="unread-mails" *ngIf="hasNewMail$ | async"></div>
-				<div class="text">
-					<div class="text-background"></div>
-					<div class="menu-header" [owTranslate]="'app.menu.mailbox-header'"></div>
-					<div
-						class="menu-text-details"
-						*ngIf="hasNewMail$ | async"
-						[innerHTML]="mailboxTextDetails$ | async"
-					></div>
-				</div>
-			</button>
-			<li class="main-menu-separator"></li> -->
 			<button
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
