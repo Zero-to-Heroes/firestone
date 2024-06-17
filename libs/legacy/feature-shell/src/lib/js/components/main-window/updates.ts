@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.16.1',
+		version: '13.16.2',
 		force: false,
 		sections: [
 			// {
@@ -42,21 +42,21 @@ export const updates: readonly Update[] = [
 			// 	text: `IMPORTANT: some people have reported app crashes since the latest updates. The reports for now have all been on Battlegrounds, so I'm disabling the new Quests live stats for now. Please let me know if this improves the situation for you (you can reach out on Discord: https://discord.gg/vKeB3gnKTy or by using the "Report a bug" feature at the top right of the app's main window).
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `The mulligan guide overlay has been revamped! It has more data, is presented in a clearer way, and lets you customize what kind of data it uses. You can choose the target Rank Bracket (Legend, Top 2k Legend, Diamond-Legend), whether to get the data vs All Classes or you current opponent's class (mostly useful when the sample size is low. And you can sort the cards based on Impact or Keep rate. Also, it has colors!`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `Firestone has been updated for patch 29.6.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
