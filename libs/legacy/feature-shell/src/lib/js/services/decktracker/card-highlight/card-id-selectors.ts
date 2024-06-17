@@ -166,6 +166,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.AmuletOfUndying:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
+		case CardIds.AncestorsCall:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Ancharrr:
 			return and(side(inputSide), inDeck, minion, pirate);
 		case CardIds.AncientMysteries:
@@ -425,6 +427,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.ClockworkKnight:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
+		case CardIds.CloningDevice:
+			return and(not(side(inputSide)), inDeck, minion);
 		case CardIds.CoilCastingTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), naga);
 		case CardIds.ColiferoTheArtist_TOY_703:
@@ -612,6 +616,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.DunBaldarBunker:
 			return and(side(inputSide), inDeck, secret);
+		case CardIds.DynOMatic:
+		case CardIds.DynOMaticCore:
+			return and(side(inputSide), or(inHand, inDeck), minion, mech);
 		case CardIds.EdgeOfDredgeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), dredge);
 		case CardIds.EerieStoneTavernBrawl:
@@ -665,6 +672,8 @@ export const cardIdSelector = (
 		case CardIds.EternalServitude_CORE_ICC_213:
 		case CardIds.EternalServitude_ICC_213:
 			return and(side(inputSide), inGraveyard, minion);
+		case CardIds.Eureka:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ExpeditedBurialTavernBrawl:
 			return and(side(inputSide), minion, deathrattle);
 		case CardIds.FairyTaleForest_TOY_507:
@@ -942,7 +951,10 @@ export const cardIdSelector = (
 		case CardIds.IntoTheFray:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.InventorBoom_TOY_607:
-			return tooltip(and(side(inputSide), inGraveyard, mech, costMore(4)));
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), mech, costMore(4)),
+				tooltip(and(side(inputSide), inGraveyard, mech, costMore(4))),
+			);
 		case CardIds.InventorsAura:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.InvestmentOpportunity:
@@ -1198,7 +1210,7 @@ export const cardIdSelector = (
 		case CardIds.Mixtape:
 			return tooltip(and(opposingSide(inputSide), cardsPlayedThisMatch));
 		case CardIds.Muckmorpher:
-			return and(side(inputSide), inDeck, minion);
+			return and(side(inputSide), inDeck, minion, not(cardIs(CardIds.Muckmorpher)));
 		case CardIds.MulchMadnessTavernBrawl:
 			return and(side(inputSide), minion, neutral);
 		case CardIds.MummyMagic:
@@ -1500,6 +1512,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.SeafloorGateway_TSC_055:
 			return and(side(inputSide), inDeck, minion, mech);
+		case CardIds.SeascoutOperator_TSC_646:
+			return and(side(inputSide), or(inHand, inDeck), minion, mech);
 		case CardIds.SecurityAutomaton_TSC_928:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.SenseDemonsLegacy_EX1_317:
@@ -1971,6 +1985,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.YshaarjTheDefiler:
 			return and(side(inputSide), cardsPlayedThisMatch, corrupted);
+		case CardIds.YshaarjRageUnbound:
+			return and(side(inputSide), inDeck, minion);
 
 		// Unsorted
 		case CardIds.BlackjackStunner:
