@@ -12,8 +12,8 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 	selector: 'my-communities',
 	styleUrls: [`./my-communities.component.scss`],
 	template: `
-		<div class="my-communities">
-			<ul class="communities-list">
+		<div class="my-communities" *ngIf="{ hasCommunities: hasCommunities$ | async } as value">
+			<ul class="communities-list" *ngIf="value.hasCommunities">
 				<div
 					class="button community"
 					(click)="goIntoCommunity(community)"
@@ -23,11 +23,13 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					<div class="text">{{ community.name }}</div>
 				</div>
 			</ul>
+			<div *ngIf="!value.hasCommunities" class="no-communities">You are not part of any guild yet</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MyCommunitiesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	hasCommunities$: Observable<boolean>;
 	communities$: Observable<readonly CommunityInfo[]>;
 
 	constructor(
@@ -44,6 +46,7 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 		this.communities$ = this.personalCommunities.communities$$.pipe(
 			this.mapData((communities) => communities ?? []),
 		);
+		this.hasCommunities$ = this.communities$.pipe(this.mapData((communities) => !!communities?.length));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

@@ -23,11 +23,11 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 		<div class="communities-join">
 			<div class="button create disabled">
 				<div class="image"></div>
-				<div class="text">Create a community</div>
+				<div class="text">Create a guild</div>
 			</div>
 			<div class="button join" (click)="showJoinPopup()">
 				<div class="image"></div>
-				<div class="text">Join a community</div>
+				<div class="text">Join a guild</div>
 			</div>
 		</div>
 	`,

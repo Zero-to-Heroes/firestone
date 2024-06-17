@@ -8,8 +8,8 @@ import { CommunityJoinService } from '../services/community-join.service';
 	styleUrls: [`./communities-join-modal.component.scss`],
 	template: `
 		<div class="modal">
-			<div class="title">Join a community</div>
-			<div class="text">Please enter the code given to you by the community host</div>
+			<div class="title">Join a guild</div>
+			<div class="text">Please enter the code given to you by the guild host</div>
 			<div class="input">
 				<input
 					type="text"

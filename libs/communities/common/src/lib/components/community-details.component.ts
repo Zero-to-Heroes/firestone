@@ -84,7 +84,8 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				(community) => `${(community?.numberOfMembers ?? 0).toLocaleString(this.i18n.formatCurrentLocale()!)}`,
 			),
 		);
-		this.leaderboard$ = combineLatest([this.selectedTab$$, this.personalCommunities.selectedCommunity$$]).pipe(
+		const selectedTab$ = this.selectedTab$$.pipe(this.mapData((selectedTab) => selectedTab));
+		this.leaderboard$ = combineLatest([selectedTab$, this.personalCommunities.selectedCommunity$$]).pipe(
 			tap(([selectedTab, community]) => console.debug('selectedTab', selectedTab, 'community', community)),
 			filter(([selectedTab, community]) => !!community),
 			this.mapData(([selectedTab, community]) => {
@@ -97,7 +98,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 		);
 
 		const allTabs = ['standard', 'wild', 'twist', 'battlegrounds', 'battlegrounds-duo'];
-		this.tabs$ = this.selectedTab$$.pipe(
+		this.tabs$ = selectedTab$.pipe(
 			this.mapData((selectedTab) =>
 				allTabs.map((tab) => ({
 					id: tab,

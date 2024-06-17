@@ -51,9 +51,7 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 								*ngIf="value.category === 'community-details'"
 							></community-details>
 						</ng-container>
-						<ng-container *ngIf="!value.isLoggedIn">
-							Please log in to use the community features
-						</ng-container>
+						<ng-container *ngIf="!value.isLoggedIn"> Please log in to use the guild features </ng-container>
 					</div>
 				</with-loading>
 			</section>
@@ -89,7 +87,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		this.categories$ = from([
 			[
 				{ id: 'manage' as ComunitiesCategory, name: 'Manage' },
-				{ id: 'my-communities' as ComunitiesCategory, name: 'My communities' },
+				{ id: 'my-communities' as ComunitiesCategory, name: 'My guilds' },
 			],
 		]);
 		this.isLoggedIn$ = this.user.user$$.pipe(this.mapData((user) => !!user?.username));

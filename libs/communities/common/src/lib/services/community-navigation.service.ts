@@ -18,7 +18,7 @@ export class CommunityNavigationService extends AbstractFacadeService<CommunityN
 	}
 
 	protected async init() {
-		this.category$$ = new BehaviorSubject<ComunitiesCategory | null>('manage');
+		this.category$$ = new BehaviorSubject<ComunitiesCategory | null>('my-communities');
 		this.selectedCommunity$$ = new BehaviorSubject<string | null>(null);
 	}
 }
