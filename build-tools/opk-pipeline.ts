@@ -1,7 +1,7 @@
-import 'reflect-metadata';
 import { OwCliContainer, ReleaseOpkCommand, SignOpkCommand, UploadOpkCommand } from '@overwolf/ow-cli/bin';
 import { PackOpkCommand } from '@overwolf/ow-cli/bin/commands/opk/pack-opk.command';
 import { readFile } from 'fs/promises';
+import 'reflect-metadata';
 
 const pipeline = async () => {
 	OwCliContainer.init();
@@ -47,12 +47,12 @@ const pipeline = async () => {
 
 	// Uploading the version to prod, so that it's easy to just manually go to
 	// the console, and perform the rollout once everything is ok
-	console.log('[opk] uploading opk to prod');
-	const newProdVersionId = await uploadOpkCmd.handler({
-		filePath: `./${signedFileName}`,
-		wait: true,
-	});
-	console.log('[opk] new prod version id', newProdVersionId);
+	// console.log('[opk] uploading opk to prod');
+	// const newProdVersionId = await uploadOpkCmd.handler({
+	// 	filePath: `./${signedFileName}`,
+	// 	wait: true,
+	// });
+	// console.log('[opk] new prod version id', newProdVersionId);
 };
 
 pipeline();
