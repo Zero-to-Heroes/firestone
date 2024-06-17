@@ -205,7 +205,7 @@ export class ConstructedMulliganDeckComponent
 				({ timeFrame, patchInfo }) =>
 					this.i18n.translateString(`decktracker.overlay.mulligan.deck-mulligan-filter-time-tooltip`, {
 						timeFrame: timeFrame,
-						patchInfo: patchInfo,
+						patchDetails: patchInfo,
 					})!,
 			),
 		);
