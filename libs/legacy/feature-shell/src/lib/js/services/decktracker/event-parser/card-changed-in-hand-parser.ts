@@ -29,6 +29,7 @@ export class CardChangedInHandParser implements EventParser {
 
 		const isCardInfoPublic = isPlayer || publicCardCreators.includes(creatorCardId);
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
+		console.debug('[card-changed-in-hand] cardData', isCardInfoPublic, cardData, cardInHand, deck.hand);
 		const newCardInHand = cardInHand
 			? cardInHand.update({
 					cardId: isCardInfoPublic ? cardId : cardInHand.cardId,
@@ -38,8 +39,7 @@ export class CardChangedInHandParser implements EventParser {
 						? this.i18n.getCardName(cardData.id)
 						: this.i18n.getCardName(cardInHand.cardId),
 					manaCost: isCardInfoPublic && cardData ? cardData.cost : undefined,
-					actualManaCost:
-						isCardInfoPublic && cardData ? cardInHand.actualManaCost ?? cardData.cost : undefined,
+					actualManaCost: isCardInfoPublic && cardData ? cardData.cost : undefined,
 					rarity:
 						isCardInfoPublic && cardData && cardData.rarity
 							? cardData.rarity.toLowerCase()
@@ -47,8 +47,10 @@ export class CardChangedInHandParser implements EventParser {
 					lastAffectedByCardId: lastAffectedByCardId,
 			  } as DeckCard)
 			: null;
+		console.debug('[card-changed-in-hand] newCardInHand', newCardInHand);
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
+		console.debug('[card-changed-in-hand] newHand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
