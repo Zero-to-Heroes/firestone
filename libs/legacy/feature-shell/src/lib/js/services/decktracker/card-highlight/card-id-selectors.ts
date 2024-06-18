@@ -397,7 +397,8 @@ export const cardIdSelector = (
 		case CardIds.ChiaDrake_Cultivate_TOY_801a:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Chogall_WON_105:
-			return and(side(inputSide), discarded);
+		case CardIds.Chogall_OG_121:
+			return tooltip(and(side(inputSide), discarded));
 		case CardIds.ChorusRiff:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ClassActionLawyer:
