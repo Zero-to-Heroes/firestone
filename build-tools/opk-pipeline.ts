@@ -1,7 +1,7 @@
+import 'reflect-metadata';
 import { OwCliContainer, ReleaseOpkCommand, SignOpkCommand, UploadOpkCommand } from '@overwolf/ow-cli/bin';
 import { PackOpkCommand } from '@overwolf/ow-cli/bin/commands/opk/pack-opk.command';
 import { readFile } from 'fs/promises';
-import 'reflect-metadata';
 
 const pipeline = async () => {
 	OwCliContainer.init();
