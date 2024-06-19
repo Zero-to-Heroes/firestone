@@ -9,6 +9,8 @@
 	justify-content: center;
 	top: 0;
 	left: 0;
+	// So that the stats are always on top of the ovrelays
+	z-index: 1;
 }
 
 .card-stats {
