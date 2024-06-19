@@ -284,6 +284,7 @@ export const buildTiers = (
 
 	// Add a tier with all the buddies
 	const showAllBuddyCards =
+		hasBuddies ||
 		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
 		playerCardId === CardIds.ETCBandManager_BG25_HERO_105;
 	const showBuddiesTier =
