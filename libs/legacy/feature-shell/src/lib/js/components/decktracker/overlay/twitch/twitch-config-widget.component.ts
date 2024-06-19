@@ -149,6 +149,16 @@ import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twi
 						></checkbox>
 						<checkbox
 							class="item indented"
+							[label]="'settings.battlegrounds.overlay.minions-list-show-show-tier-7-label' | owTranslate"
+							[labelTooltip]="
+								'settings.battlegrounds.overlay.minions-list-show-show-tier-7-tooltip' | owTranslate
+							"
+							[disabled]="!prefs.showMinionsList"
+							[value]="prefs.bgsShowTierSeven"
+							(valueChanged)="onShowTier7Changed(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
 							[label]="
 								'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'
 									| owTranslate
@@ -396,6 +406,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onShowTribeTiersChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTribeTiers: value };
 		console.log('changing bgsShowTribeTiers pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowTier7Changed(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTierSeven: value };
+		console.log('changing bgsShowTierSeven pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

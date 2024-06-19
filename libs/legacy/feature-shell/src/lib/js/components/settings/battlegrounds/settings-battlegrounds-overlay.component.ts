@@ -233,6 +233,12 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-tribe-tiers-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowTierSeven"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-tier-7-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-tier-7-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsMinionListShowGoldenCard"
 					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"

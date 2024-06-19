@@ -228,6 +228,7 @@ export const buildTiers = (
 	groupMinionsIntoTheirTribeGroup: boolean,
 	showMechanicsTiers: boolean,
 	showTribeTiers: boolean,
+	showTierSeven: boolean,
 	availableTribes: readonly Race[],
 	anomalies: readonly string[],
 	playerCardId: string,
@@ -246,6 +247,7 @@ export const buildTiers = (
 	allPlayerCardIds = allPlayerCardIds ?? [];
 	let tiersToInclude = [1, 2, 3, 4, 5, 6];
 	if (
+		showTierSeven ||
 		anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
 		playerCardId === CardIds.ThorimStormlord_BG27_HERO_801
 	) {

@@ -93,6 +93,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			map(([prefs, bgGameState, gameState]) => ({
 				showMechanicsTiers: prefs.bgsShowMechanicsTiers,
 				showTribeTiers: prefs.bgsShowTribeTiers,
+				showTierSeven: prefs.bgsShowTierSeven,
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
 				gameMode: gameState?.metadata?.gameType,
 				races: bgGameState?.currentGame?.availableRaces,
@@ -108,6 +109,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				({
 					showMechanicsTiers,
 					showTribeTiers,
+					showTierSeven,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					gameMode,
 					races,
@@ -130,6 +132,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						bgsGroupMinionsIntoTheirTribeGroup,
 						showMechanicsTiers,
 						showTribeTiers,
+						showTierSeven,
 						races,
 						anomalies,
 						normalizedCardId,

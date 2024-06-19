@@ -81,6 +81,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set showTribeTiers(value: boolean) {
 		this.showTribeTiers$$.next(value);
 	}
+	@Input() set showTierSeven(value: boolean) {
+		this.showTierSeven$$.next(value);
+	}
 	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
 		this.groupMinionsIntoTheirTribeGroup$$.next(value);
 	}
@@ -98,6 +101,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTribeTiers$$ = new BehaviorSubject<boolean>(false);
+	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
 
@@ -123,6 +127,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.allPlayerCardIds$$,
 			this.showMechanicsTiers$$,
 			this.showTribeTiers$$,
+			this.showTierSeven$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.gameMode$$,
 		]).pipe(
@@ -137,6 +142,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					allPlayersCardIds,
 					showMechanicsTiers,
 					showTribeTiers,
+					showTierSeven,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					gameMode,
 				]) => {
@@ -151,6 +157,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						bgsGroupMinionsIntoTheirTribeGroup,
 						showMechanicsTiers,
 						showTribeTiers,
+						showTierSeven,
 						races,
 						anomalies,
 						normalizedCardId,
