@@ -301,11 +301,18 @@ export const buildTiers = (
 		.filter((c) => !!c.battlegroundsPremiumDbfId)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+	const allPlayerBuddies = allPlayerCardIds
+		.map((p) => getBuddy(p as CardIds, allCards))
+		.map((b) => allCards.getCard(b));
+	const allPlayerBuddiesCardIds = allPlayerBuddies.map((b) => b.id);
 	const buddies: readonly ReferenceCard[] = !showBuddiesTier
 		? []
 		: showAllBuddyCards
 		? allBuddies
-				.filter((b) => !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds))
+				.filter(
+					(b) =>
+						allPlayerBuddiesCardIds.includes(b.id) || !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds),
+				)
 				.filter(
 					(b) =>
 						!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
@@ -315,7 +322,7 @@ export const buildTiers = (
 		[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
 				playerCardId as CardIds,
 		  )
-		? allPlayerCardIds.map((p) => getBuddy(p as CardIds, allCards)).map((b) => allCards.getCard(b))
+		? allPlayerBuddies
 		: [];
 	const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 		tavernTier: parseInt(tierLevel),
