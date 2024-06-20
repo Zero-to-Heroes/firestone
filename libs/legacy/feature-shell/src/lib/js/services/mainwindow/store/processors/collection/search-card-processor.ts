@@ -34,8 +34,10 @@ export class SearchCardProcessor implements Processor {
 				card.classes,
 				card.rarity,
 				card.cost,
-				collectionCard ? collectionCard.count : 0,
-				collectionCard ? collectionCard.premiumCount : 0,
+				collectionCard?.count ?? 0,
+				collectionCard?.premiumCount ?? 0,
+				collectionCard?.diamondCount ?? 0,
+				collectionCard?.signatureCount ?? 0,
 			);
 		});
 
