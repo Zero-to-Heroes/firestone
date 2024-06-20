@@ -138,6 +138,8 @@ export const cardIdSelector = (
 		case CardIds.AegwynnTheGuardianCore:
 		case CardIds.AegwynnTheGuardian_LEG_CS3_001:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.AkaliTheRhino:
+			return and(side(inputSide), inDeck, minion, rush);
 		case CardIds.AlakirTheWindsOfTime_WON_092h:
 			return highlightConditions(
 				and(side(inputSide), inDeck, minion, charge),
