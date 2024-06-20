@@ -42,8 +42,8 @@ export class BgsMagmalocCounterDefinition
 		currentTurn: number;
 	} {
 		return {
-			minionsPlayedOverTurn: input.bgState.currentGame.liveStats.minionsPlayedOverTurn,
-			currentTurn: input.bgState.currentGame.currentTurn,
+			minionsPlayedOverTurn: input?.bgState?.currentGame?.liveStats?.minionsPlayedOverTurn,
+			currentTurn: input?.bgState?.currentGame?.currentTurn,
 		};
 	}
 
@@ -52,7 +52,7 @@ export class BgsMagmalocCounterDefinition
 		currentTurn: number;
 	}): NonFunctionProperties<BgsMagmalocCounterDefinition> {
 		const minionsPlayedThisTurn =
-			input.minionsPlayedOverTurn.find((info) => info.turn === input.currentTurn)?.value ?? 0;
+			input.minionsPlayedOverTurn?.find((info) => info.turn === input.currentTurn)?.value ?? 0;
 		return {
 			type: 'bgsMagmaloc',
 			value: 1 + minionsPlayedThisTurn,
