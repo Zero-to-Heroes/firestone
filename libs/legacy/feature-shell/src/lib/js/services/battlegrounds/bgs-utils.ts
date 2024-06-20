@@ -673,6 +673,30 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.Watfin_BG23_HERO_303_Buddy;
 		case CardIds.ETCBandManager_BG25_HERO_105:
 			return CardIds.TalentScout_BG25_HERO_105_Buddy;
+		case CardIds.CapnHoggarr_BG26_HERO_101:
+			return CardIds.ShiningSailor_BG26_HERO_101_Buddy;
+		case CardIds.IngeTheIronHymn:
+			return CardIds.SolemnSerenader_BG26_HERO_102_Buddy;
+		case CardIds.RockMasterVoone_BG26_HERO_104:
+			return CardIds.AkaliRockRhino_BG26_HERO_104_Buddy;
+		case CardIds.ThorimStormlord_BG27_HERO_801:
+			return CardIds.VeranusStormlordsMount_BG27_HERO_801_Buddy;
+		case CardIds.SnakeEyes_BG28_HERO_400:
+			return CardIds.BoxCars_BG28_HERO_400_Buddy;
+		case CardIds.DoctorHollidae_BG28_HERO_801:
+			return CardIds.TheNineFrogs_BG28_HERO_801_Buddy;
+		case CardIds.TaethelanBloodwatcher_BG28_HERO_800:
+			return CardIds.ReliquaryAttendant_BG28_HERO_800_Buddy;
+		case CardIds.TheNamelessOne_BGDUO_HERO_100:
+			return CardIds.FacelessOne_BGDUO_HERO_100_Buddy;
+		case CardIds.Cho_BGDUO_HERO_222:
+			return CardIds.HalfusTheMighty_BGDUO_HERO_222_Buddy;
+		case CardIds.Gall_BGDUO_HERO_223:
+			return CardIds.HalfusTheWise_BGDUO_HERO_223_Buddy;
+		case CardIds.MadamGoya_BGDUO_HERO_104:
+			return CardIds.MisterChu_BGDUO_HERO_104_Buddy;
+		case CardIds.FlobbidinousFloop_BGDUO_HERO_101:
+			return CardIds.GloriousGloopling_BGDUO_HERO_101_Buddy;
 		default:
 			if (!!heroCardId) {
 				console.error('missing buddy section for ', heroCardId);
