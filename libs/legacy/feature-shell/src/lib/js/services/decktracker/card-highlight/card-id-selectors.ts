@@ -1366,6 +1366,11 @@ export const cardIdSelector = (
 				tooltip(and(side(inputSide), secretsTriggeredThisMatch)),
 				and(side(inputSide), or(inDeck, inHand), secret),
 			);
+		case CardIds.ProstheticHand_DEEP_015:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), minion, mech),
+				and(side(inputSide), or(inDeck, inHand), minion, undead),
+			);
 		case CardIds.ProvingGrounds:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Psychopomp:
