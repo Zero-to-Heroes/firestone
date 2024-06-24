@@ -547,6 +547,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, deathrattle, effectiveCostLess(6));
 		case CardIds.DeathstriderTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
+		case CardIds.DeckOfLunacy:
+			return and(side(inputSide), inDeck, spell);
 		case CardIds.DeepwaterEvoker:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Demonfuse:
