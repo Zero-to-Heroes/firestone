@@ -10,6 +10,7 @@ import { CardTooltipPositionType } from '@firestone/shared/common/view';
 			<decktracker-deck-name
 				[deck]="deck"
 				[tooltipPosition]="_tooltipPosition"
+				[hideOpponentName]="hideOpponentName"
 				*ngIf="showTitleBar"
 			></decktracker-deck-name>
 			<decktracker-cards-recap
@@ -39,6 +40,7 @@ export class DeckTrackerTitleBarComponent implements OnDestroy {
 	@Input() showTotalCardsInZone: boolean;
 	@Input() deckWinrate: StatsRecap;
 	@Input() matchupWinrate: StatsRecap;
+	@Input() hideOpponentName: boolean;
 
 	_tooltipPosition: CardTooltipPositionType;
 

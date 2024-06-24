@@ -36,31 +36,27 @@ export class DeckTrackerDeckNameComponent {
 	missingInitialDeckstring: boolean;
 	side: 'player' | 'opponent';
 
+	private _hideOpponentName: boolean;
+	private _deck: DeckState;
+
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 	}
 
-	@Input() set deck(value: DeckState) {
-		if (!value) {
-			return;
-		}
+	@Input() set hideOpponentName(value: boolean) {
+		this._hideOpponentName = value;
+		this.updateDeckName();
+	}
 
-		this.deckName =
-			value.name ||
-			(value.hero
-				? this.i18n.translateString(`decktracker.deck-name.player-name`, {
-						playerName: value.hero.playerName || value.hero.name,
-						playerClass: this.i18n.translateString(
-							`global.class.${CardClass[value.hero.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase()}`,
-						),
-				  })
-				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
-		this.deckstring = value.deckstring;
+	@Input() set deck(value: DeckState) {
+		this._deck = value;
+		this.deckstring = this._deck.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
-		this.side = value.isOpponent ? 'opponent' : 'player';
+		this.side = this._deck.isOpponent ? 'opponent' : 'player';
 		if (this.missingInitialDeckstring === undefined) {
 			this.missingInitialDeckstring = this.deckstring == null;
 		}
+		this.updateDeckName();
 	}
 
 	constructor(
@@ -86,5 +82,24 @@ export class DeckTrackerDeckNameComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
+	}
+
+	private updateDeckName() {
+		if (!this._deck) {
+			return;
+		}
+
+		this.deckName =
+			this._deck.name ||
+			(this._deck.hero && !this._hideOpponentName
+				? this.i18n.translateString(`decktracker.deck-name.player-name`, {
+						playerName: this._deck.hero.playerName || this._deck.hero.name,
+						playerClass: this.i18n.translateString(
+							`global.class.${CardClass[
+								this._deck.hero.classes?.[0] ?? CardClass.NEUTRAL
+							].toLowerCase()}`,
+						),
+				  })
+				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 	}
 }

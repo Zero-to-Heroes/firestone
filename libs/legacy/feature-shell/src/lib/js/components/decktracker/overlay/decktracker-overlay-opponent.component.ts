@@ -23,6 +23,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
 			[showDecklistExtractor]="showDecklistExtractor"
+			[hideOpponentNameExtractor]="hideOpponentNameExtractor"
 			closeEvent="CLOSE_OPPONENT_TRACKER"
 			player="opponent"
 		>
@@ -44,6 +45,7 @@ export class DeckTrackerOverlayOpponentComponent {
 	showBottomCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowBottomCardsSeparately;
 	showTopCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowTopCardsSeparately;
 	showDkRunesExtractor = (prefs: Preferences) => prefs.opponentOverlayShowDkRunes;
+	hideOpponentNameExtractor = (prefs: Preferences) => prefs.useStreamerMode;
 	deckExtractor = (state: GameState) => state.opponentDeck;
 	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
 	// trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;

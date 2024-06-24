@@ -61,6 +61,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								[showTotalCardsInZone]="showTotalCardsInZone$ | async"
 								[deckWinrate]="deckStatsRecap$ | async"
 								[matchupWinrate]="matchupStatsRecap$ | async"
+								[hideOpponentName]="hideOpponentName$ | async"
 							></decktracker-title-bar>
 							<decktracker-deck-list
 								[deckState]="value.deck"
@@ -118,6 +119,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showDkRunesExtractor: (prefs: Preferences) => boolean;
+	@Input() hideOpponentNameExtractor: (prefs: Preferences) => boolean;
 	@Input() showTotalCardsInZoneExtractor: (computedValue: boolean) => boolean = (computedValue) => computedValue;
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
@@ -153,6 +155,7 @@ export class DeckTrackerOverlayRootComponent
 	showDkRunes$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
 	showDecklist$: Observable<boolean>;
+	hideOpponentName$: Observable<boolean>;
 
 	active = true;
 	windowId: string;
@@ -197,6 +200,11 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.showMatchupWinrate$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showMatchupWinrateExtractor(preferences)),
+		);
+		this.hideOpponentName$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) =>
+				!!this.hideOpponentNameExtractor ? this.hideOpponentNameExtractor(preferences) : false,
+			),
 		);
 
 		this.showDecklist$ = this.gameState.gameState$$.pipe(
