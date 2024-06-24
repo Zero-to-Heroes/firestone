@@ -23,7 +23,10 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					<span class="value">{{ totalMembersStr$ | async }}</span>
 					<span class="label">members</span>
 				</div>
-				TODO: add "games played last week", or maybe "time played last week"
+				<div class="recent-games">
+					<span class="value">{{ totalGamesLastWeekStr$ | async }}</span>
+					<span class="label">games played in the last 7 days</span>
+				</div>
 			</div>
 			<div class="leaderboards">
 				<div class="header">Leaderboards</div>
@@ -56,6 +59,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 	communityName$: Observable<string>;
 	communityDescription$: Observable<string>;
 	totalMembersStr$: Observable<string>;
+	totalGamesLastWeekStr$: Observable<string>;
 	tabs$: Observable<readonly Tab[]>;
 	leaderboard$: Observable<readonly InternalLeaderboardEntry[] | null>;
 
@@ -82,6 +86,12 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 		this.totalMembersStr$ = this.personalCommunities.selectedCommunity$$.pipe(
 			this.mapData(
 				(community) => `${(community?.numberOfMembers ?? 0).toLocaleString(this.i18n.formatCurrentLocale()!)}`,
+			),
+		);
+		this.totalGamesLastWeekStr$ = this.personalCommunities.selectedCommunity$$.pipe(
+			this.mapData(
+				(community) =>
+					`${(community?.gamesInLastSevenDays ?? 0).toLocaleString(this.i18n.formatCurrentLocale()!)}`,
 			),
 		);
 		const selectedTab$ = this.selectedTab$$.pipe(this.mapData((selectedTab) => selectedTab));
