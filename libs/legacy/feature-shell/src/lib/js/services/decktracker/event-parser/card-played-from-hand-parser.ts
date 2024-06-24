@@ -128,17 +128,22 @@ export class CardPlayedFromHandParser implements EventParser {
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				countered: isCardCountered,
 			} as DeckCard);
+		const cardWithInfo = cardWithZone.update({
+			// When dealing with the opponent, the creator card id is hidden / removed when put in deck / drawn to
+			// avoid info leaks, so if the info is present in the event, we add it
+			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
+		});
 		// console.debug('cardWithZone', cardWithZone, isCardCountered, additionalInfo);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
-				  cardWithZone.update({
+				  cardWithInfo.update({
 						entityId: undefined,
 				  } as DeckCard)
-				: cardWithZone.update({
+				: cardWithInfo.update({
 						relatedCardIds:
 							// Reset the related card IDs once you play it, so that the info will be reset if you bounce it back to hand
-							cardWithZone.cardId === CardIds.CommanderSivara_TSC_087 ? [] : cardWithZone.relatedCardIds,
+							cardWithInfo.cardId === CardIds.CommanderSivara_TSC_087 ? [] : cardWithInfo.relatedCardIds,
 				  });
 
 		const newBoard: readonly DeckCard[] =
@@ -191,7 +196,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const handAfterCardsLinks = isCardCountered
 			? handAfterCardsRemembered
 			: processCardLinks(cardToAdd, handAfterCardsRemembered, this.helper, this.allCards);
-		const hardAfterGuessedInfo = addGuessedInfo(cardWithZone, handAfterCardsLinks, this.allCards);
+		const hardAfterGuessedInfo = addGuessedInfo(cardWithInfo, handAfterCardsLinks, this.allCards);
 
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
