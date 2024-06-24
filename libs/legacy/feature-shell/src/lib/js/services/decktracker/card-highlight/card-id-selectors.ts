@@ -434,6 +434,8 @@ export const cardIdSelector = (
 			return and(not(side(inputSide)), inDeck, minion);
 		case CardIds.CoilCastingTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), naga);
+		case CardIds.ColdFeet:
+			return and(not(side(inputSide)), or(inDeck, inHand), minion);
 		case CardIds.ColiferoTheArtist_TOY_703:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.CollectorsIreTavernBrawlToken:
