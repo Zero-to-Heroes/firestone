@@ -56,9 +56,11 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 					<div class="filter time" *ngIf="cycleTime" (click)="cycleTime()" [helpTooltip]="timeTooltip">
 						<div class="text">{{ timeLabel }}</div>
 					</div>
-					<div class="format" *ngIf="formatLabel">{{ formatLabel }}</div>
 				</div>
-				<div class="sample-size">{{ sampleSize }}</div>
+				<div class="additional-info">
+					<div class="format" *ngIf="formatLabel">{{ formatLabel }}</div>
+					<div class="sample-size">{{ sampleSize }}</div>
+				</div>
 			</div>
 			<div class="content">
 				<div class="deck-header" *ngIf="sortCriteria$ | async as sort">

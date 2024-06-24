@@ -30,9 +30,20 @@
 		margin-bottom: 15px;
 	}
 
-	.sample-size {
+	.additional-info {
 		margin-top: 5px;
 		font-size: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		& > *:not(:last-child)::after {
+			content: '-';
+			margin: 0 5px;
+		}
+	}
+
+	.sample-size {
 	}
 }
 
