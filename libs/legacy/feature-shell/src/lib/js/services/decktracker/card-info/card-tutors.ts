@@ -218,6 +218,7 @@ export const tutors = [
 	CardIds.WidowbloomSeedsman,
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
+	CardIds.MarinTheManager_WondrousWandToken_VAC_702t3,
 	CardIds.Wrathion_CFM_806,
 	CardIds.CaricatureArtist_TOY_391,
 	CardIds.ChalkArtist_TOY_388,
