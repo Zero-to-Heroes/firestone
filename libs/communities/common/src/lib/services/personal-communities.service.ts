@@ -59,6 +59,12 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 	}
 
 	private async loadCommunityDetails(communityId: string): Promise<CommunityInfo | null> {
+		const communities = await this.communities$$.getValueWithInit();
+		const communityInCache = communities?.find((community) => community.id === communityId);
+		if (communityInCache) {
+			return communityInCache;
+		}
+
 		console.debug('[communities] retrieve community details', communityId);
 		const user = await this.user.getCurrentUser();
 		const result: CommunityInfo | null = await this.api.callPostApi<CommunityInfo>(LOAD_COMMUNITY_URL, {
