@@ -47,7 +47,7 @@
 	.header {
 		color: var(--default-title-color);
 		font-size: 16px;
-		margin-bottom: 10px;
+		margin-bottom: 25px;
 	}
 }
 
@@ -70,11 +70,12 @@
 .leaderboard {
 	display: flex;
 	flex-direction: column;
-	margin-top: 20px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	padding-right: 15px;
 	min-height: 0;
 	overflow-y: scroll;
 	flex-grow: 1;
-	margin-bottom: 20px;
 }
 
 .leaderboard-header {
@@ -87,9 +88,12 @@
 	display: flex;
 	height: 40px;
 	min-height: 40px;
-	border-bottom: 1px solid var(--color-3);
 	align-items: center;
 	color: var(--color-1);
+
+	&:not:last-child {
+		border-bottom: 1px solid var(--color-3);
+	}
 
 	&:nth-child(even) {
 		background-color: rgba(255, 255, 255, 0.08);

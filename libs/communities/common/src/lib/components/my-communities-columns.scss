@@ -1,0 +1,31 @@
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 170px;
+	flex-shrink: 1;
+	flex-grow: 0;
+}
+
+.image {
+	width: 40px;
+}
+
+.name {
+	width: 220px;
+	margin-right: 20px;
+	flex-shrink: 0;
+	flex-basis: auto;
+}
+
+.description {
+	width: 220px;
+	margin-right: 20px;
+	flex-shrink: 0;
+	flex-basis: auto;
+}
+
+.members,
+.games-last-week {
+	width: 150px;
+}

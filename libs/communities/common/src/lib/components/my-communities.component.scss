@@ -4,28 +4,40 @@
 
 .my-communities {
 	display: flex;
-	justify-content: space-around;
-	display: flex;
+	flex-direction: column;
 	flex-grow: 1;
-	padding-top: 15vh;
+	margin-right: 15px;
 }
 
-.button {
-	aspect-ratio: 1;
-	height: 30vh;
-	background: rgba(255, 255, 255, 0.08);
-	border-radius: 15px;
+.header {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 3vh;
+	font-size: 14px;
+	// margin-bottom: 10px;
+	flex-wrap: wrap;
+	overflow: hidden;
+	height: 35px;
+	flex-shrink: 0;
+	flex-wrap: nowrap;
+	margin-bottom: 10px;
+}
 
-	.text {
-		color: var(--default-title-color);
-		font-size: 3vh;
-		text-align: center;
+.communities-list {
+	.community {
+		margin-bottom: 3px;
+		height: 40px;
+
+		&:not:last-child {
+			border-bottom: 1px solid var(--color-3);
+		}
 	}
+
+	&:nth-child(even) {
+		background: rgba(255, 255, 255, 0.08);
+	}
+}
+
+.community {
+	display: flex;
 
 	&.disabled {
 		opacity: 0.5;

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { CommunitiesDesktopComponent } from './components/communities-desktop.component';
@@ -22,7 +23,14 @@ const components = [
 ];
 
 @NgModule({
-	imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedFrameworkCoreModule, StatsCommonModule],
+	imports: [
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		SharedFrameworkCoreModule,
+		SharedCommonViewModule,
+		StatsCommonModule,
+	],
 	declarations: components,
 	exports: components,
 	providers: [
