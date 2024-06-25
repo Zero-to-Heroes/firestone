@@ -173,10 +173,6 @@ export class OverwolfService {
 		overwolf.games.inputTracking.onMouseUp.addListener(callback);
 	}
 
-	public addKeyDownListener(callback) {
-		overwolf.games.inputTracking.onKeyDown.addListener(callback);
-	}
-
 	public addKeyUpListener(callback) {
 		overwolf.games.inputTracking.onKeyUp.addListener(callback);
 	}
