@@ -287,6 +287,7 @@ export class DeckManipulationHelper {
 		cardId: string,
 		entityId: number,
 		normalizeUpgradedCards = true,
+		createCardIfEmpty = false,
 	): DeckCard {
 		if (!cardId?.length && !entityId) {
 			return DeckCard.create();
@@ -338,7 +339,7 @@ export class DeckManipulationHelper {
 			// Fill the card ID typically when an opponent plays a card from their hand
 			// We always override with the ID in input, as it's guaranteed to be accurate (for
 			// instance if the card changed in hand and our info is outdated)
-			if (found && cardId) {
+			if (found && cardId && !found.cardId && createCardIfEmpty) {
 				const card = this.allCards.getCard(cardId);
 				return found.update({
 					cardId: cardId,

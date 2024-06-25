@@ -857,4 +857,5 @@ export const giftCreators = [
 	CardIds.ZephrysTheGreat_ULD_003,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
+	CardIds.Repackage_RepackagedBoxToken_TOY_879t,
 ];

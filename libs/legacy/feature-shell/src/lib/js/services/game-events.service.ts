@@ -521,8 +521,9 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
 						// Not always present?
-						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
-						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
+						isPremium: gameEvent.Value.AdditionalProps?.IsPremium,
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
 						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
 						additionalPlayInfo: gameEvent.Value.AdditionalProps.AdditionalPlayInfo,

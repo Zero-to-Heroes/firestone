@@ -47,15 +47,18 @@ export class CardPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		let opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
-		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(
+		// It's important to not automatically populate the cardId here, as
+		let card = this.helper.findCardInZone(deck.hand, cardId, entityId, true, false);
+
+		// eslint-disable-next-line prefer-const
+		let [newHand, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.hand,
 			cardId,
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		console.debug('[card-played] newHand', newHand, removedCard);
+		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -80,6 +83,7 @@ export class CardPlayedFromHandParser implements EventParser {
 					removedCardFromDeck,
 				);
 				if (removedCardFromDeck) {
+					removedCard = removedCardFromDeck;
 					opponentDeck = opponentDeck.update({
 						deck: newDeckAfterReveal,
 					});
@@ -91,8 +95,9 @@ export class CardPlayedFromHandParser implements EventParser {
 					entityId,
 					false, // Only remove known cards
 				);
-				console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
+				// console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 				if (removedCardFromDeck) {
+					removedCard = removedCardFromDeck;
 					newDeck = newDeckAfterReveal;
 				}
 			}
@@ -105,8 +110,13 @@ export class CardPlayedFromHandParser implements EventParser {
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 
+		// When it's the opponent, sometimes we miss some info like related card ids
+		card = !!card?.cardId?.length ? card : removedCard;
+		card = !!card.entityId ? card : card.update({ entityId: entityId });
+		card = !!card.cardId ? card : card.update({ cardId: cardId });
+		// console.debug('[card-played] card', card, removedCard);
 		// Only minions end up on the board
-		const refCard = this.allCards.getCard(cardId);
+		const refCard = this.allCards.getCard(card?.cardId ?? cardId);
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		const cardWithZone =
 			card?.update({
@@ -187,16 +197,19 @@ export class CardPlayedFromHandParser implements EventParser {
 		}
 
 		const handAfterCardsRemembered = rememberCardsInHand(
-			cardId,
+			card.cardId,
 			isCardCountered,
 			newHand,
 			this.helper,
 			this.allCards,
 		);
+		// console.debug('[card-played] handAfterCardsRemembered', handAfterCardsRemembered, newHand);
 		const handAfterCardsLinks = isCardCountered
 			? handAfterCardsRemembered
 			: processCardLinks(cardToAdd, handAfterCardsRemembered, this.helper, this.allCards);
+		// console.debug('[card-played] handAfterCardsLinks', handAfterCardsLinks, cardToAdd);
 		const hardAfterGuessedInfo = addGuessedInfo(cardWithInfo, handAfterCardsLinks, this.allCards);
+		// console.debug('[card-played] hardAfterGuessedInfo', hardAfterGuessedInfo);
 
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
@@ -315,7 +328,7 @@ export const processCardLinks = (
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
 	const linkedCardInHand = hand.find((c) => c.cardCopyLink === card.entityId);
-	// console.debug('processCardLinks', linkedCardInHand, card, hand);
+	console.debug('[card-played] processCardLinks', linkedCardInHand, card, hand);
 	if (!linkedCardInHand) {
 		return hand;
 	}
@@ -324,14 +337,16 @@ export const processCardLinks = (
 		cardId: card.cardId,
 		cardName: card.cardName,
 	});
-	// console.debug('processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
-	return helper.updateCardInZone(
+	console.debug('[card-played] processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
+	const result = helper.updateCardInZone(
 		hand,
 		updatedLinkedCardInHand.entityId,
 		updatedLinkedCardInHand.cardId,
 		updatedLinkedCardInHand,
 		false,
 	);
+	console.debug('[card-played] processCardLinks result', result);
+	return result;
 };
 
 const addGuessedInfo = (

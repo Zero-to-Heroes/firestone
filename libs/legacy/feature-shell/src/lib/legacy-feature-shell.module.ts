@@ -776,6 +776,7 @@ import { SecretsParserService } from './js/services/decktracker/event-parser/sec
 import { GameStateMetaInfoService } from './js/services/decktracker/game-state-meta-info.service';
 import { GameStateService } from './js/services/decktracker/game-state.service';
 import { GameStateParsersService } from './js/services/decktracker/game-state/state-parsers.service';
+import { StatePostProcessService } from './js/services/decktracker/game-state/state-post-process.service';
 import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
 import { OverlayDisplayService } from './js/services/decktracker/overlay-display.service';
@@ -1868,6 +1869,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReplayUploadService,
 		SecretsParserService,
 		GameStateParsersService,
+		StatePostProcessService,
 		DeckManipulationHelper,
 		AttackOnBoardService,
 
