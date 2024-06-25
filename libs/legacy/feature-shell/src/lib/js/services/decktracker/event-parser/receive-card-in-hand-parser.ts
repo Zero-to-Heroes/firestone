@@ -118,13 +118,13 @@ export class ReceiveCardInHandParser implements EventParser {
 			} as DeckCard);
 		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
 		// moved to hand (e.g. Suspicious Pirate)
-		console.debug(
-			'[receive-card-in-hand] cardWithDefault',
-			cardWithDefault,
-			cardId,
-			creatorCardId,
-			otherCardWithObfuscation,
-		);
+		// console.debug(
+		// 	'[receive-card-in-hand] cardWithDefault',
+		// 	cardWithDefault,
+		// 	cardId,
+		// 	creatorCardId,
+		// 	otherCardWithObfuscation,
+		// );
 		const newCardId = (isCardInfoPublic ? guessCardId(cardId, deck, gameEvent) : null) ?? cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
@@ -226,7 +226,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			case CardIds.ElementaryReaction:
 			case CardIds.LadyDeathwhisper_RLK_713:
 				const positionIndex = hand.map((c) => c.entityId).indexOf(entityId);
-				console.debug('positionIndex', positionIndex, hand, entityId, creatorCardId);
+				// console.debug('positionIndex', positionIndex, hand, entityId, creatorCardId);
 				const card = hand[positionIndex];
 				const linkedCard = hand[positionIndex - 1];
 				const newCard = card.update({
@@ -237,7 +237,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				});
 				const afterNewCard1 = this.helper.replaceCardInZone(hand, newCard);
 				const afterNewCard2 = this.helper.replaceCardInZone(afterNewCard1, newLinkedCard);
-				console.debug('after replacing copies', afterNewCard2, afterNewCard1, newCard, linkedCard, card);
+				// console.debug('after replacing copies', afterNewCard2, afterNewCard1, newCard, linkedCard, card);
 				return afterNewCard2;
 			default:
 				return hand;
@@ -308,18 +308,18 @@ const guessCardId = (cardId: string, deckState: DeckState, gameEvent: GameEvent)
 			const existingBox: DeckCard = deckState.otherZone.find(
 				(c) => Math.abs(c.entityId) === gameEvent.additionalData.creatorEntityId,
 			);
-			console.debug(
-				'[receive-card-in-hand] existingBox',
-				existingBox,
-				deckState.otherZone,
-				gameEvent.additionalData.creatorEntityId,
-			);
+			// console.debug(
+			// 	'[receive-card-in-hand] existingBox',
+			// 	existingBox,
+			// 	deckState.otherZone,
+			// 	gameEvent.additionalData.creatorEntityId,
+			// );
 			const guessedCardId = existingBox?.relatedCardIds?.[0];
 			// console.debug('[receive-card-in-hand] guessedCardId', guessedCardId, existingBox?.relatedCardIds);
 			if (guessedCardId) {
 				// FIXME: didn't want to have to handle a full DeckState return for this
 				(existingBox as any).relatedCardIds = existingBox.relatedCardIds.slice(1);
-				console.debug('[receive-card-in-hand] updated box', existingBox);
+				// console.debug('[receive-card-in-hand] updated box', existingBox);
 				return guessedCardId;
 			}
 	}

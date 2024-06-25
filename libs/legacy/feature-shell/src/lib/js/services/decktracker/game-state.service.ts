@@ -294,7 +294,7 @@ export class GameStateService {
 		try {
 			if (this.state && this.state !== previousState) {
 				const previousState = this.state;
-				console.debug('[game-state] state post-processing');
+				// console.debug('[game-state] state post-processing');
 				const postProcessedState = this.statePostProcessService.postProcess(this.state);
 				// Add information that is not linked to events, like the number of turns the
 				// card has been present in the zone
@@ -303,24 +303,24 @@ export class GameStateService {
 					postProcessedState,
 					(gameEvent.gameState || ({} as any)).Player,
 				);
-				console.debug(
-					'[game-state] updated player deck',
-					postProcessedState.playerDeck === updatedPlayerDeck,
-					updatedPlayerDeck,
-					postProcessedState.playerDeck,
-				);
+				// console.debug(
+				// 	'[game-state] updated player deck',
+				// 	postProcessedState.playerDeck === updatedPlayerDeck,
+				// 	updatedPlayerDeck,
+				// 	postProcessedState.playerDeck,
+				// );
 
 				const udpatedOpponentDeck = this.updateDeck(
 					postProcessedState.opponentDeck,
 					postProcessedState,
 					(gameEvent.gameState || ({} as any)).Opponent,
 				);
-				console.debug(
-					'[game-state] updated opponent deck',
-					postProcessedState.opponentDeck === udpatedOpponentDeck,
-					udpatedOpponentDeck,
-					postProcessedState.opponentDeck,
-				);
+				// console.debug(
+				// 	'[game-state] updated opponent deck',
+				// 	postProcessedState.opponentDeck === udpatedOpponentDeck,
+				// 	udpatedOpponentDeck,
+				// 	postProcessedState.opponentDeck,
+				// );
 
 				const hasChanged =
 					postProcessedState !== this.state ||
@@ -332,7 +332,7 @@ export class GameStateService {
 							opponentDeck: udpatedOpponentDeck,
 					  })
 					: postProcessedState;
-				console.debug('[game-state] updated state', this.state === previousState, this.state);
+				// console.debug('[game-state] updated state', this.state === previousState, this.state);
 			}
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);

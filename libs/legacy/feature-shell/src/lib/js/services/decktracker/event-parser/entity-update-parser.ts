@@ -42,7 +42,7 @@ export class EntityUpdateParser implements EventParser {
 			!gameEvent.additionalData?.revealed
 				? null
 				: cardId;
-		console.debug('[entity-update] cardInOther', cardInOther, obfsucatedCardId);
+		// console.debug('[entity-update] cardInOther', cardInOther, obfsucatedCardId);
 
 		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
@@ -81,21 +81,21 @@ export class EntityUpdateParser implements EventParser {
 						cardName: this.i18n.getCardName(obfsucatedCardId),
 				  } as DeckCard)
 				: null;
-		console.debug(
-			'[entity-update] newCardInOther',
-			newCardInOther,
-			cardInOther,
-			obfsucatedCardId,
-			cardId,
-			gameEvent.additionalData?.revealed,
-		);
+		// console.debug(
+		// 	'[entity-update] newCardInOther',
+		// 	newCardInOther,
+		// 	cardInOther,
+		// 	obfsucatedCardId,
+		// 	cardId,
+		// 	gameEvent.additionalData?.revealed,
+		// );
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
 		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
 		const newOther = newCardInOther
 			? this.helper.replaceCardInZone(deck.otherZone, newCardInOther)
 			: deck.otherZone;
-		console.debug('[entity-update] newOther', newOther, deck.otherZone, newCardInOther);
+		// console.debug('[entity-update] newOther', newOther, deck.otherZone, newCardInOther);
 
 		let globalEffects = deck.globalEffects;
 		if (WHIZBANG_DECK_CARD_IDS.includes(cardId as CardIds) && !globalEffects?.some((c) => c.cardId === cardId)) {

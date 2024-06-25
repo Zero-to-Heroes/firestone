@@ -76,12 +76,12 @@ export class CardPlayedFromHandParser implements EventParser {
 					entityId,
 					false, // Only remove known cards
 				);
-				console.debug(
-					'[card-played] newDeckAfterReveal otherDeck',
-					newDeckAfterReveal,
-					newDeck,
-					removedCardFromDeck,
-				);
+				// console.debug(
+				// 	'[card-played] newDeckAfterReveal otherDeck',
+				// 	newDeckAfterReveal,
+				// 	newDeck,
+				// 	removedCardFromDeck,
+				// );
 				if (removedCardFromDeck) {
 					removedCard = removedCardFromDeck;
 					opponentDeck = opponentDeck.update({
@@ -178,11 +178,11 @@ export class CardPlayedFromHandParser implements EventParser {
 			if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && hasBrann) {
 				numberOfGlobalEffectsToAdd = 2;
 			}
-			console.debug(
-				'numberOfGlobalEffects',
-				numberOfGlobalEffectsToAdd,
-				deck.board.map((c) => c.cardId),
-			);
+			// console.debug(
+			// 	'numberOfGlobalEffects',
+			// 	numberOfGlobalEffectsToAdd,
+			// 	deck.board.map((c) => c.cardId),
+			// );
 
 			for (let i = 0; i < numberOfGlobalEffectsToAdd; i++) {
 				newGlobalEffects = this.helper.addSingleCardToZone(
@@ -192,7 +192,7 @@ export class CardPlayedFromHandParser implements EventParser {
 						entityId: null,
 					} as DeckCard),
 				);
-				console.debug('added global effect', newGlobalEffects);
+				// console.debug('added global effect', newGlobalEffects);
 			}
 		}
 
@@ -328,7 +328,7 @@ export const processCardLinks = (
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
 	const linkedCardInHand = hand.find((c) => c.cardCopyLink === card.entityId);
-	console.debug('[card-played] processCardLinks', linkedCardInHand, card, hand);
+	// console.debug('[card-played] processCardLinks', linkedCardInHand, card, hand);
 	if (!linkedCardInHand) {
 		return hand;
 	}
@@ -337,7 +337,7 @@ export const processCardLinks = (
 		cardId: card.cardId,
 		cardName: card.cardName,
 	});
-	console.debug('[card-played] processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
+	// console.debug('[card-played] processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
 	const result = helper.updateCardInZone(
 		hand,
 		updatedLinkedCardInHand.entityId,
@@ -345,7 +345,7 @@ export const processCardLinks = (
 		updatedLinkedCardInHand,
 		false,
 	);
-	console.debug('[card-played] processCardLinks result', result);
+	// console.debug('[card-played] processCardLinks result', result);
 	return result;
 };
 
