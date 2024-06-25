@@ -45,6 +45,17 @@ export class BgsPlayerBoardParser implements EventParser {
 			event.teammateBoard?.Board?.map((e) => e.CardId),
 			event.duoPendingBoards?.map((p) => p.playerBoard?.board?.map((e) => e.CardId).join(',')),
 			event.duoPendingBoards?.map((p) => p.opponentBoard?.board?.map((e) => e.CardId).join(',')),
+		);
+		console.log(
+			'[bgs-simulation] received hero cards',
+			event.playerBoard?.heroCardId,
+			event.opponentBoard?.heroCardId,
+			event.teammateBoard?.Hero?.CardId,
+			event.duoPendingBoards?.map((p) => p.playerBoard?.heroCardId).join(','),
+			event.duoPendingBoards?.map((p) => p.opponentBoard?.heroCardId).join(','),
+		);
+		console.log(
+			'[bgs-simulation] received hero power info',
 			event.playerBoard?.heroPowerInfo,
 			event.opponentBoard?.heroPowerInfo,
 			event.duoPendingBoards?.map((p) => p.playerBoard?.heroPowerInfo).join(','),
