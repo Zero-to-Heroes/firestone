@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeckCard, DeckState } from '@firestone/game-state';
+import { arraysEqual } from '@firestone/shared/framework/common';
 
 @Injectable()
 export class ZoneOrderingService {
@@ -8,15 +9,20 @@ export class ZoneOrderingService {
 		if (!stateFromTracker) {
 			return deckState;
 		}
+
 		const newBoard = stateFromTracker.Board
 			? this.orderZone(deckState.board, stateFromTracker.Board)
 			: deckState.board;
 		const newHand = stateFromTracker.Hand ? this.orderZone(deckState.hand, stateFromTracker.Hand) : deckState.hand;
 
-		return Object.assign(new DeckState(), deckState, {
-			board: newBoard,
-			hand: newHand,
-		} as DeckState);
+		const hasChanged = !arraysEqual(newBoard, deckState.board) || !arraysEqual(newHand, deckState.hand);
+
+		return hasChanged
+			? deckState.update({
+					board: newBoard,
+					hand: newHand,
+			  })
+			: deckState;
 	}
 
 	private orderZone(zone: readonly DeckCard[], stateFromTracker: any[]): readonly DeckCard[] {

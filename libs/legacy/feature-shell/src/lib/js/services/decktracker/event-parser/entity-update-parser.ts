@@ -121,10 +121,14 @@ export class EntityUpdateParser implements EventParser {
 					: deck.abyssalCurseHighestValue,
 			globalEffects: globalEffects,
 		});
+		// console.debug('[entity-update] newPlayerDeck', newPlayerDeck);
 
-		return Object.assign(new GameState(), currentState, {
+		const result = currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+		// console.debug('[entity-update] result', result);
+
+		return result;
 	}
 
 	event(): string {

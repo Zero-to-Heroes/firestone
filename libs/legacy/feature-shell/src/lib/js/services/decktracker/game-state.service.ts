@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, GameStateUpdatesService, HeroCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
@@ -19,6 +20,7 @@ import { SecretsParserService } from './event-parser/secrets/secrets-parser.serv
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
+import { StatePostProcessService } from './game-state/state-post-process.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
@@ -67,6 +69,7 @@ export class GameStateService {
 		private readonly attackOnBoardService: AttackOnBoardService,
 		private readonly gameStateUpdates: GameStateUpdatesService,
 		private readonly parserService: GameStateParsersService,
+		private readonly statePostProcessService: StatePostProcessService,
 	) {
 		this.init();
 	}
@@ -230,6 +233,7 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent) {
+		const previousState = this.state;
 		if (gameEvent.type === GameEvent.GAME_START) {
 			this.state = this.state?.update({
 				playerTrackerClosedByUser: false,
@@ -270,36 +274,65 @@ export class GameStateService {
 		for (const parser of parsersForEvent) {
 			try {
 				if (parser.applies(gameEvent, this.state, prefs)) {
+					const stateBeforeParser = this.state;
 					this.state = await parser.parse(this.state, gameEvent, {
 						secretWillTrigger: this.secretWillTrigger,
 						minionsWillDie: this.minionsWillDie,
 					});
-					// if (!this.state) {
-					// 	console.error('[game-state] parser returned null state', parser.event());
-					// }
+					// console.debug(
+					// 	'[game-state] parsed event',
+					// 	gameEvent.type,
+					// 	this.state === stateBeforeParser,
+					// 	this.state,
+					// 	parser,
+					// );
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
 		try {
-			if (this.state) {
+			if (this.state && this.state !== previousState) {
+				const previousState = this.state;
+				console.debug('[game-state] state post-processing');
+				const postProcessedState = this.statePostProcessService.postProcess(this.state);
 				// Add information that is not linked to events, like the number of turns the
 				// card has been present in the zone
 				const updatedPlayerDeck = this.updateDeck(
-					this.state.playerDeck,
-					this.state,
+					postProcessedState.playerDeck,
+					postProcessedState,
 					(gameEvent.gameState || ({} as any)).Player,
 				);
+				console.debug(
+					'[game-state] updated player deck',
+					postProcessedState.playerDeck === updatedPlayerDeck,
+					updatedPlayerDeck,
+					postProcessedState.playerDeck,
+				);
+
 				const udpatedOpponentDeck = this.updateDeck(
-					this.state.opponentDeck,
-					this.state,
+					postProcessedState.opponentDeck,
+					postProcessedState,
 					(gameEvent.gameState || ({} as any)).Opponent,
 				);
-				this.state = Object.assign(new GameState(), this.state, {
-					playerDeck: updatedPlayerDeck,
-					opponentDeck: udpatedOpponentDeck,
-				} as GameState);
+				console.debug(
+					'[game-state] updated opponent deck',
+					postProcessedState.opponentDeck === udpatedOpponentDeck,
+					udpatedOpponentDeck,
+					postProcessedState.opponentDeck,
+				);
+
+				const hasChanged =
+					postProcessedState !== this.state ||
+					updatedPlayerDeck !== postProcessedState.playerDeck ||
+					udpatedOpponentDeck !== postProcessedState.opponentDeck;
+				this.state = hasChanged
+					? postProcessedState.update({
+							playerDeck: updatedPlayerDeck,
+							opponentDeck: udpatedOpponentDeck,
+					  })
+					: postProcessedState;
+				console.debug('[game-state] updated state', this.state === previousState, this.state);
 			}
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
@@ -312,14 +345,13 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug(
-			// 	'[game-state] emitting event',
-			// 	emittedEvent.event.name,
-			// 	this.state.playerDeck?.board?.map((e) => e.cardName),
-			// 	this.state.playerDeck?.board,
-			// 	gameEvent,
-			// 	emittedEvent.state,
-			// );
+			console.debug(
+				'[game-state] emitting event',
+				emittedEvent.event.name,
+				gameEvent.cardId,
+				gameEvent,
+				emittedEvent.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -347,35 +379,94 @@ export class GameStateService {
 	}
 
 	// TODO: this should move elsewhere
+	// TODO: not a big fan of this. These methods should probably be called only once, on the appropriate action
+	// this feels lazy, and probably perf-hungry
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker: PlayerGameState): DeckState {
 		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
+		// console.debug(
+		// 	'[game-state] updated deck with meta infos',
+		// 	stateWithMetaInfos === deck,
+		// 	stateWithMetaInfos,
+		// 	deck,
+		// 	gameState.currentTurn,
+		// );
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
+		// console.debug('[game-state] updated deck with missing card info', newState === stateWithMetaInfos, newState);
 		// const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
 		if (!playerFromTracker) {
 			return newState;
 		}
 
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState, playerFromTracker);
+		// console.debug(
+		// 	'[game-state] playerDeckWithZonesOrdered',
+		// 	newState === playerDeckWithZonesOrdered,
+		// 	newState.board,
+		// 	playerDeckWithZonesOrdered.board,
+		// 	newState.hand,
+		// 	playerDeckWithZonesOrdered.hand,
+		// );
+
 		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
 			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
-			return DeckCard.create({
-				...card,
-				dormant: hasTag(entity, GameTag.DORMANT),
-			} as DeckCard);
+			const dormantTag = hasTag(entity, GameTag.DORMANT);
+			return dormantTag === card.dormant ? card : card.update({ dormant: dormantTag });
 		});
+		// console.debug(
+		// 	'[game-state] updated board',
+		// 	arraysEqual(newBoard, playerDeckWithZonesOrdered.board),
+		// 	newBoard,
+		// 	playerDeckWithZonesOrdered.board,
+		// );
+
 		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES)?.Value ?? 0;
 		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED)?.Value ?? 0;
-		const newHero: HeroCard = playerDeckWithZonesOrdered.hero?.update({
-			manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
-		});
-		return playerDeckWithZonesOrdered.update({
-			board: newBoard,
-			hero: newHero,
-			cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
-			totalAttackOnBoard: this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker),
-		} as DeckState);
+		const manaLeft = maxMana == null || manaSpent == null ? null : maxMana - manaSpent;
+		const newHero: HeroCard =
+			manaLeft != playerDeckWithZonesOrdered.hero?.manaLeft
+				? playerDeckWithZonesOrdered.hero?.update({
+						manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
+				  })
+				: playerDeckWithZonesOrdered.hero;
+		// console.debug(
+		// 	'[game-state] updated hero',
+		// 	newHero === playerDeckWithZonesOrdered.hero,
+		// 	newHero,
+		// 	playerDeckWithZonesOrdered.hero,
+		// );
+
+		const cardsLeftInDeck = playerFromTracker.Deck ? playerFromTracker.Deck.length : null;
+		// console.debug(
+		// 	'[game-state] updated cardsLeftInDeck',
+		// 	cardsLeftInDeck === playerDeckWithZonesOrdered.cardsLeftInDeck,
+		// 	cardsLeftInDeck,
+		// 	playerDeckWithZonesOrdered.cardsLeftInDeck,
+		// );
+		const totalAttackOnBoard = this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker);
+		// console.debug(
+		// 	'[game-state] updated totalAttackOnBoard',
+		// 	deepEqual(totalAttackOnBoard, playerDeckWithZonesOrdered.totalAttackOnBoard),
+		// 	totalAttackOnBoard,
+		// 	playerDeckWithZonesOrdered.totalAttackOnBoard,
+		// );
+
+		const hasChanged =
+			playerDeckWithZonesOrdered !== newState ||
+			!arraysEqual(newBoard, playerDeckWithZonesOrdered.board) ||
+			newHero !== playerDeckWithZonesOrdered.hero ||
+			cardsLeftInDeck !== playerDeckWithZonesOrdered.cardsLeftInDeck ||
+			!deepEqual(totalAttackOnBoard, playerDeckWithZonesOrdered.totalAttackOnBoard);
+
+		return hasChanged
+			? playerDeckWithZonesOrdered.update({
+					board: newBoard,
+					hero: newHero,
+					cardsLeftInDeck: cardsLeftInDeck,
+					totalAttackOnBoard: totalAttackOnBoard,
+			  })
+			: newState;
 	}
 
 	private async buildEventEmitters() {
