@@ -1,10 +1,12 @@
 :host {
 	font-size: 14px;
+	display: flex;
 }
 
 .community-details {
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 }
 
 .overview {
@@ -43,6 +45,7 @@
 .leaderboards {
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 
 	.header {
 		color: var(--default-title-color);
