@@ -67,6 +67,7 @@ import { GameEndParser } from '../event-parser/game-end-parser';
 import { GameRunningParser } from '../event-parser/game-running-parser';
 import { GameStartParser } from '../event-parser/game-start-parser';
 import { GlobalMinionEffectParser } from '../event-parser/global-minion-effect-parser';
+import { HeroChangedParser } from '../event-parser/hero-changed-parser';
 import { HeroPowerChangedParser } from '../event-parser/hero-power-changed-parser';
 import { HeroPowerDamageParser } from '../event-parser/hero-power-damage-parser';
 import { HeroRevealedParser } from '../event-parser/hero-revealed-parser';
@@ -202,6 +203,7 @@ export class GameStateParsersService {
 			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
 			[GameEvent.GAME_START]: [new GameStartParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
+			[GameEvent.HERO_CHANGED]: [new HeroChangedParser(this.allCards)],
 			[GameEvent.HERO_POWER_CHANGED]: [
 				new HeroPowerChangedParser(this.allCards, this.i18n, this.duelsRunService),
 			],

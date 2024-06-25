@@ -52,6 +52,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
 	public static readonly MINION_SUMMONED_FROM_HAND = 'MINION_SUMMONED_FROM_HAND';
 	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
+	public static readonly HERO_CHANGED = 'HERO_CHANGED';
 	public static readonly WEAPON_EQUIPPED = 'WEAPON_EQUIPPED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';
 	public static readonly HERO_REVEALED = 'HERO_REVEALED';

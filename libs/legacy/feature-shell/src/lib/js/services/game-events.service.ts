@@ -473,6 +473,9 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'HERO_CHANGED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.HERO_CHANGED, gameEvent));
+				break;
 			case 'WEAPON_EQUIPPED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.WEAPON_EQUIPPED, gameEvent, {
