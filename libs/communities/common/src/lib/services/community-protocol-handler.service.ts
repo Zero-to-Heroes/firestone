@@ -21,9 +21,15 @@ export class CommunityProtocolHandlerService {
 				info?.origin === 'urlscheme' &&
 				decodeURIComponent(info.parameter).startsWith('firestoneapp://guilds/join/')
 			) {
-				const joinCode = decodeURIComponent(info.parameter).split('firestoneapp://guilds/join/')[1];
+				const communityAndJoinCode = decodeURIComponent(info.parameter).split('firestoneapp://guilds/join/')[1];
+				if (!communityAndJoinCode?.includes('?')) {
+					return;
+				}
+
+				const [communityId, joinCode] = communityAndJoinCode.split('?');
+				// TODO: make sure that multiple communities can use the same join code
 				const joinedComunity = await this.communityJoinService.joinCommunity(joinCode);
-				if (!!joinedComunity) {
+				if (!!joinedComunity && joinedComunity.id === communityId) {
 					this.nav.category$$.next('my-communities');
 					this.nav.selectedCommunity$$.next(joinedComunity.id);
 					this.mainNav.currentApp$$.next('communities');
