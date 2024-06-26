@@ -41,6 +41,7 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 		this.nav = AppInjector.get(CommunityNavigationService);
 
 		this.communities$$.onFirstSubscribe(async () => {
+			this.communities$$.next(null);
 			const joinedCommunities = await this.loadJoinedCommunities();
 			this.communities$$.next(joinedCommunities);
 		});
@@ -75,7 +76,7 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 		return result;
 	}
 
-	private async loadJoinedCommunities(): Promise<readonly CommunityInfo[] | null> {
+	private async loadJoinedCommunities(): Promise<readonly CommunityInfo[]> {
 		console.debug('[communities] retrieve user communities');
 		const user = await this.user.getCurrentUser();
 		const result: readonly CommunityInfo[] | null = await this.api.callPostApi<readonly CommunityInfo[]>(
@@ -85,6 +86,6 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 			},
 		);
 		console.debug('[communities] result', result);
-		return result;
+		return result ?? [];
 	}
 }

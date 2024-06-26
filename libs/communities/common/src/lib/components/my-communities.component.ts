@@ -5,7 +5,7 @@ import { CommunityInfo } from '@firestone-hs/communities';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, startWith, takeUntil } from 'rxjs';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 import { PersonalCommunitiesService } from '../services/personal-communities.service';
 
@@ -14,55 +14,58 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 	styleUrls: [`./my-communities-columns.scss`, `./my-communities.component.scss`],
 	template: `
 		<div class="my-communities" *ngIf="{ hasCommunities: hasCommunities$ | async } as value">
-			<ng-container *ngIf="value.hasCommunities">
-				<div class="header" *ngIf="sortCriteria$ | async as sort">
-					<div class="cell image"></div>
-					<sortable-table-label
-						class="cell name"
-						[name]="'Name'"
-						[sort]="sort"
-						[criteria]="'name'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<div class="cell description">Description</div>
-					<sortable-table-label
-						class="cell members"
-						[name]="'Members'"
-						[sort]="sort"
-						[criteria]="'members'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell games-last-week"
-						[name]="'Games Last Week'"
-						[sort]="sort"
-						[criteria]="'games-last-week'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-				</div>
-				<ul class="communities-list">
-					<div
-						class="community"
-						(click)="goIntoCommunity(community)"
-						*ngFor="let community of communities$ | async"
-					>
+			<with-loading [isLoading]="loading$ | async">
+				<ng-container *ngIf="value.hasCommunities">
+					<div class="header" *ngIf="sortCriteria$ | async as sort">
 						<div class="cell image"></div>
-						<div class="cell name">{{ community.name }}</div>
-						<div class="cell description">{{ community.description }}</div>
-						<div class="cell members">{{ community.numberOfMembers }}</div>
-						<div class="cell games-last-week">{{ community.gamesInLastSevenDays }}</div>
+						<sortable-table-label
+							class="cell name"
+							[name]="'Name'"
+							[sort]="sort"
+							[criteria]="'name'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<div class="cell description">Description</div>
+						<sortable-table-label
+							class="cell members"
+							[name]="'Members'"
+							[sort]="sort"
+							[criteria]="'members'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell games-last-week"
+							[name]="'Games Last Week'"
+							[sort]="sort"
+							[criteria]="'games-last-week'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
 					</div>
-				</ul>
-			</ng-container>
-			<div *ngIf="!value.hasCommunities" class="no-communities">You are not part of any guild yet</div>
+					<ul class="communities-list">
+						<div
+							class="community"
+							(click)="goIntoCommunity(community)"
+							*ngFor="let community of communities$ | async"
+						>
+							<div class="cell image"></div>
+							<div class="cell name">{{ community.name }}</div>
+							<div class="cell description">{{ community.description }}</div>
+							<div class="cell members">{{ community.numberOfMembers }}</div>
+							<div class="cell games-last-week">{{ community.gamesInLastSevenDays }}</div>
+						</div>
+					</ul>
+				</ng-container>
+				<div *ngIf="!value.hasCommunities" class="no-communities">You are not part of any guild yet</div>
+			</with-loading>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MyCommunitiesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	loading$: Observable<boolean>;
 	hasCommunities$: Observable<boolean>;
 	communities$: Observable<readonly CommunityInfo[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
@@ -84,13 +87,17 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 		await waitForReady(this.personalCommunities);
 
 		this.sortCriteria$ = this.sortCriteria$$;
+		this.loading$ = this.personalCommunities.communities$$.pipe(this.mapData((communities) => communities == null));
+		this.hasCommunities$ = this.personalCommunities.communities$$.pipe(
+			this.mapData((communities) => !!communities?.length),
+			startWith(true),
+			takeUntil(this.destroyed$),
+		);
 		this.communities$ = combineLatest([this.sortCriteria$, this.personalCommunities.communities$$]).pipe(
 			this.mapData(([sortCriteria, communities]) =>
 				[...(communities ?? [])].sort((a, b) => this.sortCommunities(a, b, sortCriteria)),
 			),
-			tap((communities) => console.debug('communities', communities)),
 		);
-		this.hasCommunities$ = this.communities$.pipe(this.mapData((communities) => !!communities?.length));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
