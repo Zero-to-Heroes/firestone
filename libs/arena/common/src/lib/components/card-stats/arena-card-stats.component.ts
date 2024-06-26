@@ -59,6 +59,7 @@ const MIN_STATS_THRESHOLD = 100;
 					<sortable-table-label
 						class="cell deck-total"
 						[name]="'app.arena.card-stats.header-deck-total' | fsTranslate"
+						[helpTooltip]="'app.arena.card-stats.header-deck-total-tooltip' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'deck-total'"
 						(sortClick)="onSortClick($event)"
