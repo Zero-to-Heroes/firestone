@@ -1116,6 +1116,8 @@ export const cardIdSelector = (
 			return and(inDeck, minion, attackLessThan(4));
 		case CardIds.LearnDraconic:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.LeylineManipulator:
+			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.LilypadLurker:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.LinaShopManager_TOY_531:

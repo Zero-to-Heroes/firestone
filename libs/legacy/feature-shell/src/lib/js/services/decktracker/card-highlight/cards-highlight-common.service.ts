@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { cardIdSelector } from './card-id-selectors';
-import { and, inDeck, inHand, mech, minion, or, orWithHighlight, side } from './selectors';
+import { and, damage, inDeck, inHand, mech, minion, or, orWithHighlight, side, spell } from './selectors';
 
 export abstract class CardsHighlightCommonService extends AbstractSubscriptionComponent {
 	private handlers: { [uniqueId: string]: Handler } = {};
@@ -258,6 +258,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		// Mechanic-specific highlights
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.MODULAR])) {
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
+		}
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SPELLPOWER])) {
+			return and(side(inputSide), or(inDeck, inHand), spell, damage);
 		}
 	}
 }
