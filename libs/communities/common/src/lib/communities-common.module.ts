@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
@@ -12,6 +13,7 @@ import { MyCommunitiesComponent } from './components/my-communities.component';
 import { CommunityBootstrapService } from './services/_community-bootstrap.service';
 import { CommunityJoinService } from './services/community-join.service';
 import { CommunityNavigationService } from './services/community-navigation.service';
+import { CommunityProtocolHandlerService } from './services/community-protocol-handler.service';
 import { PersonalCommunitiesService } from './services/personal-communities.service';
 
 const components = [
@@ -27,6 +29,8 @@ const components = [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
+
+		MainwindowCommonModule,
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,
 		StatsCommonModule,
@@ -36,6 +40,7 @@ const components = [
 	providers: [
 		CommunityBootstrapService,
 		CommunityJoinService,
+		CommunityProtocolHandlerService,
 		CommunityNavigationService,
 		PersonalCommunitiesService,
 	],

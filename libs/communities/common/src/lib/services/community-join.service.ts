@@ -34,11 +34,11 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 		this.personalCommunities = AppInjector.get(PersonalCommunitiesService);
 	}
 
-	public async joinCommunity(code: string) {
+	public async joinCommunity(code: string): Promise<CommunityInfo | null> {
 		return this.mainInstance.joinCommunityInternal(code);
 	}
 
-	private async joinCommunityInternal(code: string): Promise<boolean> {
+	private async joinCommunityInternal(code: string): Promise<CommunityInfo | null> {
 		console.debug('[communities] joining community', code);
 		const user = await this.user.getCurrentUser();
 		const result: CommunityInfo | null = await this.api.callPostApi<CommunityInfo>(JOIN_COMMUNITY_URL, {
@@ -50,6 +50,6 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 			this.personalCommunities.joinCommunity(result);
 		}
 
-		return result != null;
+		return result;
 	}
 }

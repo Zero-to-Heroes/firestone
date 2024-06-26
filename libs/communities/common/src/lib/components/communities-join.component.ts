@@ -21,7 +21,12 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 	styleUrls: [`./communities-join.component.scss`],
 	template: `
 		<div class="communities-join">
-			<div class="button create disabled">
+			<div
+				class="button create disabled"
+				[helpTooltip]="
+					'This feature is still in beta and under development. If you are a streamer and wish to create a guild, please message me on Discord (link at the top of the app)'
+				"
+			>
 				<div class="image"></div>
 				<div class="text">Create a guild</div>
 			</div>
