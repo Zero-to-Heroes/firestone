@@ -1,4 +1,10 @@
-import { CardIds, defaultStartingHp, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import {
+	defaultStartingHp,
+	GameType,
+	getHeroPower,
+	isBaconGhost,
+	normalizeHeroCardId,
+} from '@firestone-hs/reference-data';
 import { BattlegroundsState, BgsGame, BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -19,7 +25,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 		// 	currentState?.currentGame?.players?.map((player) => player.cardId),
 		// );
 		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards.getService());
-		if (normalizedCardId === CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
+		if (isBaconGhost(normalizedCardId)) {
 			return currentState;
 		}
 

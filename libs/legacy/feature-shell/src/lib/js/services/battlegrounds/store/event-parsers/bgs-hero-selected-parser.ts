@@ -1,4 +1,10 @@
-import { CardIds, defaultStartingHp, GameType, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import {
+	defaultStartingHp,
+	GameType,
+	getHeroPower,
+	isBaconGhost,
+	normalizeHeroCardId,
+} from '@firestone-hs/reference-data';
 import {
 	BattlegroundsState,
 	BgsGame,
@@ -25,7 +31,7 @@ export class BgsHeroSelectedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectedEvent): Promise<BattlegroundsState> {
 		const existingMainPlayer = currentState.reconnectOngoing ? currentState.currentGame.getMainPlayer() : null;
 		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards.getService());
-		if (normalizedCardId === CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
+		if (isBaconGhost(normalizedCardId)) {
 			console.error('selecting KelThuzad in hero selection???');
 			return currentState;
 		}

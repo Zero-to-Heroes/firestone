@@ -1,6 +1,6 @@
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
-import { CardIds } from '@firestone-hs/reference-data';
+import { isBaconGhost } from '@firestone-hs/reference-data';
 import { RealTimeStatsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../models/game-event';
@@ -36,7 +36,7 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 		}
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
-			.filter((target) => target.TargetCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad)
+			.filter((target) => isBaconGhost(target.TargetCardId))
 			.map((target) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
 		if (damageDealt === 0) {

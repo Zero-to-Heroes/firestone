@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, isBaconGhost } from '@firestone-hs/reference-data';
 import { StatName } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
 
@@ -210,7 +210,7 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		if (this._stats.stats.damageToEnemyHeroOverTurn) {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
-				.filter((info) => info.value.enemyHeroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad)
+				.filter((info) => !isBaconGhost(info.value.enemyHeroCardId))
 				.map((info) => (info.value.value != null ? info.value.value : (info.value as any as number))); // For backward compatibilitymap(info => info.value);
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);

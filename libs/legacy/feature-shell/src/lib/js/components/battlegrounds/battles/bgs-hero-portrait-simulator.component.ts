@@ -7,7 +7,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { isBaconGhost } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 
 @Component({
@@ -75,7 +75,7 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() set heroCardId(value: string) {
 		this._heroCardId = value;
-		this.defaultHero = value === CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad;
+		this.defaultHero = isBaconGhost(value);
 	}
 
 	@Input() set tavernTier(value: number) {

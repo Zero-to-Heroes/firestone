@@ -1,4 +1,4 @@
-import { CardIds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { isBaconGhost, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
@@ -16,7 +16,7 @@ export class BgsBuddyGainedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsBuddyGainedEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.findPlayer(event.playerId);
 		if (!playerToUpdate) {
-			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
+			if (!isBaconGhost(event.heroCardId)) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 					console.error(
 						'No player found to update the buddy',

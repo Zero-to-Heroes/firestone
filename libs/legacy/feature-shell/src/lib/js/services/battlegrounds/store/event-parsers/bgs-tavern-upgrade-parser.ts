@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { isBaconGhost } from '@firestone-hs/reference-data';
 import { BattlegroundsState, BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvents } from '../../../game-events.service';
@@ -17,7 +17,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsTavernUpgradeEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.findPlayer(event.playerId);
 		if (!playerToUpdate) {
-			if (event.heroCardId !== CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad) {
+			if (!isBaconGhost(event.heroCardId)) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 					console.warn(
 						'No player found to update the history',
