@@ -10,10 +10,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
-import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
@@ -151,18 +150,16 @@ export class MainWindowComponent
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => showFtue));
-		this.currentApp$ = this.store
-			.listen$(([main, nav, prefs]) => nav.currentApp)
-			.pipe(this.mapData(([currentApp]) => currentApp));
+		this.currentApp$ = this.nav.currentApp$$.pipe(this.mapData((currentApp) => currentApp));
 		this.currentApp$.subscribe((currentApp) => {
 			this.analytics.trackPageView(currentApp);
 		});
 		this.activeTheme$ = combineLatest(
 			this.showFtue$,
-			this.store.listen$(([main, nav, prefs]) => nav.currentApp),
+			this.nav.currentApp$$,
 			this.displayingNewVersion.asObservable(),
 		).pipe(
-			this.mapData(([showFtue, [currentApp], displayingNewVersion]) =>
+			this.mapData(([showFtue, currentApp, displayingNewVersion]) =>
 				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
 			),
 		);

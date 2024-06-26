@@ -23,10 +23,10 @@ export class SelectMatchStatsTabProcessor implements Processor {
 			selectedStatsTabs: selectedStatsTabs,
 		} as NavigationReplays);
 		this.mainNav.isVisible$$.next(true);
+		this.mainNav.currentApp$$.next('replays');
 		return [
 			null,
 			navigationState.update({
-				currentApp: 'replays',
 				navigationReplays: newReplays,
 			} as NavigationState),
 		];

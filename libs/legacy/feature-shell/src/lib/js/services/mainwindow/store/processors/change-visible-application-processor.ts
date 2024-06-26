@@ -97,10 +97,10 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		this.mainNav.text$$.next(this.getInitialText(event.module));
 		this.mainNav.image$$.next(null);
 		this.mainNav.isVisible$$.next(event.forceApplicationVisible || this.mainNav.isVisible$$.getValue());
+		this.mainNav.currentApp$$.next(event.module);
 		return [
 			null,
 			navigationState.update({
-				currentApp: event.module,
 				navigationAchievements: achievements,
 				navigationReplays: replays,
 				navigationBattlegrounds: battlegrounds,

@@ -44,7 +44,7 @@ export class StoreInitProcessor implements Processor {
 		navigationState: NavigationState,
 		prefs: Preferences,
 	): Promise<NavigationState> {
-		const currentNavApp = navigationState.currentApp;
+		const currentNavApp = this.mainNav.currentApp$$.value;
 		// Don't change it if the user has already started to navigate
 		if (currentNavApp) {
 			return navigationState;
@@ -65,9 +65,8 @@ export class StoreInitProcessor implements Processor {
 			return navState;
 		}
 
-		const currentApp = !prefs.ftue.hasSeenGlobalFtue ? undefined : navigationState.currentApp ?? 'decktracker';
-		return navigationState.update({
-			currentApp: currentApp,
-		} as NavigationState);
+		const currentApp = !prefs.ftue.hasSeenGlobalFtue ? undefined : this.mainNav.currentApp$$.value ?? 'decktracker';
+		this.mainNav.currentApp$$.next(currentApp);
+		return navigationState;
 	}
 }

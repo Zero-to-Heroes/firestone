@@ -609,9 +609,9 @@ export class MainWindowStoreService {
 			[ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
 			[CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor()],
 			// Ftue
-			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs)],
-			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor()],
-			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs)],
+			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs, this.mainNavigation)],
+			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor(this.mainNavigation)],
+			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs, this.mainNavigation)],
 			// Stats
 			[RecomputeGameStatsEvent.eventName(), new RecomputeGameStatsProcessor(this.gameStats)],
 			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],

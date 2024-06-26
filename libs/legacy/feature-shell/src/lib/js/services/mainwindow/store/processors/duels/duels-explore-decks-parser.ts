@@ -24,10 +24,10 @@ export class DuelsExploreDecksParser implements Processor {
 		console.debug('newPrefs', newPrefs);
 		await this.prefs.savePreferences(newPrefs);
 		this.mainNav.isVisible$$.next(true);
+		this.mainNav.currentApp$$.next('duels');
 		return [
 			null,
 			navigationState.update({
-				currentApp: 'duels',
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: 'duels-top-decks',
 				}),

@@ -1,17 +1,20 @@
-import { CurrentAppType } from '../../../../../models/mainwindow/current-app.type';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { CurrentAppType } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreviousFtueEvent } from '../../events/ftue/previous-ftue-event';
 import { Processor } from '../processor';
 
 export class PreviousFtueProcessor implements Processor {
+	constructor(private readonly mainNav: MainWindowNavigationService) {}
+
 	public async process(
 		event: PreviousFtueEvent,
 		currentState: MainWindowState,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		let nextStep: CurrentAppType = undefined;
-		switch (navigationState.currentApp) {
+		switch (this.mainNav.currentApp$$.value) {
 			case undefined:
 				nextStep = undefined;
 				break;
@@ -37,6 +40,7 @@ export class PreviousFtueProcessor implements Processor {
 				nextStep = undefined;
 				break;
 		}
-		return [null, navigationState.update({ currentApp: nextStep } as NavigationState)];
+		this.mainNav.currentApp$$.next(nextStep);
+		return [null, null];
 	}
 }

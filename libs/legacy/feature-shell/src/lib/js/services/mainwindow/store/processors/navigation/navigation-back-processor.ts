@@ -65,7 +65,7 @@ export class NavigationBackProcessor implements Processor {
 		achievementsNav: AchievementsNavigationService,
 		achievementsState: AchievementsStateManagerService,
 	): NavigationState {
-		switch (navigationState.currentApp) {
+		switch (mainNav.currentApp$$.value) {
 			case 'achievements':
 				achievementsNav.goUp();
 				return NavigationBackProcessor.buildParentAchievementsState(

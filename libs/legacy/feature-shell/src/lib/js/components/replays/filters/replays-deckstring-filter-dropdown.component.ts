@@ -1,14 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { formatClass } from '../../../services/hs-utils';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replays-deckstring-filter-dropdown',
@@ -26,7 +27,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplaysDeckstringFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{
@@ -37,28 +38,35 @@ export class ReplaysDeckstringFilterDropdownComponent
 	}>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: ConstructedNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
+		private readonly decks: DecksProviderService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.mainNav, this.decks, this.prefs);
 
-		this.filter$ = combineLatest(
-			this.store.decks$(),
+		this.filter$ = combineLatest([
+			this.decks.decks$$,
 			this.nav.currentView$$,
-			this.store.listen$(
-				([main, nav]) => nav.currentApp,
-				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
-				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
-				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
+			this.mainNav.currentApp$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData(
+					(prefs) => ({
+						gameModeFilter: prefs.replaysActiveGameModeFilter,
+						deckstringFilter: prefs.replaysActiveDeckstringsFilter,
+						archivedDecks: prefs.desktopDeckHiddenDeckCodes,
+					}),
+					(a, b) => deepEqual(a, b),
+				),
 			),
-		).pipe(
-			this.mapData(([decks, currentView, [currentApp, gameModeFilter, deckstringFilter, archivedDecks]]) => {
+		]).pipe(
+			this.mapData(([decks, currentView, currentApp, { gameModeFilter, deckstringFilter, archivedDecks }]) => {
 				const options: readonly MultiselectOption[] = (
 					decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []
 				)
@@ -103,12 +111,12 @@ export class ReplaysDeckstringFilterDropdownComponent
 		}
 	}
 
-	onSelected(selectedDeckstrings: readonly string[]) {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				replaysActiveDeckstringsFilter: selectedDeckstrings,
-			})),
-		);
+	async onSelected(selectedDeckstrings: readonly string[]) {
+		const prefs: Preferences = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			replaysActiveDeckstringsFilter: selectedDeckstrings,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 }

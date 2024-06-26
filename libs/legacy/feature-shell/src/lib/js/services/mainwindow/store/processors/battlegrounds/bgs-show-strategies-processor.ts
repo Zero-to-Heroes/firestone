@@ -26,8 +26,8 @@ export class BgsShowStrategiesProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(true);
+		this.mainNav.currentApp$$.next('battlegrounds');
 		const newNavState = navigationState.update({
-			currentApp: 'battlegrounds',
 			navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 				selectedPersonalHeroStatsTab: 'strategies',
 			}),

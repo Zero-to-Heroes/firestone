@@ -1,12 +1,12 @@
-import { PreferencesService } from '@firestone/shared/common/service';
-import { CurrentAppType } from '../../../../../models/mainwindow/current-app.type';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { NextFtueEvent } from '../../events/ftue/next-ftue-event';
 import { Processor } from '../processor';
 
 export class NextFtueProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
 
 	public async process(
 		event: NextFtueEvent,
@@ -15,7 +15,7 @@ export class NextFtueProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		let nextStep: CurrentAppType = undefined;
 		let showFtue = currentState.showFtue;
-		switch (navigationState.currentApp) {
+		switch (this.mainNav.currentApp$$.value) {
 			case undefined:
 				nextStep = 'decktracker';
 				break;
@@ -41,17 +41,16 @@ export class NextFtueProcessor implements Processor {
 				nextStep = 'decktracker'; // Default page
 				break;
 		}
-		if (navigationState.currentApp === 'collection') {
+		if (this.mainNav.currentApp$$.value === 'collection') {
 			await this.prefs.setGlobalFtueDone();
 			showFtue = false;
 		}
+		this.mainNav.currentApp$$.next(nextStep);
 		return [
 			currentState.update({
 				showFtue: showFtue,
 			} as MainWindowState),
-			navigationState.update({
-				currentApp: nextStep,
-			} as NavigationState),
+			null,
 		];
 	}
 }

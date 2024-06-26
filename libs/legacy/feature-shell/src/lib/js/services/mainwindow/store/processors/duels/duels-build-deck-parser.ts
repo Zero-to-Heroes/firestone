@@ -15,6 +15,7 @@ export class DuelsBuildDeckParser implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(true);
+		this.mainNav.currentApp$$.next('duels');
 		return [
 			currentState.update({
 				duels: currentState.duels.update({
@@ -32,7 +33,6 @@ export class DuelsBuildDeckParser implements Processor {
 				}),
 			}),
 			navigationState.update({
-				currentApp: 'duels',
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: 'duels-deckbuilder',
 				}),

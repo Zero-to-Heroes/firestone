@@ -1,5 +1,4 @@
 import { NonFunctionProperties } from '../../../services/utils';
-import { CurrentAppType } from '../current-app.type';
 import { NavigationAchievements } from './navigation-achievements';
 import { NavigationBattlegrounds } from './navigation-battlegrounds';
 import { NavigationCollection } from './navigation-collection';
@@ -11,8 +10,6 @@ import { NavigationStats } from './navigation-stats';
 import { NavigationStreams } from './navigation-streams';
 
 export class NavigationState {
-	// readonly isVisible: boolean = false;
-	readonly currentApp: CurrentAppType;
 	readonly navigationReplays: NavigationReplays = new NavigationReplays();
 	readonly navigationCollection: NavigationCollection = new NavigationCollection();
 	readonly navigationAchievements: NavigationAchievements = new NavigationAchievements();

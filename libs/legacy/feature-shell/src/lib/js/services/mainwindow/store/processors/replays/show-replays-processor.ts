@@ -22,11 +22,7 @@ export class ShowReplaysProcessor implements Processor {
 		this.mainNav.text$$.next(null);
 		this.mainNav.image$$.next(null);
 		this.mainNav.isVisible$$.next(true);
-		return [
-			null,
-			navigationState.update({
-				currentApp: 'replays',
-			} as NavigationState),
-		];
+		this.mainNav.currentApp$$.next('replays');
+		return [null, null];
 	}
 }

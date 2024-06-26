@@ -24,6 +24,7 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 
 		this.nav.selectedCategoryId$$.next('bgs-category-simulator');
 		this.mainNav.text$$.next(this.i18n.translateString('battlegrounds.sim.resimulating-battle'));
+		this.mainNav.currentApp$$.next('battlegrounds');
 		return [
 			currentState.update({
 				battlegrounds: currentState.battlegrounds.update({
@@ -31,7 +32,6 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 				}),
 			}),
 			navigationState.update({
-				currentApp: 'battlegrounds',
 				navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 					currentView: 'list',
 					menuDisplayType: 'breadcrumbs',

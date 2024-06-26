@@ -89,10 +89,10 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		);
 		this.mainNav.image$$.next(null);
 		this.mainNav.isVisible$$.next(true);
+		this.mainNav.currentApp$$.next('replays');
 		return [
 			null,
 			navigationState.update({
-				currentApp: 'replays',
 				navigationReplays: newReplays,
 			} as NavigationState),
 		];

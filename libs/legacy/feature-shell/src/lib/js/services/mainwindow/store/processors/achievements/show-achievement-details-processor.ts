@@ -42,10 +42,10 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		this.mainNav.text$$.next(text);
 		this.mainNav.image$$.next(null);
 		this.mainNav.isVisible$$.next(true);
+		this.mainNav.currentApp$$.next('achievements');
 		return [
 			null,
 			navigationState.update({
-				currentApp: 'achievements',
 				navigationAchievements: newAchievements,
 			} as NavigationState),
 		];
