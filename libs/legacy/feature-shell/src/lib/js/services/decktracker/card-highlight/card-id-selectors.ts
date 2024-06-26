@@ -766,6 +766,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.GatherYourParty:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.Gazlowe:
+			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostEqual(1));
 		case CardIds.GhastlyGravedigger:
 			return and(side(inputSide), or(inDeck, inHand), secret);
 		case CardIds.GhoulishAlchemist:
