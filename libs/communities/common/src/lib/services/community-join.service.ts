@@ -7,28 +7,29 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 import { PersonalCommunitiesService } from './personal-communities.service';
 
 const JOIN_COMMUNITY_URL = 'https://t2cgqsjooshgnnjqspi44vokqa0ywqmw.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class CommunityJoinService extends AbstractFacadeService<CommunityJoinService> {
-	// public duelsConfig$$: SubscriberAwareBehaviorSubject<DuelsConfig | null>;
+	public joinStatus$$: BehaviorSubject<JoinStatus | null>;
 
 	private api: ApiRunner;
 	private user: UserService;
 	private personalCommunities: PersonalCommunitiesService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'CommunityJoinService', () => true /*!!this.duelsConfig$$*/);
+		super(windowManager, 'CommunityJoinService', () => !!this.joinStatus$$);
 	}
 
 	protected override assignSubjects() {
-		// this.duelsConfig$$ = this.mainInstance.duelsConfig$$;
+		this.joinStatus$$ = this.mainInstance.joinStatus$$;
 	}
 
 	protected async init() {
-		// this.duelsConfig$$ = new SubscriberAwareBehaviorSubject<DuelsConfig | null>(null);
+		this.joinStatus$$ = new BehaviorSubject<JoinStatus | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.user = AppInjector.get(UserService);
 		this.personalCommunities = AppInjector.get(PersonalCommunitiesService);
@@ -39,6 +40,7 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 	}
 
 	private async joinCommunityInternal(code: string): Promise<CommunityInfo | null> {
+		this.joinStatus$$.next('joining');
 		console.debug('[communities] joining community', code);
 		const user = await this.user.getCurrentUser();
 		const result: CommunityInfo | null = await this.api.callPostApi<CommunityInfo>(JOIN_COMMUNITY_URL, {
@@ -47,9 +49,14 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 		});
 		console.debug('[communities] result', result);
 		if (result) {
-			this.personalCommunities.joinCommunity(result);
+			await this.personalCommunities.joinCommunity(result);
+			this.joinStatus$$.next('joined');
+		} else {
+			this.joinStatus$$.next('error');
 		}
 
 		return result;
 	}
 }
+
+export type JoinStatus = 'joining' | 'joined' | 'error';

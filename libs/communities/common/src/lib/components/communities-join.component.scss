@@ -4,6 +4,12 @@
 
 .communities-join {
 	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.buttons {
+	display: flex;
 	justify-content: space-around;
 	display: flex;
 	flex-grow: 1;

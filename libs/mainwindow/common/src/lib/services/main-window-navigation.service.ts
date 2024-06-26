@@ -26,7 +26,7 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 	}
 
 	protected async init() {
-		this.currentApp$$ = new BehaviorSubject<CurrentAppType | null>('decktracker');
+		this.currentApp$$ = new BehaviorSubject<CurrentAppType | null>('replays');
 		this.text$$ = new BehaviorSubject<string | null>('Categories');
 		this.image$$ = new BehaviorSubject<string | null>(null);
 		this.isVisible$$ = new BehaviorSubject<boolean | null>(null);

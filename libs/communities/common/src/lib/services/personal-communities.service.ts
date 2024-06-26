@@ -54,8 +54,12 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 		});
 	}
 
-	public joinCommunity(newCommunity: CommunityInfo) {
-		const current = this.communities$$.value;
+	public async joinCommunity(newCommunity: CommunityInfo) {
+		const current = await this.communities$$.getValueWithInit();
+		if (current?.some((c) => c.id === newCommunity.id)) {
+			return;
+		}
+
 		this.communities$$.next([...(current ?? []), newCommunity]);
 	}
 

@@ -13,6 +13,7 @@ import {
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CommunityJoinService } from '../services/community-join.service';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 import { CommunitiesJoinModalComponent } from './communities-join-modal.component';
 
@@ -21,18 +22,21 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 	styleUrls: [`./communities-join.component.scss`],
 	template: `
 		<div class="communities-join">
-			<div
-				class="button create disabled"
-				[helpTooltip]="
-					'This feature is still in beta and under development. If you are a streamer and wish to create a guild, please message me on Discord (link at the top of the app)'
-				"
-			>
-				<div class="image"></div>
-				<div class="text">Create a guild</div>
-			</div>
-			<div class="button join" (click)="showJoinPopup()">
-				<div class="image"></div>
-				<div class="text">Join a guild</div>
+			<div class="error" *ngIf="error$ | async as error">{{ error }}</div>
+			<div class="buttons">
+				<div
+					class="button create disabled"
+					[helpTooltip]="
+						'This feature is still in beta and under development. If you are a streamer and wish to create a guild, please message me on Discord (link at the top of the app)'
+					"
+				>
+					<div class="image"></div>
+					<div class="text">Create a guild</div>
+				</div>
+				<div class="button join" (click)="showJoinPopup()">
+					<div class="image"></div>
+					<div class="text">Join a guild</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -40,6 +44,7 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 })
 export class CommunitiesJoinComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	showModal$: Observable<boolean>;
+	error$: Observable<string>;
 
 	private showModal$$ = new BehaviorSubject<boolean>(false);
 
@@ -51,6 +56,7 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly nav: CommunityNavigationService,
+		private readonly joinService: CommunityJoinService,
 	) {
 		super(cdr);
 	}
@@ -60,8 +66,20 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 	}
 
 	async ngAfterViewInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.joinService);
 
+		this.error$ = this.joinService.joinStatus$$.pipe(
+			this.mapData((status) => {
+				switch (status) {
+					case 'error':
+						return 'An error occurred while joining the guild';
+					case 'joining':
+						return 'Joining guild...';
+					default:
+						return '';
+				}
+			}),
+		);
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({
 			positionStrategy: this.positionStrategy,
@@ -82,7 +100,7 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.successHandler = () => {
 			this.overlayRef.detach();
-			this.nav.category$$.next('my-communities');
+			this.nav.changeCategory('my-communities');
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

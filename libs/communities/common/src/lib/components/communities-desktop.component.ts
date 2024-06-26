@@ -111,7 +111,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 
 	selectCategory(id: ComunitiesCategory) {
 		console.log('selecting category', id);
-		this.nav.category$$.next(id);
+		this.nav.changeCategory(id);
 	}
 }
 

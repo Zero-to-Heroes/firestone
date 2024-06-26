@@ -103,6 +103,7 @@ export class AppStartupService {
 		this.startApp(false);
 		// TOOD: move this elsewhere
 		this.ow.addAppLaunchTriggeredListener(async (info) => {
+			console.debug('[communities] debug', info);
 			if (
 				info?.origin === 'urlscheme' &&
 				decodeURIComponent(info.parameter).startsWith('firestoneapp://twitch/')

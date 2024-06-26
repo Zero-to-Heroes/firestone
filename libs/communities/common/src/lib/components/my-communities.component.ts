@@ -106,7 +106,7 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 
 	goIntoCommunity(community: CommunityInfo) {
 		this.nav.selectedCommunity$$.next(community.id);
-		this.nav.category$$.next('community-details');
+		this.nav.changeCategory('community-details');
 	}
 
 	onSortClick(rawCriteria: string) {
