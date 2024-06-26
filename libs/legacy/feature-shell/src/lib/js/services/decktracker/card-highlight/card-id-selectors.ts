@@ -1379,6 +1379,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.ProvingGrounds:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.PuppetmasterDorian_MIS_026:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.Psychopomp:
 			return and(side(inputSide), inGraveyard, minion);
 		case CardIds.QualityAssurance_TOY_605:
