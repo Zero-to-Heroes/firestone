@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	WindowManagerService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { ComunitiesCategory } from '../models/navigation';
 import { CommunityJoinService } from './community-join.service';
@@ -24,6 +29,8 @@ export class CommunityNavigationService extends AbstractFacadeService<CommunityN
 		this.joinService = AppInjector.get(CommunityJoinService);
 		this.category$$ = new BehaviorSubject<ComunitiesCategory | null>('my-communities');
 		this.selectedCommunity$$ = new BehaviorSubject<string | null>(null);
+
+		await waitForReady(this.joinService);
 	}
 
 	public changeCategory(category: ComunitiesCategory) {
