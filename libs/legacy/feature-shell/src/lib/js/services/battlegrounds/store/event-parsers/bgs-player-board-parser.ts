@@ -42,7 +42,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			'[bgs-simulation] received player boards',
 			event.playerBoard?.board?.map((e) => e.CardId),
 			event.opponentBoard?.board?.map((e) => e.CardId),
-			event.teammateBoard?.Board?.map((e) => e.CardId),
+			// event.teammateBoard?.Board?.map((e) => e.CardId),
 			event.duoPendingBoards?.map((p) => p.playerBoard?.board?.map((e) => e.CardId).join(',')),
 			event.duoPendingBoards?.map((p) => p.opponentBoard?.board?.map((e) => e.CardId).join(',')),
 		);
@@ -50,7 +50,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			'[bgs-simulation] received hero cards',
 			event.playerBoard?.heroCardId,
 			event.opponentBoard?.heroCardId,
-			event.teammateBoard?.Hero?.CardId,
+			// event.teammateBoard?.Hero?.CardId,
 			event.duoPendingBoards?.map((p) => p.playerBoard?.heroCardId).join(','),
 			event.duoPendingBoards?.map((p) => p.opponentBoard?.heroCardId).join(','),
 		);
@@ -151,7 +151,15 @@ export class BgsPlayerBoardParser implements EventParser {
 		if (!!event.duoPendingBoards?.length && playerTeammateBoard == null) {
 			// Limitations: we missing some info about random effects, like Embrace Your Rage
 			if (player.playerId === currentState.currentGame.getMainPlayer().playerId) {
-				playerTeammateBoard = this.buildTeammateBoard(event.teammateBoard, currentState.currentGame.players);
+				const teammateBoardFromMemory = await this.memory.getBgsPlayerTeammateBoard();
+				console.log(
+					'[bgs-simulation] found teammate board from memory',
+					teammateBoardFromMemory?.Board?.map((e) => e.CardId),
+				);
+				playerTeammateBoard = this.buildTeammateBoard(
+					teammateBoardFromMemory,
+					currentState.currentGame.players,
+				);
 				console.warn('[bgs-simulation] assigned playerTeammateBoard from memory teammateBoard');
 			} else {
 				// FIXME: this doesn't work, because if we are in a battle, and haven't found the main player,

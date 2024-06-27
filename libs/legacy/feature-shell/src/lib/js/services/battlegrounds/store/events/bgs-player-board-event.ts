@@ -1,5 +1,4 @@
 import { PlayerBoard } from '@firestone/battlegrounds/common';
-import { MemoryBgsPlayerInfo } from '@firestone/memory';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {
@@ -10,7 +9,7 @@ export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {
 		public readonly opponentBoard: PlayerBoard,
 		// Board snapshots as taken right before the start of the battle
 		public readonly latestPlayerBoard: PlayerBoard,
-		public readonly teammateBoard: MemoryBgsPlayerInfo,
+		// public readonly teammateBoard: MemoryBgsPlayerInfo,
 		// Snapshots of the boards when an opponent swap occurs
 		public readonly duoPendingBoards?: readonly { playerBoard: PlayerBoard; opponentBoard: PlayerBoard }[],
 	) {

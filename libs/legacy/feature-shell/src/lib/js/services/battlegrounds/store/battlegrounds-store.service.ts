@@ -8,7 +8,7 @@ import {
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
-import { MemoryBgsPlayerInfo, MemoryInspectionService } from '@firestone/memory';
+import { MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
@@ -134,7 +134,7 @@ export class BattlegroundsStoreService {
 	private realTimeStatsListener: (state: RealTimeStatsState) => void;
 
 	private duoPendingBoards: any[] = [];
-	private teammateBoard: MemoryBgsPlayerInfo;
+	// private teammateBoard: MemoryBgsPlayerInfo;
 	private playerBoard: PlayerBoard;
 
 	constructor(
@@ -414,15 +414,15 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD) {
 				// TODO: race with the "battle start" event?
 				const startTime = Date.now();
-				this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
+				// this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
 				this.playerBoard = gameEvent.additionalData.playerBoard;
 				console.debug(
 					'[bgs-simulation] BATTLEGROUNDS_ACTIVE_PLAYER_BOARD snapshot player board',
 					Date.now() - startTime,
 					gameEvent.additionalData.playerBoard.board,
-					this.teammateBoard?.Board,
+					// this.teammateBoard?.Board,
 					gameEvent,
-					this.teammateBoard,
+					// this.teammateBoard,
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD) {
 				this.duoPendingBoards.push({
@@ -495,7 +495,7 @@ export class BattlegroundsStoreService {
 							globalInfo: gameEvent.additionalData.opponentBoard.globalInfo,
 						},
 						this.playerBoard,
-						this.teammateBoard,
+						// this.teammateBoard,
 						this.duoPendingBoards,
 					),
 					GameEvent.BATTLEGROUNDS_COMBAT_START,
