@@ -15,7 +15,7 @@ import {
 import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService, Side } from '@firestone/memory';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, distinctUntilChanged, filter, map, pairwise, takeUntil } from 'rxjs';
@@ -408,11 +408,17 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.cardClicked.next(this._card);
 	}
 
+	private previousCard: VisualDeckCard;
 	private async updateInfos() {
 		if (!this._card) {
 			return;
 		}
 
+		if (deepEqual(this._card, this.previousCard)) {
+			return;
+		}
+
+		this.previousCard = this._card;
 		this.cardId = this._card.cardId;
 		this.entityId = this._card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
@@ -435,6 +441,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.updateGiftTooltip();
 		this.highlight = this._card.highlight;
 		this.isDredged = this._card.dredged && !this._card.zone;
+		// For now don't recompute the info dynamically (with the logic from onMouseEnter). If I start getting feedback
+		// that this is an issue, I'll revisit
 		this.relatedCardIds = this._card.relatedCardIds;
 
 		this.isBurned = !this._groupSameCardsTogether && (this._card.zone === 'BURNED' || this._card.milled);
