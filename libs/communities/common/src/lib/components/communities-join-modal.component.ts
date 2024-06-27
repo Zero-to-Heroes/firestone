@@ -8,8 +8,8 @@ import { CommunityJoinService } from '../services/community-join.service';
 	styleUrls: [`./communities-join-modal.component.scss`],
 	template: `
 		<div class="modal">
-			<div class="title">Join a guild</div>
-			<div class="text">Please enter the code given to you by the guild host</div>
+			<div class="title" [fsTranslate]="'app.communities.join.title'"></div>
+			<div class="text" [fsTranslate]="'app.communities.join.text'"></div>
 			<div class="input">
 				<input
 					type="text"
@@ -19,7 +19,11 @@ import { CommunityJoinService } from '../services/community-join.service';
 					[placeholder]="'Code'"
 				/>
 			</div>
-			<button class="validate button" (click)="joinCommunity()">Join</button>
+			<button
+				class="validate button"
+				(click)="joinCommunity()"
+				[fsTranslate]="'app.communities.join.join-button'"
+			></button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

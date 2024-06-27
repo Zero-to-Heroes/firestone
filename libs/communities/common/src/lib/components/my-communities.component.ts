@@ -20,7 +20,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						<div class="cell image"></div>
 						<sortable-table-label
 							class="cell name"
-							[name]="'Name'"
+							[name]="'app.communities.details.communities.name-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'name'"
 							(sortClick)="onSortClick($event)"
@@ -29,7 +29,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						<div class="cell description">Description</div>
 						<sortable-table-label
 							class="cell members"
-							[name]="'Members'"
+							[name]="'app.communities.details.communities.members-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'members'"
 							(sortClick)="onSortClick($event)"
@@ -37,7 +37,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						</sortable-table-label>
 						<sortable-table-label
 							class="cell games-last-week"
-							[name]="'Games Last Week'"
+							[name]="'app.communities.details.communities.games-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'games-last-week'"
 							(sortClick)="onSortClick($event)"
@@ -58,7 +58,11 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						</div>
 					</ul>
 				</ng-container>
-				<div *ngIf="!value.hasCommunities" class="no-communities">You are not part of any guild yet</div>
+				<div
+					*ngIf="!value.hasCommunities"
+					class="no-communities"
+					[fsTranslate]="'app.communities.details.communities.empty-communities'"
+				></div>
 			</with-loading>
 		</div>
 	`,

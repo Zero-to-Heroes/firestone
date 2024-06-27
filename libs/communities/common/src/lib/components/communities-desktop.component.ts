@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/eqeqeq */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import {
@@ -9,7 +10,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, UserService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	IAdsService,
+	ILocalizationService,
+	UserService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable, from } from 'rxjs';
 import { ComunitiesCategory } from '../models/navigation';
 import { CommunityNavigationService } from '../services/community-navigation.service';
@@ -51,7 +58,8 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 								*ngIf="value.category === 'community-details'"
 							></community-details>
 						</ng-container>
-						<ng-container *ngIf="!value.isLoggedIn"> Please log in to use the guild features </ng-container>
+						<ng-container *ngIf="!value.isLoggedIn" [fsTranslate]="'app.communities.please-log-in'">
+						</ng-container>
 					</div>
 				</with-loading>
 			</section>
@@ -73,6 +81,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly nav: CommunityNavigationService,
 		private readonly user: UserService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}
@@ -86,8 +95,11 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		this.selectedCategoryId$ = this.nav.selectedCommunity$$.pipe(this.mapData((info) => info));
 		this.categories$ = from([
 			[
-				{ id: 'manage' as ComunitiesCategory, name: 'Manage' },
-				{ id: 'my-communities' as ComunitiesCategory, name: 'My guilds' },
+				{ id: 'manage' as ComunitiesCategory, name: this.i18n.translateString('app.communities.menu.manage')! },
+				{
+					id: 'my-communities' as ComunitiesCategory,
+					name: this.i18n.translateString('app.communities.menu.my-communities')!,
+				},
 			],
 		]);
 		this.isLoggedIn$ = this.user.user$$.pipe(this.mapData((user) => !!user?.username));
@@ -110,7 +122,6 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 	}
 
 	selectCategory(id: ComunitiesCategory) {
-		console.log('selecting category', id);
 		this.nav.changeCategory(id);
 	}
 }

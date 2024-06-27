@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/eqeqeq */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
@@ -11,7 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CommunityJoinService } from '../services/community-join.service';
 import { CommunityNavigationService } from '../services/community-navigation.service';
@@ -26,16 +27,14 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 			<div class="buttons">
 				<div
 					class="button create disabled"
-					[helpTooltip]="
-						'This feature is still in beta and under development. If you are a streamer and wish to create a guild, please message me on Discord (link at the top of the app)'
-					"
+					[helpTooltip]="'app.communities.manage.create-text-disabled-tooltip' | fsTranslate"
 				>
 					<div class="image"></div>
-					<div class="text">Create a guild</div>
+					<div class="text" [fsTranslate]="'app.communities.manage.create-text'"></div>
 				</div>
 				<div class="button join" (click)="showJoinPopup()">
 					<div class="image"></div>
-					<div class="text">Join a guild</div>
+					<div class="text" [fsTranslate]="'app.communities.manage.join-text'"></div>
 				</div>
 			</div>
 		</div>
@@ -57,6 +56,7 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly nav: CommunityNavigationService,
 		private readonly joinService: CommunityJoinService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}
@@ -72,9 +72,9 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 			this.mapData((status) => {
 				switch (status) {
 					case 'error':
-						return 'An error occurred while joining the guild';
+						return this.i18n.translateString('app.communities.manage.status.error')!;
 					case 'joining':
-						return 'Joining guild...';
+						return this.i18n.translateString('app.communities.manage.status.joining')!;
 					default:
 						return '';
 				}

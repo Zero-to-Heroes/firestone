@@ -27,6 +27,10 @@ export class CommunityNavigationService extends AbstractFacadeService<CommunityN
 	}
 
 	public changeCategory(category: ComunitiesCategory) {
+		this.changeCategoryInternal(category);
+	}
+
+	private changeCategoryInternal(category: ComunitiesCategory) {
 		this.category$$.next(category);
 		this.joinService.joinStatus$$.next(null);
 	}

@@ -21,15 +21,15 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 				<div class="community-description">{{ communityDescription$ | async }}</div>
 				<div class="total-members">
 					<span class="value">{{ totalMembersStr$ | async }}</span>
-					<span class="label">members</span>
+					<span class="label" [fsTranslate]="'app.communities.details.total-members'"></span>
 				</div>
 				<div class="recent-games">
 					<span class="value">{{ totalGamesLastWeekStr$ | async }}</span>
-					<span class="label">games played in the last 7 days</span>
+					<span class="label">{{ gamesPlayedLabel }}</span>
 				</div>
 			</div>
 			<div class="leaderboards">
-				<div class="header">Leaderboards</div>
+				<div class="header" [fsTranslate]="'app.communities.details.leaderboards.header'"></div>
 				<ul class="tabs">
 					<div class="tab" *ngFor="let tab of tabs$ | async" [ngClass]="{ selected: tab.selected }">
 						<div class="text" (click)="selectTab(tab)">{{ tab.name }}</div>
@@ -37,9 +37,15 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 				</ul>
 				<div class="leaderboard" *ngIf="leaderboard$ | async as leaderboard">
 					<div class="leaderboard-header">
-						<div class="cell rank">Rank</div>
-						<div class="cell player-rank">Rating</div>
-						<div class="cell player-name">Name</div>
+						<div class="cell rank" [fsTranslate]="'app.communities.details.leaderboards.rank-header'"></div>
+						<div
+							class="cell player-rank"
+							[fsTranslate]="'app.communities.details.leaderboards.rating-header'"
+						></div>
+						<div
+							class="cell player-name"
+							[fsTranslate]="'app.communities.details.leaderboards.name-header'"
+						></div>
 					</div>
 					<div class="leaderboard-entry" *ngFor="let entry of leaderboard">
 						<div class="cell rank">{{ entry.rank }}</div>
@@ -47,9 +53,11 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						<div class="cell player-name">{{ entry.playerName }}</div>
 					</div>
 				</div>
-				<div class="leaderboard empty" *ngIf="!(leaderboard$ | async)?.length">
-					There are no players in this leaderboard yet
-				</div>
+				<div
+					class="leaderboard empty"
+					*ngIf="!(leaderboard$ | async)?.length"
+					[fsTranslate]="'app.communities.details.leaderboards.empty-leaderboard'"
+				></div>
 			</div>
 		</div>
 	`,
@@ -62,6 +70,8 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 	totalGamesLastWeekStr$: Observable<string>;
 	tabs$: Observable<readonly Tab[]>;
 	leaderboard$: Observable<readonly InternalLeaderboardEntry[] | null>;
+
+	gamesPlayedLabel = this.i18n.translateString('app.communities.details.games-played', { value: 7 })!;
 
 	private selectedTab$$ = new BehaviorSubject<string>('standard');
 
