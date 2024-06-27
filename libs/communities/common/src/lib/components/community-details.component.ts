@@ -117,7 +117,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 			}),
 		);
 
-		const allTabs = ['standard', 'wild', 'twist', 'battlegrounds', 'battlegrounds-duo'];
+		const allTabs = ['standard', 'wild', 'twist', 'battlegrounds', 'battlegrounds-duo', 'arena'];
 		this.tabs$ = selectedTab$.pipe(
 			this.mapData((selectedTab) =>
 				allTabs.map((tab) => ({
@@ -149,6 +149,8 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				return this.i18n.translateString('global.game-mode.battlegrounds')!;
 			case 'battlegrounds-duo':
 				return this.i18n.translateString('global.game-mode.battlegrounds-duo')!;
+			case 'arena':
+				return this.i18n.translateString('global.game-mode.arena')!;
 			default:
 				return 'Unknown';
 		}
