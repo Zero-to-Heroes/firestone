@@ -1,4 +1,4 @@
-import { DraftSlotType, DungeonCrawlOptionType, SceneMode, Zone } from '@firestone-hs/reference-data';
+import { DraftSlotType, DungeonCrawlOptionType, RewardTrackType, SceneMode, Zone } from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
@@ -50,12 +50,13 @@ export interface MemoryUpdate {
 }
 
 export interface XpChange {
+	readonly RewardTrackType: RewardTrackType;
 	readonly CurrentLevel: number;
-	readonly CurrentXp: number;
-	readonly PreviousLevel: number;
-	readonly PreviousXp: number;
-	readonly RewardSourceId: number;
-	readonly RewardSourceType: number;
+	readonly CurrentTotalXp: number;
+	readonly CurrentXpInLevel: number;
+	readonly CurrentXpNeededForLevel: number;
+	readonly XpGained: number;
+	readonly XpBonusPercent: number;
 }
 
 export interface Reward {

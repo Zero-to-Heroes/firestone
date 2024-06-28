@@ -28,6 +28,7 @@ export class ReplaysNotificationService {
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly gameStatus: GameStatusService,
+		private readonly rewardsMonitor: RewardMonitorService,
 	) {
 		this.init();
 	}
@@ -64,7 +65,7 @@ export class ReplaysNotificationService {
 			return;
 		}
 
-		const xpForGame = await this.rewards.getXpForGameInfo();
+		const xpForGame = await this.rewardsMonitor.getXpForGameInfo();
 		if (!xpForGame?.realXpGained) {
 			return;
 		}

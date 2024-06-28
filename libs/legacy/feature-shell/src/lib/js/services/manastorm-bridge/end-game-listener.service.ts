@@ -354,19 +354,7 @@ export class EndGameListenerService {
 					NewRating: bgNewRating ?? newBgInfo.NewRating,
 			  }
 			: null;
-		const [
-			// battlegroundsInfoAfterGameOver,
-			// The timing doesn't work, the diff is only computed later apparently, once the user is on the
-			// end screen
-			// Maybe this could be sent asynchronously via another API call, but for now I think it's
-			// ok to not have the new rank
-			//  duelsPlayerRankAfterGameOver,
-			xpForGame,
-		] = await Promise.all([
-			// isBattlegrounds(info.metadata.GameType) ? this.getBattlegroundsEndGame() : null,
-			// isDuels(info.metadata.GameType) ? this.getDuelsNewPlayerRank(duelsInitialRank, info.duelsInfo) : null,
-			this.rewards.getXpForGameInfo(),
-		]);
+		const xpForGame = await this.rewards.getXpForGameInfo();
 		console.log('[manastorm-bridge] read memory info');
 
 		const battleOdds = this.bgStore?.state?.currentGame?.faceOffs?.map((f) => ({

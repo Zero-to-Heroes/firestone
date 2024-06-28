@@ -3,13 +3,10 @@ import { Race } from '@firestone-hs/reference-data';
 import { MatchResultType, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 
 export interface XpForGameInfo {
-	readonly previousXp: number;
-	readonly previousLevel: number;
 	readonly currentXp: number;
 	readonly currentLevel: number;
-	readonly xpGainedWithoutBonus: number;
 	readonly realXpGained: number;
-	readonly levelsGained: number;
+	readonly xpGainedWithoutBonus: number;
 	readonly bonusXp: number;
 	readonly xpNeeded: number;
 }
