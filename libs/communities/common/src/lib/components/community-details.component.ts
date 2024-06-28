@@ -2,7 +2,7 @@
 /* eslint-disable @angular-eslint/template/eqeqeq */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CommunityInfo, LeaderboardEntry } from '@firestone-hs/communities';
+import { CommunityInfo, LeaderboardEntry, LeaderboardEntryArena } from '@firestone-hs/communities';
 import { StatGameFormatType, StatGameModeType } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
@@ -43,6 +43,11 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 							[fsTranslate]="'app.communities.details.leaderboards.rating-header'"
 						></div>
 						<div
+							class="cell runs-completed"
+							[fsTranslate]="'app.communities.details.leaderboards.runs-completed-header'"
+							*ngIf="showRunsCompleted$ | async"
+						></div>
+						<div
 							class="cell player-name"
 							[fsTranslate]="'app.communities.details.leaderboards.name-header'"
 						></div>
@@ -50,6 +55,9 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					<div class="leaderboard-entry" *ngFor="let entry of leaderboard">
 						<div class="cell rank">{{ entry.rank }}</div>
 						<rank-image class="cell player-rank" [stat]="entry.playerRank"></rank-image>
+						<div class="cell runs-completed" *ngIf="showRunsCompleted$ | async">
+							{{ entry.runsCompleted }}
+						</div>
 						<div class="cell player-name">{{ entry.playerName }}</div>
 					</div>
 				</div>
@@ -68,6 +76,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 	communityDescription$: Observable<string>;
 	totalMembersStr$: Observable<string>;
 	totalGamesLastWeekStr$: Observable<string>;
+	showRunsCompleted$: Observable<boolean>;
 	tabs$: Observable<readonly Tab[]>;
 	leaderboard$: Observable<readonly InternalLeaderboardEntry[] | null>;
 
@@ -127,6 +136,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				})),
 			),
 		);
+		this.showRunsCompleted$ = selectedTab$.pipe(this.mapData((selectedTab) => selectedTab === 'arena'));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -172,10 +182,14 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				gameMode: gameMode,
 				gameFormat: gameFormat,
 			} as GameStat;
+			const runsCompleted = !!(entry as LeaderboardEntryArena)?.runsPerDay
+				? Object.values((entry as LeaderboardEntryArena).runsPerDay).flatMap((runs) => runs).length
+				: null;
 			return {
 				rank: index + 1,
 				playerName: entry.displayName,
 				playerRank: rankStat,
+				runsCompleted: runsCompleted,
 			};
 		});
 	}
@@ -236,4 +250,5 @@ interface InternalLeaderboardEntry {
 	rank: number;
 	playerName: string;
 	playerRank: GameStat;
+	runsCompleted?: number | null;
 }
