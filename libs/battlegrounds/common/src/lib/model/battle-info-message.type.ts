@@ -1,1 +1,1 @@
-export type BattleInfoMessage = 'scallywag' | 'piloted-whirl-o-tron' | 'stitched' | 'error' | undefined;
+export type BattleInfoMessage = 'scallywag' | 'zilliax-enchantment' | 'stitched' | 'error' | undefined;

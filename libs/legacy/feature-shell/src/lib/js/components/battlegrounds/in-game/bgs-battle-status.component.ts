@@ -199,11 +199,16 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
-			case 'piloted-whirl-o-tron':
+			case 'zilliax-enchantment':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',
 					{
-						value: this.allCards.getCard(CardIds.PilotedWhirlOTron_BG21_HERO_030_Buddy).name,
+						value: this.i18n.translateString(
+							'battlegrounds.battle.composition-not-supported.reason-enchantment',
+							{
+								value: this.allCards.getCard(CardIds.ZilliaxAssembled_BG29_100_G).name,
+							},
+						),
 					},
 				);
 				break;

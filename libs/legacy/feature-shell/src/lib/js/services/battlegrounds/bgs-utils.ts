@@ -763,6 +763,11 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'stitched',
 			};
+		} else if (hasZilliaxAssembledEnchantment(boardInfo)) {
+			return {
+				isSupported: false,
+				reason: 'zilliax-enchantment',
+			};
 		}
 		return {
 			isSupported: true,
@@ -783,6 +788,12 @@ const hasMinions = (boardInfo: BgsBoardInfo, cardIds: readonly CardIds[]) => {
 const hasStictchedEntity = (boardInfo: BgsBoardInfo) => {
 	return boardInfo.board.some((m) =>
 		m.enchantments.some((e) => e.cardId === CardIds.DeathstalkerRexxar_StitchedEnchantment),
+	);
+};
+
+const hasZilliaxAssembledEnchantment = (boardInfo: BgsBoardInfo) => {
+	return boardInfo.board.some((m) =>
+		m.enchantments.some((e) => e.cardId === CardIds.ZilliaxAssembled_ZilliaxAssembledEnchantment_BG29_100_Ge),
 	);
 };
 
