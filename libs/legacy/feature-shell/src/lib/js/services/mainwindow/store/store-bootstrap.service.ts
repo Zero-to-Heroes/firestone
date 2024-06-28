@@ -60,7 +60,7 @@ export class StoreBootstrapService {
 			stats: StatsState.create({
 				categories: [
 					{ id: 'match-stats', name: this.i18n.translateString('app.profile.match-stats-title') },
-					{ id: 'xp-graph', name: this.i18n.translateString('app.stats.xp-graph-title') },
+					// { id: 'xp-graph', name: this.i18n.translateString('app.stats.xp-graph-title') },
 				],
 				loading: false,
 				filters: { xpGraphSeasonFilter: prefs.statsXpGraphSeasonFilter },
