@@ -392,7 +392,7 @@ export class GameStateService {
 		// );
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
-		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
+		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos, gameState.metadata);
 		// console.debug('[game-state] updated deck with missing card info', newState === stateWithMetaInfos, newState);
 		// const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
 		if (!playerFromTracker) {
