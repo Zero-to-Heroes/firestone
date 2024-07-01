@@ -22,7 +22,10 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 			<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
 			<div class="deck-image" aria-hidden="true">
 				<img class="skin" [src]="skin" />
-				<img class="frame" src="assets/images/deck/hero_frame.png" />
+				<img
+					class="frame"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/hero_frame.png"
+				/>
 				<img class="decoration {{ format }}" *ngIf="decoration" [src]="decoration" />
 			</div>
 			<div class="stats">

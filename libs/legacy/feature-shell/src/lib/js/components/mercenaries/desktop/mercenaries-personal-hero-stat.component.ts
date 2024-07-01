@@ -144,7 +144,9 @@ export class MercenariesPersonalHeroStatComponent {
 		this.owned = value.owned;
 		this.fullyUpgraded = value.isFullyUpgraded;
 
-		this.rarityImg = `assets/images/rarity/rarity-${CardRarity[value.rarity]?.toLowerCase()}.png`;
+		this.rarityImg = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-${CardRarity[
+			value.rarity
+		]?.toLowerCase()}.png`;
 		this.level = value.currentLevel;
 
 		this.portraitUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;

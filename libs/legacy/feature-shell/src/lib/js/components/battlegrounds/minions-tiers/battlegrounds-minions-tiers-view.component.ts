@@ -53,7 +53,10 @@ import { compareTribes, getBuddy, getEffectiveTribes, isBgsSpell } from '../../.
 								(mouseover)="onTavernMouseOver(currentTier)"
 								(click)="onTavernClick(currentTier)"
 							>
-								<img class="icon" src="assets/images/bgs/star.png" />
+								<img
+									class="icon"
+									src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs/star.png"
+								/>
 								<div class="number">{{ currentTier.tavernTier }}</div>
 							</div>
 						</ul>
@@ -69,7 +72,10 @@ import { compareTribes, getBuddy, getEffectiveTribes, isBgsSpell } from '../../.
 								(mouseover)="onTavernMouseOver(currentTier)"
 								(click)="onTavernClick(currentTier)"
 							>
-								<img class="icon" src="assets/images/bgs/star.png" />
+								<img
+									class="icon"
+									src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs/star.png"
+								/>
 								<div class="number">{{ currentTier.tavernTier }}</div>
 							</div>
 						</ul>

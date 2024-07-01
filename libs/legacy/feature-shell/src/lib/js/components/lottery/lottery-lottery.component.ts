@@ -105,7 +105,11 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.loggedIn$ = this.userName$.pipe(this.mapData((userName) => !!userName));
 		this.avatarUrl$ = this.userService.user$$.pipe(
-			this.mapData((currentUser) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
+			this.mapData(
+				(currentUser) =>
+					currentUser?.avatar ??
+					'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/social-share-login.png',
+			),
 		);
 
 		const lottery$ = this.store.lottery$().pipe(

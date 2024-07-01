@@ -141,7 +141,7 @@ export class ArenaRunComponent {
 		this.wins = this._run.wins;
 		this.losses = this._run.losses;
 		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins });
-		this.gameModeImage = `assets/images/deck/ranks/arena/arena${this.wins}wins.png`;
+		this.gameModeImage = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${this.wins}wins.png`;
 		this.rewards = this._run.rewards;
 
 		this.playerClassImage = this._run.heroCardId

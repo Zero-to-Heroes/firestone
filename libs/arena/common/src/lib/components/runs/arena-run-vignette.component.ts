@@ -98,7 +98,7 @@ export class ArenaRunVignetteComponent {
 		this.wins = value.wins;
 		this.losses = value.losses;
 		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins });
-		this.gameModeImage = `assets/images/deck/ranks/arena/arena${this.wins}wins.png`;
+		this.gameModeImage = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${this.wins}wins.png`;
 
 		const heroCard = this.allCards.getCard(getDefaultHeroDbfIdForClass(value.playerClass));
 		this.playerClassImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCard.id}.jpg`;

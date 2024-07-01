@@ -97,8 +97,8 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 		this.gameMode = this._stat.gameMode;
 		this.gameModeImage =
 			this._stat.gameMode === 'duels'
-				? 'assets/images/deck/ranks/casual_duels.png'
-				: 'assets/images/deck/ranks/heroic_duels.png';
+				? 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/casual_duels.png'
+				: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/heroic_duels.png';
 		this.gameModeTooltip =
 			this._stat.gameMode === 'duels'
 				? this.i18n.translateString('global.game-mode.casual-duels')

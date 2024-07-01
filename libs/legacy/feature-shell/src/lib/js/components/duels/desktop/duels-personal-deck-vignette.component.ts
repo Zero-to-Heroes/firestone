@@ -48,7 +48,10 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 				</div>
 				<div class="deck-image">
 					<img class="skin" [src]="skin" />
-					<img class="frame" src="assets/images/deck/hero_frame.png" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/hero_frame.png"
+					/>
 				</div>
 				<div class="stats">
 					<div class="item total-runs">

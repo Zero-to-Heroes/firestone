@@ -21,7 +21,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			<div class="deck-summary">
 				<div class="deck-image">
 					<img class="skin" [src]="info.skin" />
-					<img class="frame" src="assets/images/deck/hero_frame.png" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/hero_frame.png"
+					/>
 				</div>
 				<div class="deck-title">
 					<div class="deck-name">

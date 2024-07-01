@@ -9,7 +9,11 @@ import { Set } from '../../models/set';
 		<div *ngIf="cardSet && rarity" class="rarity-container">
 			<div class="rarity-progress">
 				<img
-					src="{{ 'assets/images/rarity-' + rarity?.toLowerCase() + '.png' }}"
+					src="{{
+						'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity-' +
+							rarity?.toLowerCase() +
+							'.png'
+					}}"
 					class="rarity"
 					title="{{ rarity }}"
 				/>

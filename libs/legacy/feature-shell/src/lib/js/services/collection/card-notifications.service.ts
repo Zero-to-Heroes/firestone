@@ -51,7 +51,7 @@ export class CardNotificationsService {
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
-					<img class="rarity" src="assets/images/rarity/rarity-${rarity}.png">
+					<img class="rarity" src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-${rarity}.png">
 					<img class="art" src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
 					<div class="message">
 						<div *ngIf="goldenClass" class="premium-deco">

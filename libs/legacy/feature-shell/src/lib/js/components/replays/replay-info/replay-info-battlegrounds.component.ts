@@ -43,7 +43,7 @@ import { extractTime } from './replay-info-ranked.component';
 					<img
 						class="darkmoon-ticket"
 						*ngIf="hasPrizes"
-						src="assets/images/bgs/ticket.png"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs/ticket.png"
 						[helpTooltip]="'app.replays.replay-info.bgs-prizes-tooltip' | owTranslate"
 					/>
 				</div>

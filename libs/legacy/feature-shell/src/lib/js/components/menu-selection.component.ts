@@ -276,7 +276,11 @@ export class MenuSelectionComponent
 
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.avatarUrl$ = this.userService.user$$.pipe(
-			this.mapData((currentUser) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
+			this.mapData(
+				(currentUser) =>
+					currentUser?.avatar ??
+					'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/social-share-login.png',
+			),
 		);
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)

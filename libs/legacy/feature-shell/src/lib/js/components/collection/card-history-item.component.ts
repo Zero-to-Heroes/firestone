@@ -95,7 +95,9 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 				this.relevantCount = history.relevantCount;
 
 				const dbCard = this.cards.getCard(history.cardId);
-				this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
+				this.rarityImg = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-${
+					dbCard.rarity || 'free'
+				}.png`;
 
 				const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
 				this.cardType = cardPremiumToCardType(history.premium);

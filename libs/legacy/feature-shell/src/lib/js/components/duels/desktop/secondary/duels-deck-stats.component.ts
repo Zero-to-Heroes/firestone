@@ -16,7 +16,10 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<div class="info">
 				<div class="deck-image">
 					<img class="skin" [src]="deckInfo.deck.skin" />
-					<img class="frame" src="assets/images/deck/hero_frame.png" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/hero_frame.png"
+					/>
 				</div>
 				<div class="metadata">
 					<div class="deck-name" *ngIf="deckInfo.deck.deckName">{{ deckInfo.deck.deckName }}</div>

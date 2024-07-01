@@ -12,7 +12,7 @@ import { PackInfo } from './pack-info';
 			<div class="value">{{ totalObtained }}</div>
 			<img
 				class="next-legendary-soon"
-				src="assets/images/rarity/rarity-legendary.png"
+				src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-legendary.png"
 				[helpTooltip]="nextLegendarySoonTooltip"
 				*ngIf="nextLegendaryComingSoon"
 			/>

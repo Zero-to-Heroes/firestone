@@ -27,7 +27,10 @@ export class ShareLoginComponent {
 		}
 		this.username = value.name;
 		this.loggedIn = value.id != undefined;
-		this.loginImage = this.loggedIn && value.avatarUrl ? value.avatarUrl : 'assets/images/social-share-login.png';
+		this.loginImage =
+			this.loggedIn && value.avatarUrl
+				? value.avatarUrl
+				: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/social-share-login.png';
 	}
 
 	loggedIn: boolean;

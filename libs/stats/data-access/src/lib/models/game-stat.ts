@@ -176,7 +176,7 @@ export class GameStat {
 		}
 
 		return {
-			frameImage: `assets/images/deck/ranks/${rankIcon}.png`,
+			frameImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/${rankIcon}.png`,
 			tooltip: rankIconTooltip,
 		};
 	}

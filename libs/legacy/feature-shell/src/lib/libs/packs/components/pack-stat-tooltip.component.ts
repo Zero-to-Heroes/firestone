@@ -33,7 +33,9 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 				<div class="pity-timers">
 					<div class="progression epic">
 						<div class="progress-title">
-							<img src="assets/images/rarity/rarity-epic-small.png" />
+							<img
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-epic-small.png"
+							/>
 							<span
 								[owTranslate]="'app.collection.sets.in-packs'"
 								[translateParams]="{ value: epicTimer }"
@@ -45,7 +47,9 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 					</div>
 					<div class="progression legendary">
 						<div class="progress-title">
-							<img src="assets/images/rarity/rarity-legendary-small.png" />
+							<img
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-legendary-small.png"
+							/>
 							<span
 								[owTranslate]="'app.collection.sets.in-packs'"
 								[translateParams]="{ value: legendaryTimer }"

@@ -75,8 +75,8 @@ export class DuelsDeckWidgetComponent {
 		this.initialDeck = value.initialDeckList;
 		this.gameModeImage =
 			value.type === 'duels'
-				? 'assets/images/deck/ranks/casual_duels.png'
-				: 'assets/images/deck/ranks/heroic_duels.png';
+				? 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/casual_duels.png'
+				: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/heroic_duels.png';
 		if (value.mmr == null) {
 			if (value.isLastPersonalDeck) {
 				this.missingDeckText = this.i18n.translateString('app.duels.deck-stat.no-personal-deck');

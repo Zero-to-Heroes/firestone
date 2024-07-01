@@ -34,7 +34,10 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				[cardTooltipShowRelatedCards]="showRelatedCards$ | async"
 				rotateOnMouseOver
 			>
-				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
+				<img
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/placeholder.png"
+					class="pale-theme placeholder"
+				/>
 				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
 				<div class="count" *ngIf="!showPlaceholder && showCounts">
 					<div class="non-premium" *ngIf="showNonPremiumCount">
