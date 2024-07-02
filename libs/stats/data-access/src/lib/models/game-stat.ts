@@ -161,12 +161,13 @@ export class GameStat {
 			// New format
 			if (this.playerRank.indexOf('-') !== -1) {
 				const wins = this.playerRank.split('-')[0];
-				// const losses = this.playerRank.split('-')[1];
 				rankIcon = `arena/arena${wins}wins`;
 				rankIconTooltip = i18n.translateString('global.game-mode.arena');
 			} else {
-				rankIcon = 'arena/arena12wins';
+				const wins = Math.ceil(+this.playerRank);
+				rankIcon = `arena/arena${wins}wins`;
 				rankIconTooltip = i18n.translateString('global.game-mode.arena');
+				console.debug('arena icon', wins, rankIcon);
 			}
 		} else if (this.gameMode === 'tavern-brawl') {
 			rankIcon = 'tavernbrawl';
@@ -244,10 +245,14 @@ export const buildRankText = (playerRank: string | undefined, gameMode: string, 
 		}
 		return playerRank;
 	}
-	if (gameMode === 'arena' && playerRank && playerRank.indexOf('-') !== -1) {
-		const wins = playerRank.split('-')[0];
-		const losses = playerRank.split('-')[1];
-		return `${wins}-${losses}`;
+	if (gameMode === 'arena') {
+		if (playerRank && playerRank.indexOf('-') !== -1) {
+			const wins = playerRank.split('-')[0];
+			const losses = playerRank.split('-')[1];
+			return `${wins}-${losses}`;
+		} else {
+			return playerRank;
+		}
 	}
 	// Bug for old matches
 	if ((gameMode === 'battlegrounds' || gameMode === 'battlegrounds-duo') && playerRank) {

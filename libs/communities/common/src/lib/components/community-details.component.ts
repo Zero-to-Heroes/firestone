@@ -4,10 +4,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CommunityInfo, LeaderboardEntry, LeaderboardEntryArena } from '@firestone-hs/communities';
 import { StatGameFormatType, StatGameModeType } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 import { PersonalCommunitiesService } from '../services/personal-communities.service';
 
@@ -115,6 +115,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 		);
 		const selectedTab$ = this.selectedTab$$.pipe(this.mapData((selectedTab) => selectedTab));
 		this.leaderboard$ = combineLatest([selectedTab$, this.personalCommunities.selectedCommunity$$]).pipe(
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			tap(([selectedTab, community]) => console.debug('selectedTab', selectedTab, 'community', community)),
 			filter(([selectedTab, community]) => !!community),
 			this.mapData(([selectedTab, community]) => {
@@ -178,7 +179,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 		const gameFormat: StatGameFormatType = this.toGameFormat(selectedTab);
 		return sourceLeaderboard.map((entry, index) => {
 			const rankStat: GameStat = {
-				playerRank: entry.currentRank,
+				playerRank: gameMode === 'arena' ? parseInt(entry.currentRank).toFixed(2) : entry.currentRank,
 				gameMode: gameMode,
 				gameFormat: gameFormat,
 			} as GameStat;
@@ -204,8 +205,10 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				return 'battlegrounds';
 			case 'battlegrounds-duo':
 				return 'battlegrounds-duo';
+			case 'arena':
+				return 'arena';
 			default:
-				return 'ranked';
+				return selectedTab as StatGameModeType;
 		}
 	}
 
@@ -234,6 +237,8 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 				return community.battlegroundsInfo?.leaderboard;
 			case 'battlegrounds-duo':
 				return community.battlegroundsDuoInfo?.leaderboard;
+			case 'arena':
+				return community.arenaInfo?.leaderboard;
 			default:
 				return null;
 		}
