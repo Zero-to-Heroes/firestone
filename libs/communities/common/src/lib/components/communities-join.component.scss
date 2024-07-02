@@ -41,3 +41,15 @@
 		background: rgba(255, 255, 255, 0.12);
 	}
 }
+
+.what-are-guilds {
+	font-size: 32px;
+	color: var(--color-2);
+	text-align: center;
+	width: fit-content;
+	align-self: center;
+
+	&:hover {
+		color: var(--color-1);
+	}
+}

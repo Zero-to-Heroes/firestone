@@ -24,6 +24,12 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 	template: `
 		<div class="communities-join">
 			<div class="error" *ngIf="error$ | async as error">{{ error }}</div>
+			<a
+				class="what-are-guilds"
+				href="https://github.com/Zero-to-Heroes/firestone/wiki/What-are-Guilds%3F"
+				target="_blank"
+				[fsTranslate]="'app.communities.what-are-guilds'"
+			></a>
 			<div class="buttons">
 				<div
 					class="button create disabled"
