@@ -176,7 +176,6 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 				[attr.aria-label]="'app.menu.communities-header' | owTranslate"
 				[ngClass]="{ selected: selectedModule === 'communities' }"
 				(click)="selectModule('communities')"
-				*ngIf="enableCommunitiesTab"
 			>
 				<div class="icon" inlineSVG="assets/svg/community.svg"></div>
 				<div class="text">
@@ -254,8 +253,6 @@ export class MenuSelectionComponent
 	mailboxTextDetails$: Observable<string>;
 	showGoPremium$: Observable<boolean>;
 
-	enableCommunitiesTab: boolean;
-
 	@Input() selectedModule: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -298,14 +295,6 @@ export class MenuSelectionComponent
 				}),
 			),
 		);
-
-		overwolf.settings.getExtensionSettings((settingsResult) => {
-			this.enableCommunitiesTab =
-				settingsResult?.settings?.channel === 'beta' || process.env['NODE_ENV'] !== 'production';
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
