@@ -30,7 +30,6 @@ import {
 	filter,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { MulliganDeckData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
@@ -98,17 +97,13 @@ export class ConstructedMulliganDeckComponent
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
-			tap((info) => console.debug('[mulligan] showWidget', info)),
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
 			distinctUntilChanged(),
 		);
 		this.showMulliganOverview$ = combineLatest([
 			showWidget$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
-		]).pipe(
-			tap((info) => console.debug('[mulligan] showMulliganOverview', info)),
-			this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview),
-		);
+		]).pipe(this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview));
 
 		this.allDeckMulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
 			filter((advice) => !!advice),
@@ -139,7 +134,6 @@ export class ConstructedMulliganDeckComponent
 				return result;
 			}),
 			shareReplay(1),
-			tap((info) => console.debug('[mulligan] mulliganInfo', info)),
 			takeUntil(this.destroyed$),
 		);
 

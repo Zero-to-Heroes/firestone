@@ -160,7 +160,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			this.mapData(([showTotalCardsInZone, zone]) => (showTotalCardsInZone ? `${zone.numberOfCards}` : '-')),
 		);
 
-		this.cardSections$ = combineLatest(
+		this.cardSections$ = combineLatest([
 			this.zone$,
 			this.collection$$.asObservable(),
 			this.showUpdatedCost$,
@@ -169,7 +169,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			this.groupSameCardsTogether$$.asObservable(),
 			this.showBottomCardsSeparately$$.asObservable(),
 			this.showTopCardsSeparately$$.asObservable(),
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([
 					zone,
@@ -235,6 +235,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			return null;
 		}
 
+		console.debug('refreshing zone', zone);
 		const result = zone.sections.map((section) => {
 			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards, collection);
 			const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
@@ -335,6 +336,7 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		const keyWithCost = keyWithDiscard + (!groupSameCardsTogether ? '-' + card.getEffectiveManaCost() : '');
 		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
 		const keyWithRelatedCards = keyWithCost + (!groupSameCardsTogether ? '-' + relatedCardIds : '');
+		console.debug('keyWithRelatedCards', keyWithRelatedCards, card);
 		if (!collection?.length) {
 			return keyWithRelatedCards;
 		}

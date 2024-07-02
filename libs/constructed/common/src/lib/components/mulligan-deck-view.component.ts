@@ -187,7 +187,6 @@ export class MulliganDeckViewComponent
 			.subscribe(async (scale) => {
 				const newScale = scale / 100;
 				const elements = await this.getScalableElements();
-				console.debug('[mulligan] setting scale 2', newScale, elements);
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});
 

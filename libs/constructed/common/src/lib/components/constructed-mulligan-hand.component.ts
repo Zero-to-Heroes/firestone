@@ -101,7 +101,6 @@ export class ConstructedMulliganHandComponent
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((advice) => {
-				console.debug('[mulligan] noData?', advice?.noData, advice);
 				this.noData$$.next(advice?.noData ?? false);
 			});
 
@@ -181,7 +180,6 @@ export class ConstructedMulliganHandComponent
 			.subscribe(async (scale) => {
 				const newScale = scale / 100;
 				const elements = await this.getScalableElements();
-				console.debug('[mulligan] setting scale 2', newScale, elements);
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});
 

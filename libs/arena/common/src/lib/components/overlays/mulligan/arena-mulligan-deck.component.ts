@@ -32,7 +32,6 @@ import {
 	filter,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { ArenaMulliganGuideGuardianService } from '../../../services/arena-mulligan-guide-guardian.service';
 import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guide.service';
@@ -91,17 +90,13 @@ export class ArenaMulliganDeckComponent
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
-			tap((info) => console.debug('[mulligan] showWidget', info)),
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
 			distinctUntilChanged(),
 		);
 		this.showMulliganOverview$ = combineLatest([
 			showWidget$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
-		]).pipe(
-			tap((info) => console.debug('[mulligan] showMulliganOverview', info)),
-			this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview),
-		);
+		]).pipe(this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview));
 
 		this.allDeckMulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
 			filter((advice) => !!advice),
@@ -132,7 +127,6 @@ export class ArenaMulliganDeckComponent
 				return result;
 			}),
 			shareReplay(1),
-			tap((info) => console.debug('[mulligan] mulliganInfo', info)),
 			takeUntil(this.destroyed$),
 		);
 
@@ -212,7 +206,6 @@ export class ArenaMulliganDeckComponent
 			.subscribe(async (scale) => {
 				const newScale = scale / 100;
 				const elements = await this.getScalableElements();
-				console.debug('[mulligan] setting scale 2', newScale, elements);
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});
 
