@@ -88,7 +88,7 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.personalCommunities);
+		await waitForReady(this.personalCommunities, this.nav);
 
 		this.sortCriteria$ = this.sortCriteria$$;
 		this.loading$ = this.personalCommunities.communities$$.pipe(this.mapData((communities) => communities == null));

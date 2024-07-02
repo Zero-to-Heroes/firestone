@@ -34,7 +34,7 @@ export class CommunityNavigationService extends AbstractFacadeService<CommunityN
 	}
 
 	public changeCategory(category: ComunitiesCategory) {
-		this.changeCategoryInternal(category);
+		this.mainInstance.changeCategoryInternal(category);
 	}
 
 	private changeCategoryInternal(category: ComunitiesCategory) {
