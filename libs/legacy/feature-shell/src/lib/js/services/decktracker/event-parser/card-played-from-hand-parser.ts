@@ -122,6 +122,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
 				manaCost: card.manaCost ?? refCard?.cost,
+				cardName: card.cardName ?? refCard?.name,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
