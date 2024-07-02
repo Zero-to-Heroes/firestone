@@ -93,7 +93,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					<div class="menu-header" [owTranslate]="'app.menu.mercenaries-header'"></div>
 				</div>
 			</button>
-			<button
+			<!-- <button
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
@@ -106,7 +106,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.duels-header'"></div>
 				</div>
-			</button>
+			</button> -->
 
 			<li class="main-menu-separator"></li>
 

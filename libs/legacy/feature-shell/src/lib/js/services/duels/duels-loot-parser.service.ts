@@ -28,7 +28,7 @@ export class DuelsLootParserService {
 		private readonly reviewIdService: ReviewIdService,
 		private readonly events: Events,
 	) {
-		this.init();
+		// this.init();
 	}
 
 	private async init() {
