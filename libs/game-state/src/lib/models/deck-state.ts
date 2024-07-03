@@ -80,6 +80,7 @@ export class DeckState {
 	readonly corpsesSpent: number = 0;
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
+	readonly spellsPlayedOnFriendlyEntities: readonly DeckCard[] = [];
 	readonly uniqueSpellSchools: readonly string[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCardWithTurn[] = [];
 	readonly secretsTriggeredThisMatch: readonly ShortCardWithTurn[] = [];
@@ -142,7 +143,12 @@ export class DeckState {
 		return Object.assign(new DeckState(), this, value);
 	}
 
-	public updateSpellsPlayedThisMatch(spell: DeckCard, allCards: CardsFacadeService, cardCost: number): DeckState {
+	public updateSpellsPlayedThisMatch(
+		spell: DeckCard,
+		allCards: CardsFacadeService,
+		cardCost: number,
+		targetEntityId: number,
+	): DeckState {
 		if (!spell) {
 			return this;
 		}
@@ -169,11 +175,18 @@ export class DeckState {
 		if (refCard?.spellSchool?.includes(SpellSchool[SpellSchool.HOLY])) {
 			manaSpentOnHolySpellsThisMatch += manaCost;
 		}
+
+		const allEntityIds = [...this.board, this.hero].map((card) => Math.abs(card?.entityId ?? 0));
+		let spellsPlayedOnFriendlyEntities = this.spellsPlayedOnFriendlyEntities ?? [];
+		if (!!targetEntityId && allEntityIds.includes(targetEntityId)) {
+			spellsPlayedOnFriendlyEntities = [...spellsPlayedOnFriendlyEntities, spell];
+		}
 		return this.update({
 			spellsPlayedThisMatch: spellsPlayedThisMatch,
 			uniqueSpellSchools: uniqueSpellSchools,
 			manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
 			manaSpentOnHolySpellsThisMatch: manaSpentOnHolySpellsThisMatch,
+			spellsPlayedOnFriendlyEntities: spellsPlayedOnFriendlyEntities,
 		});
 	}
 

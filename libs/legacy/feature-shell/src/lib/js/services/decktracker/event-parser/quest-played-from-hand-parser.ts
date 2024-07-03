@@ -79,6 +79,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 				isCardCountered ? null : cardWithZone,
 				this.allCards,
 				gameEvent.additionalData.cost,
+				null,
 			);
 
 		const newCardPlayedThisMatch: ShortCardWithTurn = {

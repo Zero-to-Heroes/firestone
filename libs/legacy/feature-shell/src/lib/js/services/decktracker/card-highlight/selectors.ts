@@ -187,6 +187,10 @@ export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(input.entityId) ||
 	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(-input.entityId);
 
+export const spellPlayedThisMatchOnFriendly = (input: SelectorInput): boolean =>
+	input.deckState?.spellsPlayedOnFriendlyEntities.map((spell) => spell.entityId).includes(input.entityId) ||
+	input.deckState?.spellsPlayedOnFriendlyEntities.map((spell) => spell.entityId).includes(-input.entityId);
+
 export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
 	const result =
 		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||

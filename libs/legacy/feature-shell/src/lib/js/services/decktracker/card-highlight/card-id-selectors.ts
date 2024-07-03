@@ -89,6 +89,7 @@ import {
 	spell,
 	spellDamage,
 	spellPlayedThisMatch,
+	spellPlayedThisMatchOnFriendly,
 	spellSchool,
 	spellSchoolPlayedThisMatch,
 	spendCorpse,
@@ -1108,7 +1109,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.LadyLiadrin:
 		case CardIds.LadyLiadrin_CORE_BT_334:
-			return tooltip(and(side(inputSide), spellPlayedThisMatch));
+			return tooltip(and(side(inputSide), spellPlayedThisMatchOnFriendly));
 		case CardIds.LadyVashj_VashjPrimeToken:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.LastStand:

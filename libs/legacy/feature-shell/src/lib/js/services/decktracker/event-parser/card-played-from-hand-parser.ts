@@ -239,6 +239,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				isCardCountered ? null : cardToAdd,
 				this.allCards,
 				gameEvent.additionalData.cost,
+				gameEvent.additionalData.targetEntityId,
 			);
 		// console.debug('newPlayerDeck', newPlayerDeck);
 
