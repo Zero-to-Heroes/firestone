@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.18.0',
+		version: '13.18.2',
 		force: false,
 		sections: [
 			// {
@@ -73,6 +73,14 @@ export const updates: readonly Update[] = [
 								text: `Cards received from Repackaged Box are now flagged in hand.`,
 							},
 							{
+								type: 'feature',
+								text: `Add the new opponent decks in Twist.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue that would show incorrect cards as being in your opponent's deck when using the Legacy Tracker mode.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where secrets replayed by Tess (and probably Yogg) would not be flagged as gifts.`,
 							},
@@ -83,6 +91,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where some card tooltips would suddenly become empty.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where card highlight for Lady Liadrin would also include spells played on non-friendly characters.`,
 							},
 						],
 					},
@@ -109,6 +121,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where a lot of match-related data points were missing from the card stats, like mulligan winrate.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'misc',
+								text: `At long last, it's time to let Duels go. This was a really fun mode, and I'm glad I could help so many of you with your runs. But it's time to move on to other things. The Duels entry in the menu has finally been removed.`,
 							},
 						],
 					},
