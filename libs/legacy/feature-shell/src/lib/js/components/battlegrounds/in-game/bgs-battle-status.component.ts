@@ -206,7 +206,7 @@ export class BgsBattleStatusComponent {
 						value: this.i18n.translateString(
 							'battlegrounds.battle.composition-not-supported.reason-enchantment',
 							{
-								value: this.allCards.getCard(CardIds.ZilliaxAssembled_BG29_100_G).name,
+								cardName: this.allCards.getCard(CardIds.ZilliaxAssembled_BG29_100_G).name,
 							},
 						),
 					},
