@@ -14,6 +14,7 @@ import { CommunityNavigationService } from './community-navigation.service';
 
 const RETRIEVE_PERSONAL_COMMUNITY_URLS = 'https://3ftuxvbgkyrk2wvwl2l4j46ysq0kqdij.lambda-url.us-west-2.on.aws/';
 const LOAD_COMMUNITY_URL = 'https://cgacfvcostpzszsmktrn3fw25y0ccxoa.lambda-url.us-west-2.on.aws/';
+const LEAVE_COMMUNITY_URL = 'https://ra25qniynglwxm3sidnp3gdjie0tmepz.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCommunitiesService> {
@@ -61,6 +62,33 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 		}
 
 		this.communities$$.next([...(current ?? []), newCommunity]);
+	}
+
+	public async leaveCommunity(communityId: string) {
+		return this.mainInstance.leaveCommunityInternal(communityId);
+	}
+
+	private async leaveCommunityInternal(communityId: string) {
+		console.debug('[communities] leaving community', communityId);
+		const user = await this.user.getCurrentUser();
+		const result = await this.api.callPostApi<boolean>(LEAVE_COMMUNITY_URL, {
+			communityId: communityId,
+			userName: user?.username,
+		});
+		if (!result) {
+			return;
+		}
+
+		const current = await this.communities$$.getValueWithInit();
+		if (!current) {
+			return;
+		}
+
+		const newCommunities = current.filter((c) => c.id !== communityId);
+		console.debug('[communities] new communities', newCommunities, this.communities$$.getValue());
+		this.communities$$.next(newCommunities);
+		this.nav.selectedCommunity$$.next(null);
+		this.nav.category$$.next('my-communities');
 	}
 
 	private async loadCommunityDetails(communityId: string): Promise<CommunityInfo | null> {

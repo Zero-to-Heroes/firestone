@@ -28,6 +28,11 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					<span class="label">{{ gamesPlayedLabel }}</span>
 				</div>
 			</div>
+			<div
+				class="leave-community-button"
+				[fsTranslate]="'app.communities.leave-community-button'"
+				(click)="leaveCommunity()"
+			></div>
 			<div class="leaderboards">
 				<div class="header" [fsTranslate]="'app.communities.details.leaderboards.header'"></div>
 				<ul class="tabs">
@@ -82,6 +87,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 
 	gamesPlayedLabel = this.i18n.translateString('app.communities.details.games-played', { value: 7 })!;
 
+	private communityId: string | undefined;
 	private selectedTab$$ = new BehaviorSubject<string>('standard');
 
 	constructor(
@@ -138,6 +144,9 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 			),
 		);
 		this.showRunsCompleted$ = selectedTab$.pipe(this.mapData((selectedTab) => selectedTab === 'arena'));
+		this.personalCommunities.selectedCommunity$$
+			.pipe(this.mapData((c) => c?.id))
+			.subscribe((id) => (this.communityId = id));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -146,6 +155,10 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 
 	selectTab(tab: Tab) {
 		this.selectedTab$$.next(tab.id);
+	}
+
+	leaveCommunity() {
+		this.personalCommunities.leaveCommunity(this.communityId!);
 	}
 
 	private buildTabName(tab: string): string {

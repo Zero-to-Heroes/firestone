@@ -130,3 +130,20 @@
 		justify-content: flex-start;
 	}
 }
+
+.leave-community-button {
+	color: #ff4747;
+	border: 1px solid #ff4747;
+	padding: 10px 20px;
+	width: fit-content;
+
+	&:hover {
+		background-color: #ff4747;
+		color: var(--color-5);
+	}
+}
+.leave-community-button {
+	position: absolute;
+	right: 10px;
+	top: 40px;
+}
