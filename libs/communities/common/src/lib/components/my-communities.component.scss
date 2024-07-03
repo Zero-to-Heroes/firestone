@@ -22,29 +22,36 @@
 }
 
 .communities-list {
+	display: flex;
+	flex-direction: column;
+
 	.community {
+		display: flex;
 		margin-bottom: 3px;
 		height: 40px;
 
-		&:not:last-child {
-			border-bottom: 1px solid var(--color-3);
+		&:nth-child(odd) {
+			background: rgba(255, 255, 255, 0.08);
 		}
-	}
 
-	&:nth-child(even) {
-		background: rgba(255, 255, 255, 0.08);
-	}
-}
+		&.disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
 
-.community {
-	display: flex;
+		&:hover:not(.disabled) {
+			background: rgba(255, 255, 255, 0.12);
+		}
 
-	&.disabled {
-		opacity: 0.5;
-		pointer-events: none;
-	}
+		.description {
+			font-size: 14px;
 
-	&:hover:not(.disabled) {
-		background: rgba(255, 255, 255, 0.12);
+			.description-text {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				justify-content: start;
+			}
+		}
 	}
 }

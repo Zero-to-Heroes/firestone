@@ -52,7 +52,9 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 						>
 							<div class="cell image"></div>
 							<div class="cell name">{{ community.name }}</div>
-							<div class="cell description">{{ community.description }}</div>
+							<div class="cell description" [helpTooltip]="community.description">
+								<span class="description-text">{{ community.description }}</span>
+							</div>
 							<div class="cell members">{{ community.numberOfMembers }}</div>
 							<div class="cell games-last-week">{{ community.gamesInLastSevenDays }}</div>
 						</div>
