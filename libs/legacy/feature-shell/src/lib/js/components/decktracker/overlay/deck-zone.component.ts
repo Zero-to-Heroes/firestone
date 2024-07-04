@@ -10,14 +10,13 @@ import {
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'deck-zone',
@@ -70,7 +69,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DeckZoneComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	cardSections$: Observable<readonly DeckZoneSection[]>;
@@ -137,12 +136,11 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 	private showTotalCardsInZone$$ = new BehaviorSubject<boolean>(true);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		@Optional() private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
