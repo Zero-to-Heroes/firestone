@@ -162,8 +162,6 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.WrathWeaver_TB_BaconUps_079:
 		case CardIds.CultistSthara_BG27_081:
 		case CardIds.CultistSthara_BG27_081_G:
-		case CardIds.DisguisedGraverobber_BG28_303:
-		case CardIds.DisguisedGraverobber_BG28_303_G:
 			return [Race.DEMON, ...cardRaces];
 		case CardIds.SeafoodSlinger_BG21_011:
 		case CardIds.SeafoodSlinger_BG21_011_G:
@@ -198,9 +196,9 @@ export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: bool
 		case CardIds.OrgozoaTheTender_BG23_015:
 		case CardIds.OrgozoaTheTender_BG23_015_G:
 			return [Race.NAGA, ...cardRaces];
-		// case CardIds.SindoreiStraightShot:
-		// case CardIds.SindoreiStraightShotBattlegrounds:
-		// 	return [Race.UNDEAD, ...cardRaces];
+		case CardIds.DisguisedGraverobber_BG28_303:
+		case CardIds.DisguisedGraverobber_BG28_303_G:
+			return [Race.UNDEAD, ...cardRaces];
 		default:
 			return getEffectiveTribesEnum(card);
 	}
