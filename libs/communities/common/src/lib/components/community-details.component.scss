@@ -19,6 +19,8 @@
 	min-width: 350px;
 	padding: 15px;
 	margin-bottom: 30px;
+	margin-top: 20px;
+	margin-right: 15px;
 
 	.community-name {
 		color: var(--default-title-color);
@@ -145,5 +147,5 @@
 .leave-community-button {
 	position: absolute;
 	right: 10px;
-	top: 40px;
+	top: 0px;
 }
