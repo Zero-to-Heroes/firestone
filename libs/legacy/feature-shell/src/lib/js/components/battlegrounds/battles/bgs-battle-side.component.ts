@@ -151,6 +151,7 @@ export class BgsBattleSideComponent {
 	undeadArmy: number;
 	eternalLegion: number;
 	tavernSpellsCastThisGame: number;
+	piratesPlayedThisGame: number;
 	forceTooltipHidden = false;
 
 	entities: readonly Entity[];
@@ -241,6 +242,7 @@ export class BgsBattleSideComponent {
 		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
+		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
 		if (!(this.cdr as ViewRef)?.destroyed) {
