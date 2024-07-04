@@ -349,38 +349,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			);
 		}
 
-		// }
-		// Otherwise, we add all the dynamic zones
-		// deckState.dynamicZones.forEach((zone) => {
-		// 	zones.push(this.buildDynamicZone(zone, null));
-		// });
 		return zones;
 	}
-
-	// private buildDynamicZone(
-	// 	zone: DynamicZone,
-	// 	sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
-	// ): DeckZone {
-	// 	return {
-	// 		id: zone.id,
-	// 		name: zone.name,
-	// 		sections: [
-	// 			{
-	// 				header: null,
-	// 				cards: zone.cards.map((card) =>
-	// 					VisualDeckCard.create(card).update({
-	// 						creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-	// 						lastAffectedByCardIds: (card.lastAffectedByCardId
-	// 							? [card.lastAffectedByCardId]
-	// 							: []) as readonly string[],
-	// 					}),
-	// 				),
-	// 				sortingFunction: sortingFunction,
-	// 			},
-	// 		],
-	// 		numberOfCards: zone.cards.length,
-	// 	} as DeckZone;
-	// }
 
 	private buildZone(
 		cards: readonly DeckCard[],

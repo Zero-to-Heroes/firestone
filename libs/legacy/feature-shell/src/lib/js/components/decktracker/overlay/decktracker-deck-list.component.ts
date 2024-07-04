@@ -122,25 +122,22 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
+
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 	}
 	@Input() set deckState(deckState: DeckState) {
-		// this._deckState = deckState;
 		this.deckState$$.next(deckState);
-		// console.debug('setting deckstate', this.deckState$$.value);
 		this.refreshScroll();
 	}
 
 	_tooltipPosition: CardTooltipPositionType;
-	// _deckState: DeckState;
 	isScroll: boolean;
 
 	private sub$$: Subscription;
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
-		// @Optional() protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly allCards: CardsFacadeService,

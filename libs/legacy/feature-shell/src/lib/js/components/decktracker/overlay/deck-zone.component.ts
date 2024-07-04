@@ -235,7 +235,6 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 			return null;
 		}
 
-		console.debug('refreshing zone', zone);
 		const result = zone.sections.map((section) => {
 			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards, collection);
 			const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
@@ -336,7 +335,6 @@ export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implem
 		const keyWithCost = keyWithDiscard + (!groupSameCardsTogether ? '-' + card.getEffectiveManaCost() : '');
 		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
 		const keyWithRelatedCards = keyWithCost + (!groupSameCardsTogether ? '-' + relatedCardIds : '');
-		console.debug('keyWithRelatedCards', keyWithRelatedCards, card);
 		if (!collection?.length) {
 			return keyWithRelatedCards;
 		}

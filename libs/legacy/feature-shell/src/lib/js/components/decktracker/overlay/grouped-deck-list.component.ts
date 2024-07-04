@@ -8,6 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { sortByProperties } from '@firestone/shared/framework/common';
@@ -19,6 +20,9 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+
+// A set of cards for which the mana cost in reference cards is not what we want to show
+const CARDS_FOR_WHICH_TO_SHOW_ORIGINAL_COST = [CardIds.ZilliaxDeluxe3000_TOY_330];
 
 @Component({
 	selector: 'grouped-deck-list',
@@ -174,7 +178,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		showGiftsSeparately: boolean,
 		groupSameCardsTogether: boolean,
 	) {
-		// console.debug('building zone', deckState);
 		if (!deckState) {
 			return null;
 		}
@@ -224,7 +227,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						sortingFunction: zone.sortingFunction,
 					} as DeckZoneSection),
 			);
-		//console.debug('zone', sections);
 		return {
 			id: 'single-zone',
 			name: undefined,
@@ -240,7 +242,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 			mode === 'focus-decklist'
 				? this.buildBaseCardForFocus(deckState, hideGeneratedCardsInOtherZone)
 				: this.buildBaseCardsForShowPlayed(deckState, hideGeneratedCardsInOtherZone);
-		// console.debug('base cards', mode, baseCards[0]?.cardName, baseCards, deckState);
 		return baseCards.map((c) => {
 			return VisualDeckCard.create({
 				...c,
@@ -272,50 +273,27 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 				// How to handle discarded cards? They should probably be handled in the same way as cards played in the "other" zone
 				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
 		];
-		// console.debug('cardsToShowNotInDeck', cardsToShowNotInDeck);
 		const cardsToShow = [
 			...deck
 				// Remove "unknown cards"
 				.filter((c) => !!c.cardId || !!c.creatorCardId),
 			...cardsToShowNotInDeck,
 		];
-		// console.debug('cardsToShow', cardsToShow);
 		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
-		// console.debug('uniqueCardNames', uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
 				const matchingCards = cardsToShow.filter((c) => c.cardName === cardName);
 				const refCard = matchingCards.find((c) => c.cardName === cardName);
 				const cardsToShowWithName = cardsToShow.filter((c) => c.cardName === cardName);
 				const isInInitialDecklist = !!deckState.deckList.find((c) => c.cardName === cardName);
-				// console.debug(
-				// 	'isInInitialDecklist',
-				// 	cardName,
-				// 	isInInitialDecklist,
-				// 	deckState.deckList,
-				// 	refCard,
-				// 	this.allCards.getCard(refCard.cardId),
-				// );
 				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
 				const creatorCardIds = cardsToShowWithName.map((c) => c.creatorCardId).filter((id) => !!id);
 				const shouldShowGiftLine = !hideGeneratedCardsInOtherZone && !!creatorCardIds.length;
 				const shouldShowDeckLine = isInInitialDecklist || quantityInDeck > 0;
 				const result: VisualDeckCard[] = [];
-				// console.debug(
-				// 	'lines to show',
-				// 	shouldShowDeckLine,
-				// 	shouldShowGiftLine,
-				// 	isInInitialDecklist,
-				// 	quantityInDeck,
-				// 	cardsToShowWithName.filter((c) => !c?.creatorCardId),
-				// );
 
 				if (shouldShowDeckLine) {
 					const displayMode = !quantityInDeck ? 'dim' : null;
-					// const deckCreatorCardIds = deck
-					// 	.filter((c) => c.cardName === cardName)
-					// 	.map((c) => c.creatorCardId)
-					// 	.filter((id) => !!id);
 					result.push(
 						...Array(Math.max(1, quantityInDeck)).fill(
 							VisualDeckCard.create({
@@ -323,17 +301,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								// Always show the base cost in this display mode
 								manaCost: this.allCards.getCard(refCard.cardId).hideStats
 									? null
-									: this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost,
-								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+									: this.getManaCost(refCard),
+								actualManaCost: this.getManaCost(refCard),
 								// Don't show a gift icon when the card is in the deck
 								creatorCardIds: [],
-								// creatorCardIds: deckCreatorCardIds,
 								highlight: displayMode,
 								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 							}),
 						),
 					);
-					// console.debug('after shouldShowDeckLine', result);
 				}
 				if (shouldShowGiftLine) {
 					const otherCreatorCardIds = cardsToShowNotInDeck
@@ -349,15 +325,14 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								...refCard,
 								manaCost: this.allCards.getCard(refCard.cardId).hideStats
 									? null
-									: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
-								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+									: this.getManaCost(refCard),
+								actualManaCost: this.getManaCost(refCard),
 								creatorCardIds: otherCreatorCardIds,
 								highlight: 'dim',
 								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 							}),
 						),
 					);
-					// console.debug('after shouldShowGiftLine', result);
 				}
 				return result;
 			})
@@ -411,13 +386,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 						.map((c) => c.creatorCardId)
 						.filter((id) => !!id).length;
 				const result: VisualDeckCard[] = [];
-				// console.debug(
-				// 	'lines to show',
-				// 	shouldShowDeckLine,
-				// 	shouldShowGiftLine,
-				// 	quantityInDeck,
-				// 	cardsToShowWithName.filter((c) => !c?.creatorCardId),
-				// );
 
 				if (shouldShowDeckLine) {
 					// Show the cards that we know to still be in deck
@@ -427,9 +395,8 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								VisualDeckCard.create({
 									...refCard,
 									// Always show the base cost in this display mode
-									manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
-									actualManaCost:
-										this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+									manaCost: this.getManaCost(refCard),
+									actualManaCost: this.getManaCost(refCard),
 									creatorCardIds: [],
 									highlight: null,
 									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
@@ -449,16 +416,14 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 									// Always show the base cost in this display mode
 									manaCost: this.allCards.getCard(refCard.cardId).hideStats
 										? null
-										: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
-									actualManaCost:
-										this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+										: this.getManaCost(refCard),
+									actualManaCost: this.getManaCost(refCard),
 									highlight: 'dim',
 									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 								}),
 							),
 						);
 					}
-					// console.debug('showing for show-played', cardName, quantityInDeck, quantityNotInDeck, result);
 				}
 				if (shouldShowGiftLine) {
 					const otherCreatorCardIds = cardsToShowNotInDeck
@@ -474,20 +439,26 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 								...refCard,
 								manaCost: this.allCards.getCard(refCard.cardId).hideStats
 									? null
-									: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
-								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+									: this.getManaCost(refCard),
+								actualManaCost: this.getManaCost(refCard),
 								creatorCardIds: otherCreatorCardIds,
 								highlight: 'dim',
 								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 							}),
 						),
 					);
-					// console.debug('after shouldShowGiftLine', result);
 				}
 				return result;
 			})
 			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
 		return result;
+	}
+
+	private getManaCost(refCard: DeckCard): number {
+		if (CARDS_FOR_WHICH_TO_SHOW_ORIGINAL_COST.some((c) => refCard.cardId?.startsWith(c))) {
+			return refCard.manaCost;
+		}
+		return this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost;
 	}
 
 	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean, showGiftsSeparately: boolean): number {
@@ -502,7 +473,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent
 		// }
 
 		if (cardsGoToBottom) {
-			//console.debug('sort order', card.cardName, card.highlight, isGift, card);
 			switch (card.highlight) {
 				case 'normal':
 					return 0;
