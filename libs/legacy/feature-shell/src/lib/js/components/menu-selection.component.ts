@@ -9,9 +9,10 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AnalyticsService, OverwolfService, UserService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
-import { CurrentAppType } from '../models/mainwindow/current-app.type';
+import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
+import { AnalyticsService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
+import { AdService } from '../services/ad.service';
 import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
@@ -264,12 +265,14 @@ export class MenuSelectionComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly userService: UserService,
+		private readonly ads: AdService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.userService.isReady();
+		await waitForReady(this.userService, this.ads, this.prefs);
 
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.avatarUrl$ = this.userService.user$$.pipe(
@@ -282,19 +285,19 @@ export class MenuSelectionComponent
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
-		this.enableMailboxTab$ = this.listenForBasicPref$((prefs) => prefs.enableMailbox);
-		this.showGoPremium$ = this.store.hasPremiumSub$().pipe(this.mapData((premium) => !premium));
-		const enableMailboxUnread$ = this.listenForBasicPref$((prefs) => prefs.enableMailboxUnread);
-		this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
-			this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),
-		);
-		this.mailboxTextDetails$ = this.store.mails$().pipe(
-			this.mapData((mailState) =>
-				this.i18n.translateString('app.menu.mailbox-text-details', {
-					value: mailState.mails.filter((mail) => !mail.read).length,
-				}),
-			),
-		);
+		this.showGoPremium$ = this.ads.hasPremiumSub$$.pipe(this.mapData((premium) => !premium));
+		// this.enableMailboxTab$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.enableMailbox));
+		// const enableMailboxUnread$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.enableMailboxUnread));
+		// this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
+		// 	this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),
+		// );
+		// this.mailboxTextDetails$ = this.store.mails$().pipe(
+		// 	this.mapData((mailState) =>
+		// 		this.i18n.translateString('app.menu.mailbox-text-details', {
+		// 			value: mailState.mails.filter((mail) => !mail.read).length,
+		// 		}),
+		// 	),
+		// );
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

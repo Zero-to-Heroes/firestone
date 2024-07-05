@@ -215,6 +215,7 @@ export class AppUiStoreFacadeService {
 		return this.store.showAds$();
 	}
 
+	/** @deprecated */
 	public hasPremiumSub$(): Observable<boolean> {
 		return this.store.hasPremiumSub$();
 	}
