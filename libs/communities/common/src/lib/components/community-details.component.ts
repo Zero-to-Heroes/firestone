@@ -148,6 +148,8 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 			.pipe(this.mapData((c) => c?.id))
 			.subscribe((id) => (this.communityId = id));
 
+		// this.personalCommunities.refreshCurrentCommunity();
+
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
