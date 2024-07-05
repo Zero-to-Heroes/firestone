@@ -28,7 +28,7 @@ export class CollectionNavigationService extends AbstractFacadeService<Collectio
 	}
 
 	protected async init() {
-		this.currentView$$ = new BehaviorSubject<CurrentView | null>(null);
+		this.currentView$$ = new BehaviorSubject<CurrentView | null>('sets');
 		this.menuDisplayType$$ = new BehaviorSubject<'menu' | 'breadcrumbs'>('menu');
 		this.searchString$$ = new BehaviorSubject<string | null>(null);
 		this.selectedSetId$$ = new BehaviorSubject<string | null>(null);

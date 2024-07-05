@@ -21,7 +21,7 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 	}
 
 	protected async init() {
-		this.currentView$$ = new BehaviorSubject<DecktrackerViewType | null>(null);
+		this.currentView$$ = new BehaviorSubject<DecktrackerViewType | null>('decks');
 		this.selectedDeckstring$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaDeck$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaArchetype$$ = new BehaviorSubject<number | null>(null);

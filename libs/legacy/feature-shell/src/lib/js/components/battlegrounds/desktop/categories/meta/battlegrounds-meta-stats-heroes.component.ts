@@ -71,7 +71,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 						.filter((t) => t.impactAveragePosition < 0)
 						.map((t) => -t.impactAveragePosition),
 				);
-				return stats.map((s) => ({ ...s, maxTribeImpact }));
+				return stats?.map((s) => ({ ...s, maxTribeImpact })) ?? [];
 			}),
 		);
 		this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));

@@ -3,7 +3,7 @@ import { CurrentView } from '../achievement/current-view.type';
 import { BgsHeroStatsFilterId } from '../battlegrounds/categories/bgs-hero-stats-filter-id';
 
 export class NavigationBattlegrounds {
-	readonly currentView: CurrentView = 'category';
+	readonly currentView: CurrentView = 'list';
 	readonly menuDisplayType: string = 'menu';
 	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'winrate-stats';
 

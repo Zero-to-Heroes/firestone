@@ -17,7 +17,7 @@ export class BattlegroundsNavigationService extends AbstractFacadeService<Battle
 	}
 
 	protected async init() {
-		this.selectedCategoryId$$ = new BehaviorSubject<CategoryId | string | null>(null);
+		this.selectedCategoryId$$ = new BehaviorSubject<CategoryId | string | null>('bgs-category-meta-heroes');
 		this.heroSearchString$$ = new BehaviorSubject<string | null>(null);
 	}
 }
