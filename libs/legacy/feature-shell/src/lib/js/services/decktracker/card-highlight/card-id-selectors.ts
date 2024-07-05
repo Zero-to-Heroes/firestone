@@ -1520,6 +1520,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ScaleReplica_TOY_387:
 			return and(side(inputSide), inDeck, dragon);
+		case CardIds.SigilOfReckoning:
+			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.SirFinleyMrrgglton_ScalesOfJustice_THD_044p:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.ScavengersIngenuity:
