@@ -1397,7 +1397,10 @@ export const cardIdSelector = (
 		case CardIds.ImpKingRafaam_REV_789:
 		case CardIds.ImpKingRafaam_REV_835:
 		case CardIds.ImpKingRafaam_ImpKingRafaamToken:
-			return tooltip(and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, imp));
+			return highlightConditions(
+				tooltip(and(side(inputSide), inGraveyard, minion, imp)),
+				and(side(inputSide), or(inDeck, inHand), minion, imp),
+			);
 		case CardIds.RaDen:
 			return tooltip(and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen))));
 		case CardIds.RaidBossOnyxia_ONY_004:
