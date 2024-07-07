@@ -559,6 +559,20 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	public async getGameUniqueId(): Promise<string | null> {
+		return new Promise<string | null>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getGameUniqueId((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getGameUniqueId', e);
+				resolve(null);
+			}
+		});
+	}
+
 	// public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
 	// 	return new Promise<boolean>(async (resolve) => {
 	// 		const plugin = await this.get();

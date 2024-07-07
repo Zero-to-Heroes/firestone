@@ -12,6 +12,7 @@ export interface XpForGameInfo {
 }
 
 export class GameForUpload {
+	uniqueId: string;
 	reviewId: string;
 	runId: string;
 	title: string;

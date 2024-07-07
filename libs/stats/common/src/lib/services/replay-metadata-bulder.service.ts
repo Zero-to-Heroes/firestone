@@ -50,6 +50,7 @@ export class ReplayMetadataBuilderService {
 				levelAfterMatch: game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
 			},
 			game: {
+				uniqueId: game.uniqueId,
 				reviewId: game.reviewId,
 				replayKey: `hearthstone/replay/${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}/${
 					game.reviewId

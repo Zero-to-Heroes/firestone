@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -38,6 +39,7 @@ export class GameEvents {
 		private readonly gameStatus: GameStatusService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameState: GameStateService,
+		private readonly gameUniqueId: GameUniqueIdService,
 	) {
 		this.init();
 	}
@@ -136,21 +138,22 @@ export class GameEvents {
 				break;
 			case 'GAME_SETTINGS':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameSettingsEvent(), {
-						type: GameEvent.GAME_SETTINGS,
-						additionalData: {
-							battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
-							battlegroundsSpells: gameEvent.Value?.BattlegroundsSpells,
-							battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
-							battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
-							battlegroundsAnomalies:
-								gameEvent.Value?.BattlegroundsAnomalies?.map(
-									(dbfId) => this.allCards.getCard(dbfId)?.id,
-								) ?? ([] as readonly string[]),
-						},
-					} as GameEvent),
-				);
+				const gameSettingsEvent = Object.assign(new GameSettingsEvent(), {
+					type: GameEvent.GAME_SETTINGS,
+					additionalData: {
+						battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
+						battlegroundsSpells: gameEvent.Value?.BattlegroundsSpells,
+						battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
+						battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
+						battlegroundsAnomalies:
+							gameEvent.Value?.BattlegroundsAnomalies?.map((dbfId) => this.allCards.getCard(dbfId)?.id) ??
+							([] as readonly string[]),
+					},
+				} as GameEvent);
+				// Not a big fan of this: I'd rather have the gameUniqueId service listen to the event, but
+				// there are too many dependencies to refactor
+				this.gameUniqueId.onNewGame();
+				this.gameEventsEmitter.allEvents.next(gameSettingsEvent);
 				break;
 			case 'MATCH_METADATA':
 				console.log(gameEvent.Type + ' event', gameEvent.Value);

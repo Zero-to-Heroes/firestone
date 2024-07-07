@@ -48,6 +48,7 @@ import { GetDuelsHeroPowerOptionsOperation } from './mind-vision/operations/get-
 import { GetDuelsInfoOperation } from './mind-vision/operations/get-duels-info-operation';
 import { GetDuelsRewardsInfoOperation } from './mind-vision/operations/get-duels-rewards-info-operation';
 import { GetDuelsSignatureTreasureOptionsOperation } from './mind-vision/operations/get-duels-signature-treasure-options-operation';
+import { GetGameUniqueIdOperation } from './mind-vision/operations/get-game-unique-id-operation';
 import { GetInGameAchievementsProgressInfoByIndexOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-by-index-operation';
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/operations/get-match-info-operation';
@@ -125,6 +126,7 @@ export class MemoryInspectionService {
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.ow);
 	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.ow);
 	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.ow);
+	private getGameUniqueIdOperation = new GetGameUniqueIdOperation(this.mindVisionFacade, this.ow);
 	// private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
 	// 	this.mindVisionFacade,
 	// 	this.ow,
@@ -319,5 +321,9 @@ export class MemoryInspectionService {
 
 	public async getProfileInfo(): Promise<MemoryPlayerProfileInfo | null> {
 		return this.mindVision.callMindVision(() => this.getProfileInfoOperation.call());
+	}
+
+	public async getGameUniqueId(): Promise<string | null> {
+		return this.mindVision.callMindVision(() => this.getGameUniqueIdOperation.call());
 	}
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArenaInfoService } from '@firestone/arena/common';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
@@ -50,6 +50,7 @@ export class EndGameListenerService {
 		private readonly gameStatus: GameStatusService,
 		private readonly arenaInfo: ArenaInfoService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly gameUniqueId: GameUniqueIdService,
 	) {
 		this.init();
 	}
@@ -74,6 +75,7 @@ export class EndGameListenerService {
 					map((event) => event.additionalData.matchInfo as MatchInfo),
 					startWith(null),
 				);
+				const uniqueId$ = this.gameUniqueId.uniqueId$$.asObservable().pipe(startWith(null));
 				// Why use this instead of the deckstring from the game state?
 				// How to make sure the "new" version doesn't override the old one once the game is over?
 				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.fullGameState$$
@@ -249,6 +251,7 @@ export class EndGameListenerService {
 					playerDeck$,
 					arenaInfo$,
 					bgInfo$,
+					uniqueId$,
 				])
 					.pipe(
 						withLatestFrom(bgMemoryInfo$, bgNewRating$),
@@ -267,6 +270,7 @@ export class EndGameListenerService {
 									playerDeck,
 									arenaInfo,
 									bgInfo,
+									uniqueId,
 								],
 								bgMemoryInfo,
 								bgNewRating,
@@ -276,6 +280,7 @@ export class EndGameListenerService {
 									metadata: metadata,
 									gameEnded: gameEnded,
 									matchInfo: matchInfo,
+									uniqueId: uniqueId,
 									playerDeck: playerDeck,
 									duelsInfo: duelsInfo,
 									arenaInfo: arenaInfo,
@@ -293,7 +298,11 @@ export class EndGameListenerService {
 						// the current game) or the reviewId changed (to mark the start)
 						distinctUntilChanged((a, b) => {
 							// console.debug('[manastorm-bridge] comparing', a, b);
-							return a?.reviewId === b?.reviewId && a?.gameEnded?.ended === b?.gameEnded?.ended;
+							return (
+								a?.reviewId === b?.reviewId &&
+								a?.gameEnded?.ended === b?.gameEnded?.ended &&
+								a?.uniqueId === b?.uniqueId
+							);
 						}),
 						filter((info) => !!info.reviewId && info.gameEnded.ended),
 						// tap((info) =>

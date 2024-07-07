@@ -31,6 +31,7 @@ import {
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
 import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
+import { BootstrapGameStateService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
 import { BootstrapSettingsService } from '@firestone/settings';
@@ -133,6 +134,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_CommunityBootstrapService: CommunityBootstrapService,
 		private readonly init_AchievementsNavigationService: AchievementsNavigationService,
 		private readonly init_BootstrapSettingsService: BootstrapSettingsService,
+		private readonly init_BootstrapGameStateService: BootstrapGameStateService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

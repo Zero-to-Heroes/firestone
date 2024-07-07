@@ -97,7 +97,8 @@ export class EndGameUploaderService {
 		}
 		console.log('[manastorm-bridge]', currentReviewId, 'Creating new game', 'with replay length', replayXml.length);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentReviewId);
-		console.log('[manastorm-bridge]', currentReviewId, 'Created new game');
+		game.uniqueId = info.uniqueId;
+		console.log('[manastorm-bridge]', currentReviewId, 'Created new game', game.uniqueId);
 		game.gameFormat = toFormatType(info.gameEnded.FormatType);
 		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', info.gameEnded.FormatType, game.gameFormat);
 		game.gameMode = toGameType(info.gameEnded.GameType);
@@ -472,6 +473,7 @@ export interface UploadInfo {
 		ScenarioID: number;
 	};
 	matchInfo: MatchInfo;
+	uniqueId: string;
 	playerDeck: { deckstring: string; name: string };
 	duelsInfo: DuelsInfo;
 	arenaInfo: ArenaInfo;
