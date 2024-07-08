@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import {
 	BgsGame,
@@ -50,6 +51,15 @@ export class BgsRunStatsService {
 	}
 
 	public async retrieveReviewPostMatchStats(reviewId: string): Promise<void> {
+		const resultFromS3 = await this.apiRunner.callGetApi<IBgsPostMatchStats>(
+			`https://bgs-post-match-stats.firestoneapp.com/${reviewId}.gz.json`,
+		);
+		console.debug('[bgs-run-stats] post-match results for review', reviewId, resultFromS3);
+		if (!!resultFromS3) {
+			this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, resultFromS3));
+			return;
+		}
+
 		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
 			`${POST_MATCH_STATS_RETRIEVE_URL}`,
 			{
