@@ -194,7 +194,7 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 		const gameFormat: StatGameFormatType = this.toGameFormat(selectedTab);
 		return sourceLeaderboard.map((entry, index) => {
 			const rankStat: GameStat = {
-				playerRank: gameMode === 'arena' ? parseInt(entry.currentRank).toFixed(2) : entry.currentRank,
+				playerRank: gameMode === 'arena' ? parseFloat(entry.currentRank).toFixed(2) : entry.currentRank,
 				gameMode: gameMode,
 				gameFormat: gameFormat,
 			} as GameStat;
