@@ -14,7 +14,7 @@ export class AttackOnBoardService {
 		const entitiesOnBoardThatCanAttack = deck.board
 			.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
 			.filter((entity) => entity)
-			.filter((entity) => this.canAttack(entity, deck.isActivePlayer))
+			.filter((entity) => this.canAttack(entity, deck.isActivePlayer, false))
 			.filter((entity) => entity.attack > 0);
 		// console.debug(
 		// 	'[attack-on-board] entitiesOnBoardThatCanAttack',
@@ -42,7 +42,7 @@ export class AttackOnBoardService {
 			? getTag(playerFromTracker.Hero, GameTag.NUM_ATTACKS_THIS_TURN)
 			: 0;
 		const heroAttack =
-			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, deck.isActivePlayer)
+			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, deck.isActivePlayer, true)
 				? Math.max(
 						0,
 						Math.min(
@@ -123,7 +123,7 @@ export class AttackOnBoardService {
 	}
 
 	// On the opponent's turn, we show the total attack, except for dormant minions
-	private canAttack(entity: EntityGameState, isActivePlayer: boolean): boolean {
+	private canAttack(entity: EntityGameState, isActivePlayer: boolean, isHero: boolean): boolean {
 		const isDormant = hasTag(entity, GameTag.DORMANT);
 		const cantAttack = hasTag(entity, GameTag.CANT_ATTACK);
 		// Here technically it's not totally correct, as you'd have to know if the
@@ -135,12 +135,13 @@ export class AttackOnBoardService {
 				hasTag(entity, GameTag.TITAN_ABILITY_USED_2) &&
 				hasTag(entity, GameTag.TITAN_ABILITY_USED_3));
 		const hasSummoningSickness =
+			!isHero &&
 			isActivePlayer &&
+			!hasTag(entity, GameTag.CHARGE) &&
 			(hasTag(entity, GameTag.EXHAUSTED) ||
 				hasTag(entity, GameTag.JUST_PLAYED) ||
 				// Ignore rush minions in the attack counter
-				hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) &&
-			!hasTag(entity, GameTag.CHARGE);
+				hasTag(entity, GameTag.ATTACKABLE_BY_RUSH));
 		// console.debug(
 		// 	'[attack-on-board] canAttack',
 		// 	entity.cardId,
