@@ -11,4 +11,6 @@ export interface Rank {
 	leagueId: number;
 	rankValue: number;
 	legendRank: number;
+	seasonId: number;
+	starLevel: number;
 }

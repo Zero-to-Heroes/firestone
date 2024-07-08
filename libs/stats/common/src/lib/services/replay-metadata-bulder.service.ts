@@ -64,6 +64,7 @@ export class ReplayMetadataBuilderService {
 				buildNumber: game.buildNumber,
 				playerRank: game.playerRank,
 				newPlayerRank: game.newPlayerRank,
+				seasonId: game.seasonId ?? 0,
 				opponentRank: game.opponentRank,
 				gameMode: game.gameMode,
 				gameFormat: game.gameFormat,

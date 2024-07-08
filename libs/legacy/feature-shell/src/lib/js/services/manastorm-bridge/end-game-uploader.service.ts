@@ -107,6 +107,7 @@ export class EndGameUploaderService {
 		// Here we want to process the rank info as soon as possible to limit the chances of it
 		// being removed from memory by the player clicking away
 		let playerRank: string | number;
+		let seasonId: number;
 		let newPlayerRank: string | number;
 
 		const playerInfo = info.matchInfo?.localPlayer;
@@ -237,6 +238,7 @@ export class EndGameUploaderService {
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
 		} else if (game.gameFormat !== 'unknown') {
 			if (playerInfo && game.gameFormat === 'standard') {
+				seasonId = playerInfo.standard?.seasonId;
 				if (playerInfo.standard?.legendRank > 0) {
 					playerRank = `legend-${playerInfo.standard.legendRank}`;
 				} else if (playerInfo.standard.leagueId >= 0 && playerInfo.standard.rankValue >= 0) {
@@ -251,6 +253,7 @@ export class EndGameUploaderService {
 					playerRank = null;
 				}
 			} else if (playerInfo && game.gameFormat === 'wild') {
+				seasonId = playerInfo.wild?.seasonId;
 				if (playerInfo.wild?.legendRank > 0) {
 					playerRank = `legend-${playerInfo.wild.legendRank}`;
 				} else if (playerInfo.wild.leagueId >= 0 && playerInfo.wild.rankValue >= 0) {
@@ -265,6 +268,7 @@ export class EndGameUploaderService {
 					playerRank = null;
 				}
 			} else if (playerInfo && game.gameFormat === 'classic') {
+				seasonId = playerInfo.classic?.seasonId;
 				if (playerInfo.classic?.legendRank > 0) {
 					playerRank = `legend-${playerInfo.classic.legendRank}`;
 				} else if (playerInfo.classic.leagueId >= 0 && playerInfo.classic.rankValue >= 0) {
@@ -279,6 +283,7 @@ export class EndGameUploaderService {
 					playerRank = null;
 				}
 			} else if (playerInfo && game.gameFormat === 'twist') {
+				seasonId = playerInfo.twist?.seasonId;
 				if (playerInfo.twist?.legendRank > 0) {
 					playerRank = `legend-${playerInfo.twist.legendRank}`;
 				} else if (playerInfo.twist.leagueId >= 0 && playerInfo.twist.rankValue >= 0) {
@@ -331,6 +336,7 @@ export class EndGameUploaderService {
 		game.opponentRank = opponentRank;
 		game.playerRank = '' + playerRank;
 		game.newPlayerRank = '' + newPlayerRank;
+		game.seasonId = seasonId;
 		console.log(
 			'[manastorm-bridge]',
 			currentReviewId,

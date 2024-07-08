@@ -23,6 +23,7 @@ export class GameForUpload {
 	gameFormat: StatGameFormatType;
 	buildNumber: number;
 	scenarioId: number;
+	seasonId: number | null;
 	playerRank: string;
 	newPlayerRank: string;
 	additionalResult: string;

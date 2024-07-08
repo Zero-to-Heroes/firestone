@@ -37,21 +37,29 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 				leagueId: matchPlayer.Standard?.LeagueId,
 				rankValue: matchPlayer.Standard?.RankValue,
 				legendRank: matchPlayer.Standard?.LegendRank,
+				seasonId: matchPlayer.Standard?.SeasonId,
+				starLevel: matchPlayer.Standard?.StarLevel,
 			},
 			wild: {
 				leagueId: matchPlayer.Wild?.LeagueId,
 				rankValue: matchPlayer.Wild?.RankValue,
 				legendRank: matchPlayer.Wild?.LegendRank,
+				seasonId: matchPlayer.Wild?.SeasonId,
+				starLevel: matchPlayer.Wild?.StarLevel,
 			},
 			classic: {
 				leagueId: matchPlayer.Classic?.LeagueId,
 				rankValue: matchPlayer.Classic?.RankValue,
 				legendRank: matchPlayer.Classic?.LegendRank,
+				seasonId: matchPlayer.Classic?.SeasonId,
+				starLevel: matchPlayer.Classic?.StarLevel,
 			},
 			twist: {
 				leagueId: matchPlayer.Twist?.LeagueId,
 				rankValue: matchPlayer.Twist?.RankValue,
 				legendRank: matchPlayer.Twist?.LegendRank,
+				seasonId: matchPlayer.Twist?.SeasonId,
+				starLevel: matchPlayer.Twist?.StarLevel,
 			},
 		} as PlayerInfo;
 	}
