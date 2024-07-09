@@ -2,13 +2,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ALL_CLASSES } from '@firestone-hs/reference-data';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
-import { ArenaRunsService } from '../../services/arena-runs.service';
+import { ArenaRunsService, isCorrectTime } from '../../services/arena-runs.service';
 import { ArenaClassSummary } from './arena-personal-stats.model';
 
 @Component({
@@ -240,17 +240,26 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 		private readonly allCards: CardsFacadeService,
 		private readonly arenaRuns: ArenaRunsService,
 		private readonly prefs: PreferencesService,
+		private readonly patchesConfig: PatchesConfigService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.arenaRuns, this.prefs);
+		await waitForReady(this.arenaRuns, this.prefs, this.patchesConfig);
 
 		console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
-		this.runs$ = this.arenaRuns.runs$$.pipe(
-			this.mapData((runs) => runs),
+		this.runs$ = combineLatest([
+			this.arenaRuns.allRuns$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveTimeFilter)),
+			this.patchesConfig.currentArenaMetaPatch$$,
+			this.patchesConfig.currentArenaSeasonPatch$$,
+		]).pipe(
+			this.mapData(
+				([runs, timeFilter, patch, seasonPatch]) =>
+					runs?.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch)) ?? [],
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

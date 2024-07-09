@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
@@ -25,6 +26,7 @@ import { ArenaRewardsService } from './arena-rewards.service';
 
 @Injectable()
 export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
+	public allRuns$$: SubscriberAwareBehaviorSubject<readonly ArenaRun[] | null | undefined>;
 	public runs$$: SubscriberAwareBehaviorSubject<readonly ArenaRun[] | null | undefined>;
 
 	private prefs: PreferencesService;
@@ -33,15 +35,19 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 	private arenaRewards: ArenaRewardsService;
 	private arenaDeckStats: ArenaDeckStatsService;
 
+	private internalSub$$ = new SubscriberAwareBehaviorSubject<null>(null);
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaRunsService', () => !!this.runs$$);
 	}
 
 	protected override assignSubjects() {
+		this.allRuns$$ = this.mainInstance.allRuns$$;
 		this.runs$$ = this.mainInstance.runs$$;
 	}
 
 	protected async init() {
+		this.allRuns$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRun[] | null | undefined>(null);
 		this.runs$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRun[] | null | undefined>(null);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameStats = AppInjector.get(GAME_STATS_PROVIDER_SERVICE_TOKEN);
@@ -52,10 +58,37 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		await waitForReady(this.prefs, this.gameStats, this.patchesConfig, this.arenaRewards, this.arenaDeckStats);
 
 		this.runs$$.onFirstSubscribe(() => {
+			this.internalSub$$.subscribe();
+		});
+		this.allRuns$$.onFirstSubscribe(() => {
+			this.internalSub$$.subscribe();
+		});
+
+		this.internalSub$$.onFirstSubscribe(() => {
 			combineLatest([
 				this.gameStats.gameStats$$,
 				this.arenaRewards.arenaRewards$$,
 				this.arenaDeckStats.deckStats$$,
+			])
+				.pipe(
+					filter(([stats, rewards, deckStats]) => !!stats?.length),
+					map(([stats, rewards, deckStats]) => {
+						const arenaMatches = stats
+							?.filter((stat) => stat.gameMode === 'arena')
+							.filter((stat) => !!stat.runId);
+						const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
+						const filteredRuns = arenaRuns;
+						return filteredRuns;
+					}),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
+				)
+				.subscribe((runs) => {
+					console.debug('[arena-runs] allRuns', runs);
+					this.allRuns$$.next(runs);
+				});
+
+			combineLatest([
+				this.allRuns$$,
 				this.prefs.preferences$$.pipe(
 					map((prefs) => ({
 						timeFilter: prefs.arenaActiveTimeFilter,
@@ -67,15 +100,11 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 				this.patchesConfig.currentArenaSeasonPatch$$,
 			])
 				.pipe(
-					filter(([stats, rewards, deckStats, { timeFilter, heroFilter }]) => !!stats?.length),
-					map(([stats, rewards, deckStats, { timeFilter, heroFilter }, patch, seasonPatch]) => {
-						const arenaMatches = stats
-							?.filter((stat) => stat.gameMode === 'arena')
-							.filter((stat) => !!stat.runId);
-						const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
-						const filteredRuns = arenaRuns
+					filter(([runs, { timeFilter, heroFilter }]) => !!runs?.length),
+					map(([runs, { timeFilter, heroFilter }, patch, seasonPatch]) => {
+						const filteredRuns = runs!
 							.filter((match) => this.isCorrectHero(match, heroFilter))
-							.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch));
+							.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch));
 						return filteredRuns;
 					}),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
@@ -137,42 +166,42 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
 		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
 	}
-
-	private isCorrectTime(
-		run: ArenaRun,
-		timeFilter: ArenaTimeFilterType,
-		patch: PatchInfo | null,
-		seasonPatch: PatchInfo | null,
-	): boolean {
-		if (timeFilter === 'all-time') {
-			return true;
-		}
-		const firstMatch = run.getFirstMatch();
-		if (!firstMatch) {
-			return false;
-		}
-
-		const firstMatchTimestamp = firstMatch.creationTimestamp;
-		switch (timeFilter) {
-			case 'last-patch':
-				return (
-					!!patch &&
-					((patch.hasNewBuildNumber && (firstMatch.buildNumber ?? 0) >= patch.number) ||
-						(!patch.hasNewBuildNumber && firstMatch.creationTimestamp > new Date(patch.date).getTime()))
-				);
-			case 'current-season':
-				return (
-					!!seasonPatch &&
-					((seasonPatch.hasNewBuildNumber && (firstMatch.buildNumber ?? 0) >= seasonPatch.number) ||
-						(!seasonPatch.hasNewBuildNumber &&
-							firstMatch.creationTimestamp > new Date(seasonPatch.date).getTime()))
-				);
-			case 'past-three':
-				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
-			case 'past-seven':
-				return Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000;
-			default:
-				return true;
-		}
-	}
 }
+
+export const isCorrectTime = (
+	run: ArenaRun,
+	timeFilter: ArenaTimeFilterType,
+	patch: PatchInfo | null,
+	seasonPatch: PatchInfo | null,
+): boolean => {
+	if (timeFilter === 'all-time') {
+		return true;
+	}
+	const firstMatch = run.getFirstMatch();
+	if (!firstMatch) {
+		return false;
+	}
+
+	const firstMatchTimestamp = firstMatch.creationTimestamp;
+	switch (timeFilter) {
+		case 'last-patch':
+			return (
+				!!patch &&
+				((patch.hasNewBuildNumber && (firstMatch.buildNumber ?? 0) >= patch.number) ||
+					(!patch.hasNewBuildNumber && firstMatch.creationTimestamp > new Date(patch.date).getTime()))
+			);
+		case 'current-season':
+			return (
+				!!seasonPatch &&
+				((seasonPatch.hasNewBuildNumber && (firstMatch.buildNumber ?? 0) >= seasonPatch.number) ||
+					(!seasonPatch.hasNewBuildNumber &&
+						firstMatch.creationTimestamp > new Date(seasonPatch.date).getTime()))
+			);
+		case 'past-three':
+			return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
+		case 'past-seven':
+			return Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000;
+		default:
+			return true;
+	}
+};
