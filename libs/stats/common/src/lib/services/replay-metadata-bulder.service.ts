@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
 	BgsPostMatchStats,
 	extractTotalDuration,
@@ -8,9 +8,11 @@ import {
 } from '@firestone-hs/hs-replay-xml-parser';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { MatchAnalysisService } from './match-analysis.service';
+
+import { IAdsService } from '@firestone/shared/framework/core';
 
 @Injectable()
 export class ReplayMetadataBuilderService {
@@ -18,6 +20,7 @@ export class ReplayMetadataBuilderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly matchAnalysisService: MatchAnalysisService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
 	public async buildMetadata(
@@ -34,10 +37,12 @@ export class ReplayMetadataBuilderService {
 		const totalDurationSeconds = extractTotalDuration(replay);
 		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(game, xml, bgsRunStats);
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
+		const isPremium = this.ads.hasPremiumSub$$.getValue();
 		const metadata: ReplayUploadMetadata = {
 			user: {
 				userId: userId,
 				userName: userName,
+				isPremium: isPremium,
 			},
 			meta: {
 				application: `firestone-${version}`,
