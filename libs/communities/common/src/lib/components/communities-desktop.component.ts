@@ -32,7 +32,7 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 			class="app-section communities"
 			*ngIf="{ category: category$ | async, isLoggedIn: isLoggedIn$ | async } as value"
 		>
-			<section class="main divider">
+			<section class="main">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="main-container">
 						<nav class="menu-selection">
@@ -63,7 +63,10 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="(showAds$ | async) === false && showSidebar(value.category)"></section>
+			<section
+				class="secondary divider"
+				*ngIf="(showAds$ | async) === false && showSidebar(value.category)"
+			></section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

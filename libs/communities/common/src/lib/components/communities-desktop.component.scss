@@ -13,6 +13,11 @@
 	color: var(--default-text-color);
 }
 
+.divider {
+	border-left: 1px solid var(--menu-bar-bottom-border-color);
+	height: 100%;
+}
+
 .main-container {
 	display: flex;
 	flex-direction: column;

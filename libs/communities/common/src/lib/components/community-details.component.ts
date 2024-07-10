@@ -17,22 +17,24 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 	template: `
 		<div class="community-details">
 			<div class="overview">
-				<div class="community-name">{{ communityName$ | async }}</div>
-				<div class="community-description">{{ communityDescription$ | async }}</div>
-				<div class="total-members">
-					<span class="value">{{ totalMembersStr$ | async }}</span>
-					<span class="label" [fsTranslate]="'app.communities.details.total-members'"></span>
+				<div class="overview-cartouche">
+					<div class="community-name">{{ communityName$ | async }}</div>
+					<div class="community-description">{{ communityDescription$ | async }}</div>
+					<div class="total-members">
+						<span class="value">{{ totalMembersStr$ | async }}</span>
+						<span class="label" [fsTranslate]="'app.communities.details.total-members'"></span>
+					</div>
+					<div class="recent-games">
+						<span class="value">{{ totalGamesLastWeekStr$ | async }}</span>
+						<span class="label">{{ gamesPlayedLabel }}</span>
+					</div>
 				</div>
-				<div class="recent-games">
-					<span class="value">{{ totalGamesLastWeekStr$ | async }}</span>
-					<span class="label">{{ gamesPlayedLabel }}</span>
-				</div>
+				<div
+					class="leave-community-button"
+					[fsTranslate]="'app.communities.leave-community-button'"
+					(click)="leaveCommunity()"
+				></div>
 			</div>
-			<div
-				class="leave-community-button"
-				[fsTranslate]="'app.communities.leave-community-button'"
-				(click)="leaveCommunity()"
-			></div>
 			<div class="leaderboards">
 				<div class="header" [fsTranslate]="'app.communities.details.leaderboards.header'"></div>
 				<ul class="tabs">
