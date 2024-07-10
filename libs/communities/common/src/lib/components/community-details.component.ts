@@ -121,6 +121,14 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 					`${(community?.gamesInLastSevenDays ?? 0).toLocaleString(this.i18n.formatCurrentLocale()!)}`,
 			),
 		);
+		this.personalCommunities.selectedCommunity$$
+			.pipe(
+				this.mapData((community) => community?.defaultTab),
+				filter((tab) => !!tab),
+			)
+			.subscribe((tab) => {
+				this.selectedTab$$.next(tab!);
+			});
 		const selectedTab$ = this.selectedTab$$.pipe(this.mapData((selectedTab) => selectedTab));
 		this.leaderboard$ = combineLatest([selectedTab$, this.personalCommunities.selectedCommunity$$]).pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
