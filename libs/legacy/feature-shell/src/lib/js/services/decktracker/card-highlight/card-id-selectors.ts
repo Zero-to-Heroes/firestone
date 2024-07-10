@@ -374,6 +374,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.CaricatureArtist_TOY_391:
 			return and(side(inputSide), inDeck, minion, effectiveCostMore(4));
+		case CardIds.CarrionStudies:
+			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.CastleKennels_REV_362:
 		case CardIds.CastleKennels_REV_790:
 			return and(side(inputSide), inDeck, minion, beast);
