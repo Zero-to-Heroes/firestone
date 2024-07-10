@@ -146,7 +146,7 @@ export class GameStateParsersService {
 			[GameEvent.BATTLEGROUNDS_HERO_SELECTED]: [new BgsHeroSelectedCardParser(this.helper)],
 			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED]: [new BgsRewardDestroyedParser(this.allCards, this.i18n)],
 			[GameEvent.BATTLEGROUNDS_REWARD_REVEALED]: [new BgsRewardEquippedParser(this.allCards, this.i18n)],
-			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper)],
+			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
 			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards, this.i18n)],

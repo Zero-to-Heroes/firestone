@@ -1,10 +1,11 @@
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class BurnedCardParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -21,6 +22,7 @@ export class BurnedCardParser implements EventParser {
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;
+		const refCard = this.allCards.getCard(card.cardId);
 		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
@@ -29,6 +31,7 @@ export class BurnedCardParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'BURNED',
+			manaCost: card.manaCost ?? refCard.cost,
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
