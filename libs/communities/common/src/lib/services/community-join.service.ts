@@ -43,6 +43,11 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 		this.joinStatus$$.next('joining');
 		console.debug('[communities] joining community', code);
 		const user = await this.user.getCurrentUser();
+		if (!user?.username) {
+			this.joinStatus$$.next('not-logged-in');
+			return null;
+		}
+
 		const result: CommunityInfo | null = await this.api.callPostApi<CommunityInfo>(JOIN_COMMUNITY_URL, {
 			code: code,
 			userName: user?.username,
@@ -59,4 +64,4 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 	}
 }
 
-export type JoinStatus = 'joining' | 'joined' | 'error';
+export type JoinStatus = 'joining' | 'joined' | 'not-logged-in' | 'error';

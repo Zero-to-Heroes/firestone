@@ -23,26 +23,28 @@ import { CommunitiesJoinModalComponent } from './communities-join-modal.componen
 	styleUrls: [`./communities-join.component.scss`],
 	template: `
 		<div class="communities-join">
-			<div class="error" *ngIf="error$ | async as error">{{ error }}</div>
-			<a
-				class="what-are-guilds"
-				href="https://github.com/Zero-to-Heroes/firestone/wiki/What-are-Guilds%3F"
-				target="_blank"
-				[fsTranslate]="'app.communities.what-are-guilds'"
-			></a>
-			<div class="buttons">
-				<div
-					class="button create disabled"
-					[helpTooltip]="'app.communities.manage.create-text-disabled-tooltip' | fsTranslate"
-				>
-					<div class="image"></div>
-					<div class="text" [fsTranslate]="'app.communities.manage.create-text'"></div>
+			<ng-container *ngIf="{ error: error$ | async } as value">
+				<div class="error" *ngIf="value.error as error">{{ error }}</div>
+				<a
+					class="what-are-guilds"
+					href="https://github.com/Zero-to-Heroes/firestone/wiki/What-are-Guilds%3F"
+					target="_blank"
+					[fsTranslate]="'app.communities.what-are-guilds'"
+				></a>
+				<div class="buttons" *ngIf="!value.error">
+					<div
+						class="button create disabled"
+						[helpTooltip]="'app.communities.manage.create-text-disabled-tooltip' | fsTranslate"
+					>
+						<div class="image"></div>
+						<div class="text" [fsTranslate]="'app.communities.manage.create-text'"></div>
+					</div>
+					<div class="button join" (click)="showJoinPopup()">
+						<div class="image"></div>
+						<div class="text" [fsTranslate]="'app.communities.manage.join-text'"></div>
+					</div>
 				</div>
-				<div class="button join" (click)="showJoinPopup()">
-					<div class="image"></div>
-					<div class="text" [fsTranslate]="'app.communities.manage.join-text'"></div>
-				</div>
-			</div>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,6 +81,8 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 				switch (status) {
 					case 'error':
 						return this.i18n.translateString('app.communities.manage.status.error')!;
+					case 'not-logged-in':
+						return this.i18n.translateString('app.communities.manage.status.not-logged-in')!;
 					case 'joining':
 						return this.i18n.translateString('app.communities.manage.status.joining')!;
 					default:

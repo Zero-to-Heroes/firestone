@@ -58,8 +58,7 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 								*ngIf="value.category === 'community-details'"
 							></community-details>
 						</ng-container>
-						<ng-container *ngIf="!value.isLoggedIn" [fsTranslate]="'app.communities.please-log-in'">
-						</ng-container>
+						<div *ngIf="!value.isLoggedIn" [fsTranslate]="'app.communities.please-log-in'"></div>
 					</div>
 				</with-loading>
 			</section>

@@ -50,7 +50,7 @@ export class CommunityProtocolHandlerService {
 		await waitForReady(this.mainNav, this.nav, this.communityJoinService);
 
 		this.mainNav.currentApp$$.next('communities');
-		this.nav.changeCategory('manage');
+		this.nav.changeCategory('my-communities');
 		console.debug('[communities] changed navigation');
 		console.debug('[communities] communityId', communityId, 'joinCode', joinCode);
 		// TODO: make sure that multiple communities can use the same join code
