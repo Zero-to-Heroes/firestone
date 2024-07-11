@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/eqeqeq */
 /* eslint-disable @angular-eslint/template/no-negated-async */
@@ -7,7 +8,18 @@ import { StatGameFormatType, StatGameModeType } from '@firestone/shared/common/s
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	map,
+	shareReplay,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 import { PersonalCommunitiesService } from '../services/personal-communities.service';
 
@@ -35,14 +47,19 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					(click)="leaveCommunity()"
 				></div>
 			</div>
-			<div class="leaderboards">
+			<div class="leaderboards" *ngIf="{ leaderboard: leaderboard$ | async } as value">
 				<div class="header" [fsTranslate]="'app.communities.details.leaderboards.header'"></div>
 				<ul class="tabs">
-					<div class="tab" *ngFor="let tab of tabs$ | async" [ngClass]="{ selected: tab.selected }">
-						<div class="text" (click)="selectTab(tab)">{{ tab.name }}</div>
+					<div
+						class="tab"
+						*ngFor="let tab of tabs$ | async; trackBy: trackByTab"
+						[ngClass]="{ selected: tab.selected }"
+						(click)="selectTab(tab)"
+					>
+						<div class="text">{{ tab.name }}</div>
 					</div>
 				</ul>
-				<div class="leaderboard" *ngIf="leaderboard$ | async as leaderboard">
+				<div class="leaderboard" *ngIf="value.leaderboard as leaderboard">
 					<div class="leaderboard-header">
 						<div class="cell rank" [fsTranslate]="'app.communities.details.leaderboards.rank-header'"></div>
 						<div
@@ -70,7 +87,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 				</div>
 				<div
 					class="leaderboard empty"
-					*ngIf="!(leaderboard$ | async)?.length"
+					*ngIf="!value.leaderboard?.length"
 					[fsTranslate]="'app.communities.details.leaderboards.empty-leaderboard'"
 				></div>
 			</div>
@@ -129,28 +146,42 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 			.subscribe((tab) => {
 				this.selectedTab$$.next(tab!);
 			});
-		const selectedTab$ = this.selectedTab$$.pipe(this.mapData((selectedTab) => selectedTab));
+		const selectedTab$ = this.selectedTab$$.pipe(
+			distinctUntilChanged((a, b) => a === b),
+			tap((tab) => console.debug('selected tab', tab)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		this.leaderboard$ = combineLatest([selectedTab$, this.personalCommunities.selectedCommunity$$]).pipe(
+			debounceTime(100),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			tap(([selectedTab, community]) => console.debug('selectedTab', selectedTab, 'community', community)),
 			filter(([selectedTab, community]) => !!community),
-			this.mapData(([selectedTab, community]) => {
+			map(([selectedTab, community]) => {
 				const sourceLeaderboard = this.getSourceLeaderboard(selectedTab, community!);
 				console.debug('sourceLeaderboard', sourceLeaderboard);
 				const displayedLeaderboard = this.buildLeaderboard(sourceLeaderboard, selectedTab);
 				console.debug('displayedLeaderboard', displayedLeaderboard);
 				return !!displayedLeaderboard?.length ? displayedLeaderboard : null;
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 
-		const allTabs = ['standard', 'wild', 'twist', 'battlegrounds', 'battlegrounds-duo', 'arena'];
+		const allTabs = ['standard', 'wild', 'twist', 'battlegrounds', 'battlegrounds-duo', 'arena'].map((tab) => ({
+			id: tab,
+			name: this.buildTabName(tab),
+		}));
 		this.tabs$ = selectedTab$.pipe(
 			this.mapData((selectedTab) =>
-				allTabs.map((tab) => ({
-					id: tab,
-					name: this.buildTabName(tab),
-					selected: tab === selectedTab,
-				})),
+				allTabs.map((tab) =>
+					tab.id === selectedTab
+						? {
+								...tab,
+								selected: tab.id === selectedTab,
+						  }
+						: tab,
+				),
 			),
 		);
 		this.showRunsCompleted$ = selectedTab$.pipe(this.mapData((selectedTab) => selectedTab === 'arena'));
@@ -158,11 +189,13 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 			.pipe(this.mapData((c) => c?.id))
 			.subscribe((id) => (this.communityId = id));
 
-		// this.personalCommunities.refreshCurrentCommunity();
-
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	trackByTab(index: number, item: Tab) {
+		return item.id;
 	}
 
 	selectTab(tab: Tab) {
