@@ -180,6 +180,7 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 			return;
 		}
 
+		this.selectedCommunity$$.next(null);
 		console.debug('[communities] update selected community', communityId, this.lastCommunityRefreshDate);
 		const selectedCommunity = await this.loadCommunityDetails(communityId!);
 		this.selectedCommunity$$.next(selectedCommunity);

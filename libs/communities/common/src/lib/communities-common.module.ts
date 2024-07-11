@@ -9,6 +9,8 @@ import { CommunitiesDesktopComponent } from './components/communities-desktop.co
 import { CommunitiesJoinModalComponent } from './components/communities-join-modal.component';
 import { CommunitiesJoinComponent } from './components/communities-join.component';
 import { CommunityDetailsComponent } from './components/community-details.component';
+import { CommunityLeaderboardsComponent } from './components/details/community-leaderboards.component';
+import { CommunityOverviewComponent } from './components/details/community-overview.component';
 import { MyCommunitiesComponent } from './components/my-communities.component';
 import { CommunityBootstrapService } from './services/_community-bootstrap.service';
 import { CommunityJoinService } from './services/community-join.service';
@@ -22,6 +24,8 @@ const components = [
 	CommunitiesJoinModalComponent,
 	MyCommunitiesComponent,
 	CommunityDetailsComponent,
+	CommunityOverviewComponent,
+	CommunityLeaderboardsComponent,
 ];
 
 @NgModule({
