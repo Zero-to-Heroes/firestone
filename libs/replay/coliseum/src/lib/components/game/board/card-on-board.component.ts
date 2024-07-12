@@ -102,7 +102,7 @@ export class CardOnBoardComponent {
 		this.attack = entity.getTag(GameTag.ATK);
 		this.health = entity.getTag(GameTag.HEALTH);
 		this.damage = entity.getTag(GameTag.DAMAGE);
-		this.durability = entity.getTag(GameTag.DURABILITY);
+		this.durability = entity.getTag(GameTag.DURABILITY) || entity.getTag(GameTag.HEALTH);
 		this.armor = entity.getTag(GameTag.ARMOR);
 		this.cost = entity.getTag(GameTag.COST);
 

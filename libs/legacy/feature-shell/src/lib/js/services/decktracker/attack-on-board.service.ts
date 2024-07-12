@@ -48,7 +48,8 @@ export class AttackOnBoardService {
 						Math.min(
 							this.windfuryMultiplier(playerFromTracker.Hero),
 							// We can get attack outside of weapons
-							getTag(playerFromTracker?.Weapon, GameTag.DURABILITY) -
+							(getTag(playerFromTracker?.Weapon, GameTag.DURABILITY) ||
+								getTag(playerFromTracker?.Weapon, GameTag.HEALTH)) -
 								getTag(playerFromTracker?.Weapon, GameTag.DAMAGE) || 1,
 						) - heroAttacksThisTurn,
 				  ) *

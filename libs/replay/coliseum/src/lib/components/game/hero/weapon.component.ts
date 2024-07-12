@@ -33,7 +33,7 @@ export class WeaponComponent {
 		this.entityId = value.id;
 		this.cardId = value.cardID;
 		this.attack = value.getTag(GameTag.ATK);
-		this.durability = value.getTag(GameTag.DURABILITY);
+		this.durability = value.getTag(GameTag.DURABILITY) || value.getTag(GameTag.HEALTH);
 		this.damage = value.getTag(GameTag.DAMAGE);
 		this.exhausted = value.getTag(GameTag.EXHAUSTED) === 1;
 	}
