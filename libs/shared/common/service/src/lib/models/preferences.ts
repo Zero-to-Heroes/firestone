@@ -830,6 +830,9 @@ export class Preferences implements IPreferences {
 	// TODO: move somewhere else
 	readonly outOfCardsToken: OutOfCardsToken;
 	readonly outOfCardsShowNotifOnSync: boolean = false;
+	readonly hearthpwnSync: boolean = false;
+	readonly hearthpwnUserId: number;
+	readonly hearthpwnAuthToken: string;
 
 	readonly d0nkeySync: boolean = true;
 	readonly hearthstoneDecksSync: boolean = true;

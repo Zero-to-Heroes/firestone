@@ -568,7 +568,7 @@ import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
-import { CollectionCommonModule } from '@firestone/collection/common';
+import { COLLECTION_MANAGER_SERVICE_TOKEN, CollectionCommonModule } from '@firestone/collection/common';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -1762,6 +1762,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useExisting: CardsHighlightFacadeService },
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
+		{ provide: COLLECTION_MANAGER_SERVICE_TOKEN, useExisting: CollectionManager },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
 		{ provide: REVIEW_ID_SERVICE_TOKEN, useExisting: ReviewIdService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },

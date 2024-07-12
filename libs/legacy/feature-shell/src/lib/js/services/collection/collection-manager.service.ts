@@ -8,6 +8,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 
+import { ICollectionManagerService } from '@firestone/collection/common';
 import { PackInfo } from '@firestone/collection/view';
 import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
@@ -23,7 +24,7 @@ import { CardsInternalService } from './details/cards';
 import { CoinsInternalService } from './details/coins';
 
 @Injectable()
-export class CollectionManager extends AbstractFacadeService<CollectionManager> {
+export class CollectionManager extends AbstractFacadeService<CollectionManager> implements ICollectionManagerService {
 	public static EPIC_PITY_TIMER = 10;
 	public static LEGENDARY_PITY_TIMER = 40;
 
