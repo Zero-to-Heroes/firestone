@@ -1,0 +1,17 @@
+.player {
+	height: 100%;
+	display: flex;
+	// justify-content: center;
+	align-items: center;
+
+	.player-rank,
+	.player-class {
+		height: 100%;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+
+	&.opponent {
+		flex-flow: row-reverse;
+	}
+}

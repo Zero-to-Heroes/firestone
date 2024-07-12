@@ -9,6 +9,9 @@ import { CommunitiesDesktopComponent } from './components/communities-desktop.co
 import { CommunitiesJoinModalComponent } from './components/communities-join-modal.component';
 import { CommunitiesJoinComponent } from './components/communities-join.component';
 import { CommunityDetailsComponent } from './components/community-details.component';
+import { CommunityFriendlyBattlePlayerComponent } from './components/details/community-friendly-battle-player.component';
+import { CommunityFriendlyBattleComponent } from './components/details/community-friendly-battle.component';
+import { CommunityInternalLadderComponent } from './components/details/community-internal-ladder.component';
 import { CommunityLeaderboardsComponent } from './components/details/community-leaderboards.component';
 import { CommunityOverviewComponent } from './components/details/community-overview.component';
 import { MyCommunitiesComponent } from './components/my-communities.component';
@@ -26,6 +29,9 @@ const components = [
 	CommunityDetailsComponent,
 	CommunityOverviewComponent,
 	CommunityLeaderboardsComponent,
+	CommunityInternalLadderComponent,
+	CommunityFriendlyBattleComponent,
+	CommunityFriendlyBattlePlayerComponent,
 ];
 
 @NgModule({

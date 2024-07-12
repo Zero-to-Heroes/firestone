@@ -21,7 +21,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 					[ngClass]="{ selected: tab.selected }"
 					(click)="selectTab(tab)"
 				>
-					<div class="text">{{ tab.name }}</div>
+					<div class="text" [helpTooltip]="tab.tooltip">{{ tab.name }}</div>
 				</div>
 				<div class="guild-name">{{ communityName$ | async }}</div>
 			</nav>
@@ -29,6 +29,7 @@ import { PersonalCommunitiesService } from '../services/personal-communities.ser
 			<ng-container *ngIf="{ selectedTab: selectedTab$ | async } as value">
 				<community-overview *ngIf="value.selectedTab === 'overview'"></community-overview>
 				<community-leaderboards *ngIf="value.selectedTab === 'leaderboards'"></community-leaderboards>
+				<community-internal-ladder *ngIf="value.selectedTab === 'friendly-battles'"></community-internal-ladder>
 			</ng-container>
 		</div>
 	`,
@@ -63,10 +64,14 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 			takeUntil(this.destroyed$),
 		);
 
-		const allTabs = ['overview', 'leaderboards'].map((tab) => ({
-			id: tab,
-			name: this.buildTabName(tab),
-		}));
+		const allTabs = ['overview', 'leaderboards', 'friendly-battles'].map((tab) => {
+			const tooltip = this.i18n.translateString(`app.communities.details.menu.${tab}-tooltip`)!;
+			return {
+				id: tab,
+				name: this.i18n.translateString(`app.communities.details.menu.${tab}`)!,
+				tooltip: tooltip === `app.communities.details.menu.${tab}-tooltip` ? null : tooltip,
+			};
+		});
 		this.tabs$ = this.selectedTab$.pipe(
 			this.mapData((selectedTab) =>
 				allTabs.map((tab) =>
@@ -92,21 +97,11 @@ export class CommunityDetailsComponent extends AbstractSubscriptionComponent imp
 	selectTab(tab: Tab) {
 		this.selectedTab$$.next(tab.id);
 	}
-
-	private buildTabName(tab: string): string {
-		switch (tab) {
-			case 'overview':
-				return this.i18n.translateString('app.communities.details.menu.overview')!;
-			case 'leaderboards':
-				return this.i18n.translateString('app.communities.details.menu.leaderboards')!;
-			default:
-				return 'Unknown';
-		}
-	}
 }
 
 interface Tab {
 	id: string;
 	name: string;
+	tooltip: string | null;
 	selected?: boolean;
 }
