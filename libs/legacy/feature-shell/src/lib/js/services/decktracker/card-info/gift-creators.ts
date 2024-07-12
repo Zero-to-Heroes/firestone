@@ -858,4 +858,6 @@ export const giftCreators = [
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
 	CardIds.Repackage_RepackagedBoxToken_TOY_879t,
+	CardIds.RuleModifier_DrivenToGreedToken_TTN_002t20,
+	CardIds.DrivenToGreed_ChaoticUnspentCoinEnchantment_TTN_002t20e,
 ];
