@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -29,11 +30,16 @@ export const DEFAULT_CARD_HEIGHT = 221;
 export class ConstructedDeckbuilderComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	currentStep$: Observable<CurrentStep>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly analytics: AnalyticsService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
+		this.analytics.trackEvent('deckbuilder');
 		this.currentStep$ = this.store
 			.listen$(([main, nav]) => main.decktracker.deckbuilder)
 			.pipe(
