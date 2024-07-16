@@ -23,6 +23,7 @@ import {
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
 } from '@firestone/battlegrounds/common';
+import { HearthpwnService } from '@firestone/collection/common';
 import { CommunityBootstrapService } from '@firestone/communities/common';
 import {
 	ConstructedMetaDecksStateService,
@@ -135,6 +136,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_AchievementsNavigationService: AchievementsNavigationService,
 		private readonly init_BootstrapSettingsService: BootstrapSettingsService,
 		private readonly init_BootstrapGameStateService: BootstrapGameStateService,
+		private readonly init_HearthpwnService: HearthpwnService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

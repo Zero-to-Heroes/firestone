@@ -39,8 +39,14 @@
 				"resizable": false,
 				"show_in_taskbar": false,
 				"is_background_page": true,
-				"size": { "width": 0, "height": 0 },
-				"start_position": { "top": 0, "left": 0 },
+				"size": {
+					"width": 0,
+					"height": 0
+				},
+				"start_position": {
+					"top": 0,
+					"left": 0
+				},
 				"grab_keyboard_focus": false,
 				"grab_focus_on_desktop": false,
 				"block_top_window_navigation": true
@@ -50,8 +56,14 @@
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
-				"size": { "width": 1400, "height": 790 },
-				"min_size": { "width": 1400, "height": 790 },
+				"size": {
+					"width": 1400,
+					"height": 790
+				},
+				"min_size": {
+					"width": 1400,
+					"height": 790
+				},
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -66,8 +78,14 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 1400, "height": 790 },
-				"min_size": { "width": 1400, "height": 790 },
+				"size": {
+					"width": 1400,
+					"height": 790
+				},
+				"min_size": {
+					"width": 1400,
+					"height": 790
+				},
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -77,8 +95,14 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": { "width": 300, "height": 720 },
-				"start_position": { "top": 0, "left": 0 },
+				"size": {
+					"width": 300,
+					"height": 720
+				},
+				"start_position": {
+					"top": 0,
+					"left": 0
+				},
 				"grab_keyboard_focus": false,
 				"grab_focus_on_desktop": false,
 				"disable_hardware_acceleration": true,
@@ -92,8 +116,14 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": { "width": 300, "height": 720 },
-				"start_position": { "top": 0, "left": 0 },
+				"size": {
+					"width": 300,
+					"height": 720
+				},
+				"start_position": {
+					"top": 0,
+					"left": 0
+				},
 				"grab_keyboard_focus": false,
 				"grab_focus_on_desktop": false,
 				"disable_hardware_acceleration": true,
@@ -107,9 +137,18 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-				"size": { "width": 440, "height": 590 },
-				"min_size": { "width": 440, "height": 590 },
-				"max_size": { "width": 440, "height": 590 },
+				"size": {
+					"width": 440,
+					"height": 590
+				},
+				"min_size": {
+					"width": 440,
+					"height": 590
+				},
+				"max_size": {
+					"width": 440,
+					"height": 590
+				},
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -119,8 +158,14 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": { "width": 530, "height": 500 },
-				"start_position": { "top": 0, "left": 0 },
+				"size": {
+					"width": 530,
+					"height": 500
+				},
+				"start_position": {
+					"top": 0,
+					"left": 0
+				},
 				"grab_keyboard_focus": false,
 				"grab_focus_on_desktop": false,
 				"block_top_window_navigation": true,
@@ -131,10 +176,22 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-				"size": { "width": 780, "height": 620 },
-				"start_position": { "top": 200, "left": 200 },
-				"min_size": { "width": 780, "height": 620 },
-				"max_size": { "width": 780, "height": 620 }
+				"size": {
+					"width": 780,
+					"height": 620
+				},
+				"start_position": {
+					"top": 200,
+					"left": 200
+				},
+				"min_size": {
+					"width": 780,
+					"height": 620
+				},
+				"max_size": {
+					"width": 780,
+					"height": 620
+				}
 			},
 			"SettingsWindow": {
 				"file": "Files/index.html",
@@ -146,18 +203,36 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 780, "height": 620 },
-				"start_position": { "top": 200, "left": 200 },
-				"min_size": { "width": 780, "height": 620 },
-				"max_size": { "width": 780, "height": 620 }
+				"size": {
+					"width": 780,
+					"height": 620
+				},
+				"start_position": {
+					"top": 200,
+					"left": 200
+				},
+				"min_size": {
+					"width": 780,
+					"height": 620
+				},
+				"max_size": {
+					"width": 780,
+					"height": 620
+				}
 			},
 			"BattlegroundsOverlayWindow": {
 				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
-				"size": { "width": 1320, "height": 790 },
-				"min_size": { "width": 1320, "height": 790 },
+				"size": {
+					"width": 1320,
+					"height": 790
+				},
+				"min_size": {
+					"width": 1320,
+					"height": 790
+				},
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -172,8 +247,14 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 1320, "height": 790 },
-				"min_size": { "width": 1320, "height": 790 },
+				"size": {
+					"width": 1320,
+					"height": 790
+				},
+				"min_size": {
+					"width": 1320,
+					"height": 790
+				},
 				"block_top_window_navigation": true,
 				"keep_window_location": true,
 				"popup_blocker": true,
@@ -188,35 +269,56 @@
 				"desktop_only": true,
 				"topmost": true,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 402, "height": 720 },
-				"min_size": { "width": 402, "height": 720 },
-				"max_size": { "width": 402, "height": 720 },
+				"size": {
+					"width": 402,
+					"height": 720
+				},
+				"min_size": {
+					"width": 402,
+					"height": 720
+				},
+				"max_size": {
+					"width": 402,
+					"height": 720
+				},
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
 			},
-
 			"OutOfCardsAuthWindow": {
 				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-				"size": { "width": 600, "height": 600 },
-				"min_size": { "width": 600, "height": 600 },
-				"start_position": { "top": 200, "left": 600 },
+				"size": {
+					"width": 600,
+					"height": 600
+				},
+				"min_size": {
+					"width": 600,
+					"height": 600
+				},
+				"start_position": {
+					"top": 200,
+					"left": 600
+				},
 				"desktop_only": true
 			}
 		},
 		"game_targeting": {
 			"type": "dedicated",
-			"game_ids": [9898]
+			"game_ids": [
+				9898
+			]
 		},
 		"force_browser": "user",
 		"launch_events": [
 			{
 				"event": "GameLaunch",
 				"event_data": {
-					"game_ids": [9898]
+					"game_ids": [
+						9898
+					]
 				},
 				"start_minimized": false
 			}
@@ -248,6 +350,7 @@
 				"https://*.outof.games",
 				"https://outof.games",
 				"https://www.googletagmanager.com",
+				"https://www.hearthpwn.com",
 				"https://*.pastebin.com"
 			]
 		},
@@ -263,6 +366,10 @@
 			"ow-utils": {
 				"file": "Files/plugins/OwUtils.dll",
 				"class": "OwUtils.OwUtilsPlugin"
+			},
+			"hearthpwn-cipher": {
+				"file": "Files/plugins/HpCipher.dll",
+				"class": "HpCipher.HpCipherPlugin"
 			},
 			"DiscordRPCPlugin": {
 				"file": "Files/plugins/DiscordRPCPlugin.dll",
