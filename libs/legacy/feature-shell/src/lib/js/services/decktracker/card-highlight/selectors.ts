@@ -198,6 +198,13 @@ export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
 	return result;
 };
 
+export const cardsPlayedLastTurn = (input: SelectorInput): boolean => {
+	const result =
+		input.deckState?.cardsPlayedLastTurn.map((card) => card.entityId).includes(input.entityId) ||
+		input.deckState?.cardsPlayedLastTurn.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
+	return result;
+};
+
 export const secretsTriggeredThisMatch = (input: SelectorInput): boolean => {
 	const result = input.deckState?.secretsTriggeredThisMatch.map((card) => card.entityId).includes(input.entityId);
 	return result;
@@ -311,9 +318,6 @@ export const whelp = hasMechanic(GameTag.WHELP);
 export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
 
-export const currentClass = (input: SelectorInput): boolean =>
-	input.card?.classes.some((cardClass) => input.deckState?.hero?.classes?.includes(CardClass[cardClass]));
-
 export const cardClass =
 	(cardClass: CardClass) =>
 	(input: SelectorInput): boolean =>
@@ -321,6 +325,10 @@ export const cardClass =
 export const neutral = cardClass(CardClass.NEUTRAL);
 export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);
+
+export const currentClass = (input: SelectorInput): boolean =>
+	input.card?.classes.some((cardClass) => input.deckState?.hero?.classes?.includes(CardClass[cardClass]));
+export const fromAnotherClass = and(not(currentClass), not(neutral));
 
 export const rarity =
 	(rarity: RarityTYpe) =>

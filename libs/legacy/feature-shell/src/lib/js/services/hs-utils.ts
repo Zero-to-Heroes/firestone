@@ -159,6 +159,7 @@ export const deathrattleGlobalEffectCards = [
 	CardIds.JadeDisplay_TOY_803,
 	CardIds.UnluckyPowderman_WW_367,
 	CardIds.Therazane_DEEP_036,
+	CardIds.ElizaGoreblade_VAC_426,
 ];
 
 export const startOfGameGlobalEffectCards = [

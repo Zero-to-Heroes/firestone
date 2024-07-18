@@ -37,7 +37,12 @@ export class PlayerElementalStreakWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.playerElementalStreakCounter;
 		this.deckStateExtractor = (state, prefValue) =>
 			state.playerDeck?.hasRelevantCard(
-				[CardIds.AzeriteGiant_WW_025, CardIds.SkarrTheCatastrophe_WW_026, CardIds.OverflowSurger_WW_424],
+				[
+					CardIds.AzeriteGiant_WW_025,
+					CardIds.SkarrTheCatastrophe_WW_026,
+					CardIds.OverflowSurger_WW_424,
+					CardIds.Lamplighter_VAC_442,
+				],
 				{
 					onlyLimited: prefValue === 'limited',
 					excludesDeckInLimited: true,
