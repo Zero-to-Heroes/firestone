@@ -10,7 +10,6 @@ import {
 	GameFormat,
 	Race,
 	ReferenceCard,
-	bannedTwistCards,
 } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -20,7 +19,7 @@ import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils'
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
-import { filter, share, startWith } from 'rxjs/operators';
+import { filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -170,7 +169,7 @@ export class ConstructedDeckbuilderCardsComponent
 	searchShortcutsTooltip: string;
 	deckName: string = this.i18n.translateString('decktracker.deck-name.unnamed-deck');
 
-	private currentDeckCards = new BehaviorSubject<readonly string[]>([]);
+	private currentDeckCards$$ = new BehaviorSubject<readonly string[]>([]);
 	private sideboards$$ = new BehaviorSubject<Sideboard[]>(null);
 	private dkRunes$$ = new BehaviorSubject<readonly DkRune[]>(null);
 
@@ -200,6 +199,11 @@ export class ConstructedDeckbuilderCardsComponent
 				this.cdr.detectChanges();
 			}
 		});
+		this.currentDeckCards$ = this.currentDeckCards$$.asObservable().pipe(
+			this.mapData((info) => info),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 
 		this.allowedCards$ = combineLatest([
 			this.constructedConfig.config$$,
@@ -207,14 +211,14 @@ export class ConstructedDeckbuilderCardsComponent
 				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
 				([main, nav]) => main.decktracker.deckbuilder.currentClass,
 			),
+			this.currentDeckCards$$,
 			from([this.allCards.getCards()]),
 		]).pipe(
 			filter(
-				([config, [currentFormat, currentClass], cards]) =>
+				([config, [currentFormat, currentClass], currentDeckCards, cards]) =>
 					!!config && !!currentFormat && !!currentClass && !!cards,
 			),
-			this.mapData(([config, [currentFormat, currentClass], cards]) => {
-				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
+			this.mapData(([config, [currentFormat, currentClass], currentDeckCards, cards]) => {
 				const validSets =
 					currentFormat === 'classic'
 						? config.vanillaSets
@@ -223,20 +227,31 @@ export class ConstructedDeckbuilderCardsComponent
 						: currentFormat === 'twist'
 						? config.twistSets
 						: config.wildSets;
+
+				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
+				const searchCardClasses: CardClass[] = [CardClass[currentClass.toUpperCase()], CardClass.NEUTRAL];
+				console.debug('searchCardClasses', searchCardClasses);
+				const touristClasses =
+					currentDeckCards?.flatMap((c) => this.allCards.getCard(c).touristFor ?? []) ?? [];
+				console.debug('touristClasses', touristClasses, currentDeckCards);
+				for (const tourist of touristClasses) {
+					const touristClass: CardClass = CardClass[tourist.toUpperCase()];
+					if (!searchCardClasses.includes(touristClass)) {
+						searchCardClasses.push(touristClass);
+					}
+				}
+				console.debug('searchCardClasses 2', searchCardClasses);
+
 				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
 					.filter((card) => validSets.includes(card.set?.toLowerCase()))
-					.filter((card) =>
-						currentFormat === 'twist'
-							? !card.classes.includes(CardClass[CardClass.NEUTRAL]) &&
-							  !bannedTwistCards.includes(card.id as CardIds)
-							: true,
-					)
+					// .filter((card) =>
+					// 	currentFormat === 'twist'
+					// 		? !card.classes.includes(CardClass[CardClass.NEUTRAL]) &&
+					// 		  !bannedTwistCards.includes(card.id as CardIds)
+					// 		: true,
+					// )
 					.filter((card) => {
-						const searchCardClasses: readonly CardClass[] = [
-							CardClass[currentClass.toUpperCase()],
-							CardClass.NEUTRAL,
-						];
 						const cardCardClasses: readonly CardClass[] = card.classes?.map((c) => CardClass[c]) ?? [];
 						return searchCardClasses.some((c) => cardCardClasses.includes(c));
 					})
@@ -264,23 +279,22 @@ export class ConstructedDeckbuilderCardsComponent
 				});
 				return result;
 			}),
-			share(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.collection$ = this.store.sets$().pipe(
 			this.mapData(
 				(allSets) => allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
 			),
-			share(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 
 		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
-			share(),
-		);
-		this.currentDeckCards$ = this.currentDeckCards.asObservable().pipe(
-			this.mapData((info) => info),
-			share(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 
 		const cleanedRunes$ = this.dkRunes$$
@@ -347,7 +361,7 @@ export class ConstructedDeckbuilderCardsComponent
 		this.store
 			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentCards)
 			.pipe(this.mapData(([cards]) => cards))
-			.subscribe((cards) => this.currentDeckCards.next(cards));
+			.subscribe((cards) => this.currentDeckCards$$.next(cards));
 		this.store
 			.listen$(([main, nav]) => main.decktracker.deckbuilder.sideboards)
 			.pipe(this.mapData(([sideboards]) => sideboards))
@@ -450,14 +464,14 @@ export class ConstructedDeckbuilderCardsComponent
 	}
 
 	addCard(card: DeckBuilderCard) {
-		if (this.currentDeckCards.value?.includes(card.cardId)) {
+		if (this.currentDeckCards$$.value?.includes(card.cardId)) {
 			if (this.allCards.getCard(card.cardId).rarity === 'Legendary') {
 				return;
-			} else if (this.currentDeckCards.value.filter((c) => c === card.cardId).length >= 2) {
+			} else if (this.currentDeckCards$$.value.filter((c) => c === card.cardId).length >= 2) {
 				return;
 			}
 		}
-		this.currentDeckCards.next([...(this.currentDeckCards.value ?? []), card.cardId]);
+		this.currentDeckCards$$.next([...(this.currentDeckCards$$.value ?? []), card.cardId]);
 	}
 
 	handleKeyPress(event: KeyboardEvent, activeCards: readonly DeckBuilderCard[]) {
@@ -474,7 +488,7 @@ export class ConstructedDeckbuilderCardsComponent
 			const card = activeCards[0];
 			this.addCard(card);
 			const hasMaxCopies =
-				this.hasMaximumCopies(card.cardId, this.currentDeckCards.value) && activeCards.length === 1;
+				this.hasMaximumCopies(card.cardId, this.currentDeckCards$$.value) && activeCards.length === 1;
 			if (event.shiftKey || hasMaxCopies) {
 				this.searchForm.setValue(null);
 			}
@@ -486,12 +500,12 @@ export class ConstructedDeckbuilderCardsComponent
 	}
 
 	onDecklistCardClicked(card: VisualDeckCard) {
-		const deckCards = [...this.currentDeckCards.value];
+		const deckCards = [...this.currentDeckCards$$.value];
 		deckCards.splice(
 			deckCards.findIndex((cardId) => cardId === card.cardId),
 			1,
 		);
-		this.currentDeckCards.next(deckCards);
+		this.currentDeckCards$$.next(deckCards);
 	}
 
 	saveDeck(deckstring: string) {
