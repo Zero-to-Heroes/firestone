@@ -139,13 +139,13 @@ export class SetsService {
 			.reduce((data, filterFunction) => {
 				return data.filter(filterFunction);
 			}, basicFiltered)
-			.map((card) => {
+			.map((card: ReferenceCard) => {
 				let cardName = card.name;
 				if (card.type === 'Hero') {
 					cardName += ' (Hero)';
 				}
 				const rarity = card.rarity ? card.rarity.toLowerCase() : '';
-				return new SetCard(card.id, cardName, card.playerClass, rarity, card.cost);
+				return new SetCard(card.id, cardName, card.classes?.map((c) => CardClass[c]) ?? [], rarity, card.cost);
 			});
 		return result;
 	}
