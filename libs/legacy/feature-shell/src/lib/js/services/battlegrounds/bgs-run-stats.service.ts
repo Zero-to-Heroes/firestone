@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import {
 	BgsGame,
@@ -7,18 +8,17 @@ import {
 	BgsPostMatchStatsForReview,
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/common';
-import { ApiRunner, OverwolfService, UserService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
+import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { sleep } from '../utils';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
-
-const POST_MATCH_STATS_RETRIEVE_URL = 'https://4nsgpj3i3anf6qc3c7zugsdjvm0sadln.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class BgsRunStatsService {
@@ -30,6 +30,8 @@ export class BgsRunStatsService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
+		private readonly games: GameStatsProviderService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async (event) => {
 			console.debug(
@@ -59,17 +61,6 @@ export class BgsRunStatsService {
 			this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, resultFromS3));
 			return;
 		}
-
-		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
-			`${POST_MATCH_STATS_RETRIEVE_URL}`,
-			{
-				reviewId: reviewId,
-			},
-		);
-		const result = results && results.length > 0 ? results[0] : null;
-		console.log('[bgs-run-stats] post-match results for review', reviewId, results && results.length > 0);
-		console.debug('[bgs-run-stats] post-match results for review', results);
-		this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, result?.stats));
 	}
 
 	private async computeHeroDetailsForBg(heroCardId: string) {
@@ -83,18 +74,32 @@ export class BgsRunStatsService {
 		heroCardId: string,
 		numberOfStats?: number,
 	): Promise<readonly BgsPostMatchStatsForReview[]> {
-		const user = await this.userService.getCurrentUser();
-		const input = {
-			userId: user.userId,
-			userName: user.username,
-			heroCardId: heroCardId,
-			limitResults: numberOfStats,
-		};
-		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
-			`${POST_MATCH_STATS_RETRIEVE_URL}`,
-			input,
+		const reviewIds: readonly string[] = await this.retrieveReviewIds(heroCardId, numberOfStats);
+		const resultsFromS3 = await Promise.all(
+			reviewIds.map((reviewId) =>
+				this.apiRunner.callGetApi<IBgsPostMatchStats>(
+					`https://bgs-post-match-stats.firestoneapp.com/${reviewId}.gz.json`,
+				),
+			),
 		);
+		const results: readonly BgsPostMatchStatsForReview[] = reviewIds.map((reviewId, index) => {
+			const stat: BgsPostMatchStatsForReview = {
+				reviewId: reviewId,
+				stats: resultsFromS3[index],
+			};
+			return stat;
+		});
 		return results;
+	}
+
+	private async retrieveReviewIds(heroCardId: string, numberOfStats?: number): Promise<readonly string[]> {
+		const allGames = await this.games.gameStats$$.getValueWithInit();
+		const gamesForHero = allGames.filter(
+			(game) =>
+				normalizeHeroCardId(game.playerCardId, this.allCards) ===
+				normalizeHeroCardId(heroCardId, this.allCards),
+		);
+		return gamesForHero.slice(0, numberOfStats).map((s) => s.reviewId);
 	}
 
 	public buildInput(
