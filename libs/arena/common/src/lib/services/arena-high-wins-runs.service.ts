@@ -17,6 +17,7 @@ import { ExtendedArenaRunInfo, ExtendedHighWinRunsInfo, InternalNotableCard } fr
 
 const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
 
+const EXPECTED_NOTABLE_CARDS_LENGTH = 1;
 @Injectable()
 export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWinsRunsService> {
 	public runs$$: SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>;
@@ -78,13 +79,19 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 
 			const extendedRuns: ExtendedHighWinRunsInfo = {
 				...runs,
-				runs: runs.runs?.map((r) => {
-					const run: ExtendedArenaRunInfo = {
-						...r,
-						notabledCards: buildNotableCards(r.decklist, this.cards),
-					};
-					return run;
-				}),
+				runs: runs.runs
+					?.map((r) => {
+						const run: ExtendedArenaRunInfo = {
+							...r,
+							notabledCards: buildNotableCards(r.decklist, this.cards),
+						};
+						return run;
+					})
+					.filter(
+						(r) =>
+							EXPECTED_NOTABLE_CARDS_LENGTH === null ||
+							r.notabledCards.length === EXPECTED_NOTABLE_CARDS_LENGTH,
+					),
 			};
 			console.log('[arena-high-wins-runs] loaded arena stats');
 			console.debug('[arena-high-wins-runs] loaded arena stats', runs);
