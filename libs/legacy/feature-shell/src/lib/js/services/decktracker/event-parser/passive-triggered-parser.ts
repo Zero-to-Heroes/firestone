@@ -33,9 +33,9 @@ export class PassiveTriggeredParser implements EventParser {
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: cardData && this.i18n.getCardName(cardId, cardData.name),
-			manaCost: cardData && cardData.cost,
-			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
+			cardName: cardData?.name,
+			manaCost: cardData?.cost,
+			rarity: cardData?.rarity?.toLowerCase(),
 		} as DeckCard);
 
 		const newGlobalEffects: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.globalEffects, card);

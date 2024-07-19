@@ -23,7 +23,6 @@ export class CostChangedParser implements EventParser {
 		}
 
 		const updatedCard = card.update({
-			manaCost: newCost,
 			actualManaCost: newCost,
 		});
 		// console.debug('found card', zone, card, deck, updatedCard);

@@ -102,7 +102,9 @@ export class CreateCardInDeckParser implements EventParser {
 				// Update: see ...
 				entityId: entityId,
 				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
-				manaCost: this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
+				manaCost: cardData?.cost,
+				actualManaCost:
+					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
 				rarity: cardData?.rarity?.toLowerCase(),
 				creatorCardId:
 					creatorEntity?.cardId ??

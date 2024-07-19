@@ -9,13 +9,14 @@ export class DeckCard {
 	readonly internalEntityId: string;
 	readonly entityId: number;
 	readonly cardName: string;
+	// The reference mana cost of the card, as it is in the reference data
 	readonly manaCost: number;
-	// So that when only the type of the card is known (like after Deck of Lunacy)
-	// we can still apply type-specific effects on it
-	readonly cardType: string;
 	// Some cards change the cost of a card, this field will reflect it
 	// For now still only implementing a few effects, like Incanter's Flow
 	readonly actualManaCost: number;
+	// So that when only the type of the card is known (like after Deck of Lunacy)
+	// we can still apply type-specific effects on it
+	readonly cardType: string;
 	readonly rarity: string;
 	readonly creatorCardId?: string;
 	readonly lastAffectedByCardId?: string;
