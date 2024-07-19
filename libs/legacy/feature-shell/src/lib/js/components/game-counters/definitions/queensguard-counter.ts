@@ -43,7 +43,9 @@ export class QueensguardCounterDefinition implements CounterDefinition<GameState
 			value: cardsPlayedThisTurn.length,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Queensguard}.jpg`,
 			cssClass: 'queensguard-counter',
-			tooltip: null,
+			tooltip: this.i18n.translateString(`counters.queensguard.${this.side}`, {
+				value: cardsPlayedThisTurn.length,
+			}),
 			cardTooltips: null,
 			standardCounter: true,
 		};
