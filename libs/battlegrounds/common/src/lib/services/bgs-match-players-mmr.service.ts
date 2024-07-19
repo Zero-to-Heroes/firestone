@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { BnetRegion, GameType, isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { BnetRegion, GameType, isBattlegrounds, isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
@@ -42,6 +42,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 		this.playersMatchMmr$$.onFirstSubscribe(async () => {
 			const gameMode$ = this.gameState.gameState$$.pipe(
 				map((gameState) => gameState?.metadata.gameType),
+				filter((gameType) => !!gameType && isBattlegrounds(gameType)),
 				distinctUntilChanged(),
 			);
 
