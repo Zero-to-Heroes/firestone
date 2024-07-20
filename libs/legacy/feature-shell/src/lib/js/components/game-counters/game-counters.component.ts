@@ -25,6 +25,7 @@ import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indic
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { CardsDrawnCounterDefinition } from './definitions/cards-drawn-counter';
+import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
 import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian-counter';
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
@@ -221,6 +222,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return WheelOfDeathCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'thirstyDrifter':
 				return ThirstyDrifterCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'cardsPlayedFromAnotherClass':
+				return CardsPlayedFromAnotherClassCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'cardsDrawn':
 				return CardsDrawnCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elementalStreak':

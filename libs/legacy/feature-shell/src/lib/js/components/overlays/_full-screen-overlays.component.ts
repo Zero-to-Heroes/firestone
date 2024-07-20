@@ -100,6 +100,7 @@ import { DebugService } from '../../services/debug.service';
 			<player-sea-shanty-widget-wrapper></player-sea-shanty-widget-wrapper>
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
 			<player-thirsty-drifter-widget-wrapper></player-thirsty-drifter-widget-wrapper>
+			<player-cards-played-from-another-class-widget-wrapper></player-cards-played-from-another-class-widget-wrapper>
 			<player-cards-drawn-widget-wrapper></player-cards-drawn-widget-wrapper>
 			<player-elemental-streak-widget-wrapper></player-elemental-streak-widget-wrapper>
 			<player-tram-heist-widget-wrapper></player-tram-heist-widget-wrapper>

@@ -478,6 +478,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerThirstyDrifterCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerCardsPlayedFromAnotherClassCounter: BooleanWithLimited = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerCardsPlayedFromAnotherClassCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerCardsDrawnCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCardsDrawnCounterWidgetPosition: { left: number; top: number };

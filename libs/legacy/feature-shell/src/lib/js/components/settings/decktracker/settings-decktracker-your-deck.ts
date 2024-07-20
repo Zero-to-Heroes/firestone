@@ -369,6 +369,17 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'cardsPlayedFromAnotherClass',
+			field: 'playerCardsPlayedFromAnotherClassCounter',
+			label: this.i18n.translateString(
+				'settings.decktracker.your-deck.counters.cards-played-from-another-class-label',
+			),
+			tooltip: this.i18n.translateString(
+				'settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip',
+			),
+			showLimitedOption: true,
+		},
+		{
 			id: 'cardsDrawn',
 			field: 'playerCardsDrawnCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-label'),

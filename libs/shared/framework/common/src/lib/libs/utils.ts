@@ -62,6 +62,14 @@ export const pickLast = <T>(array: readonly T[]): T | null => {
 	return array[array.length - 1];
 };
 
+export const anyOverlap = <T>(a: readonly T[], b: readonly T[]): boolean => {
+	if (!a?.length || !b?.length) {
+		return false;
+	}
+
+	return a.some((x) => b.includes(x));
+};
+
 export const sleep = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };

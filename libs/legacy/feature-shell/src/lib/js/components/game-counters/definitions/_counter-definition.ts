@@ -44,6 +44,7 @@ export type CounterType =
 	| 'seaShanty'
 	| 'wheelOfDeath'
 	| 'thirstyDrifter'
+	| 'cardsPlayedFromAnotherClass'
 	| 'cardsDrawn'
 	| 'elementalStreak'
 	| 'tramHeist'
