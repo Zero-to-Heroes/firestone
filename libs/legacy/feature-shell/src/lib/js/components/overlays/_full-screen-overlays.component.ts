@@ -97,6 +97,7 @@ import { DebugService } from '../../services/debug.service';
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-sea-shanty-widget-wrapper></player-sea-shanty-widget-wrapper>
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
 			<player-thirsty-drifter-widget-wrapper></player-thirsty-drifter-widget-wrapper>
 			<player-cards-drawn-widget-wrapper></player-cards-drawn-widget-wrapper>

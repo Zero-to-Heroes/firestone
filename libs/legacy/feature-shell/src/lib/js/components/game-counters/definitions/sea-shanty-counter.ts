@@ -1,12 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, ShortCard } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class CardsDrawnCounterDefinition implements CounterDefinition<GameState, number> {
-	readonly type = 'cardsDrawn';
+export class SeaShantyCounterDefinition implements CounterDefinition<GameState, readonly ShortCard[]> {
+	readonly type = 'seaShanty';
 	readonly value: number | string;
 	readonly image: string;
 	readonly cssClass: string;
@@ -24,25 +24,26 @@ export class CardsDrawnCounterDefinition implements CounterDefinition<GameState,
 		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
-	): CardsDrawnCounterDefinition {
-		return new CardsDrawnCounterDefinition(side, allCards, i18n);
+	): SeaShantyCounterDefinition {
+		return new SeaShantyCounterDefinition(side, allCards, i18n);
 	}
 
-	public select(gameState: GameState): number {
+	public select(gameState: GameState): readonly ShortCard[] {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deck.cardDrawnThisGame ?? 0;
+		return [...deck.spellsPlayedOnFriendlyEntities, ...deck.spellsPlayedOnEnemyEntities];
 	}
 
-	public emit(cardDrawnThisGame: number): NonFunctionProperties<CardsDrawnCounterDefinition> {
-		const tooltip = this.i18n.translateString(`counters.cards-drawn.${this.side}`, {
-			value: cardDrawnThisGame,
+	public emit(spellsPlayedOnCharacters: readonly ShortCard[]): NonFunctionProperties<SeaShantyCounterDefinition> {
+		const tooltip = this.i18n.translateString(`counters.sea-shanty.${this.side}`, {
+			value: spellsPlayedOnCharacters.length,
 		});
 		return {
-			type: 'cardsDrawn',
-			value: cardDrawnThisGame,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.PlayhouseGiant_TOY_530}.jpg`,
-			cssClass: 'cards-drawn-counter',
+			type: 'seaShanty',
+			value: spellsPlayedOnCharacters.length,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SeaShanty_VAC_558}.jpg`,
+			cssClass: 'sea-shanty-counter',
 			tooltip: tooltip,
+			cardTooltips: spellsPlayedOnCharacters.map((card) => card.cardId),
 			standardCounter: true,
 		};
 	}

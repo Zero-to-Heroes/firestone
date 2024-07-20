@@ -346,6 +346,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'seaShanty',
+			field: 'playerSeaShantyCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'wheelOfDeath',
 			field: 'playerWheelOfDeathCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-label'),
