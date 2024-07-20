@@ -1,6 +1,6 @@
-import { CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
-import { sortByProperties } from '@firestone/shared/framework/common';
+import { pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
@@ -406,6 +406,15 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell, nature);
 		case CardIds.ChattyBartender:
 			return and(side(inputSide), inDeck, secret);
+		case CardIds.ChattyMacaw_VAC_407:
+			return (input: SelectorInput): SelectorOutput => {
+				const lastSpellOnEnemy = input.deckState.spellsPlayedOnEnemyEntities?.length
+					? input.deckState.spellsPlayedOnEnemyEntities[
+							input.deckState.spellsPlayedOnEnemyEntities.length - 1
+					  ]
+					: null;
+				return tooltip(and(side(inputSide), cardIs(lastSpellOnEnemy?.cardId as CardIds), spell))(input);
+			};
 		case CardIds.ChemicalSpill_TOY_602:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ChiaDrake_TOY_801:
@@ -468,7 +477,23 @@ export const cardIdSelector = (
 		case CardIds.Conductivity_YOG_522:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ConnivingConman_VAC_333:
-			return and(side(inputSide), or(inDeck, inHand), fromAnotherClass);
+			return (input: SelectorInput): SelectorOutput => {
+				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch.filter(
+					(c) =>
+						!allCards
+							.getCard(c.cardId)
+							.classes?.some((cardClass) =>
+								input.deckState?.hero?.classes?.includes(CardClass[cardClass]),
+							),
+				);
+				const lastCardPlayed = cardsPlayedFromAnotherClass.length
+					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
+					: null;
+				return highlightConditions(
+					tooltip(and(side(inputSide), cardIs(lastCardPlayed?.cardId as CardIds))),
+					and(side(inputSide), or(inDeck, inHand), fromAnotherClass),
+				)(input);
+			};
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ContrabandStash:
@@ -543,6 +568,8 @@ export const cardIdSelector = (
 		// 	return and(side(inputSide), inDeck, spell);
 		case CardIds.Cultivation:
 			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
+		case CardIds.CustomsEnforcer_VAC_440:
+			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.CutlassCourier:
 			return and(side(inputSide), inDeck, pirate);
 		case CardIds.DangBlastedElemental_WW_397:
@@ -1060,7 +1087,6 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), or(attackIs(1), healthIs(1))),
 				tooltip(and(side(inputSide), minionPlayedThisMatch, or(attackIs(1), healthIs(1)))),
 			);
-			return and(side(inputSide), minionPlayedThisMatch, or(attackIs(1), healthIs(1)));
 		case CardIds.JuicyPsychmelon:
 			return and(
 				side(inputSide),
@@ -1177,6 +1203,8 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), spellPlayedThisMatchOnFriendly));
 		case CardIds.LadyVashj_VashjPrimeToken:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.Lamplighter_VAC_442:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.LastStand:
 			return and(side(inputSide), inDeck, taunt);
 		case CardIds.LeadDancer:
@@ -1391,7 +1419,16 @@ export const cardIdSelector = (
 		case CardIds.PetCollector:
 			return and(side(inputSide), inDeck, minion, beast, effectiveCostLess(6));
 		case CardIds.PetParrot_VAC_961:
-			return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1));
+			return (input: SelectorInput): SelectorOutput => {
+				const oneCostCardsPlayed = input.deckState.cardsPlayedThisMatch.filter(
+					(c) => (c.effectiveCost ?? allCards.getCard(c.cardId).cost) === 1,
+				);
+				const target = pickLast(oneCostCardsPlayed);
+				return highlightConditions(
+					tooltip(and(side(inputSide), cardIs(target?.cardId as CardIds))),
+					and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1)),
+				)(input);
+			};
 		case CardIds.PileOfBones_WW_324:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.PileOnHeroic:
@@ -1522,6 +1559,19 @@ export const cardIdSelector = (
 		case CardIds.RenoTheRelicologist:
 		case CardIds.ZephrysTheGreat_ULD_003:
 			return and(side(inputSide), inDeck, hasMultipleCopies);
+		case CardIds.RestInPeace_VAC_457:
+			return (input: SelectorInput): SelectorOutput => {
+				const highestDeadMinionCost = Math.max(
+					...input.deckState.minionsDeadThisMatch.map(
+						(c) => c.effectiveCost ?? allCards.getCard(c.cardId).cost,
+					),
+				);
+				const targets = input.deckState.minionsDeadThisMatch
+					.filter((c) => (c.effectiveCost ?? allCards.getCard(c.cardId).cost) === highestDeadMinionCost)
+					.map((c) => c.cardId as CardIds);
+
+				return tooltip(and(side(inputSide), cardIs(...targets)))(input);
+			};
 		case CardIds.Resurrect_BRM_017:
 			return and(side(inputSide), inGraveyard, minion);
 		case CardIds.ReturnPolicy_MIS_102:

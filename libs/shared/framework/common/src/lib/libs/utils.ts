@@ -55,6 +55,13 @@ export const shuffleArray = <T>(array: T[]): T[] => {
 	return shuffledArray;
 };
 
+export const pickLast = <T>(array: readonly T[]): T | null => {
+	if (!array?.length) {
+		return null;
+	}
+	return array[array.length - 1];
+};
+
 export const sleep = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };

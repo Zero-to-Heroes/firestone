@@ -81,6 +81,7 @@ export class DeckState {
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly spellsPlayedOnFriendlyEntities: readonly DeckCard[] = [];
+	readonly spellsPlayedOnEnemyEntities: readonly DeckCard[] = [];
 	readonly uniqueSpellSchools: readonly string[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCardWithTurn[] = [];
 	readonly secretsTriggeredThisMatch: readonly ShortCardWithTurn[] = [];
@@ -181,12 +182,17 @@ export class DeckState {
 		if (!!targetEntityId && allEntityIds.includes(targetEntityId)) {
 			spellsPlayedOnFriendlyEntities = [...spellsPlayedOnFriendlyEntities, spell];
 		}
+		let spellsPlayedOnEnemyEntities = this.spellsPlayedOnEnemyEntities ?? [];
+		if (!!targetEntityId && !allEntityIds.includes(targetEntityId)) {
+			spellsPlayedOnEnemyEntities = [...spellsPlayedOnEnemyEntities, spell];
+		}
 		return this.update({
 			spellsPlayedThisMatch: spellsPlayedThisMatch,
 			uniqueSpellSchools: uniqueSpellSchools,
 			manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
 			manaSpentOnHolySpellsThisMatch: manaSpentOnHolySpellsThisMatch,
 			spellsPlayedOnFriendlyEntities: spellsPlayedOnFriendlyEntities,
+			spellsPlayedOnEnemyEntities: spellsPlayedOnEnemyEntities,
 		});
 	}
 

@@ -181,7 +181,7 @@ export const healthIs =
 export const cardIs =
 	(...cardIds: readonly CardIds[]) =>
 	(input: SelectorInput): boolean =>
-		cardIds.includes(input.card?.id as CardIds);
+		!!cardIds?.length && cardIds.includes(input.card?.id as CardIds);
 
 export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(input.entityId) ||
