@@ -824,6 +824,9 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'LOCATION_USED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.LOCATION_USED, gameEvent));
+				break;
 			case 'BLOOD_GEM_BUFF_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BLOOD_GEM_BUFF_CHANGED, gameEvent, {

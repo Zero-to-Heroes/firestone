@@ -103,6 +103,7 @@ export class DeckState {
 	readonly lastDeathrattleMinionDead: ShortCard;
 	readonly anachronosTurnsPlayed: readonly number[] = [];
 	readonly bonelordFrostwhisperFirstTurnTrigger: number | null = null;
+	readonly locationsUsed: number = 0;
 	readonly plaguesShuffledIntoEnemyDeck: number = 0;
 	readonly currentExcavateTier: number = 0;
 	readonly maxExcavateTier: number = 0;

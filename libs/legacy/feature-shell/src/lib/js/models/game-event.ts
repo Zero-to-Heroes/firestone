@@ -91,6 +91,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly MINION_ON_BOARD_ATTACK_UPDATED = 'MINION_ON_BOARD_ATTACK_UPDATED';
 	public static readonly ARMOR_CHANGED = 'ARMOR_CHANGED';
+	public static readonly LOCATION_USED = 'LOCATION_USED';
 	public static readonly BLOOD_GEM_BUFF_CHANGED = 'BLOOD_GEM_BUFF_CHANGED';
 	public static readonly EXCAVATE_TIER_CHANGED = 'EXCAVATE_TIER_CHANGED';
 	public static readonly CORPSES_SPENT_THIS_GAME_CHANGED = 'CORPSES_SPENT_THIS_GAME_CHANGED';

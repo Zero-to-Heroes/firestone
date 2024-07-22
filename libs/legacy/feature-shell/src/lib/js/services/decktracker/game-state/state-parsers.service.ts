@@ -73,6 +73,7 @@ import { HeroPowerDamageParser } from '../event-parser/hero-power-damage-parser'
 import { HeroRevealedParser } from '../event-parser/hero-revealed-parser';
 import { LinkedEntityParser } from '../event-parser/linked-entity-parser';
 import { LocalPlayerParser } from '../event-parser/local-player-parser';
+import { LocationUsedParser } from '../event-parser/location-used-parser';
 import { MainStepReadyParser } from '../event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from '../event-parser/match-metadata-parser';
 import { MinionBackOnBoardParser } from '../event-parser/minion-back-on-board-parser';
@@ -211,6 +212,7 @@ export class GameStateParsersService {
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n)],
 			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards)],
+			[GameEvent.LOCATION_USED]: [new LocationUsedParser(this.allCards)],
 			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser()],
 			[GameEvent.MATCH_INFO]: [new PlayersInfoParser()],
 			[GameEvent.MATCH_METADATA]: [
