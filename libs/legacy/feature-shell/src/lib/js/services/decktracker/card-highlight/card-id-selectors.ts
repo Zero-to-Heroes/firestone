@@ -1782,6 +1782,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.SouleatersScythe_BoundSoulToken:
 			return tooltip(and(inOther, minion, lastAffectedByCardId(CardIds.SouleatersScythe)));
+		case CardIds.SouthseaDeckhand_CORE_CS2_146:
+		case CardIds.SouthseaDeckhandLegacy:
+		case CardIds.SouthseaDeckhandVanilla:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.SowTheSeedsTavernBrawl:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.SpecialDeliveryTavernBrawl:
