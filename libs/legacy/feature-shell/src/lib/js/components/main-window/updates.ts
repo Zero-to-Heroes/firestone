@@ -83,6 +83,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `Add a counter for Damage Taken on your turn, for cards like Sauna Regular or Party Planner Vona. `,
+							},
+							{
+								type: 'feature',
 								text: `The deckbuilder now properly supports Tourist cards.`,
 							},
 							{
