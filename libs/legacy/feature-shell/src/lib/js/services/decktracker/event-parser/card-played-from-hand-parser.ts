@@ -154,7 +154,10 @@ export class CardPlayedFromHandParser implements EventParser {
 				: cardWithInfo.update({
 						relatedCardIds:
 							// Reset the related card IDs once you play it, so that the info will be reset if you bounce it back to hand
-							cardWithInfo.cardId === CardIds.CommanderSivara_TSC_087 ? [] : cardWithInfo.relatedCardIds,
+							cardWithInfo.cardId === CardIds.CommanderSivara_TSC_087 ||
+							cardWithInfo.cardId === CardIds.TidepoolPupil_VAC_304
+								? []
+								: cardWithInfo.relatedCardIds,
 				  });
 
 		const newBoard: readonly DeckCard[] =
@@ -305,7 +308,9 @@ export const rememberCardsInHand = (
 	if (!isCardCountered) {
 		const refCard = allCards.getCard(cardId);
 		if (refCard?.type === 'Spell') {
-			const commanderSivaraCards = hand.filter((c) => c.cardId === CardIds.CommanderSivara_TSC_087);
+			const commanderSivaraCards = hand.filter(
+				(c) => c.cardId === CardIds.CommanderSivara_TSC_087 || c.cardId === CardIds.TidepoolPupil_VAC_304,
+			);
 			if (!!commanderSivaraCards.length) {
 				const newSivaraCards = commanderSivaraCards.map((c) =>
 					c.update({
