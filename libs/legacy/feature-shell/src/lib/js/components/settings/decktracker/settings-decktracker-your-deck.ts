@@ -346,6 +346,13 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'locationsUsed',
+			field: 'playerLocationsUsedCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-tooltip'),
+			showLimitedOption: true,
+		},
+		{
 			id: 'seaShanty',
 			field: 'playerSeaShantyCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-label'),

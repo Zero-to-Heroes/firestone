@@ -544,6 +544,7 @@ import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlay
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerHolySpellsWidgetWrapperComponent } from '@components/overlays/counters/player-holy-spells-widget-wrapper.component';
+import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
 import { PlayerPiratesSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-pirates-summoned-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
@@ -1614,6 +1615,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerSeaShantyWidgetWrapperComponent,
+		PlayerLocationsUsedWidgetWrapperComponent,
 		PlayerWheelOfDeathWidgetWrapperComponent,
 		PlayerThirstyDrifterWidgetWrapperComponent,
 		PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent,

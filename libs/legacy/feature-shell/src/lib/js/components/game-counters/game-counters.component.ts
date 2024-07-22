@@ -46,6 +46,7 @@ import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
 import { LightrayCounterDefinition } from './definitions/lightray-counter';
+import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
@@ -216,6 +217,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
+			case 'locationsUsed':
+				return LocationsUsedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'seaShanty':
 				return SeaShantyCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'wheelOfDeath':

@@ -42,6 +42,7 @@ export type CounterType =
 	| 'monstrousParrot'
 	| 'vanessaVanCleef'
 	| 'seaShanty'
+	| 'locationsUsed'
 	| 'wheelOfDeath'
 	| 'thirstyDrifter'
 	| 'cardsPlayedFromAnotherClass'
