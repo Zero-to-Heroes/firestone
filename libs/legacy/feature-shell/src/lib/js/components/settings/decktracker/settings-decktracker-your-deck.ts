@@ -346,6 +346,15 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'damageTakenOnYourTurn',
+			field: 'playerDamageTakenOnYourTurnCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-label'),
+			tooltip: this.i18n.translateString(
+				'settings.decktracker.your-deck.counters.damage-taken-on-your-turn-tooltip',
+			),
+			showLimitedOption: true,
+		},
+		{
 			id: 'locationsUsed',
 			field: 'playerLocationsUsedCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-label'),

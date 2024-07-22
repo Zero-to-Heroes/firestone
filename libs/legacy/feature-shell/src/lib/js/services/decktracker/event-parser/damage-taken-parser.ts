@@ -1,4 +1,4 @@
-import { DeckState, GameState } from '@firestone/game-state';
+import { GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { EventParser } from './event-parser';
@@ -27,12 +27,49 @@ export class DamageTakenParser implements EventParser {
 				? damageForOpponentPlayer.Damage
 				: 0;
 
+		let playerDamageByTurn = currentState.playerDeck.damageTakenByTurn;
+		if (currentState.playerDeck.isActivePlayer && localPlayerDamage > 0) {
+			let playerDamageThisTurn = currentState.playerDeck.damageTakenByTurn.find(
+				(d) => d.turn === currentState.currentTurn,
+			);
+			if (!playerDamageThisTurn) {
+				playerDamageThisTurn = { turn: +currentState.currentTurn, damage: [] };
+				playerDamageByTurn = [...playerDamageByTurn, playerDamageThisTurn];
+			}
+			const newPlayerDamageThisTurn = {
+				...playerDamageThisTurn,
+				damage: [...playerDamageThisTurn.damage, localPlayerDamage],
+			};
+			playerDamageByTurn = playerDamageByTurn.map((d) =>
+				d.turn === newPlayerDamageThisTurn.turn ? newPlayerDamageThisTurn : d,
+			);
+		}
 		const playerDeck = currentState.playerDeck.update({
 			damageTakenThisTurn: (currentState.playerDeck.damageTakenThisTurn ?? 0) + localPlayerDamage,
-		} as DeckState);
+			damageTakenByTurn: playerDamageByTurn,
+		});
+
+		let opponentDamageByTurn = currentState.opponentDeck.damageTakenByTurn;
+		if (currentState.opponentDeck.isActivePlayer && opponentPlayerDamage > 0) {
+			let opponentDamageThisTurn = currentState.opponentDeck.damageTakenByTurn.find(
+				(d) => d.turn === currentState.currentTurn,
+			);
+			if (!opponentDamageThisTurn) {
+				opponentDamageThisTurn = { turn: +currentState.currentTurn, damage: [] };
+				opponentDamageByTurn = [...opponentDamageByTurn, opponentDamageThisTurn];
+			}
+			const newOpponentDamageThisTurn = {
+				...opponentDamageThisTurn,
+				damage: [...opponentDamageThisTurn.damage, opponentPlayerDamage],
+			};
+			opponentDamageByTurn = opponentDamageByTurn.map((d) =>
+				d.turn === newOpponentDamageThisTurn.turn ? newOpponentDamageThisTurn : d,
+			);
+		}
 		const opponentDeck = currentState.opponentDeck.update({
 			damageTakenThisTurn: (currentState.opponentDeck.damageTakenThisTurn ?? 0) + opponentPlayerDamage,
-		} as DeckState);
+			damageTakenByTurn: opponentDamageByTurn,
+		});
 
 		return Object.assign(new GameState(), currentState, {
 			playerDeck: playerDeck,

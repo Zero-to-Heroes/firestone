@@ -539,6 +539,7 @@ import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays
 import { PlayerCardsDrawnWidgetWrapperComponent } from '@components/overlays/counters/player-cards-drawn-widget-wrapper.component';
 import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@components/overlays/counters/player-cards-played-from-another-class-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
+import { PlayerDamageTakenOnYourTurnWidgetWrapperComponent } from '@components/overlays/counters/player-damage-taken-on-you-turn-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
@@ -1614,6 +1615,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerDamageTakenOnYourTurnWidgetWrapperComponent,
 		PlayerSeaShantyWidgetWrapperComponent,
 		PlayerLocationsUsedWidgetWrapperComponent,
 		PlayerWheelOfDeathWidgetWrapperComponent,

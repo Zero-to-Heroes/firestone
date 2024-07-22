@@ -133,6 +133,7 @@ export class DeckState {
 	readonly manaLeft: number = 0;
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
+	readonly damageTakenByTurn: readonly TurnDamage[] = [];
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 	readonly turnTimings: readonly TurnTiming[] = [];
 	readonly turnDuration: number;
@@ -443,4 +444,9 @@ export interface CardOption {
 export interface DeckSideboard {
 	readonly keyCardId: string;
 	readonly cards: readonly string[];
+}
+
+export interface TurnDamage {
+	readonly turn: number;
+	readonly damage: readonly number[];
 }
