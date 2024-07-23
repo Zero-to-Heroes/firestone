@@ -183,6 +183,11 @@ export const cardIs =
 	(input: SelectorInput): boolean =>
 		!!cardIds?.length && cardIds.includes(input.card?.id as CardIds);
 
+export const entityIs =
+	(...entityIds: readonly number[]) =>
+	(input: SelectorInput): boolean =>
+		!!entityIds?.length && entityIds.map((id) => Math.abs(id)).includes(Math.abs(input.entityId));
+
 export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(input.entityId) ||
 	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(-input.entityId);
@@ -190,6 +195,10 @@ export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
 export const spellPlayedThisMatchOnFriendly = (input: SelectorInput): boolean =>
 	input.deckState?.spellsPlayedOnFriendlyEntities.map((spell) => spell.entityId).includes(input.entityId) ||
 	input.deckState?.spellsPlayedOnFriendlyEntities.map((spell) => spell.entityId).includes(-input.entityId);
+
+export const spellPlayedThisMatchOnFriendlyMinion = (input: SelectorInput): boolean =>
+	input.deckState?.spellsPlayedOnFriendlyMinions.map((spell) => spell.entityId).includes(input.entityId) ||
+	input.deckState?.spellsPlayedOnFriendlyMinions.map((spell) => spell.entityId).includes(-input.entityId);
 
 export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
 	const result =

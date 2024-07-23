@@ -81,6 +81,7 @@ export class DeckState {
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly spellsPlayedOnFriendlyEntities: readonly DeckCard[] = [];
+	readonly spellsPlayedOnFriendlyMinions: readonly DeckCard[] = [];
 	readonly spellsPlayedOnEnemyEntities: readonly DeckCard[] = [];
 	readonly uniqueSpellSchools: readonly string[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCardWithTurn[] = [];
@@ -181,8 +182,12 @@ export class DeckState {
 
 		const allEntityIds = [...this.board, this.hero].map((card) => Math.abs(card?.entityId ?? 0));
 		let spellsPlayedOnFriendlyEntities = this.spellsPlayedOnFriendlyEntities ?? [];
+		let spellsPlayedOnFriendlyMinions = this.spellsPlayedOnFriendlyMinions ?? [];
 		if (!!targetEntityId && allEntityIds.includes(targetEntityId)) {
 			spellsPlayedOnFriendlyEntities = [...spellsPlayedOnFriendlyEntities, spell];
+			if (this.board.map((card) => Math.abs(card.entityId)).includes(targetEntityId)) {
+				spellsPlayedOnFriendlyMinions = [...spellsPlayedOnFriendlyMinions, spell];
+			}
 		}
 		let spellsPlayedOnEnemyEntities = this.spellsPlayedOnEnemyEntities ?? [];
 		if (!!targetEntityId && !allEntityIds.includes(targetEntityId)) {
@@ -194,6 +199,7 @@ export class DeckState {
 			manaSpentOnSpellsThisMatch: manaSpentOnSpellsThisMatch,
 			manaSpentOnHolySpellsThisMatch: manaSpentOnHolySpellsThisMatch,
 			spellsPlayedOnFriendlyEntities: spellsPlayedOnFriendlyEntities,
+			spellsPlayedOnFriendlyMinions: spellsPlayedOnFriendlyMinions,
 			spellsPlayedOnEnemyEntities: spellsPlayedOnEnemyEntities,
 		});
 	}

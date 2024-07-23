@@ -37,6 +37,7 @@ import {
 	effectiveCostLessThanRemainingMana,
 	effectiveCostMore,
 	elemental,
+	entityIs,
 	excavate,
 	fel,
 	fire,
@@ -624,7 +625,10 @@ export const cardIdSelector = (
 		case CardIds.LesserDiamondSpellstone_CORE_LOOT_507:
 			return and(side(inputSide), inGraveyard, minion);
 		case CardIds.DigForTreasure_TOY_510:
-			return and(side(inputSide), inDeck, minion, pirate);
+			return highlightConditions(
+				and(side(inputSide), inDeck, minion, pirate),
+				and(side(inputSide), inDeck, minion, minion),
+			);
 		case CardIds.DinnerPerformer:
 			return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
 		case CardIds.DirgeOfDespair:
@@ -861,7 +865,10 @@ export const cardIdSelector = (
 		case CardIds.GlacialDownpourTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
 		case CardIds.GolgannethTheThunderer:
-			return and(side(inputSide), or(inDeck, inHand), overload);
+			return highlightConditions(
+				and(side(inputSide), inDeck, overload),
+				and(side(inputSide), or(inDeck, inHand), spell),
+			);
 		case CardIds.GorillabotA3:
 		case CardIds.GorillabotA3Core:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
@@ -1890,6 +1897,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostLess(3));
 		case CardIds.SunstridersCrownTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.SunwingSquawker:
+			return (input: SelectorInput): SelectorOutput => {
+				const lastSpell = pickLast(input.deckState.spellsPlayedOnFriendlyMinions);
+				return highlightConditions(
+					tooltip(and(side(inputSide), entityIs(lastSpell?.entityId))),
+					and(side(inputSide), inDeck, spell),
+				)(input);
+			};
 		case CardIds.SuperchargeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.Surfalopod_VAC_443:
