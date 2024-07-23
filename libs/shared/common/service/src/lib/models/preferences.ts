@@ -463,6 +463,10 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerDeadMinionsThisGameCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerDamageTakenOnYourTurnCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerDamageTakenOnYourTurnCounterWidgetPosition: { left: number; top: number };

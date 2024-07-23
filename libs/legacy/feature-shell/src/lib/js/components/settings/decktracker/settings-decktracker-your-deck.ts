@@ -346,6 +346,15 @@ export class SettingsDecktrackerYourDeckComponent
 			showLimitedOption: true,
 		},
 		{
+			id: 'deadMinionsThisGame',
+			field: 'playerDeadMinionsThisGameCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-label'),
+			tooltip: this.i18n.translateString(
+				'settings.decktracker.your-deck.counters.dead-minions-this-game-tooltip',
+			),
+			showLimitedOption: true,
+		},
+		{
 			id: 'damageTakenOnYourTurn',
 			field: 'playerDamageTakenOnYourTurnCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-label'),
