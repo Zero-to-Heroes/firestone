@@ -3,6 +3,8 @@ import { DeckCard, GameState, ShortCard, ShortCardWithTurn } from '@firestone/ga
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
+	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
+	CARDS_THAT_REMEMBER_SPELLS_PLAYED,
 	COUNTERSPELLS,
 	battlecryGlobalEffectCards,
 	deathrattleGlobalEffectCards,
@@ -154,8 +156,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				: cardWithInfo.update({
 						relatedCardIds:
 							// Reset the related card IDs once you play it, so that the info will be reset if you bounce it back to hand
-							cardWithInfo.cardId === CardIds.CommanderSivara_TSC_087 ||
-							cardWithInfo.cardId === CardIds.TidepoolPupil_VAC_304
+							CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED.includes(cardWithInfo.cardId as CardIds)
 								? []
 								: cardWithInfo.relatedCardIds,
 				  });
@@ -308,16 +309,27 @@ export const rememberCardsInHand = (
 	if (!isCardCountered) {
 		const refCard = allCards.getCard(cardId);
 		if (refCard?.type === 'Spell') {
-			const commanderSivaraCards = hand.filter(
-				(c) => c.cardId === CardIds.CommanderSivara_TSC_087 || c.cardId === CardIds.TidepoolPupil_VAC_304,
+			const commanderSivaraCards = hand.filter((c) =>
+				CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED.includes(c.cardId as CardIds),
 			);
 			if (!!commanderSivaraCards.length) {
-				const newSivaraCards = commanderSivaraCards.map((c) =>
-					c.update({
-						// Only keep the first 3
-						relatedCardIds: [...c.relatedCardIds, cardId].slice(0, 3),
-					}),
-				);
+				const newSivaraCards = commanderSivaraCards
+					.map((c) => {
+						const config = CARDS_THAT_REMEMBER_SPELLS_PLAYED.find((conf) => c.cardId === conf.cardId);
+						if (config.mustHaveSpellSchool && !refCard.spellSchool?.length) {
+							return null;
+						}
+						const newRelatedCardIds =
+							c.cardId === CardIds.CarressCabaretStar_VAC_449
+								? buildCarressCabaretStarRelatedCardIds(cardId, c.relatedCardIds, allCards)
+								: [...c.relatedCardIds, cardId].slice(0, config.numberOfCards);
+						const result = c.update({
+							// Only keep the first N
+							relatedCardIds: newRelatedCardIds,
+						});
+						return result;
+					})
+					.filter((c) => !!c);
 				for (const newCard of newSivaraCards) {
 					handAfterCardsRemembered = helper.replaceCardInZone(handAfterCardsRemembered, newCard);
 				}
@@ -326,6 +338,31 @@ export const rememberCardsInHand = (
 	}
 
 	return handAfterCardsRemembered;
+};
+
+const buildCarressCabaretStarRelatedCardIds = (
+	newCardId: string,
+	relatedCardIds: readonly string[],
+	allCards: CardsFacadeService,
+): readonly string[] => {
+	const existingSpellSchools: readonly string[] = [
+		...new Set(
+			relatedCardIds
+				.map((id) => allCards.getCard(id))
+				.map((card) => card?.spellSchool)
+				.filter((school) => !!school),
+		),
+	];
+	const newSpellSchool = allCards.getCard(newCardId).spellSchool;
+	if (existingSpellSchools.includes(newSpellSchool)) {
+		return relatedCardIds;
+	}
+
+	const baseRelatedCardIds = allCards
+		.getCard(CardIds.CarressCabaretStar_VAC_449)
+		.relatedCardDbfIds.map((id) => allCards.getCard(id).id);
+	const newRelatedCardIds = relatedCardIds.filter((id) => !baseRelatedCardIds.includes(id));
+	return [...newRelatedCardIds, newCardId, ...baseRelatedCardIds];
 };
 
 export const processCardLinks = (

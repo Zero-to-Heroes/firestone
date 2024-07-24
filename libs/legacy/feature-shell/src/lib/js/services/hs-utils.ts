@@ -517,6 +517,25 @@ export const COUNTERSPELLS = [
 	CardIds.Objection,
 ];
 
+export const CARDS_THAT_REMEMBER_SPELLS_PLAYED = [
+	{
+		cardId: CardIds.CarressCabaretStar_VAC_449,
+		mustHaveSpellSchool: true,
+		numberOfCards: 9999,
+	},
+	{
+		cardId: CardIds.CommanderSivara_TSC_087,
+		mustHaveSpellSchool: false,
+		numberOfCards: 3,
+	},
+	{
+		cardId: CardIds.TidepoolPupil_VAC_304,
+		mustHaveSpellSchool: false,
+		numberOfCards: 3,
+	},
+];
+export const CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED = CARDS_THAT_REMEMBER_SPELLS_PLAYED.map((c) => c.cardId);
+
 export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 	switch (playerClass?.toLowerCase()) {
 		case 'deathknight':
