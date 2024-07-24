@@ -46,7 +46,7 @@ export class PlayerMulticasterWidgetWrapperComponent
 					CardIds.DiscoveryOfMagic,
 					CardIds.ElementalInspiration,
 					CardIds.MagisterDawngrasp_AV_200,
-					CardIds.RazzleDazzler,
+					CardIds.RazzleDazzler_VAC_301,
 					CardIds.SirenSong_VAC_308,
 				],
 				{ onlyLimited: prefValue === 'limited' },
