@@ -7,7 +7,7 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { addAdditionalAttribues } from './receive-card-in-hand-parser';
+import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 
 export class EntityUpdateParser implements EventParser {
 	constructor(
@@ -54,7 +54,7 @@ export class EntityUpdateParser implements EventParser {
 			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
 
 		const newCardInHand = shouldShowCardIdInHand
-			? addAdditionalAttribues(
+			? addAdditionalAttribuesInHand(
 					cardInHand.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
@@ -66,13 +66,17 @@ export class EntityUpdateParser implements EventParser {
 			: null;
 		// console.debug('[entity-update] newCardInHand', newCardInHand, shouldShowCardIdInHand, cardInHand, gameEvent);
 
-		const newCardInDeck =
-			cardInDeck && cardInDeck.cardId !== obfsucatedCardId
-				? cardInDeck.update({
+		const newCardInDeck = addAdditionalAttribuesInDeck(
+			cardInDeck?.cardId !== obfsucatedCardId
+				? cardInDeck?.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-				  } as DeckCard)
-				: null;
+				  })
+				: cardInDeck,
+			deck,
+			gameEvent,
+			this.allCards,
+		);
 		// console.debug('[entity-update] newCardInDeck', newCardInDeck);
 		const newCardInOther =
 			cardInOther && cardInOther.cardId !== obfsucatedCardId
@@ -91,7 +95,10 @@ export class EntityUpdateParser implements EventParser {
 		// );
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
-		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
+		const newDeck =
+			newCardInDeck && newCardInDeck !== cardInDeck
+				? this.helper.replaceCardInZone(deck.deck, newCardInDeck)
+				: deck.deck;
 		const newOther = newCardInOther
 			? this.helper.replaceCardInZone(deck.otherZone, newCardInOther)
 			: deck.otherZone;
@@ -135,3 +142,23 @@ export class EntityUpdateParser implements EventParser {
 		return GameEvent.ENTITY_UPDATE;
 	}
 }
+
+export const addAdditionalAttribuesInDeck = (
+	card: DeckCard,
+	deck: DeckState,
+	gameEvent: GameEvent,
+	allCards: CardsFacadeService,
+): DeckCard => {
+	console.debug('[entity-update] addAdditionalAttribuesInDeck', card?.cardName, card, gameEvent);
+	switch (card?.cardId) {
+		case CardIds.Incindius_EruptionToken_VAC_321t:
+			return card.update({
+				mainAttributeChange:
+					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+						? // dataNum1 is the base value, while we start our count at 0
+						  gameEvent.additionalData.dataNum1 - 1
+						: card.mainAttributeChange,
+			});
+	}
+	return card;
+};

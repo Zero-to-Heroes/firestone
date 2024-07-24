@@ -158,7 +158,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				  } as DeckCard)
 				: cardWithZone;
 		const cardWithGuessedInfo = addGuessedInfo(otherCardWithBuffs, gameEvent);
-		const cardWithAdditionalAttributes = addAdditionalAttribues(
+		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
 			cardWithGuessedInfo,
 			deck,
 			gameEvent,
@@ -249,7 +249,7 @@ export class ReceiveCardInHandParser implements EventParser {
 	}
 }
 
-export const addAdditionalAttribues = (
+export const addAdditionalAttribuesInHand = (
 	card: DeckCard,
 	deck: DeckState,
 	gameEvent: GameEvent,

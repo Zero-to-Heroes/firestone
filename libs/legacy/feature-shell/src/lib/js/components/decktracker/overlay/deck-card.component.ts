@@ -173,12 +173,12 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	@Input() set showUpdatedCost(value: boolean) {
 		this._showUpdatedCost = value;
-		this.updateInfos();
+		this.updateInfos(true);
 	}
 
 	@Input() set showStatsChange(value: boolean) {
 		this._showStatsChange = value;
-		this.updateInfos();
+		this.updateInfos(true);
 	}
 
 	@Input() set card(card: VisualDeckCard) {
@@ -188,7 +188,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	@Input() set groupSameCardsTogether(value: boolean) {
 		this._groupSameCardsTogether = value;
-		this.updateInfos();
+		this.updateInfos(true);
 	}
 
 	@Input() set colorManaCost(value: boolean) {
@@ -409,12 +409,12 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private previousCard: VisualDeckCard;
-	private async updateInfos() {
+	private async updateInfos(forceRefresh = false) {
 		if (!this._card) {
 			return;
 		}
 
-		if (deepEqual(this._card, this.previousCard)) {
+		if (!forceRefresh && deepEqual(this._card, this.previousCard)) {
 			return;
 		}
 

@@ -4,7 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { addAdditionalAttribues } from './receive-card-in-hand-parser';
+import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 
 export class DataScriptChangedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -25,7 +25,7 @@ export class DataScriptChangedParser implements EventParser {
 			return currentState;
 		}
 
-		const cardWithAdditionalAttributes = addAdditionalAttribues(cardInHand, deck, gameEvent, this.allCards);
+		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(cardInHand, deck, gameEvent, this.allCards);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
 
