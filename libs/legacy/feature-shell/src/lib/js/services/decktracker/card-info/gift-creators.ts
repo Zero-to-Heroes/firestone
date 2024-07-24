@@ -890,4 +890,5 @@ export const giftCreators = [
 	CardIds.CupOMuscle_CupOMuscleToken_VAC_338t,
 	CardIds.HealthDrink_VAC_951,
 	CardIds.HealthDrink_HealthDrinkToken_VAC_951t,
+	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
 ];
