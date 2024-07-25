@@ -283,6 +283,13 @@ export const addAdditionalAttribuesInHand = (
 			return card.update({
 				mainAttributeChange: gameEvent.additionalData.dataNum1 - 8,
 			});
+		case CardIds.TheRyecleaver_MinionSandwichToken_VAC_525t2:
+			console.debug('[debug] adding sandwich info', gameEvent);
+			return gameEvent.additionalData?.referencedCardIds?.length
+				? card.update({
+						relatedCardIds: gameEvent.additionalData.referencedCardIds,
+				  })
+				: card;
 	}
 	return card;
 };
