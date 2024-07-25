@@ -16,7 +16,7 @@ import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/fram
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
 
@@ -100,7 +100,6 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 
 		const stats$ = statsConfig$.pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			tap((info) => console.debug('[debug] rebuilding stats', info)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 		);
 
@@ -109,7 +108,6 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 				([{ stats, mmrPercentile, lastUpdatedDate }, { timeFilter, rankFilter, tribesFilter }]) =>
 					!!stats?.length && !!mmrPercentile && !!lastUpdatedDate,
 			),
-			tap((info) => console.debug('[debug] rebuilding tier list', info)),
 			map(
 				([
 					{ stats, mmrPercentile, lastUpdatedDate },

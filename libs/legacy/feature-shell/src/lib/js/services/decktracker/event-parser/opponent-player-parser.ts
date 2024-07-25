@@ -41,7 +41,7 @@ export class OpponentPlayerParser implements EventParser {
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
 
 		const prefs = await this.prefs.getPreferences();
-		console.debug('[debug] opponentLoadAiDecklist', currentState.metadata);
+		console.debug('opponentLoadAiDecklist', currentState.metadata);
 		let opponentDeckString = prefs.opponentLoadAiDecklist
 			? (await this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId))
 					?.deckstring
@@ -55,7 +55,7 @@ export class OpponentPlayerParser implements EventParser {
 				currentState.metadata.scenarioId,
 				gameEvent.opponentPlayer.CardID,
 			);
-			console.debug('[debug] deckTemplateId', deckTemplateId);
+			console.debug('deckTemplateId', deckTemplateId);
 			const templateDeck = !!deckTemplateId
 				? await this.deckParser.getTemplateDeck(
 						-deckTemplateId,
@@ -64,7 +64,7 @@ export class OpponentPlayerParser implements EventParser {
 						currentState.metadata.formatType,
 				  )
 				: null;
-			console.debug('[debug] templateDeck', templateDeck);
+			console.debug('templateDeck', templateDeck);
 			opponentDeckString = templateDeck?.deckstring;
 		}
 

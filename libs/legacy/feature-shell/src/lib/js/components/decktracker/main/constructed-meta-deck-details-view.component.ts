@@ -172,7 +172,6 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	@Input() showRelativeInfo: boolean;
 
 	@Input() set input(value: ConstructedDeckDetails) {
-		console.debug('[debug] input', value);
 		this.loading = value === undefined;
 		this.missing = value === null;
 		if (!value) {

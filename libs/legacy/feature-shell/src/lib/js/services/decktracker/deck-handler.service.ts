@@ -85,7 +85,6 @@ export class DeckHandlerService {
 		}
 
 		const result = deck.map((decKCard) => this.postProcessDeckCard(decKCard, boardId));
-		// console.debug('[debug] post-processed deck', result);
 		return result;
 	}
 
@@ -96,13 +95,11 @@ export class DeckHandlerService {
 		// }
 		const newCard = this.allCards.getCard(newCardId);
 		let newCost = deckCard.manaCost;
-		// console.debug('[debug] newCardId', newCardId, deckCard.cardId);
 		if (newCard.id === CardIds.ZilliaxDeluxe3000_TOY_330) {
 			const modules = deckCard.relatedCardIds?.map((c) => this.allCards.getCard(c)) ?? [];
 			newCost = modules.map((c) => c.cost).reduce((a, b) => a + b, 0);
 			// The card ID only changes based on the skin
 			newCardId = modules[2]?.id ?? newCardId;
-			// console.debug('[debug] modules', newCardId, modules, modules[2]?.id);
 		}
 		return deckCard.update({
 			cardId: newCardId,

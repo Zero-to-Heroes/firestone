@@ -23,7 +23,6 @@ import {
 	filter,
 	switchMap,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -79,7 +78,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$])
 			.pipe(
 				debounceTime(200),
-				tap((info) => console.debug('[debug] updated premium banner', info)),
 				this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
 			)
 			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
@@ -109,14 +107,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				return config;
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			tap((info) => console.debug('[debug] updated config', info)),
 			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfigs.pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			tap((info) => console.debug('[debug] rebuilding stats overlay', info)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
-			// tap((info) => console.debug('[debug] updated tiers', info)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 

@@ -20,7 +20,6 @@ export class CardDredgedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('[debug] card dredged', cardId, controllerId, localPlayer, entityId, gameEvent, currentState);
 
 		const isPlayerBeforeReverse = controllerId === localPlayer.PlayerId;
 		const isPlayer = reverseIfNeeded(
@@ -58,7 +57,6 @@ export class CardDredgedParser implements EventParser {
 				.slice(0, 3)
 				.map((c) => c.entityId),
 		});
-		// console.debug('[debug]', 'dredged card', entityId, cardId, card);
 		const cardAfterDredgeEffect = this.applyDredgerEffect(card);
 		DeckCard.deckIndexFromBottom += 4;
 
@@ -70,7 +68,6 @@ export class CardDredgedParser implements EventParser {
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});
-		// console.debug('[debug]', 'newPlayerDeck', newPlayerDeck, deck.deck);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

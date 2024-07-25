@@ -74,7 +74,6 @@ export class CardRevealedParser implements EventParser {
 			lastAffectedByCardId: gameEvent.additionalData.creatorCardId || gameEvent.additionalData.originEntityCardId,
 			positionFromBottom: positionFromBottom,
 		} as DeckCard);
-		// console.debug('[debug]', 'card revealed', card, DeckCard.deckIndexFromBottom, gameEvent);
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
 		// bottom of the deck with another card previously)
@@ -103,7 +102,6 @@ export class CardRevealedParser implements EventParser {
 			} as DeckCard);
 			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
 		}
-		// console.debug('[debug]', 'newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOther,
 			globalEffects: globalEffects,

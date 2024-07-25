@@ -186,12 +186,6 @@ export const buildHeroStats = (
 			shouldDebug && console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribes, stat);
 
 			if (useTribesModifier && !tribeStatsToUse?.length) {
-				// console.debug(
-				// 	'[debug] [bgs-meta-stats] no tribe stats to use, skipping',
-				// 	stat,
-				// 	tribes,
-				// 	tribeStatsToUse,
-				// );
 				return null;
 			}
 
@@ -217,12 +211,6 @@ export const buildHeroStats = (
 				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
 				: stat.anomalyStats ?? [];
 			if (useAnomalyModifier && !anomalyStatsToUse?.length) {
-				// console.debug(
-				// 	'[debug] [bgs-meta-stats] no anomaly stats to use, skipping',
-				// 	stat,
-				// 	anomalies,
-				// 	anomalyStatsToUse,
-				// );
 				return null;
 			}
 

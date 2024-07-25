@@ -336,7 +336,6 @@ export class DeckState {
 			debug?: boolean;
 		},
 	) {
-		options?.debug && console.debug('[debug] considering', mechanics, this);
 		if (
 			this.hasRelevantMechanicsLimited(
 				allCards,
@@ -344,12 +343,10 @@ export class DeckState {
 				options?.onlyLimited ? !options.excludesDeckInLimited : true,
 			)
 		) {
-			options?.debug && console.debug('[debug] found in limited');
 			return true;
 		}
 
 		if (options?.onlyLimited) {
-			options?.debug && console.debug('[debug] not relevant because onlyLimited');
 			return false;
 		}
 
@@ -357,14 +354,6 @@ export class DeckState {
 		if (options?.includesOtherZone) {
 			updatedPool = updatedPool.concat(this.otherZone.filter((card) => card.zone !== 'SETASIDE'));
 		}
-		options?.debug &&
-			console.debug(
-				'[debug] checking for relevant card',
-				mechanics,
-				updatedPool,
-				updatedPool.map((card) => allCards.getCard(card?.cardId).mechanics),
-				this,
-			);
 		return updatedPool
 			.map((card) => card?.cardId)
 			.filter((cardId) => !!cardId)

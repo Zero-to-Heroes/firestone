@@ -33,11 +33,6 @@ export class GameTypeReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		// 	'[debug] [type] handleEvent',
-		// 	gameEvent,
-		// 	this.gameTypes.indexOf(gameEvent.additionalData.metaData.GameType) !== -1,
-		// 	this.gameTypes,
-		// );
 		if (this.gameTypes.indexOf(gameEvent.additionalData.metaData.GameType) !== -1) {
 			this.isCorrectGameType = true;
 		}
