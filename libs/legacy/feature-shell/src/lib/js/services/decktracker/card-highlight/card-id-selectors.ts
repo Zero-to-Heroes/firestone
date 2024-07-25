@@ -292,6 +292,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), legendary);
 		case CardIds.BenevolentBanker_WW_384:
 			return and(inDeck, spell);
+		case CardIds.Birdwatching_VAC_408:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.BitterColdTavernBrawl:
 			return and(side(inputSide), frost, dealsDamage);
 		case CardIds.BlackrockNRoll:
@@ -420,7 +422,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ChiaDrake_TOY_801:
 		case CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t:
-			return and(side(inputSide), inDeck, spell);
+			return highlightConditions(
+				and(side(inputSide), inDeck, spell, dealsDamage),
+				and(side(inputSide), inDeck, spell),
+			);
 		case CardIds.ChiaDrake_SeedlingGrowth_TOY_801b:
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.ChiaDrake_Cultivate_TOY_801a:
@@ -1996,6 +2001,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Thunderbringer_WW_440:
 			return and(side(inputSide), inDeck, or(elemental, beast));
+		case CardIds.TidepoolPupil_VAC_304:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.TimberTambourine:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(4));
 		case CardIds.TimelineAccelerator_WON_139:
