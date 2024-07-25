@@ -287,7 +287,7 @@ export class DeckManipulationHelper {
 		cardId: string,
 		entityId: number,
 		normalizeUpgradedCards = true,
-		createCardIfEmpty = false,
+		createCardIfEmpty = true,
 	): DeckCard {
 		if (!cardId?.length && !entityId) {
 			return DeckCard.create();

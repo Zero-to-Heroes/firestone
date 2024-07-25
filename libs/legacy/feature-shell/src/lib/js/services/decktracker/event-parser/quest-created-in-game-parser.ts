@@ -21,6 +21,7 @@ export class QuestCreatedInGameParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
+		const creatorEntityId = gameEvent.additionalData ? gameEvent.additionalData.creatorEntityId : null;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -33,9 +34,10 @@ export class QuestCreatedInGameParser implements EventParser {
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
+			creatorEntityId: creatorEntityId,
 			zone: 'SECRET',
 			putIntoPlay: true,
-		} as DeckCard);
+		});
 		// console.debug('[quest-created-in-game] created card', card, dbCard);
 		const previousOtherZone = deck.otherZone;
 		// Because when we discover a quest (BG), the quest is already in the otherZone, but with another "zone" attribute

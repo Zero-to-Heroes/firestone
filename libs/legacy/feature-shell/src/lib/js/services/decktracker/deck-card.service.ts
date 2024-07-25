@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardIds, getDynamicRelatedCardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, getDynamicRelatedCardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -65,7 +65,7 @@ export class DeckCardService {
 			// cardName: card.cardName ?? this.i18n.getCardName(card.cardId) ?? this.i18n.getCardName(dbCard.id),
 			// manaCost: card.manaCost ?? dbCard.cost,
 			// rarity: card.rarity ?? dbCard.rarity ? (card.rarity ?? dbCard.rarity).toLowerCase() : undefined,
-			relatedCardIds: this.buildContextRelatedCardIds(card, deckState, metaData),
+			relatedCardIds: relatedCardIds,
 		} as DeckCard);
 		// console.debug('[deck-card] doFillCard after', card.cardId, card.relatedCardIds, card);
 		return result;
@@ -80,7 +80,14 @@ export class DeckCardService {
 			case CardIds.HexLordMalacrass:
 				return deckState.cardsInStartingHand?.map((c) => c.cardId) ?? [];
 			case CardIds.FlintFirearm_WW_379:
-				return getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), metaData.formatType);
+				return getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
+					format: metaData.formatType,
+				});
+			case CardIds.MaestraMaskMerchant_VAC_336:
+				return getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
+					format: metaData.formatType,
+					currentClass: !deckState?.hero?.classes?.[0] ? null : CardClass[deckState?.hero?.classes?.[0]],
+				});
 		}
 		return card.relatedCardIds;
 	}

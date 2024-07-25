@@ -1,5 +1,5 @@
 import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -208,6 +208,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			this.helper,
 			this.allCards,
 		);
+
 		// console.debug('[card-played] handAfterCardsRemembered', handAfterCardsRemembered, newHand);
 		const handAfterCardsLinks = isCardCountered
 			? handAfterCardsRemembered
@@ -218,7 +219,7 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
-		const newPlayerDeck = deck
+		const newPlayerDeck1 = deck
 			.update({
 				hand: hardAfterGuessedInfo,
 				board: newBoard,
@@ -245,7 +246,11 @@ export class CardPlayedFromHandParser implements EventParser {
 				gameEvent.additionalData.cost,
 				gameEvent.additionalData.targetEntityId,
 			);
-		// console.debug('newPlayerDeck', newPlayerDeck);
+		const newPlayerDeck = updatePlayerDeckWithOtherSpecialCases(
+			newPlayerDeck1,
+			isCardCountered ? null : cardToAdd,
+			this.allCards,
+		);
 
 		const newCardPlayedThisMatch: ShortCardWithTurn = {
 			entityId: cardToAdd.entityId,
@@ -404,4 +409,67 @@ const addGuessedInfo = (
 			return updateHandWithStonebrewInfo(playedCard, hand, allCards);
 	}
 	return hand;
+};
+
+const updatePlayerDeckWithOtherSpecialCases = (
+	deck: DeckState,
+	playedCard: DeckCard,
+	allCards: CardsFacadeService,
+): DeckState => {
+	if (!playedCard) {
+		return deck;
+	}
+
+	const cardsToConsider = [...deck.board, ...deck.otherZone];
+	for (const card of cardsToConsider) {
+		switch (card.cardId) {
+			case CardIds.MistahVistah_VAC_519:
+				deck = updateMistahVistah(deck, card, playedCard, allCards);
+				break;
+		}
+	}
+
+	return deck;
+};
+
+const updateMistahVistah = (
+	deck: DeckState,
+	mistahVistah: DeckCard,
+	playedCard: DeckCard,
+	allCards: CardsFacadeService,
+): DeckState => {
+	// Only consider spells
+	if (allCards.getCard(playedCard.cardId).type !== 'Spell') {
+		return deck;
+	}
+
+	const scenicVista = deck.otherZone.find(
+		(c) =>
+			c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 &&
+			c.creatorEntityId === mistahVistah.entityId &&
+			c.zone !== 'REMOVEDFROMGAME',
+	);
+	if (!scenicVista) {
+		return deck;
+	}
+
+	const relatedCardIds = [...mistahVistah.relatedCardIds];
+	if (!relatedCardIds.length) {
+		relatedCardIds.push(CardIds.MistahVistah_ScenicVistaToken_VAC_519t3);
+	}
+
+	relatedCardIds.push(playedCard.cardId);
+	const newMistahVistah = mistahVistah.update({
+		relatedCardIds: relatedCardIds,
+	});
+	const newBoard = deck.board.some((c) => c.entityId === mistahVistah.entityId)
+		? deck.board.map((c) => (c.entityId === mistahVistah.entityId ? newMistahVistah : c))
+		: deck.board;
+	const newOtherZone = deck.otherZone.some((c) => c.entityId === mistahVistah.entityId)
+		? deck.otherZone.map((c) => (c.entityId === mistahVistah.entityId ? newMistahVistah : c))
+		: deck.otherZone;
+	return deck.update({
+		board: newBoard,
+		otherZone: newOtherZone,
+	});
 };
