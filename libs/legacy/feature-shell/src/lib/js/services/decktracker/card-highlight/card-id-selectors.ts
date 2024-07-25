@@ -416,7 +416,7 @@ export const cardIdSelector = (
 							input.deckState.spellsPlayedOnEnemyEntities.length - 1
 					  ]
 					: null;
-				return tooltip(and(side(inputSide), cardIs(lastSpellOnEnemy?.cardId as CardIds), spell))(input);
+				return tooltip(and(side(inputSide), entityIs(lastSpellOnEnemy?.entityId), spell))(input);
 			};
 		case CardIds.ChemicalSpill_TOY_602:
 			return and(side(inputSide), or(inHand, inDeck), minion);
@@ -496,7 +496,7 @@ export const cardIdSelector = (
 					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
 					: null;
 				return highlightConditions(
-					tooltip(and(side(inputSide), cardIs(lastCardPlayed?.cardId as CardIds))),
+					tooltip(and(side(inputSide), entityIs(lastCardPlayed?.entityId))),
 					and(side(inputSide), or(inDeck, inHand), fromAnotherClass),
 				)(input);
 			};
