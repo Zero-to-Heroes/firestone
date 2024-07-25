@@ -69,11 +69,19 @@ export class CreateCardInDeckParser implements EventParser {
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
 		);
-		const positionFromTop = buildPositionFromTop(deck, gameEvent.additionalData.creatorCardId);
+		const positionFromTop = buildPositionFromTop(
+			deck,
+			gameEvent.additionalData.creatorCardId,
+			gameEvent.additionalData.influencedByCardId,
+		);
 		// console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
 		const creatorEntityId =
-			gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId
+			// In this case, the card is removed from the deck then put back, so we're actually putting back the original
+			// card
+			gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444
+				? null
+				: gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId
 				? +(gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId)
 				: null;
 		const creatorEntity = creatorEntityId
@@ -107,9 +115,11 @@ export class CreateCardInDeckParser implements EventParser {
 					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
 				rarity: cardData?.rarity?.toLowerCase(),
 				creatorCardId:
-					creatorEntity?.cardId ??
-					gameEvent.additionalData.creatorCardId ??
-					gameEvent.additionalData.influencedByEntityId,
+					gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444
+						? null
+						: creatorEntity?.cardId ??
+						  gameEvent.additionalData.creatorCardId ??
+						  gameEvent.additionalData.influencedByEntityId,
 				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
@@ -209,9 +219,17 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 	return undefined;
 };
 
-export const buildPositionFromTop = (deck: DeckState, creatorCardId: string): number => {
+export const buildPositionFromTop = (
+	deck: DeckState,
+	creatorCardId: string,
+	lastInfluencedByCardId: string,
+): number => {
 	switch (creatorCardId) {
 		case CardIds.MerchSeller:
+			return 0;
+	}
+	switch (lastInfluencedByCardId) {
+		case CardIds.Overplanner_VAC_444:
 			return 0;
 	}
 	return undefined;

@@ -733,6 +733,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent, {
 						cost: gameEvent.Value.AdditionalProps?.Cost,
+						removedByCardId: gameEvent.Value.AdditionalProps?.RemovedByCardId,
 					}),
 				);
 				break;

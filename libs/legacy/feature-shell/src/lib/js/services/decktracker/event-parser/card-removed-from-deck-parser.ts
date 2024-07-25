@@ -35,7 +35,10 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
-			milled: card.createdByJoust ? false : true,
+			milled:
+				card.createdByJoust || gameEvent.additionalData.removedByCardId === CardIds.Overplanner_VAC_444
+					? false
+					: true,
 		} as DeckCard);
 
 		// If the JOUST card isn't present in the deck yet, add it to the known cards
