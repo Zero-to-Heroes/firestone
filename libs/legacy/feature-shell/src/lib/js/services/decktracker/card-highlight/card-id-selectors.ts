@@ -484,14 +484,20 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ConnivingConman_VAC_333:
 			return (input: SelectorInput): SelectorOutput => {
-				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch.filter(
-					(c) =>
-						!allCards
-							.getCard(c.cardId)
-							.classes?.some((cardClass) =>
-								input.deckState?.hero?.classes?.includes(CardClass[cardClass]),
-							),
-				);
+				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch
+					.filter(
+						(c) =>
+							!!allCards.getCard(c.cardId).classes?.length &&
+							allCards.getCard(c.cardId).classes[0] !== CardClass[CardClass.NEUTRAL],
+					)
+					.filter(
+						(c) =>
+							!allCards
+								.getCard(c.cardId)
+								.classes?.some((cardClass) =>
+									input.deckState?.hero?.classes?.includes(CardClass[cardClass]),
+								),
+					);
 				const lastCardPlayed = cardsPlayedFromAnotherClass.length
 					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
 					: null;
@@ -1776,6 +1782,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.Snapdragon:
 			return and(side(inputSide), inDeck, minion, battlecry);
+		case CardIds.SnatchAndGrab_VAC_700:
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.SonyaWaterdancer_TOY_515:
 			return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1));
 		case CardIds.SootSpewer:

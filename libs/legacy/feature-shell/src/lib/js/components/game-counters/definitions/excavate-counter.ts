@@ -71,7 +71,6 @@ export class ExcavateCounterDefinition
 			totalExcavates: excavate.totalExcavates,
 		});
 		const nextTierExcavateTreasures = buildExcavateTreasures(nextTier, excavate.playerClasses);
-		console.debug('showing excavate counter', nextTier, excavate, nextTierExcavateTreasures, nextTier);
 		return {
 			type: 'excavate',
 			value: `${excavate.currentTier}/${maxTier}`,

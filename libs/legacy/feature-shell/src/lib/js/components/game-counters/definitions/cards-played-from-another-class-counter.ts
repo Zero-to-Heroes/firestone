@@ -32,13 +32,19 @@ export class CardsPlayedFromAnotherClassCounterDefinition
 
 	public select(gameState: GameState): readonly ShortCard[] {
 		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const cardsPlayedFromAnotherClass = deck.cardsPlayedThisMatch.filter(
-			(c) =>
-				!anyOverlap(
-					this.allCards.getCard(c.cardId).classes?.map((c) => CardClass[c]),
-					deck.hero?.classes,
-				),
-		);
+		const cardsPlayedFromAnotherClass = deck.cardsPlayedThisMatch
+			.filter(
+				(c) =>
+					!!this.allCards.getCard(c.cardId).classes?.length &&
+					this.allCards.getCard(c.cardId).classes[0] !== CardClass[CardClass.NEUTRAL],
+			)
+			.filter(
+				(c) =>
+					!anyOverlap(
+						this.allCards.getCard(c.cardId).classes?.map((c) => CardClass[c]),
+						deck.hero?.classes,
+					),
+			);
 		return cardsPlayedFromAnotherClass;
 	}
 
