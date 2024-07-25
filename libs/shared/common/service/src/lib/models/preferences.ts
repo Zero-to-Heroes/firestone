@@ -653,7 +653,7 @@ export class Preferences implements IPreferences {
 	readonly bgsEnableBattleSimulationOverlay = true;
 	readonly bgsShowBannedTribesOverlay = true;
 	readonly bgsShowHeroTipsOverlay = true;
-	readonly bgsShowAvailableTribesOverlay = false;
+	readonly bgsShowAvailableTribesOverlay = true;
 	readonly bgsShowQuestStatsOverlay = true;
 	readonly bgsTribesOverlaySingleRow = false;
 	readonly bgsForceShowPostMatchStats2 = false;
