@@ -47,7 +47,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 				console.debug('[hearthpwn] activating hearthpwn sync');
 				this.collectionManager.collection$$
 					.pipe(
-						debounceTime(1000),
+						debounceTime(10000),
 						distinctUntilChanged((a, b) => deepEqual(a, b)),
 					)
 					.subscribe(async (collection) => {
