@@ -268,6 +268,7 @@ export const giftCreators = [
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FireFly,
+	CardIds.FireFly_CORE_UNG_809,
 	CardIds.FirePlumesHeart,
 	CardIds.FiretreeWitchdoctor,
 	CardIds.FirstDayOfSchool,
