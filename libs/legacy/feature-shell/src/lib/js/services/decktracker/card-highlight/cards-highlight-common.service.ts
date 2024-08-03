@@ -6,7 +6,19 @@ import { Observable } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { cardIdSelector } from './card-id-selectors';
-import { and, damage, inDeck, inHand, mech, minion, or, orWithHighlight, side, spell } from './selectors';
+import {
+	and,
+	damage,
+	inDeck,
+	inHand,
+	mech,
+	minion,
+	or,
+	orWithHighlight,
+	restoreHealth,
+	side,
+	spell,
+} from './selectors';
 
 export abstract class CardsHighlightCommonService extends AbstractSubscriptionComponent {
 	private handlers: { [uniqueId: string]: Handler } = {};
@@ -261,6 +273,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SPELLPOWER])) {
 			return and(side(inputSide), or(inDeck, inHand), spell, damage);
+		}
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
+			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		}
 	}
 }
