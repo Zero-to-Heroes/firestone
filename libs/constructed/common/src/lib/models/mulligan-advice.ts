@@ -9,6 +9,7 @@ export interface MulliganGuide {
 	readonly rankBracket: RankBracket;
 	readonly opponentClass: 'all' | string;
 	readonly noData?: boolean;
+	readonly againstAi?: boolean;
 }
 
 export interface MulliganCardAdvice {

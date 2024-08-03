@@ -100,7 +100,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				}
 
 				if (
-					![GameType.GT_RANKED, GameType.GT_CASUAL, GameType.GT_VS_FRIEND].includes(
+					![GameType.GT_RANKED, GameType.GT_CASUAL, GameType.GT_VS_FRIEND, GameType.GT_VS_AI].includes(
 						gameState.metadata.gameType,
 					)
 				) {
@@ -126,6 +126,13 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			filter((showWidget) => showWidget),
 			switchMap(() => this.gameState.gameState$$),
 			map((gameState) => gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+		const gameType$ = showWidget$.pipe(
+			filter((showWidget) => showWidget),
+			switchMap(() => this.gameState.gameState$$),
+			map((gameState) => gameState?.metadata.gameType),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
@@ -285,20 +292,21 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
 			debounceTime(200),
 			switchMap(([cardsInHand, deckCards]) =>
-				combineLatest([archetype$, deckDetails$, format$, playerRank$, opponentClass$]).pipe(
-					map(([archetype, deckDetails, format, playerRank, opponentClass]) => ({
+				combineLatest([archetype$, deckDetails$, format$, gameType$, playerRank$, opponentClass$]).pipe(
+					map(([archetype, deckDetails, format, gameType, playerRank, opponentClass]) => ({
 						cardsInHand: cardsInHand,
 						deckCards: deckCards,
 						archetype: archetype,
 						deckDetails: deckDetails,
 						format: format,
+						gameType: gameType,
 						playerRank: playerRank,
 						opponentClass: opponentClass,
 					})),
 				),
 			),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			map(({ cardsInHand, deckCards, archetype, deckDetails, format, playerRank, opponentClass }) => {
+			map(({ cardsInHand, deckCards, archetype, deckDetails, format, gameType, playerRank, opponentClass }) => {
 				const archetypeMatchup =
 					opponentClass === 'all'
 						? null
@@ -344,6 +352,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 				const result: MulliganGuide = {
 					noData: !cardsData.length,
+					againstAi: gameType === GameType.GT_VS_AI,
 					cardsInHand: cardsInHand!,
 					allDeckCards: allDeckCards,
 					sampleSize: sampleSize,

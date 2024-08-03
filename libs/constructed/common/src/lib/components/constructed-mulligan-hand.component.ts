@@ -21,6 +21,7 @@ import {
 	CardsFacadeService,
 	IAdsService,
 	ILocalizationService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -73,6 +74,7 @@ export class ConstructedMulliganHandComponent
 
 	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 	private noData$$ = new BehaviorSubject<boolean>(false);
+	private againstAi$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -90,10 +92,7 @@ export class ConstructedMulliganHandComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.gameState.isReady();
-		await this.ads.isReady();
-		await this.guardian.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
 
 		this.mulligan.mulliganAdvice$$
 			.pipe(
@@ -102,6 +101,7 @@ export class ConstructedMulliganHandComponent
 			)
 			.subscribe((advice) => {
 				this.noData$$.next(advice?.noData ?? false);
+				this.againstAi$$.next(advice?.againstAi ?? false);
 			});
 
 		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$, this.noData$$])
@@ -190,7 +190,7 @@ export class ConstructedMulliganHandComponent
 
 	override ngOnDestroy(): void {
 		super.ngOnDestroy();
-		if (!this.showPremiumBanner$$.value && !this.noData$$.value) {
+		if (!this.showPremiumBanner$$.value && !this.noData$$.value && !this.againstAi$$.value) {
 			this.guardian.acknowledgeMulliganAdviceSeen();
 		}
 	}
