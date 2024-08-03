@@ -234,13 +234,14 @@ export class ConstructedDeckbuilderCardsComponent
 				const touristClasses =
 					currentDeckCards?.flatMap((c) => this.allCards.getCard(c).touristFor ?? []) ?? [];
 				console.debug('touristClasses', touristClasses, currentDeckCards);
+				const touristSearchClasses: CardClass[] = [];
 				for (const tourist of touristClasses) {
 					const touristClass: CardClass = CardClass[tourist.toUpperCase()];
-					if (!searchCardClasses.includes(touristClass)) {
-						searchCardClasses.push(touristClass);
+					if (!touristSearchClasses.includes(touristClass)) {
+						touristSearchClasses.push(touristClass);
 					}
 				}
-				console.debug('searchCardClasses 2', searchCardClasses);
+				console.debug('searchCardClasses 2', searchCardClasses, touristSearchClasses);
 
 				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
@@ -253,7 +254,11 @@ export class ConstructedDeckbuilderCardsComponent
 					// )
 					.filter((card) => {
 						const cardCardClasses: readonly CardClass[] = card.classes?.map((c) => CardClass[c]) ?? [];
-						return searchCardClasses.some((c) => cardCardClasses.includes(c));
+						return (
+							searchCardClasses.some((c) => cardCardClasses.includes(c)) ||
+							(touristSearchClasses.some((c) => cardCardClasses.includes(c)) &&
+								card.set === 'Perils_in_paradise')
+						);
 					})
 					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase());
 				const groupedByName = groupByFunction((card: ReferenceCard) => card.name)(cardsWithDuplicates);
