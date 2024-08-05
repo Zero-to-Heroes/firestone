@@ -1407,6 +1407,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, effectiveCostLess(3));
 		case CardIds.OrbOfRevelationTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
+		case CardIds.OverflowSurger_WW_424:
+			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.OvergrownBeanstalk_MIS_301:
 			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
 		case CardIds.OverlordSaurfang_BAR_334:
