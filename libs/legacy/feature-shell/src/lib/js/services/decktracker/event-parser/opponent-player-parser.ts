@@ -69,7 +69,7 @@ export class OpponentPlayerParser implements EventParser {
 		}
 		if (opponentDeckString == null && prefs.opponentLoadKnownDecklist) {
 			opponentDeckString =
-				currentState.playerDeck.deckstring ??
+				currentState.opponentDeck.deckstring ??
 				(await this.deckParser.getOpenDecklist(newHero.cardId, currentState.metadata));
 		}
 
