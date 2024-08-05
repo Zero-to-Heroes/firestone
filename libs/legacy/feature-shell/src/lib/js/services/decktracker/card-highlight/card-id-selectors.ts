@@ -1671,6 +1671,10 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), cardsPlayedLastTurn));
 		case CardIds.ScaleReplica_TOY_387:
 			return and(side(inputSide), inDeck, dragon);
+		case CardIds.Scalerider:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.Scaleworm:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SeaShill_VAC_332:
 			return and(side(inputSide), or(inHand, inDeck), not(rogue), not(neutral));
 		case CardIds.SigilOfReckoning:
@@ -1829,6 +1833,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.SplishSplashWhelp_WW_819:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.SpitefulSummoner:
+			return and(side(inputSide), inDeck, spell);
 		case CardIds.SplittingAxe:
 			return and(side(inputSide), or(inDeck, inHand), totem);
 		case CardIds.SpotTheDifference_TOY_374:
@@ -2073,6 +2079,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, deathrattle, minion);
 		case CardIds.TwilightDeceptor:
 			return and(side(inputSide), inDeck, spell, shadow);
+		case CardIds.TwilightGuardian:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TwilightsCall:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
 		case CardIds.TwistedTether:
