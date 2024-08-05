@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.19.3',
+		version: '13.19.6',
 		force: false,
 		sections: [
 			// {
@@ -67,35 +67,44 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Show the minions added in the Minion Sandwich when mousing over it in the decklist.`,
+								text: `Add support for "open decklist" brawls, which means that both players' lists will be revealed when they are known before the match. This applies (a bit late) to this week's brawl (Henchmania!), but mostly will let me add better support for such future brawls.`,
 							},
 							{
-								type: 'feature',
-								text: `Update the "Top of deck" zone after playing Overplanner.`,
+								type: 'content',
+								text: `Overheal cards now highlight cards that restore health.`,
 							},
 							{
-								type: 'feature',
-								text: `Track spells that will be replayed by Mistah Vistah's Scenic Vista.`,
+								type: 'content',
+								text: `Add more card oracles (flagging the card in the opponent's hand) and card highlights.`,
 							},
 							{
-								type: 'feature',
-								text: `Update Eruption damage info when they are upgraded in deck.`,
+								type: 'content',
+								text: `The mulligan guide now shows up when playing against the AI. For now, it doesn't use up any of the free uses you have for the day if you're not a premium sub.`,
 							},
 							{
-								type: 'feature',
-								text: `Add spell schools already played as related cards to Carress, Cabaret Star.`,
+								type: 'bug',
+								text: `Fix an issue where Reska's dead minions counter would only include minions that died for your side.`,
 							},
 							{
-								type: 'feature',
-								text: `Show the Spell Schools widget for Razzle Dazzler.`,
+								type: 'bug',
+								text: `Fix an issue where Rest in Peace would not show Popstar as a potential target.`,
 							},
 							{
-								type: 'feature',
-								text: `Add a Dead Minions counter for Reska, the Pit Lord.`,
+								type: 'bug',
+								text: `Reset the remembered spells from cards like Tidepool Pupil / Commander Sivara when they are put back in the deck.`,
 							},
 							{
-								type: 'feature',
-								text: `Show the card that will be replayed by Sunwing Squawker when mousing over it in the decklist.`,
+								type: 'bug',
+								text: `Fix an issue where the constructed deckbuilder would allow all cards from another class (instead of only Perils in Paradise cards) when adding a Tourist.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Shadowy Construct.`,
 							},
 						],
 					},
