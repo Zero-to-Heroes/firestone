@@ -211,7 +211,7 @@ export class GameStateParsersService {
 			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n)],
-			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards)],
+			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards, this.deckParser, this.deckHandler)],
 			[GameEvent.LOCATION_USED]: [new LocationUsedParser(this.allCards)],
 			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser()],
 			[GameEvent.MATCH_INFO]: [new PlayersInfoParser()],

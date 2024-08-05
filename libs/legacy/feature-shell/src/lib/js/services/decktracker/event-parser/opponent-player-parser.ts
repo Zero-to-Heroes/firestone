@@ -67,6 +67,11 @@ export class OpponentPlayerParser implements EventParser {
 			console.debug('templateDeck', templateDeck);
 			opponentDeckString = templateDeck?.deckstring;
 		}
+		if (opponentDeckString == null && prefs.opponentLoadKnownDecklist) {
+			opponentDeckString =
+				currentState.playerDeck.deckstring ??
+				(await this.deckParser.getOpenDecklist(newHero.cardId, currentState.metadata));
+		}
 
 		// No deckstring, so don't change anything
 		if (!opponentDeckString) {

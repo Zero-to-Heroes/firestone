@@ -25,6 +25,7 @@ import { getLogsDir } from '../log-utils.service';
 import { DeckHandlerService } from './deck-handler.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.gz.json`;
+const OPEN_BRAWL_LISTS_URL = `https://static.zerotoheroes.com/hearthstone/data/brawl_lists`;
 
 @Injectable()
 export class DeckParserService {
@@ -168,6 +169,18 @@ export class DeckParserService {
 		}
 		this.setCurrentDeck(deckInfo);
 		return this.currentDeck;
+	}
+
+	public async getOpenDecklist(heroCardId: string, metadata: Metadata): Promise<string> {
+		if (metadata.gameType === GameType.GT_TAVERNBRAWL) {
+			console.log('[deck-parser] trying to read open tavern brawl decklist', metadata.scenarioId, heroCardId);
+			const brawlInfo: any = await this.api.callGetApi(`${OPEN_BRAWL_LISTS_URL}/${metadata.scenarioId}.json`);
+			console.debug('[deck-parser] tavern brawl lists', brawlInfo);
+			const list = brawlInfo?.lists?.[heroCardId];
+			console.debug('[deck-parser] tavern brawl list', list);
+			return list?.deckstring;
+		}
+		return null;
 	}
 
 	public async getTemplateDeck(
