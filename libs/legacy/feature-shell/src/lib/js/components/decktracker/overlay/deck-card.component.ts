@@ -86,7 +86,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
 				</div>
 			</div>
-			<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'Stolen from opponent'">
+			<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
 				<div class="inner-border">
 					<div class="svg-container" inlineSVG="assets/svg/card_stolen.svg"></div>
 				</div>
