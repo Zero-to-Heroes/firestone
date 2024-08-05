@@ -7,6 +7,7 @@ export class MinionsDiedEvent extends GameEvent {
 				CardId: string;
 				EntityId: number;
 				ControllerId: number;
+				Cost: number;
 				Timestamp: string;
 			},
 		];

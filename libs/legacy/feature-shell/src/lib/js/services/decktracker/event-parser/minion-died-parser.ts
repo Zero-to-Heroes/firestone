@@ -42,15 +42,18 @@ export class MinionDiedParser implements EventParser {
 					deck.volatileSkeletonsDeadThisMatch + (cardId === CardIds.VolatileSkeleton ? 1 : 0),
 				minionsDeadSinceLastTurn: [
 					...deck.minionsDeadSinceLastTurn,
-					{ cardId: cardId, entityId: entityId },
+					{ cardId: cardId, entityId: entityId, effectiveCost: deadMinion.Cost },
 				] as readonly ShortCard[],
 				minionsDeadThisTurn: [
 					...deck.minionsDeadThisTurn,
-					{ cardId: cardId, entityId: entityId },
+					{ cardId: cardId, entityId: entityId, effectiveCost: deadMinion.Cost },
 				] as readonly ShortCard[],
-				minionsDeadThisMatch: [...deck.minionsDeadThisMatch, { cardId: cardId, entityId: entityId }],
+				minionsDeadThisMatch: [
+					...deck.minionsDeadThisMatch,
+					{ cardId: cardId, entityId: entityId, effectiveCost: deadMinion.Cost },
+				],
 				lastDeathrattleMinionDead: refCard.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])
-					? { cardId, entityId }
+					? { cardId, entityId, effectiveCost: deadMinion.Cost }
 					: deck.lastDeathrattleMinionDead,
 			});
 			result = Object.assign(new GameState(), result, {
