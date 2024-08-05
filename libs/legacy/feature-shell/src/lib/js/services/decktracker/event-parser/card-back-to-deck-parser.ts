@@ -66,6 +66,8 @@ export class CardBackToDeckParser implements EventParser {
 			buffCardIds: [],
 			buffingEntityCardIds: [],
 			entityId: Math.abs(card.entityId),
+			// For tidepool pupil / Sivara / etc. Once a a card is moved back to the deck, its info is reset
+			relatedCardIds: [],
 			// linkedEntityIds: [],
 		});
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
