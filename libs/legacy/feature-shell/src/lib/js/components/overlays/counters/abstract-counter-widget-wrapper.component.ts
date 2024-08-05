@@ -103,18 +103,21 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					[bgState],
 					displayFromGameMode,
 				]) => {
-					const displayFromState = this.deckStateExtractor
-						? this.deckStateExtractor(deckState, displayFromPrefs, bgState)
-						: true;
 					if (
 						!gameStarted ||
 						(this.onBgs && !isBgs) ||
 						(!this.onBgs && isBgs) ||
 						isMercs ||
 						(!this.onBgs && !displayFromGameMode) ||
-						!displayFromPrefs ||
-						!displayFromState
+						!displayFromPrefs
 					) {
+						return false;
+					}
+
+					const displayFromState = this.deckStateExtractor
+						? this.deckStateExtractor(deckState, displayFromPrefs, bgState)
+						: true;
+					if (!displayFromState) {
 						return false;
 					}
 
@@ -122,7 +125,6 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
 						return false;
-						1;
 					}
 
 					return !gameEnded;

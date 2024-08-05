@@ -501,6 +501,9 @@ export class Preferences implements IPreferences {
 	readonly playerElementalStreakCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalStreakCounterWidgetPosition: { left: number; top: number };
+	readonly opponentElementalStreakCounter: BooleanWithLimited = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly oponentElementalStreakCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerTramHeistCounter: BooleanWithLimited = 'limited';
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

@@ -429,6 +429,13 @@ export class SettingsDecktrackerOpponentDeckComponent
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
 			showLimitedOption: false,
 		},
+		{
+			id: 'elementalStreak',
+			field: 'opponentElementalStreakCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.elemental-streak-tooltip'),
+			showLimitedOption: false,
+		},
 	].sort((a, b) => a.label.localeCompare(b.label));
 
 	constructor(

@@ -162,6 +162,7 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 			<opponent-dragons-summoned-widget-wrapper></opponent-dragons-summoned-widget-wrapper>
+			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
