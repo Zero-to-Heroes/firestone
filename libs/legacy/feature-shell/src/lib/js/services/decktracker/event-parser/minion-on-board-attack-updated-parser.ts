@@ -11,7 +11,8 @@ export class MinionOnBoardAttackUpdatedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		return currentState;
+		// Do it so that the attack counter is updated
+		return currentState.update({});
 	}
 
 	event(): string {
