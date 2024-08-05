@@ -1419,6 +1419,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), or(and(spell, dealsDamage), spellDamage));
 		case CardIds.PaintedCanvasaur_TOY_350:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		case CardIds.PaintersVirtue_TOY_810:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ParachuteBrigand:
 		case CardIds.PatchesThePirate_CFM_637:
 			return and(side(inputSide), or(inDeck, inHand), minion, pirate);
@@ -2053,6 +2055,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.TrinketTracker:
 			return and(side(inputSide), inDeck, spell, effectiveCostEqual(1));
+		case CardIds.TrustyCompanion_WW_027:
+			return and(side(inputSide), inDeck, minion, not(tribeless));
 		case CardIds.TrustyFishingRod_VAC_960:
 			return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 		case CardIds.Tyr:
