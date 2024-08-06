@@ -34,6 +34,7 @@ export class OpponentPlayerParser implements EventParser {
 		const classes = this.allCards.getCard(gameEvent.opponentPlayer.CardID).classes;
 		const newHero = Object.assign(new HeroCard(), currentState.opponentDeck.hero, {
 			playerName: playerName,
+			cardId: gameEvent.opponentPlayer.CardID,
 			classes: classes?.map((c) => CardClass[c]) ?? ([CardClass.NEUTRAL] as readonly CardClass[]),
 		} as HeroCard);
 
