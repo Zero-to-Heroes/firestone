@@ -707,6 +707,11 @@ export const cardIdSelector = (
 		case CardIds.DynOMatic:
 		case CardIds.DynOMaticCore:
 			return and(side(inputSide), or(inHand, inDeck), minion, mech);
+		case CardIds.EaglehornBowLegacy:
+		case CardIds.EaglehornBowVanilla:
+			return and(side(inputSide), or(inDeck, inHand), secret);
+		case CardIds.EchoOfMedivh:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.EdgeOfDredgeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), dredge);
 		case CardIds.EerieStoneTavernBrawl:
