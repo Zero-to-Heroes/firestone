@@ -45,13 +45,18 @@
 
 		.description {
 			font-size: 14px;
+			justify-content: flex-start;
 
 			.description-text {
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				justify-content: start;
+				justify-content: flex-start;
 			}
+		}
+
+		.name {
+			justify-content: flex-start;
 		}
 	}
 }
