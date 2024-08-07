@@ -27,6 +27,10 @@ export class DamageTakenParser implements EventParser {
 				? damageForOpponentPlayer.Damage
 				: 0;
 
+		if (damageForLocalPlayer?.IsPayingWithHealth || damageForOpponentPlayer?.IsPayingWithHealth) {
+			return currentState;
+		}
+
 		let playerDamageByTurn = currentState.playerDeck.damageTakenByTurn;
 		if (currentState.playerDeck.isActivePlayer && localPlayerDamage > 0) {
 			let playerDamageThisTurn = currentState.playerDeck.damageTakenByTurn.find(

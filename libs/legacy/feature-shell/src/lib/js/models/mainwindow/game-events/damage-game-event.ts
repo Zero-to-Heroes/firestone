@@ -29,4 +29,5 @@ export interface DamageGameEventTarget {
 	TargetControllerId: number;
 	Damage: number;
 	Timestamp: string;
+	IsPayingWithHealth: boolean;
 }
