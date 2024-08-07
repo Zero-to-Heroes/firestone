@@ -145,7 +145,6 @@ export class CommunityInternalLadderComponent extends AbstractSubscriptionCompon
 	}
 
 	private isValidMode(battle: InternalFriendlyBattle, selectedTab: string): boolean {
-		return true;
 		switch (selectedTab) {
 			case 'standard':
 				return battle.gameFormat === 'standard';
