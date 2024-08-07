@@ -171,6 +171,7 @@ import { DebugService } from '../../services/debug.service';
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 			<player-bgs-gold-delta-widget-wrapper></player-bgs-gold-delta-widget-wrapper>
 			<player-bgs-lord-of-gains-widget-wrapper></player-bgs-lord-of-gains-widget-wrapper>
+			<player-bgs-tuskarr-raider-widget-wrapper></player-bgs-tuskarr-raider-widget-wrapper>
 
 			<lottery-widget-wrapper></lottery-widget-wrapper>
 		</div>

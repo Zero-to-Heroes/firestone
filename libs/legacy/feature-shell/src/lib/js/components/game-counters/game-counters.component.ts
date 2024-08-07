@@ -21,6 +21,7 @@ import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter
 import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
+import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
@@ -309,6 +310,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BgsGoldDeltaCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'bgsLordOfGains':
 				return BgsLordOfGainsCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
+			case 'bgsTuskarrRaider':
+				return BgsTuskarrRaiderCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 				return null;

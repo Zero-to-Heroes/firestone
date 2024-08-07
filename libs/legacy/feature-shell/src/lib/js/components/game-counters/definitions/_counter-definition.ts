@@ -83,4 +83,5 @@ export type CounterType =
 	| 'bgsBloodGem'
 	| 'bgsGoldDelta'
 	| 'bgsLordOfGains'
+	| 'bgsTuskarrRaider'
 	| 'bgsMajordomo';

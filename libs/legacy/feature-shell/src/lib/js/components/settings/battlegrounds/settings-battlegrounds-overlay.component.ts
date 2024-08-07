@@ -297,6 +297,12 @@ import { Knob } from '../preference-slider.component';
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.counters-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
+					field="playerBgsTuskarrRaiderCounter"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.overlay.counter-tuskarr-raider-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.counter-tuskarr-raider-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerBgsBloodGemCounter"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.counter-blood-gem-label' | owTranslate"

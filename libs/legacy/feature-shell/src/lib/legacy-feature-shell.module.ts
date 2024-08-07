@@ -537,6 +537,7 @@ import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsGoldDeltaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-gold-delta-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
+import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-tuskarr-raider-widget-wrapper.component';
 import { PlayerCardsDrawnWidgetWrapperComponent } from '@components/overlays/counters/player-cards-drawn-widget-wrapper.component';
 import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@components/overlays/counters/player-cards-played-from-another-class-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
@@ -1654,6 +1655,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerBgsGoldDeltaWidgetWrapperComponent,
 		PlayerBgsBloodGemWidgetWrapperComponent,
 		PlayerBgsLordOfGainsWidgetWrapperComponent,
+		PlayerBgsTuskarrRaiderWidgetWrapperComponent,
 
 		OpponentCounterWidgetWrapperComponent,
 		OpponentWatchpostCounterWidgetWrapperComponent,
