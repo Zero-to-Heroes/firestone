@@ -124,11 +124,19 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							nextLegendary: buildPityTimer(
 								packsForBoosterId,
 								'legendary',
+								'NORMAL',
 								boosterId,
 								openedPacks,
 								pityTimerReset,
 							),
-							nextEpic: buildPityTimer(packsForBoosterId, 'epic', boosterId, openedPacks, pityTimerReset),
+							nextEpic: buildPityTimer(
+								packsForBoosterId,
+								'epic',
+								'NORMAL',
+								boosterId,
+								openedPacks,
+								pityTimerReset,
+							),
 						} as InternalPackInfo;
 						return result;
 					})
@@ -249,11 +257,14 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 const buildPityTimer = (
 	openedPacks: readonly PackResult[],
 	type: 'legendary' | 'epic',
+	quality: 'NORMAL',
 	boosterId: BoosterType,
 	totalOpenedPacks: number,
 	pityTimerReset: number | null,
 ): number => {
-	const hasAlreadyOpenedLegendary = openedPacks.flatMap((p) => p.cards).some((card) => card.cardRarity === type);
+	const hasAlreadyOpenedLegendary = openedPacks
+		.flatMap((p) => p.cards)
+		.some((card) => card.cardRarity === type && card.cardType === quality);
 	let valueIfNoPacksOpened =
 		type === 'epic'
 			? EPIC_PITY_TIMER
@@ -275,7 +286,7 @@ const buildPityTimer = (
 		if (pityTimerReset != null && new Date(openedPacks[i].creationDate).getTime() < pityTimerReset) {
 			break;
 		}
-		if (openedPacks[i].cards.some((card) => card.cardRarity === type)) {
+		if (openedPacks[i].cards.some((card) => card.cardRarity === type && card.cardType === quality)) {
 			break;
 		}
 		valueIfNoPacksOpened--;
