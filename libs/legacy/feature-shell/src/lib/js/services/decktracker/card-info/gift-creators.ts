@@ -879,6 +879,7 @@ export const giftCreators = [
 	CardIds.WitchsApprentice,
 	CardIds.WitchwoodApple,
 	CardIds.WitchwoodAppleCore,
+	CardIds.WorkForTogwaggle_WorkForTogwaggleEnchantTavernBrawlEnchantment,
 	CardIds.WorgenRoadie_InstrumentCaseToken,
 	CardIds.WorldPillarFragmentToken_DEEP_999t3,
 	CardIds.WorthyExpedition,
