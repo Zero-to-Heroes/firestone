@@ -1,0 +1,48 @@
+.internal-ladder-view {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.header {
+	display: flex;
+	color: var(--default-title-color);
+	font-size: 16px;
+	margin-bottom: 25px;
+	flex-shrink: 0;
+}
+
+.entries {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.entry {
+	display: flex;
+	padding: 5px 0;
+
+	&:nth-child(odd) {
+		background-color: rgba(255, 255, 255, 0.08);
+	}
+}
+
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&.rank {
+		width: 50px;
+	}
+
+	&.name {
+		width: 150px;
+	}
+
+	&.openskill {
+		width: 75px;
+	}
+}

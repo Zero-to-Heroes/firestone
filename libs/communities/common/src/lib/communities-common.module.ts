@@ -11,6 +11,7 @@ import { CommunitiesJoinComponent } from './components/communities-join.componen
 import { CommunityDetailsComponent } from './components/community-details.component';
 import { CommunityFriendlyBattlePlayerComponent } from './components/details/community-friendly-battle-player.component';
 import { CommunityFriendlyBattleComponent } from './components/details/community-friendly-battle.component';
+import { CommunityInternalLadderViewComponent } from './components/details/community-internal-ladder-view.component';
 import { CommunityInternalLadderComponent } from './components/details/community-internal-ladder.component';
 import { CommunityLeaderboardsComponent } from './components/details/community-leaderboards.component';
 import { CommunityOverviewComponent } from './components/details/community-overview.component';
@@ -32,6 +33,7 @@ const components = [
 	CommunityInternalLadderComponent,
 	CommunityFriendlyBattleComponent,
 	CommunityFriendlyBattlePlayerComponent,
+	CommunityInternalLadderViewComponent,
 ];
 
 @NgModule({

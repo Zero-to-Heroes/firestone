@@ -3,7 +3,13 @@
 /* eslint-disable @angular-eslint/template/eqeqeq */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { FriendlyBattle, FriendlyBattlePlayer } from '@firestone-hs/communities';
+import {
+	FriendlyBattle,
+	FriendlyBattlePlayer,
+	OPEN_SKILL_MEAN,
+	OpenSkill,
+	OpenSkillRating,
+} from '@firestone-hs/communities';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil, tap } from 'rxjs';
@@ -11,6 +17,7 @@ import { CommunityNavigationService } from '../../services/community-navigation.
 import { PersonalCommunitiesService } from '../../services/personal-communities.service';
 import { InternalFriendlyBattlePlayer } from './community-friendly-battle-player.component';
 import { InternalFriendlyBattle } from './community-friendly-battle.component';
+import { LadderEntry } from './community-internal-ladder-view.component';
 
 @Component({
 	selector: 'community-internal-ladder',
@@ -36,6 +43,9 @@ import { InternalFriendlyBattle } from './community-friendly-battle.component';
 						[battle]="battle"
 					></community-friendly-battle>
 				</div>
+				<div class="ladder">
+					<community-internal-ladder-view [ladder]="ladder$ | async"></community-internal-ladder-view>
+				</div>
 			</div>
 		</div>
 	`,
@@ -44,6 +54,7 @@ import { InternalFriendlyBattle } from './community-friendly-battle.component';
 export class CommunityInternalLadderComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tabs$: Observable<readonly Tab[]>;
 	friendlyBattles$: Observable<readonly InternalFriendlyBattle[]>;
+	ladder$: Observable<readonly LadderEntry[]>;
 
 	private selectedTab$$ = new BehaviorSubject<string>('standard');
 
@@ -95,6 +106,15 @@ export class CommunityInternalLadderComponent extends AbstractSubscriptionCompon
 				return (battles ?? []).filter((battle) => this.isValidMode(battle, selectedTab));
 			}),
 			tap((info) => console.debug('built battles')),
+		);
+		this.ladder$ = combineLatest([this.personalCommunities.selectedCommunity$$, selectedTab$]).pipe(
+			tap((info) => console.debug('building ladder', info)),
+			this.mapData(([community, tab]) => {
+				const rankings: {
+					[battleTag: string]: OpenSkillRating;
+				} = this.getRankings(community?.friendlyBattles.openSkill, tab);
+				return this.buildLadder(rankings);
+			}),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -174,6 +194,42 @@ export class CommunityInternalLadderComponent extends AbstractSubscriptionCompon
 			default:
 				return 'Unknown';
 		}
+	}
+
+	private getRankings(openSkill: OpenSkill | undefined, tab: string): { [battleTag: string]: OpenSkillRating } {
+		if (!openSkill) {
+			return {};
+		}
+		switch (tab) {
+			case 'wild':
+				return openSkill.wild;
+			case 'twist':
+				return openSkill.twist;
+			case 'standard':
+			default:
+				// Nackward-compatilibilty, mostly for tests
+				return openSkill.standard ?? openSkill['ratings'];
+		}
+	}
+
+	private buildLadder(rankings: { [battleTag: string]: OpenSkillRating }): readonly LadderEntry[] {
+		return Object.keys(rankings)
+			.map((battleTag) => {
+				const internalRanking = rankings[battleTag];
+				const ordinal = internalRanking.ordinal ?? internalRanking.sigma - 3 * internalRanking.mu;
+				// Build a new skill centered around 25
+				const ranking = (25 * (ordinal + OPEN_SKILL_MEAN)) / OPEN_SKILL_MEAN;
+				const result: LadderEntry = {
+					name: battleTag.split('#')[0],
+					mu: internalRanking.mu,
+					sigma: internalRanking.sigma,
+					ordinal: ordinal,
+					totalGames: internalRanking.totalGames,
+					ranking: ranking,
+				};
+				return result;
+			})
+			.sort((a, b) => b.ranking - a.ranking);
 	}
 }
 

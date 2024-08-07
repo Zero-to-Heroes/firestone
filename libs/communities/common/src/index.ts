@@ -5,6 +5,7 @@ export * from './lib/components/communities-join.component';
 export * from './lib/components/community-details.component';
 export * from './lib/components/details/community-friendly-battle-player.component';
 export * from './lib/components/details/community-friendly-battle.component';
+export * from './lib/components/details/community-internal-ladder-view.component';
 export * from './lib/components/details/community-internal-ladder.component';
 export * from './lib/components/details/community-leaderboards.component';
 export * from './lib/components/details/community-overview.component';
