@@ -56,6 +56,7 @@ export class CardTradedParser implements EventParser {
 		const cardWithoutInfluence = card
 			? card.update({
 					entityId: card.entityId,
+					cardId: card.cardId ?? cardId,
 					lastAffectedByCardId: undefined,
 					mainAttributeChange: buildAttributeChange(card),
 					positionFromTop: undefined,
