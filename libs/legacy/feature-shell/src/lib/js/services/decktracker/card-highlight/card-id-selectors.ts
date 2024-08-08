@@ -486,20 +486,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ConnivingConman_VAC_333:
 			return (input: SelectorInput): SelectorOutput => {
-				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch
-					.filter(
-						(c) =>
-							!!allCards.getCard(c.cardId).classes?.length &&
-							allCards.getCard(c.cardId).classes[0] !== CardClass[CardClass.NEUTRAL],
-					)
-					.filter(
-						(c) =>
-							!allCards
-								.getCard(c.cardId)
-								.classes?.some((cardClass) =>
-									input.deckState?.hero?.classes?.includes(CardClass[cardClass]),
-								),
-					);
+				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch.filter(
+					(c) =>
+						!!allCards.getCard(c.cardId).classes?.length &&
+						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.NEUTRAL]) &&
+						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.ROGUE]),
+				);
 				const lastCardPlayed = cardsPlayedFromAnotherClass.length
 					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
 					: null;
