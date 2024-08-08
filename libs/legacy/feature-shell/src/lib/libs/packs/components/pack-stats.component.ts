@@ -7,6 +7,7 @@ import {
 	GOLDEN_SET_PACKS,
 	InternalPackInfo,
 	NON_BUYABLE_BOOSTER_IDS,
+	SPECIAL_BOOSTER_IDS,
 	YEAR_PACKS,
 } from '@firestone/collection/view';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -173,7 +174,11 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						...pack,
 						set: sets.find((set) => set.id === pack.setId),
 					}))
-					.filter((pack) => NON_BUYABLE_BOOSTER_IDS.includes(pack.packType))
+					.filter(
+						(pack) =>
+							NON_BUYABLE_BOOSTER_IDS.includes(pack.packType) ||
+							SPECIAL_BOOSTER_IDS.includes(pack.packType),
+					)
 					.sort(
 						sortByProperties((pack) => [
 							-pack.set?.launchDate?.getTime() ?? 0,
@@ -252,6 +257,8 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 	BoosterType.STANDARD_SHAMAN,
 	BoosterType.STANDARD_WARLOCK,
 	BoosterType.STANDARD_WARRIOR,
+	BoosterType.WHIZBANG_CATCH_UP,
+	BoosterType.ISLAND_VACATION_CATCH_UP,
 ];
 
 const buildPityTimer = (
