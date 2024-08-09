@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.19.8',
+		version: '13.19.9',
 		force: false,
 		sections: [
 			// {
@@ -58,58 +58,64 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Add support for "open decklist" brawls, which means that both players' lists will be revealed when they are known before the match. This applies (a bit late) to this week's brawl (Henchmania!), but mostly will let me add better support for such future brawls.`,
-			// 				},
-			// 				{
-			// 					type: 'content',
-			// 					text: `Overheal cards now highlight cards that restore health.`,
-			// 				},
-			// 				{
-			// 					type: 'content',
-			// 					text: `Add more card oracles (flagging the card in the opponent's hand) and card highlights.`,
-			// 				},
-			// 				{
-			// 					type: 'content',
-			// 					text: `The mulligan guide now shows up when playing against the AI. For now, it doesn't use up any of the free uses you have for the day if you're not a premium sub.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where Reska's dead minions counter would only include minions that died for your side.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where Rest in Peace would not show Popstar as a potential target.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Reset the remembered spells from cards like Tidepool Pupil / Commander Sivara when they are put back in the deck.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the constructed deckbuilder would allow all cards from another class (instead of only Perils in Paradise cards) when adding a Tourist.`,
-			// 				},
-			// 			],
-			// 		},
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a sim issue with Shadowy Construct.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an Elemental Streak counter for the opponent, to keep track of how many elementals they played in a row. It will only show up if the opponent played at least 2 elementals in a row, and is deactivated by default.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the opponent trading a card would not make it appear in their deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where "pay with health" cards like Blood Treant would count towards the self-damage widget (used by Party Planner Vona).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the attack counter would not always update (for instance when playing a minion whose aura buffs your board)`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a counter for how many pirates you've played this game. It only appears if buddies are in and you're Patches, or if you have Tuskarr Raider (Patches' buddy) in hand or on board.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'content',
+								text: `Add missing catch-up packs to the Packs tab.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where receiving a golden card in a pack would reset the pity timer for the corresponding rarity.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `[Guilds] Add an Internal MMR for Friendly battles. This is still very experimental, and will probably be replaced by a way to create on-demand, temporary ladders or tournaments. If you're part of a guild and use this feature, please let me know what you think :)`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
