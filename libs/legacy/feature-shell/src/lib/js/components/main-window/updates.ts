@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.19.10',
+		version: '13.19.11',
 		force: false,
 		sections: [
 			// {
@@ -89,6 +89,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add a counter for how many pirates you've played this game. It only appears if buddies are in and you're Patches, or if you have Tuskarr Raider (Patches' buddy) in hand or on board.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix sim issues with Ozumat's Tentacular and Cultist's updated power.`,
 							},
 						],
 					},
