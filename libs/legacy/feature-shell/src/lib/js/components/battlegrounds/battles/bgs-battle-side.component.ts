@@ -8,12 +8,16 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { BgsBoard, BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Map } from 'immutable';
 import { buildEntityFromBoardEntity } from '../../../services/battlegrounds/bgs-utils';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
 @Component({
@@ -21,10 +25,30 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-battle-side.component.scss`,
+		`./bgs-battle-side.component.scss`,
 	],
 	template: `
 		<div class="bgs-battle-side" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
+			<div class="add-teammate" *ngIf="!_teammate && enableDuos">
+				<div class="add-teammate-button" (click)="addTeammate()">
+					<div class="add-teammate-icon">+</div>
+					<div class="add-teammate-text">Add teammate</div>
+				</div>
+			</div>
+			<div class="teammate-recap" *ngIf="!!_teammate && enableDuos">
+				<bgs-opponent-overview
+					class="teammate-container"
+					[opponent]="teammateShownInfo"
+					[showTavernUpgrades]="false"
+					[showBuddies]="false"
+					[showQuestRewards]="false"
+					[showTriples]="false"
+					[showBoardMessage]="!teammateShownInfo?.boardHistory?.length"
+					[emptyBoardMessage]="
+						'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
+					"
+				></bgs-opponent-overview>
+			</div>
 			<div class="hero">
 				<bgs-hero-portrait-simulator
 					class="portrait"
@@ -89,6 +113,14 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
 			</div>
+			<div class="switch-teammate-container" *ngIf="!!_teammate && enableDuos">
+				<div
+					class="switch-teammate-button"
+					[inlineSVG]="'assets/svg/restore.svg'"
+					(click)="switchTeammates()"
+				></div>
+			</div>
+			<!-- TODO: move this -->
 			<div class="global-effects">
 				<div class="header" [owTranslate]="'battlegrounds.sim.global-effects-header'"></div>
 				<fs-numeric-input-with-arrows
@@ -116,6 +148,8 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleSideComponent {
+	enableDuos = FeatureFlags.ENABLE_NEW_SIMULATOR_LAYOUT;
+
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
 	@Output() addMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
@@ -133,6 +167,12 @@ export class BgsBattleSideComponent {
 		this.updateInfo();
 	}
 
+	@Input() set teammate(value: BgsBoardInfo) {
+		this._teammate = value;
+		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
+		this.updateInfo();
+	}
+
 	@Input() allowClickToAdd: boolean;
 	@Input() clickToChange = false;
 	@Input() closeOnMinion = false;
@@ -141,6 +181,9 @@ export class BgsBattleSideComponent {
 	@Input() tooltipPosition: CardTooltipPositionType;
 
 	_player: BgsBoardInfo;
+	_teammate: BgsBoardInfo;
+
+	teammateShownInfo: BgsPlayer;
 
 	heroCardId: string;
 	heroPowerCardId: string;
@@ -223,6 +266,33 @@ export class BgsBattleSideComponent {
 		});
 	}
 
+	addTeammate() {
+		this._teammate = {
+			board: [],
+			player: {
+				cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+				heroPowerId: null,
+				hpLeft: 30,
+				tavernTier: this._player?.player?.tavernTier ?? 1,
+				globalInfo: {},
+				questEntities: [],
+				friendly: this._player.player.friendly,
+				hand: [],
+				heroPowerUsed: false,
+			},
+			secrets: [],
+		};
+		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
+		console.debug('teammateShownInfo', this.teammateShownInfo, this._teammate);
+	}
+
+	switchTeammates() {
+		const tmp = this._player;
+		this._player = this._teammate;
+		this._teammate = tmp;
+		this.updateInfo();
+	}
+
 	private updateInfo() {
 		if (!this._player) {
 			return;
@@ -245,9 +315,62 @@ export class BgsBattleSideComponent {
 		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
+
+		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private toBgsPlayer(player: BgsBoardInfo): BgsPlayer {
+		const result: BgsPlayer = BgsPlayer.create({
+			cardId: player.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+			displayedCardId: player.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+			heroPowerCardId: player.player.heroPowerId,
+			initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, player.player.cardId, this.allCards),
+			questRewards: [], // TODO
+			boardHistory: [this.toBgsBoard(player.board)].filter((b) => !!b),
+		} as any);
+		return result;
+	}
+
+	private toBgsBoard(board: BoardEntity[]): BgsBoard {
+		if (!board?.length) {
+			return null;
+		}
+
+		const result: BgsBoard = {
+			turn: 0,
+			board: board.map((entity) => this.buildEntity(entity)),
+		};
+		return result;
+	}
+
+	private buildEntity(boardEntity: BoardEntity): Entity {
+		const refCard = this.allCards.getCard(boardEntity.cardId);
+		const tags: Map<string, number> = Map({
+			[GameTag[GameTag.CARDTYPE]]: CardType.MINION,
+			[GameTag[GameTag.ZONE]]: Zone.PLAY,
+			[GameTag[GameTag.ATK]]: boardEntity.attack,
+			[GameTag[GameTag.HEALTH]]: boardEntity.maxHealth ?? boardEntity.health,
+			[GameTag[GameTag.DAMAGE]]: (boardEntity.maxHealth ?? boardEntity.health) - boardEntity.health,
+			[GameTag[GameTag.TAUNT]]: boardEntity.taunt ? 1 : 0,
+			[GameTag[GameTag.POISONOUS]]: boardEntity.poisonous || boardEntity.venomous ? 1 : 0,
+			[GameTag[GameTag.DIVINE_SHIELD]]: boardEntity.divineShield ? 1 : 0,
+			[GameTag[GameTag.REBORN]]: boardEntity.reborn ? 1 : 0,
+			[GameTag[GameTag.WINDFURY]]: boardEntity.windfury ? 1 : 0,
+			[GameTag[GameTag.DEATHRATTLE]]: refCard.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]) ? 1 : 0,
+			[GameTag[GameTag.TRIGGER_VISUAL]]: refCard.mechanics?.includes(GameTag[GameTag.TRIGGER_VISUAL]) ? 1 : 0,
+			[GameTag[GameTag.STEALTH]]: boardEntity.stealth ? 1 : 0,
+			[GameTag[GameTag.PREMIUM]]: this.allCards.getCard(boardEntity.cardId).battlegroundsNormalDbfId ? 1 : 0,
+			[GameTag[GameTag.TECH_LEVEL]]: this.allCards.getCard(boardEntity.cardId).techLevel,
+		});
+		return Entity.create({
+			id: boardEntity.entityId,
+			cardID: boardEntity.cardId,
+			tags: tags,
+			damageForThisAction: 0,
+		} as Entity);
 	}
 }
 

@@ -10,7 +10,7 @@ import { normalizeCardId } from './post-match/card-utils';
 	selector: 'bgs-board',
 	styleUrls: [`../../../css/component/battlegrounds/bgs-board.component.scss`],
 	template: `
-		<div class="board-turn" *ngIf="customTitle">
+		<div class="board-turn" *ngIf="showBoardMessage && customTitle">
 			{{ customTitle }}
 		</div>
 		<div class="board-turn" *ngIf="!customTitle && _entities && !finalBoard && isNumber(currentTurn - boardTurn)">
@@ -23,13 +23,24 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">Your final board</div>
 		<div
 			class="board-turn empty not-met"
-			*ngIf="!customTitle && !finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
+			*ngIf="
+				showBoardMessage &&
+				!customTitle &&
+				!finalBoard &&
+				(!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))
+			"
 		>
 			<span [owTranslate]="'battlegrounds.board.opponent-not-met'"></span>
 		</div>
 		<div
 			class="board-turn empty"
-			*ngIf="!customTitle && _entities && _entities.length === 0 && isNumber(currentTurn - boardTurn)"
+			*ngIf="
+				showBoardMessage &&
+				!customTitle &&
+				_entities &&
+				_entities.length === 0 &&
+				isNumber(currentTurn - boardTurn)
+			"
 		>
 			<span [owTranslate]="'battlegrounds.board.last-board-empty'"></span>
 		</div>
@@ -87,6 +98,7 @@ export class BgsBoardComponent implements OnDestroy {
 	@Input() currentTurn: number;
 	@Input() boardTurn: number;
 	@Input() finalBoard: boolean;
+	@Input() showBoardMessage = true;
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
 	// Used when the container will scroll, so we don't want to constrain the height
 	@Input() useFullWidth = false;

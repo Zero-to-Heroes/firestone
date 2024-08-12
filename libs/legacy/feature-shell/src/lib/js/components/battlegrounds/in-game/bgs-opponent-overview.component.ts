@@ -27,9 +27,11 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[currentTurn]="currentTurn"
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
+					[showBoardMessage]="showBoardMessage"
+					[customTitle]="emptyBoardMessage"
 				></bgs-board>
 			</div>
-			<div class="tavern-upgrades">
+			<div class="tavern-upgrades" *ngIf="showTavernUpgrades">
 				<div
 					class="title"
 					*ngIf="tavernUpgrades?.length"
@@ -51,9 +53,9 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
 				></div>
 			</div>
-			<bgs-buddies [buddies]="buddies" *ngIf="buddiesEnabled"></bgs-buddies>
-			<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
-			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
+			<bgs-buddies [buddies]="buddies" *ngIf="buddiesEnabled && showBuddies"></bgs-buddies>
+			<bgs-quest-rewards [rewards]="questRewards" *ngIf="showQuestRewards"></bgs-quest-rewards>
+			<bgs-triples [triples]="triples" [boardTurn]="boardTurn" *ngIf="showTriples"></bgs-triples>
 			<div
 				class="last-opponent-icon"
 				*ngIf="showLastOpponentIcon"
@@ -81,6 +83,12 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	buddies: readonly number[];
 
 	@Input() showLastOpponentIcon: boolean;
+	@Input() showTavernUpgrades = true;
+	@Input() showBuddies = true;
+	@Input() showQuestRewards = true;
+	@Input() showTriples = true;
+	@Input() showBoardMessage = true;
+	@Input() emptyBoardMessage: string;
 	@Input() buddiesEnabled: boolean;
 
 	@Input() currentTurn: number;
