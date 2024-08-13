@@ -10,10 +10,8 @@ import {
 	getTribeName,
 	isBattlegroundsDuo,
 } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BattleInfoMessage } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
@@ -135,6 +133,7 @@ const isValidBgSpellForTribes = (cardId: string, availableTribes: readonly Race[
 	return true;
 };
 
+/** @deprecated */
 export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: boolean): readonly Race[] => {
 	if (!card) {
 		return [];
@@ -208,6 +207,7 @@ export const isBgsSpell = (card: ReferenceCard): boolean => {
 	return card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL];
 };
 
+/** @deprecated */
 export const getEffectiveTribes = (
 	card: ReferenceCard,
 	groupMinionsIntoTheirTribeGroup: boolean,
@@ -218,6 +218,7 @@ export const getEffectiveTribes = (
 	return tribes.map((tribe) => Race[tribe]);
 };
 
+/** @deprecated */
 export const getEffectiveTribesEnum = (card: ReferenceCard): readonly Race[] => {
 	return !!card.races?.length ? card.races.map((r) => Race[r]) : [Race.BLANK];
 };
@@ -844,30 +845,6 @@ const hasMinionOnBoard = (boardInfo: BgsBoardInfo, cardId: string): boolean => {
 	}
 
 	return boardInfo.board.find((entity) => entity.cardId === cardId) != null;
-};
-
-export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsFacadeService): Entity => {
-	return Entity.fromJS({
-		id: minion.entityId,
-		cardID: minion.cardId,
-		damageForThisAction: 0,
-		tags: {
-			[GameTag[GameTag.ATK]]: minion.attack,
-			[GameTag[GameTag.HEALTH]]: minion.health,
-			[GameTag[GameTag.TAUNT]]: minion.taunt ? 1 : 0,
-			[GameTag[GameTag.STEALTH]]: minion.stealth ? 1 : 0,
-			[GameTag[GameTag.DIVINE_SHIELD]]: minion.divineShield ? 1 : 0,
-			[GameTag[GameTag.POISONOUS]]: minion.poisonous ? 1 : 0,
-			[GameTag[GameTag.VENOMOUS]]: minion.venomous ? 1 : 0,
-			[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,
-			[GameTag[GameTag.WINDFURY]]: minion.windfury ? 1 : 0,
-			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]]: minion.scriptDataNum1,
-			[GameTag[GameTag.PREMIUM]]: allCards.getCard(minion.cardId)?.battlegroundsNormalDbfId ? 1 : 0,
-		},
-		// This probably won't work with positioning auras, but I don't think there are many
-		// left (used to have Dire Wolf Alpha)
-		enchantments: minion.enchantments,
-	} as any);
 };
 
 /** @deprecated */

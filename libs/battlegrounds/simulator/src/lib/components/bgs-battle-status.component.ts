@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional,
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
-import { BgsBattleSimulationService } from '@firestone/battlegrounds/simulator';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { BgsBattleSimulationService } from '../services/bgs-battle-simulation.service';
 
 @Component({
 	selector: 'bgs-battle-status',

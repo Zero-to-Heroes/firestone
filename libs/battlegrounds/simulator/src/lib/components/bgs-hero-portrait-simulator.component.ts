@@ -12,7 +12,7 @@ import { CardTooltipPositionType } from '@firestone/shared/common/view';
 
 @Component({
 	selector: 'bgs-hero-portrait-simulator',
-	styleUrls: [`../../../../css/component/battlegrounds/battles/bgs-hero-portrait-simulator.component.scss`],
+	styleUrls: [`./bgs-hero-portrait-simulator.component.scss`],
 	template: `
 		<div class="container">
 			<div class="hero">
@@ -78,14 +78,14 @@ export class BgsHeroPortraitSimulatorComponent {
 		this.defaultHero = isBaconGhost(value);
 	}
 
-	@Input() set tavernTier(value: number) {
+	@Input() set tavernTier(value: number | null) {
 		this._tavernTier = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	@Input() set heroPowerCardId(value: string) {
+	@Input() set heroPowerCardId(value: string | null | undefined) {
 		this._heroPowerCardId = value;
 		this.heroPowerIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -93,7 +93,7 @@ export class BgsHeroPortraitSimulatorComponent {
 		}
 	}
 
-	@Input() set questRewardCardId(value: string) {
+	@Input() set questRewardCardId(value: string | null | undefined) {
 		this._questRewardCardId = value;
 		this.questRewardIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -101,12 +101,12 @@ export class BgsHeroPortraitSimulatorComponent {
 		}
 	}
 
-	heroPowerIcon: string;
-	questRewardIcon: string;
+	heroPowerIcon: string | null;
+	questRewardIcon: string | null;
 	_heroCardId: string;
-	_heroPowerCardId: string;
-	_questRewardCardId: string;
-	_tavernTier: number;
+	_heroPowerCardId: string | null | undefined;
+	_questRewardCardId: string | null | undefined;
+	_tavernTier: number | null;
 	defaultHero = true;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

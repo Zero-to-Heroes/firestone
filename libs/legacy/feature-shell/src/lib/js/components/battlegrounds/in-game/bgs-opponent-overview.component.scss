@@ -1,0 +1,229 @@
+.opponent-overview {
+	display: flex;
+	justify-content: flex-end;
+	flex-grow: 1;
+	flex-shrink: 1;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px;
+	position: relative;
+	height: 100%;
+	width: 100%;
+
+	.portrait {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 70px;
+		position: relative;
+		margin-right: 30px;
+		align-items: center;
+		justify-content: center;
+
+		::ng-deep .icon {
+			width: 100%;
+			.hero-portrait {
+				width: 100%;
+				.hero-portrait-frame {
+					width: 100%;
+					height: auto;
+
+					.aspect-ratio {
+						display: block;
+					}
+				}
+			}
+		}
+
+		.tavern {
+			position: absolute;
+			right: -18%;
+			top: 20%;
+			width: 50%;
+			z-index: 1;
+		}
+	}
+
+	::ng-deep bgs-hero-portrait .health .value {
+		font-size: 16px;
+		margin-left: 1px;
+	}
+
+	.main-info {
+		display: flex;
+		flex-direction: column;
+		border-right: 1px solid var(--color-3);
+		justify-content: center;
+		margin-right: 10px;
+		overflow: visible;
+		flex-grow: 1;
+		flex-shrink: 0;
+
+		::ng-deep bgs-board {
+			width: 520px;
+			.board {
+				top: -8px;
+
+				.minion-container {
+					margin-right: 15px;
+
+					li {
+						width: 58px;
+						height: 85px;
+					}
+
+					.card-stats {
+						.stat {
+							width: 30px;
+							height: 30px;
+
+							&.attack {
+								left: -4px;
+								top: -7px;
+							}
+
+							&.health {
+								right: -4px;
+								left: auto;
+								top: -7px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	bgs-triples {
+		flex-grow: 0;
+		width: 160px;
+		flex-shrink: 0;
+		padding-left: 10px;
+	}
+
+	::ng-deep bgs-triples {
+		.triples-section.triples-section.triples-section {
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+
+			.title {
+				width: auto;
+				margin: 0;
+			}
+			.triple-tiers {
+				justify-content: space-around;
+				align-items: center;
+				width: 100%;
+				flex-grow: 1;
+				flex-wrap: wrap;
+
+				.triple {
+					width: 45px;
+					height: 54px;
+					margin-right: 5px;
+
+					.number {
+						font-size: 20px;
+					}
+				}
+			}
+		}
+	}
+
+	.tavern-upgrades {
+		display: none;
+		width: auto;
+		flex-grow: 1;
+		flex-direction: column;
+		justify-content: space-evenly;
+		border-right: 1px solid var(--color-3);
+		padding-right: 10px;
+		align-items: flex-start;
+		max-width: 500px;
+		overflow: hidden;
+
+		.title {
+			margin-left: 20px;
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.subtitle {
+			margin-left: 20px;
+		}
+
+		.upgrades {
+			display: flex;
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+
+			.upgrades {
+				display: flex;
+				flex-direction: column;
+			}
+		}
+
+		.tavern-upgrade {
+			width: 90px;
+			// margin: auto;
+			flex-shrink: 0;
+		}
+
+		.label {
+			margin-top: -10%;
+			text-align: center;
+		}
+
+		::ng-deep tavern-level-icon .tavern-level-icon {
+			position: relative;
+			width: 60%;
+			margin: auto;
+		}
+	}
+
+	bgs-buddies {
+		display: none;
+		width: 170px;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
+	bgs-quest-rewards {
+		display: none;
+		width: 170px;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
+	.last-opponent-icon {
+		width: 28px;
+		height: 28px;
+		position: absolute;
+		top: 5px;
+		left: 5px;
+	}
+}
+
+@media (min-width: 1450px) {
+	.opponent-overview {
+		.main-info {
+			flex-grow: 0;
+		}
+		.tavern-upgrades {
+			display: flex;
+		}
+	}
+}
+
+@media (min-width: 1550px) {
+	.opponent-overview {
+		bgs-buddies {
+			display: flex;
+		}
+		bgs-quest-rewards {
+			display: flex;
+		}
+	}
+}

@@ -10,32 +10,31 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import {
-	BgsSimulatorKeyboardControl,
-	BgsSimulatorKeyboardControls,
-} from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
 import { GameTag, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import {
+	BgsBattlePositioningService,
+	BgsBattleSimulationService,
+	BgsSimulatorHeroPowerSelectionComponent,
+	BgsSimulatorHeroSelectionComponent,
+	BgsSimulatorKeyboardControl,
+	BgsSimulatorKeyboardControls,
+	BgsSimulatorMinionSelectionComponent,
+	BgsSimulatorQuestRewardSelectionComponent,
+	PermutationResult,
+	ProcessingStatus,
+} from '@firestone/battlegrounds/simulator';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { removeFromReadonlyArray } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
-import {
-	PermutationResult,
-	ProcessingStatus,
-} from '../../../services/battlegrounds/bgs-battle-positioning-executor.service';
-import { BgsBattlePositioningService } from '../../../services/battlegrounds/bgs-battle-positioning.service';
-import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { replaceInArray } from '../../../services/utils';
-import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
-import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
-import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
-import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest-reward-selection.component';
 
 @Component({
 	selector: 'bgs-battle',
@@ -49,7 +48,8 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 					[translateParams]="{ value: turnNumber }"
 				></div>
 			</div>
-			<div class="battle-content">
+			<bgs-simulator *ngIf="useNewSimUi"></bgs-simulator>
+			<div class="battle-content" *ngIf="!useNewSimUi">
 				<div class="battle-boards">
 					<bgs-battle-side
 						class="side opponent"
@@ -192,6 +192,8 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleComponent implements AfterViewInit, OnDestroy {
+	useNewSimUi = FeatureFlags.ENABLE_NEW_SIMULATOR_LAYOUT;
+
 	@Input() simulationUpdater: (
 		currentFaceOff: BgsFaceOffWithSimulation,
 		partialUpdate: BgsFaceOffWithSimulation,

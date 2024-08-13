@@ -27,7 +27,7 @@ export class CardTooltipDirective implements OnDestroy {
 		creatorCardId?: string;
 		lastAffectedByCardId?: string;
 	} = undefined;
-	@Input() cardTooltipClass = undefined;
+	@Input() cardTooltipClass: string = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;
 	@Input() cardTooltipLocalized = true;
@@ -57,7 +57,7 @@ export class CardTooltipDirective implements OnDestroy {
 		}
 	}
 
-	@Input() set cardTooltip(value: string) {
+	@Input() set cardTooltip(value: string | null | undefined) {
 		this.cardId = value;
 
 		if (!!this.cardId?.length) {

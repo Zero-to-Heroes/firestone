@@ -10,6 +10,7 @@ export enum BgsSimulatorKeyboardControl {
 	PlayerAddMinion,
 	OpponentAddMinion,
 }
+
 @Injectable()
 export class BgsSimulatorKeyboardControls {
 	private static CONTROL_KEYS = Object.values(BgsSimulatorKeyboardControl)
@@ -20,6 +21,27 @@ export class BgsSimulatorKeyboardControls {
 	private controls: {
 		[key: string]: () => void | Promise<void>;
 	} = {};
+
+	public static getKeyName(key: BgsSimulatorKeyboardControl): string {
+		switch (key) {
+			case BgsSimulatorKeyboardControl.PlayerHero:
+				return 'h';
+			case BgsSimulatorKeyboardControl.OpponentHero:
+				return 'H';
+			case BgsSimulatorKeyboardControl.PlayerHeroPower:
+				return 'p';
+			case BgsSimulatorKeyboardControl.OpponentHeroPower:
+				return 'P';
+			case BgsSimulatorKeyboardControl.PlayerQuestReward:
+				return 'r';
+			case BgsSimulatorKeyboardControl.OpponentQuestReward:
+				return 'R';
+			case BgsSimulatorKeyboardControl.PlayerAddMinion:
+				return 'm';
+			case BgsSimulatorKeyboardControl.OpponentAddMinion:
+				return 'M';
+		}
+	}
 
 	public init(allowKeyboardControl: boolean): BgsSimulatorKeyboardControls {
 		this.allowControl = allowKeyboardControl;
@@ -49,28 +71,7 @@ export class BgsSimulatorKeyboardControls {
 		this.controls = {};
 	}
 
-	public static getKeyName(key: BgsSimulatorKeyboardControl): string {
-		switch (key) {
-			case BgsSimulatorKeyboardControl.PlayerHero:
-				return 'h';
-			case BgsSimulatorKeyboardControl.OpponentHero:
-				return 'H';
-			case BgsSimulatorKeyboardControl.PlayerHeroPower:
-				return 'p';
-			case BgsSimulatorKeyboardControl.OpponentHeroPower:
-				return 'P';
-			case BgsSimulatorKeyboardControl.PlayerQuestReward:
-				return 'r';
-			case BgsSimulatorKeyboardControl.OpponentQuestReward:
-				return 'R';
-			case BgsSimulatorKeyboardControl.PlayerAddMinion:
-				return 'm';
-			case BgsSimulatorKeyboardControl.OpponentAddMinion:
-				return 'M';
-		}
-	}
-
-	private getKey(event: KeyboardEvent): BgsSimulatorKeyboardControl {
+	private getKey(event: KeyboardEvent): BgsSimulatorKeyboardControl | undefined {
 		return BgsSimulatorKeyboardControls.CONTROL_KEYS.find(
 			(key) => BgsSimulatorKeyboardControls.getKeyName(key) === event.key,
 		);

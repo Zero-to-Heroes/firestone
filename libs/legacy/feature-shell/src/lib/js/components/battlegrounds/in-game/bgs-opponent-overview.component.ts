@@ -5,7 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-opponent-overview',
-	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview.component.scss`],
+	styleUrls: [`./bgs-opponent-overview.component.scss`],
 	template: `
 		<div class="opponent-overview">
 			<div class="portrait">
@@ -35,14 +35,14 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 				<div
 					class="title"
 					*ngIf="tavernUpgrades?.length"
-					[owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"
+					[fsTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"
 				></div>
 				<div class="upgrades" *ngIf="tavernUpgrades?.length">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 						<div
 							class="label"
-							[owTranslate]="'battlegrounds.battle.turn'"
+							[fsTranslate]="'battlegrounds.battle.turn'"
 							[translateParams]="{ value: upgrade.turn }"
 						></div>
 					</div>
@@ -50,7 +50,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 				<div
 					class="subtitle"
 					*ngIf="!tavernUpgrades?.length"
-					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
+					[fsTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
 				></div>
 			</div>
 			<bgs-buddies [buddies]="buddies" *ngIf="buddiesEnabled && showBuddies"></bgs-buddies>
@@ -59,7 +59,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 			<div
 				class="last-opponent-icon"
 				*ngIf="showLastOpponentIcon"
-				[helpTooltip]="'last-opponent-icon-tooltip' | owTranslate"
+				[helpTooltip]="'last-opponent-icon-tooltip' | fsTranslate"
 				inlineSVG="assets/svg/last_opponent.svg"
 			></div>
 		</div>

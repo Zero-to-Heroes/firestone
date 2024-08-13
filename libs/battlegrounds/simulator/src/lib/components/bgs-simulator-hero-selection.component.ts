@@ -9,22 +9,15 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getHeroPower } from '@firestone-hs/reference-data';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { sortByProperties } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
-	selector: 'bgs-simulator-quest-reward-selection',
-	styleUrls: [
-		`../../../../css/component/controls/controls.scss`,
-		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-selection-popup.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-simulator-quest-reward-selection.component.scss`,
-	],
+	selector: 'bgs-simulator-hero-selection',
+	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-hero-selection.component.scss`],
 	template: `
 		<div class="container">
 			<button class="i-30 close-button" (mousedown)="close()">
@@ -36,13 +29,17 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</svg>
 			</button>
 
-			<div class="title" [owTranslate]="'battlegrounds.sim.quest-reward-title'"></div>
+			<div class="title" [fsTranslate]="'battlegrounds.sim.hero-selection-title'"></div>
 			<div class="current-hero">
 				<div *ngIf="heroIcon" class="hero-portrait-frame">
 					<img class="icon" [src]="heroIcon" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png"
+					/>
 				</div>
 				<div *ngIf="!heroIcon" class="hero-portrait-frame">
-					<div class="empty-hero" inlineSVG="assets/svg/bg_empty_hero_power.svg"></div>
+					<div class="empty-hero" inlineSVG="assets/svg/bg_empty_hero.svg"></div>
 				</div>
 				<div class="description">
 					<div class="name">{{ heroName }}</div>
@@ -50,7 +47,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</div>
 			</div>
 			<div class="hero-selection">
-				<div class="header" [owTranslate]="'battlegrounds.sim.quest-reward-header'"></div>
+				<div class="header" [fsTranslate]="'battlegrounds.sim.heroes-header'"></div>
 				<div class="search">
 					<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
@@ -59,7 +56,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							(mousedown)="onMouseDown($event)"
 							tabindex="0"
 							[autofocus]="true"
-							[placeholder]="'battlegrounds.sim.quest-reward-search-placeholder' | owTranslate"
+							[placeholder]="'battlegrounds.sim.search-heroes-placeholder' | fsTranslate"
 						/>
 					</label>
 				</div>
@@ -69,37 +66,43 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						class="hero-portrait-frame"
 						[ngClass]="{ selected: hero.id === currentHeroId }"
 						(click)="selectHero(hero)"
-						[cardTooltip]="hero.id"
+						[cardTooltip]="hero.heroPower.id"
 					>
 						<img class="icon" [src]="hero.icon" />
+						<img
+							class="frame"
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png"
+						/>
 					</div>
 				</div>
 			</div>
 			<div class="controls">
-				<div class="button" (click)="validate()" [owTranslate]="'battlegrounds.sim.select-button'"></div>
+				<div class="button" (click)="validate()" [fsTranslate]="'battlegrounds.sim.select-button'"></div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorQuestRewardSelectionComponent
-	extends AbstractSubscriptionStoreComponent
+export class BgsSimulatorHeroSelectionComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 
-	@Input() set currentReward(heroPowerCardId: string) {
-		this.currentHeroId = heroPowerCardId;
-		if (!!heroPowerCardId) {
-			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
-			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
-			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
+	@Input() set currentHero(heroCardId: string) {
+		this.currentHeroId = heroCardId;
+		if (!!heroCardId) {
+			this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCardId}.jpg`;
+			this.heroName = this.allCards.getCard(heroCardId)?.name;
+			const heroPower = getHeroPower(heroCardId, this.allCards.getService());
+			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPower)?.text);
 		} else {
 			this.heroIcon = null;
-			this.heroName = this.i18n.translateString('battlegrounds.sim.select-quest-reward-placeholder');
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-placeholder');
 			this.heroPowerText = null;
 		}
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -107,51 +110,51 @@ export class BgsSimulatorQuestRewardSelectionComponent
 
 	searchForm = new FormControl();
 
-	allHeroes: readonly QuestReward[];
+	allHeroes: readonly Hero[];
 	currentHeroId: string;
-	heroIcon: string;
+	heroIcon: string | null;
 	heroName: string;
-	heroPowerText: string;
-	searchString = new BehaviorSubject<string>(null);
+	heroPowerText: string | null;
+	searchString = new BehaviorSubject<string | null>(null);
 
 	private subscription: Subscription;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		protected readonly store: AppUiStoreFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.cdr.detach();
 	}
 
 	ngAfterContentInit(): void {
-		const allQuestRewards = this.allCards
-			.getCards()
-			.filter((card) => card.set === 'Battlegrounds')
-			.filter((card) => card.type === 'Battleground_quest_reward');
 		this.searchString
 			.asObservable()
 			.pipe(
 				debounceTime(200),
 				distinctUntilChanged(),
-				this.mapData((searchString) => {
-					const allCardIds = allQuestRewards
-						.filter((card) => !searchString?.length || card.name.toLowerCase().includes(searchString))
-						.map((card) => card.id);
-					const uniqueCardIds = Array.from(new Set(allCardIds));
-					const result = uniqueCardIds
-						.map((card) => this.allCards.getCard(card))
+				this.mapData((searchString) =>
+					this.allCards
+						.getCards()
+						.filter((card) => card.battlegroundsHero)
+						.filter(
+							(card) =>
+								!searchString?.length || card.name.toLowerCase().includes(searchString.toLowerCase()),
+						)
 						.map((card) => ({
 							id: card.id,
-							icon: this.i18n.getCardImage(card.id),
+							icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 							name: card.name,
-							text: this.sanitizeText(card.text),
+							heroPower: {
+								id: getHeroPower(card.id, this.allCards.getService()),
+								text: this.sanitizeText(
+									this.allCards.getCard(getHeroPower(card.id, this.allCards.getService()))?.text,
+								),
+							},
 						}))
-						.sort(sortByProperties((hero: QuestReward) => [hero.name]));
-					return result;
-				}),
+						.sort(sortByProperties((hero: Hero) => [hero.name])),
+				),
 			)
 			.subscribe((heroes) => {
 				this.allHeroes = [];
@@ -177,7 +180,7 @@ export class BgsSimulatorQuestRewardSelectionComponent
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
 		super.ngOnDestroy();
 		this.subscription.unsubscribe();
 	}
@@ -193,18 +196,14 @@ export class BgsSimulatorQuestRewardSelectionComponent
 		}
 	}
 
-	selectHero(hero: QuestReward) {
+	selectHero(hero: Hero) {
 		this.currentHeroId = hero.id;
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
-		this.heroPowerText = hero.text;
+		this.heroPowerText = hero.heroPower.text;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	preventDrag(event: MouseEvent) {
-		event.stopPropagation();
 	}
 
 	close() {
@@ -235,9 +234,12 @@ export class BgsSimulatorQuestRewardSelectionComponent
 	}
 }
 
-interface QuestReward {
+interface Hero {
 	id: string;
 	icon: string;
 	name: string;
-	text: string;
+	heroPower: {
+		id: string;
+		text: string;
+	};
 }

@@ -91,8 +91,6 @@ import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { BgsCustomSimulationResetEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
 import { BgsCustomSimulationUpdateEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-event';
-import { BgsSimulatorMinionTierFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
-import { BgsSimulatorMinionTribeFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs-updated-event';
@@ -219,8 +217,6 @@ import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds
 import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
 import { BgsCustomSimulationResetProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-reset-processor';
 import { BgsCustomSimulationUpdateProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-processor';
-import { BgsSimulatorMinionTierFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-processor';
-import { BgsSimulatorMinionTribeFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
@@ -753,14 +749,6 @@ export class MainWindowStoreService {
 			],
 			[BgsCustomSimulationUpdateEvent.eventName(), new BgsCustomSimulationUpdateProcessor()],
 			[BgsCustomSimulationResetEvent.eventName(), new BgsCustomSimulationResetProcessor()],
-			[
-				BgsSimulatorMinionTribeFilterSelectedEvent.eventName(),
-				new BgsSimulatorMinionTribeFilterSelectedProcessor(this.prefs),
-			],
-			[
-				BgsSimulatorMinionTierFilterSelectedEvent.eventName(),
-				new BgsSimulatorMinionTierFilterSelectedProcessor(this.prefs),
-			],
 			[
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),
 				new BattlegroundsMainWindowSelectBattleProcessor(

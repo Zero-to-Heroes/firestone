@@ -62,7 +62,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 	@Input() rating: number;
 	@Input() name: string;
 
-	@Input() set mmr(value: number) {
+	@Input() set mmr(value: number | null) {
 		this._mmr =
 			value == null
 				? null

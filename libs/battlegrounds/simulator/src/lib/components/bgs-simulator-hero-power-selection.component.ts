@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -10,22 +11,14 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { sortByProperties } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-simulator-hero-power-selection',
-	styleUrls: [
-		`../../../../css/component/controls/controls.scss`,
-		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-selection-popup.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-simulator-hero-power-selection.component.scss`,
-	],
+	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-hero-power-selection.component.scss`],
 	template: `
 		<div class="container">
 			<button class="i-30 close-button" (mousedown)="close()">
@@ -37,7 +30,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</svg>
 			</button>
 
-			<div class="title" [owTranslate]="'battlegrounds.sim.hero-power-title'"></div>
+			<div class="title" [fsTranslate]="'battlegrounds.sim.hero-power-title'"></div>
 			<div class="current-hero">
 				<div *ngIf="heroIcon" class="hero-portrait-frame">
 					<img class="icon" [src]="heroIcon" />
@@ -72,7 +65,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</div>
 			</div>
 			<div class="hero-selection">
-				<div class="header" [owTranslate]="'battlegrounds.sim.hero-powers-header'"></div>
+				<div class="header" [fsTranslate]="'battlegrounds.sim.hero-powers-header'"></div>
 				<div class="search">
 					<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
@@ -81,7 +74,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							(mousedown)="onMouseDown($event)"
 							tabindex="0"
 							[autofocus]="true"
-							[placeholder]="'battlegrounds.sim.hero-search-placeholder' | owTranslate"
+							[placeholder]="'battlegrounds.sim.hero-search-placeholder' | fsTranslate"
 						/>
 					</label>
 				</div>
@@ -98,14 +91,14 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</div>
 			</div>
 			<div class="controls">
-				<div class="button" (click)="validate()" [owTranslate]="'battlegrounds.sim.select-button'"></div>
+				<div class="button" (click)="validate()" [fsTranslate]="'battlegrounds.sim.select-button'"></div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulatorHeroPowerSelectionComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Input() closeHandler: () => void;
@@ -150,23 +143,22 @@ export class BgsSimulatorHeroPowerSelectionComponent
 
 	allHeroes: readonly HeroPower[];
 	currentHeroId: string;
-	heroIcon: string;
-	heroName: string;
-	heroPowerText: string;
-	searchString = new BehaviorSubject<string>(null);
+	heroIcon: string | null;
+	heroName: string | null;
+	heroPowerText: string | null;
+	searchString = new BehaviorSubject<string | null>(null);
 	showHeroPowerInfo: boolean;
 	heroPowerInfo: number;
-	heroPowerInfoLabel: string;
+	heroPowerInfoLabel: string | null;
 
 	private subscription: Subscription;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		protected readonly store: AppUiStoreFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.cdr.detach();
 	}
 
@@ -199,11 +191,11 @@ export class BgsSimulatorHeroPowerSelectionComponent
 						.map((card) => this.allCards.getCard(card))
 						.map((card) => ({
 							id: card.id,
-							icon: this.i18n.getCardImage(card.id),
+							icon: this.i18n.getCardImage(card.id)!,
 							name: card.name,
 							text: this.sanitizeText(card.text),
 						}))
-						.sort(sortByProperties((hero: HeroPower) => [hero.name]));
+						.sort(sortByProperties((hero) => [hero.name]));
 					return result;
 				}),
 			)
@@ -231,7 +223,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
 		super.ngOnDestroy();
 		this.subscription.unsubscribe();
 	}
@@ -252,7 +244,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
 		this.heroPowerText = hero.text;
-		this.heroPowerInfo = undefined;
+		this.heroPowerInfo = 0;
 		const isTavishHp = [
 			CardIds.AimLeftToken,
 			CardIds.AimRightToken,

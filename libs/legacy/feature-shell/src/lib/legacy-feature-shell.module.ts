@@ -38,12 +38,6 @@ import { BattlegroundsContentComponent } from './js/components/battlegrounds/bat
 import { BattlegroundsEmptyStateComponent } from './js/components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from './js/components/battlegrounds/battlegrounds.component';
 import { BgsBattlesComponent } from './js/components/battlegrounds/battles/bgs-battles.component';
-import { BgsSimulatorHeroPowerSelectionComponent } from './js/components/battlegrounds/battles/bgs-simulator-hero-power-selection.component';
-import { BgsSimulatorHeroSelectionComponent } from './js/components/battlegrounds/battles/bgs-simulator-hero-selection.component';
-import { BgsSimulatorMinionSelectionComponent } from './js/components/battlegrounds/battles/bgs-simulator-minion-selection.component';
-import { BattlegroundsSimulatorMinionTierFilterDropdownComponent } from './js/components/battlegrounds/battles/bgs-simulator-minion-tier-filter-dropdown.component';
-import { BattlegroundsSimulatorMinionTribeFilterDropdownComponent } from './js/components/battlegrounds/battles/bgs-simulator-minion-tribe-filter-dropdown.component';
-import { BgsSimulatorQuestRewardSelectionComponent } from './js/components/battlegrounds/battles/bgs-simulator-quest-reward-selection.component';
 import { BgsBannedTribeComponent } from './js/components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from './js/components/battlegrounds/bgs-banned-tribes.component';
 import { BattlegroundsCategoryDetailsComponent } from './js/components/battlegrounds/desktop/battlegrounds-category-details.component';
@@ -576,6 +570,8 @@ import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsSimulatorModule,
+	BgsBattlePositioningExecutorService,
+	BgsBattlePositioningMockExecutorService,
 	BgsBattleSimulationExecutorService,
 	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/simulator';
@@ -634,12 +630,6 @@ import { BgsBattleRecapComponent } from './js/components/battlegrounds/battles/b
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesViewComponent } from './js/components/battlegrounds/battles/bgs-battles-view.component';
-import { BgsHeroPortraitSimulatorComponent } from './js/components/battlegrounds/battles/bgs-hero-portrait-simulator.component';
-import { BgsMinusButtonComponent } from './js/components/battlegrounds/battles/bgs-minus-button.component';
-import { BgsPlusButtonComponent } from './js/components/battlegrounds/battles/bgs-plus-button.component';
-import { BgsSimulatorKeyboardControls } from './js/components/battlegrounds/battles/simulator-keyboard-controls.service';
-import { BgsBoardComponent } from './js/components/battlegrounds/bgs-board.component';
-import { BgsCardTooltipComponent } from './js/components/battlegrounds/bgs-card-tooltip.component';
 import { BgsPlayerCapsuleComponent } from './js/components/battlegrounds/bgs-player-capsule.component';
 import { GraphWithComparisonNewComponent } from './js/components/battlegrounds/graph-with-comparison-new.component';
 import { BgsHeroMiniComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-mini.component';
@@ -748,9 +738,6 @@ import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
 import { ArenaDraftManagerService } from './js/services/arena/arena-draft-manager.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
-import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
-import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
-import { BgsBattlePositioningService } from './js/services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
@@ -870,7 +857,7 @@ try {
 		console.log('version is ' + process.env['APP_VERSION']);
 
 		overwolf.settings.getExtensionSettings((settingsResult) => {
-			const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
+			// const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
 			process.env['APP_CHANNEL'] = settingsResult?.settings?.channel;
 		});
 	});
@@ -1013,8 +1000,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DkRunesComponent,
 
 		BgsOpponentOverviewBigComponent,
-		BgsBoardComponent,
-		BgsCardTooltipComponent,
 		BgsTriplesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
@@ -1049,9 +1034,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsBattleRecapComponent,
 		BgsBattleRecapPlayerComponent,
 		BgsBattleSideComponent,
-		BgsPlusButtonComponent,
-		BgsMinusButtonComponent,
-		BgsHeroPortraitSimulatorComponent,
 
 		BgsLeaderboardEmptyCardComponent,
 		BgsOverlayHeroOverviewComponent,
@@ -1122,8 +1104,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckListStaticComponent,
 
 		BgsOpponentOverviewBigComponent,
-		BgsBoardComponent,
-		BgsCardTooltipComponent,
 		BgsTriplesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
@@ -1155,9 +1135,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
 		BgsBattleSideComponent,
-		BgsPlusButtonComponent,
-		BgsMinusButtonComponent,
-		BgsHeroPortraitSimulatorComponent,
 
 		BgsLeaderboardEmptyCardComponent,
 		BgsHeroShortRecapComponent,
@@ -1212,12 +1189,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsBannedTribeComponent,
 		GraphWithSingleValueComponent,
 		BgsBattlesComponent,
-		BgsSimulatorHeroSelectionComponent,
-		BgsSimulatorHeroPowerSelectionComponent,
-		BgsSimulatorQuestRewardSelectionComponent,
-		BgsSimulatorMinionSelectionComponent,
-		BattlegroundsSimulatorMinionTribeFilterDropdownComponent,
-		BattlegroundsSimulatorMinionTierFilterDropdownComponent,
 		CurrentSessionBgsBoardTooltipComponent,
 
 		// ConstructedComponent,
@@ -1882,12 +1853,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsPerfectGamesService,
 		BgsMetaHeroStrategiesService,
 		BgsGlobalStatsService,
-		BgsBattlePositioningService,
 		BgsRunStatsService,
 		BgsBestUserStatsService,
 		RealTimeStatsService,
 		BgsCustomSimulationService,
-		BgsSimulatorKeyboardControls,
 		BgsBoardHighlighterService,
 
 		MercenariesMemoryCacheService,

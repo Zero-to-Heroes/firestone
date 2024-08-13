@@ -1,9 +1,7 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import {
-	BgsSimulatorKeyboardControl,
-	BgsSimulatorKeyboardControls,
-} from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
+
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsSimulatorKeyboardControl, BgsSimulatorKeyboardControls } from '@firestone/battlegrounds/simulator';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';

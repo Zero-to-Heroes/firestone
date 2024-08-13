@@ -8,21 +8,20 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
+import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBoard, BgsCardTooltipComponent, BgsPlayer } from '@firestone/battlegrounds/common';
-import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/simulator';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Map } from 'immutable';
+import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 
 @Component({
-	selector: 'bgs-battle-side',
-	styleUrls: [`./bgs-battle-side.component.scss`],
+	selector: 'bgs-simulator-side',
+	styleUrls: [`./bgs-simulator-side.component.scss`],
 	template: `
-		<div class="bgs-battle-side" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
+		<div class="bgs-battle-side full-screen-mode">
 			<div class="add-teammate" *ngIf="!_teammate && enableDuos">
 				<div class="add-teammate-button" (click)="addTeammate()">
 					<div class="add-teammate-icon">+</div>
@@ -30,18 +29,14 @@ import { Map } from 'immutable';
 				</div>
 			</div>
 			<div class="teammate-recap" *ngIf="!!_teammate && enableDuos">
-				<bgs-opponent-overview
+				<bgs-simulator-player-overview
 					class="teammate-container"
 					[opponent]="teammateShownInfo"
-					[showTavernUpgrades]="false"
-					[showBuddies]="false"
-					[showQuestRewards]="false"
-					[showTriples]="false"
 					[showBoardMessage]="!teammateShownInfo?.boardHistory?.length"
 					[emptyBoardMessage]="
 						'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
 					"
-				></bgs-opponent-overview>
+				></bgs-simulator-player-overview>
 			</div>
 			<div class="hero">
 				<bgs-hero-portrait-simulator
@@ -51,7 +46,7 @@ import { Map } from 'immutable';
 					[questRewardCardId]="questRewardCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
-					[tavernTier]="showTavernTier && tavernTier"
+					[tavernTier]="showTavernTier ? tavernTier : null"
 					[tooltipPosition]="tooltipPosition"
 					[fullScreenMode]="fullScreenMode"
 					(portraitChangeRequested)="onPortraitClick()"
@@ -88,21 +83,21 @@ import { Map } from 'immutable';
 						[useUpdateIcon]="true"
 						(click)="updateMinion(entity, i)"
 						*ngIf="closeOnMinion"
-						[helpTooltip]="'battlegrounds.sim.update-minion-button-tooltip' | owTranslate"
+						[helpTooltip]="'battlegrounds.sim.update-minion-button-tooltip' | fsTranslate"
 					></bgs-plus-button>
 					<bgs-minus-button
 						class="button remove"
 						(click)="removeMinion(entity, i)"
 						*ngIf="closeOnMinion"
 						helpTooltip="Remove minion"
-						[helpTooltip]="'battlegrounds.sim.remove-minion-button-tooltip' | owTranslate"
+						[helpTooltip]="'battlegrounds.sim.remove-minion-button-tooltip' | fsTranslate"
 					></bgs-minus-button>
 				</div>
 				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd">
 					<bgs-plus-button
 						class="change-icon"
 						(click)="addMinion()"
-						[helpTooltip]="'battlegrounds.sim.add-minion-button-tooltip' | owTranslate"
+						[helpTooltip]="'battlegrounds.sim.add-minion-button-tooltip' | fsTranslate"
 					></bgs-plus-button>
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
@@ -116,11 +111,11 @@ import { Map } from 'immutable';
 			</div>
 			<!-- TODO: move this -->
 			<div class="global-effects">
-				<div class="header" [owTranslate]="'battlegrounds.sim.global-effects-header'"></div>
+				<div class="header" [fsTranslate]="'battlegrounds.sim.global-effects-header'"></div>
 				<fs-numeric-input-with-arrows
 					class="input undead-army"
 					[label]="undeadArmyLabel"
-					[helpTooltip]="'battlegrounds.sim.undead-army-tooltip' | owTranslate"
+					[helpTooltip]="'battlegrounds.sim.undead-army-tooltip' | fsTranslate"
 					[value]="undeadArmy"
 					[debounceTime]="200"
 					(fsModelUpdate)="onUndeadArmyChanged($event)"
@@ -129,7 +124,7 @@ import { Map } from 'immutable';
 				<fs-numeric-input-with-arrows
 					class="input eternal-legion"
 					[label]="eternalLegionLabel"
-					[helpTooltip]="'battlegrounds.sim.eternal-legion-tooltip' | owTranslate"
+					[helpTooltip]="'battlegrounds.sim.eternal-legion-tooltip' | fsTranslate"
 					[value]="eternalLegion"
 					[minValue]="0"
 					[debounceTime]="200"
@@ -141,7 +136,7 @@ import { Map } from 'immutable';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattleSideComponent {
+export class BgsSimulatorSideComponent {
 	enableDuos = false;
 
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
@@ -177,11 +172,11 @@ export class BgsBattleSideComponent {
 	_player: BgsBoardInfo;
 	_teammate: BgsBoardInfo;
 
-	teammateShownInfo: BgsPlayer;
+	teammateShownInfo: BgsPlayer | null;
 
 	heroCardId: string;
-	heroPowerCardId: string;
-	questRewardCardId: string;
+	heroPowerCardId: string | null | undefined;
+	questRewardCardId: string | null | undefined;
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
@@ -245,7 +240,7 @@ export class BgsBattleSideComponent {
 	}
 
 	addMinion() {
-		this.addMinionRequested.next(null);
+		this.addMinionRequested.next({ index: this.entities.length });
 	}
 
 	updateMinion(entity: Entity, index: number) {
@@ -316,7 +311,7 @@ export class BgsBattleSideComponent {
 		}
 	}
 
-	private toBgsPlayer(player: BgsBoardInfo): BgsPlayer {
+	private toBgsPlayer(player: BgsBoardInfo): BgsPlayer | null {
 		if (!player) {
 			return null;
 		}
@@ -332,43 +327,16 @@ export class BgsBattleSideComponent {
 		return result;
 	}
 
-	private toBgsBoard(board: BoardEntity[]): BgsBoard {
+	private toBgsBoard(board: BoardEntity[]): BgsBoard | null {
 		if (!board?.length) {
 			return null;
 		}
 
 		const result: BgsBoard = {
 			turn: 0,
-			board: board.map((entity) => this.buildEntity(entity)),
+			board: board.map((entity) => buildEntityFromBoardEntity(entity, this.allCards)),
 		};
 		return result;
-	}
-
-	private buildEntity(boardEntity: BoardEntity): Entity {
-		const refCard = this.allCards.getCard(boardEntity.cardId);
-		const tags: Map<string, number> = Map({
-			[GameTag[GameTag.CARDTYPE]]: CardType.MINION,
-			[GameTag[GameTag.ZONE]]: Zone.PLAY,
-			[GameTag[GameTag.ATK]]: boardEntity.attack,
-			[GameTag[GameTag.HEALTH]]: boardEntity.maxHealth ?? boardEntity.health,
-			[GameTag[GameTag.DAMAGE]]: (boardEntity.maxHealth ?? boardEntity.health) - boardEntity.health,
-			[GameTag[GameTag.TAUNT]]: boardEntity.taunt ? 1 : 0,
-			[GameTag[GameTag.POISONOUS]]: boardEntity.poisonous || boardEntity.venomous ? 1 : 0,
-			[GameTag[GameTag.DIVINE_SHIELD]]: boardEntity.divineShield ? 1 : 0,
-			[GameTag[GameTag.REBORN]]: boardEntity.reborn ? 1 : 0,
-			[GameTag[GameTag.WINDFURY]]: boardEntity.windfury ? 1 : 0,
-			[GameTag[GameTag.DEATHRATTLE]]: refCard.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]) ? 1 : 0,
-			[GameTag[GameTag.TRIGGER_VISUAL]]: refCard.mechanics?.includes(GameTag[GameTag.TRIGGER_VISUAL]) ? 1 : 0,
-			[GameTag[GameTag.STEALTH]]: boardEntity.stealth ? 1 : 0,
-			[GameTag[GameTag.PREMIUM]]: this.allCards.getCard(boardEntity.cardId).battlegroundsNormalDbfId ? 1 : 0,
-			[GameTag[GameTag.TECH_LEVEL]]: this.allCards.getCard(boardEntity.cardId).techLevel,
-		});
-		return Entity.create({
-			id: boardEntity.entityId,
-			cardID: boardEntity.cardId,
-			tags: tags,
-			damageForThisAction: 0,
-		} as Entity);
 	}
 }
 

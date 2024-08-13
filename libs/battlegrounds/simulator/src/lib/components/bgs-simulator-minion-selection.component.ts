@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -9,26 +11,18 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { sortByProperties } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-simulator-minion-selection',
-	styleUrls: [
-		`../../../../css/component/controls/controls.scss`,
-		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-selection-popup.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-simulator-minion-selection.component.scss`,
-	],
+	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-minion-selection.component.scss`],
 	template: `
 		<div class="container">
 			<div class="content-container" cdkTrapFocus cdkTrapFocusAutoCapture>
@@ -41,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</svg>
 				</button>
 
-				<div class="title" [owTranslate]="'battlegrounds.sim.update-minion-title'"></div>
+				<div class="title" [fsTranslate]="'battlegrounds.sim.update-minion-title'"></div>
 				<div class="current-hero">
 					<div *ngIf="card" class="hero-portrait-frame">
 						<bgs-card-tooltip [config]="card" [visible]="true"></bgs-card-tooltip>
@@ -53,14 +47,14 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						<div class="stats">
 							<fs-numeric-input-with-arrows
 								class="input attack"
-								[label]="'global.hs-terms.attack' | owTranslate"
+								[label]="'global.hs-terms.attack' | fsTranslate"
 								[value]="attack"
 								(fsModelUpdate)="onAttackChanged($event)"
 							>
 							</fs-numeric-input-with-arrows>
 							<fs-numeric-input-with-arrows
 								class="input health"
-								[label]="'global.hs-terms.health' | owTranslate"
+								[label]="'global.hs-terms.health' | fsTranslate"
 								[value]="health"
 								[minValue]="1"
 								(fsModelUpdate)="onHealthChanged($event)"
@@ -69,61 +63,61 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						</div>
 						<div class="attributes">
 							<checkbox
-								[label]="'global.hs-terms.golden' | owTranslate"
+								[label]="'global.hs-terms.golden' | fsTranslate"
 								[value]="premium"
 								(valueChanged)="onPremiumChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.divine-shield' | owTranslate"
+								[label]="'global.hs-terms.divine-shield' | fsTranslate"
 								[value]="divineShield"
 								(valueChanged)="onDivineShieldChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.venomous' | owTranslate"
+								[label]="'global.hs-terms.venomous' | fsTranslate"
 								[value]="venomous"
 								(valueChanged)="onVenomousChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.poisonous' | owTranslate"
+								[label]="'global.hs-terms.poisonous' | fsTranslate"
 								[value]="poisonous"
 								(valueChanged)="onPoisonousChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.reborn' | owTranslate"
+								[label]="'global.hs-terms.reborn' | fsTranslate"
 								[value]="reborn"
 								(valueChanged)="onRebornChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.taunt' | owTranslate"
+								[label]="'global.hs-terms.taunt' | fsTranslate"
 								[value]="taunt"
 								(valueChanged)="onTauntChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.stealth' | owTranslate"
+								[label]="'global.hs-terms.stealth' | fsTranslate"
 								[value]="stealth"
 								(valueChanged)="onStealthChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'global.hs-terms.windfury' | owTranslate"
+								[label]="'global.hs-terms.windfury' | fsTranslate"
 								[value]="windfury"
 								(valueChanged)="onWindfuryChanged($event)"
 							></checkbox>
 							<checkbox
-								[label]="'battlegrounds.sim.summon-mechs' | owTranslate"
+								[label]="'battlegrounds.sim.summon-mechs' | fsTranslate"
 								[value]="summonMechs"
 								(valueChanged)="onSummonMechsChanged($event)"
-								[helpTooltip]="'battlegrounds.sim.summon-mechs-tooltip' | owTranslate"
+								[helpTooltip]="'battlegrounds.sim.summon-mechs-tooltip' | fsTranslate"
 							></checkbox>
 							<checkbox
-								[label]="'battlegrounds.sim.summon-plants' | owTranslate"
+								[label]="'battlegrounds.sim.summon-plants' | fsTranslate"
 								[value]="summonPlants"
 								(valueChanged)="onSummonPlantsChanged($event)"
-								[helpTooltip]="'battlegrounds.sim.summon-plants-tooltip' | owTranslate"
+								[helpTooltip]="'battlegrounds.sim.summon-plants-tooltip' | fsTranslate"
 							></checkbox>
 							<fs-numeric-input-with-arrows
 								class="input sneed"
-								[label]="'battlegrounds.sim.sneed-deathrattle' | owTranslate"
-								[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | owTranslate"
+								[label]="'battlegrounds.sim.sneed-deathrattle' | fsTranslate"
+								[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | fsTranslate"
 								[value]="sneeds"
 								[minValue]="0"
 								(fsModelUpdate)="onSneedChanged($event)"
@@ -134,7 +128,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				</div>
 				<div class="hero-selection">
 					<div class="search">
-						<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
+						<div class="header" [fsTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
 						<bgs-sim-minion-tribe-filter class="filter tribe-filter"></bgs-sim-minion-tribe-filter>
 						<bgs-sim-minion-tier-filter class="filter tier-filter"></bgs-sim-minion-tier-filter>
 						<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
@@ -145,13 +139,13 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								tabindex="0"
 								cdkFocusInitial
 								[autofocus]="true"
-								[placeholder]="'battlegrounds.sim.search-minion-placeholder' | owTranslate"
+								[placeholder]="'battlegrounds.sim.search-minion-placeholder' | fsTranslate"
 							/>
 						</label>
 						<preference-toggle
 							class="show-buddies-button"
 							field="bgsShowBuddiesInSimulatorSelection"
-							[label]="'battlegrounds.sim.show-buddies-button-title' | owTranslate"
+							[label]="'battlegrounds.sim.show-buddies-button-title' | fsTranslate"
 						></preference-toggle>
 					</div>
 					<div class="heroes" scrollable>
@@ -172,7 +166,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						class="button"
 						(click)="validate()"
 						[ngClass]="{ disabled: !card }"
-						[owTranslate]="'battlegrounds.sim.select-button'"
+						[fsTranslate]="'battlegrounds.sim.select-button'"
 					></div>
 				</div>
 			</div>
@@ -181,20 +175,20 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulatorMinionSelectionComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newEntity: BoardEntity) => void;
 	@Input() entityId: number;
-	@Input() set currentMinion(value: BoardEntity) {
+	@Input() set currentMinion(value: BoardEntity | null) {
 		this._entity = value;
 		this.updateValues();
 	}
 
 	searchForm = new FormControl();
 
-	card: Entity;
+	card: Entity | null;
 
 	// allMinions$: Observable<readonly Minion[]>;
 	allMinions: readonly Minion[] = [];
@@ -215,37 +209,41 @@ export class BgsSimulatorMinionSelectionComponent
 	sneeds = 0;
 	scriptDataNum1: number;
 
-	searchString = new BehaviorSubject<string>(null);
+	searchString = new BehaviorSubject<string | null>(null);
 
 	private ref: ReferenceCard;
-	private _entity: BoardEntity;
+	private _entity: BoardEntity | null;
 	private subscription: Subscription;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.cdr.detach();
 	}
 
-	ngAfterContentInit(): void {
-		const showBuddies$: Observable<boolean> = this.listenForBasicPref$(
-			(prefs) => prefs.bgsShowBuddiesInSimulatorSelection,
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		const showBuddies$: Observable<boolean> = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowBuddiesInSimulatorSelection),
 		);
 		combineLatest([
 			this.searchString.asObservable(),
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTribeFilter,
-				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					tribeFilter: prefs.bgsActiveSimulatorMinionTribeFilter,
+					tierFilter: prefs.bgsActiveSimulatorMinionTierFilter,
+				})),
 			),
 			showBuddies$,
 		])
 			.pipe(
 				debounceTime(200),
-				this.mapData(([searchString, [tribeFilter, tierFilter], showBuddies]) => {
+				this.mapData(([searchString, { tribeFilter, tierFilter }, showBuddies]) => {
 					const result = this.allCards
 						.getCards()
 						.filter(
@@ -273,7 +271,7 @@ export class BgsSimulatorMinionSelectionComponent
 						)
 						.map((card) => ({
 							id: card.id,
-							icon: this.i18n.getCardImage(card.id, { isBgs: true }),
+							icon: this.i18n.getCardImage(card.id, { isBgs: true })!,
 							name: card.name,
 							tier: card.techLevel ?? 0,
 						}))
@@ -301,6 +299,7 @@ export class BgsSimulatorMinionSelectionComponent
 					this.cdr.detectChanges();
 				}
 			});
+
 		// To bind the async pipes
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -308,7 +307,7 @@ export class BgsSimulatorMinionSelectionComponent
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
 		super.ngOnDestroy();
 		this.subscription?.unsubscribe();
 	}
@@ -330,19 +329,19 @@ export class BgsSimulatorMinionSelectionComponent
 			this.cardId = this.ref.battlegroundsNormalDbfId
 				? this.ref.id
 				: // Default when the card doesn't have a golden version
-				  this.allCards.getCardFromDbfId(this.ref.battlegroundsPremiumDbfId).id ?? this.cardId;
+				  this.allCards.getCard(this.ref.battlegroundsPremiumDbfId!).id ?? this.cardId;
 		} else {
 			this.cardId = this.ref.battlegroundsPremiumDbfId
 				? this.ref.id
-				: this.allCards.getCardFromDbfId(this.ref.battlegroundsNormalDbfId).id ?? this.cardId;
+				: this.allCards.getCard(this.ref.battlegroundsNormalDbfId!).id ?? this.cardId;
 		}
 		// Check if the user changed the stats of the base card. If not, we just use the stats
 		// from the premium card instead
 		const areStatsUpdated = this.attack !== this.ref.attack || this.health !== this.ref.health;
 		this.ref = this.allCards.getCard(this.cardId);
 		if (!areStatsUpdated) {
-			this.attack = this.ref.attack;
-			this.health = this.ref.health;
+			this.attack = this.ref.attack ?? 0;
+			this.health = this.ref.health ?? 0;
 		}
 		// Don't change the existing customization
 		this.updateCard();
@@ -434,9 +433,9 @@ export class BgsSimulatorMinionSelectionComponent
 	selectMinion(minion: Minion) {
 		this.cardId = minion.id;
 		this.ref = this.allCards.getCard(this.cardId);
-		this.premium = this.ref.battlegroundsNormalDbfId > 0;
-		this.attack = this.ref.attack;
-		this.health = this.ref.health;
+		this.premium = !!this.ref.battlegroundsNormalDbfId;
+		this.attack = this.ref.attack ?? 0;
+		this.health = this.ref.health ?? 0;
 		this.divineShield = this.ref.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 		this.venomous = this.ref.mechanics?.includes(GameTag[GameTag.VENOMOUS]);
 		this.poisonous = this.ref.mechanics?.includes(GameTag[GameTag.POISONOUS]);
@@ -505,26 +504,27 @@ export class BgsSimulatorMinionSelectionComponent
 
 		this.cardId = this._entity.cardId;
 		this.ref = this.allCards.getCard(this.cardId);
-		this.premium = this.ref.battlegroundsNormalDbfId > 0;
+		this.premium = !!this.ref.battlegroundsNormalDbfId;
 		this.attack = this._entity.attack;
 		this.health = this._entity.health;
-		this.divineShield = this._entity.divineShield;
-		this.venomous = this._entity.venomous;
-		this.poisonous = this._entity.poisonous;
-		this.scriptDataNum1 = this._entity.scriptDataNum1;
-		this.reborn = this._entity.reborn;
-		this.taunt = this._entity.taunt;
-		this.stealth = this._entity.stealth;
-		this.windfury = this._entity.windfury;
-		this.summonMechs = this._entity.enchantments
-			.map((e) => e.cardId)
+		this.divineShield = !!this._entity.divineShield;
+		this.venomous = !!this._entity.venomous;
+		this.poisonous = !!this._entity.poisonous;
+		this.scriptDataNum1 = this._entity.scriptDataNum1 ?? 0;
+		this.reborn = !!this._entity.reborn;
+		this.taunt = !!this._entity.taunt;
+		this.stealth = !!this._entity.stealth;
+		this.windfury = !!this._entity.windfury;
+		this.summonMechs = !!this._entity.enchantments
+			?.map((e) => e.cardId)
 			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e);
-		this.summonPlants = this._entity.enchantments
-			.map((e) => e.cardId)
+		this.summonPlants = !!this._entity.enchantments
+			?.map((e) => e.cardId)
 			.includes(CardIds.LivingSpores_LivingSporesEnchantment);
-		this.sneeds = this._entity.enchantments
-			.map((e) => e.cardId)
-			.filter((cardId) => cardId === CardIds.SneedsReplicator_ReplicateEnchantment).length;
+		this.sneeds =
+			this._entity.enchantments
+				?.map((e) => e.cardId)
+				.filter((cardId) => cardId === CardIds.SneedsReplicator_ReplicateEnchantment).length ?? 0;
 		this.updateCard();
 	}
 

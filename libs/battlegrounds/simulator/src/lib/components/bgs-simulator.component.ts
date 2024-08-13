@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
@@ -10,10 +12,6 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-// import {
-// 	BgsSimulatorKeyboardControl,
-// 	BgsSimulatorKeyboardControls,
-// } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
 import { GameTag, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -24,10 +22,17 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { removeFromReadonlyArray, replaceInArray } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
-// import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
-// import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
-// import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
-// import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest-reward-selection.component';
+import { PermutationResult, ProcessingStatus } from '../services/bgs-battle-positioning-executor.service';
+import { BgsBattlePositioningService } from '../services/bgs-battle-positioning.service';
+import { BgsBattleSimulationService } from '../services/bgs-battle-simulation.service';
+import {
+	BgsSimulatorKeyboardControl,
+	BgsSimulatorKeyboardControls,
+} from '../services/simulator-keyboard-controls.service';
+import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
+import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
+import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
+import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest-reward-selection.component';
 
 @Component({
 	selector: 'bgs-simulator',
@@ -35,7 +40,7 @@ import { Subscription } from 'rxjs';
 	template: `
 		<div class="battle-simulator">
 			<div class="battle-boards">
-				<bgs-battle-side
+				<bgs-simulator-side
 					class="side opponent"
 					[player]="opponent"
 					[showTavernTier]="showTavernTier"
@@ -53,7 +58,7 @@ import { Subscription } from 'rxjs';
 					(addMinionRequested)="onMinionAddRequested('opponent')"
 					(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
 					(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
-				></bgs-battle-side>
+				></bgs-simulator-side>
 				<div class="simulations">
 					<div class="controls">
 						<div
@@ -83,7 +88,7 @@ import { Subscription } from 'rxjs';
 						></div>
 					</div>
 				</div>
-				<bgs-battle-side
+				<bgs-simulator-side
 					class="side player"
 					[player]="player"
 					[showTavernTier]="showTavernTier"
@@ -101,7 +106,7 @@ import { Subscription } from 'rxjs';
 					(addMinionRequested)="onMinionAddRequested('player')"
 					(updateMinionRequested)="onMinionUpdateRequested('player', $event)"
 					(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
-				></bgs-battle-side>
+				></bgs-simulator-side>
 			</div>
 			<div class="side-buttons">
 				<div
@@ -235,8 +240,8 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	private sub$$: Subscription;
 
 	constructor(
-		// private readonly simulationService: BgsBattleSimulationService,
-		// private readonly positioningService: BgsBattlePositioningService,
+		private readonly simulationService: BgsBattleSimulationService,
+		private readonly positioningService: BgsBattlePositioningService,
 		private readonly prefs: PreferencesService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
@@ -244,7 +249,8 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
-		private readonly allCards: CardsFacadeService, // private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
+		private readonly allCards: CardsFacadeService,
+		private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
 	) {}
 
 	async ngAfterViewInit() {
@@ -266,23 +272,23 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		// this.simulatorKeyboardControls.tearDown();
+		this.simulatorKeyboardControls.tearDown();
 		this.sub$$?.unsubscribe();
 	}
 
 	private initKeyboardControls() {
-		// this.simulatorKeyboardControls
-		// 	.init(this.allowKeyboardControl)
-		// 	.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.onPortraitChangeRequested('player'))
-		// 	.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'))
-		// 	.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () => this.onHeroPowerChangeRequested('player'))
-		// 	.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () => this.onHeroPowerChangeRequested('opponent'))
-		// 	.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () => this.onQuestRewardChangeRequested('player'))
-		// 	.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
-		// 		this.onQuestRewardChangeRequested('opponent'),
-		// 	)
-		// 	.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.onMinionAddRequested('player'))
-		// 	.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.onMinionAddRequested('opponent'));
+		this.simulatorKeyboardControls
+			.init(this.allowKeyboardControl)
+			.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.onPortraitChangeRequested('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'))
+			.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () => this.onHeroPowerChangeRequested('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () => this.onHeroPowerChangeRequested('opponent'))
+			.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () => this.onQuestRewardChangeRequested('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
+				this.onQuestRewardChangeRequested('opponent'),
+			)
+			.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.onMinionAddRequested('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.onMinionAddRequested('opponent'));
 	}
 
 	@HostListener('document:keyup', ['$event'])
@@ -295,7 +301,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		if (this.overlayRef.hasAttached()) {
 			return;
 		}
-		// this.simulatorKeyboardControls.handleKeyDown(event);
+		this.simulatorKeyboardControls.handleKeyDown(event);
 	}
 
 	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {
@@ -375,7 +381,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onPortraitChangeRequested(side: 'player' | 'opponent') {
-		const portal = null; // new ComponentPortal(BgsSimulatorHeroSelectionComponent);
+		const portal = new ComponentPortal(BgsSimulatorHeroSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
@@ -417,7 +423,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onQuestRewardChangeRequested(side: 'player' | 'opponent') {
-		const portal = null; // new ComponentPortal(BgsSimulatorQuestRewardSelectionComponent);
+		const portal = new ComponentPortal(BgsSimulatorQuestRewardSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
@@ -458,7 +464,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onHeroPowerChangeRequested(side: 'player' | 'opponent') {
-		const portal = null; // new ComponentPortal(BgsSimulatorHeroPowerSelectionComponent);
+		const portal = new ComponentPortal(BgsSimulatorHeroPowerSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
@@ -466,8 +472,9 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		};
-		modalRef.instance.currentHero =
-			side === 'player' ? this.player.player.heroPowerId : this.opponent.player.heroPowerId;
+		modalRef.instance.currentHero = (
+			side === 'player' ? this.player.player.heroPowerId : this.opponent.player.heroPowerId
+		)!;
 		modalRef.instance.heroPowerData =
 			side === 'player' ? +(this.player.player.heroPowerInfo ?? -1) : +(this.opponent.player.heroPowerInfo ?? -1);
 		modalRef.instance.applyHandler = (newHeroPowerCardId: string, heroPowerInfo: number) => {
@@ -501,7 +508,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMinionAddRequested(side: 'player' | 'opponent') {
-		const portal = null; // new ComponentPortal(BgsSimulatorMinionSelectionComponent);
+		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
@@ -542,7 +549,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMinionUpdateRequested(side: 'player' | 'opponent', event: { index: number }) {
-		const portal = null; // new ComponentPortal(BgsSimulatorMinionSelectionComponent);
+		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
@@ -552,7 +559,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		};
 		const existingSide =
 			side === 'player' ? this._faceOff.battleInfo?.playerBoard : this._faceOff.battleInfo?.opponentBoard;
-		modalRef.instance.currentMinion = existingSide?.board[event.index];
+		modalRef.instance.currentMinion = existingSide?.board[event.index] ?? null;
 		modalRef.instance.entityId = this._faceOff.getNextEntityId();
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
@@ -652,7 +659,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 			battleInfoMesage: undefined,
 		} as BgsFaceOffWithSimulation;
 		const code = btoa(JSON.stringify(sim));
-		const shortCode = null; // await this.simulationService.getIdForSimulationSample(code as any);
+		const shortCode = await this.simulationService.getIdForSimulationSample(code as any);
 		this.ow.placeOnClipboard(btoa(`simBoard${shortCode}`));
 		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.export-confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -708,11 +715,11 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		};
 		console.log('[bgs-simulation-desktop] battle simulation request prepared');
 		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
-		const newSim = undefined; // await this.simulationService.simulateLocalBattle(battleInfo, prefs);
+		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
 		console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'done',
-			battleResult: newSim,
+			battleResult: newSim ?? undefined,
 		});
 		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
 		this.simulateButtonDisabled = false;
@@ -728,7 +735,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// this.positioningService.cancel();
+		this.positioningService.cancel();
 		this.processingReposition = false;
 		this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
 		this.repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
@@ -776,37 +783,37 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 				currentTurn: 0,
 			},
 		};
-		// console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
-		// const it = this.positioningService.findBestPositioning(battleInfo);
-		// // eslint-disable-next-line no-constant-condition
-		// while (true) {
-		// 	const value = await it.next();
-		// 	const status: ProcessingStatus = value.value[0];
-		// 	const result: PermutationResult = value.value[1];
-		// 	if (!!result) {
-		// 		this.simulationUpdater(
-		// 			null,
-		// 			BgsFaceOffWithSimulation.create({
-		// 				battleInfoStatus: 'done',
-		// 				battleInfo: result.battleInfo,
-		// 				battleResult: result.result,
-		// 			} as BgsFaceOffWithSimulation),
-		// 		);
-		// 		this.processingReposition = false;
-		// 		this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
-		// 		this.repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
-		// 		break;
-		// 	}
-		// 	this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-${ProcessingStatus[
-		// 		status
-		// 	].toLowerCase()}`;
-		// 	this.repositionButtonTooltipKey = `battlegrounds.sim.reposition-button-tooltip-${ProcessingStatus[
-		// 		status
-		// 	].toLowerCase()}`;
-		// 	if (!(this.cdr as ViewRef)?.destroyed) {
-		// 		this.cdr.detectChanges();
-		// 	}
-		// }
+		console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
+		const it = this.positioningService.findBestPositioning(battleInfo);
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			const value = await it.next();
+			const status: ProcessingStatus = value.value[0];
+			const result: PermutationResult = value.value[1];
+			if (!!result) {
+				this.simulationUpdater(
+					null,
+					BgsFaceOffWithSimulation.create({
+						battleInfoStatus: 'done',
+						battleInfo: result.battleInfo,
+						battleResult: result.result,
+					} as BgsFaceOffWithSimulation),
+				);
+				this.processingReposition = false;
+				this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
+				this.repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
+				break;
+			}
+			this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-${ProcessingStatus[
+				status
+			].toLowerCase()}`;
+			this.repositionButtonTooltipKey = `battlegrounds.sim.reposition-button-tooltip-${ProcessingStatus[
+				status
+			].toLowerCase()}`;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
 	}
 
 	private buildBoard(entities: readonly Entity[]): BoardEntity[] {

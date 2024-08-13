@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import {
 	BgsBattlePositioningExecutorService,
 	PermutationResult,
 	ProcessingStatus,
-} from '../../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-positioning-executor.service';
+} from '@firestone/battlegrounds/simulator';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { chunk } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Chunk, InternalPermutationResult, Permutation } from './bgs-battle-positioning-worker.worker';
 
 @Injectable()
@@ -52,7 +51,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		battleInfo: BgsBattleInfo,
 	): AsyncIterator<[ProcessingStatus, PermutationResult]> {
 		this.cancelled = false;
-		const start = Date.now();
 		// Initialize the data
 		const initialBoard = battleInfo.playerBoard.board;
 

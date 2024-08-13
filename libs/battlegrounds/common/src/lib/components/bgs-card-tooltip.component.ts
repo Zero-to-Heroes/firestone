@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-card-tooltip',
-	styleUrls: [`../../../css/component/battlegrounds/bgs-card-tooltip.component.scss`],
+	styleUrls: [`./bgs-card-tooltip.component.scss`],
 	template: `
 		<div class="container" [ngClass]="{ hidden: !_visible }">
 			<img [src]="image" class="card" />
@@ -18,7 +18,7 @@ export class BgsCardTooltipComponent {
 	_entity: Entity;
 	_visible: boolean;
 
-	image: string;
+	image: string | null;
 	cardId: string;
 	attack: number;
 	health: number;
@@ -52,5 +52,5 @@ export class BgsCardTooltipComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
 }

@@ -1,14 +1,14 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import { normalizeMinionCardId } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { MinionStat } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { MinionStat } from '../model/_barrel';
 import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
-import { normalizeCardId } from './post-match/card-utils';
 
 @Component({
 	selector: 'bgs-board',
-	styleUrls: [`../../../css/component/battlegrounds/bgs-board.component.scss`],
+	styleUrls: [`./bgs-board.component.scss`],
 	template: `
 		<div class="board-turn" *ngIf="showBoardMessage && customTitle">
 			{{ customTitle }}
@@ -16,8 +16,8 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div class="board-turn" *ngIf="!customTitle && _entities && !finalBoard && isNumber(currentTurn - boardTurn)">
 			{{
 				currentTurn - boardTurn === 0
-					? ('battlegrounds.board.seen-just-now' | owTranslate)
-					: ('battlegrounds.board.seen-turns-ago' | owTranslate: { value: currentTurn - boardTurn })
+					? ('battlegrounds.board.seen-just-now' | fsTranslate)
+					: ('battlegrounds.board.seen-turns-ago' | fsTranslate: { value: currentTurn - boardTurn })
 			}}
 		</div>
 		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">Your final board</div>
@@ -30,7 +30,7 @@ import { normalizeCardId } from './post-match/card-utils';
 				(!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))
 			"
 		>
-			<span [owTranslate]="'battlegrounds.board.opponent-not-met'"></span>
+			<span [fsTranslate]="'battlegrounds.board.opponent-not-met'"></span>
 		</div>
 		<div
 			class="board-turn empty"
@@ -42,7 +42,7 @@ import { normalizeCardId } from './post-match/card-utils';
 				isNumber(currentTurn - boardTurn)
 			"
 		>
-			<span [owTranslate]="'battlegrounds.board.last-board-empty'"></span>
+			<span [fsTranslate]="'battlegrounds.board.last-board-empty'"></span>
 		</div>
 		<ul class="board" *ngIf="_entities && _entities.length > 0">
 			<div class="minion-container" *ngFor="let entity of _entities; trackBy: trackByEntity">
@@ -64,12 +64,12 @@ import { normalizeCardId } from './post-match/card-utils';
 						class="header"
 						[helpTooltip]="
 							showTooltipWarning(entity)
-								? ('battlegrounds.board.stats-share-warning' | owTranslate)
+								? ('battlegrounds.board.stats-share-warning' | fsTranslate)
 								: null
 						"
 						*ngIf="!hideDamageHeader"
 					>
-						{{ 'battlegrounds.board.total-damage' | owTranslate }}
+						{{ 'battlegrounds.board.total-damage' | fsTranslate }}
 						<span *ngIf="showTooltipWarning(entity)">*</span>
 					</div>
 					<div class="values">
@@ -107,19 +107,16 @@ export class BgsBoardComponent implements OnDestroy {
 		this._minionStats = value;
 	}
 
-	@Input('entities') set entities(value: readonly Entity[]) {
+	@Input() set entities(value: readonly Entity[]) {
 		this.inputEntities = value || [];
 		this._entities = this.inputEntities.map((entity) => Entity.create({ ...entity } as Entity));
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 	}
 
-	@Input('enchantmentCandidates') set enchantmentCandidates(value: readonly Entity[]) {
+	@Input() set enchantmentCandidates(value: readonly Entity[]) {
 		this._enchantmentCandidates = value;
 	}
 
-	@Input('options') set options(value: readonly number[]) {
+	@Input() set options(value: readonly number[]) {
 		this._options = value;
 	}
 
@@ -140,18 +137,18 @@ export class BgsBoardComponent implements OnDestroy {
 	showTooltipWarning(entity: Entity): boolean {
 		return (
 			this._entities
-				?.map((e) => normalizeCardId(e.cardID, this.allCards))
-				?.filter((cardId) => cardId === normalizeCardId(entity.cardID, this.allCards)).length > 1
+				?.map((e) => normalizeMinionCardId(e.cardID, this.allCards))
+				?.filter((cardId) => cardId === normalizeMinionCardId(entity.cardID, this.allCards)).length > 1
 		);
 	}
 
-	getDamageDealt(entity: Entity): number {
-		return this._minionStats?.find((stat) => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+	getDamageDealt(entity: Entity): number | undefined {
+		return this._minionStats?.find((stat) => stat.cardId === normalizeMinionCardId(entity.cardID, this.allCards))
 			?.damageDealt;
 	}
 
-	getDamageTaken(entity: Entity): number {
-		return this._minionStats?.find((stat) => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+	getDamageTaken(entity: Entity): number | undefined {
+		return this._minionStats?.find((stat) => stat.cardId === normalizeMinionCardId(entity.cardID, this.allCards))
 			?.damageTaken;
 	}
 
