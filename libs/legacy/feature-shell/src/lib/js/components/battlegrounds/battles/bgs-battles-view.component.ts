@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
@@ -104,9 +104,10 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(store, cdr);
 	}
@@ -125,7 +126,8 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 		if (this._isMainWindow) {
 			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		} else {
-			this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
+			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view' });
+			// this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
 		}
 	}
 

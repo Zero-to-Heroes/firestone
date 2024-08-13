@@ -13,7 +13,7 @@ export class BgsSelectBattleParser implements EventParser {
 			(p: BgsPanel) => p.id === 'bgs-battles',
 		) as BgsBattlesPanel;
 		const newPanel = panel.update({
-			selectedFaceOffId: event.faceOffId,
+			// selectedFaceOffId: event.faceOffId,
 			closedManually: event.faceOffId == null,
 		} as BgsBattlesPanel);
 		return currentState.updatePanel(newPanel);
