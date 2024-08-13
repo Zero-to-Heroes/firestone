@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { OutcomeSamples, SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { Preferences } from '@firestone/shared/common/service';
+import { BugReportService, Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BugReportService } from '@legacy-import/src/lib/js/services/bug/bug-report.service';
 import { BgsBattleSimulationExecutorService } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/battlegrounds/bgs-battle-simulation-executor.service';
 import { sumOnArray } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
 

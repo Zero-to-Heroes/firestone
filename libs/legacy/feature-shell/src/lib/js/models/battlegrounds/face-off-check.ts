@@ -1,7 +1,7 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { BgsFaceOffWithSimulation, BgsGame } from '@firestone/battlegrounds/common';
+import { BugReportService } from '@firestone/shared/common/service';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
-import { BugReportService } from '../../services/bug/bug-report.service';
 
 export const checkIntegrity = (
 	faceOff: BgsFaceOffWithSimulation,

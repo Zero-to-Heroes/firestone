@@ -1,8 +1,8 @@
 import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
+import { BugReportService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { checkIntegrity } from '@legacy-import/src/lib/js/models/battlegrounds/face-off-check';
-import { BugReportService } from '../../../bug/bug-report.service';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

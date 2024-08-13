@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
-import { BugReportService } from '../../../services/bug/bug-report.service';
+import { BugReportService, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
