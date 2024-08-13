@@ -8,6 +8,7 @@ import { OwNotificationsService } from './services/notifications.service';
 import { PatchesConfigService } from './services/patches-config.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
 import { PreferencesService } from './services/preferences.service';
+import { S3FileUploadService } from './services/s3-file-upload.service';
 
 @NgModule({
 	imports: [CommonModule, SharedFrameworkCommonModule, SharedFrameworkCoreModule],
@@ -18,6 +19,7 @@ import { PreferencesService } from './services/preferences.service';
 		OwNotificationsService,
 		PatchesConfigService,
 		LogUtilsService,
+		S3FileUploadService,
 	],
 })
 export class SharedCommonServiceModule {}

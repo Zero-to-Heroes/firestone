@@ -8,4 +8,5 @@ export * from './lib/services/notifications.service';
 export * from './lib/services/patches-config.service';
 export * from './lib/services/preferences-storage.service';
 export * from './lib/services/preferences.service';
+export * from './lib/services/s3-file-upload.service';
 export * from './lib/shared-common-service.module';
