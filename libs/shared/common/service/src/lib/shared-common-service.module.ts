@@ -6,6 +6,7 @@ import { GameStatusService } from './services/game-status.service';
 import { LogUtilsService } from './services/log-utils.service';
 import { OwNotificationsService } from './services/notifications.service';
 import { PatchesConfigService } from './services/patches-config.service';
+import { SimpleIOService } from './services/plugins/simple-io.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
 import { PreferencesService } from './services/preferences.service';
 import { S3FileUploadService } from './services/s3-file-upload.service';
@@ -20,6 +21,7 @@ import { S3FileUploadService } from './services/s3-file-upload.service';
 		PatchesConfigService,
 		LogUtilsService,
 		S3FileUploadService,
+		SimpleIOService,
 	],
 })
 export class SharedCommonServiceModule {}

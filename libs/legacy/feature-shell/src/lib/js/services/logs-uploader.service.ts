@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { getLogsDir, PreferencesService, S3FileUploadService } from '@firestone/shared/common/service';
+import { getLogsDir, PreferencesService, S3FileUploadService, SimpleIOService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
-import { SimpleIOService } from './plugins/simple-io.service';
 
 @Injectable()
 export class LogsUploaderService {
