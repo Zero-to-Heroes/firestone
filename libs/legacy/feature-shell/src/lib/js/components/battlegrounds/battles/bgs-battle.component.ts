@@ -39,7 +39,7 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 
 @Component({
 	selector: 'bgs-battle',
-	styleUrls: [`../../../../css/component/battlegrounds/battles/bgs-battle.component.scss`],
+	styleUrls: [`./bgs-battle.component.scss`],
 	template: `
 		<div class="bgs-battle {{ additionalClass }}" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
 			<div class="turn-label" *ngIf="turnNumber">
