@@ -7,13 +7,13 @@ import {
 	GameType,
 	PRACTICE_ALL,
 	SCENARIO_WITHOUT_RESTART,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 	ScenarioId,
 	SceneMode,
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
 import { Metadata } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
-import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -21,7 +21,6 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
-import { getLogsDir } from '../log-utils.service';
 import { DeckHandlerService } from './deck-handler.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.gz.json`;

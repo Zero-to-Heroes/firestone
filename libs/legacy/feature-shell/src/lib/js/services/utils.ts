@@ -168,6 +168,7 @@ export const removeFromArray = <T>(array: T[], element: T) => {
 	}
 };
 
+/** @deprecated */
 export const replaceInArray = <T>(array: readonly T[], index: number, element: T): T[] => {
 	const ret = array.slice(0);
 	ret[index] = element;

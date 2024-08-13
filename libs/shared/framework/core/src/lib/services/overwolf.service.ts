@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 
-// import '@overwolf/types';
-
 const HEARTHSTONE_GAME_ID = 9898;
 const NO_AD_PLAN = 13;
 

@@ -27,6 +27,7 @@ const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent,
 		HttpClientModule,
 		BrowserAnimationsModule,
 		InlineSVGModule.forRoot(),
+
 		SharedFrameworkCommonModule,
 	],
 	providers: [

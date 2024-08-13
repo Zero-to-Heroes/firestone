@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Events } from '../services/events.service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
-import { LogUtilsService } from './log-utils.service';
 
 @Injectable()
 export class LogRegisterService {

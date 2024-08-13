@@ -55,6 +55,12 @@ export const shuffleArray = <T>(array: T[]): T[] => {
 	return shuffledArray;
 };
 
+export const replaceInArray = <T>(array: readonly T[], index: number, element: T): T[] => {
+	const ret = array.slice(0);
+	ret[index] = element;
+	return ret;
+};
+
 export const pickLast = <T>(array: readonly T[]): T | null => {
 	if (!array?.length) {
 		return null;
