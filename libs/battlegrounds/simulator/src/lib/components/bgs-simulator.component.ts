@@ -33,7 +33,7 @@ import { Subscription } from 'rxjs';
 	selector: 'bgs-simulator',
 	styleUrls: [`./bgs-simulator.component.scss`],
 	template: `
-		<div class="battle-simulator">
+		<!-- <div class="battle-simulator">
 			<div class="battle-boards">
 				<bgs-battle-side
 					class="side opponent"
@@ -129,7 +129,7 @@ import { Subscription } from 'rxjs';
 					<div class="text" [fsTranslate]="'battlegrounds.sim.reset-button'"></div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -167,27 +167,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 							heroPowerInfo: 0,
 							heroPowerInfo2: 0,
 							questRewards: undefined,
-							globalInfo: {
-								EternalKnightsDeadThisGame:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo
-										?.EternalKnightsDeadThisGame,
-								TavernSpellsCastThisGame:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.TavernSpellsCastThisGame,
-								PiratesPlayedThisGame:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.PiratesPlayedThisGame,
-								UndeadAttackBonus:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.UndeadAttackBonus,
-								ChoralAttackBuff:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.ChoralAttackBuff,
-								ChoralHealthBuff:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.ChoralHealthBuff,
-								FrostlingBonus:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.FrostlingBonus,
-								BloodGemAttackBonus:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.BloodGemAttackBonus,
-								BloodGemHealthBonus:
-									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.BloodGemHealthBonus,
-							},
+							questEntities: [],
 						},
 					},
 					opponentBoard: {
@@ -200,40 +180,20 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
 							heroPowerInfo2: 0,
-							questRewards: null,
-							globalInfo: {
-								EternalKnightsDeadThisGame:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo
-										?.EternalKnightsDeadThisGame,
-								TavernSpellsCastThisGame:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo
-										?.TavernSpellsCastThisGame,
-								PiratesPlayedThisGame:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.PiratesPlayedThisGame,
-								UndeadAttackBonus:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.UndeadAttackBonus,
-								ChoralAttackBuff:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.ChoralAttackBuff,
-								ChoralHealthBuff:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.ChoralHealthBuff,
-								FrostlingBonus:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.FrostlingBonus,
-								BloodGemAttackBonus:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.BloodGemAttackBonus,
-								BloodGemHealthBonus:
-									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.BloodGemHealthBonus,
-							},
+							questRewards: undefined,
+							questEntities: [],
 						},
 					},
 					options: {
 						numberOfSimulations: 8000,
 						maxAcceptableDuration: 6000,
+						skipInfoLogs: true,
 					},
 					gameState: {
 						// No restrictions on tribes yet
 						validTribes: undefined,
 						currentTurn: 0,
-						anomalies: this._faceOff.battleInfo?.gameState?.anomalies ?? [],
+						anomalies: [],
 					},
 				},
 			});
@@ -284,9 +244,8 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
-		private readonly allCards: CardsFacadeService,
-	) // private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
-	{}
+		private readonly allCards: CardsFacadeService, // private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
+	) {}
 
 	async ngAfterViewInit() {
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();

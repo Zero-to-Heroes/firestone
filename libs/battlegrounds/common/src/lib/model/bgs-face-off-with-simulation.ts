@@ -12,7 +12,7 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 	readonly opponentTavern: number;
 	readonly battleInfo?: BgsBattleInfo;
 	readonly battleResult?: SimulationResult;
-	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
+	readonly battleInfoStatus?: 'empty' | 'waiting-for-result' | 'done';
 	readonly battleInfoMesage: BattleInfoMessage;
 
 	public static override create(

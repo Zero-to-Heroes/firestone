@@ -101,7 +101,7 @@
 	}
 }
 
-&.inline {
+.inline {
 	margin-left: 75px;
 	border: 1px solid;
 	border-image: linear-gradient(-45deg, rgba(159, 182, 215, 0), #ffb948) 1;
@@ -349,7 +349,7 @@
 	}
 }
 
-&.full-screen-mode {
+.full-screen-mode {
 	height: 100%;
 
 	.battle-content {

@@ -323,6 +323,10 @@ export class BgsBattleSideComponent {
 	}
 
 	private toBgsPlayer(player: BgsBoardInfo): BgsPlayer {
+		if (!player) {
+			return null;
+		}
+
 		const result: BgsPlayer = BgsPlayer.create({
 			cardId: player.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
 			displayedCardId: player.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,

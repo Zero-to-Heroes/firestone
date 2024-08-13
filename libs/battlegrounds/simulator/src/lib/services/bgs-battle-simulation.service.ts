@@ -4,10 +4,10 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/simulator';
 import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 
 const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://664abby5durcmapfl2wc6cqlaq0xkkcm.lambda-url.us-west-2.on.aws/';
 const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q40sesoo.lambda-url.us-west-2.on.aws/';
