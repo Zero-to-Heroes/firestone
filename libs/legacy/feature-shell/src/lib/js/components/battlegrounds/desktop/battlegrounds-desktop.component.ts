@@ -128,10 +128,10 @@ export class BattlegroundsDesktopComponent
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),
 			},
-			{
-				id: 'bgs-category-personal-stats',
-				name: this.i18n.translateString('app.battlegrounds.menu.records'),
-			},
+			// {
+			// 	id: 'bgs-category-personal-stats',
+			// 	name: this.i18n.translateString('app.battlegrounds.menu.records'),
+			// },
 			{
 				id: 'bgs-category-perfect-games',
 				name: this.i18n.translateString('app.battlegrounds.menu.perfect-games'),
