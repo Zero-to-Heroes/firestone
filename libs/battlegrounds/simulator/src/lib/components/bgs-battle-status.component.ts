@@ -3,12 +3,11 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/simulator';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-battle-status',
-	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-battle-status.component.scss`],
+	styleUrls: [`./bgs-battle-status.component.scss`],
 	template: `
 		<div class="battle-simulation">
 			<div
@@ -18,13 +17,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[helpTooltip]="_simulationMessage"
 			></div>
 			<div class="probas">
-				<div class="title" [owTranslate]="'battlegrounds.battle.chance-label'"></div>
+				<div class="title" [fsTranslate]="'battlegrounds.battle.chance-label'"></div>
 				<div class="proba-items">
 					<div class="win item">
 						<div
 							class="label"
-							[helpTooltip]="'battlegrounds.battle.win-chance-tooltip' | owTranslate"
-							[owTranslate]="'battlegrounds.battle.win-chance-label'"
+							[helpTooltip]="'battlegrounds.battle.win-chance-tooltip' | fsTranslate"
+							[fsTranslate]="'battlegrounds.battle.win-chance-label'"
 						></div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultWin || '--' }}</div>
@@ -32,7 +31,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 								class="replay-icon"
 								*ngIf="hasSimulationResult('win') && showReplayLink"
 								(click)="viewSimulationResult('win')"
-								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | owTranslate"
+								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | fsTranslate"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
 									<use xlink:href="assets/svg/sprite.svg#video" />
@@ -46,8 +45,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="tie item">
 						<div
 							class="label"
-							[helpTooltip]="'battlegrounds.battle.tie-chance-tooltip' | owTranslate"
-							[owTranslate]="'battlegrounds.battle.tie-chance-label'"
+							[helpTooltip]="'battlegrounds.battle.tie-chance-tooltip' | fsTranslate"
+							[fsTranslate]="'battlegrounds.battle.tie-chance-label'"
 						></div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultTie || '--' }}</div>
@@ -55,7 +54,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 								class="replay-icon"
 								*ngIf="hasSimulationResult('tie') && showReplayLink"
 								(click)="viewSimulationResult('tie')"
-								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | owTranslate"
+								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | fsTranslate"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
 									<use xlink:href="assets/svg/sprite.svg#video" />
@@ -69,8 +68,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="lose item">
 						<div
 							class="label"
-							[helpTooltip]="'battlegrounds.battle.lose-chance-tooltip' | owTranslate"
-							[owTranslate]="'battlegrounds.battle.lose-chance-label'"
+							[helpTooltip]="'battlegrounds.battle.lose-chance-tooltip' | fsTranslate"
+							[fsTranslate]="'battlegrounds.battle.lose-chance-label'"
 						></div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultLose || '--' }}</div>
@@ -78,7 +77,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 								class="replay-icon"
 								*ngIf="hasSimulationResult('loss') && showReplayLink"
 								(click)="viewSimulationResult('loss')"
-								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | owTranslate"
+								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | fsTranslate"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
 									<use xlink:href="assets/svg/sprite.svg#video" />
@@ -92,8 +91,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 			</div>
 			<div class="damage-container">
-				<div class="title" [owTranslate]="'battlegrounds.battle.damage-title'"></div>
-				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.damage-dealt-tooltip' | owTranslate">
+				<div class="title" [fsTranslate]="'battlegrounds.battle.damage-title'"></div>
+				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.damage-dealt-tooltip' | fsTranslate">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/sprite.svg#sword" />
@@ -103,7 +102,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 				<div
 					class="damage received"
-					[helpTooltip]="'battlegrounds.battle.damage-received-tooltip' | owTranslate"
+					[helpTooltip]="'battlegrounds.battle.damage-received-tooltip' | fsTranslate"
 				>
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
@@ -114,24 +113,34 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 			</div>
 			<div class="damage-container lethal">
-				<div class="title" [owTranslate]="'battlegrounds.battle.lethal-title'"></div>
-				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.lethal-dealt-tooltip' | owTranslate">
+				<div class="title" [fsTranslate]="'battlegrounds.battle.lethal-title'"></div>
+				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.lethal-dealt-tooltip' | fsTranslate">
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
 					<div
 						class="damage-value"
-						[ngClass]="{ active: wonLethalChance && battleSimulationWonLethalChance > 0 }"
+						[ngClass]="{
+							active:
+								wonLethalChance &&
+								!!battleSimulationWonLethalChance &&
+								battleSimulationWonLethalChance > 0
+						}"
 					>
 						{{ wonLethalChance || '--' }}
 					</div>
 				</div>
 				<div
 					class="damage received"
-					[helpTooltip]="'battlegrounds.battle.lethal-received-tooltip' | owTranslate"
+					[helpTooltip]="'battlegrounds.battle.lethal-received-tooltip' | fsTranslate"
 				>
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
 					<div
 						class="damage-value"
-						[ngClass]="{ active: lostLethalChance && battleSimulationLostLethalChance > 0 }"
+						[ngClass]="{
+							active:
+								lostLethalChance &&
+								!!battleSimulationLostLethalChance &&
+								battleSimulationLostLethalChance > 0
+						}"
 					>
 						{{ lostLethalChance || '--' }}
 					</div>
@@ -144,21 +153,21 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class BgsBattleStatusComponent {
 	@Input() showReplayLink: boolean;
 
-	_simulationMessage: string;
+	_simulationMessage: string | null;
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;
-	winSimulationSample: readonly GameSample[];
-	tieSimulationSample: readonly GameSample[];
-	loseSimulationSample: readonly GameSample[];
+	winSimulationSample: readonly GameSample[] | undefined;
+	tieSimulationSample: readonly GameSample[] | undefined;
+	loseSimulationSample: readonly GameSample[] | undefined;
 	temporaryBattleTooltip: string;
-	damageWon: string;
-	damageLost: string;
-	wonLethalChance: string;
-	lostLethalChance: string;
+	damageWon: string | null;
+	damageLost: string | null;
+	wonLethalChance: string | null;
+	lostLethalChance: string | null;
 
-	battleSimulationWonLethalChance: number;
-	battleSimulationLostLethalChance: number;
+	battleSimulationWonLethalChance: number | null;
+	battleSimulationLostLethalChance: number | null;
 
 	processingSimulationSample: boolean;
 
@@ -212,47 +221,13 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
-			// case 'rylak':
-			// 	this._simulationMessage = this.i18n.translateString(
-			// 		'battlegrounds.battle.composition-not-supported.general',
-			// 		{
-			// 			value: this.allCards.getCard(CardIds.RylakMetalhead_BG26_801).name,
-			// 		},
-			// 	);
-			// 	break;
-			// case 'choral-mrrrglr':
-			// 	this._simulationMessage = this.i18n.translateString(
-			// 		'battlegrounds.battle.composition-not-supported.general',
-			// 		{
-			// 			value: this.allCards.getCard(CardIds.ChoralMrrrglr).name,
-			// 		},
-			// 	);
-			// 	break;
-			// case 'bassgill':
-			// 	this._simulationMessage = this.i18n.translateString(
-			// 		'battlegrounds.battle.composition-not-supported.general',
-			// 		{
-			// 			value: this.allCards.getCard(CardIds.Bassgill).name,
-			// 		},
-			// 	);
-			// 	break;
-			// case 'secret':
-			// 	this._simulationMessage = this.i18n.translateString(
-			// 		'battlegrounds.battle.composition-not-supported.general',
-			// 		{
-			// 			value: this.i18n.translateString(
-			// 				'battlegrounds.battle.composition-not-supported.reason-secret',
-			// 			),
-			// 		},
-			// 	);
-			// 	break;
 			case 'error':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.bug',
 				);
 				break;
 			default:
-				this._simulationMessage = undefined;
+				this._simulationMessage = null;
 				break;
 		}
 
@@ -301,11 +276,6 @@ export class BgsBattleStatusComponent {
 			this.battleSimulationWonLethalChance = this.battle.battleResult.wonLethalPercent;
 			this.battleSimulationLostLethalChance = this.battle.battleResult.lostLethalPercent;
 
-			// 	'lethal chances',
-			// 	this.battleSimulationWonLethalChance,
-			// 	this.battleSimulationLostLethalChance,
-			// 	this.battle,
-			// );
 			this.wonLethalChance = this.battle.battleResult.wonPercent
 				? this.battle.battleResult.wonLethalPercent?.toFixed(1) + '%'
 				: null;
@@ -317,14 +287,14 @@ export class BgsBattleStatusComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly bgsSim: BgsBattleSimulationService,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
-		const simulationSample: GameSample = this.pickSimulationResult(category);
+		const simulationSample: GameSample | null = this.pickSimulationResult(category);
 
 		if (!simulationSample) {
 			return;

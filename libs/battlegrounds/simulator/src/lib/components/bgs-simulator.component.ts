@@ -33,7 +33,7 @@ import { Subscription } from 'rxjs';
 	selector: 'bgs-simulator',
 	styleUrls: [`./bgs-simulator.component.scss`],
 	template: `
-		<!-- <div class="battle-simulator">
+		<div class="battle-simulator">
 			<div class="battle-boards">
 				<bgs-battle-side
 					class="side opponent"
@@ -129,7 +129,7 @@ import { Subscription } from 'rxjs';
 					<div class="text" [fsTranslate]="'battlegrounds.sim.reset-button'"></div>
 				</div>
 			</div>
-		</div> -->
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

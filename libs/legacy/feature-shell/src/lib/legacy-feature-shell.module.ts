@@ -648,7 +648,6 @@ import { BgsHeroSelectionTooltipComponent } from './js/components/battlegrounds/
 import { BgsHeroStatsComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-stats.component';
 import { BgsHeroTierComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
 import { BgsHeroTribesComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-tribes.component';
-import { BgsBattleStatusComponent } from './js/components/battlegrounds/in-game/bgs-battle-status.component';
 import { BgsHeroFaceOffComponent } from './js/components/battlegrounds/in-game/bgs-hero-face-off.component';
 import { BgsHeroFaceOffsComponent } from './js/components/battlegrounds/in-game/bgs-hero-face-offs.component';
 import { BgsNextOpponentOverviewComponent } from './js/components/battlegrounds/in-game/bgs-next-opponent-overview.component';
@@ -1016,7 +1015,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
 		BgsCardTooltipComponent,
-		BgsBattleStatusComponent,
 		BgsTriplesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
@@ -1126,7 +1124,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
 		BgsCardTooltipComponent,
-		BgsBattleStatusComponent,
 		BgsTriplesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,

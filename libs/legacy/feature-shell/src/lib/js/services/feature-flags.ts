@@ -9,7 +9,7 @@ export class FeatureFlags {
 	public static readonly APP_TIPS = true;
 	public static readonly ENABLE_BGS_QUESTS = true;
 	public static readonly ENABLE_BGS_QUESTS_IN_APP = true;
-	public static readonly ENABLE_NEW_SIMULATOR_LAYOUT = false;
+	public static readonly ENABLE_NEW_SIMULATOR_LAYOUT = true;
 
 	// Shelved for now
 	public static readonly ENABLE_MULTI_GRAPHS = false;
