@@ -48,7 +48,11 @@
 		position: relative;
 		background: rgba(255, 255, 255, 0.08);
 		padding: 15px;
-		// overflow: hidden;
+
+		&.battles {
+			padding: 0;
+			background: transparent;
+		}
 	}
 
 	::ng-deep bgs-battles-view {

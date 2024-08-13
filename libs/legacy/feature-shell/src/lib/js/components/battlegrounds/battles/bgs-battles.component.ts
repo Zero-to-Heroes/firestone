@@ -33,6 +33,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			[selectedFaceOff]="value.selectedFaceOff"
 			[actualBattle]="actualBattle$ | async"
 			[battleResultHistory]="battleResultHistory$ | async"
+			[canSelectBattle]="false"
 			[showAds]="showAds$ | async"
 		>
 		</bgs-battles-view>

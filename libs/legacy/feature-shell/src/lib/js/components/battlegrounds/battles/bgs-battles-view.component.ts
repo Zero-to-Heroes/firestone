@@ -67,6 +67,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						<bgs-battle-recap
 							*ngFor="let faceOff of faceOffs; trackBy: trackByFn"
 							[faceOff]="faceOff"
+							[selectable]="canSelectBattle"
 							(click)="selectBattle(faceOff)"
 							[ngClass]="{
 								highlighted: selectedFaceOff?.id && faceOff.id === selectedFaceOff.id
@@ -94,6 +95,7 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	@Input() actualBattle: BgsFaceOffWithSimulation;
 	@Input() battleResultHistory: readonly BattleResultHistory[];
 	@Input() showAds: boolean;
+	@Input() canSelectBattle = true;
 
 	@Input() set isMainWindow(value: boolean) {
 		this._isMainWindow = value;

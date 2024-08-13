@@ -91,19 +91,18 @@ export class BgsBattleRecapComponent {
 		console.debug('set sides', this.player, this.opponent, this.playerTeammate, this.opponentTeammate);
 
 		this.battle = value;
-
-		this.selectable = true; // !!value.battleInfo;
 	}
 
 	turnNumber: number;
 	result: string;
 	i18nResult: string;
-	selectable: boolean;
 	player: BattleRecapPlayer;
 	playerTeammate: BattleRecapPlayer;
 	opponent: BattleRecapPlayer;
 	opponentTeammate: BattleRecapPlayer;
 	battle: BgsFaceOffWithSimulation;
+
+	@Input() selectable = true;
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 

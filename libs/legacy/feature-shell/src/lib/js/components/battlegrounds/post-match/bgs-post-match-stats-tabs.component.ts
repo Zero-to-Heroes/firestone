@@ -74,7 +74,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				>
 				</bgs-chart-warband-composition>
 				<bgs-battles-view
-					class="stat"
+					class="stat battles"
 					*ngIf="selectedTab === 'battles'"
 					[faceOffs]="faceOffs"
 					[isMainWindow]="true"
