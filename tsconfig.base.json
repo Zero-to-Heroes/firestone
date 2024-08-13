@@ -24,6 +24,7 @@
 			"@firestone/arena/common": ["libs/arena/common/src/index.ts"],
 			"@firestone/battlegrounds/common": ["libs/battlegrounds/common/src/index.ts"],
 			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
+			"@firestone/battlegrounds/simulator": ["libs/battlegrounds/simulator/src/index.ts"],
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
 			"@firestone/collection/common": ["libs/collection/common/src/index.ts"],
 			"@firestone/collection/view": ["libs/collection/view/src/index.ts"],

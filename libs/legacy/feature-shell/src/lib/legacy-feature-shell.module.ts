@@ -574,6 +574,11 @@ import { AchievementsViewModule } from '@firestone/achievements/view';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import {
+	BattlegroundsSimulatorModule,
+	BgsBattleSimulationExecutorService,
+	BgsBattleSimulationMockExecutorService,
+} from '@firestone/battlegrounds/simulator';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, CollectionCommonModule } from '@firestone/collection/common';
 import { CollectionViewModule } from '@firestone/collection/view';
@@ -747,8 +752,6 @@ import { ArenaLastMatchService } from './js/services/arena/arena-last-match.serv
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
 import { BgsBattlePositioningService } from './js/services/battlegrounds/bgs-battle-positioning.service';
-import { BgsBattleSimulationExecutorService } from './js/services/battlegrounds/bgs-battle-simulation-executor.service';
-import { BgsBattleSimulationMockExecutorService } from './js/services/battlegrounds/bgs-battle-simulation-mock-executor.service';
 import { BgsBattleSimulationService } from './js/services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
@@ -759,7 +762,6 @@ import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
-import { BugReportService } from './js/services/bug/bug-report.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
 import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
@@ -816,8 +818,6 @@ import { LocalizationFacadeService } from './js/services/localization-facade.ser
 import { LocalizationService } from './js/services/localization.service';
 import { LogListenerService } from './js/services/log-listener.service';
 import { LogRegisterService } from './js/services/log-register.service';
-import { LogUtilsService } from './js/services/log-utils.service';
-import { LogsUploaderService } from './js/services/logs-uploader.service';
 import { LotteryWidgetControllerService } from './js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from './js/services/lottery/lottery.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
@@ -839,7 +839,6 @@ import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-s
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
 import { OwUtilsService } from './js/services/plugins/ow-utils.service';
-import { SimpleIOService } from './js/services/plugins/simple-io.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
@@ -849,7 +848,6 @@ import { QuestsService } from './js/services/quests.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
 import { ReviewIdService } from './js/services/review-id.service';
 import { RewardMonitorService } from './js/services/rewards/rewards-monitor';
-import { S3FileUploadService } from './js/services/s3-file-upload.service';
 import { SettingsCommunicationService } from './js/services/settings/settings-communication.service';
 import { GameStatsLoaderService } from './js/services/stats/game/game-stats-loader.service';
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
@@ -911,6 +909,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
 		BattlegroundsCommonModule,
+		BattlegroundsSimulatorModule,
 		StatsDataAccessModule,
 		DuelsViewModule,
 		DuelsDataAccessModule,
@@ -1784,10 +1783,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SetsService,
 		DebugService,
 		Events,
-		LogsUploaderService,
-		S3FileUploadService,
-		SimpleIOService,
-		BugReportService,
 
 		ModsBootstrapService,
 		ModsManagerService,
@@ -1850,7 +1845,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		GameEventsPluginService,
 		GameModeDataService,
 		LogListenerService,
-		LogUtilsService,
 		CardsMonitorService,
 		LogRegisterService,
 		HsClientConfigService,
