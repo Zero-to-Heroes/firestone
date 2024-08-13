@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { LogsUploaderService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
+import { LogsUploaderService } from './logs-uploader.service';
 
 const FEEDBACK_ENDPOINT_POST = 'https://pimeswfluvdckrzixlrn3ohkby0bxpra.lambda-url.us-west-2.on.aws/';
 

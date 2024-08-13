@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { normalizeHeroCardId, Race } from '@firestone-hs/reference-data';
+import { CardIds, normalizeHeroCardId, Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
@@ -14,7 +14,7 @@ const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q
 
 @Injectable()
 export class BgsBattleSimulationService {
-	public battleInfo$$ = new BehaviorSubject<BattleInfo>(null);
+	public battleInfo$$ = new BehaviorSubject<BattleInfo | null>(null);
 	private isPremium: boolean;
 
 	constructor(
@@ -67,7 +67,7 @@ export class BgsBattleSimulationService {
 			prefs.bgsUseRemoteSimulator,
 			this.isPremium,
 		);
-		const result: SimulationResult = shouldUseLocalSimulator
+		const result: SimulationResult | null = shouldUseLocalSimulator
 			? await this.simulateLocalBattle(battleInfoInput, prefs)
 			: await this.api.callPostApi<SimulationResult>(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput);
 		const resultForLog = !!result ? { ...result } : null;
@@ -78,23 +78,26 @@ export class BgsBattleSimulationService {
 		this.battleInfo$$.next({
 			battleId: battleId,
 			result: result,
-			heroCardId: normalizeHeroCardId(battleInfoInput.opponentBoard.player.nonGhostCardId, this.cards),
+			heroCardId: normalizeHeroCardId(
+				battleInfoInput.opponentBoard.player.nonGhostCardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+				this.cards,
+			),
 		});
 	}
 
-	public async getIdForSimulationSample(sample: GameSample): Promise<string> {
+	public async getIdForSimulationSample(sample: GameSample): Promise<string | null> {
 		console.log('calling sample endpoint');
 		try {
 			const result = await this.api.callPostApi<string>(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, sample);
 			console.log('[bgs-simulation] id for simulation sample', result);
 			return result;
-		} catch (e) {
+		} catch (e: any) {
 			console.error('[bgs-simulation] could not get if from sample', e.message, sample, e);
 			return null;
 		}
 	}
 
-	public async getIdForSimulationSampleWithFetch(sample: GameSample): Promise<string> {
+	public async getIdForSimulationSampleWithFetch(sample: GameSample): Promise<string | null> {
 		console.log('calling fetch sample endpoint');
 		try {
 			const response = await fetch(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, {
@@ -109,16 +112,16 @@ export class BgsBattleSimulationService {
 			});
 			// console.debug('[bgs-simulation] id for simulation sample', response);
 			return response.text();
-		} catch (e) {
+		} catch (e: any) {
 			console.error('[bgs-simulation] could not get if from sample', e.message, sample, e);
 			return null;
 		}
 	}
 
-	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
+	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult | null> {
 		try {
 			return this.executor.simulateLocalBattle(battleInfo, prefs);
-		} catch (e) {
+		} catch (e: any) {
 			console.error('[bgs-simulation] could not simulate battle', e.message, e);
 			if (!e.message?.includes('Maximum call stack size exceeded')) {
 				this.bugService.submitAutomatedReport({
@@ -136,6 +139,6 @@ export class BgsBattleSimulationService {
 
 export interface BattleInfo {
 	battleId: string;
-	result: SimulationResult;
+	result: SimulationResult | null;
 	heroCardId: string;
 }

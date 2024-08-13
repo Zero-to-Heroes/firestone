@@ -10,10 +10,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import {
-	BgsSimulatorKeyboardControl,
-	BgsSimulatorKeyboardControls,
-} from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
+// import {
+// 	BgsSimulatorKeyboardControl,
+// 	BgsSimulatorKeyboardControls,
+// } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
 import { GameTag, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -166,7 +166,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
 							heroPowerInfo2: 0,
-							questRewards: null,
+							questRewards: undefined,
 							globalInfo: {
 								EternalKnightsDeadThisGame:
 									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo
@@ -285,8 +285,8 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
-		private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
-	) {}
+	) // private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
+	{}
 
 	async ngAfterViewInit() {
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
@@ -307,23 +307,23 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.simulatorKeyboardControls.tearDown();
+		// this.simulatorKeyboardControls.tearDown();
 		this.sub$$?.unsubscribe();
 	}
 
 	private initKeyboardControls() {
-		this.simulatorKeyboardControls
-			.init(this.allowKeyboardControl)
-			.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.onPortraitChangeRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'))
-			.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () => this.onHeroPowerChangeRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () => this.onHeroPowerChangeRequested('opponent'))
-			.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () => this.onQuestRewardChangeRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
-				this.onQuestRewardChangeRequested('opponent'),
-			)
-			.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.onMinionAddRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.onMinionAddRequested('opponent'));
+		// this.simulatorKeyboardControls
+		// 	.init(this.allowKeyboardControl)
+		// 	.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.onPortraitChangeRequested('player'))
+		// 	.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'))
+		// 	.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () => this.onHeroPowerChangeRequested('player'))
+		// 	.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () => this.onHeroPowerChangeRequested('opponent'))
+		// 	.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () => this.onQuestRewardChangeRequested('player'))
+		// 	.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
+		// 		this.onQuestRewardChangeRequested('opponent'),
+		// 	)
+		// 	.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.onMinionAddRequested('player'))
+		// 	.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.onMinionAddRequested('opponent'));
 	}
 
 	@HostListener('document:keyup', ['$event'])
@@ -336,7 +336,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		if (this.overlayRef.hasAttached()) {
 			return;
 		}
-		this.simulatorKeyboardControls.handleKeyDown(event);
+		// this.simulatorKeyboardControls.handleKeyDown(event);
 	}
 
 	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {

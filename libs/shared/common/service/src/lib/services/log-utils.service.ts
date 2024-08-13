@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, interval } from 'rxjs';
+import { Preferences } from '../models/preferences';
+import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class LogUtilsService {
