@@ -11,7 +11,7 @@ import {
 	MemoryMercenariesInfo,
 	MemoryTeam,
 } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameForUpload, XpForGameInfo } from '@firestone/stats/common';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
@@ -22,7 +22,6 @@ import { DuelsLootParserService } from '../duels/duels-loot-parser.service';
 import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { HsGameMetaData } from '../game-mode-data.service';
-import { LogsUploaderService } from '../logs-uploader.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import {
 	MercenariesReferenceData,

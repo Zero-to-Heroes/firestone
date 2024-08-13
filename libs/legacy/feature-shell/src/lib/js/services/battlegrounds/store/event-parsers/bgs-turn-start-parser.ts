@@ -1,7 +1,7 @@
 import { BattlegroundsState, BgsGame, BgsNextOpponentOverviewPanel, BgsPanel } from '@firestone/battlegrounds/common';
 import { GameState } from '@firestone/game-state';
+import { LogsUploaderService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { LogsUploaderService } from '../../../logs-uploader.service';
 import { isBattlegrounds } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';

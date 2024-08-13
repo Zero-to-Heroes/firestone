@@ -4,6 +4,7 @@ export * from './lib/models/preferences';
 export * from './lib/models/unfit-pref-model';
 export * from './lib/services/game-status.service';
 export * from './lib/services/log-utils.service';
+export * from './lib/services/logs-uploader.service';
 export * from './lib/services/notifications.service';
 export * from './lib/services/patches-config.service';
 export * from './lib/services/plugins/simple-io.service';
