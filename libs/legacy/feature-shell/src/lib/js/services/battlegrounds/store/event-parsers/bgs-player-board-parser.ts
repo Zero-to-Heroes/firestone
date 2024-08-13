@@ -13,12 +13,12 @@ import {
 	PlayerBoard,
 	PlayerBoardEntity,
 } from '@firestone/battlegrounds/common';
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/simulator';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 import { GameEvents } from '../../../game-events.service';
-import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsPlayerBoardEvent } from '../events/bgs-player-board-event';

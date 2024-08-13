@@ -7,6 +7,7 @@ import {
 	PlayerBoard,
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/common';
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/simulator';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import {
@@ -35,7 +36,6 @@ import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';
-import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../bgs-best-user-stats.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { isBattlegrounds } from '../bgs-utils';
@@ -81,6 +81,7 @@ import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { BgsExtraGoldNextTurnEvent, BgsExtraGoldNextTurnParser } from './event-parsers/extra-gold-next-turn';
 import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
+import { BattlegroundsBattleSimulationEvent } from './events/battlegrounds-battle-simulation-event';
 import { BgsArmorChangedEvent } from './events/bgs-armor-changed-event';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
@@ -260,6 +261,11 @@ export class BattlegroundsStoreService {
 		this.matchMemoryInfo.battlegroundsMemoryInfo$$
 			.pipe(filter((info) => !!info))
 			.subscribe((info) => this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info)));
+		this.simulation.battleInfo$$.pipe(filter((info) => !!info)).subscribe((info) => {
+			this.battlegroundsUpdater.next(
+				new BattlegroundsBattleSimulationEvent(info.battleId, info.result, info.heroCardId),
+			);
+		});
 	}
 
 	private async handleHotkeyPressed(force = false) {

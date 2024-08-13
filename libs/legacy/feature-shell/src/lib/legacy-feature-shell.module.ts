@@ -752,7 +752,6 @@ import { ArenaLastMatchService } from './js/services/arena/arena-last-match.serv
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
 import { BgsBattlePositioningService } from './js/services/battlegrounds/bgs-battle-positioning.service';
-import { BgsBattleSimulationService } from './js/services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
@@ -1886,7 +1885,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsPerfectGamesService,
 		BgsMetaHeroStrategiesService,
 		BgsGlobalStatsService,
-		BgsBattleSimulationService,
 		BgsBattlePositioningService,
 		BgsRunStatsService,
 		BgsBestUserStatsService,

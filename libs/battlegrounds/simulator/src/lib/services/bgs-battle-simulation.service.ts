@@ -1,40 +1,30 @@
-import { EventEmitter, Injectable, Optional } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
+import { Inject, Injectable } from '@angular/core';
+import { normalizeHeroCardId, Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { AdService } from '../ad.service';
-import { BugReportService } from '../bug/bug-report.service';
-import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
-import { normalizeHeroCardId } from './bgs-utils';
-import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
-import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
+import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/simulator';
+import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 
 const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://664abby5durcmapfl2wc6cqlaq0xkkcm.lambda-url.us-west-2.on.aws/';
 const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q40sesoo.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class BgsBattleSimulationService {
-	private stateUpdater: EventEmitter<BattlegroundsStoreEvent>;
+	public battleInfo$$ = new BehaviorSubject<BattleInfo>(null);
 	private isPremium: boolean;
 
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly cards: CardsFacadeService,
 		private readonly executor: BgsBattleSimulationExecutorService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly bugService: BugReportService,
-		@Optional() private readonly ow: OverwolfService,
-		@Optional() private readonly prefs: PreferencesService,
+		private readonly prefs: PreferencesService,
 	) {
-		if (ow?.isOwEnabled()) {
-			setTimeout(() => {
-				this.stateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
-			});
-		}
 		this.init();
 	}
 
@@ -85,13 +75,11 @@ export class BgsBattleSimulationService {
 			delete resultForLog.outcomeSamples;
 		}
 		console.log('[bgs-simulation] battle simulation result', resultForLog);
-		this.stateUpdater.next(
-			new BattlegroundsBattleSimulationEvent(
-				battleId,
-				result,
-				normalizeHeroCardId(battleInfoInput.opponentBoard.player.nonGhostCardId, this.cards),
-			),
-		);
+		this.battleInfo$$.next({
+			battleId: battleId,
+			result: result,
+			heroCardId: normalizeHeroCardId(battleInfoInput.opponentBoard.player.nonGhostCardId, this.cards),
+		});
 	}
 
 	public async getIdForSimulationSample(sample: GameSample): Promise<string> {
@@ -144,4 +132,10 @@ export class BgsBattleSimulationService {
 			return null;
 		}
 	}
+}
+
+export interface BattleInfo {
+	battleId: string;
+	result: SimulationResult;
+	heroCardId: string;
 }
