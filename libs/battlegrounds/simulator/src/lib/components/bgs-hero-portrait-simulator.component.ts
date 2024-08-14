@@ -8,20 +8,6 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 	styleUrls: [`./bgs-hero-portrait-simulator.component.scss`],
 	template: `
 		<div class="container">
-			<div class="hero">
-				<bgs-hero-portrait
-					class="portrait click-to-change"
-					[heroCardId]="_heroCardId"
-					[health]="health"
-					[maxHealth]="maxHealth"
-				></bgs-hero-portrait>
-				<bgs-plus-button
-					class="change-icon"
-					(click)="onPortraitClick()"
-					[useUpdateIcon]="!defaultHero"
-				></bgs-plus-button>
-				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
-			</div>
 			<div class="quest-reward">
 				<div class="item-container" [cardTooltip]="_questRewardCardId" [cardTooltipPosition]="tooltipPosition">
 					<img [src]="questRewardIcon" class="image" *ngIf="!!questRewardIcon" />
@@ -36,6 +22,20 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 					(click)="onQuestRewardClick()"
 					[useUpdateIcon]="!defaultHero"
 				></bgs-plus-button>
+			</div>
+			<div class="hero">
+				<bgs-hero-portrait
+					class="portrait click-to-change"
+					[heroCardId]="_heroCardId"
+					[health]="health"
+					[maxHealth]="maxHealth"
+				></bgs-hero-portrait>
+				<bgs-plus-button
+					class="change-icon"
+					(click)="onPortraitClick()"
+					[useUpdateIcon]="!defaultHero"
+				></bgs-plus-button>
+				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="hero-power">
 				<div class="item-container" [cardTooltip]="_heroPowerCardId" [cardTooltipPosition]="tooltipPosition">

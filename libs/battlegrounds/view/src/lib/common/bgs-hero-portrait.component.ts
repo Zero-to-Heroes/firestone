@@ -17,7 +17,6 @@ import { Observable } from 'rxjs';
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png"
 				/>
 				<div class="name" *ngIf="name">{{ name }}</div>
-				<div class="aspect-ratio"></div>
 			</div>
 			<div class="quest-reward" *ngIf="_questRewardCardId" [cardTooltip]="_questRewardCardId">
 				<img [src]="questRewardIcon" class="image" *ngIf="!!questRewardIcon" />

@@ -205,6 +205,9 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.controller.portraitChangeRequested.subscribe((request) => this.onPortraitChangeRequested(request));
 		this.controller.heroPowerChangeRequested.subscribe((request) => this.onHeroPowerChangeRequested(request));
 		this.controller.questRewardChangeRequested.subscribe((request) => this.onQuestRewardChangeRequested(request));
+		this.controller.minionAddRequested.subscribe((request) => this.onMinionAddRequested(request));
+		this.controller.minionUpdateRequested.subscribe((request) => this.onMinionUpdateRequested(request));
+		this.controller.minionRemoveRequested.subscribe((request) => this.onMinionRemoveRequested(request));
 
 		this.simulatorKeyboardControls
 			.init(true)

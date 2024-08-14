@@ -1,33 +1,29 @@
 .bgs-battle-side {
-	display: flex;
 	position: relative;
-
-	.add-teammate,
-	.teammate-recap {
-		display: none;
-	}
+	height: 100%;
+	display: grid;
+	grid-template-rows: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+	gap: 0.5vh;
 
 	.hero {
-		flex-grow: 0;
-		flex-shrink: 0;
+		position: relative;
+		z-index: 9;
 		display: flex;
 		flex-direction: column;
-		z-index: 9;
-		position: relative;
-		margin-right: 30px;
+		align-items: center;
+		justify-self: center;
+		margin: 0;
+		width: 40%;
 
 		.portrait {
-			width: 60px;
-
-			&.click-to-change ::ng-deep .hero-portrait .portrait {
-				cursor: pointer;
-			}
+			width: auto;
+			height: 100%;
+			width: 100%;
 		}
 
 		::ng-deep bgs-hero-portrait {
 			.health .value {
 				font-size: 22px;
-				// top: 74%;
 			}
 		}
 
@@ -41,34 +37,49 @@
 
 	.board {
 		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
 
 		.minion-container {
-			margin-right: 5px;
+			margin-right: 2%;
+			height: 100%;
+			aspect-ratio: 60/89;
 			display: flex;
 			position: relative;
 
-			.button {
+			.minion-controls {
 				position: absolute;
-			}
+				top: 3%;
+				display: flex;
+				gap: 5%;
+				width: 100%;
+				height: 15%;
+				align-items: center;
+				justify-content: center;
 
-			.update {
-				top: 0px;
-				left: calc(50% - 23px);
-			}
-
-			.remove {
-				top: 0px;
-				left: calc(50% + 3px);
+				.button {
+					position: relative;
+				}
 			}
 		}
 
 		.minion {
 			// Needed for drag and drop
 			display: flex;
+			width: 100%;
+			height: 100%;
+			font-size: 2vh;
 
-			::ng-deep .card-on-board {
-				width: 60px;
-				height: auto;
+			::ng-deep card-on-board {
+				&:before {
+					content: '';
+				}
+				.card-on-board {
+					width: 60px;
+					height: auto;
+					aspect-ratio: 60/89;
+				}
 			}
 
 			&:hover {
@@ -78,11 +89,15 @@
 
 		.click-to-add {
 			position: relative;
-			max-width: 60px;
+			height: 60%;
 
 			.change-icon {
-				top: -8px;
-				left: 20px;
+				top: -10%;
+				left: 35%;
+			}
+
+			.empty-minion {
+				height: 100%;
 			}
 		}
 
@@ -130,145 +145,135 @@
 	.board.cdk-drop-list-dragging .minion:not(.cdk-drag-placeholder) {
 		transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 	}
+}
 
-	&.full-screen-mode {
-		flex-direction: column;
+.add-teammate {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
 
-		.hero {
-			align-items: center;
-			margin: 0;
+	.add-teammate-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
-			.portrait {
-				width: auto;
-			}
+		.add-teammate-icon {
+			margin-right: 15px;
+			font-size: 20px;
 		}
 
-		.board {
-			margin-top: 30px;
-			align-items: center;
-			justify-content: center;
+		.add-teammate-text {
+			border: 1px solid;
+			padding: 10px 20px;
 		}
 
-		.add-teammate {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-bottom: 25px;
-
-			.add-teammate-button {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-
-				.add-teammate-icon {
-					margin-right: 15px;
-					font-size: 20px;
-				}
-
-				.add-teammate-text {
-					border: 1px solid;
-					padding: 10px 20px;
-				}
-
-				&:hover {
-					color: var(--default-text-color-bright);
-				}
-			}
-		}
-
-		.teammate-recap {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: 7vh;
-			margin-bottom: 2vh;
-
-			.teammate-container {
-				height: 100%;
-				min-width: 50%;
-			}
-
-			::ng-deep bgs-opponent-overview {
-				.opponent-overview {
-					background: none;
-					padding: 0;
-
-					.main-info {
-						border: none;
-						margin: none;
-
-						bgs-board {
-							width: fit-content;
-							align-items: center;
-							justify-content: center;
-							height: 100%;
-
-							.board-turn {
-								margin: 0;
-							}
-
-							.board {
-								padding: 0;
-								margin: 0;
-								height: 100%;
-								top: 0;
-
-								.minion-container {
-									aspect-ratio: 58/85;
-									margin: 0;
-
-									li {
-										height: 100%;
-										width: 100%;
-									}
-								}
-							}
-						}
-					}
-
-					.portrait {
-						height: 100%;
-						width: fit-content;
-						margin-right: 2vh;
-
-						.icon {
-							max-height: 100%;
-							height: 85%; // Because we want the image inside the frame
-							width: fit-content;
-							aspect-ratio: 1;
-
-							.hero-portrait {
-								width: fit-content;
-								aspect-ratio: 1;
-							}
-
-							.hero-portrait-frame {
-								height: 100%;
-								width: auto;
-								aspect-ratio: 1;
-
-								.frame {
-									height: 100%;
-									width: auto;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		.switch-teammate-container {
-			position: absolute;
-			right: 0;
-			margin-top: auto;
-			margin-bottom: auto;
+		&:hover {
+			color: var(--default-text-color-bright);
 		}
 	}
 }
 
-:host.opponent {
-	.global-effects {
-		bottom: 0;
+.teammate-recap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 7vh;
+
+	.teammate-container {
+		height: 100%;
+		min-width: 50%;
+	}
+
+	::ng-deep bgs-opponent-overview {
+		.opponent-overview {
+			background: none;
+			padding: 0;
+
+			.main-info {
+				border: none;
+				margin: none;
+
+				bgs-board {
+					width: fit-content;
+					align-items: center;
+					justify-content: center;
+					height: 100%;
+
+					.board-turn {
+						margin: 0;
+					}
+
+					.board {
+						padding: 0;
+						margin: 0;
+						height: 100%;
+						top: 0;
+
+						.minion-container {
+							aspect-ratio: 58/85;
+							margin: 0;
+
+							li {
+								height: 100%;
+								width: 100%;
+							}
+						}
+					}
+				}
+			}
+
+			.portrait {
+				height: 100%;
+				width: fit-content;
+				margin-right: 2vh;
+
+				.icon {
+					max-height: 100%;
+					height: 85%; // Because we want the image inside the frame
+					width: fit-content;
+					aspect-ratio: 1;
+
+					.hero-portrait {
+						width: fit-content;
+						aspect-ratio: 1;
+					}
+
+					.hero-portrait-frame {
+						height: 100%;
+						width: auto;
+						aspect-ratio: 1;
+
+						.frame {
+							height: 100%;
+							width: auto;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.switch-teammate-container {
+	position: absolute;
+	right: 0;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+:host.player {
+	.bgs-battle-side {
+		grid-template-rows: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+
+		.teammate {
+			order: 3;
+		}
+		.hero {
+			order: 2;
+		}
+		.board {
+			order: 1;
+		}
 	}
 }

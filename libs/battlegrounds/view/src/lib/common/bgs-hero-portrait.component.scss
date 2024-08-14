@@ -14,25 +14,28 @@
 .hero-portrait-frame {
 	position: relative;
 	width: 100%;
+	max-height: 100%;
+	aspect-ratio: 100/115;
 
 	.icon {
 		position: absolute;
-		top: 2%;
-		left: 0;
-		width: 100%;
+		// top: 2%;
+		// left: 0;
+		// width: 100%;
+		top: 7%;
+		left: 8%;
+		width: 84%;
 		clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
 	}
 
 	.frame {
 		z-index: 1;
 		position: absolute;
-		top: -3%;
-		left: -1;
-		width: 103%;
-	}
-
-	.aspect-ratio {
-		padding-bottom: 115%;
+		// top: -3%;
+		// left: -1;
+		// width: 103%;
+		left: 8%;
+		height: 100%;
 	}
 
 	.name {

@@ -14,23 +14,25 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 	selector: 'bgs-simulator-side',
 	styleUrls: [`./bgs-simulator-side.component.scss`],
 	template: `
-		<div class="bgs-battle-side full-screen-mode">
-			<!-- <div class="add-teammate" *ngIf="!_teammate && enableDuos">
-				<div class="add-teammate-button" (click)="addTeammate()">
-					<div class="add-teammate-icon">+</div>
-					<div class="add-teammate-text">Add teammate</div>
+		<div class="bgs-battle-side">
+			<div class="teammate">
+				<div class="add-teammate" *ngIf="!_teammate && enableDuos">
+					<div class="add-teammate-button" (click)="addTeammate()">
+						<div class="add-teammate-icon">+</div>
+						<div class="add-teammate-text">Add teammate</div>
+					</div>
+				</div>
+				<div class="teammate-recap" *ngIf="!!_teammate && enableDuos">
+					<bgs-simulator-player-overview
+						class="teammate-container"
+						[opponent]="teammateShownInfo"
+						[showBoardMessage]="!teammateShownInfo?.boardHistory?.length"
+						[emptyBoardMessage]="
+							'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
+						"
+					></bgs-simulator-player-overview>
 				</div>
 			</div>
-			<div class="teammate-recap" *ngIf="!!_teammate && enableDuos">
-				<bgs-simulator-player-overview
-					class="teammate-container"
-					[opponent]="teammateShownInfo"
-					[showBoardMessage]="!teammateShownInfo?.boardHistory?.length"
-					[emptyBoardMessage]="
-						'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
-					"
-				></bgs-simulator-player-overview>
-			</div> -->
 			<div class="hero">
 				<bgs-hero-portrait-simulator
 					class="portrait"
@@ -68,20 +70,22 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 						(cdkDropListDropped)="drop($event)"
 					>
 					</card-on-board>
-					<bgs-plus-button
-						class="button update"
-						[useUpdateIcon]="true"
-						(click)="updateMinion(entity, i)"
-						[helpTooltip]="'battlegrounds.sim.update-minion-button-tooltip' | fsTranslate"
-					></bgs-plus-button>
-					<bgs-minus-button
-						class="button remove"
-						(click)="removeMinion(entity, i)"
-						helpTooltip="Remove minion"
-						[helpTooltip]="'battlegrounds.sim.remove-minion-button-tooltip' | fsTranslate"
-					></bgs-minus-button>
+					<div class="minion-controls">
+						<bgs-plus-button
+							class="button update"
+							[useUpdateIcon]="true"
+							(click)="updateMinion(entity, i)"
+							[helpTooltip]="'battlegrounds.sim.update-minion-button-tooltip' | fsTranslate"
+						></bgs-plus-button>
+						<bgs-minus-button
+							class="button remove"
+							(click)="removeMinion(entity, i)"
+							helpTooltip="Remove minion"
+							[helpTooltip]="'battlegrounds.sim.remove-minion-button-tooltip' | fsTranslate"
+						></bgs-minus-button>
+					</div>
 				</div>
-				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7">
+				<div class="click-to-add" *ngIf="(entities?.length ?? 0) < 7">
 					<bgs-plus-button
 						class="change-icon"
 						(click)="addMinion()"
@@ -125,7 +129,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulatorSideComponent {
-	enableDuos = false;
+	enableDuos = true;
 
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
@@ -209,6 +213,7 @@ export class BgsSimulatorSideComponent {
 	// }
 
 	addMinion() {
+		console.debug('requesting add minion', this.side);
 		this.controller.requestAddMinion(this.side);
 	}
 

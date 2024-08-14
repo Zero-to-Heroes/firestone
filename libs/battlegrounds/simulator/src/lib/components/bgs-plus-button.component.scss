@@ -1,8 +1,9 @@
 :host {
 	position: absolute;
-	width: 19px;
 	height: 19px;
 	z-index: 2;
+	height: 2.5vh;
+	aspect-ratio: 1;
 }
 
 .change-icon {

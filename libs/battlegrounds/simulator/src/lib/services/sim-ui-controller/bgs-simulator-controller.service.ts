@@ -7,7 +7,7 @@ import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { BehaviorSubject } from 'rxjs';
 import { StateManagerService } from './state-manager.service';
 
-// TODO: store the full battle state here?
+// TODO: store the state on the backend controller, mostly so that refreshing (while in dev) doesn't lose the state
 @Injectable()
 export class BgsSimulatorControllerService {
 	public faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(null);
