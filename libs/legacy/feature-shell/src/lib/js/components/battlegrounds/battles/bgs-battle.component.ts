@@ -48,7 +48,7 @@ import { replaceInArray } from '../../../services/utils';
 					[translateParams]="{ value: turnNumber }"
 				></div>
 			</div>
-			<bgs-simulator *ngIf="useNewSimUi"></bgs-simulator>
+			<bgs-simulator class="simulator" *ngIf="useNewSimUi" [faceOff]="_faceOff"></bgs-simulator>
 			<div class="battle-content" *ngIf="!useNewSimUi">
 				<div class="battle-boards">
 					<bgs-battle-side

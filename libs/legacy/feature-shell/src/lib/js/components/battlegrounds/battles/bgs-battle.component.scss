@@ -3,6 +3,10 @@
 	flex-direction: column;
 	position: relative;
 
+	.simulator {
+		min-height: 0;
+	}
+
 	.battle-content {
 		// display: grid;
 		// grid-template-rows: 2fr 1fr 2fr;
