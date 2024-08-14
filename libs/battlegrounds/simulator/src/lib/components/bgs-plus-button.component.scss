@@ -2,7 +2,7 @@
 	position: absolute;
 	height: 19px;
 	z-index: 2;
-	height: 2.5vh;
+	height: min(2.5vh, 1.5vw);
 	aspect-ratio: 1;
 }
 

@@ -27,7 +27,7 @@
 
 		::ng-deep bgs-hero-portrait {
 			.health .value {
-				font-size: 22px;
+				font-size: min(2.5vh, 1.5vw);
 			}
 		}
 
@@ -78,7 +78,7 @@
 			display: flex;
 			width: 100%;
 			height: 100%;
-			font-size: 2vh;
+			font-size: min(2.5vh, 1.5vw);
 
 			::ng-deep card-on-board {
 				&:before {

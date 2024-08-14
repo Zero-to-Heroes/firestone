@@ -29,6 +29,10 @@
 			z-index: 1;
 			aspect-ratio: 1;
 		}
+
+		::ng-deep bgs-hero-portrait .icon {
+			width: 84%;
+		}
 	}
 
 	.hero-power,
