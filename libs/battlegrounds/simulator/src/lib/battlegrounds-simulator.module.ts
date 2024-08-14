@@ -27,6 +27,8 @@ import { BgsBattlePositioningMockExecutorService } from './services/bgs-battle-p
 import { BgsBattlePositioningService } from './services/bgs-battle-positioning.service';
 import { BgsBattleSimulationMockExecutorService } from './services/bgs-battle-simulation-mock-executor.service';
 import { BgsBattleSimulationService } from './services/bgs-battle-simulation.service';
+import { BgsSimulatorControllerService } from './services/sim-ui-controller/bgs-simulator-controller.service';
+import { StateManagerService } from './services/sim-ui-controller/state-manager.service';
 import { BgsSimulatorKeyboardControls } from './services/simulator-keyboard-controls.service';
 
 const components = [
@@ -66,8 +68,10 @@ const components = [
 		BgsBattleSimulationMockExecutorService,
 		BgsBattleSimulationService,
 		BgsBattlePositioningMockExecutorService,
+		BgsSimulatorControllerService,
 		BgsBattlePositioningService,
 		BgsSimulatorKeyboardControls,
+		StateManagerService,
 	],
 	declarations: components,
 	exports: components,

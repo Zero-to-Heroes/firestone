@@ -80,9 +80,9 @@ export class BgsSimulatorQuestRewardSelectionComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Input() closeHandler: () => void;
-	@Input() applyHandler: (newHeroCardId: string) => void;
+	@Input() applyHandler: (newHeroCardId: string | null) => void;
 
-	@Input() set currentReward(heroPowerCardId: string) {
+	@Input() set currentReward(heroPowerCardId: string | null) {
 		this.currentHeroId = heroPowerCardId;
 		if (!!heroPowerCardId) {
 			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
@@ -101,7 +101,7 @@ export class BgsSimulatorQuestRewardSelectionComponent
 	searchForm = new FormControl();
 
 	allHeroes: readonly QuestReward[];
-	currentHeroId: string;
+	currentHeroId: string | null;
 	heroIcon: string | null;
 	heroName: string;
 	heroPowerText: string | null;

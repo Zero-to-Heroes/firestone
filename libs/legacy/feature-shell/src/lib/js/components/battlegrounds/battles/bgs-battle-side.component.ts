@@ -53,7 +53,6 @@ import { Map } from 'immutable';
 					[maxHealth]="maxHealth"
 					[tavernTier]="showTavernTier && tavernTier"
 					[tooltipPosition]="tooltipPosition"
-					[fullScreenMode]="fullScreenMode"
 					(portraitChangeRequested)="onPortraitClick()"
 					(heroPowerChangeRequested)="onHeroPowerClick()"
 					(questRewardChangeRequested)="onQuestRewardClick()"

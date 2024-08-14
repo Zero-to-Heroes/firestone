@@ -1,14 +1,7 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	Output,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { isBaconGhost } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
 	selector: 'bgs-hero-portrait-simulator',
@@ -29,7 +22,7 @@ import { CardTooltipPositionType } from '@firestone/shared/common/view';
 				></bgs-plus-button>
 				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
-			<div class="quest-reward" *ngIf="fullScreenMode || _questRewardCardId">
+			<div class="quest-reward">
 				<div class="item-container" [cardTooltip]="_questRewardCardId" [cardTooltipPosition]="tooltipPosition">
 					<img [src]="questRewardIcon" class="image" *ngIf="!!questRewardIcon" />
 					<div class="image empty-icon" *ngIf="!questRewardIcon"></div>
@@ -64,14 +57,10 @@ import { CardTooltipPositionType } from '@firestone/shared/common/view';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroPortraitSimulatorComponent {
-	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() questRewardChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-
 	@Input() health = 40;
 	@Input() maxHealth = 40;
 	@Input() tooltipPosition: CardTooltipPositionType;
-	@Input() fullScreenMode: boolean;
+	@Input() side: Side;
 
 	@Input() set heroCardId(value: string) {
 		this._heroCardId = value;
@@ -80,25 +69,16 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() set tavernTier(value: number | null) {
 		this._tavernTier = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	@Input() set heroPowerCardId(value: string | null | undefined) {
 		this._heroPowerCardId = value;
 		this.heroPowerIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	@Input() set questRewardCardId(value: string | null | undefined) {
 		this._questRewardCardId = value;
 		this.questRewardIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	heroPowerIcon: string | null;
@@ -109,17 +89,17 @@ export class BgsHeroPortraitSimulatorComponent {
 	_tavernTier: number | null;
 	defaultHero = true;
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly controller: BgsSimulatorControllerService) {}
 
 	onPortraitClick() {
-		this.portraitChangeRequested.next();
+		this.controller.requestHeroChange(this.side);
 	}
 
 	onHeroPowerClick() {
-		this.heroPowerChangeRequested.next();
+		this.controller.requestHeroPowerChange(this.side);
 	}
 
 	onQuestRewardClick() {
-		this.questRewardChangeRequested.next();
+		this.controller.requestQuestRewardChange(this.side);
 	}
 }

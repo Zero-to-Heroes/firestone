@@ -102,9 +102,9 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Input() closeHandler: () => void;
-	@Input() applyHandler: (newHeroCardId: string, heroPowerInfo: number) => void;
+	@Input() applyHandler: (newHeroCardId: string | null, heroPowerInfo: number) => void;
 
-	@Input() set currentHero(heroPowerCardId: string) {
+	@Input() set currentHeroPower(heroPowerCardId: string | null) {
 		this.currentHeroId = heroPowerCardId;
 		if (!!heroPowerCardId) {
 			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
@@ -142,7 +142,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	searchForm = new FormControl();
 
 	allHeroes: readonly HeroPower[];
-	currentHeroId: string;
+	currentHeroId: string | null;
 	heroIcon: string | null;
 	heroName: string | null;
 	heroPowerText: string | null;

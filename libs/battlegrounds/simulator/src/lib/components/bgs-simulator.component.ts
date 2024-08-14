@@ -1,30 +1,38 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ComponentRef,
 	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { GameTag, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { removeFromReadonlyArray, replaceInArray } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { PermutationResult, ProcessingStatus } from '../services/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningService } from '../services/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../services/bgs-battle-simulation.service';
+import {
+	BgsSimulatorControllerService,
+	HeroChangeRequest,
+	HeroPowerChangeRequest,
+	MinionAddRequest,
+	MinionRemoveRequest,
+	MinionUpdateRequest,
+	QuestRewardChangeRequest,
+} from '../services/sim-ui-controller/bgs-simulator-controller.service';
 import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
@@ -42,36 +50,26 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 			<div class="battle-boards">
 				<bgs-simulator-side
 					class="side opponent"
-					[player]="opponent"
-					[showTavernTier]="showTavernTier"
-					[clickToChange]="clickToChange"
-					[allowClickToAdd]="allowClickToAdd"
-					[closeOnMinion]="closeOnMinion"
-					[fullScreenMode]="true"
+					[player]="opponent$ | async"
+					[side]="'opponent'"
 					[tooltipPosition]="'right'"
-					(entitiesUpdated)="onEntitiesUpdated('opponent', $event)"
-					(portraitChangeRequested)="onPortraitChangeRequested('opponent')"
-					(heroPowerChangeRequested)="onHeroPowerChangeRequested('opponent')"
-					(questRewardChangeRequested)="onQuestRewardChangeRequested('opponent')"
-					(undeadArmyChanged)="onUndeadArmyChanged('opponent', $event)"
-					(eternalLegionChanged)="onEternalLegionChanged('opponent', $event)"
-					(addMinionRequested)="onMinionAddRequested('opponent')"
-					(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
-					(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
 				></bgs-simulator-side>
 				<div class="simulations">
 					<div class="controls">
 						<div
 							class="button simulate"
 							[ngClass]="{ disabled: simulateButtonDisabled }"
-							(click)="simulateNewBattle()"
+							(click)="simulateWinOdds()"
 							[helpTooltip]="tooltip"
 						>
 							{{ simulateButtonLabel }}
 						</div>
 					</div>
 					<div class="result new">
-						<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
+						<bgs-battle-status
+							[showReplayLink]="true"
+							[nextBattle]="battleResult$ | async"
+						></bgs-battle-status>
 					</div>
 					<div class="controls position" [ngClass]="{ busy: processingReposition }">
 						<div
@@ -90,22 +88,9 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 				</div>
 				<bgs-simulator-side
 					class="side player"
-					[player]="player"
-					[showTavernTier]="showTavernTier"
-					[clickToChange]="clickToChange"
-					[allowClickToAdd]="allowClickToAdd"
-					[closeOnMinion]="closeOnMinion"
-					[fullScreenMode]="true"
+					[player]="player$ | async"
+					[side]="'player'"
 					[tooltipPosition]="'top-right'"
-					(entitiesUpdated)="onEntitiesUpdated('player', $event)"
-					(portraitChangeRequested)="onPortraitChangeRequested('player')"
-					(heroPowerChangeRequested)="onHeroPowerChangeRequested('player')"
-					(questRewardChangeRequested)="onQuestRewardChangeRequested('player')"
-					(undeadArmyChanged)="onUndeadArmyChanged('player', $event)"
-					(eternalLegionChanged)="onEternalLegionChanged('player', $event)"
-					(addMinionRequested)="onMinionAddRequested('player')"
-					(updateMinionRequested)="onMinionUpdateRequested('player', $event)"
-					(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
 				></bgs-simulator-side>
 			</div>
 			<div class="side-buttons">
@@ -138,87 +123,15 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
-	@Input() simulationUpdater: (
-		currentFaceOff: BgsFaceOffWithSimulation | null,
-		partialUpdate: BgsFaceOffWithSimulation,
-	) => void;
-
-	@Input() simulationReset: (faceOffId: string) => void;
+export class BgsSimulatorComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	battleResult$: Observable<BgsFaceOffWithSimulation | null>;
+	opponent$: Observable<BgsBoardInfo | null>;
+	player$: Observable<BgsBoardInfo | null>;
+	turnNumber$: Observable<number | null>;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
-		// Make sure we have an instance of the class, and not just a data structure
-		this._faceOff = BgsFaceOffWithSimulation.create(value);
-		if (!this._faceOff) {
-			return;
-		}
-		if (!this._faceOff.battleInfo) {
-			this._faceOff = this._faceOff.update({
-				battleInfo: {
-					playerBoard: {
-						board: [],
-						player: {
-							cardId: this._faceOff.playerCardId ?? 'TB_BaconShop_HERO_KelThuzad',
-							hpLeft:
-								this._faceOff.playerHpLeft ??
-								defaultStartingHp(
-									GameType.GT_BATTLEGROUNDS,
-									this._faceOff.playerCardId ?? 'TB_BaconShop_HERO_KelThuzad',
-									this.allCards,
-								),
-							tavernTier: this._faceOff.playerTavern ?? 6,
-							heroPowerId: null,
-							heroPowerUsed: true,
-							heroPowerInfo: 0,
-							heroPowerInfo2: 0,
-							questRewards: undefined,
-							questEntities: [],
-						},
-					},
-					opponentBoard: {
-						board: [],
-						player: {
-							cardId: this._faceOff.opponentCardId ?? 'TB_BaconShop_HERO_KelThuzad',
-							hpLeft: this._faceOff.opponentHpLeft ?? 40,
-							tavernTier: this._faceOff.opponentTavern ?? 6,
-							heroPowerId: null,
-							heroPowerUsed: true,
-							heroPowerInfo: 0,
-							heroPowerInfo2: 0,
-							questRewards: undefined,
-							questEntities: [],
-						},
-					},
-					options: {
-						numberOfSimulations: 8000,
-						maxAcceptableDuration: 6000,
-						skipInfoLogs: true,
-					},
-					gameState: {
-						// No restrictions on tribes yet
-						validTribes: undefined,
-						currentTurn: 0,
-						anomalies: [],
-					},
-				},
-			});
-		}
-		this.updateInfo();
+		this.initialBattle = this.controller.initBattleWithSideEffects(value);
 	}
-
-	@Input() actualBattle: BgsFaceOffWithSimulation;
-	@Input() hideActualBattle = false;
-	@Input() clickToChange = false;
-	@Input() allowClickToAdd = false;
-	@Input() closeOnMinion = false;
-	@Input() showTavernTier = false;
-	@Input() allowKeyboardControl = false;
-	@Input() additionalClass: string;
-
-	turnNumber: number;
-	_faceOff: BgsFaceOffWithSimulation;
-	opponent: BgsBoardInfo;
-	player: BgsBoardInfo;
 
 	tooltip: string | null;
 	exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
@@ -232,18 +145,19 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 	repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
 	processingReposition = false;
 
-	newBattle: BgsFaceOffWithSimulation;
+	private initialBattle: BgsFaceOffWithSimulation;
 
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 
 	private sub$$: Subscription;
+	private battleResult$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(null);
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly simulationService: BgsBattleSimulationService,
 		private readonly positioningService: BgsBattlePositioningService,
 		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
@@ -251,9 +165,13 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
 		private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
-	) {}
+		private readonly controller: BgsSimulatorControllerService,
+	) {
+		super(cdr);
+	}
 
-	async ngAfterViewInit() {
+	ngAfterViewInit() {
+		this.tooltip = this.i18n.translateString('battlegrounds.sim.simulate-button-tooltip');
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
 		this.sub$$ = this.overlayRef.backdropClick().subscribe(() => {
@@ -263,40 +181,52 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 
-		this.tooltip = this.i18n.translateString('battlegrounds.sim.simulate-button-tooltip');
-		this.initKeyboardControls();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.battleResult$ = this.battleResult$$.asObservable();
+		this.opponent$ = this.controller.faceOff$$.pipe(
+			this.mapData((faceOff) => faceOff?.battleInfo?.opponentBoard ?? null),
+		);
+		this.player$ = this.controller.faceOff$$.pipe(
+			this.mapData((faceOff) => faceOff?.battleInfo?.playerBoard ?? null),
+		);
+		this.turnNumber$ = this.controller.faceOff$$.pipe(this.mapData((faceOff) => faceOff?.turn ?? null));
+
+		this.initControllerRequests();
 	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
+		super.ngOnDestroy();
 		this.simulatorKeyboardControls.tearDown();
 		this.sub$$?.unsubscribe();
 	}
 
-	private initKeyboardControls() {
+	private initControllerRequests() {
+		this.controller.portraitChangeRequested.subscribe((request) => this.onPortraitChangeRequested(request));
+		this.controller.heroPowerChangeRequested.subscribe((request) => this.onHeroPowerChangeRequested(request));
+		this.controller.questRewardChangeRequested.subscribe((request) => this.onQuestRewardChangeRequested(request));
+
 		this.simulatorKeyboardControls
-			.init(this.allowKeyboardControl)
-			.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.onPortraitChangeRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'))
-			.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () => this.onHeroPowerChangeRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () => this.onHeroPowerChangeRequested('opponent'))
-			.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () => this.onQuestRewardChangeRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
-				this.onQuestRewardChangeRequested('opponent'),
+			.init(true)
+			.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.controller.requestHeroChange('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.controller.requestHeroChange('opponent'))
+			.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () =>
+				this.controller.requestHeroPowerChange('player'),
 			)
-			.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.onMinionAddRequested('player'))
-			.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.onMinionAddRequested('opponent'));
+			.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () =>
+				this.controller.requestHeroPowerChange('opponent'),
+			)
+			.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () =>
+				this.controller.requestQuestRewardChange('player'),
+			)
+			.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
+				this.controller.requestQuestRewardChange('opponent'),
+			)
+			.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.controller.requestAddMinion('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.controller.requestAddMinion('opponent'));
 	}
 
 	@HostListener('document:keyup', ['$event'])
 	handleKeyboardControl(event: KeyboardEvent) {
-		if (!this.allowKeyboardControl) {
-			return;
-		}
-
 		// Control is back to the overlay
 		if (this.overlayRef.hasAttached()) {
 			return;
@@ -304,329 +234,118 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		this.simulatorKeyboardControls.handleKeyDown(event);
 	}
 
-	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {
-		side === 'player'
-			? this.simulationUpdater(this._faceOff, {
-					battleInfo: {
-						playerBoard: {
-							board: this.buildBoard(newEntities),
-						} as BgsBoardInfo,
-					},
-			  } as BgsFaceOffWithSimulation)
-			: this.simulationUpdater(this._faceOff, {
-					battleInfo: {
-						opponentBoard: {
-							board: this.buildBoard(newEntities),
-						} as BgsBoardInfo,
-					},
-			  } as BgsFaceOffWithSimulation);
-	}
+	// onUndeadArmyChanged(side: 'player' | 'opponent', newValue: number) {
+	// 	const request =
+	// 		side === 'player'
+	// 			? ({
+	// 					battleInfo: {
+	// 						playerBoard: {
+	// 							player: {
+	// 								globalInfo: {
+	// 									UndeadAttackBonus: newValue,
+	// 								},
+	// 							},
+	// 						},
+	// 					},
+	// 			  } as BgsFaceOffWithSimulation)
+	// 			: ({
+	// 					battleInfo: {
+	// 						opponentBoard: {
+	// 							player: {
+	// 								globalInfo: {
+	// 									UndeadAttackBonus: newValue,
+	// 								},
+	// 							},
+	// 						},
+	// 					},
+	// 			  } as BgsFaceOffWithSimulation);
+	// 	console.debug('updating undead army', side, newValue, request);
+	// 	this.simulationUpdater(this._faceOff, request);
+	// }
 
-	onUndeadArmyChanged(side: 'player' | 'opponent', newValue: number) {
-		const request =
-			side === 'player'
-				? ({
-						battleInfo: {
-							playerBoard: {
-								player: {
-									globalInfo: {
-										UndeadAttackBonus: newValue,
-									},
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation)
-				: ({
-						battleInfo: {
-							opponentBoard: {
-								player: {
-									globalInfo: {
-										UndeadAttackBonus: newValue,
-									},
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation);
-		console.debug('updating undead army', side, newValue, request);
-		this.simulationUpdater(this._faceOff, request);
-	}
+	// onEternalLegionChanged(side: 'player' | 'opponent', newValue: number) {
+	// 	const request =
+	// 		side === 'player'
+	// 			? ({
+	// 					battleInfo: {
+	// 						playerBoard: {
+	// 							player: {
+	// 								globalInfo: {
+	// 									EternalKnightsDeadThisGame: newValue,
+	// 								},
+	// 							},
+	// 						},
+	// 					},
+	// 			  } as BgsFaceOffWithSimulation)
+	// 			: ({
+	// 					battleInfo: {
+	// 						opponentBoard: {
+	// 							player: {
+	// 								globalInfo: {
+	// 									EternalKnightsDeadThisGame: newValue,
+	// 								},
+	// 							},
+	// 						},
+	// 					},
+	// 			  } as BgsFaceOffWithSimulation);
+	// 	console.debug('updating eternal legion', side, newValue, request);
+	// 	this.simulationUpdater(this._faceOff, request);
+	// }
 
-	onEternalLegionChanged(side: 'player' | 'opponent', newValue: number) {
-		const request =
-			side === 'player'
-				? ({
-						battleInfo: {
-							playerBoard: {
-								player: {
-									globalInfo: {
-										EternalKnightsDeadThisGame: newValue,
-									},
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation)
-				: ({
-						battleInfo: {
-							opponentBoard: {
-								player: {
-									globalInfo: {
-										EternalKnightsDeadThisGame: newValue,
-									},
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation);
-		console.debug('updating eternal legion', side, newValue, request);
-		this.simulationUpdater(this._faceOff, request);
-	}
-
-	onPortraitChangeRequested(side: 'player' | 'opponent') {
-		const portal = new ComponentPortal(BgsSimulatorHeroSelectionComponent);
-		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.closeHandler = () => {
-			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		};
-		modalRef.instance.currentHero = side === 'player' ? this.player.player.cardId : this.opponent.player.cardId;
+	onPortraitChangeRequested(request: HeroChangeRequest) {
+		const modalRef = this.createModal(BgsSimulatorHeroSelectionComponent);
+		modalRef.instance.currentHero = request.heroCardId;
 		modalRef.instance.applyHandler = (newHeroCardId: string) => {
 			this.overlayRef.detach();
-			side === 'player'
-				? this.simulationUpdater(this._faceOff, {
-						playerCardId: newHeroCardId,
-						battleInfo: {
-							playerBoard: {
-								player: {
-									cardId: newHeroCardId,
-									heroPowerId: getHeroPower(newHeroCardId, this.allCards.getService()),
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation)
-				: this.simulationUpdater(this._faceOff, {
-						opponentCardId: newHeroCardId,
-						battleInfo: {
-							opponentBoard: {
-								player: {
-									cardId: newHeroCardId,
-									heroPowerId: getHeroPower(newHeroCardId, this.allCards.getService()),
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation);
+			this.controller.updateHero(request.side, newHeroCardId);
 		};
-		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	onQuestRewardChangeRequested(side: 'player' | 'opponent') {
-		const portal = new ComponentPortal(BgsSimulatorQuestRewardSelectionComponent);
-		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.closeHandler = () => {
+	onHeroPowerChangeRequested(request: HeroPowerChangeRequest) {
+		const modalRef = this.createModal(BgsSimulatorHeroPowerSelectionComponent);
+		modalRef.instance.currentHeroPower = request.heroPowerCardId;
+		modalRef.instance.heroPowerData = request.heroPowerInfo;
+		modalRef.instance.applyHandler = (newHeroPowerCardId: string | null, heroPowerInfo: number) => {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			this.controller.updateHeroPower(request.side, newHeroPowerCardId, heroPowerInfo);
 		};
-		modalRef.instance.currentReward =
-			side === 'player'
-				? (this.player.player.questRewards ?? [])[0]
-				: (this.opponent.player.questRewards ?? [])[0];
-		modalRef.instance.applyHandler = (newQuestRewardId: string) => {
-			this.overlayRef.detach();
-			side === 'player'
-				? this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							playerBoard: {
-								player: {
-									questRewards: [newQuestRewardId] as readonly string[],
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation)
-				: this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							opponentBoard: {
-								player: {
-									questRewards: [newQuestRewardId] as readonly string[],
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation);
-		};
-		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	onHeroPowerChangeRequested(side: 'player' | 'opponent') {
-		const portal = new ComponentPortal(BgsSimulatorHeroPowerSelectionComponent);
-		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.closeHandler = () => {
+	onQuestRewardChangeRequested(request: QuestRewardChangeRequest) {
+		const modalRef = this.createModal(BgsSimulatorQuestRewardSelectionComponent);
+		modalRef.instance.currentReward = request.questRewardCardIds?.[0] ?? null;
+		modalRef.instance.applyHandler = (newQuestRewardId: string | null) => {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			this.controller.updateQuestRewards(request.side, newQuestRewardId);
 		};
-		modalRef.instance.currentHero = (
-			side === 'player' ? this.player.player.heroPowerId : this.opponent.player.heroPowerId
-		)!;
-		modalRef.instance.heroPowerData =
-			side === 'player' ? +(this.player.player.heroPowerInfo ?? -1) : +(this.opponent.player.heroPowerInfo ?? -1);
-		modalRef.instance.applyHandler = (newHeroPowerCardId: string, heroPowerInfo: number) => {
-			this.overlayRef.detach();
-			side === 'player'
-				? this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							playerBoard: {
-								player: {
-									heroPowerId: newHeroPowerCardId,
-									heroPowerInfo: heroPowerInfo,
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation)
-				: this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							opponentBoard: {
-								player: {
-									heroPowerId: newHeroPowerCardId,
-									heroPowerInfo: heroPowerInfo,
-								},
-							},
-						},
-				  } as BgsFaceOffWithSimulation);
-		};
-		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	onMinionAddRequested(side: 'player' | 'opponent') {
-		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
-		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.closeHandler = () => {
-			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		};
+	onMinionAddRequested(request: MinionAddRequest) {
+		const modalRef = this.createModal(BgsSimulatorMinionSelectionComponent);
 		modalRef.instance.currentMinion = null;
-		modalRef.instance.entityId = this._faceOff.getNextEntityId();
+		modalRef.instance.entityId = request.entityId;
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
-			side === 'player'
-				? this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							playerBoard: {
-								board: [
-									...(this._faceOff.battleInfo?.playerBoard.board ?? []),
-									newEntity,
-								] as readonly BoardEntity[],
-							} as BgsBoardInfo,
-						},
-				  } as BgsFaceOffWithSimulation)
-				: this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							opponentBoard: {
-								board: [
-									...(this._faceOff.battleInfo?.opponentBoard.board ?? []),
-									newEntity,
-								] as readonly BoardEntity[],
-							} as BgsBoardInfo,
-						},
-				  } as BgsFaceOffWithSimulation);
+			this.controller.addMinion(request.side, newEntity);
 		};
-		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	onMinionUpdateRequested(side: 'player' | 'opponent', event: { index: number }) {
-		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
-		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.closeHandler = () => {
-			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		};
-		const existingSide =
-			side === 'player' ? this._faceOff.battleInfo?.playerBoard : this._faceOff.battleInfo?.opponentBoard;
-		modalRef.instance.currentMinion = existingSide?.board[event.index] ?? null;
-		modalRef.instance.entityId = this._faceOff.getNextEntityId();
+	onMinionUpdateRequested(request: MinionUpdateRequest) {
+		const modalRef = this.createModal(BgsSimulatorMinionSelectionComponent);
+		modalRef.instance.currentMinion = request.entity;
+		modalRef.instance.entityId = request.entity?.entityId ?? 1;
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
-			const minionIndex = event?.index;
-			side === 'player'
-				? this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							playerBoard: {
-								board: replaceInArray(
-									this._faceOff.battleInfo?.playerBoard.board ?? [],
-									minionIndex,
-									newEntity,
-								),
-							} as BgsBoardInfo,
-						},
-				  } as BgsFaceOffWithSimulation)
-				: this.simulationUpdater(this._faceOff, {
-						battleInfo: {
-							opponentBoard: {
-								board: replaceInArray(
-									this._faceOff.battleInfo?.opponentBoard.board ?? [],
-									minionIndex,
-									newEntity,
-								),
-							} as BgsBoardInfo,
-						},
-				  } as BgsFaceOffWithSimulation);
+			this.controller.updateMinion(request.side, request.index, newEntity);
 		};
-		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	onMinionRemoveRequested(side: 'player' | 'opponent', event: { index: number }) {
-		const existingSide =
-			side === 'player' ? this._faceOff.battleInfo?.playerBoard : this._faceOff.battleInfo?.opponentBoard;
-		const minionIndex = event?.index ?? existingSide?.board.length;
-		side === 'player'
-			? this.simulationUpdater(this._faceOff, {
-					battleInfo: {
-						playerBoard: {
-							board: [
-								...removeFromReadonlyArray(
-									this._faceOff.battleInfo?.playerBoard.board ?? [],
-									minionIndex,
-								),
-							] as readonly BoardEntity[],
-						} as BgsBoardInfo,
-					},
-			  } as BgsFaceOffWithSimulation)
-			: this.simulationUpdater(this._faceOff, {
-					battleInfo: {
-						opponentBoard: {
-							board: [
-								...removeFromReadonlyArray(
-									this._faceOff.battleInfo?.opponentBoard.board ?? [],
-									minionIndex,
-								),
-							] as readonly BoardEntity[],
-						} as BgsBoardInfo,
-					},
-			  } as BgsFaceOffWithSimulation);
+	onMinionRemoveRequested(request: MinionRemoveRequest) {
+		this.controller.removeMinion(request.side, request.index);
 	}
 
 	resetBoards() {
-		this.simulationReset(this._faceOff.id);
+		this.controller.resetBattle(this.initialBattle);
 	}
 
 	async importBoards() {
@@ -641,7 +360,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 			const code = await this.api.get(url);
 			const faceOffStr = atob(code ?? '');
 			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
-			this.simulationUpdater(null, faceOff);
+			this.initialBattle = this.controller.initBattleWithSideEffects(faceOff);
 		} catch (e) {
 			console.warn('could not import from clipboard', fromClipboard, e);
 		}
@@ -653,7 +372,7 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 			this.cdr.detectChanges();
 		}
 		const sim: BgsFaceOffWithSimulation = {
-			...this._faceOff,
+			...this.controller.faceOff$$.value,
 			battleResult: undefined,
 			battleInfoStatus: undefined,
 			battleInfoMesage: undefined,
@@ -673,16 +392,17 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		}, this.exportConfirmationTimeout);
 	}
 
-	// For now do it purely in the UI, let's see later on if we want to use the store
-	async simulateNewBattle() {
-		if (this.simulateButtonDisabled || !this._faceOff.battleInfo) {
+	async simulateWinOdds() {
+		if (this.simulateButtonDisabled || !this.controller.faceOff$$.value?.battleInfo) {
 			return;
 		}
 
-		this.newBattle = BgsFaceOffWithSimulation.create({
-			battleInfoStatus: 'waiting-for-result',
-			battleResult: undefined,
-		});
+		this.battleResult$$.next(
+			BgsFaceOffWithSimulation.create({
+				battleInfoStatus: 'waiting-for-result',
+				battleResult: undefined,
+			}),
+		);
 		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulating-button');
 		this.simulateButtonDisabled = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -691,23 +411,14 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 
 		const prefs = await this.prefs.getPreferences();
 		const battleInfo: BgsBattleInfo = {
-			playerBoard: {
-				player: this.player.player,
-				secrets: this.player.secrets,
-				board: this.player.board,
-			},
-			opponentBoard: {
-				player: this.opponent.player,
-				secrets: this.opponent.secrets,
-				board: this.opponent.board,
-			},
+			...this.controller.faceOff$$.value.battleInfo,
 			options: {
-				...this._faceOff.battleInfo.options,
+				...this.controller.faceOff$$.value.battleInfo?.options,
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
 				maxAcceptableDuration: 8000,
 			},
 			gameState: {
-				...this._faceOff.battleInfo.gameState,
+				...this.controller.faceOff$$.value.battleInfo.gameState,
 				// No restrictions on tribes yet
 				validTribes: undefined,
 				currentTurn: 0,
@@ -717,10 +428,12 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
 		console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
-		this.newBattle = BgsFaceOffWithSimulation.create({
-			battleInfoStatus: 'done',
-			battleResult: newSim ?? undefined,
-		});
+		this.battleResult$$.next(
+			BgsFaceOffWithSimulation.create({
+				battleInfoStatus: 'done',
+				battleResult: newSim ?? undefined,
+			}),
+		);
 		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
 		this.simulateButtonDisabled = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -747,37 +460,31 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		if (!this._faceOff.battleInfo) {
+		if (!this.controller.faceOff$$.value?.battleInfo) {
 			return;
 		}
 
 		this.processingReposition = true;
-		this.newBattle = BgsFaceOffWithSimulation.create({
-			battleInfoStatus: 'waiting-for-result',
-			battleResult: undefined,
-		});
+		this.battleResult$$.next(
+			BgsFaceOffWithSimulation.create({
+				battleInfoStatus: 'waiting-for-result',
+				battleResult: undefined,
+			}),
+		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 
 		const prefs = await this.prefs.getPreferences();
 		const battleInfo: BgsBattleInfo = {
-			playerBoard: {
-				player: this.player.player,
-				secrets: this.player.secrets,
-				board: this.player.board,
-			},
-			opponentBoard: {
-				player: this.opponent.player,
-				secrets: this.opponent.secrets,
-				board: this.opponent.board,
-			},
+			...this.controller.faceOff$$.value.battleInfo,
 			options: {
-				...this._faceOff.battleInfo.options,
+				...this.controller.faceOff$$.value.battleInfo?.options,
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
 				maxAcceptableDuration: 6000,
 			},
 			gameState: {
+				...this.controller.faceOff$$.value.battleInfo.gameState,
 				// No restrictions on tribes yet
 				validTribes: undefined,
 				currentTurn: 0,
@@ -791,13 +498,19 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 			const status: ProcessingStatus = value.value[0];
 			const result: PermutationResult = value.value[1];
 			if (!!result) {
-				this.simulationUpdater(
-					null,
+				this.battleResult$$.next(
 					BgsFaceOffWithSimulation.create({
 						battleInfoStatus: 'done',
 						battleInfo: result.battleInfo,
 						battleResult: result.result,
-					} as BgsFaceOffWithSimulation),
+					}),
+				);
+				this.controller.initBattleWithSideEffects(
+					BgsFaceOffWithSimulation.create({
+						battleInfoStatus: 'done',
+						battleInfo: result.battleInfo,
+						battleResult: result.result,
+					}),
 				);
 				this.processingReposition = false;
 				this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
@@ -816,42 +529,20 @@ export class BgsSimulatorComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	private buildBoard(entities: readonly Entity[]): BoardEntity[] {
-		const result = (entities ?? []).map((entity) => this.buildEntity(entity));
-		return result;
-	}
-
-	private buildEntity(entity: Entity): BoardEntity {
-		return {
-			entityId: entity.id,
-			cardId: entity.cardID,
-			attack: entity.getTag(GameTag.ATK),
-			health: entity.getTag(GameTag.HEALTH),
-			divineShield: entity.getTag(GameTag.DIVINE_SHIELD) === 1,
-			friendly: true,
-			windfury: entity.getTag(GameTag.WINDFURY) === 1 || entity.getTag(GameTag.MEGA_WINDFURY) === 1,
-			stealth: entity.getTag(GameTag.STEALTH) === 1,
-			poisonous: entity.getTag(GameTag.POISONOUS) === 1,
-			venomous: entity.getTag(GameTag.VENOMOUS) === 1,
-			reborn: entity.getTag(GameTag.REBORN) === 1,
-			taunt: entity.getTag(GameTag.TAUNT) === 1,
-			enchantments: entity['enchantments'],
-			definitelyDead: false,
-			immuneWhenAttackCharges: 0,
+	private createModal<T extends SimulatorModal>(type: ComponentType<T>): ComponentRef<T> {
+		const portal = new ComponentPortal(type);
+		const modalRef = this.overlayRef.attach(portal);
+		modalRef.instance.closeHandler = () => {
+			this.overlayRef.detach();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
 		};
+		this.positionStrategy.apply();
+		return modalRef;
 	}
+}
 
-	private updateInfo() {
-		if (!this._faceOff || !this._faceOff.battleInfo) {
-			return;
-		}
-
-		this.opponent = this._faceOff.battleInfo.opponentBoard;
-		this.player = this._faceOff.battleInfo.playerBoard;
-		this.newBattle = this._faceOff;
-		this.turnNumber = this._faceOff.turn;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+interface SimulatorModal {
+	closeHandler: () => void;
 }

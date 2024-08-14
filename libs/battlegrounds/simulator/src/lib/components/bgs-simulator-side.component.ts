@@ -1,13 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	Output,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -15,6 +7,7 @@ import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity
 import { BgsBoard, BgsCardTooltipComponent, BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 
 @Component({
@@ -22,7 +15,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 	styleUrls: [`./bgs-simulator-side.component.scss`],
 	template: `
 		<div class="bgs-battle-side full-screen-mode">
-			<div class="add-teammate" *ngIf="!_teammate && enableDuos">
+			<!-- <div class="add-teammate" *ngIf="!_teammate && enableDuos">
 				<div class="add-teammate-button" (click)="addTeammate()">
 					<div class="add-teammate-icon">+</div>
 					<div class="add-teammate-text">Add teammate</div>
@@ -37,21 +30,18 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 						'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
 					"
 				></bgs-simulator-player-overview>
-			</div>
+			</div> -->
 			<div class="hero">
 				<bgs-hero-portrait-simulator
 					class="portrait"
+					[side]="side"
 					[heroCardId]="heroCardId"
 					[heroPowerCardId]="heroPowerCardId"
 					[questRewardCardId]="questRewardCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
-					[tavernTier]="showTavernTier ? tavernTier : null"
+					[tavernTier]="tavernTier"
 					[tooltipPosition]="tooltipPosition"
-					[fullScreenMode]="fullScreenMode"
-					(portraitChangeRequested)="onPortraitClick()"
-					(heroPowerChangeRequested)="onHeroPowerClick()"
-					(questRewardChangeRequested)="onQuestRewardClick()"
 				></bgs-hero-portrait-simulator>
 			</div>
 			<div class="board" cdkDropListGroup (cdkDropListDropped)="drop($event)">
@@ -82,18 +72,16 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 						class="button update"
 						[useUpdateIcon]="true"
 						(click)="updateMinion(entity, i)"
-						*ngIf="closeOnMinion"
 						[helpTooltip]="'battlegrounds.sim.update-minion-button-tooltip' | fsTranslate"
 					></bgs-plus-button>
 					<bgs-minus-button
 						class="button remove"
 						(click)="removeMinion(entity, i)"
-						*ngIf="closeOnMinion"
 						helpTooltip="Remove minion"
 						[helpTooltip]="'battlegrounds.sim.remove-minion-button-tooltip' | fsTranslate"
 					></bgs-minus-button>
 				</div>
-				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd">
+				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7">
 					<bgs-plus-button
 						class="change-icon"
 						(click)="addMinion()"
@@ -102,15 +90,15 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
 			</div>
-			<div class="switch-teammate-container" *ngIf="!!_teammate && enableDuos">
+			<!-- <div class="switch-teammate-container" *ngIf="!!_teammate && enableDuos">
 				<div
 					class="switch-teammate-button"
 					[inlineSVG]="'assets/svg/restore.svg'"
 					(click)="switchTeammates()"
 				></div>
-			</div>
+			</div> -->
 			<!-- TODO: move this -->
-			<div class="global-effects">
+			<!-- <div class="global-effects">
 				<div class="header" [fsTranslate]="'battlegrounds.sim.global-effects-header'"></div>
 				<fs-numeric-input-with-arrows
 					class="input undead-army"
@@ -131,7 +119,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 					(fsModelUpdate)="onEternalLegionChanged($event)"
 				>
 				</fs-numeric-input-with-arrows>
-			</div>
+			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -141,36 +129,23 @@ export class BgsSimulatorSideComponent {
 
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
-	@Output() addMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() updateMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() removeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() entitiesUpdated: EventEmitter<readonly Entity[]> = new EventEmitter<readonly Entity[]>();
-	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() questRewardChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() eternalLegionChanged = new EventEmitter<number>();
-	@Output() undeadArmyChanged = new EventEmitter<number>();
+	@Input() side: Side;
 
-	@Input() set player(value: BgsBoardInfo) {
+	@Input() set player(value: BgsBoardInfo | null) {
 		this._player = value;
 		this.updateInfo();
 	}
 
-	@Input() set teammate(value: BgsBoardInfo) {
+	@Input() set teammate(value: BgsBoardInfo | null) {
 		this._teammate = value;
 		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
 		this.updateInfo();
 	}
 
-	@Input() allowClickToAdd: boolean;
-	@Input() clickToChange = false;
-	@Input() closeOnMinion = false;
-	@Input() showTavernTier = false;
-	@Input() fullScreenMode = false;
 	@Input() tooltipPosition: CardTooltipPositionType;
 
-	_player: BgsBoardInfo;
-	_teammate: BgsBoardInfo;
+	_player: BgsBoardInfo | null;
+	_teammate: BgsBoardInfo | null;
 
 	teammateShownInfo: BgsPlayer | null;
 
@@ -180,18 +155,24 @@ export class BgsSimulatorSideComponent {
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
+
+	entities: readonly Entity[];
+
 	undeadArmy: number;
 	eternalLegion: number;
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
-	forceTooltipHidden = false;
-
-	entities: readonly Entity[];
 
 	undeadArmyLabel = this.allCards.getCard(CardIds.NerubianDeathswarmer_UndeadArmyEnchantment).name;
 	eternalLegionLabel = this.allCards.getCard(CardIds.EternalLegionEnchantment).name;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {}
+	forceTooltipHidden = false;
+
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly controller: BgsSimulatorControllerService,
+	) {}
 
 	trackByFn(index, item: Entity) {
 		return item.id;
@@ -212,47 +193,31 @@ export class BgsSimulatorSideComponent {
 		const entitiesWithoutMovedElement: Entity[] = this.entities.filter((entity) => entity.id !== movedElement.id);
 		entitiesWithoutMovedElement.splice(movedElementNewIndex, 0, movedElement);
 		this.entities = entitiesWithoutMovedElement;
-		this.entitiesUpdated.next(this.entities);
+		this.controller.updateBoard(this.side, this.entities);
 		this.forceTooltipHidden = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	onPortraitClick() {
-		this.portraitChangeRequested.next();
-	}
+	// onUndeadArmyChanged(value: number) {
+	// 	this.controller.requestUndeadArmyChange(value);
+	// }
 
-	onHeroPowerClick() {
-		this.heroPowerChangeRequested.next();
-	}
-
-	onQuestRewardClick() {
-		this.questRewardChangeRequested.next();
-	}
-
-	onUndeadArmyChanged(value: number) {
-		this.undeadArmyChanged.next(value);
-	}
-
-	onEternalLegionChanged(value: number) {
-		this.eternalLegionChanged.next(value);
-	}
+	// onEternalLegionChanged(value: number) {
+	// 	this.controller.requestEternalLegionChange(value);
+	// }
 
 	addMinion() {
-		this.addMinionRequested.next({ index: this.entities.length });
+		this.controller.requestAddMinion(this.side);
 	}
 
 	updateMinion(entity: Entity, index: number) {
-		this.updateMinionRequested.next({
-			index: index,
-		});
+		this.controller.requestUpdateMinion(this.side, index);
 	}
 
 	removeMinion(entity: Entity, index: number) {
-		this.removeMinionRequested.next({
-			index: index,
-		});
+		this.controller.requestRemoveMinion(this.side, index);
 	}
 
 	addTeammate() {
@@ -265,7 +230,7 @@ export class BgsSimulatorSideComponent {
 				tavernTier: this._player?.player?.tavernTier ?? 1,
 				globalInfo: {},
 				questEntities: [],
-				friendly: this._player.player.friendly,
+				friendly: this._player?.player.friendly,
 				hand: [],
 				heroPowerUsed: false,
 			},
@@ -311,7 +276,7 @@ export class BgsSimulatorSideComponent {
 		}
 	}
 
-	private toBgsPlayer(player: BgsBoardInfo): BgsPlayer | null {
+	private toBgsPlayer(player: BgsBoardInfo | null): BgsPlayer | null {
 		if (!player) {
 			return null;
 		}

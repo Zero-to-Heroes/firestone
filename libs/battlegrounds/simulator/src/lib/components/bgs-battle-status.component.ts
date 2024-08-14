@@ -171,10 +171,10 @@ export class BgsBattleStatusComponent {
 
 	processingSimulationSample: boolean;
 
-	private battle: BgsFaceOffWithSimulation;
+	private battle: BgsFaceOffWithSimulation | null;
 	private tempInterval;
 
-	@Input() set nextBattle(value: BgsFaceOffWithSimulation) {
+	@Input() set nextBattle(value: BgsFaceOffWithSimulation | null) {
 		if (value === this.battle) {
 			return;
 		}

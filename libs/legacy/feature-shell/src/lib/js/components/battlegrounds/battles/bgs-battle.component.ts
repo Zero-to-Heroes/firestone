@@ -568,7 +568,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		};
-		modalRef.instance.currentHero =
+		modalRef.instance.currentHeroPower =
 			side === 'player' ? this.player.player.heroPowerId : this.opponent.player.heroPowerId;
 		modalRef.instance.heroPowerData =
 			side === 'player' ? +this.player.player.heroPowerInfo : +this.opponent.player.heroPowerInfo;
