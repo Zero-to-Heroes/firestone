@@ -74,6 +74,7 @@ export class BgsSimulatorControllerService {
 	}
 	public addMinion(side: Side, entity: BoardEntity) {
 		const faceOff = this.stateManager.addMinion(this.faceOff$$.value!, side, entity);
+		console.debug('adding minion', entity, this.faceOff$$.value, faceOff);
 		this.faceOff$$.next(faceOff);
 	}
 

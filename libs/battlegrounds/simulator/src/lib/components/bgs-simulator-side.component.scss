@@ -2,8 +2,12 @@
 	position: relative;
 	height: 100%;
 	display: grid;
-	grid-template-rows: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+	grid-template-rows: minmax(0, 2fr) minmax(0, 2fr);
 	gap: 0.5vh;
+
+	&.with-duos {
+		grid-template-rows: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+	}
 
 	.hero {
 		position: relative;
@@ -13,7 +17,7 @@
 		align-items: center;
 		justify-self: center;
 		margin: 0;
-		width: 40%;
+		width: 55%;
 
 		.portrait {
 			width: auto;
@@ -35,15 +39,20 @@
 		}
 	}
 
+	&.with-duos {
+		grid-template-rows: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+		width: 40%;
+	}
+
 	.board {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		overflow: hidden;
+		overflow: visible;
 
 		.minion-container {
 			margin-right: 2%;
-			height: 100%;
+			height: 80%;
 			aspect-ratio: 60/89;
 			display: flex;
 			position: relative;
@@ -214,9 +223,8 @@
 							aspect-ratio: 58/85;
 							margin: 0;
 
-							li {
-								height: 100%;
-								width: 100%;
+							::ng-deep card-on-board board-card-stats .stat .value.value.value.value.value {
+								font-size: inherit;
 							}
 						}
 					}
@@ -264,7 +272,12 @@
 
 :host.player {
 	.bgs-battle-side {
-		grid-template-rows: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+		grid-template-rows: minmax(0, 2fr) minmax(0, 2fr);
+		gap: 0.5vh;
+
+		&.with-duos {
+			grid-template-rows: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+		}
 
 		.teammate {
 			order: 3;

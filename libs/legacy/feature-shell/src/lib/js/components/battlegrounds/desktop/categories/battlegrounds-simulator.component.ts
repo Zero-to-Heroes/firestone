@@ -20,19 +20,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 					<use xlink:href="assets/svg/sprite.svg#info" />
 				</svg>
 			</div>
-			<bgs-battle
-				class="battle"
-				[faceOff]="faceOff$ | async"
-				[hideActualBattle]="true"
-				[clickToChange]="true"
-				[allowClickToAdd]="true"
-				[closeOnMinion]="true"
-				[fullScreenMode]="true"
-				[showTavernTier]="true"
-				[simulationUpdater]="simulationUpdater"
-				[simulationReset]="simulationReset"
-				[allowKeyboardControl]="true"
-			></bgs-battle>
+			<bgs-battle class="battle" [faceOff]="faceOff$ | async"></bgs-battle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

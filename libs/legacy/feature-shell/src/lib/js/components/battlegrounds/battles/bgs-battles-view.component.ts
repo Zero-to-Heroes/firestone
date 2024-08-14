@@ -10,9 +10,7 @@ import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
-import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -37,32 +35,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			</div>
 			<ng-container>
 				<div class="content" *ngIf="faceOffs?.length">
-					<ng-container *ngIf="selectedFaceOff">
-						<bgs-battle
-							class="battle"
-							[faceOff]="selectedFaceOff"
-							[hideActualBattle]="false"
-							[actualBattle]="actualBattle"
-							[clickToChange]="true"
-							[allowClickToAdd]="true"
-							[closeOnMinion]="true"
-							[fullScreenMode]="false"
-							[showTavernTier]="true"
-							[additionalClass]="'inline'"
-							[simulationUpdater]="simulationUpdater"
-							[simulationReset]="simulationReset"
-							[allowKeyboardControl]="false"
-						></bgs-battle>
-						<button class="i-30 close-button" (mousedown)="closeBattle()">
-							<svg class="svg-icon-fill">
-								<use
-									xmlns:xlink="https://www.w3.org/1999/xlink"
-									xlink:href="assets/svg/sprite.svg#window-control_close"
-								></use>
-							</svg>
-						</button>
-						<div class="battles-header" [owTranslate]="'battlegrounds.sim.battles-header'"></div>
-					</ng-container>
 					<div class="battles-list" scrollable>
 						<bgs-battle-recap
 							*ngFor="let faceOff of faceOffs; trackBy: trackByFn"
@@ -87,9 +59,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
-	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
-	simulationReset: (faceOffId: string) => void;
-
 	@Input() faceOffs: readonly BgsFaceOffWithSimulation[];
 	@Input() selectedFaceOff: BgsFaceOffWithSimulation;
 	@Input() actualBattle: BgsFaceOffWithSimulation;
@@ -116,19 +85,14 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
-			this.battlegroundsUpdater.next(new BgsBattleSimulationUpdateEvent(currentFaceOff, partialUpdate));
-		};
-		this.simulationReset = (faceOffId: string) => {
-			this.battlegroundsUpdater.next(new BgsBattleSimulationResetEvent(faceOffId));
-		};
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
 		if (this._isMainWindow) {
+			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-main-window' });
 			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		} else {
-			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view' });
+			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-bg-window' });
 			// this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
 		}
 	}

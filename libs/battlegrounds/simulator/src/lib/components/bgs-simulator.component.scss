@@ -20,7 +20,7 @@
 	margin: auto;
 
 	& > * {
-		overflow: auto; /* Ensure content inside rows does not overflow */
+		overflow: visible; /* Ensure content inside rows does not overflow */
 	}
 }
 

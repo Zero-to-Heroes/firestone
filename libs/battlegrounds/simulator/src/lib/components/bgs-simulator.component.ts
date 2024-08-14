@@ -201,6 +201,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.sub$$?.unsubscribe();
 	}
 
+	// TODO: adding minions to both boards lead to some lost info
 	private initControllerRequests() {
 		this.controller.portraitChangeRequested.subscribe((request) => this.onPortraitChangeRequested(request));
 		this.controller.heroPowerChangeRequested.subscribe((request) => this.onHeroPowerChangeRequested(request));
@@ -538,9 +539,9 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			// if (!(this.cdr as ViewRef)?.destroyed) {
+			// 	this.cdr.detectChanges();
+			// }
 		};
 		this.positionStrategy.apply();
 		return modalRef;

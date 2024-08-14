@@ -14,15 +14,15 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 	selector: 'bgs-simulator-side',
 	styleUrls: [`./bgs-simulator-side.component.scss`],
 	template: `
-		<div class="bgs-battle-side">
-			<div class="teammate">
-				<div class="add-teammate" *ngIf="!_teammate && enableDuos">
+		<div class="bgs-battle-side" [ngClass]="{ 'with-duos': enableDuos }">
+			<div class="teammate" *ngIf="enableDuos">
+				<div class="add-teammate" *ngIf="!_teammate">
 					<div class="add-teammate-button" (click)="addTeammate()">
 						<div class="add-teammate-icon">+</div>
 						<div class="add-teammate-text">Add teammate</div>
 					</div>
 				</div>
-				<div class="teammate-recap" *ngIf="!!_teammate && enableDuos">
+				<div class="teammate-recap" *ngIf="!!_teammate">
 					<bgs-simulator-player-overview
 						class="teammate-container"
 						[opponent]="teammateShownInfo"
@@ -129,7 +129,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulatorSideComponent {
-	enableDuos = true;
+	enableDuos = false;
 
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
