@@ -6,6 +6,7 @@ export class GameSettingsEvent extends GameEvent {
 		battlegroundsQuests: boolean;
 		battlegroundsSpells: boolean;
 		battlegroundsBuddies: boolean;
+		battlegroundsTrinkets: boolean;
 		battlegroundsAnomalies: readonly string[];
 	};
 }

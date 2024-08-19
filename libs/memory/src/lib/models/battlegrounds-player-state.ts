@@ -9,6 +9,7 @@ export interface MemoryBgsPlayerInfo {
 	readonly Board: readonly BgsEntity[];
 	readonly Hand: readonly BgsEntity[];
 	readonly Secrets: readonly BgsEntity[];
+	readonly Trinkets: readonly BgsEntity[];
 }
 
 export interface BgsEntity {

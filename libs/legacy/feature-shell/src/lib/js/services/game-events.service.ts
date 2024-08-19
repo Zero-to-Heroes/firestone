@@ -145,6 +145,7 @@ export class GameEvents {
 						battlegroundsSpells: gameEvent.Value?.BattlegroundsSpells,
 						battlegroundsQuests: gameEvent.Value?.BattlegroundsQuests,
 						battlegroundsBuddies: gameEvent.Value?.BattlegroundsBuddies,
+						battlegroundsTrinkets: gameEvent.Value?.BattlegroundsTrinkets,
 						battlegroundsAnomalies:
 							gameEvent.Value?.BattlegroundsAnomalies?.map((dbfId) => this.allCards.getCard(dbfId)?.id) ??
 							([] as readonly string[]),
@@ -1186,6 +1187,7 @@ export class GameEvents {
 								playerId: gameEvent.Value.PlayerBoard.PlayerId,
 								board: gameEvent.Value.PlayerBoard.Board, // as is
 								secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
+								trinkets: gameEvent.Value.PlayerBoard.Trinkets, // as is
 								hand: gameEvent.Value.PlayerBoard.Hand, // as is
 								hero: gameEvent.Value.PlayerBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
@@ -1217,6 +1219,7 @@ export class GameEvents {
 								playerId: gameEvent.Value.PlayerBoard.PlayerId,
 								board: gameEvent.Value.PlayerBoard.Board, // as is
 								secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
+								trinkets: gameEvent.Value.PlayerBoard.Trinkets, // as is
 								hand: gameEvent.Value.PlayerBoard.Hand, // as is
 								hero: gameEvent.Value.PlayerBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,

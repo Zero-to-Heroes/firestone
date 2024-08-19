@@ -141,11 +141,13 @@ export class ReplayMetadataBuilderService {
 			hasSpells: game.hasBgsSpells,
 			hasQuests: game.replay.hasBgsQuests,
 			hasAnomalies: game.replay.hasBgsAnomalies,
+			hasTrinkets: game.replay.hasBgsTrinkets,
 			bannedTribes: game.bannedTribes,
 			availableTribes: game.availableTribes,
 			mainPlayerId: game.replay.mainPlayerId,
 			heroQuests: game.replay.bgsHeroQuests,
 			anomalies: game.replay.bgsAnomalies,
+			trinkets: game.replay.bgsHeroTrinkets,
 			finalComp: postMatchStats?.boardHistory?.length
 				? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
 				: null,

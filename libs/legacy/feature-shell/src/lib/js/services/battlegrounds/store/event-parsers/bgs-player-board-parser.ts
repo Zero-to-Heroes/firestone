@@ -2,7 +2,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { defaultStartingHp, GameTag, GameType } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import { BgsPlayerEntity, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
 import {
@@ -313,6 +313,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			hand: teammateBoardFromMemory.Hand?.map((entity) => this.buildEntityFromMemory(entity)),
 			hero: this.buildEntityFromMemory(teammateBoardFromMemory.Hero),
 			secrets: teammateBoardFromMemory.Secrets?.map((entity) => this.buildEntityFromMemory(entity)),
+			trinkets: teammateBoardFromMemory.Trinkets?.map((entity) => this.buildTrinketFromMemory(entity)),
 			questEntities: [], // No info
 			questRewardEntities: [], // No info
 			questRewards: [], // No info
@@ -333,6 +334,14 @@ export class BgsPlayerBoardParser implements EventParser {
 					TagScriptDataNum1: e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value,
 					TagScriptDataNum2: e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value,
 				})) ?? [],
+		};
+	}
+
+	private buildTrinketFromMemory(entity: BgsEntity): BoardTrinket {
+		return {
+			entityId: entity.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
+			cardId: entity.CardId,
+			scriptDataNum1: entity.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value,
 		};
 	}
 
@@ -363,6 +372,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			playerId:
 				opponentBoard.hero.Tags?.find((t) => t.Name === GameTag.PLAYER_ID)?.Value ?? teammatePlayer?.playerId,
 			secrets: opponentBoard.secrets,
+			trinkets: opponentBoard.trinkets,
 			questEntities: opponentBoard.questEntities,
 			questRewardEntities: opponentBoard.questRewardEntities,
 			questRewards: opponentBoard.questRewards,
@@ -396,6 +406,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board, this.allCards);
 		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets, this.allCards);
+		const trinkets: BoardTrinket[] = [...playerBoard.trinkets];
 		const hand: BoardEntity[] = player.buildBgsEntities(playerBoard.hand, this.allCards);
 		let tavernTier =
 			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
@@ -429,6 +440,8 @@ export class BgsPlayerBoardParser implements EventParser {
 				questRewardEntities: playerBoard.questRewardEntities,
 				questEntities: playerBoard.questEntities,
 				hand: hand,
+				trinkets: trinkets,
+				secrets: secrets,
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 					TavernSpellsCastThisGame: playerBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
