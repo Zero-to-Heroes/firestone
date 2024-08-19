@@ -392,6 +392,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				ChoralAttackBuff: opponentBoard.globalInfo?.ChoralAttackBuff ?? 0,
 				ChoralHealthBuff: opponentBoard.globalInfo?.ChoralHealthBuff ?? 0,
 				FrostlingBonus: opponentBoard.globalInfo?.FrostlingBonus ?? 0,
+				AstralAutomatonsSummonedThisGame: opponentBoard.globalInfo?.AstralAutomatonsSummonedThisGame ?? 0,
 				BloodGemAttackBonus: opponentBoard.globalInfo?.BloodGemAttackBonus ?? 0,
 				BloodGemHealthBonus: opponentBoard.globalInfo?.BloodGemHealthBonus ?? 0,
 			},
@@ -404,9 +405,10 @@ export class BgsPlayerBoardParser implements EventParser {
 			return null;
 		}
 
+		console.debug('[bgs-simulation] building board info', playerBoard, player);
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board, this.allCards);
 		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets, this.allCards);
-		const trinkets: BoardTrinket[] = [...playerBoard.trinkets];
+		const trinkets: BoardTrinket[] = [...(playerBoard.trinkets ?? [])];
 		const hand: BoardEntity[] = player.buildBgsEntities(playerBoard.hand, this.allCards);
 		let tavernTier =
 			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
@@ -450,6 +452,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					ChoralAttackBuff: playerBoard.globalInfo?.ChoralAttackBuff ?? 0,
 					ChoralHealthBuff: playerBoard.globalInfo?.ChoralHealthBuff ?? 0,
 					FrostlingBonus: playerBoard.globalInfo?.FrostlingBonus ?? 0,
+					AstralAutomatonsSummonedThisGame: playerBoard.globalInfo?.AstralAutomatonsSummonedThisGame ?? 0,
 					BloodGemAttackBonus: playerBoard.globalInfo?.BloodGemAttackBonus ?? 0,
 					BloodGemHealthBonus: playerBoard.globalInfo?.BloodGemHealthBonus ?? 0,
 				},

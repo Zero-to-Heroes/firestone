@@ -1054,6 +1054,23 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'BATTLEGROUNDS_TRINKET_SELECTION':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_TRINKET_SELECTION,
+						additionalData: {
+							options: gameEvent.Value.Options,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_TRINKET_SELECTED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_TRINKET_SELECTED, gameEvent),
+				);
+				break;
 			case 'BATTLEGROUNDS_TRIPLE':
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
@@ -1236,6 +1253,7 @@ export class GameEvents {
 								playerId: gameEvent.Value.OpponentBoard.PlayerId,
 								board: gameEvent.Value.OpponentBoard.Board, // as is
 								secrets: gameEvent.Value.OpponentBoard.Secrets, // as is
+								trinkets: gameEvent.Value.OpponentBoard.Trinkets, // as is
 								hand: gameEvent.Value.OpponentBoard.Hand, // as is
 								hero: gameEvent.Value.OpponentBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
