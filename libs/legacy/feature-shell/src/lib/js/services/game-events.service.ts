@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { GameUniqueIdService } from '@firestone/game-state';
+import { GameEventsFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -40,12 +40,17 @@ export class GameEvents {
 		private readonly allCards: CardsFacadeService,
 		private readonly gameState: GameStateService,
 		private readonly gameUniqueId: GameUniqueIdService,
+		private readonly eventsFacade: GameEventsFacadeService,
 	) {
 		this.init();
 	}
 
 	async init() {
 		await this.scene.isReady();
+
+		this.gameEventsEmitter.allEvents.subscribe((event) => {
+			this.eventsFacade.allEvents.next(event);
+		});
 
 		this.gameStatus.inGame$$
 			.pipe(
