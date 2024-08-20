@@ -313,7 +313,6 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.isFirstTrinket,
 					),
 				);
-				this.startMemoryReading();
 			} else if (gameEvent.type === GameEvent.GAME_START) {
 				this.duoPendingBoards = [];
 				this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState, null, true));
