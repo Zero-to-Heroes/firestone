@@ -148,6 +148,7 @@ export class ReplayMetadataBuilderService {
 			heroQuests: game.replay.bgsHeroQuests,
 			anomalies: game.replay.bgsAnomalies,
 			trinkets: game.replay.bgsHeroTrinkets,
+			trinketsOffered: game.replay.bgsHeroTrinketsOffered,
 			finalComp: postMatchStats?.boardHistory?.length
 				? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
 				: null,
