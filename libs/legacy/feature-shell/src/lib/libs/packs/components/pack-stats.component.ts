@@ -125,7 +125,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							nextLegendary: buildPityTimer(
 								packsForBoosterId,
 								'legendary',
-								'NORMAL',
+								GOLDEN_SET_PACKS.includes(boosterId) ? 'GOLDEN' : 'NORMAL',
 								boosterId,
 								openedPacks,
 								pityTimerReset,
@@ -133,7 +133,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							nextEpic: buildPityTimer(
 								packsForBoosterId,
 								'epic',
-								'NORMAL',
+								GOLDEN_SET_PACKS.includes(boosterId) ? 'GOLDEN' : 'NORMAL',
 								boosterId,
 								openedPacks,
 								pityTimerReset,
@@ -264,7 +264,7 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 const buildPityTimer = (
 	openedPacks: readonly PackResult[],
 	type: 'legendary' | 'epic',
-	quality: 'NORMAL',
+	quality: 'NORMAL' | 'GOLDEN',
 	boosterId: BoosterType,
 	totalOpenedPacks: number,
 	pityTimerReset: number | null,
