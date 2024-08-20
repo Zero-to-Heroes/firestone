@@ -243,6 +243,7 @@ export const buildTiers = (
 	hasBuddies: boolean,
 	hasSpells: boolean,
 	hasTrinkets: boolean,
+	playerTrinkets: readonly string[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
@@ -257,7 +258,8 @@ export const buildTiers = (
 	if (
 		showTierSeven ||
 		anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
-		playerCardId === CardIds.ThorimStormlord_BG27_HERO_801
+		playerCardId === CardIds.ThorimStormlord_BG27_HERO_801 ||
+		playerTrinkets?.includes(CardIds.PaglesFishingRod_BG30_MagicItem_993)
 	) {
 		tiersToInclude.push(7);
 	}

@@ -106,6 +106,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				showTrinkets: prefs.bgsShowTrinkets,
 				playerCardId: bgGameState?.currentGame?.getMainPlayer()?.cardId,
 				allPlayersCardIds: bgGameState?.currentGame?.players?.map((p) => p.cardId),
+				playerTrinkets: [
+					bgGameState?.currentGame?.getMainPlayer()?.lesserTrinket,
+					bgGameState?.currentGame?.getMainPlayer()?.greaterTrinket,
+				].filter((trinket) => !!trinket),
 			})),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
@@ -124,6 +128,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					showTrinkets,
 					playerCardId,
 					allPlayersCardIds,
+					playerTrinkets,
 				}) => {
 					// hasSpells = true;
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
@@ -153,6 +158,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						hasBuddies,
 						hasSpells,
 						hasTrinkets,
+						playerTrinkets,
 						this.i18n,
 						this.allCards,
 					);
