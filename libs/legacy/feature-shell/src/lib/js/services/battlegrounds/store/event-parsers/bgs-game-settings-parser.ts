@@ -20,7 +20,7 @@ export class BgsGameSettingsParser implements EventParser {
 				hasBuddies: event.event.additionalData.battlegroundsBuddies,
 				hasSpells: event.event.additionalData.battlegroundsSpells,
 				anomalies: event.event.additionalData.battlegroundsAnomalies,
-				hasTrinkets: true, // event.event.additionalData.battlegroundsTrinkets,
+				hasTrinkets: event.event.additionalData.battlegroundsTrinkets,
 			} as BgsGame),
 		} as BattlegroundsState);
 	}

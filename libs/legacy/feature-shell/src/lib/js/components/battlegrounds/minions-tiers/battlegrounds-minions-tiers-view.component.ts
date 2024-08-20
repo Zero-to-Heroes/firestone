@@ -14,7 +14,6 @@ import {
 	NON_DISCOVERABLE_BUDDIES,
 	Race,
 	ReferenceCard,
-	SpellSchool,
 	getTribeIcon,
 	getTribeName,
 } from '@firestone-hs/reference-data';
@@ -281,7 +280,9 @@ export const buildTiers = (
 
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 		.filter(
-			(card) => tiersToInclude.includes(card.techLevel) || card.type === CardType[CardType.BATTLEGROUND_TRINKET],
+			(card) =>
+				tiersToInclude.includes(card.techLevel) ||
+				card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET],
 		)
 		.map((card) =>
 			isCardExcludedByAnomaly(card, anomalies)
@@ -335,23 +336,25 @@ export const buildTiers = (
 		  )
 		? allPlayerBuddies
 		: [];
-	const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
-		tavernTier: parseInt(tierLevel),
-		cards: groupedByTier[tierLevel],
-		groupingFunction: (card: ExtendedReferenceCard) => {
-			if (hasSpells && isBgsSpell(card)) {
-				return ['spell'];
-			}
-			return getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
-				(t) =>
-					!availableTribes?.length ||
-					availableTribes.includes(Race[t]) ||
-					Race[t] === Race.BLANK ||
-					Race[t] === Race.ALL,
-			);
-		},
-		type: 'standard',
-	}));
+	const standardTiers: readonly Tier[] = Object.keys(groupedByTier)
+		.filter((tier) => !isNaN(+tier))
+		.map((tierLevel) => ({
+			tavernTier: parseInt(tierLevel),
+			cards: groupedByTier[tierLevel],
+			groupingFunction: (card: ExtendedReferenceCard) => {
+				if (hasSpells && isBgsSpell(card)) {
+					return ['spell'];
+				}
+				return getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
+					(t) =>
+						!availableTribes?.length ||
+						availableTribes.includes(Race[t]) ||
+						Race[t] === Race.BLANK ||
+						Race[t] === Race.ALL,
+				);
+			},
+			type: 'standard',
+		}));
 	const mechanicsTiers = showMechanicsTiers ? buildMechanicsTiers(filteredCards, buddies, hasSpells, i18n) : [];
 	const tribeTiers = showTribeTiers
 		? buildTribeTiers(
@@ -426,8 +429,10 @@ const buildTribeTiers = (
 				tavernTier: 'trinket',
 				tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.JarOGems_BG30_MagicItem_546}.jpg`,
 				tooltip: 'Trinkets',
-				cards: cardsInGame.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]),
-				groupingFunction: (card: ReferenceCard) => [SpellSchool[card.spellSchool]],
+				cards: cardsInGame.filter(
+					(c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] && !!c.spellSchool,
+				),
+				groupingFunction: (card: ReferenceCard) => [card.spellSchool],
 				type: 'tribe',
 		  };
 	return [...tribesResult, spellsTier, trinketsTier].filter((tier) => tier);

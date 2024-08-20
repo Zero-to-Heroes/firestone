@@ -61,7 +61,14 @@ export const getAllCardsInGame = (
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
-		.filter((card) => card.techLevel || (hasTrinkets && card.type === CardType[CardType.BATTLEGROUND_TRINKET]))
+		.filter(
+			(card) =>
+				card.techLevel ||
+				(hasTrinkets &&
+					card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
+					// Exclude the placeholder trinket cards
+					card.cost != null),
+		)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) =>
 			isBattlegroundsDuo(gameMode) ? true : !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),

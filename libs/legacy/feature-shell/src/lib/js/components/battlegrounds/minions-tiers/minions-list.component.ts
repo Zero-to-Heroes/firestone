@@ -145,7 +145,9 @@ export class BattlegroundsMinionsListComponent
 										: isNaN(+tribeString)
 										? Race[tribeString]
 										: null,
-								title: isNaN(+tribeString)
+								title: tribeString?.toLowerCase()?.includes('trinket')
+									? this.i18n.translateString(`global.spellschool.${tribeString.toLowerCase()}`)
+									: isNaN(+tribeString)
 									? this.i18n.translateString(`global.tribe.${tribeString.toLowerCase()}`)
 									: this.i18n.translateString(`app.battlegrounds.filters.tier.tier`, {
 											value: tribeString,
