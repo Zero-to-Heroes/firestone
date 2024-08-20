@@ -16,8 +16,6 @@ export interface TwitchBgsState {
 	readonly currentBattle?: TwitchBgsCurrentBattle;
 	readonly availableRaces: readonly Race[];
 	readonly phase: 'recruit' | 'combat';
-	readonly lesserTrinket: string | undefined;
-	readonly greaterTrinket: string | undefined;
 	readonly config: TwitchBgsStateConfig;
 }
 
@@ -26,6 +24,7 @@ export interface TwitchBgsStateConfig {
 	readonly hasQuests: boolean;
 	readonly hasPrizes: boolean;
 	readonly hasSpells: boolean;
+	readonly hasTrinkets: boolean;
 	readonly anomalies: readonly string[];
 }
 

@@ -66,6 +66,18 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 				[helpTooltip]="opponentCardsLeftInDeckTooltip"
 			></div>
 			<ul class="hero top-hero">
+				<div class="trinkets" *ngIf="bgsHasTrinkets">
+					<empty-card
+						class="lesser"
+						[cardId]="topHeroLesserTrinketCard"
+						[cardTooltipPosition]="'right'"
+					></empty-card>
+					<empty-card
+						class="greater"
+						[cardId]="topHeroGreaterTrinketCard"
+						[cardTooltipPosition]="'right'"
+					></empty-card>
+				</div>
 				<div class="weapon">
 					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
 				</div>
@@ -104,6 +116,18 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 				></empty-card>
 			</ul>
 			<ul class="hero bottom-hero">
+				<div class="trinkets" *ngIf="bgsHasTrinkets">
+					<empty-card
+						class="lesser"
+						[cardId]="bottomHeroLesserTrinketCard"
+						[cardTooltipPosition]="'left'"
+					></empty-card>
+					<empty-card
+						class="greater"
+						[cardId]="bottomHeroGreaterTrinketCard"
+						[cardTooltipPosition]="'left'"
+					></empty-card>
+				</div>
 				<div class="weapon">
 					<empty-card
 						[cardId]="bottomWeaponCard"
@@ -187,14 +211,19 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 	topBoardCards: readonly string[];
 	topSecretCards: readonly string[];
 	topHeroCard: string;
+	topHeroLesserTrinketCard: string;
+	topHeroGreaterTrinketCard: string;
 	bottomBoardCards: readonly string[];
 	bottomHeroPowerCard: string;
 	bottomWeaponCard: string;
 	bottomSecretCards: readonly string[];
 	bottomHandCards: readonly string[];
 	bottomHeroCard: string;
+	bottomHeroLesserTrinketCard: string;
+	bottomHeroGreaterTrinketCard: string;
 	bgsPlayers: readonly TwitchBgsPlayer[];
 	bgsAnomaly: string;
+	bgsHasTrinkets: boolean;
 	constructedAnomaly: string;
 	currentTurn: number;
 	playerCardsLeftInDeckTooltip: string;
@@ -250,6 +279,14 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 					!!this.bgsPlayers?.length &&
 					this._bgsState?.inGame &&
 					!this._bgsState?.gameEnded;
+				this.bgsHasTrinkets = this.bgsState?.config?.hasTrinkets;
+
+				const mainPlayerBgsInfo = this.isBgs ? this.bgsPlayers.find((player) => player.isMainPlayer) : null;
+				const currentOpponentBgsInfo = this.isBgs
+					? // TODO: won't work with scenarios where multiple players are the same hero
+					  this.bgsPlayers.find((player) => player.cardId === gameState.opponentDeck?.hero?.cardId)
+					: null;
+				this.isBgs && console.debug('BG players infos', mainPlayerBgsInfo, currentOpponentBgsInfo);
 
 				this.topHeroPowerCard = this._gameState?.opponentDeck?.heroPower?.cardId;
 				this.topWeaponCard = this._gameState?.opponentDeck?.weapon?.cardId;
@@ -258,12 +295,16 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 					.filter((card) => card.zone === 'SECRET')
 					.map((card) => card.cardId);
 				this.topHeroCard = this._gameState?.opponentDeck?.hero?.cardId;
+				this.topHeroLesserTrinketCard = currentOpponentBgsInfo?.lesserTrinket;
+				this.topHeroGreaterTrinketCard = currentOpponentBgsInfo?.greaterTrinket;
 				this.bottomBoardCards = this._gameState?.playerDeck?.board.map((card) => card.cardId);
 				this.bottomHeroPowerCard = this.buildBottomHeroPowerCards(this._gameState, this._bgsState);
 				this.bottomWeaponCard = this.buildBottomWeaponCards(this._gameState, this._bgsState);
 				this.bottomSecretCards = this.buildBottomSecretCards(this._gameState, this._bgsState);
 				this.bottomHandCards = this._gameState?.playerDeck?.hand.map((card) => card.cardId);
 				this.bottomHeroCard = this._gameState?.playerDeck?.hero?.cardId;
+				this.bottomHeroLesserTrinketCard = mainPlayerBgsInfo?.lesserTrinket;
+				this.bottomHeroGreaterTrinketCard = mainPlayerBgsInfo?.greaterTrinket;
 				this.constructedAnomaly = this._gameState?.matchInfo?.anomalies?.[0];
 				this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
 					cardsInDeck: this._gameState?.playerDeck?.deck?.length ?? 0,

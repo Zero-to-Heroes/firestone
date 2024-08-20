@@ -185,13 +185,12 @@ export class TwitchAuthService {
 					gameEnded: bgsState.currentGame?.gameEnded,
 					availableRaces: bgsState.currentGame?.availableRaces,
 					phase: bgsState.currentGame?.phase,
-					lesserTrinket: bgsState.currentGame?.getMainPlayer()?.lesserTrinket,
-					greaterTrinket: bgsState.currentGame?.getMainPlayer()?.greaterTrinket,
 					config: {
 						hasBuddies: bgsState.currentGame?.hasBuddies,
 						hasPrizes: bgsState.currentGame?.hasPrizes,
 						hasQuests: bgsState.currentGame?.hasQuests,
 						hasSpells: bgsState.currentGame?.hasSpells,
+						hasTrinkets: bgsState.currentGame?.hasTrinkets,
 						anomalies: bgsState.currentGame?.anomalies,
 					},
 			  }

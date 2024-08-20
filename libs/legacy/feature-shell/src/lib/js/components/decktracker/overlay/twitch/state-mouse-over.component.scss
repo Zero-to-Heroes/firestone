@@ -117,6 +117,14 @@ empty-card {
 	align-items: center;
 	justify-content: center;
 
+	.trinkets {
+		position: absolute;
+		width: 30vh;
+		height: 69%;
+		left: 20%;
+		display: flex;
+	}
+
 	.weapon {
 		position: absolute;
 		width: 15vh;
@@ -168,6 +176,12 @@ empty-card {
 	height: 19%;
 	top: 8%;
 
+	.trinkets {
+		top: auto;
+		bottom: 0%;
+		left: 25%;
+	}
+
 	.weapon {
 		top: auto;
 		bottom: 0%;
@@ -196,6 +210,12 @@ empty-card {
 
 	.hero-power {
 		top: 14%;
+	}
+
+	.trinkets {
+		left: 25%;
+		bottom: 16%;
+		top: auto;
 	}
 
 	.weapon {
