@@ -33,6 +33,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 					[currentTurn]="currentTurn"
 					tavernTitle="Latest upgrade"
 					[showTavernsIfEmpty]="false"
+					[showQuestRewardsIfEmpty]="false"
 				></bgs-opponent-overview-big>
 			</div>
 			<div class="cards" *ngIf="showHeroCards$ | async">

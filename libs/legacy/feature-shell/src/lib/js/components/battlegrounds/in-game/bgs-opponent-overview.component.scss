@@ -190,7 +190,8 @@
 		flex-shrink: 0;
 	}
 
-	bgs-quest-rewards {
+	bgs-quest-rewards,
+	bgs-trinkets {
 		display: none;
 		width: 170px;
 		flex-grow: 0;
@@ -222,7 +223,8 @@
 		bgs-buddies {
 			display: flex;
 		}
-		bgs-quest-rewards {
+		bgs-quest-rewards,
+		bgs-trinkets {
 			display: flex;
 		}
 	}

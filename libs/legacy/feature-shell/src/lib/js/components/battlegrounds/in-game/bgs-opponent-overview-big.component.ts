@@ -11,7 +11,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'bgs-opponent-overview-big',
-	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`],
+	styleUrls: [`./bgs-opponent-overview-big.component.scss`],
 	template: `
 		<bgs-player-capsule
 			[player]="_opponent"
@@ -32,6 +32,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						[rewards]="questRewards"
 						*ngIf="showQuestRewardsIfEmpty || questRewards?.length"
 					></bgs-quest-rewards>
+					<bgs-trinkets [trinkets]="trinkets" *ngIf="trinkets?.length"></bgs-trinkets>
 					<bgs-battle-status
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
@@ -68,6 +69,7 @@ export class BgsOpponentOverviewBigComponent {
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 	questRewards: readonly QuestReward[];
+	trinkets: string[];
 	buddies: readonly number[];
 
 	@Input() rating: number;
@@ -99,6 +101,14 @@ export class BgsOpponentOverviewBigComponent {
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;
 		this.questRewards = value.questRewards;
+		this.trinkets = [];
+		if (value.lesserTrinket) {
+			this.trinkets.push(value.lesserTrinket);
+		}
+		if (value.greaterTrinket) {
+			this.trinkets.push(value.greaterTrinket);
+		}
+		console.debug('trinkets', this.trinkets, value);
 		this.buddies = value.buddyTurns;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {

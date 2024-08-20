@@ -19,7 +19,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 
 @Component({
 	selector: 'bgs-leaderboard-empty-card',
-	styleUrls: ['../../../../css/component/battlegrounds/overlay/bgs-leaderboard-empty-card.component.scss'],
+	styleUrls: ['./bgs-leaderboard-empty-card.component.scss'],
 	template: `
 		<div class="card">
 			<div
@@ -54,6 +54,8 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[questRewards]="questRewards"
 					[buddyImage]="buddyImage"
 					[buddyClass]="buddyClass"
+					[lesserTrinket]="lesserTrinket"
+					[greaterTrinket]="greaterTrinket"
 				></bgs-hero-short-recap>
 			</div>
 		</div>
@@ -132,6 +134,8 @@ export class BgsLeaderboardEmptyCardComponent
 
 	buddyImage: string;
 	buddyClass: string;
+	lesserTrinket: string;
+	greaterTrinket: string;
 
 	private callbackHandle;
 	private isPremiumUser: boolean;
@@ -237,6 +241,8 @@ export class BgsLeaderboardEmptyCardComponent
 				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
 				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
 		this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
+		this.lesserTrinket = this._previousPlayer.lesserTrinket;
+		this.greaterTrinket = this._previousPlayer.greaterTrinket;
 		this.mmr =
 			this._bgsPlayer?.player?.mmr != null
 				? this.i18n.translateString('battlegrounds.in-game.opponents.mmr', {

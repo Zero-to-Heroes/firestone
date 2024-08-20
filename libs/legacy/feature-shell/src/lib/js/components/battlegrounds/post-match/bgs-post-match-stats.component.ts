@@ -31,7 +31,7 @@ import { normalizeCardId } from './card-utils';
 @Component({
 	selector: 'bgs-post-match-stats',
 	styleUrls: [
-		`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
+		`../in-game/bgs-opponent-overview-big.component.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats.component.scss`,
 	],
 	template: `

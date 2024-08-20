@@ -8,7 +8,7 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
@@ -20,7 +20,8 @@ import { AdService } from '../../../services/ad.service';
 			*ngIf="{
 				showNextOpponentRecapSeparately: showNextOpponentRecapSeparately$ | async,
 				opponents: opponents$ | async,
-				buddiesEnabled: buddiesEnabled$ | async
+				buddiesEnabled: buddiesEnabled$ | async,
+				questsEnabled: questsEnabled$ | async
 			} as value2"
 			[ngClass]="{ 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
 		>
@@ -37,6 +38,7 @@ import { AdService } from '../../../services/ad.service';
 						[currentTurn]="value.currentTurn"
 						[enableSimulation]="enableSimulation$ | async"
 						[nextBattle]="nextBattle$ | async"
+						[showQuestRewardsIfEmpty]="value2.questsEnabled"
 						[buddiesEnabled]="value2.buddiesEnabled"
 					></bgs-opponent-overview-big>
 					<div class="other-opponents">
@@ -48,6 +50,7 @@ import { AdService } from '../../../services/ad.service';
 								[currentTurn]="value.currentTurn"
 								[showLastOpponentIcon]="isLastOpponent(opponent, value.lastOpponentPlayerId)"
 								[buddiesEnabled]="value2.buddiesEnabled"
+								[showQuestRewards]="value2.questsEnabled"
 							></bgs-opponent-overview>
 						</div>
 					</div>
@@ -90,6 +93,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 	lastOpponentPlayerId$: Observable<number>;
 
 	buddiesEnabled$: Observable<boolean>;
+	questsEnabled$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -109,6 +113,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 		);
 		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
 		this.buddiesEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasBuddies));
+		this.questsEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasQuests));
 		this.currentTurn$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.currentTurn));
 		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.state.gameState$$.pipe(
 			this.mapData(
@@ -125,6 +130,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 		const opponents$ = this.state.gameState$$.pipe(
 			debounceTime(1000),
 			map((state) => state.currentGame?.players),
+			tap((players) => console.debug('[bgs-next-opponent-overview] players', players)),
 			filter((players) => !!players?.length),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData((players) =>

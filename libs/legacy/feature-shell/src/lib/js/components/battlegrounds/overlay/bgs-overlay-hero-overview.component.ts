@@ -32,6 +32,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				[showTavernsIfEmpty]="false"
 				[showLastOpponentIcon]="isLastOpponent"
 				[buddiesEnabled]="buddiesEnabled"
+				[showQuestRewardsIfEmpty]="questsEnabled"
 			></bgs-opponent-overview-big>
 		</div>
 	`,
@@ -42,6 +43,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 		player: BgsPlayer;
 		config: {
 			hasBuddies: boolean;
+			hasQuests: boolean;
 		};
 		currentTurn: number;
 		isLastOpponent: boolean;
@@ -52,6 +54,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 		this.isLastOpponent = value.isLastOpponent;
 		this.componentClass = value.additionalClasses;
 		this.buddiesEnabled = value.config?.hasBuddies;
+		this.questsEnabled = value.config?.hasQuests;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -68,6 +71,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 	scale: number;
 
 	buddiesEnabled: boolean;
+	questsEnabled: boolean;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,

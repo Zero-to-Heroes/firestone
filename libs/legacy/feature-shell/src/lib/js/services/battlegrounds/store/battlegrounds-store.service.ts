@@ -76,6 +76,7 @@ import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parse
 import { BgsToggleHighlightMechanicsOnBoardParser } from './event-parsers/bgs-toggle-highlight-mechanics-on-board-parser';
 import { BgsToggleHighlightMinionOnBoardParser } from './event-parsers/bgs-toggle-highlight-minion-on-board-parser';
 import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle-highlight-tribe-on-board-parser';
+import { BgsTrinketSelectedEvent, BgsTrinketSelectedParser } from './event-parsers/bgs-trinket-selected-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { BgsExtraGoldNextTurnEvent, BgsExtraGoldNextTurnParser } from './event-parsers/extra-gold-next-turn';
@@ -300,6 +301,16 @@ export class BattlegroundsStoreService {
 						gameEvent.cardId,
 						gameEvent.localPlayer.PlayerId,
 						gameEvent.additionalData,
+					),
+				);
+				this.startMemoryReading();
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRINKET_SELECTED) {
+				this.battlegroundsUpdater.next(
+					new BgsTrinketSelectedEvent(
+						gameEvent.additionalData.heroCardId,
+						gameEvent.additionalData.playerId,
+						gameEvent.additionalData.trinketDbfId,
+						gameEvent.additionalData.isFirstTrinket,
 					),
 				);
 				this.startMemoryReading();
@@ -703,6 +714,7 @@ export class BattlegroundsStoreService {
 				this.memory,
 			),
 			new BgsTripleCreatedParser(this.allCards),
+			new BgsTrinketSelectedParser(this.allCards),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(this.logsUploader, this.i18n),
 			new BgsGameEndParser(this.prefs, this.i18n, () => this.stateUpdater),

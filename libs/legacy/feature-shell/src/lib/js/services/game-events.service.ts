@@ -1068,7 +1068,12 @@ export class GameEvents {
 			case 'BATTLEGROUNDS_TRINKET_SELECTED':
 				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.BATTLEGROUNDS_TRINKET_SELECTED, gameEvent),
+					GameEvent.build(GameEvent.BATTLEGROUNDS_TRINKET_SELECTED, gameEvent, {
+						heroCardId: gameEvent.Value.AdditionalProps.HeroCardId,
+						trinketDbfId: gameEvent.Value.AdditionalProps.TrinketDbfId,
+						isFirstTrinket: gameEvent.Value.AdditionalProps.IsFirstTrinket,
+						playerId: gameEvent.Value.PlayerId,
+					}),
 				);
 				break;
 			case 'BATTLEGROUNDS_TRIPLE':

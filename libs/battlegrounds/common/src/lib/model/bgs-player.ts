@@ -39,6 +39,8 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly highestWinStreak: number;
 	// Most recent last
 	readonly buddyTurns: readonly number[] = [];
+	readonly lesserTrinket: string;
+	readonly greaterTrinket: string;
 
 	public static create(base: Partial<NonFunctionProperties<BgsPlayer>>): BgsPlayer {
 		return Object.assign(new BgsPlayer(), base);

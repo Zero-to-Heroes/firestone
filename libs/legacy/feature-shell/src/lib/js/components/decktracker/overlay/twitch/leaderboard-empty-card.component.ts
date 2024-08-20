@@ -34,6 +34,8 @@ import { TwitchBgsBoard, TwitchBgsPlayer, TwitchBgsStateConfig } from './twitch-
 				[buddiesEnabled]="_config?.hasBuddies"
 				[buddyImage]="buddyImage"
 				[buddyClass]="buddyClass"
+				[lesserTrinket]="lesserTrinket"
+				[greaterTrinket]="greaterTrinket"
 			></bgs-hero-short-recap>
 		</div>
 	`,
@@ -92,6 +94,8 @@ export class LeaderboardEmptyCardComponent {
 
 	buddyImage: string;
 	buddyClass: string;
+	lesserTrinket: string;
+	greaterTrinket: string;
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
@@ -144,6 +148,8 @@ export class LeaderboardEmptyCardComponent {
 				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
 				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
 		this.buddyClass = this._previousPlayer.buddyTurns?.length === 0 ? 'missing' : '';
+		this.lesserTrinket = this._previousPlayer.lesserTrinket;
+		this.greaterTrinket = this._previousPlayer.greaterTrinket;
 	}
 
 	private extractBoardHistory(): readonly BgsBoard[] {

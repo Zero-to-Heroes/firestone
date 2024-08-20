@@ -56,6 +56,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 			<bgs-buddies [buddies]="buddies" *ngIf="buddiesEnabled && showBuddies"></bgs-buddies>
 			<bgs-quest-rewards [rewards]="questRewards" *ngIf="showQuestRewards"></bgs-quest-rewards>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn" *ngIf="showTriples"></bgs-triples>
+			<bgs-trinkets [trinkets]="trinkets" *ngIf="showTrinkets"></bgs-trinkets>
 			<div
 				class="last-opponent-icon"
 				*ngIf="showLastOpponentIcon"
@@ -79,6 +80,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	tavernUpgrades: BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 	questRewards: readonly QuestReward[];
+	trinkets: string[];
 	debug = false;
 	buddies: readonly number[];
 
@@ -86,6 +88,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	@Input() showTavernUpgrades = true;
 	@Input() showBuddies = true;
 	@Input() showQuestRewards = true;
+	@Input() showTrinkets = true;
 	@Input() showTriples = true;
 	@Input() showBoardMessage = true;
 	@Input() emptyBoardMessage: string;
@@ -118,6 +121,13 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.triples = value.tripleHistory;
 		this.questRewards = value.questRewards;
 		this.buddies = value.buddyTurns;
+		this.trinkets = [];
+		if (value.lesserTrinket) {
+			this.trinkets.push(value.lesserTrinket);
+		}
+		if (value.greaterTrinket) {
+			this.trinkets.push(value.greaterTrinket);
+		}
 	}
 
 	private _opponent: BgsPlayer;

@@ -16,6 +16,8 @@ export interface TwitchBgsState {
 	readonly currentBattle?: TwitchBgsCurrentBattle;
 	readonly availableRaces: readonly Race[];
 	readonly phase: 'recruit' | 'combat';
+	readonly lesserTrinket: string | undefined;
+	readonly greaterTrinket: string | undefined;
 	readonly config: TwitchBgsStateConfig;
 }
 
@@ -48,6 +50,8 @@ export interface TwitchBgsPlayer {
 	readonly lastKnownBattleHistory: BgsBattleHistory;
 	readonly questRewards: readonly QuestReward[];
 	readonly buddyTurns: readonly number[];
+	readonly lesserTrinket: string;
+	readonly greaterTrinket: string;
 }
 
 export interface TwitchBgsBoard {

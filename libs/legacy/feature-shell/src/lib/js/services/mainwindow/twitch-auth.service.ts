@@ -185,6 +185,8 @@ export class TwitchAuthService {
 					gameEnded: bgsState.currentGame?.gameEnded,
 					availableRaces: bgsState.currentGame?.availableRaces,
 					phase: bgsState.currentGame?.phase,
+					lesserTrinket: bgsState.currentGame?.getMainPlayer()?.lesserTrinket,
+					greaterTrinket: bgsState.currentGame?.getMainPlayer()?.greaterTrinket,
 					config: {
 						hasBuddies: bgsState.currentGame?.hasBuddies,
 						hasPrizes: bgsState.currentGame?.hasPrizes,
@@ -365,6 +367,8 @@ export class TwitchAuthService {
 			lastKnownBattleHistory: player.getLastKnownBattleHistory(),
 			questRewards: player.questRewards,
 			buddyTurns: player.buddyTurns,
+			lesserTrinket: player.lesserTrinket,
+			greaterTrinket: player.greaterTrinket,
 		};
 	}
 

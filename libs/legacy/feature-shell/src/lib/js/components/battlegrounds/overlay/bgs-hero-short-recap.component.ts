@@ -3,7 +3,7 @@ import { QuestReward } from '@firestone/battlegrounds/common';
 
 @Component({
 	selector: 'bgs-hero-short-recap',
-	styleUrls: ['../../../../css/component/battlegrounds/overlay/bgs-hero-short-recap.component.scss'],
+	styleUrls: ['./bgs-hero-short-recap.component.scss'],
 	template: `
 		<div class="short-recap">
 			<tavern-level-icon [level]="tavernTier" class="element tavern" *ngIf="tavernTier"></tavern-level-icon>
@@ -25,6 +25,12 @@ import { QuestReward } from '@firestone/battlegrounds/common';
 			<div class="element damage" [ngClass]="{ debuff: damage < 0 }">
 				<img class="icon" [src]="damageImage" />
 				<div class="value">{{ damage }}</div>
+			</div>
+			<div class="element trinket lesser" *ngIf="lesserTrinketUrl">
+				<img class="icon" [src]="lesserTrinketUrl" />
+			</div>
+			<div class="element trinket greater" *ngIf="greaterTrinketUrl">
+				<img class="icon" [src]="greaterTrinketUrl" />
 			</div>
 			<div class="element quest-rewards" *ngIf="questRewards?.length">
 				<div
@@ -56,11 +62,20 @@ export class BgsHeroShortRecapComponent {
 	@Input() buddyImage: string;
 	@Input() buddyClass: string;
 
+	@Input() set lesserTrinket(value: string) {
+		this.lesserTrinketUrl = this.getIcon(value);
+	}
+	@Input() set greaterTrinket(value: string) {
+		this.greaterTrinketUrl = this.getIcon(value);
+	}
+
 	triplesImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_triple.png';
 	winStreakImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_winstreak.png';
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
+	lesserTrinketUrl: string;
+	greaterTrinketUrl: string;
 
 	getIcon(cardId: string): string {
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
+		return !!cardId ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg` : null;
 	}
 }

@@ -4,7 +4,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'bgs-quest-rewards',
-	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-quest-rewards.component.scss`],
+	styleUrls: [`./bgs-quest-rewards.component.scss`],
 	template: `
 		<div class="rewards-container">
 			<div

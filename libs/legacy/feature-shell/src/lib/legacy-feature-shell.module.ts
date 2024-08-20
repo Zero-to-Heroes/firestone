@@ -495,6 +495,7 @@ import { BgsBattleRecapPlayerComponent } from '@components/battlegrounds/battles
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
+import { BgsTrinketsComponent } from '@components/battlegrounds/in-game/bgs-trinkets.component';
 import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegrounds/overlay/battlegrounds-tribe-details-tooltip.component';
 import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
 import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
@@ -1022,6 +1023,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
 		BgsQuestRewardsComponent,
+		BgsTrinketsComponent,
 		BgsStrategyCurveComponent,
 		BgsBuddiesComponent,
 
@@ -1124,7 +1126,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsNextOpponentOverviewComponent,
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
-		BgsQuestRewardsComponent,
 		BgsStrategyCurveComponent,
 		BattlegroundsTribeDetailsTooltipComponent,
 
