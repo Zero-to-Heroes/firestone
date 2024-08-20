@@ -148,17 +148,34 @@ export class TwitchAuthService {
 			return null;
 		}
 
+		let playerDeck = this.cleanDeck(
+			deckEvent.state.playerDeck,
+			deckEvent.state.isBattlegrounds(),
+			deckEvent.state.isMercenaries(),
+		);
+		const bgsPlayer = bgsState?.currentGame?.getMainPlayer();
+		playerDeck = playerDeck.update({
+			weapon: playerDeck.weapon?.update({
+				cardId: playerDeck.weapon.cardId ?? bgsPlayer?.greaterTrinket ?? bgsPlayer?.lesserTrinket,
+			}),
+		});
+
+		const bgsOpponent = bgsState?.currentGame?.players?.find(
+			(player) => player.cardId === deckEvent.state.opponentDeck?.hero?.cardId,
+		);
+		let opponentDeck = this.cleanDeck(
+			deckEvent.state.opponentDeck,
+			deckEvent.state.isBattlegrounds(),
+			deckEvent.state.isMercenaries(),
+		);
+		opponentDeck = opponentDeck.update({
+			weapon: opponentDeck.weapon?.update({
+				cardId: opponentDeck.weapon.cardId ?? bgsOpponent?.greaterTrinket ?? bgsOpponent?.lesserTrinket,
+			}),
+		});
 		const newDeckState = GameState.create({
-			playerDeck: this.cleanDeck(
-				deckEvent.state.playerDeck,
-				deckEvent.state.isBattlegrounds(),
-				deckEvent.state.isMercenaries(),
-			),
-			opponentDeck: this.cleanDeck(
-				deckEvent.state.opponentDeck,
-				deckEvent.state.isBattlegrounds(),
-				deckEvent.state.isMercenaries(),
-			),
+			playerDeck: playerDeck,
+			opponentDeck: opponentDeck,
 			mulliganOver: deckEvent.state.mulliganOver,
 			metadata: deckEvent.state.metadata,
 			currentTurn: deckEvent.state.currentTurn,
