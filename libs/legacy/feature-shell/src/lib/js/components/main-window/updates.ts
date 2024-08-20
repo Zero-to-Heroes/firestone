@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.19.12',
+		version: '13.20.1',
 		force: false,
 		sections: [
 			// {
@@ -43,21 +43,21 @@ export const updates: readonly Update[] = [
 			// 	And many more goodies will come once I'm finally able to play with the cards and see how some of these actually work :)
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'general',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `App has been updated for 30.0.3`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `App has been updated for 30.2, including all the trinkets!`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -66,8 +66,29 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add an option to show all the trinkets in the minions list.`,
+							},
+							{
+								type: 'feature',
+								text: `Mousing over the weapon slots on the Twitch extension will let the viewer view the Greater Trinket (if bought), or the Lesser Trinket. Proper support for the trinkets will come in a future release of the Twitch extension, but that can take a bit more time.`,
+							},
+							{
+								type: 'feature',
+								text: `The Battle Simulator should now scale better with the app's size. More features - and full support for Duos and Trinkets - will be added in the coming weeks.`,
+							},
+							{
+								type: 'misc',
+								text: `The Records Broken tab has been removed. This tab, while IMO quite fun, was not super popular, and was requiring too many resources on the backend to keep updated. Let me know if you really miss it :)`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
 								type: 'bug',
-								text: `Fix sim issues.`,
+								text: `Fix an issue where Golden Pack pity timers were not correctly updated.`,
 							},
 						],
 					},
