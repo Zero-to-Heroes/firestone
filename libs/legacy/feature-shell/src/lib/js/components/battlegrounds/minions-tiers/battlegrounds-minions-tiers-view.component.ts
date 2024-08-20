@@ -14,6 +14,7 @@ import {
 	NON_DISCOVERABLE_BUDDIES,
 	Race,
 	ReferenceCard,
+	SpellSchool,
 	getTribeIcon,
 	getTribeName,
 } from '@firestone-hs/reference-data';
@@ -235,12 +236,14 @@ export const buildTiers = (
 	showMechanicsTiers: boolean,
 	showTribeTiers: boolean,
 	showTierSeven: boolean,
+	showTrinkets: boolean,
 	availableTribes: readonly Race[],
 	anomalies: readonly string[],
 	playerCardId: string,
 	allPlayerCardIds: readonly string[],
 	hasBuddies: boolean,
 	hasSpells: boolean,
+	hasTrinkets: boolean,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
@@ -277,7 +280,9 @@ export const buildTiers = (
 	// console.debug('tiersToInclude', tiersToInclude, anomalies, playerCardId);
 
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
-		.filter((card) => tiersToInclude.includes(card.techLevel))
+		.filter(
+			(card) => tiersToInclude.includes(card.techLevel) || card.type === CardType[CardType.BATTLEGROUND_TRINKET],
+		)
 		.map((card) =>
 			isCardExcludedByAnomaly(card, anomalies)
 				? {
@@ -355,6 +360,7 @@ export const buildTiers = (
 				availableTribes,
 				buddies,
 				hasSpells,
+				hasTrinkets && showTrinkets,
 				groupMinionsIntoTheirTribeGroup,
 				i18n,
 				allCards,
@@ -369,6 +375,7 @@ const buildTribeTiers = (
 	availableTribes: readonly Race[],
 	allBuddies: readonly ExtendedReferenceCard[],
 	hasSpells: boolean,
+	hasTrinkets: boolean,
 	groupMinionsIntoTheirTribeGroup: boolean,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
@@ -413,7 +420,17 @@ const buildTribeTiers = (
 				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				type: 'tribe',
 		  };
-	return [...tribesResult, spellsTier].filter((tier) => tier);
+	const trinketsTier: Tier = !hasTrinkets
+		? null
+		: {
+				tavernTier: 'trinket',
+				tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.JarOGems_BG30_MagicItem_546}.jpg`,
+				tooltip: 'Trinkets',
+				cards: cardsInGame.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]),
+				groupingFunction: (card: ReferenceCard) => [SpellSchool[card.spellSchool]],
+				type: 'tribe',
+		  };
+	return [...tribesResult, spellsTier, trinketsTier].filter((tier) => tier);
 };
 
 const buildMechanicsTiers = (

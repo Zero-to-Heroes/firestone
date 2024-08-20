@@ -159,6 +159,16 @@ import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twi
 						></checkbox>
 						<checkbox
 							class="item indented"
+							[label]="'settings.battlegrounds.overlay.minions-list-show-trinkets-label' | owTranslate"
+							[labelTooltip]="
+								'settings.battlegrounds.overlay.minions-list-show-trinkets-tooltip' | owTranslate
+							"
+							[disabled]="!prefs.showMinionsList"
+							[value]="prefs.bgsShowTrinkets"
+							(valueChanged)="onShowTrinketsChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
 							[label]="
 								'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'
 									| owTranslate
@@ -412,6 +422,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onShowTier7Changed(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTierSeven: value };
 		console.log('changing bgsShowTierSeven pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowTrinketsChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTrinkets: value };
+		console.log('changing bgsShowTrinkets pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

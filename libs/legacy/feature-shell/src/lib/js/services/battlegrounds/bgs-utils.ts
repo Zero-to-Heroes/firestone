@@ -55,12 +55,13 @@ export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
 	hasSpells: boolean,
 	hasDarkmoonPrizes: boolean,
+	hasTrinkets: boolean,
 	gameMode: GameType,
 	allCards: CardsFacadeService,
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
-		.filter((card) => card.techLevel)
+		.filter((card) => card.techLevel || (hasTrinkets && card.type === CardType[CardType.BATTLEGROUND_TRINKET]))
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) =>
 			isBattlegroundsDuo(gameMode) ? true : !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
@@ -76,6 +77,7 @@ export const getAllCardsInGame = (
 			if (!hasSpells) {
 				return false;
 			}
+			// TODO: filter trinkets based on tribes
 			return isValidBgSpellForTribes(card.id, availableTribes);
 		})
 		.filter((card) => {

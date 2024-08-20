@@ -84,6 +84,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set showTierSeven(value: boolean) {
 		this.showTierSeven$$.next(value);
 	}
+	@Input() set showTrinkets(value: boolean) {
+		this.showTrinkets$$.next(value);
+	}
 	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
 		this.groupMinionsIntoTheirTribeGroup$$.next(value);
 	}
@@ -96,12 +99,14 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private hasBuddies$$ = new BehaviorSubject<boolean>(false);
 	private hasSpells$$ = new BehaviorSubject<boolean>(false);
 	private hasPrizes$$ = new BehaviorSubject<boolean>(false);
+	private hasTrinkets$$ = new BehaviorSubject<boolean>(false);
 	private anomalies$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerCardId$$ = new BehaviorSubject<string>(null);
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTribeTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
+	private showTrinkets$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
 
@@ -123,11 +128,13 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.hasSpells$$,
 			this.anomalies$$,
 			this.hasPrizes$$,
+			this.hasTrinkets$$,
 			this.playerCardId$$,
 			this.allPlayerCardIds$$,
 			this.showMechanicsTiers$$,
 			this.showTribeTiers$$,
 			this.showTierSeven$$,
+			this.showTrinkets$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.gameMode$$,
 		]).pipe(
@@ -138,11 +145,13 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					hasSpells,
 					anomalies,
 					hasPrizes,
+					hasTrinkets,
 					playerCardId,
 					allPlayersCardIds,
 					showMechanicsTiers,
 					showTribeTiers,
 					showTierSeven,
+					showTrinkets,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					gameMode,
 				]) => {
@@ -150,7 +159,14 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
-					const cardsInGame = getAllCardsInGame(races, hasSpells, hasPrizes, gameMode, this.allCards);
+					const cardsInGame = getAllCardsInGame(
+						races,
+						hasSpells,
+						hasPrizes,
+						hasTrinkets,
+						gameMode,
+						this.allCards,
+					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,
@@ -158,12 +174,14 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						showMechanicsTiers,
 						showTribeTiers,
 						showTierSeven,
+						showTrinkets,
 						races,
 						anomalies,
 						normalizedCardId,
 						allPlayerCardIds,
 						hasBuddies,
 						hasSpells,
+						hasTrinkets,
 						this.i18n,
 						this.allCards,
 					);

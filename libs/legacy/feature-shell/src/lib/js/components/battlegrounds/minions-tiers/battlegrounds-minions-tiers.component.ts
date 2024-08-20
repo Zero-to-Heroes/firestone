@@ -67,6 +67,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	enableMouseOver$: Observable<boolean>;
 	showGoldenCards$: Observable<boolean>;
 	showSpellsAtBottom$: Observable<boolean>;
+	showTrinkets$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -101,6 +102,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				hasSpells: bgGameState?.currentGame?.hasSpells,
 				anomalies: bgGameState?.currentGame?.anomalies,
 				hasPrizes: bgGameState?.currentGame?.hasPrizes,
+				hasTrinkets: bgGameState?.currentGame?.hasTrinkets,
+				showTrinkets: prefs.bgsShowTrinkets,
 				playerCardId: bgGameState?.currentGame?.getMainPlayer()?.cardId,
 				allPlayersCardIds: bgGameState?.currentGame?.players?.map((p) => p.cardId),
 			})),
@@ -117,6 +120,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					hasSpells,
 					anomalies,
 					hasPrizes,
+					hasTrinkets,
+					showTrinkets,
 					playerCardId,
 					allPlayersCardIds,
 				}) => {
@@ -125,7 +130,14 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
-					const cardsInGame = getAllCardsInGame(races, hasSpells, hasPrizes, gameMode, this.allCards);
+					const cardsInGame = getAllCardsInGame(
+						races,
+						hasSpells,
+						hasPrizes,
+						hasTrinkets,
+						gameMode,
+						this.allCards,
+					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,
@@ -133,12 +145,14 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showMechanicsTiers,
 						showTribeTiers,
 						showTierSeven,
+						showTrinkets,
 						races,
 						anomalies,
 						normalizedCardId,
 						allPlayerCardIds,
 						hasBuddies,
 						hasSpells,
+						hasTrinkets,
 						this.i18n,
 						this.allCards,
 					);

@@ -69,6 +69,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
 					[showTribeTiers]="showTribeTiers$ | async"
 					[showTierSeven]="showTierSeven$ | async"
+					[showTrinkets]="showTrinkets$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 					[gameMode]="gameMode$ | async"
 				></battlegrounds-minions-tiers-twitch>
@@ -89,6 +90,7 @@ export class DeckTrackerOverlayContainerComponent
 	showMechanicsTiers$: Observable<boolean>;
 	showTribeTiers$: Observable<boolean>;
 	showTierSeven$: Observable<boolean>;
+	showTrinkets$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
 	gameMode$: Observable<GameType>;
 
@@ -146,6 +148,9 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.showTierSeven$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowTierSeven),
+		);
+		this.showTrinkets$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsShowTrinkets),
 		);
 		this.groupMinionsIntoTheirTribeGroup$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsGroupMinionsIntoTheirTribeGroup),

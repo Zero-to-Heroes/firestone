@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -27,6 +28,7 @@ import { Knob } from '../preference-slider.component';
 				bgsUseOverlay: bgsUseOverlay$ | async,
 				showBannedTribes: showBannedTribes$ | async,
 				bgsEnableQuestsOverlay: bgsEnableQuestsOverlay$ | async,
+				bgsShowTribeTiers: bgsShowTribeTiers$ | async,
 				bgsEnableMinionListOverlay: bgsEnableMinionListOverlay$ | async
 			} as value"
 			scrollable
@@ -239,6 +241,14 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-tier-7-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowTrinkets"
+					[ngClass]="{
+						disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay || !value.bgsShowTribeTiers
+					}"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-trinkets-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-trinkets-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsMinionListShowGoldenCard"
 					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"
@@ -360,10 +370,7 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBattlegroundsOverlayComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class SettingsBattlegroundsOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableSimulation$: Observable<boolean>;
 	bgsEnableBattleSimulationOverlay$: Observable<boolean>;
 	bgsHideSimResultsOnRecruit$: Observable<boolean>;
@@ -375,6 +382,7 @@ export class SettingsBattlegroundsOverlayComponent
 	showBannedTribes$: Observable<boolean>;
 	bgsEnableMinionListOverlay$: Observable<boolean>;
 	bgsEnableQuestsOverlay$: Observable<boolean>;
+	bgsShowTribeTiers$: Observable<boolean>;
 
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
@@ -425,30 +433,45 @@ export class SettingsBattlegroundsOverlayComponent
 	];
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.enableSimulation$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableSimulation);
-		this.bgsEnableBattleSimulationOverlay$ = this.listenForBasicPref$(
-			(prefs) => prefs.bgsEnableBattleSimulationOverlay,
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.enableSimulation$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableSimulation));
+		this.bgsEnableBattleSimulationOverlay$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableBattleSimulationOverlay),
 		);
-		this.bgsHideSimResultsOnRecruit$ = this.listenForBasicPref$((prefs) => prefs.bgsHideSimResultsOnRecruit);
-		this.bgsShowSimResultsOnlyOnRecruit$ = this.listenForBasicPref$(
-			(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+		this.bgsHideSimResultsOnRecruit$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsHideSimResultsOnRecruit),
 		);
-		this.bgsEnableOpponentBoardMouseOver$ = this.listenForBasicPref$(
-			(prefs) => prefs.bgsEnableOpponentBoardMouseOver,
+		this.bgsShowSimResultsOnlyOnRecruit$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowSimResultsOnlyOnRecruit),
 		);
-		this.bgsEnableApp$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableApp);
-		this.bgsUseOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsUseOverlay);
-		this.bgsFullToggle$ = this.listenForBasicPref$((prefs) => prefs.bgsFullToggle);
-		this.showBannedTribes$ = this.listenForBasicPref$((prefs) => prefs.bgsShowBannedTribesOverlay);
-		this.bgsEnableMinionListOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
-		this.bgsEnableQuestsOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsShowQuestStatsOverlay);
+		this.bgsEnableOpponentBoardMouseOver$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
+		);
+		this.bgsEnableApp$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableApp));
+		this.bgsUseOverlay$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsUseOverlay));
+		this.bgsFullToggle$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsFullToggle));
+		this.showBannedTribes$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowBannedTribesOverlay),
+		);
+		this.bgsEnableMinionListOverlay$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsEnableMinionListOverlay),
+		);
+		this.bgsEnableQuestsOverlay$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowQuestStatsOverlay),
+		);
+		this.bgsShowTribeTiers$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowTribeTiers));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
