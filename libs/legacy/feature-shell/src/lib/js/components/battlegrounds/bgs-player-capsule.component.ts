@@ -5,7 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-player-capsule',
-	styleUrls: [`../../../css/component/battlegrounds/bgs-player-capsule.component.scss`],
+	styleUrls: [`./bgs-player-capsule.component.scss`],
 	template: `
 		<div class="player-overview">
 			<div class="background-additions">

@@ -1,5 +1,6 @@
 :host {
 	display: flex;
+	aspect-ratio: 1;
 }
 
 .hero-portrait {
@@ -21,8 +22,8 @@
 		position: absolute;
 		top: 7%;
 		left: 8%;
-		// width: 84%;
-		width: 97%;
+		width: 84%;
+		// width: 97%;
 		clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
 	}
 
@@ -69,6 +70,7 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 	bottom: -40%;
+	left: 7%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -122,7 +124,7 @@
 	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
 	color: white;
 	position: absolute;
-	bottom: 13%;
+	bottom: 1%;
 	width: 45%;
 	height: 20%;
 	right: -10%;
@@ -144,10 +146,6 @@
 
 	&.damaged {
 		color: #ff4747;
-	}
-
-	&.new {
-		bottom: 6%;
 	}
 }
 

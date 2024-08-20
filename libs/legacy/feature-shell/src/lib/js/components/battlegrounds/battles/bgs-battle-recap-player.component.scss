@@ -8,13 +8,13 @@
 		width: 62px;
 		margin-right: 10px;
 		position: relative;
+		top: -3px;
+
+		.portrait {
+			width: 100%;
+		}
 
 		bgs-hero-portrait ::ng-deep {
-			.hero-portrait-frame {
-				width: 62px;
-				height: auto;
-			}
-
 			.health .value {
 				font-size: 18px;
 			}

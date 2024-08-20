@@ -46,6 +46,9 @@
 
 		.icon {
 			width: 100%;
+			aspect-ratio: 1;
+			height: auto;
+			min-height: 0;
 		}
 
 		::ng-deep bgs-hero-portrait {
