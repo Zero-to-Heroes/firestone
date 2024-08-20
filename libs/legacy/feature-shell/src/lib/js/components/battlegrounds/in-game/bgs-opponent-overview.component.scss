@@ -52,7 +52,6 @@
 	.main-info {
 		display: flex;
 		flex-direction: column;
-		border-right: 1px solid var(--color-3);
 		justify-content: center;
 		margin-right: 10px;
 		overflow: visible;
@@ -137,7 +136,7 @@
 		flex-grow: 1;
 		flex-direction: column;
 		justify-content: space-evenly;
-		border-right: 1px solid var(--color-3);
+		// border-right: 1px solid var(--color-3);
 		padding-right: 10px;
 		align-items: flex-start;
 		max-width: 500px;
@@ -204,6 +203,10 @@
 		position: absolute;
 		top: 5px;
 		left: 5px;
+	}
+
+	& > *:not(:last-child):not(.portrait) {
+		border-right: 1px solid var(--color-3);
 	}
 }
 
