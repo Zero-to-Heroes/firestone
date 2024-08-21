@@ -154,11 +154,13 @@ export class TwitchAuthService {
 			deckEvent.state.isMercenaries(),
 		);
 		const bgsPlayer = bgsState?.currentGame?.getMainPlayer();
-		playerDeck = playerDeck.update({
-			weapon: playerDeck.weapon?.update({
-				cardId: playerDeck.weapon.cardId ?? bgsPlayer?.greaterTrinket ?? bgsPlayer?.lesserTrinket,
-			}),
-		});
+		playerDeck = {
+			...playerDeck,
+			weapon: {
+				...(playerDeck.weapon ?? {}),
+				cardId: playerDeck.weapon?.cardId ?? bgsPlayer?.greaterTrinket ?? bgsPlayer?.lesserTrinket,
+			} as DeckCard,
+		} as DeckState;
 
 		const bgsOpponent = bgsState?.currentGame?.players?.find(
 			(player) => player.cardId === deckEvent.state.opponentDeck?.hero?.cardId,
@@ -168,11 +170,13 @@ export class TwitchAuthService {
 			deckEvent.state.isBattlegrounds(),
 			deckEvent.state.isMercenaries(),
 		);
-		opponentDeck = opponentDeck.update({
-			weapon: opponentDeck.weapon?.update({
-				cardId: opponentDeck.weapon.cardId ?? bgsOpponent?.greaterTrinket ?? bgsOpponent?.lesserTrinket,
-			}),
-		});
+		opponentDeck = {
+			...opponentDeck,
+			weapon: {
+				...(opponentDeck.weapon ?? {}),
+				cardId: opponentDeck.weapon?.cardId ?? bgsOpponent?.greaterTrinket ?? bgsOpponent?.lesserTrinket,
+			} as DeckCard,
+		} as DeckState;
 		const newDeckState = GameState.create({
 			playerDeck: playerDeck,
 			opponentDeck: opponentDeck,
@@ -316,7 +320,7 @@ export class TwitchAuthService {
 		}
 
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
-		console.debug('[twitch-auth] sending event', newEvent);
+		// console.debug('[twitch-auth] sending event', newEvent);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			(data: any) => {
 				// Do nothing
