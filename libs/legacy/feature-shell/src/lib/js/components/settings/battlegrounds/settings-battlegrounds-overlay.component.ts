@@ -56,6 +56,12 @@ import { Knob } from '../preference-slider.component';
 					premiumSetting
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowTrinketStatsOverlay"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-trinket-stats-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-trinket-stats-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowQuestStatsOverlay"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.general.show-quest-stats-label' | owTranslate"

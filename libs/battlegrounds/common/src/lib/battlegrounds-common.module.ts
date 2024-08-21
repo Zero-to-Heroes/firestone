@@ -14,9 +14,12 @@ import { BgsBoardComponent } from './components/bgs-board.component';
 import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
 import { BgsQuestStatsInfoPremiumComponent } from './components/bgs-quest-stats-info-premium.component';
+import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
+import { BgsInGameTrinketsGuardianService } from './services/bgs-in-game-trinkets-guardian.service';
+import { BgsInGameTrinketsService } from './services/bgs-in-game-trinkets.service';
 import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
 import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
 import { BgsMetaHeroStatsDuoService } from './services/bgs-meta-hero-stats-duo.service';
@@ -26,6 +29,7 @@ import { BattlegroundsOfficialLeaderboardService } from './services/bgs-official
 import { BgsPlayerHeroStatsService } from './services/bgs-player-hero-stats.service';
 import { BattlegroundsQuestsService } from './services/bgs-quests.service';
 import { BgsStateFacadeService } from './services/bgs-state-facade.service';
+import { BattlegroundsTrinketsService } from './services/bgs-trinkets.service';
 
 const components = [
 	BgsQuestStatsInfoPremiumComponent,
@@ -52,6 +56,10 @@ const components = [
 		StatsCommonModule,
 	],
 	providers: [
+		BgsCommonBootstrapService,
+		BattlegroundsTrinketsService,
+		BgsInGameTrinketsGuardianService,
+		BgsInGameTrinketsService,
 		BattlegroundsQuestsService,
 		BgsInGameQuestsService,
 		BgsInGameQuestsGuardianService,

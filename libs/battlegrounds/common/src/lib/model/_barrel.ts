@@ -28,3 +28,4 @@ export * from './quests-in-game';
 export * from './real-time-stats';
 export * from './stats/bgs-hero-stat';
 export * from './stats/stats-config';
+export * from './trinkets-in-game';
