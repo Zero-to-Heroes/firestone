@@ -11,6 +11,7 @@ import { GameHelper } from '../../../services/game-helper';
 	template: `
 		<div class="hero">
 			<weapon [weapon]="_weapon" *ngIf="_weapon"></weapon>
+			<trinkets [trinkets]="_trinkets" *ngIf="_trinkets?.length"></trinkets>
 			<bgs-quest-reward [reward]="_reward" *ngIf="_reward"></bgs-quest-reward>
 			<hero-card [hero]="_hero" [playerEntity]="playerEntity" [secrets]="_secrets" [option]="isOption(_hero)">
 			</hero-card>
@@ -51,6 +52,7 @@ export class HeroComponent {
 	_reward: Entity | undefined;
 	_options: readonly number[];
 	_secrets: readonly Entity[];
+	_trinkets: readonly Entity[];
 	_opponentId: number;
 	playerEntity: Entity | undefined;
 	heroOptions: readonly number[];
@@ -115,6 +117,7 @@ export class HeroComponent {
 		this._weapon = this.getWeaponEntity(this._entities, this._playerId);
 		this._reward = this.getBgsQuestRewardEntity(this._entities, this._playerId);
 		this._secrets = this.getSecretEntities(this._entities, this._playerId);
+		this._trinkets = this.getTrinketEntities(this._entities, this._playerId);
 
 		// Battlegrounds stuff
 		const opponentEntity =
@@ -208,5 +211,18 @@ export class HeroComponent {
 			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)
 			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.SECRET)
 			.sort((a, b) => a.getTag(GameTag.ZONE_POSITION) - b.getTag(GameTag.ZONE_POSITION));
+	}
+
+	private getTrinketEntities(entities: Map<number, Entity>, playerId: number): readonly Entity[] {
+		if (!entities || !playerId) {
+			return [];
+		}
+		return entities
+			.valueSeq()
+			.toArray()
+			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)
+			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
+			.filter((entity) => entity.getCardType() === CardType.BATTLEGROUND_TRINKET)
+			.sort((a, b) => a.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) - b.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6));
 	}
 }

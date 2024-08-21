@@ -52,7 +52,7 @@
 		"@firestone-hs/official-leaderboards": "^0.0.1",
 		"@firestone-hs/reference-data": "^2.0.63",
 		"@firestone-hs/replay-metadata": "^0.0.68",
-		"@firestone-hs/replay-parser": "^1.2.31",
+		"@firestone-hs/replay-parser": "^1.2.32",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.470",

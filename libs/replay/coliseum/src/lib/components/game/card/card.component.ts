@@ -157,11 +157,12 @@ export class CardComponent {
 			this.cost = this._entity.getTag(GameTag.COST);
 			this.originalCard = this.cards.getCard(this.cardId);
 			this.race = this.originalCard?.race?.toLowerCase();
-			this.cardType =
-				this.originalCard && this.originalCard.type
-					? CardType[this.originalCard.type.toUpperCase() as string]
-					: undefined;
-			this.cardTypeStr = this.originalCard.type?.toLowerCase();
+			const originalType =
+				this.originalCard?.type?.toUpperCase() == CardType[CardType.BATTLEGROUND_TRINKET]
+					? CardType[CardType.SPELL]
+					: this.originalCard?.type;
+			this.cardType = !!originalType ? CardType[originalType.toUpperCase() as string] : undefined;
+			this.cardTypeStr = originalType?.toLowerCase();
 			this.cardClass = this.originalCard?.classes?.length ? CardClass[this.originalCard.classes[0]] : undefined;
 			this.tavernTier = this.conf.isBattlegrounds() ? this._entity.getTag(GameTag.TECH_LEVEL) : 0;
 		}

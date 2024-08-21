@@ -1,0 +1,12 @@
+.trinkets {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-content: center;
+	justify-content: center;
+
+	.trinket {
+		height: 70%;
+		aspect-ratio: 1;
+	}
+}

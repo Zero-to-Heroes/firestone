@@ -50,6 +50,8 @@ import { QuestComponent } from './components/game/hero/quest.component';
 import { SecretComponent } from './components/game/hero/secret.component';
 import { SecretsComponent } from './components/game/hero/secrets.component';
 import { TavernButtonComponent } from './components/game/hero/tavern-button.component';
+import { TrinketComponent } from './components/game/hero/trinket.component';
+import { TrinketsComponent } from './components/game/hero/trinkets.component';
 import { WeaponArtComponent } from './components/game/hero/weapon-art.component';
 import { WeaponFrameComponent } from './components/game/hero/weapon-frame.component';
 import { WeaponStatsComponent } from './components/game/hero/weapon-stats.component';
@@ -122,6 +124,8 @@ import { Events } from './services/events.service';
 		BgsQuestRewardComponent,
 		BgsQuestRewardArtComponent,
 		BgsQuestRewardFrameComponent,
+		TrinketsComponent,
+		TrinketComponent,
 
 		WeaponComponent,
 		WeaponArtComponent,
