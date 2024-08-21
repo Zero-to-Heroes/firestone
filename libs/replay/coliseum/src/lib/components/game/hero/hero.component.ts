@@ -168,12 +168,21 @@ export class HeroComponent {
 		if (!entities || !playerId) {
 			return undefined;
 		}
-		const heroPower = entities
-			.valueSeq()
-			.toArray()
-			.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.HERO_POWER)
-			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
-			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
+		const heroPower =
+			// First try to get the trinket
+			entities
+				.valueSeq()
+				.toArray()
+				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)
+				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
+				.filter((entity) => entity.getCardType() === CardType.BATTLEGROUND_TRINKET)
+				.find((entity) => entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) === 3) ??
+			entities
+				.valueSeq()
+				.toArray()
+				.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.HERO_POWER)
+				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
+				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
 		return heroPower;
 	}
 
@@ -223,6 +232,7 @@ export class HeroComponent {
 			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)
 			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
 			.filter((entity) => entity.getCardType() === CardType.BATTLEGROUND_TRINKET)
+			.filter((entity) => entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) !== 3)
 			.sort((a, b) => a.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) - b.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6));
 	}
 }
