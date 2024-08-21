@@ -49,7 +49,6 @@ export class MetaHeroStatsEffects {
 					[],
 					true,
 					true,
-					false,
 					this.allCards,
 				);
 				console.debug('result', result);
