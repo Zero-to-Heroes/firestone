@@ -4,6 +4,7 @@ export * from './lib/components/bgs-board.component';
 export * from './lib/components/bgs-card-tooltip.component';
 export * from './lib/components/bgs-hero-stats-info-premium.component';
 export * from './lib/components/bgs-quest-stats-info-premium.component';
+export * from './lib/components/bgs-trinket-stats-info-premium.component';
 export * from './lib/model/_barrel';
 export * from './lib/services/_bgs-common-bootstrap.service';
 export * from './lib/services/bgs-in-game-hero-selection-guardian.service';

@@ -14,6 +14,7 @@ import { BgsBoardComponent } from './components/bgs-board.component';
 import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
 import { BgsQuestStatsInfoPremiumComponent } from './components/bgs-quest-stats-info-premium.component';
+import { BgsTrinketStatsInfoPremiumComponent } from './components/bgs-trinket-stats-info-premium.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
@@ -37,6 +38,7 @@ const components = [
 	BgsHeroStatsInfoPremiumComponent,
 	BgsCardTooltipComponent,
 	BgsBoardComponent,
+	BgsTrinketStatsInfoPremiumComponent,
 ];
 
 @NgModule({

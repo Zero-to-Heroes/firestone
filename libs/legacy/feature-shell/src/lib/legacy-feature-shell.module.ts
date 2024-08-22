@@ -552,6 +552,8 @@ import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/coun
 import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
+import { ChoosingBgsTrinketWidgetWrapperComponent } from '@components/overlays/trinket/choosing-bgs-trinket-widget-wrapper.component';
+import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trinket/choosing-card-bgs-trinket-option.component';
 import { SettingsArenaGeneralComponent } from '@components/settings/arena/settings-arena-general';
 import { SettingsArenaMenuComponent } from '@components/settings/arena/settings-arena-menu.component';
 import { SettingsArenaComponent } from '@components/settings/arena/settings-arena.component';
@@ -1513,6 +1515,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ChoosingCardOptionComponent,
 		ChoosingBgsQuestWidgetWrapperComponent,
 		ChoosingCardBgsQuestOptionComponent,
+		ChoosingBgsTrinketWidgetWrapperComponent,
+		ChoosingCardBgsTrinketOptionComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,
