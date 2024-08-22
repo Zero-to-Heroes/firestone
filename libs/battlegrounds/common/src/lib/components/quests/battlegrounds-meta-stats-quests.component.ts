@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import {
 	BgsMetaQuestRewardStatTierItem,
 	BgsMetaQuestStatTierItem,
@@ -10,6 +9,7 @@ import { BgsQuestActiveTabType, PreferencesService } from '@firestone/shared/com
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
+import { BattlegroundsQuestsService } from '../../services/bgs-quests.service';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-quests',

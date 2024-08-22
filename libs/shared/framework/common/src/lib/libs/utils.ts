@@ -140,8 +140,18 @@ export const capitalizeFirstLetter = (input: string): string | null => {
 	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
 };
 
-export const buildPercents = (value: number): string => {
-	return value == null ? '-' : (100 * value).toFixed(1) + '%';
+export const buildPercents = (value: number, locale?: string): string => {
+	if (value == null) {
+		return '-';
+	}
+	locale = locale ?? 'enUS';
+	const fractionDigits = value < 10 ? 2 : 1;
+	return (
+		(100 * value).toLocaleString(locale, {
+			minimumFractionDigits: fractionDigits,
+			maximumFractionDigits: fractionDigits,
+		}) + '%'
+	);
 };
 
 export const removeFromReadonlyArray = <T>(array: readonly T[], index: number): T[] => {

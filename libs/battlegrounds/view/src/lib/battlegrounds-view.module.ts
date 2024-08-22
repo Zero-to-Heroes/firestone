@@ -21,6 +21,9 @@ import { BattlegroundsMetaStatsQuestsViewComponent } from './meta-quests/battleg
 import { BattlegroundsMetaStatsQuestRewardInfoComponent } from './meta-quests/rewards/battlegrounds-meta-stats-quest-reward-info.component';
 import { BattlegroundsMetaStatsQuestRewardTierComponent } from './meta-quests/rewards/battlegrounds-meta-stats-quest-reward-tier.component';
 import { BattlegroundsMetaStatsQuestRewardsViewComponent } from './meta-quests/rewards/battlegrounds-meta-stats-quest-rewards-view.component';
+import { BattlegroundsMetaStatsTrinketInfoComponent } from './meta-trinkets/battlegrounds-meta-stats-trinket-info.component';
+import { BattlegroundsMetaStatsTrinketTierComponent } from './meta-trinkets/battlegrounds-meta-stats-trinket-tier.component';
+import { BattlegroundsMetaStatsTrinketsViewComponent } from './meta-trinkets/battlegrounds-meta-stats-trinkets-view.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
@@ -34,6 +37,9 @@ const components = [
 	BattlegroundsMetaStatsQuestRewardInfoComponent,
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
 	BattlegroundsHeroSearchComponent,
+	BattlegroundsMetaStatsTrinketsViewComponent,
+	BattlegroundsMetaStatsTrinketTierComponent,
+	BattlegroundsMetaStatsTrinketInfoComponent,
 	BgsHeroPortraitComponent,
 	CircularProgressComponent,
 

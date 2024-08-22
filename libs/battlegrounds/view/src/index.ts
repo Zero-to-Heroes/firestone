@@ -17,3 +17,6 @@ export * from './lib/meta-quests/battlegrounds-meta-stats-quests-view.component'
 export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-reward-info.component';
 export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-reward-tier.component';
 export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-rewards-view.component';
+export * from './lib/meta-trinkets/battlegrounds-meta-stats-trinket-info.component';
+export * from './lib/meta-trinkets/battlegrounds-meta-stats-trinket-tier.component';
+export * from './lib/meta-trinkets/battlegrounds-meta-stats-trinkets-view.component';

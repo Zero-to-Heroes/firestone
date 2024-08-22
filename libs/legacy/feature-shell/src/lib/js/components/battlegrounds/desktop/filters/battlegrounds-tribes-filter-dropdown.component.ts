@@ -72,6 +72,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 						'bgs-category-simulator',
 						'bgs-category-personal-rating',
 						'bgs-category-meta-quests',
+						'bgs-category-meta-trinkets',
 						'bgs-category-leaderboard',
 						// 'bgs-category-perfect-games',
 					].includes(categoryId),

@@ -10,6 +10,7 @@ import {
 import {
 	BG_USE_QUESTS,
 	BG_USE_QUESTS_IN_DESKTOP,
+	BG_USE_TRINKETS,
 	BattlegroundsNavigationService,
 } from '@firestone/battlegrounds/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -123,7 +124,13 @@ export class BattlegroundsDesktopComponent
 						id: 'bgs-category-meta-quests',
 						name: this.i18n.translateString('app.battlegrounds.menu.quests'),
 				  }
-				: (null as BattlegroundsCategory),
+				: null,
+			BG_USE_TRINKETS
+				? {
+						id: 'bgs-category-meta-trinkets',
+						name: this.i18n.translateString('app.battlegrounds.menu.trinkets'),
+				  }
+				: null,
 			{
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),

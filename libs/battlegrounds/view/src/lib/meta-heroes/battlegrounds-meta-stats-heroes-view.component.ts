@@ -29,7 +29,10 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 			>
 				<div class="top">
 					<div class="search">
-						<battlegrounds-hero-search></battlegrounds-hero-search>
+						<battlegrounds-hero-search
+							[searchString]="searchString$ | async"
+							(searchStringChange)="searchStringChange.next($event)"
+						></battlegrounds-hero-search>
 					</div>
 					<div class="data-info">
 						<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
@@ -91,8 +94,10 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	lastUpdate$: Observable<string>;
 	lastUpdateFull$: Observable<string>;
 	totalGames$: Observable<string>;
+	searchString$: Observable<string>;
 
 	@Output() heroStatClick = new EventEmitter<string>();
+	@Output() searchStringChange = new EventEmitter<string>();
 
 	@Input() set stats(value: readonly BgsMetaHeroStatTierItem[]) {
 		this.stats$$.next(value);

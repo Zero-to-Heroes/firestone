@@ -1,18 +1,18 @@
 import {
-	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
+	Input,
 	OnDestroy,
-	ViewRef,
+	Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
 	selector: 'battlegrounds-hero-search',
@@ -34,32 +34,18 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 })
 export class BattlegroundsHeroSearchComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
+	implements AfterViewInit, OnDestroy
 {
-	searchString: string;
+	@Output() searchStringChange = new EventEmitter<string>();
+
+	@Input() searchString: string;
+
 	searchForm = new FormControl();
 
 	private searchFormSub$$: Subscription;
-	private searchStringSub$$: Subscription;
 
-	constructor(
-		protected override readonly cdr: ChangeDetectorRef,
-		private readonly nav: BattlegroundsNavigationService,
-	) {
+	constructor(protected override readonly cdr: ChangeDetectorRef) {
 		super(cdr);
-	}
-
-	async ngAfterContentInit() {
-		await this.nav.isReady();
-		this.searchStringSub$$ = this.nav.heroSearchString$$
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe((heroSearchString) => {
-				this.searchString = heroSearchString;
-			});
-
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	ngAfterViewInit() {
@@ -75,11 +61,10 @@ export class BattlegroundsHeroSearchComponent
 	override ngOnDestroy() {
 		super.ngOnDestroy();
 		this.searchFormSub$$?.unsubscribe();
-		this.searchStringSub$$?.unsubscribe();
 	}
 
 	onSearchStringChange() {
-		this.nav.heroSearchString$$.next(this.searchString);
+		this.searchStringChange.next(this.searchString);
 	}
 
 	onMouseDown(event: Event) {

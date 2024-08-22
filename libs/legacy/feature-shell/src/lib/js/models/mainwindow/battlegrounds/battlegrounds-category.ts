@@ -4,6 +4,7 @@ export interface BattlegroundsCategory {
 		| 'bgs-category-personal-heroes'
 		| 'bgs-category-meta-heroes'
 		| 'bgs-category-meta-quests'
+		| 'bgs-category-meta-trinkets'
 		| 'bgs-category-personal-quests'
 		| 'bgs-category-personal-hero-details-' // Also add the hero card Id as suffix
 		| 'bgs-category-personal-rating'

@@ -8,6 +8,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
+export const BG_USE_TRINKETS = true;
 // Because it's used twice per game
 export const DAILY_FREE_USES_TRINKETS = 4;
 

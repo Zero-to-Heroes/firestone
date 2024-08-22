@@ -1,0 +1,50 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.info {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	padding: 5px;
+	background: rgba(255, 255, 255, 0.08);
+	flex-wrap: wrap;
+	overflow: hidden;
+	height: 50px;
+
+	&.clickable:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	& > * {
+		height: 100%;
+	}
+
+	.image {
+		height: 100%;
+		margin-right: 20px;
+
+		.icon {
+			height: 130%;
+			clip-path: ellipse(34% 34% at 50% 50%);
+			position: relative;
+		}
+	}
+
+	.name {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+
+		.text {
+			color: var(--default-title-color);
+			font-size: 1em;
+		}
+
+		.data-points {
+			font-size: 0.75em;
+			display: flex;
+		}
+	}
+}

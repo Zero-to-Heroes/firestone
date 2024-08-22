@@ -19,6 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-mode-filter-dropdown class="filter"></battlegrounds-mode-filter-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-quest-type-filter-dropdown class="filter"></battlegrounds-quest-type-filter-dropdown>
+			<battlegrounds-trinket-type-filter-dropdown class="filter"></battlegrounds-trinket-type-filter-dropdown>
 			<battlegrounds-hero-filter-dropdown class="hero-filter"></battlegrounds-hero-filter-dropdown>
 			<battlegrounds-rank-filter-dropdown class="rank-filter"></battlegrounds-rank-filter-dropdown>
 			<battlegrounds-anomalies-filter-dropdown class="anomalies-filter"></battlegrounds-anomalies-filter-dropdown>
@@ -72,6 +73,7 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 					currentView !== 'bgs-category-personal-stats' &&
 					currentView !== 'bgs-category-perfect-games' &&
 					currentView !== 'bgs-category-meta-quests' &&
+					currentView !== 'bgs-category-meta-trinkets' &&
 					currentView !== 'bgs-category-leaderboard' &&
 					currentView !== 'bgs-category-simulator',
 			),

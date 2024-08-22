@@ -34,6 +34,7 @@ import { Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 			[totalGames]="totalGames$ | async"
 			[lastUpdate]="lastUpdate$ | async"
 			(heroStatClick)="onHeroStatsClick($event)"
+			(searchStringChange)="onSearchStringChange($event)"
 		></battlegrounds-meta-stats-heroes-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,5 +106,9 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 
 	onHeroStatsClick(heroCardId: string) {
 		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsEvent(heroCardId));
+	}
+
+	onSearchStringChange(value: string) {
+		this.nav.heroSearchString$$.next(value);
 	}
 }

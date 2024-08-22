@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { DAILY_FREE_USES_TRINKETS } from '../services/bgs-in-game-trinkets-guardian.service';
+import { DAILY_FREE_USES } from '../../services/bgs-in-game-quests-guardian.service';
 
 @Component({
-	selector: 'bgs-trinket-stats-info-premium',
-	styleUrls: ['./bgs-trinket-stats-info-premium.component.scss'],
+	selector: 'bgs-quest-stats-info-premium',
+	styleUrls: ['./bgs-quest-stats-info-premium.component.scss'],
 	template: `
 		<div class="info-premium" (click)="showPremium()" [helpTooltip]="helpTooltip">
 			<div class="container">
@@ -19,9 +19,9 @@ import { DAILY_FREE_USES_TRINKETS } from '../services/bgs-in-game-trinkets-guard
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsTrinketStatsInfoPremiumComponent {
+export class BgsQuestStatsInfoPremiumComponent {
 	helpTooltip = this.i18n.translateString('battlegrounds.in-game.quests.locked-premium-info-tooltip', {
-		value: DAILY_FREE_USES_TRINKETS,
+		value: DAILY_FREE_USES,
 	});
 
 	constructor(
@@ -32,7 +32,7 @@ export class BgsTrinketStatsInfoPremiumComponent {
 
 	showPremium() {
 		console.debug('show premium');
-		this.analytics.trackEvent('subscription-click', { page: 'bgs-trinkets-overlay' });
+		this.analytics.trackEvent('subscription-click', { page: 'bgs-quests-overlay' });
 		this.ow.openStore();
 	}
 }

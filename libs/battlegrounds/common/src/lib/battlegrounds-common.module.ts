@@ -14,9 +14,10 @@ import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboard
 import { BgsBoardComponent } from './components/bgs-board.component';
 import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
-import { BgsQuestStatsInfoPremiumComponent } from './components/bgs-quest-stats-info-premium.component';
-import { BgsTrinketStatsInfoPremiumComponent } from './components/bgs-trinket-stats-info-premium.component';
 import { BattlegroundsMetaStatsQuestsComponent } from './components/quests/battlegrounds-meta-stats-quests.component';
+import { BgsQuestStatsInfoPremiumComponent } from './components/quests/bgs-quest-stats-info-premium.component';
+import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
+import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
@@ -42,6 +43,7 @@ const components = [
 	BgsBoardComponent,
 	BgsTrinketStatsInfoPremiumComponent,
 	BattlegroundsMetaStatsQuestsComponent,
+	BattlegroundsMetaStatsTrinketsComponent,
 ];
 
 @NgModule({
