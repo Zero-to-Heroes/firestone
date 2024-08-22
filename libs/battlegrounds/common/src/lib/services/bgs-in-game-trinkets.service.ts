@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { BgsTrinketStats } from '@firestone-hs/bgs-global-stats';
-import { CardIds, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
+import { CardIds, CardType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
 import { CardOption, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -137,7 +137,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			tap((info) => console.debug('[bgs-trinket] received info', info)),
 			filter(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
-				return options?.every((o) => isBgTrinketDiscover(o.source)) ?? false;
+				return options?.every((o) => isBgTrinketDiscover(o, this.allCards)) ?? false;
 			}),
 			map(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
 				if (!showFromPrefs) {
@@ -158,8 +158,12 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 	}
 }
 
-const isBgTrinketDiscover = (source: string): boolean => {
-	return source === CardIds.LesserTrinketToken_BG30_Trinket_1st || source === CardIds.GreaterTrinket_BG30_Trinket_2nd;
+const isBgTrinketDiscover = (option: CardOption, allCards: CardsFacadeService): boolean => {
+	return (
+		option.source === CardIds.LesserTrinketToken_BG30_Trinket_1st ||
+		option.source === CardIds.GreaterTrinket_BG30_Trinket_2nd ||
+		allCards.getCard(option.cardId).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]
+	);
 };
 
 const buildBgsTrinketCardChoiceValue = (
