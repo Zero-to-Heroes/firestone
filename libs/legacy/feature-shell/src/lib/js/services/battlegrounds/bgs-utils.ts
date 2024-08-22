@@ -487,7 +487,7 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 		case CardIds.MadamGoya_BGDUO_HERO_104:
 			return 921;
 		case CardIds.MarinTheManager_BG30_HERO_304:
-			return 921;
+			return 990;
 		// case CardIds.Diablo:
 		// 	return;
 		default:
