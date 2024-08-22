@@ -1,6 +1,7 @@
 import {
 	CardIds,
 	CardType,
+	CustomTags,
 	GameTag,
 	GameType,
 	NON_BUYABLE_MINION_IDS,
@@ -66,6 +67,8 @@ export const getAllCardsInGame = (
 				card.techLevel ||
 				(hasTrinkets &&
 					card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
+					// Manual exclusions
+					!allCards.getCard(card.id).otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL]) &&
 					// Exclude the placeholder trinket cards
 					card.cost != null),
 		)
