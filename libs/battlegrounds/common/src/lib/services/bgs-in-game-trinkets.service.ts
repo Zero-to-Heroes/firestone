@@ -23,6 +23,7 @@ import {
 	map,
 	shareReplay,
 	switchMap,
+	tap,
 } from 'rxjs';
 import { BgsTrinketCardChoiceOption } from '../model/trinkets-in-game';
 import { BgsStateFacadeService } from './bgs-state-facade.service';
@@ -70,6 +71,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			debounceTime(500),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
+				// return true;
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -88,6 +90,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			}),
 			distinctUntilChanged(),
 			shareReplay(1),
+			tap((show) => console.debug('[bgs-trinket] setting showWidget', show)),
 		);
 		showWidget$.subscribe((show) => {
 			this.showWidget$$.next(show);
@@ -97,7 +100,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			filter((show) => show),
 			distinctUntilChanged(),
 			switchMap(() => this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.hasTrinkets))),
-			filter((hasQuests) => !!hasQuests),
+			filter((hasTrinkets) => !!hasTrinkets),
 			distinctUntilChanged(),
 			switchMap(() =>
 				this.bgsGameState.gameState$$.pipe(
@@ -116,16 +119,23 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 				return trinkets;
 			}),
 			shareReplay(1),
+			tap((trinkets) => console.debug('[bgs-trinket] setting trinkets', trinkets)),
 		) as Observable<BgsTrinketStats>;
 
 		const options$ = combineLatest([
-			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
+			this.gameState.gameState$$.pipe(
+				map((state) => state?.playerDeck?.currentOptions),
+				// map((state) =>
+				// 	!!state?.playerDeck?.currentOptions?.length ? state.playerDeck.currentOptions : buildFakeOptions(),
+				// ),
+			),
 			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTrinketStatsOverlay)),
 			trinkets$,
 			this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.getMainPlayer()?.cardId)),
 		]).pipe(
 			debounceTime(500),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap((info) => console.debug('[bgs-trinket] received info', info)),
 			filter(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
 				return options?.every((o) => isBgTrinketDiscover(o.source)) ?? false;
 			}),
@@ -172,4 +182,41 @@ const buildBgsTrinketCardChoiceValue = (
 		pickRate: trinketStat.pickRate,
 		pickRateTop25: trinketStat.pickRateAtMmr.find((p) => p.mmr === 25)!.pickRate,
 	};
+};
+
+const buildFakeOptions = (): readonly CardOption[] => {
+	return [
+		{
+			cardId: CardIds.JarOGems_BG30_MagicItem_546,
+			source: CardIds.LesserTrinketToken_BG30_Trinket_1st,
+			entityId: 1,
+			context: {
+				DataNum1: 0,
+			},
+		},
+		{
+			cardId: CardIds.LavaLamp_BG30_MagicItem_951,
+			source: CardIds.LesserTrinketToken_BG30_Trinket_1st,
+			entityId: 2,
+			context: {
+				DataNum1: 0,
+			},
+		},
+		{
+			cardId: CardIds.HoggyBank_BG30_MagicItem_411,
+			source: CardIds.LesserTrinketToken_BG30_Trinket_1st,
+			entityId: 3,
+			context: {
+				DataNum1: 0,
+			},
+		},
+		{
+			cardId: CardIds.BobBlehead_BG30_MagicItem_998,
+			source: CardIds.LesserTrinketToken_BG30_Trinket_1st,
+			entityId: 4,
+			context: {
+				DataNum1: 0,
+			},
+		},
+	];
 };

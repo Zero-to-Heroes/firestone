@@ -40,7 +40,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
 			<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
 			<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
-			<!-- <choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper> -->
+			<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
 
 			<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
 			<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>

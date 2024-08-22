@@ -8,7 +8,8 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const DAILY_FREE_USES_TRINKETS = 2;
+// Because it's used twice per game
+export const DAILY_FREE_USES_TRINKETS = 4;
 
 @Injectable()
 export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsInGameTrinketsGuardianService> {

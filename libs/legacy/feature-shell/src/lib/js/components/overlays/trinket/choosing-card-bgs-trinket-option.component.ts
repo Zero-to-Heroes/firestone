@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsTrinketCardChoiceOption, DAILY_FREE_USES_TRINKETS } from '@firestone/battlegrounds/common';
+import { buildColor } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
@@ -20,58 +21,64 @@ import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
 	styleUrls: ['./choosing-card-bgs-trinket-option.component.scss'],
 	template: `
 		<div class="option scalable">
-			<div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
-				{{ freeUsesText }}
-			</div>
-			<div class="category placement">
-				<div
-					class="title"
-					[fsTranslate]="'battlegrounds.in-game.trinkets.placement-title'"
-					[helpTooltip]="'battlegrounds.in-game.trinkets.placement-title-tooltip'"
-				></div>
-				<div class="stats">
-					<div class="stat average">
-						<div
-							class="header"
-							[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
-							[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip'"
-						></div>
-						<div class="value">{{ placementGlobal }}</div>
+			<div class="category-container placement">
+				<div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
+					<div class="text">
+						{{ freeUsesText }}
 					</div>
-					<div class="stat high-mmmr">
-						<div
-							class="header"
-							[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
-							[helpTooltip]="'battlegrounds.in-game.trinkets.high-mmr-header-tooltip'"
-							[translateParams]="{ value: 25 }"
-						></div>
-						<div class="value">{{ placementHighMmr }}</div>
+				</div>
+				<div class="category">
+					<div
+						class="title"
+						[fsTranslate]="'battlegrounds.in-game.trinkets.placement-title'"
+						[helpTooltip]="'battlegrounds.in-game.trinkets.placement-title-tooltip' | fsTranslate"
+					></div>
+					<div class="stats">
+						<div class="stat average">
+							<div
+								class="header"
+								[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
+								[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip' | fsTranslate"
+							></div>
+							<div class="value" [style.color]="placementGlobalColor">{{ placementGlobal }}</div>
+						</div>
+						<div class="stat high-mmmr">
+							<div
+								class="header"
+								[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
+								[helpTooltip]="'battlegrounds.in-game.trinkets.high-mmr-header-tooltip' | fsTranslate"
+								[translateParams]="{ value: 25 }"
+							></div>
+							<div class="value" [style.color]="placementHighMmrColor">{{ placementHighMmr }}</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="category pick-rate">
-				<div
-					class="title"
-					[fsTranslate]="'battlegrounds.in-game.trinkets.pick-rate-title'"
-					[helpTooltip]="'battlegrounds.in-game.trinkets.pick-rate-title-tooltip'"
-				></div>
-				<div class="stats">
-					<div class="stat average">
-						<div
-							class="header"
-							[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
-							[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip'"
-						></div>
-						<div class="value">{{ pickRateGlobal }}</div>
-					</div>
-					<div class="stat high-mmmr">
-						<div
-							class="header"
-							[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
-							[helpTooltip]="'battlegrounds.in-game.trinkets.high-mmr-header-tooltip'"
-							[translateParams]="{ value: 25 }"
-						></div>
-						<div class="value">{{ pickRateHighMmr }}</div>
+			<div class="category-container pick-rate">
+				<div class="category">
+					<div
+						class="title"
+						[fsTranslate]="'battlegrounds.in-game.trinkets.pick-rate-title'"
+						[helpTooltip]="'battlegrounds.in-game.trinkets.pick-rate-title-tooltip' | fsTranslate"
+					></div>
+					<div class="stats">
+						<div class="stat average">
+							<div
+								class="header"
+								[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
+								[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip' | fsTranslate"
+							></div>
+							<div class="value" [style.color]="pickRateGlobalColor">{{ pickRateGlobal }}</div>
+						</div>
+						<div class="stat high-mmmr">
+							<div
+								class="header"
+								[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
+								[helpTooltip]="'battlegrounds.in-game.trinkets.high-mmr-header-tooltip' | fsTranslate"
+								[translateParams]="{ value: 25 }"
+							></div>
+							<div class="value" [style.color]="pickRateHighMmrColor">{{ pickRateHighMmr }}</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -85,6 +92,11 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 	pickRateGlobal: string;
 	pickRateHighMmr: string;
 
+	placementGlobalColor: string;
+	placementHighMmrColor: string;
+	pickRateGlobalColor: string;
+	pickRateHighMmrColor: string;
+
 	@Input() set option(value: BgsTrinketCardChoiceOption) {
 		const loc = this.i18n.formatCurrentLocale();
 		this.placementGlobal = value.averagePlacement.toLocaleString(loc, {
@@ -95,14 +107,43 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 			maximumFractionDigits: 2,
 			minimumFractionDigits: 2,
 		});
-		this.pickRateGlobal = value.pickRate.toLocaleString(loc, {
+		this.pickRateGlobal = (100 * value.pickRate).toLocaleString(loc, {
 			maximumFractionDigits: 1,
 			minimumFractionDigits: 1,
 		});
-		this.pickRateHighMmr = value.pickRateTop25.toLocaleString(loc, {
+		this.pickRateHighMmr = (100 * value.pickRateTop25).toLocaleString(loc, {
 			maximumFractionDigits: 1,
 			minimumFractionDigits: 1,
 		});
+
+		this.placementGlobalColor = buildColor(
+			'hsl(112, 100%, 64%)',
+			'hsl(0, 100%, 64%)',
+			-(value.averagePlacement ?? 0),
+			-3,
+			-4.7,
+		);
+		this.placementHighMmrColor = buildColor(
+			'hsl(112, 100%, 64%)',
+			'hsl(0, 100%, 64%)',
+			-(value.averagePlacementTop25 ?? 0),
+			-3,
+			-4.7,
+		);
+		this.pickRateGlobalColor = buildColor(
+			'hsl(112, 100%, 64%)',
+			'hsl(0, 100%, 64%)',
+			value.pickRate ?? 0,
+			0.6,
+			0.2,
+		);
+		this.pickRateHighMmrColor = buildColor(
+			'hsl(112, 100%, 64%)',
+			'hsl(0, 100%, 64%)',
+			value.pickRateTop25 ?? 0,
+			0.6,
+			0.2,
+		);
 	}
 
 	@Input() set freeUsesLeft(value: number) {
