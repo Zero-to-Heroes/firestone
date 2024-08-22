@@ -2098,7 +2098,9 @@ export const cardIdSelector = (
 		case CardIds.TrustyFishingRod_VAC_960:
 			return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 		case CardIds.Tyr:
-			return tooltip(and(side(inputSide), inGraveyard, paladin, minion, attackGreaterThan(1), attackLessThan(5)));
+			return tooltip(
+				and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
+			);
 		case CardIds.TyrsTears:
 		case CardIds.TyrsTears_TyrsTearsToken:
 			return highlightConditions(
