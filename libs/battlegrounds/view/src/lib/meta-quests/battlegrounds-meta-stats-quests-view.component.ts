@@ -132,16 +132,16 @@ export class BattlegroundsMetaStatsQuestsViewComponent
 	lastUpdateFull$: Observable<string | null>;
 	totalGames$: Observable<string>;
 
-	@Input() set stats(value: readonly BgsMetaQuestStatTierItem[]) {
+	@Input() set stats(value: readonly BgsMetaQuestStatTierItem[] | null) {
 		this.stats$$.next(value);
 	}
-	@Input() set lastUpdate(value: string) {
+	@Input() set lastUpdate(value: string | null) {
 		this.lastUpdate$$.next(value);
 	}
-	@Input() set collapsedQuests(value: readonly string[]) {
+	@Input() set collapsedQuests(value: readonly string[] | null) {
 		this.collapsedQuests$$.next(value);
 	}
-	@Input() groupedByDifficulty: boolean;
+	@Input() groupedByDifficulty: boolean | null;
 	@Input() searchString: string;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestStatTierItem[]>(null);

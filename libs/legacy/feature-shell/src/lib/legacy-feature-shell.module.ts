@@ -428,7 +428,6 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
-import { BattlegroundsMetaStatsQuestsComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-quests.component';
 import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
 import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
@@ -495,6 +494,7 @@ import { BgsBattleRecapPlayerComponent } from '@components/battlegrounds/battles
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
+import { BattlegroundsTrinketTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-trinket-type-filter-dropdown.component';
 import { BgsTrinketsComponent } from '@components/battlegrounds/in-game/bgs-trinkets.component';
 import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegrounds/overlay/battlegrounds-tribe-details-tooltip.component';
 import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
@@ -1350,7 +1350,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsMetaStatsHeroesComponent,
-		BattlegroundsMetaStatsQuestsComponent,
 		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsQuestVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
@@ -1382,6 +1381,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsQuestTypeFilterDropdownComponent,
 		BattlegroundsModeFilterDropdownComponent,
 		BattlegroundsLeaderboardRegionFilterDropdownComponent,
+		BattlegroundsTrinketTypeFilterDropdownComponent,
 
 		DuelsDesktopComponent,
 		DuelsEmptyStateComponent,

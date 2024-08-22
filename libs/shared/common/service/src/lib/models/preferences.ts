@@ -13,6 +13,7 @@ import {
 	BgsQuestActiveTabType,
 	BgsRankFilterType,
 	BgsStatsFilterId,
+	BgsTrinketActiveTabType,
 	CollectionCardClassFilterType,
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
@@ -740,6 +741,7 @@ export class Preferences implements IPreferences {
 	readonly bgsHeroesUseConservativeEstimate: boolean = true;
 	readonly bgsShowBuddiesInSimulatorSelection: boolean = false;
 	readonly bgsQuestsActiveTab: BgsQuestActiveTabType = 'quests';
+	readonly bgsTrinketsActiveTab: BgsTrinketActiveTabType = 'lesser';
 	readonly bgsGroupQuestsByDifficulty: boolean = false;
 	readonly bgsActiveUseMmrFilterInHeroSelection: boolean = true;
 	readonly bgsActiveUseTribesFilterInHeroSelection: boolean = true;

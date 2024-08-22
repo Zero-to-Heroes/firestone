@@ -6,18 +6,14 @@ import {
 	buildQuestRewardStats,
 	buildQuestStats,
 } from '@firestone/battlegrounds/data-access';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { BgsQuestActiveTabType, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsQuestActiveTabType } from '@legacy-import/src/lib/js/models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-quests',
-	styleUrls: [
-		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-quests.component.scss`,
-	],
+	styleUrls: [`./battlegrounds-meta-stats-quests.component.scss`],
 	template: `
 		<ng-container [ngSwitch]="questsTab$ | async">
 			<ng-container *ngSwitchCase="'quests'">
@@ -47,27 +43,23 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMetaStatsQuestsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class BattlegroundsMetaStatsQuestsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	questsTab$: Observable<BgsQuestActiveTabType>;
 
 	questStats$: Observable<readonly BgsMetaQuestStatTierItem[]>;
 	collapsedQuests$: Observable<readonly string[]>;
 	groupedByDifficulty$: Observable<boolean>;
-	lastUpdate$: Observable<string>;
+	lastUpdate$: Observable<string | null>;
 
 	rewardStats$: Observable<readonly BgsMetaQuestRewardStatTierItem[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly quests: BattlegroundsQuestsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -110,7 +102,11 @@ export class BattlegroundsMetaStatsQuestsComponent
 		await this.prefs.savePreferences(newPrefs);
 	}
 
-	async onCollapseAll(stats: readonly BgsMetaQuestStatTierItem[]) {
+	async onCollapseAll(stats: readonly BgsMetaQuestStatTierItem[] | null) {
+		if (!stats) {
+			return;
+		}
+
 		const prefs = await this.prefs.getPreferences();
 		const newCollapsed = stats.map((s) => s.cardId);
 		const newPrefs = {

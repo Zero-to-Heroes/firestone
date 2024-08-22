@@ -69,13 +69,13 @@ export class BattlegroundsMetaStatsQuestRewardsViewComponent
 	lastUpdateFull$: Observable<string | null>;
 	totalGames$: Observable<string>;
 
-	@Input() set stats(value: readonly BgsMetaQuestRewardStatTierItem[]) {
+	@Input() set stats(value: readonly BgsMetaQuestRewardStatTierItem[] | null) {
 		this.stats$$.next(value);
 	}
-	@Input() set lastUpdate(value: string) {
+	@Input() set lastUpdate(value: string | null) {
 		this.lastUpdate$$.next(value);
 	}
-	@Input() searchString: string;
+	@Input() searchString: string | null;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaQuestRewardStatTierItem[]>(null);
 	private lastUpdate$$ = new BehaviorSubject<string | null>(null);

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { MemoryModule } from '@firestone/memory';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -15,6 +16,7 @@ import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
 import { BgsQuestStatsInfoPremiumComponent } from './components/bgs-quest-stats-info-premium.component';
 import { BgsTrinketStatsInfoPremiumComponent } from './components/bgs-trinket-stats-info-premium.component';
+import { BattlegroundsMetaStatsQuestsComponent } from './components/quests/battlegrounds-meta-stats-quests.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
@@ -39,6 +41,7 @@ const components = [
 	BgsCardTooltipComponent,
 	BgsBoardComponent,
 	BgsTrinketStatsInfoPremiumComponent,
+	BattlegroundsMetaStatsQuestsComponent,
 ];
 
 @NgModule({
@@ -53,6 +56,7 @@ const components = [
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,
 		BattlegroundsDataAccessModule,
+		BattlegroundsViewModule,
 		ConstructedCommonModule,
 		MemoryModule,
 		StatsCommonModule,

@@ -95,6 +95,7 @@ export type ConstructedMetaDecksDustFilterType = 'all' | number;
 export type BgsActiveTimeFilterType = 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
 export type BgsRankFilterType = 100 | 50 | 25 | 10 | 1;
 export type BgsQuestActiveTabType = 'quests' | 'rewards';
+export type BgsTrinketActiveTabType = 'lesser' | 'greater';
 export type BgsHeroSortFilterType = 'tier' | 'average-position' | 'games-played' | 'mmr' | 'last-played';
 export type BgsStatsFilterId =
 	| 'hp-by-turn'
