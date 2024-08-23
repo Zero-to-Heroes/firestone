@@ -27,7 +27,7 @@ import { groupByFunction } from '../../../services/utils';
 				</div>
 			</div>
 			<div
-				class="subtitle"
+				class="subtitle empty"
 				*ngIf="!tierTriples?.length"
 				[owTranslate]="'battlegrounds.in-game.opponents.triple-empty-state'"
 			></div>

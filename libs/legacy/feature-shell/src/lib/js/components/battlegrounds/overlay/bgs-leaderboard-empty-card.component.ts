@@ -11,7 +11,7 @@ import {
 import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
@@ -89,7 +89,7 @@ export class BgsLeaderboardEmptyCardComponent
 	}
 
 	@Input() set bgsPlayer(value: BgsPlayer) {
-		if (this._previousPlayer === value) {
+		if (deepEqual(this._previousPlayer, value)) {
 			return;
 		}
 		this._previousPlayer = value;
@@ -218,6 +218,8 @@ export class BgsLeaderboardEmptyCardComponent
 				boardHistory: this._previousPlayer?.boardHistory ?? [],
 				questRewards: this._previousPlayer?.questRewards,
 				buddyTurns: this._previousPlayer?.buddyTurns ?? [],
+				lesserTrinket: this._previousPlayer?.lesserTrinket,
+				greaterTrinket: this._previousPlayer?.greaterTrinket,
 			}),
 			config: {
 				hasBuddies: this.buddiesEnabled,
@@ -253,6 +255,7 @@ export class BgsLeaderboardEmptyCardComponent
 		if (this.winStreak === 0 && this.damage > 0) {
 			this.damage = -this.damage;
 		}
+		// console.debug('set trinkets', this.lesserTrinket, this.greaterTrinket, this._previousPlayer);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

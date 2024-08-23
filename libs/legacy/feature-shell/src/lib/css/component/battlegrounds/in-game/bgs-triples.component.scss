@@ -15,6 +15,10 @@
 	}
 	.subtitle {
 		text-align: center;
+
+		&.empty {
+			margin: auto;
+		}
 	}
 
 	.triple-tiers {
