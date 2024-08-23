@@ -702,7 +702,6 @@ export class Preferences implements IPreferences {
 	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
-	readonly bgsShowMechanicsHighlight: boolean = true;
 	readonly bgsShowMechanicsTiers: boolean = true;
 	readonly bgsShowTribeTiers: boolean = true;
 	readonly bgsShowTierSeven: boolean = false;

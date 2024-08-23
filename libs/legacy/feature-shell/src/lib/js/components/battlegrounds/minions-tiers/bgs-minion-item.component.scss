@@ -1,0 +1,97 @@
+:host {
+	display: flex;
+}
+
+.minion {
+	width: 100%;
+	height: 26px;
+	display: flex;
+	position: relative;
+	margin-bottom: 2px;
+	overflow: hidden;
+
+	&:not(.banned):hover {
+		transform: scale(1.1);
+
+		.highlight-minion-button {
+			display: block;
+		}
+	}
+
+	.banned-overlay {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: #07081f;
+		opacity: 0.7;
+	}
+
+	&.banned .banned-overlay {
+		display: flex;
+	}
+
+	.highlight-buttons {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		--icon-color: var(--color-2);
+		--icon-secondary-color: var(--color-7);
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
+		padding-right: 6px;
+	}
+
+	.icon {
+		height: 100%;
+		margin-left: auto;
+		margin-right: -2px;
+	}
+
+	.name {
+		font-family: Open Sans;
+		color: var(--default-text-color);
+		background: linear-gradient(90deg, #090a0d 72%, rgba(9, 10, 13, 0) 100%);
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-size: 13px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		padding-left: 11px;
+		display: flex;
+		align-items: center;
+	}
+
+	.gold-cost {
+		height: 100%;
+		margin-right: 5px;
+		margin-left: -7px;
+		position: relative;
+
+		.cost {
+			position: absolute;
+			top: 0;
+			left: 1px;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: Passion One;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 15px;
+			text-align: center;
+			text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000,
+				1px 1px 0 #000;
+		}
+	}
+}

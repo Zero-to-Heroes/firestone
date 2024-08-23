@@ -1,3 +1,4 @@
 {
-	"eslint.validate": ["json"]
+	"eslint.validate": ["json"],
+	"typescript.preferences.importModuleSpecifier": "shortest"
 }

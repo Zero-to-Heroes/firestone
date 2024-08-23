@@ -10,13 +10,14 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { buildTiers } from '@components/battlegrounds/minions-tiers/tier-builder';
+import { Tier } from '@components/battlegrounds/minions-tiers/tiers.model';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardIds, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { getAllCardsInGame, getBuddy } from '@services/battlegrounds/bgs-utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
-import { Tier, buildTiers } from '../../../battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
@@ -24,7 +25,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 	styleUrls: [
 		`../../../../../css/global/cdk-overlay.scss`,
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
-		'../../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
+		'../../../battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
 		'./battlegrounds-minions-tiers-twitch.component.scss',
 	],
 	template: `
@@ -181,6 +182,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						allPlayerCardIds,
 						hasBuddies,
 						hasSpells,
+						true,
 						hasTrinkets,
 						[],
 						this.i18n,

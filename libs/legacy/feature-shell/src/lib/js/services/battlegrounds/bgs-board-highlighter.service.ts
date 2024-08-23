@@ -50,7 +50,6 @@ export class BgsBoardHighlighterService {
 
 		const minionsToHighlight$ = combineLatest([
 			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTribesHighlight, distinctUntilChanged())),
-			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowMechanicsHighlight, distinctUntilChanged())),
 			this.store.listenBattlegrounds$(
 				([state]) => state.currentGame?.phase,
 				([state]) => state.highlightedTribes,
@@ -63,14 +62,12 @@ export class BgsBoardHighlighterService {
 		]).pipe(
 			debounceTime(50),
 			filter(
-				([showTribesHighlight, showMechanicsHighlights, [phase], [opponentBoard], enableAutoHighlight]) =>
-					!!phase && !!opponentBoard,
+				([showTribesHighlight, [phase], [opponentBoard], enableAutoHighlight]) => !!phase && !!opponentBoard,
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
 					showTribesHighlight,
-					showMechanicsHighlights,
 					[phase, highlightedTribes, highlightedMinions, highlightedMechanics, anomalies],
 					[opponentBoard],
 					enableAutoHighlight,
@@ -79,7 +76,7 @@ export class BgsBoardHighlighterService {
 						return [];
 					}
 					highlightedTribes = showTribesHighlight ? highlightedTribes : [];
-					highlightedMinions = showMechanicsHighlights ? highlightedMinions : [];
+					highlightedMinions = showTribesHighlight ? highlightedMinions : [];
 					const shopMinions: readonly ShopMinion[] = opponentBoard.map((minion) => ({
 						entityId: minion.entityId,
 						cardId: minion.cardId,

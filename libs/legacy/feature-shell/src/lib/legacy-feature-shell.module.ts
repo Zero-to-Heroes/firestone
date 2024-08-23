@@ -496,6 +496,10 @@ import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@componen
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
 import { BattlegroundsTrinketTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-trinket-type-filter-dropdown.component';
 import { BgsTrinketsComponent } from '@components/battlegrounds/in-game/bgs-trinkets.component';
+import { BattlegroundsMinionItemComponent } from '@components/battlegrounds/minions-tiers/bgs-minion-item.component';
+import { BattlegroundsMinionsHighlightButtonsComponent } from '@components/battlegrounds/minions-tiers/minion-highlight-buttons.component';
+import { BattlegroundsMinionsListTiersHeaderComponent } from '@components/battlegrounds/minions-tiers/minions-list-tiers-header.component';
+import { BattlegroundsMinionsTierIconComponent } from '@components/battlegrounds/minions-tiers/tier-icon.component';
 import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegrounds/overlay/battlegrounds-tribe-details-tooltip.component';
 import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
 import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
@@ -1032,6 +1036,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
 		BattlegroundsMinionsGroupComponent,
+		BattlegroundsMinionsTierIconComponent,
+		BattlegroundsMinionsListTiersHeaderComponent,
+		BattlegroundsMinionsHighlightButtonsComponent,
+		BattlegroundsMinionItemComponent,
 
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
@@ -1131,9 +1139,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsStrategyCurveComponent,
 		BattlegroundsTribeDetailsTooltipComponent,
 
-		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
-		BattlegroundsMinionsGroupComponent,
 
 		BgsBattlesViewComponent,
 		BgsBattleComponent,

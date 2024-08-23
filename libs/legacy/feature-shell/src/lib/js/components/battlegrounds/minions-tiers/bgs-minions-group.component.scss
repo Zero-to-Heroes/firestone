@@ -1,0 +1,63 @@
+:host {
+	display: flex;
+}
+
+.bgs-minions-group {
+	width: 100%;
+
+	.header {
+		background: var(--color-5);
+		color: var(--color-1);
+		width: 100%;
+		height: 26px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 2px;
+
+		.header-text {
+			font-size: 15px;
+		}
+
+		.highlight-button {
+			--icon-color: var(--color-2);
+			--icon-secondary-color: var(--color-7);
+			position: absolute;
+			right: 10px;
+			padding: 5px;
+			width: 26px;
+			max-width: 26px;
+
+			&:not(.no-highlight):hover {
+				--icon-color: var(--color-1);
+			}
+
+			&:not(.no-highlight).highlighted {
+				--icon-color: var(--default-title-color);
+
+				&:hover {
+					--icon-secondary-color: var(--color-4);
+				}
+			}
+
+			&.no-highlight {
+				display: none;
+			}
+		}
+	}
+
+	.minions {
+		display: flex;
+		flex-direction: column;
+		list-style: none;
+
+		.minion {
+			width: 100%;
+			height: 26px;
+			display: flex;
+			position: relative;
+			margin-bottom: 2px;
+			overflow: hidden;
+		}
+	}
+}

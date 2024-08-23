@@ -236,10 +236,10 @@ export const getEffectiveTribesEnum = (card: ReferenceCard): readonly Race[] => 
 };
 
 export const compareTribes = (a: Race, b: Race, i18n: { translateString: (key: string) => string }): number => {
-	if (a === Race.BLANK) {
+	if (a === Race.BLANK || a == null) {
 		return 1;
 	}
-	if (b === Race.BLANK) {
+	if (b === Race.BLANK || a == null) {
 		return -1;
 	}
 	if (a === Race.ALL) {

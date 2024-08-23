@@ -15,18 +15,19 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { getAllCardsInGame, getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { Tier, buildTiers } from './battlegrounds-minions-tiers-view.component';
+import { buildTiers } from './tier-builder';
+import { Tier } from './tiers.model';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',
 	styleUrls: [
 		`../../../../css/global/cdk-overlay.scss`,
 		`../../../../css/themes/battlegrounds-theme.scss`,
-		'../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
+		'./battlegrounds-minions-tiers.component.scss',
 	],
 	template: `
 		<div class="battlegrounds-minions-tiers scalable battlegrounds-theme">
@@ -36,14 +37,12 @@ import { Tier, buildTiers } from './battlegrounds-minions-tiers-view.component';
 				[tavernTier]="tavernTier$ | async"
 				[showMinionsList]="showMinionsList$ | async"
 				[showTribesHighlight]="showTribesHighlight$ | async"
-				[showBattlecryHighlight]="showBattlecryHighlight$ | async"
 				[highlightedMinions]="highlightedMinions$ | async"
 				[highlightedTribes]="highlightedTribes$ | async"
 				[highlightedMechanics]="highlightedMechanics$ | async"
 				[enableMouseOver]="enableMouseOver$ | async"
 				[showGoldenCards]="showGoldenCards$ | async"
 				[showTurnNumber]="showTurnNumber$ | async"
-				[showSpellsAtBottom]="showSpellsAtBottom$ | async"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -61,13 +60,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	currentTurn$: Observable<number>;
 	tavernTier$: Observable<number>;
 	showTribesHighlight$: Observable<boolean>;
-	showBattlecryHighlight$: Observable<boolean>;
 	showMinionsList$: Observable<boolean>;
 	showTurnNumber$: Observable<boolean>;
 	enableMouseOver$: Observable<boolean>;
 	showGoldenCards$: Observable<boolean>;
-	showSpellsAtBottom$: Observable<boolean>;
-	showTrinkets$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -100,6 +96,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				races: bgGameState?.currentGame?.availableRaces,
 				hasBuddies: bgGameState?.currentGame?.hasBuddies,
 				hasSpells: bgGameState?.currentGame?.hasSpells,
+				showSpellsAtBottom: prefs.bgsMinionListShowSpellsAtBottom,
 				anomalies: bgGameState?.currentGame?.anomalies,
 				hasPrizes: bgGameState?.currentGame?.hasPrizes,
 				hasTrinkets: bgGameState?.currentGame?.hasTrinkets,
@@ -111,6 +108,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					bgGameState?.currentGame?.getMainPlayer()?.greaterTrinket,
 				].filter((trinket) => !!trinket),
 			})),
+			debounceTime(200),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				({
@@ -122,6 +120,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					races,
 					hasBuddies,
 					hasSpells,
+					showSpellsAtBottom,
 					anomalies,
 					hasPrizes,
 					hasTrinkets,
@@ -130,6 +129,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					allPlayersCardIds,
 					playerTrinkets,
 				}) => {
+					console.debug('rebuilding tiers');
 					// hasSpells = true;
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
@@ -157,6 +157,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						allPlayerCardIds,
 						hasBuddies,
 						hasSpells,
+						showSpellsAtBottom,
 						hasTrinkets,
 						playerTrinkets,
 						this.i18n,
@@ -178,9 +179,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.showTribesHighlight$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowTribesHighlight),
 		);
-		this.showBattlecryHighlight$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.bgsShowMechanicsHighlight),
-		);
 		this.showMinionsList$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsEnableMinionListOverlay),
 		);
@@ -192,9 +190,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		);
 		this.showGoldenCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsMinionListShowGoldenCard),
-		);
-		this.showSpellsAtBottom$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.bgsMinionListShowSpellsAtBottom),
 		);
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListScale)).subscribe((scale) => {
 			let element = this.el.nativeElement.querySelector('.scalable');
