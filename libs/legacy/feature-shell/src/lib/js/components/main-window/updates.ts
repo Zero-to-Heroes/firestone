@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.20.1',
+		version: '13.21.1',
 		force: false,
 		sections: [
 			// {
@@ -48,11 +48,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `App has been updated for 30.2, including all the trinkets!`,
+								text: `You can now browse trinket stats in the main app!`,
+							},
+							{
+								type: 'feature',
+								text: `You can now see trinket stats directly in the overlay. Free users can use this 4 times per day (which is roughly 2 games), while it's unlimited for premium users.`,
 							},
 						],
 					},
@@ -67,28 +71,24 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to show all the trinkets in the minions list.`,
+								text: `Trinkets are now shown in the various BG widgets, like the next opponent overview (when mousing over a portrait on the leaderboard), the quick opponents view (pressing tab (Premium)) or the overall opponents view (in the BG window).`,
 							},
 							{
-								type: 'feature',
-								text: `Mousing over the weapon slots on the Twitch extension will let the viewer view the Greater Trinket (if bought), or the Lesser Trinket. Proper support for the trinkets will come in a future release of the Twitch extension, but that can take a bit more time.`,
+								type: 'bug',
+								text: `Fix an issue where achievements for Marin were indeed showing the ones for Madam Goya.`,
 							},
 							{
-								type: 'feature',
-								text: `The Battle Simulator should now scale better with the app's size. More features - and full support for Duos and Trinkets - will be added in the coming weeks.`,
-							},
-							{
-								type: 'misc',
-								text: `The Records Broken tab has been removed. This tab, while IMO quite fun, was not super popular, and was requiring too many resources on the backend to keep updated. Let me know if you really miss it :)`,
+								type: 'bug',
+								text: `Continue fixing simulation issues. Expect more fixes in the coming week!`,
 							},
 						],
 					},
 					{
-						category: 'collection',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where Golden Pack pity timers were not correctly updated.`,
+								text: `Fix an issue where Tyr would only highlight Paladin cards when mousing over it in the tracker.`,
 							},
 						],
 					},
