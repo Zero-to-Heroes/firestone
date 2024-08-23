@@ -95,17 +95,17 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 	freeUsesText: string;
 	freeUsesTooltip: string;
 
-	@Input() set hero(value: BgsMetaHeroStatTierItem) {
+	@Input() set hero(value: BgsMetaHeroStatTierItem | null) {
 		this._hero = value;
 		this.tier = value?.tier;
 		this.averagePosition = value?.averagePosition?.toFixed(2);
-		const tribesImpactValue = !value.tribesFilter?.length
+		const tribesImpactValue = !value?.tribesFilter?.length
 			? null
 			: value?.tribeStats?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0;
 		this.tribesImpact = tribesImpactValue == null ? '-' : tribesImpactValue.toFixed(2);
 		this.tribesImpactCss = tribesImpactValue == null ? '' : tribesImpactValue < 0 ? 'better' : 'worse';
 		// Build the tooltip that shows the impact of each tribe
-		const allTribes = [...value.averagePositionDetails.allTribesAveragePositionModifierDetails]
+		const allTribes = [...(value?.averagePositionDetails.allTribesAveragePositionModifierDetails ?? [])]
 			.sort((a, b) => a.impact - b.impact)
 			.map((tribe) => ({
 				...tribe,
