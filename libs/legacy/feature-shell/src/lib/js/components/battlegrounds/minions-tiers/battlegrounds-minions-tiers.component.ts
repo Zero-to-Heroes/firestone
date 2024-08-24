@@ -14,7 +14,7 @@ import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { getAllCardsInGame, getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
@@ -75,12 +75,13 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		private readonly prefs: PreferencesService,
 		private readonly bgGameState: BgsStateFacadeService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly cardRules: CardRulesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.bgGameState, this.gameState);
+		await waitForReady(this.prefs, this.bgGameState, this.gameState, this.cardRules);
 
 		this.tiers$ = combineLatest([
 			this.prefs.preferences$$,
@@ -142,6 +143,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						hasTrinkets,
 						gameMode,
 						this.allCards,
+						this.cardRules.rules$$?.value,
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(

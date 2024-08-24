@@ -11,6 +11,7 @@ import { FsTranslatePipe } from './localization/fs-translate.pipe';
 import { LocalizationStandaloneService } from './localization/localization-standalone.service';
 import { AnalyticsService } from './services/analytics/analytics.service';
 import { ApiRunner } from './services/api-runner';
+import { CardRulesService } from './services/card-rules.service';
 import { CardsFacadeStandaloneService } from './services/cards-facade-standalone.service';
 import { CardsFacadeService } from './services/cards-facade.service';
 import { DiskCacheService } from './services/disk-cache.service';
@@ -36,6 +37,7 @@ const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent,
 		OverwolfService,
 		CardsFacadeService,
 		CardsFacadeStandaloneService,
+		CardRulesService,
 		DiskCacheService,
 		LocalStorageService,
 		WindowManagerService,

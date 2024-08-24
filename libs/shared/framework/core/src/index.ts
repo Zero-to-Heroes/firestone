@@ -10,6 +10,7 @@ export * from './lib/services/ads-service.interface';
 export * from './lib/services/analytics/analytics.service';
 export * from './lib/services/api-runner';
 export * from './lib/services/app-injector';
+export * from './lib/services/card-rules.service';
 export * from './lib/services/cards-facade-standalone.service';
 export * from './lib/services/cards-facade.service';
 export * from './lib/services/cards-highlight-service.interface';

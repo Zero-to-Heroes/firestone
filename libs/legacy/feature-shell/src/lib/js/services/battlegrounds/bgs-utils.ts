@@ -1,5 +1,7 @@
 import {
 	CardIds,
+	CardRule,
+	CardRules,
 	CardType,
 	CustomTags,
 	GameTag,
@@ -59,6 +61,7 @@ export const getAllCardsInGame = (
 	hasTrinkets: boolean,
 	gameMode: GameType,
 	allCards: CardsFacadeService,
+	cardRules: CardRules | null,
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
@@ -80,15 +83,13 @@ export const getAllCardsInGame = (
 		.filter((card) => hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
-			if (card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_SPELL]) {
-				return true;
+			if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL]) {
+				return hasSpells && isValidBgSpellForTribes(card.id, availableTribes);
 			}
-			// Filter spells based on tribes
-			if (!hasSpells) {
-				return false;
+			if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]) {
+				return hasTrinkets && isValidTrinketForTribes(card.id, availableTribes, allCards, cardRules);
 			}
-			// TODO: filter trinkets based on tribes
-			return isValidBgSpellForTribes(card.id, availableTribes);
+			return true;
 		})
 		.filter((card) => {
 			if (!availableTribes?.length) {
@@ -142,6 +143,49 @@ const isValidBgSpellForTribes = (cardId: string, availableTribes: readonly Race[
 		case CardIds.GemConfiscation_BG28_698:
 			return availableTribes.includes(Race.QUILBOAR);
 	}
+	return true;
+};
+
+const isValidTrinketForTribes = (
+	cardId: string,
+	availableTribes: readonly Race[],
+	allCards: CardsFacadeService,
+	cardRules: CardRules | null,
+): boolean => {
+	if (!availableTribes?.length || !cardRules) {
+		return true;
+	}
+
+	const rule: CardRule | null = cardRules[cardId];
+	if (!rule) {
+		return true;
+	}
+
+	const isBanned = rule.bgsBannedInLobbyWithRaces?.some((bannedRace) => availableTribes.includes(Race[bannedRace]));
+	if (isBanned) {
+		console.debug(
+			'banned trinket',
+			allCards.getCard(cardId).name,
+			rule.bgsBannedInLobbyWithRaces?.map((r) => Race[r]),
+			availableTribes.map((r) => Race[r]),
+		);
+		return false;
+	}
+
+	const isRestrictionMet =
+		rule.bgsOnlyInLobbyWithRaces?.length > 0
+			? rule.bgsBannedInLobbyWithRaces?.some((neededTribe) => availableTribes.includes(Race[neededTribe]))
+			: true;
+	if (!isRestrictionMet) {
+		console.debug(
+			'restriction not met trinket',
+			allCards.getCard(cardId).name,
+			rule.bgsOnlyInLobbyWithRaces?.map((r) => Race[r]),
+			availableTribes.map((r) => Race[r]),
+		);
+		return false;
+	}
+
 	return true;
 };
 

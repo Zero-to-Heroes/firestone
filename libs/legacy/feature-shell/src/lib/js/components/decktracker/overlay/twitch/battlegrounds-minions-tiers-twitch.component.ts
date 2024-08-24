@@ -167,6 +167,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						hasTrinkets,
 						gameMode,
 						this.allCards,
+						null,
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
