@@ -88,15 +88,6 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 			),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(([card, showGoldenCards, highlightedMinions, highlightedTribes, highlightedMechanics]) => {
-				console.debug(
-					'rebuilding minion',
-					card.name,
-					card,
-					showGoldenCards,
-					highlightedMinions,
-					highlightedTribes,
-					highlightedMechanics,
-				);
 				const hasBattlecry = card.mechanics?.includes(GameTag[GameTag.BATTLECRY]);
 				const hasDeathrattle = card.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]);
 				const hasTaunt = card.mechanics?.includes(GameTag[GameTag.TAUNT]);
@@ -188,7 +179,6 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 								value: this.i18n.translateString('global.mechanics.reborn'),
 						  }),
 				};
-				console.debug('rebuilt minion', result.cardId);
 				return result;
 			}),
 		);

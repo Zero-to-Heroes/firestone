@@ -13,8 +13,12 @@
 	&:not(.banned):hover {
 		transform: scale(1.1);
 
-		.highlight-minion-button {
-			display: block;
+		.highlight-buttons {
+			margin-right: 10px;
+
+			::ng-deep .highlight-buttons .highlight-minion-button {
+				display: flex;
+			}
 		}
 	}
 
@@ -34,11 +38,6 @@
 	}
 
 	.highlight-buttons {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		--icon-color: var(--color-2);
-		--icon-secondary-color: var(--color-7);
 		position: absolute;
 		right: 0;
 		top: 0;
