@@ -77,5 +77,9 @@
 	display: flex;
 	max-height: 100%;
 	overflow-y: scroll;
-	overflow-x: hidden;
+	overflow-x: visible;
+	padding-left: 20px;
+	width: calc(100% + 20px);
+	position: relative;
+	left: -20px;
 }
