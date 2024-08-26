@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.21.1',
+		version: '13.21.2',
 		force: false,
 		sections: [
 			// {
@@ -72,6 +72,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Trinkets are now shown in the various BG widgets, like the next opponent overview (when mousing over a portrait on the leaderboard), the quick opponents view (pressing tab (Premium)) or the overall opponents view (in the BG window).`,
+							},
+							{
+								type: 'feature',
+								text: `The list of trinkets now only shows trinkets that are available based on the current lobby tribes.`,
 							},
 							{
 								type: 'bug',

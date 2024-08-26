@@ -15,9 +15,10 @@ import { ExtendedReferenceCard } from './tiers.model';
 		<div
 			class="minion"
 			*ngIf="minion$ | async as minion"
-			[ngClass]="{ banned: minion.banned }"
+			[ngClass]="{ banned: minion.banned, locked: minion.trinketLocked }"
 			[cardTooltip]="minion.displayedCardIds"
 			[cardTooltipBgs]="true"
+			[helpTooltip]="minion.trinketLockedReason"
 		>
 			<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 			<div class="name">
@@ -28,7 +29,9 @@ import { ExtendedReferenceCard } from './tiers.model';
 					/>
 					<div class="cost">{{ minion.goldCost }}</div>
 				</div>
-				{{ minion.name }}
+				<span class="name-text">
+					{{ minion.name }}
+				</span>
 			</div>
 			<minion-highlight-buttons
 				class="highlight-buttons"
@@ -121,6 +124,9 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					hasEndOfTurn: hasEndOfTurn,
 					hasReborn: hasReborn,
 					hasBgSpell: hasBgSpell,
+
+					trinketLocked: card.trinketLocked,
+					trinketLockedReason: card.trinketLockedReason?.join('<br />'),
 
 					battlecryHighlight: battlecryHighlight,
 					deathrattleHighlight: deathrattleHighlight,
@@ -221,6 +227,9 @@ export interface Minion {
 	readonly hasBattlecry?: boolean;
 	readonly hasReborn?: boolean;
 	readonly hasBgSpell?: boolean;
+
+	readonly trinketLocked?: boolean;
+	readonly trinketLockedReason?: string;
 
 	readonly battlecryHighlight?: boolean;
 	readonly deathrattleHighlight?: boolean;

@@ -189,6 +189,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						this.i18n,
 						this.allCards,
 					);
+					// TODO: filter to show locked trinkets
 					return result;
 				},
 			),

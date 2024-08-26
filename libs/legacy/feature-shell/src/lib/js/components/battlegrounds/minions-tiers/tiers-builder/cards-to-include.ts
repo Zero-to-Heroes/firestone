@@ -12,15 +12,16 @@ export const filterCardsToInclude = (
 				tiersToInclude.includes(card.techLevel) ||
 				card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET],
 		)
-		.map((card) =>
-			isCardExcludedByAnomaly(card, anomalies)
-				? {
-						...card,
-						banned: true,
-				  }
-				: card,
-		);
+		.map((card) => enhanceCard(card, anomalies));
 	return filteredCards;
+};
+
+const enhanceCard = (card: ReferenceCard, anomalies: readonly string[]): ExtendedReferenceCard => {
+	const result: ExtendedReferenceCard = {
+		...card,
+		banned: isCardExcludedByAnomaly(card, anomalies),
+	};
+	return result;
 };
 
 const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {

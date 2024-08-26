@@ -15,11 +15,13 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil, tap } from 'rxjs';
 import { getAllCardsInGame, getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { buildTiers } from './tier-builder';
+import { MinionInfo, enhanceTiers } from './tier-enhancer';
+import { getActualTribes } from './tiers-builder/utils';
 import { Tier } from './tiers.model';
 
 @Component({
@@ -82,13 +84,25 @@ export class BattlegroundsMinionsTiersOverlayComponent
 
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs, this.bgGameState, this.gameState, this.cardRules);
+		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 
-		this.tiers$ = combineLatest([
+		const playerTrinkets$ = this.bgGameState.gameState$$.pipe(
+			debounceTime(200),
+			this.mapData((main) => ({
+				lesser: main?.currentGame?.getMainPlayer()?.lesserTrinket,
+				greater: main?.currentGame?.getMainPlayer()?.greaterTrinket,
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const staticTiers$ = combineLatest([
 			this.prefs.preferences$$,
 			this.bgGameState.gameState$$,
 			this.gameState.gameState$$,
+			playerTrinkets$,
 		]).pipe(
-			map(([prefs, bgGameState, gameState]) => ({
+			map(([prefs, bgGameState, gameState, playerTrinkets]) => ({
 				showMechanicsTiers: prefs.bgsShowMechanicsTiers,
 				showTribeTiers: prefs.bgsShowTribeTiers,
 				showTierSeven: prefs.bgsShowTierSeven,
@@ -104,10 +118,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				showTrinkets: prefs.bgsShowTrinkets,
 				playerCardId: bgGameState?.currentGame?.getMainPlayer()?.cardId,
 				allPlayersCardIds: bgGameState?.currentGame?.players?.map((p) => p.cardId),
-				playerTrinkets: [
-					bgGameState?.currentGame?.getMainPlayer()?.lesserTrinket,
-					bgGameState?.currentGame?.getMainPlayer()?.greaterTrinket,
-				].filter((trinket) => !!trinket),
+				playerTrinkets: [playerTrinkets?.lesser, playerTrinkets?.greater].filter((trinket) => !!trinket),
 			})),
 			debounceTime(200),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
@@ -130,7 +141,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					allPlayersCardIds,
 					playerTrinkets,
 				}) => {
-					console.debug('rebuilding tiers');
+					console.debug('[tiers] rebuilding tiers');
 					// hasSpells = true;
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
@@ -143,7 +154,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						hasTrinkets,
 						gameMode,
 						this.allCards,
-						this.cardRules.rules$$?.value,
+						cardRules,
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
@@ -168,6 +179,39 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					return result;
 				},
 			),
+		);
+
+		const boardComposition$: Observable<readonly MinionInfo[]> = combineLatest([
+			this.gameState.gameState$$,
+			playerTrinkets$,
+		]).pipe(
+			this.mapData(([gameState, trinkets]) => {
+				const trinketsArray = [trinkets.lesser, trinkets.greater].filter((trinket) => !!trinket);
+				const allEntities = [...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])];
+				const composition = allEntities.map((e) => {
+					const result: MinionInfo = {
+						tavernTier: this.allCards.getCard(e.cardId).techLevel,
+						tribes: getActualTribes(this.allCards.getCard(e.cardId), false, trinketsArray),
+					};
+					return result;
+				});
+				return composition;
+			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap((composition) => console.debug('[tiers] board composition', composition)),
+			takeUntil(this.destroyed$),
+		);
+		this.tiers$ = combineLatest([
+			staticTiers$,
+			boardComposition$,
+			this.bgGameState.gameState$$.pipe(
+				this.mapData((state) => state?.currentGame?.getMainPlayer()?.getCurrentTavernTier()),
+			),
+		]).pipe(
+			this.mapData(([tiers, boardComposition, tavernLevel]) => {
+				console.debug('[tiers] updating tiers');
+				return enhanceTiers(tiers, boardComposition, tavernLevel, cardRules, this.i18n);
+			}),
 		);
 		this.highlightedTribes$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedTribes));
 		this.highlightedMechanics$ = this.bgGameState.gameState$$.pipe(

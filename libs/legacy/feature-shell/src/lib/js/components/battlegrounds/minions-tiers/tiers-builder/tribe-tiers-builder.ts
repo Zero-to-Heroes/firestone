@@ -51,12 +51,10 @@ const buildTrinketTierGroups = (
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): readonly TierGroup[] => {
-	return [SpellSchool.LESSER_TRINKET, SpellSchool.GREATER_TRINKET]
-		.map((quality) => {
-			const group: TierGroup = buildTrinketTierGroup(cards, quality, i18n, config);
-			return group;
-		})
-		.sort((a, b) => a.label.localeCompare(b.label));
+	return [SpellSchool.LESSER_TRINKET, SpellSchool.GREATER_TRINKET].map((quality) => {
+		const group: TierGroup = buildTrinketTierGroup(cards, quality, i18n, config);
+		return group;
+	});
 };
 
 const buildTrinketTierGroup = (
