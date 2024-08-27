@@ -78,6 +78,10 @@ export const updates: readonly Update[] = [
 								text: `The list of trinkets now only shows trinkets that are available based on the current lobby tribes.`,
 							},
 							{
+								type: 'feature',
+								text: `The list of trinkets now grays out trinkets that you can't be offered with your current board (e.g. some trinkets require you to have 2 minions of a given type between your board and hand), and will explain why they are grayed out.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where achievements for Marin were indeed showing the ones for Madam Goya.`,
 							},
