@@ -2,6 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { ColiseumDebugService } from '../../../services/coliseum-debug.service';
 
 @Component({
 	selector: 'card-on-board',
@@ -14,6 +15,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 			[tooltipEnchantments]="_enchantments"
 			[attr.data-entity-id]="_entity.id"
 		>
+			<div *ngIf="debug" class="debug-entity-id">{{ _entity.id }}</div>
 			<div
 				class="main-card"
 				[ngClass]="{ highlight: _option, 'in-recruit': isRecruitPhase, 'main-player': isMainPlayer }"
@@ -57,6 +59,8 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 	host: { '[@fadeInOut]': 'in' },
 })
 export class CardOnBoardComponent {
+	debug = false;
+
 	_entity: Entity;
 	_enchantments: readonly Entity[];
 	_option: boolean;
@@ -79,7 +83,9 @@ export class CardOnBoardComponent {
 	sleeping: boolean;
 	tavernTier: number;
 
-	constructor(private cards: AllCardsService) {}
+	constructor(private cards: AllCardsService, private readonly debugService: ColiseumDebugService) {
+		this.debug = debugService.active;
+	}
 
 	@Input() isMainPlayer: boolean;
 	@Input() isRecruitPhase: boolean;

@@ -10,6 +10,16 @@
 	height: 100%;
 	width: 100%;
 
+	.debug-entity-id {
+		position: absolute;
+		top: 0vh;
+		color: white;
+		text-align: center;
+		width: 100%;
+		z-index: 9999;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+	}
+
 	&::before {
 		content: '';
 		padding-top: 148%;

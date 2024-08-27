@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { ReplayLocation } from '@firestone/replay/coliseum';
+import { ColiseumDebugService, ReplayLocation } from '@firestone/replay/coliseum';
 import { ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -35,6 +35,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		private readonly api: ApiRunner,
 		private readonly http: HttpClient,
 		private readonly allCards: CardsFacadeStandaloneService,
+		private readonly debugService: ColiseumDebugService,
 	) {}
 
 	async ngAfterContentInit() {
@@ -58,6 +59,11 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		// console.debug('bgsSimulation', bgsSimulation);
 		const initialTurn = this.getSearchParam('turn');
 		const initialAction = this.getSearchParam('action');
+		const debug = this.getSearchParam('debug');
+
+		if (debug) {
+			this.debugService.active = true;
+		}
 
 		console.debug('params', reviewId, bgsSimulationId, bgsSimulation);
 		this.reviewId = reviewId;
@@ -111,6 +117,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 			: this.bgsSimulationId
 			? `bgsSimulationId=${this.bgsSimulationId}&`
 			: '';
+
 		const queryString = `${reviewQuery}turn=${location.turn}&action=${location.action}`;
 		const newUrl = `${baseUrl}?${queryString}`;
 		window.history.replaceState({ path: newUrl }, '', newUrl);
