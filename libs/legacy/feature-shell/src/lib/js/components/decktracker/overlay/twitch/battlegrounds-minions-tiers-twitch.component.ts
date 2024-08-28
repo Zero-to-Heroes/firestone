@@ -186,6 +186,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						true,
 						hasTrinkets,
 						[],
+						null,
 						this.i18n,
 						this.allCards,
 					);

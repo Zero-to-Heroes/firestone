@@ -1,5 +1,6 @@
 import {
 	CardIds,
+	CardRules,
 	CardType,
 	getTribeIcon,
 	getTribeName,
@@ -7,19 +8,23 @@ import {
 	ReferenceCard,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { isBgsTrinket } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
 import { TierBuilderConfig } from './tiers-config.model';
-import { getActualTribes } from './utils';
+import { getActualTribes, getTrinketNameKey } from './utils';
 
 export const buildTribeTiers = (
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
 	availableTribes: readonly Race[],
+	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
 	const tribeTiers: readonly Tier[] = availableTribes
-		.map((targetTribe) => buildSingleTribeTier(targetTribe, cardsToInclude, tiersToInclude, i18n, config))
+		.map((targetTribe) =>
+			buildSingleTribeTier(targetTribe, cardsToInclude, tiersToInclude, cardRules, i18n, config),
+		)
 		.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 	const spellTier: Tier = config?.spells ? buildSpellsTier(cardsToInclude, tiersToInclude, i18n, config) : null;
 	const trinketTier: Tier = config?.trinkets ? buildTrinketsTier(cardsToInclude, i18n, config) : null;
@@ -85,7 +90,7 @@ const buildSpellsTier = (
 	const cardsForSpells = cardsToInclude.filter(
 		(card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL],
 	);
-	const spellGroups: readonly TierGroup[] = buildTierGroups(cardsForSpells, tiersToInclude, i18n, config);
+	const spellGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForSpells, tiersToInclude, i18n, config);
 	const result: Tier = {
 		type: 'tribe',
 		tavernTier: 'spells',
@@ -100,6 +105,7 @@ const buildSingleTribeTier = (
 	targetTribe: Race,
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
+	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): Tier => {
@@ -110,15 +116,26 @@ const buildSingleTribeTier = (
 			config?.groupMinionsIntoTheirTribeGroup,
 			config?.playerTrinkets,
 		);
+		const isTrinket = isBgsTrinket(card);
+		const cardTrinketTribes = [
+			// ...(cardRules?.[card.id]?.bgsMinionTypesRules?.needTypesInLobby ?? []),
+			...(cardRules?.[card.id]?.bgsMinionTypesRules?.needBoardTypes ?? []),
+		]
+			.filter((type) => type)
+			.map((tribe) => Race[tribe]);
 		if (targetTribe === null) {
-			return cardTribes.length === 0;
+			return cardTribes.length === 0 || (isTrinket && cardTrinketTribes.length === 0);
 		}
-		if (cardTribes.length === 0) {
+		if (cardTribes.length === 0 && cardTrinketTribes.length === 0) {
 			return false;
 		}
-		return cardTribes.includes(Race.ALL) || cardTribes.includes(targetTribe);
+		return (
+			cardTribes.includes(Race.ALL) ||
+			cardTribes.includes(targetTribe) ||
+			(isTrinket && cardTrinketTribes.includes(targetTribe))
+		);
 	});
-	const tribeGroups: readonly TierGroup[] = buildTierGroups(cardsForTribe, tiersToInclude, i18n, config);
+	const tribeGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForTribe, tiersToInclude, i18n, config);
 	const spellGroup: TierGroup = config?.spells ? buildSpellGroup(cardsForTribe, i18n) : null;
 	const trinketGroup = config?.trinkets ? buildTrinketGroup(cardsForTribe, i18n) : null;
 	const groups: readonly TierGroup[] = config?.showSpellsAtBottom
@@ -140,9 +157,13 @@ const buildTrinketGroup = (
 ): TierGroup => {
 	const cardForGroup = cardsForTribe
 		.filter((card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET])
+		.sort(
+			(a, b) =>
+				a.name.localeCompare(b.name) || (SpellSchool[a.spellSchool] ?? 0) - (SpellSchool[b.spellSchool] ?? 0),
+		)
 		.map((card) => ({
 			...card,
-			name: i18n.translateString(`battlegrounds.in-game.minions-list`, {
+			name: i18n.translateString(`battlegrounds.in-game.minions-list.${getTrinketNameKey(card)}`, {
 				name: card.name,
 			}),
 		}));
@@ -169,7 +190,7 @@ const buildSpellGroup = (
 	return result;
 };
 
-const buildTierGroups = (
+const buildTribeTierGroups = (
 	cards: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
@@ -177,13 +198,13 @@ const buildTierGroups = (
 ): readonly TierGroup[] => {
 	return tiersToInclude
 		.map((techLevel) => {
-			const group: TierGroup = buildTierGroup(cards, techLevel, i18n, config);
+			const group: TierGroup = buildTribeTierGroup(cards, techLevel, i18n, config);
 			return group;
 		})
-		.sort((a, b) => a.label.localeCompare(b.label));
+		.sort((a, b) => (!!a.tribe ? -1 : 0) - (!!b.tribe ? -1 : 0) || a.label.localeCompare(b.label));
 };
 
-const buildTierGroup = (
+const buildTribeTierGroup = (
 	cards: readonly ExtendedReferenceCard[],
 	techLevel: number,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },

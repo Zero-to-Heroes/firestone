@@ -13,6 +13,7 @@ export const enhanceTiers = (
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): readonly Tier[] => {
 	const newTiers = tiers.map((tier) => enhanceTier(tier, boardComposition, tavernLevel, cardRules, i18n));
+	console.debug('[tier-enhancer] enhanced tiers', tiers);
 	return newTiers;
 };
 
@@ -28,7 +29,6 @@ const enhanceTier = (
 		return tier;
 	}
 
-	console.debug('[tier-enhancer] enhanced tier', tier.tavernTier, tier, newGroups);
 	const newTier: Tier = {
 		...tier,
 		groups: newGroups,
@@ -48,7 +48,6 @@ const enhanceGroup = (
 		return group;
 	}
 
-	console.debug('[tier-enhancer] enhanced group', group.label, group, newCards);
 	const newGroup: TierGroup = {
 		...group,
 		cards: newCards,
@@ -68,7 +67,6 @@ const enhanceCard = (
 		return card;
 	}
 
-	console.debug('[tier-enhancer] enhanced card', card.id, card, trinketLocked, trinketLockedReason);
 	const newCard: ExtendedReferenceCard = {
 		...card,
 		trinketLocked,

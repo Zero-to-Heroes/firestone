@@ -1,4 +1,4 @@
-import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardRules, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filterCardsToInclude } from './tiers-builder/cards-to-include';
 import { buildMechanicsTiers } from './tiers-builder/mechanics-tiers-builder';
@@ -24,6 +24,7 @@ export const buildTiers = (
 	showSpellsAtBottom: boolean,
 	hasTrinkets: boolean,
 	playerTrinkets: readonly string[],
+	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
@@ -84,7 +85,7 @@ export const buildTiers = (
 		  )
 		: [];
 	const tribeTiers: readonly Tier[] = showTribeTiers
-		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, i18n, config)
+		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, config)
 		: [];
 	console.debug('all tiers', standardTiers, mechanicsTiers, tribeTiers);
 	return [...standardTiers, ...mechanicsTiers, ...tribeTiers];

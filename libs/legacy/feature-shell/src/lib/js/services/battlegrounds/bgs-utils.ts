@@ -165,12 +165,12 @@ const isValidTrinketForTribes = (
 		availableTribes.includes(Race[bannedRace]),
 	);
 	if (isBanned) {
-		console.debug(
-			'banned trinket',
-			allCards.getCard(cardId).name,
-			rule.bgsMinionTypesRules?.bannedWithTypesInLobby?.map((r) => Race[r]),
-			availableTribes.map((r) => Race[r]),
-		);
+		// console.debug(
+		// 	'banned trinket',
+		// 	allCards.getCard(cardId).name,
+		// 	rule.bgsMinionTypesRules?.bannedWithTypesInLobby?.map((r) => Race[r]),
+		// 	availableTribes.map((r) => Race[r]),
+		// );
 		return false;
 	}
 
@@ -181,12 +181,12 @@ const isValidTrinketForTribes = (
 			  )
 			: true;
 	if (!isRestrictionMet) {
-		console.debug(
-			'restriction not met trinket',
-			allCards.getCard(cardId).name,
-			rule.bgsMinionTypesRules?.needTypesInLobby?.map((r) => Race[r]),
-			availableTribes.map((r) => Race[r]),
-		);
+		// console.debug(
+		// 	'restriction not met trinket',
+		// 	allCards.getCard(cardId).name,
+		// 	rule.bgsMinionTypesRules?.needTypesInLobby?.map((r) => Race[r]),
+		// 	availableTribes.map((r) => Race[r]),
+		// );
 		return false;
 	}
 

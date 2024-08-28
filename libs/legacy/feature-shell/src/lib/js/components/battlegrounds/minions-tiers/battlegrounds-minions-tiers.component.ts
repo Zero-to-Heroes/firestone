@@ -173,6 +173,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showSpellsAtBottom,
 						hasTrinkets,
 						playerTrinkets,
+						cardRules,
 						this.i18n,
 						this.allCards,
 					);
