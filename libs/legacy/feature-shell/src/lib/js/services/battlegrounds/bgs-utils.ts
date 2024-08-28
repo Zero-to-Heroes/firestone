@@ -267,6 +267,10 @@ export const isBgsSpell = (card: ReferenceCard): boolean => {
 	return card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL];
 };
 
+export const isBgsTrinket = (card: ReferenceCard): boolean => {
+	return card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET];
+};
+
 /** @deprecated */
 export const getEffectiveTribes = (
 	card: ReferenceCard,

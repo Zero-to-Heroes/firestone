@@ -3,7 +3,7 @@ import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
-import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
+import { isBgsSpell, isBgsTrinket } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
 import { ExtendedReferenceCard } from './tiers.model';
@@ -35,7 +35,7 @@ import { ExtendedReferenceCard } from './tiers.model';
 			</div>
 			<minion-highlight-buttons
 				class="highlight-buttons"
-				*ngIf="showTribesHighlight"
+				*ngIf="showTribesHighlight && !minion.hidePins"
 				[minion]="minion"
 			></minion-highlight-buttons>
 		</div>
@@ -114,7 +114,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					name: card.name, // Already enhanced when building groups
 					highlighted: highlightedMinions.includes(card.id),
 					banned: card.banned,
-					goldCost: isBgsSpell(card) ? card.cost : null,
+					goldCost: isBgsSpell(card) || isBgsTrinket(card) ? card.cost : null,
 					techLevel: card.techLevel,
 
 					hasBattlecry: hasBattlecry,
@@ -127,6 +127,8 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 
 					trinketLocked: card.trinketLocked,
 					trinketLockedReason: card.trinketLockedReason?.join('<br />'),
+
+					hidePins: isBgsTrinket(card),
 
 					battlecryHighlight: battlecryHighlight,
 					deathrattleHighlight: deathrattleHighlight,
@@ -248,6 +250,8 @@ export interface Minion {
 	readonly divineShieldHighlightTooltip?: string;
 	readonly endOfTurnHighlightTooltip?: string;
 	readonly rebornHighlightTooltip?: string;
+
+	readonly hidePins?: boolean;
 }
 
 const enhanceCardName = (card: ReferenceCard, group: BgsMinionsGroup): string => {
