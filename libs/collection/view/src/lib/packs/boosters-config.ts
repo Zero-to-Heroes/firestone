@@ -41,7 +41,12 @@ export const CLASS_PACKS = [
 	BoosterType.STANDARD_WARLOCK,
 ];
 
-export const YEAR_PACKS = [BoosterType.YEAR_OF_DRAGON, BoosterType.YEAR_OF_PHOENIX];
+export const YEAR_PACKS = [
+	BoosterType.YEAR_OF_DRAGON,
+	BoosterType.YEAR_OF_PHOENIX,
+	BoosterType.WHIZBANG_CATCH_UP,
+	BoosterType.ISLAND_VACATION_CATCH_UP,
+];
 
 export const NON_BUYABLE_BOOSTER_IDS = [
 	...GOLDEN_SET_PACKS,
