@@ -1,10 +1,12 @@
-import { CardIds, CardType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardRules, CardType, ReferenceCard } from '@firestone-hs/reference-data';
 import { ExtendedReferenceCard } from '../tiers.model';
 
 export const filterCardsToInclude = (
 	cardsInGame: readonly ReferenceCard[],
 	tiersToInclude: readonly number[],
 	anomalies: readonly string[],
+	playerCardId: string,
+	cardRules: CardRules,
 ): readonly ExtendedReferenceCard[] => {
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 		.filter(
@@ -12,16 +14,42 @@ export const filterCardsToInclude = (
 				tiersToInclude.includes(card.techLevel) ||
 				card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET],
 		)
-		.map((card) => enhanceCard(card, anomalies));
+		.map((card) => enhanceCard(card, anomalies, playerCardId, cardRules));
 	return filteredCards;
 };
 
-const enhanceCard = (card: ReferenceCard, anomalies: readonly string[]): ExtendedReferenceCard => {
+const enhanceCard = (
+	card: ReferenceCard,
+	anomalies: readonly string[],
+	playerCardId: string,
+	cardRules: CardRules,
+): ExtendedReferenceCard => {
+	const { banned, bannedReason } = isBanned(card, anomalies, playerCardId, cardRules);
 	const result: ExtendedReferenceCard = {
 		...card,
-		banned: isCardExcludedByAnomaly(card, anomalies),
+		banned: banned,
+		bannedReason: bannedReason,
 	};
 	return result;
+};
+
+const isBanned = (
+	card: ReferenceCard,
+	anomalies: readonly string[],
+	playerCardId: string,
+	cardRules: CardRules,
+): { banned: boolean; bannedReason: string } => {
+	if (isCardExcludedByAnomaly(card, anomalies)) {
+		return { banned: true, bannedReason: 'anomaly' };
+	}
+	if (isCardExcludedForPlayer(card, playerCardId, cardRules)) {
+		return { banned: true, bannedReason: 'player' };
+	}
+};
+
+const isCardExcludedForPlayer = (card: ReferenceCard, playerCardId: string, cardRules: CardRules): boolean => {
+	const cardRule = cardRules?.[card.id];
+	return cardRule?.bgsMinionTypesRules?.bannedForHeroes?.includes(playerCardId);
 };
 
 const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {

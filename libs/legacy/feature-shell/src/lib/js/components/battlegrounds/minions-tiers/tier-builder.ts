@@ -54,6 +54,8 @@ export const buildTiers = (
 		cardsInGame,
 		tiersToInclude,
 		anomalies,
+		playerCardId,
+		cardRules,
 	);
 
 	const config: TierBuilderConfig = {

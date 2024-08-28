@@ -2,6 +2,7 @@ import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 
 export interface ExtendedReferenceCard extends ReferenceCard {
 	readonly banned?: boolean;
+	readonly bannedReason?: string;
 	readonly trinketLocked?: boolean;
 	readonly trinketLockedReason?: readonly string[];
 }

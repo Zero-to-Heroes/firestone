@@ -143,9 +143,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				}) => {
 					console.debug('[tiers] rebuilding tiers');
 					// hasSpells = true;
-					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
-					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
+					const ownBuddyId = hasBuddies ? getBuddy(normalizedPlayerCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(
 						races,
@@ -166,7 +166,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showTrinkets,
 						races,
 						anomalies,
-						normalizedCardId,
+						normalizedPlayerCardId,
 						allPlayerCardIds,
 						hasBuddies,
 						hasSpells,
@@ -204,14 +204,16 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		);
 		this.tiers$ = combineLatest([
 			staticTiers$,
+			this.bgGameState.gameState$$.pipe(this.mapData((state) => state?.currentGame?.getMainPlayer()?.cardId)),
 			boardComposition$,
 			this.bgGameState.gameState$$.pipe(
 				this.mapData((state) => state?.currentGame?.getMainPlayer()?.getCurrentTavernTier()),
 			),
 		]).pipe(
-			this.mapData(([tiers, boardComposition, tavernLevel]) => {
+			this.mapData(([tiers, rawPlayerCardId, boardComposition, tavernLevel]) => {
 				console.debug('[tiers] updating tiers');
-				return enhanceTiers(tiers, boardComposition, tavernLevel, cardRules, this.i18n);
+				const playerCardId = normalizeHeroCardId(rawPlayerCardId, this.allCards);
+				return enhanceTiers(tiers, playerCardId, boardComposition, tavernLevel, cardRules, this.i18n);
 			}),
 		);
 		this.highlightedTribes$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedTribes));

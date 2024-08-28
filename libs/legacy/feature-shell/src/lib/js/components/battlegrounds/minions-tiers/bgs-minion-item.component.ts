@@ -18,7 +18,7 @@ import { ExtendedReferenceCard } from './tiers.model';
 			[ngClass]="{ banned: minion.banned, locked: minion.trinketLocked }"
 			[cardTooltip]="minion.displayedCardIds"
 			[cardTooltipBgs]="true"
-			[helpTooltip]="minion.trinketLockedReason"
+			[helpTooltip]="minion.bannedReason ?? minion.trinketLockedReason"
 		>
 			<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 			<div class="name">
@@ -114,6 +114,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					name: card.name, // Already enhanced when building groups
 					highlighted: highlightedMinions.includes(card.id),
 					banned: card.banned,
+					bannedReason: card.bannedReason,
 					goldCost: isBgsSpell(card) || isBgsTrinket(card) ? card.cost : null,
 					techLevel: card.techLevel,
 
@@ -221,6 +222,7 @@ export interface Minion {
 	readonly image: string;
 	readonly name: string;
 	readonly banned?: boolean;
+	readonly bannedReason?: string;
 	readonly techLevel?: number;
 	readonly goldCost: number;
 	readonly highlighted: boolean;

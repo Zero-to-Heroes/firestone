@@ -1,11 +1,17 @@
-import { Race } from '@firestone-hs/reference-data';
+import { BgsMinionTypesRules, Race } from '@firestone-hs/reference-data';
 import { MinionInfo } from '../tier-enhancer';
 
 export const getBoardTypesLock = (
-	needBoardTypes: readonly string[],
+	rule: BgsMinionTypesRules,
+	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): { ruleLock: boolean; ruleLockReasons: readonly string[] } => {
+	const needBoardTypes = rule.needBoardTypes;
+	if (rule.alwaysAvailableForHeroes?.includes(playerCardId)) {
+		return { ruleLock: false, ruleLockReasons: null };
+	}
+
 	let ruleLock = false;
 	let ruleLockReasons = null;
 	for (const minionType of needBoardTypes) {

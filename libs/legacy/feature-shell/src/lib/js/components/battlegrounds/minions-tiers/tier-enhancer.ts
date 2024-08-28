@@ -7,24 +7,30 @@ import { ExtendedReferenceCard, Tier, TierGroup } from './tiers.model';
 
 export const enhanceTiers = (
 	tiers: readonly Tier[],
+	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	tavernLevel: number,
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): readonly Tier[] => {
-	const newTiers = tiers.map((tier) => enhanceTier(tier, boardComposition, tavernLevel, cardRules, i18n));
+	const newTiers = tiers.map((tier) =>
+		enhanceTier(tier, playerCardId, boardComposition, tavernLevel, cardRules, i18n),
+	);
 	console.debug('[tier-enhancer] enhanced tiers', tiers);
 	return newTiers;
 };
 
 const enhanceTier = (
 	tier: Tier,
+	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	tavernLevel: number,
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): Tier => {
-	const newGroups = tier.groups.map((g) => enhanceGroup(g, boardComposition, tavernLevel, cardRules, i18n));
+	const newGroups = tier.groups.map((g) =>
+		enhanceGroup(g, playerCardId, boardComposition, tavernLevel, cardRules, i18n),
+	);
 	if (newGroups.every((g, index) => g === tier.groups[index])) {
 		return tier;
 	}
@@ -38,12 +44,15 @@ const enhanceTier = (
 
 const enhanceGroup = (
 	group: TierGroup,
+	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	tavernLevel: number,
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): TierGroup => {
-	const newCards = group.cards.map((c) => enhanceCard(c, boardComposition, tavernLevel, cardRules, i18n));
+	const newCards = group.cards.map((c) =>
+		enhanceCard(c, playerCardId, boardComposition, tavernLevel, cardRules, i18n),
+	);
 	if (newCards.every((c, index) => c === group.cards[index])) {
 		return group;
 	}
@@ -57,12 +66,20 @@ const enhanceGroup = (
 
 const enhanceCard = (
 	card: ExtendedReferenceCard,
+	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	tavernLevel: number,
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): ExtendedReferenceCard => {
-	const { trinketLocked, trinketLockedReason } = getTrinketLock(card, boardComposition, tavernLevel, cardRules, i18n);
+	const { trinketLocked, trinketLockedReason } = getTrinketLock(
+		card,
+		playerCardId,
+		boardComposition,
+		tavernLevel,
+		cardRules,
+		i18n,
+	);
 	if (trinketLocked === card.trinketLocked && arraysEqual(trinketLockedReason, card.trinketLockedReason)) {
 		return card;
 	}
@@ -77,6 +94,7 @@ const enhanceCard = (
 
 const getTrinketLock = (
 	card: ExtendedReferenceCard,
+	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	tavernLevel: number,
 	cardRules: CardRules,
@@ -90,7 +108,7 @@ const getTrinketLock = (
 	let locked = false;
 	let lockedReason: string[] = null;
 	if (rule.needBoardTypes?.length > 0) {
-		const { ruleLock, ruleLockReasons } = getBoardTypesLock(rule.needBoardTypes, boardComposition, i18n);
+		const { ruleLock, ruleLockReasons } = getBoardTypesLock(rule, playerCardId, boardComposition, i18n);
 		if (ruleLock) {
 			locked = true;
 			lockedReason = lockedReason ?? [];
