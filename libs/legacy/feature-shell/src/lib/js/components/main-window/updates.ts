@@ -79,7 +79,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `The list of trinkets now grays out trinkets that you can't be offered with your current board (e.g. some trinkets require you to have 2 minions of a given type between your board and hand), and will explain why they are grayed out.`,
+								text: `The list of trinkets now grays out trinkets that you can't be offered with your current board (e.g. some trinkets require you to have 2 minions of a given type between your board and hand), and will explain why they are grayed out. The exact rules are still being refined though, so please let me know if you see something that seems incorrect (mostly, being offered a grayed-out trinket).`,
 							},
 							{
 								type: 'bug',
