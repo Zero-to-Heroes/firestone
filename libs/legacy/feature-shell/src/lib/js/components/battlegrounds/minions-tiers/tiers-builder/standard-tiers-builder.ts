@@ -63,7 +63,7 @@ const buildTribeGroups = (
 	config?: TierBuilderConfig,
 ): readonly TierGroup[] => {
 	const minions = cards.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION]);
-	return [...availableTribes, null]
+	return [...availableTribes, Race.ALL, null]
 		.map((tribe) => {
 			const group: TierGroup = buildTribeGroup(minions, tribe, i18n, config);
 			return group;
@@ -92,7 +92,7 @@ const buildTribeGroup = (
 			if (cardTribes.length === 0) {
 				return false;
 			}
-			return cardTribes.includes(Race.ALL) || cardTribes.includes(targetTribe);
+			return cardTribes.includes(targetTribe);
 		})
 		.sort((a, b) => a.name.localeCompare(b.name));
 	const result: TierGroup = {
