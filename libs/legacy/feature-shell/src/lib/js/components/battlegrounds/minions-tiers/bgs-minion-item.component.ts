@@ -17,6 +17,7 @@ import { ExtendedReferenceCard } from './tiers.model';
 			*ngIf="minion$ | async as minion"
 			[ngClass]="{ banned: minion.banned, locked: minion.trinketLocked }"
 			[cardTooltip]="minion.displayedCardIds"
+			[cardTooltipRelatedCardIds]="minion.relatedCardIds"
 			[cardTooltipBgs]="true"
 			[helpTooltip]="minion.bannedReason ?? minion.trinketLockedReason"
 		>
@@ -110,6 +111,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 				const result: Minion = {
 					cardId: card.id,
 					displayedCardIds: this.buildAllCardIds(card.id, showGoldenCards),
+					relatedCardIds: this.buildRelatedCardIds(card.id),
 					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.id}.jpg`,
 					name: card.name, // Already enhanced when building groups
 					highlighted: highlightedMinions.includes(card.id),
@@ -214,11 +216,17 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 
 		return [id, `${premiumCard.id}_golden`].join(',');
 	}
+
+	private buildRelatedCardIds(id: string): readonly string[] {
+		const refCard = this.allCards.getCard(id);
+		return refCard.relatedCardDbfIds?.map((dbfId) => this.allCards.getCard(dbfId).id) ?? [];
+	}
 }
 
 export interface Minion {
 	readonly cardId: string;
 	readonly displayedCardIds: string;
+	readonly relatedCardIds: readonly string[];
 	readonly image: string;
 	readonly name: string;
 	readonly banned?: boolean;
