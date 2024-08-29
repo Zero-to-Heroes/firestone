@@ -9,7 +9,7 @@ import { Card } from '../external-models/card';
 import { CardBack } from '../external-models/card-back';
 import { MatchInfo } from '../external-models/match-info';
 import { BattlegroundsInfo } from '../models/battlegrounds-info';
-import { MemoryBgsPlayerInfo, MemoryBgsTeamInfo } from '../models/battlegrounds-player-state';
+import { MemoryBgsPlayerInfo } from '../models/battlegrounds-player-state';
 import { CoinInfo } from '../models/coin-info';
 import { DeckInfoFromMemory } from '../models/deck-info-from-memory';
 import { AdventuresInfo, DuelsDeck, DuelsInfo, MemoryDuelsHeroPowerOption } from '../models/memory-duels';
@@ -180,9 +180,9 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getBgsPlayerTeammateBoardOperation.call());
 	}
 
-	public async getBgsPlayerBoard(): Promise<MemoryBgsTeamInfo | null> {
-		return this.mindVision.callMindVision(() => this.getBgsPlayerBoardOperation.call());
-	}
+	// public async getBgsPlayerBoard(): Promise<MemoryBgsTeamInfo | null> {
+	// 	return this.mindVision.callMindVision(() => this.getBgsPlayerBoardOperation.call());
+	// }
 
 	public async getMercenariesInfo(numberOfRetries?: number): Promise<MemoryMercenariesInfo | null> {
 		return this.mindVision.callMindVision(() => this.getMercenariesInfoOperation.call(numberOfRetries));
