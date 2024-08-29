@@ -120,14 +120,14 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 			'hsl(112, 100%, 64%)',
 			'hsl(0, 100%, 64%)',
 			-(value.averagePlacement ?? 0),
-			-3.3,
+			-3.7,
 			-4.5,
 		);
 		this.placementHighMmrColor = buildColor(
 			'hsl(112, 100%, 64%)',
 			'hsl(0, 100%, 64%)',
 			-(value.averagePlacementTop25 ?? 0),
-			-3.3,
+			-3.7,
 			-4.5,
 		);
 		this.pickRateGlobalColor = buildColor(
@@ -135,14 +135,14 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 			'hsl(0, 100%, 64%)',
 			value.pickRate ?? 0,
 			0.65,
-			0.25,
+			0.35,
 		);
 		this.pickRateHighMmrColor = buildColor(
 			'hsl(112, 100%, 64%)',
 			'hsl(0, 100%, 64%)',
 			value.pickRateTop25 ?? 0,
 			0.65,
-			0.25,
+			0.35,
 		);
 	}
 
