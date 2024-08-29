@@ -11,6 +11,7 @@ import { ExtendedReferenceCard, Tier } from './tiers.model';
 export const buildTiers = (
 	cardsInGame: readonly ReferenceCard[],
 	groupMinionsIntoTheirTribeGroup: boolean,
+	includeTrinketsInTribeGroups: boolean,
 	showMechanicsTiers: boolean,
 	showTribeTiers: boolean,
 	showTierSeven: boolean,
@@ -65,6 +66,7 @@ export const buildTiers = (
 		trinkets: hasTrinkets && showTrinkets,
 		playerTrinkets: playerTrinkets,
 		groupMinionsIntoTheirTribeGroup: groupMinionsIntoTheirTribeGroup,
+		includeTrinketsInTribeGroups: includeTrinketsInTribeGroups,
 		showSpellsAtBottom: showSpellsAtBottom,
 		showAllBuddyCards: showAllBuddyCards,
 		showBuddiesTier: showBuddiesTier,

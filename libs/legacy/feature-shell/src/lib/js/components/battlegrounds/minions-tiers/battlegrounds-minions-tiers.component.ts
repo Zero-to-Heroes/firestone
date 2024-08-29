@@ -107,6 +107,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				showTribeTiers: prefs.bgsShowTribeTiers,
 				showTierSeven: prefs.bgsShowTierSeven,
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
+				bgsIncludeTrinketsInTribeGroups: prefs.bgsIncludeTrinketsInTribeGroups,
 				gameMode: gameState?.metadata?.gameType,
 				races: bgGameState?.currentGame?.availableRaces,
 				hasBuddies: bgGameState?.currentGame?.hasBuddies,
@@ -128,6 +129,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					showTribeTiers,
 					showTierSeven,
 					bgsGroupMinionsIntoTheirTribeGroup,
+					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
 					races,
 					hasBuddies,
@@ -160,6 +162,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					const result = buildTiers(
 						cardsToIncludes,
 						bgsGroupMinionsIntoTheirTribeGroup,
+						bgsIncludeTrinketsInTribeGroups,
 						showMechanicsTiers,
 						showTribeTiers,
 						showTierSeven,

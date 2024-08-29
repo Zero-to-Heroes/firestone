@@ -91,6 +91,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
 		this.groupMinionsIntoTheirTribeGroup$$.next(value);
 	}
+	@Input() set includeTrinketsInTribeGroups(value: boolean) {
+		this.includeTrinketsInTribeGroups$$.next(value);
+	}
 	@Input() set gameMode(value: GameType) {
 		this.gameMode$$.next(value);
 	}
@@ -109,6 +112,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
 	private showTrinkets$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
+	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(false);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
 
 	constructor(
@@ -137,6 +141,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.showTierSeven$$,
 			this.showTrinkets$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
+			this.includeTrinketsInTribeGroups$$,
 			this.gameMode$$,
 		]).pipe(
 			this.mapData(
@@ -154,6 +159,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					showTierSeven,
 					showTrinkets,
 					bgsGroupMinionsIntoTheirTribeGroup,
+					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
 				]) => {
 					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
@@ -173,6 +179,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					const result = buildTiers(
 						cardsToIncludes,
 						bgsGroupMinionsIntoTheirTribeGroup,
+						bgsIncludeTrinketsInTribeGroups,
 						showMechanicsTiers,
 						showTribeTiers,
 						showTierSeven,

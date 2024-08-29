@@ -137,7 +137,8 @@ const buildSingleTribeTier = (
 	});
 	const tribeGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForTribe, tiersToInclude, i18n, config);
 	const spellGroup: TierGroup = config?.spells ? buildSpellGroup(cardsForTribe, i18n) : null;
-	const trinketGroup = config?.trinkets ? buildTrinketGroup(cardsForTribe, i18n) : null;
+	const trinketGroup =
+		config?.trinkets && config?.includeTrinketsInTribeGroups ? buildTrinketGroup(cardsForTribe, i18n) : null;
 	const groups: readonly TierGroup[] = config?.showSpellsAtBottom
 		? [...tribeGroups, spellGroup, trinketGroup]
 		: [spellGroup, trinketGroup, ...tribeGroups];

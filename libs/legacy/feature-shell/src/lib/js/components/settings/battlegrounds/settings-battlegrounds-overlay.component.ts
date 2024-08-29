@@ -247,6 +247,16 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-trinkets-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsIncludeTrinketsInTribeGroups"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[label]="
+						'settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-label' | owTranslate
+					"
+					[tooltip]="
+						'settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-tooltip' | owTranslate
+					"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsMinionListShowGoldenCard"
 					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"
