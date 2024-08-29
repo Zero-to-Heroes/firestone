@@ -191,6 +191,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				const allEntities = [...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])];
 				const composition = allEntities.map((e) => {
 					const result: MinionInfo = {
+						cardId: e.cardId,
 						tavernTier: this.allCards.getCard(e.cardId).techLevel,
 						tribes: getActualTribes(this.allCards.getCard(e.cardId), false, trinketsArray),
 					};
@@ -213,7 +214,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.mapData(([tiers, rawPlayerCardId, boardComposition, tavernLevel]) => {
 				console.debug('[tiers] updating tiers');
 				const playerCardId = normalizeHeroCardId(rawPlayerCardId, this.allCards);
-				return enhanceTiers(tiers, playerCardId, boardComposition, tavernLevel, cardRules, this.i18n);
+				return enhanceTiers(
+					tiers,
+					playerCardId,
+					boardComposition,
+					tavernLevel,
+					cardRules,
+					this.allCards,
+					this.i18n,
+				);
 			}),
 		);
 		this.highlightedTribes$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedTribes));

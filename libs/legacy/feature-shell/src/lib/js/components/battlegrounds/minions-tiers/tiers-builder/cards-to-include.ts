@@ -45,6 +45,7 @@ const isBanned = (
 	if (isCardExcludedForPlayer(card, playerCardId, cardRules)) {
 		return { banned: true, bannedReason: 'player' };
 	}
+	return { banned: false, bannedReason: null };
 };
 
 const isCardExcludedForPlayer = (card: ReferenceCard, playerCardId: string, cardRules: CardRules): boolean => {
