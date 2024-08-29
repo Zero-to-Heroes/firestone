@@ -144,7 +144,7 @@ export const buildPercents = (value: number, locale?: string): string => {
 	if (value == null) {
 		return '-';
 	}
-	locale = locale ?? 'enUS';
+	locale = locale ?? 'en-US';
 	const fractionDigits = value < 10 ? 2 : 1;
 	return (
 		(100 * value).toLocaleString(locale, {
