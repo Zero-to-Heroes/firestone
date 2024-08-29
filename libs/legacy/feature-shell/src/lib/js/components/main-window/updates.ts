@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.21.2',
+		version: '13.21.4',
 		force: false,
 		sections: [
 			// {
@@ -94,6 +94,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the new Perils in Paradise Coins would mess up mulligan stats.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where Tyr would only highlight Paladin cards when mousing over it in the tracker.`,
