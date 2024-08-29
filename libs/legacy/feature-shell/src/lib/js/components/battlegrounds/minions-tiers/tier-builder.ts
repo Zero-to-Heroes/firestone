@@ -56,6 +56,8 @@ export const buildTiers = (
 		anomalies,
 		playerCardId,
 		cardRules,
+		allCards,
+		i18n,
 	);
 
 	const config: TierBuilderConfig = {

@@ -1,4 +1,5 @@
 import { CardIds, CardRules, CardType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ExtendedReferenceCard } from '../tiers.model';
 
 export const filterCardsToInclude = (
@@ -7,6 +8,8 @@ export const filterCardsToInclude = (
 	anomalies: readonly string[],
 	playerCardId: string,
 	cardRules: CardRules,
+	allCards: CardsFacadeService,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): readonly ExtendedReferenceCard[] => {
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 		.filter(
@@ -14,7 +17,7 @@ export const filterCardsToInclude = (
 				tiersToInclude.includes(card.techLevel) ||
 				card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET],
 		)
-		.map((card) => enhanceCard(card, anomalies, playerCardId, cardRules));
+		.map((card) => enhanceCard(card, anomalies, playerCardId, cardRules, allCards, i18n));
 	return filteredCards;
 };
 
@@ -23,8 +26,10 @@ const enhanceCard = (
 	anomalies: readonly string[],
 	playerCardId: string,
 	cardRules: CardRules,
+	allCards: CardsFacadeService,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): ExtendedReferenceCard => {
-	const { banned, bannedReason } = isBanned(card, anomalies, playerCardId, cardRules);
+	const { banned, bannedReason } = isBanned(card, anomalies, playerCardId, cardRules, allCards, i18n);
 	const result: ExtendedReferenceCard = {
 		...card,
 		banned: banned,
@@ -38,12 +43,19 @@ const isBanned = (
 	anomalies: readonly string[],
 	playerCardId: string,
 	cardRules: CardRules,
+	allCards: CardsFacadeService,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): { banned: boolean; bannedReason: string } => {
 	if (isCardExcludedByAnomaly(card, anomalies)) {
 		return { banned: true, bannedReason: 'anomaly' };
 	}
 	if (isCardExcludedForPlayer(card, playerCardId, cardRules)) {
-		return { banned: true, bannedReason: 'player' };
+		return {
+			banned: true,
+			bannedReason: i18n.translateString('battlegrounds.in-game.minions-list.banned-reason.hero', {
+				heroName: allCards.getCard(playerCardId).name,
+			}),
+		};
 	}
 	return { banned: false, bannedReason: null };
 };
