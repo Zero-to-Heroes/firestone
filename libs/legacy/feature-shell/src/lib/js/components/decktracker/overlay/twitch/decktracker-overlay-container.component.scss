@@ -2,7 +2,20 @@
 	height: 100%;
 	width: 100%;
 	position: relative;
-	--card-tooltip-min-width: 30vh;
+
+	--card-tooltip-min-width: 22vh;
+	--bgs-minions-list-widget-background-image: radial-gradient(
+			50% 50% at 50% 50%,
+			rgba(94, 11, 70, 0.7) 0%,
+			rgba(43, 24, 39, 0.7) 100%
+		),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png');
+	--bgs-simulation-widget-background-image: radial-gradient(
+			30vw at 50% 50%,
+			rgba(94, 11, 70, 0.7) 0%,
+			rgba(30, 1, 22, 1) 100%
+		),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 }
 
 .container {

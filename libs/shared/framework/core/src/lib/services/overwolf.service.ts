@@ -603,10 +603,16 @@ export class OverwolfService {
 	public async onSubscriptionChanged(
 		listener: (event: overwolf.profile.subscriptions.SubscriptionChangedEvent) => void,
 	) {
-		overwolf.profile.subscriptions.onSubscriptionChanged.addListener(listener);
+		if (!!overwolf) {
+			overwolf.profile.subscriptions.onSubscriptionChanged.addListener(listener);
+		}
 	}
 
 	public async shouldShowAds(): Promise<boolean> {
+		if (!overwolf) {
+			return false;
+		}
+
 		return new Promise<boolean>((resolve) => {
 			if (!overwolf.profile.subscriptions) {
 				resolve(true);

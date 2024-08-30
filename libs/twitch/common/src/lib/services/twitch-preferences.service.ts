@@ -15,6 +15,10 @@ export class TwitchPreferencesService {
 		this.init();
 	}
 
+	public async isReady(): Promise<boolean> {
+		return true;
+	}
+
 	public preferences$<S extends PrefsSelector<TwitchPreferences | null, any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<TwitchPreferences | null, infer T> ? T : never }> {

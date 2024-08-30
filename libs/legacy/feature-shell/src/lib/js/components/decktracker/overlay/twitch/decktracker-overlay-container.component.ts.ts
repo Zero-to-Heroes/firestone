@@ -16,14 +16,14 @@ import {
 	AbstractSubscriptionTwitchResizableComponent,
 	TwitchBgsCurrentBattle,
 	TwitchBgsState,
+	TwitchEvent,
 	TwitchPreferencesService,
 } from '@firestone/twitch/common';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
-import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
-import fullState from './game-states/constructed.json';
+import fullState from './game-states/bgs-trinkets.json';
 import { TwitchCardsFacadeManagerService } from './twitch-cards-facade-manager.service';
 import { TwitchLocalizationManagerService } from './twitch-localization-manager.service';
 
@@ -32,7 +32,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 	styleUrls: [
 		`../../../../../css/themes/decktracker-theme.scss`,
 		`../../../../../css/themes/battlegrounds-theme.scss`,
-		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
+		'./decktracker-overlay-container.component.scss',
 	],
 	template: `
 		<div

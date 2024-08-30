@@ -14,7 +14,13 @@ import {
 } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '@firestone/twitch/common';
+import {
+	TwitchBgsBoard,
+	TwitchBgsBoardEntity,
+	TwitchBgsPlayer,
+	TwitchBgsState,
+	TwitchEvent,
+} from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -528,11 +534,4 @@ export class TwitchAuthService {
 		await this.prefs.setTwitchAccessToken(accessToken);
 		await this.retrieveUserName(accessToken);
 	}
-}
-
-export interface TwitchEvent {
-	readonly scene: SceneMode;
-	readonly deck: GameState;
-	readonly bgs: TwitchBgsState;
-	readonly streamerPrefs: Partial<Preferences>;
 }

@@ -151,9 +151,9 @@ import { DropdownOption } from '../../../settings/dropdown.component';
 						></checkbox>
 						<checkbox
 							class="item indented"
-							[label]="'settings.battlegrounds.overlay.minions-list-show-show-tier-7-label' | owTranslate"
+							[label]="'settings.battlegrounds.overlay.minions-list-show-tier-7-label' | owTranslate"
 							[labelTooltip]="
-								'settings.battlegrounds.overlay.minions-list-show-show-tier-7-tooltip' | owTranslate
+								'settings.battlegrounds.overlay.minions-list-show-tier-7-tooltip' | owTranslate
 							"
 							[disabled]="!prefs.showMinionsList"
 							[value]="prefs.bgsShowTierSeven"

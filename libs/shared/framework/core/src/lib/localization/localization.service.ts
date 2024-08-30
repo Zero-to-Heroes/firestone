@@ -5,8 +5,8 @@ export abstract class ILocalizationService {
 	abstract getTranslateService(): TranslateService;
 	abstract setLocale(locale: string): void;
 	abstract get locale(): string;
-	abstract getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
-	abstract getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
+	abstract getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null | undefined;
+	abstract getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null | undefined;
 	abstract getCardName(cardId: string, defaultName: string): string | null;
 	abstract getCreatedByCardName(creatorCardId: string): string | null;
 	abstract getUnknownCardName(playerClass: string | null): string | null;
