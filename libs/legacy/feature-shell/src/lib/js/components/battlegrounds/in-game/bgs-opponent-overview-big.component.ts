@@ -7,7 +7,7 @@ import {
 	BgsTriple,
 	QuestReward,
 } from '@firestone/battlegrounds/common';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-opponent-overview-big',
@@ -116,7 +116,7 @@ export class BgsOpponentOverviewBigComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
 
 	trackByUpgradeFn(index, item: BgsTavernUpgrade) {
 		return item.tavernTier;

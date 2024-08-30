@@ -10,9 +10,8 @@ import {
 import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
 import { BgsPlayer } from '@firestone/battlegrounds/common';
 import { getBuddy } from '@firestone/battlegrounds/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, from } from 'rxjs';
 
 @Component({
@@ -20,7 +19,7 @@ import { Observable, from } from 'rxjs';
 	styleUrls: [
 		'../../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../../css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/twitch-bgs-hero-overview.component.scss',
+		'./twitch-bgs-hero-overview.component.scss',
 	],
 	template: `
 		<div class="battlegrounds-theme container scalable">
@@ -42,8 +41,15 @@ import { Observable, from } from 'rxjs';
 						<img class="card buddy normal" [src]="reward.image" />
 					</div>
 				</ng-container>
-				<img class="card buddy normal" [src]="buddyCardImage" />
-				<img class="card buddy golden" [src]="buddyCardGoldenImage" />
+				<ng-container *ngIf="trinkets?.length">
+					<div class="trinkets" *ngFor="let trinket of trinkets">
+						<img class="card buddy normal" *ngIf="!!trinket" [src]="trinket.image" />
+					</div>
+				</ng-container>
+				<ng-container *ngIf="showBuddies">
+					<img class="card buddy normal" [src]="buddyCardImage" />
+					<img class="card buddy golden" [src]="buddyCardGoldenImage" />
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -58,10 +64,12 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 	heroPowerImage: string;
 	leaderboardPositionClass: string;
 	rewards: readonly Reward[];
+	trinkets: readonly Trinket[];
 	buddyCardImage: string;
 	buddyCardGoldenImage: string;
+	showBuddies: boolean;
 
-	@Input() set config(value: { player: BgsPlayer; currentTurn: number; showLogo: boolean }) {
+	@Input() set config(value: TwitchOpponentOverviewInput) {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
 		this.showLogo = value.showLogo ?? true;
@@ -73,6 +81,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 			}),
 			completed: reward.completed,
 		}));
+		this.showBuddies = value.config?.hasBuddies;
 		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
 		const buddyCard = this.cards.getCard(buddyCardId);
 		const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
@@ -89,6 +98,26 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,
 		});
+		if (value.player.lesserTrinket || value.player.greaterTrinket) {
+			this.trinkets = [
+				!!value.player.lesserTrinket
+					? {
+							image: this.i18n.getCardImage(value.player.lesserTrinket, {
+								isBgs: true,
+								isHighRes: true,
+							}),
+					  }
+					: null,
+				!!value.player.greaterTrinket
+					? {
+							image: this.i18n.getCardImage(value.player.greaterTrinket, {
+								isBgs: true,
+								isHighRes: true,
+							}),
+					  }
+					: null,
+			];
+		}
 		super.listenForResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -101,14 +130,27 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 		protected readonly el: ElementRef,
 		protected readonly renderer: Renderer2,
 		private readonly cards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr, prefs, el, renderer);
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
 	}
 }
 
+export interface TwitchOpponentOverviewInput {
+	player: BgsPlayer;
+	currentTurn: number;
+	showLogo: boolean;
+	config: {
+		hasBuddies: boolean;
+	};
+}
+
 interface Reward {
 	readonly image: string;
 	readonly completed: boolean;
+}
+
+interface Trinket {
+	readonly image: string;
 }

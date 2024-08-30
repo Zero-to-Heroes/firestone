@@ -5,7 +5,7 @@ import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsBoard, BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
 import { TwitchBgsBoard, TwitchBgsPlayer, TwitchBgsStateConfig } from '@firestone/twitch/common';
 import { fromJS } from 'immutable';
-import { TwitchBgsHeroOverviewComponent } from './twitch-bgs-hero-overview.component';
+import { TwitchBgsHeroOverviewComponent, TwitchOpponentOverviewInput } from './twitch-bgs-hero-overview.component';
 
 @Component({
 	selector: 'leaderboard-empty-card',
@@ -71,14 +71,7 @@ export class LeaderboardEmptyCardComponent {
 		this.updateInfo();
 	}
 
-	_bgsPlayer: {
-		player: BgsPlayer;
-		currentTurn: number;
-		showLogo: boolean;
-		config: {
-			hasBuddies: boolean;
-		};
-	};
+	_bgsPlayer: TwitchOpponentOverviewInput;
 
 	_previousPlayer: TwitchBgsPlayer | BgsPlayer;
 	_currentTurn: number;
@@ -116,6 +109,8 @@ export class LeaderboardEmptyCardComponent {
 				boardHistory: boardHistory,
 				questRewards: this._previousPlayer.questRewards,
 				buddyTurns: this._previousPlayer.buddyTurns,
+				lesserTrinket: this._previousPlayer.lesserTrinket,
+				greaterTrinket: this._previousPlayer.greaterTrinket,
 			} as BgsPlayer),
 			config: {
 				hasBuddies: this._config?.hasBuddies,
@@ -123,6 +118,7 @@ export class LeaderboardEmptyCardComponent {
 			currentTurn: this._currentTurn,
 			showLogo: false,
 		};
+		console.debug('showing player', this._bgsPlayer);
 		this.questRewards = this._bgsPlayer.player.questRewards;
 		this.tavernTier = [...(this._previousPlayer.tavernUpgradeHistory ?? [])].pop()?.tavernTier ?? 1;
 		this.triples = (this._previousPlayer.tripleHistory ?? []).length;

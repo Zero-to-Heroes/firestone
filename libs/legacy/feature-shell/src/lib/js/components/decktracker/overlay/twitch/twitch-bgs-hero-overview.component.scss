@@ -76,7 +76,7 @@
 	display: flex;
 	margin-top: -5px;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	// So that the tooltip positioning manages to properly center it
 	height: 290px;
 	z-index: 9;
@@ -85,9 +85,6 @@
 
 	.card {
 		width: 220px;
-
-		&:not(:last-child) {
-			margin-right: -30px;
-		}
+		margin-right: -30px;
 	}
 }
