@@ -164,6 +164,8 @@ export class CardTooltipComponent
 	private timeout;
 	private lifecycleHookDone: boolean;
 
+	private isShowing: boolean;
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
@@ -189,9 +191,16 @@ export class CardTooltipComponent
 
 	@HostListener('window:click', ['$event'])
 	onMouseDown(event: MouseEvent) {
-		console.debug('handling click', event, this.viewRef, this.el.nativeElement);
 		// If the click happens outside of the tooltip, we close it
-		if (!this.el.nativeElement.contains(event.target)) {
+		if (this.isShowing && !this.el.nativeElement.contains(event.target)) {
+			// console.debug(
+			// 	'closing from click',
+			// 	event,
+			// 	this.viewRef,
+			// 	this.el.nativeElement,
+			// 	event.target,
+			// 	this.el.nativeElement.contains(event.target),
+			// );
 			this.viewRef.destroy();
 		}
 	}
@@ -206,6 +215,7 @@ export class CardTooltipComponent
 			this.keepInBound$$.next(++i);
 		});
 		this.resizeObserver.observe(this.el.nativeElement);
+		setTimeout(() => (this.isShowing = true), 500);
 	}
 
 	override ngOnDestroy(): void {

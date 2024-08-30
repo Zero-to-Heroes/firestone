@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 
 @Component({
 	selector: 'empty-card',
-	styleUrls: ['../../../../../css/component/decktracker/overlay/twitch/empty-card.component.scss'],
+	styleUrls: ['./empty-card.component.scss'],
 	template: `
 		<div
 			class="card"
