@@ -250,7 +250,10 @@ export class OverwolfService {
 		});
 	}
 
-	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
+	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult | null> {
+		if (!this.isOwEnabled()) {
+			return null;
+		}
 		return new Promise<overwolf.profile.GetCurrentUserResult>((resolve) => {
 			overwolf.profile.getCurrentUser((user) => {
 				resolve(user);
@@ -603,13 +606,13 @@ export class OverwolfService {
 	public async onSubscriptionChanged(
 		listener: (event: overwolf.profile.subscriptions.SubscriptionChangedEvent) => void,
 	) {
-		if (!!overwolf) {
+		if (this.isOwEnabled()) {
 			overwolf.profile.subscriptions.onSubscriptionChanged.addListener(listener);
 		}
 	}
 
 	public async shouldShowAds(): Promise<boolean> {
-		if (!overwolf) {
+		if (!this.isOwEnabled()) {
 			return false;
 		}
 

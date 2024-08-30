@@ -10,9 +10,14 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Tier, buildTiers, getAllCardsInGame, getBuddy } from '@firestone/battlegrounds/core';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	CardRulesService,
+	CardsFacadeService,
+	ILocalizationService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 
@@ -63,6 +68,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set hasPrizes(value: boolean) {
 		this.hasPrizes$$.next(value);
 	}
+	@Input() set hasTrinkets(value: boolean) {
+		this.hasTrinkets$$.next(value);
+	}
 	@Input() set anomalies(value: readonly string[]) {
 		this.anomalies$$.next(value ?? []);
 	}
@@ -108,7 +116,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
 	private showTrinkets$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
-	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(false);
+	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(true);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
 
 	constructor(
@@ -118,11 +126,14 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		protected readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly cardRules: CardRulesService,
 	) {
 		super(cdr, prefs, el, renderer);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.cardRules);
+
 		this.tiers$ = combineLatest([
 			this.availableRaces$$,
 			this.hasBuddies$$,
@@ -139,6 +150,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.includeTrinketsInTribeGroups$$,
 			this.gameMode$$,
+			this.cardRules.rules$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -157,10 +169,11 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					bgsGroupMinionsIntoTheirTribeGroup,
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
+					cardRules,
 				]) => {
-					const normalizedCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
-					const ownBuddyId = hasBuddies ? getBuddy(normalizedCardId as CardIds, this.allCards) : null;
+					const ownBuddyId = hasBuddies ? getBuddy(normalizedPlayerCardId as CardIds, this.allCards) : null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(
 						races,
@@ -169,7 +182,15 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						hasTrinkets,
 						gameMode,
 						this.allCards,
-						null,
+						cardRules,
+					);
+					console.debug(
+						'trinkets in game',
+						hasTrinkets,
+						cardsInGame.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]),
+						this.allCards
+							.getCards()
+							.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]),
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
@@ -182,17 +203,18 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						showTrinkets,
 						races,
 						anomalies,
-						normalizedCardId,
+						normalizedPlayerCardId,
 						allPlayerCardIds,
 						hasBuddies,
 						hasSpells,
 						true,
 						hasTrinkets,
 						[],
-						null,
+						cardRules,
 						this.i18n,
 						this.allCards,
 					);
+					console.debug('built tiers', result);
 					// TODO: filter to show locked trinkets
 					return result;
 				},
@@ -202,6 +224,10 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		this.showGoldenCards$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsListGoldenCards),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit(): void {

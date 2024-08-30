@@ -11,23 +11,25 @@ import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/e
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './bgs-minions-list.component.scss'],
 	template: `
 		<div class="bgs-minions-list">
-			<bgs-minions-group
-				class="minion-group"
-				*ngFor="let group of groups; trackBy: trackByGroup"
-				[group]="group"
-				[showTribesHighlight]="showTribesHighlight"
-				[showGoldenCards]="showGoldenCards"
-				[highlightedMinions]="highlightedMinions"
-				[highlightedTribes]="highlightedTribes"
-				[highlightedMechanics]="highlightedMechanics"
-			></bgs-minions-group>
+			<div class="list-scroller">
+				<bgs-minions-group
+					class="minion-group"
+					*ngFor="let group of groups; trackBy: trackByGroup"
+					[group]="group"
+					[showTribesHighlight]="showTribesHighlight"
+					[showGoldenCards]="showGoldenCards"
+					[highlightedMinions]="highlightedMinions"
+					[highlightedTribes]="highlightedTribes"
+					[highlightedMechanics]="highlightedMechanics"
+				></bgs-minions-group>
 
-			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight">
-				<div class="background-second-part"></div>
-				<div class="background-main-part"></div>
-				<div class="content">
-					<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
-					{{ 'battlegrounds.in-game.minions-list.reset-button' | owTranslate }}
+				<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight">
+					<div class="background-second-part"></div>
+					<div class="background-main-part"></div>
+					<div class="content">
+						<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
+						{{ 'battlegrounds.in-game.minions-list.reset-button' | owTranslate }}
+					</div>
 				</div>
 			</div>
 		</div>

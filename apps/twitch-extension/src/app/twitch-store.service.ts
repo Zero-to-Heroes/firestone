@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { PrefsSelector, Store, arraysEqual } from '@firestone/shared/framework/common';
-import { BehaviorSubject, Observable, distinctUntilChanged, filter, map } from 'rxjs';
+import { BehaviorSubject, Observable, distinctUntilChanged, filter, from, map } from 'rxjs';
 
 @Injectable()
 export class TwitchStoreService extends Store<Preferences> {
@@ -30,5 +30,9 @@ export class TwitchStoreService extends Store<Preferences> {
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
+	}
+
+	public shouldTrackLottery$(): Observable<boolean> {
+		return from([false]);
 	}
 }

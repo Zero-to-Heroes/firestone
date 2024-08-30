@@ -67,6 +67,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[currentTurn]="bgsState.currentTurn"
 					[hasBuddies]="bgsState.config?.hasBuddies"
 					[hasSpells]="bgsState.config?.hasSpells"
+					[hasTrinkets]="bgsState.config?.hasTrinkets"
 					[anomalies]="bgsState.config?.anomalies"
 					[playerCardId]="getMainPlayerCardId(bgsState)"
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
@@ -74,6 +75,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[showTierSeven]="showTierSeven$ | async"
 					[showTrinkets]="showTrinkets$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
+					[includeTrinketsInTribeGroups]="true"
 					[gameMode]="gameMode$ | async"
 				></battlegrounds-minions-tiers-twitch>
 			</ng-container>
