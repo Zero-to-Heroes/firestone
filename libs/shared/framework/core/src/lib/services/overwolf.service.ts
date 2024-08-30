@@ -250,9 +250,9 @@ export class OverwolfService {
 		});
 	}
 
-	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult | null> {
+	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
 		if (!this.isOwEnabled()) {
-			return null;
+			return {} as overwolf.profile.GetCurrentUserResult;
 		}
 		return new Promise<overwolf.profile.GetCurrentUserResult>((resolve) => {
 			overwolf.profile.getCurrentUser((user) => {
