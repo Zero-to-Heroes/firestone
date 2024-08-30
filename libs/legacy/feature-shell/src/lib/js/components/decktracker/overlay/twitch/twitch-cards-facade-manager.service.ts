@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
+import { TwitchPreferencesService } from '@firestone/twitch/common';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
-import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Injectable()
 export class TwitchCardsFacadeManagerService {

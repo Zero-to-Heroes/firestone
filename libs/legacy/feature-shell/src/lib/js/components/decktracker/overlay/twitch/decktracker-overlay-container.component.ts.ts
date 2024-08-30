@@ -8,19 +8,22 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
+import {
+	AbstractSubscriptionTwitchResizableComponent,
+	TwitchBgsCurrentBattle,
+	TwitchBgsState,
+	TwitchPreferencesService,
+} from '@firestone/twitch/common';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
-import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import fullState from './game-states/constructed.json';
-import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 import { TwitchCardsFacadeManagerService } from './twitch-cards-facade-manager.service';
 import { TwitchLocalizationManagerService } from './twitch-localization-manager.service';
 

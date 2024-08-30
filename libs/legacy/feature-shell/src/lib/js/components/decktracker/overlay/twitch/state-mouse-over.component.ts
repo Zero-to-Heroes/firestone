@@ -10,13 +10,12 @@ import {
 } from '@angular/core';
 import { GameState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { TwitchBgsPlayer, TwitchBgsState, TwitchPreferencesService } from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-facade.service';
-import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'state-mouse-over',

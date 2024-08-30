@@ -1,0 +1,1072 @@
+{
+	"scene": 4,
+	"deck": {
+		"playerDeck": {
+			"hand": [
+				{
+					"cardId": "BG23_HERO_306",
+					"entityId": 79,
+					"zone": "HAND"
+				}
+			],
+			"board": [
+				{
+					"cardId": "BG25_008",
+					"entityId": 6956,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG25_008",
+					"entityId": 6958,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG_TTN_401",
+					"entityId": 6959,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG30_125",
+					"entityId": 6961,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG30_125",
+					"entityId": 6963,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG29_140",
+					"entityId": 8115,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG21_005",
+					"entityId": 6965,
+					"zone": "PLAY"
+				}
+			],
+			"otherZone": [],
+			"heroPower": {
+				"cardId": "BG23_HERO_306p",
+				"entityId": 119,
+				"zone": "PLAY"
+			},
+			"weapon": {
+				"cardId": "BG30_MagicItem_991"
+			}
+		},
+		"opponentDeck": {
+			"hand": [
+				{
+					"entityId": 3357,
+					"zone": "HAND"
+				},
+				{
+					"entityId": 6927,
+					"zone": "HAND"
+				},
+				{
+					"entityId": 6929,
+					"zone": "HAND"
+				},
+				{
+					"entityId": 1320,
+					"zone": "HAND"
+				},
+				{
+					"entityId": 1322,
+					"zone": "HAND"
+				}
+			],
+			"board": [
+				{
+					"cardId": "BG28_303",
+					"entityId": 8305,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG30_103",
+					"entityId": 8308,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG25_022",
+					"entityId": 8311,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG21_008",
+					"entityId": 8315,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BGS_071",
+					"entityId": 8322,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG28_519",
+					"entityId": 8325,
+					"zone": "PLAY"
+				},
+				{
+					"cardId": "BG27_080",
+					"entityId": 8378,
+					"zone": "PLAY"
+				}
+			],
+			"otherZone": [],
+			"heroPower": null,
+			"weapon": {}
+		},
+		"mulliganOver": true,
+		"metadata": {
+			"gameType": 23,
+			"formatType": 1,
+			"scenarioId": 3459
+		},
+		"currentTurn": 10,
+		"gameTagTurnNumber": 0,
+		"gameStarted": true,
+		"matchInfo": {}
+	},
+	"bgs": {
+		"leaderboard": [
+			{
+				"cardId": "BG21_HERO_030",
+				"heroPowerCardId": "BG21_HERO_030p",
+				"name": "Sneed",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 1,
+				"lastBoard": {
+					"turn": 8,
+					"board": [
+						{
+							"id": 5784,
+							"cardID": "BG26_528",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"ENTITY_ID": 5784,
+								"ATK": 6,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"DEATHRATTLE": 1,
+								"HEALTH": 6,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 5787,
+							"cardID": "BG24_009",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"ENTITY_ID": 5787,
+								"ATK": 10,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 2,
+								"DEATHRATTLE": 1,
+								"HEALTH": 10,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 5793,
+							"cardID": "TB_BaconUps_079",
+							"tags": {
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"PREMIUM": 1,
+								"ENTITY_ID": 5793,
+								"ATK": 21,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 3,
+								"HEALTH": 19,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 5797,
+							"cardID": "BG26_174",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"TAG_SCRIPT_DATA_NUM_2": 7,
+								"ENTITY_ID": 5797,
+								"ATK": 5,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 4,
+								"DEATHRATTLE": 1,
+								"HEALTH": 17,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 5802,
+							"cardID": "BG26_524",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"TAG_SCRIPT_DATA_NUM_1": 0,
+								"ELITE": 1,
+								"ENTITY_ID": 5802,
+								"ATK": 6,
+								"TECH_LEVEL": 3,
+								"ZONE_POSITION": 5,
+								"HEALTH": 5,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 5804,
+							"cardID": "BG26_522",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"ENTITY_ID": 5804,
+								"ATK": 4,
+								"TECH_LEVEL": 3,
+								"ZONE_POSITION": 6,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 5805,
+							"cardID": "BG26_528",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"ENTITY_ID": 5805,
+								"ATK": 4,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 7,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						}
+					]
+				},
+				"tripleHistory": [
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 8
+					}
+				],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 3
+					},
+					{
+						"tavernTier": 3,
+						"turn": 6
+					},
+					{
+						"tavernTier": 4,
+						"turn": 7
+					}
+				],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "DEMON",
+					"count": 6
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "TB_BaconShop_HERO_27",
+					"damage": 5,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_925",
+				"greaterTrinket": "BG30_MagicItem_999"
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_18",
+				"heroPowerCardId": "TB_BaconShop_HP_072",
+				"name": "Patches the Pirate",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 0,
+				"leaderboardPlace": 2,
+				"lastBoard": {
+					"turn": 2,
+					"board": [
+						{
+							"id": 897,
+							"cardID": "BGS_061",
+							"tags": {
+								"CARDRACE": 23,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 897,
+								"ATK": 3,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"DEATHRATTLE": 1,
+								"HEALTH": 1,
+								"CONTROLLER": 15
+							}
+						}
+					]
+				},
+				"tripleHistory": [
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 10
+					},
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 10
+					},
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 10
+					}
+				],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 2
+					},
+					{
+						"tavernTier": 3,
+						"turn": 4
+					},
+					{
+						"tavernTier": 4,
+						"turn": 7
+					}
+				],
+				"currentWinStreak": 5,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "PIRATE",
+					"count": 7
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "TB_BaconShop_HERO_60",
+					"damage": 13,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_924",
+				"greaterTrinket": "BG30_MagicItem_986"
+			},
+			{
+				"cardId": "BG28_HERO_800",
+				"heroPowerCardId": "BG28_HERO_800p",
+				"name": "Tae'thelan Bloodwatcher",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 3,
+				"leaderboardPlace": 3,
+				"lastBoard": {
+					"turn": 9,
+					"board": [
+						{
+							"id": 7130,
+							"cardID": "BG23_318",
+							"tags": {
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"ELITE": 1,
+								"ENTITY_ID": 7130,
+								"ATK": 16,
+								"TECH_LEVEL": 5,
+								"ZONE_POSITION": 1,
+								"DEATHRATTLE": 1,
+								"HEALTH": 12,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 7132,
+							"cardID": "BG21_006_G",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"PREMIUM": 1,
+								"ENTITY_ID": 7132,
+								"ATK": 18,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 2,
+								"DEATHRATTLE": 1,
+								"HEALTH": 18,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 7135,
+							"cardID": "TB_BaconUps_079",
+							"tags": {
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"PREMIUM": 1,
+								"ENTITY_ID": 7135,
+								"ATK": 61,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 3,
+								"HEALTH": 50,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 7142,
+							"cardID": "BG26_174",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"TAG_SCRIPT_DATA_NUM_1": 3,
+								"ENTITY_ID": 7142,
+								"ATK": 5,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 4,
+								"HEALTH": 28,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 7145,
+							"cardID": "BG26_174",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"TAG_SCRIPT_DATA_NUM_1": 3,
+								"ENTITY_ID": 7145,
+								"ATK": 10,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 5,
+								"HEALTH": 29,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 7149,
+							"cardID": "BG24_009_G",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"PREMIUM": 1,
+								"ENTITY_ID": 7149,
+								"ATK": 8,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 6,
+								"HEALTH": 6,
+								"CONTROLLER": 15
+							}
+						}
+					]
+				},
+				"tripleHistory": [
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 7
+					},
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 8
+					},
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 9
+					}
+				],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 2
+					},
+					{
+						"tavernTier": 3,
+						"turn": 6
+					},
+					{
+						"tavernTier": 4,
+						"turn": 7
+					}
+				],
+				"currentWinStreak": 1,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "DEMON",
+					"count": 5
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "BG23_HERO_306",
+					"damage": 7,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_888",
+				"greaterTrinket": "BG30_MagicItem_414t"
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_60",
+				"heroPowerCardId": "TB_BaconShop_HP_066",
+				"name": "Kael'thas Sunstrider",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 4,
+				"leaderboardPlace": 4,
+				"lastBoard": null,
+				"tripleHistory": [
+					{
+						"tierOfTripledMinion": 3,
+						"turn": 6
+					},
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 8
+					},
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 10
+					}
+				],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 2
+					},
+					{
+						"tavernTier": 3,
+						"turn": 6
+					},
+					{
+						"tavernTier": 4,
+						"turn": 8
+					}
+				],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "UNDEAD",
+					"count": 7
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "TB_BaconShop_HERO_18",
+					"damage": 13,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_821",
+				"greaterTrinket": "BG30_MagicItem_841t"
+			},
+			{
+				"cardId": "BG23_HERO_306",
+				"heroPowerCardId": "BG23_HERO_306p",
+				"name": "Sylvanas Windrunner",
+				"isMainPlayer": true,
+				"initialHealth": 30,
+				"damageTaken": 7,
+				"leaderboardPlace": 5,
+				"lastBoard": {
+					"turn": 9,
+					"board": [
+						{
+							"id": 5678,
+							"cardID": "BG26_528",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"ENTITY_ID": 5678,
+								"ATK": 9,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 1,
+								"HEALTH": 11,
+								"CONTROLLER": 7
+							}
+						},
+						{
+							"id": 5681,
+							"cardID": "BG25_008",
+							"tags": {
+								"CARDRACE": 11,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"ENTITY_ID": 5681,
+								"ATK": 18,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 2,
+								"HEALTH": 13,
+								"CONTROLLER": 7
+							}
+						},
+						{
+							"id": 5683,
+							"cardID": "BG25_008",
+							"tags": {
+								"CARDRACE": 11,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"ENTITY_ID": 5683,
+								"ATK": 16,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 3,
+								"HEALTH": 12,
+								"CONTROLLER": 7
+							}
+						},
+						{
+							"id": 5684,
+							"cardID": "BG_TTN_401",
+							"tags": {
+								"CARDRACE": 17,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"ENTITY_ID": 5684,
+								"ATK": 4,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 4,
+								"HEALTH": 6,
+								"CONTROLLER": 7
+							}
+						},
+						{
+							"id": 5688,
+							"cardID": "BG30_125",
+							"tags": {
+								"CARDRACE": 11,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"ENTITY_ID": 5688,
+								"ATK": 5,
+								"TECH_LEVEL": 4,
+								"ZONE_POSITION": 5,
+								"DEATHRATTLE": 1,
+								"HEALTH": 6,
+								"CONTROLLER": 7
+							}
+						},
+						{
+							"id": 6030,
+							"cardID": "BG30_125",
+							"tags": {
+								"CARDRACE": 11,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"ENTITY_ID": 6030,
+								"ATK": 5,
+								"TECH_LEVEL": 4,
+								"ZONE_POSITION": 6,
+								"DEATHRATTLE": 1,
+								"HEALTH": 6,
+								"CONTROLLER": 7
+							}
+						},
+						{
+							"id": 6260,
+							"cardID": "BG21_005",
+							"tags": {
+								"CARDRACE": 15,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 6,
+								"ENTITY_ID": 6260,
+								"ATK": 11,
+								"TECH_LEVEL": 6,
+								"ZONE_POSITION": 7,
+								"HEALTH": 11,
+								"CONTROLLER": 7
+							}
+						}
+					]
+				},
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 2
+					},
+					{
+						"tavernTier": 3,
+						"turn": 5
+					},
+					{
+						"tavernTier": 4,
+						"turn": 7
+					}
+				],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "UNDEAD",
+					"count": 4
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "BG28_HERO_800",
+					"damage": 7,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_301",
+				"greaterTrinket": "BG30_MagicItem_991"
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_27",
+				"heroPowerCardId": "TB_BaconShop_HP_014",
+				"name": "Sindragosa",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 21,
+				"leaderboardPlace": 6,
+				"lastBoard": null,
+				"tripleHistory": [
+					{
+						"tierOfTripledMinion": 4,
+						"turn": 10
+					}
+				],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 3
+					},
+					{
+						"tavernTier": 3,
+						"turn": 6
+					},
+					{
+						"tavernTier": 4,
+						"turn": 10
+					}
+				],
+				"currentWinStreak": 2,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "MECH",
+					"count": 5
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "BG21_HERO_030",
+					"damage": 5,
+					"isDefeated": false
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_925",
+				"greaterTrinket": "BG30_MagicItem_880t"
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_702",
+				"heroPowerCardId": "TB_BaconShop_HP_702",
+				"name": "The Jailer",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 31,
+				"leaderboardPlace": 7,
+				"lastBoard": {
+					"turn": 7,
+					"board": [
+						{
+							"id": 4639,
+							"cardID": "BGS_071",
+							"tags": {
+								"CARDRACE": 17,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 4,
+								"TAUNT": 1,
+								"ENTITY_ID": 4639,
+								"ATK": 4,
+								"DIVINE_SHIELD": 1,
+								"TECH_LEVEL": 3,
+								"ZONE_POSITION": 1,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 4642,
+							"cardID": "BG27_023",
+							"tags": {
+								"CARDRACE": 14,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"ELITE": 1,
+								"ENTITY_ID": 4642,
+								"ATK": 7,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 2,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 4644,
+							"cardID": "BG26_172",
+							"tags": {
+								"CARDRACE": 11,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 4,
+								"TAUNT": 1,
+								"ENTITY_ID": 4644,
+								"ATK": 6,
+								"TECH_LEVEL": 3,
+								"ZONE_POSITION": 3,
+								"HEALTH": 3,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 4647,
+							"cardID": "BG26_172",
+							"tags": {
+								"CARDRACE": 11,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 4,
+								"ENTITY_ID": 4647,
+								"ATK": 5,
+								"TECH_LEVEL": 3,
+								"ZONE_POSITION": 4,
+								"HEALTH": 1,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 4648,
+							"cardID": "BG28_556",
+							"tags": {
+								"CARDRACE": 18,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"ENTITY_ID": 4648,
+								"ATK": 4,
+								"TECH_LEVEL": 3,
+								"ZONE_POSITION": 5,
+								"HEALTH": 5,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 4649,
+							"cardID": "BG_EX1_103",
+							"tags": {
+								"CARDRACE": 14,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 3,
+								"ENTITY_ID": 4649,
+								"ATK": 3,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 6,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						}
+					]
+				},
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 2
+					},
+					{
+						"tavernTier": 3,
+						"turn": 3
+					},
+					{
+						"tavernTier": 4,
+						"turn": 7
+					}
+				],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "mixed",
+					"count": 2
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "TB_BaconShop_HERO_27",
+					"damage": 9,
+					"isDefeated": true
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_803"
+			},
+			{
+				"cardId": "TB_BaconShop_HERO_59",
+				"heroPowerCardId": "TB_BaconShop_HP_065",
+				"name": "Aranna Starseeker",
+				"isMainPlayer": false,
+				"initialHealth": 30,
+				"damageTaken": 30,
+				"leaderboardPlace": 8,
+				"lastBoard": {
+					"turn": 6,
+					"board": [
+						{
+							"id": 3529,
+							"cardID": "BG26_888",
+							"tags": {
+								"CARDRACE": 14,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 5,
+								"TAUNT": 1,
+								"VENOMOUS": 1,
+								"ENTITY_ID": 3529,
+								"ATK": 6,
+								"TECH_LEVEL": 5,
+								"ZONE_POSITION": 1,
+								"DEATHRATTLE": 1,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 3532,
+							"cardID": "BG22_401",
+							"tags": {
+								"CARDRACE": 14,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 1,
+								"TAUNT": 1,
+								"ENTITY_ID": 3532,
+								"ATK": 3,
+								"TECH_LEVEL": 1,
+								"ZONE_POSITION": 2,
+								"HEALTH": 8,
+								"CONTROLLER": 15
+							}
+						},
+						{
+							"id": 3535,
+							"cardID": "BG25_040",
+							"tags": {
+								"CARDRACE": 24,
+								"EXHAUSTED": 0,
+								"CARDTYPE": 4,
+								"COST": 2,
+								"ENTITY_ID": 3535,
+								"ATK": 2,
+								"TECH_LEVEL": 2,
+								"ZONE_POSITION": 3,
+								"HEALTH": 4,
+								"CONTROLLER": 15
+							}
+						}
+					]
+				},
+				"tripleHistory": [],
+				"tavernUpgradeHistory": [
+					{
+						"tavernTier": 2,
+						"turn": 2
+					},
+					{
+						"tavernTier": 3,
+						"turn": 4
+					},
+					{
+						"tavernTier": 4,
+						"turn": 5
+					}
+				],
+				"currentWinStreak": 0,
+				"lastKnownComposition": {
+					"turn": 10,
+					"tribe": "MURLOC",
+					"count": 3
+				},
+				"lastKnownBattleHistory": {
+					"turn": 10,
+					"opponentCardId": "TB_BaconShop_HERO_60",
+					"damage": 15,
+					"isDefeated": true
+				},
+				"questRewards": [],
+				"buddyTurns": [],
+				"lesserTrinket": "BG30_MagicItem_432"
+			}
+		],
+		"currentBattle": {
+			"battleInfo": {
+				"wonLethal": 0,
+				"won": 0,
+				"tied": 4,
+				"lost": 2739,
+				"lostLethal": 0,
+				"damageWon": 0,
+				"damageLost": 21783,
+				"averageDamageWon": 0,
+				"averageDamageLost": 7.952902519167579,
+				"wonLethalPercent": 0,
+				"wonPercent": 0,
+				"tiedPercent": 0.14582573824279985,
+				"lostPercent": 99.8541742617572,
+				"lostLethalPercent": 0,
+				"outcomeSamples": null
+			},
+			"status": "done"
+		},
+		"currentTurn": 10,
+		"inGame": true,
+		"availableRaces": [15, 17, 14, 23, 11],
+		"phase": "recruit",
+		"config": {
+			"hasBuddies": false,
+			"hasPrizes": false,
+			"hasQuests": false,
+			"hasSpells": true,
+			"hasTrinkets": true,
+			"anomalies": [null]
+		}
+	},
+	"streamerPrefs": {
+		"bgsHideSimResultsOnRecruit": true,
+		"bgsShowSimResultsOnlyOnRecruit": false
+	}
+}

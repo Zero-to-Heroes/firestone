@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectorRef, ElementRef, HostListener, Injectable, Renderer2, ViewRef } from '@angular/core';
-import { sleep } from '@services/utils';
+import { sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
+import { TwitchPreferences } from '../model/twitch-preferences';
+import { TwitchPreferencesService } from '../services/twitch-preferences.service';
 import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twitch.component';
-import { TwitchPreferences } from './twitch-preferences';
-import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Injectable()
 export abstract class AbstractSubscriptionTwitchResizableComponent extends AbstractSubscriptionTwitchComponent {
@@ -14,7 +15,7 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 	protected minScale = 0.1;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		protected readonly prefs: TwitchPreferencesService,
 		protected readonly el: ElementRef,
 		protected readonly renderer: Renderer2,
@@ -23,13 +24,14 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 	}
 
 	async listenForResize() {
-		this.sub = combineLatest(this.prefs.prefs.asObservable(), this.resizeSubject.asObservable())
+		this.sub = combineLatest([this.prefs.prefs.asObservable(), this.resizeSubject.asObservable()])
 			.pipe(
+				filter(([prefs, resize]) => !!prefs),
 				map(([prefs, resize]) => prefs),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((prefs) => {
-				this.resize(prefs);
+				this.resize(prefs!);
 			});
 		await sleep(100);
 		this.onResized(null);

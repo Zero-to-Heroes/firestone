@@ -14,16 +14,11 @@ import {
 } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { delay, distinctUntilChanged, filter, map, sampleTime, take } from 'rxjs/operators';
-import {
-	TwitchBgsBoard,
-	TwitchBgsBoardEntity,
-	TwitchBgsPlayer,
-	TwitchBgsState,
-} from '../../components/decktracker/overlay/twitch/twitch-bgs-state';
 import { GameEvent } from '../../models/game-event';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { TwitchPreferencesService } from '@firestone/twitch/common';
 import { CardsHighlightCommonService } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-common.service';
 import { Observable } from 'rxjs';
-import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Injectable()
 export class CardsHighlightStandaloneService extends CardsHighlightCommonService {

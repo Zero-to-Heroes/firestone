@@ -17,8 +17,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { CardsHighlightStandaloneService } from '@components/decktracker/overlay/twitch/cards-highlight-standalone.service';
 import { TwitchCardsHighlightFacadeService } from '@components/decktracker/overlay/twitch/twitch-cards-highlight-facade.service';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { TwitchCommonModule, TwitchPreferencesService } from '@firestone/twitch/common';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
@@ -43,7 +43,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 	imports: [
 		CommonModule,
 		BrowserModule,
-		LegacyFeatureShellModule,
+
 		TranslateModule.forRoot({
 			defaultLanguage: 'enUS',
 			loader: {
@@ -52,6 +52,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 				deps: [HttpClient],
 			},
 		}),
+
+		LegacyFeatureShellModule,
+		TwitchCommonModule,
 	],
 	providers: [
 		CardsHighlightStandaloneService,

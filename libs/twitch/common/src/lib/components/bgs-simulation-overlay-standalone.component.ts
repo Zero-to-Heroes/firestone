@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -12,17 +13,16 @@ import {
 } from '@angular/core';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { Preferences } from '@firestone/shared/common/service';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { TwitchBgsCurrentBattle } from '../model/twitch-bgs-state';
+import { TwitchPreferencesService } from '../services/twitch-preferences.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
-import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
-import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'bgs-simulation-overlay-standalone',
 	styleUrls: [
-		'../../../../../css/themes/battlegrounds-theme.scss',
-		`../../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
-		`../../../../../css/component/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component.scss`,
+		`../../../../../legacy/feature-shell/src/lib/css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
+		`./bgs-simulation-overlay-standalone.component.scss`,
 	],
 	template: `
 		<div
@@ -43,8 +43,8 @@ export class BgsSimulationOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit
 {
-	nextBattle$: Observable<BgsFaceOffWithSimulation>;
-	hidden$: Observable<boolean>;
+	nextBattle$: Observable<BgsFaceOffWithSimulation | null>;
+	hidden$: Observable<boolean | null>;
 
 	simulationMessage: string;
 
@@ -67,37 +67,38 @@ export class BgsSimulationOverlayStandaloneComponent
 		this.streamerPrefs$$.next(value);
 	}
 
-	private battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
-	private streamerPrefs$$ = new BehaviorSubject<Partial<Preferences>>(null);
-	private phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
-	private hideWhenEmpty$$ = new BehaviorSubject<boolean>(null);
+	private battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle | null>(null);
+	private streamerPrefs$$ = new BehaviorSubject<Partial<Preferences | null>>(null);
+	private phase$$ = new BehaviorSubject<'combat' | 'recruit' | null>(null);
+	private hideWhenEmpty$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		protected readonly prefs: TwitchPreferencesService,
-		protected readonly el: ElementRef,
-		protected readonly renderer: Renderer2,
+		protected override readonly cdr: ChangeDetectorRef,
+		protected override readonly prefs: TwitchPreferencesService,
+		protected override readonly el: ElementRef,
+		protected override readonly renderer: Renderer2,
 	) {
 		super(cdr, prefs, el, renderer);
 	}
 
 	ngAfterContentInit(): void {
 		super.listenForResize();
-		this.nextBattle$ = combineLatest(
+		this.nextBattle$ = combineLatest([
 			this.prefs.prefs.asObservable(),
 			this.battleState$$.asObservable(),
 			this.phase$$.asObservable(),
 			this.streamerPrefs$$.asObservable(),
-		).pipe(
+		]).pipe(
+			filter(([prefs, battleState, phase, streamerPrefs]) => !!prefs),
 			this.mapData(([prefs, battleState, phase, streamerPrefs]) => {
-				const hideBattleOddsInCombat: boolean =
-					prefs.hideBattleOddsInCombat == null
+				const hideBattleOddsInCombat: boolean | undefined =
+					prefs!.hideBattleOddsInCombat == null
 						? streamerPrefs?.bgsShowSimResultsOnlyOnRecruit
-						: prefs.hideBattleOddsInCombat === 'true';
-				const hideBattleOddsInTavern: boolean =
-					prefs.hideBattleOddsInTavern == null
+						: prefs!.hideBattleOddsInCombat === 'true';
+				const hideBattleOddsInTavern: boolean | undefined =
+					prefs!.hideBattleOddsInTavern == null
 						? streamerPrefs?.bgsHideSimResultsOnRecruit
-						: prefs.hideBattleOddsInTavern === 'true';
+						: prefs!.hideBattleOddsInTavern === 'true';
 				if (hideBattleOddsInCombat && phase === 'combat') {
 					return null;
 				}
@@ -108,10 +109,10 @@ export class BgsSimulationOverlayStandaloneComponent
 					battleResult: battleState?.battleInfo,
 					battleInfoStatus: battleState?.status,
 					battleInfoMesage: null,
-				} as BgsFaceOffWithSimulation);
+				});
 			}),
 		);
-		this.hidden$ = combineLatest(this.hideWhenEmpty$$.asObservable(), this.nextBattle$).pipe(
+		this.hidden$ = combineLatest([this.hideWhenEmpty$$.asObservable(), this.nextBattle$]).pipe(
 			this.mapData(([hideWhenEmpty, nextBattle]) => {
 				if (!hideWhenEmpty) {
 					return false;

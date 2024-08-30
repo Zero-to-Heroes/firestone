@@ -6,13 +6,15 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { TwitchPreferences } from '@components/decktracker/overlay/twitch/twitch-preferences';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import {
+	AbstractSubscriptionTwitchComponent,
+	TwitchPreferences,
+	TwitchPreferencesService,
+} from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable, from } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DropdownOption } from '../../../settings/dropdown.component';
-import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twitch.component';
 
 @Component({
 	selector: 'twitch-config-widget',

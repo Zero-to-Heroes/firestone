@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { TwitchPreferencesService } from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { TranslateService } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { mapTwitchLanguageToHsLocale } from './twitch-config-widget.component';
-import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Injectable()
 export class TwitchLocalizationManagerService {

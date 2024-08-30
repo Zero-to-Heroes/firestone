@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckState } from '@firestone/game-state';
-import { TwitchPreferences } from './twitch-preferences';
-import { TwitchPreferencesService } from './twitch-preferences.service';
+import { TwitchPreferences, TwitchPreferencesService } from '@firestone/twitch/common';
 
 @Component({
 	selector: 'decktracker-twitch-title-bar',

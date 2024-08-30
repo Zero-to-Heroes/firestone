@@ -11,12 +11,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { DeckState, GameState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Component({

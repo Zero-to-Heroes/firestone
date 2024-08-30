@@ -13,7 +13,7 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 	readonly battleInfo?: BgsBattleInfo;
 	readonly battleResult?: SimulationResult;
 	readonly battleInfoStatus?: 'empty' | 'waiting-for-result' | 'done';
-	readonly battleInfoMesage: BattleInfoMessage;
+	readonly battleInfoMesage: BattleInfoMessage | null;
 
 	public static override create(
 		base: Partial<NonFunctionProperties<BgsFaceOffWithSimulation>>,

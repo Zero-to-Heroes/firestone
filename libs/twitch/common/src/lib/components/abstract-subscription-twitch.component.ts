@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, ViewRef } from '@angular/core';
-import { arraysEqual } from '@services/utils';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 

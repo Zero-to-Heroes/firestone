@@ -441,14 +441,12 @@ import { ControlWebsiteComponent } from '@components/controls/control-website.co
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
-import { BgsSimulationOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
 import { DeckTrackerOverlayContainerComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 import { DeckTrackerOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { DeckTrackerTwitchTitleBarComponent } from '@components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
 import { EmptyCardComponent } from '@components/decktracker/overlay/twitch/empty-card.component';
 import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
 import { LotteryAchievementComponent } from '@components/lottery/lottery-achievement.component';
 import { LotteryAchievementsWidgetComponent } from '@components/lottery/lottery-achievements.component';
@@ -610,6 +608,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { TwitchCommonModule } from '@firestone/twitch/common';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
@@ -921,6 +920,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MercenariesCommonModule,
 		MainwindowCommonModule,
 		SettingsModule,
+		TwitchCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -1735,7 +1735,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
 		BattlegroundsMinionsTiersTwitchOverlayComponent,
-		BgsSimulationOverlayStandaloneComponent,
 		DeckTrackerOverlayContainerComponent,
 		DeckTrackerOverlayStandaloneComponent,
 		DeckTrackerTwitchTitleBarComponent,
@@ -1926,8 +1925,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		LotteryService,
 		LotteryWidgetControllerService,
-
-		TwitchPreferencesService,
 	],
 	entryComponents: [
 		ConfirmationComponent,

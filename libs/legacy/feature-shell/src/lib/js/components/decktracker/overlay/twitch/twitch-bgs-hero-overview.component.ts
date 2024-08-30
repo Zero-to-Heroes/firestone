@@ -7,14 +7,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
 import { BgsPlayer } from '@firestone/battlegrounds/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
 import { getBuddy } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, from } from 'rxjs';
-import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
 	selector: 'twitch-bgs-hero-overview',

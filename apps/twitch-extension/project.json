@@ -27,7 +27,11 @@
 					"styles": true,
 					"vendor": false
 				},
-				"styles": ["apps/twitch-extension/src/styles.scss"],
+				"styles": [
+					"apps/twitch-extension/src/styles.scss",
+					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss",
+					"libs/shared/styles/src/lib/styles/decktracker-theme.scss"
+				],
 				"scripts": []
 			},
 			"configurations": {
