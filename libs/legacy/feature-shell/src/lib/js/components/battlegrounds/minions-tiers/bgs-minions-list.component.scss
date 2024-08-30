@@ -1,7 +1,12 @@
 :host {
 	// display: flex;
 	min-height: 0;
-	background: var(--bgs-minions-list-widget-background-image);
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-left: 20px;
+	width: calc(100% + 20px);
+	position: relative;
+	left: -20px;
 }
 
 .bgs-minions-list {
@@ -9,22 +14,13 @@
 	display: flex;
 	flex-direction: column;
 	min-height: 0;
-	padding-left: 20px;
-	width: calc(100% + 20px);
-	left: -20px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	position: relative;
-}
-
-.list-scroller {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	min-height: 0;
 	overflow: visible;
 	position: relative;
 	margin-top: 2px;
+}
+
+.minion-group {
+	background: var(--bgs-minions-list-widget-background-image);
 }
 
 .reset-all-button {
