@@ -322,8 +322,12 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	private buildEntityFromMemory(entity: BgsEntity): PlayerBoardEntity {
+		const entityId = entity.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value;
+		if (!entity.CardId) {
+			console.warn('missing cardId in buildEntityFromMemory', entityId, entity.Tags);
+		}
 		return {
-			Id: entity.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
+			Id: entityId,
 			Entity: entity.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
 			CardId: entity.CardId,
 			Tags: entity.Tags,

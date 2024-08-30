@@ -133,6 +133,10 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		return null;
 	}
 
+	if (!logEntity.CardId) {
+		console.warn('missing cardId for', logEntity.Entity, logEntity.Tags);
+	}
+
 	return {
 		cardId: logEntity.CardId,
 		attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
