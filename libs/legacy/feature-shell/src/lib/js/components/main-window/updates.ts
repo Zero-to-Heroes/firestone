@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.21.6',
+		version: '13.21.7',
 		force: false,
 		sections: [
 			// {
@@ -47,6 +47,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fixes an issue where you couldn't copy decks from the Meta Decks tab anymore.`,
+							},
+						],
+					},
 					{
 						category: 'battlegrounds',
 						details: [
@@ -98,10 +107,6 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where you couldn't copy deck codes from the Meta Decks tab anymore.`,
-							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the new Perils in Paradise Coins would mess up mulligan stats.`,
