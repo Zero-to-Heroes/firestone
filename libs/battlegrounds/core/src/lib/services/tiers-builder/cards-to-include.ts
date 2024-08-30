@@ -14,7 +14,7 @@ export const filterCardsToInclude = (
 	const filteredCards: readonly ExtendedReferenceCard[] = cardsInGame
 		.filter(
 			(card) =>
-				tiersToInclude.includes(card.techLevel) ||
+				tiersToInclude.includes(card.techLevel as number) ||
 				card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET],
 		)
 		.map((card) => enhanceCard(card, anomalies, playerCardId, cardRules, allCards, i18n));
@@ -45,7 +45,7 @@ const isBanned = (
 	cardRules: CardRules,
 	allCards: CardsFacadeService,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-): { banned: boolean; bannedReason: string } => {
+): { banned: boolean; bannedReason: string | null } => {
 	if (isCardExcludedByAnomaly(card, anomalies)) {
 		return { banned: true, bannedReason: 'anomaly' };
 	}
@@ -62,7 +62,7 @@ const isBanned = (
 
 const isCardExcludedForPlayer = (card: ReferenceCard, playerCardId: string, cardRules: CardRules): boolean => {
 	const cardRule = cardRules?.[card.id];
-	return cardRule?.bgsMinionTypesRules?.bannedForHeroes?.includes(playerCardId);
+	return !!cardRule?.bgsMinionTypesRules?.bannedForHeroes?.includes(playerCardId);
 };
 
 const isCardExcludedByAnomaly = (card: ReferenceCard, anomalies: readonly string[]): boolean => {

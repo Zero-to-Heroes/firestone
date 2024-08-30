@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Race } from '@firestone-hs/reference-data';
-import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
+import { pickRandom } from '@firestone/shared/framework/common';
 import { MinionInfo } from '../tier-enhancer';
 
 const numberOfRandomPicks = 15;
@@ -7,7 +8,7 @@ const numberOfRandomPicks = 15;
 export const getMenagerieLock = (
 	boardComposition: readonly MinionInfo[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-): { ruleLock: boolean; ruleLockReasons: readonly string[] } => {
+): { ruleLock: boolean; ruleLockReasons: readonly string[] | null } => {
 	for (let i = 0; i < numberOfRandomPicks; i++) {
 		const totalTribes = getRandomTribes(boardComposition);
 		if (totalTribes >= 3) {
@@ -30,7 +31,7 @@ const getRandomTribes = (boardComposition: readonly MinionInfo[]): number => {
 	for (const minion of minionTribesWithoutAll) {
 		const missingTribes = minion.tribes.filter((tribe) => !tribesOnBoard.includes(tribe));
 		if (missingTribes.length > 0) {
-			tribesOnBoard.push(pickRandom(missingTribes));
+			tribesOnBoard.push(pickRandom(missingTribes)!);
 		}
 	}
 	return tribesWithAll + tribesOnBoard.length;

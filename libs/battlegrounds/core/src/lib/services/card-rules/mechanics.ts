@@ -8,7 +8,7 @@ export const getMechanicsLock = (
 	thresholdInclusive: number,
 	allCards: CardsFacadeService,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-): { ruleLock: boolean; ruleLockReasons: readonly string[] } => {
+): { ruleLock: boolean; ruleLockReasons: readonly string[] | null } => {
 	if (boardComposition?.filter((m) => hasMechanic(m, mechanic, allCards)).length >= thresholdInclusive) {
 		return { ruleLock: false, ruleLockReasons: null };
 	}

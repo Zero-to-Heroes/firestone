@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	BUDDIES_TRIBE_REQUIREMENTS,
@@ -10,7 +11,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getBuddy } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
+import { getBuddy } from '../hero-utils';
 import { ExtendedReferenceCard, TavernTierType, Tier, TierGroup } from '../tiers.model';
 import { TierBuilderConfig } from './tiers-config.model';
 import { getTrinketNameKey } from './utils';
@@ -128,16 +129,16 @@ const buildGroups = (
 	cardsForMechanics: readonly ReferenceCard[],
 	tiersToInclude: readonly number[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-	config: TierBuilderConfig,
+	config?: TierBuilderConfig,
 ): readonly TierGroup[] => {
 	const tierGroups = tiersToInclude.map((techLevel) => buildTierGroup(cardsForMechanics, techLevel, i18n, config));
 	const spellGroup = config?.spells ? buildSpellGroup(cardsForMechanics, i18n) : null;
 	const trinketGroup = config?.trinkets ? buildTrinketGroup(cardsForMechanics, i18n) : null;
 
-	const groups: readonly TierGroup[] = config?.showSpellsAtBottom
+	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
 		? [...tierGroups, spellGroup, trinketGroup]
 		: [spellGroup, trinketGroup, ...tierGroups];
-	return groups.filter((g) => !!g?.cards?.length);
+	return groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[];
 };
 
 const buildTrinketGroup = (
@@ -180,7 +181,7 @@ const buildTierGroup = (
 	cardsForMechanics: readonly ReferenceCard[],
 	techLevel: number,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-	config: TierBuilderConfig,
+	config?: TierBuilderConfig,
 ): TierGroup => {
 	{
 		const cards = cardsForMechanics
@@ -210,7 +211,7 @@ const buildBuddies = (
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
 	const allPlayerBuddies = allPlayerCardIds
 		.map((p) => getBuddy(p as CardIds, allCards))
-		.map((b) => allCards.getCard(b));
+		.map((b) => allCards.getCard(b!));
 	const allPlayerBuddiesCardIds = allPlayerBuddies.map((b) => b.id);
 	const buddies: readonly ReferenceCard[] = !config?.showBuddiesTier
 		? []
@@ -223,7 +224,9 @@ const buildBuddies = (
 				.filter(
 					(b) =>
 						!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
-						availableTribes.includes(BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy).tribe),
+						availableTribes.includes(
+							BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy)?.tribe ?? Race.INVALID,
+						),
 				)
 		: // For tess, only show the buddies of the opponents
 		[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
@@ -235,4 +238,4 @@ const buildBuddies = (
 };
 
 const isInMechanicalTier = (card: ReferenceCard, mechanic: GameTag): boolean =>
-	card.mechanics?.includes(GameTag[mechanic]) || card.referencedTags?.includes(GameTag[mechanic]);
+	!!card.mechanics?.includes(GameTag[mechanic]) || !!card.referencedTags?.includes(GameTag[mechanic]);

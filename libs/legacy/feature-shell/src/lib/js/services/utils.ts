@@ -211,6 +211,7 @@ export const mod = (n: number, m: number): number => {
 // https://www.just-bi.nl/a-tale-of-a-javascript-memory-leak/
 export const freeRegexp = () => /\s*/g.exec('');
 
+/** @deprecated */
 export const pickRandom = <T>(array: readonly T[]): T => {
 	if (!array?.length) {
 		return null;

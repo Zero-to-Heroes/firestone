@@ -7,7 +7,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { Tier } from './tiers.model';
+import { Tier } from '@firestone/battlegrounds/core';
 
 @Component({
 	selector: 'minions-list-tiers-header',

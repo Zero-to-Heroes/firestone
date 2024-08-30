@@ -7,9 +7,9 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
+import { TavernTierType, Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { TavernTierType, Tier } from './tiers.model';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-view',

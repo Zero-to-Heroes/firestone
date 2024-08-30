@@ -10,13 +10,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { buildTiers } from '@components/battlegrounds/minions-tiers/tier-builder';
-import { Tier } from '@components/battlegrounds/minions-tiers/tiers.model';
 import { CardIds, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { Tier, buildTiers, getAllCardsInGame, getBuddy } from '@firestone/battlegrounds/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
-import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { getAllCardsInGame, getBuddy } from '@services/battlegrounds/bgs-utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 
 @Component({
@@ -120,7 +117,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		protected readonly el: ElementRef,
 		protected readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr, prefs, el, renderer);
 	}

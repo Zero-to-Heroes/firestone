@@ -8,13 +8,13 @@ import {
 	Input,
 } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { ExtendedReferenceCard, TierGroup } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ExtendedReferenceCard, TierGroup } from './tiers.model';
 
 @Component({
 	selector: 'bgs-minions-group',

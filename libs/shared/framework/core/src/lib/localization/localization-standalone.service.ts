@@ -61,7 +61,7 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		await this.allCards.setLocale(locale);
 	}
 
-	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null | undefined {
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null {
 		if (!cardId) {
 			return null;
 		}
@@ -74,7 +74,7 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		return `${base}/${suffix}`;
 	}
 
-	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null | undefined {
+	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null {
 		if (!cardId) {
 			return null;
 		}

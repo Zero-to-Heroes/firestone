@@ -11,18 +11,22 @@ import {
 } from '@angular/core';
 import { CardIds, GameTag, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import {
+	MinionInfo,
+	Tier,
+	buildTiers,
+	enhanceTiers,
+	getActualTribes,
+	getAllCardsInGame,
+	getBuddy,
+} from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil, tap } from 'rxjs';
-import { getAllCardsInGame, getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { buildTiers } from './tier-builder';
-import { MinionInfo, enhanceTiers } from './tier-enhancer';
-import { getActualTribes } from './tiers-builder/utils';
-import { Tier } from './tiers.model';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',

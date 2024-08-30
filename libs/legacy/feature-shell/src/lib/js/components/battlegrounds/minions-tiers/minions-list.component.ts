@@ -1,10 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
+import { Tier, TierGroup } from '@firestone/battlegrounds/core';
 import { uuid } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
-import { Tier, TierGroup } from './tiers.model';
 
 @Component({
 	selector: 'bgs-minions-list',

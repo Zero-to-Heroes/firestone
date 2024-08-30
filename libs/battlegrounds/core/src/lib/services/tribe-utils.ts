@@ -1,9 +1,10 @@
-import { CardIds, getEffectiveTribes, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { CardIds, getEffectiveTribes, getTribeName, Race, ReferenceCard } from '@firestone-hs/reference-data';
 
 export const getActualTribes = (
 	card: ReferenceCard,
 	groupMinionsIntoTheirTribeGroup: boolean,
-	trinkets: readonly string[],
+	trinkets: readonly string[] | undefined,
 ): readonly Race[] => {
 	return [
 		...getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).map((t) => Race[t]),
@@ -11,7 +12,7 @@ export const getActualTribes = (
 	];
 };
 
-const getSpecialTribesForEntity = (card: ReferenceCard, trinkets: readonly string[]): readonly Race[] => {
+const getSpecialTribesForEntity = (card: ReferenceCard, trinkets: readonly string[] | undefined): readonly Race[] => {
 	switch (card.id) {
 		case CardIds.WhelpSmuggler_BG21_013:
 		case CardIds.WhelpSmuggler_BG21_013_G:
@@ -28,11 +29,22 @@ const getSpecialTribesForEntity = (card: ReferenceCard, trinkets: readonly strin
 	return [];
 };
 
-export const getTrinketNameKey = (card: ReferenceCard): string => {
-	if (card.spellSchool?.toUpperCase() === SpellSchool[SpellSchool.LESSER_TRINKET]) {
-		return 'trinket-name-lesser';
-	} else if (card.spellSchool?.toUpperCase() === SpellSchool[SpellSchool.GREATER_TRINKET]) {
-		return 'trinket-name-greater';
+export const compareTribes = (
+	a: Race | null,
+	b: Race | null,
+	i18n: { translateString: (key: string) => string },
+): number => {
+	if (a === Race.BLANK || a == null) {
+		return 1;
 	}
-	return 'trinket-name';
+	if (b === Race.BLANK || a == null) {
+		return -1;
+	}
+	if (a === Race.ALL) {
+		return 1;
+	}
+	if (b === Race.ALL) {
+		return -1;
+	}
+	return getTribeName(a!, i18n).localeCompare(getTribeName(b!, i18n));
 };

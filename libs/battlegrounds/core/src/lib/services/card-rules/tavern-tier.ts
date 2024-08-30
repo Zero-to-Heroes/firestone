@@ -1,7 +1,7 @@
 export const getTavernTier3Lock = (
 	tavernLevel: number,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-): { ruleLock: boolean; ruleLockReasons: readonly string[] } => {
+): { ruleLock: boolean; ruleLockReasons: readonly string[] | null } => {
 	if (tavernLevel >= 3) {
 		return { ruleLock: false, ruleLockReasons: null };
 	}

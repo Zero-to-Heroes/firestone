@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { ExtendedReferenceCard, isBgsTrinket } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
-import { isBgsSpell, isBgsTrinket } from '../../../services/battlegrounds/bgs-utils';
+import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
-import { ExtendedReferenceCard } from './tiers.model';
 
 @Component({
 	selector: 'bgs-minion-item',

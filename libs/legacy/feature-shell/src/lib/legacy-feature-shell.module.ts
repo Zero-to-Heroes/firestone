@@ -572,6 +572,7 @@ import { AchievementsDataAccessModule } from '@firestone/achievements/data-acces
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
+import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsSimulatorModule,
@@ -901,6 +902,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsViewModule,
 		BattlegroundsCommonModule,
 		BattlegroundsSimulatorModule,
+		BattlegroundsCoreModule,
 		StatsDataAccessModule,
 		DuelsViewModule,
 		DuelsDataAccessModule,

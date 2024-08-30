@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
 import { BgsPlayer } from '@firestone/battlegrounds/common';
+import { getBuddy } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
-import { getBuddy } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, from } from 'rxjs';
 

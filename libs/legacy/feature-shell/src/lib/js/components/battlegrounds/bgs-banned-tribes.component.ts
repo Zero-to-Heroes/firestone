@@ -9,12 +9,12 @@ import {
 } from '@angular/core';
 import { Race, getTribeName } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { compareTribes } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { compareTribes } from '../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({

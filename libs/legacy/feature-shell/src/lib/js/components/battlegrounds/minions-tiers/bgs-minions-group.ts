@@ -1,5 +1,5 @@
 import { GameTag, Race } from '@firestone-hs/reference-data';
-import { ExtendedReferenceCard } from './tiers.model';
+import { ExtendedReferenceCard } from '@firestone/battlegrounds/core';
 
 export interface BgsMinionsGroup {
 	readonly tribe: Race;

@@ -1,8 +1,7 @@
 import { CardType, Race } from '@firestone-hs/reference-data';
-import { compareTribes } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
+import { compareTribes, getActualTribes } from '../tribe-utils';
 import { TierBuilderConfig } from './tiers-config.model';
-import { getActualTribes } from './utils';
 
 export const buildStandardTiers = (
 	cardsToInclude: readonly ExtendedReferenceCard[],
@@ -27,8 +26,8 @@ const buildTier = (
 	config?: TierBuilderConfig,
 ): Tier => {
 	const tribeGroups: readonly TierGroup[] = buildTribeGroups(cardsForTier, availableTribes, i18n, config);
-	const spellGroup: TierGroup = config?.spells ? buildSpellGroup(cardsForTier, i18n) : null;
-	const groups: readonly TierGroup[] = config?.showSpellsAtBottom
+	const spellGroup: TierGroup | null = config?.spells ? buildSpellGroup(cardsForTier, i18n) : null;
+	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
 		? [...tribeGroups, spellGroup]
 		: [spellGroup, ...tribeGroups];
 	const result: Tier = {
@@ -36,7 +35,7 @@ const buildTier = (
 		tavernTier: tier,
 		tavernTierIcon: null,
 		tooltip: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: tier }),
-		groups: groups.filter((g) => !!g?.cards?.length),
+		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
 	return result;
 };
@@ -75,7 +74,7 @@ const buildTribeGroups = (
 
 const buildTribeGroup = (
 	cards: readonly ExtendedReferenceCard[],
-	targetTribe: Race,
+	targetTribe: Race | null,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): TierGroup => {
@@ -83,7 +82,7 @@ const buildTribeGroup = (
 		.filter((card) => {
 			const cardTribes: readonly Race[] = getActualTribes(
 				card,
-				config?.groupMinionsIntoTheirTribeGroup,
+				config?.groupMinionsIntoTheirTribeGroup ?? false,
 				config?.playerTrinkets,
 			);
 			if (targetTribe === null) {

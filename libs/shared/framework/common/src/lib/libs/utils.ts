@@ -109,6 +109,13 @@ export const sortByProperties = <T>(sorter: (t: T) => any[]): ((a: T, b: T) => n
 	};
 };
 
+export const pickRandom = <T>(array: readonly T[]): T | null => {
+	if (!array?.length) {
+		return null;
+	}
+	return array[Math.floor(Math.random() * array.length)];
+};
+
 export const getStandardDeviation = (array: readonly number[]): { mean: number; standardDeviation: number } => {
 	if (!array?.length) {
 		return {

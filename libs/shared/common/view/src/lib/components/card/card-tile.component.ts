@@ -78,8 +78,8 @@ export class CardTileComponent {
 	cardImage: string;
 	manaCostStr: string;
 	cardName: string;
-	rarity: string;
-	cardClass: string;
+	rarity: string | null;
+	cardClass: string | null;
 	relatedCardIds: readonly string[];
 	linkedCardHighlight: boolean | string;
 

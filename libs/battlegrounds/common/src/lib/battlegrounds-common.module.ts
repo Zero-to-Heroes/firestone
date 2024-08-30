@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
+import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -59,6 +60,7 @@ const components = [
 		SharedCommonViewModule,
 		BattlegroundsDataAccessModule,
 		BattlegroundsViewModule,
+		BattlegroundsCoreModule,
 		ConstructedCommonModule,
 		MemoryModule,
 		StatsCommonModule,

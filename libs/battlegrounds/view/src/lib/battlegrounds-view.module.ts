@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -56,6 +57,7 @@ const components = [
 		ReactiveFormsModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
+		BattlegroundsCoreModule,
 		InlineSVGModule.forRoot(),
 	],
 	declarations: components,

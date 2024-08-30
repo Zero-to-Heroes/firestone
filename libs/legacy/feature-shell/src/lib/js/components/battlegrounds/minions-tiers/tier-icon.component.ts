@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Tier } from './tiers.model';
+import { Tier } from '@firestone/battlegrounds/core';
 
 @Component({
 	selector: 'tier-icon',

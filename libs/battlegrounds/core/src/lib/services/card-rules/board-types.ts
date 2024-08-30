@@ -6,14 +6,14 @@ export const getBoardTypesLock = (
 	playerCardId: string,
 	boardComposition: readonly MinionInfo[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
-): { ruleLock: boolean; ruleLockReasons: readonly string[] } => {
-	const needBoardTypes = rule.needBoardTypes;
+): { ruleLock: boolean; ruleLockReasons: readonly string[] | null } => {
 	if (rule.alwaysAvailableForHeroes?.includes(playerCardId)) {
 		return { ruleLock: false, ruleLockReasons: null };
 	}
 
 	let ruleLock = false;
-	let ruleLockReasons = null;
+	let ruleLockReasons: string[] | null = null;
+	const needBoardTypes = rule.needBoardTypes ?? [];
 	for (const minionType of needBoardTypes) {
 		if (compositionMatches(Race[minionType.toUpperCase()], boardComposition)) {
 			return { ruleLock: false, ruleLockReasons: null };
