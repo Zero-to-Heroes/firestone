@@ -1,4 +1,4 @@
-import { BgsPostMatchStatsForReview } from '@firestone/battlegrounds/common';
+import { BgsPostMatchStatsForReview } from '@firestone/battlegrounds/core';
 import { NonFunctionProperties } from '../../../services/utils';
 import { BattlegroundsCategory } from './battlegrounds-category';
 import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-state';

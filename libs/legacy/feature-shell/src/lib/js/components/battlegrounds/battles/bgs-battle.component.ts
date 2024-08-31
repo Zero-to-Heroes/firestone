@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 
 @Component({
 	selector: 'bgs-battle',

@@ -1,5 +1,5 @@
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BattlegroundsState, BgsPlayer } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsPlayer } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';

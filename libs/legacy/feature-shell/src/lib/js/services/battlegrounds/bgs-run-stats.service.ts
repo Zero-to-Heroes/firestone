@@ -7,7 +7,7 @@ import {
 	BgsPostMatchStats,
 	BgsPostMatchStatsForReview,
 	RealTimeStatsState,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
 import { Events } from '../events.service';

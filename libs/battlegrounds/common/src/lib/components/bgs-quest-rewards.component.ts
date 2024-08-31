@@ -1,6 +1,7 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { QuestReward } from '@firestone/battlegrounds/common';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { QuestReward } from '@firestone/battlegrounds/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-quest-rewards',
@@ -9,7 +10,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="rewards-container">
 			<div
 				class="title"
-				[owTranslate]="'battlegrounds.in-game.opponents.rewards-title'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.rewards-title'"
 				*ngIf="_rewards?.length"
 			></div>
 			<div class="rewards" *ngIf="_rewards?.length">
@@ -30,7 +31,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div
 				class="subtitle"
 				*ngIf="!_rewards?.length"
-				[owTranslate]="'battlegrounds.in-game.opponents.rewards-empty-state'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.rewards-empty-state'"
 			></div>
 		</div>
 	`,
@@ -64,7 +65,7 @@ export class BgsQuestRewardsComponent {
 		return item.cardId;
 	}
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }
 
 interface Reward {

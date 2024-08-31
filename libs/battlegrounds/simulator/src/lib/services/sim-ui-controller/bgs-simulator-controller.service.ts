@@ -3,7 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { BehaviorSubject } from 'rxjs';
 import { StateManagerService } from './state-manager.service';
 

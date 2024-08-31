@@ -1,4 +1,4 @@
-import { BgsStatsFilterId } from '@firestone/battlegrounds/common';
+import { BgsStatsFilterId } from '@firestone/battlegrounds/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';

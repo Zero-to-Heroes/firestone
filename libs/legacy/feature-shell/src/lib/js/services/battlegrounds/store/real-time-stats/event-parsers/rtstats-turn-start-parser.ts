@@ -1,4 +1,4 @@
-import { RealTimeStatsState } from '@firestone/battlegrounds/common';
+import { RealTimeStatsState } from '@firestone/battlegrounds/core';
 import { GameEvent } from '../../../../../models/game-event';
 import { EventParser } from './_event-parser';
 

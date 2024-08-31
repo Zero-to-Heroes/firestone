@@ -8,7 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
-import { BattlegroundsNavigationService, BgsPlayer, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import { BgsPlayer } from '@firestone/battlegrounds/core';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';

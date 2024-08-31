@@ -17,7 +17,7 @@ import {
 	BgsStatsFilterId,
 	MinionStat,
 	QuestReward,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
@@ -31,7 +31,7 @@ import { normalizeCardId } from './card-utils';
 @Component({
 	selector: 'bgs-post-match-stats',
 	styleUrls: [
-		`../in-game/bgs-opponent-overview-big.component.scss`,
+		// `../in-game/bgs-opponent-overview-big.component.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats.component.scss`,
 	],
 	template: `

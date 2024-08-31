@@ -6,11 +6,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
+import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { BgsBattleStatusComponent } from './components/bgs-battle-status.component';
 import { BgsHeroPortraitSimulatorComponent } from './components/bgs-hero-portrait-simulator.component';
 import { BgsMinusButtonComponent } from './components/bgs-minus-button.component';
 import { BgsPlusButtonComponent } from './components/bgs-plus-button.component';
@@ -25,15 +25,12 @@ import { BgsSimulatorSideComponent } from './components/bgs-simulator-side.compo
 import { BgsSimulatorComponent } from './components/bgs-simulator.component';
 import { BgsBattlePositioningMockExecutorService } from './services/bgs-battle-positioning-mock-executor.service';
 import { BgsBattlePositioningService } from './services/bgs-battle-positioning.service';
-import { BgsBattleSimulationMockExecutorService } from './services/bgs-battle-simulation-mock-executor.service';
-import { BgsBattleSimulationService } from './services/bgs-battle-simulation.service';
 import { BgsSimulatorControllerService } from './services/sim-ui-controller/bgs-simulator-controller.service';
 import { StateManagerService } from './services/sim-ui-controller/state-manager.service';
 import { BgsSimulatorKeyboardControls } from './services/simulator-keyboard-controls.service';
 
 const components = [
 	BgsSimulatorComponent,
-	BgsBattleStatusComponent,
 	BgsSimulatorSideComponent,
 	BgsSimulatorPlayerOverviewComponent,
 	BgsPlusButtonComponent,
@@ -61,12 +58,11 @@ const components = [
 		ColiseumComponentsModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
-		BattlegroundsCommonModule,
+		BattlegroundsCoreModule,
 		BattlegroundsViewModule,
+		BattlegroundsCommonModule,
 	],
 	providers: [
-		BgsBattleSimulationMockExecutorService,
-		BgsBattleSimulationService,
 		BgsBattlePositioningMockExecutorService,
 		BgsSimulatorControllerService,
 		BgsBattlePositioningService,

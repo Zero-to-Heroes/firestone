@@ -7,7 +7,7 @@ import {
 	Input,
 	ViewChild,
 } from '@angular/core';
-import { NumericTurnInfo } from '@firestone/battlegrounds/common';
+import { NumericTurnInfo } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';

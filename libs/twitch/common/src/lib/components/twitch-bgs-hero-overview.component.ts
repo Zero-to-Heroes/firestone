@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -8,17 +10,17 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
-import { BgsPlayer } from '@firestone/battlegrounds/common';
-import { getBuddy } from '@firestone/battlegrounds/core';
+import { BgsPlayer, getBuddy } from '@firestone/battlegrounds/core';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
 import { Observable, from } from 'rxjs';
+import { TwitchPreferencesService } from '../services/twitch-preferences.service';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
 	selector: 'twitch-bgs-hero-overview',
 	styleUrls: [
-		'../../../../../css/themes/battlegrounds-theme.scss',
-		'../../../../../css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
+		'../../../../../legacy/feature-shell/src/lib/css/themes/battlegrounds-theme.scss',
+		'../../../../../legacy/feature-shell/src/lib/css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
 		'./twitch-bgs-hero-overview.component.scss',
 	],
 	template: `
@@ -56,18 +58,19 @@ import { Observable, from } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchResizableComponent {
-	showHeroCards$: Observable<boolean>;
+	showHeroCards$: Observable<boolean | undefined>;
 
 	_opponent: BgsPlayer;
 	currentTurn: number;
 	showLogo = true;
-	heroPowerImage: string;
+	heroPowerImage: string | null;
 	leaderboardPositionClass: string;
-	rewards: readonly Reward[];
-	trinkets: readonly Trinket[];
-	buddyCardImage: string;
-	buddyCardGoldenImage: string;
+	rewards: readonly Reward[] | undefined;
+	trinkets: readonly (Trinket | null)[];
+
 	showBuddies: boolean;
+	buddyCardImage: string | null;
+	buddyCardGoldenImage: string | null;
 
 	@Input() set config(value: TwitchOpponentOverviewInput) {
 		this._opponent = value.player;
@@ -78,22 +81,28 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 			image: this.i18n.getCardImage(reward.cardId, {
 				isBgs: true,
 				isHighRes: true,
-			}),
+			})!,
 			completed: reward.completed,
 		}));
 		this.showBuddies = value.config?.hasBuddies;
 		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
-		const buddyCard = this.cards.getCard(buddyCardId);
-		const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
-		this.buddyCardImage = this.i18n.getCardImage(buddyCardId, {
-			isBgs: true,
-			isHighRes: true,
-		});
-		this.buddyCardGoldenImage = this.i18n.getCardImage(buddyCardGolden.id, {
-			isBgs: true,
-			cardType: 'GOLDEN',
-			isHighRes: true,
-		});
+		const buddyCard = !!buddyCardId ? this.cards.getCard(buddyCardId) : null;
+		const buddyCardGolden = !!buddyCard?.battlegroundsPremiumDbfId
+			? this.cards.getCard(buddyCard.battlegroundsPremiumDbfId)
+			: null;
+		this.buddyCardImage = !!buddyCardId
+			? this.i18n.getCardImage(buddyCardId, {
+					isBgs: true,
+					isHighRes: true,
+			  })
+			: null;
+		this.buddyCardGoldenImage = !!buddyCardGolden
+			? this.i18n.getCardImage(buddyCardGolden.id, {
+					isBgs: true,
+					cardType: 'GOLDEN',
+					isHighRes: true,
+			  })
+			: null;
 		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards.getService());
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,
@@ -105,7 +114,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 							image: this.i18n.getCardImage(value.player.lesserTrinket, {
 								isBgs: true,
 								isHighRes: true,
-							}),
+							})!,
 					  }
 					: null,
 				!!value.player.greaterTrinket
@@ -113,7 +122,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 							image: this.i18n.getCardImage(value.player.greaterTrinket, {
 								isBgs: true,
 								isHighRes: true,
-							}),
+							})!,
 					  }
 					: null,
 			];
@@ -125,10 +134,10 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 	}
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		protected readonly prefs: TwitchPreferencesService,
-		protected readonly el: ElementRef,
-		protected readonly renderer: Renderer2,
+		protected override readonly cdr: ChangeDetectorRef,
+		protected override readonly prefs: TwitchPreferencesService,
+		protected override readonly el: ElementRef,
+		protected override readonly renderer: Renderer2,
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 	) {

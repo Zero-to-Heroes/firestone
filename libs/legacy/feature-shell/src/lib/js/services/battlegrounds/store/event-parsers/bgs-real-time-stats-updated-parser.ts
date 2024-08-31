@@ -5,7 +5,7 @@ import {
 	BgsPanel,
 	BgsPostMatchStatsPanel,
 	RealTimeStatsState,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsRealTimeStatsUpdatedEvent } from '../events/bgs-real-time-stats-updated-event';

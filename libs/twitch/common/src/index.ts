@@ -1,6 +1,7 @@
 export * from './lib/components/abstract-subscription-twitch-resizable.component';
 export * from './lib/components/abstract-subscription-twitch.component';
 export * from './lib/components/bgs-simulation-overlay-standalone.component';
+export * from './lib/components/twitch-bgs-hero-overview.component';
 export * from './lib/model/ebs-event';
 export * from './lib/model/twitch-bgs-state';
 export * from './lib/model/twitch-preferences';

@@ -1,5 +1,5 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { NonFunctionProperties, groupByFunction } from '@firestone/shared/framework/common';

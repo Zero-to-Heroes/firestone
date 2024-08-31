@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { BnetRegion, GameType, isBattlegrounds, isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { PlayerMatchMmr } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
-import { PlayerMatchMmr } from '../model/in-game/bgs-player-match-mmr';
 import { BgsMatchMemoryInfoService } from './bgs-match-memory-info.service';
 import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderboards.service';
 

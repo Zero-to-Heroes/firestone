@@ -6,7 +6,7 @@ import {
 	Component,
 	OnDestroy,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/core';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, startWith } from 'rxjs/operators';

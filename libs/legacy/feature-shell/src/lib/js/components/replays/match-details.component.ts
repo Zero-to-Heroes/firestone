@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BgsStatsFilterId } from '@firestone/battlegrounds/common';
+import { BgsStatsFilterId } from '@firestone/battlegrounds/core';
 import { Observable, startWith } from 'rxjs';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';

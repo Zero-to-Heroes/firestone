@@ -1,4 +1,4 @@
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { isWindowClosed } from '../../../utils';

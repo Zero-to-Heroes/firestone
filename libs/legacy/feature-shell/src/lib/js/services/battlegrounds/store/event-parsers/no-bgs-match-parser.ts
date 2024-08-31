@@ -1,4 +1,4 @@
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { NoBgsMatchEvent } from '../events/no-bgs-match-event';
 import { EventParser } from './_event-parser';

@@ -12,7 +12,7 @@ import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsBoard, BgsCardTooltipComponent, BgsPlayer } from '@firestone/battlegrounds/common';
+import { BgsBoard, BgsCardTooltipComponent, BgsPlayer } from '@firestone/battlegrounds/core';
 import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/simulator';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

@@ -1,5 +1,5 @@
 import { buildLuckFactor } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsGame, RealTimeStatsState } from '@firestone/battlegrounds/common';
+import { BgsGame, RealTimeStatsState } from '@firestone/battlegrounds/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { Events } from '../../../../../events.service';
 import { isBattlegrounds } from '../../../../bgs-utils';

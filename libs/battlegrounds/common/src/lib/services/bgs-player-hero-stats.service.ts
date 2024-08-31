@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { Config } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
@@ -15,7 +16,6 @@ import {
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { toGameTypeEnum } from '@firestone/stats/data-access';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
-import { Config } from '../model/_barrel';
 import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';
 import { filterBgsMatchStats } from './hero-stats-helper';

@@ -11,7 +11,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { Preferences } from '@firestone/shared/common/service';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 import { TwitchBgsCurrentBattle } from '../model/twitch-bgs-state';

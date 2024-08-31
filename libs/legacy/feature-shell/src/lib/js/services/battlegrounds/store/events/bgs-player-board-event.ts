@@ -1,4 +1,4 @@
-import { PlayerBoard } from '@firestone/battlegrounds/common';
+import { PlayerBoard } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {

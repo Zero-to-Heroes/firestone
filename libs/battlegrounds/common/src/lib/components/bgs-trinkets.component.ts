@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-trinkets',
@@ -8,7 +8,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="rewards-container">
 			<div
 				class="title"
-				[owTranslate]="'battlegrounds.in-game.opponents.trinkets-title'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.trinkets-title'"
 				*ngIf="_trinkets?.length"
 			></div>
 			<div class="rewards" *ngIf="_trinkets?.length">
@@ -23,7 +23,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div
 				class="subtitle"
 				*ngIf="!_trinkets?.length"
-				[owTranslate]="'battlegrounds.in-game.opponents.trinkets-empty-state'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.trinkets-empty-state'"
 			></div>
 		</div>
 	`,
@@ -48,7 +48,7 @@ export class BgsTrinketsComponent {
 		return item.cardId;
 	}
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }
 
 interface Reward {

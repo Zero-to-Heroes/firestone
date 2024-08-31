@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { RealTimeStatsState } from '@firestone/battlegrounds/common';
+import { RealTimeStatsState } from '@firestone/battlegrounds/core';
 import { SceneService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';

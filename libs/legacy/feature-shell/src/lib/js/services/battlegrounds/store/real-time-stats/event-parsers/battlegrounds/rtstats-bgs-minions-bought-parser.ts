@@ -1,4 +1,4 @@
-import { NumericTurnInfoWithCardIds, RealTimeStatsState } from '@firestone/battlegrounds/common';
+import { NumericTurnInfoWithCardIds, RealTimeStatsState } from '@firestone/battlegrounds/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds } from '../../../../bgs-utils';
 import { EventParser } from '../_event-parser';

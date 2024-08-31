@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BgsBattleSimulationService } from '../services/bgs-battle-simulation.service';
+import { BgsFaceOffWithSimulation } from '../model/bgs-face-off-with-simulation';
+import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-simulation.service';
 
 @Component({
 	selector: 'bgs-battle-status',

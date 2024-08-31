@@ -1,9 +1,4 @@
-import {
-	BattlegroundsState,
-	BgsBattlesPanel,
-	BgsFaceOffWithSimulation,
-	BgsPanel,
-} from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsBattlesPanel, BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsBattleSimulationResetEvent } from '../events/bgs-battle-simulation-reset-event';
 import { EventParser } from './_event-parser';

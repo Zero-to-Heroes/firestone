@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/battlegrounds/common';
+import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -29,7 +29,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 				<div
 					class="last-opponent-icon"
 					*ngIf="showLastOpponentIcon"
-					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
+					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | fsTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
 			</div>
@@ -48,10 +48,10 @@ export class BgsPlayerCapsuleComponent {
 	heroPowerCardId: string;
 	questRewardCardId: string;
 	name: string;
-	mmr: number;
-	tavernTier: number;
-	boardMinions: readonly Entity[];
-	boardTurn: number;
+	mmr: number | null;
+	tavernTier: number | undefined;
+	boardMinions: readonly Entity[] | null;
+	boardTurn: number | undefined;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 

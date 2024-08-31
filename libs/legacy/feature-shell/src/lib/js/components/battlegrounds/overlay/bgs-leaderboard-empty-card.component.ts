@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
-import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/common';
+import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';

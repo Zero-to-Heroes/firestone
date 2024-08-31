@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsGame, BgsNextOpponentOverviewPanel, BgsPanel } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsGame, BgsNextOpponentOverviewPanel, BgsPanel } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { LogsUploaderService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';

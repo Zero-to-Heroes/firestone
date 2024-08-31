@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsPlayer, BgsTriple } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsPlayer, BgsTriple } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

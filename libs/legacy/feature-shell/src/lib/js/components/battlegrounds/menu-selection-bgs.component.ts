@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { BgsPanelId } from '@firestone/battlegrounds/common';
+import { BgsPanelId } from '@firestone/battlegrounds/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';

@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -8,7 +9,6 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime } from 'rxjs';
-import { BattlegroundsState } from '../model/battlegrounds-state';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
 @Injectable()

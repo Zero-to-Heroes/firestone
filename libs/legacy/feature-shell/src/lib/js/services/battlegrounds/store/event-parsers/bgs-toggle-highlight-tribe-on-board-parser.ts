@@ -1,5 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from '../events/bgs-toggle-highlight-tribe-on-board-event';
 import { EventParser } from './_event-parser';

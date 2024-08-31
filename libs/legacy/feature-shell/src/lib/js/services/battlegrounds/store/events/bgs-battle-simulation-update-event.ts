@@ -1,4 +1,4 @@
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsBattleSimulationUpdateEvent extends BattlegroundsStoreEvent {

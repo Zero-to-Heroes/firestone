@@ -14,6 +14,7 @@ export * from './in-game/bgs-composition';
 export * from './in-game/bgs-damage';
 export * from './in-game/bgs-next-opponent-overview-panel';
 export * from './in-game/bgs-opponent-overview';
+export * from './in-game/bgs-player-match-mmr';
 export * from './in-game/bgs-tavern-upgrade';
 export * from './in-game/bgs-tribe';
 export * from './in-game/bgs-triple';

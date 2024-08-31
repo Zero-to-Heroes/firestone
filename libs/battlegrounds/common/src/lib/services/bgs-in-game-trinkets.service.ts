@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { BgsTrinketStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, CardType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
+import { BgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
 import { CardOption, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -25,7 +26,6 @@ import {
 	switchMap,
 	tap,
 } from 'rxjs';
-import { BgsTrinketCardChoiceOption } from '../model/trinkets-in-game';
 import { BgsStateFacadeService } from './bgs-state-facade.service';
 import { BattlegroundsTrinketsService } from './bgs-trinkets.service';
 

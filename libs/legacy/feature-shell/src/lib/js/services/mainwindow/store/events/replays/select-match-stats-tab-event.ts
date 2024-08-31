@@ -1,4 +1,4 @@
-import { BgsStatsFilterId } from '@firestone/battlegrounds/common';
+import { BgsStatsFilterId } from '@firestone/battlegrounds/core';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class SelectMatchStatsTabEvent implements MainWindowStoreEvent {

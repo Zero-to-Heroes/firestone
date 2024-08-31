@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BgsQuestStat } from '@firestone/battlegrounds/common';
+import { BgsQuestStat } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { OutcomeSamples, SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/simulator';
+import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
 import { BugReportService, Preferences } from '@firestone/shared/common/service';
 import { sumOnArray } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

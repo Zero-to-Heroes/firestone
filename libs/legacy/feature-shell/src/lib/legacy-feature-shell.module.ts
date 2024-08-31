@@ -433,7 +433,6 @@ import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/st
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
-import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
 import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
 import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
 import { ControlCloseComponent } from '@components/controls/control-close.component';
@@ -493,7 +492,6 @@ import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battl
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
 import { BattlegroundsTrinketTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-trinket-type-filter-dropdown.component';
-import { BgsTrinketsComponent } from '@components/battlegrounds/in-game/bgs-trinkets.component';
 import { BattlegroundsMinionItemComponent } from '@components/battlegrounds/minions-tiers/bgs-minion-item.component';
 import { BattlegroundsMinionsHighlightButtonsComponent } from '@components/battlegrounds/minions-tiers/minion-highlight-buttons.component';
 import { BattlegroundsMinionsListTiersHeaderComponent } from '@components/battlegrounds/minions-tiers/minions-list-tiers-header.component';
@@ -572,14 +570,16 @@ import { AchievementsDataAccessModule } from '@firestone/achievements/data-acces
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
-import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
+import {
+	BattlegroundsCoreModule,
+	BgsBattleSimulationExecutorService,
+	BgsBattleSimulationMockExecutorService,
+} from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsSimulatorModule,
 	BgsBattlePositioningExecutorService,
 	BgsBattlePositioningMockExecutorService,
-	BgsBattleSimulationExecutorService,
-	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/simulator';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, CollectionCommonModule } from '@firestone/collection/common';
@@ -637,7 +637,6 @@ import { BgsBattleRecapComponent } from './js/components/battlegrounds/battles/b
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesViewComponent } from './js/components/battlegrounds/battles/bgs-battles-view.component';
-import { BgsPlayerCapsuleComponent } from './js/components/battlegrounds/bgs-player-capsule.component';
 import { GraphWithComparisonNewComponent } from './js/components/battlegrounds/graph-with-comparison-new.component';
 import { BgsHeroMiniComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-mini.component';
 import { BgsHeroOverviewComponent } from './js/components/battlegrounds/hero-selection/bgs-hero-overview.component';
@@ -648,10 +647,7 @@ import { BgsHeroTribesComponent } from './js/components/battlegrounds/hero-selec
 import { BgsHeroFaceOffComponent } from './js/components/battlegrounds/in-game/bgs-hero-face-off.component';
 import { BgsHeroFaceOffsComponent } from './js/components/battlegrounds/in-game/bgs-hero-face-offs.component';
 import { BgsNextOpponentOverviewComponent } from './js/components/battlegrounds/in-game/bgs-next-opponent-overview.component';
-import { BgsOpponentOverviewBigComponent } from './js/components/battlegrounds/in-game/bgs-opponent-overview-big.component';
 import { BgsOpponentOverviewComponent } from './js/components/battlegrounds/in-game/bgs-opponent-overview.component';
-import { BgsQuestRewardsComponent } from './js/components/battlegrounds/in-game/bgs-quest-rewards.component';
-import { BgsTriplesComponent } from './js/components/battlegrounds/in-game/bgs-triples.component';
 import { MinionIconComponent } from './js/components/battlegrounds/minion-icon.component';
 import { BattlegroundsMinionsTiersViewOverlayComponent } from './js/components/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { BattlegroundsMinionsGroupComponent } from './js/components/battlegrounds/minions-tiers/bgs-minions-group.component';
@@ -692,7 +688,6 @@ import { DecktrackerWidgetIconComponent } from './js/components/decktracker/over
 import { DeckTrackerWinrateRecapComponent } from './js/components/decktracker/overlay/decktracker-winrate-recap.component';
 import { GroupedDeckListComponent } from './js/components/decktracker/overlay/grouped-deck-list.component';
 import { LeaderboardEmptyCardComponent } from './js/components/decktracker/overlay/twitch/leaderboard-empty-card.component';
-import { TwitchBgsHeroOverviewComponent } from './js/components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { FilterComponent } from './js/components/filter.component';
 import { FsFilterDropdownComponent } from './js/components/fs-filter-dropdown.component';
 import { HotkeyComponent } from './js/components/hotkey.component';
@@ -1008,8 +1003,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckListStaticComponent,
 		DkRunesComponent,
 
-		BgsOpponentOverviewBigComponent,
-		BgsTriplesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,
@@ -1017,7 +1010,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStrategyTipsTooltipComponent,
 		BgsHeroStatsComponent,
-		BgsPlayerCapsuleComponent,
 		BgsPostMatchStatsComponent,
 		BgsPostMatchStatsTabsComponent,
 		BgsPostMatchStatsRecapComponent,
@@ -1030,10 +1022,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsNextOpponentOverviewComponent,
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
-		BgsQuestRewardsComponent,
-		BgsTrinketsComponent,
 		BgsStrategyCurveComponent,
-		BgsBuddiesComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
@@ -1117,15 +1106,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckZoneComponent,
 		DeckListStaticComponent,
 
-		BgsOpponentOverviewBigComponent,
-		BgsTriplesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,
 		BgsHeroMiniComponent,
 		BgsHeroStrategyTipsTooltipComponent,
 		BgsHeroStatsComponent,
-		BgsPlayerCapsuleComponent,
 		BgsPostMatchStatsComponent,
 		BgsPostMatchStatsTabsComponent,
 		BgsPostMatchStatsRecapComponent,
@@ -1735,7 +1721,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		// Twitch
 		LeaderboardEmptyCardComponent,
-		TwitchBgsHeroOverviewComponent,
 		BattlegroundsMinionsTiersTwitchOverlayComponent,
 		DeckTrackerOverlayContainerComponent,
 		DeckTrackerOverlayStandaloneComponent,
@@ -1743,7 +1728,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		EmptyCardComponent,
 		LeaderboardEmptyCardComponent,
 		StateMouseOverComponent,
-		TwitchBgsHeroOverviewComponent,
 		TwitchConfigWidgetComponent,
 	],
 	providers: [

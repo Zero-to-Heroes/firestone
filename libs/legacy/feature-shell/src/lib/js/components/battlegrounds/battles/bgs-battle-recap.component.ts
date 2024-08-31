@@ -1,7 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsCardTooltipComponent, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsCardTooltipComponent, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BattleRecapPlayer } from './bgs-battle-recap-player.component';

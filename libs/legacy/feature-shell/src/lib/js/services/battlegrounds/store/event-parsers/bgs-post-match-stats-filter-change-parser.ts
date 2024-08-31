@@ -1,9 +1,4 @@
-import {
-	BattlegroundsState,
-	BgsPanel,
-	BgsPostMatchStatsPanel,
-	BgsStatsFilterId,
-} from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsPanel, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsPostMatchStatsFilterChangeEvent } from '../events/bgs-post-match-stats-filter-change-event';

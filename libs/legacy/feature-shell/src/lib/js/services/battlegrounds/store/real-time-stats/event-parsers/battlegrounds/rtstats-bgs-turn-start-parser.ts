@@ -1,4 +1,4 @@
-import { HpTurnInfo, RealTimeStatsState } from '@firestone/battlegrounds/common';
+import { HpTurnInfo, RealTimeStatsState } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { EventParser } from '../_event-parser';

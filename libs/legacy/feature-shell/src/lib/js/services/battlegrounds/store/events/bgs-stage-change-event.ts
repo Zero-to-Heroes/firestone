@@ -1,4 +1,4 @@
-import { BgsPanelId } from '@firestone/battlegrounds/common';
+import { BgsPanelId } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsStageChangeEvent extends BattlegroundsStoreEvent {

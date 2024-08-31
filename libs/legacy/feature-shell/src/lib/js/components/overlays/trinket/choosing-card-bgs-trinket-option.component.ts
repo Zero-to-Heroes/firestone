@@ -8,7 +8,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsTrinketCardChoiceOption, DAILY_FREE_USES_TRINKETS } from '@firestone/battlegrounds/common';
+import { DAILY_FREE_USES_TRINKETS } from '@firestone/battlegrounds/common';
+import { BgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
 import { buildColor } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

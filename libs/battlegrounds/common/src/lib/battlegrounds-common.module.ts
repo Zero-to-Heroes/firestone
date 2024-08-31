@@ -13,8 +13,13 @@ import { StatsCommonModule } from '@firestone/stats/common';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboards.component';
 import { BgsBoardComponent } from './components/bgs-board.component';
-import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
+import { BgsBuddiesComponent } from './components/bgs-buddies.component';
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
+import { BgsOpponentOverviewBigComponent } from './components/bgs-opponent-overview-big.component';
+import { BgsPlayerCapsuleComponent } from './components/bgs-player-capsule.component';
+import { BgsQuestRewardsComponent } from './components/bgs-quest-rewards.component';
+import { BgsTrinketsComponent } from './components/bgs-trinkets.component';
+import { BgsTriplesComponent } from './components/bgs-triples.component';
 import { BattlegroundsMetaStatsQuestsComponent } from './components/quests/battlegrounds-meta-stats-quests.component';
 import { BgsQuestStatsInfoPremiumComponent } from './components/quests/bgs-quest-stats-info-premium.component';
 import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
@@ -40,11 +45,16 @@ const components = [
 	BgsQuestStatsInfoPremiumComponent,
 	BgsLeaderboardsComponent,
 	BgsHeroStatsInfoPremiumComponent,
-	BgsCardTooltipComponent,
 	BgsBoardComponent,
 	BgsTrinketStatsInfoPremiumComponent,
 	BattlegroundsMetaStatsQuestsComponent,
 	BattlegroundsMetaStatsTrinketsComponent,
+	BgsTriplesComponent,
+	BgsBuddiesComponent,
+	BgsQuestRewardsComponent,
+	BgsTrinketsComponent,
+	BgsOpponentOverviewBigComponent,
+	BgsPlayerCapsuleComponent,
 ];
 
 @NgModule({

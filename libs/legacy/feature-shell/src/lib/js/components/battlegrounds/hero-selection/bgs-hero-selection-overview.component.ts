@@ -1,12 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
-	BgsHeroSelectionOverviewPanel,
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
-	Config,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
+import { BgsHeroSelectionOverviewPanel, Config } from '@firestone/battlegrounds/core';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';

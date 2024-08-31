@@ -1,4 +1,4 @@
-import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
+import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/core';
 import { GameStat } from '@firestone/stats/data-access';
 
 export class MatchDetail {

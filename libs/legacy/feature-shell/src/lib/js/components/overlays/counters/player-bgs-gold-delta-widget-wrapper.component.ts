@@ -7,7 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { getGoldFromCardId } from '@components/game-counters/definitions/bgs-delta-gold-counter';
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';

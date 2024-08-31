@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsTriple } from '@firestone/battlegrounds/common';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { groupByFunction } from '../../../services/utils';
+import { BgsTriple } from '@firestone/battlegrounds/core';
+import { groupByFunction } from '@firestone/shared/framework/common';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-triples',
-	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-triples.component.scss`],
+	styleUrls: [`./bgs-triples.component.scss`],
 	template: `
 		<div class="triples-section">
 			<div
 				class="title"
 				*ngIf="tierTriples?.length"
-				[owTranslate]="'battlegrounds.in-game.opponents.triple-title'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.triple-title'"
 			></div>
 			<div class="triple-tiers" *ngIf="tierTriples?.length">
 				<div
@@ -29,7 +29,7 @@ import { groupByFunction } from '../../../services/utils';
 			<div
 				class="subtitle empty"
 				*ngIf="!tierTriples?.length"
-				[owTranslate]="'battlegrounds.in-game.opponents.triple-empty-state'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.triple-empty-state'"
 			></div>
 		</div>
 	`,
@@ -81,5 +81,5 @@ export class BgsTriplesComponent {
 		});
 	}
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }

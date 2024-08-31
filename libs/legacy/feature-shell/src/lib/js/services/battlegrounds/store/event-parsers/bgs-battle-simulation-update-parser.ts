@@ -1,9 +1,4 @@
-import {
-	BattlegroundsState,
-	BgsBattlesPanel,
-	BgsFaceOffWithSimulation,
-	BgsPanel,
-} from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsBattlesPanel, BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/core';
 import * as deepmerge from 'deepmerge';
 import { replaceInArray } from '../../../utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

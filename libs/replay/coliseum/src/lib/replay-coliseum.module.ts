@@ -185,7 +185,7 @@ import { Events } from './services/events.service';
 		CardElementResizeDirective,
 		TransitionGroupItemDirective,
 	],
-	exports: [ColiseumComponent],
+	exports: [ColiseumComponent, CardStatsComponent, TavernLevelIconComponent],
 	providers: [Events, ColiseumDebugService],
 })
 export class ReplayColiseumModule {}

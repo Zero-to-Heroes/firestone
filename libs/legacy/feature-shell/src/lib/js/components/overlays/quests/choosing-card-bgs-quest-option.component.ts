@@ -8,7 +8,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsQuestCardChoiceOption, DAILY_FREE_USES_HERO, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { DAILY_FREE_USES_HERO, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';

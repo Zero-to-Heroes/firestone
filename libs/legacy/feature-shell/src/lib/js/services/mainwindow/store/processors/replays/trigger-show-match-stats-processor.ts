@@ -1,4 +1,4 @@
-import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/common';
+import { BgsPostMatchStatsPanel } from '@firestone/battlegrounds/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';

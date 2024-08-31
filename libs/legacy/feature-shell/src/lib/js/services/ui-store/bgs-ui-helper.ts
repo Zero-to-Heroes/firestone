@@ -1,5 +1,5 @@
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { BgsQuestStat } from '@firestone/battlegrounds/common';
+import { BgsQuestStat } from '@firestone/battlegrounds/core';
 import { BgsActiveTimeFilterType, BgsHeroTier } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { PatchInfo } from '@firestone/shared/common/service';

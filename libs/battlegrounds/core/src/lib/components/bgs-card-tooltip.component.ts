@@ -9,7 +9,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 	template: `
 		<div class="container" [ngClass]="{ hidden: !_visible }">
 			<img [src]="image" class="card" />
-			<card-stats [cardId]="cardId" [attack]="attack" [health]="health" [autoFontResize]="false"> </card-stats>
+			<card-stats [cardId]="cardId" [attack]="attack" [health]="health"> </card-stats>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -6,7 +6,7 @@ import {
 	BgsTavernUpgrade,
 	BgsTriple,
 	QuestReward,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 
 export interface TwitchBgsState {
 	readonly leaderboard: readonly TwitchBgsPlayer[];

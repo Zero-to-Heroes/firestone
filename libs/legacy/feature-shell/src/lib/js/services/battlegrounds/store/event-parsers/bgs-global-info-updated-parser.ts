@@ -7,7 +7,7 @@ import {
 	BgsPanel,
 	BgsPlayer,
 	BgsPostMatchStatsPanel,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 import { MemoryBgGame, MemoryBgPlayer } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { normalizeHeroCardId } from '../../bgs-utils';

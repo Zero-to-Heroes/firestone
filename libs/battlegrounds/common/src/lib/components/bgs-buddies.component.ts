@@ -1,14 +1,15 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'bgs-buddies',
-	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-buddies.component.scss`],
+	styleUrls: [`./bgs-buddies.component.scss`],
 	template: `
 		<div class="buddies-container">
 			<div
 				class="title"
-				[owTranslate]="'battlegrounds.in-game.opponents.buddies-title'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.buddies-title'"
 				*ngIf="_buddies?.length"
 			></div>
 			<div class="buddies" *ngIf="_buddies?.length">
@@ -20,7 +21,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div
 				class="subtitle"
 				*ngIf="!_buddies?.length"
-				[owTranslate]="'battlegrounds.in-game.opponents.buddies-empty-state'"
+				[fsTranslate]="'battlegrounds.in-game.opponents.buddies-empty-state'"
 			></div>
 		</div>
 	`,
@@ -57,7 +58,7 @@ export class BgsBuddiesComponent {
 		return index;
 	}
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }
 
 interface Buddy {

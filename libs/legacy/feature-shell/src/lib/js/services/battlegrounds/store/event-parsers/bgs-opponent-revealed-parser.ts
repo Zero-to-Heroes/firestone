@@ -5,7 +5,7 @@ import {
 	isBaconGhost,
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
-import { BattlegroundsState, BgsGame, BgsPlayer } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, BgsGame, BgsPlayer } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsOpponentRevealedEvent } from '../events/bgs-opponent-revealed-event';

@@ -1,13 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import {
-	BattlegroundsState,
 	BgsMatchMemoryInfoService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
+} from '@firestone/battlegrounds/common';
+import {
+	BattlegroundsState,
+	BgsBattleSimulationService,
 	PlayerBoard,
 	RealTimeStatsState,
-} from '@firestone/battlegrounds/common';
-import { BgsBattleSimulationService } from '@firestone/battlegrounds/simulator';
+} from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import {

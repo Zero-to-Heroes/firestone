@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { QuestReward } from '@firestone/battlegrounds/common';
+import { QuestReward } from '@firestone/battlegrounds/core';
 
 @Component({
 	selector: 'bgs-hero-short-recap',

@@ -7,7 +7,7 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsBattlesPanel, BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/common';
+import { BgsBattlesPanel, BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/core';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';

@@ -5,7 +5,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 @Component({
 	selector: 'current-session-bgs-board-tooltip',
 	styleUrls: [
-		`../../battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
+		// `../../battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
 		`../../../../css/component/overlays/session/current-session-bgs-board-tooltip.component.scss`,
 	],
 	template: `

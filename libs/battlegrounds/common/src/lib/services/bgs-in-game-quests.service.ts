@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, SceneMode, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
 import { CardOption, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -23,7 +24,6 @@ import {
 	switchMap,
 	tap,
 } from 'rxjs';
-import { BgsQuestCardChoiceOption } from '../model/quests-in-game';
 import { BG_USE_QUESTS } from './bgs-in-game-quests-guardian.service';
 import { BattlegroundsQuestsService } from './bgs-quests.service';
 import { BgsStateFacadeService } from './bgs-state-facade.service';

@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { BgsHeroStatsV2, MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { Config } from '@firestone/battlegrounds/core';
 import {
 	BgsMetaHeroStatTierItem,
 	BgsMetaHeroStatsAccessService,
@@ -16,7 +17,6 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs';
-import { Config } from '../model/_barrel';
 import { DEFAULT_MMR_PERCENTILE } from './bgs-player-hero-stats.service';
 
 @Injectable()

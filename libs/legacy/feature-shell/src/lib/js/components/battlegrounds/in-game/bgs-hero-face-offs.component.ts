@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsNextOpponentOverviewPanel, BgsPlayer, BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';

@@ -15,7 +15,7 @@ import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
 import { DuelsDeckSummary } from '@firestone/duels/general';

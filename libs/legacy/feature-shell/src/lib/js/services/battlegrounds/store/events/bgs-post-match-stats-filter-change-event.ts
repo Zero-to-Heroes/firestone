@@ -1,4 +1,4 @@
-import { BgsStatsFilterId } from '@firestone/battlegrounds/common';
+import { BgsStatsFilterId } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsPostMatchStatsFilterChangeEvent extends BattlegroundsStoreEvent {

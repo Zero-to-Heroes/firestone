@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {
-	BattlegroundsSimulatorModule,
-	BgsBattlePositioningExecutorService,
-	BgsBattleSimulationExecutorService,
-} from '@firestone/battlegrounds/simulator';
+import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
+import { BattlegroundsSimulatorModule, BgsBattlePositioningExecutorService } from '@firestone/battlegrounds/simulator';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';

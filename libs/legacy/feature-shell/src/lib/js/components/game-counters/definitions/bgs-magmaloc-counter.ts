@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BattlegroundsState, NumericTurnInfo } from '@firestone/battlegrounds/common';
+import { BattlegroundsState, NumericTurnInfo } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

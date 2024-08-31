@@ -1,5 +1,5 @@
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
-import { BgsPostMatchStats } from '@firestone/battlegrounds/common';
+import { BgsPostMatchStats } from '@firestone/battlegrounds/core';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsGameEndEvent extends BattlegroundsStoreEvent {

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsQuestStat } from '@firestone/battlegrounds/common';
+import { BgsQuestStat } from '@firestone/battlegrounds/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({

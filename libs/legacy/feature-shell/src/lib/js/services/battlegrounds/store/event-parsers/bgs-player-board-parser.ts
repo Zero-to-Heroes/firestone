@@ -7,13 +7,13 @@ import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
 import {
 	BattlegroundsState,
+	BgsBattleSimulationService,
 	BgsBoard,
 	BgsGame,
 	BgsPlayer,
 	PlayerBoard,
 	PlayerBoardEntity,
-} from '@firestone/battlegrounds/common';
-import { BgsBattleSimulationService } from '@firestone/battlegrounds/simulator';
+} from '@firestone/battlegrounds/core';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

@@ -9,7 +9,7 @@ import {
 	BgsNextOpponentOverviewPanel,
 	BgsPanel,
 	BgsPostMatchStatsPanel,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GameStateService } from '../../../decktracker/game-state.service';

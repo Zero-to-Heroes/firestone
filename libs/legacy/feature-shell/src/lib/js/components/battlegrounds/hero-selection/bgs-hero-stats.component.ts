@@ -1,6 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsPlayerHeroStatsService, BgsQuestStat } from '@firestone/battlegrounds/common';
+import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import { BgsQuestStat } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,

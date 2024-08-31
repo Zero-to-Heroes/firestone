@@ -16,14 +16,13 @@ import {
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/common';
+import { BgsBattleSimulationService, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { PermutationResult, ProcessingStatus } from '../services/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningService } from '../services/bgs-battle-positioning.service';
-import { BgsBattleSimulationService } from '../services/bgs-battle-simulation.service';
 import {
 	BgsSimulatorControllerService,
 	HeroChangeRequest,

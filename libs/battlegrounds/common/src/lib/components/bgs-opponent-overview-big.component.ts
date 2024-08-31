@@ -6,7 +6,7 @@ import {
 	BgsTavernUpgrade,
 	BgsTriple,
 	QuestReward,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -47,7 +47,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 						<div
 							class="label"
-							[owTranslate]="'battlegrounds.battle.turn'"
+							[fsTranslate]="'battlegrounds.battle.turn'"
 							[translateParams]="{ value: upgrade.turn }"
 						></div>
 					</div>
@@ -55,7 +55,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 				<div
 					class="tavern-upgrades empty"
 					*ngIf="!tavernUpgrades?.length"
-					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
+					[fsTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
 				></div>
 			</div>
 		</bgs-player-capsule>
@@ -97,8 +97,8 @@ export class BgsOpponentOverviewBigComponent {
 			return;
 		}
 
-		this.boardMinions = value.getLastKnownBoardStateAsReplayEntities();
-		this.boardTurn = value.getLastBoardStateTurn();
+		this.boardMinions = value.getLastKnownBoardStateAsReplayEntities() ?? [];
+		this.boardTurn = value.getLastBoardStateTurn() ?? 0;
 		this.triples = value.tripleHistory;
 		this.questRewards = value.questRewards;
 		this.trinkets = [];

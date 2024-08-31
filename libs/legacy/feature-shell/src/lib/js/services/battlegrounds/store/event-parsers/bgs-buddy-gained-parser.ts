@@ -1,5 +1,5 @@
 import { isBaconGhost, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/common';
+import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { GameEvents } from '../../../game-events.service';
