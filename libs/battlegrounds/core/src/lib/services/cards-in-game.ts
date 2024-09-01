@@ -28,7 +28,7 @@ export const getAllCardsInGame = (
 		.getCards()
 		.filter(
 			(card) =>
-				card.techLevel ||
+				(card.techLevel && card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET]) ||
 				(hasTrinkets &&
 					card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
 					// Manual exclusions
