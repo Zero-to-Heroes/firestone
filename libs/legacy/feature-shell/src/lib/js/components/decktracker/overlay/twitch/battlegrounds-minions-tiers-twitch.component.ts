@@ -10,8 +10,18 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, CardType, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { Tier, buildTiers, getAllCardsInGame, getBuddy } from '@firestone/battlegrounds/core';
+import { CardIds, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import {
+	MinionInfo,
+	Tier,
+	buildTiers,
+	enhanceTiers,
+	getActualTribes,
+	getAllCardsInGame,
+	getBuddy,
+} from '@firestone/battlegrounds/core';
+import { GameState } from '@firestone/game-state';
+import { deepEqual } from '@firestone/shared/framework/common';
 import {
 	CardRulesService,
 	CardsFacadeService,
@@ -19,7 +29,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
-import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, from, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-twitch',
@@ -101,9 +111,19 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set gameMode(value: GameType) {
 		this.gameMode$$.next(value);
 	}
+	@Input() set playerTrinkets(value: readonly string[]) {
+		this.playerTrinkets$$.next(value);
+	}
+	@Input() set gameState(value: GameState) {
+		this.gameState$$.next(value);
+	}
+	@Input() set currentTavernTier(value: number) {
+		this.currentTavernTier$$.next(value);
+	}
 
 	private availableRaces$$ = new BehaviorSubject<readonly Race[]>([]);
 	private currentTurn$$ = new BehaviorSubject<number>(null);
+	private currentTavernTier$$ = new BehaviorSubject<number>(null);
 	private hasBuddies$$ = new BehaviorSubject<boolean>(false);
 	private hasSpells$$ = new BehaviorSubject<boolean>(false);
 	private hasPrizes$$ = new BehaviorSubject<boolean>(false);
@@ -111,6 +131,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private anomalies$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerCardId$$ = new BehaviorSubject<string>(null);
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
+	private playerTrinkets$$ = new BehaviorSubject<readonly string[]>([]);
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTribeTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
@@ -118,6 +139,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(true);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
+	private gameState$$ = new BehaviorSubject<GameState>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -134,7 +156,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.cardRules);
 
-		this.tiers$ = combineLatest([
+		const cardRules = await this.cardRules.rules$$.getValueWithInit();
+
+		const staticTiers$ = combineLatest([
 			this.availableRaces$$,
 			this.hasBuddies$$,
 			this.hasSpells$$,
@@ -150,7 +174,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.includeTrinketsInTribeGroups$$,
 			this.gameMode$$,
-			this.cardRules.rules$$,
+			this.playerTrinkets$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -169,7 +193,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					bgsGroupMinionsIntoTheirTribeGroup,
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
-					cardRules,
+					playerTrinkets,
 				]) => {
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
@@ -184,14 +208,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						this.allCards,
 						cardRules,
 					);
-					console.debug(
-						'trinkets in game',
-						hasTrinkets,
-						cardsInGame.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]),
-						this.allCards
-							.getCards()
-							.filter((c) => c.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]),
-					);
+					console.debug('card rules', cardRules);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
 						cardsToIncludes,
@@ -209,17 +226,58 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						hasSpells,
 						true,
 						hasTrinkets,
-						[],
+						playerTrinkets,
 						cardRules,
 						this.i18n,
 						this.allCards,
 					);
 					console.debug('built tiers', result);
-					// TODO: filter to show locked trinkets
 					return result;
 				},
 			),
 		);
+
+		const boardComposition$: Observable<readonly MinionInfo[]> = combineLatest([
+			this.gameState$$,
+			this.playerTrinkets$$,
+		]).pipe(
+			this.mapData(([gameState, trinkets]) => {
+				const allEntities = [...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])];
+				const composition = allEntities.map((e) => {
+					const result: MinionInfo = {
+						cardId: e.cardId,
+						tavernTier: this.allCards.getCard(e.cardId).techLevel,
+						tribes: getActualTribes(this.allCards.getCard(e.cardId), false, trinkets),
+					};
+					return result;
+				});
+				return composition;
+			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			takeUntil(this.destroyed$),
+		);
+
+		this.tiers$ = combineLatest([
+			staticTiers$,
+			this.playerCardId$$,
+			boardComposition$,
+			this.currentTavernTier$$,
+		]).pipe(
+			this.mapData(([tiers, rawPlayerCardId, boardComposition, tavernLevel]) => {
+				console.debug('[tiers] updating tiers');
+				const playerCardId = normalizeHeroCardId(rawPlayerCardId, this.allCards);
+				return enhanceTiers(
+					tiers,
+					playerCardId,
+					boardComposition,
+					tavernLevel,
+					cardRules,
+					this.allCards,
+					this.i18n,
+				);
+			}),
+		);
+
 		this.currentTurn$ = this.currentTurn$$.asObservable().pipe(this.mapData((currentTurn) => currentTurn));
 		this.showGoldenCards$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsListGoldenCards),

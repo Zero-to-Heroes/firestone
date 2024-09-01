@@ -23,8 +23,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
-// import fullState from './game-states/bgs-trinkets.json';
-import fullState from './game-states/constructed.json';
+import fullState from './game-states/bgs-trinkets.json';
+// import fullState from './game-states/constructed.json';
 import { TwitchCardsFacadeManagerService } from './twitch-cards-facade-manager.service';
 import { TwitchLocalizationManagerService } from './twitch-localization-manager.service';
 
@@ -66,11 +66,13 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					*ngIf="bgsState?.inGame && (showMinionsList$ | async)"
 					[availableRaces]="bgsState.availableRaces"
 					[currentTurn]="bgsState.currentTurn"
+					[currentTavernTier]="getCurrentTavernTier(bgsState)"
 					[hasBuddies]="bgsState.config?.hasBuddies"
 					[hasSpells]="bgsState.config?.hasSpells"
 					[hasTrinkets]="bgsState.config?.hasTrinkets"
 					[anomalies]="bgsState.config?.anomalies"
 					[playerCardId]="getMainPlayerCardId(bgsState)"
+					[playerTrinkets]="getMainPlayerTrinkets(bgsState)"
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
 					[showTribeTiers]="showTribeTiers$ | async"
 					[showTierSeven]="showTierSeven$ | async"
@@ -78,6 +80,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 					[includeTrinketsInTribeGroups]="true"
 					[gameMode]="gameMode$ | async"
+					[gameState]="gameState"
 				></battlegrounds-minions-tiers-twitch>
 			</ng-container>
 			<twitch-config-widget></twitch-config-widget>
@@ -224,8 +227,20 @@ export class DeckTrackerOverlayContainerComponent
 		}
 	}
 
+	getCurrentTavernTier(bgsState: TwitchBgsState): number {
+		const history = bgsState.leaderboard?.find((p) => p.isMainPlayer)?.tavernUpgradeHistory;
+		return history?.length ? history[history.length - 1].tavernTier : 1;
+	}
+
 	getMainPlayerCardId(bgsState: TwitchBgsState): string {
 		return bgsState.leaderboard?.find((p) => p.isMainPlayer)?.cardId;
+	}
+
+	getMainPlayerTrinkets(bgsState: TwitchBgsState): readonly string[] {
+		return [
+			bgsState.leaderboard?.find((p) => p.isMainPlayer)?.lesserTrinket,
+			bgsState.leaderboard?.find((p) => p.isMainPlayer)?.greaterTrinket,
+		].filter((t) => !!t);
 	}
 
 	getAllPlayerCardIds(bgsState: TwitchBgsState): readonly string[] {
