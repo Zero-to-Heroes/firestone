@@ -121,8 +121,19 @@ empty-card {
 		position: absolute;
 		width: 30vh;
 		height: 69%;
-		left: 20%;
+		left: 29%;
 		display: flex;
+		flex-direction: row-reverse;
+
+		.trinket {
+			aspect-ratio: 1;
+			height: 10vh;
+			width: auto;
+
+			&.lesser {
+				margin-top: auto;
+			}
+		}
 	}
 
 	.weapon {
@@ -177,9 +188,17 @@ empty-card {
 	top: 8%;
 
 	.trinkets {
-		top: auto;
-		bottom: 0%;
-		left: 25%;
+		top: 20%;
+		bottom: auto;
+
+		.trinket.lesser {
+			margin-bottom: auto;
+			margin-top: 0;
+		}
+		.trinket.greater {
+			margin-top: auto;
+			margin-bottom: 0;
+		}
 	}
 
 	.weapon {
@@ -213,7 +232,6 @@ empty-card {
 	}
 
 	.trinkets {
-		left: 25%;
 		bottom: 16%;
 		top: auto;
 	}

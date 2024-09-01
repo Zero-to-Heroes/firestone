@@ -6,6 +6,7 @@ import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-acc
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { MemoryModule } from '@firestone/memory';
+import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
@@ -63,6 +64,7 @@ const components = [
 
 		VirtualScrollerModule,
 
+		ReplayColiseumModule,
 		ColiseumComponentsModule,
 
 		SharedFrameworkCommonModule,

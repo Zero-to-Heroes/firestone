@@ -67,17 +67,19 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 			<ul class="hero top-hero">
 				<div class="trinkets" *ngIf="bgsHasTrinkets">
 					<empty-card
-						class="lesser"
+						class="trinket lesser"
 						[cardId]="topHeroLesserTrinketCard"
 						[cardTooltipPosition]="'right'"
+						[cardTooltipBgs]="isBgs"
 					></empty-card>
 					<empty-card
-						class="greater"
+						class="trinket greater"
 						[cardId]="topHeroGreaterTrinketCard"
 						[cardTooltipPosition]="'right'"
+						[cardTooltipBgs]="isBgs"
 					></empty-card>
 				</div>
-				<div class="weapon">
+				<div class="weapon" *ngIf="!bgsHasTrinkets">
 					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
 				</div>
 				<div class="secrets">
@@ -117,17 +119,19 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 			<ul class="hero bottom-hero">
 				<div class="trinkets" *ngIf="bgsHasTrinkets">
 					<empty-card
-						class="lesser"
+						class="trinket lesser"
 						[cardId]="bottomHeroLesserTrinketCard"
+						[cardTooltipBgs]="isBgs"
 						[cardTooltipPosition]="'left'"
 					></empty-card>
 					<empty-card
-						class="greater"
+						class="trinket greater"
 						[cardId]="bottomHeroGreaterTrinketCard"
+						[cardTooltipBgs]="isBgs"
 						[cardTooltipPosition]="'left'"
 					></empty-card>
 				</div>
-				<div class="weapon">
+				<div class="weapon" *ngIf="!bgsHasTrinkets">
 					<empty-card
 						[cardId]="bottomWeaponCard"
 						[cardTooltipPosition]="'left'"
@@ -188,6 +192,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 	}
 
 	@Input() set bgsState(value: TwitchBgsState) {
+		console.debug('setting bgState', value);
 		this.bgsState$$.next(value);
 	}
 
@@ -278,14 +283,22 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 					!!this.bgsPlayers?.length &&
 					this._bgsState?.inGame &&
 					!this._bgsState?.gameEnded;
-				this.bgsHasTrinkets = this.bgsState?.config?.hasTrinkets;
+				this.bgsHasTrinkets = bgsState?.config?.hasTrinkets;
+				console.debug('hasTrinkets', this.bgsHasTrinkets, bgsState);
 
 				const mainPlayerBgsInfo = this.isBgs ? this.bgsPlayers.find((player) => player.isMainPlayer) : null;
 				const currentOpponentBgsInfo = this.isBgs
 					? // TODO: won't work with scenarios where multiple players are the same hero
 					  this.bgsPlayers.find((player) => player.cardId === gameState.opponentDeck?.hero?.cardId)
 					: null;
-				this.isBgs && console.debug('BG players infos', mainPlayerBgsInfo, currentOpponentBgsInfo);
+				this.isBgs &&
+					console.debug(
+						'trinket BG players infos',
+						mainPlayerBgsInfo,
+						currentOpponentBgsInfo,
+						this.bgsPlayers,
+						gameState.opponentDeck,
+					);
 
 				this.topHeroPowerCard = this._gameState?.opponentDeck?.heroPower?.cardId;
 				this.topWeaponCard = this._gameState?.opponentDeck?.weapon?.cardId;
@@ -304,6 +317,13 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 				this.bottomHeroCard = this._gameState?.playerDeck?.hero?.cardId;
 				this.bottomHeroLesserTrinketCard = mainPlayerBgsInfo?.lesserTrinket;
 				this.bottomHeroGreaterTrinketCard = mainPlayerBgsInfo?.greaterTrinket;
+				console.debug(
+					'trinkets',
+					this.topHeroLesserTrinketCard,
+					this.topHeroGreaterTrinketCard,
+					this.bottomHeroLesserTrinketCard,
+					this.bottomHeroGreaterTrinketCard,
+				);
 				this.constructedAnomaly = this._gameState?.matchInfo?.anomalies?.[0];
 				this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
 					cardsInDeck: this._gameState?.playerDeck?.deck?.length ?? 0,

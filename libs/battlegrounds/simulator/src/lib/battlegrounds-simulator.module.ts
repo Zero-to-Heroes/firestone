@@ -8,6 +8,7 @@ import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
+import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -55,6 +56,7 @@ const components = [
 
 		InlineSVGModule.forRoot(),
 
+		ReplayColiseumModule,
 		ColiseumComponentsModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,

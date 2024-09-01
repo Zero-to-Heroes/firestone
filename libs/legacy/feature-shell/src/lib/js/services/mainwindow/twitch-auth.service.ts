@@ -238,6 +238,7 @@ export class TwitchAuthService {
 				otherZone: this.cleanZone(newOther, isBattlegrounds),
 				heroPower: this.cleanCard(deckState.heroPower, isBattlegrounds),
 				weapon: this.cleanCard(deckState.weapon, isBattlegrounds),
+				hero: { ...deckState.hero },
 			} as DeckState;
 		}
 		const result = {
