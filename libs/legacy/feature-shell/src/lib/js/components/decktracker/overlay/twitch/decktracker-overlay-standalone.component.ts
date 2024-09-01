@@ -48,6 +48,7 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 							[showRelatedCards]="showRelatedCards$ | async"
 							[colorManaCost]="colorManaCost$ | async"
 							[darkenUsedCards]="true"
+							[showTotalCardsInZone]="true"
 							[side]="'player'"
 						>
 						</decktracker-deck-list>
