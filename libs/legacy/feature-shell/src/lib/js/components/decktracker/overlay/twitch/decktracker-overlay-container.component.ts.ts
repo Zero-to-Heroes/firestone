@@ -323,7 +323,7 @@ export class DeckTrackerOverlayContainerComponent
 			return;
 		}
 
-		this.gameState = (fullState as any).deck;
+		this.gameState = this.enrichGameState((fullState as any).deck);
 		this.bgsState = (fullState as any).bgs;
 		this.showDecktracker =
 			!!this.gameState &&

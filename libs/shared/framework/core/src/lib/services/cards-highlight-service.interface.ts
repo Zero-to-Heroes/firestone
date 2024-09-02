@@ -13,4 +13,9 @@ export interface ICardsHighlightService {
 		card?: any /*DeckCard*/,
 	): readonly { cardId: string; playTiming: number }[];
 	onMouseLeave(cardId: string);
+	getCardsForTooltip(
+		cardId: string,
+		side: 'player' | 'opponent' | 'duels',
+		card?: any /*DeckCard*/,
+	): readonly { cardId: string; playTiming: number }[];
 }

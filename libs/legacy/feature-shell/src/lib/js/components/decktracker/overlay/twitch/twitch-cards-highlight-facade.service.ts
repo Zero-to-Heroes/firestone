@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeckCard } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
 import {
 	Handler,
 	SelectorOptions,
@@ -8,7 +8,7 @@ import {
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Injectable()
-export class TwitchCardsHighlightFacadeService {
+export class TwitchCardsHighlightFacadeService implements ICardsHighlightService {
 	constructor(private readonly ow: OverwolfService, private readonly service: CardsHighlightStandaloneService) {}
 
 	public async init(options?: SelectorOptions) {
@@ -45,5 +45,13 @@ export class TwitchCardsHighlightFacadeService {
 
 	onMouseLeave(cardId: string) {
 		this.service.onMouseLeave(cardId);
+	}
+
+	getCardsForTooltip(
+		cardId: string,
+		side: 'player' | 'opponent' | 'duels',
+		card?: DeckCard,
+	): readonly { cardId: string; playTiming: number }[] {
+		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
 	}
 }
