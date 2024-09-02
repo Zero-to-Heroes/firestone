@@ -339,8 +339,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						const rawImpact = !!cardData?.inHandAfterMulligan
 							? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate
 							: null;
-						const rawKeepRate = !!cardData?.inHandAfterMulligan
-							? cardData?.keptInMulligan / cardData.inHandAfterMulligan
+						const rawKeepRate = !!cardData?.drawnBeforeMulligan
+							? cardData?.keptInMulligan / cardData.drawnBeforeMulligan
 							: null;
 						const mulliganAdvice: MulliganCardAdvice = {
 							cardId: refCard.id,

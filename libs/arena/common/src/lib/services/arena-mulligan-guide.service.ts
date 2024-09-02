@@ -245,8 +245,8 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 						const rawImpact = stats?.inHandAfterMulligan
 							? stats.inHandAfterMulliganThenWin / stats.inHandAfterMulligan - classWinrate
 							: null;
-						const rawKeepRate = stats?.inHandAfterMulligan
-							? stats?.keptInMulligan / stats.inHandAfterMulligan
+						const rawKeepRate = stats?.drawnBeforeMulligan
+							? stats?.keptInMulligan / stats.drawnBeforeMulligan
 							: null;
 						const mulliganAdvice: MulliganCardAdvice = {
 							cardId: refCard.id,
