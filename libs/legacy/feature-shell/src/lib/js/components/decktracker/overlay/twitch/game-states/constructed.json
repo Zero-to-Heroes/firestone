@@ -3,7 +3,7 @@
 	"deck": {
 		"playerDeck": {
 			"secrets": [],
-			"deckstring": "AAEBAQcI1ASoigT5jASJoASj7wS0+AWQ+wWLlAYLpLYDqbMErbMEjLcEkLcE784EjtQEpeQE8M0FofsF7KkGAAA=",
+			"deckstring": "AAEBAQcI1ASoigSJoASj7wT9xAW0+AWQ+wWLlAYLpLYDqbMErbMEjLcEkLcE784EjtQEpeQE8M0FofsF7KkGAAEDhxf9xAX76AP9xAXHsgT9xAUAAA==",
 			"duelsStartingDeckstring": null,
 			"name": "Dredge",
 			"hero": {
@@ -11,98 +11,86 @@
 				"cardId": "HERO_01h",
 				"name": "Garrosh Hellscream",
 				"playerName": "Daedin",
-				"entityId": 64,
-				"maxHealth": 30,
-				"manaLeft": 0
+				"manaLeft": 0,
+				"entityId": 67,
+				"maxHealth": 30
 			},
 			"cardsLeftInDeck": 25,
 			"totalAttackOnBoard": { "board": 0, "hero": 0 },
 			"heroPower": {
-				"internalEntityId": "e5b9af9d",
+				"internalEntityId": "7d84870f",
 				"cardId": "HERO_01dbp",
-				"entityId": 65,
+				"entityId": 68,
 				"manaCost": 2,
 				"zone": "PLAY"
 			},
 			"weapon": {},
 			"hand": [
-				{ "internalEntityId": "dd6f9757", "cardId": "TSC_909", "manaCost": 2, "entityId": 23, "zone": "HAND" },
 				{
-					"internalEntityId": "e83bbe1d",
-					"cardId": "CORE_EX1_606",
-					"manaCost": 2,
-					"entityId": 12,
-					"zone": "HAND"
-				},
-				{ "internalEntityId": "7cb2ec6c", "cardId": "TSC_942", "manaCost": 2, "entityId": 9, "zone": "HAND" },
-				{ "internalEntityId": "a719e1fe", "cardId": "TID_714", "manaCost": 4, "entityId": 8, "zone": "HAND" }
-			],
-			"board": [
-				{ "internalEntityId": "d19f6d5e", "cardId": "TSC_909", "manaCost": 2, "entityId": 19, "zone": "PLAY" }
-			],
-			"deck": [
-				{ "internalEntityId": "1eee5f6b", "cardId": "YOD_022", "manaCost": 1 },
-				{ "internalEntityId": "001da862", "cardId": "YOD_022", "manaCost": 1 },
-				{ "internalEntityId": "441e07e4", "cardId": "CORE_EX1_410", "manaCost": 1 },
-				{ "internalEntityId": "4a69cec9", "cardId": "REV_338", "manaCost": 1 },
-				{ "internalEntityId": "44a8f4dd", "cardId": "REV_338", "manaCost": 1 },
-				{ "internalEntityId": "9eae5d1e", "cardId": "ETC_355", "manaCost": 1 },
-				{ "internalEntityId": "89352aa5", "cardId": "GIFT_07", "manaCost": 1 },
-				{ "internalEntityId": "2247a3c2", "cardId": "TSC_942", "manaCost": 2 },
-				{ "internalEntityId": "f3a9fb57", "cardId": "CORE_EX1_606", "manaCost": 2 },
-				{ "internalEntityId": "34944a5c", "cardId": "CORE_BT_117", "manaCost": 2 },
-				{ "internalEntityId": "12a2da1e", "cardId": "TTN_469", "manaCost": 2 },
-				{ "internalEntityId": "f7b6cee2", "cardId": "TSC_940", "manaCost": 3 },
-				{ "internalEntityId": "c439858b", "cardId": "TSC_940", "manaCost": 3 },
-				{ "internalEntityId": "10816dca", "cardId": "TSC_911", "manaCost": 4 },
-				{ "internalEntityId": "328483af", "cardId": "TSC_911", "manaCost": 4 },
-				{ "internalEntityId": "3e1c5c91", "cardId": "TTN_467", "manaCost": 4 },
-				{ "internalEntityId": "745fe3ca", "cardId": "CS3_024", "manaCost": 5 },
-				{ "internalEntityId": "31f214bb", "cardId": "YOG_502", "manaCost": 6 },
-				{ "internalEntityId": "72ff490f", "cardId": "AV_108", "manaCost": 10 },
-				{
-					"internalEntityId": "20599804",
+					"internalEntityId": "fe727dc7",
 					"cardId": "ETC_355",
 					"manaCost": 1,
-					"entityId": 29,
+					"entityId": 4,
+					"zone": "HAND",
+					"actualManaCost": 1
+				},
+				{ "internalEntityId": "e0efa130", "cardId": "MAW_032", "manaCost": 3, "entityId": 25, "zone": "HAND" },
+				{
+					"relatedCardIds": ["LOE_079", "BAR_078", "TSC_032"],
+					"internalEntityId": "bc4bab8d",
+					"cardId": "ETC_080",
+					"manaCost": 4,
+					"entityId": 28,
+					"zone": "HAND"
+				},
+				{ "internalEntityId": "981a8dbd", "cardId": "REV_338", "manaCost": 1, "entityId": 8, "zone": "HAND" },
+				{ "internalEntityId": "58777bc6", "cardId": "YOD_022", "manaCost": 1, "entityId": 19, "zone": "HAND" },
+				{ "internalEntityId": "f3c5fc7a", "cardId": "DMF_COIN2", "entityId": 71, "zone": "HAND" }
+			],
+			"board": [],
+			"deck": [
+				{ "internalEntityId": "a75fa8f9", "cardId": "YOD_022", "manaCost": 1 },
+				{ "internalEntityId": "9c7beb86", "cardId": "CORE_EX1_410", "manaCost": 1 },
+				{ "internalEntityId": "43451e7f", "cardId": "REV_338", "manaCost": 1 },
+				{ "internalEntityId": "28d78425", "cardId": "ETC_355", "manaCost": 1 },
+				{ "internalEntityId": "6149d5af", "cardId": "GIFT_07", "manaCost": 1 },
+				{ "internalEntityId": "76dffa88", "cardId": "EX1_402", "manaCost": 2 },
+				{ "internalEntityId": "b510881d", "cardId": "TSC_909", "manaCost": 2 },
+				{ "internalEntityId": "ad048f98", "cardId": "TSC_909", "manaCost": 2 },
+				{ "internalEntityId": "50c2848b", "cardId": "TSC_942", "manaCost": 2 },
+				{ "internalEntityId": "ec786617", "cardId": "TSC_942", "manaCost": 2 },
+				{ "internalEntityId": "e27369a5", "cardId": "CORE_EX1_606", "manaCost": 2 },
+				{ "internalEntityId": "0e455ac0", "cardId": "CORE_EX1_606", "manaCost": 2 },
+				{ "internalEntityId": "53613b82", "cardId": "CORE_BT_117", "manaCost": 2 },
+				{ "internalEntityId": "680b64da", "cardId": "TSC_940", "manaCost": 3 },
+				{ "internalEntityId": "3d76a7d6", "cardId": "TSC_940", "manaCost": 3 },
+				{ "internalEntityId": "cd327250", "cardId": "TSC_911", "manaCost": 4 },
+				{ "internalEntityId": "75a5f5f7", "cardId": "TSC_911", "manaCost": 4 },
+				{ "internalEntityId": "3192cef7", "cardId": "TID_714", "manaCost": 4 },
+				{ "internalEntityId": "f38e81c9", "cardId": "TID_714", "manaCost": 4 },
+				{ "internalEntityId": "c3bb79c7", "cardId": "TTN_467", "manaCost": 4 },
+				{ "internalEntityId": "9f36d008", "cardId": "CS3_024", "manaCost": 5 },
+				{ "internalEntityId": "46b7d470", "cardId": "YOG_502", "manaCost": 6 },
+				{
+					"internalEntityId": "0dcad295",
+					"cardId": "GIFT_07",
+					"manaCost": 1,
+					"entityId": 11,
 					"actualManaCost": 1
 				},
 				{
-					"internalEntityId": "0d9c0950",
-					"cardId": "TID_714",
-					"manaCost": 4,
-					"entityId": 15,
-					"actualManaCost": 4
-				},
-				{
-					"internalEntityId": "3bf1b977",
-					"cardId": "EX1_402",
+					"internalEntityId": "d13abd0b",
+					"cardId": "TTN_469",
 					"manaCost": 2,
-					"entityId": 22,
+					"entityId": 17,
 					"actualManaCost": 2
 				},
 				{
-					"internalEntityId": "d1df7dba",
-					"cardId": "MAW_032",
-					"manaCost": 3,
-					"positionFromBottom": 13,
-					"entityId": 30
-				},
-				{
-					"internalEntityId": "a46de299",
-					"cardId": "GIFT_07",
-					"manaCost": 1,
-					"positionFromBottom": 15,
-					"entityId": 6
-				},
-				{
-					"linkedEntityIds": [30, 11, 6],
-					"internalEntityId": "48a17ad3",
+					"internalEntityId": "ed8f20d8",
 					"cardId": "TTN_469",
 					"manaCost": 2,
-					"positionFromTop": 25,
-					"dredged": true,
-					"entityId": 11
+					"entityId": 24,
+					"actualManaCost": 2
 				}
 			],
 			"otherZone": [],
@@ -133,82 +121,76 @@
 				{ "cardId": "TSC_911", "manaCost": 4 },
 				{ "cardId": "TID_714", "manaCost": 4 },
 				{ "cardId": "TID_714", "manaCost": 4 },
+				{ "cardId": "ETC_080", "manaCost": 4 },
 				{ "cardId": "TTN_467", "manaCost": 4 },
 				{ "cardId": "CS3_024", "manaCost": 5 },
-				{ "cardId": "YOG_502", "manaCost": 6 },
-				{ "cardId": "AV_108", "manaCost": 10 }
-			]
+				{ "cardId": "YOG_502", "manaCost": 6 }
+			],
+			"sideboards": [{ "keyCardId": "ETC_080", "cards": ["LOE_079", "BAR_078", "TSC_032"] }]
 		},
 		"opponentDeck": {
 			"secrets": [],
 			"duelsStartingDeckstring": null,
 			"hero": {
-				"classes": [3],
+				"classes": [8],
 				"playerName": "The Innkeeper",
-				"cardId": "HERO_05",
+				"cardId": "HERO_02",
 				"manaLeft": 0,
-				"entityId": 66,
+				"entityId": 69,
 				"maxHealth": 30
 			},
-			"cardsLeftInDeck": 25,
+			"cardsLeftInDeck": 26,
 			"totalAttackOnBoard": { "board": 1, "hero": 0 },
 			"heroPower": {
-				"internalEntityId": "4bf5de6d",
-				"cardId": "HERO_05bp",
-				"entityId": 67,
+				"internalEntityId": "5bc9c56e",
+				"cardId": "HERO_02bp",
+				"entityId": 70,
 				"manaCost": 2,
 				"zone": "PLAY"
 			},
 			"weapon": {},
 			"hand": [
-				{ "internalEntityId": "6e09cde8", "entityId": 40, "zone": "HAND" },
-				{ "internalEntityId": "d36c3e6d", "entityId": 35, "zone": "HAND" },
-				{ "internalEntityId": "094bdbee", "entityId": 50, "zone": "HAND" },
-				{
-					"internalEntityId": "f5ae3f6e",
-					"cardId": "GAME_005",
-					"entityId": 68,
-					"creatorCardId": "GAME_005",
-					"zone": "HAND"
-				},
-				{ "internalEntityId": "a8c0c7e5", "entityId": 60, "zone": "HAND" }
+				{ "internalEntityId": "9eb89096", "entityId": 49, "zone": "HAND" },
+				{ "internalEntityId": "131153dc", "entityId": 43, "zone": "HAND" },
+				{ "internalEntityId": "9f6d9d5f", "entityId": 66, "zone": "HAND" }
 			],
 			"board": [
-				{ "internalEntityId": "85f09878", "entityId": 57, "cardId": "CS2_171", "manaCost": 1, "zone": "PLAY" }
+				{ "internalEntityId": "3fd48e0f", "entityId": 63, "cardId": "CS2_171", "manaCost": 1, "zone": "PLAY" }
 			],
 			"deck": [
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" },
-				{ "internalEntityId": "ed043e4a" }
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" },
+				{ "internalEntityId": "a9d86d5b" }
 			],
 			"otherZone": [],
 			"deckList": []
 		},
 		"mulliganOver": true,
-		"metadata": { "gameType": 1, "formatType": 1, "scenarioId": 256 },
-		"currentTurn": 2,
+		"metadata": { "gameType": 1, "formatType": 1, "scenarioId": 263 },
+		"currentTurn": 1,
 		"gameTagTurnNumber": 0,
 		"gameStarted": true,
 		"matchInfo": { "anomalies": [] }

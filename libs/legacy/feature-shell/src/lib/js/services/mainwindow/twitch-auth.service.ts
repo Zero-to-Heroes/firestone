@@ -12,7 +12,7 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
+import { deepEqual, NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	TwitchBgsBoard,
@@ -23,7 +23,7 @@ import {
 } from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { deflate, inflate } from 'pako';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { delay, distinctUntilChanged, filter, map, sampleTime, take } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 
@@ -241,7 +241,7 @@ export class TwitchAuthService {
 				hero: { ...deckState.hero },
 			} as DeckState;
 		}
-		const result = {
+		const result: Partial<NonFunctionProperties<DeckState>> = {
 			// ...deckState,
 			secrets: deckState.secrets,
 			deckstring: deckState.deckstring,
@@ -259,6 +259,7 @@ export class TwitchAuthService {
 			deckList: deckState.deckList?.map(
 				(c) => ({ cardId: c.cardId, manaCost: c.manaCost } as DeckCard),
 			) as readonly DeckCard[],
+			sideboards: deckState.sideboards,
 		};
 		return result as DeckState;
 	}
