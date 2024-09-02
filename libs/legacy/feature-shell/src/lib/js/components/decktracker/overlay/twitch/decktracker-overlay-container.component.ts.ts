@@ -18,6 +18,7 @@ import {
 	TwitchBgsState,
 	TwitchEvent,
 	TwitchPreferencesService,
+	TwitchStreamerConfig,
 } from '@firestone/twitch/common';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -54,6 +55,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 				></state-mouse-over>
 				<decktracker-overlay-standalone
 					class="player"
+					[ngClass]="{ reversed: invertTrackedPosition }"
 					*ngIf="showDecktracker"
 					[gameState]="gameState"
 					[side]="'player'"
@@ -61,6 +63,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 				</decktracker-overlay-standalone>
 				<decktracker-overlay-standalone
 					class="opponent"
+					[ngClass]="{ reversed: invertTrackedPosition }"
 					*ngIf="showDecktracker && (showOpponentTracker$ | async)"
 					[gameState]="gameState"
 					[side]="'opponent'"
@@ -128,6 +131,7 @@ export class DeckTrackerOverlayContainerComponent
 	// Streamer settings
 	horizontalOffset: number;
 	magnifierIconOnTop: null | '' | 'top' | 'bottom';
+	invertTrackedPosition: boolean | undefined | null;
 
 	private twitch;
 	private token: string;
@@ -227,10 +231,11 @@ export class DeckTrackerOverlayContainerComponent
 				window.location.search,
 			);
 			if (this.twitch.configuration.broadcaster) {
-				const config = JSON.parse(this.twitch.configuration.broadcaster.content);
+				const config: TwitchStreamerConfig = JSON.parse(this.twitch.configuration.broadcaster.content);
 				console.log('config', config);
 				this.horizontalOffset = config?.horizontalOffset;
 				this.magnifierIconOnTop = config?.magnifierIconOnTop;
+				this.invertTrackedPosition = config?.invertTrackedPosition;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

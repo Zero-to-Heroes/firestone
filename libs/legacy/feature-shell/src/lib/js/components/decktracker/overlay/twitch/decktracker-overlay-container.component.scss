@@ -36,10 +36,18 @@
 		&.player {
 			right: 0;
 			top: 0;
+			&.reversed {
+				left: 0;
+				top: 0;
+			}
 		}
 		&.opponent {
 			left: 0;
 			top: 0;
+			&.reversed {
+				right: 0;
+				top: 0;
+			}
 		}
 	}
 
