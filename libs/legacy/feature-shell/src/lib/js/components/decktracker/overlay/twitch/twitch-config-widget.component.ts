@@ -91,6 +91,12 @@ import { DropdownOption } from '../../../settings/dropdown.component';
 							[value]="prefs.decktrackerColorManaCost"
 							(valueChanged)="onDecktrackerColorManaCostChanged(prefs, $event)"
 						></checkbox>
+						<checkbox
+							class="item"
+							[label]="'twitch.show-opponent-tracker' | owTranslate"
+							[value]="prefs.decktrackerShowOpponentTracker"
+							(valueChanged)="onDecktrackerShowOpponentTrackerChanged(prefs, $event)"
+						></checkbox>
 					</div>
 				</section>
 				<section class="battlegrounds">
@@ -388,6 +394,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onDecktrackerColorManaCostChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, decktrackerColorManaCost: value };
 		console.log('changing decktrackerColorManaCost pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onDecktrackerShowOpponentTrackerChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, decktrackerShowOpponentTracker: value };
+		console.log('changing decktrackerShowOpponentTracker pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

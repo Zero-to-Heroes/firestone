@@ -52,7 +52,19 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[overlayLeftOffset]="horizontalOffset"
 					[magnifierIconOnTop]="magnifierIconOnTop"
 				></state-mouse-over>
-				<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
+				<decktracker-overlay-standalone
+					class="player"
+					*ngIf="showDecktracker"
+					[gameState]="gameState"
+					[side]="'player'"
+				>
+				</decktracker-overlay-standalone>
+				<decktracker-overlay-standalone
+					class="opponent"
+					*ngIf="showDecktracker && (showOpponentTracker$ | async)"
+					[gameState]="gameState"
+					[side]="'opponent'"
+				>
 				</decktracker-overlay-standalone>
 				<bgs-simulation-overlay-standalone
 					*ngIf="bgsState?.inGame && (showBattleSimulator$ | async)"
@@ -100,6 +112,7 @@ export class DeckTrackerOverlayContainerComponent
 	showTribeTiers$: Observable<boolean>;
 	showTierSeven$: Observable<boolean>;
 	showTrinkets$: Observable<boolean>;
+	showOpponentTracker$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
 	gameMode$: Observable<GameType>;
 
@@ -160,6 +173,9 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.showTrinkets$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowTrinkets),
+		);
+		this.showOpponentTracker$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.decktrackerShowOpponentTracker),
 		);
 		this.groupMinionsIntoTheirTribeGroup$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsGroupMinionsIntoTheirTribeGroup),

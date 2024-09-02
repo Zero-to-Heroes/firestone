@@ -31,6 +31,16 @@
 	decktracker-overlay-standalone {
 		z-index: 3;
 		max-height: 98%;
+		position: absolute;
+
+		&.player {
+			right: 0;
+			top: 0;
+		}
+		&.opponent {
+			left: 0;
+			top: 0;
+		}
 	}
 
 	bgs-simulation-overlay-standalone {

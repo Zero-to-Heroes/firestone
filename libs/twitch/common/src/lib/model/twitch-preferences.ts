@@ -12,6 +12,7 @@ export class TwitchPreferences {
 	readonly decktrackerColorManaCost: boolean = true;
 
 	readonly decktrackerOpen: boolean = true;
+	readonly decktrackerShowOpponentTracker: boolean = false;
 	readonly magnifierIconOnTop: boolean = false;
 	readonly hideBattleOddsInCombat: 'auto' | 'true' | 'false' = 'auto';
 	readonly hideBattleOddsInTavern: 'auto' | 'true' | 'false' = 'auto';

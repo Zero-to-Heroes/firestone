@@ -41,6 +41,7 @@
 		width: 12px;
 		height: 6px;
 		margin-right: 8px;
+		display: flex;
 
 		&.close {
 			transform: scale(1, -1);

@@ -5,9 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	Input,
-	Output,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -15,7 +13,7 @@ import { DeckState, GameState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService } from '@firestone/twitch/common';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, filter, Observable, takeUntil } from 'rxjs';
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Component({
@@ -51,7 +49,7 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 							[showTotalCardsInZone]="true"
 							[showBottomCardsSeparately]="true"
 							[showTopCardsSeparately]="true"
-							[side]="'player'"
+							[side]="side$ | async"
 						>
 						</decktracker-deck-list>
 					</div>
@@ -65,22 +63,18 @@ export class DeckTrackerOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit, AfterViewInit
 {
-	@Output() dragStart = new EventEmitter<void>();
-	@Output() dragEnd = new EventEmitter<void>();
-
 	displayMode$: Observable<'DISPLAY_MODE_ZONE' | 'DISPLAY_MODE_GROUPED'>;
 	showRelatedCards$ = new Observable<boolean>();
 	showTracker$: Observable<boolean>;
 	colorManaCost$: Observable<boolean>;
+	side$: Observable<'player' | 'opponent'>;
+
+	@Input() set side(value: 'player' | 'opponent') {
+		this.side$$.next(value);
+	}
 
 	@Input() set gameState(value: GameState) {
-		this.playerDeck = value?.playerDeck;
-		this.gameState$$.next(
-			GameState.create({
-				...value,
-				playerDeck: this.playerDeck,
-			}),
-		);
+		this.gameState$$.next(value);
 	}
 
 	playerDeck: DeckState;
@@ -88,6 +82,7 @@ export class DeckTrackerOverlayStandaloneComponent
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameState$$ = new BehaviorSubject<GameState>(null);
+	private side$$ = new BehaviorSubject<'player' | 'opponent'>('player');
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -101,6 +96,19 @@ export class DeckTrackerOverlayStandaloneComponent
 	}
 
 	ngAfterContentInit() {
+		combineLatest([this.gameState$$, this.side$$])
+			.pipe(
+				filter(([gameState, side]) => !!gameState && !!side),
+				debounceTime(100),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([gameState, side]) => {
+				this.playerDeck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+		this.side$ = this.side$$.asObservable();
 		this.displayMode$ = this.prefs.prefs
 			.asObservable()
 			.pipe(this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')));
@@ -122,49 +130,11 @@ export class DeckTrackerOverlayStandaloneComponent
 
 	private keepOverlayInBounds() {
 		return;
-		// setTimeout(() => {
-		// 	try {
-		// 		// Move the tracker so that it doesn't go over the edges
-		// 		const rect = this.el.nativeElement.querySelector('.scalable').getBoundingClientRect();
-		// 		const parentRect = this.el.nativeElement.parentNode.getBoundingClientRect();
-		// 		// Get current transform values
-		// 		const transform = window.getComputedStyle(this.el.nativeElement.querySelector('.root')).transform;
-		// 		const matrix = new DOMMatrix(transform);
-		// 		const matrixCurrentLeftMove = matrix.m41;
-		// 		const matrixCurrentTopMove = matrix.m42;
-		// 		let newTranslateLeft = matrixCurrentLeftMove;
-		// 		let newTranslateTop = matrixCurrentTopMove;
-		// 		if (rect.left < 0) {
-		// 			// We move it so that the left is 0
-		// 			const amountToMove = Math.abs(rect.left);
-		// 			newTranslateLeft = matrixCurrentLeftMove + amountToMove;
-		// 		} else if (rect.right > parentRect.right) {
-		// 			const amountToMove = rect.right - parentRect.right;
-		// 			newTranslateLeft = matrixCurrentLeftMove - amountToMove;
-		// 		}
-		// 		if (rect.top < 0) {
-		// 			const amountToMove = Math.abs(rect.top);
-		// 			newTranslateTop = matrixCurrentTopMove + amountToMove;
-		// 		} else if (rect.bottom > parentRect.bottom) {
-		// 			const amountToMove = rect.bottom - parentRect.bottom;
-		// 			newTranslateTop = matrixCurrentTopMove - amountToMove;
-		// 		}
-		// 		const newTransform = `translate3d(${newTranslateLeft}px, ${newTranslateTop}px, 0px)`;
-		// 		this.renderer.setStyle(this.el.nativeElement.querySelector('.root'), 'transform', newTransform);
-		// 	} catch (e) {
-		// 		// Usually happens in edge where DOMMatrix is not defined
-		// 		console.warn('Exception while keeping overlay in bounds', e);
-		// 	}
-		// 	// this.cdr.detectChanges();
-		// });
 	}
 
 	startDragging() {
 		this.tooltipPosition = 'none';
 		this.dragging = true;
-
-		// this.events.broadcast(Events.HIDE_TOOLTIP);
-		this.dragStart.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -172,8 +142,6 @@ export class DeckTrackerOverlayStandaloneComponent
 
 	async stopDragging() {
 		this.dragging = false;
-
-		this.dragEnd.next();
 		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
