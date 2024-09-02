@@ -141,7 +141,7 @@ export class BattlegroundsStoreService {
 	private battlegroundsHotkeyListener;
 	private realTimeStatsListener: (state: RealTimeStatsState) => void;
 
-	private duoPendingBoards: any[] = [];
+	private duoPendingBoards: { playerBoard: PlayerBoard; opponentBoard: PlayerBoard }[] = [];
 	// private teammateBoard: MemoryBgsPlayerInfo;
 	private playerBoard: PlayerBoard;
 
@@ -453,6 +453,7 @@ export class BattlegroundsStoreService {
 						playerId: gameEvent.additionalData.playerBoard.playerId,
 						board: gameEvent.additionalData.playerBoard.board,
 						secrets: gameEvent.additionalData.playerBoard.secrets,
+						trinkets: gameEvent.additionalData.playerBoard.trinkets,
 						hand: gameEvent.additionalData.playerBoard.hand,
 						hero: gameEvent.additionalData.playerBoard.hero,
 						heroPowerCardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
@@ -469,6 +470,7 @@ export class BattlegroundsStoreService {
 						playerId: gameEvent.additionalData.opponentBoard.playerId,
 						board: gameEvent.additionalData.opponentBoard.board,
 						secrets: gameEvent.additionalData.opponentBoard.secrets,
+						trinkets: gameEvent.additionalData.opponentBoard.trinkets,
 						hand: gameEvent.additionalData.opponentBoard.hand,
 						hero: gameEvent.additionalData.opponentBoard.hero,
 						heroPowerCardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
