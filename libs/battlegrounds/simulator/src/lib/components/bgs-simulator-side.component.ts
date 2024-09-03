@@ -55,7 +55,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 					cdkDropListOrientation="horizontal"
 					[cdkDropListData]="i"
 					(cdkDropListDropped)="drop($event)"
-					cachedComponentTooltip
+					componentTooltip
 					[componentType]="componentType"
 					[componentInput]="entity"
 					[componentTooltipPosition]="'right'"
