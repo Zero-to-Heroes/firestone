@@ -755,6 +755,8 @@ export class MainWindowStoreService {
 					this.i18n,
 					this.battlegroundsNavigation,
 					this.mainNavigation,
+					this.ow,
+					this.prefs,
 				),
 			],
 			[

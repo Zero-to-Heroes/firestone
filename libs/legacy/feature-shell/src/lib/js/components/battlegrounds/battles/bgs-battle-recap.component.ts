@@ -24,6 +24,7 @@ import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 				<div class="result {{ result }}" *ngIf="result">{{ i18nResult }}</div>
 			</div>
 			<div class="battle-content">
+				<div class="background" [helpTooltip]="'battlegrounds.battle.import-tooltip' | fsTranslate"></div>
 				<div class="team">
 					<bgs-battle-recap-player [player]="player"></bgs-battle-recap-player>
 					<bgs-battle-recap-player *ngIf="playerTeammate" [player]="playerTeammate"></bgs-battle-recap-player>

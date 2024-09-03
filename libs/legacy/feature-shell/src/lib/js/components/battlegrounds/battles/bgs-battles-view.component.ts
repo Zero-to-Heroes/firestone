@@ -39,7 +39,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						<bgs-battle-recap
 							*ngFor="let faceOff of faceOffs; trackBy: trackByFn"
 							[faceOff]="faceOff"
-							[selectable]="canSelectBattle"
+							[selectable]="true || canSelectBattle"
 							(click)="selectBattle(faceOff)"
 							[ngClass]="{
 								highlighted: selectedFaceOff?.id && faceOff.id === selectedFaceOff.id
@@ -92,8 +92,9 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-main-window' });
 			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		} else {
+			console.debug('selecting battle', faceOff);
 			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-bg-window' });
-			// this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
+			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		}
 	}
 
