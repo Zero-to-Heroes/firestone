@@ -48,7 +48,6 @@ export class BgsBattleRecapComponent {
 		if (!value) {
 			return;
 		}
-		console.debug('setting faceOff', value);
 		this.turnNumber = value.turn;
 		this.result = value.result;
 		this.i18nResult = value.result
@@ -87,7 +86,6 @@ export class BgsBattleRecapComponent {
 					board: opponentTeammateBattleInfo,
 			  }
 			: null;
-		console.debug('set sides', this.player, this.opponent, this.playerTeammate, this.opponentTeammate);
 
 		this.battle = value;
 	}

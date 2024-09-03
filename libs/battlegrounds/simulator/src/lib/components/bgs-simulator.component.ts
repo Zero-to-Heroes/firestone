@@ -130,7 +130,6 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		this.initialBattle = this.controller.initBattleWithSideEffects(value);
-		console.debug('setting faceOff', value, this.initialBattle);
 	}
 
 	tooltip: string | null;
