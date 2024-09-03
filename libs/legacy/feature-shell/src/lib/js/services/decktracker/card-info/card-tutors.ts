@@ -238,4 +238,5 @@ export const tutors = [
 	CardIds.Wrathion_CFM_806,
 	CardIds.Buttons_VAC_437,
 	CardIds.TortollanTraveler_VAC_518,
+	CardIds.WatercolorArtist_TOY_376,
 ];

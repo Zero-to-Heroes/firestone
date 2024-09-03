@@ -305,6 +305,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, outcast);
 		case CardIds.BladeOfTheBurningSun:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.Blazecaller:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.BlindeyeSharpshooter_WW_402:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), naga),
@@ -793,6 +795,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.FirekeepersIdolTavernBrawl:
 			return and(side(inputSide), spell, fire);
+		case CardIds.FirePlumeHarbinger:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.FirePlumesHeart:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.FiremancerFlurgl:
@@ -966,7 +970,7 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, weapon),
 			);
 		case CardIds.Gyreworm:
-			return and(side(inputSide), spell, elemental);
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.HabeasCorpses:
 			return and(side(inputSide), inGraveyard, minion);
 		case CardIds.HagathasEmbrace:
