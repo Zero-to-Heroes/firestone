@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "13.21.8",
+	"version": "13.21.9",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -86,10 +86,12 @@
 		"immutable": "^4.1.0",
 		"jsonwebtoken": "^9.0.0",
 		"jszip": "^3.10.1",
+		"marked": "^4.3.0",
 		"ng-inline-svg-2": "^15.0.0",
 		"ng-select": "^1.0.2",
 		"ng2-charts": "^4.0.1",
 		"ngx-color-picker": "^14.0.0",
+		"ngx-markdown": "^15.1.2",
 		"ngx-scrollbar": "^10.0.1",
 		"ngx-virtual-scroller": "^4.0.3",
 		"pako": "1.0.11",
