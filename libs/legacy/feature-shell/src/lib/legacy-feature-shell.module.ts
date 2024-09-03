@@ -715,7 +715,6 @@ import { WindowWrapperComponent } from './js/components/window-wrapper.component
 import { ActiveThemeDirective } from './js/directives/active-theme.directive';
 import { AskConfirmationDirective } from './js/directives/ask-confirmation.directive';
 import { BindCssVariableDirective } from './js/directives/bind-css-variable-directive';
-import { ComponentTooltipDirective } from './js/directives/component-tooltip.directive';
 import { DoubleClickDirective } from './js/directives/exclusive-double-click.directive';
 import { GrowOnClickDirective } from './js/directives/grow-on-click.directive';
 import { NgxCacheIfDirective } from './js/directives/ngx-cache-if.directive';
@@ -960,7 +959,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		ConfirmationComponent,
 
-		ComponentTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
@@ -1067,7 +1065,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		ConfirmationComponent,
 
-		ComponentTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,

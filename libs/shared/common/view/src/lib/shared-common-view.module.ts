@@ -27,6 +27,7 @@ import { BuffInfoComponent } from './components/tooltip/buff-info.component';
 import { CachedComponentTooltipDirective } from './components/tooltip/cached-component-tooltip.directive';
 import { CardTooltipComponent } from './components/tooltip/card-tooltip.component';
 import { CardTooltipDirective } from './components/tooltip/card-tooltip.directive';
+import { ComponentTooltipDirective } from './components/tooltip/component-tooltip.directive';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
 import { ShortDatePipe } from './pipes/short-date.pipe';
@@ -37,6 +38,7 @@ const components = [
 	CardTooltipDirective,
 	HelpTooltipDirective,
 	HelpTooltipComponent,
+	ComponentTooltipDirective,
 	CachedComponentTooltipDirective,
 	CardTileComponent,
 	CopyDesckstringComponent,

@@ -18,6 +18,7 @@ export * from './lib/components/tooltip/cached-component-tooltip.directive';
 export * from './lib/components/tooltip/card-tooltip-position.type';
 export * from './lib/components/tooltip/card-tooltip.component';
 export * from './lib/components/tooltip/card-tooltip.directive';
+export * from './lib/components/tooltip/component-tooltip.directive';
 export * from './lib/components/tooltip/help-tooltip.component';
 export * from './lib/components/tooltip/help-tooltip.directive';
 export * from './lib/pipes/short-date.pipe';

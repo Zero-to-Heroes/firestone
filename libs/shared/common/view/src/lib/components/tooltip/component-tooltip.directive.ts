@@ -59,6 +59,13 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input() componentTooltipAllowMouseOver = false;
 	@Input() componentTooltipAutoHide = true;
 
+	@Input() set componentTooltipForceHide(value: boolean) {
+		this.forceHide = value;
+		if (this.forceHide) {
+			this.onMouseLeave(null);
+		}
+	}
+
 	private _position:
 		| 'bottom'
 		| 'right'
@@ -73,6 +80,9 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private positionStrategy: PositionStrategy;
 
 	private tooltipLeaveSub: Subscription;
+
+	private forceHide: boolean;
+	private hideTimeout;
 
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
@@ -128,8 +138,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		this.tooltipLeaveSub?.unsubscribe();
 	}
 
-	private hideTimeout;
-
 	@HostListener('mouseenter')
 	onMouseEnter() {
 		if (!this._componentInput) {
@@ -139,10 +147,14 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		if (this.overlayRef.hasAttached()) {
 			return;
 		}
+		if (this.forceHide) {
+			return;
+		}
 
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
+		console.debug('attaching tooltip', this._componentInput);
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(this._componentType);
 
@@ -156,6 +168,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 				this.onMouseLeave(leave),
 			);
 		}
+		tooltipRef.instance.visible = true;
 
 		this.positionStrategy.apply();
 
