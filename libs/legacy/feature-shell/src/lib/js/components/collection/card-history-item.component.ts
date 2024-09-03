@@ -99,7 +99,7 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 					dbCard.rarity || 'free'
 				}.png`;
 
-				const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
+				const name = dbCard?.name;
 				this.cardType = cardPremiumToCardType(history.premium);
 				this.cardName = history.premium
 					? this.i18n.translateString(`app.collection.card-history.${this.cardType.toLowerCase()}-card`, {

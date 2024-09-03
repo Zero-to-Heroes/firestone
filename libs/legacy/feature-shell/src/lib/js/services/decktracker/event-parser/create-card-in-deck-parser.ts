@@ -189,7 +189,7 @@ export class CreateCardInDeckParser implements EventParser {
 		if (creatorCardId) {
 			return this.i18n.getCreatedByCardName(creatorCardId);
 		}
-		return this.i18n.getUnknownCardName();
+		return null;
 	}
 }
 
