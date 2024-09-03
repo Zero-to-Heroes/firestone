@@ -61,8 +61,13 @@ export class CardBackToDeckParser implements EventParser {
 		// the enchantments, cost reduction, etc.
 		const refCard = this.allCards.getCard(card.cardId);
 		const cardWithInfoReset = card?.update({
-			manaCost: refCard?.cost ?? card?.manaCost,
-			actualManaCost: refCard?.cost ?? card?.manaCost,
+			// Otherwise the cost goes back to 0
+			manaCost:
+				(card.cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330) ? card.manaCost : refCard?.cost) ??
+				card?.manaCost,
+			actualManaCost:
+				(card.cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330) ? card.manaCost : refCard?.cost) ??
+				card?.manaCost,
 			buffCardIds: [],
 			buffingEntityCardIds: [],
 			entityId: Math.abs(card.entityId),
@@ -82,6 +87,7 @@ export class CardBackToDeckParser implements EventParser {
 			temporaryCard: false,
 			zone: undefined,
 		} as DeckCard);
+		console.debug('[card-back-to-deck] cardWithoutInfluence', cardWithoutInfluence, cardWithInfoReset);
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
 		});
