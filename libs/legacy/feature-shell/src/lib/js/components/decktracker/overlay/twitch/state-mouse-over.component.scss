@@ -7,13 +7,221 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	pointer-events: none;
 }
 
 .state-mouse-over {
 	height: 100%;
 	aspect-ratio: 16/9;
 	position: relative;
+}
+
+.absolute-positioned {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+
+	& > * {
+		pointer-events: all;
+	}
+}
+
+.player-areas {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	display: grid;
+	grid-template-rows: minmax(0, 12fr) minmax(0, 14fr);
+
+	.player-area {
+		position: relative;
+		display: grid;
+
+		&.top {
+			grid-template-rows: minmax(0, 6fr) minmax(0, 12fr) minmax(0, 11fr);
+		}
+		&.bottom {
+			grid-template-rows: minmax(0, 11fr) minmax(0, 12fr) minmax(0, 9fr);
+		}
+	}
+
+	.board {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		empty-card {
+			margin-left: 1%;
+			width: 6.3%;
+		}
+	}
+
+	.hero-container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.trinkets {
+			position: absolute;
+			width: 20vh;
+			height: 84%;
+			left: 36.5%;
+			display: flex;
+			flex-direction: row-reverse;
+
+			.trinket {
+				aspect-ratio: 1;
+				height: 10vh;
+				width: auto;
+			}
+		}
+
+		.weapon {
+			position: absolute;
+			width: 15vh;
+			height: 69%;
+			left: 35.5%;
+		}
+
+		.hero-power {
+			position: absolute;
+			width: 15vh;
+			height: 69%;
+			left: 55%;
+		}
+
+		.hero {
+			position: absolute;
+			width: 15vh;
+			height: 70%;
+			left: 46%;
+
+			empty-card {
+				width: 100%;
+			}
+		}
+
+		.secrets {
+			position: absolute;
+			width: 17vh;
+			height: 85%;
+			left: 45.5%;
+			z-index: 1;
+
+			::ng-deep .secret {
+				.card {
+					width: 25%;
+					height: 25%;
+					position: relative;
+					display: flex;
+				}
+			}
+		}
+	}
+
+	.hand {
+		position: relative;
+	}
+}
+
+.player-area.top {
+	.hand {
+	}
+
+	.hero-container {
+		.trinkets {
+			top: 6%;
+			bottom: auto;
+
+			.trinket.lesser {
+				margin-bottom: auto;
+				margin-top: 0;
+			}
+			.trinket.greater {
+				margin-top: auto;
+				margin-bottom: 0;
+			}
+		}
+
+		.weapon {
+			top: auto;
+			bottom: 0%;
+			left: 37%;
+		}
+
+		.hero-power {
+			top: auto;
+			bottom: 0%;
+		}
+
+		.secrets {
+			bottom: 5%;
+			top: auto;
+		}
+	}
+
+	.board {
+	}
+}
+
+.player-area.bottom {
+	.board {
+	}
+
+	.hero-container {
+		.hero-power {
+			top: 23%;
+		}
+
+		.trinkets {
+			bottom: -7%;
+			top: auto;
+
+			.trinket.greater {
+				margin-bottom: auto;
+				margin-top: 0;
+			}
+			.trinket.lesser {
+				margin-top: auto;
+				margin-bottom: 0;
+			}
+		}
+
+		.weapon {
+			bottom: 7%;
+			top: auto;
+		}
+
+		.hero {
+			bottom: 0%;
+		}
+	}
+
+	.hand {
+		width: 40%;
+		left: 25%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		// So that it's easier to mouse over the card
+		empty-card {
+			position: absolute;
+			left: 50%;
+			top: 0;
+			// height: 150%;
+		}
+
+		::ng-deep empty-card .card.card.card img {
+			height: 64%;
+		}
+	}
 }
 
 empty-card {
@@ -81,193 +289,17 @@ empty-card {
 
 .constructed-cards-left-in-deck {
 	position: absolute;
-	right: 26vh;
+	right: 19vh;
 	width: 8vh;
 	height: 15vh;
 	pointer-events: all;
 
 	&.player {
-		top: 49vh;
+		top: 52vh;
 	}
 
 	&.opponent {
 		top: 23vh;
-	}
-}
-
-.board {
-	position: absolute;
-	width: 100%;
-	left: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	empty-card {
-		margin-left: 0.5%;
-		width: 6.2%;
-	}
-}
-
-.hero {
-	position: absolute;
-	width: 100%;
-	left: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	.trinkets {
-		position: absolute;
-		width: 30vh;
-		height: 69%;
-		left: 29%;
-		display: flex;
-		flex-direction: row-reverse;
-
-		.trinket {
-			aspect-ratio: 1;
-			height: 10vh;
-			width: auto;
-
-			&.lesser {
-				margin-top: auto;
-			}
-		}
-	}
-
-	.weapon {
-		position: absolute;
-		width: 15vh;
-		height: 69%;
-		left: 35%;
-	}
-
-	.hero-power {
-		position: absolute;
-		width: 15vh;
-		height: 69%;
-		left: 54%;
-	}
-
-	.hero {
-		position: absolute;
-		width: 11vh;
-		height: 65%;
-		left: 47%;
-		bottom: 14%;
-		top: auto;
-
-		empty-card {
-			width: 100%;
-		}
-	}
-
-	.secrets {
-		position: absolute;
-		width: 17vh;
-		height: 100%;
-		left: 45.5%;
-		bottom: 5%;
-		top: auto;
-		z-index: 1;
-
-		::ng-deep .secret {
-			.card {
-				width: 25%;
-				height: 25%;
-				position: relative;
-				display: flex;
-			}
-		}
-	}
-}
-
-.top-hero {
-	height: 19%;
-	top: 8%;
-
-	.trinkets {
-		top: 20%;
-		bottom: auto;
-
-		.trinket.lesser {
-			margin-bottom: auto;
-			margin-top: 0;
-		}
-		.trinket.greater {
-			margin-top: auto;
-			margin-bottom: 0;
-		}
-	}
-
-	.weapon {
-		top: auto;
-		bottom: 0%;
-		left: 37%;
-	}
-
-	.hero-power {
-		top: auto;
-		bottom: 0%;
-	}
-}
-
-.top-board {
-	height: 18%;
-	top: 27%;
-}
-
-.bottom-board {
-	height: 18%;
-	top: 44%;
-}
-
-.bottom-hero {
-	height: 21%;
-	top: 60%;
-
-	.hero-power {
-		top: 14%;
-	}
-
-	.trinkets {
-		bottom: 16%;
-		top: auto;
-	}
-
-	.weapon {
-		left: 36.5%;
-		bottom: 16%;
-		top: auto;
-	}
-
-	.hero {
-		bottom: 30%;
-	}
-}
-
-.bottom-hand {
-	position: absolute;
-	width: 40%;
-	left: 25%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	// Total is not 100% because the overlay doesn't go all the way to the bottom of the screen
-	top: 80%;
-	height: 20%;
-
-	// So that it's easier to mouse over the card
-	empty-card {
-		position: absolute;
-		left: 50%;
-		top: 0;
-		// height: 150%;
-	}
-
-	::ng-deep empty-card .card.card.card img {
-		height: 64%;
 	}
 }
 

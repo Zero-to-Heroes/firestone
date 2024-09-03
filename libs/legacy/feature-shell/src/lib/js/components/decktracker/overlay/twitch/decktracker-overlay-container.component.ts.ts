@@ -17,6 +17,7 @@ import {
 	TwitchBgsCurrentBattle,
 	TwitchBgsState,
 	TwitchEvent,
+	TwitchPreferences,
 	TwitchPreferencesService,
 	TwitchStreamerConfig,
 } from '@firestone/twitch/common';
@@ -155,6 +156,12 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	ngAfterContentInit(): void {
+		// I'm missing a button to restore the tracker here, so at least automatically
+		// restore it upon refresh
+		const prefs = this.prefs.preferences$$.getValue();
+		const newPrefs: TwitchPreferences = { ...prefs, decktrackerOpen: true };
+		this.prefs.savePrefs(newPrefs);
+
 		this.baseInitDone$ = this.baseInitDone$$.asObservable();
 		this.gameMode$ = this.gameMode$$.asObservable();
 		this.showMinionsList$ = from(this.prefs.prefs.asObservable()).pipe(
@@ -195,10 +202,6 @@ export class DeckTrackerOverlayContainerComponent
 			return;
 		}
 
-		await this.localizationManager.init();
-		await this.allCardsManager.isReady();
-		this.baseInitDone$$.next(true);
-
 		this.twitch = (window as any).Twitch.ext;
 		this.twitch.onAuthorized(async (auth) => {
 			console.log('on authorized', auth);
@@ -209,6 +212,24 @@ export class DeckTrackerOverlayContainerComponent
 				this.processEvent(deckEvent);
 			});
 		});
+		this.twitch.configuration.onChanged(() => {
+			console.log('received configuration', this.twitch.configuration.broadcaster);
+			if (this.twitch.configuration.broadcaster) {
+				const config: TwitchStreamerConfig = JSON.parse(this.twitch.configuration.broadcaster.content);
+				console.log('config', config);
+				this.horizontalOffset = config?.horizontalOffset;
+				this.magnifierIconOnTop = config?.magnifierIconOnTop;
+				this.invertTrackedPosition = config?.invertTrackedPosition;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
+		});
+
+		await this.localizationManager.init();
+		await this.allCardsManager.isReady();
+		this.baseInitDone$$.next(true);
+
 		// this.twitch.onContext(async (context, props) => {
 		// 	console.log('on context', context, props);
 		// 	if (!props?.length || props.includes('language')) {
@@ -221,28 +242,8 @@ export class DeckTrackerOverlayContainerComponent
 		// 		this.localeInit = true;
 		// 	}
 		// });
-		this.twitch.configuration.onChanged(() => {
-			console.log();
-			console.log(
-				'received configuration',
-				this.twitch.configuration.broadcaster,
-				window,
-				window.location,
-				window.location.search,
-			);
-			if (this.twitch.configuration.broadcaster) {
-				const config: TwitchStreamerConfig = JSON.parse(this.twitch.configuration.broadcaster.content);
-				console.log('config', config);
-				this.horizontalOffset = config?.horizontalOffset;
-				this.magnifierIconOnTop = config?.magnifierIconOnTop;
-				this.invertTrackedPosition = config?.invertTrackedPosition;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			}
-		});
 		await this.addDebugGameState();
-		console.log('init done', process.env.NODE_ENV);
+		console.log('init done', process.env.NODE_ENV, this.twitch.configuration);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -274,6 +275,7 @@ export class DeckTrackerOverlayContainerComponent
 	// }
 
 	private async processEvent(event: TwitchEvent) {
+		await this.allCardsManager.isReady();
 		console.log('received event', event);
 		this.inGameplay = event.scene === SceneMode.GAMEPLAY;
 		this.bgsState = event?.bgs;

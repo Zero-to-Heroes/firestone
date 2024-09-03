@@ -15,3 +15,9 @@ More information [here](https://github.com/Zero-to-Heroes/firestone/blob/master/
 -   The app can be downloaded from here: https://www.overwolf.com/app/sebastien_tromp-firestone
 -   If you want to come and say hi on Discord: https://discord.gg/vKeB3gnKTy
 -   Stay up-to-date with what we're doing and bugs found on Twitter: https://twitter.com/ZerotoHeroes_HS
+-   See the list of all the app's features: https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features
+-   And all the premium features: https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features
+
+## Twitter features threads
+
+-   Perils in Paradise QoL improvements: https://x.com/ZerotoHeroes_HS/status/1816439954932715608

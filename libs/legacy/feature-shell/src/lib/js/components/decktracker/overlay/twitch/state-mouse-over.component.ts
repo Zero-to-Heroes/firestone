@@ -22,160 +22,173 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 	styleUrls: ['./state-mouse-over.component.scss'],
 	template: `
 		<div class="state-mouse-over" [style.left.%]="horizontalOffset">
-			<ul
-				class="bgs-leaderboard"
-				*ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded && bgsPlayers.length === 8"
-			>
-				<leaderboard-empty-card
-					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByLeaderboard"
-					[bgsPlayer]="bgsPlayer"
-					[currentTurn]="currentTurn"
-					[config]="_bgsState.config"
-					[showLiveInfo]="showLiveInfo$ | async"
-				>
-				</leaderboard-empty-card>
-				<div class="players-recap-icon" [ngClass]="{ inversed: magnifierIconOnTop$ | async }">
-					<div
-						class="icon"
-						(mouseenter)="toggleLiveInfo(true)"
-						(mouseleave)="toggleLiveInfo(false)"
-						inlineSVG="assets/svg/search.svg"
-					></div>
+			<div class="player-areas">
+				<div class="player-area top">
+					<div class="hand top-hand"></div>
+					<ul class="hero-container">
+						<div class="trinkets" *ngIf="bgsHasTrinkets">
+							<empty-card
+								class="trinket lesser"
+								[cardId]="topHeroLesserTrinketCard"
+								[cardTooltipPosition]="'right'"
+								[cardTooltipBgs]="isBgs"
+							></empty-card>
+							<empty-card
+								class="trinket greater"
+								[cardId]="topHeroGreaterTrinketCard"
+								[cardTooltipPosition]="'right'"
+								[cardTooltipBgs]="isBgs"
+							></empty-card>
+						</div>
+						<div class="weapon" *ngIf="!bgsHasTrinkets">
+							<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
+						</div>
+						<div class="secrets">
+							<empty-card
+								*ngFor="let card of topSecretCards; let i = index"
+								class="secret"
+								[cardId]="card"
+								[cardTooltipPosition]="'right'"
+								[cardTooltipBgs]="isBgs"
+								[leftOffset]="topSecretPositionLeft(i)"
+								[topOffset]="topSecretPositionTop(i)"
+							></empty-card>
+						</div>
+						<div class="hero">
+							<empty-card [cardId]="topHeroCard" [cardTooltipPosition]="'right'"></empty-card>
+						</div>
+						<div class="hero-power">
+							<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
+						</div>
+					</ul>
+					<ul class="board">
+						<empty-card
+							*ngFor="let cardId of topBoardCards"
+							[cardId]="cardId"
+							[cardTooltipBgs]="isBgs"
+						></empty-card>
+					</ul>
 				</div>
-			</ul>
-			<div class="bgs-anomaly" *ngIf="bgsAnomaly">
-				<empty-card
-					class="anomaly"
-					[cardId]="bgsAnomaly"
-					[cardTooltipPosition]="'left'"
-					[cardTooltipBgs]="isBgs"
-				></empty-card>
+				<div class="player-area bottom">
+					<ul class="board">
+						<empty-card
+							*ngFor="let cardId of bottomBoardCards"
+							[cardId]="cardId"
+							[cardTooltipBgs]="isBgs"
+							(mouseenter)="onBottomCardMouseEnter(cardId)"
+							(mouseleave)="onBottomCardMouseLeave(cardId)"
+						></empty-card>
+					</ul>
+					<ul class="hero-container">
+						<div class="trinkets" *ngIf="bgsHasTrinkets">
+							<empty-card
+								class="trinket lesser"
+								[cardId]="bottomHeroLesserTrinketCard"
+								[cardTooltipBgs]="isBgs"
+								[cardTooltipPosition]="'left'"
+							></empty-card>
+							<empty-card
+								class="trinket greater"
+								[cardId]="bottomHeroGreaterTrinketCard"
+								[cardTooltipBgs]="isBgs"
+								[cardTooltipPosition]="'left'"
+							></empty-card>
+						</div>
+						<div class="weapon" *ngIf="!bgsHasTrinkets">
+							<empty-card
+								[cardId]="bottomWeaponCard"
+								[cardTooltipPosition]="'left'"
+								[cardTooltipBgs]="isBgs"
+							></empty-card>
+						</div>
+						<div class="secrets">
+							<empty-card
+								*ngFor="let card of bottomSecretCards; let i = index"
+								class="secret"
+								[cardId]="card"
+								[cardTooltipPosition]="'right'"
+								[cardTooltipBgs]="isBgs"
+								[leftOffset]="bottomSecretPositionLeft(i)"
+								[topOffset]="bottomSecretPositionTop(i)"
+							></empty-card>
+						</div>
+						<div class="hero">
+							<empty-card [cardId]="bottomHeroCard" [cardTooltipPosition]="'right'"></empty-card>
+						</div>
+						<div class="hero-power">
+							<empty-card
+								[cardId]="bottomHeroPowerCard"
+								[cardTooltipPosition]="'right'"
+								[cardTooltipBgs]="isBgs"
+								(mouseenter)="onBottomCardMouseEnter(bottomHeroPowerCard)"
+								(mouseleave)="onBottomCardMouseLeave(bottomHeroPowerCard)"
+							></empty-card>
+						</div>
+					</ul>
+					<ul class="hand">
+						<empty-card
+							*ngFor="let cardId of bottomHandCards; let i = index"
+							[transform]="handRotation(i)"
+							[leftOffset]="handPositionLeft(i)"
+							[topOffset]="handPositionTop(i)"
+							[cardId]="cardId"
+							[cardTooltipBgs]="isBgs"
+							[cardTooltipPosition]="'top'"
+							(mouseenter)="onBottomCardMouseEnter(cardId)"
+							(mouseleave)="onBottomCardMouseLeave(cardId)"
+						>
+						</empty-card>
+					</ul>
+				</div>
 			</div>
-			<div class="constructed-anomaly" *ngIf="constructedAnomaly">
-				<empty-card class="anomaly" [cardId]="constructedAnomaly" [cardTooltipPosition]="'right'"></empty-card>
-			</div>
-			<div
-				class="constructed-cards-left-in-deck player"
-				*ngIf="!isBgs"
-				[helpTooltip]="playerCardsLeftInDeckTooltip"
-			></div>
-			<div
-				class="constructed-cards-left-in-deck opponent"
-				*ngIf="!isBgs"
-				[helpTooltip]="opponentCardsLeftInDeckTooltip"
-			></div>
-			<ul class="hero top-hero">
-				<div class="trinkets" *ngIf="bgsHasTrinkets">
-					<empty-card
-						class="trinket lesser"
-						[cardId]="topHeroLesserTrinketCard"
-						[cardTooltipPosition]="'right'"
-						[cardTooltipBgs]="isBgs"
-					></empty-card>
-					<empty-card
-						class="trinket greater"
-						[cardId]="topHeroGreaterTrinketCard"
-						[cardTooltipPosition]="'right'"
-						[cardTooltipBgs]="isBgs"
-					></empty-card>
-				</div>
-				<div class="weapon" *ngIf="!bgsHasTrinkets">
-					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
-				</div>
-				<div class="secrets">
-					<empty-card
-						*ngFor="let card of topSecretCards; let i = index"
-						class="secret"
-						[cardId]="card"
-						[cardTooltipPosition]="'right'"
-						[cardTooltipBgs]="isBgs"
-						[leftOffset]="topSecretPositionLeft(i)"
-						[topOffset]="topSecretPositionTop(i)"
-					></empty-card>
-				</div>
-				<div class="hero">
-					<empty-card [cardId]="topHeroCard" [cardTooltipPosition]="'right'"></empty-card>
-				</div>
-				<div class="hero-power">
-					<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
-				</div>
-			</ul>
-			<ul class="board top-board">
-				<empty-card
-					*ngFor="let cardId of topBoardCards"
-					[cardId]="cardId"
-					[cardTooltipBgs]="isBgs"
-				></empty-card>
-			</ul>
-			<ul class="board bottom-board">
-				<empty-card
-					*ngFor="let cardId of bottomBoardCards"
-					[cardId]="cardId"
-					[cardTooltipBgs]="isBgs"
-					(mouseenter)="onBottomCardMouseEnter(cardId)"
-					(mouseleave)="onBottomCardMouseLeave(cardId)"
-				></empty-card>
-			</ul>
-			<ul class="hero bottom-hero">
-				<div class="trinkets" *ngIf="bgsHasTrinkets">
-					<empty-card
-						class="trinket lesser"
-						[cardId]="bottomHeroLesserTrinketCard"
-						[cardTooltipBgs]="isBgs"
-						[cardTooltipPosition]="'left'"
-					></empty-card>
-					<empty-card
-						class="trinket greater"
-						[cardId]="bottomHeroGreaterTrinketCard"
-						[cardTooltipBgs]="isBgs"
-						[cardTooltipPosition]="'left'"
-					></empty-card>
-				</div>
-				<div class="weapon" *ngIf="!bgsHasTrinkets">
-					<empty-card
-						[cardId]="bottomWeaponCard"
-						[cardTooltipPosition]="'left'"
-						[cardTooltipBgs]="isBgs"
-					></empty-card>
-				</div>
-				<div class="secrets">
-					<empty-card
-						*ngFor="let card of bottomSecretCards; let i = index"
-						class="secret"
-						[cardId]="card"
-						[cardTooltipPosition]="'right'"
-						[cardTooltipBgs]="isBgs"
-						[leftOffset]="bottomSecretPositionLeft(i)"
-						[topOffset]="bottomSecretPositionTop(i)"
-					></empty-card>
-				</div>
-				<div class="hero">
-					<empty-card [cardId]="bottomHeroCard" [cardTooltipPosition]="'right'"></empty-card>
-				</div>
-				<div class="hero-power">
-					<empty-card
-						[cardId]="bottomHeroPowerCard"
-						[cardTooltipPosition]="'right'"
-						[cardTooltipBgs]="isBgs"
-						(mouseenter)="onBottomCardMouseEnter(bottomHeroPowerCard)"
-						(mouseleave)="onBottomCardMouseLeave(bottomHeroPowerCard)"
-					></empty-card>
-				</div>
-			</ul>
-			<ul class="bottom-hand">
-				<empty-card
-					*ngFor="let cardId of bottomHandCards; let i = index"
-					[transform]="handRotation(i)"
-					[leftOffset]="handPositionLeft(i)"
-					[topOffset]="handPositionTop(i)"
-					[cardId]="cardId"
-					[cardTooltipBgs]="isBgs"
-					[cardTooltipPosition]="'top'"
-					(mouseenter)="onBottomCardMouseEnter(cardId)"
-					(mouseleave)="onBottomCardMouseLeave(cardId)"
+			<div class="absolute-positioned">
+				<ul
+					class="bgs-leaderboard"
+					*ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded && bgsPlayers.length === 8"
 				>
-				</empty-card>
-			</ul>
+					<leaderboard-empty-card
+						*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByLeaderboard"
+						[bgsPlayer]="bgsPlayer"
+						[currentTurn]="currentTurn"
+						[config]="_bgsState.config"
+						[showLiveInfo]="showLiveInfo$ | async"
+					>
+					</leaderboard-empty-card>
+					<div class="players-recap-icon" [ngClass]="{ inversed: magnifierIconOnTop$ | async }">
+						<div
+							class="icon"
+							(mouseenter)="toggleLiveInfo(true)"
+							(mouseleave)="toggleLiveInfo(false)"
+							inlineSVG="assets/svg/search.svg"
+						></div>
+					</div>
+				</ul>
+				<div class="bgs-anomaly" *ngIf="bgsAnomaly">
+					<empty-card
+						class="anomaly"
+						[cardId]="bgsAnomaly"
+						[cardTooltipPosition]="'left'"
+						[cardTooltipBgs]="isBgs"
+					></empty-card>
+				</div>
+				<div class="constructed-anomaly" *ngIf="constructedAnomaly">
+					<empty-card
+						class="anomaly"
+						[cardId]="constructedAnomaly"
+						[cardTooltipPosition]="'right'"
+					></empty-card>
+				</div>
+				<div
+					class="constructed-cards-left-in-deck player"
+					*ngIf="!isBgs"
+					[helpTooltip]="playerCardsLeftInDeckTooltip"
+				></div>
+				<div
+					class="constructed-cards-left-in-deck opponent"
+					*ngIf="!isBgs"
+					[helpTooltip]="opponentCardsLeftInDeckTooltip"
+				></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
