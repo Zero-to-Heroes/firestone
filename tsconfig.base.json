@@ -21,6 +21,7 @@
 			"@firestone/achievements/common": ["libs/achievements/common/src/index.ts"],
 			"@firestone/achievements/data-access": ["libs/achievements/data-access/src/index.ts"],
 			"@firestone/achievements/view": ["libs/achievements/view/src/index.ts"],
+			"@firestone/app/common": ["libs/app/common/src/index.ts"],
 			"@firestone/arena/common": ["libs/arena/common/src/index.ts"],
 			"@firestone/battlegrounds/common": ["libs/battlegrounds/common/src/index.ts"],
 			"@firestone/battlegrounds/core": ["libs/battlegrounds/core/src/index.ts"],

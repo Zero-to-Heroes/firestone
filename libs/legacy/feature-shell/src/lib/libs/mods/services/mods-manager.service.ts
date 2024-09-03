@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { isVersionBefore } from '@firestone/app/common';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
-import { isVersionBefore, sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
+import { sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
 import { toModVersion, toVersionString } from '../model/mods-config';

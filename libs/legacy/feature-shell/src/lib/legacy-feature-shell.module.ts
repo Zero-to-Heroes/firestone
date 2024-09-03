@@ -204,7 +204,6 @@ import { LoadingComponent } from './js/components/loading/loading.component';
 import { MainWindowComponent } from './js/components/main-window.component';
 import { FtueComponent } from './js/components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from './js/components/main-window/global-header.component';
-import { NewVersionNotificationComponent } from './js/components/main-window/new-version-notification.component';
 import { MenuSelectionComponent } from './js/components/menu-selection.component';
 import { MercenariesFiltersComponent } from './js/components/mercenaries/desktop/filters/_mercenaries-filters.component';
 import { MercenariesFullyUpgradedFilterDropdownComponent } from './js/components/mercenaries/desktop/filters/mercenaries-fully-upgraded-filter-dropdown.component';
@@ -568,6 +567,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsCommonModule } from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
+import { AppCommonModule } from '@firestone/app/common';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import {
@@ -889,6 +889,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OverlayModule,
 		SelectModule,
 
+		AppCommonModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		ReplayColiseumModule,
@@ -1647,7 +1648,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentElementalStreakWidgetWrapperComponent,
 
 		FtueComponent,
-		NewVersionNotificationComponent,
 
 		SettingsAppSelectionComponent,
 		SettingsAdvancedToggleComponent,
