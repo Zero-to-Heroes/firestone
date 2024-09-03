@@ -33,7 +33,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '13.21.7',
+		version: '13.21.8',
 		force: false,
 		sections: [
 			// {
@@ -52,20 +52,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fixes an issue where you couldn't copy decks from the Meta Decks tab anymore.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now browse trinket stats in the main app!`,
-							},
-							{
-								type: 'feature',
-								text: `You can now see trinket stats directly in the overlay. Free users can use this 4 times per day (which is roughly 2 games), while it's unlimited for premium users.`,
+								text: `Fix an issue where the mulligan winrate would sometimes be incorrect in the overlay.`,
 							},
 						],
 					},
@@ -76,44 +63,36 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Trinkets are now shown in the various BG widgets, like the next opponent overview (when mousing over a portrait on the leaderboard), the quick opponents view (pressing tab (Premium)) or the overall opponents view (in the BG window).`,
-							},
-							{
-								type: 'feature',
-								text: `The list of trinkets now only shows trinkets that are available based on the current lobby tribes.`,
-							},
-							{
-								type: 'feature',
-								text: `The list of trinkets now grays out trinkets that you can't be offered with your current board (e.g. some trinkets require you to have 2 minions of a given type between your board and hand), and will explain why they are grayed out. The exact rules are still being refined though, so please let me know if you see something that seems incorrect (mostly, being offered a grayed-out trinket).`,
-							},
-							{
-								type: 'feature',
-								text: `Mousing over the trinkets in the minions list now shows the related cards (so if you don't know what a Dreamer's Embrace is, we got you covered)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where achievements for Marin were indeed showing the ones for Madam Goya.`,
-							},
-							{
-								type: 'bug',
-								text: `Continue fixing simulation issues. Expect more fixes in the coming week!`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the new Perils in Paradise Coins would mess up mulligan stats.`,
+								text: `Fix an issue where Zilliax' cost would be set back to 0 when putting it back into your deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Tyr would only highlight Paladin cards when mousing over it in the tracker.`,
+								text: `Fix an issue where some cards would show up as "Unknown cards" even if you had enabled the setting to turn that off.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Restore the ability to export a battle to the simulator, so that you can modify it there.`,
+							},
+							{
+								type: 'feature',
+								text: `Restore the "End of Turn" and "Taunt" groups in the minions list.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the tooltip of a minion would not update correctly when modifying it in the simulator.`,
+							},
+							{
+								type: 'bug',
+								text: `Continue fixing simulation issues.`,
 							},
 						],
 					},
