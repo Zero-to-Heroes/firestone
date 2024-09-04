@@ -252,6 +252,17 @@ export class NewVersionNotificationComponent
 			{ version: '13.13.5', date: '2024-05-21' },
 			{ version: '13.12.9', date: '2024-05-13' },
 			{ version: '13.11.25', date: '2024-05-06' },
+			{ version: '13.10.6', date: '2024-04-15' },
+			{ version: '13.9.1', date: '2024-04-03' },
+			{ version: '13.8.1', date: '2024-03-26' },
+			{ version: '13.7.6', date: '2024-03-18' },
+			{ version: '13.6.0', date: '2024-02-29' },
+			{ version: '13.5.19', date: '2024-02-26' },
+			{ version: '13.4.9', date: '2024-02-12' },
+			{ version: '13.3.3', date: '2024-01-31' },
+			{ version: '13.2.26', date: '2024-01-25' },
+			{ version: '13.2.20', date: '2024-01-15' },
+			{ version: '13.2.4', date: '2023-12-18' },
 		];
 		for (const v of versions) {
 			v.versionDetails = await this.loadTextDetail(v.version);
