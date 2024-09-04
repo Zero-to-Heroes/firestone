@@ -130,7 +130,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulatorSideComponent {
-	enableDuos = false;
+	enableDuos = true;
 
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
