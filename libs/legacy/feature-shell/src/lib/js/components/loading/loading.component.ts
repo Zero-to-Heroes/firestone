@@ -26,7 +26,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 				<div class="controls">
 					<control-settings></control-settings>
 					<control-discord></control-discord>
-					<control-website></control-website>
+					<!-- <control-website></control-website> -->
 					<button
 						class="i-30 pink-button"
 						(mousedown)="minimizeWindow()"
