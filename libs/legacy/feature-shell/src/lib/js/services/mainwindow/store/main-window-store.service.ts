@@ -3,6 +3,7 @@ import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService, ArenaRewardsService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
@@ -89,8 +90,6 @@ import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filt
 import { BgsTribesFilterSelectedEvent } from './events/battlegrounds/bgs-tribes-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
-import { BgsCustomSimulationResetEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
-import { BgsCustomSimulationUpdateEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs-updated-event';
@@ -215,8 +214,6 @@ import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-t
 import { BgsTribesFilterSelectedProcessor } from './processors/battlegrounds/bgs-tribes-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
-import { BgsCustomSimulationResetProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-reset-processor';
-import { BgsCustomSimulationUpdateProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
@@ -395,6 +392,7 @@ export class MainWindowStoreService {
 		private readonly battlegroundsNavigation: BattlegroundsNavigationService,
 		private readonly mainNavigation: MainWindowNavigationService,
 		private readonly achievementsNavigation: AchievementsNavigationService,
+		private readonly simulationController: BgsSimulatorControllerService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -747,8 +745,6 @@ export class MainWindowStoreService {
 				SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
 				new SelectBattlegroundsPersonalStatsHeroProcessor(this.mainNavigation),
 			],
-			[BgsCustomSimulationUpdateEvent.eventName(), new BgsCustomSimulationUpdateProcessor()],
-			[BgsCustomSimulationResetEvent.eventName(), new BgsCustomSimulationResetProcessor()],
 			[
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),
 				new BattlegroundsMainWindowSelectBattleProcessor(
@@ -757,6 +753,7 @@ export class MainWindowStoreService {
 					this.mainNavigation,
 					this.ow,
 					this.prefs,
+					this.simulationController,
 				),
 			],
 			[

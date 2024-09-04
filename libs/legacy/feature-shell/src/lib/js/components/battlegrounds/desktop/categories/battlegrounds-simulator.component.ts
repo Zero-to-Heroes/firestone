@@ -1,14 +1,15 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
-import { BgsSimulatorKeyboardControl, BgsSimulatorKeyboardControls } from '@firestone/battlegrounds/simulator';
+import {
+	BgsSimulatorControllerService,
+	BgsSimulatorKeyboardControl,
+	BgsSimulatorKeyboardControls,
+} from '@firestone/battlegrounds/simulator';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { BgsCustomSimulationResetEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
-import { BgsCustomSimulationUpdateEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-simulator',
@@ -25,41 +26,27 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsSimulatorComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
-	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
-	simulationReset: (faceOffId: string) => void;
-
+export class BattlegroundsSimulatorComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
 
 	helpTooltip: string = this.buildHelpTooltip();
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly controller: BgsSimulatorControllerService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.faceOff$ = this.store
-			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
-			.pipe(
-				filter(([state]) => !!state),
-				this.mapData(([state]) => state.faceOff),
-			);
-	}
+	async ngAfterContentInit() {
+		await waitForReady(this.controller);
 
-	ngAfterViewInit(): void {
-		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
-			this.store.send(new BgsCustomSimulationUpdateEvent(currentFaceOff, partialUpdate));
-		};
-		this.simulationReset = (faceOffId: string) => {
-			this.store.send(new BgsCustomSimulationResetEvent(faceOffId));
-		};
+		this.faceOff$ = this.controller.faceOff$$.pipe(this.mapData((faceOff) => faceOff));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildHelpTooltip(): string {

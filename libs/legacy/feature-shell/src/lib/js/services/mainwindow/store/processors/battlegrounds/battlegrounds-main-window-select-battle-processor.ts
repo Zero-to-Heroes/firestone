@@ -1,7 +1,8 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -15,6 +16,7 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly controller: BgsSimulatorControllerService,
 	) {}
 
 	public async process(
@@ -23,9 +25,8 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.debug('handling event', event);
-		const updatedSim = currentState.battlegrounds.customSimulationState.update({
-			faceOff: event.faceOff,
-		});
+		await waitForReady(this.controller);
+		this.controller.initBattleWithSideEffects(event.faceOff);
 
 		this.nav.selectedCategoryId$$.next('bgs-category-simulator');
 		const prefs = await this.prefs.getPreferences();
@@ -39,11 +40,7 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 		this.mainNav.text$$.next(this.i18n.translateString('battlegrounds.sim.resimulating-battle'));
 		this.mainNav.currentApp$$.next('battlegrounds');
 		return [
-			currentState.update({
-				battlegrounds: currentState.battlegrounds.update({
-					customSimulationState: updatedSim,
-				}),
-			}),
+			null,
 			navigationState.update({
 				navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 					currentView: 'list',

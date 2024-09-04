@@ -2,11 +2,11 @@
 	position: relative;
 	height: 100%;
 	display: grid;
-	grid-template-rows: minmax(0, 2fr) minmax(0, 2fr);
+	grid-template-rows: minmax(0, 20fr) minmax(0, 20fr);
 	gap: 0.5vh;
 
 	&.with-duos {
-		grid-template-rows: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+		grid-template-rows: minmax(0, 10fr) minmax(0, 20fr) minmax(0, 20fr);
 	}
 
 	.hero {
@@ -37,11 +37,6 @@
 			top: 20%;
 			width: 35%;
 		}
-	}
-
-	&.with-duos {
-		grid-template-rows: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr);
-		width: 40%;
 	}
 
 	.board {
@@ -80,14 +75,9 @@
 			height: 100%;
 			font-size: min(2.5vh, 1.5vw);
 
-			::ng-deep card-on-board {
-				&:before {
-					content: '';
-				}
-				.card-on-board {
-					width: 60px;
-					height: auto;
-					aspect-ratio: 60/89;
+			::ng-deep {
+				board-card-stats .stat .value {
+					font-size: 2vh !important;
 				}
 			}
 
@@ -160,12 +150,15 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 100%;
+	height: 60%;
 
 	.add-teammate-button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		height: 100%;
+		max-height: 55px;
+		min-height: 0;
 
 		.add-teammate-icon {
 			margin-right: 15px;
@@ -174,7 +167,11 @@
 
 		.add-teammate-text {
 			border: 1px solid;
-			padding: 10px 20px;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 20px;
 		}
 
 		&:hover {
@@ -183,83 +180,21 @@
 	}
 }
 
+.teammate {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+}
+
 .teammate-recap {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 7vh;
+	height: 100%;
 
 	.teammate-container {
 		height: 100%;
 		min-width: 50%;
-	}
-
-	::ng-deep bgs-opponent-overview {
-		.opponent-overview {
-			background: none;
-			padding: 0;
-
-			.main-info {
-				border: none;
-				margin: none;
-
-				bgs-board {
-					width: fit-content;
-					align-items: center;
-					justify-content: center;
-					height: 100%;
-
-					.board-turn {
-						margin: 0;
-					}
-
-					.board {
-						padding: 0;
-						margin: 0;
-						height: 100%;
-						top: 0;
-
-						.minion-container {
-							aspect-ratio: 58/85;
-							margin: 0;
-
-							::ng-deep card-on-board board-card-stats .stat .value.value.value.value.value {
-								font-size: inherit;
-							}
-						}
-					}
-				}
-			}
-
-			.portrait {
-				height: 100%;
-				width: fit-content;
-				margin-right: 2vh;
-
-				.icon {
-					max-height: 100%;
-					height: 85%; // Because we want the image inside the frame
-					width: fit-content;
-					aspect-ratio: 1;
-
-					.hero-portrait {
-						width: fit-content;
-						aspect-ratio: 1;
-					}
-
-					.hero-portrait-frame {
-						height: 100%;
-						width: auto;
-						aspect-ratio: 1;
-
-						.frame {
-							height: 100%;
-							width: auto;
-						}
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -281,6 +216,7 @@
 
 		.teammate {
 			order: 3;
+			align-items: flex-end;
 		}
 		.hero {
 			order: 2;

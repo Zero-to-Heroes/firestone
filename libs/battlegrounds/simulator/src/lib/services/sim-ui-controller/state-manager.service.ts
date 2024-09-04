@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
+import { CardIds, defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
@@ -9,9 +10,11 @@ import { Side } from './bgs-simulator-controller.service';
 
 @Injectable()
 export class StateManagerService {
+	// Keep this stateless, so it can be used on the UI windows, which keeps the code
+	// simpler
 	public constructor(private readonly allCards: CardsFacadeService) {}
 
-	public buildInitialBattle(battle: BgsFaceOffWithSimulation): BgsFaceOffWithSimulation {
+	public buildInitialBattle(battle: BgsFaceOffWithSimulation | null): BgsFaceOffWithSimulation {
 		// Make sure we have an instance of the class, and not just a data structure
 		let result = BgsFaceOffWithSimulation.create(battle ?? {});
 		if (!result.battleInfo) {
@@ -177,6 +180,80 @@ export class StateManagerService {
 						},
 					},
 			  });
+	}
+
+	public addTeammate(value: BgsFaceOffWithSimulation, side: Side): BgsFaceOffWithSimulation {
+		if (!value.battleInfo) {
+			return value;
+		}
+
+		return side === 'player'
+			? value.update({
+					battleInfo: {
+						...value.battleInfo,
+						playerTeammateBoard: {
+							board: [],
+							player: {
+								cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+								heroPowerId: null,
+								hpLeft: 30,
+								tavernTier: 1,
+								globalInfo: {},
+								questEntities: [],
+								friendly: true,
+								hand: [],
+								heroPowerUsed: false,
+							},
+							secrets: [],
+						},
+					},
+			  })
+			: value.update({
+					battleInfo: {
+						...value.battleInfo,
+						opponentTeammateBoard: {
+							board: [],
+							player: {
+								cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+								heroPowerId: null,
+								hpLeft: 30,
+								tavernTier: 1,
+								globalInfo: {},
+								questEntities: [],
+								friendly: false,
+								hand: [],
+								heroPowerUsed: false,
+							},
+							secrets: [],
+						},
+					},
+			  });
+	}
+
+	public switchTeammates(value: BgsFaceOffWithSimulation, side: Side): BgsFaceOffWithSimulation {
+		if (!value.battleInfo) {
+			return value;
+		}
+
+		if (side === 'player') {
+			const tmp = value.battleInfo.playerTeammateBoard;
+			return value.update({
+				battleInfo: {
+					...value.battleInfo,
+					playerTeammateBoard: value.battleInfo.playerBoard,
+					playerBoard: tmp!,
+				},
+			});
+		} else {
+			const tmp = value.battleInfo.opponentTeammateBoard;
+			return value.update({
+				battleInfo: {
+					...value.battleInfo,
+					opponentTeammateBoard: value.battleInfo.opponentBoard,
+					opponentBoard: tmp!,
+				},
+			});
+		}
 	}
 
 	public addMinion(value: BgsFaceOffWithSimulation, side: Side, entity: BoardEntity): BgsFaceOffWithSimulation {

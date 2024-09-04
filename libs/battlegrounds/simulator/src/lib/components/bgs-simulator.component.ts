@@ -19,7 +19,13 @@ import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity
 import { BgsBattleSimulationService, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ApiRunner, CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	ApiRunner,
+	CardsFacadeService,
+	ILocalizationService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { PermutationResult, ProcessingStatus } from '../services/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningService } from '../services/bgs-battle-positioning.service';
@@ -50,6 +56,7 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 				<bgs-simulator-side
 					class="side opponent"
 					[player]="opponent$ | async"
+					[teammate]="opponentTeammate$ | async"
 					[side]="'opponent'"
 					[tooltipPosition]="'right'"
 				></bgs-simulator-side>
@@ -88,6 +95,7 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 				<bgs-simulator-side
 					class="side player"
 					[player]="player$ | async"
+					[teammate]="playerTeammate$ | async"
 					[side]="'player'"
 					[tooltipPosition]="'top-right'"
 				></bgs-simulator-side>
@@ -125,11 +133,14 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 export class BgsSimulatorComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	battleResult$: Observable<BgsFaceOffWithSimulation | null>;
 	opponent$: Observable<BgsBoardInfo | null>;
+	opponentTeammate$: Observable<BgsBoardInfo | null>;
 	player$: Observable<BgsBoardInfo | null>;
+	playerTeammate$: Observable<BgsBoardInfo | null>;
 	turnNumber$: Observable<number | null>;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
-		this.initialBattle = this.controller.initBattleWithSideEffects(value);
+		// Because it's already set in the controller state
+		// this.setInitialBattle(value);
 	}
 
 	tooltip: string | null;
@@ -143,8 +154,6 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 	repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
 	repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
 	processingReposition = false;
-
-	private initialBattle: BgsFaceOffWithSimulation;
 
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -169,7 +178,9 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		super(cdr);
 	}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
+		await waitForReady(this.controller);
+
 		this.tooltip = this.i18n.translateString('battlegrounds.sim.simulate-button-tooltip');
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
@@ -184,12 +195,22 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.opponent$ = this.controller.faceOff$$.pipe(
 			this.mapData((faceOff) => faceOff?.battleInfo?.opponentBoard ?? null),
 		);
+		this.opponentTeammate$ = this.controller.faceOff$$.pipe(
+			this.mapData((faceOff) => faceOff?.battleInfo?.opponentTeammateBoard ?? null),
+		);
 		this.player$ = this.controller.faceOff$$.pipe(
 			this.mapData((faceOff) => faceOff?.battleInfo?.playerBoard ?? null),
+		);
+		this.playerTeammate$ = this.controller.faceOff$$.pipe(
+			this.mapData((faceOff) => faceOff?.battleInfo?.playerTeammateBoard ?? null),
 		);
 		this.turnNumber$ = this.controller.faceOff$$.pipe(this.mapData((faceOff) => faceOff?.turn ?? null));
 
 		this.initControllerRequests();
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')
@@ -197,6 +218,11 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		super.ngOnDestroy();
 		this.simulatorKeyboardControls.tearDown();
 		this.sub$$?.unsubscribe();
+	}
+
+	private async setInitialBattle(value: BgsFaceOffWithSimulation) {
+		await waitForReady(this.controller);
+		this.controller.initBattleWithSideEffects(value);
 	}
 
 	// TODO: adding minions to both boards lead to some lost info
@@ -348,7 +374,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	resetBoards() {
-		this.controller.resetBattle(this.initialBattle);
+		this.controller.resetBattle();
 	}
 
 	async importBoards() {
@@ -363,7 +389,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			const code = await this.api.get(url);
 			const faceOffStr = atob(code ?? '');
 			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
-			this.initialBattle = this.controller.initBattleWithSideEffects(faceOff);
+			this.controller.initBattleWithSideEffects(faceOff);
 		} catch (e) {
 			console.warn('could not import from clipboard', fromClipboard, e);
 		}

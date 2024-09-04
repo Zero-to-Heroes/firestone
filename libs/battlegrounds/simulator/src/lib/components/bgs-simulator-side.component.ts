@@ -30,6 +30,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 						[emptyBoardMessage]="
 							'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
 						"
+						(click)="switchTeammates()"
 					></bgs-simulator-player-overview>
 				</div>
 			</div>
@@ -226,29 +227,12 @@ export class BgsSimulatorSideComponent {
 	}
 
 	addTeammate() {
-		this._teammate = {
-			board: [],
-			player: {
-				cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
-				heroPowerId: null,
-				hpLeft: 30,
-				tavernTier: this._player?.player?.tavernTier ?? 1,
-				globalInfo: {},
-				questEntities: [],
-				friendly: this._player?.player.friendly,
-				hand: [],
-				heroPowerUsed: false,
-			},
-			secrets: [],
-		};
-		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
+		this.controller.addTeammate(this.side);
 		console.debug('teammateShownInfo', this.teammateShownInfo, this._teammate);
 	}
 
 	switchTeammates() {
-		const tmp = this._player;
-		this._player = this._teammate;
-		this._teammate = tmp;
+		this.controller.switchTeammates(this.side);
 		this.updateInfo();
 	}
 

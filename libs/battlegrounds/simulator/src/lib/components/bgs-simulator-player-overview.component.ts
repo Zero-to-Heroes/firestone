@@ -64,6 +64,7 @@ export class BgsSimulatorPlayerOverviewComponent {
 		this.name = value.name;
 		this.mmr = value.mmr;
 		this.tavernTier = value.getCurrentTavernTier();
+		this.boardMinions = value.getLastKnownBoardStateAsReplayEntities() ?? [];
 	}
 
 	private _opponent: BgsPlayer;

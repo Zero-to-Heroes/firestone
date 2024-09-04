@@ -24,6 +24,7 @@ import {
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
 } from '@firestone/battlegrounds/common';
+import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { HearthpwnService } from '@firestone/collection/common';
 import { CommunityBootstrapService } from '@firestone/communities/common';
 import {
@@ -121,6 +122,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BattlegroundsOfficialLeaderboardService: BattlegroundsOfficialLeaderboardService,
 		private readonly init_BattlegroundsNavigationService: BattlegroundsNavigationService,
 		private readonly init_BgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
+		private readonly init_BgsSimulatorControllerService: BgsSimulatorControllerService,
 		private readonly init_ArenaClassStatsService: ArenaClassStatsService,
 		private readonly init_ArenaCardStatsService: ArenaCardStatsService,
 		private readonly init_ArenaDraftManagerService: ArenaDraftManagerService,

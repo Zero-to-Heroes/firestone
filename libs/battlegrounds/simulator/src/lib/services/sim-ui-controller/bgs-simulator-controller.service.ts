@@ -4,13 +4,14 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { StateManagerService } from './state-manager.service';
 
 // TODO: store the state on the backend controller, mostly so that refreshing (while in dev) doesn't lose the state
 @Injectable()
-export class BgsSimulatorControllerService {
-	public faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(null);
+export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimulatorControllerService> {
+	public faceOff$$: BehaviorSubject<BgsFaceOffWithSimulation | null>;
 
 	public portraitChangeRequested: EventEmitter<HeroChangeRequest> = new EventEmitter<HeroChangeRequest>();
 	public heroPowerChangeRequested: EventEmitter<HeroPowerChangeRequest> = new EventEmitter<HeroPowerChangeRequest>();
@@ -20,16 +21,38 @@ export class BgsSimulatorControllerService {
 	public minionUpdateRequested: EventEmitter<MinionUpdateRequest> = new EventEmitter<MinionUpdateRequest>();
 	public minionRemoveRequested: EventEmitter<MinionRemoveRequest> = new EventEmitter<MinionRemoveRequest>();
 
-	constructor(private readonly stateManager: StateManagerService) {}
+	private stateManager: StateManagerService;
+	private initialBattle: BgsFaceOffWithSimulation;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'BgsSimulatorControllerService', () => !!this.faceOff$$);
+		this.stateManager = AppInjector.get(StateManagerService); // Make it available on the UI side, since it's stateless
+	}
+
+	protected override assignSubjects() {
+		this.faceOff$$ = this.mainInstance.faceOff$$;
+	}
+
+	protected async init() {
+		console.debug('[simulator] init service', new Error().stack);
+		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(
+			this.stateManager.buildInitialBattle(null),
+		);
+		this.faceOff$$.subscribe((faceOff) => console.debug('[simulator] updated faceOff', faceOff));
+	}
 
 	public initBattleWithSideEffects(battle: BgsFaceOffWithSimulation) {
+		console.debug('[simulator] init faceOff', battle, new Error().stack);
 		const faceOff = this.stateManager.buildInitialBattle(battle);
 		this.faceOff$$.next(faceOff);
+		this.initialBattle = faceOff;
 		return faceOff;
 	}
 
-	public resetBattle(battle: BgsFaceOffWithSimulation) {
-		this.faceOff$$.next(battle);
+	// For now, just clear
+	public resetBattle() {
+		console.debug('[simulator] reset battle', new Error().stack);
+		this.faceOff$$.next(this.stateManager.buildInitialBattle(null));
 	}
 
 	public requestHeroChange(side: Side) {
@@ -39,6 +62,7 @@ export class BgsSimulatorControllerService {
 		});
 	}
 	public updateHero(side: Side, heroCardId: string) {
+		console.debug('[simulator] updateHero', new Error().stack);
 		const faceOff = this.stateManager.updateHero(this.faceOff$$.value!, side, heroCardId);
 		this.faceOff$$.next(faceOff);
 	}
@@ -75,6 +99,17 @@ export class BgsSimulatorControllerService {
 	public addMinion(side: Side, entity: BoardEntity) {
 		const faceOff = this.stateManager.addMinion(this.faceOff$$.value!, side, entity);
 		console.debug('adding minion', entity, this.faceOff$$.value, faceOff);
+		this.faceOff$$.next(faceOff);
+	}
+
+	public addTeammate(side: Side) {
+		const faceOff = this.stateManager.addTeammate(this.faceOff$$.value!, side);
+		console.debug('adding teammate', this.faceOff$$.value, faceOff);
+		this.faceOff$$.next(faceOff);
+	}
+
+	public switchTeammates(side: Side) {
+		const faceOff = this.stateManager.switchTeammates(this.faceOff$$.value!, side);
 		this.faceOff$$.next(faceOff);
 	}
 
