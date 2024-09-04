@@ -19,7 +19,7 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 				<div class="add-teammate" *ngIf="!_teammate">
 					<div class="add-teammate-button" (click)="addTeammate()">
 						<div class="add-teammate-icon">+</div>
-						<div class="add-teammate-text">Add teammate</div>
+						<div class="add-teammate-text" [fsTranslate]="'battlegrounds.sim.add-teammate-button'"></div>
 					</div>
 				</div>
 				<div class="teammate-recap" *ngIf="!!_teammate">
@@ -27,9 +27,8 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 						class="teammate-container"
 						[opponent]="teammateShownInfo"
 						[showBoardMessage]="!teammateShownInfo?.boardHistory?.length"
-						[emptyBoardMessage]="
-							'No board yet. Click to switch the teammate to the active spot, and edit the board there.'
-						"
+						[emptyBoardMessage]="'battlegrounds.sim.empty-teammate-board' | fsTranslate"
+						[helpTooltip]="'battlegrounds.sim.teammate-board-tooltip' | fsTranslate"
 						(click)="switchTeammates()"
 					></bgs-simulator-player-overview>
 				</div>
@@ -95,13 +94,6 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
 			</div>
-			<!-- <div class="switch-teammate-container" *ngIf="!!_teammate && enableDuos">
-				<div
-					class="switch-teammate-button"
-					[inlineSVG]="'assets/svg/restore.svg'"
-					(click)="switchTeammates()"
-				></div>
-			</div> -->
 			<!-- TODO: move this -->
 			<!-- <div class="global-effects">
 				<div class="header" [fsTranslate]="'battlegrounds.sim.global-effects-header'"></div>

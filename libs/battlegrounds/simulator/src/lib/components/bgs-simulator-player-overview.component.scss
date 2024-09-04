@@ -16,6 +16,8 @@
 	width: 100%;
 	--background-color: rgba(255, 255, 255, 0.08);
 	background: var(--background-color);
+	border-radius: 15px;
+	padding: 0 2vh;
 
 	&:hover {
 		--background-color: rgba(255, 255, 255, 0.12);
