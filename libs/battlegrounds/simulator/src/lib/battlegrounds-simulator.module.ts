@@ -24,6 +24,7 @@ import { BattlegroundsSimulatorMinionTribeFilterDropdownComponent } from './comp
 import { BgsSimulatorPlayerOverviewComponent } from './components/bgs-simulator-player-overview.component';
 import { BgsSimulatorQuestRewardSelectionComponent } from './components/bgs-simulator-quest-reward-selection.component';
 import { BgsSimulatorSideComponent } from './components/bgs-simulator-side.component';
+import { BgsSimulatorTrinketSelectionComponent } from './components/bgs-simulator-trinket-selection.component';
 import { BgsSimulatorComponent } from './components/bgs-simulator.component';
 import { BgsBattlePositioningMockExecutorService } from './services/bgs-battle-positioning-mock-executor.service';
 import { BgsBattlePositioningService } from './services/bgs-battle-positioning.service';
@@ -39,6 +40,7 @@ const components = [
 	BgsMinusButtonComponent,
 	BgsHeroPortraitSimulatorComponent,
 	BgsSimulatorHeroPowerSelectionComponent,
+	BgsSimulatorTrinketSelectionComponent,
 	BgsSimulatorGlobalInfoSelectionComponent,
 	BgsSimulatorHeroSelectionComponent,
 	BgsSimulatorQuestRewardSelectionComponent,

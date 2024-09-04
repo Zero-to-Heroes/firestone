@@ -13,9 +13,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { TrinketSlot } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBattleSimulationService, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -39,6 +40,7 @@ import {
 	MinionRemoveRequest,
 	MinionUpdateRequest,
 	QuestRewardChangeRequest,
+	TrinketChangeRequest,
 } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 import {
 	BgsSimulatorKeyboardControl,
@@ -49,6 +51,7 @@ import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-po
 import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
 import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
 import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest-reward-selection.component';
+import { BgsSimulatorTrinketSelectionComponent } from './bgs-simulator-trinket-selection.component';
 
 @Component({
 	selector: 'bgs-simulator',
@@ -234,6 +237,12 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.controller.heroPowerChangeRequested.subscribe((request) => this.onHeroPowerChangeRequested(request));
 		this.controller.globalInfoChangeRequested.subscribe((request) => this.onGlobalInfoChangeRequested(request));
 		this.controller.questRewardChangeRequested.subscribe((request) => this.onQuestRewardChangeRequested(request));
+		this.controller.greaterTrinketChangeRequested.subscribe((request) =>
+			this.onGreaterTrinketChangeRequested(request),
+		);
+		this.controller.lesserTrinketChangeRequested.subscribe((request) =>
+			this.onLesserTrinketChangeRequested(request),
+		);
 		this.controller.minionAddRequested.subscribe((request) => this.onMinionAddRequested(request));
 		this.controller.minionUpdateRequested.subscribe((request) => this.onMinionUpdateRequested(request));
 		this.controller.minionRemoveRequested.subscribe((request) => this.onMinionRemoveRequested(request));
@@ -350,6 +359,26 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		modalRef.instance.applyHandler = (newHeroPowerCardId: string | null, heroPowerInfo: number) => {
 			this.overlayRef.detach();
 			this.controller.updateHeroPower(request.side, newHeroPowerCardId, heroPowerInfo);
+		};
+	}
+
+	onGreaterTrinketChangeRequested(request: TrinketChangeRequest) {
+		const modalRef = this.createModal(BgsSimulatorTrinketSelectionComponent);
+		modalRef.instance.currentTrinket = request.trinket;
+		modalRef.instance.trinketSlot = TrinketSlot.GREATER;
+		modalRef.instance.applyHandler = (newTrinket: BoardTrinket | null) => {
+			this.overlayRef.detach();
+			this.controller.updateGreaterTrinket(request.side, newTrinket);
+		};
+	}
+
+	onLesserTrinketChangeRequested(request: TrinketChangeRequest) {
+		const modalRef = this.createModal(BgsSimulatorTrinketSelectionComponent);
+		modalRef.instance.currentTrinket = request.trinket;
+		modalRef.instance.trinketSlot = TrinketSlot.LESSER;
+		modalRef.instance.applyHandler = (newTrinket: BoardTrinket | null) => {
+			this.overlayRef.detach();
+			this.controller.updateLesserTrinket(request.side, newTrinket);
 		};
 	}
 

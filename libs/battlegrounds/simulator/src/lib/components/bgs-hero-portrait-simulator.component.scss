@@ -1,7 +1,7 @@
 .container {
 	position: relative;
 	display: grid;
-	grid-template-columns: minmax(0, 10fr) minmax(0, 10fr) minmax(0, 10fr) minmax(0, 7fr);
+	grid-template-columns: minmax(0, 13fr) minmax(0, 12fr) minmax(0, 12fr) minmax(0, 8fr);
 	align-items: center;
 	height: 100%;
 
@@ -33,7 +33,8 @@
 	}
 
 	.hero-power,
-	.quest-reward {
+	.quest-reward,
+	.trinket {
 		position: relative;
 		height: 80%;
 		aspect-ratio: 1;
@@ -76,12 +77,29 @@
 	}
 
 	.hero-power {
-		justify-self: flex-end;
+		justify-self: center;
 
 		.change-icon {
 			top: 7%;
 			right: 44%;
 			height: 24%;
+		}
+	}
+
+	.trinkets {
+		display: flex;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
+
+		.trinket {
+			height: 60%;
+
+			.change-icon {
+				top: 0%;
+				right: 39%;
+				height: 24%;
+			}
 		}
 	}
 

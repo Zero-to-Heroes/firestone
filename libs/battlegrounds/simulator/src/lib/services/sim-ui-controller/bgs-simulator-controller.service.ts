@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, TrinketSlot } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { StateManagerService } from './state-manager.service';
 
@@ -20,16 +25,21 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	public heroPowerChangeRequested: EventEmitter<HeroPowerChangeRequest> = new EventEmitter<HeroPowerChangeRequest>();
 	public questRewardChangeRequested: EventEmitter<QuestRewardChangeRequest> =
 		new EventEmitter<QuestRewardChangeRequest>();
+	public greaterTrinketChangeRequested: EventEmitter<TrinketChangeRequest> = new EventEmitter<TrinketChangeRequest>();
+	public lesserTrinketChangeRequested: EventEmitter<TrinketChangeRequest> = new EventEmitter<TrinketChangeRequest>();
 	public minionAddRequested: EventEmitter<MinionAddRequest> = new EventEmitter<MinionAddRequest>();
 	public minionUpdateRequested: EventEmitter<MinionUpdateRequest> = new EventEmitter<MinionUpdateRequest>();
 	public minionRemoveRequested: EventEmitter<MinionRemoveRequest> = new EventEmitter<MinionRemoveRequest>();
 
 	private stateManager: StateManagerService;
+	private allCards: CardsFacadeService;
+
 	private initialBattle: BgsFaceOffWithSimulation;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsSimulatorControllerService', () => !!this.faceOff$$);
 		this.stateManager = AppInjector.get(StateManagerService); // Make it available on the UI side, since it's stateless
+		this.allCards = AppInjector.get(CardsFacadeService); // Make it available on the UI side, since it's stateless
 	}
 
 	protected override assignSubjects() {
@@ -101,6 +111,28 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 	public updateQuestRewards(side: Side, questRewardCardId: string | null) {
 		const faceOff = this.stateManager.updateQuestReward(this.faceOff$$.value!, side, questRewardCardId);
+		this.faceOff$$.next(faceOff);
+	}
+
+	public requestGreaterTrinketChange(side: Side) {
+		this.greaterTrinketChangeRequested.next({
+			side: side,
+			trinket: this.getSide(side)?.player.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.GREATER),
+		});
+	}
+	public updateGreaterTrinket(side: Side, trinket: BoardTrinket | null) {
+		const faceOff = this.stateManager.updateGreaterTrinket(this.faceOff$$.value!, side, trinket);
+		this.faceOff$$.next(faceOff);
+	}
+
+	public requestLesserTrinketChange(side: Side) {
+		this.lesserTrinketChangeRequested.next({
+			side: side,
+			trinket: this.getSide(side)?.player.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.LESSER),
+		});
+	}
+	public updateLesserTrinket(side: Side, trinket: BoardTrinket | null) {
+		const faceOff = this.stateManager.updateLesserTrinket(this.faceOff$$.value!, side, trinket);
 		this.faceOff$$.next(faceOff);
 	}
 
@@ -183,6 +215,10 @@ export interface HeroPowerChangeRequest {
 export interface QuestRewardChangeRequest {
 	side: Side;
 	questRewardCardIds: readonly string[];
+}
+export interface TrinketChangeRequest {
+	side: Side;
+	trinket: BoardTrinket | null | undefined;
 }
 export interface MinionAddRequest {
 	side: Side;

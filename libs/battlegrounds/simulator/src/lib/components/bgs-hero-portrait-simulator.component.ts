@@ -8,7 +8,7 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 	styleUrls: [`./bgs-hero-portrait-simulator.component.scss`],
 	template: `
 		<div class="container">
-			<div class="quest-reward">
+			<div class="quest-reward" *ngIf="useQuests">
 				<div class="item-container" [cardTooltip]="_questRewardCardId" [cardTooltipPosition]="tooltipPosition">
 					<img [src]="questRewardIcon" class="image" *ngIf="!!questRewardIcon" />
 					<div class="image empty-icon" *ngIf="!questRewardIcon"></div>
@@ -22,6 +22,48 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 					(click)="onQuestRewardClick()"
 					[useUpdateIcon]="!defaultHero"
 				></bgs-plus-button>
+			</div>
+			<div class="trinkets" *ngIf="useTrinkets">
+				<div class="trinket greater">
+					<div
+						class="item-container"
+						[cardTooltip]="_greaterTrinketCardId"
+						[cardTooltipPosition]="tooltipPosition"
+						[cardTooltipBgs]="true"
+					>
+						<img [src]="greaterTrinketIcon" class="image" *ngIf="!!greaterTrinketIcon" />
+						<div class="image empty-icon" *ngIf="!greaterTrinketIcon"></div>
+						<img
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/simulator/trinket_frame.png"
+							class="frame"
+						/>
+					</div>
+					<bgs-plus-button
+						class="change-icon"
+						(click)="onGreaterTrinketClick()"
+						[useUpdateIcon]="!!greaterTrinketIcon"
+					></bgs-plus-button>
+				</div>
+				<div class="trinket lesser">
+					<div
+						class="item-container"
+						[cardTooltip]="_lesserTrinketCardId"
+						[cardTooltipPosition]="tooltipPosition"
+						[cardTooltipBgs]="true"
+					>
+						<img [src]="lesserTrinketIcon" class="image" *ngIf="!!lesserTrinketIcon" />
+						<div class="image empty-icon" *ngIf="!lesserTrinketIcon"></div>
+						<img
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/simulator/trinket_frame.png"
+							class="frame"
+						/>
+					</div>
+					<bgs-plus-button
+						class="change-icon"
+						(click)="onLesserTrinketClick()"
+						[useUpdateIcon]="!!lesserTrinketIcon"
+					></bgs-plus-button>
+				</div>
 			</div>
 			<div class="hero">
 				<bgs-hero-portrait
@@ -69,6 +111,9 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroPortraitSimulatorComponent {
+	useQuests = false;
+	useTrinkets = true;
+
 	@Input() health = 40;
 	@Input() maxHealth = 40;
 	@Input() tooltipPosition: CardTooltipPositionType;
@@ -93,11 +138,29 @@ export class BgsHeroPortraitSimulatorComponent {
 		this.questRewardIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
 	}
 
+	@Input() set greaterTrinketCardId(value: string | null | undefined) {
+		this._greaterTrinketCardId = value;
+		this.greaterTrinketIcon = !!value
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`
+			: null;
+	}
+
+	@Input() set lesserTrinketCardId(value: string | null | undefined) {
+		this._lesserTrinketCardId = value;
+		this.lesserTrinketIcon = !!value
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`
+			: null;
+	}
+
 	heroPowerIcon: string | null;
 	questRewardIcon: string | null;
+	greaterTrinketIcon: string | null;
+	lesserTrinketIcon: string | null;
 	_heroCardId: string;
 	_heroPowerCardId: string | null | undefined;
 	_questRewardCardId: string | null | undefined;
+	_greaterTrinketCardId: string | null | undefined;
+	_lesserTrinketCardId: string | null | undefined;
 	_tavernTier: number | null;
 	defaultHero = true;
 
@@ -117,5 +180,13 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	onQuestRewardClick() {
 		this.controller.requestQuestRewardChange(this.side);
+	}
+
+	onGreaterTrinketClick() {
+		this.controller.requestGreaterTrinketChange(this.side);
+	}
+
+	onLesserTrinketClick() {
+		this.controller.requestLesserTrinketChange(this.side);
 	}
 }

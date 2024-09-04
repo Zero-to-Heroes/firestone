@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardIds, GameType, defaultStartingHp } from '@firestone-hs/reference-data';
+import { CardIds, GameType, TrinketSlot, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
@@ -40,6 +40,8 @@ import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 					[heroCardId]="heroCardId"
 					[heroPowerCardId]="heroPowerCardId"
 					[questRewardCardId]="questRewardCardId"
+					[lesserTrinketCardId]="lesserTrinketCardId"
+					[greaterTrinketCardId]="greaterTrinketCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
 					[tavernTier]="tavernTier"
@@ -149,6 +151,8 @@ export class BgsSimulatorSideComponent {
 	heroCardId: string;
 	heroPowerCardId: string | null | undefined;
 	questRewardCardId: string | null | undefined;
+	lesserTrinketCardId: string | null | undefined;
+	greaterTrinketCardId: string | null | undefined;
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
@@ -238,6 +242,13 @@ export class BgsSimulatorSideComponent {
 		this.questRewardCardId = !!this._player.player?.questRewards?.length
 			? this._player.player?.questRewards[0]
 			: null;
+		this.lesserTrinketCardId = this._player.player?.trinkets?.find(
+			(trinket) => trinket.scriptDataNum6 === TrinketSlot.LESSER,
+		)?.cardId;
+		this.greaterTrinketCardId = this._player.player?.trinkets?.find(
+			(trinket) => trinket.scriptDataNum6 === TrinketSlot.GREATER,
+		)?.cardId;
+		console.debug('trinkets', this._player.player?.trinkets, this.lesserTrinketCardId, this.greaterTrinketCardId);
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;

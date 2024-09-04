@@ -6,8 +6,8 @@ import { ILocalizationService } from './localization.service';
 	selector: '[fsTranslate]',
 })
 export class FsTranslateDirective extends TranslateDirective {
-	@Input() set fsTranslate(key: string) {
-		super.translate = key;
+	@Input() set fsTranslate(key: string | null) {
+		super.translate = key ?? '';
 	}
 
 	constructor(element: ElementRef, _ref: ChangeDetectorRef, i18n: ILocalizationService) {

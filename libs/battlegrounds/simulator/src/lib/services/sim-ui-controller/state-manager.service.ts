@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { CardIds, defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
+import { CardIds, defaultStartingHp, GameTag, GameType, getHeroPower, TrinketSlot } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -213,6 +213,114 @@ export class StateManagerService {
 							player: {
 								...value.battleInfo.opponentBoard.player,
 								questRewards: [questRewardCardId].filter((cardId) => cardId != null) as string[],
+							},
+						},
+					},
+			  });
+	}
+
+	public updateGreaterTrinket(
+		value: BgsFaceOffWithSimulation,
+		side: Side,
+		trinket: BoardTrinket | null,
+	): BgsFaceOffWithSimulation {
+		if (!value.battleInfo) {
+			return value;
+		}
+
+		const newTrinket: BoardTrinket | null = !!trinket
+			? {
+					...trinket,
+					entityId: Math.floor(Math.random() * 600000),
+					scriptDataNum6: TrinketSlot.GREATER,
+			  }
+			: null;
+
+		return side === 'player'
+			? value.update({
+					battleInfo: {
+						...value.battleInfo,
+						playerBoard: {
+							...value.battleInfo.playerBoard,
+							player: {
+								...value.battleInfo.playerBoard.player,
+								trinkets: [
+									...(value.battleInfo.playerBoard.player.trinkets ?? []).filter(
+										(t) => t.scriptDataNum6 !== TrinketSlot.GREATER,
+									),
+									newTrinket,
+								].filter((t) => t != null),
+							},
+						},
+					},
+			  })
+			: value.update({
+					battleInfo: {
+						...value.battleInfo,
+						opponentBoard: {
+							...value.battleInfo.opponentBoard,
+							player: {
+								...value.battleInfo.opponentBoard.player,
+								trinkets: [
+									...(value.battleInfo.opponentBoard.player.trinkets ?? []).filter(
+										(t) => t.scriptDataNum6 !== TrinketSlot.GREATER,
+									),
+									newTrinket,
+								].filter((t) => t != null),
+							},
+						},
+					},
+			  });
+	}
+
+	public updateLesserTrinket(
+		value: BgsFaceOffWithSimulation,
+		side: Side,
+		trinket: BoardTrinket | null,
+	): BgsFaceOffWithSimulation {
+		if (!value.battleInfo) {
+			return value;
+		}
+
+		const newTrinket: BoardTrinket | null = !!trinket
+			? {
+					...trinket,
+					entityId: Math.floor(Math.random() * 600000),
+					scriptDataNum6: TrinketSlot.LESSER,
+			  }
+			: null;
+
+		return side === 'player'
+			? value.update({
+					battleInfo: {
+						...value.battleInfo,
+						playerBoard: {
+							...value.battleInfo.playerBoard,
+							player: {
+								...value.battleInfo.playerBoard.player,
+								trinkets: [
+									...(value.battleInfo.playerBoard.player.trinkets ?? []).filter(
+										(t) => t.scriptDataNum6 !== TrinketSlot.LESSER,
+									),
+									newTrinket,
+								].filter((t) => t != null),
+							},
+						},
+					},
+			  })
+			: value.update({
+					battleInfo: {
+						...value.battleInfo,
+						opponentBoard: {
+							...value.battleInfo.opponentBoard,
+							player: {
+								...value.battleInfo.opponentBoard.player,
+								trinkets: [
+									...(value.battleInfo.opponentBoard.player.trinkets ?? []).filter(
+										(t) => t.scriptDataNum6 !== TrinketSlot.LESSER,
+									),
+									newTrinket,
+								].filter((t) => t != null),
 							},
 						},
 					},
