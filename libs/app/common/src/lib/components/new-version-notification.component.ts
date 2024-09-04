@@ -6,12 +6,14 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	OnDestroy,
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { firstValueFrom } from 'rxjs';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, firstValueFrom, Observable, Subscription } from 'rxjs';
 import { AppVersion } from '../model/app-version';
 import { isVersionBefore } from '../services/notifications-utils';
 
@@ -29,9 +31,18 @@ import { isVersionBefore } from '../services/notifications-utils';
 			<div class="versions-container">
 				<div class="versions-data">
 					<nav class="versions-history">
+						<div class="history-search">
+							<fs-text-input
+								class="search"
+								[placeholder]="'Search in history'"
+								[debounceTime]="100"
+								(fsModelUpdate)="onSearchStringUpdated($event)"
+							>
+							</fs-text-input>
+						</div>
 						<div
 							class="version"
-							*ngFor="let version of versions; let i = index"
+							*ngFor="let version of versions$ | async; let i = index"
 							[ngClass]="{ selected: version === selectedVersion }"
 							(click)="selectVersion(version)"
 						>
@@ -86,7 +97,12 @@ import { isVersionBefore } from '../services/notifications-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewVersionNotificationComponent implements AfterContentInit {
+export class NewVersionNotificationComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy
+{
+	versions$: Observable<readonly AppVersion[]>;
+
 	@Output() notificationDisplayed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	@Input() set forceOpen(value: boolean) {
@@ -96,26 +112,58 @@ export class NewVersionNotificationComponent implements AfterContentInit {
 		}
 	}
 
+	searchString: string;
+	searchForm = new FormControl();
+
 	showNewVersion: boolean;
 	dontShowAgain: boolean;
 	_forceOpen: boolean;
 
-	versions: readonly AppVersion[];
 	selectedVersion: AppVersion;
 
+	private versions: readonly AppVersion[];
+	private searchStringSub$$: Subscription;
+	private searchString$$ = new BehaviorSubject<string | null>(null);
+
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly http: HttpClient,
-	) {}
+	) {
+		super(cdr);
+	}
 
 	async ngAfterContentInit() {
 		this.versions = await this.loadVersions();
+
+		this.searchStringSub$$ = this.searchForm.valueChanges
+			.pipe(debounceTime(200))
+			.pipe(distinctUntilChanged())
+			.subscribe((data) => {
+				this.onSearchStringUpdated(data);
+			});
+		this.versions$ = this.searchString$$.pipe(
+			debounceTime(200),
+			distinctUntilChanged(),
+			this.mapData((searchString) => {
+				if (!searchString) {
+					return this.versions;
+				}
+				return this.versions.filter((version) =>
+					version.versionDetails?.toLowerCase().includes(searchString.toLowerCase()),
+				);
+			}),
+		);
+
 		this.updateInfo();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	override ngOnDestroy(): void {
+		super.ngOnDestroy();
+		this.searchStringSub$$?.unsubscribe();
 	}
 
 	async confirm() {
@@ -140,6 +188,14 @@ export class NewVersionNotificationComponent implements AfterContentInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onSearchStringUpdated(newSearch: string) {
+		this.searchString$$.next(newSearch);
+	}
+
+	onMouseDown(event: Event) {
+		event.stopPropagation();
 	}
 
 	private async updateInfo() {

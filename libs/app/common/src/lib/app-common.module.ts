@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -11,6 +12,8 @@ const components = [NewVersionNotificationComponent];
 @NgModule({
 	imports: [
 		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
 
 		InlineSVGModule.forRoot(),
 		MarkdownModule.forRoot({ loader: HttpClient }),
