@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { isBaconGhost } from '@firestone-hs/reference-data';
+import { CardType, isBaconGhost } from '@firestone-hs/reference-data';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
@@ -80,7 +82,12 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="hero-power">
-				<div class="item-container" [cardTooltip]="_heroPowerCardId" [cardTooltipPosition]="tooltipPosition">
+				<div
+					class="item-container"
+					[cardTooltip]="_heroPowerCardId"
+					[cardTooltipPosition]="tooltipPosition"
+					[cardTooltipBgs]="isHeroPowerBgs"
+				>
 					<img [src]="heroPowerIcon" class="image" *ngIf="!!heroPowerIcon" />
 					<div class="image empty-icon" *ngIf="!heroPowerIcon"></div>
 					<img
@@ -131,6 +138,9 @@ export class BgsHeroPortraitSimulatorComponent {
 	@Input() set heroPowerCardId(value: string | null | undefined) {
 		this._heroPowerCardId = value;
 		this.heroPowerIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
+		this.isHeroPowerBgs = !value
+			? false
+			: this.allCards.getCard(value).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET];
 	}
 
 	@Input() set questRewardCardId(value: string | null | undefined) {
@@ -158,13 +168,18 @@ export class BgsHeroPortraitSimulatorComponent {
 	lesserTrinketIcon: string | null;
 	_heroCardId: string;
 	_heroPowerCardId: string | null | undefined;
+	isHeroPowerBgs: boolean;
 	_questRewardCardId: string | null | undefined;
 	_greaterTrinketCardId: string | null | undefined;
 	_lesserTrinketCardId: string | null | undefined;
 	_tavernTier: number | null;
 	defaultHero = true;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly controller: BgsSimulatorControllerService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly controller: BgsSimulatorControllerService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	onPortraitClick() {
 		this.controller.requestHeroChange(this.side);

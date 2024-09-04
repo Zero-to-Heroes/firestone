@@ -238,7 +238,9 @@ export class BgsSimulatorSideComponent {
 		}
 
 		this.heroCardId = this._player.player?.cardId;
-		this.heroPowerCardId = this._player.player?.heroPowerId;
+		this.heroPowerCardId =
+			this._player.player?.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.HERO_POWER)?.cardId ??
+			this._player.player?.heroPowerId;
 		this.questRewardCardId = !!this._player.player?.questRewards?.length
 			? this._player.player?.questRewards[0]
 			: null;
