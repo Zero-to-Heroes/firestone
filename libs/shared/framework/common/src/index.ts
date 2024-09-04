@@ -5,6 +5,7 @@ export * from './lib/libs/subscriber-aware-behavior-subject';
 export * from './lib/libs/translation-file-version';
 export * from './lib/libs/utils';
 export * from './lib/models/preferences';
+export * from './lib/pipes/highlighter.pipe';
 export * from './lib/services/app-ui-store.service';
 export * from './lib/services/cdk-overlay-container.service';
 export * from './lib/shared-framework-common.module';

@@ -13,6 +13,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { MarkdownService } from 'ngx-markdown';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, firstValueFrom, Observable, Subscription } from 'rxjs';
 import { AppVersion } from '../model/app-version';
 import { isVersionBefore } from '../services/notifications-utils';
@@ -57,7 +58,10 @@ import { isVersionBefore } from '../services/notifications-utils';
 							[translateParams]="{ value: selectedVersion.version }"
 						></div>
 						<div class="update-text">
-							<markdown [data]="selectedVersion.versionDetails"></markdown>
+							<div
+								class="parsed-text"
+								[innerHTML]="selectedVersion.textHtml | highlighter: (searchString$ | async)"
+							></div>
 						</div>
 					</section>
 				</div>
@@ -102,6 +106,7 @@ export class NewVersionNotificationComponent
 	implements AfterContentInit, OnDestroy
 {
 	versions$: Observable<readonly AppVersion[]>;
+	searchString$: Observable<string | null>;
 
 	@Output() notificationDisplayed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -112,7 +117,6 @@ export class NewVersionNotificationComponent
 		}
 	}
 
-	searchString: string;
 	searchForm = new FormControl();
 
 	showNewVersion: boolean;
@@ -129,6 +133,7 @@ export class NewVersionNotificationComponent
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly http: HttpClient,
+		private readonly markdownService: MarkdownService,
 	) {
 		super(cdr);
 	}
@@ -136,6 +141,7 @@ export class NewVersionNotificationComponent
 	async ngAfterContentInit() {
 		this.versions = await this.loadVersions();
 
+		this.searchString$ = this.searchString$$.asObservable();
 		this.searchStringSub$$ = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
@@ -184,6 +190,11 @@ export class NewVersionNotificationComponent
 	}
 
 	selectVersion(version: AppVersion) {
+		if (version.versionDetails && !version.textHtml) {
+			const parsed = this.markdownService.parse(version.versionDetails);
+			console.debug('parsed', parsed);
+			version.textHtml = parsed;
+		}
 		this.selectedVersion = version;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -206,7 +217,7 @@ export class NewVersionNotificationComponent
 		const prefs: Preferences = await this.prefs.getPreferences();
 		const lastSeenReleaseNotes: string = prefs.lastSeenReleaseNotes;
 		const lastUpdate = this.versions[0];
-		this.selectedVersion = lastUpdate;
+		this.selectVersion(lastUpdate);
 		this.dontShowAgain = prefs.dontShowNewVersionNotif;
 		if (!this._forceOpen && prefs.dontShowNewVersionNotif && !lastUpdate.force) {
 			return;

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
+import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { MarkdownModule } from 'ngx-markdown';
@@ -19,6 +20,7 @@ const components = [NewVersionNotificationComponent];
 		MarkdownModule.forRoot({ loader: HttpClient }),
 
 		SharedFrameworkCoreModule,
+		SharedFrameworkCommonModule,
 		SharedCommonViewModule,
 	],
 	declarations: components,
