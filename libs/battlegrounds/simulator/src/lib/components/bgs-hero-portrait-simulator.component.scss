@@ -1,7 +1,7 @@
 .container {
 	position: relative;
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 10fr) minmax(0, 10fr) minmax(0, 10fr) minmax(0, 7fr);
 	align-items: center;
 	height: 100%;
 
@@ -74,6 +74,7 @@
 			height: 24%;
 		}
 	}
+
 	.hero-power {
 		justify-self: flex-end;
 
@@ -81,6 +82,28 @@
 			top: 7%;
 			right: 44%;
 			height: 24%;
+		}
+	}
+
+	.global-info {
+		justify-self: flex-end;
+		position: relative;
+
+		.item-container {
+			height: 9vh;
+			aspect-ratio: 1;
+
+			.icon {
+				height: 100%;
+				clip-path: circle(4vh at 50% 50%);
+				opacity: 0.7;
+			}
+		}
+
+		&:hover {
+			.item-container .icon {
+				opacity: 1;
+			}
 		}
 	}
 }

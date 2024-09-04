@@ -2,6 +2,7 @@ export * from './lib/battlegrounds-simulator.module';
 export * from './lib/components/bgs-hero-portrait-simulator.component';
 export * from './lib/components/bgs-minus-button.component';
 export * from './lib/components/bgs-plus-button.component';
+export * from './lib/components/bgs-simulator-global-info-selection.component';
 export * from './lib/components/bgs-simulator-hero-power-selection.component';
 export * from './lib/components/bgs-simulator-hero-selection.component';
 export * from './lib/components/bgs-simulator-minion-selection.component';

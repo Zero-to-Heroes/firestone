@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { CardIds, defaultStartingHp, GameTag, GameType, getHeroPower } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -101,6 +102,42 @@ export class StateManagerService {
 								...value.battleInfo.opponentBoard.player,
 								cardId: heroCardId,
 								heroPowerId: getHeroPower(heroCardId, this.allCards.getService()),
+							},
+						},
+					},
+			  });
+	}
+
+	public updateGlobalInfo(
+		value: BgsFaceOffWithSimulation,
+		side: Side,
+		globalInfo: BgsPlayerGlobalInfo | null,
+	): BgsFaceOffWithSimulation {
+		if (!value.battleInfo) {
+			return value;
+		}
+
+		return side === 'player'
+			? value.update({
+					battleInfo: {
+						...value.battleInfo,
+						playerBoard: {
+							...value.battleInfo.playerBoard,
+							player: {
+								...value.battleInfo.playerBoard.player,
+								globalInfo: globalInfo ?? undefined,
+							},
+						},
+					},
+			  })
+			: value.update({
+					battleInfo: {
+						...value.battleInfo,
+						opponentBoard: {
+							...value.battleInfo.opponentBoard,
+							player: {
+								...value.battleInfo.opponentBoard.player,
+								globalInfo: globalInfo ?? undefined,
 							},
 						},
 					},

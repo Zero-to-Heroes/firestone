@@ -15,6 +15,7 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { BgsHeroPortraitSimulatorComponent } from './components/bgs-hero-portrait-simulator.component';
 import { BgsMinusButtonComponent } from './components/bgs-minus-button.component';
 import { BgsPlusButtonComponent } from './components/bgs-plus-button.component';
+import { BgsSimulatorGlobalInfoSelectionComponent } from './components/bgs-simulator-global-info-selection.component';
 import { BgsSimulatorHeroPowerSelectionComponent } from './components/bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from './components/bgs-simulator-hero-selection.component';
 import { BgsSimulatorMinionSelectionComponent } from './components/bgs-simulator-minion-selection.component';
@@ -38,6 +39,7 @@ const components = [
 	BgsMinusButtonComponent,
 	BgsHeroPortraitSimulatorComponent,
 	BgsSimulatorHeroPowerSelectionComponent,
+	BgsSimulatorGlobalInfoSelectionComponent,
 	BgsSimulatorHeroSelectionComponent,
 	BgsSimulatorQuestRewardSelectionComponent,
 	BgsSimulatorMinionSelectionComponent,

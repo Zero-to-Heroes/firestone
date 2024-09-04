@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBattleSimulationService, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -31,6 +32,7 @@ import { PermutationResult, ProcessingStatus } from '../services/bgs-battle-posi
 import { BgsBattlePositioningService } from '../services/bgs-battle-positioning.service';
 import {
 	BgsSimulatorControllerService,
+	GlobalInfoChangeRequest,
 	HeroChangeRequest,
 	HeroPowerChangeRequest,
 	MinionAddRequest,
@@ -42,6 +44,7 @@ import {
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '../services/simulator-keyboard-controls.service';
+import { BgsSimulatorGlobalInfoSelectionComponent } from './bgs-simulator-global-info-selection.component';
 import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
 import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
@@ -229,6 +232,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 	private initControllerRequests() {
 		this.controller.portraitChangeRequested.subscribe((request) => this.onPortraitChangeRequested(request));
 		this.controller.heroPowerChangeRequested.subscribe((request) => this.onHeroPowerChangeRequested(request));
+		this.controller.globalInfoChangeRequested.subscribe((request) => this.onGlobalInfoChangeRequested(request));
 		this.controller.questRewardChangeRequested.subscribe((request) => this.onQuestRewardChangeRequested(request));
 		this.controller.minionAddRequested.subscribe((request) => this.onMinionAddRequested(request));
 		this.controller.minionUpdateRequested.subscribe((request) => this.onMinionUpdateRequested(request));
@@ -327,6 +331,15 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		modalRef.instance.applyHandler = (newHeroCardId: string) => {
 			this.overlayRef.detach();
 			this.controller.updateHero(request.side, newHeroCardId);
+		};
+	}
+
+	onGlobalInfoChangeRequested(request: GlobalInfoChangeRequest) {
+		const modalRef = this.createModal(BgsSimulatorGlobalInfoSelectionComponent);
+		modalRef.instance.currentGlobalInfo = request.globalInfo;
+		modalRef.instance.applyHandler = (newGlobalInfo: BgsPlayerGlobalInfo | null) => {
+			this.overlayRef.detach();
+			this.controller.updateGlobalInfo(request.side, newGlobalInfo);
 		};
 	}
 

@@ -2,6 +2,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
@@ -14,6 +15,8 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	public faceOff$$: BehaviorSubject<BgsFaceOffWithSimulation | null>;
 
 	public portraitChangeRequested: EventEmitter<HeroChangeRequest> = new EventEmitter<HeroChangeRequest>();
+	public globalInfoChangeRequested: EventEmitter<GlobalInfoChangeRequest> =
+		new EventEmitter<GlobalInfoChangeRequest>();
 	public heroPowerChangeRequested: EventEmitter<HeroPowerChangeRequest> = new EventEmitter<HeroPowerChangeRequest>();
 	public questRewardChangeRequested: EventEmitter<QuestRewardChangeRequest> =
 		new EventEmitter<QuestRewardChangeRequest>();
@@ -76,6 +79,17 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 	public updateHeroPower(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) {
 		const faceOff = this.stateManager.updateHeroPower(this.faceOff$$.value!, side, heroPowerCardId, heroPowerInfo);
+		this.faceOff$$.next(faceOff);
+	}
+
+	public requestGlobalInfoChange(side: Side) {
+		this.globalInfoChangeRequested.next({
+			side: side,
+			globalInfo: this.getSide(side)?.player.globalInfo,
+		});
+	}
+	public updateGlobalInfo(side: Side, globalInfo: BgsPlayerGlobalInfo | null) {
+		const faceOff = this.stateManager.updateGlobalInfo(this.faceOff$$.value!, side, globalInfo);
 		this.faceOff$$.next(faceOff);
 	}
 
@@ -156,6 +170,10 @@ export type Side = 'player' | 'opponent';
 export interface HeroChangeRequest {
 	side: Side;
 	heroCardId: string;
+}
+export interface GlobalInfoChangeRequest {
+	side: Side;
+	globalInfo: BgsPlayerGlobalInfo | undefined;
 }
 export interface HeroPowerChangeRequest {
 	side: Side;

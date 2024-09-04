@@ -52,6 +52,18 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 					[useUpdateIcon]="!defaultHero"
 				></bgs-plus-button>
 			</div>
+			<div
+				class="global-info"
+				(click)="onHeroGlobalInfoClick()"
+				[helpTooltip]="'battlegrounds.sim.global-info-title-tooltip' | fsTranslate"
+			>
+				<div class="item-container">
+					<img
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/simulator/hero_enchantments.png"
+						class="icon"
+					/>
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,6 +109,10 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	onHeroPowerClick() {
 		this.controller.requestHeroPowerChange(this.side);
+	}
+
+	onHeroGlobalInfoClick() {
+		this.controller.requestGlobalInfoChange(this.side);
 	}
 
 	onQuestRewardClick() {
