@@ -281,7 +281,7 @@ export class BgsSimulatorSideComponent {
 			heroPowerCardId: player.player.heroPowerId ?? undefined,
 			initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, player.player.cardId, this.allCards),
 			questRewards: [], // TODO
-			boardHistory: [this.toBgsBoard(player.board)].filter((b) => !!b),
+			boardHistory: [this.toBgsBoard(player.board)].filter((b) => !!b) as BgsBoard[],
 			lesserTrinket: player.player.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.LESSER)?.cardId,
 			greaterTrinket: player.player.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.GREATER)?.cardId,
 		});

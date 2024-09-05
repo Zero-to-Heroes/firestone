@@ -11,6 +11,7 @@ export * from './lib/components/bgs-simulator-minion-tribe-filter-dropdown.compo
 export * from './lib/components/bgs-simulator-player-overview.component';
 export * from './lib/components/bgs-simulator-quest-reward-selection.component';
 export * from './lib/components/bgs-simulator-side.component';
+export * from './lib/components/bgs-simulator-trinket-selection.component';
 export * from './lib/components/bgs-simulator.component';
 export * from './lib/services/bgs-battle-positioning-executor.service';
 export * from './lib/services/bgs-battle-positioning-mock-executor.service';

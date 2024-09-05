@@ -197,10 +197,14 @@ export class TwitchAuthService {
 			? {
 					leaderboard: this.buildLeaderboard(bgsState),
 					currentBattle: {
-						battleInfo: latestBattle?.battleResult
-							? { ...latestBattle?.battleResult, outcomeSamples: null }
-							: null,
-						status: latestBattle?.battleInfoStatus,
+						battleInfo:
+							latestBattle?.battleResult && latestBattle?.battleInfoStatus !== 'ongoing'
+								? { ...latestBattle?.battleResult, outcomeSamples: null }
+								: null,
+						status:
+							latestBattle?.battleInfoStatus === 'ongoing'
+								? 'waiting-for-result'
+								: latestBattle?.battleInfoStatus,
 					},
 					currentTurn: bgsState.currentGame?.currentTurn,
 					inGame: bgsState.inGame,
