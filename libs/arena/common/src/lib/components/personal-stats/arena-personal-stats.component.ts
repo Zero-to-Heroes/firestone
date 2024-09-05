@@ -281,27 +281,27 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 				return ALL_CLASSES.map((playerClass) => {
 					const runs = grouped[playerClass];
 					const totalRuns = runs?.length;
-					const totalGames = runs?.reduce((a, b) => a + b.wins + b.losses, 0) ?? 0;
+					const allGames = runs?.flatMap((r) => r.steps) ?? [];
+					const allGamesWithoutTies = allGames.filter((s) => s.result !== 'tied') ?? [];
+
+					const totalGames = allGames.length;
+					const totalGamesWithoutTies = allGamesWithoutTies.length;
 					const totalWins = runs?.reduce((a, b) => a + b.wins, 0) ?? 0;
-					const totalGamesFirst =
-						runs?.flatMap((r) => r.steps).filter((s) => s.coinPlay === 'play').length ?? 0;
+					const totalGamesFirst = allGamesWithoutTies.filter((s) => s.coinPlay === 'play').length ?? 0;
 					const totalWinsFirst =
-						runs?.flatMap((r) => r.steps).filter((s) => s.coinPlay === 'play' && s.result === 'won')
-							.length ?? 0;
-					const totalGamesCoin =
-						runs?.flatMap((r) => r.steps).filter((s) => s.coinPlay === 'coin').length ?? 0;
+						allGamesWithoutTies.filter((s) => s.coinPlay === 'play' && s.result === 'won').length ?? 0;
+					const totalGamesCoin = allGamesWithoutTies.filter((s) => s.coinPlay === 'coin').length ?? 0;
 					const totalWinsCoin =
-						runs?.flatMap((r) => r.steps).filter((s) => s.coinPlay === 'coin' && s.result === 'won')
-							.length ?? 0;
+						allGamesWithoutTies.filter((s) => s.coinPlay === 'coin' && s.result === 'won').length ?? 0;
 
 					const winrateStr = showAsPercents
-						? totalGames > 0
-							? ((100 * totalWins) / totalGames).toFixed(2) + '%'
+						? totalGamesWithoutTies > 0
+							? ((100 * totalWins) / totalGamesWithoutTies).toFixed(2) + '%'
 							: '-'
 						: null;
 					const winrateDetails = !showAsPercents
-						? totalGames > 0
-							? { wins: totalWins, losses: totalGames - totalWins }
+						? totalGamesWithoutTies > 0
+							? { wins: totalWins, losses: totalGamesWithoutTies - totalWins }
 							: { wins: null, losses: null }
 						: null;
 
@@ -342,11 +342,11 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 							? 'negative'
 							: null,
 						gamesPlayed: totalGames,
-						winrateClass: !totalGames
+						winrateClass: !totalGamesWithoutTies
 							? null
-							: (100 * totalWins) / totalGames > 51
+							: (100 * totalWins) / totalGamesWithoutTies > 51
 							? 'positive'
-							: (100 * totalWins) / totalGames < 49
+							: (100 * totalWins) / totalGamesWithoutTies < 49
 							? 'negative'
 							: null,
 						winrateFirstClass: !totalGamesFirst
