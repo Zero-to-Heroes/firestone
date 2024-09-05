@@ -278,11 +278,13 @@ export class BgsSimulatorSideComponent {
 		const result: BgsPlayer = BgsPlayer.create({
 			cardId: player.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
 			displayedCardId: player.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
-			heroPowerCardId: player.player.heroPowerId,
+			heroPowerCardId: player.player.heroPowerId ?? undefined,
 			initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, player.player.cardId, this.allCards),
 			questRewards: [], // TODO
 			boardHistory: [this.toBgsBoard(player.board)].filter((b) => !!b),
-		} as any);
+			lesserTrinket: player.player.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.LESSER)?.cardId,
+			greaterTrinket: player.player.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.GREATER)?.cardId,
+		});
 		return result;
 	}
 

@@ -230,24 +230,45 @@
 	}
 }
 
-@media (min-width: 1450px) {
-	.opponent-overview {
-		.main-info {
-			flex-grow: 0;
+.trinket {
+	position: relative;
+	height: 80%;
+	aspect-ratio: 1;
+	min-height: 0;
+
+	.item-container {
+		width: 100%;
+		height: 100%;
+	}
+
+	.image {
+		position: absolute;
+		height: 100%;
+		aspect-ratio: 185/213;
+		top: 0;
+		left: 0;
+		clip-path: ellipse(35% 35% at 50% 55%);
+
+		&.empty-icon {
+			background: var(--color-5);
 		}
-		.tavern-upgrades {
-			display: flex;
-		}
+	}
+
+	.frame {
+		position: absolute;
+		height: 100%;
+		top: 0;
+		left: 0;
 	}
 }
 
-@media (min-width: 1550px) {
-	.opponent-overview {
-		bgs-buddies {
-			display: flex;
-		}
-		bgs-quest-rewards {
-			display: flex;
-		}
+.trinkets {
+	display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+
+	.trinket {
+		height: 5vh;
 	}
 }

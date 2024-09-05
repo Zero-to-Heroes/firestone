@@ -6,7 +6,7 @@
 	gap: 0.5vh;
 
 	&.with-duos {
-		grid-template-rows: minmax(0, 10fr) minmax(0, 20fr) minmax(0, 20fr);
+		grid-template-rows: minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr);
 	}
 
 	.hero {
@@ -209,11 +209,11 @@
 
 :host.player {
 	.bgs-battle-side {
-		grid-template-rows: minmax(0, 2fr) minmax(0, 2fr);
+		grid-template-rows: minmax(0, 20fr) minmax(0, 20fr);
 		gap: 0.5vh;
 
 		&.with-duos {
-			grid-template-rows: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+			grid-template-rows: minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr);
 		}
 
 		.teammate {

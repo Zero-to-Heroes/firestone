@@ -8,6 +8,26 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 	styleUrls: [`./bgs-simulator-player-overview.component.scss`],
 	template: `
 		<div class="opponent-overview">
+			<div class="trinkets" *ngIf="!!greaterTrinketIcon || !!lesserTrinketIcon">
+				<div class="trinket greater" *ngIf="!!greaterTrinketIcon">
+					<div class="item-container" [cardTooltip]="_greaterTrinketCardId" [cardTooltipBgs]="true">
+						<img [src]="greaterTrinketIcon" class="image" />
+						<img
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/simulator/trinket_frame.png"
+							class="frame"
+						/>
+					</div>
+				</div>
+				<div class="trinket lesser" *ngIf="!!lesserTrinketIcon">
+					<div class="item-container" [cardTooltip]="_lesserTrinketCardId" [cardTooltipBgs]="true">
+						<img [src]="lesserTrinketIcon" class="image" />
+						<img
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/simulator/trinket_frame.png"
+							class="frame"
+						/>
+					</div>
+				</div>
+			</div>
 			<div class="portrait">
 				<bgs-hero-portrait
 					class="icon"
@@ -44,6 +64,10 @@ export class BgsSimulatorPlayerOverviewComponent {
 	tavernTier: number;
 	boardMinions: readonly Entity[];
 	boardTurn: number;
+	greaterTrinketIcon: string | null;
+	lesserTrinketIcon: string | null;
+	_greaterTrinketCardId: string | null | undefined;
+	_lesserTrinketCardId: string | null | undefined;
 
 	@Input() showBoardMessage = true;
 	@Input() emptyBoardMessage: string;
@@ -65,6 +89,14 @@ export class BgsSimulatorPlayerOverviewComponent {
 		this.mmr = value.mmr;
 		this.tavernTier = value.getCurrentTavernTier();
 		this.boardMinions = value.getLastKnownBoardStateAsReplayEntities() ?? [];
+		this._greaterTrinketCardId = value.greaterTrinket;
+		this.greaterTrinketIcon = !!this._greaterTrinketCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._greaterTrinketCardId}.jpg`
+			: null;
+		this._lesserTrinketCardId = value.lesserTrinket;
+		this.lesserTrinketIcon = !!this._lesserTrinketCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._lesserTrinketCardId}.jpg`
+			: null;
 	}
 
 	private _opponent: BgsPlayer;
