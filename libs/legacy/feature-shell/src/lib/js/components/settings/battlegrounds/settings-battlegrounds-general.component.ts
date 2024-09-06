@@ -144,6 +144,26 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="numberOfSimsKnobs"
 				>
 				</preference-slider>
+				<div
+					class="slider-label"
+					[ngClass]="{
+						disabled: !value.useLocalSimulator || !value.enableSimulation || !value.bgsFullToggle
+					}"
+					[owTranslate]="'settings.battlegrounds.general.max-sim-duration-label'"
+					[helpTooltip]="'settings.battlegrounds.general.max-sim-duration-tooltip' | owTranslate"
+				></div>
+				<preference-slider
+					class="simulation-slider"
+					field="bgsSimulatorMaxDurationInMillis"
+					[enabled]="value.useLocalSimulator && value.bgsEnableApp && value.bgsFullToggle"
+					[showCurrentValue]="true"
+					displayedValueUnit=""
+					[min]="2000"
+					[max]="20000"
+					[snapSensitivity]="200"
+					[knobs]="numberOfSimsKnobs"
+				>
+				</preference-slider>
 			</div>
 		</div>
 	`,
@@ -164,7 +184,7 @@ export class SettingsBattlegroundsGeneralComponent
 
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
-			absoluteValue: 2500,
+			absoluteValue: 8000,
 		},
 	];
 	sizeKnobs: readonly Knob[] = [

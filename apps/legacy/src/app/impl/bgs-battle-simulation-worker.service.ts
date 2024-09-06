@@ -20,7 +20,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		const numberOfWorkers = 1; // Math.max(1, (this.cpuCount ?? 1) - 1);
 		this.simulateLocalBattleInstance(
 			battleInfo,
-			Math.floor(prefs.bgsSimulatorNumberOfSims / numberOfWorkers),
+			Math.floor((battleInfo.options?.numberOfSimulations ?? prefs.bgsSimulatorNumberOfSims) / numberOfWorkers),
 			onResultReceived,
 		);
 		// const results = await Promise.all(

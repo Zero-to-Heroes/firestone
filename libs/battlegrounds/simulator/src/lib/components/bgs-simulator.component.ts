@@ -487,7 +487,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			options: {
 				...this.controller.faceOff$$.value.battleInfo?.options,
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
-				maxAcceptableDuration: 8000,
+				maxAcceptableDuration: prefs.bgsSimulatorMaxDurationInMillis ?? 8000,
 			},
 			gameState: {
 				...this.controller.faceOff$$.value.battleInfo.gameState,
@@ -559,7 +559,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			options: {
 				...this.controller.faceOff$$.value.battleInfo?.options,
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
-				maxAcceptableDuration: 6000,
+				maxAcceptableDuration: prefs.bgsSimulatorMaxDurationInMillis ?? 6000,
 			},
 			gameState: {
 				...this.controller.faceOff$$.value.battleInfo.gameState,
