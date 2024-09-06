@@ -6,6 +6,7 @@ export * from './lib/components/bgs-hero-stats-info-premium.component';
 export * from './lib/components/bgs-opponent-overview-big.component';
 export * from './lib/components/bgs-player-capsule.component';
 export * from './lib/components/bgs-quest-rewards.component';
+export * from './lib/components/bgs-simulation-overlay.component';
 export * from './lib/components/bgs-trinkets.component';
 export * from './lib/components/bgs-triples.component';
 export * from './lib/components/quests/battlegrounds-meta-stats-quests.component';

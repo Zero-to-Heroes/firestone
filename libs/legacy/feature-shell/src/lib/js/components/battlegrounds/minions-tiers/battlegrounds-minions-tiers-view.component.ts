@@ -78,7 +78,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	@Input() showTribesHighlight: boolean;
 
 	@Input() set tiers(value: readonly Tier[]) {
-		console.debug('setting tiers in tiers-view', value);
 		if (!value) {
 			return;
 		}
@@ -115,7 +114,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	}
 
 	onDisplayedTier(tavernTier: Tier) {
-		console.debug('setting displayed tier', tavernTier);
 		this.displayedTierId$$.next(tavernTier?.tavernTier);
 	}
 

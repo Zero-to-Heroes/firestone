@@ -94,6 +94,5 @@ export const buildTiers = (
 	const tribeTiers: readonly Tier[] = showTribeTiers
 		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, config)
 		: [];
-	console.debug('all tiers', standardTiers, mechanicsTiers, tribeTiers);
 	return [...standardTiers, ...mechanicsTiers, ...tribeTiers];
 };

@@ -20,7 +20,6 @@ export const enhanceTiers = (
 	const newTiers = tiers.map((tier) =>
 		enhanceTier(tier, playerCardId, boardComposition, tavernLevel, cardRules, allCards, i18n),
 	);
-	console.debug('[tier-enhancer] enhanced tiers', tiers);
 	return newTiers;
 };
 

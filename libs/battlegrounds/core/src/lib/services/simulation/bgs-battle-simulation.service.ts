@@ -5,6 +5,7 @@ import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-bat
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
@@ -14,6 +15,7 @@ const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q
 
 @Injectable()
 export class BgsBattleSimulationService {
+	// TODO: maybe expose this to the UI, and have the simulation widget listen to it directly?
 	public battleInfo$$ = new BehaviorSubject<BattleInfo | null>(null);
 	private isPremium: boolean;
 
@@ -66,23 +68,53 @@ export class BgsBattleSimulationService {
 			shouldUseLocalSimulator,
 			prefs.bgsUseRemoteSimulator,
 			this.isPremium,
+			prefs.bgsSimShowIntermediaryResults,
 		);
-		const result: SimulationResult | null = shouldUseLocalSimulator
-			? await this.simulateLocalBattle(battleInfoInput, prefs)
-			: await this.api.callPostApi<SimulationResult>(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput);
-		const resultForLog = !!result ? { ...result } : null;
-		if (!!resultForLog) {
-			delete resultForLog.outcomeSamples;
+
+		// Don't show intermediate results
+		if (!shouldUseLocalSimulator || !this.isPremium || !prefs.bgsSimShowIntermediaryResults) {
+			(battleInfoInput.options as any).intermediateResults = 0;
+			const result: SimulationResult | null = shouldUseLocalSimulator
+				? await this.simulateLocalBattleOnce(battleInfoInput, prefs)
+				: await this.api.callPostApi<SimulationResult>(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput);
+			const resultForLog = !!result ? { ...result } : null;
+			if (!!resultForLog) {
+				delete resultForLog.outcomeSamples;
+			}
+			console.log('[bgs-simulation] battle simulation result', resultForLog);
+			this.battleInfo$$.next({
+				battleId: battleId,
+				result: result,
+				heroCardId: normalizeHeroCardId(
+					battleInfoInput.opponentBoard.player.nonGhostCardId ??
+						CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+					this.cards,
+				),
+			});
+		} else {
+			(battleInfoInput.options as any).intermediateResults = 200;
+			console.debug('[bgs-simulation] [debug] starting sim');
+			this.simulateLocalBattle(battleInfoInput, prefs, async (result: SimulationResult | null) => {
+				await sleep(0);
+				const resultForLog = !!result ? { ...result } : null;
+				if (!!resultForLog) {
+					delete resultForLog.outcomeSamples;
+				}
+				if (!!result) {
+					console.debug('[bgs-simulation] [debug] partial battle simulation result', resultForLog);
+					this.battleInfo$$.next({
+						battleId: battleId,
+						result: result,
+						intermediateResult: !result.outcomeSamples,
+						heroCardId: normalizeHeroCardId(
+							battleInfoInput.opponentBoard.player.nonGhostCardId ??
+								CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+							this.cards,
+						),
+					});
+				}
+			});
 		}
-		console.log('[bgs-simulation] battle simulation result', resultForLog);
-		this.battleInfo$$.next({
-			battleId: battleId,
-			result: result,
-			heroCardId: normalizeHeroCardId(
-				battleInfoInput.opponentBoard.player.nonGhostCardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
-				this.cards,
-			),
-		});
 	}
 
 	public async getIdForSimulationSample(sample: GameSample): Promise<string | null> {
@@ -118,9 +150,32 @@ export class BgsBattleSimulationService {
 		}
 	}
 
-	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult | null> {
+	public simulateLocalBattleOnce(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult | null> {
+		return new Promise<SimulationResult | null>((resolve) => {
+			try {
+				this.executor.simulateLocalBattle(battleInfo, prefs, (result) => resolve(result));
+			} catch (e: any) {
+				console.error('[bgs-simulation] could not simulate battle', e.message, e);
+				if (!e.message?.includes('Maximum call stack size exceeded')) {
+					this.bugService.submitAutomatedReport({
+						type: 'bg-sim-crash',
+						info: JSON.stringify({
+							message: '[bgs-simulation] Simulation crashed',
+							battleInfo: battleInfo,
+						}),
+					});
+				}
+			}
+		});
+	}
+
+	public simulateLocalBattle(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void {
 		try {
-			return this.executor.simulateLocalBattle(battleInfo, prefs);
+			this.executor.simulateLocalBattle(battleInfo, prefs, onResultReceived);
 		} catch (e: any) {
 			console.error('[bgs-simulation] could not simulate battle', e.message, e);
 			if (!e.message?.includes('Maximum call stack size exceeded')) {
@@ -132,7 +187,6 @@ export class BgsBattleSimulationService {
 					}),
 				});
 			}
-			return null;
 		}
 	}
 }
@@ -140,5 +194,6 @@ export class BgsBattleSimulationService {
 export interface BattleInfo {
 	battleId: string;
 	result: SimulationResult | null;
+	intermediateResult?: boolean;
 	heroCardId: string;
 }

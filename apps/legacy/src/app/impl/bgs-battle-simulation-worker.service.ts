@@ -12,17 +12,26 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		super();
 	}
 
-	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
+	public simulateLocalBattle(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void {
 		const numberOfWorkers = 1; // Math.max(1, (this.cpuCount ?? 1) - 1);
-		const results = await Promise.all(
-			[...Array(numberOfWorkers).keys()].map((i) =>
-				this.simulateLocalBattleInstance(
-					battleInfo,
-					Math.floor(prefs.bgsSimulatorNumberOfSims / numberOfWorkers),
-				),
-			),
+		this.simulateLocalBattleInstance(
+			battleInfo,
+			Math.floor(prefs.bgsSimulatorNumberOfSims / numberOfWorkers),
+			onResultReceived,
 		);
-		return this.mergeSimulationResults(results?.filter((result) => result != null) ?? []);
+		// const results = await Promise.all(
+		// 	[...Array(numberOfWorkers).keys()].map((i) =>
+		// 		this.simulateLocalBattleInstance(
+		// 			battleInfo,
+		// 			Math.floor(prefs.bgsSimulatorNumberOfSims / numberOfWorkers),
+		// 		),
+		// 	),
+		// );
+		// return this.mergeSimulationResults(results?.filter((result) => result != null) ?? []);
 	}
 
 	private mergeSimulationResults(results: SimulationResult[]): SimulationResult {
@@ -67,37 +76,36 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		};
 	}
 
-	private async simulateLocalBattleInstance(
+	private simulateLocalBattleInstance(
 		battleInfo: BgsBattleInfo,
 		numberOfSims: number,
-	): Promise<SimulationResult> {
-		return new Promise<SimulationResult>((resolve) => {
-			const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
-			worker.onmessage = (ev: MessageEvent) => {
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void {
+		const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
+		worker.onmessage = (ev: MessageEvent) => {
+			if (!ev?.data) {
+				this.bugService.submitAutomatedReport({
+					type: 'bg-sim-crash',
+					info: JSON.stringify({
+						message: '[bgs-simulation] Simulation crashed',
+						battleInfo: battleInfo,
+					}),
+				});
 				worker.terminate();
-				if (!ev?.data) {
-					this.bugService.submitAutomatedReport({
-						type: 'bg-sim-crash',
-						info: JSON.stringify({
-							message: '[bgs-simulation] Simulation crashed',
-							battleInfo: battleInfo,
-						}),
-					});
-					resolve(null);
-					return;
-				}
-				resolve(JSON.parse(ev.data));
-			};
-			worker.postMessage({
-				battleMessage: {
-					...battleInfo,
-					options: {
-						...battleInfo.options,
-						numberOfSimulations: numberOfSims,
-					},
-				} as BgsBattleInfo,
-				cards: this.cards.getService(),
-			});
+				onResultReceived(null);
+				return;
+			}
+			onResultReceived(JSON.parse(ev.data));
+		};
+		worker.postMessage({
+			battleMessage: {
+				...battleInfo,
+				options: {
+					...battleInfo.options,
+					numberOfSimulations: numberOfSims,
+				},
+			} as BgsBattleInfo,
+			cards: this.cards.getService(),
 		});
 	}
 }

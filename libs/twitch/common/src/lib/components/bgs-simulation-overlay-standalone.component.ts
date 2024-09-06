@@ -21,7 +21,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 @Component({
 	selector: 'bgs-simulation-overlay-standalone',
 	styleUrls: [
-		`../../../../../legacy/feature-shell/src/lib/css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
+		`../../../../../battlegrounds/common/src/lib/components/bgs-simulation-overlay.component.scss`,
 		`./bgs-simulation-overlay-standalone.component.scss`,
 	],
 	template: `

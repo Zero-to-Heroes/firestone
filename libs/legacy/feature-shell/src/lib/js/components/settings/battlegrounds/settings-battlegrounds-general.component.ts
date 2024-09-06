@@ -107,6 +107,13 @@ import { Knob } from '../preference-slider.component';
 					premiumSetting
 				></preference-toggle>
 				<preference-toggle
+					field="bgsSimShowIntermediaryResults"
+					[ngClass]="{ disabled: !value.enableSimulation || !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-intermediate-results-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-intermediate-results-tooltip' | owTranslate"
+					premiumSetting
+				></preference-toggle>
+				<preference-toggle
 					field="bgsHideSimResultsOnRecruit"
 					[ngClass]="{ disabled: !value.bgsFullToggle || value.bgsShowSimResultsOnlyOnRecruit }"
 					[label]="'settings.battlegrounds.general.hide-simulation-label' | owTranslate"

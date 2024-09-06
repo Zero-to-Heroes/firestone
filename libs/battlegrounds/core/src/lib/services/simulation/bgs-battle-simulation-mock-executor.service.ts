@@ -6,7 +6,11 @@ import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-exec
 
 @Injectable()
 export class BgsBattleSimulationMockExecutorService extends BgsBattleSimulationExecutorService {
-	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult | null> {
-		return null;
+	public simulateLocalBattle(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void {
+		onResultReceived(null);
 	}
 }

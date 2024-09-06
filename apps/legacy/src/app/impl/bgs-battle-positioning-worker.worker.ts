@@ -22,7 +22,13 @@ addEventListener('message', ({ data }) => {
 	// let i = 0;
 
 	for (const battleInfo of battleMessages) {
-		const permutationResult: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
+		const battleIterator = simulateBattle(battleInfo, cards, cardsData);
+		// Iterate through all intermediate results to reach the final result
+		let result = battleIterator.next();
+		while (!result.done) {
+			result = battleIterator.next();
+		}
+		const permutationResult = result.value;
 		if (!!permutationResult) {
 			permutationResults.push({
 				permutation: battleInfo.playerBoard.board,

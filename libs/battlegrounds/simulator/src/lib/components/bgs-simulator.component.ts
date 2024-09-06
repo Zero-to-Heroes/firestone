@@ -497,16 +497,22 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		};
 		console.log('[bgs-simulation-desktop] battle simulation request prepared');
 		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
-		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
-		console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
-		this.battleResult$$.next(
-			BgsFaceOffWithSimulation.create({
-				battleInfoStatus: 'done',
-				battleResult: newSim ?? undefined,
-			}),
-		);
-		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
-		this.simulateButtonDisabled = false;
+		this.simulationService.simulateLocalBattle(battleInfo, prefs, (newSim) => {
+			console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
+			if (!!newSim) {
+				const intermediateResult = !newSim.outcomeSamples;
+				this.battleResult$$.next(
+					BgsFaceOffWithSimulation.create({
+						battleInfoStatus: intermediateResult ? 'ongoing' : 'done',
+						battleResult: newSim ?? undefined,
+					}),
+				);
+				if (!intermediateResult) {
+					this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
+					this.simulateButtonDisabled = false;
+				}
+			}
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

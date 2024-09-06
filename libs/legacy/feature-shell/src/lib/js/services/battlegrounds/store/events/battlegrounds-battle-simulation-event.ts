@@ -6,6 +6,7 @@ export class BattlegroundsBattleSimulationEvent extends BattlegroundsStoreEvent 
 		public readonly battleId: string,
 		public readonly result: SimulationResult,
 		public readonly opponentHeroCardId: string,
+		public readonly intermediateResult: boolean,
 	) {
 		super('BattlegroundsBattleSimulationEvent');
 	}

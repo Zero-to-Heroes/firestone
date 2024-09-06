@@ -266,7 +266,12 @@ export class BattlegroundsStoreService {
 			.subscribe((info) => this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info)));
 		this.simulation.battleInfo$$.pipe(filter((info) => !!info)).subscribe((info) => {
 			this.battlegroundsUpdater.next(
-				new BattlegroundsBattleSimulationEvent(info.battleId, info.result, info.heroCardId),
+				new BattlegroundsBattleSimulationEvent(
+					info.battleId,
+					info.result,
+					info.heroCardId,
+					info.intermediateResult,
+				),
 			);
 		});
 	}
@@ -649,13 +654,13 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			console.debug(
-				'[bgs-store] emitting new state',
-				gameEvent.type,
-				gameEvent,
-				this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
-				this.state,
-			);
+			// console.debug(
+			// 	'[bgs-store] [debug] emitting new state',
+			// 	gameEvent.type,
+			// 	gameEvent,
+			// 	this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),
+			// 	this.state,
+			// );
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay();
 		}

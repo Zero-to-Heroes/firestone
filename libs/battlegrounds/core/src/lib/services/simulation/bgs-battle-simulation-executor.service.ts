@@ -8,5 +8,6 @@ export abstract class BgsBattleSimulationExecutorService {
 	public abstract simulateLocalBattle(
 		battleInfo: BgsBattleInfo,
 		prefs: Preferences,
-	): Promise<SimulationResult | null>;
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void;
 }

@@ -7,16 +7,16 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 
 @Component({
 	selector: 'bgs-simulation-overlay',
-	styleUrls: [`../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`],
+	styleUrls: [`./bgs-simulation-overlay.component.scss`],
 	template: `
 		<div class="app-container battlegrounds-theme simulation-overlay scalable">
 			<bgs-battle-status
@@ -28,11 +28,11 @@ import { filter } from 'rxjs/operators';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	nextBattle$: Observable<BgsFaceOffWithSimulation>;
+	nextBattle$: Observable<BgsFaceOffWithSimulation | null>;
 	showSimulationSample$: Observable<boolean>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
@@ -55,11 +55,11 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		]).pipe(
 			filter(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }]) => !!currentGame),
 			this.mapData(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }]) => {
-				const result = currentGame.getRelevantFaceOff(
+				const result = currentGame?.getRelevantFaceOff(
 					bgsShowSimResultsOnlyOnRecruit,
 					bgsHideSimResultsOnRecruit,
 				);
-				return result;
+				return result ?? null;
 			}),
 		);
 		this.showSimulationSample$ = this.prefs.preferences$$.pipe(

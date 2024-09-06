@@ -76,7 +76,6 @@ import { BattlegroundsMinionsTiersOverlayComponent } from './js/components/battl
 import { BattlegroundsOverlayButtonComponent } from './js/components/battlegrounds/overlay/battlegrounds-overlay-button.component';
 import { BgsHeroSelectionOverlayComponent } from './js/components/battlegrounds/overlay/bgs-hero-selection-overlay.component';
 import { BgsTavernMinionComponent } from './js/components/battlegrounds/overlay/bgs-tavern-minion.component';
-import { BgsSimulationOverlayComponent } from './js/components/battlegrounds/simulation-overlay/bgs-simulation-overlay.component';
 import { CardBackComponent } from './js/components/collection/card-back.component';
 import { CardBacksComponent } from './js/components/collection/card-backs.component';
 import { CardHistoryItemComponent } from './js/components/collection/card-history-item.component';
@@ -1155,7 +1154,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsOverlayButtonComponent,
 		BgsBannedTribesComponent,
 		BgsHeroTipsComponent,
-		BgsSimulationOverlayComponent,
 		BgsHeroSelectionOverlayComponent,
 		BgsHeroSelectionOverlayInfoComponent,
 		// ConstructedComponent,

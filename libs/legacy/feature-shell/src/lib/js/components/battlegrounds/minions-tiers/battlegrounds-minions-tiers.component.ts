@@ -24,7 +24,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -147,7 +147,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					allPlayersCardIds,
 					playerTrinkets,
 				}) => {
-					console.debug('[tiers] rebuilding tiers');
 					// hasSpells = true;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
@@ -207,7 +206,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				return composition;
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			tap((composition) => console.debug('[tiers] board composition', composition)),
 			takeUntil(this.destroyed$),
 		);
 		this.tiers$ = combineLatest([
@@ -219,7 +217,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 		]).pipe(
 			this.mapData(([tiers, rawPlayerCardId, boardComposition, tavernLevel]) => {
-				console.debug('[tiers] updating tiers');
 				const playerCardId = normalizeHeroCardId(rawPlayerCardId, this.allCards);
 				return enhanceTiers(
 					tiers,

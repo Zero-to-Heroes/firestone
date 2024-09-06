@@ -19,6 +19,7 @@ import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-in
 import { BgsOpponentOverviewBigComponent } from './components/bgs-opponent-overview-big.component';
 import { BgsPlayerCapsuleComponent } from './components/bgs-player-capsule.component';
 import { BgsQuestRewardsComponent } from './components/bgs-quest-rewards.component';
+import { BgsSimulationOverlayComponent } from './components/bgs-simulation-overlay.component';
 import { BgsTrinketsComponent } from './components/bgs-trinkets.component';
 import { BgsTriplesComponent } from './components/bgs-triples.component';
 import { BattlegroundsMetaStatsQuestsComponent } from './components/quests/battlegrounds-meta-stats-quests.component';
@@ -56,6 +57,7 @@ const components = [
 	BgsTrinketsComponent,
 	BgsOpponentOverviewBigComponent,
 	BgsPlayerCapsuleComponent,
+	BgsSimulationOverlayComponent,
 ];
 
 @NgModule({

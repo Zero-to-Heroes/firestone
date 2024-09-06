@@ -29,7 +29,7 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 							<div class="value">{{ battleSimulationResultWin || '--' }}</div>
 							<div
 								class="replay-icon"
-								*ngIf="hasSimulationResult('win') && showReplayLink"
+								*ngIf="hasSimulationResult('win') && !!showReplayLink"
 								(click)="viewSimulationResult('win')"
 								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | fsTranslate"
 							>
@@ -52,7 +52,7 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 							<div class="value">{{ battleSimulationResultTie || '--' }}</div>
 							<div
 								class="replay-icon"
-								*ngIf="hasSimulationResult('tie') && showReplayLink"
+								*ngIf="hasSimulationResult('tie') && !!showReplayLink"
 								(click)="viewSimulationResult('tie')"
 								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | fsTranslate"
 							>
@@ -75,7 +75,7 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 							<div class="value">{{ battleSimulationResultLose || '--' }}</div>
 							<div
 								class="replay-icon"
-								*ngIf="hasSimulationResult('loss') && showReplayLink"
+								*ngIf="hasSimulationResult('loss') && !!showReplayLink"
 								(click)="viewSimulationResult('loss')"
 								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | fsTranslate"
 							>
@@ -147,11 +147,38 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 				</div>
 			</div>
 		</div>
+		<div class="ongoing" *ngIf="isOngoing">
+			<svg class="svg-icon-fill loading-icon">
+				<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
+			</svg>
+			<div
+				class="text"
+				[fsTranslate]="'battlegrounds.battle.temp-result-text'"
+				[helpTooltip]="'battlegrounds.battle.temp-result-tooltip'"
+			></div>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	// animations: [
+	// 	trigger('slideInOut', [
+	// 		transition(':enter', [
+	// 			style({ transform: 'translateY(-100%)', opacity: 0 }),
+	// 			animate('500ms ease-in', style({ transform: 'translateY(0%)', opacity: 1 })),
+	// 		]),
+	// 		// transition(':leave', [animate('10ms ease-in', style({ opacity: 0 }))]),
+	// 	]),
+	// ],
 })
 export class BgsBattleStatusComponent {
-	@Input() showReplayLink: boolean;
+	@Input() showReplayLink: boolean | null;
+
+	@Input() set nextBattle(value: BgsFaceOffWithSimulation | null) {
+		if (value === this.battle) {
+			return;
+		}
+		this.battle = value;
+		this.updateInfo();
+	}
 
 	_simulationMessage: string | null;
 	battleSimulationResultWin: string;
@@ -170,23 +197,19 @@ export class BgsBattleStatusComponent {
 	battleSimulationLostLethalChance: number | null;
 
 	processingSimulationSample: boolean;
+	isOngoing: boolean;
 
 	private battle: BgsFaceOffWithSimulation | null;
-	private tempInterval;
 
-	@Input() set nextBattle(value: BgsFaceOffWithSimulation | null) {
-		if (value === this.battle) {
-			return;
-		}
-		this.battle = value;
-		this.updateInfo();
-	}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+		@Optional() private readonly ow: OverwolfService,
+		private readonly bgsSim: BgsBattleSimulationService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	private updateInfo() {
-		if (this.tempInterval) {
-			clearInterval(this.tempInterval);
-		}
-
 		switch (this.battle?.battleInfoMesage) {
 			case 'scallywag':
 				this._simulationMessage = this.i18n.translateString(
@@ -257,13 +280,12 @@ export class BgsBattleStatusComponent {
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
 
+		this.isOngoing = this.battle?.battleInfoStatus === 'ongoing';
+		// this.isOngoing = true;
 		if (this.battle?.battleResult?.wonPercent != null && this.battle?.battleInfoStatus !== 'empty') {
 			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
 			this.battleSimulationResultLose = this.battle.battleResult.lostPercent.toFixed(1) + '%';
-			this.winSimulationSample = this.battle.battleResult.outcomeSamples?.won;
-			this.tieSimulationSample = this.battle.battleResult.outcomeSamples?.tied;
-			this.loseSimulationSample = this.battle.battleResult.outcomeSamples?.lost;
 			this.damageWon =
 				this.battle.battleResult.averageDamageWon != null
 					? this.battle.battleResult.averageDamageWon.toFixed(1)
@@ -282,16 +304,12 @@ export class BgsBattleStatusComponent {
 			this.lostLethalChance = this.battle.battleResult.lostPercent
 				? this.battle.battleResult.lostLethalPercent?.toFixed(1) + '%'
 				: null;
+
+			this.winSimulationSample = this.battle.battleResult.outcomeSamples?.won;
+			this.tieSimulationSample = this.battle.battleResult.outcomeSamples?.tied;
+			this.loseSimulationSample = this.battle.battleResult.outcomeSamples?.lost;
 		}
 	}
-
-	constructor(
-		private readonly cdr: ChangeDetectorRef,
-		private readonly i18n: ILocalizationService,
-		@Optional() private readonly ow: OverwolfService,
-		private readonly bgsSim: BgsBattleSimulationService,
-		private readonly allCards: CardsFacadeService,
-	) {}
 
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
 		const simulationSample: GameSample | null = this.pickSimulationResult(category);

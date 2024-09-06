@@ -8,7 +8,7 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, throttleTime } from 'rxjs';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 		this.gameState$$.onFirstSubscribe(() => {
 			const bgState: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 			combineLatest([bgState, this.matchPlayers.playersMatchMmr$$])
-				.pipe(debounceTime(200))
+				.pipe(throttleTime(200))
 				.subscribe(([state, playersMmr]) => {
 					if (!state?.currentGame) {
 						return;
@@ -61,7 +61,6 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 							}),
 						}),
 					});
-					console.debug('[bgs-state-facade] updating state', mergedState);
 					this.gameState$$.next(mergedState);
 				});
 		});

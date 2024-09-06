@@ -48,7 +48,6 @@
 	// background-image: var(--window-background-image);
 	background-size: 100%;
 	background-image: var(--bgs-simulation-widget-background-image, --window-background-image);
-	background-size: 100%;
 	background-repeat: no-repeat;
 	// background-size: contain;
 	display: flex;
@@ -69,8 +68,27 @@
 	margin-bottom: 10px;
 }
 
-::ng-deep bgs-battle-status .battle-simulation.battle-simulation.battle-simulation {
-	.probas {
-		border-left: none;
+::ng-deep bgs-battle-status {
+	.battle-simulation {
+		z-index: 1;
+	}
+	.ongoing.ongoing {
+		background-size: 100%;
+		background-image: var(--bgs-simulation-widget-background-image, --window-background-image);
+		background-repeat: no-repeat;
+		border-width: 1px;
+		border-style: solid;
+		border-image-slice: 1;
+		border-image-source: linear-gradient(to bottom right, rgba(255, 185, 72, 0) 0%, #ffb948 100%);
+		width: 60%;
+		transform: translateY(130%) translateX(-50%);
+		left: 50%;
+		z-index: 0;
+	}
+
+	.battle-simulation.battle-simulation.battle-simulation {
+		.probas {
+			border-left: none;
+		}
 	}
 }
