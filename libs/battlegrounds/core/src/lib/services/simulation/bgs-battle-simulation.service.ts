@@ -9,14 +9,15 @@ import { sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
+import { BgsIntermediateResultsSimGuardianService } from './bgs-intermediate-results-sim-guardian.service';
 
 const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://664abby5durcmapfl2wc6cqlaq0xkkcm.lambda-url.us-west-2.on.aws/';
 const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q40sesoo.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class BgsBattleSimulationService {
-	// TODO: maybe expose this to the UI, and have the simulation widget listen to it directly?
 	public battleInfo$$ = new BehaviorSubject<BattleInfo | null>(null);
+
 	private isPremium: boolean;
 
 	constructor(
@@ -26,6 +27,7 @@ export class BgsBattleSimulationService {
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly bugService: BugReportService,
 		private readonly prefs: PreferencesService,
+		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 	) {
 		this.init();
 	}
@@ -39,10 +41,12 @@ export class BgsBattleSimulationService {
 	}
 
 	public async startBgsBattleSimulation(
+		gameId: string,
 		battleId: string,
 		battleInfo: BgsBattleInfo,
 		races: readonly Race[],
 		currentTurn: number,
+		reconnectOngoing: boolean,
 	) {
 		const prefs = await this.prefs?.getPreferences();
 		if (!prefs.bgsEnableSimulation || !prefs.bgsFullToggle) {
@@ -63,16 +67,47 @@ export class BgsBattleSimulationService {
 		console.debug('[bgs-simulation] battle simulation request prepared', battleInfo);
 
 		const shouldUseLocalSimulator = !prefs.bgsUseRemoteSimulator || !this.isPremium;
+		const shouldUseIntermediateResults =
+			prefs.bgsSimShowIntermediaryResults && (this.isPremium || this.guardian.hasFreeUses(gameId));
 		console.debug(
-			'[bgs-simulation] useLocalSim?',
+			'[bgs-simulation] [debug] useLocalSim?',
 			shouldUseLocalSimulator,
-			prefs.bgsUseRemoteSimulator,
-			this.isPremium,
+			shouldUseIntermediateResults,
 			prefs.bgsSimShowIntermediaryResults,
+			this.guardian.hasFreeUses(gameId),
+			this.isPremium,
+			gameId,
 		);
 
 		// Don't show intermediate results
-		if (!shouldUseLocalSimulator || !this.isPremium || !prefs.bgsSimShowIntermediaryResults) {
+		if (shouldUseLocalSimulator && shouldUseIntermediateResults && !reconnectOngoing) {
+			(battleInfoInput.options as any).intermediateResults = 200;
+			console.debug('[bgs-simulation] [debug] starting sim with partial results');
+			this.simulateLocalBattle(battleInfoInput, prefs, async (result: SimulationResult | null) => {
+				await sleep(0);
+				const resultForLog = !!result ? { ...result } : null;
+				if (!!resultForLog) {
+					delete resultForLog.outcomeSamples;
+				}
+				if (!!result) {
+					console.debug('[bgs-simulation] [debug] partial battle simulation result', resultForLog);
+					if (result.outcomeSamples) {
+						console.log('[bgs-simulation] battle simulation result', resultForLog);
+					}
+					this.battleInfo$$.next({
+						battleId: battleId,
+						result: result,
+						intermediateResult: !result.outcomeSamples,
+						heroCardId: normalizeHeroCardId(
+							battleInfoInput.opponentBoard.player.nonGhostCardId ??
+								CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+							this.cards,
+						),
+					});
+				}
+			});
+		} else {
+			console.debug('[bgs-simulation] [debug] starting sim for single use');
 			(battleInfoInput.options as any).intermediateResults = 0;
 			const result: SimulationResult | null = shouldUseLocalSimulator
 				? await this.simulateLocalBattleOnce(battleInfoInput, prefs)
@@ -90,29 +125,6 @@ export class BgsBattleSimulationService {
 						CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
 					this.cards,
 				),
-			});
-		} else {
-			(battleInfoInput.options as any).intermediateResults = 200;
-			console.debug('[bgs-simulation] [debug] starting sim');
-			this.simulateLocalBattle(battleInfoInput, prefs, async (result: SimulationResult | null) => {
-				await sleep(0);
-				const resultForLog = !!result ? { ...result } : null;
-				if (!!resultForLog) {
-					delete resultForLog.outcomeSamples;
-				}
-				if (!!result) {
-					console.debug('[bgs-simulation] [debug] partial battle simulation result', resultForLog);
-					this.battleInfo$$.next({
-						battleId: battleId,
-						result: result,
-						intermediateResult: !result.outcomeSamples,
-						heroCardId: normalizeHeroCardId(
-							battleInfoInput.opponentBoard.player.nonGhostCardId ??
-								CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
-							this.cards,
-						),
-					});
-				}
 			});
 		}
 	}

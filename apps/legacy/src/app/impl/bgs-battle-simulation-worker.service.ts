@@ -95,7 +95,11 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 				onResultReceived(null);
 				return;
 			}
-			onResultReceived(JSON.parse(ev.data));
+			const result: SimulationResult = JSON.parse(ev.data);
+			if (!!result.outcomeSamples) {
+				worker.terminate();
+			}
+			onResultReceived(result);
 		};
 		worker.postMessage({
 			battleMessage: {

@@ -1,9 +1,29 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import {
+	ADS_SERVICE_TOKEN,
+	CardsFacadeService,
+	IAdsService,
+	ILocalizationService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
+import { combineLatest, debounceTime, Observable } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../model/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-simulation.service';
+import { BgsIntermediateResultsSimGuardianService } from '../services/simulation/bgs-intermediate-results-sim-guardian.service';
 
 @Component({
 	selector: 'bgs-battle-status',
@@ -147,6 +167,14 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 				</div>
 			</div>
 		</div>
+		<battle-status-premium
+			class="ongoing premium"
+			*ngIf="
+				!forceHidePremiumBanner &&
+				battle?.battleInfoStatus === 'waiting-for-result' &&
+				(showPremiumBanner$ | async)
+			"
+		></battle-status-premium>
 		<div class="ongoing" *ngIf="isOngoing">
 			<svg class="svg-icon-fill loading-icon">
 				<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
@@ -159,18 +187,12 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	// animations: [
-	// 	trigger('slideInOut', [
-	// 		transition(':enter', [
-	// 			style({ transform: 'translateY(-100%)', opacity: 0 }),
-	// 			animate('500ms ease-in', style({ transform: 'translateY(0%)', opacity: 1 })),
-	// 		]),
-	// 		// transition(':leave', [animate('10ms ease-in', style({ opacity: 0 }))]),
-	// 	]),
-	// ],
 })
-export class BgsBattleStatusComponent {
+export class BgsBattleStatusComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	showPremiumBanner$: Observable<boolean | null>;
+
 	@Input() showReplayLink: boolean | null;
+	@Input() forceHidePremiumBanner: boolean | null;
 
 	@Input() set nextBattle(value: BgsFaceOffWithSimulation | null) {
 		if (value === this.battle) {
@@ -199,15 +221,40 @@ export class BgsBattleStatusComponent {
 	processingSimulationSample: boolean;
 	isOngoing: boolean;
 
-	private battle: BgsFaceOffWithSimulation | null;
+	battle: BgsFaceOffWithSimulation | null;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly bgsSim: BgsBattleSimulationService,
 		private readonly allCards: CardsFacadeService,
-	) {}
+		private readonly guardian: BgsIntermediateResultsSimGuardianService,
+		private readonly prefs: PreferencesService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.guardian, this.ads, this.prefs);
+
+		this.showPremiumBanner$ = combineLatest([
+			this.ads.hasPremiumSub$$,
+			this.guardian.freeUsesLeft$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsSimShowIntermediaryResults)),
+		]).pipe(
+			debounceTime(200),
+			this.mapData(
+				([hasPremiumSub, freeUsesLeft, requestIntermediateResults]) =>
+					requestIntermediateResults && (!hasPremiumSub || freeUsesLeft === 0),
+			),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	private updateInfo() {
 		switch (this.battle?.battleInfoMesage) {
@@ -266,7 +313,10 @@ export class BgsBattleStatusComponent {
 			this.damageLost = null;
 			this.wonLethalChance = null;
 			this.lostLethalChance = null;
-		} else if (this.battle?.battleInfoStatus === 'waiting-for-result') {
+		} else if (
+			this.battle?.battleInfoStatus === 'waiting-for-result' ||
+			this.battle?.battleInfoStatus === 'ongoing'
+		) {
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.battleSimulationResultWin = '__';
 			this.battleSimulationResultTie = '__';

@@ -10,14 +10,17 @@ import {
 	BgsBattleSimulationService,
 	BgsBoard,
 	BgsGame,
+	BgsIntermediateResultsSimGuardianService,
 	BgsPlayer,
 	PlayerBoard,
 	PlayerBoardEntity,
 } from '@firestone/battlegrounds/core';
+import { GameState, GameUniqueIdService } from '@firestone/game-state';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryInspectionService } from '@firestone/memory';
-import { LogsUploaderService } from '@firestone/shared/common/service';
+import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
+import { AdService } from '../../../ad.service';
 import { GameEvents } from '../../../game-events.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -31,13 +34,21 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly gameEventsService: GameEvents,
 		private readonly allCards: CardsFacadeService,
 		private readonly memory: MemoryInspectionService,
+		private readonly gameIdService: GameUniqueIdService,
+		private readonly prefs: PreferencesService,
+		private readonly guardian: BgsIntermediateResultsSimGuardianService,
+		private readonly adService: AdService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsPlayerBoardEvent';
 	}
 
-	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
+	public async parse(
+		currentState: BattlegroundsState,
+		event: BgsPlayerBoardEvent,
+		gameState: GameState,
+	): Promise<BattlegroundsState> {
 		console.log(
 			'[bgs-simulation] [debug] received player boards',
 			event.playerBoard?.board?.map((e) => e.CardId),
@@ -256,9 +267,15 @@ export class BgsPlayerBoardParser implements EventParser {
 			console.debug(currentState);
 			return currentState;
 		}
+
+		const prefs = await this.prefs.getPreferences();
+		const isPremium = this.adService.enablePremiumFeatures$$.value;
+		const shouldUseIntermediateResults =
+			prefs.bgsSimShowIntermediaryResults &&
+			(isPremium || this.guardian.hasFreeUses(this.gameIdService.uniqueId$$.value));
 		const updatedFaceOff = lastFaceOff.update({
 			battleInfo: battleInfo,
-			battleInfoStatus: 'waiting-for-result',
+			battleInfoStatus: shouldUseIntermediateResults ? 'ongoing' : 'waiting-for-result',
 			battleInfoMesage: isSupported.reason,
 		});
 		const newFaceOffs = currentState.currentGame.faceOffs.map((f) =>
@@ -277,10 +294,12 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		try {
 			this.simulation.startBgsBattleSimulation(
+				this.gameIdService.uniqueId$$.value,
 				updatedFaceOff.id,
 				battleInfo,
 				result?.currentGame?.availableRaces ?? [],
 				result.currentGame?.currentTurn ?? 0,
+				gameState?.reconnectOngoing,
 			);
 		} catch (e) {
 			console.error('[bgs-player-board-parser] could not start simulation', e.message, e);

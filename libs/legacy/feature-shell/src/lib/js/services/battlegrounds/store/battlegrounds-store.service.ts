@@ -7,10 +7,11 @@ import {
 import {
 	BattlegroundsState,
 	BgsBattleSimulationService,
+	BgsIntermediateResultsSimGuardianService,
 	PlayerBoard,
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { GameState, GameUniqueIdService } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import {
 	BugReportService,
@@ -29,6 +30,7 @@ import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { AdService } from '../../ad.service';
 import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
@@ -168,6 +170,9 @@ export class BattlegroundsStoreService {
 		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
 		private readonly metaHeroStatsDuo: BgsMetaHeroStatsDuoService,
+		private readonly gameIdService: GameUniqueIdService,
+		private readonly intermediateSimGuardian: BgsIntermediateResultsSimGuardianService,
+		private readonly adService: AdService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -720,6 +725,10 @@ export class BattlegroundsStoreService {
 				this.gameEventsService,
 				this.allCards,
 				this.memory,
+				this.gameIdService,
+				this.prefs,
+				this.intermediateSimGuardian,
+				this.adService,
 			),
 			new BgsTripleCreatedParser(this.allCards),
 			new BgsTrinketSelectedParser(this.allCards),

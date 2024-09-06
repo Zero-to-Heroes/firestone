@@ -81,6 +81,7 @@ import { BgsSimulatorTrinketSelectionComponent } from './bgs-simulator-trinket-s
 						<bgs-battle-status
 							[showReplayLink]="true"
 							[nextBattle]="battleResult$ | async"
+							[forceHidePremiumBanner]="true"
 						></bgs-battle-status>
 					</div>
 					<div class="controls position" [ngClass]="{ busy: processingReposition }">

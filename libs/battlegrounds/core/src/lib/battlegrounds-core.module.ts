@@ -5,12 +5,14 @@ import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { BattleStatusPremiumComponent } from './components/battle-status-premium.component';
 import { BgsBattleStatusComponent } from './components/bgs-battle-status.component';
 import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
 import { BgsBattleSimulationMockExecutorService } from './services/simulation/bgs-battle-simulation-mock-executor.service';
 import { BgsBattleSimulationService } from './services/simulation/bgs-battle-simulation.service';
+import { BgsIntermediateResultsSimGuardianService } from './services/simulation/bgs-intermediate-results-sim-guardian.service';
 
-const components = [BgsCardTooltipComponent, BgsBattleStatusComponent];
+const components = [BgsCardTooltipComponent, BgsBattleStatusComponent, BattleStatusPremiumComponent];
 
 @NgModule({
 	imports: [
@@ -22,7 +24,11 @@ const components = [BgsCardTooltipComponent, BgsBattleStatusComponent];
 		BattlegroundsDataAccessModule,
 		ReplayColiseumModule,
 	],
-	providers: [BgsBattleSimulationMockExecutorService, BgsBattleSimulationService],
+	providers: [
+		BgsBattleSimulationMockExecutorService,
+		BgsBattleSimulationService,
+		BgsIntermediateResultsSimGuardianService,
+	],
 	declarations: components,
 	exports: components,
 })

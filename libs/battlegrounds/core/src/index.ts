@@ -1,4 +1,5 @@
 export * from './lib/battlegrounds-core.module';
+export * from './lib/components/battle-status-premium.component';
 export * from './lib/components/bgs-battle-status.component';
 export * from './lib/components/bgs-card-tooltip.component';
 export * from './lib/model/_barrel';
@@ -12,6 +13,7 @@ export * from './lib/services/hero-utils';
 export * from './lib/services/simulation/bgs-battle-simulation-executor.service';
 export * from './lib/services/simulation/bgs-battle-simulation-mock-executor.service';
 export * from './lib/services/simulation/bgs-battle-simulation.service';
+export * from './lib/services/simulation/bgs-intermediate-results-sim-guardian.service';
 export * from './lib/services/tier-builder';
 export * from './lib/services/tier-enhancer';
 export * from './lib/services/tiers-builder/cards-to-include';
