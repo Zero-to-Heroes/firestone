@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { COIN_IDS, CardClass, CardIds, GameType, SceneMode, getBaseCardId } from '@firestone-hs/reference-data';
+import { CardClass, GameType, SceneMode, getBaseCardId, isCoin } from '@firestone-hs/reference-data';
 import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -180,8 +180,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			map((gameState) => {
 				// There should never be a "basic" coin in the mulligan AFAIK
 				const cardsInHand =
-					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !COIN_IDS.includes(c as CardIds)) ??
-					[];
+					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !isCoin(c, this.allCards)) ?? [];
 				return cardsInHand.length > 0 ? cardsInHand : null;
 			}),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),

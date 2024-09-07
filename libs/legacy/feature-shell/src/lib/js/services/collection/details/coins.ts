@@ -1,4 +1,4 @@
-import { COIN_IDS, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { isCoin, ReferenceCard } from '@firestone-hs/reference-data';
 import { CoinInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -30,7 +30,7 @@ export class CoinsInternalService extends AbstractCollectionInternalService<Coin
 	}
 
 	protected override async preInit(): Promise<void> {
-		this.refCoins = this.allCards.getCards().filter((card) => COIN_IDS.includes(card.id as CardIds));
+		this.refCoins = this.allCards.getCards().filter((card) => isCoin(card.id, this.allCards));
 	}
 
 	protected override updateMemoryInfo(collection: readonly CoinInfo[]): readonly Coin[] {

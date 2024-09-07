@@ -1,4 +1,39 @@
-import { COIN_IDS, CardIds } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
+
+const COIN_IDS = [
+	CardIds.TheCoinCore,
+	CardIds.TheCoin_AT_COIN,
+	CardIds.TheCoin_AV_COIN1,
+	CardIds.TheCoin_AV_COIN2,
+	CardIds.TheCoin_BAR_COIN1,
+	CardIds.TheCoin_BAR_COIN2,
+	CardIds.TheCoin_BAR_COIN3,
+	CardIds.TheCoin_BT_COIN,
+	CardIds.TheCoin_DAL_COIN,
+	CardIds.TheCoin_DMF_COIN1,
+	CardIds.TheCoin_DMF_COIN2,
+	CardIds.TheCoin_DRG_COIN,
+	CardIds.TheCoin_REV_COIN1,
+	CardIds.TheCoin_REV_COIN2,
+	CardIds.TheCoin_RLK_COIN1,
+	CardIds.TheCoin_RLK_COIN2,
+	CardIds.TheCoin_SW_COIN1,
+	CardIds.TheCoin_SW_COIN2,
+	CardIds.TheCoin_TSC_COIN1,
+	CardIds.TheCoin_TSC_COIN2,
+	CardIds.TheCoin_ULD_COIN,
+	CardIds.TheCoin_ETC_COIN1,
+	CardIds.TheCoin_ETC_COIN2,
+	CardIds.TheCoin_TOY_COIN1,
+	CardIds.TheCoin_TOY_COIN2,
+	CardIds.TheCoin_TOY_COIN3,
+	CardIds.TheCoin_TTN_COIN1,
+	CardIds.TheCoin_TTN_COIN2,
+	CardIds.TheCoin_WW_COIN1,
+	CardIds.TheCoin_WW_COIN2,
+	CardIds.TheCoin_VAC_COIN1,
+	CardIds.TheCoin_VAC_COIN2,
+];
 
 export const giftCreators = [
 	// For some reason the coin is flagged as created by the coin...

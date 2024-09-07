@@ -3,14 +3,13 @@ import { Injectable } from '@angular/core';
 import { ArchetypeStat, DeckStat, GameFormat, RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import {
-	COIN_IDS,
 	CardClass,
-	CardIds,
 	GameFormat as GameFormatEnum,
 	GameFormatString,
 	GameType,
 	SceneMode,
 	getBaseCardId,
+	isCoin,
 } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -259,8 +258,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			map((gameState) => {
 				// There should never be a "basic" coin in the mulligan AFAIK
 				const cardsInHand =
-					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !COIN_IDS.includes(c as CardIds)) ??
-					[];
+					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !isCoin(c, this.allCards)) ?? [];
 				return cardsInHand.length > 0 ? cardsInHand : null;
 			}),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),

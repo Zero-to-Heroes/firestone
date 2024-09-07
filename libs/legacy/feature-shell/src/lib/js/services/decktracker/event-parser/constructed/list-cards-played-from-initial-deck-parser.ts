@@ -1,11 +1,12 @@
-import { CardIds, COIN_IDS, getBaseCardId } from '@firestone-hs/reference-data';
+import { getBaseCardId, isCoin } from '@firestone-hs/reference-data';
 import { DeckState, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class ListCardsPlayedFromInitialDeckParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -26,7 +27,7 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 			!card ||
 			card.creatorCardId ||
 			gameEvent.additionalData.creatorCardId ||
-			COIN_IDS.includes(baseCardId as CardIds)
+			isCoin(baseCardId, this.allCards)
 		) {
 			return currentState;
 		}

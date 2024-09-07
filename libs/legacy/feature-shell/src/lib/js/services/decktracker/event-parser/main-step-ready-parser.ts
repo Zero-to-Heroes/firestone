@@ -1,10 +1,13 @@
-import { COIN_IDS, CardIds } from '@firestone-hs/reference-data';
+import { isCoin } from '@firestone-hs/reference-data';
 import { DeckCard, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 import { buildTurnTimings } from './new-turn-parser';
 
 export class MainStepReadyParser implements EventParser {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
 	}
@@ -33,13 +36,13 @@ export class MainStepReadyParser implements EventParser {
 				turnTimings: playerTurnTimings,
 				cardsInStartingHand: currentState.playerDeck.hand
 					.map((card) => ({ ...card } as DeckCard))
-					.filter((card) => !COIN_IDS.includes(card.cardId as CardIds)),
+					.filter((card) => !isCoin(card.cardId, this.allCards)),
 			}),
 			opponentDeck: currentState.opponentDeck.update({
 				turnTimings: opponentTurnTimings,
 				cardsInStartingHand: currentState.opponentDeck.hand
 					.map((card) => ({ ...card } as DeckCard))
-					.filter((card) => !COIN_IDS.includes(card.cardId as CardIds)),
+					.filter((card) => !isCoin(card.cardId, this.allCards)),
 			}),
 		} as GameState);
 	}
