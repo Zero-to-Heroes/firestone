@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -21,6 +22,7 @@ const components = [SettingsGeneralAppearanceComponent, CustomColorPickerCompone
 
 		SharedFrameworkCommonModule,
 		SharedFrameworkCoreModule,
+		SharedCommonServiceModule,
 	],
 	providers: [BootstrapSettingsService, CustomAppearanceService],
 	declarations: components,

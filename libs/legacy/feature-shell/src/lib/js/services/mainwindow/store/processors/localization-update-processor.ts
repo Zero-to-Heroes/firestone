@@ -15,6 +15,7 @@ export class LocalizationUpdateProcessor implements Processor {
 		console.log('updating localization', event.locale);
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = { ...prefs, locale: event.locale };
+		// TODO: remove the event, and have the translate service listen to the prefs and update itself when the pref changes
 		await this.prefs.savePreferences(newPrefs);
 		await this.translate.use(event.locale).toPromise();
 		console.log('updated localization', event.locale);
