@@ -25,7 +25,7 @@ import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parser
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { BehaviorSubject, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, throttleTime } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -147,6 +147,8 @@ export class BattlegroundsStoreService {
 	// private teammateBoard: MemoryBgsPlayerInfo;
 	private playerBoard: PlayerBoard;
 
+	private updateOverlay$$ = new BehaviorSubject<void>(null);
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private allCards: CardsFacadeService,
@@ -228,6 +230,7 @@ export class BattlegroundsStoreService {
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
 			this.handleHotkeyPressed();
 		});
+		this.updateOverlay$$.pipe(throttleTime(500)).subscribe(() => this.updateOverlay());
 		// this.handleDisplayPreferences();
 		// this.gameStatus.onGameExit(() => {
 		// 	if (this.memoryInterval) {
@@ -264,7 +267,7 @@ export class BattlegroundsStoreService {
 			});
 		this.prefs.preferences$$.subscribe((prefs) => {
 			console.debug('[bgs-store] prefs updated', prefs);
-			this.updateOverlay();
+			this.updateOverlay$$.next();
 		});
 		this.matchMemoryInfo.battlegroundsMemoryInfo$$
 			.pipe(filter((info) => !!info))
@@ -634,7 +637,7 @@ export class BattlegroundsStoreService {
 			this.state = this.state.update({
 				forceOpen: false,
 			} as BattlegroundsState);
-			this.updateOverlay();
+			this.updateOverlay$$.next();
 		} else if (gameEvent.type === BgsToggleOverlayWindowEvent.NAME) {
 			const window = await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY);
 			if (window.stateEx === 'normal' || window.stateEx === 'maximized') {
@@ -667,7 +670,7 @@ export class BattlegroundsStoreService {
 			// 	this.state,
 			// );
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
-			this.updateOverlay();
+			this.updateOverlay$$.next();
 		}
 	}
 
@@ -686,12 +689,6 @@ export class BattlegroundsStoreService {
 		}
 		this.eventEmitters = result;
 	}
-
-	// private async handleDisplayPreferences(preferences: Preferences = null) {
-	// 	// preferences = preferences || (await this.prefs.getPreferences());
-	// 	// await Promise.all(this.overlayHandlers.map((handler) => handler.handleDisplayPreferences(preferences)));
-	// 	this.updateOverlay();
-	// }
 
 	private async updateOverlay() {
 		if (this.overlayHandlers?.length) {
