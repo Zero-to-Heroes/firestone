@@ -36,7 +36,7 @@ export class TreantCounterDefinition implements CounterDefinition<GameState, num
 		return {
 			type: 'treant',
 			value: treantsSummoned,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.LivingMana_ManaTreantToken}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SoulOfTheForest_TreantLegacyToken}.jpg`,
 			cssClass: 'pogo-counter',
 			tooltip: this.i18n.translateString(`counters.specific-summons.${this.side}`, {
 				value: treantsSummoned,
