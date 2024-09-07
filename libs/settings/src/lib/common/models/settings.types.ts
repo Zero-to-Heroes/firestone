@@ -61,7 +61,7 @@ export interface Setting {
 
 export interface ToggleConfig {
 	readonly messageWhenToggleValue?: string;
-	readonly valueToDisplayMessageOn?: string;
+	readonly valueToDisplayMessageOn?: string | boolean;
 	readonly toggleFunction?: (context: SettingContext) => void;
 }
 
