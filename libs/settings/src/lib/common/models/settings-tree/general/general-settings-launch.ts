@@ -3,7 +3,7 @@ import { SettingContext, SettingNode } from '../../settings.types';
 export const generalLaunchSettings = (context: SettingContext): SettingNode => {
 	return {
 		id: 'general-launch',
-		name: context.i18n.translateString('settings.general.menu.general.launch.title'),
+		name: context.i18n.translateString('settings.general.launch.title'),
 		keywords: null,
 		children: null,
 		sections: [

@@ -11,55 +11,65 @@ import {
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
+import { FeatureFlags } from '../../services/feature-flags';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
 	selector: 'settings',
 	styleUrls: [`../../../css/component/settings/settings.component.scss`],
 	template: `
-		<ng-container *ngIf="initReady">
+		<ng-container *ngIf="!useNewSettings">
+			<ng-container *ngIf="initReady">
+				<window-wrapper [activeTheme]="'general'">
+					<section class="title-bar">
+						<div class="title" [owTranslate]="'settings.title'"></div>
+						<div class="controls">
+							<control-close [windowId]="thisWindowId" [shouldHide]="false"></control-close>
+						</div>
+					</section>
+					<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
+					</settings-app-selection>
+					<ng-container [ngSwitch]="selectedApp">
+						<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
+						<settings-achievements
+							*ngSwitchCase="'achievements'"
+							[selectedMenu]="selectedMenu"
+						></settings-achievements>
+						<settings-collection
+							*ngSwitchCase="'collection'"
+							[selectedMenu]="selectedMenu"
+						></settings-collection>
+						<settings-arena *ngSwitchCase="'arena'" [selectedMenu]="selectedMenu"></settings-arena>
+						<settings-decktracker
+							*ngSwitchCase="'decktracker'"
+							[selectedMenu]="selectedMenu"
+						></settings-decktracker>
+						<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
+						<settings-battlegrounds
+							*ngSwitchCase="'battlegrounds'"
+							[selectedMenu]="selectedMenu"
+						></settings-battlegrounds>
+						<settings-mercenaries
+							*ngSwitchCase="'mercenaries'"
+							[selectedMenu]="selectedMenu"
+						></settings-mercenaries>
+					</ng-container>
+					<settings-advanced-toggle></settings-advanced-toggle>
+					<settings-modal></settings-modal>
+				</window-wrapper>
+			</ng-container>
+		</ng-container>
+		<ng-container *ngIf="useNewSettings">
 			<window-wrapper [activeTheme]="'general'">
-				<section class="title-bar">
-					<div class="title" [owTranslate]="'settings.title'"></div>
-					<div class="controls">
-						<control-close [windowId]="thisWindowId" [shouldHide]="false"></control-close>
-					</div>
-				</section>
-				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
-				</settings-app-selection>
-				<ng-container [ngSwitch]="selectedApp">
-					<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
-					<settings-achievements
-						*ngSwitchCase="'achievements'"
-						[selectedMenu]="selectedMenu"
-					></settings-achievements>
-					<settings-collection
-						*ngSwitchCase="'collection'"
-						[selectedMenu]="selectedMenu"
-					></settings-collection>
-					<settings-arena *ngSwitchCase="'arena'" [selectedMenu]="selectedMenu"></settings-arena>
-					<settings-decktracker
-						*ngSwitchCase="'decktracker'"
-						[selectedMenu]="selectedMenu"
-					></settings-decktracker>
-					<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
-					<settings-battlegrounds
-						*ngSwitchCase="'battlegrounds'"
-						[selectedMenu]="selectedMenu"
-					></settings-battlegrounds>
-					<settings-mercenaries
-						*ngSwitchCase="'mercenaries'"
-						[selectedMenu]="selectedMenu"
-					></settings-mercenaries>
-				</ng-container>
-				<settings-advanced-toggle></settings-advanced-toggle>
-				<settings-modal></settings-modal>
+				<settings-root></settings-root>
 			</window-wrapper>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements AfterViewInit, OnDestroy {
+	useNewSettings = FeatureFlags.USE_NEW_SETTINGS;
+
 	initReady = true;
 	thisWindowId: string;
 	selectedApp = 'general';

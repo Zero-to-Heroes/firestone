@@ -9,6 +9,7 @@ export class FeatureFlags {
 	public static readonly APP_TIPS = true;
 	public static readonly ENABLE_BGS_QUESTS = true;
 	public static readonly ENABLE_BGS_QUESTS_IN_APP = true;
+	public static readonly USE_NEW_SETTINGS = false;
 
 	// Shelved for now
 	public static readonly ENABLE_MULTI_GRAPHS = false;

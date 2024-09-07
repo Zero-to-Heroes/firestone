@@ -1,0 +1,25 @@
+:host {
+	display: flex;
+}
+
+.navigation-node {
+	width: 100%;
+
+	& > .child-node {
+		margin-left: calc(var(--settings-indent-level) * 30px);
+	}
+
+	&.selected > .name {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	.name {
+		height: 30px;
+		display: flex;
+		align-items: center;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.12);
+		}
+	}
+}

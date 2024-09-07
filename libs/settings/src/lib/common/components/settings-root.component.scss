@@ -1,0 +1,35 @@
+:host {
+	flex-grow: 1;
+	color: var(--default-text-color);
+}
+
+.settings-root {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.navigation {
+	height: 100%;
+	width: 200px;
+	flex-grow: 0;
+	flex-shrink: 0;
+	border-right: 1px solid var(--color-4);
+	overflow: hidden;
+}
+
+.header {
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--default-title-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+	border-bottom: 1px solid var(--card-highlight-color-1);
+}
+
+.nodes {
+	padding: 10px;
+}
