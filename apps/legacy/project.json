@@ -17,23 +17,23 @@
 				"inlineStyleLanguage": "scss",
 				"assets": [
 					{
-						"glob": "**/*",
-						"input": "libs/shared/assets/src/assets",
-						"output": "./assets"
-					},
-					{
-						"glob": "**/*",
-						"input": "dependencies",
+						"input": "apps/legacy/src",
+						"glob": "uninstall.html",
 						"output": "./"
 					},
 					{
+						"input": "libs/shared/assets/src/assets",
 						"glob": "**/*",
+						"output": "./assets"
+					},
+					{
 						"input": "overwolf-plugins",
+						"glob": "**/*",
 						"output": "./plugins"
 					},
 					{
-						"glob": "*",
 						"input": "overwolf",
+						"glob": "*",
 						"output": "./.."
 					}
 				],

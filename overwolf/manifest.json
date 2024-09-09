@@ -307,18 +307,14 @@
 		},
 		"game_targeting": {
 			"type": "dedicated",
-			"game_ids": [
-				9898
-			]
+			"game_ids": [9898]
 		},
 		"force_browser": "user",
 		"launch_events": [
 			{
 				"event": "GameLaunch",
 				"event_data": {
-					"game_ids": [
-						9898
-					]
+					"game_ids": [9898]
 				},
 				"start_minimized": false
 			}
@@ -396,6 +392,10 @@
 			}
 		},
 		"process_name": "Firestone",
+		"uninstall_window": {
+			"file": "Files/uninstall.html",
+			"required_runtime": 1000
+		},
 		"disable_cleanup": true
 	}
 }
