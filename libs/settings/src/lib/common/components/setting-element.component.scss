@@ -1,4 +1,31 @@
+:host {
+	font-size: 14px;
+}
+
 .disabled {
 	opacity: 0.5;
 	pointer-events: none;
+}
+
+preference-toggle ::ng-deep .preference-toggle .toggle .settings-p {
+	font-size: 1em;
+}
+
+.slider-container {
+	display: flex;
+
+	.label {
+		width: 300px;
+		font-size: 1em;
+		margin-right: 15px;
+		display: flex;
+		align-items: center;
+	}
+
+	.slider-info {
+		position: relative;
+		width: 15px;
+		height: 15px;
+		margin-left: 5px;
+	}
 }

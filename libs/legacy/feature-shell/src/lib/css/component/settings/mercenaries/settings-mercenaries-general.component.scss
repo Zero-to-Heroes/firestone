@@ -13,10 +13,9 @@
 		margin-top: 30px;
 	}
 
-	.first-slider {
-		width: 300px;
-		margin-bottom: 15px;
-		margin-left: 10px;
+	preference-slider {
+		margin-top: 15px;
+		margin-bottom: 40px;
 	}
 
 	::ng-deep .first-slider .preference-slider {
@@ -36,8 +35,5 @@
 	::ng-deep preference-slider .preference-slider {
 		width: 230px;
 		margin-left: 10px;
-	}
-	::ng-deep preference-slider:not(:last-child) .preference-slider {
-		margin-bottom: 40px;
 	}
 }

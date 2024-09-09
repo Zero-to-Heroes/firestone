@@ -401,7 +401,6 @@ import { SettingsMercenariesQuestsComponent } from './js/components/settings/mer
 import { SettingsMercenariesComponent } from './js/components/settings/mercenaries/settings-mercenaries.component';
 import { ModalVideoSettingsChangedComponent } from './js/components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from './js/components/settings/modal/settings-modal.component';
-import { PreferenceSliderComponent } from './js/components/settings/preference-slider.component';
 import { SettingsReplaysGeneralComponent } from './js/components/settings/replays/settings-replays-general.component';
 import { SettingsReplaysMenuComponent } from './js/components/settings/replays/settings-replays-menu.component';
 import { SettingsReplaysComponent } from './js/components/settings/replays/settings-replays.component';
@@ -1704,7 +1703,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsMercenariesGeneralComponent,
 		SettingsMercenariesQuestsComponent,
 
-		PreferenceSliderComponent,
 		LocalizationDropdownComponent,
 
 		MercenariesHighlightDirective,

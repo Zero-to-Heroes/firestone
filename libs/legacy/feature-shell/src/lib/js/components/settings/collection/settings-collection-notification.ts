@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Knob } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
-import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-collection-notification',
@@ -47,7 +47,6 @@ import { Knob } from '../preference-slider.component';
 					[max]="150"
 					[snapSensitivity]="5"
 					[knobs]="cardSizeKnobs"
-					[hackRightOffset]="8"
 				>
 				</preference-slider>
 			</section>

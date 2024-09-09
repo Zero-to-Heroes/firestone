@@ -10,6 +10,7 @@ export * from './lib/components/input/numeric-input-with-arrows.component';
 export * from './lib/components/input/text-input.component';
 export * from './lib/components/misc/progress-bar.component';
 export * from './lib/components/misc/scrollable.directive';
+export * from './lib/components/slider/preference-slider.component';
 export * from './lib/components/table/sortable-table-label.component';
 export * from './lib/components/toggle/preference-toggle.component';
 export * from './lib/components/toggle/toggle-view.component';

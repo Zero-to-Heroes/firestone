@@ -48,10 +48,6 @@
 		margin-top: 15px;
 	}
 
-	::ng-deep .first-slider .preference-slider {
-		margin-top: 15px;
-	}
-
 	::ng-deep .toggle .preference-toggle {
 		margin-top: 0;
 	}
@@ -68,18 +64,17 @@
 		pointer-events: none;
 	}
 
+	preference-slider {
+		margin-top: 15px;
+		margin-bottom: 40px;
+	}
+
 	::ng-deep preference-slider .preference-slider {
 		width: 230px;
 		margin-left: 10px;
 	}
-	::ng-deep preference-slider:not(:last-child) .preference-slider {
-		margin-bottom: 40px;
-	}
 
 	::ng-deep preference-slider.hand-slider .knob {
 		margin-left: 3px;
-	}
-	::ng-deep preference-slider.secrets-slider .preference-slider {
-		margin-bottom: 60px;
 	}
 }

@@ -20,6 +20,7 @@ import { NumericInputWithArrowsComponent } from './components/input/numeric-inpu
 import { TextInputComponent } from './components/input/text-input.component';
 import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { ScrollableDirective } from './components/misc/scrollable.directive';
+import { PreferenceSliderComponent } from './components/slider/preference-slider.component';
 import { SortableLabelComponent } from './components/table/sortable-table-label.component';
 import { PreferenceToggleComponent } from './components/toggle/preference-toggle.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
@@ -60,6 +61,7 @@ const components = [
 
 	ToggleViewComponent,
 	PreferenceToggleComponent,
+	PreferenceSliderComponent,
 
 	ScrollableDirective,
 	PremiumSettingDirective,

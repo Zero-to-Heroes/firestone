@@ -20,8 +20,8 @@ export const generalAccessibilitySettings = (context: SettingContext): SettingNo
 					{
 						type: 'slider',
 						field: 'globalZoomLevel',
-						label: context.i18n.translateString('settings.general.launch.zoom-level'),
-						tooltip: context.i18n.translateString('settings.general.launch.zoom-level-tooltip'),
+						label: context.i18n.translateString('settings.general.launch.zoom-label'),
+						tooltip: context.i18n.translateString('settings.general.launch.zoom-tooltip'),
 						sliderConfig: {
 							min: 100,
 							max: 400,

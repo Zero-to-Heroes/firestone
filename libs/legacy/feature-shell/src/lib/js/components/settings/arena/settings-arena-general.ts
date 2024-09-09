@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Knob } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-arena-general',

@@ -1,5 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { Knob } from '@firestone/shared/common/view';
 import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 
 export interface SettingContext {
@@ -80,11 +81,6 @@ export interface SliderConfig {
 	readonly snapSensitivity: number;
 	readonly showCurrentValue?: boolean;
 	readonly knobs: readonly Knob[];
-}
-export interface Knob {
-	readonly percentageValue?: number;
-	readonly absoluteValue?: number;
-	readonly label: string;
 }
 export interface TextInputConfig {
 	readonly onInputUpdate: (value: string, context: SettingContext) => void;

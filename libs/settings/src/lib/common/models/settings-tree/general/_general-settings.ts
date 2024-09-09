@@ -1,4 +1,5 @@
 import { SettingContext, SettingNode } from '../../settings.types';
+import { generalAccessibilitySettings } from './general-settings-accessibility';
 import { generalDataSettings } from './general-settings-data';
 import { generalLaunchSettings } from './general-settings-launch';
 import { generalNotificationsSettings } from './general-settings-notifications';
@@ -12,7 +13,7 @@ export const generalSettings = (context: SettingContext): SettingNode => {
 			generalLaunchSettings(context),
 			generalNotificationsSettings(context),
 			generalDataSettings(context),
-			//
+			generalAccessibilitySettings(context),
 		],
 	};
 };

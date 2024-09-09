@@ -1,0 +1,201 @@
+:host {
+	height: 14px;
+}
+
+.preference-slider {
+	display: flex;
+	position: relative;
+	height: 100%;
+
+	.slider {
+		width: 100%;
+		opacity: 1;
+
+		&::-webkit-slider-runnable-track {
+			cursor: auto;
+			-webkit-appearance: none;
+			height: 100%;
+			background: transparent;
+			// background: red;
+		}
+		&::-webkit-slider-thumb {
+			// cursor: auto;
+			// height: 50%;
+			// aspect-ratio: 1;
+			// position: relative;
+			// transform: translateY(-50%);
+			// border-radius: 50%;
+			-webkit-appearance: none;
+			// background: #ffb948;
+			// color: #ffb948;
+			// opacity: 1;
+			opacity: 0;
+		}
+	}
+
+	.progress-background {
+		position: absolute;
+		// 50% - height / 2
+		top: calc(50% - 1px);
+		height: 2px;
+		left: 0;
+		right: 0;
+		background: #a89782;
+		background: #a8978282; // opacity 50%
+		pointer-events: none;
+	}
+
+	.progress {
+		position: absolute;
+		height: 2px;
+		// 50% - height / 2
+		top: calc(50% - 1px);
+		background: #ffb948;
+		pointer-events: none;
+	}
+
+	.thumb {
+		position: absolute;
+		height: 100%;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: #ffb948;
+		color: #ffb948;
+		opacity: 1;
+		z-index: 1;
+	}
+
+	.currentValue {
+		position: absolute;
+		right: -25px;
+		width: 50px;
+		text-align: center;
+		top: 5px;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 11px;
+		line-height: 15px;
+		color: #d9c3ab;
+	}
+
+	.knobs {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		pointer-events: none;
+
+		.knob {
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			aspect-ratio: 1;
+			// transform: translateX(-50%);
+
+			.circle {
+				background: #2f0d0d;
+				border: 1px solid #d9c3ab;
+				border-radius: 50%;
+				height: 100%;
+				aspect-ratio: 1;
+			}
+
+			.label {
+				position: absolute;
+				font-size: 0.8em;
+				color: #d9c3ab;
+				bottom: 0px;
+				position: absolute;
+				transform: translateY(100%);
+			}
+		}
+	}
+
+	&:hover .slider:not(:disabled) {
+		opacity: 1;
+	}
+
+	.info {
+		margin-left: 5px;
+		margin-top: 2px;
+
+		.zth-tooltip {
+			position: absolute;
+			max-width: 200px;
+
+			p {
+				width: 200px;
+				color: #2f0d0d;
+			}
+
+			&.right {
+				top: 50%;
+				transform: translateY(-50%);
+				left: 35px;
+				right: auto;
+			}
+		}
+	}
+
+	&.disabled {
+		opacity: 0.4;
+		cursor: auto;
+
+		.slider::-webkit-slider-runnable-track {
+			cursor: auto;
+			-webkit-appearance: none;
+		}
+		.slider::-webkit-slider-thumb {
+			display: none;
+		}
+		.progress {
+			// display: none;
+		}
+	}
+}
+
+input[type='range'] {
+	-webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+	width: 100%; /* Specific width is required for Firefox. */
+	background: transparent; /* Otherwise white in Chrome */
+	opacity: 0.7;
+	display: block;
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+	}
+
+	&:focus {
+		outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: none;
+		height: 16px;
+		width: 16px;
+		border-radius: 50%;
+		background: #d9c3ab;
+		// cursor: pointer;
+		margin-top: -5px;
+	}
+
+	&::-webkit-slider-runnable-track {
+		width: 100%;
+		height: 5px;
+		// cursor: pointer;
+		background: #a89782;
+		border: none;
+	}
+
+	&:focus::-webkit-slider-runnable-track {
+		background: #a89782;
+	}
+
+	&:hover {
+		opacity: 1;
+	}
+}

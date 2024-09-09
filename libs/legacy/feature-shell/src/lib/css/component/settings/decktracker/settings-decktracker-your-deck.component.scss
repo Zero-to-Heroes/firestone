@@ -56,6 +56,11 @@
 		margin-top: 0;
 	}
 
+	preference-slider {
+		margin-top: 15px;
+		margin-bottom: 40px;
+	}
+
 	::ng-deep .toggle .preference-toggle label p,
 	::ng-deep preference-slider .preference-slider label {
 		// width: 260px;
@@ -71,8 +76,5 @@
 	::ng-deep preference-slider .preference-slider {
 		width: 230px;
 		margin-left: 10px;
-	}
-	::ng-deep preference-slider:not(:last-child) .preference-slider {
-		margin-bottom: 40px;
 	}
 }
