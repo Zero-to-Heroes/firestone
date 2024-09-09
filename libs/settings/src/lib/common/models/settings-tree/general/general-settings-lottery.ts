@@ -1,5 +1,5 @@
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { SettingContext, SettingNode } from '../../settings.types';
 
 export const generalLotterySettings = (context: SettingContext): SettingNode => {
@@ -48,9 +48,11 @@ export const generalLotterySettings = (context: SettingContext): SettingNode => 
 			{
 				id: 'general-lottery-premium',
 				title: context.i18n.translateString('settings.general.menu.premium'),
-				disabledIf: () => {
-					return context.adService.hasPremiumSub$$.pipe(map((sub) => !sub));
-				},
+				disabled$: () =>
+					context.adService.hasPremiumSub$$.pipe(
+						tap((sub) => console.debug('has premium sub', sub)),
+						map((sub) => !sub),
+					),
 				settings: [
 					{
 						type: 'slider',

@@ -1,4 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
+import { ChangeDetectorRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
 import { AnalyticsService, IAdsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
@@ -10,6 +11,7 @@ export interface SettingContext {
 	readonly ow: OverwolfService;
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
+	readonly cdr: ChangeDetectorRef;
 }
 
 export interface SettingNode {
@@ -31,7 +33,7 @@ export interface Section {
 	readonly title: string;
 	readonly texts?: readonly string[]; // Raw HTML
 	readonly settings?: readonly (Setting | SettingButton)[];
-	readonly disabledIf?: () => Observable<boolean>;
+	readonly disabled$?: () => Observable<boolean>;
 	// TODO: how to handle the buttons that let you reset the widget positions?
 	readonly buttons?: readonly SettingButton[];
 	// need text, tooltip, action, confirmation

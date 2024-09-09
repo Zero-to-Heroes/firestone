@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { Section, SectionReference, Setting, SettingButton, SettingNode } from '../models/settings.types';
+import { Section, SectionReference, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
@@ -13,20 +14,11 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 			<div class="page-title">{{ node.name }}</div>
 			<section class="section" *ngFor="let section of node.sections">
 				<ng-container *ngIf="isSection(section)">
-					<div class="title" *ngIf="section.title">{{ section.title }}</div>
-					<div class="settings-group">
-						<div class="section-text" *ngFor="let text of section.texts" [innerHTML]="text"></div>
-						<ng-container *ngFor="let setting of section.settings">
-							<ng-container *ngIf="isStandardSetting(setting)">
-								<setting-element [setting]="setting"> </setting-element>
-							</ng-container>
-							<ng-container *ngIf="isSettingButton(setting)">
-								<setting-button [setting]="setting"> </setting-button>
-							</ng-container>
-						</ng-container>
-					</div>
+					<settings-current-page-section [section]="section"> </settings-current-page-section>
 				</ng-container>
-				<!-- TODO: inject the component if it's a SectionReference -->
+				<ng-container *ngIf="isSectionReference(section)">
+					<ng-container *ngComponentOutlet="section.componentType"></ng-container>
+				</ng-container>
 			</section>
 		</div>
 	`,
@@ -58,13 +50,5 @@ export class SettingsCurrentPageComponent extends AbstractSubscriptionComponent 
 
 	isSectionReference(section: Section | SectionReference): section is SectionReference {
 		return (section as SectionReference).componentType !== undefined;
-	}
-
-	isStandardSetting(setting: Setting | SettingButton): setting is Setting {
-		return (setting as Setting).field !== undefined;
-	}
-
-	isSettingButton(setting: Setting | SettingButton): setting is SettingButton {
-		return (setting as SettingButton).action !== undefined;
 	}
 }

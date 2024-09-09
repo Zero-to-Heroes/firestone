@@ -56,7 +56,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.adService);
 
 		const context: SettingContext = {
 			prefs: this.prefs,
@@ -64,6 +64,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			ow: this.ow,
 			i18n: this.i18n,
 			adService: this.adService,
+			cdr: this.cdr,
 		};
 		this.rootNode = settingsDefinition(context);
 
