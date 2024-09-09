@@ -1,3 +1,4 @@
+export * from './lib/common/components/setting-button.component';
 export * from './lib/common/components/setting-element.component';
 export * from './lib/common/components/settings-current-page.component';
 export * from './lib/common/components/settings-navigation-node.component';

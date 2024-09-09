@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { Section, SectionReference, SettingNode } from '../models/settings.types';
+import { Section, SectionReference, Setting, SettingButton, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
@@ -15,8 +15,14 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 				<ng-container *ngIf="isSection(section)">
 					<div class="title" *ngIf="section.title">{{ section.title }}</div>
 					<div class="settings-group">
-						<setting-element *ngFor="let setting of section.settings" [setting]="setting">
-						</setting-element>
+						<ng-container *ngFor="let setting of section.settings">
+							<ng-container *ngIf="isStandardSetting(setting)">
+								<setting-element [setting]="setting"> </setting-element>
+							</ng-container>
+							<ng-container *ngIf="isSettingButton(setting)">
+								<setting-button [setting]="setting"> </setting-button>
+							</ng-container>
+						</ng-container>
 					</div>
 				</ng-container>
 				<!-- TODO: inject the component if it's a SectionReference -->
@@ -51,5 +57,13 @@ export class SettingsCurrentPageComponent extends AbstractSubscriptionComponent 
 
 	isSectionReference(section: Section | SectionReference): section is SectionReference {
 		return (section as SectionReference).componentType !== undefined;
+	}
+
+	isStandardSetting(setting: Setting | SettingButton): setting is Setting {
+		return (setting as Setting).field !== undefined;
+	}
+
+	isSettingButton(setting: Setting | SettingButton): setting is SettingButton {
+		return (setting as SettingButton).action !== undefined;
 	}
 }

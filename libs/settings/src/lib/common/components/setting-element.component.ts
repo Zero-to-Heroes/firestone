@@ -22,8 +22,8 @@ import { Setting } from '../models/settings.types';
 			></preference-toggle>
 			<div class="slider-container" *ngSwitchCase="'slider'">
 				<div class="label">
-					<div class="slider-text" [innerHTML]="_setting.label"></div>
-					<i class="slider-info" *ngIf="_setting.tooltip" [helpTooltip]="_setting.tooltip">
+					<div class="setting-text" [innerHTML]="_setting.label"></div>
+					<i class="setting-info" *ngIf="_setting.tooltip" [helpTooltip]="_setting.tooltip">
 						<svg>
 							<use xlink:href="assets/svg/sprite.svg#info" />
 						</svg>

@@ -28,17 +28,18 @@ export interface Section {
 	readonly id: string;
 	readonly title: string;
 	readonly texts?: readonly string[]; // Raw HTML
-	readonly settings?: readonly Setting[];
-	readonly disabledIf?: (context: SettingContext) => boolean;
+	readonly settings?: readonly (Setting | SettingButton)[];
+	readonly disabledIf?: () => boolean;
 	// TODO: how to handle the buttons that let you reset the widget positions?
 	readonly buttons?: readonly SettingButton[];
 	// need text, tooltip, action, confirmation
 }
 
 export interface SettingButton {
+	readonly label?: string;
 	readonly text: string;
-	readonly tooltip: string;
-	readonly action: (context: SettingContext) => void;
+	readonly tooltip: string | null;
+	readonly action: () => void;
 	readonly confirmation?: string;
 }
 
