@@ -60,7 +60,7 @@ import { Subscription } from 'rxjs';
 export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() field: string;
 	@Input() label: string;
-	@Input() tooltip: string;
+	@Input() tooltip: string | null;
 	@Input() tooltipPosition = 'right';
 	@Input() messageWhenToggleValue: string | undefined;
 	@Input() valueToDisplayMessageOn: string | boolean | number | undefined;

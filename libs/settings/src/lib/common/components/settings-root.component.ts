@@ -1,8 +1,17 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
+	ADS_SERVICE_TOKEN,
 	AnalyticsService,
+	IAdsService,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
@@ -41,6 +50,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly prefs: PreferencesService,
 		private readonly analytics: AnalyticsService,
 		private readonly ow: OverwolfService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 	) {
 		super(cdr);
 	}
@@ -53,6 +63,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			analytics: this.analytics,
 			ow: this.ow,
 			i18n: this.i18n,
+			adService: this.adService,
 		};
 		this.rootNode = settingsDefinition(context);
 

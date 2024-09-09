@@ -1,13 +1,15 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
-import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, IAdsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
 
 export interface SettingContext {
 	readonly prefs: PreferencesService;
 	readonly analytics: AnalyticsService;
 	readonly ow: OverwolfService;
 	readonly i18n: ILocalizationService;
+	readonly adService: IAdsService;
 }
 
 export interface SettingNode {
@@ -29,7 +31,7 @@ export interface Section {
 	readonly title: string;
 	readonly texts?: readonly string[]; // Raw HTML
 	readonly settings?: readonly (Setting | SettingButton)[];
-	readonly disabledIf?: () => boolean;
+	readonly disabledIf?: () => Observable<boolean>;
 	// TODO: how to handle the buttons that let you reset the widget positions?
 	readonly buttons?: readonly SettingButton[];
 	// need text, tooltip, action, confirmation
@@ -47,7 +49,7 @@ export interface Setting {
 	readonly type: 'toggle' | 'dropdown' | 'slider' | 'text-input';
 	readonly field: keyof Preferences;
 	readonly label: string;
-	readonly tooltip: string;
+	readonly tooltip: string | null;
 	// E.g. if a setting can only be activated when the parent is on, and we want to display them as indented below them
 	// readonly childSettings?: readonly Setting[];
 	readonly disabledIf?: (prefs: Preferences) => boolean;
@@ -81,7 +83,7 @@ export interface SliderConfig {
 	readonly max: number;
 	readonly snapSensitivity: number;
 	readonly showCurrentValue?: boolean;
-	readonly knobs: readonly Knob[];
+	readonly knobs?: readonly Knob[];
 }
 export interface TextInputConfig {
 	readonly onInputUpdate: (value: string, context: SettingContext) => void;

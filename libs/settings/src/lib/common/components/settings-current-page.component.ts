@@ -15,6 +15,7 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 				<ng-container *ngIf="isSection(section)">
 					<div class="title" *ngIf="section.title">{{ section.title }}</div>
 					<div class="settings-group">
+						<div class="section-text" *ngFor="let text of section.texts" [innerHTML]="text"></div>
 						<ng-container *ngFor="let setting of section.settings">
 							<ng-container *ngIf="isStandardSetting(setting)">
 								<setting-element [setting]="setting"> </setting-element>
