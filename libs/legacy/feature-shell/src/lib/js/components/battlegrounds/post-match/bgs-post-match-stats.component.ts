@@ -147,7 +147,6 @@ export class BgsPostMatchStatsComponent
 		if (!value?.player || value === this._panel) {
 			return;
 		}
-		console.debug('setting panel', value);
 		this._panel = value;
 		this.icon = this.i18n.getCardImage(value.player.getDisplayCardId(), { isBgs: true });
 		this.health = value.player.initialHealth + value.player.currentArmor - value.player.damageTaken;

@@ -192,7 +192,6 @@ export class NewVersionNotificationComponent
 	selectVersion(version: AppVersion) {
 		if (version.versionDetails && !version.textHtml) {
 			const parsed = this.markdownService.parse(version.versionDetails);
-			console.debug('parsed', parsed);
 			version.textHtml = parsed;
 		}
 		this.selectedVersion = version;
@@ -268,7 +267,6 @@ export class NewVersionNotificationComponent
 		for (const v of versions) {
 			v.versionDetails = await this.loadTextDetail(v.version);
 		}
-		console.debug('loaded versions', versions);
 		return versions;
 	}
 

@@ -363,41 +363,24 @@ export class BgsChartHpComponent {
 			this._stats.hpOverTurn,
 		);
 		const hpOverTurn = {};
-		console.debug(
-			'built player order',
-			playerOrder,
-			this._stats.leaderboardPositionOverTurn,
-			this._stats.hpOverTurn,
-		);
 		for (const playerId of playerOrder) {
-			console.debug('handling playerId', playerId);
 			hpOverTurn[playerId] = this._stats.hpOverTurn[playerId];
 		}
 		const hpOverTurnDebug = {};
 		for (const playerId of Object.keys(hpOverTurn)) {
 			const playerCardId = this._stats.playerIdToCardIdMapping[playerId];
-			console.debug('playerCardId', playerCardId, playerId);
 			const lastInfo = hpOverTurn[playerId][hpOverTurn[playerId].length - 1];
 			hpOverTurnDebug[this.allCards.getCard(playerCardId).name] = lastInfo.value + (lastInfo.armor ?? 0);
 		}
 		const leaderboardPositionOverTurnDebug = {};
 		for (const playerId of Object.keys(this._stats.leaderboardPositionOverTurn)) {
 			const playerCardId = this._stats.playerIdToCardIdMapping[playerId];
-			console.debug('playerCardId', playerCardId, playerId);
 			const lastInfo =
 				this._stats.leaderboardPositionOverTurn[playerId][
 					this._stats.leaderboardPositionOverTurn[playerId].length - 1
 				];
 			leaderboardPositionOverTurnDebug[this.allCards.getCard(playerCardId).name] = lastInfo.value;
 		}
-		console.debug(
-			'hpOverTurn',
-			hpOverTurn,
-			hpOverTurnDebug,
-			leaderboardPositionOverTurnDebug,
-			this._stats.playerIdToCardIdMapping,
-			this._stats.leaderboardPositionOverTurn,
-		);
 
 		// It's just a way to arbitrarily always assign the same color to a player
 		const sortedPlayerIds = [...playerOrder].sort();
@@ -412,7 +395,6 @@ export class BgsChartHpComponent {
 					?.filter((turnInfo) => turnInfo)
 					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
-		console.debug('players', players, this._mainPlayerId);
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
@@ -436,7 +418,6 @@ export class BgsChartHpComponent {
 			backgroundColor: 'transparent',
 			borderColor: player.color,
 		}));
-		console.debug('newChartData', newChartData);
 		// if (areEqualDataSets(newChartData, this.lineChartData.datasets)) {
 		// 	return;
 		// }

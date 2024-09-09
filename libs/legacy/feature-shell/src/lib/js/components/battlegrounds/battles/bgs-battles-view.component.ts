@@ -88,11 +88,11 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
+		console.debug('selecting battle', faceOff, this._isMainWindow);
 		if (this._isMainWindow) {
 			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-main-window' });
 			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		} else {
-			console.debug('selecting battle', faceOff);
 			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-bg-window' });
 			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		}

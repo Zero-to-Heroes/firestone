@@ -35,7 +35,6 @@ export class BgsCardTooltipComponent {
 			isBgs: true,
 			cardType: this._entity.getTag(GameTag.PREMIUM) === 1 ? 'GOLDEN' : 'NORMAL',
 		});
-		console.debug('set entity', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

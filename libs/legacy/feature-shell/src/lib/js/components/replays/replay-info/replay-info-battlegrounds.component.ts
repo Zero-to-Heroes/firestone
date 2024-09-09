@@ -190,7 +190,6 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 			return;
 		}
 
-		console.debug('setting replay info', this.replayInfo);
 		this.gameMode = this.replayInfo.gameMode;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(this.replayInfo, true);
 
