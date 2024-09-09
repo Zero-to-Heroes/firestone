@@ -47,6 +47,8 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 
 	protected async init() {
+		await this.allCards.waitForReady();
+
 		console.debug('[simulator] init service', new Error().stack);
 		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(
 			this.stateManager.buildInitialBattle(null),
