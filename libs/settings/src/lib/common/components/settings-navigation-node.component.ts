@@ -63,7 +63,7 @@ export class SettingsNavigationNodeComponent extends AbstractSubscriptionCompone
 		await waitForReady(this.controller);
 
 		this.isSelected$ = this.controller.selectedNode$$.pipe(
-			this.mapData((selectedNode) => selectedNode === this._node),
+			this.mapData((selectedNode) => selectedNode?.id === this._node?.id),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
