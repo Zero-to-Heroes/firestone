@@ -126,7 +126,6 @@ export class PreferenceSliderComponent extends AbstractSubscriptionComponent imp
 		// Same as thumb positioning, see below
 		const minLeft = 0 - height / 2;
 		const maxLeft = width - height / 2;
-		console.debug('minLeft', minLeft, 'maxLeft', maxLeft);
 		return minLeft + (valueInPercent / 100) * (maxLeft - minLeft);
 	}
 
