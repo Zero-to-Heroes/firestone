@@ -1,20 +1,13 @@
 .title,
 .subtitle {
-	font-family: Open Sans;
-	font-style: normal;
 	font-weight: 600;
-	line-height: normal;
 	font-size: 14px;
 	color: #d9c3ab;
 	margin-bottom: 5px;
 }
 
 .text {
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
 	font-size: 11px;
-	line-height: 15px;
 	color: #d9c3ab;
 }
 
@@ -31,99 +24,10 @@
 
 a,
 ::ng-deep a {
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
-	line-height: normal;
 	color: var(--color-4);
-	margin-top: 5px;
 
 	&:hover {
 		color: #ffb948;
-	}
-}
-
-label {
-	display: flex;
-	margin-bottom: 15px;
-
-	i {
-		--icon-color: #a89782;
-		--icon-color-secondary: #ffb948;
-		width: 15px;
-		height: 15px;
-		margin-right: 15px;
-
-		svg {
-			fill: transparent;
-		}
-	}
-
-	p,
-	input {
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		line-height: normal;
-		font-size: 14px;
-		color: #a89782;
-	}
-
-	&:hover:not([disabled]) {
-		i {
-			--icon-color: #d9c3ab;
-		}
-	}
-
-	&[disabled] > *:not(.info) {
-		opacity: 0.5;
-	}
-}
-
-input {
-	display: none;
-}
-
-input[type='range'] {
-	-webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-	width: 100%; /* Specific width is required for Firefox. */
-	background: transparent; /* Otherwise white in Chrome */
-	opacity: 0.7;
-	display: block;
-
-	&::-webkit-slider-thumb {
-		-webkit-appearance: none;
-	}
-
-	&:focus {
-		outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-	}
-
-	&::-webkit-slider-thumb {
-		-webkit-appearance: none;
-		border: none;
-		height: 16px;
-		width: 16px;
-		border-radius: 50%;
-		background: #d9c3ab;
-		cursor: pointer;
-		margin-top: -5px;
-	}
-
-	&::-webkit-slider-runnable-track {
-		width: 100%;
-		height: 5px;
-		cursor: pointer;
-		background: #a89782;
-		border: none;
-	}
-
-	&:focus::-webkit-slider-runnable-track {
-		background: #a89782;
-	}
-
-	&:hover {
-		opacity: 1;
 	}
 }
 
@@ -134,139 +38,25 @@ input[type='range'] {
 	display: flex;
 	flex-direction: column;
 	color: var(--default-text-color);
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
 	font-size: 13px;
 
 	&.disabled {
 		pointer-events: none;
 		opacity: 0.5;
 	}
-
-	.header {
-		margin-bottom: 8px;
-	}
 }
 
-.info {
-	margin-left: 5px;
-	margin-top: 2px;
-	position: relative;
-	width: 15px;
-	height: 15px;
+preference-toggle ::ng-deep {
+	.preference-toggle.preference-toggle {
+		margin: 0;
 
-	&:hover {
-		.zth-tooltip {
-			opacity: 1;
-		}
-	}
-
-	.zth-tooltip {
-		background-color: #a89782;
-		padding: 15px;
-		opacity: 0;
-		position: fixed; // Because of the overflow:hidden
-		max-width: 200px;
-		pointer-events: none;
-		z-index: 100;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
-
-		.tooltip-arrow {
-			position: absolute;
-			width: 16px;
-			height: 9px;
-			fill: #a89782;
-			overflow: visible;
-		}
-
-		p {
-			cursor: default;
-			color: #2f0d0d;
+		.info {
 			margin: 0;
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: normal;
-			line-height: normal;
-			font-size: 13px;
+			margin-left: 5px;
 		}
 
-		&.right {
-			right: 24px;
-			top: 78px;
-
-			.tooltip-arrow {
-				left: -3px;
-				top: calc(50% - 5px);
-				transform: rotate(-90deg);
-			}
-		}
-	}
-}
-
-::ng-deep preference-toggle {
-	&:first-child {
-		font-style: normal;
-		.preference-toggle {
-			margin-top: 0;
-		}
-	}
-	.preference-toggle {
-		margin-top: 15px;
-
-		.toggle .settings-p {
+		label .settings-p {
 			width: 300px;
-		}
-	}
-}
-
-::ng-deep preference-toggle.disabled .preference-toggle,
-::ng-deep preference-slider.disabled .preference-slider {
-	opacity: 0.4;
-	pointer-events: none;
-}
-
-.premium-setting {
-	.locked {
-	}
-}
-
-button {
-	border: 1px solid #d9c3ab;
-	padding-left: 25px;
-	padding-right: 25px;
-	width: auto;
-	height: 35px;
-	display: flex;
-	align-items: center;
-	color: var(--default-text-color);
-	font-size: 14px;
-
-	i {
-		width: 18px;
-		height: 18px;
-		margin-right: 5px;
-		--icon-color: #ffb948;
-	}
-
-	div {
-		display: flex;
-	}
-
-	&:hover {
-		background: #ffb948;
-		border: none;
-		color: #2f0d0d;
-
-		span {
-			color: #2f0d0d;
-		}
-
-		i {
-			--icon-color: #2f0d0d;
 		}
 	}
 }

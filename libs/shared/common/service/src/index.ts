@@ -1,3 +1,4 @@
+export * from './lib/directives/advanced-setting.directive';
 export * from './lib/models/patches';
 export * from './lib/models/pref-model';
 export * from './lib/models/preferences';

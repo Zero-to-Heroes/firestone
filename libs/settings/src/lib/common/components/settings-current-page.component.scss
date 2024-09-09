@@ -1,0 +1,23 @@
+:host {
+	display: flex;
+	flex-grow: 1;
+}
+
+.current-page {
+	flex-grow: 1;
+	padding: 10px 20px;
+
+	::ng-deep setting-element {
+		&:not(:last-child) > *:not(.advanced-setting-hidden) {
+			margin-bottom: 15px;
+		}
+	}
+}
+
+.page-title {
+	font-size: 1.2em;
+	color: var(--default-title-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

@@ -12,14 +12,13 @@
 	&.selected > .name {
 		background: rgba(255, 255, 255, 0.08);
 	}
+	&.selectable > .name:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
 
 	.name {
 		height: 30px;
 		display: flex;
 		align-items: center;
-
-		&:hover {
-			background: rgba(255, 255, 255, 0.12);
-		}
 	}
 }

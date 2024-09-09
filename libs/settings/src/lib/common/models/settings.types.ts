@@ -47,7 +47,7 @@ export interface Setting {
 	readonly label: string;
 	readonly tooltip: string;
 	// E.g. if a setting can only be activated when the parent is on, and we want to display them as indented below them
-	readonly childSettings?: readonly Setting[];
+	// readonly childSettings?: readonly Setting[];
 	readonly disabledIf?: (prefs: Preferences) => boolean;
 	readonly keywords?: readonly string[] | null;
 	readonly advancedSetting?: boolean;
@@ -62,7 +62,7 @@ export interface Setting {
 export interface ToggleConfig {
 	readonly messageWhenToggleValue?: string;
 	readonly valueToDisplayMessageOn?: string | boolean;
-	readonly toggleFunction?: (context: SettingContext) => void;
+	readonly toggleFunction?: (newValue: boolean) => void;
 }
 
 export interface DropdownConfig {

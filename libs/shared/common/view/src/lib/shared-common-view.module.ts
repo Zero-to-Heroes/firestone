@@ -30,6 +30,7 @@ import { CardTooltipDirective } from './components/tooltip/card-tooltip.directiv
 import { ComponentTooltipDirective } from './components/tooltip/component-tooltip.directive';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
+import { PremiumSettingDirective } from './directives/premium-setting.directive';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 
 const components = [
@@ -61,6 +62,7 @@ const components = [
 	PreferenceToggleComponent,
 
 	ScrollableDirective,
+	PremiumSettingDirective,
 
 	ShortDatePipe,
 ];

@@ -1,3 +1,5 @@
+export * from './lib/common/components/setting-element.component';
+export * from './lib/common/components/settings-current-page.component';
 export * from './lib/common/components/settings-navigation-node.component';
 export * from './lib/common/components/settings-root.component';
 export * from './lib/common/services/bootstrap-settings.service';

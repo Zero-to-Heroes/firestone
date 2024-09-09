@@ -17,19 +17,24 @@
 	flex-shrink: 0;
 	border-right: 1px solid var(--color-4);
 	overflow: hidden;
+
+	.header {
+		padding: 10px;
+		background: rgba(255, 255, 255, 0.08);
+		color: var(--default-title-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+		border-bottom: 1px solid var(--card-highlight-color-1);
+	}
+
+	.nodes {
+		padding: 10px;
+	}
 }
 
-.header {
-	padding: 10px;
-	background: rgba(255, 255, 255, 0.08);
-	color: var(--default-title-color);
+.current-section {
+	flex-grow: 1;
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 40px;
-	border-bottom: 1px solid var(--card-highlight-color-1);
-}
-
-.nodes {
-	padding: 10px;
 }

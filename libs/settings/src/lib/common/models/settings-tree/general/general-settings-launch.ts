@@ -24,7 +24,7 @@ export const generalLaunchSettings = (context: SettingContext): SettingNode => {
 						label: context.i18n.translateString('settings.general.launch.integrated-mode-label'),
 						tooltip: context.i18n.translateString('settings.general.launch.integrated-mode-tooltip'),
 						toggleConfig: {
-							toggleFunction: (context: SettingContext) => context.ow.getMainWindow().reloadWindows(),
+							toggleFunction: (newValue: boolean) => context.ow.getMainWindow().reloadWindows(),
 						},
 					},
 					{

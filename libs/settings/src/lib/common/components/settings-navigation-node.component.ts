@@ -18,10 +18,13 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 	selector: 'settings-navigation-node',
 	styleUrls: [`../../settings-common.component.scss`, `./settings-navigation-node.component.scss`],
 	template: `
-		<div class="navigation-node" [ngClass]="{ 'is-leaf': !node.children?.length, selected: isSelected$ | async }">
-			<div class="name" (click)="selectNode()">{{ node.name }}</div>
+		<div
+			class="navigation-node"
+			[ngClass]="{ 'is-leaf': !_node.children?.length, selected: isSelected$ | async, selectable: selectable }"
+		>
+			<div class="name" (click)="selectNode()">{{ _node.name }}</div>
 			<settings-navigation-node
-				*ngFor="let child of node.children"
+				*ngFor="let child of _node.children"
 				class="child-node"
 				[node]="child"
 				[indentLevel]="_indentLevel + 1"
@@ -33,14 +36,19 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 export class SettingsNavigationNodeComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	isSelected$: Observable<boolean>;
 
-	@Input() node: SettingNode;
+	@Input() set node(value: SettingNode) {
+		this._node = value;
+		this.selectable = !!value.sections?.length;
+	}
 
 	@Input() set indentLevel(value: number) {
 		this._indentLevel = value;
 		this.el.nativeElement.style.setProperty('--settings-indent-level', `${value}`);
 	}
 
+	_node: SettingNode;
 	_indentLevel: number;
+	selectable: boolean;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -55,7 +63,7 @@ export class SettingsNavigationNodeComponent extends AbstractSubscriptionCompone
 		await waitForReady(this.controller);
 
 		this.isSelected$ = this.controller.selectedNode$$.pipe(
-			this.mapData((selectedNode) => selectedNode === this.node),
+			this.mapData((selectedNode) => selectedNode === this._node),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -64,6 +72,8 @@ export class SettingsNavigationNodeComponent extends AbstractSubscriptionCompone
 	}
 
 	selectNode() {
-		this.controller.selectNode(this.node);
+		if (this.selectable) {
+			this.controller.selectNode(this._node);
+		}
 	}
 }

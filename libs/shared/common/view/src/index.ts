@@ -21,5 +21,6 @@ export * from './lib/components/tooltip/card-tooltip.directive';
 export * from './lib/components/tooltip/component-tooltip.directive';
 export * from './lib/components/tooltip/help-tooltip.component';
 export * from './lib/components/tooltip/help-tooltip.directive';
+export * from './lib/directives/premium-setting.directive';
 export * from './lib/pipes/short-date.pipe';
 export * from './lib/shared-common-view.module';

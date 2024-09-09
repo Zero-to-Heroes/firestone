@@ -25,7 +25,9 @@ import { SettingContext, SettingNode } from '../models/settings.types';
 					></settings-navigation-node>
 				</ul>
 			</nav>
-			<div class="current-section"></div>
+			<div class="current-section">
+				<settings-current-page></settings-current-page>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

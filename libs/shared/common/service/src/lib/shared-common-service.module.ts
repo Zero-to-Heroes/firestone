@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { AdvancedSettingDirective } from './directives/advanced-setting.directive';
 import { BugReportService } from './services/bug-report.service';
 import { GameStatusService } from './services/game-status.service';
 import { LogUtilsService } from './services/log-utils.service';
@@ -12,6 +13,8 @@ import { SimpleIOService } from './services/plugins/simple-io.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
 import { PreferencesService } from './services/preferences.service';
 import { S3FileUploadService } from './services/s3-file-upload.service';
+
+const components = [AdvancedSettingDirective];
 
 @NgModule({
 	imports: [CommonModule, SharedFrameworkCommonModule, SharedFrameworkCoreModule],
@@ -27,5 +30,7 @@ import { S3FileUploadService } from './services/s3-file-upload.service';
 		LogsUploaderService,
 		BugReportService,
 	],
+	declarations: components,
+	exports: components,
 })
 export class SharedCommonServiceModule {}

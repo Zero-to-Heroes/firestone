@@ -5,45 +5,40 @@ import {
 	Directive,
 	ElementRef,
 	Host,
+	Inject,
 	Input,
 	Optional,
 	Renderer2,
 	Self,
-	ViewContainerRef,
 } from '@angular/core';
-import { PreferenceToggleComponent } from '@firestone/shared/common/view';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
+import { PreferenceToggleComponent } from '../components/toggle/preference-toggle.component';
 
 @Directive({
 	selector: '[premiumSetting]',
 })
-export class PremiumSettingDirective
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
-	@Input() premiumSettingEnabled = true;
+export class PremiumSettingDirective extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+	@Input() premiumSettingEnabled: boolean | undefined = true;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,
-		private readonly viewContainerRef: ViewContainerRef,
+		@Inject(ADS_SERVICE_TOKEN) private readonly adsService: IAdsService,
 		// Need to find another solution when targeting another component
 		// Maybe see https://stackoverflow.com/questions/46014761/how-to-access-host-component-from-directive
 		// https://github.com/angular/angular/issues/8277#issuecomment-323678013
 		@Host() @Self() @Optional() private readonly targetPreferenceToggle: PreferenceToggleComponent,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit() {
-		if (this.premiumSettingEnabled) {
+		if (!!this.premiumSettingEnabled) {
 			// I don't think there's a case where I would want to make the directive conditional to the lottery
 			// being shown, as settings are permanent, and the lottery is just something you can pop on and off
-			this.store
-				.hasPremiumSub$()
+			this.adsService.hasPremiumSub$$
 				.pipe(this.mapData((premium) => premium))
 				.subscribe((value) => this.setPremium(value));
 		}

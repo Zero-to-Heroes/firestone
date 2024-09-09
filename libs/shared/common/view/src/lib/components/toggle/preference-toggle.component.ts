@@ -62,9 +62,9 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 	@Input() label: string;
 	@Input() tooltip: string;
 	@Input() tooltipPosition = 'right';
-	@Input() messageWhenToggleValue: string;
-	@Input() valueToDisplayMessageOn: string | boolean | number;
-	@Input() toggleFunction: (newValue: boolean) => void;
+	@Input() messageWhenToggleValue: string | undefined;
+	@Input() valueToDisplayMessageOn: string | boolean | number | undefined;
+	@Input() toggleFunction: ((newValue: boolean) => void) | undefined;
 	@Input() callbackOnLoad: (newValue: boolean) => void;
 	@Input() valueExtractor: (valkue: boolean) => Promise<boolean> = async (value) => value;
 
@@ -121,7 +121,9 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 
 	shouldDisplayMessage(): boolean {
 		return (
-			this.valueToDisplayMessageOn === this.value || (this.toggled && this.valueToDisplayMessageOn === 'onToggle')
+			this.valueToDisplayMessageOn !== undefined &&
+			(this.valueToDisplayMessageOn === this.value ||
+				(this.toggled && this.valueToDisplayMessageOn === 'onToggle'))
 		);
 	}
 
