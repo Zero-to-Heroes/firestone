@@ -1,6 +1,7 @@
 import { SettingContext, SettingNode } from '../../settings.types';
 import { generalAccessibilitySettings } from './general-settings-accessibility';
 import { generalAdminSettings } from './general-settings-admin';
+import { generalAppearanceSettings } from './general-settings-appearance';
 import { generalDataSettings } from './general-settings-data';
 import { generalLaunchSettings } from './general-settings-launch';
 import { generalLotterySettings } from './general-settings-lottery';
@@ -18,6 +19,7 @@ export const generalSettings = (context: SettingContext): SettingNode => {
 			generalDataSettings(context),
 			generalAccessibilitySettings(context),
 			generalLotterySettings(context),
+			generalAppearanceSettings(context),
 		],
 	};
 };

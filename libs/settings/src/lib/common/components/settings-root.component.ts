@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EnvironmentInjector,
 	Inject,
 	ViewRef,
 } from '@angular/core';
@@ -50,6 +51,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly prefs: PreferencesService,
 		private readonly analytics: AnalyticsService,
 		private readonly ow: OverwolfService,
+		private readonly envInjector: EnvironmentInjector,
 		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 	) {
 		super(cdr);
@@ -65,6 +67,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			i18n: this.i18n,
 			adService: this.adService,
 			cdr: this.cdr,
+			injector: this.envInjector,
 		};
 		this.rootNode = settingsDefinition(context);
 

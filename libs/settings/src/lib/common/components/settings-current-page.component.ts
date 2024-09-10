@@ -17,7 +17,8 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 					<settings-current-page-section [section]="section"> </settings-current-page-section>
 				</ng-container>
 				<ng-container *ngIf="isSectionReference(section)">
-					<ng-container *ngComponentOutlet="section.componentType"></ng-container>
+					<settings-current-page-section-reference [section]="section">
+					</settings-current-page-section-reference>
 				</ng-container>
 			</section>
 		</div>

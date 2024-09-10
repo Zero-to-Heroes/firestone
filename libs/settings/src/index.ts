@@ -1,6 +1,7 @@
 export * from './lib/common/components/custom-pages/appearance-customization.component';
 export * from './lib/common/components/setting-button.component';
 export * from './lib/common/components/setting-element.component';
+export * from './lib/common/components/settings-current-page-section-reference.component';
 export * from './lib/common/components/settings-current-page-section.component';
 export * from './lib/common/components/settings-current-page.component';
 export * from './lib/common/components/settings-navigation-node.component';

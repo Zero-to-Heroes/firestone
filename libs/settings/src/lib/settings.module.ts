@@ -6,8 +6,11 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { AppearanceCustomizationPageComponent } from './common/components/custom-pages/appearance-customization.component';
 import { SettingButtonComponent } from './common/components/setting-button.component';
 import { SettingElementComponent } from './common/components/setting-element.component';
+import { SettingsCurrentPageSectionReferenceComponent } from './common/components/settings-current-page-section-reference.component';
+import { SettingsCurrentPageSectionComponent } from './common/components/settings-current-page-section.component';
 import { SettingsCurrentPageComponent } from './common/components/settings-current-page.component';
 import { SettingsNavigationNodeComponent } from './common/components/settings-navigation-node.component';
 import { SettingsRootComponent } from './common/components/settings-root.component';
@@ -21,9 +24,13 @@ const components = [
 	SettingsRootComponent,
 	SettingsNavigationNodeComponent,
 	SettingsCurrentPageComponent,
+	SettingsCurrentPageSectionComponent,
+	SettingsCurrentPageSectionReferenceComponent,
 	SettingElementComponent,
 	SettingButtonComponent,
 	SettingsGeneralAppearanceComponent,
+
+	AppearanceCustomizationPageComponent,
 	CustomColorPickerComponent,
 ];
 

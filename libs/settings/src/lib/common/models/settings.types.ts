@@ -1,5 +1,4 @@
-import { ComponentType } from '@angular/cdk/portal';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, EnvironmentInjector } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
 import { AnalyticsService, IAdsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
@@ -12,6 +11,7 @@ export interface SettingContext {
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
 	readonly cdr: ChangeDetectorRef;
+	readonly injector: EnvironmentInjector;
 }
 
 export interface SettingNode {
@@ -24,9 +24,9 @@ export interface SettingNode {
 
 // Not sure how to do this, but the idea is to simply specify a manually crafted component that we insert
 export interface SectionReference {
-	// TODO: have an interface to signal that a component can be inserted in the settings?
-	readonly componentType: ComponentType<any>;
+	readonly componentType: SettingsSectionReferenceType;
 }
+export type SettingsSectionReferenceType = 'AppearanceCustomizationPageComponent';
 
 export interface Section {
 	readonly id: string;
