@@ -46,6 +46,7 @@ import {
 	frenzy,
 	fromAnotherClass,
 	frost,
+	generateCorpse,
 	generatesPlague,
 	hasMultipleCopies,
 	hasSpellSchool,
@@ -358,6 +359,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BunnyStomper_WW_435:
 			return and(side(inputSide), or(inDeck, inHand), beast);
+		case CardIds.BusyBot_WORK_002:
+			return and(side(inputSide), or(inDeck, inHand), minion, attackIs(1));
+		case CardIds.BusyPeon_WORK_041:
+			return and(side(inputSide), or(inDeck, inHand), location);
 		case CardIds.ButchTavernBrawl:
 			return and(side(inputSide), inGraveyard, beast);
 		case CardIds.Buttons_VAC_437:
@@ -395,6 +400,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, effectiveCostMore(4));
 		case CardIds.CarnivorousCube:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.CarnivorousCubicle_WORK_042:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.CarrionStudies:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.CastleKennels_REV_362:
@@ -580,6 +587,8 @@ export const cardIdSelector = (
 			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.CutlassCourier:
 			return and(side(inputSide), inDeck, pirate);
+		case CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.DangBlastedElemental_WW_397:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.DaringDrake:
@@ -759,6 +768,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, taunt);
 		case CardIds.Ensmallen_TOY_805:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.EternalLayover_WORK_028:
+			return and(side(inputSide), or(inDeck, inHand), generateCorpse);
 		case CardIds.EternalServitude_CORE_ICC_213:
 		case CardIds.EternalServitude_ICC_213:
 			return and(side(inputSide), inGraveyard, minion);
@@ -1065,6 +1076,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), forge);
 		case CardIds.ImpCredibleTrousersTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
+		case CardIds.ImployeeOfTheMonth_WORK_009:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.IncantersFlow:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.InfantryReanimator:
@@ -1757,6 +1770,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.SharpEyedSeeker:
 			return and(side(inputSide), inDeck, notInInitialDeck);
+		case CardIds.SharpShipment_WORK_005:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.Shattershambler:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.SheldrasMoontree:
@@ -1790,6 +1805,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.SicklyGrimewalker_YOG_512:
 			return and(side(inputSide), or(inDeck, inHand), undead);
+		case CardIds.SilvermoonBrochure_WORK_017:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.SilvermoonFarstrider_RLK_826:
 			return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 		case CardIds.SilvermoonPortal:
@@ -1853,6 +1870,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.SpinetailDrake_WW_820:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.SpiritPeddler_WORK_015:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SpiritGuide:
 			return highlightConditions(
 				and(side(inputSide), inDeck, spell, shadow),
@@ -2084,6 +2103,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.TramOperator:
 			return and(side(inputSide), inDeck, minion, mech);
+		case CardIds.TravelmasterDungar_WORK_043:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.TreasureDistributor_TOY_518:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.TrenchSurveyor_TSC_642:
@@ -2101,6 +2122,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, not(tribeless));
 		case CardIds.TrustyFishingRod_VAC_960:
 			return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
+		case CardIds.Turbulus_WORK_013:
+			return and(side(inputSide), or(inDeck, inHand), minion, battlecry);
 		case CardIds.Tyr:
 			return tooltip(
 				and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
@@ -2133,6 +2156,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.UnendingSwarm:
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(3)));
+		case CardIds.UngoroBrochure_WORK_050:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.UnlockedPotential:
 			return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 		case CardIds.UnluckyPowderman_WW_367:

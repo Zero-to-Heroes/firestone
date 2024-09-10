@@ -207,6 +207,10 @@ export class SetsService {
 	// Used for pity timers mostly
 	public normalizeSetId(setId: string): string {
 		switch (setId) {
+			case 'traveling_travel_agency':
+				return 'perils_in_paradise';
+			case 'boom_inventions':
+				return 'whizbangs_workshop';
 			case 'maw_and_disorder':
 				return 'revendreth';
 			case 'darkmoon_races':

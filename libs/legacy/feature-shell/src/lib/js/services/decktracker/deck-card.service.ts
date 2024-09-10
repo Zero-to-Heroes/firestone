@@ -79,16 +79,18 @@ export class DeckCardService {
 			case CardIds.StarlightWhelp:
 			case CardIds.HexLordMalacrass:
 				return deckState.cardsInStartingHand?.map((c) => c.cardId) ?? [];
-			case CardIds.FlintFirearm_WW_379:
-				return getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
-					format: metaData.formatType,
-				});
 			case CardIds.MaestraMaskMerchant_VAC_336:
 				return getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
 					format: metaData.formatType,
 					currentClass: !deckState?.hero?.classes?.[0] ? null : CardClass[deckState?.hero?.classes?.[0]],
 				});
+			case CardIds.FlintFirearm_WW_379:
+			default:
+				const dynamicCards = getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
+					format: metaData.formatType,
+					currentClass: !deckState?.hero?.classes?.[0] ? null : CardClass[deckState?.hero?.classes?.[0]],
+				});
+				return !!dynamicCards?.length ? dynamicCards : card.relatedCardIds;
 		}
-		return card.relatedCardIds;
 	}
 }

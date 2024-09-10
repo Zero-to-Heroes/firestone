@@ -21,3 +21,4 @@ More information [here](https://github.com/Zero-to-Heroes/firestone/blob/master/
 ## Twitter features threads
 
 -   Perils in Paradise QoL improvements: https://x.com/ZerotoHeroes_HS/status/1816439954932715608
+-   Twitch features list: https://x.com/ZerotoHeroes_HS/status/1833410453487096251

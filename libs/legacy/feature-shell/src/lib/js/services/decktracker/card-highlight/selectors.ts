@@ -357,3 +357,6 @@ export const restoreHealth = (input: SelectorInput): boolean => {
 export const spendCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]);
 };
+export const generateCorpse = (input: SelectorInput): boolean => {
+	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]);
+};
