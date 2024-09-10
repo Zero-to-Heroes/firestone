@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EnvironmentInjector,
 	Inject,
 	ViewRef,
 } from '@angular/core';
@@ -19,6 +19,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { settingsDefinition } from '../models/settings-tree/settings-definition';
 import { SettingContext, SettingNode } from '../models/settings.types';
+import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
 	selector: 'settings-root',
@@ -51,14 +52,14 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly prefs: PreferencesService,
 		private readonly analytics: AnalyticsService,
 		private readonly ow: OverwolfService,
-		private readonly envInjector: EnvironmentInjector,
+		private readonly controller: SettingsControllerService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.adService);
+		await waitForReady(this.prefs, this.adService, this.controller);
 
 		const context: SettingContext = {
 			prefs: this.prefs,
@@ -66,10 +67,11 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			ow: this.ow,
 			i18n: this.i18n,
 			adService: this.adService,
-			cdr: this.cdr,
-			injector: this.envInjector,
 		};
 		this.rootNode = settingsDefinition(context);
+		if (!this.controller.selectedNode$$.value) {
+			this.controller.selectedNode$$.next(this.rootNode.children![0].children![0]);
+		}
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

@@ -6,7 +6,7 @@
 	width: 100%;
 
 	& > .child-node {
-		margin-left: calc(var(--settings-indent-level) * 30px);
+		margin-left: calc(var(--settings-indent-level) * 10px);
 	}
 
 	&.selected > .name {
@@ -18,6 +18,7 @@
 
 	.name {
 		height: 30px;
+		padding-left: 10px;
 		display: flex;
 		align-items: center;
 	}

@@ -1,4 +1,3 @@
-import { ChangeDetectorRef, EnvironmentInjector } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
 import { AnalyticsService, IAdsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
@@ -10,8 +9,6 @@ export interface SettingContext {
 	readonly ow: OverwolfService;
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
-	readonly cdr: ChangeDetectorRef;
-	readonly injector: EnvironmentInjector;
 }
 
 export interface SettingNode {
