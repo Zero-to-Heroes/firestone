@@ -14,6 +14,7 @@ const CARD_SENDING_TO_BOTTOM = [
 	CardIds.ForgottenDepthsTavernBrawl,
 	CardIds.Drown,
 ];
+const CARD_SENDING_TO_TOP = [CardIds.EnvoyOfProsperity_WORK_031];
 export class CardBackToDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -94,6 +95,10 @@ export class CardBackToDeckParser implements EventParser {
 		const cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
 			? cardWithInfluenceBack.update({
 					positionFromBottom: DeckCard.deckIndexFromBottom++,
+			  })
+			: CARD_SENDING_TO_TOP.includes(gameEvent.additionalData.influencedByCardId)
+			? cardWithInfluenceBack.update({
+					positionFromTop: 0,
 			  })
 			: cardWithInfluenceBack;
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
