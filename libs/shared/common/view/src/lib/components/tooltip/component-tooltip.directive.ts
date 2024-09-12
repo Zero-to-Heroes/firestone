@@ -187,6 +187,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseleave', ['$event'])
 	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
+		// return;
 		if (
 			this.componentTooltipAllowMouseOver &&
 			(event?.relatedTarget as HTMLDivElement)?.classList?.contains('pack-stat-tooltip')

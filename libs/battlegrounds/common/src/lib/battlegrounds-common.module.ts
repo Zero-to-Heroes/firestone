@@ -24,6 +24,10 @@ import { BgsTrinketsComponent } from './components/bgs-trinkets.component';
 import { BgsTriplesComponent } from './components/bgs-triples.component';
 import { BattlegroundsMetaStatsQuestsComponent } from './components/quests/battlegrounds-meta-stats-quests.component';
 import { BgsQuestStatsInfoPremiumComponent } from './components/quests/bgs-quest-stats-info-premium.component';
+import { BgsStrategiesViewComponent } from './components/strategies/bgs-strategies-view.component';
+import { BgsStrategyCurveComponent } from './components/strategies/bgs-strategy-curve.component';
+import { BgsTrinketStrategiesWrapperComponent } from './components/strategies/bgs-trinket-strategies-wrapper.component';
+import { BgsTrinketStrategyTipsTooltipComponent } from './components/strategies/bgs-trinket-strategy-tips-tooltip.component';
 import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
 import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
@@ -37,6 +41,7 @@ import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.serv
 import { BgsMetaHeroStatsDuoService } from './services/bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './services/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './services/bgs-meta-hero-strategies.service';
+import { BgsMetaTrinketStrategiesService } from './services/bgs-meta-trinket-strategies.service';
 import { BattlegroundsNavigationService } from './services/bgs-navigation.service';
 import { BattlegroundsOfficialLeaderboardService } from './services/bgs-official-leaderboards.service';
 import { BgsPlayerHeroStatsService } from './services/bgs-player-hero-stats.service';
@@ -59,6 +64,10 @@ const components = [
 	BgsOpponentOverviewBigComponent,
 	BgsPlayerCapsuleComponent,
 	BgsSimulationOverlayComponent,
+	BgsStrategiesViewComponent,
+	BgsStrategyCurveComponent,
+	BgsTrinketStrategiesWrapperComponent,
+	BgsTrinketStrategyTipsTooltipComponent,
 ];
 
 @NgModule({
@@ -99,6 +108,7 @@ const components = [
 		BattlegroundsNavigationService,
 		BgsInGameHeroSelectionGuardianService,
 		BgsMetaHeroStrategiesService,
+		BgsMetaTrinketStrategiesService,
 	],
 	declarations: components,
 	exports: components,

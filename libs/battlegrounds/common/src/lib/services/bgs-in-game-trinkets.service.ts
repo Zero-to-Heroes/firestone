@@ -71,7 +71,6 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			debounceTime(500),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
-				// return true;
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -102,17 +101,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			switchMap(() => this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.hasTrinkets))),
 			filter((hasTrinkets) => !!hasTrinkets),
 			distinctUntilChanged(),
-			switchMap(() =>
-				this.bgsGameState.gameState$$.pipe(
-					map((state) => ({
-						playerRank: state?.currentGame?.mmrAtStart,
-						availableRaces: state?.currentGame?.availableRaces,
-					})),
-				),
-			),
-			debounceTime(500),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			switchMap(({ playerRank, availableRaces }) => {
+			switchMap(() => {
 				return this.trinkets.loadTrinkets('last-patch');
 			}),
 			map((trinkets) => {
@@ -135,7 +124,6 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 		]).pipe(
 			debounceTime(500),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			tap((info) => console.debug('[bgs-trinket] received info', info)),
 			filter(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
 				return options?.every((o) => isBgTrinketDiscover(o, this.allCards)) ?? false;
 			}),
@@ -152,7 +140,6 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			shareReplay(1),
 		);
 		options$.subscribe((options) => {
-			console.debug('[bgs-trinket] setting options', options);
 			this.trinketStats$$.next(options as any);
 		});
 	}

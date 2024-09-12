@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -8,86 +9,106 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { DAILY_FREE_USES_TRINKETS } from '@firestone/battlegrounds/common';
+import { BgsTrinketStrategyTipsTooltipComponent, DAILY_FREE_USES_TRINKETS } from '@firestone/battlegrounds/common';
 import { BgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
 import { buildColor } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import { distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 
 // TODO: sample size
 @Component({
 	selector: 'choosing-card-bgs-trinket-option',
 	styleUrls: ['./choosing-card-bgs-trinket-option.component.scss'],
 	template: `
-		<div class="option scalable">
-			<div class="category-container placement">
-				<div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
-					<div class="text">
-						{{ freeUsesText }}
+		<div class="option ">
+			<div class="stats-container scalable">
+				<div class="category-container placement">
+					<div class="free-uses-left" *ngIf="_freeUsesLeft" [helpTooltip]="freeUsesTooltip">
+						<div class="text">
+							{{ freeUsesText }}
+						</div>
+					</div>
+					<div class="category">
+						<div
+							class="title"
+							[fsTranslate]="'battlegrounds.in-game.trinkets.placement-title'"
+							[helpTooltip]="'battlegrounds.in-game.trinkets.placement-title-tooltip' | fsTranslate"
+						></div>
+						<div class="stats">
+							<div class="stat average">
+								<div
+									class="header"
+									[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
+									[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip' | fsTranslate"
+								></div>
+								<div class="value" [style.color]="placementGlobalColor">{{ placementGlobal }}</div>
+							</div>
+							<div class="stat high-mmmr">
+								<div
+									class="header"
+									[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
+									[helpTooltip]="
+										'battlegrounds.in-game.trinkets.high-mmr-header-tooltip' | fsTranslate
+									"
+									[translateParams]="{ value: 25 }"
+								></div>
+								<div class="value" [style.color]="placementHighMmrColor">{{ placementHighMmr }}</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="category">
-					<div
-						class="title"
-						[fsTranslate]="'battlegrounds.in-game.trinkets.placement-title'"
-						[helpTooltip]="'battlegrounds.in-game.trinkets.placement-title-tooltip' | fsTranslate"
-					></div>
-					<div class="stats">
-						<div class="stat average">
-							<div
-								class="header"
-								[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
-								[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip' | fsTranslate"
-							></div>
-							<div class="value" [style.color]="placementGlobalColor">{{ placementGlobal }}</div>
-						</div>
-						<div class="stat high-mmmr">
-							<div
-								class="header"
-								[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
-								[helpTooltip]="'battlegrounds.in-game.trinkets.high-mmr-header-tooltip' | fsTranslate"
-								[translateParams]="{ value: 25 }"
-							></div>
-							<div class="value" [style.color]="placementHighMmrColor">{{ placementHighMmr }}</div>
+				<div class="category-container pick-rate">
+					<div class="category">
+						<div
+							class="title"
+							[fsTranslate]="'battlegrounds.in-game.trinkets.pick-rate-title'"
+							[helpTooltip]="'battlegrounds.in-game.trinkets.pick-rate-title-tooltip' | fsTranslate"
+						></div>
+						<div class="stats">
+							<div class="stat average">
+								<div
+									class="header"
+									[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
+									[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip' | fsTranslate"
+								></div>
+								<div class="value" [style.color]="pickRateGlobalColor">{{ pickRateGlobal }}</div>
+							</div>
+							<div class="stat high-mmmr">
+								<div
+									class="header"
+									[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
+									[helpTooltip]="
+										'battlegrounds.in-game.trinkets.high-mmr-header-tooltip' | fsTranslate
+									"
+									[translateParams]="{ value: 25 }"
+								></div>
+								<div class="value" [style.color]="pickRateHighMmrColor">{{ pickRateHighMmr }}</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="category-container pick-rate">
-				<div class="category">
-					<div
-						class="title"
-						[fsTranslate]="'battlegrounds.in-game.trinkets.pick-rate-title'"
-						[helpTooltip]="'battlegrounds.in-game.trinkets.pick-rate-title-tooltip' | fsTranslate"
-					></div>
-					<div class="stats">
-						<div class="stat average">
-							<div
-								class="header"
-								[fsTranslate]="'battlegrounds.in-game.trinkets.global-header'"
-								[helpTooltip]="'battlegrounds.in-game.trinkets.global-header-tooltip' | fsTranslate"
-							></div>
-							<div class="value" [style.color]="pickRateGlobalColor">{{ pickRateGlobal }}</div>
-						</div>
-						<div class="stat high-mmmr">
-							<div
-								class="header"
-								[fsTranslate]="'battlegrounds.in-game.trinkets.high-mmr-header'"
-								[helpTooltip]="'battlegrounds.in-game.trinkets.high-mmr-header-tooltip' | fsTranslate"
-								[translateParams]="{ value: 25 }"
-							></div>
-							<div class="value" [style.color]="pickRateHighMmrColor">{{ pickRateHighMmr }}</div>
-						</div>
-					</div>
-				</div>
+			<div class="controls">
+				<div
+					class="trinket-strategy"
+					*ngIf="showTips$ | async"
+					[fsTranslate]="'battlegrounds.in-game.trinkets.view-tips'"
+					componentTooltip
+					[componentType]="componentType"
+					[componentInput]="cardId"
+				></div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	componentType: ComponentType<BgsTrinketStrategyTipsTooltipComponent> = BgsTrinketStrategyTipsTooltipComponent;
+
+	showTips$: Observable<boolean>;
+
 	placementGlobal: string;
 	placementHighMmr: string;
 	pickRateGlobal: string;
@@ -100,6 +121,7 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 
 	@Input() set option(value: BgsTrinketCardChoiceOption) {
 		const loc = this.i18n.formatCurrentLocale();
+		this.cardId = value.cardId;
 		this.placementGlobal = value.averagePlacement.toLocaleString(loc, {
 			maximumFractionDigits: 2,
 			minimumFractionDigits: 2,
@@ -156,13 +178,13 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 			max: DAILY_FREE_USES_TRINKETS,
 			left: value,
 		});
-		console.debug('set free users left', this._freeUsesLeft);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
+	cardId: string;
 	_freeUsesLeft: number;
 	freeUsesTooltip: string;
 	freeUsesText: string;
@@ -192,6 +214,9 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 				const elements = this.el.nativeElement.querySelectorAll('.scalable');
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});
+		this.showTips$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowTrinketTipsOverlay && prefs.bgsFullToggle),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

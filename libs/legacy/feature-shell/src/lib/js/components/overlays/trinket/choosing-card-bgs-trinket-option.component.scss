@@ -4,11 +4,16 @@
 }
 
 .option {
+	display: grid;
+	grid-template-rows: minmax(0, 2fr) minmax(0, 1fr);
+	color: var(--color-2);
+}
+
+.stats-container {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	color: var(--color-2);
 	font-size: 1em;
 	// width: 100%;
 	width: fit-content;
@@ -106,5 +111,18 @@
 
 	&:not(:last-child) {
 		border-right: 1px solid var(--color-3);
+	}
+}
+
+.controls {
+	display: flex;
+	align-items: flex-end;
+	justify-content: start;
+
+	.trinket-strategy {
+		color: var(--default-title-color);
+		background: var(--color-5);
+		border-radius: 15px;
+		padding: 5px 10px;
 	}
 }

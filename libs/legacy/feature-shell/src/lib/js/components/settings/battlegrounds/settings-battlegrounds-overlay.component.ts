@@ -56,6 +56,12 @@ import { Observable } from 'rxjs';
 					premiumSetting
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowTrinketTipsOverlay"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
+					[label]="'settings.battlegrounds.general.show-trinket-tips-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.show-trinket-tips-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowTrinketStatsOverlay"
 					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.general.show-trinket-stats-label' | owTranslate"

@@ -27,7 +27,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'bottom-left' = 'bottom';
 
-	@Input('helpTooltip') set text(value: string | SafeHtml | null) {
+	@Input('helpTooltip') set text(value: string | SafeHtml | null | undefined) {
 		if (!value || value === this._text) {
 			return;
 		}

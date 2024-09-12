@@ -1,81 +1,43 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
-	BgsHeroCurve,
 	BgsHeroCurveActionExtended,
-	BgsHeroCurveStep,
 	BgsHeroStratAuthor,
 	BgsHeroStratTip,
 	BgsMetaHeroStrategiesService,
+	LocalizedBgsHeroCurve,
+	LocalizedBgsHeroCurveStep,
+	Strategy,
 } from '@firestone/battlegrounds/common';
 import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { BgsStrategyCurveComponent } from './bgs-strategy-curve.component';
 
 @Component({
-	selector: 'bgs-strategies-view',
-	styleUrls: [`../../../../../css/component/battlegrounds/desktop/strategy/bgs-strategies.component.scss`],
+	selector: 'bgs-strategies-wrapper',
+	styleUrls: [`./bgs-strategies.component.scss`],
 	template: `
 		<div class="strategies" *ngIf="{ strategies: strategies$ | async } as value">
-			<div class="strategy" *ngFor="let strat of value.strategies">
-				<div class="summary">
-					<div class="background"></div>
-					<blockquote class="text" [innerHTML]="strat.summary"></blockquote>
-					<div class="curves" *ngIf="strat.curves?.length">
-						<div class="label" [owTranslate]="'app.battlegrounds.strategies.curve-label'"></div>
-						<div
-							class="curve"
-							*ngFor="let curve of strat.curves"
-							componentTooltip
-							[componentType]="componentType"
-							[componentInput]="curve"
-						>
-							{{ curve.name }}
-						</div>
-					</div>
-				</div>
-				<div class="author">
-					<div class="name" [helpTooltip]="strat.author?.tooltip" *ngIf="!strat.author?.link">
-						{{ strat.author?.name }}
-					</div>
-					<a
-						class="name"
-						[helpTooltip]="strat.author?.tooltip"
-						*ngIf="strat.author?.link"
-						href="{{ strat.author?.link }}"
-						target="_blank"
-						>{{ strat.author?.name }}</a
-					>
-					<div class="date">{{ strat.date }}</div>
-				</div>
-			</div>
+			<bgs-strategies-view [strategies]="value.strategies"></bgs-strategies-view>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsStrategiesViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	componentType: ComponentType<BgsStrategyCurveComponent> = BgsStrategyCurveComponent;
-
+export class BgsStrategiesWrapperComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set heroId(value: string) {
 		this.heroId$$.next(value);
 	}
 
 	strategies$: Observable<readonly Strategy[]>;
 
-	loading = true;
-	visible = false;
-
 	private heroId$$ = new BehaviorSubject<string>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly strategies: BgsMetaHeroStrategiesService,
 	) {
@@ -174,25 +136,4 @@ export class BgsStrategiesViewComponent extends AbstractSubscriptionComponent im
 			this.cdr.detectChanges();
 		}
 	}
-}
-
-interface Strategy {
-	readonly date: string;
-	readonly summary: string;
-	readonly curves: readonly LocalizedBgsHeroCurve[];
-	readonly author: {
-		readonly name: string;
-		readonly tooltip: string;
-		readonly link?: string;
-	};
-}
-
-export interface LocalizedBgsHeroCurve extends BgsHeroCurve {
-	readonly steps: readonly LocalizedBgsHeroCurveStep[];
-}
-
-export interface LocalizedBgsHeroCurveStep extends BgsHeroCurveStep {
-	readonly turnLabel: string;
-	readonly goldLabel: string;
-	readonly localizedActions: readonly string[];
 }

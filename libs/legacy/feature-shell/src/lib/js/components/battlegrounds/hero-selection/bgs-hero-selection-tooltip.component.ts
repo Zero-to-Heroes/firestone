@@ -20,7 +20,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<div class="name">{{ _hero.name }} ({{ totalMatchesText }})</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 			</div>
-			<bgs-strategies-view class="strategies" [heroId]="_hero.id"></bgs-strategies-view>
+			<bgs-strategies-wrapper class="strategies" [heroId]="_hero.id"></bgs-strategies-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

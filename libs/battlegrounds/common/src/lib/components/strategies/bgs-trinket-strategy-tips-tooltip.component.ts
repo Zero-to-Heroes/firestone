@@ -1,18 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
-	selector: 'bgs-hero-selection-tooltip',
-	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component.scss`],
+	selector: 'bgs-trinket-strategy-tips-tooltip',
+	styleUrls: [`./bgs-trinket-strategy-tips-tooltip.component.scss`],
 	template: `
 		<div class="tooltip {{ _cssClass }}" [ngClass]="{ hidden: !_visible }">
-			<bgs-strategies-wrapper class="strategies" [heroId]="cardId"></bgs-strategies-wrapper>
+			<bgs-trinket-strategies-wrapper class="strategies" [cardId]="cardId"></bgs-trinket-strategies-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroStrategyTipsTooltipComponent {
+export class BgsTrinketStrategyTipsTooltipComponent {
 	cardId: string;
 	_visible = true;
 	_cssClass: string;
@@ -41,9 +39,5 @@ export class BgsHeroStrategyTipsTooltipComponent {
 		}
 	}
 
-	constructor(
-		private readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
-		private readonly allCards: CardsFacadeService,
-	) {}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 }

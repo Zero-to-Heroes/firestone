@@ -20,6 +20,7 @@ export class LocalStorageService {
 	public static REFERENCE_QUESTS = 'reference-quests';
 	public static USER_BGS_BEST_STATS = 'user-bgs-best-stats';
 	public static BGS_META_HERO_STRATEGIES = 'bgs-meta-hero-strategies';
+	public static BGS_META_TRINKET_STRATEGIES = 'BGS_META_TRINKET_STRATEGIES';
 	public static BGS_QUESTS_DATA = 'bgs-quests-data';
 	public static USER_GLOBAL_STATS = 'user-global-stats';
 	public static MERCENARIES_GLOBAL_STATS = 'mercenaries-global-stats';

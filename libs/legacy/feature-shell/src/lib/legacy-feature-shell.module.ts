@@ -425,9 +425,8 @@ import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
-import { BgsStrategiesViewComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-view.component';
+import { BgsStrategiesWrapperComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-wrapper.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
-import { BgsStrategyCurveComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategy-curve.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
 import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
@@ -1016,7 +1015,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsNextOpponentOverviewComponent,
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
-		BgsStrategyCurveComponent,
+		BgsStrategiesWrapperComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
@@ -1117,7 +1116,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsNextOpponentOverviewComponent,
 		BgsHeroFaceOffsComponent,
 		BgsHeroFaceOffComponent,
-		BgsStrategyCurveComponent,
 		BattlegroundsTribeDetailsTooltipComponent,
 
 		BattlegroundsMinionsListComponent,
@@ -1349,7 +1347,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsReplaysRecapComponent,
 		BgsLastWarbandsComponent,
 		BgsStrategiesComponent,
-		BgsStrategiesViewComponent,
 		BgsMmrEvolutionForHeroComponent,
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { LocalizedBgsHeroCurve } from './bgs-strategies-view.component';
+import { LocalizedBgsHeroCurve } from '../../models/strategies';
 
 @Component({
 	selector: 'bgs-strategy-curve',
-	styleUrls: [`../../../../../css/component/battlegrounds/desktop/strategy/bgs-strategy-curve.component.scss`],
+	styleUrls: [`./bgs-strategy-curve.component.scss`],
 	template: `
 		<div class="curve" *ngIf="curve.notes">
 			<div class="title">{{ curve.name }}</div>

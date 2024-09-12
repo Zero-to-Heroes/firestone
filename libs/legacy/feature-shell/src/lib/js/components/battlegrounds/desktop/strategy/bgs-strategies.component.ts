@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'bgs-strategies',
-	styleUrls: [`../../../../../css/component/battlegrounds/desktop/strategy/bgs-strategies.component.scss`],
-	template: ` <bgs-strategies-view [heroId]="heroId$ | async"></bgs-strategies-view> `,
+	styleUrls: [`./bgs-strategies.component.scss`],
+	template: ` <bgs-strategies-wrapper [heroId]="heroId$ | async"></bgs-strategies-wrapper> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsStrategiesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
