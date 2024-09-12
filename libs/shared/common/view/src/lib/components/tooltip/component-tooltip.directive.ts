@@ -154,7 +154,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
-		console.debug('attaching tooltip', this._componentInput);
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(this._componentType);
 

@@ -14,7 +14,6 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { StateManagerService } from './state-manager.service';
 
-// TODO: store the state on the backend controller, mostly so that refreshing (while in dev) doesn't lose the state
 @Injectable()
 export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimulatorControllerService> {
 	public faceOff$$: BehaviorSubject<BgsFaceOffWithSimulation | null>;
@@ -34,7 +33,7 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	private stateManager: StateManagerService;
 	private allCards: CardsFacadeService;
 
-	private initialBattle: BgsFaceOffWithSimulation;
+	private initialBattle: BgsFaceOffWithSimulation | null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsSimulatorControllerService', () => !!this.faceOff$$);
@@ -49,7 +48,6 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	protected async init() {
 		await this.allCards.waitForReady();
 
-		console.debug('[simulator] init service', new Error().stack);
 		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(
 			this.stateManager.buildInitialBattle(null),
 		);
@@ -57,16 +55,19 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 
 	public initBattleWithSideEffects(battle: BgsFaceOffWithSimulation) {
-		console.debug('[simulator] init faceOff', battle, new Error().stack);
+		console.debug('[simulator] initBattleWithSideEffects', battle, new Error().stack);
 		const faceOff = this.stateManager.buildInitialBattle(battle);
 		this.faceOff$$.next(faceOff);
-		this.initialBattle = faceOff;
+		this.mainInstance.initialBattle = faceOff;
 		return faceOff;
 	}
 
-	// For now, just clear
 	public resetBattle() {
-		console.debug('[simulator] reset battle', new Error().stack);
+		this.faceOff$$.next(this.mainInstance.initialBattle ?? this.stateManager.buildInitialBattle(null));
+	}
+
+	public clearBattle() {
+		// this.mainInstance.initialBattle = null;
 		this.faceOff$$.next(this.stateManager.buildInitialBattle(null));
 	}
 
@@ -77,7 +78,6 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateHero(side: Side, heroCardId: string) {
-		console.debug('[simulator] updateHero', new Error().stack);
 		const faceOff = this.stateManager.updateHero(this.faceOff$$.value!, side, heroCardId);
 		this.faceOff$$.next(faceOff);
 	}
@@ -146,13 +146,11 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 	public addMinion(side: Side, entity: BoardEntity) {
 		const faceOff = this.stateManager.addMinion(this.faceOff$$.value!, side, entity);
-		console.debug('adding minion', entity, this.faceOff$$.value, faceOff);
 		this.faceOff$$.next(faceOff);
 	}
 
 	public addTeammate(side: Side) {
 		const faceOff = this.stateManager.addTeammate(this.faceOff$$.value!, side);
-		console.debug('adding teammate', this.faceOff$$.value, faceOff);
 		this.faceOff$$.next(faceOff);
 	}
 

@@ -132,6 +132,10 @@ import { BgsSimulatorTrinketSelectionComponent } from './bgs-simulator-trinket-s
 					<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
 					<div class="text" [fsTranslate]="'battlegrounds.sim.reset-button'"></div>
 				</div>
+				<div class="button clear" (click)="clearBoards()">
+					<div class="icon" inlineSVG="assets/svg/bin.svg"></div>
+					<div class="text" [fsTranslate]="'battlegrounds.sim.clear-button'"></div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -414,6 +418,10 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 
 	onMinionRemoveRequested(request: MinionRemoveRequest) {
 		this.controller.removeMinion(request.side, request.index);
+	}
+
+	clearBoards() {
+		this.controller.clearBattle();
 	}
 
 	resetBoards() {

@@ -108,7 +108,6 @@ export class BgsOpponentOverviewBigComponent {
 		if (value.greaterTrinket) {
 			this.trinkets.push(value.greaterTrinket);
 		}
-		console.debug('trinkets', this.trinkets, value);
 		this.buddies = value.buddyTurns;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {
