@@ -36,6 +36,7 @@ import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.serv
 import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
 import { BgsMetaHeroStatsDuoService } from './services/bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './services/bgs-meta-hero-stats.service';
+import { BgsMetaHeroStrategiesService } from './services/bgs-meta-hero-strategies.service';
 import { BattlegroundsNavigationService } from './services/bgs-navigation.service';
 import { BattlegroundsOfficialLeaderboardService } from './services/bgs-official-leaderboards.service';
 import { BgsPlayerHeroStatsService } from './services/bgs-player-hero-stats.service';
@@ -97,6 +98,7 @@ const components = [
 		BgsMetaHeroStatsDuoService,
 		BattlegroundsNavigationService,
 		BgsInGameHeroSelectionGuardianService,
+		BgsMetaHeroStrategiesService,
 	],
 	declarations: components,
 	exports: components,

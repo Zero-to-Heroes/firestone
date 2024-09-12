@@ -739,7 +739,6 @@ import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-us
 import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
-import { BgsMetaHeroStrategiesService } from './js/services/battlegrounds/bgs-meta-hero-strategies.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
@@ -1836,7 +1835,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		BattlegroundsStoreService,
 		BgsPerfectGamesService,
-		BgsMetaHeroStrategiesService,
 		BgsGlobalStatsService,
 		BgsRunStatsService,
 		BgsBestUserStatsService,
