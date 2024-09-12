@@ -72,6 +72,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								[showUnknownCards]="showUnknownCards$ | async"
 								[showUpdatedCost]="showUpdatedCost$ | async"
 								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
+								[showDiscoveryZone]="showDiscoveryZone$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
 								[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 								[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone$ | async"
@@ -108,6 +109,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() opacityExtractor: (prefs: Preferences) => number;
 	@Input() cardsGoToBottomExtractor: (prefs: Preferences) => boolean;
 	@Input() showGlobalEffectsExtractor: (prefs: Preferences) => boolean;
+	@Input() showDiscoveryExtractor: (prefs: Preferences) => boolean;
 	@Input() darkenUsedCardsExtractor: (prefs: Preferences) => boolean;
 	@Input() hideGeneratedCardsInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
@@ -145,6 +147,7 @@ export class DeckTrackerOverlayRootComponent
 	showStatsChange$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;
 	showGlobalEffectsZone$: Observable<boolean>;
+	showDiscoveryZone$: Observable<boolean>;
 	showDeckWinrate$: Observable<boolean>;
 	showMatchupWinrate$: Observable<boolean>;
 	darkenUsedCards$: Observable<boolean>;
@@ -388,6 +391,9 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.showGlobalEffectsZone$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showGlobalEffectsExtractor(preferences)),
+		);
+		this.showDiscoveryZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showDiscoveryExtractor(preferences)),
 		);
 		this.darkenUsedCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.darkenUsedCardsExtractor(preferences)),

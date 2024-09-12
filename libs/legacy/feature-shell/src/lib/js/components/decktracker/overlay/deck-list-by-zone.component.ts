@@ -93,6 +93,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showBoardCardsInSeparateZone$$.next(value);
 	}
 
+	@Input() set showDiscoveryZone(value: boolean) {
+		this.showDiscoveryZone$$.next(value);
+	}
+
 	@Input() set deckState(value: DeckState) {
 		this.deckState$$.next(value);
 	}
@@ -113,6 +117,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showGeneratedCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
 	private showBoardCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
+	private showDiscoveryZone$$ = new BehaviorSubject<boolean>(true);
 	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(true);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
@@ -141,6 +146,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showGeneratedCardsInSeparateZone$$,
 			this.showBoardCardsInSeparateZone$$,
 			this.showPlaguesOnTop$$,
+			this.showDiscoveryZone$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
 			debounceTime(200),
@@ -156,6 +162,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					showGeneratedCardsInSeparateZone,
 					showBoardCardsInSeparateZone,
 					showPlaguesOnTop,
+					showDiscoveryZone,
 				]) =>
 					this.buildZones(
 						showGlobalEffectsZone,
@@ -166,6 +173,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showGeneratedCardsInSeparateZone,
 						showBoardCardsInSeparateZone,
 						showPlaguesOnTop,
+						showDiscoveryZone,
 						deckState,
 					),
 			),
@@ -183,6 +191,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showGeneratedCardsInSeparateZone: boolean,
 		showBoardCardsInSeparateZone: boolean,
 		showPlaguesOnTop: boolean,
+		showDiscoveryZone: boolean,
 		deckState: DeckState,
 	): readonly DeckZone[] {
 		if (!deckState) {
@@ -275,6 +284,26 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					sortCardsByManaCostInOtherZone
 						? (a, b) => a.manaCost - b.manaCost
 						: (a, b) => this.sortByIcon(a, b),
+					null,
+				),
+			);
+		}
+
+		if (showDiscoveryZone && !!deckState.currentOptions?.length) {
+			const discoveryCards = deckState.currentOptions.map((o) =>
+				DeckCard.create({
+					cardId: o.cardId,
+					entityId: o.entityId,
+					manaCost: this.allCards.getCard(o.cardId)?.cost,
+				}),
+			);
+			zones.push(
+				this.buildZone(
+					discoveryCards,
+					null,
+					'discovery',
+					this.i18n.translateString('decktracker.zones.discovery'),
+					(a, b) => 0, // Keep initial order
 					null,
 				),
 			);

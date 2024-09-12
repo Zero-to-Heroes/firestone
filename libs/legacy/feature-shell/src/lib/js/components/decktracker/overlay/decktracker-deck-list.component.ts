@@ -51,6 +51,7 @@ import { SetCard } from '../../../models/set';
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGlobalEffectsZone]="showGlobalEffectsZone"
+					[showDiscoveryZone]="showDiscoveryZone"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone"
@@ -105,6 +106,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showTransformedInto: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGlobalEffectsZone: boolean;
+	@Input() showDiscoveryZone: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() groupSameCardsTogether: boolean;
 	@Input() showGeneratedCardsInSeparateZone: boolean;

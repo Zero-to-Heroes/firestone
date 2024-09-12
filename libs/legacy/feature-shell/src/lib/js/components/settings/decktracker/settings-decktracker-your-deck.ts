@@ -53,6 +53,13 @@ import { CounterSetting } from './model';
 				<preference-toggle
 					[ngClass]="{ disabled: !value.overlayGroupByZone }"
 					class="indented"
+					field="overlayShowDiscoveryZone"
+					[label]="'settings.decktracker.your-deck.discovery-zone-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.discovery-zone-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ disabled: !value.overlayGroupByZone }"
+					class="indented"
 					field="overlaySortByManaInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.sort-by-mana-cost-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip' | owTranslate"
