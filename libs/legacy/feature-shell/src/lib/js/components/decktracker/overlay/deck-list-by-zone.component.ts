@@ -294,7 +294,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				DeckCard.create({
 					cardId: o.cardId,
 					entityId: o.entityId,
-					manaCost: this.allCards.getCard(o.cardId)?.cost,
+					manaCost: this.allCards.getCard(o.cardId)?.hideStats ? null : this.allCards.getCard(o.cardId)?.cost,
 				}),
 			);
 			zones.push(
