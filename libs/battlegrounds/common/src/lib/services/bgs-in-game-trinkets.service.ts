@@ -95,7 +95,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			this.showWidget$$.next(show);
 		});
 
-		const trinkets$: Observable<BgsTrinketStats> = showWidget$.pipe(
+		const trinkets$: Observable<BgsTrinketStats | null> = showWidget$.pipe(
 			filter((show) => show),
 			distinctUntilChanged(),
 			switchMap(() => this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.hasTrinkets))),
@@ -104,12 +104,10 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			switchMap(() => {
 				return this.trinkets.loadTrinkets('last-patch');
 			}),
-			map((trinkets) => {
-				return trinkets;
-			}),
+			map((trinkets) => trinkets ?? null),
 			shareReplay(1),
 			tap((trinkets) => console.debug('[bgs-trinket] setting trinkets', trinkets)),
-		) as Observable<BgsTrinketStats>;
+		) as Observable<BgsTrinketStats | null>;
 
 		const options$ = combineLatest([
 			this.gameState.gameState$$.pipe(
@@ -125,7 +123,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			debounceTime(500),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			filter(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
-				return options?.every((o) => isBgTrinketDiscover(o, this.allCards)) ?? false;
+				return !!trinkets && !!options?.every((o) => isBgTrinketDiscover(o, this.allCards));
 			}),
 			map(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
 				if (!showFromPrefs) {
@@ -133,7 +131,7 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 				}
 				return (
 					options?.map((o) =>
-						buildBgsTrinketCardChoiceValue(o, mainPlayerCardId ?? '', trinkets, this.allCards),
+						buildBgsTrinketCardChoiceValue(o, mainPlayerCardId ?? '', trinkets!, this.allCards),
 					) ?? []
 				);
 			}),
