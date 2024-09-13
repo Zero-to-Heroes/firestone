@@ -1,0 +1,47 @@
+.hero-mini {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+
+	.icon {
+		width: 135%;
+		clip-path: ellipse(35% 35% at 50% 50%);
+	}
+
+	.portrait {
+		height: 100%;
+
+		// ::ng-deep {
+		// 	.hero-portrait {
+		// 		width: 100%;
+
+		// 		.hero-portrait-frame {
+		// 			width: 100%;
+		// 			height: auto;
+
+		// 			.aspect-ratio {
+		// 				display: block;
+		// 				padding-bottom: 115%;
+		// 			}
+		// 		}
+
+		// 		.health {
+		// 			.icon {
+		// 				display: none;
+		// 			}
+		// 			.value {
+		// 				font-size: 13px;
+		// 			}
+		// 		}
+		// 	}
+		// }
+	}
+
+	.results {
+		display: flex;
+	}
+}

@@ -4,7 +4,7 @@ import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/d
 
 @Component({
 	selector: 'bgs-hero-tier',
-	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tier.component.scss`],
+	styleUrls: [`./bgs-hero-tier.component.scss`],
 	template: `
 		<div class="bgs-hero-tier {{ _tier?.toLowerCase() }}">
 			<div class="tier {{ _tier?.toLowerCase() }}">
