@@ -1,5 +1,7 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -19,7 +21,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			[cardTooltip]="minion.displayedCardIds"
 			[cardTooltipRelatedCardIds]="minion.relatedCardIds"
 			[cardTooltipBgs]="true"
-			[helpTooltip]="minion.bannedReason ?? minion.trinketLockedReason"
 		>
 			<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 			<div class="name">
@@ -30,9 +31,22 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					/>
 					<div class="cost">{{ minion.goldCost }}</div>
 				</div>
-				<span class="name-text">
+				<span class="name-text" [helpTooltip]="minion.bannedReason ?? minion.trinketLockedReason">
 					{{ minion.name }}
 				</span>
+				<i
+					class="info"
+					*ngIf="showTips$ | async"
+					componentTooltip
+					[componentType]="componentType"
+					[componentInput]="minion.cardId"
+					[componentTooltipPosition]="'bottom-left'"
+					[componentTooltipCssClass]="'with-top-margin'"
+				>
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#info" />
+					</svg>
+				</i>
 			</div>
 			<minion-highlight-buttons
 				class="highlight-buttons"
@@ -44,13 +58,19 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMinionItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	componentType: ComponentType<BgsTrinketStrategyTipsTooltipComponent> = BgsTrinketStrategyTipsTooltipComponent;
+
 	minion$: Observable<Minion>;
+	showTips$: Observable<boolean>;
 
 	@Input() set minion(value: ExtendedReferenceCard) {
 		this.minion$$.next(value);
 	}
 	@Input() set showGoldenCards(value: boolean) {
 		this.showGoldenCards$$.next(value);
+	}
+	@Input() set showTrinketTips(value: boolean) {
+		this.showTrinketTips$$.next(value);
 	}
 	@Input() set highlightedMinions(value: readonly string[]) {
 		this.highlightedMinions$$.next(value ?? []);
@@ -66,6 +86,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 
 	private minion$$ = new BehaviorSubject<ExtendedReferenceCard | null>(null);
 	private showGoldenCards$$ = new BehaviorSubject<boolean>(true);
+	private showTrinketTips$$ = new BehaviorSubject<boolean>(true);
 	private highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
@@ -192,6 +213,9 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 				};
 				return result;
 			}),
+		);
+		this.showTips$ = combineLatest([this.minion$$, this.showTrinketTips$$]).pipe(
+			this.mapData(([card, showTrinketTips]) => showTrinketTips && isBgsTrinket(card)),
 		);
 	}
 

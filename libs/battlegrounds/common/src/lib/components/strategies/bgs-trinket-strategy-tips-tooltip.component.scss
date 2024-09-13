@@ -38,6 +38,10 @@
 	&.hidden {
 		display: none;
 	}
+
+	&.with-top-margin {
+		margin-top: 90px;
+	}
 }
 
 .strategies {

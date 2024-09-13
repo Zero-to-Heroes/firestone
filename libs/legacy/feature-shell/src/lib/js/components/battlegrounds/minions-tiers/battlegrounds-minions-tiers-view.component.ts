@@ -46,6 +46,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 							[highlightedTribes]="highlightedTribes"
 							[highlightedMechanics]="highlightedMechanics"
 							[showGoldenCards]="showGoldenCards"
+							[showTrinketTips]="showTrinketTips"
 						></bgs-minions-list>
 					</ng-container>
 				</ng-container>
@@ -71,6 +72,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	@Input() showTurnNumber: boolean;
 	@Input() enableMouseOver: boolean;
 	@Input() showGoldenCards: boolean;
+	@Input() showTrinketTips: boolean;
 
 	@Input() highlightedTribes: readonly Race[];
 	@Input() highlightedMechanics: readonly GameTag[];

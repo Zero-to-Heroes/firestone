@@ -17,6 +17,7 @@ import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/e
 				[group]="group"
 				[showTribesHighlight]="showTribesHighlight"
 				[showGoldenCards]="showGoldenCards"
+				[showTrinketTips]="showTrinketTips"
 				[highlightedMinions]="highlightedMinions"
 				[highlightedTribes]="highlightedTribes"
 				[highlightedMechanics]="highlightedMechanics"
@@ -48,6 +49,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() showTribesHighlight: boolean;
 	@Input() showGoldenCards: boolean;
+	@Input() showTrinketTips: boolean;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 

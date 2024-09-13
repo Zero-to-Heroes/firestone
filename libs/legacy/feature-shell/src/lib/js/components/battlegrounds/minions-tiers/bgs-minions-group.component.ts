@@ -40,6 +40,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					*ngFor="let minion of minions; trackBy: trackByFn"
 					[minion]="minion"
 					[showGoldenCards]="showGoldenCards"
+					[showTrinketTips]="showTrinketTips"
 					[highlightedMinions]="highlightedMinions"
 					[highlightedTribes]="highlightedTribes"
 					[highlightedMechanics]="highlightedMechanics"
@@ -76,6 +77,7 @@ export class BattlegroundsMinionsGroupComponent
 	}
 
 	@Input() showGoldenCards: boolean;
+	@Input() showTrinketTips: boolean;
 	@Input() highlightedMinions: readonly string[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() showTribesHighlight: boolean;

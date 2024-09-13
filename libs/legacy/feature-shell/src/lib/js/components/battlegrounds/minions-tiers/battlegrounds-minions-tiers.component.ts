@@ -48,6 +48,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[highlightedMechanics]="highlightedMechanics$ | async"
 				[enableMouseOver]="enableMouseOver$ | async"
 				[showGoldenCards]="showGoldenCards$ | async"
+				[showTrinketTips]="showTrinketTips$ | async"
 				[showTurnNumber]="showTurnNumber$ | async"
 			></battlegrounds-minions-tiers-view>
 		</div>
@@ -70,6 +71,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showTurnNumber$: Observable<boolean>;
 	enableMouseOver$: Observable<boolean>;
 	showGoldenCards$: Observable<boolean>;
+	showTrinketTips$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -253,6 +255,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.showGoldenCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsMinionListShowGoldenCard),
 		);
+		this.showTrinketTips$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowTrinketTipsOverlay));
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListScale)).subscribe((scale) => {
 			let element = this.el.nativeElement.querySelector('.scalable');
 			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);

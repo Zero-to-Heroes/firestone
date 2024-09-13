@@ -44,6 +44,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 			| 'right'
 			| 'left'
 			| 'top'
+			| 'bottom-left'
 			| 'auto'
 			| 'global-top-center'
 			| 'global-top-left'
@@ -58,6 +59,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@Input() componentTooltipAllowMouseOver = false;
 	@Input() componentTooltipAutoHide = true;
+	@Input() componentTooltipCssClass: string;
 
 	@Input() set componentTooltipForceHide(value: boolean) {
 		this.forceHide = value;
@@ -71,6 +73,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		| 'right'
 		| 'left'
 		| 'top'
+		| 'bottom-left'
 		| 'global-top-center'
 		| 'global-top-left'
 		| 'global-bottom-left'
@@ -167,6 +170,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 				this.onMouseLeave(leave),
 			);
 		}
+		tooltipRef.instance.cssClass = this.componentTooltipCssClass;
 		tooltipRef.instance.visible = true;
 
 		this.positionStrategy.apply();
@@ -246,6 +250,15 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 						originX: 'center',
 						originY: 'bottom',
 						overlayX: 'center',
+						overlayY: 'top',
+					},
+				];
+			case 'bottom-left':
+				return [
+					{
+						originX: 'start',
+						originY: 'bottom',
+						overlayX: 'end',
 						overlayY: 'top',
 					},
 				];
