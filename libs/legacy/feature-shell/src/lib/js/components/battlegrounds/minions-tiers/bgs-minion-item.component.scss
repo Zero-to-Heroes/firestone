@@ -93,5 +93,10 @@
 	.info {
 		--size: 15px;
 		margin-left: 10px;
+		opacity: 0.6;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }

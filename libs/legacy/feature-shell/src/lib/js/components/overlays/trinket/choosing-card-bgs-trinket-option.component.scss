@@ -124,5 +124,10 @@
 		background: var(--color-5);
 		border-radius: 15px;
 		padding: 5px 10px;
+		opacity: 0.6;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }
