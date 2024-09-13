@@ -495,11 +495,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ConnivingConman_VAC_333:
 			return (input: SelectorInput): SelectorOutput => {
+				const currentClass = input.deckState.hero?.classes?.[0] ?? CardClass.ROGUE;
 				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch.filter(
 					(c) =>
 						!!allCards.getCard(c.cardId).classes?.length &&
 						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.NEUTRAL]) &&
-						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.ROGUE]),
+						!allCards.getCard(c.cardId).classes.includes(CardClass[currentClass]),
 				);
 				const lastCardPlayed = cardsPlayedFromAnotherClass.length
 					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
@@ -786,6 +787,12 @@ export const cardIdSelector = (
 		case CardIds.FandralStaghelm_CORE_OG_044:
 		case CardIds.FandralStaghelm_OG_044:
 			return and(side(inputSide), inDeck, chooseOne);
+		case CardIds.FateSplitter:
+			return (input: SelectorInput): SelectorOutput => {
+				const lastCardPlayed =
+					input.deckState.cardsPlayedThisMatch?.[input.deckState.cardsPlayedThisMatch.length - 1];
+				return tooltip(and(side(inputSide), entityIs(lastCardPlayed?.entityId)))(input);
+			};
 		case CardIds.FeldoreiWarband:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.FelfireInTheHole:
@@ -1204,6 +1211,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), spell),
 				and(side(inputSide), or(inDeck, inHand), beast),
 			);
+		case CardIds.KingTide_VAC_524:
+			return and(or(inDeck, inHand), spell);
 		case CardIds.KnightOfAnointment:
 			return and(side(inputSide), inDeck, spell, spellSchool(SpellSchool.HOLY));
 		case CardIds.KnightOfTheWild:
@@ -1513,6 +1522,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.PopgarThePutrid_WW_091:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
+		case CardIds.PortalmancerSkyla_WORK_063:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.PotionOfSparkingTavernBrawl:
 			return and(side(inputSide), minion, rush);
 		case CardIds.PredatoryInstincts:
