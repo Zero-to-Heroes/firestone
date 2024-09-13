@@ -1096,6 +1096,7 @@ export const cardIdSelector = (
 		case CardIds.ElementalInspiration:
 		case CardIds.InquisitiveCreation:
 		case CardIds.WisdomOfNorgannon:
+		case CardIds.RazzleDazzler_VAC_301:
 			return and(side(inputSide), or(inDeck, inHand), spell, hasSpellSchool, not(spellSchoolPlayedThisMatch));
 		case CardIds.Insight:
 		case CardIds.Insight_InsightToken:
@@ -1689,6 +1690,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RocketBackpacksTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, not(rush));
+		case CardIds.RollingStone:
+			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(1));
 		case CardIds.RollTheBones_ICC_201:
 		case CardIds.RollTheBones_CORE_ICC_201:
 			return and(side(inputSide), inDeck, deathrattle);
@@ -1775,6 +1778,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.ShadyDealer:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
+		case CardIds.ShaleSpider_DEEP_034:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.ShallowGrave:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
 		case CardIds.SharkPuncher_WON_138:
@@ -1898,6 +1903,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.SpreadingSaplingsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature);
+		case CardIds.RuleModifier_SpreadOfCorruptionToken_TTN_002t45:
+			return and(spell);
 		case CardIds.SpringTheTrap:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.SrExcavatorTavernBrawl:
