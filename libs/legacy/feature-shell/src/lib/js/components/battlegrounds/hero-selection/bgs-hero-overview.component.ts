@@ -13,7 +13,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 	selector: 'bgs-hero-overview',
 	styleUrls: [
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
-		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-overview.component.scss`,
+		`./bgs-hero-overview.component.scss`,
 	],
 	template: `
 		<div class="hero-overview" *ngIf="_hero">

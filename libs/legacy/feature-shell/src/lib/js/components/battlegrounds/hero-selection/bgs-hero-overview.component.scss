@@ -73,28 +73,25 @@
 	}
 
 	.portrait-container {
-		width: 12vh;
-		margin-top: 10px;
-		margin-bottom: 10px;
+		height: 25%;
+		aspect-ratio: 1;
 		position: relative;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
 
+		.portrait {
+			height: 100%;
+		}
+
 		::ng-deep bgs-hero-portrait {
 			.hero-portrait-frame {
-				width: 85px;
+				width: 100%;
 			}
 			.health {
-				.icon {
-					display: none;
-				}
 				.value {
-					font-size: 16px;
-					margin-top: 0;
-					position: relative;
-					top: -4px;
+					font-size: 2em;
 				}
 			}
 		}

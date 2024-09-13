@@ -21,7 +21,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'bgs-hero-selection-overview',
-	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`],
+	styleUrls: [`./bgs-hero-selection-overview.component.scss`],
 	template: `
 		<div class="container">
 			<div class="left" *ngIf="!(showAds$ | async)">
@@ -55,12 +55,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						"
 					></preference-toggle> -->
 				</div>
-				<bgs-hero-overview
-					*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
-					[hero]="hero"
-					[achievements]="hero?.achievements"
-					[style.width.%]="getOverviewWidth()"
-				></bgs-hero-overview>
+				<div class="hero-container">
+					<bgs-hero-overview
+						*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
+						[hero]="hero"
+						[achievements]="hero?.achievements"
+					></bgs-hero-overview>
+				</div>
 			</div>
 		</div>
 	`,
@@ -189,10 +190,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	getOverviewWidth(): number {
-		return 24;
 	}
 
 	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsMetaHeroStatTierItem[] }) {
