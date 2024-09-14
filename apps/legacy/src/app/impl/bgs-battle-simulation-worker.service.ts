@@ -84,13 +84,15 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
 		worker.onmessage = (ev: MessageEvent) => {
 			if (!ev?.data) {
-				this.bugService.submitAutomatedReport({
-					type: 'bg-sim-crash',
-					info: JSON.stringify({
-						message: '[bgs-simulation] Simulation crashed',
-						battleInfo: battleInfo,
-					}),
-				});
+				if (!!this.cards.getCards().length) {
+					this.bugService.submitAutomatedReport({
+						type: 'bg-sim-crash',
+						info: JSON.stringify({
+							message: '[bgs-simulation] Simulation crashed',
+							battleInfo: battleInfo,
+						}),
+					});
+				}
 				worker.terminate();
 				onResultReceived(null);
 				return;

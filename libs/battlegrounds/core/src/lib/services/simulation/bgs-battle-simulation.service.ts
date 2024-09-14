@@ -169,13 +169,15 @@ export class BgsBattleSimulationService {
 			} catch (e: any) {
 				console.error('[bgs-simulation] could not simulate battle', e.message, e);
 				if (!e.message?.includes('Maximum call stack size exceeded')) {
-					this.bugService.submitAutomatedReport({
-						type: 'bg-sim-crash',
-						info: JSON.stringify({
-							message: '[bgs-simulation] Simulation crashed',
-							battleInfo: battleInfo,
-						}),
-					});
+					if (!!this.cards.getCards().length) {
+						this.bugService.submitAutomatedReport({
+							type: 'bg-sim-crash',
+							info: JSON.stringify({
+								message: '[bgs-simulation] Simulation crashed',
+								battleInfo: battleInfo,
+							}),
+						});
+					}
 				}
 			}
 		});
