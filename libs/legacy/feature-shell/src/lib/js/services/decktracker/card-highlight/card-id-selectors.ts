@@ -1067,7 +1067,9 @@ export const cardIdSelector = (
 				const targets = candidates.slice(0, 3);
 				const lowestCostTarget = targets[targets.length - 1];
 				const lowestCost = allCards.getCard(lowestCostTarget.cardId).cost;
-				return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostMore(lowestCost - 1)))(input);
+				return tooltip(and(side(inputSide), inGraveyard, minion, taunt, effectiveCostMore(lowestCost - 1)))(
+					input,
+				);
 			};
 		case CardIds.IcebloodTower:
 			return and(side(inputSide), inDeck, spell);
