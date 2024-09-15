@@ -32,6 +32,8 @@ export class BgsIntermediateResultsSimGuardianService extends AbstractFacadeServ
 	}
 
 	public hasFreeUses(gameId: string): boolean {
+		// Don't paywall it anymore
+		return true;
 		// Using it in the simulator
 		if (!gameId) {
 			return true;
