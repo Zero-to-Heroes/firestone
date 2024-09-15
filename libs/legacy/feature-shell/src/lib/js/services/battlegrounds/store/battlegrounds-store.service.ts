@@ -25,7 +25,7 @@ import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parser
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { BehaviorSubject, distinctUntilChanged, filter, throttleTime } from 'rxjs';
+import { auditTime, BehaviorSubject, distinctUntilChanged, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -230,7 +230,7 @@ export class BattlegroundsStoreService {
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
 			this.handleHotkeyPressed();
 		});
-		this.updateOverlay$$.pipe(throttleTime(500)).subscribe(() => this.updateOverlay());
+		this.updateOverlay$$.pipe(auditTime(500)).subscribe(() => this.updateOverlay());
 		// this.handleDisplayPreferences();
 		// this.gameStatus.onGameExit(() => {
 		// 	if (this.memoryInterval) {
