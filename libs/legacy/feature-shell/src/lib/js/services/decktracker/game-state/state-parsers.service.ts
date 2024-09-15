@@ -303,7 +303,7 @@ export class GameStateParsersService {
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
 			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs)],
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
-			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper, this.i18n)],
 			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],
 			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
 			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],

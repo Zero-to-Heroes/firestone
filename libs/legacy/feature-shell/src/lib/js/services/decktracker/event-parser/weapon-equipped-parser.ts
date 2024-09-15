@@ -2,10 +2,15 @@ import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class WeaponEquippedParser implements EventParser {
-	constructor(private readonly cards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly cards: CardsFacadeService,
+		private readonly helper: DeckManipulationHelper,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -29,8 +34,11 @@ export class WeaponEquippedParser implements EventParser {
 			playTiming: GameState.playTiming++,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
 		} as DeckCard);
+
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);
 		const newPlayerDeck = deck.update({
 			weapon: card,
+			otherZone: newOtherZone,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
