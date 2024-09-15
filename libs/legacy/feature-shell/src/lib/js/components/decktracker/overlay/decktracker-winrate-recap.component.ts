@@ -88,15 +88,6 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 				date: dateFrom,
 			});
 		}
-		console.debug(
-			'updated winrate info',
-			this.text,
-			this.tooltip,
-			this.winrate,
-			this.wins,
-			this.losses,
-			this._stats,
-		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

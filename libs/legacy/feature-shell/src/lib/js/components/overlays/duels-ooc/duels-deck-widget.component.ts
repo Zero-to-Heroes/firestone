@@ -71,7 +71,6 @@ export class DuelsDeckWidgetComponent {
 	@Input() collection: readonly SetCard[];
 
 	@Input() set deck(value: DuelsDeckWidgetDeck) {
-		console.debug('setting deck', value);
 		this.initialDeck = value.initialDeckList;
 		this.gameModeImage =
 			value.type === 'duels'

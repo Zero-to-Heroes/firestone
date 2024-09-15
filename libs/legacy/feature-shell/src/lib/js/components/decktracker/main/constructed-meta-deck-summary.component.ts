@@ -129,7 +129,6 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 					(this.i18n.translateString(`archetype.${deck.archetypeName}`) === `archetype.${deck.archetypeName}`
 						? deck.archetypeName
 						: this.i18n.translateString(`archetype.${deck.archetypeName}`));
-				console.debug('setting deck', deck, this.deckName, overrideDeckName(deck, this.allCards));
 				this.winrate = this.buildPercents(deck.winrate);
 				this.totalGames = deck.totalGames;
 				this.removedCards = buildCardVariations(

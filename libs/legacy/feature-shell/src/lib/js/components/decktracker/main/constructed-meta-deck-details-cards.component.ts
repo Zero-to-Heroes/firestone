@@ -68,7 +68,6 @@ export class ConstructedMetaDeckDetailsCardsComponent
 	addedCardsHeaderDetails: string;
 
 	@Input() set deck(value: ConstructedDeckDetails) {
-		console.debug('setting deck', value);
 		this.deck$$.next(value);
 	}
 
