@@ -501,6 +501,7 @@ export class GameEvents {
 						originEntityCardId: gameEvent.Value.AdditionalProps.OriginEntityCardId,
 						revealedFromBlock: gameEvent.Value.AdditionalProps.RevealedFromBlock,
 						indexInBlock: gameEvent.Value.AdditionalProps.IndexInBlock,
+						cost: gameEvent.Value.AdditionalProps.Cost,
 					}),
 				);
 				break;
