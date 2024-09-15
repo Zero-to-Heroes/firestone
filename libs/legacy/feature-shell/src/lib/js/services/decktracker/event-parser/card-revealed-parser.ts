@@ -60,14 +60,12 @@ export class CardRevealedParser implements EventParser {
 				gameEvent.additionalData.indexInBlock,
 			);
 		}
-		// else {
-		// 	positionFromBottom = DeckCard.deckIndexFromBottom++;
-		// }
+
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: this.i18n.getCardName(dbCard.id, dbCard.name),
-			manaCost: dbCard.cost,
+			manaCost: gameEvent.additionalData.cost ?? dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
 			temporaryCard: true,
