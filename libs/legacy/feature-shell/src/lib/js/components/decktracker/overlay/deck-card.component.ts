@@ -17,7 +17,16 @@ import { CardMousedOverService, Side } from '@firestone/memory';
 import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { combineLatest, distinctUntilChanged, filter, map, pairwise, takeUntil } from 'rxjs';
+import {
+	auditTime,
+	BehaviorSubject,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	map,
+	pairwise,
+	takeUntil,
+} from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { AdService } from '../../../services/ad.service';
@@ -165,23 +174,19 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	@Input() set showUpdatedCost(value: boolean) {
-		this._showUpdatedCost = value;
-		this.updateInfos(true);
+		this.showUpdatedCost$$.next(value);
 	}
 
 	@Input() set showStatsChange(value: boolean) {
-		this._showStatsChange = value;
-		this.updateInfos(true);
+		this.showStatsChange$$.next(value);
 	}
 
 	@Input() set card(card: VisualDeckCard) {
-		this._card = card;
-		this.updateInfos();
+		this.card$$.next(card);
 	}
 
 	@Input() set groupSameCardsTogether(value: boolean) {
-		this._groupSameCardsTogether = value;
-		this.updateInfos(true);
+		this.groupSameCardsTogether$$.next(value);
 	}
 
 	@Input() set colorManaCost(value: boolean) {
@@ -267,15 +272,16 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	mouseOverRight = 0;
 	_showUnknownCards = true;
 	isUnknownCard: boolean;
-	_groupSameCardsTogether: boolean;
 	_side: 'player' | 'opponent' | 'duels';
 
-	private _showUpdatedCost: boolean;
-	private _showStatsChange: boolean;
-	private _card: VisualDeckCard;
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
+
+	private showUpdatedCost$$ = new BehaviorSubject<boolean>(false);
+	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
+	private card$$ = new BehaviorSubject<VisualDeckCard | null>(null);
+	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -331,12 +337,28 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			return;
 		}
 
+		combineLatest([
+			this.card$$.pipe(distinctUntilChanged()),
+			this.showUpdatedCost$$.pipe(distinctUntilChanged()),
+			this.showStatsChange$$.pipe(distinctUntilChanged()),
+			this.groupSameCardsTogether$$.pipe(distinctUntilChanged()),
+		])
+			.pipe(
+				filter(([card]) => !!card),
+				auditTime(200),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {
+				this.updateInfos(card, showUpdatedCost, showStatsChange, groupSameCardsTogether);
+			});
+
 		this._uniqueId = uuidShort();
 		this.cardsHighlightService?.register(
 			this._uniqueId,
 			{
 				referenceCardProvider: () => this._referenceCard,
-				deckCardProvider: () => this._card,
+				deckCardProvider: () => this.card$$.value,
 				zoneProvider: () => this._zone,
 				side: () => this._side,
 				highlightCallback: (highlight: SelectorOutput) => this.doHighlight(highlight),
@@ -345,13 +367,13 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			} as Handler,
 			this._side,
 		);
-		// console.debug('registering highlight', this._card?.cardId, this.el.nativeElement);
+		// console.debug('registering highlight', card?.cardId, this.el.nativeElement);
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
-		// console.debug('unregistering highlight', this._card?.cardName, this.el.nativeElement);
+		// console.debug('unregistering highlight', card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
 	}
@@ -371,9 +393,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, this._card);
-		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this._card);
-		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this._card);
+		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, card);
+		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this.card$$.value);
+		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this.card$$.value);
 		if (!cardsToShow?.length) {
 			return;
 		}
@@ -397,68 +419,63 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	onCardClicked(event: MouseEvent) {
-		this.cardClicked.next(this._card);
+		this.cardClicked.next(this.card$$.value);
 	}
 
-	private previousCard: VisualDeckCard;
-	private async updateInfos(forceRefresh = false) {
-		if (!this._card) {
-			return;
-		}
-
-		if (!forceRefresh && deepEqual(this._card, this.previousCard)) {
-			return;
-		}
-
-		this.previousCard = this._card;
-		this.cardId = this._card.cardId;
-		this.entityId = this._card.entityId;
+	private async updateInfos(
+		card: VisualDeckCard,
+		showUpdatedCost: boolean,
+		showStatsChange: boolean,
+		groupSameCardsTogether: boolean,
+	) {
+		this.cardId = card.cardId;
+		this.entityId = card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg)`;
-		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
+		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
 		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
-		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
+		this.manaCostReduction = this.manaCost != null && this.manaCost < card.manaCost;
 		this.cardName =
-			(!!this._card.cardName?.length
-				? this._card.cardName + this.buildSuffix(this._card)
+			(!!card.cardName?.length
+				? card.cardName + this.buildSuffix(card, showStatsChange)
 				: this.i18n.getCardName(this.cardId) ?? this.i18n?.getUnknownCardName()) ??
 			this.i18n.getUnknownCardName();
-		this.isUnknownCard = !this._card.cardName?.length && !this.cardId;
+		this.isUnknownCard = !card.cardName?.length && !this.cardId;
 
-		this.numberOfCopies = this._card.totalQuantity;
-		this.positionFromTop = this._card.positionFromTop;
-		this.rarity = this._card.rarity?.toLowerCase() ?? this.cards.getCard(this.cardId)?.rarity?.toLowerCase();
-		this.creatorCardIds = this._card.creatorCardIds;
+		this.numberOfCopies = card.totalQuantity;
+		this.positionFromTop = card.positionFromTop;
+		this.rarity = card.rarity?.toLowerCase() ?? this.cards.getCard(this.cardId)?.rarity?.toLowerCase();
+		this.creatorCardIds = card.creatorCardIds;
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
-		this.highlight = this._card.highlight;
-		this.isDredged = this._card.dredged && !this._card.zone;
+		this.highlight = card.highlight;
+		this.isDredged = card.dredged && !card.zone;
 		// For now don't recompute the info dynamically (with the logic from onMouseEnter). If I start getting feedback
 		// that this is an issue, I'll revisit
-		this.relatedCardIds = this._card.relatedCardIds;
+		this.relatedCardIds = card.relatedCardIds;
 
-		this.isBurned = !this._groupSameCardsTogether && (this._card.zone === 'BURNED' || this._card.milled);
-		this.isDiscarded = !this._groupSameCardsTogether && this._card.zone === 'DISCARD';
-		this.isCountered = !this._groupSameCardsTogether && this._card.countered;
-		this.isGraveyard = !this._groupSameCardsTogether && this._card.zone === 'GRAVEYARD';
-		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
-		this.transformedInto = !!this._card.transformedInto
+		this.isBurned = !groupSameCardsTogether && (card.zone === 'BURNED' || card.milled);
+		this.isDiscarded = !groupSameCardsTogether && card.zone === 'DISCARD';
+		this.isCountered = !groupSameCardsTogether && card.countered;
+		this.isGraveyard = !groupSameCardsTogether && card.zone === 'GRAVEYARD';
+		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER';
+		this.transformedInto = !!card.transformedInto
 			? VisualDeckCard.create({
-					cardId: this._card.transformedInto,
-					entityId: this._card.entityId,
-					manaCost: this.cards.getCard(this._card.transformedInto)?.cost,
-					cardName: this.cards.getCard(this._card.transformedInto)?.name,
-					rarity: this.cards.getCard(this._card.transformedInto)?.rarity?.toLowerCase(),
+					cardId: card.transformedInto,
+					entityId: card.entityId,
+					manaCost: this.cards.getCard(card.transformedInto)?.cost,
+					cardName: this.cards.getCard(card.transformedInto)?.name,
+					rarity: this.cards.getCard(card.transformedInto)?.rarity?.toLowerCase(),
 			  })
 			: null;
-		this._isMissing = this._card.isMissing;
-		this.isStolen = this._card.stolenFromOpponent;
+		this._isMissing = card.isMissing;
+		this.isStolen = card.stolenFromOpponent;
 
-		this.cardClass = !!this._card.classes?.length ? CardClass[this._card.classes[0]].toLowerCase() : null;
+		this.cardClass = !!card.classes?.length ? CardClass[card.classes[0]].toLowerCase() : null;
 
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
-			console.error('invalid number of copies', this._card);
+			console.error('invalid number of copies', card);
 		}
 		// Preload
 		if (this.cardId) {
@@ -499,8 +516,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
-	private buildSuffix(_card: VisualDeckCard) {
-		if (!this._showStatsChange) {
+	private buildSuffix(_card: VisualDeckCard, showStatsChange: boolean): string {
+		if (_card.mainAttributeChange) {
+			console.debug('building suffixt', _card.cardName, _card.mainAttributeChange, showStatsChange);
+		}
+		if (!showStatsChange) {
 			return '';
 		}
 		if (_card.mainAttributeChange) {
