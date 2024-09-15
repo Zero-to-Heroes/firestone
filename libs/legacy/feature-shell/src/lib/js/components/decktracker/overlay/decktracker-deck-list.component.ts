@@ -15,7 +15,6 @@ import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, GameFormat } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
@@ -62,7 +61,6 @@ import { SetCard } from '../../../models/set';
 					[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
 					[showTopCardsSeparately]="showTopCardsSeparately"
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
-					[tooltipPosition]="_tooltipPosition"
 					[darkenUsedCards]="darkenUsedCards"
 					[showTotalCardsInZone]="showTotalCardsInZone"
 					[side]="side"
@@ -79,7 +77,6 @@ import { SetCard } from '../../../models/set';
 					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showStatsChange]="showStatsChange"
 					[cardsGoToBottom]="cardsGoToBottom"
-					[tooltipPosition]="_tooltipPosition"
 					[showTopCardsSeparately]="showTopCardsSeparately"
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
@@ -125,15 +122,11 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
 
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
 	@Input() set deckState(deckState: DeckState) {
 		this.deckState$$.next(deckState);
 		this.refreshScroll();
 	}
 
-	_tooltipPosition: CardTooltipPositionType;
 	isScroll: boolean;
 
 	private sub$$: Subscription;

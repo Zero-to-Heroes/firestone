@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil } from 'rxjs';
@@ -25,7 +24,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<li *ngFor="let zone of zones$ | async; trackBy: trackZone">
 				<deck-zone
 					[zone]="zone"
-					[tooltipPosition]="_tooltipPosition"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
 					[showTransformedInto]="showTransformedInto"
@@ -101,13 +99,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.deckState$$.next(value);
 	}
 
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
-
 	@Input() darkenUsedCards: boolean;
 
-	_tooltipPosition: CardTooltipPositionType;
 	_darkenUsedCards = true;
 
 	private showGlobalEffectsZone$$ = new BehaviorSubject<boolean>(false);

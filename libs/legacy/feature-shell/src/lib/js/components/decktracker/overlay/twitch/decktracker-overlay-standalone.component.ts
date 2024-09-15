@@ -42,7 +42,6 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 							*ngIf="playerDeck?.deck?.length > 0"
 							[deckState]="playerDeck"
 							[displayMode]="displayMode$ | async"
-							[tooltipPosition]="tooltipPosition"
 							[showRelatedCards]="showRelatedCards$ | async"
 							[colorManaCost]="colorManaCost$ | async"
 							[darkenUsedCards]="true"

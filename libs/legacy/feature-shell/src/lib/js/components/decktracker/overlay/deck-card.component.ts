@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService, Side } from '@firestone/memory';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -165,12 +164,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class DeckCardComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
-	/** @deprecated */
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-		this.cdr.detectChanges();
-	}
-
 	@Input() set showUpdatedCost(value: boolean) {
 		this._showUpdatedCost = value;
 		this.updateInfos(true);
@@ -241,7 +234,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
-	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
 	entityId: number;
 	cardImage: string;

@@ -10,7 +10,6 @@ import {
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -30,14 +29,13 @@ const CARDS_FOR_WHICH_TO_SHOW_ORIGINAL_COST = [CardIds.ZilliaxDeluxe3000_TOY_330
 			<deck-zone
 				*ngIf="zone$ | async as zone"
 				[zone]="zone"
-				[tooltipPosition]="_tooltipPosition"
 				[colorManaCost]="colorManaCost"
 				[showRelatedCards]="showRelatedCards"
 				[showUnknownCards]="showUnknownCards"
 				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately$ | async"
 				[groupSameCardsTogether]="groupSameCardsTogether$ | async"
-				[showStatsChange]="showStatsChange"
+				[showStatsChange]="showStatsChange$ | async"
 				[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 				[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 				[side]="side"
@@ -57,19 +55,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	showBottomCardsSeparately$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
 	groupSameCardsTogether$: Observable<boolean>;
+	showStatsChange$: Observable<boolean>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showUpdatedCost: boolean;
-	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
-
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
 
 	@Input() set deckState(deckState: DeckState) {
 		this.deckState$$.next(deckState);
@@ -100,7 +94,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
 
-	_tooltipPosition: CardTooltipPositionType;
+	@Input() set showStatsChange(value: boolean) {
+		this.showStatsChange$$.next(value);
+	}
 
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 	private showWarning$$ = new BehaviorSubject<boolean>(null);
@@ -110,6 +106,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
+	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -126,6 +123,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			.pipe(this.mapData((info) => info));
 		this.showGiftsSeparately$ = this.showGiftsSeparately$$.asObservable().pipe(this.mapData((info) => info));
 		this.groupSameCardsTogether$ = this.groupSameCardsTogether$$.asObservable().pipe(this.mapData((info) => info));
+		this.showStatsChange$ = this.showStatsChange$$.asObservable().pipe(this.mapData((info) => info));
 		this.zone$ = combineLatest([
 			this.deckState$$.asObservable(),
 			this.showWarning$$.asObservable(),
@@ -134,6 +132,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			this.showTopCardsSeparately$,
 			this.showBottomCardsSeparately$,
 			this.showGiftsSeparately$,
+			this.showStatsChange$$,
 			this.groupSameCardsTogether$,
 		]).pipe(
 			this.mapData(
@@ -145,6 +144,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 					showTopCardsSeparately,
 					showBottomCardsSeparately,
 					showGiftsSeparately,
+					showStatsChange,
 					groupSameCardsTogether,
 				]) =>
 					this.buildGroupedList(
@@ -155,6 +155,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						showTopCardsSeparately,
 						showBottomCardsSeparately,
 						showGiftsSeparately,
+						showStatsChange,
 						groupSameCardsTogether,
 					),
 			),
@@ -173,6 +174,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		showTopCardsSeparately: boolean,
 		showBottomCardsSeparately: boolean,
 		showGiftsSeparately: boolean,
+		showStatsChange: boolean,
 		groupSameCardsTogether: boolean,
 	) {
 		if (!deckState) {
@@ -207,7 +209,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		const deckForBase: DeckState = deckState.update({
 			deck: cardsInDeckZone,
 		});
-		const base = this.buildBaseCards(deckForBase, hideGeneratedCardsInOtherZone);
+		const base = this.buildBaseCards(deckForBase, hideGeneratedCardsInOtherZone, showStatsChange);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
 			cards: base,
@@ -233,23 +235,23 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		};
 	}
 
-	private buildBaseCards(deckState: DeckState, hideGeneratedCardsInOtherZone: boolean): readonly VisualDeckCard[] {
+	private buildBaseCards(
+		deckState: DeckState,
+		hideGeneratedCardsInOtherZone: boolean,
+		showStatsChange: boolean,
+	): readonly VisualDeckCard[] {
 		const mode = !!deckState.deckList?.length ? 'focus-decklist' : 'show-played';
 		const baseCards: readonly VisualDeckCard[] =
 			mode === 'focus-decklist'
-				? this.buildBaseCardForFocus(deckState, hideGeneratedCardsInOtherZone)
-				: this.buildBaseCardsForShowPlayed(deckState, hideGeneratedCardsInOtherZone);
-		return baseCards.map((c) => {
-			return VisualDeckCard.create({
-				...c,
-				mainAttributeChange: null, // FIXME
-			});
-		});
+				? this.buildBaseCardForFocus(deckState, hideGeneratedCardsInOtherZone, showStatsChange)
+				: this.buildBaseCardsForShowPlayed(deckState, hideGeneratedCardsInOtherZone, showStatsChange);
+		return baseCards;
 	}
 
 	private buildBaseCardForFocus(
 		deckState: DeckState,
 		hideGeneratedCardsInOtherZone: boolean,
+		showStatsChange: boolean,
 	): readonly VisualDeckCard[] {
 		const deck: readonly DeckCard[] = deckState.deck;
 		// Here we should get all the cards that were part of the initial deck (+ the generated cards,
@@ -291,22 +293,33 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 
 				if (shouldShowDeckLine) {
 					const displayMode = !quantityInDeck ? 'dim' : null;
-					result.push(
-						...Array(Math.max(1, quantityInDeck)).fill(
-							VisualDeckCard.create({
-								...refCard,
-								// Always show the base cost in this display mode
-								manaCost: this.allCards.getCard(refCard.cardId).hideStats
-									? null
-									: this.getManaCost(refCard),
-								actualManaCost: this.getManaCost(refCard),
-								// Don't show a gift icon when the card is in the deck
-								creatorCardIds: [],
-								highlight: displayMode,
-								internalEntityIds: matchingCards.map((c) => c.internalEntityId),
-							}),
-						),
-					);
+					const statModifiers = !showStatsChange
+						? [null]
+						: [...new Set(matchingCards.map((c) => c.mainAttributeChange))];
+					for (const statsModifier of statModifiers) {
+						const quantityInDeckWithStat = deck.filter(
+							(c) =>
+								c.cardName === cardName &&
+								(showStatsChange ? c.mainAttributeChange === statsModifier : true),
+						).length;
+						result.push(
+							...Array(Math.max(1, quantityInDeckWithStat)).fill(
+								VisualDeckCard.create({
+									...refCard,
+									// Always show the base cost in this display mode
+									manaCost: this.allCards.getCard(refCard.cardId).hideStats
+										? null
+										: this.getManaCost(refCard),
+									actualManaCost: this.getManaCost(refCard),
+									// Don't show a gift icon when the card is in the deck
+									creatorCardIds: [],
+									highlight: displayMode,
+									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
+									mainAttributeChange: statsModifier,
+								}),
+							),
+						);
+					}
 				}
 				if (shouldShowGiftLine) {
 					const otherCreatorCardIds = cardsToShowNotInDeck
@@ -340,6 +353,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private buildBaseCardsForShowPlayed(
 		deckState: DeckState,
 		hideGeneratedCardsInOtherZone: boolean,
+		showStatsChange: boolean,
 	): readonly VisualDeckCard[] {
 		const deck: readonly DeckCard[] = deckState.deck;
 		// Here we should get all the cards that were part of the initial deck (+ the generated cards,
@@ -387,19 +401,30 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				if (shouldShowDeckLine) {
 					// Show the cards that we know to still be in deck
 					if (quantityInDeck > 0) {
-						result.push(
-							...Array(quantityInDeck).fill(
-								VisualDeckCard.create({
-									...refCard,
-									// Always show the base cost in this display mode
-									manaCost: this.getManaCost(refCard),
-									actualManaCost: this.getManaCost(refCard),
-									creatorCardIds: [],
-									highlight: null,
-									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
-								}),
-							),
-						);
+						const statModifiers = !showStatsChange
+							? [null]
+							: [...new Set(matchingCards.map((c) => c.mainAttributeChange))];
+						for (const statsModifier of statModifiers) {
+							const quantityInDeckWithStat = deck.filter(
+								(c) =>
+									c.cardName === cardName &&
+									(showStatsChange ? c.mainAttributeChange === statsModifier : true),
+							).length;
+							result.push(
+								...Array(quantityInDeckWithStat).fill(
+									VisualDeckCard.create({
+										...refCard,
+										// Always show the base cost in this display mode
+										manaCost: this.getManaCost(refCard),
+										actualManaCost: this.getManaCost(refCard),
+										creatorCardIds: [],
+										highlight: null,
+										internalEntityIds: matchingCards.map((c) => c.internalEntityId),
+										mainAttributeChange: statsModifier,
+									}),
+								),
+							);
+						}
 					}
 					// Show the cards that were played
 					const quantityNotInDeck = cardsToShowNotInDeck

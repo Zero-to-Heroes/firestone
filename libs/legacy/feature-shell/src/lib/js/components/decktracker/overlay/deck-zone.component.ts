@@ -9,7 +9,6 @@ import {
 	Output,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -50,7 +49,6 @@ import { groupByFunction } from '../../../services/utils';
 					<li *ngFor="let card of section.cards; trackBy: trackCard">
 						<deck-card
 							[card]="card"
-							[tooltipPosition]="tooltipPosition"
 							[colorManaCost]="colorManaCost"
 							[showRelatedCards]="showRelatedCards"
 							[showTransformedInto]="showTransformedInto"
@@ -90,7 +88,6 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	@Input() showTransformedInto: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() darkenUsedCards: boolean;
-	@Input() tooltipPosition: CardTooltipPositionType;
 
 	@Input() set zone(zone: DeckZone) {
 		this.zone$$.next(zone);
