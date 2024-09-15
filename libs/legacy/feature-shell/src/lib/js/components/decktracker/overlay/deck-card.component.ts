@@ -337,15 +337,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			return;
 		}
 
-		combineLatest([
-			this.card$$.pipe(distinctUntilChanged()),
-			this.showUpdatedCost$$.pipe(distinctUntilChanged()),
-			this.showStatsChange$$.pipe(distinctUntilChanged()),
-			this.groupSameCardsTogether$$.pipe(distinctUntilChanged()),
-		])
+		combineLatest([this.card$$, this.showUpdatedCost$$, this.showStatsChange$$, this.groupSameCardsTogether$$])
 			.pipe(
 				filter(([card]) => !!card),
-				auditTime(200),
+				auditTime(50),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				takeUntil(this.destroyed$),
 			)
