@@ -243,4 +243,5 @@ export const tutors = [
 	CardIds.UngoroBrochure_WORK_050,
 	CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
 	CardIds.Burndown_WORK_026,
+	CardIds.Robocaller_WORK_006,
 ];
