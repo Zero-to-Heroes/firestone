@@ -19,6 +19,7 @@ import { Observable, tap } from 'rxjs';
 			[placeholder]="value.placeholder"
 			[visible]="true"
 			[allowSearch]="true"
+			[resetIsClear]="true"
 			(optionSelected)="onSelected($event)"
 		></filter-dropdown-multiselect>
 	`,

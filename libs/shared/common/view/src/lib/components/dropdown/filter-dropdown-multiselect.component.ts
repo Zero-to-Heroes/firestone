@@ -113,6 +113,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
+	@Input() resetIsClear: boolean;
 	@Input() allowSearch: boolean;
 	@Input() validSelectionNumber: number;
 	@Input() validationErrorTooltip: string;
@@ -256,8 +257,12 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	resetSelection() {
-		this.tempSelected$.next(this.options$.value);
-		this.currentSearch$$.next(null);
+		if (this.resetIsClear) {
+			this.clearSelection();
+		} else {
+			this.tempSelected$.next(this.options$.value);
+			this.currentSearch$$.next(null);
+		}
 	}
 
 	buttonTooltip(validSelection: boolean): string {
