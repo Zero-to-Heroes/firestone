@@ -6,6 +6,7 @@ import { BattlegroundsState, BgsBoard, BgsPlayer } from '@firestone/battleground
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
+	BugReportService,
 	GameStatusService,
 	Message,
 	OwNotificationsService,
@@ -58,6 +59,7 @@ export class TwitchAuthService {
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
+		private readonly bugReport: BugReportService,
 	) {
 		this.init();
 		window['deflate'] = (input, options) => {
@@ -357,6 +359,14 @@ export class TwitchAuthService {
 						JSON.stringify(newEvent),
 						newEvent,
 					);
+					this.bugReport.submitAutomatedReport({
+						type: 'twitch-ebs-error',
+						info: JSON.stringify({
+							token: prefs.twitchAccessToken,
+							error: error,
+							event: newEvent,
+						}),
+					});
 				} else {
 					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
 				}
