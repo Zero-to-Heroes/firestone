@@ -281,14 +281,6 @@ const buildPityTimer = (
 			  !hasAlreadyOpenedLegendary
 			? 10
 			: LEGENDARY_PITY_TIMER;
-	console.debug(
-		'pity timer value',
-		boosterId,
-		type,
-		valueIfNoPacksOpened,
-		totalOpenedPacks,
-		hasAlreadyOpenedLegendary,
-	);
 	for (let i = 0; i < openedPacks.length; i++) {
 		if (pityTimerReset != null && new Date(openedPacks[i].creationDate).getTime() < pityTimerReset) {
 			break;

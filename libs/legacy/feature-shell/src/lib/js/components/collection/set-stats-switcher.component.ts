@@ -58,7 +58,6 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionComponent imp
 						: activeFilter === 'twist'
 						? allSets.filter((set) => set.twist)
 						: allSets.filter((set) => !set.standard);
-				console.debug('visible sets', sets, activeFilter);
 				return sets;
 			}),
 		);

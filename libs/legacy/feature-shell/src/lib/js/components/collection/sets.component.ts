@@ -4,7 +4,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, tap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { Set } from '../../models/set';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -77,7 +77,6 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 			this.mapData((sets) => sets.filter((s) => s.id?.toLowerCase() !== 'gift')),
 		);
 		this.sets$ = combineLatest([this.activeFilter$, this.allSets$]).pipe(
-			tap((info) => console.debug('sets', info)),
 			this.mapData(([activeFilter, allSets]) => {
 				const sets =
 					activeFilter === 'all'
