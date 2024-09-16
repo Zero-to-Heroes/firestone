@@ -299,6 +299,17 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		await this.cardMouseOverService.isReady();
 		await this.ads.isReady();
 
+		combineLatest([this.card$$, this.showUpdatedCost$$, this.showStatsChange$$, this.groupSameCardsTogether$$])
+			.pipe(
+				filter(([card]) => !!card),
+				auditTime(50),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {
+				this.updateInfos(card, showUpdatedCost, showStatsChange, groupSameCardsTogether);
+			});
+
 		combineLatest([this.ads.enablePremiumFeatures$$, this.cardMouseOverService.mousedOverCard$$])
 			.pipe(
 				filter(([enablePremiumFeatures]) => enablePremiumFeatures),
@@ -336,17 +347,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!this._side) {
 			return;
 		}
-
-		combineLatest([this.card$$, this.showUpdatedCost$$, this.showStatsChange$$, this.groupSameCardsTogether$$])
-			.pipe(
-				filter(([card]) => !!card),
-				auditTime(50),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {
-				this.updateInfos(card, showUpdatedCost, showStatsChange, groupSameCardsTogether);
-			});
 
 		this._uniqueId = uuidShort();
 		this.cardsHighlightService?.register(
