@@ -1,11 +1,9 @@
-@import '../../global/variables';
-@import '../../global/fonts';
-
 .card-details-container {
 	display: flex;
 	position: relative;
 	top: -17px;
 	width: 100%;
+	color: var(--default-text-color);
 
 	.details {
 		// width: 413px;
@@ -16,9 +14,8 @@
 		min-width: 0;
 
 		h1 {
-			@extend %card-title;
 			padding-bottom: 14px;
-			border-bottom: 1px solid $yellow03;
+			border-bottom: 1px solid var(--default-title-color);
 			margin-bottom: 20px;
 			margin-right: 55px;
 		}
@@ -28,11 +25,11 @@
 		}
 
 		.card-info {
-			@extend %you-have-viewed;
+			font-size: 13px;
 			margin-top: 9px;
 
 			.sub-title {
-				@extend %card-details;
+				color: var(--color-common-3);
 				margin-right: 10px;
 			}
 
@@ -41,8 +38,7 @@
 				flex-direction: column;
 
 				.sub-title {
-					@extend %card-title;
-					border-bottom: 1px solid $yellow03;
+					border-bottom: 1px solid var(--default-title-color);
 					margin-bottom: 20px;
 					padding-bottom: 9px;
 					font-size: 16px;
@@ -77,7 +73,7 @@
 						}
 
 						&:hover {
-							color: $green01;
+							color: var(--default-text-color);
 
 							& > button {
 								--icon-color: #d9c3ab;
@@ -106,19 +102,50 @@
 		}
 	}
 
-	.card-view-container {
-		padding-left: 19px;
+	.card-visuals {
 		display: flex;
-		align-items: flex-start;
-		justify-content: center;
+		flex-direction: column;
+		padding-left: 20px;
 		margin-right: 40px;
 		width: 360px;
 		min-width: 360px;
-		height: 570px;
 		// This means that we can't go back (in the navigation) while mousing over a card,
 		// but it just looks much better that way
 		z-index: 1;
 		padding-top: 55px;
+	}
+
+	.quality-selector-container {
+		display: flex;
+		height: 30px;
+		align-items: center;
+		justify-content: center;
+
+		.arrow {
+			height: 15px;
+			aspect-ratio: 1;
+
+			&.left {
+				transform: rotate(90deg);
+				margin-right: 20px;
+			}
+			&.right {
+				transform: rotate(-90deg);
+				margin-left: 20px;
+			}
+		}
+
+		&:hover {
+			color: var(--default-text-color-bright);
+		}
+	}
+
+	.card-view-container {
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		height: 570px;
+		position: relative;
 
 		::ng-deep card-view {
 			// margin-top: 10px;
@@ -157,7 +184,8 @@
 						}
 					}
 
-					.premium.premium, .diamond{
+					.premium.premium,
+					.diamond {
 						width: 90px;
 
 						.left {

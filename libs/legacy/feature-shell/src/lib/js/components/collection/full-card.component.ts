@@ -11,10 +11,11 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardClass, ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
@@ -23,22 +24,37 @@ import { capitalizeEachWord, pickRandom } from '../../services/utils';
 
 @Component({
 	selector: 'full-card',
-	styleUrls: [`../../../css/component/collection/full-card.component.scss`],
+	styleUrls: [`./full-card.component.scss`],
 	template: `
 		<div
 			class="card-details-container"
 			[ngClass]="{ owned: card.owned, missing: !card.owned, hero: isHero }"
 			*ngIf="card"
 		>
-			<div class="card-view-container">
-				<card-view
-					[card]="card"
-					[tooltips]="false"
-					[showCounts]="showCount"
-					[cardType]="!!card.ownedPremium ? 'GOLDEN' : 'NORMAL'"
-					[highRes]="true"
-					>/</card-view
-				>
+			<div class="card-visuals">
+				<div class="quality-selector-container" (mousedown)="nextQuality()">
+					<!-- <div class="arrow left" (mousedown)="previousQuality()" *ngIf="availableQualities.length > 1">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
+						</svg>
+					</div> -->
+					<div class="quality-text">{{ qualityText$ | async }}</div>
+					<div class="arrow right" *ngIf="availableQualities.length > 1">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
+						</svg>
+					</div>
+				</div>
+				<div class="card-view-container">
+					<card-view
+						[card]="card"
+						[tooltips]="false"
+						[showCounts]="showCount"
+						[cardType]="currentQualityToDisplay$ | async"
+						[highRes]="true"
+						>/</card-view
+					>
+				</div>
 			</div>
 			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
@@ -92,6 +108,9 @@ import { capitalizeEachWord, pickRandom } from '../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FullCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	qualityText$: Observable<string>;
+	currentQualityToDisplay$: Observable<CollectionCardType>;
+
 	// eslint-disable-next-line @angular-eslint/no-output-native
 	@Output() close = new EventEmitter();
 
@@ -106,6 +125,8 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 	faction: string;
 	isHero: boolean;
 
+	availableQualities: CollectionCardType[] = ['NORMAL', 'GOLDEN'];
+
 	audioCategories: readonly AudioClipCategory[];
 	audioClips: readonly AudioClip[];
 
@@ -113,6 +134,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 	private previousClips: readonly AudioClip[] = [];
 
 	private selectedCard$$ = new BehaviorSubject<SetCard | ReferenceCard>(null);
+	private currentQualityToDisplay$$ = new BehaviorSubject<CollectionCardType>('NORMAL');
 
 	@Input() set selectedCard(selectedCard: SetCard | ReferenceCard) {
 		this.selectedCard$$.next(selectedCard);
@@ -131,6 +153,8 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
+
+		this.currentQualityToDisplay$ = this.currentQualityToDisplay$$.pipe(this.mapData((info) => info));
 
 		combineLatest([
 			this.selectedCard$$.asObservable(),
@@ -198,14 +222,54 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 				this.flavor = flavorSource?.length
 					? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
 					: null;
+
+				console.debug('will build quality', this.currentQualityToDisplay$$.value);
+				this.currentQualityToDisplay$$.next(
+					!!this.card.ownedSignature
+						? 'SIGNATURE'
+						: !!this.card.ownedDiamond
+						? 'DIAMOND'
+						: !!this.card.ownedPremium
+						? 'GOLDEN'
+						: 'NORMAL',
+				);
+				console.debug('current quality', this.currentQualityToDisplay$$.value);
+
+				if (card.availableAsDiamond) {
+					this.availableQualities.push('DIAMOND');
+				}
+				if (card.availableAsSignature) {
+					this.availableQualities.push('SIGNATURE');
+				}
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			});
+		this.qualityText$ = this.currentQualityToDisplay$$.pipe(
+			this.mapData((quality) => {
+				const result = capitalizeFirstLetter(
+					this.i18n.translateString(`app.collection.card-history.version.${quality.toLowerCase()}`),
+				);
+				console.debug('updating quality text', quality, result);
+				return result;
+			}),
+		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	previousQuality() {
+		const index = this.availableQualities.indexOf(this.currentQualityToDisplay$$.value);
+		const newIndex = (index - 1 + this.availableQualities.length) % this.availableQualities.length;
+		this.currentQualityToDisplay$$.next(this.availableQualities[newIndex]);
+	}
+
+	nextQuality() {
+		const index = this.availableQualities.indexOf(this.currentQualityToDisplay$$.value);
+		const newIndex = (index + 1) % this.availableQualities.length;
+		this.currentQualityToDisplay$$.next(this.availableQualities[newIndex]);
 	}
 
 	playSound(audioClip: AudioClip) {
