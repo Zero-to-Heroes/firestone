@@ -8,6 +8,7 @@ import { SectionReference, SettingsSectionReferenceType } from '../models/settin
 import { SettingsControllerService } from '../services/settings-controller.service';
 import { AppearanceCustomizationPageComponent } from './custom-pages/appearance-customization.component';
 import { SettingsGeneralBugReportComponent } from './custom-pages/settings-general-bug-report.component';
+import { SettingsGeneralThirdPartyComponent } from './custom-pages/settings-general-third-party.component';
 
 @Component({
 	selector: 'settings-current-page-section-reference',
@@ -34,6 +35,7 @@ export class SettingsCurrentPageSectionReferenceComponent
 	private componentMaps: Record<SettingsSectionReferenceType, ComponentType<any>> = {
 		AppearanceCustomizationPageComponent: AppearanceCustomizationPageComponent,
 		SettingsGeneralBugReportComponent: SettingsGeneralBugReportComponent,
+		SettingsGeneralThirdPartyComponent: SettingsGeneralThirdPartyComponent,
 	};
 
 	private section$$ = new BehaviorSubject<SectionReference | null>(null);

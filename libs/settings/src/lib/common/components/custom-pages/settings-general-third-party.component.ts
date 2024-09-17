@@ -15,14 +15,14 @@ import { Observable } from 'rxjs';
 @Component({
 	selector: 'settings-general-third-party',
 	styleUrls: [
-		`../../../../css/global/forms.scss`,
-		`../../../../css/global/scrollbar-settings.scss`,
-		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/general/settings-general-third-party.component.scss`,
+		`../../../../../../legacy/feature-shell/src/lib/css/global/forms.scss`,
+		`../../../../../../legacy/feature-shell/src/lib/css/global/scrollbar-settings.scss`,
+		`../../../../../../legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`./settings-general-third-party.component.scss`,
 	],
 	template: `
 		<div class="general-third-party" *ngIf="{ oocLoggedIn: oocLoggedIn$ | async } as value" scrollable>
-			<div class="intro" [owTranslate]="'settings.general.third-party.intro'"></div>
+			<div class="intro" [fsTranslate]="'settings.general.third-party.intro'"></div>
 			<section class="vs">
 				<h2>
 					<img [src]="vs.icon" class="icon" />
@@ -51,13 +51,13 @@ import { Observable } from 'rxjs';
 				<div class="connect">
 					<div class="logged-out" *ngIf="oocLoginUrl && !value.oocLoggedIn">
 						<button (mousedown)="oocConnect()">
-							<span [owTranslate]="'settings.general.third-party.ooc.connect-button-text'"></span>
+							<span [fsTranslate]="'settings.general.third-party.ooc.connect-button-text'"></span>
 						</button>
 					</div>
 					<div class="logged-in" *ngIf="oocLoginUrl && value.oocLoggedIn">
-						<div class="user-name" [owTranslate]="'settings.general.third-party.ooc.connected-text'"></div>
+						<div class="user-name" [fsTranslate]="'settings.general.third-party.ooc.connected-text'"></div>
 						<button (mousedown)="oocDisconnect()">
-							<span [owTranslate]="'settings.general.third-party.ooc.disconnect-button-text'"></span>
+							<span [fsTranslate]="'settings.general.third-party.ooc.disconnect-button-text'"></span>
 						</button>
 					</div>
 				</div>
@@ -164,7 +164,7 @@ export class SettingsGeneralThirdPartyComponent
 	};
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
@@ -177,7 +177,7 @@ export class SettingsGeneralThirdPartyComponent
 
 		this.oocLoggedIn$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.outOfCardsToken),
-			this.mapData((token) => token?.access_token && token?.expires_timestamp > Date.now()),
+			this.mapData((token) => !!token?.access_token && token?.expires_timestamp > Date.now()),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

@@ -35,7 +35,10 @@ export interface SettingNode {
 export interface SectionReference {
 	readonly componentType: SettingsSectionReferenceType;
 }
-export type SettingsSectionReferenceType = 'AppearanceCustomizationPageComponent' | 'SettingsGeneralBugReportComponent';
+export type SettingsSectionReferenceType =
+	| 'AppearanceCustomizationPageComponent'
+	| 'SettingsGeneralBugReportComponent'
+	| 'SettingsGeneralThirdPartyComponent';
 
 export interface Section {
 	readonly id: string;

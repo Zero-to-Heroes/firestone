@@ -195,7 +195,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 
-	public async udpateOutOfCardsToken(token: OutOfCardsToken) {
+	public async udpateOutOfCardsToken(token: OutOfCardsToken | null) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, outOfCardsToken: token };
 		await this.savePreferences(newPrefs);

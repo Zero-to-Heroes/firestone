@@ -8,6 +8,7 @@ import { generalLaunchSettings } from './general-settings-launch';
 import { generalLocalizationSettings } from './general-settings-localization';
 import { generalLotterySettings } from './general-settings-lottery';
 import { generalNotificationsSettings } from './general-settings-notifications';
+import { generalThirdPartiesSettings } from './general-settings-third-parties';
 
 export const generalSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -22,8 +23,9 @@ export const generalSettings = (context: SettingContext): SettingNode => {
 			generalAccessibilitySettings(context),
 			generalAppearanceSettings(context),
 			generalLocalizationSettings(context),
-			generalBugSettings(context),
 			generalLotterySettings(context),
+			generalBugSettings(context),
+			generalThirdPartiesSettings(context),
 		],
 	};
 };

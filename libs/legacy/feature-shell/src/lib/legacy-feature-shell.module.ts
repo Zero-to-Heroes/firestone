@@ -392,7 +392,6 @@ import { SettingsGeneralLaunchComponent } from './js/components/settings/general
 import { SettingsGeneralLocalizationComponent } from './js/components/settings/general/settings-general-localization.component';
 import { SettingsGeneralMenuComponent } from './js/components/settings/general/settings-general-menu.component';
 import { SettingsGeneralQuestsComponent } from './js/components/settings/general/settings-general-quests.component';
-import { SettingsGeneralThirdPartyComponent } from './js/components/settings/general/settings-general-third-party.component';
 import { SettingsGeneralComponent } from './js/components/settings/general/settings-general.component';
 import { SettingsMercenariesGeneralComponent } from './js/components/settings/mercenaries/settings-mercenaries-general.component';
 import { SettingsMercenariesMenuComponent } from './js/components/settings/mercenaries/settings-mercenaries-menu.component';
@@ -1639,7 +1638,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralPremiumComponent,
 		SettingsGeneralLotteryComponent,
 		SettingsGeneralLocalizationComponent,
-		SettingsGeneralThirdPartyComponent,
 		SettingsGeneralDataComponent,
 		SettingsGeneralQuestsComponent,
 		SettingsGeneralModsComponent,
