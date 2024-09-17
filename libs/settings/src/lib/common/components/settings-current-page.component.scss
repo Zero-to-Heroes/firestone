@@ -6,6 +6,7 @@
 .current-page {
 	flex-grow: 1;
 	padding: 10px 20px;
+	overflow: auto;
 
 	::ng-deep setting-element,
 	::ng-deep setting-button {

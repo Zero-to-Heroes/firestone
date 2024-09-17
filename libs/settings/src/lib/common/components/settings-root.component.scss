@@ -1,6 +1,7 @@
 :host {
 	flex-grow: 1;
 	color: var(--default-text-color);
+	min-height: 0;
 }
 
 .settings-root {

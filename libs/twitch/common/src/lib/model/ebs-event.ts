@@ -4,8 +4,8 @@ import { Preferences } from '@firestone/shared/common/service';
 import { TwitchBgsState } from './twitch-bgs-state';
 
 export interface TwitchEvent {
-	readonly scene: SceneMode;
+	readonly scene: SceneMode | null;
 	readonly deck: GameState;
-	readonly bgs: TwitchBgsState;
+	readonly bgs: TwitchBgsState | null;
 	readonly streamerPrefs: Partial<Preferences>;
 }

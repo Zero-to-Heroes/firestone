@@ -376,7 +376,6 @@ import { SettingsBattlegroundsComponent } from './js/components/settings/battleg
 import { SettingsCollectionMenuComponent } from './js/components/settings/collection/settings-collection-menu.component';
 import { SettingsCollectionNotificationComponent } from './js/components/settings/collection/settings-collection-notification';
 import { SettingsCollectionComponent } from './js/components/settings/collection/settings-collection.component';
-import { SettingsBroadcastComponent } from './js/components/settings/decktracker/settings-broadcast';
 import { SettingsDecktrackerBetaComponent } from './js/components/settings/decktracker/settings-decktracker-beta.component';
 import { SettingsDecktrackerDuelsComponent } from './js/components/settings/decktracker/settings-decktracker-duels.component';
 import { SettingsDecktrackerGlobalComponent } from './js/components/settings/decktracker/settings-decktracker-global';
@@ -687,8 +686,6 @@ import { SecondaryDefaultComponent } from './js/components/main-window/secondary
 import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
 import { DropdownComponent } from './js/components/settings/dropdown.component';
-import { NumericInputComponent } from './js/components/settings/numeric-input.component';
-import { PreferenceNumericInputComponent } from './js/components/settings/preference-numeric-input.component';
 import { ClipboardShareButtonComponent } from './js/components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from './js/components/sharing/reddit/reddit-share-button.component';
 import { RedditShareInfoComponent } from './js/components/sharing/reddit/reddit-share-info.component';
@@ -800,7 +797,6 @@ import { CollectionBootstrapService } from './js/services/mainwindow/store/colle
 import { MainWindowStateFacadeService } from './js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from './js/services/mainwindow/store/store-bootstrap.service';
-import { TwitchAuthService } from './js/services/mainwindow/twitch-auth.service';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from './js/services/manastorm-bridge/end-game-listener.service';
 import { EndGameUploaderService } from './js/services/manastorm-bridge/end-game-uploader.service';
@@ -958,9 +954,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DoubleClickDirective,
 		OwTranslateDirective,
 
-		PreferenceNumericInputComponent,
 		DropdownComponent,
-		NumericInputComponent,
 
 		FilterComponent,
 		OwTranslatePipe,
@@ -1664,7 +1658,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsDecktrackerYourDeckComponent,
 		SettingsDecktrackerOpponentDeckComponent,
 		SettingsDecktrackerGlobalComponent,
-		SettingsBroadcastComponent,
 		SettingsDecktrackerBetaComponent,
 		SettingsDecktrackerDuelsComponent,
 		SettingsDecktrackerTurnTimerComponent,
@@ -1785,7 +1778,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsCommunicationService,
 		OutOfCardsService,
 		GameNativeStateStoreService,
-		TwitchAuthService,
 		TwitchPresenceService,
 		TwitchCardsFacadeManagerService,
 		TwitchLocalizationManagerService,

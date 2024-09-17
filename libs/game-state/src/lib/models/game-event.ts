@@ -1,7 +1,7 @@
 import { Rank } from '@firestone/memory';
 
 export interface GameEvent {
-	readonly type: string;
+	readonly type: GameEventType | string;
 	readonly cardId: string;
 	readonly controllerId: number; // matches a PlayerId
 	readonly localPlayer: GameEventPlayer;
@@ -21,3 +21,5 @@ export interface GameEventPlayer {
 	standard: Rank;
 	wild: Rank;
 }
+
+export type GameEventType = 'SCENE_CHANGED_MINDVISION';

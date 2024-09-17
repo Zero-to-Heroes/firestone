@@ -38,7 +38,8 @@ export interface SectionReference {
 export type SettingsSectionReferenceType =
 	| 'AppearanceCustomizationPageComponent'
 	| 'SettingsGeneralBugReportComponent'
-	| 'SettingsGeneralThirdPartyComponent';
+	| 'SettingsGeneralThirdPartyComponent'
+	| 'SettingsBroadcastComponent';
 
 export interface Section {
 	readonly id: string;

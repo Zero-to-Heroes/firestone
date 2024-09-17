@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import { GameStatusService } from '@firestone/shared/common/service';
+import { TwitchAuthService } from '@firestone/twitch/common';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
@@ -28,7 +29,6 @@ import { HsClientConfigService } from '../../js/services/hs-client-config.servic
 import { LogRegisterService } from '../../js/services/log-register.service';
 import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
-import { TwitchAuthService } from '../../js/services/mainwindow/twitch-auth.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
 import { QuestsService } from '../../js/services/quests.service';

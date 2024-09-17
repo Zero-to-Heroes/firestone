@@ -5,8 +5,8 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 @Component({
 	selector: 'settings-general-bug-report',
 	styleUrls: [
-		`../../../../../../legacy/feature-shell/src/lib/css/global/forms.scss`,
-		`../../../../../../legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`../scrollbar-settings.scss`,
+		`../../../settings-common.component.scss`,
 		`./settings-general-bug-report.component.scss`,
 	],
 	template: `

@@ -1,9 +1,10 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsState, BgsBoard, BgsPlayer } from '@firestone/battlegrounds/core';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEventType, GameState } from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
 	BugReportService,
@@ -13,20 +14,13 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { deepEqual, NonFunctionProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import {
-	TwitchBgsBoard,
-	TwitchBgsBoardEntity,
-	TwitchBgsPlayer,
-	TwitchBgsState,
-	TwitchEvent,
-} from '@firestone/twitch/common';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { deepEqual, Mutable, NonFunctionProperties } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { delay, distinctUntilChanged, filter, map, sampleTime, take } from 'rxjs/operators';
-import { GameEvent } from '../../models/game-event';
+import { TwitchEvent } from '../model/ebs-event';
+import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '../model/twitch-bgs-state';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
 const REDIRECT_URI = 'https://www.firestoneapp.com/twitch-login.html';
@@ -44,18 +38,20 @@ const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
-	private deckEvents = new BehaviorSubject<{ event: string; state: GameState }>(null);
-	private bgEvents = new BehaviorSubject<BattlegroundsState>(null);
+	private deckEvents = new BehaviorSubject<{ event: string; state: GameState } | null>(null);
+	private bgEvents = new BehaviorSubject<BattlegroundsState | null>(null);
 	private twitchAccessToken$: Observable<string>;
 	private streamerPrefs$: Observable<Partial<Preferences>>;
 
 	private twitchDelay = 0;
 
+	private hasLoggedInfoOnce = false;
+
 	constructor(
 		private readonly prefs: PreferencesService,
 		private readonly http: HttpClient,
 		private readonly notificationService: OwNotificationsService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
@@ -98,7 +94,7 @@ export class TwitchAuthService {
 
 		this.gameStatus.inGame$$
 			.pipe(
-				filter((inGame) => inGame),
+				filter((inGame) => !!inGame),
 				take(1),
 			)
 			.subscribe(async () => {
@@ -125,7 +121,7 @@ export class TwitchAuthService {
 
 	public async emitDeckEvent(event: any) {
 		// console.debug('[twitch-auth] enqueueing deck event', event);
-		if ([GameEvent.SCENE_CHANGED_MINDVISION].includes(event.event.name)) {
+		if (['SCENE_CHANGED_MINDVISION' as GameEventType].includes(event.event.name)) {
 			return;
 		}
 		this.deckEvents.next({ event: event.event.name, state: event.state });
@@ -137,12 +133,12 @@ export class TwitchAuthService {
 	}
 
 	private buildEvent(
-		currentScene: SceneMode,
-		deckEvent: { event: string; state: GameState },
-		bgsState: BattlegroundsState,
+		currentScene: SceneMode | null,
+		deckEvent: { event: string; state: GameState } | null,
+		bgsState: BattlegroundsState | null,
 		twitchAccessToken: string,
 		streamerPrefs: Partial<Preferences>,
-	): TwitchEvent {
+	): TwitchEvent | null {
 		if (!twitchAccessToken) {
 			return null;
 		}
@@ -195,13 +191,13 @@ export class TwitchAuthService {
 		// We need to show the last non-empty face off to let the extension decide whether to show the result
 		// or not (e.g. based on the "show only on tavern" pref)
 		const latestBattle = bgsState?.currentGame?.lastNonEmptyFaceOff();
-		const newBgsState: TwitchBgsState = !!bgsState
-			? {
+		const newBgsState: TwitchBgsState | null = !!bgsState
+			? ({
 					leaderboard: this.buildLeaderboard(bgsState),
 					currentBattle: {
 						battleInfo:
 							latestBattle?.battleResult && latestBattle?.battleInfoStatus !== 'ongoing'
-								? { ...latestBattle?.battleResult, outcomeSamples: null }
+								? { ...latestBattle?.battleResult, outcomeSamples: undefined }
 								: null,
 						status:
 							latestBattle?.battleInfoStatus === 'ongoing'
@@ -221,7 +217,7 @@ export class TwitchAuthService {
 						hasTrinkets: bgsState.currentGame?.hasTrinkets,
 						anomalies: bgsState.currentGame?.anomalies,
 					},
-			  }
+			  } as TwitchBgsState)
 			: null;
 
 		const result: TwitchEvent = {
@@ -271,15 +267,17 @@ export class TwitchAuthService {
 	}
 
 	private cleanZone(zone: readonly DeckCard[], isBattlegrounds: boolean): readonly DeckCard[] {
-		return zone.map((card) => this.cleanCard(card, isBattlegrounds)).filter((card) => !!card);
+		return zone
+			.map((card) => this.cleanCard(card, isBattlegrounds))
+			.filter((card) => !!card) as readonly DeckCard[];
 	}
 
-	private cleanCard(card: DeckCard, isBattlegrounds: boolean): DeckCard {
+	private cleanCard(card: DeckCard | null, isBattlegrounds: boolean): DeckCard | null {
 		if (!card || card.zone === 'SETASIDE') {
 			return null;
 		}
 
-		const newCard = { ...card };
+		const newCard: Mutable<Partial<DeckCard>> = { ...card };
 		if (isBattlegrounds) {
 			delete newCard.creatorCardId;
 			// delete newCard.zone;
@@ -318,8 +316,7 @@ export class TwitchAuthService {
 		}
 	}
 
-	private hasLoggedInfoOnce = false;
-	private async sendEvent(newEvent: TwitchEvent) {
+	private async sendEvent(newEvent: TwitchEvent | null) {
 		const prefs = await this.prefs.getPreferences();
 		if (!newEvent) {
 			return;

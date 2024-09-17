@@ -19,6 +19,8 @@ import { PreferenceDropdownComponent } from './components/dropdown/preference-dr
 import { PreferenceYNLimitedComponent } from './components/dropdown/preference-ynlimited-dropdown.component';
 import { CheckboxComponent } from './components/input/checkbox.component';
 import { NumericInputWithArrowsComponent } from './components/input/numeric-input-with-arrows.component';
+import { NumericInputComponent } from './components/input/numeric-input.component';
+import { PreferenceNumericInputComponent } from './components/input/preference-numeric-input.component';
 import { TextInputComponent } from './components/input/text-input.component';
 import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { ScrollableDirective } from './components/misc/scrollable.directive';
@@ -54,7 +56,9 @@ const components = [
 	PreferenceDropdownComponent,
 	PreferenceYNLimitedComponent,
 
+	NumericInputComponent,
 	NumericInputWithArrowsComponent,
+	PreferenceNumericInputComponent,
 	TextInputComponent,
 	CheckboxComponent,
 

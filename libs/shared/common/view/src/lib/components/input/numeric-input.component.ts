@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 @Component({
 	selector: 'numeric-input',
 	styleUrls: [
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/numeric-input.component.scss`,
+		`../../../../../../../../libs/legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`./numeric-input.component.scss`,
 	],
 	template: `
 		<div class="numeric-input" [ngClass]="{ disabled: disabled }">

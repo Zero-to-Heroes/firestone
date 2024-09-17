@@ -8,16 +8,14 @@ import {
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'settings-general-third-party',
 	styleUrls: [
-		`../../../../../../legacy/feature-shell/src/lib/css/global/forms.scss`,
-		`../../../../../../legacy/feature-shell/src/lib/css/global/scrollbar-settings.scss`,
-		`../../../../../../legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`../scrollbar-settings.scss`,
+		`../../../settings-common.component.scss`,
 		`./settings-general-third-party.component.scss`,
 	],
 	template: `
@@ -167,7 +165,7 @@ export class SettingsGeneralThirdPartyComponent
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}

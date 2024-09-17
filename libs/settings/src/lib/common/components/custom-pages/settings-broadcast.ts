@@ -2,16 +2,15 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { TWITCH_LOGIN_URL, TwitchAuthService } from '@firestone/twitch/common';
 import { Observable } from 'rxjs';
-import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
 
 @Component({
 	selector: 'settings-broadcast',
 	styleUrls: [
-		`../../../../css/global/scrollbar-settings.scss`,
-		`../../../../css/global/forms.scss`,
-		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/decktracker/settings-broadcast.component.scss`,
+		`../scrollbar-settings.scss`,
+		`../../../settings-common.component.scss`,
+		`./settings-broadcast.component.scss`,
 	],
 	template: `
 		<div
@@ -22,30 +21,30 @@ import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindo
 			scrollable
 		>
 			<section>
-				<h2 [owTranslate]="'settings.general.twitch.title'"></h2>
-				<p class="text" [owTranslate]="'settings.general.twitch.intro'"></p>
+				<h2 [fsTranslate]="'settings.general.twitch.title'"></h2>
+				<p class="text" [fsTranslate]="'settings.general.twitch.intro'"></p>
 				<ol class="todo">
 					<li>
-						{{ 'settings.general.twitch.todo-1' | owTranslate }}
+						{{ 'settings.general.twitch.todo-1' | fsTranslate }}
 						<a
 							href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u"
 							target="_blank"
 							(mousedown)="preventMiddleClick($event)"
 							(click)="preventMiddleClick($event)"
 							(auxclick)="preventMiddleClick($event)"
-							>{{ 'settings.general.twitch.link' | owTranslate }}</a
+							>{{ 'settings.general.twitch.link' | fsTranslate }}</a
 						>
 					</li>
-					<li [owTranslate]="'settings.general.twitch.todo-2'"></li>
+					<li [fsTranslate]="'settings.general.twitch.todo-2'"></li>
 					<li>
-						{{ 'settings.general.twitch.todo-3' | owTranslate }}
+						{{ 'settings.general.twitch.todo-3' | fsTranslate }}
 						<a
 							href="https://github.com/Zero-to-Heroes/firestone/wiki/Setting-up-the-Twitch-extension"
 							target="_blank"
 							(mousedown)="preventMiddleClick($event)"
 							(click)="preventMiddleClick($event)"
 							(auxclick)="preventMiddleClick($event)"
-							>{{ 'settings.general.twitch.link' | owTranslate }}</a
+							>{{ 'settings.general.twitch.link' | fsTranslate }}</a
 						>
 					</li>
 				</ol>
@@ -57,12 +56,12 @@ import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindo
 								<use xlink:href="assets/svg/sprite.svg#twitch" />
 							</svg>
 						</i>
-						<span [owTranslate]="'settings.general.twitch.login-button-text'"></span>
+						<span [fsTranslate]="'settings.general.twitch.login-button-text'"></span>
 					</button>
 				</div>
 				<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
 					<div class="user-name">
-						{{ 'settings.general.twitch.logged-in-as-text' | owTranslate }}
+						{{ 'settings.general.twitch.logged-in-as-text' | fsTranslate }}
 						<a
 							href="https://www.twitch.tv/{{ value.twitchUserName }}"
 							target="_blank"
@@ -78,17 +77,17 @@ import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindo
 								<use xlink:href="assets/svg/sprite.svg#twitch" />
 							</svg>
 						</i>
-						<span [owTranslate]="'settings.general.twitch.logout-button-text'"></span>
+						<span [fsTranslate]="'settings.general.twitch.logout-button-text'"></span>
 					</button>
 				</div>
 			</section>
 
 			<section>
-				<h2 class="title" [owTranslate]="'settings.general.twitch.configuration-title'"></h2>
+				<h2 class="title" [fsTranslate]="'settings.general.twitch.configuration-title'"></h2>
 				<div class="settings-group">
 					<preference-numeric-input
-						[label]="'settings.general.twitch.delay-label' | owTranslate"
-						[tooltip]="'settings.general.twitch.delay-label-tooltip' | owTranslate"
+						[label]="'settings.general.twitch.delay-label' | fsTranslate"
+						[tooltip]="'settings.general.twitch.delay-label-tooltip' | fsTranslate"
 						[field]="'twitchDelay'"
 						[minValue]="0"
 						[incrementStep]="100"
@@ -97,12 +96,12 @@ import { TWITCH_LOGIN_URL, TwitchAuthService } from '../../../services/mainwindo
 			</section>
 
 			<section>
-				<h2 class="title" [owTranslate]="'settings.general.twitch.other-options-title'"></h2>
+				<h2 class="title" [fsTranslate]="'settings.general.twitch.other-options-title'"></h2>
 				<div class="settings-group">
 					<preference-toggle
 						field="appearOnLiveStreams"
-						[label]="'settings.general.twitch.appear-on-live-streams-label' | owTranslate"
-						[tooltip]="'settings.general.twitch.appear-on-live-streams-tooltip' | owTranslate"
+						[label]="'settings.general.twitch.appear-on-live-streams-label' | fsTranslate"
+						[tooltip]="'settings.general.twitch.appear-on-live-streams-tooltip' | fsTranslate"
 					></preference-toggle>
 				</div>
 			</section>
@@ -117,7 +116,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 	twitchLoginUrl: string = TWITCH_LOGIN_URL;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly twitch: TwitchAuthService,
@@ -132,7 +131,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 		this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => (!prefs.twitchLoginName ? null : prefs.twitchAccessToken)))
 			.subscribe(async (token) => {
-				this.twitchedLoggedIn = !!token ? await this.twitch.isLoggedIn() : null;
+				this.twitchedLoggedIn = !!token ? await this.twitch.isLoggedIn() : false;
 				this.cdr?.detectChanges();
 			});
 
@@ -156,5 +155,6 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 			event.preventDefault();
 			return false;
 		}
+		return true;
 	}
 }

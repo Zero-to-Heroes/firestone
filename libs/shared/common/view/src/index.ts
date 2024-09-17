@@ -9,6 +9,8 @@ export * from './lib/components/dropdown/preference-dropdown.component';
 export * from './lib/components/dropdown/preference-ynlimited-dropdown.component';
 export * from './lib/components/input/checkbox.component';
 export * from './lib/components/input/numeric-input-with-arrows.component';
+export * from './lib/components/input/numeric-input.component';
+export * from './lib/components/input/preference-numeric-input.component';
 export * from './lib/components/input/text-input.component';
 export * from './lib/components/misc/progress-bar.component';
 export * from './lib/components/misc/scrollable.directive';

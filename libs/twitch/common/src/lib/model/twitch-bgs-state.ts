@@ -40,13 +40,13 @@ export interface TwitchBgsPlayer {
 	readonly isMainPlayer: boolean;
 	readonly tavernUpgradeHistory: readonly BgsTavernUpgrade[];
 	readonly tripleHistory: readonly BgsTriple[];
-	readonly lastBoard: TwitchBgsBoard;
+	readonly lastBoard: TwitchBgsBoard | null;
 	readonly initialHealth: number;
 	readonly damageTaken: number;
 	readonly leaderboardPlace: number;
 	readonly currentWinStreak: number;
-	readonly lastKnownComposition: BgsComposition;
-	readonly lastKnownBattleHistory: BgsBattleHistory;
+	readonly lastKnownComposition: BgsComposition | null;
+	readonly lastKnownBattleHistory: BgsBattleHistory | null;
 	readonly questRewards: readonly QuestReward[];
 	readonly buddyTurns: readonly number[];
 	readonly lesserTrinket: string;

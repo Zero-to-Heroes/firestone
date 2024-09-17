@@ -9,6 +9,7 @@ import { generalLocalizationSettings } from './general-settings-localization';
 import { generalLotterySettings } from './general-settings-lottery';
 import { generalNotificationsSettings } from './general-settings-notifications';
 import { generalThirdPartiesSettings } from './general-settings-third-parties';
+import { generalTwitchSettings } from './general-settings-twitch';
 
 export const generalSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -26,6 +27,7 @@ export const generalSettings = (context: SettingContext): SettingNode => {
 			generalLotterySettings(context),
 			generalBugSettings(context),
 			generalThirdPartiesSettings(context),
+			generalTwitchSettings(context),
 		],
 	};
 };

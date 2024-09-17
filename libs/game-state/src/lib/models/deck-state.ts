@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -50,8 +51,8 @@ export class DeckState {
 	readonly sideboards?: readonly DeckSideboard[];
 	readonly name?: string;
 	readonly hero?: HeroCard;
-	readonly heroPower: DeckCard;
-	readonly weapon: DeckCard;
+	readonly heroPower: DeckCard | null;
+	readonly weapon: DeckCard | null;
 	readonly deckList: readonly DeckCard[] = [];
 	readonly archetypeId: number | null;
 	readonly cardsInStartingHand: readonly DeckCard[] = [];
@@ -358,7 +359,7 @@ export class DeckState {
 			.map((card) => card?.cardId)
 			.filter((cardId) => !!cardId)
 			.concat(this.getCardsInSideboards())
-			.map((card) => allCards.getCard(card))
+			.map((card) => allCards.getCard(card!))
 			.some((card) => card.mechanics?.some((mec) => mechanics.includes(GameTag[mec])));
 	}
 
