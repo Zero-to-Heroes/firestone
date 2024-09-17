@@ -174,7 +174,7 @@
 			"SettingsOverlayWindow": {
 				"file": "Files/index.html",
 				"transparent": true,
-				"resizable": false,
+				"resizable": true,
 				"show_in_taskbar": true,
 				"size": {
 					"width": 780,
@@ -189,14 +189,14 @@
 					"height": 620
 				},
 				"max_size": {
-					"width": 780,
-					"height": 620
+					"width": 1080,
+					"height": 1000
 				}
 			},
 			"SettingsWindow": {
 				"file": "Files/index.html",
 				"transparent": true,
-				"resizable": false,
+				"resizable": true,
 				"show_in_taskbar": true,
 				"native_window": true,
 				"use_os_windowing": true,
@@ -216,8 +216,8 @@
 					"height": 620
 				},
 				"max_size": {
-					"width": 780,
-					"height": 620
+					"width": 1080,
+					"height": 1000
 				}
 			},
 			"BattlegroundsOverlayWindow": {

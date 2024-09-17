@@ -20,7 +20,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 	template: `
 		<ng-container *ngIf="!useNewSettings">
 			<ng-container *ngIf="initReady">
-				<window-wrapper [activeTheme]="'general'">
+				<window-wrapper [activeTheme]="'general'" [allowResize]="true">
 					<section class="title-bar">
 						<div class="title" [owTranslate]="'settings.title'"></div>
 						<div class="controls">
@@ -60,7 +60,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 			</ng-container>
 		</ng-container>
 		<ng-container *ngIf="useNewSettings">
-			<window-wrapper [activeTheme]="'general'">
+			<window-wrapper [activeTheme]="'general'" [allowResize]="true">
 				<settings-root></settings-root>
 			</window-wrapper>
 		</ng-container>
