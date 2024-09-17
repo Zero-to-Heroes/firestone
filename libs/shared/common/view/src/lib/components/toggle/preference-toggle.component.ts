@@ -32,7 +32,7 @@ import { Subscription } from 'rxjs';
 				(change)="toggleValue()"
 			/>
 			<label class="toggle" for="a-01-{{ uniqueId }}-{{ field }}" [ngClass]="{ enabled: value }">
-				<p class="settings-p">
+				<p class="settings-p" *ngIf="!!label">
 					{{ label }}
 					<i class="info" *ngIf="tooltip" [helpTooltip]="tooltip">
 						<svg>
@@ -59,7 +59,7 @@ import { Subscription } from 'rxjs';
 })
 export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() field: string;
-	@Input() label: string;
+	@Input() label: string | null;
 	@Input() tooltip: string | null;
 	@Input() tooltipPosition = 'right';
 	@Input() messageWhenToggleValue: string | undefined;

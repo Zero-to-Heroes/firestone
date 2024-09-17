@@ -9,3 +9,21 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 		children: [generalSettings(context)],
 	};
 };
+
+export const findNode = (node: SettingNode, id: string | undefined): SettingNode | null => {
+	if (!id) {
+		return null;
+	}
+	if (node.id === id) {
+		return node;
+	}
+	if (node.children) {
+		for (const child of node.children) {
+			const result = findNode(child, id);
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return null;
+};

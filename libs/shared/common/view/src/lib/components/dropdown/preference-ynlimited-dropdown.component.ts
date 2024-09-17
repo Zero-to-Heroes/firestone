@@ -9,17 +9,13 @@ import {
 } from '@angular/core';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
 	selector: 'preference-ynlimited',
-	styleUrls: [
-		`../../../css/component/settings/preference-dropdown.component.scss`,
-		`../../../css/component/settings/preference-ynlimited-dropdown.component.scss`,
-	],
+	styleUrls: [`./preference-dropdown.component.scss`, `./preference-ynlimited-dropdown.component.scss`],
 	template: `
 		<label class="label">
 			{{ label }}
@@ -62,9 +58,9 @@ export class PreferenceYNLimitedComponent extends AbstractSubscriptionComponent 
 	];
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}

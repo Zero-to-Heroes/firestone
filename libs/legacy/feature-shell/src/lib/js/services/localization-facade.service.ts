@@ -17,7 +17,7 @@ export class LocalizationFacadeService implements ILocalizationService {
 	}
 
 	public async setLocale(locale: string) {
-		this.service.setLocale(locale);
+		await this.service.setLocale(locale);
 	}
 
 	public get locale() {

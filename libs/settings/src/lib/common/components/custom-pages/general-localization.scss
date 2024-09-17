@@ -1,0 +1,5 @@
+.current-page.general-localization {
+	::ng-deep ng-select select-dropdown > div .options {
+		max-height: 200px;
+	}
+}

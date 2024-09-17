@@ -19,6 +19,13 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		return this.translate;
 	}
 
+	public async setLocale(locale: string) {
+		console.log('setting locale', locale);
+		this.locale = locale;
+		await this.translate.use(locale).toPromise();
+		await this.allCards.setLocale(locale);
+	}
+
 	public formatCurrentLocale(): string {
 		switch (this.locale) {
 			case 'deDE':
@@ -52,13 +59,6 @@ export class LocalizationStandaloneService implements ILocalizationService {
 			default:
 				return 'en-US';
 		}
-	}
-
-	public async setLocale(locale: string) {
-		console.log('setting locale', locale);
-		this.locale = locale;
-		await this.translate.use(locale).toPromise();
-		await this.allCards.setLocale(locale);
 	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null {

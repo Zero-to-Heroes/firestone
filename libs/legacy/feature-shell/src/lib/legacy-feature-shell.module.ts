@@ -554,7 +554,6 @@ import { SettingsArenaComponent } from '@components/settings/arena/settings-aren
 import { SettingsBattlegroundsLeaderboardComponent } from '@components/settings/battlegrounds/settings-battlegrounds-leaderboard.component';
 import { SettingsDecktrackerMulliganComponent } from '@components/settings/decktracker/settings-decktracker-mulligan.componen';
 import { SettingsDiscordComponent } from '@components/settings/general/settings-discord.component';
-import { PreferenceYNLimitedComponent } from '@components/settings/preference-ynlimited-dropdown.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -691,7 +690,6 @@ import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overla
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
 import { DropdownComponent } from './js/components/settings/dropdown.component';
 import { NumericInputComponent } from './js/components/settings/numeric-input.component';
-import { PreferenceDropdownComponent } from './js/components/settings/preference-dropdown.component';
 import { PreferenceNumericInputComponent } from './js/components/settings/preference-numeric-input.component';
 import { ClipboardShareButtonComponent } from './js/components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from './js/components/sharing/reddit/reddit-share-button.component';
@@ -968,8 +966,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceNumericInputComponent,
 		DropdownComponent,
 		NumericInputComponent,
-		PreferenceDropdownComponent,
-		PreferenceYNLimitedComponent,
 
 		FilterComponent,
 		SafeHtmlPipe,

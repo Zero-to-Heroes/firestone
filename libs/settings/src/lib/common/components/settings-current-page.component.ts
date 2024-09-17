@@ -8,9 +8,13 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 
 @Component({
 	selector: 'settings-current-page',
-	styleUrls: [`../../settings-common.component.scss`, `./settings-current-page.component.scss`],
+	styleUrls: [
+		`../../settings-common.component.scss`,
+		`./settings-current-page.component.scss`,
+		`./custom-pages/general-localization.scss`,
+	],
 	template: `
-		<div class="current-page" *ngIf="node$ | async as node">
+		<div class="current-page {{ node.cssClass }}" *ngIf="node$ | async as node">
 			<div class="page-title">{{ node.name }}</div>
 			<section class="section" *ngFor="let section of node.sections">
 				<ng-container *ngIf="isSection(section)">

@@ -17,7 +17,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { settingsDefinition } from '../models/settings-tree/settings-definition';
+import { findNode, settingsDefinition } from '../models/settings-tree/settings-definition';
 import { SettingContext, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
@@ -69,6 +69,16 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			adService: this.adService,
 		};
 		this.rootNode = settingsDefinition(context);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)).subscribe((locale) => {
+			const selectedNodeId = this.controller.selectedNode$$.value?.id;
+			this.rootNode = settingsDefinition(context);
+			const newSelectedNode = findNode(this.rootNode, selectedNodeId);
+			this.controller.selectedNode$$.next(newSelectedNode);
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+
 		if (!this.controller.selectedNode$$.value) {
 			this.controller.selectedNode$$.next(this.rootNode.children![0].children![0]);
 		}

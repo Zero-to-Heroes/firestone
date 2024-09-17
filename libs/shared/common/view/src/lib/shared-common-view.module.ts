@@ -15,6 +15,8 @@ import { CopyDesckstringComponent } from './components/deck/copy-deckstring.comp
 import { DeckListBasicComponent } from './components/deck/deck-list-basic.component';
 import { FilterDropdownMultiselectComponent } from './components/dropdown/filter-dropdown-multiselect.component';
 import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
+import { PreferenceDropdownComponent } from './components/dropdown/preference-dropdown.component';
+import { PreferenceYNLimitedComponent } from './components/dropdown/preference-ynlimited-dropdown.component';
 import { CheckboxComponent } from './components/input/checkbox.component';
 import { NumericInputWithArrowsComponent } from './components/input/numeric-input-with-arrows.component';
 import { TextInputComponent } from './components/input/text-input.component';
@@ -48,6 +50,8 @@ const components = [
 
 	FilterDropdownComponent,
 	FilterDropdownMultiselectComponent,
+	PreferenceDropdownComponent,
+	PreferenceYNLimitedComponent,
 
 	NumericInputWithArrowsComponent,
 	TextInputComponent,

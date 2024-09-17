@@ -14,6 +14,7 @@ export interface SettingContext {
 export interface SettingNode {
 	readonly id: string;
 	readonly name: string;
+	readonly cssClass?: string;
 	readonly keywords: readonly string[] | null;
 	readonly children: readonly SettingNode[] | null;
 	readonly sections?: readonly (Section | SectionReference)[];
@@ -47,7 +48,7 @@ export interface SettingButton {
 export interface Setting {
 	readonly type: 'toggle' | 'dropdown' | 'slider' | 'text-input';
 	readonly field: keyof Preferences;
-	readonly label: string;
+	readonly label: string | null;
 	readonly tooltip: string | null;
 	// E.g. if a setting can only be activated when the parent is on, and we want to display them as indented below them
 	// readonly childSettings?: readonly Setting[];
@@ -70,6 +71,7 @@ export interface ToggleConfig {
 
 export interface DropdownConfig {
 	readonly options: readonly DropdownOption[];
+	readonly afterSelection?: (newValue: string) => void;
 	readonly isYesNoLimited?: boolean;
 }
 export interface DropdownOption {

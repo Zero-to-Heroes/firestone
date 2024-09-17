@@ -5,6 +5,8 @@ export * from './lib/components/deck/copy-deckstring.component';
 export * from './lib/components/deck/deck-list-basic.component';
 export * from './lib/components/dropdown/filter-dropdown-multiselect.component';
 export * from './lib/components/dropdown/filter-dropdown.component';
+export * from './lib/components/dropdown/preference-dropdown.component';
+export * from './lib/components/dropdown/preference-ynlimited-dropdown.component';
 export * from './lib/components/input/checkbox.component';
 export * from './lib/components/input/numeric-input-with-arrows.component';
 export * from './lib/components/input/text-input.component';

@@ -18,7 +18,7 @@ import { IOption } from 'ng-select';
 		<ng-select
 			*ngIf="_visible"
 			class="filter hero-sort-filter"
-			[options]="options"
+			[options]="_options"
 			[ngModel]="_filter"
 			[placeholder]="placeholder"
 			(selected)="select($event)"
@@ -52,7 +52,9 @@ export class FilterDropdownComponent implements AfterViewInit {
 	// eslint-disable-next-line @angular-eslint/no-output-on-prefix
 	@Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
 
-	@Input() options: IOptionWithImage[] | null;
+	@Input() set options(value: readonly IOptionWithImage[] | null) {
+		this._options = !!value ? [...value] : [];
+	}
 	@Input() placeholder: string;
 
 	@Input() set filter(value: string) {
@@ -72,6 +74,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 		}
 	}
 
+	_options: IOptionWithImage[];
 	_visible: boolean;
 	_filter: string;
 

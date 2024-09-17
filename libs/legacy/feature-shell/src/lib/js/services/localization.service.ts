@@ -66,7 +66,8 @@ export class LocalizationService {
 		return this._locale;
 	}
 
-	public setLocale(locale: string) {
+	public async setLocale(locale: string) {
+		await this.translate.use(locale).toPromise();
 		this._locale = locale;
 	}
 

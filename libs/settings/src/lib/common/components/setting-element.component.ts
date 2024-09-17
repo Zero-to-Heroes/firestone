@@ -20,6 +20,18 @@ import { Setting } from '../models/settings.types';
 				[valueToDisplayMessageOn]="_setting.toggleConfig?.valueToDisplayMessageOn"
 				[toggleFunction]="_setting.toggleConfig?.toggleFunction"
 			></preference-toggle>
+			<preferences-dropdown
+				*ngSwitchCase="'dropdown'"
+				[ngClass]="{ disabled: disabled }"
+				[options]="_setting.dropdownConfig!.options"
+				[field]="_setting.field"
+				[label]="_setting.label"
+				[tooltip]="_setting.tooltip"
+				[afterSelection]="_setting.dropdownConfig!.afterSelection"
+				[advancedSetting]="_setting.advancedSetting"
+				premiumSetting
+				[premiumSettingEnabled]="_setting.premiumSetting"
+			></preferences-dropdown>
 			<div class="slider-container" *ngSwitchCase="'slider'">
 				<div class="label">
 					<div class="setting-text" [innerHTML]="_setting.label"></div>
