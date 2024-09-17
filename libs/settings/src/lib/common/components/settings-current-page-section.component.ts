@@ -11,7 +11,11 @@ import { Section, Setting, SettingButton } from '../models/settings.types';
 		<div class="section">
 			<div class="title" *ngIf="title$ | async as title">{{ title }}</div>
 			<div class="settings-group" [ngClass]="{ disabled: disabled$ | async }">
-				<div class="section-text" *ngFor="let text of texts$ | async" [innerHTML]="text"></div>
+				<div
+					class="section-text"
+					*ngFor="let text of texts$ | async"
+					[innerHTML]="isString(text) ? text : (text | async)"
+				></div>
 				<ng-container *ngFor="let setting of settings$ | async">
 					<ng-container *ngIf="isStandardSetting(setting)">
 						<setting-element [setting]="setting"> </setting-element>
@@ -27,7 +31,7 @@ import { Section, Setting, SettingButton } from '../models/settings.types';
 })
 export class SettingsCurrentPageSectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	title$: Observable<string | null>;
-	texts$: Observable<readonly string[] | null>;
+	texts$: Observable<readonly (string | Observable<string>)[] | null>;
 	settings$: Observable<readonly (Setting | SettingButton)[] | null>;
 	disabled$: Observable<boolean | undefined>;
 
@@ -58,5 +62,9 @@ export class SettingsCurrentPageSectionComponent extends AbstractSubscriptionCom
 
 	isSettingButton(setting: Setting | SettingButton): setting is SettingButton {
 		return (setting as SettingButton).action !== undefined;
+	}
+
+	isString(value: any): value is string {
+		return typeof value === 'string';
 	}
 }

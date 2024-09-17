@@ -1,17 +1,18 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import {
-	Replay,
 	extractTotalDuration,
 	extractTotalTurns,
 	parseHsReplayString,
+	Replay,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
-import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
+import { extractPlayerInfoFromDeckstring, GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { BehaviorSubject } from 'rxjs';
+
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
@@ -24,7 +25,6 @@ import {
 	MercenariesReferenceDataService,
 } from '../../mercenaries/mercenaries-reference-data.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { extractPlayerInfoFromDeckstring } from './game-stats-loader.service';
 
 @Injectable()
 export class GameStatsUpdaterService {

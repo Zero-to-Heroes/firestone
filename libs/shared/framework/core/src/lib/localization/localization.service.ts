@@ -7,7 +7,7 @@ export abstract class ILocalizationService {
 	abstract get locale(): string;
 	abstract getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
 	abstract getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
-	abstract getCardName(cardId: string, defaultName: string): string | null;
+	abstract getCardName(cardId: string, defaultName?: string): string | null;
 	abstract getCreatedByCardName(creatorCardId: string): string | null;
 	abstract getUnknownCardName(playerClass: string | null): string | null;
 	abstract getUnknownManaSpellName(manaCost: number): string | null;

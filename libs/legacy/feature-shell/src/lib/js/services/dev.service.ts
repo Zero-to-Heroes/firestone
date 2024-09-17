@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
 import { CardIds, ReferenceCard, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -14,7 +14,6 @@ import { ChallengeBuilderService } from './achievement/achievements/challenges/c
 import { RawAchievementsLoaderService } from './achievement/data/raw-achievements-loader.service';
 import { CardNotificationsService } from './collection/card-notifications.service';
 import { SetsService } from './collection/sets-service.service';
-import { DeckHandlerService } from './decktracker/deck-handler.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';

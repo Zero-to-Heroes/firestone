@@ -755,7 +755,6 @@ import { CardsHighlightService } from './js/services/decktracker/card-highlight/
 import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
-import { DeckHandlerService } from './js/services/decktracker/deck-handler.service';
 import { DeckParserService } from './js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
 import { DeckManipulationHelper } from './js/services/decktracker/event-parser/deck-manipulation-helper';
@@ -827,7 +826,6 @@ import { ReplaysNotificationService } from './js/services/replays/replays-notifi
 import { ReviewIdService } from './js/services/review-id.service';
 import { RewardMonitorService } from './js/services/rewards/rewards-monitor';
 import { SettingsCommunicationService } from './js/services/settings/settings-communication.service';
-import { GameStatsLoaderService } from './js/services/stats/game/game-stats-loader.service';
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
 import { MatchStatsService } from './js/services/stats/match-stats.service';
@@ -1742,7 +1740,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AchievementsStorageService,
 		AchievementsStateManagerService,
 
-		DeckHandlerService,
 		CollectionManager,
 		SetsManagerService,
 		CollectionStorageService,
@@ -1844,7 +1841,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AiDeckService,
 		SecretConfigService,
 
-		GameStatsLoaderService,
 		GameStatsUpdaterService,
 		GameStatsProviderService,
 		MatchStatsService,

@@ -5,6 +5,7 @@ import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { AppearanceCustomizationPageComponent } from './common/components/custom-pages/appearance-customization.component';
 import { SettingButtonComponent } from './common/components/setting-button.component';
@@ -46,6 +47,7 @@ const components = [
 		SharedFrameworkCoreModule,
 		SharedCommonServiceModule,
 		SharedCommonViewModule,
+		StatsDataAccessModule,
 	],
 	providers: [BootstrapSettingsService, CustomAppearanceService, SettingsControllerService],
 	declarations: components,

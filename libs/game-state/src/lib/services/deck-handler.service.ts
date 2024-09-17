@@ -1,14 +1,20 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { decode, encode, Sideboard } from '@firestone-hs/deckstrings';
-import { Board, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckSideboard } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
-import { LocalizationFacadeService } from '../localization-facade.service';
+import {
+	Board,
+	CardIds,
+	getDefaultHeroDbfIdForClass,
+	normalizeDeckHeroDbfId,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../models/deck-card';
+import { DeckSideboard } from '../models/deck-state';
 
 @Injectable()
 export class DeckHandlerService {
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 
 	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
 		if (!deckstring) {
@@ -16,7 +22,7 @@ export class DeckHandlerService {
 		}
 
 		const deck = decode(deckstring);
-		const sideboards: readonly DeckSideboard[] = this.convertSideboards(deck.sideboards);
+		const sideboards: readonly DeckSideboard[] = this.convertSideboards(deck.sideboards ?? []);
 		return deck
 			? deck.cards
 					// [dbfid, count] pair
@@ -57,13 +63,13 @@ export class DeckHandlerService {
 		return result;
 	}
 
-	public buildSideboards(deckstring: string): readonly DeckSideboard[] {
+	public buildSideboards(deckstring: string): readonly DeckSideboard[] | null {
 		if (!deckstring?.length) {
 			return null;
 		}
 
 		try {
-			return this.convertSideboards(decode(deckstring)?.sideboards);
+			return this.convertSideboards(decode(deckstring)?.sideboards ?? []);
 		} catch (e) {
 			console.error('could not convert sideboards', deckstring);
 			return [];
@@ -97,7 +103,7 @@ export class DeckHandlerService {
 		let newCost = deckCard.manaCost;
 		if (newCard.id === CardIds.ZilliaxDeluxe3000_TOY_330) {
 			const modules = deckCard.relatedCardIds?.map((c) => this.allCards.getCard(c)) ?? [];
-			newCost = modules.map((c) => c.cost).reduce((a, b) => a + b, 0);
+			newCost = modules.map((c) => c.cost).reduce((a, b) => (a ?? 0) + (b ?? 0), 0)!;
 			// The card ID only changes based on the skin
 			newCardId = modules[2]?.id ?? newCardId;
 		}
@@ -108,10 +114,13 @@ export class DeckHandlerService {
 		} as DeckCard);
 	}
 
+	/** @deprecated: use allCards.normalizeDeckstring() */
 	public normalizeDeckstring(deckstring: string): string {
 		try {
 			const deck = decode(deckstring);
-			deck.heroes = deck.heroes?.map((heroDbfId) => normalizeDeckHeroDbfId(heroDbfId, this.allCards) ?? 7);
+			deck.heroes = deck.heroes?.map(
+				(heroDbfId) => normalizeDeckHeroDbfId(heroDbfId, this.allCards.getService()) ?? 7,
+			);
 			const newDeckstring = encode(deck);
 			return newDeckstring;
 		} catch (e) {
@@ -198,21 +207,24 @@ export class DeckHandlerService {
 		}
 	}
 
-	public normalizeHero(heroDbfId: number, heroCardId?: string): number {
-		let card: ReferenceCard;
+	public normalizeHero(heroDbfId: number, heroCardId?: string): number | null {
+		let card: ReferenceCard | null = null;
 
 		if (heroDbfId) {
 			card = this.allCards.getCardFromDbfId(+heroDbfId);
 		}
 
-		if (!card || !card.id) {
+		if (heroCardId && (!card || !card.id)) {
 			card = this.allCards.getCard(heroCardId);
 			if (!card || !card.id) {
 				return heroDbfId;
 			}
 		}
 
-		const playerClass: string = this.allCards.getCard(card.id)?.playerClass;
-		return getDefaultHeroDbfIdForClass(playerClass);
+		if (card) {
+			const playerClass: string = this.allCards.getCard(card.id)?.playerClass;
+			return getDefaultHeroDbfIdForClass(playerClass);
+		}
+		return null;
 	}
 }

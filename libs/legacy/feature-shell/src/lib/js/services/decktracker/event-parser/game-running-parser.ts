@@ -1,6 +1,5 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckHandlerService } from '../deck-handler.service';
 import { EventParser } from './event-parser';
 
 export class GameRunningParser implements EventParser {

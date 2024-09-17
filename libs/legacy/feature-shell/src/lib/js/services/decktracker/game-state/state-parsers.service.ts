@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DeckHandlerService } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -8,7 +9,6 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
-import { DeckHandlerService } from '../deck-handler.service';
 import { DeckParserService } from '../deck-parser.service';
 import { AnomalyRevealedParser } from '../event-parser/anomaly-revealed-parser';
 import {

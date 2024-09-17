@@ -181,6 +181,7 @@ export const updateFirstElementWithoutProp = <T>(
 	return replaceInArray(array, indexWithoutProperty, base as T);
 };
 
+/** deprecated use decodeBase64 */
 export const decode = (input: string): string => {
 	const fromBase64 = Buffer.from(input, 'base64').toString();
 	const inflated = inflate(fromBase64, { to: 'string' });

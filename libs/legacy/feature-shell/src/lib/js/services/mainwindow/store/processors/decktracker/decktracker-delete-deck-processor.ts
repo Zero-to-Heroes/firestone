@@ -1,8 +1,9 @@
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { DecktrackerDeleteDeckEvent } from '../../events/decktracker/decktracker-delete-deck-event';
 import { Processor } from '../processor';
 

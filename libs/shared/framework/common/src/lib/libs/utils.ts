@@ -1,4 +1,5 @@
 import equal from 'deep-equal';
+import { inflate } from 'pako';
 
 export const groupByFunction =
 	<T>(keyExtractor: (obj: T) => string | number) =>
@@ -167,6 +168,12 @@ export const removeFromReadonlyArray = <T>(array: readonly T[], index: number): 
 		ret.splice(index, 1);
 	}
 	return ret;
+};
+
+export const decodeBase64 = (input: string): string => {
+	const fromBase64 = Buffer.from(input, 'base64').toString();
+	const inflated = inflate(fromBase64, { to: 'string' });
+	return JSON.parse(inflated);
 };
 
 export type NonFunctionPropertyNames<T> = {

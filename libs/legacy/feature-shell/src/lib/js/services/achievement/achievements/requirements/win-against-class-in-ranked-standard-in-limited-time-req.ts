@@ -1,6 +1,6 @@
+import { GameStats } from '@firestone/stats/data-access';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
-import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
 import { Requirement } from './_requirement';
 
 export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirement {

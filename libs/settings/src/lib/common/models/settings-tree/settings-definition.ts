@@ -1,6 +1,11 @@
 import { SettingContext, SettingNode } from '../settings.types';
 import { generalSettings } from './general/_general-settings';
 
+/**
+ * TODO
+ * - advanced settings toggle
+ * - refresh for packs and achievements (in the Data section)
+ */
 export const settingsDefinition = (context: SettingContext): SettingNode => {
 	return {
 		id: 'root',

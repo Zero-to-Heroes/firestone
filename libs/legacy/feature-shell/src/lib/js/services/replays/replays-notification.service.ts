@@ -9,12 +9,13 @@ import { XpForGameInfo } from '@firestone/stats/common';
 import { GameStat, buildRankText } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
+
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsShowPostMatchStatsEvent } from '../battlegrounds/store/events/bgs-show-post-match-stats-event';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
-import { GameStatsLoaderService } from '../stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()

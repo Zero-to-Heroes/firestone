@@ -243,6 +243,7 @@ export const getHeroFaction = (card: ReferenceCard): string | undefined => {
 	return card.faction?.toLowerCase();
 };
 
+/** @deprecated */
 export const isMercenaries = (gameType: GameType | string): boolean => {
 	return (
 		gameType === GameType.GT_MERCENARIES_AI_VS_AI ||

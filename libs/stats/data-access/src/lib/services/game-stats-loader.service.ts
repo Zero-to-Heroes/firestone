@@ -1,8 +1,15 @@
+/* eslint-disable no-case-declarations */
 import { Injectable } from '@angular/core';
 import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { getDefaultHeroDbfIdForClass, isMercenaries } from '@firestone-hs/reference-data';
+import {
+	PatchesConfigService,
+	PatchInfo,
+	PreferencesService,
+	StatGameModeType,
+} from '@firestone/shared/common/service';
+import { decodeBase64, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -12,14 +19,9 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { filter } from 'rxjs';
-import { GameStats } from '../../../models/mainwindow/stats/game-stats';
-import { DeckHandlerService } from '../../decktracker/deck-handler.service';
-import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
-import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
-import { decode } from '../../utils';
+import { GameStat } from '../models/game-stat';
+import { GameStats } from '../models/game-stats';
 
 const GAME_STATS_ENDPOINT = 'https://lq32rsf3wgmmjxihavjplf5jfq0ntetn.lambda-url.us-west-2.on.aws/';
 
@@ -32,13 +34,11 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private api: ApiRunner;
 	private ow: OverwolfService;
 	private prefs: PreferencesService;
-	private handler: DeckHandlerService;
 	private allCards: CardsFacadeService;
 	private diskCache: DiskCacheService;
-	private store: AppUiStoreService;
 	private patchesConfig: PatchesConfigService;
 
-	constructor(protected readonly windowManager: WindowManagerService) {
+	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
 	}
 
@@ -51,13 +51,10 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.handler = AppInjector.get(DeckHandlerService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
-		this.store = AppInjector.get(AppUiStoreService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
 
-		await this.store.initComplete();
 		await this.patchesConfig.isReady();
 
 		this.gameStats$$.onFirstSubscribe(async () => {
@@ -120,6 +117,10 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	public async clearGames() {
+		await this.mainInstance.clearGamesInternal();
+	}
+
+	private async clearGamesInternal() {
 		console.log('[game-stats-loader] clearing games');
 		await this.saveLocalStats([]);
 		const stats = await this.refreshGameStats(false);
@@ -127,6 +128,10 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	public async fullRefresh() {
+		await this.mainInstance.fullRefreshInternal();
+	}
+
+	private async fullRefreshInternal() {
 		console.log('[game-stats-loader] triggering full refresh');
 		const stats = await this.refreshGameStats(true);
 		this.gameStats$$.next(stats);
@@ -149,14 +154,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		const stats: readonly GameStat[] = endpointResult
 			.map((stat) => {
-				const decoded = (stat as any).finalComp ? decode((stat as any).finalComp) : null;
+				const decoded = (stat as any).finalComp ? decodeBase64((stat as any).finalComp) : null;
 				const postMatchStats: BgsPostMatchStats = decoded == null ? null : ({ boardHistory: [decoded] } as any);
 				let playerInfoFromDeckstring = null;
 				return {
 					...stat,
 					playerDecklist: isMercenaries(stat.gameMode)
 						? stat.playerDecklist
-						: this.handler.normalizeDeckstring(stat.playerDecklist),
+						: this.allCards.normalizeDeckList(stat.playerDecklist),
 					// Because old stats are corrupted
 					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
 					postMatchStats: postMatchStats,

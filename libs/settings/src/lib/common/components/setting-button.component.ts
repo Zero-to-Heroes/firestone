@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { Observable } from 'rxjs';
 import { SettingButton } from '../models/settings.types';
 
 @Component({
@@ -16,7 +17,7 @@ import { SettingButton } from '../models/settings.types';
 				</i>
 			</div>
 			<button (mousedown)="requestAction()">
-				<span>{{ currentButtonText }}</span>
+				<span>{{ isString(currentButtonText) ? currentButtonText : (currentButtonText | async) }}</span>
 			</button>
 		</div>
 	`,
@@ -32,16 +33,16 @@ export class SettingButtonComponent {
 
 	_setting: SettingButton;
 	disabled: boolean | undefined;
-	currentButtonText: string;
+	currentButtonText: string | Observable<string>;
 
-	private defaultButtonText: string;
+	private defaultButtonText: string | Observable<string>;
 	private confirmationShown: boolean;
 
 	constructor(private readonly prefs: PreferencesService) {}
 
-	requestAction() {
+	async requestAction() {
 		if (!this._setting.confirmation) {
-			this._setting.action();
+			await this._setting.action();
 			return;
 		}
 
@@ -53,7 +54,11 @@ export class SettingButtonComponent {
 
 		this.currentButtonText = this.defaultButtonText;
 		this.confirmationShown = false;
-		this._setting.action();
+		await this._setting.action();
+	}
+
+	isString(value: any): value is string {
+		return typeof value === 'string';
 	}
 
 	private async updateInfo() {

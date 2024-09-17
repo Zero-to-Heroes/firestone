@@ -11,6 +11,15 @@ preference-toggle ::ng-deep .preference-toggle .toggle .settings-p {
 	font-size: 1em;
 }
 
+preferences-dropdown {
+	display: flex;
+
+	::ng-deep .label {
+		width: 300px;
+		margin-right: 15px;
+	}
+}
+
 .slider-container {
 	display: flex;
 

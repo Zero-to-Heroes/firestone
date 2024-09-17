@@ -3,10 +3,9 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { IGameStatsProviderService } from '@firestone/stats/common';
-import { GameStat } from '@firestone/stats/data-access';
+import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { GameStatsLoaderService } from './game-stats-loader.service';
 
 @Injectable()
 export class GameStatsProviderService

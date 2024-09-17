@@ -12,11 +12,13 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
+	DiskCacheService,
 	IAdsService,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { findNode, settingsDefinition } from '../models/settings-tree/settings-definition';
 import { SettingContext, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
@@ -53,13 +55,16 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly analytics: AnalyticsService,
 		private readonly ow: OverwolfService,
 		private readonly controller: SettingsControllerService,
+		private readonly diskCache: DiskCacheService,
+		private readonly gamesLoader: GameStatsLoaderService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.adService, this.controller);
+		await waitForReady(this.prefs, this.adService, this.controller, this.gamesLoader);
+		console.debug('gamesLoader', this.gamesLoader);
 
 		const context: SettingContext = {
 			prefs: this.prefs,
@@ -67,6 +72,10 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			ow: this.ow,
 			i18n: this.i18n,
 			adService: this.adService,
+			services: {
+				diskCache: this.diskCache,
+				gamesLoader: this.gamesLoader,
+			},
 		};
 		this.rootNode = settingsDefinition(context);
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)).subscribe((locale) => {

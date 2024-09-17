@@ -5,12 +5,13 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
+
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
-import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
 import { Processor } from '../processor';
 

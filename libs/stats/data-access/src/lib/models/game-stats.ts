@@ -1,6 +1,6 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameStat } from '@firestone/stats/data-access';
-import { NonFunctionProperties } from '../../../services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { GameStat } from './game-stat';
 
 export class GameStats {
 	// Ordered from newest (index 0) to oldest

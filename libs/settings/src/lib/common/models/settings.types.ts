@@ -1,6 +1,13 @@
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
-import { AnalyticsService, IAdsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	AnalyticsService,
+	DiskCacheService,
+	IAdsService,
+	ILocalizationService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { Observable } from 'rxjs';
 
 export interface SettingContext {
@@ -9,6 +16,10 @@ export interface SettingContext {
 	readonly ow: OverwolfService;
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
+	readonly services: {
+		readonly diskCache: DiskCacheService;
+		readonly gamesLoader: GameStatsLoaderService;
+	};
 }
 
 export interface SettingNode {
@@ -29,7 +40,7 @@ export type SettingsSectionReferenceType = 'AppearanceCustomizationPageComponent
 export interface Section {
 	readonly id: string;
 	readonly title: string;
-	readonly texts?: readonly string[]; // Raw HTML
+	readonly texts?: readonly (string | Observable<string>)[]; // Raw HTML
 	readonly settings?: readonly (Setting | SettingButton)[];
 	readonly disabled$?: () => Observable<boolean>;
 	// TODO: how to handle the buttons that let you reset the widget positions?
@@ -39,9 +50,9 @@ export interface Section {
 
 export interface SettingButton {
 	readonly label?: string;
-	readonly text: string;
+	readonly text: string | Observable<string>;
 	readonly tooltip: string | null;
-	readonly action: () => void;
+	readonly action: () => void | PromiseLike<void>;
 	readonly confirmation?: string;
 }
 

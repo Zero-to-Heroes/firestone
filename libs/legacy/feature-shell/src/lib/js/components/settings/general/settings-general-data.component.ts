@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DiskCacheService, waitForReady } from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
@@ -8,7 +9,6 @@ import { AchievementsFullRefreshEvent } from '../../../services/mainwindow/store
 import { CollectionRefreshPacksEvent } from '../../../services/mainwindow/store/events/collection/colection-refresh-packs-event';
 import { GamesFullClearEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-clear-event';
 import { GamesFullRefreshEvent } from '../../../services/mainwindow/store/events/stats/game-stats-full-refresh-event';
-import { GameStatsLoaderService } from '../../../services/stats/game/game-stats-loader.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

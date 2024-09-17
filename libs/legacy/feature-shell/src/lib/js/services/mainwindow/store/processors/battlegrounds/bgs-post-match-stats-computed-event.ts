@@ -1,6 +1,6 @@
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { GameStatsLoaderService } from '../../../../stats/game/game-stats-loader.service';
 import { BgsPostMatchStatsComputedEvent } from '../../events/battlegrounds/bgs-post-match-stats-computed-event';
 import { Processor } from '../processor';
 

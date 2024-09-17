@@ -11,7 +11,7 @@ import {
 	SceneMode,
 	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
-import { Metadata } from '@firestone/game-state';
+import { DeckHandlerService, Metadata } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
@@ -21,7 +21,6 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
-import { DeckHandlerService } from './deck-handler.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.gz.json`;
 const OPEN_BRAWL_LISTS_URL = `https://static.zerotoheroes.com/hearthstone/data/brawl_lists`;
