@@ -117,7 +117,7 @@
 .controls {
 	display: flex;
 	align-items: flex-end;
-	justify-content: start;
+	justify-content: flex-start;
 
 	.trinket-strategy {
 		color: var(--default-title-color);

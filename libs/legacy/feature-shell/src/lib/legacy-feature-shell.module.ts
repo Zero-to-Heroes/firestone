@@ -387,7 +387,6 @@ import { SettingsDecktrackerTurnTimerComponent } from './js/components/settings/
 import { SettingsDecktrackerYourDeckComponent } from './js/components/settings/decktracker/settings-decktracker-your-deck';
 import { SettingsDecktrackerComponent } from './js/components/settings/decktracker/settings-decktracker.component';
 import { LocalizationDropdownComponent } from './js/components/settings/general/localization-dropdown.component';
-import { SettingsGeneralBugReportComponent } from './js/components/settings/general/settings-general-bug-report.component';
 import { SettingsGeneralDataComponent } from './js/components/settings/general/settings-general-data.component';
 import { SettingsGeneralLaunchComponent } from './js/components/settings/general/settings-general-launch.component';
 import { SettingsGeneralLocalizationComponent } from './js/components/settings/general/settings-general-localization.component';
@@ -716,7 +715,6 @@ import { OwTranslatePipe } from './js/directives/ow-translate.pipe';
 import { PulseDirective } from './js/directives/pulse.directive';
 import { RippleOnClickDirective } from './js/directives/ripple-on-click.directive';
 import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over.directive';
-import { SafeHtmlPipe } from './js/pipes/safe-html.pipe';
 import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
 import { AchievementHistoryService } from './js/services/achievement/achievements-history.service';
 import { AchievementsLiveProgressTrackingService } from './js/services/achievement/achievements-live-progress-tracking.service';
@@ -966,7 +964,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		NumericInputComponent,
 
 		FilterComponent,
-		SafeHtmlPipe,
 		OwTranslatePipe,
 
 		SocialSharesComponent,
@@ -1066,7 +1063,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OwTranslateDirective,
 
 		FilterComponent,
-		SafeHtmlPipe,
 		OwTranslatePipe,
 
 		SocialSharesComponent,
@@ -1643,7 +1639,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralPremiumComponent,
 		SettingsGeneralLotteryComponent,
 		SettingsGeneralLocalizationComponent,
-		SettingsGeneralBugReportComponent,
 		SettingsGeneralThirdPartyComponent,
 		SettingsGeneralDataComponent,
 		SettingsGeneralQuestsComponent,

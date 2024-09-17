@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SectionReference, SettingsSectionReferenceType } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 import { AppearanceCustomizationPageComponent } from './custom-pages/appearance-customization.component';
+import { SettingsGeneralBugReportComponent } from './custom-pages/settings-general-bug-report.component';
 
 @Component({
 	selector: 'settings-current-page-section-reference',
@@ -32,6 +33,7 @@ export class SettingsCurrentPageSectionReferenceComponent
 	// directly when building the object doesn't work
 	private componentMaps: Record<SettingsSectionReferenceType, ComponentType<any>> = {
 		AppearanceCustomizationPageComponent: AppearanceCustomizationPageComponent,
+		SettingsGeneralBugReportComponent: SettingsGeneralBugReportComponent,
 	};
 
 	private section$$ = new BehaviorSubject<SectionReference | null>(null);

@@ -1,58 +1,58 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BugReportService, PreferencesService } from '@firestone/shared/common/service';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'settings-general-bug-report',
 	styleUrls: [
-		`../../../../css/global/forms.scss`,
-		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/general/settings-general-bug-report.component.scss`,
+		`../../../../../../legacy/feature-shell/src/lib/css/global/forms.scss`,
+		`../../../../../../legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`./settings-general-bug-report.component.scss`,
 	],
 	template: `
 		<div class="general-bug-report">
-			<div class="title" [owTranslate]="'settings.general.bug-report.title'"></div>
+			<div class="title" [fsTranslate]="'settings.general.bug-report.title'"></div>
 			<p class="note">
-				{{ 'settings.general.bug-report.general-bug-text' | owTranslate }}
+				{{ 'settings.general.bug-report.general-bug-text' | fsTranslate }}
 				<a
 					href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting"
 					target="_blank"
 					(mousedown)="preventMiddleClick($event)"
 					(click)="preventMiddleClick($event)"
 					(auxclick)="preventMiddleClick($event)"
-					>{{ 'settings.general.bug-report.link-text' | owTranslate }}</a
+					>{{ 'settings.general.bug-report.link-text' | fsTranslate }}</a
 				>
 			</p>
 			<p class="note">
-				{{ 'settings.general.bug-report.simulator-bug-text' | owTranslate }}
+				{{ 'settings.general.bug-report.simulator-bug-text' | fsTranslate }}
 				<a
 					href="https://github.com/Zero-to-Heroes/firestone/wiki/How-to-report-a-simulator-bug"
 					target="_blank"
 					(mousedown)="preventMiddleClick($event)"
 					(click)="preventMiddleClick($event)"
 					(auxclick)="preventMiddleClick($event)"
-					>{{ 'settings.general.bug-report.link-text' | owTranslate }}</a
+					>{{ 'settings.general.bug-report.link-text' | fsTranslate }}</a
 				>
 			</p>
 			<input
 				class="email form-start"
 				[(ngModel)]="email"
 				(mousedown)="preventDrag($event)"
-				[placeholder]="'settings.general.bug-report.email-placeholder' | owTranslate"
+				[placeholder]="'settings.general.bug-report.email-placeholder' | fsTranslate"
 			/>
 			<textarea
 				class="body"
 				[ngModel]="body"
 				(ngModelChange)="onBodyChange($event)"
 				(mousedown)="preventDrag($event)"
-				[placeholder]="'settings.general.bug-report.message-placeholder' | owTranslate"
+				[placeholder]="'settings.general.bug-report.message-placeholder' | fsTranslate"
 			></textarea>
 			<div class="button-group">
 				<div class="status" *ngIf="status" [innerHTML]="status | safe"></div>
 				<button
 					(mousedown)="submit()"
 					[ngClass]="{ disabled: buttonDisabled || !body }"
-					[owTranslate]="'settings.general.bug-report.send-button'"
+					[fsTranslate]="'settings.general.bug-report.send-button'"
 				></button>
 			</div>
 		</div>
@@ -61,14 +61,14 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 })
 export class SettingsGeneralBugReportComponent implements AfterViewInit {
 	email: string;
-	body: string;
+	body: string | null;
 	status: string;
 	buttonDisabled: boolean;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly bugService: BugReportService,
 	) {}
 
@@ -131,6 +131,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 			event.preventDefault();
 			return false;
 		}
+		return true;
 	}
 
 	private async loadDefaultValues() {

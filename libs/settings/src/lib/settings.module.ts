@@ -8,6 +8,7 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { AppearanceCustomizationPageComponent } from './common/components/custom-pages/appearance-customization.component';
+import { SettingsGeneralBugReportComponent } from './common/components/custom-pages/settings-general-bug-report.component';
 import { SettingButtonComponent } from './common/components/setting-button.component';
 import { SettingElementComponent } from './common/components/setting-element.component';
 import { SettingsCurrentPageSectionReferenceComponent } from './common/components/settings-current-page-section-reference.component';
@@ -30,6 +31,7 @@ const components = [
 	SettingElementComponent,
 	SettingButtonComponent,
 	SettingsGeneralAppearanceComponent,
+	SettingsGeneralBugReportComponent,
 
 	AppearanceCustomizationPageComponent,
 	CustomColorPickerComponent,

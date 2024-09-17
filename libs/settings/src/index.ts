@@ -1,4 +1,5 @@
 export * from './lib/common/components/custom-pages/appearance-customization.component';
+export * from './lib/common/components/custom-pages/settings-general-bug-report.component';
 export * from './lib/common/components/setting-button.component';
 export * from './lib/common/components/setting-element.component';
 export * from './lib/common/components/settings-current-page-section-reference.component';

@@ -2,6 +2,7 @@ import { SettingContext, SettingNode } from '../../settings.types';
 import { generalAccessibilitySettings } from './general-settings-accessibility';
 import { generalAdminSettings } from './general-settings-admin';
 import { generalAppearanceSettings } from './general-settings-appearance';
+import { generalBugSettings } from './general-settings-bug';
 import { generalDataSettings } from './general-settings-data';
 import { generalLaunchSettings } from './general-settings-launch';
 import { generalLocalizationSettings } from './general-settings-localization';
@@ -21,6 +22,7 @@ export const generalSettings = (context: SettingContext): SettingNode => {
 			generalAccessibilitySettings(context),
 			generalAppearanceSettings(context),
 			generalLocalizationSettings(context),
+			generalBugSettings(context),
 			generalLotterySettings(context),
 		],
 	};

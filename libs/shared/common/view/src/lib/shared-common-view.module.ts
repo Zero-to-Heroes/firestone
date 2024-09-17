@@ -34,6 +34,7 @@ import { ComponentTooltipDirective } from './components/tooltip/component-toolti
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
 import { PremiumSettingDirective } from './directives/premium-setting.directive';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 
 const components = [
@@ -71,6 +72,7 @@ const components = [
 	PremiumSettingDirective,
 
 	ShortDatePipe,
+	SafeHtmlPipe,
 ];
 
 @NgModule({
