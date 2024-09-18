@@ -58,6 +58,7 @@ export class EntityUpdateParser implements EventParser {
 					cardInHand.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
+						manaCost: this.allCards.getCard(obfsucatedCardId)?.cost,
 					} as DeckCard),
 					deck,
 					gameEvent,
@@ -71,6 +72,7 @@ export class EntityUpdateParser implements EventParser {
 				? cardInDeck?.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
+						manaCost: this.allCards.getCard(obfsucatedCardId)?.cost,
 				  })
 				: cardInDeck,
 			deck,
@@ -83,6 +85,7 @@ export class EntityUpdateParser implements EventParser {
 				? cardInOther.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
+						manaCost: this.allCards.getCard(obfsucatedCardId)?.cost,
 				  } as DeckCard)
 				: null;
 		// console.debug(
