@@ -12,11 +12,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 
 @Component({
 	selector: 'set-stats',
-	styleUrls: [
-		`../../../css/global/forms.scss`,
-		`../../../css/global/toggle.scss`,
-		`../../../css/component/collection/set-stats.component.scss`,
-	],
+	styleUrls: [`../../../css/global/forms.scss`, `../../../css/global/toggle.scss`, `./set-stats.component.scss`],
 	template: `
 		<div class="set-stats">
 			<div class="top-container">

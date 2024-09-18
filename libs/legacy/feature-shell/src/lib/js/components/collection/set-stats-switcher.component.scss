@@ -2,3 +2,7 @@
 	height: 100%;
 	display: flex;
 }
+
+:host > * {
+	min-width: 0;
+}

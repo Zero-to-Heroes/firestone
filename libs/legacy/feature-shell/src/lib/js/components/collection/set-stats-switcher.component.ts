@@ -12,7 +12,7 @@ import { SetsManagerService } from '../../services/collection/sets-manager.servi
 	styleUrls: [
 		`../../../css/global/forms.scss`,
 		`../../../css/global/toggle.scss`,
-		`../../../css/component/collection/set-stats-switcher.component.scss`,
+		`./set-stats-switcher.component.scss`,
 	],
 	template: `
 		<ng-container [ngSwitch]="setStatsType$ | async">
