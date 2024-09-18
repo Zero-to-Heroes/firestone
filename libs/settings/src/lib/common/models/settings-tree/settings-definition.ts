@@ -5,6 +5,7 @@ import { generalSettings } from './general/_general-settings';
  * TODO
  * - advanced settings toggle
  * - refresh for packs and achievements (in the Data section)
+ * - Mods section (and only show it on beta version)
  */
 export const settingsDefinition = (context: SettingContext): SettingNode => {
 	return {

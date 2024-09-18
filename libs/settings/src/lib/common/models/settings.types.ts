@@ -39,6 +39,7 @@ export type SettingsSectionReferenceType =
 	| 'AppearanceCustomizationPageComponent'
 	| 'SettingsGeneralBugReportComponent'
 	| 'SettingsGeneralThirdPartyComponent'
+	| 'SettingsDiscordComponent'
 	| 'SettingsBroadcastComponent';
 
 export interface Section {

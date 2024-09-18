@@ -8,6 +8,7 @@ import { SectionReference, SettingsSectionReferenceType } from '../models/settin
 import { SettingsControllerService } from '../services/settings-controller.service';
 import { AppearanceCustomizationPageComponent } from './custom-pages/appearance-customization.component';
 import { SettingsBroadcastComponent } from './custom-pages/settings-broadcast';
+import { SettingsDiscordComponent } from './custom-pages/settings-discord.component';
 import { SettingsGeneralBugReportComponent } from './custom-pages/settings-general-bug-report.component';
 import { SettingsGeneralThirdPartyComponent } from './custom-pages/settings-general-third-party.component';
 
@@ -38,6 +39,7 @@ export class SettingsCurrentPageSectionReferenceComponent
 		SettingsGeneralBugReportComponent: SettingsGeneralBugReportComponent,
 		SettingsGeneralThirdPartyComponent: SettingsGeneralThirdPartyComponent,
 		SettingsBroadcastComponent: SettingsBroadcastComponent,
+		SettingsDiscordComponent: SettingsDiscordComponent,
 	};
 
 	private section$$ = new BehaviorSubject<SectionReference | null>(null);

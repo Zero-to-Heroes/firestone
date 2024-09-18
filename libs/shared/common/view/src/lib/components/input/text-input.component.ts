@@ -40,7 +40,7 @@ export class TextInputComponent extends AbstractSubscriptionComponent implements
 
 	@Output() fsModelUpdate = new EventEmitter<string>();
 
-	@Input() set value(value: string) {
+	@Input() set value(value: string | null) {
 		this.value$$.next(value);
 	}
 	@Input() placeholder: string;
@@ -48,7 +48,7 @@ export class TextInputComponent extends AbstractSubscriptionComponent implements
 	@Input() debounceTime = 200;
 	@Input() showSearchIcon = true;
 
-	private value$$ = new BehaviorSubject<string>(null);
+	private value$$ = new BehaviorSubject<string | null>(null);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef) {
 		super(cdr);

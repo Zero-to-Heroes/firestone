@@ -1,3 +1,10 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	padding: 0 10px;
+}
+
 .title,
 .subtitle {
 	font-weight: 600;
@@ -39,6 +46,8 @@ a,
 	flex-direction: column;
 	color: var(--default-text-color);
 	font-size: 13px;
+	height: fit-content;
+	width: 100%;
 
 	&.disabled {
 		pointer-events: none;

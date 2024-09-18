@@ -550,7 +550,6 @@ import { SettingsArenaMenuComponent } from '@components/settings/arena/settings-
 import { SettingsArenaComponent } from '@components/settings/arena/settings-arena.component';
 import { SettingsBattlegroundsLeaderboardComponent } from '@components/settings/battlegrounds/settings-battlegrounds-leaderboard.component';
 import { SettingsDecktrackerMulliganComponent } from '@components/settings/decktracker/settings-decktracker-mulligan.componen';
-import { SettingsDiscordComponent } from '@components/settings/general/settings-discord.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -1635,7 +1634,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralDataComponent,
 		SettingsGeneralQuestsComponent,
 		SettingsGeneralModsComponent,
-		SettingsDiscordComponent,
 
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,

@@ -4,6 +4,7 @@ import { generalAdminSettings } from './general-settings-admin';
 import { generalAppearanceSettings } from './general-settings-appearance';
 import { generalBugSettings } from './general-settings-bug';
 import { generalDataSettings } from './general-settings-data';
+import { generalDiscordSettings } from './general-settings-discord';
 import { generalLaunchSettings } from './general-settings-launch';
 import { generalLocalizationSettings } from './general-settings-localization';
 import { generalLotterySettings } from './general-settings-lottery';
@@ -24,10 +25,13 @@ export const generalSettings = (context: SettingContext): SettingNode => {
 			generalAccessibilitySettings(context),
 			generalAppearanceSettings(context),
 			generalLocalizationSettings(context),
+			// These should be moved somewhere else, but where?
 			generalLotterySettings(context),
 			generalBugSettings(context),
+			// Move these into an "integrations" section?
 			generalThirdPartiesSettings(context),
 			generalTwitchSettings(context),
+			generalDiscordSettings(context),
 		],
 	};
 };

@@ -1,23 +1,18 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService } from '@firestone/shared/framework/core';
+import { AnalyticsService, ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, take, takeUntil } from 'rxjs';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'settings-discord',
-	styleUrls: [
-		`../../../../css/component/settings/settings-common.component.scss`,
-		`../settings-section.scss`,
-		`./settings-discord.component.scss`,
-	],
+	styleUrls: [`../../../settings-common.component.scss`, `./settings-discord.component.scss`],
 	template: `
 		<div class="settings-group">
 			<preference-toggle
 				field="discordRichPresence"
-				[label]="'settings.general.discord.discord-presence-label' | owTranslate"
-				[tooltip]="'settings.general.discord.discord-presence-tooltip' | owTranslate"
+				[label]="'settings.general.discord.discord-presence-label' | fsTranslate"
+				[tooltip]="'settings.general.discord.discord-presence-tooltip' | fsTranslate"
 				[toggleFunction]="afterRichPresenceChanged"
 			></preference-toggle>
 		</div>
@@ -26,8 +21,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<preference-toggle
 					class="toggle"
 					field="discordRpcEnableCustomInGameText"
-					[label]="'settings.general.discord.activate-custom-in-game-text-label' | owTranslate"
-					[tooltip]="'settings.general.discord.activate-custom-in-game-text-tooltip' | owTranslate"
+					[label]="'settings.general.discord.activate-custom-in-game-text-label' | fsTranslate"
+					[tooltip]="'settings.general.discord.activate-custom-in-game-text-tooltip' | fsTranslate"
 				></preference-toggle>
 				<div class="custom-text-config" [ngClass]="{ disabled: discordRpcDisableCustomInGameText$ | async }">
 					<fs-text-input
@@ -45,7 +40,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<!-- Premium config -->
 		<div class="settings-group" [ngClass]="{ disabled: discordDisabled$ | async }" premiumSetting>
 			<div class="title">
-				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | owTranslate">
+				<div class="premium-lock" [helpTooltip]="'settings.global.locked-tooltip' | fsTranslate">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#lock" />
 					</svg>
@@ -57,8 +52,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<preference-toggle
 					class="toggle"
 					field="discordRpcEnableCustomInMatchText"
-					[label]="'settings.general.discord.activate-custom-in-match-text-label' | owTranslate"
-					[tooltip]="'settings.general.discord.activate-custom-in-match-text-tooltip' | owTranslate"
+					[label]="'settings.general.discord.activate-custom-in-match-text-label' | fsTranslate"
+					[tooltip]="'settings.general.discord.activate-custom-in-match-text-tooltip' | fsTranslate"
 				></preference-toggle>
 				<div class="custom-text-config" [ngClass]="{ disabled: discordRpcDisableCustomInMatchText$ | async }">
 					<div class="details">
@@ -109,9 +104,9 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 	});
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
