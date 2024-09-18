@@ -178,7 +178,10 @@ export const buildHeroStats = (
 				.filter((t) => t.dataPointsOnMissingTribe > t.dataPoints / 20)
 				.map((t) => ({
 					...t,
-					impactAveragePosition: t.averagePosition - (t.averagePositionWithoutTribe || t.averagePosition),
+					// Use t.averagePosition - t.refAveragePosition to limit the sample size issue with missing tribes
+					// UPdate: since we now restrict to top 10% for overlay stats, we can use the vs missing tribe to
+					// spread out the impacts more
+					impactAveragePosition: t.impactAveragePositionVsMissingTribe,
 				}));
 			const tribeStatsToUse = useTribesModifier
 				? modifiedTribeStats.filter((t) => tribes.includes(t.tribe))
