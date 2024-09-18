@@ -85,7 +85,6 @@ export const extractUniqueTribes = (allPlayedCards: readonly ReferenceCard[]) =>
 			dirty = false;
 			for (let j = 0; j < minionsToProcess.length; j++) {
 				const minion = minionsToProcess[j];
-				// console.debug('considering minion', minion.name, minion.races);
 				if (!minion.picked && minion.races.length > 0 && minion.races.length <= i) {
 					const raceToAdd = minion.races[0];
 					uniqueTribes.push(Race[raceToAdd]);

@@ -330,10 +330,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 				}
 
 				if (mousedOverCard?.CardId === this.cardId) {
-					console.debug('considering mouse over', previousMouseOverCard, mousedOverCard, this.cardId);
 					this.onMouseEnter(null);
 				} else if (previousMouseOverCard?.CardId === this.cardId) {
-					console.debug('considering mouse leave', previousMouseOverCard, mousedOverCard, this.cardId);
 					this.onMouseLeave(null);
 				}
 			});

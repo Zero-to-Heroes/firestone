@@ -327,7 +327,6 @@ export class SettingsGeneralModsComponent
 		const modsWithDownloadLinks = this.installedMods.filter((m) => !!m.DownloadLink);
 		console.debug('modsWithDownloadLinks', modsWithDownloadLinks);
 		for (const mod of modsWithDownloadLinks) {
-			console.debug('considering', mod);
 			this.checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.checking-mod-for-updates', {
 				modName: mod.Name,
 			});
