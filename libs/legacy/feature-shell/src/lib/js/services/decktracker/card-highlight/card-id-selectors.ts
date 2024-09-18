@@ -764,7 +764,7 @@ export const cardIdSelector = (
 				const last = deadDemons[deadDemons.length - 1];
 				return highlightConditions(
 					and(side(inputSide), or(inHand, inDeck), minion, demon),
-					tooltip(and(side(inputSide), inGraveyard, minion, demon, cardIs(last.cardId as CardIds))),
+					tooltip(and(side(inputSide), inGraveyard, minion, demon, entityIs(last.entityId))),
 				)(input);
 			};
 		case CardIds.EnduranceTrainingTavernBrawl:
@@ -1240,14 +1240,7 @@ export const cardIdSelector = (
 				}
 
 				return highlightConditions(
-					tooltip(
-						and(
-							side(inputSide),
-							inGraveyard,
-							minion,
-							cardIs(...candidates.map((c) => c.cardId as CardIds)),
-						),
-					),
+					tooltip(and(side(inputSide), inGraveyard, minion, entityIs(...candidates.map((c) => c.entityId)))),
 				)(input);
 			};
 		case CardIds.LadyAnacondra_WC_006:
@@ -1639,9 +1632,8 @@ export const cardIdSelector = (
 				);
 				const targets = input.deckState.minionsDeadThisMatch
 					.filter((c) => (c.effectiveCost ?? allCards.getCard(c.cardId).cost) === highestDeadMinionCost)
-					.map((c) => c.cardId as CardIds);
-
-				return tooltip(and(side(inputSide), cardIs(...targets)))(input);
+					.map((c) => c.entityId);
+				return tooltip(and(side(inputSide), entityIs(...targets)))(input);
 			};
 		case CardIds.Resurrect_BRM_017:
 			return highlightConditions(
