@@ -2,9 +2,14 @@ import { Injectable } from '@angular/core';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map } from 'rxjs';
-// import { PreferencesService } from '@firestone/shared/common/service';
 
 const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/classes/%timePeriod%/overview.gz.json`;
 
@@ -29,8 +34,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 		this.prefs = AppInjector.get(PreferencesService);
 
 		this.classStats$$.onFirstSubscribe(async () => {
-			console.debug('[arena-class-stats] init');
-			await this.prefs.isReady();
+			await waitForReady(this.prefs);
 
 			this.prefs.preferences$$
 				.pipe(
@@ -47,6 +51,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 							? 'past-3'
 							: timeFilter;
 					const result: ArenaClassStats | null = await this.buildClassStats(timePeriod);
+					console.debug('[arena-class-stats] loaded class stats', result);
 					this.classStats$$.next(result);
 				});
 		});
@@ -55,7 +60,6 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 	public async buildClassStats(timePeriod: string): Promise<ArenaClassStats | null> {
 		const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod);
 		const result: ArenaClassStats | null = await this.api.callGetApi(url);
-		console.log('[arena-class-stats] loaded duels config');
 		return result;
 	}
 }
