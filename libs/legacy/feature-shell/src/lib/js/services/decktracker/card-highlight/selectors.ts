@@ -276,6 +276,7 @@ const TREANT_DBF_IDS = [
 ];
 export const summonsTreant = (input: SelectorInput): boolean =>
 	TREANT_DBF_IDS.some((treantDbfId) => input.card.relatedCardDbfIds?.includes(treantDbfId));
+export const isTreant = (input: SelectorInput): boolean => TREANT_DBF_IDS.includes(input.card.dbfId);
 
 const PLAGUE_GENERATORS = [CardIds.DistressedKvaldir, CardIds.DownWithTheShip, CardIds.Helya, CardIds.StaffOfThePrimus];
 export const generatesPlague = (input: SelectorInput): boolean => PLAGUE_GENERATORS.includes(input.cardId as CardIds);

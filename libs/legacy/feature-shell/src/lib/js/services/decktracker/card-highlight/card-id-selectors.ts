@@ -62,6 +62,7 @@ import {
 	inOther,
 	inPlay,
 	isSi7,
+	isTreant,
 	lastAffectedByCardId,
 	legendary,
 	lifesteal,
@@ -509,6 +510,8 @@ export const cardIdSelector = (
 					and(side(inputSide), or(inDeck, inHand), fromAnotherClass),
 				)(input);
 			};
+		case CardIds.ConservatorNymph:
+			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ContrabandStash:
@@ -582,7 +585,7 @@ export const cardIdSelector = (
 		// case CardIds.Cultivate:
 		// 	return and(side(inputSide), inDeck, spell);
 		case CardIds.Cultivation:
-			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
+			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
 		case CardIds.CustomsEnforcer_VAC_440:
 			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.CutlassCourier:
