@@ -468,8 +468,23 @@ const updateMistahVistah = (
 	const newOtherZone = deck.otherZone.some((c) => c.entityId === mistahVistah.entityId)
 		? deck.otherZone.map((c) => (c.entityId === mistahVistah.entityId ? newMistahVistah : c))
 		: deck.otherZone;
+
+	const relatedCardIdsForGlobalEffect = relatedCardIds.filter(
+		(c) => c != CardIds.MistahVistah_ScenicVistaToken_VAC_519t3,
+	);
+	const scenicVistaGlobalEffect = deck.globalEffects.find(
+		(c) => c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3,
+	);
+	const newGlobalEffects = scenicVistaGlobalEffect
+		? deck.globalEffects.map((c) =>
+				c.cardId === scenicVistaGlobalEffect.cardId
+					? scenicVistaGlobalEffect.update({ relatedCardIds: relatedCardIdsForGlobalEffect })
+					: c,
+		  )
+		: deck.globalEffects;
 	return deck.update({
 		board: newBoard,
 		otherZone: newOtherZone,
+		globalEffects: newGlobalEffects,
 	});
 };
