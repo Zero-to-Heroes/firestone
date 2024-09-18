@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "13.25.0",
+	"version": "13.25.1",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -39,7 +39,7 @@
 		"@firestone-hs/arena-high-win-runs": "^0.0.1",
 		"@firestone-hs/arena-stats": "^0.0.6",
 		"@firestone-hs/assign-constructed-archetype": "^0.0.3",
-		"@firestone-hs/bgs-global-stats": "^1.0.44",
+		"@firestone-hs/bgs-global-stats": "^1.0.45",
 		"@firestone-hs/build-global-stats": "^1.0.8",
 		"@firestone-hs/coliseum-components": "^0.0.27",
 		"@firestone-hs/communities": "^0.0.11",
