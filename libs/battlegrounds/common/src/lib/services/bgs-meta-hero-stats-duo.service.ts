@@ -69,7 +69,7 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 			const config$ = this.prefs.preferences$$.pipe(
 				map((prefs) => {
 					const config: Config = {
-						rankFilter: prefs.bgsActiveRankFilter,
+						rankFilter: prefs.bgsActiveRankFilter === 1 ? 10 : prefs.bgsActiveRankFilter,
 						tribesFilter: prefs.bgsActiveTribesFilter,
 						timeFilter: prefs.bgsActiveTimeFilter,
 						options: {
@@ -138,7 +138,6 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 			? null
 			: buildHeroStats(
 					stats?.heroStats,
-					// bgsActiveRankFilter,
 					config.tribesFilter ?? [],
 					config.anomaliesFilter ?? [],
 					!!config.options?.convervativeEstimate,
