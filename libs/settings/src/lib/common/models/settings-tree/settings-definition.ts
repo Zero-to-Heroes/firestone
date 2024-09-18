@@ -1,4 +1,5 @@
 import { SettingContext, SettingNode } from '../settings.types';
+import { decktrackerSettings } from './decktracker/_decktracker-settings';
 import { generalSettings } from './general/_general-settings';
 
 /**
@@ -12,7 +13,7 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 		id: 'root',
 		name: context.i18n.translateString('settings.title'),
 		keywords: null,
-		children: [generalSettings(context)],
+		children: [generalSettings(context), decktrackerSettings(context)],
 	};
 };
 

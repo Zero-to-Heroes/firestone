@@ -44,7 +44,7 @@ export type SettingsSectionReferenceType =
 
 export interface Section {
 	readonly id: string;
-	readonly title: string;
+	readonly title: string | null;
 	readonly texts?: readonly (string | Observable<string>)[]; // Raw HTML
 	readonly settings?: readonly (Setting | SettingButton)[];
 	readonly disabled$?: () => Observable<boolean>;
