@@ -4,6 +4,7 @@ import { DeckCard, DeckState, GameState, GameStateUpdatesService, HeroCard } fro
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { TwitchAuthService } from '@firestone/twitch/common';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
@@ -11,7 +12,6 @@ import { GameEvent, PlayerGameState } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { uuid } from '../utils';
 import { DeckCardService } from './deck-card.service';
