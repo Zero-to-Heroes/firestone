@@ -96,7 +96,7 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 
 				const dbCard = this.cards.getCard(history.cardId);
 				this.rarityImg = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rarity/rarity-${
-					dbCard.rarity || 'free'
+					dbCard.rarity?.toLowerCase() || 'free'
 				}.png`;
 
 				const name = dbCard?.name;
