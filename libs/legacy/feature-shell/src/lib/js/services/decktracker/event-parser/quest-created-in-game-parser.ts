@@ -56,6 +56,9 @@ export class QuestCreatedInGameParser implements EventParser {
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
 				DeckCard.create({
+					// We don't want to remove the quests from global effects once they are completed, but we do
+					// want to remove objectives once they are completed
+					entityId: dbCard.mechanics?.includes(GameTag[GameTag.OBJECTIVE]) ? entityId : null,
 					cardId: globalEffectCard.id,
 					cardName: this.i18n.getCardName(globalEffectCard.id, globalEffectCard.name),
 					manaCost: globalEffectCard.cost,
