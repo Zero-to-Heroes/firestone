@@ -20,7 +20,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { findNode, settingsDefinition } from '../models/settings-tree/settings-definition';
+import { findNode, settingsDefinition } from '../models/settings-tree/_settings-definition';
 import { SettingContext, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
