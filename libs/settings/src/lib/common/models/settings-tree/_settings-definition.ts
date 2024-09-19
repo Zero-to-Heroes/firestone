@@ -3,6 +3,7 @@ import { arenaSettings } from './arena/_arena-settings';
 import { battlegroundsSettings } from './battlegrounds/_battlegrounds-settings';
 import { decktrackerSettings } from './decktracker/_decktracker-settings';
 import { generalSettings } from './general/_general-settings';
+import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
 
 /**
  * TODO
@@ -22,6 +23,7 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			decktrackerSettings(context),
 			battlegroundsSettings(context),
 			arenaSettings(context),
+			mercenariesSettings(context),
 		],
 	};
 };
