@@ -12,6 +12,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
+	CardsFacadeService,
 	DiskCacheService,
 	IAdsService,
 	ILocalizationService,
@@ -50,6 +51,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly analytics: AnalyticsService,
@@ -67,6 +69,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		console.debug('gamesLoader', this.gamesLoader);
 
 		const context: SettingContext = {
+			allCards: this.allCards,
 			prefs: this.prefs,
 			analytics: this.analytics,
 			ow: this.ow,

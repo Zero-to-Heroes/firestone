@@ -2,6 +2,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { Knob } from '@firestone/shared/common/view';
 import {
 	AnalyticsService,
+	CardsFacadeService,
 	DiskCacheService,
 	IAdsService,
 	ILocalizationService,
@@ -16,6 +17,7 @@ export interface SettingContext {
 	readonly ow: OverwolfService;
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
+	readonly allCards: CardsFacadeService;
 	readonly services: {
 		readonly diskCache: DiskCacheService;
 		readonly gamesLoader: GameStatsLoaderService;
@@ -84,12 +86,22 @@ export interface ToggleConfig {
 	readonly valueToDisplayMessageOn?: string | boolean;
 	readonly toggleFunction?: (newValue: boolean) => void;
 }
-
-export interface DropdownConfig {
-	readonly options: readonly DropdownOption[];
+interface BaseDropdownConfig {
 	readonly afterSelection?: (newValue: string) => void;
 	readonly isYesNoLimited?: boolean;
 }
+
+interface DropdownConfigWithOptions extends BaseDropdownConfig {
+	readonly options: readonly DropdownOption[];
+	readonly isYesNoLimited?: false;
+}
+
+interface DropdownConfigWithoutOptions extends BaseDropdownConfig {
+	readonly options?: never;
+	readonly isYesNoLimited: true;
+}
+export type DropdownConfig = DropdownConfigWithOptions | DropdownConfigWithoutOptions;
+
 export interface DropdownOption {
 	readonly value: string;
 	readonly label: string;

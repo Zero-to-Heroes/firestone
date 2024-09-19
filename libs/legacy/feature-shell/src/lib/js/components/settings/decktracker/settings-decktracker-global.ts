@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { Knob } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -166,20 +165,6 @@ export class SettingsDecktrackerGlobalComponent {
 	resetText = this.i18n.translateString('settings.decktracker.global.reset-button');
 	confirmationShown = false;
 	showResetConfirmationText = false;
-	sizeKnobs: readonly Knob[] = [
-		{
-			percentageValue: 0,
-			label: this.i18n.translateString('settings.global.knob-sizes.small'),
-		},
-		{
-			percentageValue: 50,
-			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
-		},
-		{
-			percentageValue: 100,
-			label: this.i18n.translateString('settings.global.knob-sizes.large'),
-		},
-	];
 
 	constructor(private readonly prefs: PreferencesService, private readonly i18n: LocalizationFacadeService) {}
 
