@@ -12,6 +12,7 @@ import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
  * - Mods section (and only show it on beta version)
  * - Move all settings related to the BG sim to their own section
  * - Same for some overlays like banned tribes, minions list?
+ * - Mercenaries Quest. It's quite a lot of work, and I don't think it's used
  */
 export const settingsDefinition = (context: SettingContext): SettingNode => {
 	return {
