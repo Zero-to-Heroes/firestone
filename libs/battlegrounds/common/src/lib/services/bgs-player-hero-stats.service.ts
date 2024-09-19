@@ -224,7 +224,10 @@ const extractRank = (
 		.filter((m) => m.mmr <= mmrFilter)
 		.sort((a, b) => a.mmr - b.mmr)
 		.pop();
-	return mmr?.percentile ?? 100;
+	if (!mmr?.percentile) {
+		return 100;
+	}
+	return mmr.percentile === 1 ? 10 : mmr.percentile;
 };
 
 const extractMmr = (mmrPercentiles: readonly MmrPercentile[] | null, targetPercentile: number, mmrFilter?: number) => {
