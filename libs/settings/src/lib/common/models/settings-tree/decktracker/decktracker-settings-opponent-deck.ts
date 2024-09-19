@@ -20,17 +20,13 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 						type: 'toggle',
 						field: 'opponentTracker',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-tracker-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-tracker-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-tracker-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'opponentLoadKnownDecklist',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.known-decklist-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.known-decklist-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.known-decklist-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker,
 					},
 					{
@@ -43,107 +39,71 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					{
 						type: 'toggle',
 						field: 'opponentOverlayGroupByZone',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.group-cards-by-zone-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.group-cards-by-zone-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.group-cards-by-zone-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.group-cards-by-zone-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayCardsGoToBottom',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.used-cards-go-to-bottom-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.used-cards-go-to-bottom-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || prefs.opponentOverlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayDarkenUsedCards',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.darken-used-cards-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.darken-used-cards-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.darken-used-cards-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.darken-used-cards-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayShowGlobalEffects',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.global-effects-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.global-effects-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.global-effects-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlaySortByManaInOtherZone',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.sort-by-mana-cost-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayShowTopCardsSeparately',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-top-cards-separately-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-top-cards-separately-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-top-cards-separately-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-top-cards-separately-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayShowBottomCardsSeparately',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-bottom-cards-separately-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-bottom-cards-separately-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayShowDkRunes',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-dk-runes-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-dk-runes-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-dk-runes-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker,
 					},
 					{
 						type: 'toggle',
 						field: 'opponentOverlayHideGeneratedCardsInOtherZone',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.hide-generated-cards-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.hide-generated-cards-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.hide-generated-cards-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.hide-generated-cards-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker,
 					},
 					{
 						type: 'toggle',
 						field: 'hideOpponentDecktrackerWhenFriendsListIsOpen',
-						label: context.i18n.translateString(
-							'settings.battlegrounds.session-widget.hide-when-friends-list-open',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip',
-						),
+						label: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.opponentTracker,
 					},
 				],
@@ -156,35 +116,26 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 						type: 'toggle',
 						field: 'dectrackerShowOpponentTurnDraw',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.card-turn-draw-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.card-turn-draw-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.card-turn-draw-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'dectrackerShowOpponentGuess',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.guessed-cards-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.guessed-cards-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.guessed-cards-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'dectrackerShowOpponentBuffInHand',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.buff-in-hand-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.buff-in-hand-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.buff-in-hand-tooltip'),
 					},
 					{
 						type: 'slider',
 						field: 'decktrackerOpponentHandScale',
 						label: context.i18n.translateString('settings.decktracker.mulligan.size'),
 						tooltip: null,
-						disabledIf: (prefs: Preferences) =>
-							!prefs.dectrackerShowOpponentTurnDraw &&
-							!prefs.dectrackerShowOpponentGuess &&
-							!prefs.dectrackerShowOpponentBuffInHand,
+						disabledIf: (prefs: Preferences) => !prefs.dectrackerShowOpponentTurnDraw && !prefs.dectrackerShowOpponentGuess && !prefs.dectrackerShowOpponentBuffInHand,
 						sliderConfig: {
 							min: 60,
 							max: 100,
@@ -201,12 +152,8 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					{
 						type: 'toggle',
 						field: 'secretsHelper',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.enable-secret-helper-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.enable-secret-helper-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.enable-secret-helper-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.enable-secret-helper-tooltip'),
 					},
 					{
 						type: 'slider',
@@ -300,8 +247,7 @@ const toSetting = (counter: CounterSetting): Setting => {
 	}
 };
 
-const counters = (context: SettingContext): readonly CounterSetting[] =>
-	rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
+const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
 const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
 		id: 'galakrond',

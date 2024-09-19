@@ -18,9 +18,7 @@ export const generalNotificationsSettings = (context: SettingContext): SettingNo
 						tooltip: context.i18n.translateString('settings.general.launch.display-notifications-tooltip'),
 						advancedSetting: true,
 						toggleConfig: {
-							messageWhenToggleValue: context.i18n.translateString(
-								'settings.general.launch.display-notifications-confirmation',
-							),
+							messageWhenToggleValue: context.i18n.translateString('settings.general.launch.display-notifications-confirmation'),
 							valueToDisplayMessageOn: false,
 						},
 					},

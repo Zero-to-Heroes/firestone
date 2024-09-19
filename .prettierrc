@@ -6,12 +6,24 @@
 	"tabWidth": 4,
 	"overrides": [
 		{
-			"files": "*.ts",
+			"files": "**/*.ts",
 			"options": {
 				"parser": "typescript"
-
 			}
-
+		},
+		{
+			"files": "**/libs/settings/**/models/settings-tree/**/*.ts",
+			"options": {
+				"parser": "typescript",
+				"printWidth": 250
+			}
+		},
+		{
+			"files": "**/libs/settings/**/models/settings-tree/**/_*.ts",
+			"options": {
+				"parser": "typescript",
+				"printWidth": 120
+			}
 		}
 	]
 }

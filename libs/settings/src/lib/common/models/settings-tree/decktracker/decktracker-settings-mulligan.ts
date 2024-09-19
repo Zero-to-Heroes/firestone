@@ -15,22 +15,14 @@ export const decktrackerMulliganSettings = (context: SettingContext): SettingNod
 					{
 						type: 'toggle',
 						field: 'decktrackerShowMulliganCardImpact',
-						label: context.i18n.translateString(
-							'settings.decktracker.mulligan.show-mulligan-card-impact-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.mulligan.show-mulligan-card-impact-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-card-impact-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-card-impact-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'decktrackerShowMulliganDeckOverview',
-						label: context.i18n.translateString(
-							'settings.decktracker.mulligan.show-mulligan-deck-overview-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.mulligan.show-mulligan-deck-overview-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-deck-overview-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-deck-overview-tooltip'),
 					},
 					{
 						type: 'slider',

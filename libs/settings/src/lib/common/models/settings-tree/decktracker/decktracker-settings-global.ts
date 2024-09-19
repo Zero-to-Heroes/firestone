@@ -51,9 +51,7 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						type: 'toggle',
 						field: 'overlayShowTransformedInto',
 						label: context.i18n.translateString('settings.decktracker.global.show-transformed-into-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-transformed-into-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-transformed-into-tooltip'),
 					},
 					{
 						type: 'toggle',
@@ -71,33 +69,25 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						type: 'toggle',
 						field: 'overlayShowMatchupWinrate',
 						label: context.i18n.translateString('settings.decktracker.global.show-matchup-winrate'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-matchup-winrate-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-matchup-winrate-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowBoardCardsSeparateZone',
 						label: context.i18n.translateString('settings.decktracker.global.show-board-in-separate-zone'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-board-in-separate-zone-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-board-in-separate-zone-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowGiftedCardsInSeparateLine',
 						label: context.i18n.translateString('settings.decktracker.global.show-gifts-separately'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-gifts-separately-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-gifts-separately-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowGiftedCardsSeparateZone',
 						label: context.i18n.translateString('settings.decktracker.global.show-gifts-in-separate-zone'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-gifts-in-separate-zone-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-gifts-in-separate-zone-tooltip'),
 					},
 					{
 						type: 'toggle',
@@ -109,19 +99,13 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						type: 'toggle',
 						field: 'overlayShowPlaguesOnTop',
 						label: context.i18n.translateString('settings.decktracker.global.show-plagues-on-top'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-plagues-on-top-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-plagues-on-top-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayResetDeckPositionAfterTrade2',
-						label: context.i18n.translateString(
-							'settings.decktracker.global.reset-deck-position-after-trade',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.reset-deck-position-after-trade-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.global.reset-deck-position-after-trade'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.reset-deck-position-after-trade-tooltip'),
 					},
 					{
 						type: 'toggle',
@@ -133,9 +117,7 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						type: 'toggle',
 						field: 'overlayShowCostReduction',
 						label: context.i18n.translateString('settings.decktracker.global.show-cost-reduction'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.show-cost-reduction-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-cost-reduction-tooltip'),
 					},
 					{
 						type: 'toggle',
@@ -147,9 +129,7 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						type: 'toggle',
 						field: 'overlayHighlightRelatedCards',
 						label: context.i18n.translateString('settings.decktracker.global.highlight-related-cards'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.highlight-related-cards-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.highlight-related-cards-tooltip'),
 					},
 					{
 						type: 'toggle',
@@ -161,14 +141,10 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						type: 'toggle',
 						field: 'decktrackerCloseOnGameEnd',
 						label: context.i18n.translateString('settings.decktracker.global.close-tracker-on-end'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.close-tracker-on-end-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.global.close-tracker-on-end-tooltip'),
 						advancedSetting: true,
 						toggleConfig: {
-							messageWhenToggleValue: context.i18n.translateString(
-								'settings.decktracker.global.close-tracker-on-end-advanced',
-							),
+							messageWhenToggleValue: context.i18n.translateString('settings.decktracker.global.close-tracker-on-end-advanced'),
 							valueToDisplayMessageOn: false,
 						},
 					},
@@ -187,12 +163,8 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 					{
 						type: 'toggle',
 						field: 'countersUseExpandedView',
-						label: context.i18n.translateString(
-							'settings.decktracker.global.counters-use-expanded-view-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.global.counters-use-expanded-view-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.global.counters-use-expanded-view-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.counters-use-expanded-view-tooltip'),
 					},
 				],
 			},
@@ -207,9 +179,7 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						action: () => {
 							context.prefs.resetDecktrackerPositions();
 						},
-						confirmation: context.i18n.translateString(
-							'settings.decktracker.global.reset-button-confirmation',
-						),
+						confirmation: context.i18n.translateString('settings.decktracker.global.reset-button-confirmation'),
 					},
 				],
 			},

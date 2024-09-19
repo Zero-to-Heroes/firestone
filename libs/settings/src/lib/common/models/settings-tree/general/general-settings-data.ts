@@ -87,23 +87,11 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 };
 
 const refreshGamesButtonText$ = (context: SettingContext): Observable<string> => {
-	return isRefreshingGames$$.pipe(
-		map((isRefreshing) =>
-			isRefreshing
-				? context.i18n.translateString('settings.general.data.refresh-progress-button-label')
-				: context.i18n.translateString('settings.general.data.refresh-button-label'),
-		),
-	);
+	return isRefreshingGames$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
 };
 
 const clearGamesButtonText$ = (context: SettingContext): Observable<string> => {
-	return isClearingGames$$.pipe(
-		map((isClearing) =>
-			isClearing
-				? context.i18n.translateString('settings.general.data.refresh-progress-button-label')
-				: context.i18n.translateString('settings.general.data.clear-button-label'),
-		),
-	);
+	return isClearingGames$$.pipe(map((isClearing) => (isClearing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.clear-button-label'))));
 };
 
 const gamesPeriodOptions = (context: SettingContext): readonly DropdownOption[] => {

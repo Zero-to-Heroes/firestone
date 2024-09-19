@@ -15,9 +15,7 @@ export const generalAdminSettings = (context: SettingContext): SettingNode => {
 						label: context.i18n.translateString('settings.general.launch.reset-prefs-button-default'),
 						text: context.i18n.translateString('settings.general.launch.reset-prefs-button-default'),
 						tooltip: context.i18n.translateString('settings.general.launch.reset-prefs-tooltip'),
-						confirmation: context.i18n.translateString(
-							'settings.general.launch.reset-prefs-button-confirmation',
-						),
+						confirmation: context.i18n.translateString('settings.general.launch.reset-prefs-button-confirmation'),
 						action: async () => {
 							await context.prefs.reset();
 							context.ow.getMainWindow().reloadWindows();

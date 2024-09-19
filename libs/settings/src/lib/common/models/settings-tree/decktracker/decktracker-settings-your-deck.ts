@@ -18,42 +18,28 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					{
 						type: 'toggle',
 						field: 'overlayGroupByZone',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.group-cards-by-zone-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.group-cards-by-zone-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.group-cards-by-zone-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.group-cards-by-zone-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayCardsGoToBottom',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.used-cards-go-to-bottom-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.used-cards-go-to-bottom-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'overlayDarkenUsedCards',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.darken-used-cards-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.darken-used-cards-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.darken-used-cards-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.darken-used-cards-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowGlobalEffects',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.global-effects-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.global-effects-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.global-effects-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone,
 					},
 					{
@@ -66,51 +52,33 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					{
 						type: 'toggle',
 						field: 'overlaySortByManaInOtherZone',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.sort-by-mana-cost-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone,
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowTopCardsSeparately',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-top-cards-separately-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-top-cards-separately-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-top-cards-separately-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-top-cards-separately-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowBottomCardsSeparately',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-bottom-cards-separately-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-bottom-cards-separately-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayShowDkRunes',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-dk-runes-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.show-dk-runes-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-dk-runes-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'overlayHideGeneratedCardsInOtherZone',
-						label: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.hide-generated-cards-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.opponent-deck.hide-generated-cards-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.hide-generated-cards-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.hide-generated-cards-tooltip'),
 					},
 					{
 						type: 'toggle',
@@ -119,9 +87,7 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 						tooltip: context.i18n.translateString('settings.decktracker.your-deck.ignore-decklist-tooltip'),
 						advancedSetting: true,
 						toggleConfig: {
-							messageWhenToggleValue: context.i18n.translateString(
-								'settings.decktracker.your-deck.ignore-decklist-confirmation',
-							),
+							messageWhenToggleValue: context.i18n.translateString('settings.decktracker.your-deck.ignore-decklist-confirmation'),
 							valueToDisplayMessageOn: true,
 						},
 					},
@@ -205,8 +171,7 @@ const toSetting = (counter: CounterSetting): Setting => {
 	}
 };
 
-const counters = (context: SettingContext): readonly CounterSetting[] =>
-	rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
+const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
 const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
 		id: 'galakrond',
@@ -390,9 +355,7 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		id: 'damageTakenOnYourTurn',
 		field: 'playerDamageTakenOnYourTurnCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-label'),
-		tooltip: context.i18n.translateString(
-			'settings.decktracker.your-deck.counters.damage-taken-on-your-turn-tooltip',
-		),
+		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-tooltip'),
 		showLimitedOption: true,
 	},
 	{
@@ -428,12 +391,8 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
 		id: 'cardsPlayedFromAnotherClass',
 		field: 'playerCardsPlayedFromAnotherClassCounter',
-		label: context.i18n.translateString(
-			'settings.decktracker.your-deck.counters.cards-played-from-another-class-label',
-		),
-		tooltip: context.i18n.translateString(
-			'settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip',
-		),
+		label: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-label'),
+		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip'),
 		showLimitedOption: true,
 	},
 	{

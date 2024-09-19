@@ -17,19 +17,13 @@ export const decktrackerTurnTimerSettings = (context: SettingContext): SettingNo
 						type: 'toggle',
 						field: 'showTurnTimer',
 						label: context.i18n.translateString('settings.decktracker.turn-timer.show-turn-timer-label'),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.turn-timer.show-turn-timer-tooltip',
-						),
+						tooltip: context.i18n.translateString('settings.decktracker.turn-timer.show-turn-timer-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'showTurnTimerMatchLength',
-						label: context.i18n.translateString(
-							'settings.decktracker.turn-timer.show-turn-timer-match-length-label',
-						),
-						tooltip: context.i18n.translateString(
-							'settings.decktracker.turn-timer.show-turn-timer-match-length-tooltip',
-						),
+						label: context.i18n.translateString('settings.decktracker.turn-timer.show-turn-timer-match-length-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.turn-timer.show-turn-timer-match-length-tooltip'),
 					},
 					{
 						type: 'slider',
