@@ -1,8 +1,8 @@
 // prettier-ignore
 import { CardIds } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
-import { Setting, SettingContext, SettingNode } from '../../settings.types';
-import { sizeKnobs } from '../common';
+import { SettingContext, SettingNode } from '../../settings.types';
+import { sizeKnobs, toSetting } from '../common';
 import { CounterSetting } from './internal/decktracker-settings-internal';
 
 export const decktrackerOpponentDeckSettings = (context: SettingContext): SettingNode => {
@@ -224,24 +224,6 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 			},
 		],
 	};
-};
-
-const toSetting = (counter: CounterSetting): Setting => {
-	if (counter.showLimitedOption) {
-		return {
-			type: 'toggle-ynlimited',
-			field: counter.field,
-			label: counter.label,
-			tooltip: counter.tooltip,
-		};
-	} else {
-		return {
-			type: 'toggle',
-			field: counter.field,
-			label: counter.label,
-			tooltip: counter.tooltip,
-		};
-	}
 };
 
 const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));

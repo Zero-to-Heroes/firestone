@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	],
 	template: `
 		<div class="numeric-input" [ngClass]="{ disabled: disabled }">
-			<div class="label" [innerHTML]="label" [helpTooltip]="labelTooltip"></div>
+			<div class="label" *ngIf="label" [innerHTML]="label" [helpTooltip]="labelTooltip"></div>
 			<input
 				type="number"
 				[ngModel]="value"

@@ -39,6 +39,15 @@ import { Setting } from '../models/settings.types';
 				premiumSetting
 				[premiumSettingEnabled]="_setting.premiumSetting"
 			></preferences-dropdown>
+			<preference-numeric-input
+				*ngSwitchCase="'dropdown'"
+				[ngClass]="{ disabled: disabled }"
+				[field]="_setting.field"
+				[label]="_setting.label"
+				[tooltip]="_setting.tooltip"
+				[minValue]="_setting.numericConfig!.minValue"
+				[incrementStep]="_setting.numericConfig!.incrementStep"
+			></preference-numeric-input>
 			<div class="slider-container" *ngSwitchCase="'slider'">
 				<div class="label">
 					<div class="setting-text" [innerHTML]="_setting.label"></div>

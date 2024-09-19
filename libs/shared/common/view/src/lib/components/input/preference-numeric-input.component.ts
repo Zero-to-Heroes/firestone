@@ -17,8 +17,8 @@ import { Observable } from 'rxjs';
 			[label]="label"
 			[labelTooltip]="tooltip"
 			[value]="value$ | async"
-			[minValue]="minValue"
-			[incrementStep]="incrementStep"
+			[minValue]="minValue ?? 1"
+			[incrementStep]="incrementStep ?? 1"
 			[disabled]="disabled"
 			(valueChange)="onValueChanged($event)"
 		></numeric-input>
@@ -29,10 +29,10 @@ export class PreferenceNumericInputComponent extends AbstractSubscriptionCompone
 	value$: Observable<number>;
 
 	@Input() field: string;
-	@Input() label: string;
-	@Input() tooltip: string;
-	@Input() minValue = 1;
-	@Input() incrementStep = 1;
+	@Input() label: string | null;
+	@Input() tooltip: string | null;
+	@Input() minValue: number | null | undefined;
+	@Input() incrementStep: number | null | undefined;
 	@Input() disabled: boolean;
 
 	value: boolean;

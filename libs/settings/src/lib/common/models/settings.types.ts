@@ -64,7 +64,7 @@ export interface SettingButton {
 }
 
 export interface Setting {
-	readonly type: 'toggle' | 'toggle-ynlimited' | 'dropdown' | 'slider' | 'text-input';
+	readonly type: 'toggle' | 'toggle-ynlimited' | 'dropdown' | 'slider' | 'text-input' | 'numeric-input';
 	readonly field: keyof Preferences;
 	readonly label: string | null;
 	readonly tooltip: string | null;
@@ -79,6 +79,7 @@ export interface Setting {
 	readonly dropdownConfig?: DropdownConfig;
 	readonly sliderConfig?: SliderConfig;
 	readonly textInputConfig?: TextInputConfig;
+	readonly numericConfig?: NumericInputConfig;
 }
 
 export interface ToggleConfig {
@@ -106,4 +107,9 @@ export interface SliderConfig {
 }
 export interface TextInputConfig {
 	readonly onInputUpdate: (value: string, context: SettingContext) => void;
+}
+
+export interface NumericInputConfig {
+	readonly minValue?: number;
+	readonly incrementStep?: number;
 }
