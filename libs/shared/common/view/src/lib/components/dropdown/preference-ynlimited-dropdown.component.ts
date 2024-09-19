@@ -36,8 +36,8 @@ export class PreferenceYNLimitedComponent extends AbstractSubscriptionComponent 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	@Input() field: string;
-	@Input() label: string;
-	@Input() tooltip: string;
+	@Input() label: string | null;
+	@Input() tooltip: string | null;
 
 	options: BooleanOption[] = [
 		{

@@ -153,13 +153,10 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 const toSetting = (counter: CounterSetting): Setting => {
 	if (counter.showLimitedOption) {
 		return {
-			type: 'dropdown',
+			type: 'toggle-ynlimited',
 			field: counter.field,
 			label: counter.label,
 			tooltip: counter.tooltip,
-			dropdownConfig: {
-				isYesNoLimited: true,
-			},
 		};
 	} else {
 		return {

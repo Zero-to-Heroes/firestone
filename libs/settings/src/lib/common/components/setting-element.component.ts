@@ -20,6 +20,13 @@ import { Setting } from '../models/settings.types';
 				[valueToDisplayMessageOn]="_setting.toggleConfig?.valueToDisplayMessageOn"
 				[toggleFunction]="_setting.toggleConfig?.toggleFunction"
 			></preference-toggle>
+			<preference-ynlimited
+				*ngSwitchCase="'toggle'"
+				class="toggle"
+				[field]="_setting.field"
+				[label]="_setting.label"
+				[tooltip]="_setting.tooltip"
+			></preference-ynlimited>
 			<preferences-dropdown
 				*ngSwitchCase="'dropdown'"
 				[ngClass]="{ disabled: disabled }"

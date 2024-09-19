@@ -64,7 +64,7 @@ export interface SettingButton {
 }
 
 export interface Setting {
-	readonly type: 'toggle' | 'dropdown' | 'slider' | 'text-input';
+	readonly type: 'toggle' | 'toggle-ynlimited' | 'dropdown' | 'slider' | 'text-input';
 	readonly field: keyof Preferences;
 	readonly label: string | null;
 	readonly tooltip: string | null;
@@ -86,21 +86,11 @@ export interface ToggleConfig {
 	readonly valueToDisplayMessageOn?: string | boolean;
 	readonly toggleFunction?: (newValue: boolean) => void;
 }
-interface BaseDropdownConfig {
+
+export interface DropdownConfig {
 	readonly afterSelection?: (newValue: string) => void;
-	readonly isYesNoLimited?: boolean;
-}
-
-interface DropdownConfigWithOptions extends BaseDropdownConfig {
 	readonly options: readonly DropdownOption[];
-	readonly isYesNoLimited?: false;
 }
-
-interface DropdownConfigWithoutOptions extends BaseDropdownConfig {
-	readonly options?: never;
-	readonly isYesNoLimited: true;
-}
-export type DropdownConfig = DropdownConfigWithOptions | DropdownConfigWithoutOptions;
 
 export interface DropdownOption {
 	readonly value: string;
