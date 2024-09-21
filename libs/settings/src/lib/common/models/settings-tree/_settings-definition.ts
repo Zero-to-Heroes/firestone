@@ -4,8 +4,11 @@ import { arenaSettings } from './arena/_arena-settings';
 import { battlegroundsSettings } from './battlegrounds/_battlegrounds-settings';
 import { collectionSettings } from './collection/_collection-settings';
 import { decktrackerSettings } from './decktracker/_decktracker-settings';
-import { generalSettings } from './general/_general-settings';
+import { applicationSettings } from './general/_general-settings';
+import { globalSettings } from './global/_global-settings';
+import { integrationsSettings } from './integrations/_integrations-settings';
 import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
+import { troubleshootingSettings } from './troubleshooting/_troubleshooting-settings';
 
 /**
  * TODO
@@ -21,13 +24,16 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 		name: context.i18n.translateString('settings.title'),
 		keywords: null,
 		children: [
-			generalSettings(context),
+			applicationSettings(context),
+			globalSettings(context),
 			decktrackerSettings(context),
 			battlegroundsSettings(context),
 			arenaSettings(context),
 			mercenariesSettings(context),
 			collectionSettings(context),
 			achievementsSettings(context),
+			integrationsSettings(context),
+			troubleshootingSettings(context),
 		],
 	};
 };

@@ -20,7 +20,11 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 	template: `
 		<div
 			class="navigation-node"
-			[ngClass]="{ 'is-leaf': !_node.children?.length, selected: isSelected$ | async, selectable: selectable }"
+			[ngClass]="{
+				'is-leaf': !_node.children?.length,
+				selected: isSelected$ | async,
+				selectable: selectable
+			}"
 		>
 			<div class="name" (click)="selectNode()">{{ _node.name }}</div>
 			<settings-navigation-node
@@ -35,6 +39,7 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 })
 export class SettingsNavigationNodeComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	isSelected$: Observable<boolean>;
+	collapsed$: Observable<boolean>;
 
 	@Input() set node(value: SettingNode) {
 		this._node = value;
