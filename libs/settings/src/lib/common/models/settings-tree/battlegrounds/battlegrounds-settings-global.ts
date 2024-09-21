@@ -131,6 +131,7 @@ export const battlegroundsGlobalSettings = (context: SettingContext): SettingNod
 							snapSensitivity: 3,
 							showCurrentValue: true,
 							knobs: numberOfSimsKnobs(context),
+							displayedValueUnit: '',
 						},
 					},
 					{
@@ -145,6 +146,7 @@ export const battlegroundsGlobalSettings = (context: SettingContext): SettingNod
 							snapSensitivity: 3,
 							showCurrentValue: true,
 							knobs: simDurationKnobs(context),
+							displayedValueUnit: '',
 						},
 					},
 				],

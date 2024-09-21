@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Component({
 	selector: 'preference-numeric-input',
@@ -33,6 +33,7 @@ export class PreferenceNumericInputComponent extends AbstractSubscriptionCompone
 	@Input() tooltip: string | null;
 	@Input() minValue: number | null | undefined;
 	@Input() incrementStep: number | null | undefined;
+	@Input() defaultValue: number | null;
 	@Input() disabled: boolean;
 
 	value: boolean;
@@ -44,7 +45,11 @@ export class PreferenceNumericInputComponent extends AbstractSubscriptionCompone
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
 
-		this.value$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs[this.field]));
+		this.value$ = this.prefs.preferences$$.pipe(
+			tap((value) => console.debug('value 0', value, this.field)),
+			this.mapData((prefs) => (isNaN(prefs[this.field]) ? this.defaultValue ?? 1 : prefs[this.field])),
+			tap((value) => console.debug('value', value)),
+		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

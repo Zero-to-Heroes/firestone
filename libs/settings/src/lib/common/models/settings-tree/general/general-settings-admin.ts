@@ -12,7 +12,7 @@ export const generalAdminSettings = (context: SettingContext): SettingNode => {
 				title: context.i18n.translateString('settings.general.menu.admin'),
 				settings: [
 					{
-						label: context.i18n.translateString('settings.general.launch.reset-prefs-button-default'),
+						label: context.i18n.translateString('settings.general.launch.reset-prefs-button-label'),
 						text: context.i18n.translateString('settings.general.launch.reset-prefs-button-default'),
 						tooltip: context.i18n.translateString('settings.general.launch.reset-prefs-tooltip'),
 						confirmation: context.i18n.translateString('settings.general.launch.reset-prefs-button-confirmation'),
@@ -23,7 +23,7 @@ export const generalAdminSettings = (context: SettingContext): SettingNode => {
 					},
 					{
 						label: context.i18n.translateString('settings.general.launch.restart-app-button-label'),
-						text: context.i18n.translateString('settings.general.launch.restart-app-button-label'),
+						text: context.i18n.translateString('settings.general.launch.restart-app-button-text'),
 						tooltip: null,
 						action: async () => {
 							context.ow.relaunchApp();

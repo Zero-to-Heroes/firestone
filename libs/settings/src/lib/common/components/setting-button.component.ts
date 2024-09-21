@@ -8,7 +8,7 @@ import { SettingButton } from '../models/settings.types';
 	styleUrls: [`../../settings-common.component.scss`, `./setting-element.component.scss`],
 	template: `
 		<div class="button-container">
-			<div class="label">
+			<div class="label" *ngIf="_setting.label">
 				<div class="setting-text" [innerHTML]="_setting.label"></div>
 				<i class="setting-info" *ngIf="_setting.tooltip" [helpTooltip]="_setting.tooltip">
 					<svg>

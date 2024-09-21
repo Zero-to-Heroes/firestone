@@ -103,6 +103,7 @@ export interface SliderConfig {
 	readonly max: number;
 	readonly snapSensitivity: number;
 	readonly showCurrentValue?: boolean;
+	readonly displayedValueUnit?: string;
 	readonly knobs?: readonly Knob[];
 }
 export interface TextInputConfig {

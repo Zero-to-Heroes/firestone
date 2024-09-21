@@ -18,10 +18,10 @@ import { Section, Setting, SettingButton } from '../models/settings.types';
 				></div>
 				<ng-container *ngFor="let setting of settings$ | async">
 					<ng-container *ngIf="isStandardSetting(setting)">
-						<setting-element [setting]="setting"> </setting-element>
+						<setting-element class="element" [setting]="setting"> </setting-element>
 					</ng-container>
 					<ng-container *ngIf="isSettingButton(setting)">
-						<setting-button [setting]="setting"> </setting-button>
+						<setting-button class="element" [setting]="setting"> </setting-button>
 					</ng-container>
 				</ng-container>
 			</div>

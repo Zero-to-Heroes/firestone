@@ -7,7 +7,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -20,6 +20,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
+import { Observable } from 'rxjs';
 import { findNode, settingsDefinition } from '../models/settings-tree/_settings-definition';
 import { SettingContext, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
@@ -38,6 +39,11 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 						[indentLevel]="0"
 					></settings-navigation-node>
 				</ul>
+				<div class="advanced-settings-container">
+					<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
+						{{ buttonText$ | async }}
+					</button>
+				</div>
 			</nav>
 			<div class="current-section">
 				<settings-current-page></settings-current-page>
@@ -47,6 +53,8 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsRootComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	buttonText$: Observable<string>;
+
 	rootNode: SettingNode;
 
 	constructor(
@@ -66,8 +74,14 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs, this.adService, this.controller, this.gamesLoader);
-		console.debug('gamesLoader', this.gamesLoader);
 
+		this.buttonText$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) =>
+				prefs.advancedModeToggledOn
+					? this.i18n.translateString('settings.global.hide-advanced-settings-button')
+					: this.i18n.translateString('settings.global.show-advanced-settings-button'),
+			),
+		);
 		const context: SettingContext = {
 			allCards: this.allCards,
 			prefs: this.prefs,
@@ -98,5 +112,12 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	async toggleAdvancedSettings() {
+		const prefs = await this.prefs.getPreferences();
+		const advancedModeToggledOn = prefs.advancedModeToggledOn;
+		const newPrefs: Preferences = { ...prefs, advancedModeToggledOn: !advancedModeToggledOn };
+		await this.prefs.savePreferences(newPrefs);
 	}
 }

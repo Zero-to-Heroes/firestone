@@ -43,6 +43,11 @@ preferences-dropdown {
 		display: flex;
 		align-items: center;
 	}
+
+	// Apply style to the button only if there is no .label element preceding it
+	&:not(:has(> .label)) > button {
+		flex-grow: 0;
+	}
 }
 
 .setting-info {
@@ -57,10 +62,12 @@ button {
 	padding-left: 25px;
 	padding-right: 25px;
 	width: auto;
-	height: 35px;
+	height: 100%;
 	display: flex;
 	align-self: flex-start;
 	align-items: center;
+	flex-grow: 1;
+	justify-content: center;
 
 	span {
 		color: #d9c3ab;

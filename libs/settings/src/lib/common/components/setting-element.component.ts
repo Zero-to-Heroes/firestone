@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { Setting } from '../models/settings.types';
 
 @Component({
@@ -21,7 +24,7 @@ import { Setting } from '../models/settings.types';
 				[toggleFunction]="_setting.toggleConfig?.toggleFunction"
 			></preference-toggle>
 			<preference-ynlimited
-				*ngSwitchCase="'toggle'"
+				*ngSwitchCase="'toggle-ynlimited'"
 				class="toggle"
 				[field]="_setting.field"
 				[label]="_setting.label"
@@ -40,7 +43,7 @@ import { Setting } from '../models/settings.types';
 				[premiumSettingEnabled]="_setting.premiumSetting"
 			></preferences-dropdown>
 			<preference-numeric-input
-				*ngSwitchCase="'dropdown'"
+				*ngSwitchCase="'numeric-input'"
 				[ngClass]="{ disabled: disabled }"
 				[field]="_setting.field"
 				[label]="_setting.label"
@@ -66,6 +69,7 @@ import { Setting } from '../models/settings.types';
 					[snapSensitivity]="_setting.sliderConfig!.snapSensitivity"
 					[knobs]="_setting.sliderConfig!.knobs"
 					[showCurrentValue]="_setting.sliderConfig!.showCurrentValue"
+					[displayedValueUnit]="_setting.sliderConfig!.displayedValueUnit ?? ''"
 				>
 				</preference-slider>
 			</div>
@@ -73,19 +77,38 @@ import { Setting } from '../models/settings.types';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingElementComponent {
+export class SettingElementComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set setting(value: Setting) {
 		this._setting = value;
-		this.updateInfo();
+		this.setting$$.next(value);
 	}
 
 	_setting: Setting;
 	disabled: boolean | undefined;
 
-	constructor(private readonly prefs: PreferencesService) {}
+	private setting$$ = new BehaviorSubject<Setting | null>(null);
 
-	private async updateInfo() {
-		const prefs = await this.prefs.getPreferences();
-		this.disabled = this._setting?.disabledIf?.(prefs);
+	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		combineLatest([this.setting$$, this.prefs.preferences$$])
+			.pipe(
+				filter(([setting, prefs]) => !!setting && !!prefs),
+				this.mapData(([setting, prefs]) => setting?.disabledIf?.(prefs)),
+			)
+			.subscribe((disabled) => {
+				this.disabled = disabled;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

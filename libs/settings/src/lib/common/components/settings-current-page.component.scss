@@ -5,11 +5,14 @@
 
 .current-page {
 	flex-grow: 1;
-	padding: 10px 20px;
+	padding: 10px 0;
 	overflow: auto;
 
 	::ng-deep setting-element,
 	::ng-deep setting-button {
+		& > *:not(.advanced-setting-hidden) {
+			height: 30px;
+		}
 		&:not(:last-child) > *:not(.advanced-setting-hidden) {
 			margin-bottom: 15px;
 		}

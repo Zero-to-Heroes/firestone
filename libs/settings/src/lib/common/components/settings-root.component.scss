@@ -18,6 +18,10 @@
 	flex-shrink: 0;
 	border-right: 1px solid var(--color-4);
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 30px; // To not overlap with the version indication
+	font-size: 13px;
 
 	.header {
 		padding: 10px;
@@ -32,6 +36,29 @@
 
 	.nodes {
 		padding: 10px;
+		min-width: 0;
+		overflow: scroll;
+		flex-grow: 1;
+	}
+}
+
+.advanced-settings-container {
+	// padding: 5px 15px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.settings-advanced-toggle {
+		text-decoration: underline;
+		color: #a89782;
+
+		&:hover {
+			color: #ffb948;
+		}
 	}
 }
 

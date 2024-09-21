@@ -46,6 +46,10 @@ export const battlegroundsSessionWidgetSettings = (context: SettingContext): Set
 						label: context.i18n.translateString('settings.battlegrounds.session-widget.number-of-matches'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.session-widget.number-of-matches-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.showCurrentSessionWidgetBgs || !prefs.sessionWidgetShowMatches,
+						numericConfig: {
+							minValue: 1,
+							incrementStep: 1,
+						},
 					},
 					{
 						type: 'slider',
