@@ -19,6 +19,7 @@ import { SettingsCurrentPageSectionComponent } from './common/components/setting
 import { SettingsCurrentPageComponent } from './common/components/settings-current-page.component';
 import { SettingsNavigationNodeComponent } from './common/components/settings-navigation-node.component';
 import { SettingsRootComponent } from './common/components/settings-root.component';
+import { SettingsSearchComponent } from './common/components/settings-search.component';
 import { BootstrapSettingsService } from './common/services/bootstrap-settings.service';
 import { CustomAppearanceService } from './common/services/custom-appearance.service';
 import { SettingsControllerService } from './common/services/settings-controller.service';
@@ -33,6 +34,7 @@ const components = [
 	SettingsCurrentPageSectionReferenceComponent,
 	SettingElementComponent,
 	SettingButtonComponent,
+	SettingsSearchComponent,
 
 	SettingsGeneralAppearanceComponent,
 	SettingsGeneralBugReportComponent,

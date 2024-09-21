@@ -20,9 +20,10 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { findNode, settingsDefinition } from '../models/settings-tree/_settings-definition';
 import { SettingContext, SettingNode } from '../models/settings.types';
+import { filterSettings } from '../services/search';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
@@ -32,6 +33,7 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 		<div class="settings-root">
 			<nav class="navigation" *ngIf="rootNode">
 				<div class="header" [fsTranslate]="'settings.title'"></div>
+				<settings-search class="search"></settings-search>
 				<ul class="nodes">
 					<settings-navigation-node
 						*ngFor="let child of rootNode.children"
@@ -95,15 +97,24 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			},
 		};
 		this.rootNode = settingsDefinition(context);
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)).subscribe((locale) => {
-			const selectedNodeId = this.controller.selectedNode$$.value?.id;
-			this.rootNode = settingsDefinition(context);
-			const newSelectedNode = findNode(this.rootNode, selectedNodeId);
-			this.controller.selectedNode$$.next(newSelectedNode);
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		const localeSettings$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => {
+				return settingsDefinition(context);
+			}),
+		);
+
+		combineLatest([localeSettings$, this.controller.searchString$$]).subscribe(
+			([settingsDefinition, searchString]) => {
+				const selectedNodeId = this.controller.selectedNode$$.value?.id;
+				const filteredSettings = filterSettings(settingsDefinition, searchString);
+				const newSelectedNode = findNode(filteredSettings, selectedNodeId);
+				this.rootNode = filteredSettings;
+				this.controller.selectedNode$$.next(newSelectedNode);
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			},
+		);
 
 		if (!this.controller.selectedNode$$.value) {
 			this.controller.selectedNode$$.next(this.rootNode.children![0].children![0]);

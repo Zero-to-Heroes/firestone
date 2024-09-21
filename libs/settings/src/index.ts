@@ -10,6 +10,7 @@ export * from './lib/common/components/settings-current-page-section.component';
 export * from './lib/common/components/settings-current-page.component';
 export * from './lib/common/components/settings-navigation-node.component';
 export * from './lib/common/components/settings-root.component';
+export * from './lib/common/components/settings-search.component';
 export * from './lib/common/services/bootstrap-settings.service';
 export * from './lib/common/services/custom-appearance.service';
 export * from './lib/common/services/settings-controller.service';

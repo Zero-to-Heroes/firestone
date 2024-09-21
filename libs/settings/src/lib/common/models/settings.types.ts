@@ -61,6 +61,7 @@ export interface SettingButton {
 	readonly tooltip: string | null;
 	readonly action: () => void | PromiseLike<void>;
 	readonly confirmation?: string;
+	readonly keywords?: readonly string[] | null;
 }
 
 export interface Setting {
