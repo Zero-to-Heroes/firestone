@@ -9,7 +9,6 @@ import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
 
 /**
  * TODO
- * - advanced settings toggle
  * - refresh for packs and achievements (in the Data section)
  * - Mods section (and only show it on beta version)
  * - Move all settings related to the BG sim to their own section

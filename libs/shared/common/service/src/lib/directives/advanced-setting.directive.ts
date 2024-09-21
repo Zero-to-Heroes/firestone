@@ -34,6 +34,8 @@ export class AdvancedSettingDirective extends AbstractSubscriptionComponent impl
 
 	private updateVisibility(advancedModeToggledOn: boolean) {
 		this.renderer.setStyle(this.el.nativeElement, 'display', advancedModeToggledOn ? 'inherit' : 'none');
+		this.renderer.removeClass(this.el.nativeElement, 'advanced-setting-visible');
+		this.renderer.removeClass(this.el.nativeElement, 'advanced-setting-hidden');
 		this.renderer.addClass(
 			this.el.nativeElement,
 			advancedModeToggledOn ? 'advanced-setting-visible' : 'advanced-setting-hidden',

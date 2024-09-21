@@ -57,7 +57,9 @@
 		color: #a89782;
 
 		&:hover {
-			color: #ffb948;
+			background: var(--default-title-color);
+			border: 1px solid var(--default-title-color);
+			color: var(--color-7);
 		}
 	}
 }
