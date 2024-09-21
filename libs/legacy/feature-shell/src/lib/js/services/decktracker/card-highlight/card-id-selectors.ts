@@ -2085,6 +2085,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, or(elemental, beast));
 		case CardIds.TidepoolPupil_VAC_304:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.TidePools_VAC_522:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.TimberTambourine:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(4));
 		case CardIds.TimelineAccelerator_WON_139:
