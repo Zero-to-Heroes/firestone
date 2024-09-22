@@ -13,6 +13,7 @@ import { AppearanceCustomizationPageComponent } from './common/components/custom
 import { SettingsBroadcastComponent } from './common/components/custom-pages/settings-broadcast';
 import { SettingsDiscordComponent } from './common/components/custom-pages/settings-discord.component';
 import { SettingsGeneralBugReportComponent } from './common/components/custom-pages/settings-general-bug-report.component';
+import { SettingsGeneralModsComponent } from './common/components/custom-pages/settings-general-mods.component';
 import { SettingsGeneralThirdPartyComponent } from './common/components/custom-pages/settings-general-third-party.component';
 import { SettingButtonComponent } from './common/components/setting-button.component';
 import { SettingElementComponent } from './common/components/setting-element.component';
@@ -43,6 +44,7 @@ const components = [
 	SettingsGeneralThirdPartyComponent,
 	SettingsBroadcastComponent,
 	SettingsDiscordComponent,
+	SettingsGeneralModsComponent,
 
 	AppearanceCustomizationPageComponent,
 	CustomColorPickerComponent,

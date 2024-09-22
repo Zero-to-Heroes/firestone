@@ -1,5 +1,5 @@
 import { SettingContext, SettingNode } from '../../settings.types';
-import { generalBugSettings } from '../general/general-settings-bug';
+import { generalBugSettings } from './general-settings-bug';
 
 export const troubleshootingSettings = (context: SettingContext): SettingNode => {
 	return {

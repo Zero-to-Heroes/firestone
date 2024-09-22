@@ -20,6 +20,7 @@ export interface SettingContext {
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
 	readonly allCards: CardsFacadeService;
+	readonly isBeta: boolean;
 	readonly services: {
 		readonly diskCache: DiskCacheService;
 		readonly gamesLoader: GameStatsLoaderService;
@@ -46,6 +47,7 @@ export type SettingsSectionReferenceType =
 	| 'SettingsGeneralBugReportComponent'
 	| 'SettingsGeneralThirdPartyComponent'
 	| 'SettingsDiscordComponent'
+	| 'SettingsGeneralModsComponent'
 	| 'SettingsBroadcastComponent';
 
 export interface Section {

@@ -469,7 +469,6 @@ import { PlayerTreantWidgetWrapperComponent } from '@components/overlays/counter
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { SettingsGeneralLotteryComponent } from '@components/settings/general/settings-general-lottery.component';
-import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { SettingsGeneralPremiumComponent } from '@components/settings/general/settings-general-premium.component';
 // import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 // import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
@@ -1634,7 +1633,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralLocalizationComponent,
 		SettingsGeneralDataComponent,
 		SettingsGeneralQuestsComponent,
-		SettingsGeneralModsComponent,
 
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,

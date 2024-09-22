@@ -265,7 +265,6 @@ export class BattlegroundsStoreService {
 				this.buildEventEmitters();
 			});
 		this.prefs.preferences$$.subscribe((prefs) => {
-			console.debug('[bgs-store] prefs updated', prefs);
 			this.updateOverlay$$.next();
 		});
 		this.matchMemoryInfo.battlegroundsMemoryInfo$$

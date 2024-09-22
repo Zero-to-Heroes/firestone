@@ -2,6 +2,7 @@ export * from './lib/common/components/custom-pages/appearance-customization.com
 export * from './lib/common/components/custom-pages/settings-broadcast';
 export * from './lib/common/components/custom-pages/settings-discord.component';
 export * from './lib/common/components/custom-pages/settings-general-bug-report.component';
+export * from './lib/common/components/custom-pages/settings-general-mods.component';
 export * from './lib/common/components/custom-pages/settings-general-third-party.component';
 export * from './lib/common/components/setting-button.component';
 export * from './lib/common/components/setting-element.component';

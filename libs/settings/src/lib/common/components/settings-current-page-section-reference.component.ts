@@ -10,6 +10,7 @@ import { AppearanceCustomizationPageComponent } from './custom-pages/appearance-
 import { SettingsBroadcastComponent } from './custom-pages/settings-broadcast';
 import { SettingsDiscordComponent } from './custom-pages/settings-discord.component';
 import { SettingsGeneralBugReportComponent } from './custom-pages/settings-general-bug-report.component';
+import { SettingsGeneralModsComponent } from './custom-pages/settings-general-mods.component';
 import { SettingsGeneralThirdPartyComponent } from './custom-pages/settings-general-third-party.component';
 
 @Component({
@@ -40,6 +41,7 @@ export class SettingsCurrentPageSectionReferenceComponent
 		SettingsGeneralThirdPartyComponent: SettingsGeneralThirdPartyComponent,
 		SettingsBroadcastComponent: SettingsBroadcastComponent,
 		SettingsDiscordComponent: SettingsDiscordComponent,
+		SettingsGeneralModsComponent: SettingsGeneralModsComponent,
 	};
 
 	private section$$ = new BehaviorSubject<SectionReference | null>(null);

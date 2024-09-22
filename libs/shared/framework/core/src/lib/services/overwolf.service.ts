@@ -250,6 +250,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async isBetaChannel(): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			overwolf.settings.getExtensionSettings((settingsResult) => {
+				resolve(settingsResult?.settings?.channel === 'beta' || process.env['NODE_ENV'] !== 'production');
+			});
+		});
+	}
+
 	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
 		if (!this.isOwEnabled()) {
 			return {} as overwolf.profile.GetCurrentUserResult;

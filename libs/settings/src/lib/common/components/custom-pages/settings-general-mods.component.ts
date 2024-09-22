@@ -23,10 +23,9 @@ import { Observable, filter } from 'rxjs';
 @Component({
 	selector: 'settings-general-mods',
 	styleUrls: [
-		`../../../../css/global/scrollbar-settings.scss`,
-		`../../../../css/global/forms.scss`,
-		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/general/settings-general-mods.component.scss`,
+		`../scrollbar-settings.scss`,
+		`../../../settings-common.component.scss`,
+		`./settings-general-mods.component.scss`,
 	],
 	template: `
 		<div class="general-mods" scrollable>
@@ -142,7 +141,7 @@ export class SettingsGeneralModsComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
-	modsInstallStatus$: Observable<string>;
+	modsInstallStatus$: Observable<string | null>;
 	inGame$: Observable<boolean>;
 
 	gameLocation: string;
@@ -170,7 +169,7 @@ export class SettingsGeneralModsComponent
 	private modsManager: ModsManagerService;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly modUtils: ModsUtilsService,
 		private readonly prefs: PreferencesService,
@@ -184,7 +183,7 @@ export class SettingsGeneralModsComponent
 	async ngAfterContentInit() {
 		this.modsManager = this.ow.getMainWindow().modsManager;
 
-		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(this.mapData((info) => info));
+		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(this.mapData((info) => info ?? false));
 		this.modsManager.modsData$$
 			.asObservable()
 			.pipe(
@@ -343,7 +342,7 @@ export class SettingsGeneralModsComponent
 			const confForMod = existingConf[mod.AssemblyName];
 			const newConfForMod: ModConfig = {
 				...confForMod,
-				updateAvailableVersion: toModVersion(newAvailableVersion),
+				updateAvailableVersion: toModVersion(newAvailableVersion) ?? undefined,
 			};
 			const newConf: ModsConfig = {
 				...existingConf,

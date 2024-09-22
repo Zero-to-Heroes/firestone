@@ -223,6 +223,9 @@ export class ModsUtilsService {
 
 	private async updateInstallPath(installPath: string) {
 		const prefs = await this.prefs.getPreferences();
+		if (installPath === prefs.gameInstallPath) {
+			return;
+		}
 		const newPrefs: Preferences = { ...prefs, gameInstallPath: installPath };
 		await this.prefs.savePreferences(newPrefs);
 	}

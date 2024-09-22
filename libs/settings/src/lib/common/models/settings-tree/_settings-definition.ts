@@ -8,11 +8,11 @@ import { applicationSettings } from './general/_general-settings';
 import { globalSettings } from './global/_global-settings';
 import { integrationsSettings } from './integrations/_integrations-settings';
 import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
+import { modsSettings } from './mods/_mods-settings';
 import { troubleshootingSettings } from './troubleshooting/_troubleshooting-settings';
 
 /**
  * TODO
- * - Mods section (and only show it on beta version)
  * - Move all settings related to the BG sim to their own section
  * - Same for some overlays like banned tribes, minions list?
  * - Mercenaries Quest. It's quite a lot of work, and I don't think it's used
@@ -33,8 +33,8 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			achievementsSettings(context),
 			integrationsSettings(context),
 			troubleshootingSettings(context),
-			// modsSettings(context),
-		],
+			context.isBeta ? modsSettings(context) : null,
+		].filter((c) => !!c) as SettingNode[],
 	};
 };
 

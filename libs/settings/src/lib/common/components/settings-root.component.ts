@@ -88,6 +88,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 					: this.i18n.translateString('settings.global.show-advanced-settings-button'),
 			),
 		);
+		const isBeta = await this.ow.isBetaChannel();
 		const context: SettingContext = {
 			allCards: this.allCards,
 			prefs: this.prefs,
@@ -95,6 +96,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			ow: this.ow,
 			i18n: this.i18n,
 			adService: this.adService,
+			isBeta: isBeta,
 			services: {
 				diskCache: this.diskCache,
 				gamesLoader: this.gamesLoader,
