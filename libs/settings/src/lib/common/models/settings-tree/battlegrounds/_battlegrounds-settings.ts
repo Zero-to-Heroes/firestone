@@ -1,7 +1,9 @@
 import { SettingContext, SettingNode } from '../../settings.types';
+import { battlegroundsBannedTribesSettings } from './battlegrounds-settings-banned-tribes';
 import { battlegroundsBattleOddsSettings } from './battlegrounds-settings-battle-odds';
 import { battlegroundsGlobalSettings } from './battlegrounds-settings-global';
 import { battlegroundsLeaderboardSettings } from './battlegrounds-settings-leaderboard';
+import { battlegroundsMinionsListSettings } from './battlegrounds-settings-minions-list';
 import { battlegroundsOverlaySettings } from './battlegrounds-settings-overlay';
 import { battlegroundsSessionWidgetSettings } from './battlegrounds-settings-session-widget';
 
@@ -14,6 +16,8 @@ export const battlegroundsSettings = (context: SettingContext): SettingNode => {
 			battlegroundsGlobalSettings(context),
 			battlegroundsOverlaySettings(context),
 			battlegroundsBattleOddsSettings(context),
+			battlegroundsMinionsListSettings(context),
+			battlegroundsBannedTribesSettings(context),
 			battlegroundsSessionWidgetSettings(context),
 			battlegroundsLeaderboardSettings(context),
 		],

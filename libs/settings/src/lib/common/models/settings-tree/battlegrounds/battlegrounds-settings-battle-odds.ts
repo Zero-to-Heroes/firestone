@@ -70,7 +70,7 @@ export const battlegroundsBattleOddsSettings = (context: SettingContext): Settin
 			},
 			{
 				id: 'battlegrounds-simulator-overlay',
-				title: context.i18n.translateString('settings.battlegrounds.general.simulator-config-title'),
+				title: context.i18n.translateString('settings.battlegrounds.overlay.overlay-title'),
 				settings: [
 					{
 						type: 'toggle',

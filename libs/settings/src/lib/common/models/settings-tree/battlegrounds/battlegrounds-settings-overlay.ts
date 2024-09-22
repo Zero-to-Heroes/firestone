@@ -1,5 +1,4 @@
 import { Preferences } from '@firestone/shared/common/service';
-import { Knob } from '@firestone/shared/common/view';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
 import { CounterSetting } from '../decktracker/internal/decktracker-settings-internal';
@@ -69,20 +68,6 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 					},
 					{
 						type: 'toggle',
-						field: 'bgsShowBannedTribesOverlay',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.show-banned-tribes-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.show-banned-tribes-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsEnableMinionListOverlay',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.show-minions-list-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.show-minions-list-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
-					},
-					{
-						type: 'toggle',
 						field: 'bgsEnableTurnNumbertOverlay',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.turn-counter-label'),
 						tooltip: null,
@@ -108,141 +93,6 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 						label: context.i18n.translateString('settings.battlegrounds.general.show-achievements-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.show-achievements-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
-					},
-				],
-			},
-			// TODO: move this
-			{
-				id: 'battlegrounds-banned-tribes-overlay',
-				title: context.i18n.translateString('settings.battlegrounds.overlay.banned-tribes-title'),
-				settings: [
-					{
-						type: 'toggle',
-						field: 'bgsBannedTribesShowVertically',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.banned-tribes-show-in-column-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.banned-tribes-show-in-column-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsShowBannedTribesOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsShowAvailableTribesOverlay',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.show-available-tribes-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.show-available-tribes-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsShowBannedTribesOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsTribesOverlaySingleRow',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.banned-tribes-single-row-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.banned-tribes-single-row-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsShowBannedTribesOverlay,
-					},
-					{
-						type: 'slider',
-						field: 'bgsBannedTribeScale',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.banned-tribes-icon-size-label'),
-						tooltip: null,
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsShowBannedTribesOverlay,
-						sliderConfig: {
-							min: 80,
-							max: 135,
-							snapSensitivity: 3,
-							knobs: sizeKnobs(context),
-						},
-					},
-				],
-			},
-			{
-				id: 'battlegrounds-minions-list-overlay',
-				title: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-title'),
-				settings: [
-					{
-						type: 'toggle',
-						field: 'bgsEnableMinionListMouseOver',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-on-mouse-over-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-on-mouse-over-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-						advancedSetting: true,
-						toggleConfig: {
-							messageWhenToggleValue: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-on-mouse-over-confirmation'),
-							valueToDisplayMessageOn: false,
-						},
-					},
-					{
-						type: 'toggle',
-						field: 'bgsGroupMinionsIntoTheirTribeGroup',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsShowTribesHighlight',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tribes-highlight-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tribes-highlight-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsShowMechanicsTiers',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsShowTribeTiers',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tribe-tiers-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tribe-tiers-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsShowTierSeven',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tier-7-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tier-7-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsShowTrinkets',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-trinkets-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-trinkets-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsIncludeTrinketsInTribeGroups',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsMinionListShowGoldenCard',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-golden-cards-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-golden-cards-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'toggle',
-						field: 'bgsMinionListShowSpellsAtBottom',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-spells-at-bottom-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-spells-at-bottom-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-					},
-					{
-						type: 'slider',
-						field: 'bgsMinionsListScale',
-						label: context.i18n.translateString('settings.global.widget-size-label'),
-						tooltip: null,
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
-						sliderConfig: {
-							min: 40,
-							max: 135,
-							snapSensitivity: 3,
-							knobs: minionsListSizeKnobs(context),
-						},
 					},
 				],
 			},
@@ -343,20 +193,5 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		field: 'playerBgsSouthseaCounter',
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-soutshsea-label'),
 		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-soutshsea-tooltip'),
-	},
-];
-
-const minionsListSizeKnobs = (context: SettingContext): readonly Knob[] => [
-	{
-		absoluteValue: 40,
-		label: context.i18n.translateString('settings.global.knob-sizes.small'),
-	},
-	{
-		absoluteValue: 100,
-		label: context.i18n.translateString('settings.global.knob-sizes.medium'),
-	},
-	{
-		absoluteValue: 135,
-		label: context.i18n.translateString('settings.global.knob-sizes.large'),
 	},
 ];

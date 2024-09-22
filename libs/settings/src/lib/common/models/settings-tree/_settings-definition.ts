@@ -13,8 +13,6 @@ import { troubleshootingSettings } from './troubleshooting/_troubleshooting-sett
 
 /**
  * TODO
- * - Move all settings related to the BG sim to their own section
- * - Same for some overlays like banned tribes, minions list?
  * - Mercenaries Quest. It's quite a lot of work, and I don't think it's used
  */
 export const settingsDefinition = (context: SettingContext): SettingNode => {
