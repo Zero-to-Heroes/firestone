@@ -168,21 +168,6 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 					},
 				],
 			},
-			{
-				id: 'decktracker-global-reset',
-				title: null,
-				settings: [
-					{
-						// label: context.i18n.translateString('settings.decktracker.global.reset-button'),
-						text: context.i18n.translateString('settings.decktracker.global.reset-button'),
-						tooltip: context.i18n.translateString('settings.decktracker.global.reset-button-tooltip'),
-						action: () => {
-							context.prefs.resetDecktrackerPositions();
-						},
-						confirmation: context.i18n.translateString('settings.decktracker.global.reset-button-confirmation'),
-					},
-				],
-			},
 		],
 	};
 };
