@@ -20,7 +20,7 @@ import {
 	PatchesConfigService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
@@ -37,7 +37,6 @@ import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { GameEvents } from '../../game-events.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
-import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';
 import { BgsBestUserStatsService } from '../bgs-best-user-stats.service';

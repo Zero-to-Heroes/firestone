@@ -11,11 +11,10 @@ import {
 } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
-import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
-import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 

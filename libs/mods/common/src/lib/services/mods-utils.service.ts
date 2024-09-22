@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { OwUtilsService } from '@legacy-import/src/lib/js/services/plugins/ow-utils.service';
-import { sortByProperties } from '@legacy-import/src/lib/js/services/utils';
-import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
+import { sortByProperties } from '@firestone/shared/framework/common';
+import { OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { ModConfig, ModsConfig, toModVersion, toVersionString } from '../model/mods-config';
 import { ModsConfigService } from './mods-config.service';
+import { ModData, ModsManagerService } from './mods-manager.service';
 
 const MELON_LOADER_LATESTT_ZIP = 'https://github.com/LavaGang/MelonLoader/releases/download/v0.5.7/MelonLoader.x86.zip';
 const MODS_MANAGER_PLUGIN_URL =
@@ -22,7 +21,7 @@ const UNSTRIPPED_LIBS = ['mscorlib.dll', 'Mono.Security.dll', 'System.Core.dll',
 // TODO: most likely, this whole class should be incorporated into mods-manager
 @Injectable()
 export class ModsUtilsService {
-	public currentModsStatus$$ = new BehaviorSubject<string>(null);
+	public currentModsStatus$$ = new BehaviorSubject<string | null>(null);
 
 	private modsManager: ModsManagerService;
 
@@ -56,25 +55,27 @@ export class ModsUtilsService {
 	public async installedMods(installPath: string): Promise<readonly ModData[]> {
 		const files = await this.ow.listFilesInDirectory(`${installPath}\\Mods`);
 		const conf = this.modsConfig.getConfig();
-		const result = files.data
-			?.filter((f) => f.type === 'file')
-			.filter((f) => f?.name?.toLowerCase()?.endsWith('.dll'))
-			.map((f) => f.name.split('.dll')[0])
-			.filter((name) => name !== 'GameEventsConnector')
-			.filter((name) => name !== 'FirestoneMelonModsManager')
-			.map((assemblyName) => {
-				const existingConf = conf[assemblyName];
-				return {
-					AssemblyName: assemblyName,
-					DownloadLink: existingConf?.downloadLink,
-					Name: existingConf?.modName ?? assemblyName,
-					Registered: existingConf?.enabled ?? true,
-					Version: toVersionString(existingConf?.lastKnownVersion),
-					updateAvailableVersion: toVersionString(existingConf?.updateAvailableVersion),
-				};
-			})
-			.filter((mod) => !!mod)
-			.sort(sortByProperties((m) => [m.Name]));
+		const result =
+			files.data
+				?.filter((f) => f.type === 'file')
+				.filter((f) => f?.name?.toLowerCase()?.endsWith('.dll'))
+				.map((f) => f.name.split('.dll')[0])
+				.filter((name) => name !== 'GameEventsConnector')
+				.filter((name) => name !== 'FirestoneMelonModsManager')
+				.map((assemblyName) => {
+					const existingConf = conf[assemblyName];
+					const result: ModData = {
+						AssemblyName: assemblyName,
+						DownloadLink: existingConf?.downloadLink ?? null,
+						Name: existingConf?.modName ?? assemblyName,
+						Registered: existingConf?.enabled ?? true,
+						Version: toVersionString(existingConf?.lastKnownVersion) ?? '0.0.0',
+						updateAvailableVersion: toVersionString(existingConf?.updateAvailableVersion),
+					};
+					return result;
+				})
+				.filter((mod) => !!mod)
+				.sort(sortByProperties((m: ModData) => [m.Name])) ?? [];
 		console.debug('looking for installed mods', conf, result);
 		return result;
 	}
@@ -124,14 +125,14 @@ export class ModsUtilsService {
 		return result;
 	}
 
-	public async updateMod(mod: ModData): Promise<ModData> {
+	public async updateMod(mod: ModData): Promise<ModData | null> {
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
 		console.debug('[mods-manager] updating mod', mod, installPath);
 		// const isModActivated = mod.Registered;
 		// await this.modsManager.deactivateMods([mod.AssemblyName]);
 		const updated = await this.io.downloadFileTo(
-			mod.DownloadLink,
+			mod.DownloadLink ?? '',
 			`${installPath}\\Mods`,
 			`${mod.AssemblyName}.dll`,
 		);
@@ -143,18 +144,18 @@ export class ModsUtilsService {
 		// 	await this.modsManager.toggleMods([mod.AssemblyName]);
 		// }
 		const existingConf: ModsConfig = this.modsConfig.getConfig();
-		const existingModConf: ModConfig = existingConf[mod.AssemblyName] ?? {
+		const existingModConf: ModConfig = existingConf[mod.AssemblyName ?? ''] ?? {
 			assemblyName: mod.AssemblyName,
 			enabled: mod.Registered,
 		};
 		const newModConf: ModConfig = {
 			...existingModConf,
-			lastKnownVersion: toModVersion(mod.updateAvailableVersion),
-			updateAvailableVersion: null,
+			lastKnownVersion: toModVersion(mod.updateAvailableVersion) ?? undefined,
+			updateAvailableVersion: undefined,
 		};
 		const newConf: ModsConfig = {
 			...existingConf,
-			[mod.AssemblyName]: newModConf,
+			[mod.AssemblyName ?? '']: newModConf,
 		};
 		console.debug('updating mods conf', newConf);
 		this.modsConfig.updateConf(newConf);
@@ -163,7 +164,7 @@ export class ModsUtilsService {
 
 	// Copy the managed libs
 	public async refreshEngine(
-		installPath: string = null,
+		installPath: string | null = null,
 	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
 		const isGameRunning = await this.gameStatus.inGame();
 		if (isGameRunning) {

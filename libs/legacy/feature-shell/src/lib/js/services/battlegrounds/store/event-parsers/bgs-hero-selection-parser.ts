@@ -1,8 +1,8 @@
 import { BattlegroundsState, BgsGame, BgsHeroSelectionOverviewPanel, BgsPanel } from '@firestone/battlegrounds/core';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { OwUtilsService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { OwUtilsService } from '../../../plugins/ow-utils.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsHeroSelectionEvent } from '../events/bgs-hero-selection-event';
 import { EventParser } from './_event-parser';

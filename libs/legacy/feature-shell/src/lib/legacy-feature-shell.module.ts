@@ -588,6 +588,7 @@ import { GameStateModule, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state'
 import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule } from '@firestone/mercenaries/common';
+import { ModsCommonModule } from '@firestone/mods/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SettingsModule } from '@firestone/settings';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -604,9 +605,6 @@ import {
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { TwitchCommonModule } from '@firestone/twitch/common';
-import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
-import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
-import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
 import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
@@ -811,7 +809,6 @@ import { MercenariesReferenceDataService } from './js/services/mercenaries/merce
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
-import { OwUtilsService } from './js/services/plugins/ow-utils.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
@@ -834,7 +831,6 @@ import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
-import { ModsConfigService } from './libs/mods/services/mods-config.service';
 
 console.log('environment is ' + process.env['NODE_ENV']);
 
@@ -904,6 +900,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MainwindowCommonModule,
 		SettingsModule,
 		TwitchCommonModule,
+		ModsCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
@@ -1716,11 +1713,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DebugService,
 		Events,
 
-		ModsBootstrapService,
-		ModsManagerService,
-		ModsUtilsService,
-		ModsConfigService,
-
 		AchievementHistoryStorageService,
 		AchievementHistoryService,
 
@@ -1733,7 +1725,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CollectionManager,
 		SetsManagerService,
 		CollectionStorageService,
-		OwUtilsService,
 		HotkeyService,
 		CardsHighlightService,
 		CardsHighlightFacadeService,

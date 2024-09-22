@@ -8,7 +8,7 @@ export const filterSettings = (root: SettingNode, searchString: string | null): 
 
 	const result: SettingNode = {
 		...root,
-		children: root.children!.map((child) => filterNode(child, searchString)).filter((c) => !!c),
+		children: root.children!.map((child) => filterNode(child, searchString)).filter((c) => !!c) as SettingNode[],
 	};
 	return result;
 };
@@ -19,8 +19,9 @@ const filterNode = (node: SettingNode, searchString: string): SettingNode | null
 		sections: node.sections
 			?.map((section) => filterSection(section, searchString))
 			.filter((s) => !!s?.settings?.length)
-			.filter((s) => !!s),
-		children: node.children?.map((child) => filterNode(child, searchString)).filter((c) => !!c) ?? [],
+			.filter((s) => !!s) as (Section | SectionReference)[],
+		children: (node.children?.map((child) => filterNode(child, searchString)).filter((c) => !!c) ??
+			[]) as SettingNode[],
 	};
 
 	if (!result?.sections?.length && !result.children?.length) {

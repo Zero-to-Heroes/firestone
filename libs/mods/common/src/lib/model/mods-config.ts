@@ -17,7 +17,7 @@ export interface ModVersion {
 	readonly patch: number;
 }
 
-export const toModVersion = (version: string): ModVersion => {
+export const toModVersion = (version: string | null): ModVersion | null => {
 	if (!version?.split('.')?.length) {
 		return null;
 	}
@@ -30,7 +30,7 @@ export const toModVersion = (version: string): ModVersion => {
 	};
 };
 
-export const toVersionString = (version: ModVersion) => {
+export const toVersionString = (version: ModVersion | undefined) => {
 	if (!version) {
 		return null;
 	}

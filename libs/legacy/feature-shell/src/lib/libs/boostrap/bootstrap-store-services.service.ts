@@ -37,6 +37,7 @@ import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/
 import { BootstrapGameStateService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
+import { ModsConfigService } from '@firestone/mods/common';
 import { BootstrapSettingsService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardRulesService } from '@firestone/shared/framework/core';
@@ -67,7 +68,6 @@ import { ProfileUploaderService } from '../../js/services/profile/profile-upload
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
-import { ModsConfigService } from '../mods/services/mods-config.service';
 import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';
 
 @Injectable()

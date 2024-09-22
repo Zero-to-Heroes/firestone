@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { isVersionBefore } from '@firestone/app/common';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { sleep, sortByProperties } from '@firestone/shared/framework/common';
 import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
-import { sleep, sortByProperties } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
 import { toModVersion, toVersionString } from '../model/mods-config';
@@ -17,10 +16,9 @@ export class ModsManagerService {
 	private inGame$$ = new BehaviorSubject<boolean>(false);
 	private internalModsData$$ = new BehaviorSubject<readonly ModData[]>([]);
 
-	private ws: WebSocket;
+	private ws: WebSocket | null;
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly gameStatus: GameStatusService,
 		private readonly modsConfigService: ModsConfigService,
 		private readonly modsUtils: ModsUtilsService,
@@ -31,7 +29,6 @@ export class ModsManagerService {
 	}
 
 	public async init() {
-		await this.store.initComplete();
 		await waitForReady(this.prefs);
 
 		this.prefs.preferences$$
@@ -73,12 +70,15 @@ export class ModsManagerService {
 					}
 				});
 
-				combineLatest([this.internalModsData$$.asObservable(), this.store.listenModsConfig$((conf) => conf)])
+				combineLatest([
+					this.internalModsData$$.asObservable(),
+					this.modsConfigService.conf$$.pipe(map((conf) => conf)),
+				])
 					.pipe(
 						tap((info) => console.debug('[mods-manager] processing mods data', info)),
 						// filter(([modsData, conf]) => !!modsData?.length),
 					)
-					.subscribe(async ([modsData, [conf]]) => {
+					.subscribe(async ([modsData, conf]) => {
 						let modsDirty = false;
 						const newConf = { ...conf };
 						for (const modData of modsData) {
@@ -131,11 +131,11 @@ export class ModsManagerService {
 								(modData) =>
 									({
 										...modData,
-										Registered: newConf[modData.AssemblyName].enabled,
-										Version: toVersionString(newConf[modData.AssemblyName]?.lastKnownVersion),
-										DownloadLink: newConf[modData.AssemblyName].downloadLink,
+										Registered: newConf[modData.AssemblyName ?? ''].enabled,
+										Version: toVersionString(newConf[modData.AssemblyName ?? '']?.lastKnownVersion),
+										DownloadLink: newConf[modData.AssemblyName ?? ''].downloadLink,
 										updateAvailableVersion: toVersionString(
-											newConf[modData.AssemblyName]?.updateAvailableVersion,
+											newConf[modData.AssemblyName ?? '']?.updateAvailableVersion,
 										),
 									} as ModData),
 							)
@@ -151,11 +151,13 @@ export class ModsManagerService {
 							.filter((m) => m.Registered)
 							.filter((m) => {
 								const processedMod = result.find((m2) => m2.AssemblyName === m.AssemblyName);
-								return !processedMod.Registered;
+								return !processedMod?.Registered;
 							});
 						if (!!modsToDeactivate.length) {
 							console.debug('[mods-manager] will request mod deactivationg', modsData, result);
-							this.deactivateMods(modsToDeactivate.map((m) => m.AssemblyName));
+							this.deactivateMods(
+								modsToDeactivate.map((m) => m.AssemblyName).filter((n) => !!n) as string[],
+							);
 						}
 
 						console.debug('[mods-manager] sending mods data', result);
@@ -205,8 +207,8 @@ export class ModsManagerService {
 		});
 	}
 
-	public async hasUpdates(mod: ModData): Promise<string> {
-		const userRepo = mod.DownloadLink.split('https://github.com/')[1];
+	public async hasUpdates(mod: ModData): Promise<string | null> {
+		const userRepo = mod.DownloadLink?.split('https://github.com/')[1];
 		const apiCheckUrl = `https://api.github.com/repos/${userRepo}/releases/latest`;
 		console.debug('[mods-manager] checking updates for mod', mod, userRepo, apiCheckUrl);
 		const releaseDataStr = await this.api.get(apiCheckUrl);
@@ -277,8 +279,8 @@ interface ModMessage<T> {
 export interface ModData {
 	readonly Name: string;
 	readonly Registered: boolean;
-	readonly Version: string;
-	readonly DownloadLink: string;
 	readonly AssemblyName: string;
-	readonly updateAvailableVersion: string;
+	readonly Version: string;
+	readonly DownloadLink: string | null;
+	readonly updateAvailableVersion: string | null;
 }

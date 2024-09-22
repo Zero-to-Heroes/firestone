@@ -1,6 +1,6 @@
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OwUtilsService } from '@legacy-import/src/lib/js/services/plugins/ow-utils.service';
+import { OwUtilsService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 

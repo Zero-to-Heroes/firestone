@@ -12,7 +12,6 @@ import { troubleshootingSettings } from './troubleshooting/_troubleshooting-sett
 
 /**
  * TODO
- * - refresh for packs and achievements (in the Data section)
  * - Mods section (and only show it on beta version)
  * - Move all settings related to the BG sim to their own section
  * - Same for some overlays like banned tribes, minions list?
@@ -34,6 +33,7 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			achievementsSettings(context),
 			integrationsSettings(context),
 			troubleshootingSettings(context),
+			// modsSettings(context),
 		],
 	};
 };

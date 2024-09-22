@@ -34,7 +34,6 @@ import {
 	MercenariesHighlightsSelector,
 	MercenariesOutOfCombatStateSelector,
 	MercenariesStateSelector,
-	ModsConfigSelector,
 	NativeGameStateSelector,
 	Selector,
 	StoreEvent,
@@ -81,12 +80,6 @@ export class AppUiStoreFacadeService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }> {
 		return this.store.listenPrefs$(...selectors);
-	}
-
-	public listenModsConfig$<S extends ModsConfigSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends ModsConfigSelector<infer T> ? T : never }> {
-		return this.store.listenModsConfig$(...selectors);
 	}
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(

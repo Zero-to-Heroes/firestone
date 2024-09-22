@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
+import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
@@ -38,8 +39,6 @@ import { RewardMonitorService } from '../../js/services/rewards/rewards-monitor'
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
-import { ModsBootstrapService } from '../mods/services/mods-bootstrap.service';
-import { ModsManagerService } from '../mods/services/mods-manager.service';
 import { PackMonitor } from '../packs/services/pack-monitor.service';
 import { PackStatsService } from '../packs/services/pack-stats.service';
 import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';

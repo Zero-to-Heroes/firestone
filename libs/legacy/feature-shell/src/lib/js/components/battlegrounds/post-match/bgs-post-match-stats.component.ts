@@ -18,13 +18,12 @@ import {
 	MinionStat,
 	QuestReward,
 } from '@firestone/battlegrounds/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { normalizeCardId } from './card-utils';
 

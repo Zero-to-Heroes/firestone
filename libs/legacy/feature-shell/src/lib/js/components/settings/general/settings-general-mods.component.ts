@@ -6,17 +6,19 @@ import {
 	Component,
 	ViewRef,
 } from '@angular/core';
+import {
+	ModConfig,
+	ModData,
+	ModsConfig,
+	ModsConfigService,
+	ModsManagerService,
+	ModsUtilsService,
+	toModVersion,
+} from '@firestone/mods/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { sleep } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { ModConfig, ModsConfig, toModVersion } from '@legacy-import/src/lib/libs/mods/model/mods-config';
-import { ModsConfigService } from '@legacy-import/src/lib/libs/mods/services/mods-config.service';
-import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
-import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable, filter } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-general-mods',
@@ -28,77 +30,77 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	],
 	template: `
 		<div class="general-mods" scrollable>
-			<h2 class="title" [owTranslate]="'settings.general.mods.title'"></h2>
-			<p class="warning" [owTranslate]="'settings.general.mods.warning'"></p>
+			<h2 class="title" [fsTranslate]="'settings.general.mods.title'"></h2>
+			<p class="warning" [fsTranslate]="'settings.general.mods.warning'"></p>
 			<p class="instructions" [innerHTML]="instructions | safe"></p>
 
 			<div class="section">
-				<h3 class="section-title" [owTranslate]="'settings.general.mods.check-mods-title'"></h3>
-				<p class="description" [owTranslate]="'settings.general.mods.check-mods-description'"></p>
+				<h3 class="section-title" [fsTranslate]="'settings.general.mods.check-mods-title'"></h3>
+				<p class="description" [fsTranslate]="'settings.general.mods.check-mods-description'"></p>
 				<div class="button-group">
 					<input
 						class="game-location"
 						[(ngModel)]="gameLocation"
 						(mousedown)="preventDrag($event)"
-						[placeholder]="'settings.general.mods.game-location-placeholder' | owTranslate"
+						[placeholder]="'settings.general.mods.game-location-placeholder' | fsTranslate"
 					/>
-					<button (mousedown)="checkMods()" [owTranslate]="'settings.general.mods.check-mods'"></button>
+					<button (mousedown)="checkMods()" [fsTranslate]="'settings.general.mods.check-mods'"></button>
 				</div>
 			</div>
 
 			<div class="section" [ngClass]="{ disabled: !modsChecked }">
-				<h3 class="section-title" [owTranslate]="'settings.general.mods.enable-mods-title'"></h3>
+				<h3 class="section-title" [fsTranslate]="'settings.general.mods.enable-mods-title'"></h3>
 				<p
 					class="description"
-					[owTranslate]="'settings.general.mods.enable-mods-description'"
+					[fsTranslate]="'settings.general.mods.enable-mods-description'"
 					*ngIf="!areModsInstalled"
 				></p>
 				<p
 					class="description"
-					[owTranslate]="'settings.general.mods.disable-mods-description'"
+					[fsTranslate]="'settings.general.mods.disable-mods-description'"
 					*ngIf="areModsInstalled"
 				></p>
 				<div
 					class="game-running-error"
-					[owTranslate]="'settings.general.mods.game-running-error'"
+					[fsTranslate]="'settings.general.mods.game-running-error'"
 					*ngIf="showGameRunningError"
 				></div>
 				<div
 					class="mods-install-status"
 					*ngIf="modsInstallStatus$ | async as status"
-					[owTranslate]="status"
+					[fsTranslate]="status"
 				></div>
 				<div class="button-group" [ngClass]="{ pending: installOngoing }">
 					<button
 						*ngIf="!areModsInstalled"
 						(mousedown)="enableMods()"
-						[owTranslate]="'settings.general.mods.enable-mods'"
+						[fsTranslate]="'settings.general.mods.enable-mods'"
 					></button>
 					<button
 						*ngIf="areModsInstalled"
 						(mousedown)="refreshEngine()"
-						[helpTooltip]="'settings.general.mods.refresh-engine-tooltip' | owTranslate"
+						[helpTooltip]="'settings.general.mods.refresh-engine-tooltip' | fsTranslate"
 					>
 						{{ refreshEngineTitle }}
 					</button>
 					<button
 						*ngIf="areModsInstalled"
 						(mousedown)="disableMods()"
-						[owTranslate]="'settings.general.mods.disable-mods'"
+						[fsTranslate]="'settings.general.mods.disable-mods'"
 					></button>
 				</div>
 			</div>
 			<div class="section" [ngClass]="{ disabled: !modsChecked || !areModsInstalled }">
-				<h3 class="section-title" [owTranslate]="'settings.general.mods.add-mods-title'"></h3>
+				<h3 class="section-title" [fsTranslate]="'settings.general.mods.add-mods-title'"></h3>
 				<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
-				<p class="description" [owTranslate]="'settings.general.mods.installed-mods-description'"></p>
+				<p class="description" [fsTranslate]="'settings.general.mods.installed-mods-description'"></p>
 
 				<button
 					class="check-updates-button"
 					*ngIf="areModsInstalled && !!installedMods?.length"
 					[ngClass]="{ disabled: checkForUpdatesButtonDisabled }"
 					(mousedown)="checkForUpdates()"
-					[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | owTranslate"
+					[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | fsTranslate"
 				>
 					{{ checkForUpdatesLabel }}
 				</button>
@@ -109,14 +111,14 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							class="update-available"
 							*ngIf="!!mod.updateAvailableVersion && !value.inGame"
 							inlineSVG="assets/svg/restore.svg"
-							[helpTooltip]="'settings.general.mods.update-available' | owTranslate"
+							[helpTooltip]="'settings.general.mods.update-available' | fsTranslate"
 							(click)="updateMod(mod)"
 						></div>
 						<div
 							class="update-available disabled"
 							*ngIf="!!mod.updateAvailableVersion && value.inGame"
 							inlineSVG="assets/svg/restore.svg"
-							[helpTooltip]="'settings.general.mods.update-disabled' | owTranslate"
+							[helpTooltip]="'settings.general.mods.update-disabled' | fsTranslate"
 						></div>
 						<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
 						<a class="mod-name" *ngIf="mod.DownloadLink" href="{{ mod.DownloadLink }}" target="_blank">{{
@@ -137,7 +139,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 })
 // TODO: add more feedback on what is happening
 export class SettingsGeneralModsComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	modsInstallStatus$: Observable<string>;
@@ -168,16 +170,15 @@ export class SettingsGeneralModsComponent
 	private modsManager: ModsManagerService;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly modUtils: ModsUtilsService,
 		private readonly prefs: PreferencesService,
 		private readonly modsConfig: ModsConfigService,
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

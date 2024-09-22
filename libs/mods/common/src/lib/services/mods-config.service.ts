@@ -34,7 +34,7 @@ export class ModsConfigService {
 
 	private async init() {
 		const currentWindow = await this.ow?.getCurrentWindow();
-		if (currentWindow?.name === OverwolfService.MAIN_WINDOW) {
+		if ((currentWindow as any)?.name === OverwolfService.MAIN_WINDOW) {
 			this.isMainNode = true;
 			window['modsConfig'] = this.conf$$;
 			window['internalModsConfig'] = this;

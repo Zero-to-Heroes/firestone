@@ -1,6 +1,6 @@
 import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OwUtilsService } from '../../../plugins/ow-utils.service';
+import { OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsRecruitStartEvent } from '../events/bgs-recruit-start-event';
 import { EventParser } from './_event-parser';

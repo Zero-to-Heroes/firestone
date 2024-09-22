@@ -1,25 +1,19 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
-import { sleep } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 
 @Injectable()
 export class ModsBootstrapService {
 	private inGame$$ = new BehaviorSubject<boolean>(false);
 
-	private ws: WebSocket;
+	private ws: WebSocket | null;
 
-	constructor(
-		private readonly store: AppUiStoreFacadeService,
-		private readonly gameStatus: GameStatusService,
-		private readonly prefs: PreferencesService,
-	) {}
+	constructor(private readonly gameStatus: GameStatusService, private readonly prefs: PreferencesService) {}
 
 	public async init() {
-		await this.store.initComplete();
 		await waitForReady(this.prefs);
 
 		this.prefs.preferences$$
@@ -54,19 +48,19 @@ export class ModsBootstrapService {
 						}
 					});
 
-				this.store
-					.listenDeckState$((state) => state)
-					.pipe(
-						filter(() => this.ws?.readyState === this.ws?.OPEN),
-						debounceTime(1000),
-						distinctUntilChanged(),
-						map(([state]) => JSON.stringify(state)),
-						distinctUntilChanged(),
-					)
-					.subscribe((state) => {
-						this.sendToWs(state);
-						// console.debug('[mods-boostrap] sent state to websocket');
-					});
+				// this.store
+				// 	.listenDeckState$((state) => state)
+				// 	.pipe(
+				// 		filter(() => this.ws?.readyState === this.ws?.OPEN),
+				// 		debounceTime(1000),
+				// 		distinctUntilChanged(),
+				// 		map(([state]) => JSON.stringify(state)),
+				// 		distinctUntilChanged(),
+				// 	)
+				// 	.subscribe((state) => {
+				// 		this.sendToWs(state);
+				// 		// console.debug('[mods-boostrap] sent state to websocket');
+				// 	});
 			});
 	}
 

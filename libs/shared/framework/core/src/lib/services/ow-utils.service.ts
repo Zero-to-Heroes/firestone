@@ -1,5 +1,7 @@
+/* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
-import { OverwolfService, WindowManagerService } from '@firestone/shared/framework/core';
+import { OverwolfService } from './overwolf.service';
+import { WindowManagerService } from './window-manager.service';
 
 declare let OverwolfPlugin: any;
 
@@ -29,11 +31,11 @@ export class OwUtilsService {
 		return this.internalService.flashWindow(windowName);
 	}
 
-	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string, any]> {
+	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string | null, any]> {
 		return this.internalService.captureWindow(windowName, copyToClipboard);
 	}
 
-	public async captureActiveWindow(): Promise<[string, any]> {
+	public async captureActiveWindow(): Promise<[string | null, any]> {
 		return this.internalService.captureActiveWindow();
 	}
 
@@ -82,8 +84,8 @@ class OwUtilsServiceInternal {
 		});
 	}
 
-	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string, any]> {
-		return new Promise<[string, any]>(async (resolve, reject) => {
+	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string | null, any]> {
+		return new Promise<[string | null, any]>(async (resolve, reject) => {
 			console.log('[ow-utils] capturing window', windowName);
 			const plugin = await this.get();
 			try {
@@ -94,13 +96,13 @@ class OwUtilsServiceInternal {
 				});
 			} catch (e) {
 				console.warn('[ow-utils] could not take screenshot', e);
-				resolve(null);
+				resolve([null, null]);
 			}
 		});
 	}
 
-	public async captureActiveWindow(): Promise<[string, any]> {
-		return new Promise<[string, any]>(async (resolve, reject) => {
+	public async captureActiveWindow(): Promise<[string | null, any]> {
+		return new Promise<[string | null, any]>(async (resolve, reject) => {
 			const plugin = await this.get();
 
 			try {
@@ -110,7 +112,7 @@ class OwUtilsServiceInternal {
 				});
 			} catch (e) {
 				console.warn('[ow-utils] could not take screenshot', e);
-				resolve(null);
+				resolve([null, null]);
 			}
 		});
 	}
