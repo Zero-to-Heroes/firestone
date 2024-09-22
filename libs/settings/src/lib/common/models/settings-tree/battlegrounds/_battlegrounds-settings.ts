@@ -1,4 +1,5 @@
 import { SettingContext, SettingNode } from '../../settings.types';
+import { battlegroundsBattleOddsSettings } from './battlegrounds-settings-battle-odds';
 import { battlegroundsGlobalSettings } from './battlegrounds-settings-global';
 import { battlegroundsLeaderboardSettings } from './battlegrounds-settings-leaderboard';
 import { battlegroundsOverlaySettings } from './battlegrounds-settings-overlay';
@@ -12,6 +13,7 @@ export const battlegroundsSettings = (context: SettingContext): SettingNode => {
 		children: [
 			battlegroundsGlobalSettings(context),
 			battlegroundsOverlaySettings(context),
+			battlegroundsBattleOddsSettings(context),
 			battlegroundsSessionWidgetSettings(context),
 			battlegroundsLeaderboardSettings(context),
 		],

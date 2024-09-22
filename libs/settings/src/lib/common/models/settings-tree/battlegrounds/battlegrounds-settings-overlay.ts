@@ -104,44 +104,10 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 					},
 					{
 						type: 'toggle',
-						field: 'bgsEnableBattleSimulationOverlay',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.battle-simulation-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.battle-simulation-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation,
-					},
-					{
-						type: 'toggle',
 						field: 'bgsShowHeroSelectionAchievements',
 						label: context.i18n.translateString('settings.battlegrounds.general.show-achievements-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.show-achievements-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
-					},
-				],
-			},
-			// TODO: move this
-			{
-				id: 'battlegrounds-simulator-overlay',
-				title: context.i18n.translateString('settings.battlegrounds.general.simulator-config-title'),
-				settings: [
-					{
-						type: 'toggle',
-						field: 'bgsEnableSimulationSampleInOverlay',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.battle-simulation-example-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.battle-simulation-example-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || !prefs.bgsEnableBattleSimulationOverlay,
-					},
-					{
-						type: 'slider',
-						field: 'bgsSimulatorScale',
-						label: context.i18n.translateString('settings.global.widget-size-label'),
-						tooltip: null,
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || !prefs.bgsEnableBattleSimulationOverlay,
-						sliderConfig: {
-							min: 80,
-							max: 170,
-							snapSensitivity: 3,
-							knobs: sizeKnobs(context),
-						},
 					},
 				],
 			},
