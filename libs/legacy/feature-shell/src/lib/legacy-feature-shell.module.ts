@@ -554,7 +554,7 @@ import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/m
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { AchievementsCommonModule } from '@firestone/achievements/common';
+import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { AppCommonModule } from '@firestone/app/common';
@@ -572,7 +572,11 @@ import {
 	BgsBattlePositioningMockExecutorService,
 } from '@firestone/battlegrounds/simulator';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
-import { COLLECTION_MANAGER_SERVICE_TOKEN, CollectionCommonModule } from '@firestone/collection/common';
+import {
+	COLLECTION_MANAGER_SERVICE_TOKEN,
+	COLLECTION_PACK_SERVICE_TOKEN,
+	CollectionCommonModule,
+} from '@firestone/collection/common';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -1702,6 +1706,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
 		{ provide: COLLECTION_MANAGER_SERVICE_TOKEN, useExisting: CollectionManager },
+		{ provide: COLLECTION_PACK_SERVICE_TOKEN, useExisting: PackStatsService },
+		{ provide: REMOTE_ACHIEVEMENTS_SERVICE_TOKEN, useExisting: FirestoneRemoteAchievementsLoaderService },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
 		{ provide: REVIEW_ID_SERVICE_TOKEN, useExisting: ReviewIdService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },

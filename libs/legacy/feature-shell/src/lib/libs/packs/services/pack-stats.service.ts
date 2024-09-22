@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
+import { ICollectionPackService } from '@firestone/collection/common';
 import { ApiRunner, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
@@ -12,7 +13,7 @@ const PACKS_UPDATE_URL = 'https://zbfdquy6qvpmragkcwjzpr3v5a0bcgfn.lambda-url.us
 const PACKS_RETRIEVE_URL = 'https://dwfrvwcatnkfohkhcksuxweoii0mtgch.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
-export class PackStatsService {
+export class PackStatsService implements ICollectionPackService {
 	constructor(
 		private readonly events: Events,
 		private readonly allCards: SetsService,

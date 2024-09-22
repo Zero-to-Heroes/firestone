@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IRemoteAchievementsService } from '@firestone/achievements/common';
 import { ApiRunner, LocalStorageService, UserService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../../models/achievement';
@@ -10,7 +11,7 @@ const ACHIEVEMENTS_RETRIEVE_URL = 'https://v4sa2mtlxy5y5suuwwmj6p2i6e0epbqt.lamb
 
 // This is only used for Firestone achievements - the native achievements are retrieved from memory
 @Injectable()
-export class FirestoneRemoteAchievementsLoaderService {
+export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievementsService {
 	public remoteAchievements$$ = new BehaviorSubject<readonly CompletedAchievement[]>([]);
 
 	constructor(

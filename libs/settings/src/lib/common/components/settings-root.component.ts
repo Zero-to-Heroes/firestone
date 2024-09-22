@@ -7,6 +7,8 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
+import { IRemoteAchievementsService, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@firestone/achievements/common';
+import { COLLECTION_PACK_SERVICE_TOKEN, ICollectionPackService } from '@firestone/collection/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -70,6 +72,8 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly diskCache: DiskCacheService,
 		private readonly gamesLoader: GameStatsLoaderService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
+		@Inject(COLLECTION_PACK_SERVICE_TOKEN) private readonly packService: ICollectionPackService,
+		@Inject(REMOTE_ACHIEVEMENTS_SERVICE_TOKEN) private readonly remoteAchievements: IRemoteAchievementsService,
 	) {
 		super(cdr);
 	}
@@ -94,6 +98,8 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			services: {
 				diskCache: this.diskCache,
 				gamesLoader: this.gamesLoader,
+				packService: this.packService,
+				remoteAchievements: this.remoteAchievements,
 			},
 		};
 		this.rootNode = settingsDefinition(context);

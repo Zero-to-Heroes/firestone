@@ -3,6 +3,8 @@ import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
 import { DropdownOption, SettingContext, SettingNode } from '../../settings.types';
 
 const isRefreshingGames$$ = new BehaviorSubject<boolean>(false);
+const isRefreshingPacks$$ = new BehaviorSubject<boolean>(false);
+const isRefreshingAchievements$$ = new BehaviorSubject<boolean>(false);
 const isClearingGames$$ = new BehaviorSubject<boolean>(false);
 
 export const generalDataSettings = (context: SettingContext): SettingNode => {
@@ -82,12 +84,47 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 					},
 				],
 			},
+			{
+				id: 'general-data-other',
+				title: context.i18n.translateString('settings.general.data.other-title'),
+				settings: [
+					{
+						label: context.i18n.translateString('settings.general.data.packs'),
+						text: refreshPacksButtonText$(context),
+						tooltip: context.i18n.translateString('settings.general.data.packs-tooltip'),
+						action: async () => {
+							isRefreshingPacks$$.next(true);
+							// Make sure we don't return too quickly, otherwise the user might think nothing happened
+							await Promise.all([context.services.packService.refreshPackStats(), sleep(1000)]);
+							isRefreshingPacks$$.next(false);
+						},
+					},
+					{
+						label: context.i18n.translateString('settings.general.data.achievements'),
+						text: refreshAchievementsButtonText$(context),
+						tooltip: context.i18n.translateString('settings.general.data.achievements-tooltip'),
+						action: async () => {
+							isRefreshingAchievements$$.next(true);
+							await Promise.all([await context.services.remoteAchievements.loadAchievements(), sleep(1000)]);
+							isRefreshingAchievements$$.next(false);
+						},
+					},
+				],
+			},
 		],
 	};
 };
 
 const refreshGamesButtonText$ = (context: SettingContext): Observable<string> => {
 	return isRefreshingGames$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+};
+
+const refreshPacksButtonText$ = (context: SettingContext): Observable<string> => {
+	return isRefreshingPacks$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+};
+
+const refreshAchievementsButtonText$ = (context: SettingContext): Observable<string> => {
+	return isRefreshingAchievements$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
 };
 
 const clearGamesButtonText$ = (context: SettingContext): Observable<string> => {
