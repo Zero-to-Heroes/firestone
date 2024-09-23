@@ -144,23 +144,38 @@ export class AppStartupService {
 	private async reloadWindows() {
 		console.log('reloading windows in app bootstrap');
 		const prefs: Preferences = await this.prefs.getPreferences();
+		const [mainWindowIntegrated, mainWindowNative, settingsWindowIntegrated, settingsWindowNative] =
+			await Promise.all([
+				this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY),
+				this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW),
+				this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY),
+				this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW),
+			]);
+		const isSettingsWindowOpen = settingsWindowIntegrated.isVisible || settingsWindowNative.isVisible;
+		const isMainWindowOpen = mainWindowIntegrated.isVisible || mainWindowNative.isVisible;
+		console.debug('[reload] are windows open', isSettingsWindowOpen, isMainWindowOpen);
+		await this.ow.closeWindow(mainWindowIntegrated.id);
+		await this.ow.closeWindow(mainWindowNative.id);
+		await this.ow.closeWindow(settingsWindowIntegrated.id);
+		await this.ow.closeWindow(settingsWindowNative.id);
+		console.debug('[reload] cloased windows');
+
 		const [mainWindow, settingsWindow] = await Promise.all([
 			this.ow.getCollectionWindow(prefs),
 			this.ow.getSettingsWindow(prefs),
 		]);
-		const isSettingsWindowOpen = settingsWindow.isVisible;
-		const isMainWindowOpen = mainWindow.isVisible;
-		this.ow.closeWindow(settingsWindow.id);
-		this.ow.closeWindow(mainWindow.id);
-		await this.ow.restoreWindow(mainWindow.id);
-		await this.ow.restoreWindow(settingsWindow.id);
-		this.ow.bringToFront(settingsWindow.id);
-		this.ow.bringToFront(mainWindow.id);
+		const restoredMain = await this.ow.restoreWindow(mainWindow.id);
+		const restoredSettings = await this.ow.restoreWindow(settingsWindow.id);
+		await this.ow.bringToFront(settingsWindow.id);
+		await this.ow.bringToFront(mainWindow.id);
+		console.debug('[reload] restored', restoredSettings, restoredMain);
 
 		if (!isSettingsWindowOpen) {
+			console.debug('[reload] closing settings window');
 			this.ow.closeWindow(settingsWindow.id);
 		}
 		if (!isMainWindowOpen) {
+			console.debug('[reload] closing main window');
 			this.ow.closeWindow(mainWindow.id);
 		}
 	}
