@@ -36,7 +36,7 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 			<nav class="navigation" *ngIf="rootNode">
 				<div class="header" [fsTranslate]="'settings.title'"></div>
 				<settings-search class="search"></settings-search>
-				<ul class="nodes">
+				<ul class="nodes" scrollable>
 					<settings-navigation-node
 						*ngFor="let child of rootNode.children"
 						[node]="child"

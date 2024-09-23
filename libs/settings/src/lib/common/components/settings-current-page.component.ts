@@ -16,15 +16,17 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 	template: `
 		<div class="current-page {{ node.cssClass }}" *ngIf="node$ | async as node">
 			<div class="page-title">{{ node.name }}</div>
-			<section class="section" *ngFor="let section of node.sections">
-				<ng-container *ngIf="isSection(section)">
-					<settings-current-page-section [section]="section"> </settings-current-page-section>
-				</ng-container>
-				<ng-container *ngIf="isSectionReference(section)">
-					<settings-current-page-section-reference [section]="section">
-					</settings-current-page-section-reference>
-				</ng-container>
-			</section>
+			<div class="sections" scrollable>
+				<section class="section" *ngFor="let section of node.sections">
+					<ng-container *ngIf="isSection(section)">
+						<settings-current-page-section [section]="section"> </settings-current-page-section>
+					</ng-container>
+					<ng-container *ngIf="isSectionReference(section)">
+						<settings-current-page-section-reference [section]="section">
+						</settings-current-page-section-reference>
+					</ng-container>
+				</section>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
