@@ -9,7 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 
 const META_TRINKET_STRATEGIES_URL =
-	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-trinket-strategies.json';
+	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-trinket-strategies.gz.json';
 
 @Injectable()
 export class BgsMetaTrinketStrategiesService extends AbstractFacadeService<BgsMetaTrinketStrategiesService> {
