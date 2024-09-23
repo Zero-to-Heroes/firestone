@@ -7,9 +7,14 @@
 	position: relative;
 	height: 100%;
 
+	& > * {
+		pointer-events: none;
+	}
+
 	.slider {
 		width: 100%;
 		opacity: 1;
+		pointer-events: all;
 
 		&::-webkit-slider-runnable-track {
 			cursor: auto;
@@ -42,7 +47,6 @@
 		right: 0;
 		background: #a89782;
 		background: #a8978282; // opacity 50%
-		pointer-events: none;
 	}
 
 	.progress {
@@ -51,7 +55,6 @@
 		// 50% - height / 2
 		top: calc(50% - 1px);
 		background: #ffb948;
-		pointer-events: none;
 	}
 
 	.thumb {
@@ -83,7 +86,6 @@
 		position: absolute;
 		height: 100%;
 		width: 100%;
-		pointer-events: none;
 
 		.knob {
 			position: absolute;

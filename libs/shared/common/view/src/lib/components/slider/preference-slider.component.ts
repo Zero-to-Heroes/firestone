@@ -20,7 +20,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 		`./preference-slider.component.scss`,
 	],
 	template: `
-		<div class="preference-slider" [ngClass]="{ disabled: !enabled }">
+		<div class="preference-slider" [ngClass]="{ disabled: !enabled }" (mousedown)="onSliderMouseDown($event)">
 			<input
 				[disabled]="!enabled"
 				type="range"
@@ -29,7 +29,6 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 				[min]="min"
 				[max]="max"
 				step="any"
-				(mousedown)="onSliderMouseDown($event)"
 				(mouseup)="onSliderMouseUp($event)"
 				[(ngModel)]="value"
 				(ngModelChange)="onValueChange($event)"

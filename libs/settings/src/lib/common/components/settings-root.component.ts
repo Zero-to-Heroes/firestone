@@ -106,6 +106,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		};
 		this.rootNode = settingsDefinition(context);
 		const localeSettings$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.locale),
 			this.mapData((prefs) => {
 				return settingsDefinition(context);
 			}),
