@@ -187,7 +187,7 @@ export const cardIdSelector = (
 		case CardIds.AncientMysteries:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.AnimateDead:
-			return and(side(inputSide), inGraveyard, minion, effectiveCostLess(3));
+			return and(side(inputSide), inGraveyard, minion, effectiveCostLess(4));
 		case CardIds.AnimatedAvalanche:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.AntiqueFlinger_WW_413:
