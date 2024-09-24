@@ -80,8 +80,8 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreCo
 		heroId: string,
 	): Value {
 		const heroStatsOverTurn: (readonly BattleResultHistory[])[] = postMatch
-			.map((postMatch) => postMatch.stats.battleResultHistory)
-			.filter((stats) => stats && stats.length) as (readonly BattleResultHistory[])[];
+			.map((postMatch) => postMatch.stats?.battleResultHistory)
+			.filter((stats) => !!stats?.length) as (readonly BattleResultHistory[])[];
 
 		const allTurns = heroStatsOverTurn
 			.flatMap((stats) => stats.map((stat) => stat.turn))

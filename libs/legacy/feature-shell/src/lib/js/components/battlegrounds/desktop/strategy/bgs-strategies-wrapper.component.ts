@@ -2,14 +2,18 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
 	BgsHeroCurveActionExtended,
-	BgsHeroStratAuthor,
 	BgsHeroStratTip,
 	BgsMetaHeroStrategiesService,
 	LocalizedBgsHeroCurve,
 	LocalizedBgsHeroCurveStep,
 	Strategy,
 } from '@firestone/battlegrounds/common';
-import { PatchInfo, PatchesConfigService } from '@firestone/shared/common/service';
+import {
+	ExpertContributor,
+	ExpertContributorsService,
+	PatchInfo,
+	PatchesConfigService,
+} from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -40,26 +44,34 @@ export class BgsStrategiesWrapperComponent extends AbstractSubscriptionComponent
 		private readonly i18n: ILocalizationService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly strategies: BgsMetaHeroStrategiesService,
+		private readonly contributors: ExpertContributorsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig, this.strategies);
+		await waitForReady(this.patchesConfig, this.strategies, this.contributors);
 
 		this.strategies$ = combineLatest([
 			this.heroId$$.asObservable(),
 			this.strategies.strategies$$,
+			this.contributors.contributors$$,
 			this.patchesConfig.config$$,
 		]).pipe(
-			filter(([heroId, strats, patchConfig]) => !!strats?.heroes?.length),
-			this.mapData(([heroId, strats, patchConfig]) => {
-				console.debug('strats', strats);
+			filter(([heroId, strats, contributors, patchConfig]) => !!strats?.heroes?.length && !!contributors?.length),
+			this.mapData(([heroId, strats, contributors, patchConfig]) => {
+				console.debug('strats', strats, heroId, contributors);
 				const stratsForHero: readonly BgsHeroStratTip[] =
-					strats.heroes.find((h) => h.id === normalizeHeroCardId(heroId, this.allCards))?.tips ?? [];
+					strats.heroes.find((h) => h.cardId === normalizeHeroCardId(heroId, this.allCards))?.tips ?? [];
+				console.debug(
+					'stratsForHero',
+					normalizeHeroCardId(heroId, this.allCards),
+					stratsForHero,
+					strats.heroes.find((h) => h.cardId === normalizeHeroCardId(heroId, this.allCards)),
+				);
 
 				return [...stratsForHero].sort(sortByProperties((s) => [-s.patch])).map((strat) => {
-					const author: BgsHeroStratAuthor = strats.authors.find((a) => a.id === strat.author);
+					const author: ExpertContributor = contributors.find((a) => a.id === strat.author);
 					const patch: PatchInfo = patchConfig?.patches?.find((p) => p.number === strat.patch);
 					const result: Strategy = {
 						date: this.i18n.translateString('app.battlegrounds.strategies.date', {

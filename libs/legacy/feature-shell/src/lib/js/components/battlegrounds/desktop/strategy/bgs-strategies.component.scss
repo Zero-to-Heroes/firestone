@@ -2,3 +2,9 @@
 	display: flex;
 	flex-direction: column;
 }
+
+bgs-strategies-wrapper,
+bgs-strategies-view {
+	flex-grow: 1;
+	display: flex;
+}

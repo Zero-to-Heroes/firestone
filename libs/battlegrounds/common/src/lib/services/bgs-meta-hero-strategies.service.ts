@@ -9,7 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 
 const META_HERO_STRATEGIES_URL =
-	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/battlegrounds-strategies.json';
+	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-hero-strategies.gz.json';
 
 @Injectable()
 export class BgsMetaHeroStrategiesService extends AbstractFacadeService<BgsMetaHeroStrategiesService> {
@@ -47,14 +47,12 @@ export class BgsMetaHeroStrategiesService extends AbstractFacadeService<BgsMetaH
 }
 
 export interface BgsHeroStrategies {
-	readonly lastUpdateDate: Date;
 	readonly heroes: readonly BgsHeroStratHero[];
 	readonly curves: readonly BgsHeroCurve[];
-	readonly authors: readonly BgsHeroStratAuthor[];
 }
 
 export interface BgsHeroStratHero {
-	readonly id: string;
+	readonly cardId: string;
 	readonly tips: readonly BgsHeroStratTip[];
 }
 
@@ -66,14 +64,6 @@ export interface BgsHeroStratTip {
 	readonly language: string;
 	readonly patch: number;
 	readonly date: Date;
-}
-
-export interface BgsHeroStratAuthor {
-	readonly id: string;
-	readonly name: string;
-	readonly link: string;
-	readonly pictureUrl: string;
-	readonly highlights: string;
 }
 
 export interface BgsHeroCurve {

@@ -39,7 +39,7 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
 import { ModsConfigService } from '@firestone/mods/common';
 import { BootstrapSettingsService } from '@firestone/settings';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { CardRulesService } from '@firestone/shared/framework/core';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
@@ -141,6 +141,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BootstrapGameStateService: BootstrapGameStateService,
 		private readonly init_HearthpwnService: HearthpwnService,
 		private readonly init_CardRulesService: CardRulesService,
+		private readonly init_ExpertContributorsService: ExpertContributorsService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

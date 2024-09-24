@@ -40,12 +40,13 @@ export class BgsMetaTrinketStrategiesService extends AbstractFacadeService<BgsMe
 			const result = await this.api.callGetApi<readonly BgsTrinketTip[]>(META_TRINKET_STRATEGIES_URL);
 			this.localStorage.setItem(LocalStorageService.BGS_META_TRINKET_STRATEGIES, result);
 			this.strategies$$.next(result);
+			console.debug('[bgs-meta-trinket-strategies] loaded strategies', result);
 		});
 	}
 }
 
 export interface BgsTrinketTip {
-	readonly id: string;
+	readonly cardId: string;
 	readonly tips: readonly BgsTrinketTipItem[];
 }
 
