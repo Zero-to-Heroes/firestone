@@ -191,6 +191,9 @@ export class DeckTrackerOverlayContainerComponent
 		this.groupMinionsIntoTheirTribeGroup$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsGroupMinionsIntoTheirTribeGroup),
 		);
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.cardScale)).subscribe((scale) => {
+			this.el.nativeElement.style.setProperty('--card-tooltip-min-width', `${(scale / 100) * 30}vh`);
+		});
 	}
 
 	async ngAfterViewInit() {

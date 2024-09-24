@@ -52,6 +52,15 @@ import { DropdownOption } from '../../../settings/dropdown.component';
 					[incrementStep]="5"
 					(valueChange)="onScaleChanged(prefs, $event)"
 				></numeric-input>
+				<numeric-input
+					class="item input scale"
+					[label]="'twitch.card-scale' | owTranslate"
+					[labelTooltip]="'twitch.card-scale-tooltip' | owTranslate"
+					[value]="prefs.cardScale"
+					[minValue]="40"
+					[incrementStep]="5"
+					(valueChange)="onCardScaleChanged(prefs, $event)"
+				></numeric-input>
 				<section class="constructed">
 					<div class="section-title" [owTranslate]="'twitch.constructed-section-title'"></div>
 					<div class="group">
@@ -357,6 +366,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 
 	onScaleChanged(prefs: TwitchPreferences, value: number) {
 		const newPrefs: TwitchPreferences = { ...prefs, scale: value };
+		console.log('changing scale pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onCardScaleChanged(prefs: TwitchPreferences, value: number) {
+		const newPrefs: TwitchPreferences = { ...prefs, cardScale: value };
 		console.log('changing scale pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}

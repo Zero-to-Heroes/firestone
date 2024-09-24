@@ -2,6 +2,7 @@ export class TwitchPreferences {
 	readonly locale: string = 'auto';
 	readonly adaptativeScaling: boolean = true;
 	readonly scale: number = 100;
+	readonly cardScale: number = 100;
 	readonly useModernTracker: boolean = false;
 	readonly showHeroCards: boolean = true;
 	readonly showMinionsList: boolean = true;
