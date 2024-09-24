@@ -711,3 +711,8 @@ export const isCastWhenDrawn = (cardId: string, allCards: CardsFacadeService): b
 		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.CASTS_WHEN_DRAWN])
 	);
 };
+
+// A set of cards for which the mana cost in reference cards is not what we want to show
+export const shouldKeepOriginalCost = (cardId: string | CardIds): boolean => {
+	return cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330);
+};

@@ -8,7 +8,6 @@ import {
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
-import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -17,9 +16,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
-
-// A set of cards for which the mana cost in reference cards is not what we want to show
-const CARDS_FOR_WHICH_TO_SHOW_ORIGINAL_COST = [CardIds.ZilliaxDeluxe3000_TOY_330];
+import { shouldKeepOriginalCost } from '../../../services/hs-utils';
 
 @Component({
 	selector: 'grouped-deck-list',
@@ -477,7 +474,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	}
 
 	private getManaCost(refCard: DeckCard): number {
-		if (CARDS_FOR_WHICH_TO_SHOW_ORIGINAL_COST.some((c) => refCard.cardId?.startsWith(c))) {
+		if (shouldKeepOriginalCost(refCard.cardId)) {
 			return refCard.manaCost;
 		}
 		return this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost;

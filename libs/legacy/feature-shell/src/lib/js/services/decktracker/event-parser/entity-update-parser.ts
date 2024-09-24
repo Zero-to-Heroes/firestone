@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { publicCardCreators } from '@services/hs-utils';
+import { publicCardCreators, shouldKeepOriginalCost } from '@services/hs-utils';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
@@ -58,21 +58,32 @@ export class EntityUpdateParser implements EventParser {
 					cardInHand.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-						manaCost: this.allCards.getCard(obfsucatedCardId)?.cost,
+						manaCost: shouldKeepOriginalCost(obfsucatedCardId)
+							? cardInHand.manaCost
+							: this.allCards.getCard(obfsucatedCardId)?.cost,
 					} as DeckCard),
 					deck,
 					gameEvent,
 					this.allCards,
 			  )
 			: null;
-		// console.debug('[entity-update] newCardInHand', newCardInHand, shouldShowCardIdInHand, cardInHand, gameEvent);
+		console.debug(
+			'[entity-update] newCardInHand',
+			obfsucatedCardId,
+			newCardInHand,
+			shouldShowCardIdInHand,
+			cardInHand,
+			gameEvent,
+		);
 
 		const newCardInDeck = addAdditionalAttribuesInDeck(
 			cardInDeck?.cardId !== obfsucatedCardId
 				? cardInDeck?.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-						manaCost: this.allCards.getCard(obfsucatedCardId)?.cost,
+						manaCost: shouldKeepOriginalCost(obfsucatedCardId)
+							? cardInDeck.manaCost
+							: this.allCards.getCard(obfsucatedCardId)?.cost,
 				  })
 				: cardInDeck,
 			deck,
@@ -85,7 +96,9 @@ export class EntityUpdateParser implements EventParser {
 				? cardInOther.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-						manaCost: this.allCards.getCard(obfsucatedCardId)?.cost,
+						manaCost: shouldKeepOriginalCost(obfsucatedCardId)
+							? cardInOther.manaCost
+							: this.allCards.getCard(obfsucatedCardId)?.cost,
 				  } as DeckCard)
 				: null;
 		// console.debug(
