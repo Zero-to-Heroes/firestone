@@ -24,8 +24,8 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 		'./twitch-bgs-hero-overview.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-theme container scalable">
-			<div class="bgs-hero-overview-tooltip {{ leaderboardPositionClass }}">
+		<div class="battlegrounds-theme container">
+			<div class="bgs-hero-overview-tooltip scalable {{ leaderboardPositionClass }} ">
 				<bgs-opponent-overview-big
 					[opponent]="_opponent"
 					[enableSimulation]="false"
@@ -143,6 +143,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 	) {
 		super(cdr, prefs, el, renderer);
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
+		this.elToResize = () => this.el.nativeElement.querySelector('.container > .scalable');
 	}
 }
 

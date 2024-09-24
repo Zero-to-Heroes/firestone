@@ -25,8 +25,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { BehaviorSubject, Observable, from } from 'rxjs';
-// import fullState from './game-states/bgs-trinkets.json';
-import fullState from './game-states/constructed.json';
+import fullState from './game-states/bgs-trinkets.json';
+// import fullState from './game-states/constructed.json';
 import { TwitchCardsFacadeManagerService } from './twitch-cards-facade-manager.service';
 import { TwitchLocalizationManagerService } from './twitch-localization-manager.service';
 

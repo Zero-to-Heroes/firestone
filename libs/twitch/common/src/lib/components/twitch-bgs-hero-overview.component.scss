@@ -20,6 +20,7 @@
 	min-height: 110px;
 	height: 110px;
 	flex-shrink: 0;
+	transform-origin: bottom left;
 
 	&.position-8 {
 		margin-top: -140px;
@@ -45,6 +46,8 @@
 		}
 
 		.player-overview .player-info {
+			overflow: visible;
+
 			.bottom-info {
 				height: 100%;
 			}
@@ -78,13 +81,13 @@
 	align-items: center;
 	justify-content: flex-start;
 	// So that the tooltip positioning manages to properly center it
-	height: 290px;
+	// height: 290px;
 	z-index: 9;
-	min-height: 290px;
+	// min-height: 290px;
 	flex-shrink: 0;
 
 	.card {
-		width: 220px;
+		width: calc(0.8 * var(--card-tooltip-min-width));
 		margin-right: -30px;
 	}
 }

@@ -14,6 +14,8 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 
 	protected minScale = 0.1;
 
+	protected elToResize: () => ElementRef;
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		protected readonly prefs: TwitchPreferencesService,
@@ -68,7 +70,15 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 
 	// Allow override simply to benefit from the pref listening mechanism
 	protected doResize(newScale: number) {
-		const element = this.el.nativeElement.querySelector('.scalable') ?? this.el.nativeElement;
+		// Init not complete yet
+		if (this.elToResize && !this.elToResize()) {
+			return;
+		}
+		const element =
+			this.elToResize?.() ?? this.el.nativeElement.querySelector('.scalable') ?? this.el.nativeElement;
+		console.debug('changing scale', newScale, element);
+		console.debug('elToResize', this.elToResize?.());
+		console.debug('nativeElement', this.el.nativeElement);
 		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 	}
 }
