@@ -49,6 +49,7 @@ svg {
 	cursor: default;
 	width: 100%;
 	height: 100%;
+	overflow: visible; // Sometimes the icon is cropped
 }
 
 .svg-icon-fill {
