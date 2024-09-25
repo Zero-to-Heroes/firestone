@@ -40,6 +40,7 @@ export interface SettingNode {
 
 // Not sure how to do this, but the idea is to simply specify a manually crafted component that we insert
 export interface SectionReference {
+	readonly id: string;
 	readonly componentType: SettingsSectionReferenceType;
 }
 export type SettingsSectionReferenceType =

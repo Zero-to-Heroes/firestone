@@ -33,13 +33,10 @@ export class ControlBugComponent {
 	) {}
 
 	async showBugForm() {
-		this.settingsController.selectNodeId('general-bug');
-		// Avoid flickering
-		setTimeout(async () => {
-			const prefs = await this.prefs.getPreferences();
-			const settingsWindow = await this.ow.getSettingsWindow(prefs);
-			this.ow.restoreWindow(settingsWindow.id);
-			this.ow.bringToFront(settingsWindow.id);
-		}, 10);
+		this.settingsController.selectNodeFromOutside('general-bug');
+		const prefs = await this.prefs.getPreferences();
+		const settingsWindow = await this.ow.getSettingsWindow(prefs);
+		this.ow.restoreWindow(settingsWindow.id);
+		this.ow.bringToFront(settingsWindow.id);
 	}
 }

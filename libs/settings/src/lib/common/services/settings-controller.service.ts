@@ -32,12 +32,11 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 		this.rootNode$$.next(node);
 	}
 
-	// public selectNode(node: SettingNode) {
-	// 	this.selectedNode$$.next(node);
-	// }
-
 	public selectNodeId(nodeId: string | null) {
-		console.debug('selecting node id', nodeId, this.rootNode$$.value);
+		this.selectedNodeId$$.next(nodeId);
+	}
+
+	public selectNodeFromOutside(nodeId: string | null) {
 		this.selectedNodeId$$.next(nodeId);
 		this.searchString$$.next(null);
 	}
