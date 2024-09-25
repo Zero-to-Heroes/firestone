@@ -888,10 +888,10 @@ export class OverwolfService {
 		});
 	}
 
-	public async getSystemInformation(): Promise<any> {
-		return new Promise<any>((resolve) => {
+	public async getSystemInformation(): Promise<ExtendedSystemInfo | null> {
+		return new Promise<ExtendedSystemInfo | null>((resolve) => {
 			overwolf.utils.getSystemInformation((res) => {
-				resolve(res.systemInfo);
+				resolve((res?.systemInfo as ExtendedSystemInfo) ?? null);
 			});
 		});
 	}
@@ -1021,4 +1021,8 @@ export interface ExtendedWindowInfo extends overwolf.windows.WindowInfo {
 		width: number;
 		height: number;
 	};
+}
+
+export interface ExtendedSystemInfo extends overwolf.utils.SystemInfo {
+	SystemLanguage: string;
 }

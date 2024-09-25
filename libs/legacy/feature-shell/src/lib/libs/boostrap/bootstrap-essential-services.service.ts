@@ -42,10 +42,10 @@ export class BootstrapEssentialServicesService {
 		let prefs = await this.prefs.getPreferences();
 		console.debug('[bootstrap] setting language', prefs.locale);
 		let locale = prefs.locale;
-		// OW API call doesn't work at the moment
-		if (false && !prefs.hasChangedLocale) {
-			const regionInfo = await this.ow.getRegionInfo();
-			const systemLocale = regionInfo.info?.name;
+		if (!prefs.hasChangedLocale) {
+			const systemInfo = await this.ow.getSystemInformation();
+			console.debug('[bootstrap] system info', systemInfo);
+			const systemLocale = systemInfo?.SystemLanguage;
 			if (!!systemLocale?.length) {
 				locale = this.localizationService.getFirestoneLocale(systemLocale);
 				console.log('[bootstrap] setting language from region', locale, systemLocale);

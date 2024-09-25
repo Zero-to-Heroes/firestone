@@ -176,32 +176,44 @@ export class LocalizationService {
 	public getFirestoneLocale(locale: string): string {
 		switch (locale) {
 			case 'en-US':
+			case 'en':
 				return 'enUS';
 			case 'de-DE':
+			case 'de':
 				return 'deDE';
 			case 'es-ES':
+			case 'es':
 				return 'esES';
 			case 'es-MX':
 				return 'esMX';
 			case 'fr-FR':
+			case 'fr':
 				return 'frFR';
 			case 'it-IT':
+			case 'it':
 				return 'itIT';
 			case 'ja-JP':
+			case 'ja':
 				return 'jaJP';
 			case 'ko-KR':
+			case 'ko':
 				return 'koKR';
 			case 'pl-PL':
+			case 'pl':
 				return 'plPL';
 			case 'pt-BR':
+			case 'pt':
 				return 'ptBR';
 			case 'ru-RU':
+			case 'ru':
 				return 'ruRU';
 			case 'th-TH':
+			case 'th':
 				return 'thTH';
 			case 'zh-CN':
 				return 'zhCN';
 			case 'zh-TW':
+			case 'zh':
 				return 'zhTW';
 			default:
 				return 'enUS';
