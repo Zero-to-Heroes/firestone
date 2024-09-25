@@ -364,45 +364,6 @@ import { ReplaysComponent } from './js/components/replays/replays.component';
 import { SecretsHelperControlBarComponent } from './js/components/secrets-helper/secrets-helper-control-bar.component';
 import { SecretsHelperWidgetIconComponent } from './js/components/secrets-helper/secrets-helper-widget-icon.component';
 import { SecretsHelperComponent } from './js/components/secrets-helper/secrets-helper.component';
-import { SettingsAchievementsMenuComponent } from './js/components/settings/achievements/settings-achievements-menu.component';
-import { SettingsAchievementsNotificationsComponent } from './js/components/settings/achievements/settings-achievements-notifications.component';
-import { SettingsAchievementsComponent } from './js/components/settings/achievements/settings-achievements.component';
-import { SettingsAchievementsLiveComponent } from './js/components/settings/achievements/unused_settings-achievements-live.component';
-import { SettingsBattlegroundsGeneralComponent } from './js/components/settings/battlegrounds/settings-battlegrounds-general.component';
-import { SettingsBattlegroundsMenuComponent } from './js/components/settings/battlegrounds/settings-battlegrounds-menu.component';
-import { SettingsBattlegroundsOverlayComponent } from './js/components/settings/battlegrounds/settings-battlegrounds-overlay.component';
-import { SettingsBattlegroundsSessionComponent } from './js/components/settings/battlegrounds/settings-battlegrounds-session.component';
-import { SettingsBattlegroundsComponent } from './js/components/settings/battlegrounds/settings-battlegrounds.component';
-import { SettingsCollectionMenuComponent } from './js/components/settings/collection/settings-collection-menu.component';
-import { SettingsCollectionNotificationComponent } from './js/components/settings/collection/settings-collection-notification';
-import { SettingsCollectionComponent } from './js/components/settings/collection/settings-collection.component';
-import { SettingsDecktrackerBetaComponent } from './js/components/settings/decktracker/settings-decktracker-beta.component';
-import { SettingsDecktrackerDuelsComponent } from './js/components/settings/decktracker/settings-decktracker-duels.component';
-import { SettingsDecktrackerGlobalComponent } from './js/components/settings/decktracker/settings-decktracker-global';
-import { SettingsDecktrackerLaunchComponent } from './js/components/settings/decktracker/settings-decktracker-launch';
-import { SettingsDecktrackerMenuComponent } from './js/components/settings/decktracker/settings-decktracker-menu.component';
-import { SettingsDecktrackerOpponentDeckComponent } from './js/components/settings/decktracker/settings-decktracker-opponent-deck';
-import { SettingsDecktrackerTurnTimerComponent } from './js/components/settings/decktracker/settings-decktracker-turn-timer.component';
-import { SettingsDecktrackerYourDeckComponent } from './js/components/settings/decktracker/settings-decktracker-your-deck';
-import { SettingsDecktrackerComponent } from './js/components/settings/decktracker/settings-decktracker.component';
-import { LocalizationDropdownComponent } from './js/components/settings/general/localization-dropdown.component';
-import { SettingsGeneralDataComponent } from './js/components/settings/general/settings-general-data.component';
-import { SettingsGeneralLaunchComponent } from './js/components/settings/general/settings-general-launch.component';
-import { SettingsGeneralLocalizationComponent } from './js/components/settings/general/settings-general-localization.component';
-import { SettingsGeneralMenuComponent } from './js/components/settings/general/settings-general-menu.component';
-import { SettingsGeneralQuestsComponent } from './js/components/settings/general/settings-general-quests.component';
-import { SettingsGeneralComponent } from './js/components/settings/general/settings-general.component';
-import { SettingsMercenariesGeneralComponent } from './js/components/settings/mercenaries/settings-mercenaries-general.component';
-import { SettingsMercenariesMenuComponent } from './js/components/settings/mercenaries/settings-mercenaries-menu.component';
-import { SettingsMercenariesQuestsComponent } from './js/components/settings/mercenaries/settings-mercenaries-quests.component';
-import { SettingsMercenariesComponent } from './js/components/settings/mercenaries/settings-mercenaries.component';
-import { ModalVideoSettingsChangedComponent } from './js/components/settings/modal/modal-video-settings-changed.component';
-import { SettingsModalComponent } from './js/components/settings/modal/settings-modal.component';
-import { SettingsReplaysGeneralComponent } from './js/components/settings/replays/settings-replays-general.component';
-import { SettingsReplaysMenuComponent } from './js/components/settings/replays/settings-replays-menu.component';
-import { SettingsReplaysComponent } from './js/components/settings/replays/settings-replays.component';
-import { SettingsAdvancedToggleComponent } from './js/components/settings/settings-advanced-toggle.component';
-import { SettingsAppSelectionComponent } from './js/components/settings/settings-app-selection.component';
 import { SettingsComponent } from './js/components/settings/settings.component';
 import { StatsFiltersComponent } from './js/components/stats/desktop/filters/_stats-filters.component';
 import { StatsXpSeasonFilterDropdownComponent } from './js/components/stats/desktop/filters/stats-xp-season-filter-dropdown.component';
@@ -420,74 +381,30 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
-import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
-import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
-import { BgsStrategiesWrapperComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-wrapper.component';
-import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
-import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
-import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
-import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
-import { ControlCloseComponent } from '@components/controls/control-close.component';
-import { ControlWebsiteComponent } from '@components/controls/control-website.component';
-import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
-import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
-import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
-import { DeckTrackerOverlayContainerComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
-import { DeckTrackerOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
-import { DeckTrackerTwitchTitleBarComponent } from '@components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
-import { EmptyCardComponent } from '@components/decktracker/overlay/twitch/empty-card.component';
-import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/state-mouse-over.component';
-import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
-import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
-import { LotteryAchievementComponent } from '@components/lottery/lottery-achievement.component';
-import { LotteryAchievementsWidgetComponent } from '@components/lottery/lottery-achievements.component';
-import { LotteryLotteryWidgetComponent } from '@components/lottery/lottery-lottery.component';
-import { LotteryNavigationComponent } from '@components/lottery/lottery-navigation.component';
-import { LotteryWidgetWrapperComponent } from '@components/lottery/lottery-widget-wrapper.component';
-import { LotteryWindowComponent } from '@components/lottery/lottery-window.component';
-import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
-import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
-import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
-import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
-import { OpponentEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/opponent-earthen-golem-widget-wrapper.component';
-import { OpponentMulticasterWidgetWrapperComponent } from '@components/overlays/counters/opponent-multicaster-widget-wrapper.component';
-import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
-import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
-import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
-import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
-import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
-import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
-import { PlayerChainedGuardianWidgetWrapperComponent } from '@components/overlays/counters/player-chained-guardian-widget-wrapper.component';
-import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
-import { PlayerEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/player-earthen-golem-widget-wrapper.component';
-import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
-import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overlays/counters/player-menagerie-widget-wrapper.component';
-import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
-import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
-import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
-import { PlayerTreantWidgetWrapperComponent } from '@components/overlays/counters/player-treant-widget-wrapper.component';
-import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
-import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
-import { SettingsGeneralLotteryComponent } from '@components/settings/general/settings-general-lottery.component';
-import { SettingsGeneralPremiumComponent } from '@components/settings/general/settings-general-premium.component';
-// import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
-// import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
-// import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { ArenaRunComponent } from '@components/arena/desktop/arena-run.component';
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { BgsBattleRecapPlayerComponent } from '@components/battlegrounds/battles/bgs-battle-recap-player.component';
+import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
+import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
 import { BattlegroundsTrinketTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-trinket-type-filter-dropdown.component';
+import { BgsStrategiesWrapperComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-wrapper.component';
+import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
+import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { BattlegroundsMinionItemComponent } from '@components/battlegrounds/minions-tiers/bgs-minion-item.component';
 import { BattlegroundsMinionsHighlightButtonsComponent } from '@components/battlegrounds/minions-tiers/minion-highlight-buttons.component';
 import { BattlegroundsMinionsListTiersHeaderComponent } from '@components/battlegrounds/minions-tiers/minions-list-tiers-header.component';
 import { BattlegroundsMinionsTierIconComponent } from '@components/battlegrounds/minions-tiers/tier-icon.component';
 import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegrounds/overlay/battlegrounds-tribe-details-tooltip.component';
 import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
+import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
+import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
+import { ControlCloseComponent } from '@components/controls/control-close.component';
+import { ControlWebsiteComponent } from '@components/controls/control-website.component';
 import { ConstructedMetaArchetypeDetailsCardsComponent } from '@components/decktracker/main/constructed-meta-archetype-details-cards.component';
 import { ConstructedMetaArchetypeDetailsComponent } from '@components/decktracker/main/constructed-meta-archetype-details.component';
 import { ConstructedMetaArchetypeComponent } from '@components/decktracker/main/constructed-meta-archetype.component';
@@ -502,8 +419,25 @@ import { ConstructedMetaDeckCardSearchComponent } from '@components/decktracker/
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
+import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
+import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
+import { DeckTrackerOverlayContainerComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
+import { DeckTrackerOverlayStandaloneComponent } from '@components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
+import { DeckTrackerTwitchTitleBarComponent } from '@components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
+import { EmptyCardComponent } from '@components/decktracker/overlay/twitch/empty-card.component';
+import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchCardsFacadeManagerService } from '@components/decktracker/overlay/twitch/twitch-cards-facade-manager.service';
+import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchLocalizationManagerService } from '@components/decktracker/overlay/twitch/twitch-localization-manager.service';
+import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
+import { LotteryAchievementComponent } from '@components/lottery/lottery-achievement.component';
+import { LotteryAchievementsWidgetComponent } from '@components/lottery/lottery-achievements.component';
+import { LotteryLotteryWidgetComponent } from '@components/lottery/lottery-lottery.component';
+import { LotteryNavigationComponent } from '@components/lottery/lottery-navigation.component';
+import { LotteryWidgetWrapperComponent } from '@components/lottery/lottery-widget-wrapper.component';
+import { LotteryWindowComponent } from '@components/lottery/lottery-window.component';
+import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
@@ -512,43 +446,60 @@ import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { ConstructedMulliganDeckWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-deck-widget-wrapper.component';
 import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-hand-widget-wrapper.component';
+import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
+import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
+import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
+import { OpponentEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/opponent-earthen-golem-widget-wrapper.component';
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
+import { OpponentMulticasterWidgetWrapperComponent } from '@components/overlays/counters/opponent-multicaster-widget-wrapper.component';
+import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
 import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
 import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
+import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
+import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
+import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsGoldDeltaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-gold-delta-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
+import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-tuskarr-raider-widget-wrapper.component';
+import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerCardsDrawnWidgetWrapperComponent } from '@components/overlays/counters/player-cards-drawn-widget-wrapper.component';
 import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@components/overlays/counters/player-cards-played-from-another-class-widget-wrapper.component';
+import { PlayerChainedGuardianWidgetWrapperComponent } from '@components/overlays/counters/player-chained-guardian-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
+import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
 import { PlayerDamageTakenOnYourTurnWidgetWrapperComponent } from '@components/overlays/counters/player-damage-taken-on-you-turn-widget-wrapper.component';
 import { PlayerDeadMinionsThisGameWidgetWrapperComponent } from '@components/overlays/counters/player-dead-minions-this-game-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
+import { PlayerEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/player-earthen-golem-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerHolySpellsWidgetWrapperComponent } from '@components/overlays/counters/player-holy-spells-widget-wrapper.component';
+import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
+import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overlays/counters/player-menagerie-widget-wrapper.component';
+import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
+import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerPiratesSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-pirates-summoned-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
+import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
+import { PlayerTreantWidgetWrapperComponent } from '@components/overlays/counters/player-treant-widget-wrapper.component';
 import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
+import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
+import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { ChoosingBgsTrinketWidgetWrapperComponent } from '@components/overlays/trinket/choosing-bgs-trinket-widget-wrapper.component';
 import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trinket/choosing-card-bgs-trinket-option.component';
-import { SettingsArenaGeneralComponent } from '@components/settings/arena/settings-arena-general';
-import { SettingsArenaMenuComponent } from '@components/settings/arena/settings-arena-menu.component';
-import { SettingsArenaComponent } from '@components/settings/arena/settings-arena.component';
-import { SettingsBattlegroundsLeaderboardComponent } from '@components/settings/battlegrounds/settings-battlegrounds-leaderboard.component';
-import { SettingsDecktrackerMulliganComponent } from '@components/settings/decktracker/settings-decktracker-mulligan.componen';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -1620,62 +1571,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentElementalStreakWidgetWrapperComponent,
 
 		FtueComponent,
-
-		SettingsAppSelectionComponent,
-		SettingsAdvancedToggleComponent,
-
-		SettingsGeneralComponent,
-		SettingsGeneralMenuComponent,
-		SettingsGeneralLaunchComponent,
-		SettingsGeneralPremiumComponent,
-		SettingsGeneralLotteryComponent,
-		SettingsGeneralLocalizationComponent,
-		SettingsGeneralDataComponent,
-		SettingsGeneralQuestsComponent,
-
-		SettingsCollectionComponent,
-		SettingsCollectionMenuComponent,
-		SettingsCollectionNotificationComponent,
-
-		SettingsArenaComponent,
-		SettingsArenaMenuComponent,
-		SettingsArenaGeneralComponent,
-
-		SettingsAchievementsComponent,
-		SettingsAchievementsMenuComponent,
-		SettingsAchievementsNotificationsComponent,
-		SettingsAchievementsLiveComponent,
-		SettingsModalComponent,
-		ModalVideoSettingsChangedComponent,
-
-		SettingsDecktrackerComponent,
-		SettingsDecktrackerMenuComponent,
-		SettingsDecktrackerLaunchComponent,
-		SettingsDecktrackerYourDeckComponent,
-		SettingsDecktrackerOpponentDeckComponent,
-		SettingsDecktrackerGlobalComponent,
-		SettingsDecktrackerBetaComponent,
-		SettingsDecktrackerDuelsComponent,
-		SettingsDecktrackerTurnTimerComponent,
-		SettingsDecktrackerMulliganComponent,
-
-		SettingsReplaysComponent,
-		SettingsReplaysGeneralComponent,
-		SettingsReplaysMenuComponent,
-
-		SettingsBattlegroundsComponent,
-		SettingsBattlegroundsGeneralComponent,
-		SettingsBattlegroundsOverlayComponent,
-		SettingsBattlegroundsSessionComponent,
-		SettingsBattlegroundsLeaderboardComponent,
-		SettingsBattlegroundsMenuComponent,
-
-		SettingsMercenariesComponent,
-		SettingsMercenariesMenuComponent,
-		SettingsMercenariesGeneralComponent,
-		SettingsMercenariesQuestsComponent,
-
-		LocalizationDropdownComponent,
 
 		MercenariesHighlightDirective,
 		AutofocusDirective,
