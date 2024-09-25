@@ -247,7 +247,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					const result: MinionInfo = {
 						cardId: e.cardId,
 						tavernTier: this.allCards.getCard(e.cardId).techLevel,
-						tribes: getActualTribes(this.allCards.getCard(e.cardId), false, trinkets),
+						tribes: getActualTribes(this.allCards.getCard(e.cardId), true, trinkets),
 					};
 					return result;
 				});
