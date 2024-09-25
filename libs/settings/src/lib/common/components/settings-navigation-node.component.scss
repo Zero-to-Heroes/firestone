@@ -1,12 +1,18 @@
 :host {
 	display: flex;
+
+	&[style*='--settings-indent-level: 0'] > .navigation-node > .name {
+		font-weight: bold;
+		font-size: 1.1em;
+		opacity: 1;
+	}
 }
 
 .navigation-node {
 	width: 100%;
 
 	& > .child-node {
-		margin-left: calc(var(--settings-indent-level) * 10px);
+		margin-left: calc(var(--settings-indent-level) * 15px);
 	}
 
 	&.selected > .name {
@@ -14,6 +20,7 @@
 	}
 	&.selectable > .name:hover {
 		background: rgba(255, 255, 255, 0.12);
+		opacity: 1;
 	}
 
 	.name {
@@ -21,5 +28,6 @@
 		padding-left: 10px;
 		display: flex;
 		align-items: center;
+		opacity: 0.9;
 	}
 }
