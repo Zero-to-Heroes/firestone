@@ -173,6 +173,41 @@ export class LocalizationService {
 		}
 	}
 
+	public getFirestoneLocale(locale: string): string {
+		switch (locale) {
+			case 'en-US':
+				return 'enUS';
+			case 'de-DE':
+				return 'deDE';
+			case 'es-ES':
+				return 'esES';
+			case 'es-MX':
+				return 'esMX';
+			case 'fr-FR':
+				return 'frFR';
+			case 'it-IT':
+				return 'itIT';
+			case 'ja-JP':
+				return 'jaJP';
+			case 'ko-KR':
+				return 'koKR';
+			case 'pl-PL':
+				return 'plPL';
+			case 'pt-BR':
+				return 'ptBR';
+			case 'ru-RU':
+				return 'ruRU';
+			case 'th-TH':
+				return 'thTH';
+			case 'zh-CN':
+				return 'zhCN';
+			case 'zh-TW':
+				return 'zhTW';
+			default:
+				return 'enUS';
+		}
+	}
+
 	private buildTypeSuffix(cardType: CollectionCardType): string {
 		switch (cardType) {
 			case 'NORMAL':

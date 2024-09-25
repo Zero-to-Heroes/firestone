@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SettingsControllerService } from '@firestone/settings';
 import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { OwUtilsService } from '@firestone/shared/framework/core';
+import { OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
@@ -21,6 +21,7 @@ export class BootstrapEssentialServicesService {
 		private readonly localizationFacadeService: LocalizationFacadeService,
 		private readonly translate: TranslateService,
 		private readonly init_SettingsControllerService: SettingsControllerService,
+		private readonly ow: OverwolfService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
@@ -38,8 +39,21 @@ export class BootstrapEssentialServicesService {
 		// this language will be used as a fallback when a translation isn't found in the current language
 		this.translate.setDefaultLang('enUS');
 		// Load the locales first, otherwise some windows will be displayed with missing text
-		const prefs = await this.prefs.getPreferences();
+		let prefs = await this.prefs.getPreferences();
 		console.debug('[bootstrap] setting language', prefs.locale);
+		let locale = prefs.locale;
+		// OW API call doesn't work at the moment
+		if (false && !prefs.hasChangedLocale) {
+			const regionInfo = await this.ow.getRegionInfo();
+			const systemLocale = regionInfo.info?.name;
+			if (!!systemLocale?.length) {
+				locale = this.localizationService.getFirestoneLocale(systemLocale);
+				console.log('[bootstrap] setting language from region', locale, systemLocale);
+				prefs = { ...prefs, locale: locale, hasChangedLocale: true };
+				await this.prefs.savePreferences(prefs);
+			}
+		}
+
 		await this.translate.use(prefs.locale).toPromise();
 		console.debug('[bootstrap] starting localization service');
 		await this.localizationService.start(this.translate);

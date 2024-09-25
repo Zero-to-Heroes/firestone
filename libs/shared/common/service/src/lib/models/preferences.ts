@@ -56,6 +56,7 @@ export class Preferences implements IPreferences {
 	readonly id: number = 1;
 
 	readonly locale: string = 'enUS';
+	readonly hasChangedLocale: boolean = false;
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly gameInstallPath: string;

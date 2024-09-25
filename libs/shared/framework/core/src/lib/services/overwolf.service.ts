@@ -986,6 +986,15 @@ export class OverwolfService {
 			});
 		});
 	}
+
+	public async getRegionInfo(): Promise<overwolf.os.GetRegionInfoResult> {
+		return new Promise<overwolf.os.GetRegionInfoResult>((resolve) => {
+			overwolf.os.getRegionInfo((result) => {
+				// console.debug('[bootstrap] got region info', result);
+				resolve(result);
+			});
+		});
+	}
 }
 
 export interface ListenObject {
