@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { SettingsControllerService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
@@ -24,17 +25,15 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlBugComponent implements AfterViewInit {
-	private settingsEventBus: EventEmitter<[string, string]>;
-
-	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}
-
-	async ngAfterViewInit() {
-		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-	}
+export class ControlBugComponent {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly settingsController: SettingsControllerService,
+	) {}
 
 	async showBugForm() {
-		this.settingsEventBus.next(['general', 'bugreport']);
+		this.settingsController.selectNodeId('general-bug');
 		// Avoid flickering
 		setTimeout(async () => {
 			const prefs = await this.prefs.getPreferences();

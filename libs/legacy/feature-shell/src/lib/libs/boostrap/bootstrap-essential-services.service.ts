@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SettingsControllerService } from '@firestone/settings';
 import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -6,7 +7,6 @@ import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { LocalizationService } from '../../js/services/localization.service';
-import { SettingsCommunicationService } from '../../js/services/settings/settings-communication.service';
 
 @Injectable()
 export class BootstrapEssentialServicesService {
@@ -15,12 +15,12 @@ export class BootstrapEssentialServicesService {
 		private readonly debugService: DebugService,
 		private readonly initCardsService: CardsInitService,
 		private readonly notifs: OwNotificationsService,
-		private readonly settingsCommunicationService: SettingsCommunicationService,
 		private readonly init_OWUtilsService: OwUtilsService,
 		private readonly prefs: PreferencesService,
 		private readonly localizationService: LocalizationService,
 		private readonly localizationFacadeService: LocalizationFacadeService,
 		private readonly translate: TranslateService,
+		private readonly init_SettingsControllerService: SettingsControllerService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

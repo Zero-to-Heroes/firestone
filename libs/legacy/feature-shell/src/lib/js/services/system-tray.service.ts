@@ -1,25 +1,25 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { SettingsControllerService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';
 
 @Injectable()
 export class SystemTrayService {
-	private settingsEventBus: EventEmitter<[string, string]>;
-
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly mainNav: MainWindowNavigationService,
+		private readonly settingsController: SettingsControllerService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.i18n.initReady();
-		await waitForReady(this.mainNav);
+		await waitForReady(this.mainNav, this.settingsController);
 
 		const menu: overwolf.os.tray.ExtensionTrayMenu = {
 			menu_items: [
@@ -69,7 +69,6 @@ export class SystemTrayService {
 					return;
 			}
 		});
-		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 	}
 
 	private async resetWindowPositions() {
@@ -94,8 +93,6 @@ export class SystemTrayService {
 	}
 
 	private async showSettingsWindow() {
-		this.settingsEventBus.next([null, null]);
-
 		const prefs = await this.prefs.getPreferences();
 		const windowName = this.ow.getSettingsWindowName(prefs);
 		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);

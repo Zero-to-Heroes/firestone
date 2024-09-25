@@ -3,6 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
+import { findNode } from '../models/settings-tree/_settings-definition';
 import { Section, SectionReference, SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
@@ -44,7 +45,9 @@ export class SettingsCurrentPageComponent extends AbstractSubscriptionComponent 
 	async ngAfterContentInit() {
 		await waitForReady(this.controller);
 
-		this.node$ = this.controller.selectedNode$$.pipe(this.mapData((selectedNode) => selectedNode));
+		this.node$ = this.controller.selectedNodeId$$.pipe(
+			this.mapData((selectedNodeId) => findNode(this.controller.rootNode$$.value, selectedNodeId)),
+		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { SettingsControllerService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
@@ -20,23 +21,18 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlSettingsComponent implements AfterViewInit {
+export class ControlSettingsComponent {
 	@Input() settingsApp: string;
 	@Input() shouldMoveSettingsWindow = true;
 	@Input() settingsSection: string;
 
-	private settingsEventBus: EventEmitter<[string, string]>;
-
-	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}
-
-	async ngAfterViewInit() {
-		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-	}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly settingsController: SettingsControllerService,
+	) {}
 
 	async showSettings() {
-		if (this.settingsApp) {
-			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
-		}
 		const prefs = await this.prefs.getPreferences();
 		const windowName = await this.ow.getSettingsWindowName(prefs);
 		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);

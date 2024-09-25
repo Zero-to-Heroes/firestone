@@ -67,8 +67,8 @@ export class SettingsNavigationNodeComponent extends AbstractSubscriptionCompone
 	async ngAfterContentInit() {
 		await waitForReady(this.controller);
 
-		this.isSelected$ = this.controller.selectedNode$$.pipe(
-			this.mapData((selectedNode) => selectedNode?.id === this._node?.id),
+		this.isSelected$ = this.controller.selectedNodeId$$.pipe(
+			this.mapData((selectedNodeId) => selectedNodeId === this._node?.id),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -78,7 +78,7 @@ export class SettingsNavigationNodeComponent extends AbstractSubscriptionCompone
 
 	selectNode() {
 		if (this.selectable) {
-			this.controller.selectNode(this._node);
+			this.controller.selectNodeId(this._node?.id);
 		}
 	}
 }

@@ -36,8 +36,8 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 	};
 };
 
-export const findNode = (node: SettingNode, id: string | undefined): SettingNode | null => {
-	if (!id) {
+export const findNode = (node: SettingNode | null, id: string | undefined | null): SettingNode | null => {
+	if (!id || !node) {
 		return null;
 	}
 	if (node.id === id) {

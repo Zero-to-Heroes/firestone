@@ -817,7 +817,6 @@ import { QuestsService } from './js/services/quests.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
 import { ReviewIdService } from './js/services/review-id.service';
 import { RewardMonitorService } from './js/services/rewards/rewards-monitor';
-import { SettingsCommunicationService } from './js/services/settings/settings-communication.service';
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
 import { MatchStatsService } from './js/services/stats/match-stats.service';
@@ -1768,7 +1767,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CardsMonitorService,
 		LogRegisterService,
 		HsClientConfigService,
-		SettingsCommunicationService,
 		OutOfCardsService,
 		GameNativeStateStoreService,
 		TwitchPresenceService,
