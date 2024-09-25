@@ -76,7 +76,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 	}
 
 	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
-		console.debug('saving prefs', new Error().stack);
+		// console.debug('saving prefs', new Error().stack);
 		const finalPrefs = {
 			...userPrefs,
 			lastUpdateDate: new Date(),
