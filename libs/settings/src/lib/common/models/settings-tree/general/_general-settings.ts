@@ -13,13 +13,13 @@ export const applicationSettings = (context: SettingContext): SettingNode => {
 		name: context.i18n.translateString('settings.menu.app'),
 		keywords: null,
 		children: [
+			generalLocalizationSettings(context),
 			generalAdminSettings(context),
 			generalLaunchSettings(context),
 			generalNotificationsSettings(context),
 			generalDataSettings(context),
 			generalAccessibilitySettings(context),
 			generalAppearanceSettings(context),
-			generalLocalizationSettings(context),
 		],
 	};
 };
