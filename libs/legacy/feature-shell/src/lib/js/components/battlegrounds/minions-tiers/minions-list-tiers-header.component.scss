@@ -6,6 +6,66 @@
 	width: 100%;
 }
 
+.tiers-selection {
+	display: flex;
+	height: 50px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: var(--bgs-minions-list-widget-background-image);
+	border-width: 2px;
+	border-style: solid;
+	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	border-image-slice: 1;
+	color: var(--color-1);
+	min-width: 256px;
+
+	.tier {
+		display: flex;
+		align-items: center;
+		width: 50px;
+		height: 100%;
+		flex-grow: 0;
+		flex-shrink: 0;
+		opacity: 0.8;
+
+		.icon-container {
+			height: 100%;
+			aspect-ratio: 1;
+
+			.icon {
+				height: 100%;
+				width: 100%;
+			}
+		}
+
+		.label {
+			display: none;
+			margin-right: 10px;
+			max-width: 100px;
+		}
+
+		&.compositions-category,
+		&.tribes-category {
+			.icon-container .icon {
+				clip-path: circle(40% at 50% 50%);
+			}
+		}
+
+		&.selected {
+			width: auto;
+			flex-grow: 1;
+
+			.label {
+				display: flex;
+			}
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
 .tiers {
 	display: flex;
 	// width: 250px;
