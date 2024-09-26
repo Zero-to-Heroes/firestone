@@ -418,7 +418,7 @@ export class Preferences implements IPreferences {
 	readonly playerMulticasterCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMulticasterCounterWidgetPosition: { left: number; top: number };
-	readonly opponentMulticasterCounter: BooleanWithLimited = true;
+	readonly opponentMulticasterCounter: BooleanWithLimited = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentMulticasterCounterWidgetPosition: { left: number; top: number };
 

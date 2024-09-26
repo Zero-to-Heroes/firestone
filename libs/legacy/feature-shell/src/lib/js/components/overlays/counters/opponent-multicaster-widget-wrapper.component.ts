@@ -37,7 +37,9 @@ export class OpponentMulticasterWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentMulticasterCounter;
 		this.deckStateExtractor = (state) =>
 			(state.opponentDeck?.spellsPlayedThisMatch?.length > 0 &&
-				state.opponentDeck?.hero?.classes?.includes(CardClass.MAGE)) ||
+				(state.opponentDeck?.hero?.classes?.includes(CardClass.MAGE) ||
+					state.opponentDeck?.hero?.classes?.includes(CardClass.SHAMAN) ||
+					state.opponentDeck?.hero?.classes?.includes(CardClass.DEATHKNIGHT))) ||
 			state?.opponentDeck?.hasRelevantCard(
 				[
 					CardIds.Multicaster,
@@ -47,6 +49,9 @@ export class OpponentMulticasterWidgetWrapperComponent
 					CardIds.InquisitiveCreation,
 					CardIds.DiscoveryOfMagic,
 					CardIds.ElementalInspiration,
+					CardIds.MagisterDawngrasp_AV_200,
+					CardIds.RazzleDazzler_VAC_301,
+					CardIds.SirenSong_VAC_308,
 				],
 				{ onlyLimited: true },
 			);
