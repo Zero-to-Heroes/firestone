@@ -96,7 +96,7 @@ export class Preferences implements IPreferences {
 
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
-	readonly showCurrentSessionWidgetBgs: boolean = false;
+	readonly showCurrentSessionWidgetBgs: boolean = true;
 	readonly hideCurrentSessionWidgetWhenFriendsListIsOpen: boolean = true;
 	readonly showTurnTimer: boolean = true;
 	readonly showTurnTimerMatchLength: boolean = true;
