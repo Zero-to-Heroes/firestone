@@ -124,7 +124,7 @@ const buildSingleTribeTier = (
 		);
 		const isTrinket = isBgsTrinket(card);
 		const cardTrinketTribes = [
-			// ...(cardRules?.[card.id]?.bgsMinionTypesRules?.needTypesInLobby ?? []),
+			...(cardRules?.[card.id]?.bgsMinionTypesRules?.needTypesInLobby ?? []),
 			...(cardRules?.[card.id]?.bgsMinionTypesRules?.needBoardTypes ?? []),
 		]
 			.filter((type) => type)
