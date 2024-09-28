@@ -15,6 +15,7 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 						// label: context.i18n.translateString('settings.decktracker.global.reset-button'),
 						text: context.i18n.translateString('settings.decktracker.global.reset-button'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.reset-button-tooltip'),
+						keywords: [context.i18n.translateString('settings.decktracker.global.reset-button')],
 						action: () => {
 							context.prefs.resetDecktrackerPositions();
 						},
