@@ -57,6 +57,12 @@ export class BgsPlayerBoardParser implements EventParser {
 			event.duoPendingBoards?.map((p) => p.playerBoard?.board?.map((e) => e.CardId).join(',')),
 			event.duoPendingBoards?.map((p) => p.opponentBoard?.board?.map((e) => e.CardId).join(',')),
 		);
+		console.debug(
+			'[bgs-simulation] received player boards',
+			event,
+			currentState.currentGame.getMainPlayer(),
+			currentState,
+		);
 		console.log(
 			'[bgs-simulation] received hero cards',
 			event.playerBoard?.heroCardId,
@@ -72,7 +78,6 @@ export class BgsPlayerBoardParser implements EventParser {
 			event.duoPendingBoards?.map((p) => p.playerBoard?.heroPowerInfo).join(','),
 			event.duoPendingBoards?.map((p) => p.opponentBoard?.heroPowerInfo).join(','),
 		);
-		console.debug('[bgs-simulation] received player boards', event, currentState.currentGame.getMainPlayer());
 
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
 			setTimeout(async () => {
@@ -152,9 +157,29 @@ export class BgsPlayerBoardParser implements EventParser {
 			if (playerTeammateBoard == null && duoPendingBoard.playerBoard.playerId !== player.playerId) {
 				playerTeammateBoard = duoPendingBoard.playerBoard;
 				console.log('[bgs-simulation] assigned playerTeammateBoard');
+				console.debug(
+					'playerTeammateBoard',
+					playerTeammateBoard,
+					'duoPendingBoard',
+					duoPendingBoard,
+					'event',
+					event,
+					'player',
+					player,
+				);
 			} else if (opponentTeammateBoard == null && duoPendingBoard.opponentBoard.playerId !== opponent.playerId) {
 				opponentTeammateBoard = duoPendingBoard.opponentBoard;
 				console.log('[bgs-simulation] assigned opponentTeammateBoard');
+				console.debug(
+					'opponentTeammateBoard',
+					opponentTeammateBoard,
+					'duoPendingBoard',
+					duoPendingBoard,
+					'event',
+					event,
+					'opponent',
+					opponent,
+				);
 			}
 		}
 
@@ -172,12 +197,14 @@ export class BgsPlayerBoardParser implements EventParser {
 					currentState.currentGame.players,
 				);
 				console.warn('[bgs-simulation] assigned playerTeammateBoard from memory teammateBoard');
+				console.debug(playerTeammateBoard, teammateBoardFromMemory, currentState.currentGame.players);
 			} else {
 				// FIXME: this doesn't work, because if we are in a battle, and haven't found the main player,
 				// it means that the current board will be the teammate's. Since this only use the board state,
 				// it will get the teammate's board (+ maybe some stuff from the player's), but not the player's board
 				playerTeammateBoard = this.buildPlayerBoard(event.playerBoard);
 				console.warn('[bgs-simulation] assigned playerTeammateBoard from base playerBoard.');
+				console.debug(playerTeammateBoard, event.playerBoard);
 			}
 		}
 		if (!!event.duoPendingBoards?.length && opponentTeammateBoard == null) {
@@ -187,6 +214,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				currentState.currentGame.players,
 			);
 			console.warn('[bgs-simulation] assigned opponentTeammateBoard in second phase.');
+			console.debug(opponentTeammateBoard, event.duoPendingBoards, opponent, currentState.currentGame.players);
 		}
 
 		console.debug(
@@ -249,7 +277,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			},
 		};
 		const isSupported = isSupportedScenario(battleInfo);
-		if (!event.opponentBoard?.heroCardId || !normalizeHeroCardId(event.opponentBoard?.heroCardId, this.allCards)) {
+		if (!bgsOpponent?.player?.cardId || !normalizeHeroCardId(bgsOpponent?.player?.cardId, this.allCards)) {
 			console.error('[bgs-player-board-parser] missing opponentCardId', event);
 		}
 
@@ -257,14 +285,29 @@ export class BgsPlayerBoardParser implements EventParser {
 		// There shouldn't be any case where the board is assigned to a face-off that is not the last, since logs
 		// are procesed in order
 		const lastFaceOff = currentState.currentGame.faceOffs[currentState.currentGame.faceOffs.length - 1];
-		if (lastFaceOff?.opponentPlayerId !== event.opponentBoard.playerId) {
+		if (lastFaceOff == null) {
+			console.error(
+				'[bgs-player-board-parser] could not find face-off to update',
+				lastFaceOff?.opponentPlayerId,
+				event.opponentBoard.playerId,
+				lastFaceOff,
+			);
+			console.debug(currentState, event);
+			return currentState;
+		}
+
+		// TODO: what happens in Duos?
+		if (
+			lastFaceOff.opponentPlayerId !== event.opponentBoard.playerId &&
+			lastFaceOff.opponentPlayerId !== opponentTeammateBoard?.playerId
+		) {
 			console.error(
 				'[bgs-player-board-parser] got incorrect matching face-off',
 				lastFaceOff?.opponentPlayerId,
 				event.opponentBoard.playerId,
 				lastFaceOff,
 			);
-			console.debug(currentState);
+			console.debug(currentState, event);
 			return currentState;
 		}
 
@@ -499,6 +542,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					playerBoard.playerId,
 					currentState.currentGame.players.map((player) => player.playerId),
 				);
+				console.debug('[bgs-simulation] full players', currentState.currentGame.players);
 			}
 			return null;
 		}
