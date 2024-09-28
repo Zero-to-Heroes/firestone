@@ -60,16 +60,22 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getCollection(throwException = false): Promise<any[] | null> {
+	public async getCollection(throwException = false, debug = false): Promise<any[] | null> {
 		return new Promise<any[] | null>(async (resolve, reject) => {
 			const plugin = await this.get();
 			plugin.getCollection(throwException, (collection) => {
 				if (collection === 'exception') {
+					if (debug) {
+						console.log('[mind-vision] could not get collection', collection);
+					}
 					reject();
 					return;
 				}
 
 				try {
+					if (debug && !collection) {
+						console.log('[mind-vision] could not get collection', collection);
+					}
 					resolve(collection ? JSON.parse(collection) : null);
 				} catch (e) {
 					console.warn('[mind-vision] could not parse collection', e);

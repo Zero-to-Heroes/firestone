@@ -75,7 +75,7 @@ export class MindVisionStateListening implements MindVisionState {
 				await sleep(1000);
 				this.log('waiting for collection to be populated');
 				try {
-					collection = await this.mindVision.getCollection(true);
+					collection = await this.mindVision.getCollection(true, true);
 				} catch (e) {
 					this.warn('caught exception', e);
 					reject();
