@@ -21,6 +21,7 @@ import {
 } from '@firestone-hs/replay-parser';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { ColiseumDebugService } from '../services/coliseum-debug.service';
 import { GameConfService } from '../services/game-conf.service';
 
 @Component({
@@ -140,6 +141,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		private readonly gameConf: GameConfService,
 		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly debugService: ColiseumDebugService,
 	) {}
 
 	ngAfterContentInit() {

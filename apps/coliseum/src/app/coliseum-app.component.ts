@@ -139,9 +139,10 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	private async loadReplay(replayKey: string): Promise<string | undefined> {
 		if (replayKey?.endsWith('.zip')) {
 			const headers = new HttpHeaders({ 'Content-Type': 'application/zip' }).set('Accept', 'application/zip');
-			const zippedReplay = await this.http
-				.get(REPLAY_API + replayKey, { headers: headers, responseType: 'blob' })
-				.toPromise();
+			const baseUrl = REPLAY_API + replayKey;
+			const url = this.debugService.active ? baseUrl + `?ts=${new Date().getTime()}` : baseUrl;
+			console.debug('loading zipped replay', url);
+			const zippedReplay = await this.http.get(url, { headers: headers, responseType: 'blob' }).toPromise();
 			const zipContent = await loadAsync(zippedReplay as any);
 			const file = Object.keys(zipContent.files)[0];
 
