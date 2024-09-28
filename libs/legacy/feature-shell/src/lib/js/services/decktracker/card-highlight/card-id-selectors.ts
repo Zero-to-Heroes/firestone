@@ -1488,7 +1488,7 @@ export const cardIdSelector = (
 				const target = pickLast(oneCostCardsPlayed);
 				return highlightConditions(
 					tooltip(and(side(inputSide), entityIs(target?.entityId))),
-					and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1)),
+					and(side(inputSide), or(inHand, inDeck), baseCostEqual(1)),
 				)(input);
 			};
 		case CardIds.PileOfBones_WW_324:
