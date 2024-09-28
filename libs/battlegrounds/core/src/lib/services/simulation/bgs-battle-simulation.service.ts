@@ -90,7 +90,7 @@ export class BgsBattleSimulationService {
 					delete resultForLog.outcomeSamples;
 				}
 				if (!!result) {
-					console.debug('[bgs-simulation] [debug] partial battle simulation result', resultForLog);
+					// console.debug('[bgs-simulation] [debug] partial battle simulation result', resultForLog);
 					if (result.outcomeSamples) {
 						console.log('[bgs-simulation] battle simulation result', resultForLog);
 					}
