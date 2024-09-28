@@ -445,13 +445,10 @@ export class BattlegroundsStoreService {
 					);
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD) {
-				// TODO: race with the "battle start" event?
-				const startTime = Date.now();
 				// this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
 				this.playerBoard = gameEvent.additionalData.playerBoard;
 				console.debug(
 					'[bgs-simulation] BATTLEGROUNDS_ACTIVE_PLAYER_BOARD snapshot player board',
-					Date.now() - startTime,
 					gameEvent.additionalData.playerBoard.board,
 					// this.teammateBoard?.Board,
 					gameEvent,
