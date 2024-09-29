@@ -103,8 +103,8 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 						label: context.i18n.translateString('settings.decktracker.mulligan.size'),
 						tooltip: null,
 						sliderConfig: {
-							min: 50,
-							max: 125,
+							min: 30,
+							max: 200,
 							snapSensitivity: 5,
 							knobs: sizeKnobs(context),
 						},
