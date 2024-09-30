@@ -28,6 +28,33 @@
 			right: -8%;
 			z-index: 1;
 		}
+
+		.trinkets {
+			position: absolute;
+			bottom: -10%;
+			left: -10%;
+			height: fit-content;
+			width: 50%;
+			z-index: 2;
+		}
+
+		::ng-deep bgs-trinkets {
+			.rewards-container {
+				padding: 0;
+				border: none;
+
+				.rewards {
+					flex-direction: column;
+
+					.reward {
+						margin: 0;
+						width: 100%;
+						height: auto;
+						aspect-ratio: 1;
+					}
+				}
+			}
+		}
 	}
 
 	.board {
@@ -55,6 +82,18 @@
 		.board {
 			justify-content: flex-end;
 			margin-right: 5px;
+		}
+	}
+
+	&.has-trinkets {
+		.hero {
+			width: 82px;
+
+			.trinkets {
+				position: relative;
+				bottom: 0;
+				left: 0;
+			}
 		}
 	}
 }

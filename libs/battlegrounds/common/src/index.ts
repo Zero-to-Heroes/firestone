@@ -1,5 +1,7 @@
 export * from './lib/battlegrounds-common.module';
 export * from './lib/components/battlegrounds-leaderboards.component';
+export * from './lib/components/battles/bgs-battle-recap-player.component';
+export * from './lib/components/battles/bgs-battle-recap.component';
 export * from './lib/components/bgs-board.component';
 export * from './lib/components/bgs-buddies.component';
 export * from './lib/components/bgs-hero-stats-info-premium.component';

@@ -385,7 +385,6 @@ import { ArenaRunComponent } from '@components/arena/desktop/arena-run.component
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
-import { BgsBattleRecapPlayerComponent } from '@components/battlegrounds/battles/bgs-battle-recap-player.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
@@ -576,7 +575,6 @@ import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-bra
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AdsComponent } from './js/components/ads/ads.component';
-import { BgsBattleRecapComponent } from './js/components/battlegrounds/battles/bgs-battle-recap.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesViewComponent } from './js/components/battlegrounds/battles/bgs-battles-view.component';
@@ -962,8 +960,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
-		BgsBattleRecapComponent,
-		BgsBattleRecapPlayerComponent,
 		BgsBattleSideComponent,
 
 		BgsLeaderboardEmptyCardComponent,

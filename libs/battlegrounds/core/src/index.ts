@@ -14,6 +14,7 @@ export * from './lib/services/simulation/bgs-battle-simulation-executor.service'
 export * from './lib/services/simulation/bgs-battle-simulation-mock-executor.service';
 export * from './lib/services/simulation/bgs-battle-simulation.service';
 export * from './lib/services/simulation/bgs-intermediate-results-sim-guardian.service';
+export * from './lib/services/simulation/simulation-utils';
 export * from './lib/services/tier-builder';
 export * from './lib/services/tier-enhancer';
 export * from './lib/services/tiers-builder/cards-to-include';

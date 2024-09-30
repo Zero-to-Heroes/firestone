@@ -4,11 +4,15 @@ import { CardIds, GameType, TrinketSlot, defaultStartingHp } from '@firestone-hs
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsBoard, BgsCardTooltipComponent, BgsPlayer } from '@firestone/battlegrounds/core';
+import {
+	BgsBoard,
+	BgsCardTooltipComponent,
+	BgsPlayer,
+	buildEntityFromBoardEntity,
+} from '@firestone/battlegrounds/core';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
-import { buildEntityFromBoardEntity } from '../services/simulation-utils';
 
 @Component({
 	selector: 'bgs-simulator-side',

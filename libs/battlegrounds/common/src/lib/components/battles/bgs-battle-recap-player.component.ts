@@ -3,17 +3,21 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BgsCardTooltipComponent } from '@firestone/battlegrounds/core';
-import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/simulator';
+import { BgsCardTooltipComponent, buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'bgs-battle-recap-player',
 	styleUrls: [`./bgs-battle-recap-player.component.scss`],
 	template: `
-		<div class="group player">
+		<div class="group player" [ngClass]="{ 'has-trinkets': !!trinkets?.length }">
 			<div class="hero">
+				<bgs-trinkets
+					class="trinkets"
+					[trinkets]="trinkets"
+					[showTitle]="false"
+					*ngIf="!!trinkets?.length"
+				></bgs-trinkets>
 				<bgs-hero-portrait
 					class="portrait"
 					[heroCardId]="playerHeroCardId"
@@ -53,6 +57,7 @@ export class BgsBattleRecapPlayerComponent {
 		if (value.board) {
 			this.playerEntities =
 				value?.board?.board?.map((minion) => buildEntityFromBoardEntity(minion, this.allCards)) ?? [];
+			this.trinkets = value.board.player.trinkets?.map((trinket) => trinket.cardId) ?? [];
 		}
 	}
 
@@ -61,8 +66,9 @@ export class BgsBattleRecapPlayerComponent {
 	playerMaxHealth: number;
 	playerTavernTier: number;
 	playerEntities: readonly Entity[];
+	trinkets: readonly string[];
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	trackByEntityFn(index: number, entity: Entity) {
 		return entity.id;

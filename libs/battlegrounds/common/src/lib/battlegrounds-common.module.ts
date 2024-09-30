@@ -13,6 +13,8 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboards.component';
+import { BgsBattleRecapPlayerComponent } from './components/battles/bgs-battle-recap-player.component';
+import { BgsBattleRecapComponent } from './components/battles/bgs-battle-recap.component';
 import { BgsBoardComponent } from './components/bgs-board.component';
 import { BgsBuddiesComponent } from './components/bgs-buddies.component';
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
@@ -68,6 +70,8 @@ const components = [
 	BgsStrategyCurveComponent,
 	BgsTrinketStrategiesWrapperComponent,
 	BgsTrinketStrategyTipsTooltipComponent,
+	BgsBattleRecapPlayerComponent,
+	BgsBattleRecapComponent,
 ];
 
 @NgModule({

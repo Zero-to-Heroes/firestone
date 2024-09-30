@@ -18,5 +18,4 @@ export * from './lib/services/bgs-battle-positioning-mock-executor.service';
 export * from './lib/services/bgs-battle-positioning.service';
 export * from './lib/services/sim-ui-controller/bgs-simulator-controller.service';
 export * from './lib/services/sim-ui-controller/state-manager.service';
-export * from './lib/services/simulation-utils';
 export * from './lib/services/simulator-keyboard-controls.service';

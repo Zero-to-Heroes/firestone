@@ -9,10 +9,15 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 			<div
 				class="title"
 				[fsTranslate]="'battlegrounds.in-game.opponents.trinkets-title'"
-				*ngIf="_trinkets?.length"
+				*ngIf="_trinkets?.length && showTitle"
 			></div>
 			<div class="rewards" *ngIf="_trinkets?.length">
-				<div class="reward" *ngFor="let reward of _trinkets; trackBy: trackByFn" [cardTooltip]="reward.cardId">
+				<div
+					class="reward"
+					*ngFor="let reward of _trinkets; trackBy: trackByFn"
+					[cardTooltip]="reward.cardId"
+					[cardTooltipBgs]="true"
+				>
 					<img [src]="reward.icon" class="icon" />
 					<img
 						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_quest_reward_frame.png"
@@ -32,6 +37,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 export class BgsTrinketsComponent {
 	_trinkets: readonly Reward[] = [];
 
+	@Input() showTitle = true;
 	@Input() set trinkets(value: readonly string[]) {
 		this._trinkets = [...(value ?? [])]
 			.map(

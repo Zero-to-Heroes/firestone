@@ -1,9 +1,9 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsCardTooltipComponent, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 
 @Component({
@@ -18,7 +18,7 @@ import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 			<div class="turn-label" *ngIf="turnNumber">
 				<div
 					class="turn"
-					[owTranslate]="'battlegrounds.battle.turn'"
+					[fsTranslate]="'battlegrounds.battle.turn'"
 					[translateParams]="{ value: turnNumber }"
 				></div>
 				<div class="result {{ result }}" *ngIf="result">{{ i18nResult }}</div>
@@ -46,7 +46,7 @@ export class BgsBattleRecapComponent {
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
-		if (!value) {
+		if (!value?.battleInfo) {
 			return;
 		}
 		this.turnNumber = value.turn;
@@ -62,14 +62,14 @@ export class BgsBattleRecapComponent {
 			tavernTier: playerBattleInfo?.player?.tavernTier ?? value.playerTavern,
 			board: playerBattleInfo,
 		};
-		const opponentBattleInfo = value.battleInfo?.opponentBoard;
+		const opponentBattleInfo = value.battleInfo.opponentBoard;
 		this.opponent = {
 			heroCardId: opponentBattleInfo?.player?.cardId ?? value.opponentCardId,
 			health: opponentBattleInfo?.player?.hpLeft ?? value.opponentHpLeft,
 			tavernTier: opponentBattleInfo?.player?.tavernTier ?? value.opponentTavern,
 			board: opponentBattleInfo,
 		};
-		const playerTeammateBattleInfo = value.battleInfo?.playerTeammateBoard;
+		const playerTeammateBattleInfo = value.battleInfo.playerTeammateBoard;
 		this.playerTeammate = !!playerTeammateBattleInfo?.player
 			? {
 					heroCardId: playerTeammateBattleInfo.player?.cardId,
@@ -93,16 +93,16 @@ export class BgsBattleRecapComponent {
 
 	turnNumber: number;
 	result: string;
-	i18nResult: string;
+	i18nResult: string | undefined;
 	player: BattleRecapPlayer;
-	playerTeammate: BattleRecapPlayer;
+	playerTeammate: BattleRecapPlayer | null;
 	opponent: BattleRecapPlayer;
-	opponentTeammate: BattleRecapPlayer;
+	opponentTeammate: BattleRecapPlayer | null;
 	battle: BgsFaceOffWithSimulation;
 
 	@Input() selectable = true;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 
 	trackByEntityFn(index: number, entity: Entity) {
 		return entity.id;
