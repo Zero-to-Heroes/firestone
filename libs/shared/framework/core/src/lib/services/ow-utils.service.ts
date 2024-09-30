@@ -39,6 +39,10 @@ export class OwUtilsService {
 		return this.internalService.captureActiveWindow();
 	}
 
+	public async copyImageDataUrlToClipboard(dataUrl: string): Promise<void> {
+		return this.internalService.copyImageDataUrlToClipboard(dataUrl);
+	}
+
 	public async deleteFileOrFolder(path: string): Promise<void> {
 		return this.internalService.deleteFileOrFolder(path);
 	}
@@ -128,6 +132,22 @@ class OwUtilsServiceInternal {
 				});
 			} catch (e) {
 				console.warn('[ow-utils] could not delete file or folder', path, e);
+				resolve();
+			}
+		});
+	}
+
+	public async copyImageDataUrlToClipboard(dataUrl: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.log('[ow-utils] copyImageDataUrlToClipboard');
+			const plugin = await this.get();
+			try {
+				plugin.copyImageDataUrlToClipboard(dataUrl, () => {
+					console.log('[ow-utils] copyImageDataUrlToClipboard');
+					resolve();
+				});
+			} catch (e) {
+				console.warn('[ow-utils] could not copyImageDataUrlToClipboard', e);
 				resolve();
 			}
 		});

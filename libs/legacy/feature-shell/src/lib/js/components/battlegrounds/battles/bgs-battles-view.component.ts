@@ -1,19 +1,20 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	EventEmitter,
 	Input,
 } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { sleep } from '@firestone/shared/framework/common';
+import { AnalyticsService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
 import domtoimage from 'dom-to-image-more';
-import html2canvas from 'html2canvas';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -23,7 +24,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-battles-view.component.scss`,
+		`./bgs-battles-view.component.scss`,
 	],
 	template: `
 		<div class="container">
@@ -38,8 +39,16 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			</div>
 			<ng-container>
 				<div class="content" *ngIf="faceOffs?.length">
-					<!-- <div class="screenshot-container" (click)="takeScreenshot()">Screenshot</div>
-					<div class="screenshot-container" (click)="takeScreenshotDomToImage()">ScreenshotDomToImage</div> -->
+					<div class="screenshot-container">
+						<div class="text" *ngIf="screenshotText$ | async as text">{{ text }}</div>
+						<div class="screenshot-icon" (click)="takeScreenshotDomToImage()">
+							<div
+								class="icon"
+								inlineSVG="assets/svg/social/clipboard.svg"
+								[helpTooltip]="screenshotTooltip$ | async"
+							></div>
+						</div>
+					</div>
 					<div class="battles-list" scrollable>
 						<bgs-battle-recap
 							*ngFor="let faceOff of faceOffs; trackBy: trackByFn"
@@ -64,7 +73,13 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: remove store and use stateUpdater instead
-export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
+export class BgsBattlesViewComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterViewInit, AfterContentInit
+{
+	screenshotText$: Observable<string>;
+	screenshotTooltip$: Observable<string>;
+
 	@Input() faceOffs: readonly BgsFaceOffWithSimulation[];
 	@Input() selectedFaceOff: BgsFaceOffWithSimulation;
 	@Input() actualBattle: BgsFaceOffWithSimulation;
@@ -80,14 +95,22 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	private _isMainWindow: boolean;
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
+	private screenshotText$$ = new BehaviorSubject<string>(null);
+	private screenshotTooltip$$ = new BehaviorSubject<string>('Copy the list of battles to your clipboard');
+
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
-		private readonly el: ElementRef,
+		private readonly owUtils: OwUtilsService,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.screenshotText$ = this.screenshotText$$.asObservable();
+		this.screenshotTooltip$ = this.screenshotTooltip$$.asObservable();
 	}
 
 	async ngAfterViewInit() {
@@ -112,54 +135,32 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 		return item.id;
 	}
 
-	takeScreenshot() {
+	async takeScreenshotDomToImage() {
+		this.screenshotText$$.next('Taking screenshot...');
+		this.screenshotTooltip$$.next('It can take a few seconds, thanks for waiting :)');
+		await sleep(1);
 		const captureElement: HTMLElement = document.querySelector('.battles-list');
-		html2canvas(captureElement).then((canvas) => {
-			console.debug('finished capturing canvas', canvas);
-			// Copy the resulting image to the clipboard
-			canvas.toBlob((blob) => {
-				const item = new ClipboardItem({ 'image/png': blob });
-				console.debug('item', item);
-				navigator.clipboard.write([item]).then(
-					() => {
-						console.log('Screenshot copied to clipboard');
-					},
-					(err) => {
-						console.error('Could not copy screenshot to clipboard', err);
-					},
-				);
+		const computedStyles = getComputedStyle(captureElement);
+		const backgroundImage = computedStyles.getPropertyValue('--window-background-image');
+		console.log(backgroundImage);
+
+		domtoimage
+			.toJpeg(captureElement, {
+				width: captureElement.scrollWidth,
+				height: captureElement.scrollHeight + 20,
+				style: {
+					'padding-top': '10px',
+					'background-size': 'cover',
+					'background-image': backgroundImage,
+				},
+			})
+			.then(async (dataUrl) => {
+				await this.owUtils.copyImageDataUrlToClipboard(dataUrl);
+				this.screenshotText$$.next('Copied to clipboard!');
+				this.screenshotTooltip$$.next('You can now paste it to your favorite social network');
+				await sleep(3000);
+				this.screenshotText$$.next(null);
+				this.screenshotTooltip$$.next('Copy the list of battles to your clipboard');
 			});
-
-			// And save it to the disk
-			const imageData = canvas.toDataURL('image/png');
-			console.debug('imageData', imageData);
-			const link = document.createElement('a');
-			link.setAttribute('download', 'screenshot.png');
-			link.setAttribute('href', imageData);
-			link.click();
-		});
-	}
-
-	// TODO: add proper header
-	takeScreenshotDomToImage() {
-		const captureElement: HTMLElement = document.querySelector('.battles-list');
-		// Change the background before taking the screenshot
-		captureElement.style.backgroundSize = 'cover';
-		// Doesn't work, but we should be able to get the value with javascript from the CSS?
-		// captureElement.style.backgroundImage = 'var(--window-background-image)';
-		captureElement.style.backgroundImage =
-			'radial-gradient(44.58% 50% at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100% ), url("https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/decktracker_main_window.png")';
-		setTimeout(() => {
-			domtoimage
-				.toJpeg(captureElement, {
-					with: captureElement.scrollWidth,
-					height: captureElement.scrollHeight,
-					quality: 0.95,
-				})
-				.then(function (dataUrl) {
-					captureElement.style.background = 'transparent';
-					console.debug('dataUrl', dataUrl);
-				});
-		}); // Delay in milliseconds
 	}
 }

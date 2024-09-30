@@ -121,3 +121,23 @@
 		}
 	}
 }
+
+.screenshot-container {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-bottom: 10px;
+	margin-top: -30px;
+
+	.screenshot-icon {
+		width: 30px;
+		height: 30px;
+		margin-right: 10px;
+		--icon-secondary-color: var(--color-2);
+		--icon-color: transparent;
+
+		&:hover {
+			--icon-secondary-color: var(--color-1);
+		}
+	}
+}
