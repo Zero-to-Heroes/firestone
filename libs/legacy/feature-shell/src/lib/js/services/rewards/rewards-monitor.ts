@@ -47,19 +47,21 @@ export class RewardMonitorService {
 							(change) => change.RewardTrackType === RewardTrackType.GLOBAL,
 						);
 
-						const xpGained = xpChange.XpGained;
-						const xpModifier = 1 + (xpChange?.XpBonusPercent ?? 0) / 100;
-						const rawXpGained = xpGained / xpModifier;
-						const xpForGameInfo: XpForGameInfo = {
-							currentXp: xpChange.CurrentXpInLevel,
-							currentLevel: xpChange.CurrentLevel,
-							xpGainedWithoutBonus: rawXpGained,
-							realXpGained: xpGained,
-							bonusXp: xpChange?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-							xpNeeded: xpChange.CurrentXpNeededForLevel,
-						};
-						console.log('[rewards-monitor] built xp for game', xpGained);
-						this.xpForGameInfo$$.next(xpForGameInfo);
+						if (!!xpChange) {
+							const xpGained = xpChange.XpGained;
+							const xpModifier = 1 + (xpChange.XpBonusPercent ?? 0) / 100;
+							const rawXpGained = xpGained / xpModifier;
+							const xpForGameInfo: XpForGameInfo = {
+								currentXp: xpChange.CurrentXpInLevel,
+								currentLevel: xpChange.CurrentLevel,
+								xpGainedWithoutBonus: rawXpGained,
+								realXpGained: xpGained,
+								bonusXp: xpChange.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
+								xpNeeded: xpChange.CurrentXpNeededForLevel,
+							};
+							console.log('[rewards-monitor] built xp for game', xpGained);
+							this.xpForGameInfo$$.next(xpForGameInfo);
+						}
 					}
 				});
 			});
