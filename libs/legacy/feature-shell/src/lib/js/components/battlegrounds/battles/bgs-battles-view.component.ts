@@ -142,7 +142,10 @@ export class BgsBattlesViewComponent
 		const captureElement: HTMLElement = document.querySelector('.battles-list');
 		const computedStyles = getComputedStyle(captureElement);
 		const backgroundImage = computedStyles.getPropertyValue('--window-background-image');
-		console.log(backgroundImage);
+
+		const messageTimeout = setTimeout(() => {
+			this.screenshotText$$.next('Still working...');
+		}, 5000);
 
 		domtoimage
 			.toJpeg(captureElement, {
@@ -156,6 +159,7 @@ export class BgsBattlesViewComponent
 			})
 			.then(async (dataUrl) => {
 				await this.owUtils.copyImageDataUrlToClipboard(dataUrl);
+				clearTimeout(messageTimeout);
 				this.screenshotText$$.next('Copied to clipboard!');
 				this.screenshotTooltip$$.next('You can now paste it to your favorite social network');
 				await sleep(3000);
