@@ -85,6 +85,20 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	public async getCollectionSize(throwException = false, debug = false): Promise<number | null> {
+		return new Promise<number | null>(async (resolve, reject) => {
+			const plugin = await this.get();
+			plugin.getCollectionSize(throwException, (collectionSize) => {
+				try {
+					resolve(collectionSize);
+				} catch (e) {
+					console.warn('[mind-vision] could not parse getCollectionSize', e);
+					resolve(null);
+				}
+			});
+		});
+	}
+
 	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[] | null> {
 		return new Promise<readonly number[] | null>(async (resolve, reject) => {
 			const plugin = await this.get();

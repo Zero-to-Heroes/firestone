@@ -30,7 +30,7 @@ export class MindVisionStateListening implements MindVisionState {
 		this.log('onEnter, plugin init starting');
 		this.log('running sanity checks');
 		try {
-			await this.loadCollection(this.abortController.signal);
+			await this.performSanityChecks(this.abortController.signal);
 		} catch (e) {
 			this.warn('Exception while loading collection, triggering force reset', e);
 			this.dispatcher(Action.FORCE_RESET);
@@ -59,7 +59,7 @@ export class MindVisionStateListening implements MindVisionState {
 		return null;
 	}
 
-	private async loadCollection(abortSignal: AbortSignal): Promise<void> {
+	private async performSanityChecks(abortSignal: AbortSignal): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			let abortProcess = false;
 			abortSignal.addEventListener('abort', () => {
@@ -68,14 +68,14 @@ export class MindVisionStateListening implements MindVisionState {
 				resolve();
 			});
 
-			let collection: any[] | null = null;
+			let collectionSize: number | null = null;
 			// TODO: there is an issue if we're leaving the state while this is ongoing
-			while (!collection?.length && !abortProcess) {
-				this.debug('current collection', collection, abortProcess);
+			while (!collectionSize && !abortProcess) {
+				this.debug('current collection', collectionSize, abortProcess);
 				await sleep(1000);
 				this.log('waiting for collection to be populated');
 				try {
-					collection = await this.mindVision.getCollection(true, true);
+					collectionSize = await this.mindVision.getCollectionSize(true, true);
 				} catch (e) {
 					this.warn('caught exception', e);
 					reject();
