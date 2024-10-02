@@ -52,11 +52,19 @@ import { isVersionBefore } from '../services/notifications-utils';
 						</div>
 					</nav>
 					<section class="current-version" *ngIf="selectedVersion">
-						<div
-							class="title"
-							[fsTranslate]="'new-version.title'"
-							[translateParams]="{ value: selectedVersion.version }"
-						></div>
+						<div class="title">
+							<div
+								class="main-text"
+								[fsTranslate]="'new-version.title'"
+								[translateParams]="{ value: selectedVersion.version }"
+							></div>
+							<a
+								class="view-online"
+								[href]="getReleaseNotesUrl(selectedVersion.version)"
+								target="_blank"
+								[fsTranslate]="'new-version.view-online'"
+							></a>
+						</div>
 						<div class="update-text">
 							<div
 								class="parsed-text"
@@ -208,6 +216,10 @@ export class NewVersionNotificationComponent
 		event.stopPropagation();
 	}
 
+	getReleaseNotesUrl(version: string): string {
+		return `https://github.com/Zero-to-Heroes/firestone/blob/master/libs/shared/assets/src/assets/app-versions/${version}.md`;
+	}
+
 	private async updateInfo() {
 		if (!this.versions) {
 			return;
@@ -237,6 +249,7 @@ export class NewVersionNotificationComponent
 
 	private async loadVersions(): Promise<readonly AppVersion[]> {
 		const versions: readonly AppVersion[] = [
+			{ version: '13.28.0', date: '2024-10-02' },
 			{ version: '13.27.2', date: '2024-09-30' },
 			{ version: '13.26.8', date: '2024-09-26' },
 			{ version: '13.26.7', date: '2024-09-25' },

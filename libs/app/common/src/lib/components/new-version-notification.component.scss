@@ -126,9 +126,17 @@
 		margin-top: 0;
 		margin-bottom: 12px;
 		margin-right: auto;
-		font-weight: 600;
-		font-size: 18px;
-		color: #ffb948;
+		display: flex;
+
+		.main-text {
+			font-weight: 600;
+			font-size: 18px;
+			color: #ffb948;
+		}
+
+		.view-online {
+			margin-left: 20px;
+		}
 	}
 
 	::ng-deep .update-text {
