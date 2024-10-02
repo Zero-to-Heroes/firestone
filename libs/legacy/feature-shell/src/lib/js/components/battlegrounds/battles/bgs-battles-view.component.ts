@@ -136,6 +136,7 @@ export class BgsBattlesViewComponent
 	}
 
 	async takeScreenshotDomToImage() {
+		this.analytics.trackEvent('screenshot', { origin: 'bgs-battles-view' });
 		this.screenshotText$$.next('Taking screenshot...');
 		this.screenshotTooltip$$.next('It can take a few seconds, thanks for waiting :)');
 		await sleep(1);
