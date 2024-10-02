@@ -68,14 +68,14 @@ export class MindVisionStateListening implements MindVisionState {
 				resolve();
 			});
 
-			let collectionSize: number | null = null;
+			let bootstrapped: boolean | null = null;
 			// TODO: there is an issue if we're leaving the state while this is ongoing
-			while (!collectionSize && !abortProcess) {
-				this.debug('current collection', collectionSize, abortProcess);
+			while (!bootstrapped && !abortProcess) {
+				// this.debug('current collection', bootstrapped, abortProcess);
 				await sleep(1000);
-				this.log('waiting for collection to be populated');
+				this.log('waiting for mindvision to be bootstrapped');
 				try {
-					collectionSize = await this.mindVision.getCollectionSize(true, true);
+					bootstrapped = await this.mindVision.isBootstrapped();
 				} catch (e) {
 					this.warn('caught exception', e);
 					reject();

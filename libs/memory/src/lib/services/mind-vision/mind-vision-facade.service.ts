@@ -46,6 +46,20 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	public async isBootstrapped(): Promise<boolean | null> {
+		return new Promise<boolean | null>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.isBootstrapped((info) => {
+					resolve(info);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not isBootstrapped', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getMemoryChanges(): Promise<MemoryUpdate | null> {
 		return new Promise<MemoryUpdate | null>(async (resolve, reject) => {
 			const plugin = await this.get();
