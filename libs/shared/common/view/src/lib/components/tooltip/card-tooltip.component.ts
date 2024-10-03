@@ -334,7 +334,7 @@ export class CardTooltipComponent
 							.map((cardId) => {
 								const card = this.allCards.getCard(cardId);
 								const adjustedCardType =
-									cardId?.endsWith('_golden') || !!card.battlegroundsNormalDbfId
+									cardId?.endsWith('_golden') || !!card.premium || !!card.battlegroundsNormalDbfId
 										? 'GOLDEN'
 										: cardType;
 								const realCardId = cardId?.split('_golden')[0];

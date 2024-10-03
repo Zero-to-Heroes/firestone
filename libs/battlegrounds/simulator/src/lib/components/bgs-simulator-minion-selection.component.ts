@@ -433,7 +433,7 @@ export class BgsSimulatorMinionSelectionComponent
 	selectMinion(minion: Minion) {
 		this.cardId = minion.id;
 		this.ref = this.allCards.getCard(this.cardId);
-		this.premium = !!this.ref.battlegroundsNormalDbfId;
+		this.premium = !!this.ref.premium;
 		this.attack = this.ref.attack ?? 0;
 		this.health = this.ref.health ?? 0;
 		this.divineShield = this.ref.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
@@ -504,7 +504,7 @@ export class BgsSimulatorMinionSelectionComponent
 
 		this.cardId = this._entity.cardId;
 		this.ref = this.allCards.getCard(this.cardId);
-		this.premium = !!this.ref.battlegroundsNormalDbfId;
+		this.premium = !!this.ref.premium;
 		this.attack = this._entity.attack;
 		this.health = this._entity.health;
 		this.divineShield = !!this._entity.divineShield;

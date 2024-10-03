@@ -477,5 +477,5 @@ export const isBattlegroundsScene = (scene: SceneMode): boolean => {
 };
 
 export const isMinionGolden = (card: ReferenceCard): boolean => {
-	return !!card.battlegroundsNormalDbfId;
+	return !!card.premium;
 };
