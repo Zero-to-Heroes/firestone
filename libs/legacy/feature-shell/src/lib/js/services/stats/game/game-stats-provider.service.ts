@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
@@ -30,7 +35,7 @@ export class GameStatsProviderService
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameStats = AppInjector.get(GameStatsLoaderService);
 
-		await Promise.all([this.prefs.isReady(), this.gameStats.isReady()]);
+		await waitForReady(this.prefs, this.gameStats);
 
 		this.gameStats$$.onFirstSubscribe(() => {
 			combineLatest([
@@ -38,11 +43,22 @@ export class GameStatsProviderService
 				this.prefs.preferences$$.pipe(map((prefs) => prefs.regionFilter)),
 			])
 				.pipe(
-					map(([stats, regionFilter]) =>
-						stats?.stats?.filter(
+					map(([stats, regionFilter]) => {
+						const filteredByRegion: readonly GameStat[] = stats?.stats?.filter(
 							(stat) => !regionFilter || regionFilter === 'all' || stat.region === regionFilter,
-						),
-					),
+						);
+						if (!!stats?.stats?.length && !filteredByRegion?.length) {
+							console.log(
+								'[game-stats-provider] No stats for region, removing region filter',
+								regionFilter,
+								stats?.stats?.length,
+								stats?.stats?.[0]?.region,
+							);
+							this.prefs.resetRegionFilter();
+							// filteredByRegion = stats?.stats;
+						}
+						return filteredByRegion;
+					}),
 					startWith([]),
 				)
 				.subscribe(this.gameStats$$);

@@ -108,6 +108,16 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
+	public async resetRegionFilter() {
+		const prefs = await this.getPreferences();
+		if (prefs.regionFilter === 'all') {
+			return;
+		}
+
+		const newPrefs: Preferences = { ...prefs, regionFilter: 'all' };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setValue(field: string, pref: boolean | number | string): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
