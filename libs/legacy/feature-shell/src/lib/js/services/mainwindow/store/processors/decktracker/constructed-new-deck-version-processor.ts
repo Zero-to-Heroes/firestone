@@ -14,30 +14,29 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
-		const versionLinks = prefs.constructedDeckVersions;
+		const versionLinks: readonly ConstructedDeckVersions[] = prefs.constructedDeckVersions;
 		console.debug('processing new deck version', event, versionLinks);
-		const existingLinkFromPreviousVersion = this.findExistingVersion(versionLinks, event.previousVersionDeckstring);
-		const existingLinkFromNewVersion = this.findExistingVersion(versionLinks, event.newVersionDeckstring);
+		const existingLinkFromPreviousVersion: ConstructedDeckVersions = this.findExistingVersion(
+			versionLinks,
+			event.previousVersionDeckstring,
+		);
+		const existingLinkFromNewVersion: ConstructedDeckVersions = this.findExistingVersion(
+			versionLinks,
+			event.newVersionDeckstring,
+		);
 		console.debug('existingLinkFromPreviousVersion', existingLinkFromPreviousVersion);
 		console.debug('existingLinkFromNewVersion', existingLinkFromNewVersion);
-		const newLinkFromPreviousVersion = this.addVersion(existingLinkFromPreviousVersion, event.newVersionDeckstring);
-		const newLinkFromNewVersion = this.addVersion(existingLinkFromNewVersion, event.previousVersionDeckstring);
-		console.debug('newLinkFromPreviousVersion', newLinkFromPreviousVersion);
-		console.debug('newLinkFromNewVersion', newLinkFromNewVersion);
-		const link: ConstructedDeckVersions = newLinkFromPreviousVersion ??
-			newLinkFromNewVersion ?? {
-				versions: [{ deckstring: event.previousVersionDeckstring }, { deckstring: event.newVersionDeckstring }],
-			};
-		console.debug('new link', link);
-		const cleanedLink: ConstructedDeckVersions = {
-			versions: [...new Set(link.versions)],
+		const newLink: ConstructedDeckVersions = {
+			versions: [
+				...new Set([
+					...(existingLinkFromPreviousVersion?.versions ?? []),
+					...(existingLinkFromNewVersion?.versions ?? []),
+				]),
+			],
 		};
-		const newVersionLinks = [
-			...versionLinks.filter(
-				(link) => !link.versions.map((v) => v.deckstring).includes(event.previousVersionDeckstring),
-			),
-			cleanedLink,
-		];
+		const newVersionLinks: readonly ConstructedDeckVersions[] = [...(versionLinks ?? []), newLink]
+			.filter((link) => link !== existingLinkFromPreviousVersion && link !== existingLinkFromNewVersion)
+			.filter((link) => link?.versions?.length > 0);
 		console.debug('newVersionLinks', newVersionLinks);
 
 		await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
@@ -49,15 +48,5 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 		previousVersionDeckstring: string,
 	): ConstructedDeckVersions {
 		return versionLinks.find((link) => link.versions.map((v) => v.deckstring).includes(previousVersionDeckstring));
-	}
-
-	private addVersion(existing: ConstructedDeckVersions, newVersion: string): ConstructedDeckVersions {
-		if (!existing) {
-			return null;
-		}
-		return {
-			...existing,
-			versions: [...existing.versions, { deckstring: newVersion }],
-		};
 	}
 }
