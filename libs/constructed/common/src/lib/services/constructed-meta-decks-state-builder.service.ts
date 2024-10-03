@@ -191,9 +191,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		const fileName = `${format}/${rank}/${time}/overview-from-hourly.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load deck stats', url, format, time, rank);
-		const resultStr = await this.api.get(url);
+		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
-			console.error('could not load meta decks', format, time, rank, url);
+			console.log('could not load meta decks', format, time, rank, url);
 			return null;
 		}
 
@@ -240,9 +240,10 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		const fileName = `${format}/${rank}/${time}/${deckId}`;
 		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
-		const resultStr = await this.api.get(url);
+		// Can happen if there is no data for the deck
+		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
-			console.error('could not load meta deck', format, time, rank, url);
+			console.log('could not load meta deck', format, time, rank, url);
 			return null;
 		}
 
@@ -260,9 +261,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		const fileName = `${format}/${rank}/${time}/overview-from-hourly.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load archetype stats', url, format, time, rank);
-		const resultStr = await this.api.get(url);
+		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
-			console.error('could not load meta decks', format, time, rank, url);
+			console.log('could not load meta decks', format, time, rank, url);
 			return null;
 		}
 
@@ -285,9 +286,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		const fileName = `${format}/${rank}/${time}/archetype/${archetypeId}.gz.json`;
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load stat for archetype', url, format, time, rank, archetypeId);
-		const resultStr = await this.api.get(url);
+		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
-			console.error('could not load meta archetypes', format, time, rank, url);
+			console.log('could not load meta archetypes', format, time, rank, url);
 			return null;
 		}
 
