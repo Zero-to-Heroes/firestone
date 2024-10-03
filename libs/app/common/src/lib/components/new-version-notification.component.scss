@@ -127,6 +127,7 @@
 		margin-bottom: 12px;
 		margin-right: auto;
 		display: flex;
+		align-items: baseline;
 
 		.main-text {
 			font-weight: 600;
@@ -135,7 +136,13 @@
 		}
 
 		.view-online {
-			margin-left: 20px;
+			margin-top: 0;
+			margin-bottom: 12px;
+			margin-right: auto;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
 		}
 	}
 
