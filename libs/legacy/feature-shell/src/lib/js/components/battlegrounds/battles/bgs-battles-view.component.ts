@@ -136,26 +136,29 @@ export class BgsBattlesViewComponent
 	}
 
 	async takeScreenshotDomToImage() {
-		this.analytics.trackEvent('screenshot', { origin: 'bgs-battles-view' });
-		this.screenshotText$$.next('Taking screenshot...');
+		this.screenshotText$$.next('Taking high-res screenshot...');
 		this.screenshotTooltip$$.next('It can take a few seconds, thanks for waiting :)');
-		await sleep(1);
+		this.analytics.trackEvent('screenshot', { origin: 'bgs-battles-view' });
+		await sleep(100);
 		const captureElement: HTMLElement = document.querySelector('.battles-list');
 		const computedStyles = getComputedStyle(captureElement);
 		const backgroundImage = computedStyles.getPropertyValue('--window-background-image');
 
 		const messageTimeout = setTimeout(() => {
 			this.screenshotText$$.next('Still working...');
-		}, 5000);
+		}, 4000);
 
+		const scale = 4;
 		domtoimage
 			.toJpeg(captureElement, {
-				width: captureElement.scrollWidth,
-				height: captureElement.scrollHeight + 20,
+				width: scale * captureElement.scrollWidth,
+				height: scale * (captureElement.scrollHeight + 20),
 				style: {
 					'padding-top': '10px',
 					'background-size': 'cover',
 					'background-image': backgroundImage,
+					transform: `scale(${scale})`,
+					'transform-origin': 'top left',
 				},
 			})
 			.then(async (dataUrl) => {
