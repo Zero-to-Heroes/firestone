@@ -50,7 +50,7 @@ export class MindVisionFacadeService {
 		return new Promise<boolean | null>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.isBootstrapped((info) => {
+				plugin.isBootstrapped(true, (info) => {
 					resolve(info);
 				});
 			} catch (e) {
