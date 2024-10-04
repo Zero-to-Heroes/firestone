@@ -28,7 +28,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 						></div>
 					</div>
 					<ng-container *ngIf="showMinionsList">
-						<minions-list-tiers-header
+						<minions-list-tiers-header-2
 							[tierLevels]="tierLevels"
 							[mechanicalTiers]="mechanicalTiers"
 							[tribeTiers]="tribeTiers"
@@ -37,7 +37,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 							[mouseLeaveTrigger]="mouseLeaveTrigger$ | async"
 							(displayedTierChange)="onDisplayedTier($event)"
 							(lockedTierChange)="onDisplayedTier($event)"
-						></minions-list-tiers-header>
+						></minions-list-tiers-header-2>
 						<bgs-minions-list
 							class="minions-list"
 							[tier]="displayedTier$ | async"

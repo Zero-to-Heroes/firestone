@@ -17,7 +17,7 @@
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
 	border-image-slice: 1;
 	color: var(--color-1);
-	min-width: 256px;
+	min-width: 312px;
 
 	.tier {
 		display: flex;
@@ -26,7 +26,7 @@
 		height: 100%;
 		flex-grow: 0;
 		flex-shrink: 0;
-		opacity: 0.8;
+		opacity: 0.4;
 
 		.icon-container {
 			height: 100%;
@@ -53,10 +53,11 @@
 
 		&.selected {
 			width: auto;
-			flex-grow: 1;
+			opacity: 0.9;
+			// flex-grow: 1;
 
 			.label {
-				display: flex;
+				// display: flex;
 			}
 		}
 
