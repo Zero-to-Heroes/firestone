@@ -10,7 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameType, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameType, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
 	MinionInfo,
 	Tier,
@@ -18,7 +18,6 @@ import {
 	enhanceTiers,
 	getActualTribes,
 	getAllCardsInGame,
-	getBuddy,
 } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { deepEqual } from '@firestone/shared/framework/common';
@@ -197,7 +196,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 				]) => {
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
-					const ownBuddyId = hasBuddies ? getBuddy(normalizedPlayerCardId as CardIds, this.allCards) : null;
+					const ownBuddyId = hasBuddies
+						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
+						: null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(
 						races,

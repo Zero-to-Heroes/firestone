@@ -5,13 +5,13 @@ import {
 	CardIds,
 	CardType,
 	GameTag,
+	getBuddy,
 	NON_DISCOVERABLE_BUDDIES,
 	Race,
 	ReferenceCard,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getBuddy } from '../hero-utils';
 import { ExtendedReferenceCard, TavernTierType, Tier, TierGroup } from '../tiers.model';
 import { TierBuilderConfig } from './tiers-config.model';
 import { getTrinketNameKey } from './utils';
@@ -210,7 +210,7 @@ const buildBuddies = (
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
 	const allPlayerBuddies = allPlayerCardIds
-		.map((p) => getBuddy(p as CardIds, allCards))
+		.map((p) => getBuddy(p as CardIds, allCards.getService()))
 		.map((b) => allCards.getCard(b!));
 	const allPlayerBuddiesCardIds = allPlayerBuddies.map((b) => b.id);
 	const buddies: readonly ReferenceCard[] = !config?.showBuddiesTier

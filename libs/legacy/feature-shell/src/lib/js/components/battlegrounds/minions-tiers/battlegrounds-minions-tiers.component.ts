@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameTag, Race, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import {
 	MinionInfo,
@@ -18,7 +18,6 @@ import {
 	enhanceTiers,
 	getActualTribes,
 	getAllCardsInGame,
-	getBuddy,
 } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -152,7 +151,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					// hasSpells = true;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
-					const ownBuddyId = hasBuddies ? getBuddy(normalizedPlayerCardId as CardIds, this.allCards) : null;
+					const ownBuddyId = hasBuddies
+						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
+						: null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(
 						races,

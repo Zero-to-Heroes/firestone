@@ -9,8 +9,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
-import { BgsPlayer, getBuddy } from '@firestone/battlegrounds/core';
+import { CardIds, getBuddy, getHeroPower } from '@firestone-hs/reference-data';
+import { BgsPlayer } from '@firestone/battlegrounds/core';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, from } from 'rxjs';
 import { TwitchPreferencesService } from '../services/twitch-preferences.service';
@@ -85,7 +85,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 			completed: reward.completed,
 		}));
 		this.showBuddies = value.config?.hasBuddies;
-		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
+		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards.getService());
 		const buddyCard = !!buddyCardId ? this.cards.getCard(buddyCardId) : null;
 		const buddyCardGolden = !!buddyCard?.battlegroundsPremiumDbfId
 			? this.cards.getCard(buddyCard.battlegroundsPremiumDbfId)
