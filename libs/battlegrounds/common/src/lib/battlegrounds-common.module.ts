@@ -33,6 +33,7 @@ import { BgsTrinketStrategyTipsTooltipComponent } from './components/strategies/
 import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
 import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
+import { BgsInGameCompositionsService } from './services/bgs-in-game-compositions.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
 import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-guardian.service';
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
@@ -40,6 +41,7 @@ import { BgsInGameTrinketsGuardianService } from './services/bgs-in-game-trinket
 import { BgsInGameTrinketsService } from './services/bgs-in-game-trinkets.service';
 import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
 import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
+import { BgsMetaCompositionStrategiesService } from './services/bgs-meta-composition-strategies.service';
 import { BgsMetaHeroStatsDuoService } from './services/bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './services/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './services/bgs-meta-hero-strategies.service';
@@ -113,6 +115,8 @@ const components = [
 		BgsInGameHeroSelectionGuardianService,
 		BgsMetaHeroStrategiesService,
 		BgsMetaTrinketStrategiesService,
+		BgsMetaCompositionStrategiesService,
+		BgsInGameCompositionsService,
 	],
 	declarations: components,
 	exports: components,

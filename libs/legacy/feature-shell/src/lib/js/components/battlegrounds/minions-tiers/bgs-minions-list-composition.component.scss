@@ -1,0 +1,35 @@
+.composition {
+	min-width: 256px;
+
+	.header {
+		background: var(--color-5);
+		color: var(--color-1);
+		width: 100%;
+		height: 26px;
+		display: flex;
+		align-items: center;
+		// justify-content: center;
+		margin-bottom: 2px;
+		justify-content: flex-start;
+		padding-left: 10px;
+
+		.header-text {
+			font-size: 15px;
+		}
+	}
+
+	.cards {
+		.header {
+			justify-content: center;
+			.header-text {
+				font-size: 0.8em;
+			}
+		}
+	}
+
+	&.collapsed {
+		.cards {
+			display: none;
+		}
+	}
+}

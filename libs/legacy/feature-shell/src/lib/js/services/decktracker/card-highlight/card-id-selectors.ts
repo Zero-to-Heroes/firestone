@@ -1692,7 +1692,7 @@ export const cardIdSelector = (
 		case CardIds.RollTheBones_CORE_ICC_201:
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.RottenRodent:
-			return and(side(inputSide), inDeck, minion, deathrattle);
+			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.RottingNecromancer:
 			return and(side(inputSide), inDeck, minion, undead);
 		case CardIds.RoyalGreatswordTavernBrawlToken:

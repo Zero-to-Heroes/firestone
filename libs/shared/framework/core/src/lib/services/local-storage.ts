@@ -22,6 +22,7 @@ export class LocalStorageService {
 	public static BGS_META_HERO_STRATEGIES = 'bgs-meta-hero-strategies';
 	public static EXPERT_CONTRIBUTORS = 'EXPERT_CONTRIBUTORS';
 	public static BGS_META_TRINKET_STRATEGIES = 'BGS_META_TRINKET_STRATEGIES';
+	public static BGS_META_COMP_STRATEGIES = 'BGS_META_COMP_STRATEGIES';
 	public static BGS_QUESTS_DATA = 'bgs-quests-data';
 	public static USER_GLOBAL_STATS = 'user-global-stats';
 	public static MERCENARIES_GLOBAL_STATS = 'mercenaries-global-stats';

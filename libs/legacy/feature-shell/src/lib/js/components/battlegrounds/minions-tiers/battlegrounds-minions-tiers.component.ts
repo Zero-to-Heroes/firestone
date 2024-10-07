@@ -9,21 +9,23 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsMetaCompositionStrategiesService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import {
 	MinionInfo,
 	Tier,
+	buildCompositions,
 	buildTiers,
 	enhanceTiers,
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil, tap } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -38,6 +40,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="battlegrounds-minions-tiers scalable battlegrounds-theme">
 			<battlegrounds-minions-tiers-view
 				[tiers]="tiers$ | async"
+				[compositions]="compositions$ | async"
 				[currentTurn]="currentTurn$ | async"
 				[tavernTier]="tavernTier$ | async"
 				[showMinionsList]="showMinionsList$ | async"
@@ -60,6 +63,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	implements AfterContentInit, OnDestroy
 {
 	tiers$: Observable<readonly Tier[]>;
+	compositions$: Observable<readonly BgsCompAdvice[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
 	highlightedMinions$: Observable<readonly string[]>;
@@ -83,12 +87,14 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		private readonly bgGameState: BgsStateFacadeService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly cardRules: CardRulesService,
+		private readonly strategies: BgsMetaCompositionStrategiesService,
+		private readonly contributors: ExpertContributorsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.bgGameState, this.gameState, this.cardRules);
+		await waitForReady(this.prefs, this.bgGameState, this.gameState, this.cardRules, this.strategies);
 		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 
 		const playerTrinkets$ = this.bgGameState.gameState$$.pipe(
@@ -232,6 +238,14 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				);
 			}),
 		);
+		this.compositions$ = combineLatest([
+			this.bgGameState.gameState$$.pipe(this.mapData((state) => state?.currentGame?.availableRaces)),
+			this.strategies.strategies$$,
+		]).pipe(
+			this.mapData(([availableTribes, strategies]) => buildCompositions(availableTribes, strategies)),
+			tap((comps) => console.debug('comps', comps)),
+		);
+
 		this.highlightedTribes$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedTribes));
 		this.highlightedMechanics$ = this.bgGameState.gameState$$.pipe(
 			this.mapData((main) => main?.highlightedMechanics),

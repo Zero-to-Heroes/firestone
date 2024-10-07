@@ -78,3 +78,14 @@
 	max-height: 100%;
 	position: relative;
 }
+
+.compositions-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-top: 3px;
+
+	.composition {
+		margin-bottom: 5px;
+	}
+}

@@ -8,6 +8,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -63,9 +64,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					</div>
 					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tribes'"></div>
 				</div>
-				<!-- <div
+				<div
 					class="tier compositions-category"
-					*ngIf="tribeTiers?.length"
+					*ngIf="compositions?.length"
 					(click)="selectCategory('compositions')"
 					[ngClass]="{ selected: category === 'compositions' }"
 					[helpTooltip]="'battlegrounds.in-game.minions-list.navigation.compositions-tooltip' | fsTranslate"
@@ -80,7 +81,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 						class="label"
 						[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
 					></div>
-				</div> -->
+				</div>
 			</nav>
 			<ng-container [ngSwitch]="selectedCategory$ | async">
 				<ul class="tiers tier-levels" *ngSwitchCase="'tiers'">
@@ -129,6 +130,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	@Input() tierLevels: readonly Tier[];
 	@Input() mechanicalTiers: readonly Tier[];
 	@Input() tribeTiers: readonly Tier[];
+	@Input() compositions: readonly BgsCompAdvice[];
 
 	@Input() set tavernTier(value: number) {
 		if (!value || !this.tierLevels?.length || value === this.currentTavernTier) {
@@ -167,11 +169,14 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 	selectCategory(category: MinionTierCategory) {
 		console.debug('selecting', category);
-		this.selectedCategory$$.next(category);
 		this.setLockedTier(undefined);
 		this.setDisplayedTier(undefined);
+		this.selectedCategory$$.next(category);
 		switch (category) {
-			case 'tiers':
+			case 'compositions':
+				this.setDisplayedTier({ tavernTier: 'compositions' } as Tier);
+				this.setLockedTier({ tavernTier: 'compositions' } as Tier);
+				break;
 		}
 	}
 

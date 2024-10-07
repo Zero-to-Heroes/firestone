@@ -28,6 +28,7 @@ export * from './lib/services/bgs-in-game-trinkets-guardian.service';
 export * from './lib/services/bgs-in-game-trinkets.service';
 export * from './lib/services/bgs-match-memory-info.service';
 export * from './lib/services/bgs-match-players-mmr.service';
+export * from './lib/services/bgs-meta-composition-strategies.service';
 export * from './lib/services/bgs-meta-hero-stats-duo.service';
 export * from './lib/services/bgs-meta-hero-stats.service';
 export * from './lib/services/bgs-meta-hero-strategies.service';

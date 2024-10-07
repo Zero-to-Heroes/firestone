@@ -6,6 +6,7 @@ import {
 	Input,
 	ViewEncapsulation,
 } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { TavernTierType, Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -28,26 +29,44 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 						></div>
 					</div>
 					<ng-container *ngIf="showMinionsList">
-						<minions-list-tiers-header-2
+						<minions-list-tiers-header
 							[tierLevels]="tierLevels"
 							[mechanicalTiers]="mechanicalTiers"
 							[tribeTiers]="tribeTiers"
 							[tavernTier]="currentTavernTier"
+							[compositions]="compositions"
 							[enableMouseOver]="enableMouseOver"
 							[mouseLeaveTrigger]="mouseLeaveTrigger$ | async"
 							(displayedTierChange)="onDisplayedTier($event)"
 							(lockedTierChange)="onDisplayedTier($event)"
-						></minions-list-tiers-header-2>
-						<bgs-minions-list
-							class="minions-list"
-							[tier]="displayedTier$ | async"
-							[showTribesHighlight]="showTribesHighlight"
-							[highlightedMinions]="highlightedMinions"
-							[highlightedTribes]="highlightedTribes"
-							[highlightedMechanics]="highlightedMechanics"
-							[showGoldenCards]="showGoldenCards"
-							[showTrinketTips]="showTrinketTips"
-						></bgs-minions-list>
+						></minions-list-tiers-header>
+						<ng-container *ngIf="displayedTierId$ | async as displayedTierId">
+							<ng-container *ngIf="displayedTierId !== 'compositions'">
+								<bgs-minions-list
+									class="minions-list"
+									[tier]="displayedTier$ | async"
+									[showTribesHighlight]="showTribesHighlight"
+									[highlightedMinions]="highlightedMinions"
+									[highlightedTribes]="highlightedTribes"
+									[highlightedMechanics]="highlightedMechanics"
+									[showGoldenCards]="showGoldenCards"
+									[showTrinketTips]="showTrinketTips"
+								></bgs-minions-list>
+							</ng-container>
+							<div class="compositions-list" *ngIf="displayedTierId === 'compositions'">
+								<bgs-minions-list-composition
+									*ngFor="let comp of compositions ?? []; trackBy: trackByCompFn"
+									class="composition"
+									[composition]="comp"
+									[showTribesHighlight]="showTribesHighlight"
+									[highlightedMinions]="highlightedMinions"
+									[highlightedTribes]="highlightedTribes"
+									[highlightedMechanics]="highlightedMechanics"
+									[showGoldenCards]="showGoldenCards"
+									[showTrinketTips]="showTrinketTips"
+								></bgs-minions-list-composition>
+							</div>
+						</ng-container>
 					</ng-container>
 				</ng-container>
 			</div>
@@ -61,6 +80,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	implements AfterContentInit
 {
 	mouseLeaveTrigger$: Observable<boolean>;
+	displayedTierId$: Observable<TavernTierType>;
 	displayedTier$: Observable<Tier>;
 
 	tierLevels: readonly Tier[] = [];
@@ -90,6 +110,8 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 		this.allTiers$$.next([...this.tierLevels, ...this.mechanicalTiers, ...this.tribeTiers]);
 	}
 
+	@Input() compositions: readonly BgsCompAdvice[];
+
 	@Input() set tavernTier(value: number) {
 		this.currentTavernTier = value;
 	}
@@ -106,6 +128,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 
 	ngAfterContentInit() {
 		this.mouseLeaveTrigger$ = this.mouseLeaveTrigger$$.pipe(this.mapData((value) => value));
+		this.displayedTierId$ = this.displayedTierId$$.pipe(this.mapData((value) => value));
 		this.displayedTier$ = combineLatest([this.allTiers$$, this.displayedTierId$$]).pipe(
 			this.mapData(([allTiers, displayedTierId]) => allTiers?.find((t) => t.tavernTier === displayedTierId)),
 		);
@@ -115,7 +138,12 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 		return tavernTier?.tavernTier;
 	}
 
+	trackByCompFn(index: number, comp: BgsCompAdvice) {
+		return comp?.compId;
+	}
+
 	onDisplayedTier(tavernTier: Tier) {
+		console.debug('setting displayed tier', tavernTier?.tavernTier, tavernTier);
 		this.displayedTierId$$.next(tavernTier?.tavernTier);
 	}
 

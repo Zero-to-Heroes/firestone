@@ -42,7 +42,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showGoldenCards]="showGoldenCards"
 					[showTrinketTips]="showTrinketTips"
 					[highlightedMinions]="highlightedMinions"
-					[highlightedTribes]="highlightedTribes"
+					[highlightedTribes]="highlightedTribes$ | async"
 					[highlightedMechanics]="highlightedMechanics"
 					[showTribesHighlight]="showTribesHighlight"
 				></bgs-minion-item>

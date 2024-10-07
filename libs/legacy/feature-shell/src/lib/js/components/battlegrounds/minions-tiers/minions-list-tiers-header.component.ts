@@ -7,6 +7,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { Tier } from '@firestone/battlegrounds/core';
 
 @Component({
@@ -54,6 +55,7 @@ export class BattlegroundsMinionsListTiersHeaderComponent {
 	@Input() tierLevels: readonly Tier[];
 	@Input() mechanicalTiers: readonly Tier[];
 	@Input() tribeTiers: readonly Tier[];
+	@Input() compositions: readonly BgsCompAdvice[]; // Unused here
 
 	@Input() set tavernTier(value: number) {
 		if (!value || !this.tierLevels?.length || value === this.currentTavernTier) {
