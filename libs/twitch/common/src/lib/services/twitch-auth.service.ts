@@ -46,6 +46,7 @@ export class TwitchAuthService {
 	private twitchDelay = 0;
 
 	private hasLoggedInfoOnce = false;
+	private hasLoggedExpiredTokenInfoOnce = false;
 
 	constructor(
 		private readonly prefs: PreferencesService,
@@ -366,6 +367,12 @@ export class TwitchAuthService {
 					});
 				} else {
 					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
+				}
+				if (!this.hasLoggedExpiredTokenInfoOnce) {
+					if (error?.error?.text?.toLowerCase()?.includes('invalid bearer')) {
+						this.sendExpiredTwitchTokenNotification();
+						this.hasLoggedExpiredTokenInfoOnce = true;
+					}
 				}
 			},
 		);
