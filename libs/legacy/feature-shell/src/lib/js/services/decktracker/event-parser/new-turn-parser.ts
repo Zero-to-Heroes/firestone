@@ -28,7 +28,7 @@ export class NewTurnParser implements EventParser {
 		const currentTurn = currentState.mulliganOver || numericTurn >= 2 ? numericTurn : 'mulligan';
 		const isPlayerActive = gameEvent.additionalData.activePlayerId === localPlayer.PlayerId;
 		const isPlayerActiveInPreviousTurn = currentState.playerDeck.isActivePlayer;
-		console.debug('[turn-start] currentTurn', currentTurn, isPlayerActive, isPlayerActiveInPreviousTurn);
+		// console.debug('[turn-start] currentTurn', currentTurn, isPlayerActive, isPlayerActiveInPreviousTurn);
 		// const isPlayerActive = currentState.playerDeck.isFirstPlayer
 		// 	? gameTurnNumber % 2 === 1
 		// 	: gameTurnNumber % 2 === 0;

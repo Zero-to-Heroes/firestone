@@ -342,7 +342,7 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
-				console.debug('[bgs-store] will send next opponent', gameEvent);
+				// console.debug('[bgs-store] will send next opponent', gameEvent);
 				this.handleEventOnlyAfterTrigger(
 					// cardID is null when repeating the same opponent
 					new BgsNextOpponentEvent(
@@ -658,7 +658,7 @@ export class BattlegroundsStoreService {
 		if (newState !== this.state) {
 			this.state = newState;
 			// console.debug(
-			// 	'[bgs-store] [debug] emitting new state',
+			// 	'[bgs-store] emitting new state',
 			// 	gameEvent.type,
 			// 	gameEvent,
 			// 	this.state.currentGame?.players?.map((p) => ({ main: p.isMainPlayer, playerId: p.playerId })),

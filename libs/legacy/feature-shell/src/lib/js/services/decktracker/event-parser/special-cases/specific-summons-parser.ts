@@ -64,7 +64,7 @@ export class SpecificSummonsParser implements EventParser {
 		const [, controllerId, localPlayer] = gameEvent.parse();
 		const refCard = this.allCards.getCard(gameEvent.cardId);
 		const processors = PROCESSORS.filter((p) => p.cardSelector(refCard));
-		console.debug('processor', gameEvent.type, gameEvent, processors);
+		// console.debug('processor', gameEvent.type, gameEvent, processors);
 		if (!processors?.length) {
 			return currentState;
 		}

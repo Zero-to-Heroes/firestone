@@ -26,8 +26,10 @@ export class MindVisionStateMachineService {
 	private currentState: MindVisionState;
 
 	private memoryUpdateListener = async (changes: string | 'reset') => {
-		console.debug('[mind-vision] memory update', CurrentState[this.currentState?.stateId()], changes);
 		const changesToBroadcast: MemoryUpdate | 'reset' = changes === 'reset' ? changes : JSON.parse(changes);
+		if (!(changesToBroadcast as MemoryUpdate).MousedOverCard?.CardId) {
+			console.debug('[mind-vision] memory update', CurrentState[this.currentState?.stateId()], changes);
+		}
 		// Happens when the plugin is reset, we need to resubscribe
 		if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
 			console.warn('[mind-vision] memory update is reset', changesToBroadcast);

@@ -13,13 +13,13 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsLeaderboardPlaceEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.findPlayer(event.playerId);
-		console.debug(
-			'[bgs-leaderboard-place-parser] updating player',
-			event.leaderboardPlace,
-			this.allCards.getCard(event.heroCardId).name,
-			event.heroCardId,
-			playerToUpdate,
-		);
+		// console.debug(
+		// 	'[bgs-leaderboard-place-parser] updating player',
+		// 	event.leaderboardPlace,
+		// 	this.allCards.getCard(event.heroCardId).name,
+		// 	event.heroCardId,
+		// 	playerToUpdate,
+		// );
 
 		if (!playerToUpdate) {
 			return currentState;

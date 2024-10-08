@@ -69,20 +69,20 @@ export class BgsBattleSimulationService {
 		const shouldUseLocalSimulator = !prefs.bgsUseRemoteSimulator || !this.isPremium;
 		const shouldUseIntermediateResults =
 			prefs.bgsSimShowIntermediaryResults && (this.isPremium || this.guardian.hasFreeUses(gameId));
-		console.debug(
-			'[bgs-simulation] [debug] useLocalSim?',
-			shouldUseLocalSimulator,
-			shouldUseIntermediateResults,
-			prefs.bgsSimShowIntermediaryResults,
-			this.guardian.hasFreeUses(gameId),
-			this.isPremium,
-			gameId,
-		);
+		// console.debug(
+		// 	'[bgs-simulation] useLocalSim?',
+		// 	shouldUseLocalSimulator,
+		// 	shouldUseIntermediateResults,
+		// 	prefs.bgsSimShowIntermediaryResults,
+		// 	this.guardian.hasFreeUses(gameId),
+		// 	this.isPremium,
+		// 	gameId,
+		// );
 
 		// Don't show intermediate results
 		if (shouldUseLocalSimulator && shouldUseIntermediateResults && !reconnectOngoing) {
 			(battleInfoInput.options as any).intermediateResults = 200;
-			console.debug('[bgs-simulation] [debug] starting sim with partial results');
+			// console.debug('[bgs-simulation] starting sim with partial results');
 			this.simulateLocalBattle(battleInfoInput, prefs, async (result: SimulationResult | null) => {
 				await sleep(0);
 				const resultForLog = !!result ? { ...result } : null;
@@ -90,7 +90,7 @@ export class BgsBattleSimulationService {
 					delete resultForLog.outcomeSamples;
 				}
 				if (!!result) {
-					// console.debug('[bgs-simulation] [debug] partial battle simulation result', resultForLog);
+					// console.debug('[bgs-simulation] partial battle simulation result', resultForLog);
 					if (result.outcomeSamples) {
 						console.log('[bgs-simulation] battle simulation result', resultForLog);
 					}
@@ -107,7 +107,7 @@ export class BgsBattleSimulationService {
 				}
 			});
 		} else {
-			console.debug('[bgs-simulation] [debug] starting sim for single use');
+			// console.debug('[bgs-simulation] starting sim for single use');
 			(battleInfoInput.options as any).intermediateResults = 0;
 			const result: SimulationResult | null = shouldUseLocalSimulator
 				? await this.simulateLocalBattleOnce(battleInfoInput, prefs)

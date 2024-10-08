@@ -255,7 +255,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			return this.cache[cacheKey];
 		}
 
-		// console.debug('[debug] loading new deck details', new Error().stack, deckstring, format, time, rank);
+		// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`

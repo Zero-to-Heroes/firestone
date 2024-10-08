@@ -39,7 +39,7 @@ export class BgsBoardHighlighterService {
 	}
 
 	private initHighlights() {
-		console.debug('[bgs-board-highlighter] init highlights');
+		// console.debug('[bgs-board-highlighter] init highlights');
 		const enableAutoHighlight$ = combineLatest([
 			this.ads.enablePremiumFeatures$$,
 			this.prefs.preferences$$.pipe(
@@ -94,7 +94,7 @@ export class BgsBoardHighlighterService {
 			),
 		);
 		minionsToHighlight$.pipe(distinctUntilChanged((a, b) => deepEqual(a, b))).subscribe((minions) => {
-			console.debug('[bgs-board-highlighter] new minions', minions);
+			// console.debug('[bgs-board-highlighter] new minions', minions);
 			this.shopMinions$$.next(minions);
 		});
 	}
@@ -144,7 +144,7 @@ export class BgsBoardHighlighterService {
 	}
 
 	private initPremiumHighlights() {
-		console.debug('[bgs-board-highlighter] init premium highlights');
+		// console.debug('[bgs-board-highlighter] init premium highlights');
 		combineLatest([
 			this.ads.enablePremiumFeatures$$,
 			this.prefs.preferences$$.pipe(
@@ -174,7 +174,7 @@ export class BgsBoardHighlighterService {
 				}
 
 				const minionsToHighlight: readonly string[] = this.buildMinionToHighlight(heroCardId);
-				console.debug('[bgs-highlighter] minionsToHighlight', minionsToHighlight, minionAuto);
+				// console.debug('[bgs-highlighter] minionsToHighlight', minionsToHighlight, minionAuto);
 				if (!!minionsToHighlight?.length && minionAuto) {
 					this.bgsStore.battlegroundsUpdater.next(
 						new BgsToggleHighlightMinionOnBoardEvent(minionsToHighlight),

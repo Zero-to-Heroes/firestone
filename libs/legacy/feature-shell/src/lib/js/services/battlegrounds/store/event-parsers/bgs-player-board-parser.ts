@@ -50,7 +50,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		gameState: GameState,
 	): Promise<BattlegroundsState> {
 		console.log(
-			'[bgs-simulation] [debug] received player boards',
+			'[bgs-simulation] received player boards',
 			event.playerBoard?.board?.map((e) => e.CardId),
 			event.opponentBoard?.board?.map((e) => e.CardId),
 			// event.teammateBoard?.Board?.map((e) => e.CardId),

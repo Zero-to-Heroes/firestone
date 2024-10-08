@@ -50,11 +50,7 @@ export class BgsIntermediateResultsSimGuardianService extends AbstractFacadeServ
 			return true;
 		}
 		if (gamesToday.length >= DAILY_FREE_USES) {
-			console.debug(
-				'[bgs-sim-intermediate-results-guardian] [debug] no more free uses today',
-				gamesToday,
-				gameId,
-			);
+			console.debug('[bgs-sim-intermediate-results-guardian] no more free uses today', gamesToday, gameId);
 			return false;
 		}
 
