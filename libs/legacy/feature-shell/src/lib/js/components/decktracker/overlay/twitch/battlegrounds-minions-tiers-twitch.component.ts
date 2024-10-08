@@ -98,6 +98,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set showTierSeven(value: boolean) {
 		this.showTierSeven$$.next(value);
 	}
+	@Input() set showBuddies(value: boolean) {
+		this.showBuddies$$.next(value);
+	}
 	@Input() set showTrinkets(value: boolean) {
 		this.showTrinkets$$.next(value);
 	}
@@ -134,6 +137,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTribeTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
+	private showBuddies$$ = new BehaviorSubject<boolean>(false);
 	private showTrinkets$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(true);
@@ -169,6 +173,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.showMechanicsTiers$$,
 			this.showTribeTiers$$,
 			this.showTierSeven$$,
+			this.showBuddies$$,
 			this.showTrinkets$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.includeTrinketsInTribeGroups$$,
@@ -188,15 +193,17 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					showMechanicsTiers,
 					showTribeTiers,
 					showTierSeven,
+					showBuddies,
 					showTrinkets,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
 					playerTrinkets,
 				]) => {
+					const willShowBuddies = showBuddies || hasBuddies;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
-					const ownBuddyId = hasBuddies
+					const ownBuddyId = willShowBuddies
 						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
 						: null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
@@ -223,7 +230,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						anomalies,
 						normalizedPlayerCardId,
 						allPlayerCardIds,
-						hasBuddies,
+						willShowBuddies,
 						hasSpells,
 						true,
 						hasTrinkets,

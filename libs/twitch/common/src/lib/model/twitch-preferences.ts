@@ -21,6 +21,7 @@ export class TwitchPreferences {
 	readonly bgsShowMechanicsTiers: boolean = false;
 	readonly bgsShowTribeTiers: boolean = false;
 	readonly bgsShowTierSeven: boolean = false;
+	readonly bgsShowBuddies: boolean = false;
 	readonly bgsShowTrinkets: boolean = false;
 	readonly bgsGroupMinionsIntoTheirTribeGroup: boolean = false;
 }

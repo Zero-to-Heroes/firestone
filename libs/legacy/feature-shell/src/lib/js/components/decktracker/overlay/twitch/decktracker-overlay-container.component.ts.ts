@@ -92,6 +92,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
 					[showTribeTiers]="showTribeTiers$ | async"
 					[showTierSeven]="showTierSeven$ | async"
+					[showBuddies]="showBuddies$ | async"
 					[showTrinkets]="showTrinkets$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 					[includeTrinketsInTribeGroups]="true"
@@ -115,6 +116,7 @@ export class DeckTrackerOverlayContainerComponent
 	showMechanicsTiers$: Observable<boolean>;
 	showTribeTiers$: Observable<boolean>;
 	showTierSeven$: Observable<boolean>;
+	showBuddies$: Observable<boolean>;
 	showTrinkets$: Observable<boolean>;
 	showOpponentTracker$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
@@ -182,6 +184,7 @@ export class DeckTrackerOverlayContainerComponent
 		this.showTierSeven$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowTierSeven),
 		);
+		this.showBuddies$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.bgsShowBuddies));
 		this.showTrinkets$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowTrinkets),
 		);

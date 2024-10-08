@@ -117,6 +117,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				showMechanicsTiers: prefs.bgsShowMechanicsTiers,
 				showTribeTiers: prefs.bgsShowTribeTiers,
 				showTierSeven: prefs.bgsShowTierSeven,
+				showBuddies: prefs.bgsShowBuddies,
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
 				bgsIncludeTrinketsInTribeGroups: prefs.bgsIncludeTrinketsInTribeGroups,
 				gameMode: gameState?.metadata?.gameType,
@@ -139,6 +140,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					showMechanicsTiers,
 					showTribeTiers,
 					showTierSeven,
+					showBuddies,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
@@ -155,9 +157,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					playerTrinkets,
 				}) => {
 					// hasSpells = true;
+					const willShowBuddies = hasBuddies || showBuddies;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
-					const ownBuddyId = hasBuddies
+					const ownBuddyId = willShowBuddies
 						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
 						: null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
@@ -183,7 +186,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						anomalies,
 						normalizedPlayerCardId,
 						allPlayerCardIds,
-						hasBuddies,
+						willShowBuddies,
 						hasSpells,
 						showSpellsAtBottom,
 						hasTrinkets,

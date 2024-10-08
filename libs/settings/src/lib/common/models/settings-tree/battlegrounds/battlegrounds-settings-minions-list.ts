@@ -69,6 +69,13 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 					},
 					{
 						type: 'toggle',
+						field: 'bgsShowBuddies',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-buddies-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-buddies-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsShowTrinkets',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-trinkets-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-trinkets-tooltip'),
