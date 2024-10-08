@@ -37,6 +37,8 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	private prefs: PreferencesService;
 	private navigation: ConstructedNavigationService;
 
+	private cache: { [key: string]: DeckStat | null } = {};
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'constructedMetaDecks', () => !!this.constructedMetaDecks$$);
 	}
@@ -233,10 +235,27 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat | null> {
+		return this.mainInstance.loadNewDeckDetailsInternal(deckstring, format, time, rank);
+	}
+
+	private async loadNewDeckDetailsInternal(
+		deckstring: string | undefined | null,
+		format: GameFormat,
+		time: TimePeriod,
+		rank: RankBracket,
+	) {
 		if (!deckstring) {
 			return null;
 		}
 
+		const cacheKey = `${format}_${time}_${rank}_${deckstring}`;
+		console.debug('[constructed-meta-decks] checking cache', cacheKey, this.cache[cacheKey]);
+		if (this.cache[cacheKey] !== undefined) {
+			console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.cache[cacheKey]);
+			return this.cache[cacheKey];
+		}
+
+		// console.debug('[debug] loading new deck details', new Error().stack, deckstring, format, time, rank);
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
 		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
@@ -248,12 +267,14 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		// Can happen if there is no data for the deck
 		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
-			console.log('could not load meta deck', format, time, rank, url);
+			this.cache[cacheKey] = null;
+			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
 			return null;
 		}
 
 		const deck: DeckStat = JSON.parse(resultStr);
 		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames);
+		this.cache[cacheKey] = deck;
 		return deck;
 	}
 
