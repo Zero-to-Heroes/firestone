@@ -16,6 +16,8 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 	private memoryUpdates: MemoryUpdatesService;
 	private collectionManager: CollectionManager;
 
+	private hasUpdatedPackStats = false;
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'CollectionBootstrapService', () => !!this.packStats$$);
 	}
@@ -32,7 +34,7 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 		this.collectionManager = AppInjector.get(CollectionManager);
 
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
-			if (changes.CollectionInit) {
+			if (changes.CollectionInit && this.hasUpdatedPackStats) {
 				console.debug('[collection-bootstrap] collection init detected in memory updates');
 				this.initCollectionState();
 			}
@@ -41,6 +43,7 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 		this.packStats$$.onFirstSubscribe(() => {
 			console.debug('[collection-bootstrap] first subscription to pack stats, initializing');
 			this.initCollectionState();
+			this.hasUpdatedPackStats = true;
 
 			this.packStats$$.pipe(filter((packStats) => !!packStats?.length)).subscribe((packStats) => {
 				const history = this.buildHistory(packStats);
