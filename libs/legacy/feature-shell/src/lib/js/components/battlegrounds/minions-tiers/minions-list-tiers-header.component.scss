@@ -29,6 +29,7 @@
 		opacity: 0.4;
 
 		.icon-container {
+			display: none;
 			height: 100%;
 			aspect-ratio: 1;
 
@@ -39,7 +40,6 @@
 		}
 
 		.label {
-			display: none;
 			margin-right: 10px;
 			max-width: 100px;
 		}

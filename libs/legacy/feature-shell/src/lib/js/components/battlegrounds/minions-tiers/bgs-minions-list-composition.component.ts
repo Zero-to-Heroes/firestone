@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsInGameCompositionsService } from 'libs/battlegrounds/common/src/lib/services/bgs-in-game-compositions.service';
 import { BehaviorSubject, combineLatest, Observable, tap } from 'rxjs';
 
 @Component({
