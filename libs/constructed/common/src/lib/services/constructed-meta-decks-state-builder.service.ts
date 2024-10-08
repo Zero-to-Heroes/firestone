@@ -16,7 +16,9 @@ import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
-const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rdwyw.lambda-url.us-west-2.on.aws';
+// const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rdwyw.lambda-url.us-west-2.on.aws';
+const CONSTRUCTED_META_DECK_DETAILS_URL =
+	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}';
 const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/archetypes';
 
 @Injectable()
@@ -237,8 +239,11 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
-		const fileName = `${format}/${rank}/${time}/${deckId}`;
-		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}/${fileName}`;
+		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
+			.replace('{format}', format)
+			.replace('{rank}', rank)
+			.replace('{timePeriod}', time)
+			.replace('{deckId}', deckId);
 		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
 		// Can happen if there is no data for the deck
 		const resultStr = await this.api.get(url, false);
