@@ -25,13 +25,15 @@ export class BgsHeroSelectionParser implements EventParser {
 		if (prefs.flashWindowOnYourTurn) {
 			this.owUtils.flashWindow();
 		}
+		console.debug('[bgs-hero-selection] handling event', event);
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo(10);
-		console.log('[bgs-game-init] retrieved bgs info', bgsInfo?.Game?.AvailableRaces);
+		console.log('[bgs-hero-selection] retrieved bgs info', bgsInfo?.Game?.AvailableRaces);
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.Game?.AvailableRaces);
-		const newHeroSelectionPanel: BgsHeroSelectionOverviewPanel = await this.buildHeroSelectionPanel(
+		const newHeroSelectionPanel: BgsHeroSelectionOverviewPanel = this.buildHeroSelectionPanel(
 			currentState,
 			event.heroCardIds,
 		);
+		console.debug('[bgs-hero-selection] newHeroSelectionPanel', newHeroSelectionPanel);
 		const panels: readonly BgsPanel[] = currentState.panels.map((panel) =>
 			panel.id === 'bgs-hero-selection-overview' ? newHeroSelectionPanel : panel,
 		);
@@ -46,10 +48,10 @@ export class BgsHeroSelectionParser implements EventParser {
 		} as BattlegroundsState);
 	}
 
-	private async buildHeroSelectionPanel(
+	private buildHeroSelectionPanel(
 		currentState: BattlegroundsState,
 		heroCardIds: readonly string[],
-	): Promise<BgsHeroSelectionOverviewPanel> {
+	): BgsHeroSelectionOverviewPanel {
 		return BgsHeroSelectionOverviewPanel.create({
 			name: this.i18n.translateString('battlegrounds.menu.hero-selection'),
 			heroOptionCardIds: heroCardIds,

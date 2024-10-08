@@ -114,23 +114,24 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 
+		const panel$ = this.bgsState.gameState$$.pipe(
+			this.mapData(
+				(main) =>
+					main?.panels?.find(
+						(panel) => panel.id === 'bgs-hero-selection-overview',
+					) as BgsHeroSelectionOverviewPanel,
+			),
+		);
+
 		this.heroOverviews$ = combineLatest([
 			tiers$,
 			this.achievements.groupedAchievements$$,
-			this.bgsState.gameState$$.pipe(
-				this.mapData(
-					(main) =>
-						main?.panels?.find(
-							(panel) => panel.id === 'bgs-hero-selection-overview',
-						) as BgsHeroSelectionOverviewPanel,
-				),
-			),
+			panel$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
 			this.mapData(([tiers, achievements, panel, showAchievements]) => {
-				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
-				if (!panel || !heroesAchievementCategory) {
-					console.log('no panel or no category', !panel, !heroesAchievementCategory);
+				if (!panel) {
+					console.log('no panel');
 					return [];
 				}
 
@@ -141,8 +142,9 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					return [];
 				}
 
+				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
 				const heroAchievements: readonly VisualAchievement[] =
-					heroesAchievementCategory.retrieveAllAchievements();
+					heroesAchievementCategory?.retrieveAllAchievements() ?? [];
 				const heroOverviews: readonly InternalBgsHeroStat[] = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
 					const tier = tiers.find((t) => t.items.map((i) => i.baseCardId).includes(normalized));
@@ -164,7 +166,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						tooltipClass: `hero-selection-overlay ${tooltipPosition}`,
 					};
 				});
-				console.debug('heroOverviews', heroOverviews, tiers);
+				// console.debug('heroOverviews', heroOverviews, tiers);
 				if (heroOverviews.length === 2) {
 					return [null, ...heroOverviews, null];
 				} else if (heroOverviews.length === 1) {
