@@ -79,5 +79,5 @@ export interface BattleRecapPlayer {
 	readonly heroCardId: string;
 	readonly health: number;
 	readonly tavernTier: number;
-	readonly board: BgsBoardInfo;
+	readonly board: BgsBoardInfo | null;
 }

@@ -13,7 +13,7 @@ import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 		<div
 			class="bgs-battle-recap"
 			[ngClass]="{ selectable: selectable, duos: !!playerTeammate || !!opponentTeammate }"
-			[attr.data-id]="battle?.id"
+			[attr.data-id]="battle?.id ?? 'unknown-id'"
 		>
 			<div class="turn-label" *ngIf="turnNumber">
 				<div
@@ -46,9 +46,7 @@ export class BgsBattleRecapComponent {
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
-		if (!value?.battleInfo) {
-			return;
-		}
+		console.debug('setting faceoff', value);
 		this.turnNumber = value.turn;
 		this.result = value.result;
 		this.i18nResult = value.result
@@ -60,16 +58,16 @@ export class BgsBattleRecapComponent {
 			heroCardId: playerBattleInfo?.player?.cardId ?? value.playerCardId,
 			health: playerBattleInfo?.player?.hpLeft ?? value.playerHpLeft,
 			tavernTier: playerBattleInfo?.player?.tavernTier ?? value.playerTavern,
-			board: playerBattleInfo,
+			board: playerBattleInfo ?? null,
 		};
-		const opponentBattleInfo = value.battleInfo.opponentBoard;
+		const opponentBattleInfo = value.battleInfo?.opponentBoard;
 		this.opponent = {
 			heroCardId: opponentBattleInfo?.player?.cardId ?? value.opponentCardId,
 			health: opponentBattleInfo?.player?.hpLeft ?? value.opponentHpLeft,
 			tavernTier: opponentBattleInfo?.player?.tavernTier ?? value.opponentTavern,
-			board: opponentBattleInfo,
+			board: opponentBattleInfo ?? null,
 		};
-		const playerTeammateBattleInfo = value.battleInfo.playerTeammateBoard;
+		const playerTeammateBattleInfo = value.battleInfo?.playerTeammateBoard;
 		this.playerTeammate = !!playerTeammateBattleInfo?.player
 			? {
 					heroCardId: playerTeammateBattleInfo.player?.cardId,
