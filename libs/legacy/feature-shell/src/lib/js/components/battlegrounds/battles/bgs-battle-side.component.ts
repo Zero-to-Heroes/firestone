@@ -192,6 +192,7 @@ export class BgsBattleSideComponent {
 	eternalLegion: number;
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
+	piratesSummonedThisGame: number;
 	forceTooltipHidden = false;
 
 	entities: readonly Entity[];
@@ -310,6 +311,7 @@ export class BgsBattleSideComponent {
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
 		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;
+		this.piratesSummonedThisGame = this._player.player?.globalInfo?.PiratesSummonedThisGame ?? 0;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
 

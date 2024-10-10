@@ -167,6 +167,7 @@ export class BgsSimulatorSideComponent {
 	eternalLegion: number;
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
+	piratesSummonedThisGame: number;
 
 	undeadArmyLabel = this.allCards.getCard(CardIds.NerubianDeathswarmer_UndeadArmyEnchantment).name;
 	eternalLegionLabel = this.allCards.getCard(CardIds.EternalLegionEnchantment).name;
@@ -265,6 +266,7 @@ export class BgsSimulatorSideComponent {
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
 		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;
+		this.piratesSummonedThisGame = this._player.player?.globalInfo?.PiratesSummonedThisGame ?? 0;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
 
