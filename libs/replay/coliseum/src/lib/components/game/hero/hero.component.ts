@@ -180,6 +180,13 @@ export class HeroComponent {
 			entities
 				.valueSeq()
 				.toArray()
+				.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.BATTLEGROUND_QUEST_REWARD)
+				.filter((entity) => entity.getTag(GameTag.BACON_IS_HEROPOWER_QUESTREWARD) === 1)
+				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
+				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0] ??
+			entities
+				.valueSeq()
+				.toArray()
 				.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.HERO_POWER)
 				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
 				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
@@ -206,6 +213,7 @@ export class HeroComponent {
 			.valueSeq()
 			.toArray()
 			.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.BATTLEGROUND_QUEST_REWARD)
+			.filter((entity) => entity.getTag(GameTag.BACON_IS_HEROPOWER_QUESTREWARD) !== 1)
 			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
 			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
 	}
