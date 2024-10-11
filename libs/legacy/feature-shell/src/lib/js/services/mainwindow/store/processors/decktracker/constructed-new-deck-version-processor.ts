@@ -26,13 +26,16 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 		);
 		console.log('existingLinkFromPreviousVersion', existingLinkFromPreviousVersion);
 		console.log('existingLinkFromNewVersion', existingLinkFromNewVersion);
+		const newLinkVersions: readonly string[] = [
+			...new Set([
+				...(existingLinkFromPreviousVersion?.versions?.flatMap((v) => v.deckstring) ?? []),
+				event.previousVersionDeckstring,
+				...(existingLinkFromNewVersion?.versions?.flatMap((v) => v.deckstring) ?? []),
+				event.newVersionDeckstring,
+			]),
+		];
 		const newLink: ConstructedDeckVersions = {
-			versions: [
-				...new Set([
-					...(existingLinkFromPreviousVersion?.versions ?? []),
-					...(existingLinkFromNewVersion?.versions ?? []),
-				]),
-			],
+			versions: newLinkVersions.map((deckstring) => ({ deckstring })),
 		};
 		console.log('newLink', newLink);
 		const newVersionLinks: readonly ConstructedDeckVersions[] = [...(versionLinks ?? []), newLink]
