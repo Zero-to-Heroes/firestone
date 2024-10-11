@@ -38,6 +38,10 @@ export class ReplayMetadataBuilderService {
 		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(game, xml, bgsRunStats);
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		const isPremium = this.ads.hasPremiumSub$$.getValue();
+		const newSuffix = !userName?.length ? 'anonymous' : isPremium ? 'premium' : 'logged-in';
+		const replayKey = `hearthstone/replay-${newSuffix}/${today.getUTCFullYear()}/${
+			today.getUTCMonth() + 1
+		}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
 		const metadata: ReplayUploadMetadata = {
 			user: {
 				userId: userId,
@@ -57,9 +61,7 @@ export class ReplayMetadataBuilderService {
 			game: {
 				uniqueId: game.uniqueId,
 				reviewId: game.reviewId,
-				replayKey: `hearthstone/replay/${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}/${
-					game.reviewId
-				}.xml.zip`,
+				replayKey: replayKey,
 				deckstring: game.deckstring,
 				normalizedDeckstring: !game.deckstring?.length
 					? null

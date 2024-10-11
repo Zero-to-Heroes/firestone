@@ -68,7 +68,14 @@ export class ReplayUploadService {
 		});
 		const replayKey = fullMetaData.game.replayKey;
 		console.log('[manastorm-bridge] uploading replay', replayKey);
-		await this.uploadReplay(replayKey, fileReplayBlob);
+		const userType = !fullMetaData.user?.userName?.length
+			? 'anonymous'
+			: fullMetaData.user.isPremium
+			? 'premium'
+			: 'loggedIn';
+		await this.uploadReplay(replayKey, fileReplayBlob, {
+			userType: userType,
+		});
 
 		// const fileToUpload = JSON.stringify(fullMetaData) + '\n' + game.uncompressedXmlReplay;
 		// const fileToUpload = game.uncompressedXmlReplay;
@@ -88,7 +95,7 @@ export class ReplayUploadService {
 		console.log('[manastorm-bridge] uploaded metadata');
 	}
 
-	private async uploadReplay(replayKey: string, fileReplayBlob: Blob) {
+	private async uploadReplay(replayKey: string, fileReplayBlob: Blob, tags: { userType: string }) {
 		return new Promise<void>((resolve, reject) => {
 			const s3 = new S3();
 			const params = {
@@ -97,6 +104,7 @@ export class ReplayUploadService {
 				ACL: 'public-read',
 				Body: fileReplayBlob,
 				ContentType: 'application/zip',
+				Tagging: `userType=${tags.userType}`,
 			};
 			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 				if (err) {
