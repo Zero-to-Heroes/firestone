@@ -133,7 +133,6 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			const firstMatch = matches[0];
 			const sortedMatches = [...matches].sort((a, b) => a.creationTimestamp - b.creationTimestamp);
 			const [wins, losses] = this.extractWins(sortedMatches);
-			console.debug('extracted wins', wins, losses, sortedMatches);
 			return ArenaRun.create({
 				id: firstMatch.runId,
 				creationTimestamp: firstMatch.creationTimestamp,
