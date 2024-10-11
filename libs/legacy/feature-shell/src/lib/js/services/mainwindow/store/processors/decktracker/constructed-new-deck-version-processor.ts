@@ -15,7 +15,7 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		const versionLinks: readonly ConstructedDeckVersions[] = prefs.constructedDeckVersions;
-		console.debug('processing new deck version', event, versionLinks);
+		console.log('processing new deck version', event, versionLinks);
 		const existingLinkFromPreviousVersion: ConstructedDeckVersions = this.findExistingVersion(
 			versionLinks,
 			event.previousVersionDeckstring,
@@ -24,8 +24,8 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 			versionLinks,
 			event.newVersionDeckstring,
 		);
-		console.debug('existingLinkFromPreviousVersion', existingLinkFromPreviousVersion);
-		console.debug('existingLinkFromNewVersion', existingLinkFromNewVersion);
+		console.log('existingLinkFromPreviousVersion', existingLinkFromPreviousVersion);
+		console.log('existingLinkFromNewVersion', existingLinkFromNewVersion);
 		const newLink: ConstructedDeckVersions = {
 			versions: [
 				...new Set([
@@ -34,10 +34,10 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 				]),
 			],
 		};
+		console.log('newLink', newLink);
 		const newVersionLinks: readonly ConstructedDeckVersions[] = [...(versionLinks ?? []), newLink]
 			.filter((link) => link !== existingLinkFromPreviousVersion && link !== existingLinkFromNewVersion)
 			.filter((link) => link?.versions?.length > 0);
-		console.debug('newVersionLinks', newVersionLinks);
 
 		await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
 		return [null, null];
