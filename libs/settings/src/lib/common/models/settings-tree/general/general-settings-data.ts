@@ -5,6 +5,7 @@ import { DropdownOption, SettingContext, SettingNode } from '../../settings.type
 const isRefreshingGames$$ = new BehaviorSubject<boolean>(false);
 const isRefreshingPacks$$ = new BehaviorSubject<boolean>(false);
 const isRefreshingAchievements$$ = new BehaviorSubject<boolean>(false);
+const isRefreshingArenaRewards$$ = new BehaviorSubject<boolean>(false);
 const isClearingGames$$ = new BehaviorSubject<boolean>(false);
 
 export const generalDataSettings = (context: SettingContext): SettingNode => {
@@ -109,6 +110,16 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 							isRefreshingAchievements$$.next(false);
 						},
 					},
+					{
+						label: context.i18n.translateString('settings.general.data.arena-rewards'),
+						text: refreshArenaRewardsButtonText$(context),
+						tooltip: context.i18n.translateString('settings.general.data.arena-rewards-tooltip'),
+						action: async () => {
+							isRefreshingArenaRewards$$.next(true);
+							await Promise.all([await context.services.arenaRewards.refreshRewards(), sleep(1000)]);
+							isRefreshingArenaRewards$$.next(false);
+						},
+					},
 				],
 			},
 		],
@@ -125,6 +136,10 @@ const refreshPacksButtonText$ = (context: SettingContext): Observable<string> =>
 
 const refreshAchievementsButtonText$ = (context: SettingContext): Observable<string> => {
 	return isRefreshingAchievements$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+};
+
+const refreshArenaRewardsButtonText$ = (context: SettingContext): Observable<string> => {
+	return isRefreshingArenaRewards$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
 };
 
 const clearGamesButtonText$ = (context: SettingContext): Observable<string> => {

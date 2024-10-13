@@ -853,7 +853,7 @@ export class OverwolfService {
 	public async deleteAppFile(fileName: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.extensions.io.delete(overwolf.extensions.io.enums.StorageSpace.appData, fileName, (res) => {
-				console.debug('[overwolf-utils] deleted app file', fileName, res);
+				// console.debug('[overwolf-utils] deleted app file', fileName, res);
 				resolve(res.success);
 			});
 		});

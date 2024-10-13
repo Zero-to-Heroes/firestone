@@ -9,6 +9,7 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	DiskCacheService,
 	OverwolfService,
 	UserService,
 	WindowManagerService,
@@ -29,6 +30,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	private arenaInfoService: ArenaInfoService;
 	private reviewIdService: IReviewIdService;
 	private ow: OverwolfService;
+	private diskCache: DiskCacheService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'arenaRewards', () => !!this.arenaRewards$$);
@@ -46,6 +48,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.arenaInfoService = AppInjector.get(ArenaInfoService);
 		this.reviewIdService = AppInjector.get(REVIEW_ID_SERVICE_TOKEN);
 		this.ow = AppInjector.get(OverwolfService);
+		this.diskCache = AppInjector.get(DiskCacheService);
 
 		this.arenaRewards$$.onFirstSubscribe(async () => {
 			this.userService.user$$
@@ -55,10 +58,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 				)
 				.subscribe(async (currentUser) => {
 					console.log('[arena-rewards] getting rewards for user', currentUser?.userId, currentUser?.username);
-					const result: readonly ArenaRewardInfo[] | null = await this.api.callPostApi(REWARDS_RETRIEVE_URL, {
-						userId: currentUser?.userId,
-						userName: currentUser?.username,
-					});
+					const result: readonly ArenaRewardInfo[] | null = await this.loadArenaRewards(currentUser);
 					this.arenaRewards$$.next(result);
 				});
 		});
@@ -74,6 +74,16 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			});
 	}
 
+	public async refreshRewards() {
+		return this.mainInstance.refreshRewardsInternal();
+	}
+
+	private async refreshRewardsInternal() {
+		const currentUser = await this.userService.getCurrentUser();
+		const result: readonly ArenaRewardInfo[] | null = await this.loadArenaRewards(currentUser, true);
+		this.arenaRewards$$.next(result);
+	}
+
 	public async addRewards(rewards: Input) {
 		const currentRewards = await this.arenaRewards$$.getValueWithInit();
 		if (currentRewards?.some((reward) => reward.runId === rewards.runId)) {
@@ -83,6 +93,30 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 
 		const newRewards: readonly ArenaRewardInfo[] = [...(currentRewards ?? []), ...this.buildRewards(rewards)];
 		this.arenaRewards$$.next(newRewards);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS, newRewards);
+	}
+
+	private async loadArenaRewards(
+		currentUser: overwolf.profile.GetCurrentUserResult | null,
+		skipLocal = false,
+	): Promise<readonly ArenaRewardInfo[] | null> {
+		if (!skipLocal) {
+			const localRewards = await this.diskCache.getItem<readonly ArenaRewardInfo[]>(
+				DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS,
+			);
+			if (localRewards != null) {
+				return localRewards;
+			}
+		}
+
+		console.log('[arena-rewards] fetching rewards from remote');
+		const remoteRewards = await this.api.callPostApi<readonly ArenaRewardInfo[]>(REWARDS_RETRIEVE_URL, {
+			userId: currentUser?.userId,
+			userName: currentUser?.username,
+		});
+		const result = remoteRewards ?? [];
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS, result);
+		return result;
 	}
 
 	private async handleRewards(rewards: readonly Reward[], arenaInfo: ArenaInfo, reviewId: string) {

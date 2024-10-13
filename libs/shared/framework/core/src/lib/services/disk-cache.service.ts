@@ -8,6 +8,7 @@ import { OverwolfService } from './overwolf.service';
 export class DiskCacheService {
 	public static DISK_CACHE_KEYS = {
 		ACHIEVEMENTS_HISTORY: 'achievements-history.json',
+		ARENA_REWARDS: 'arena-rewards.json',
 		COLLECTION: 'collection.json',
 		COLLECTION_PACK_STATS: 'collection-pack-stats.json',
 		CARDS_HISTORY: 'cards-history.json',

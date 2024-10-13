@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AchievementsCommonModule } from '@firestone/achievements/common';
+import { ArenaCommonModule } from '@firestone/arena/common';
 import { CollectionCommonModule } from '@firestone/collection/common';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -65,6 +66,7 @@ const components = [
 		StatsDataAccessModule,
 		CollectionCommonModule,
 		AchievementsCommonModule,
+		ArenaCommonModule,
 	],
 	providers: [BootstrapSettingsService, CustomAppearanceService, SettingsControllerService],
 	declarations: components,

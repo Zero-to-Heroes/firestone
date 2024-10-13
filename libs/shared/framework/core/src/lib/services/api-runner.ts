@@ -52,6 +52,7 @@ export class ApiRunner {
 			if (options?.bearerToken) {
 				headers = headers.set('Authorization', `Bearer ${options.bearerToken}`);
 			}
+			console.debug('[remote] calling POST', url);
 			this.http.post(url, input, { headers: headers }).subscribe(
 				(result: any) => {
 					console.debug('retrieved POST call', url);
@@ -76,6 +77,7 @@ export class ApiRunner {
 	// For JSON output
 	public async callGetApi<T>(url: string): Promise<T | null> {
 		return new Promise<T | null>((resolve, reject) => {
+			console.debug('[remote] calling GET', url);
 			this.http.get(url).subscribe(
 				(result: any) => {
 					console.debug('retrieved GET call', url);
@@ -94,6 +96,7 @@ export class ApiRunner {
 
 	public async get(url: string, logError = true): Promise<string | undefined> {
 		return new Promise<string | undefined>((resolve, reject) => {
+			console.debug('[remote] calling GET', url);
 			this.http
 				.get(url, {
 					responseType: 'text',
