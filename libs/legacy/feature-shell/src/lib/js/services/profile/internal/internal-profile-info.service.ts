@@ -140,7 +140,7 @@ export class InternalProfileInfoService {
 			const playerRecordsForClass = profileInfo.PlayerRecords.filter((r) => r.Data > 0).filter((r) =>
 				this.allCards
 					.getCard(r.Data)
-					.classes.filter((c) => c !== CardClass[CardClass.NEUTRAL])
+					.classes?.filter((c) => c !== CardClass[CardClass.NEUTRAL])
 					.map((c) => getDefaultHeroDbfIdForClass(c))
 					.includes(getDefaultHeroDbfIdForClass(CardClass[playerClass.TagClass])),
 			);
