@@ -1582,7 +1582,7 @@ export class GameEvents {
 		}
 	}
 
-	public receiveLogLine(data: string) {
+	public receiveLogLine(data: string, postponed = false) {
 		// In case the game overrides the info during the process, we stop everything and start from scratch
 		if (data === 'truncated') {
 			console.log(
@@ -1612,6 +1612,14 @@ export class GameEvents {
 
 		if (data.indexOf('tag=STATE value=COMPLETE') !== -1) {
 			console.log('[game-events] received tag=STATE value=COMPLETE log', data);
+		}
+
+		// Hack to try and get the board state a bit early
+		// See comments in BattlegroundsPLayerBoardParser
+		if (data.includes('BACON_CHOSEN_BOARD_SKIN_ID') && !postponed) {
+			console.debug('[game-events] postponing BACON_CHOSEN_BOARD_SKIN_ID', data);
+			setTimeout(() => this.receiveLogLine(data, true), 1000);
+			return;
 		}
 
 		if (this.existingLogLines.length > 0) {

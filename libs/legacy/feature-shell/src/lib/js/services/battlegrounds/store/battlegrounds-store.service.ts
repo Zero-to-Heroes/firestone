@@ -689,7 +689,7 @@ export class BattlegroundsStoreService {
 		if (this.overlayHandlers?.length) {
 			const start = Date.now();
 			await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(this.state)));
-			console.debug('[bgs-store] overlay updated in', Date.now() - start, 'ms');
+			// console.debug('[bgs-store] overlay updated in', Date.now() - start, 'ms');
 		}
 		if (this.state.forceOpen) {
 			this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
