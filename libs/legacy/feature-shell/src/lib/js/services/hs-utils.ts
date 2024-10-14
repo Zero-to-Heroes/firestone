@@ -168,6 +168,7 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.DarkbishopBenedictus,
 	CardIds.DarkbishopBenedictusCore,
 	CardIds.PrinceRenathal,
+	CardIds.PrinceRenathal_CORE_REV_018,
 	CardIds.ChogallTwilightChieftain_YOG_530,
 ];
 
