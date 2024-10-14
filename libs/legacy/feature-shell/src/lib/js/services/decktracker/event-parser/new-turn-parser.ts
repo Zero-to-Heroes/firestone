@@ -53,7 +53,8 @@ export class NewTurnParser implements EventParser {
 		);
 		const playerDeck = currentState.playerDeck.update({
 			isActivePlayer: isPlayerActive,
-			cardsPlayedLastTurn: isPlayerActive
+			// Looks like both serve the same purpose
+			cardsPlayedLastTurn: !isPlayerActive
 				? currentState.playerDeck.cardsPlayedThisTurn
 				: currentState.playerDeck.cardsPlayedLastTurn,
 			cardsPlayedThisTurn: isPlayerActive
@@ -70,7 +71,7 @@ export class NewTurnParser implements EventParser {
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
 			isActivePlayer: !isPlayerActive,
-			cardsPlayedLastTurn: !isPlayerActive
+			cardsPlayedLastTurn: isPlayerActive
 				? currentState.opponentDeck.cardsPlayedThisTurn
 				: currentState.opponentDeck.cardsPlayedLastTurn,
 			cardsPlayedThisTurn: !isPlayerActive
@@ -85,6 +86,14 @@ export class NewTurnParser implements EventParser {
 			minionsDeadThisTurn: [] as readonly ShortCard[],
 			turnTimings: opponentTurnTimings,
 		} as DeckState);
+		console.debug(
+			'[debug] [turn-start] playerDeck',
+			isPlayerActive,
+			playerDeck.cardsPlayedLastTurn,
+			playerDeck.cardsPlayedThisTurn,
+			opponentDeck.cardsPlayedLastTurn,
+			opponentDeck.cardsPlayedThisTurn,
+		);
 
 		const startOfTurnState = currentState.update({
 			currentTurn: currentTurn,

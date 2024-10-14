@@ -2117,6 +2117,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, rush);
 		case CardIds.TramConductorGerry_WW_437:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
+		case CardIds.TramHeist_WW_053:
+			return tooltip(and(opposingSide(inputSide), cardsPlayedLastTurn));
 		case CardIds.TramOperator:
 			return and(side(inputSide), inDeck, minion, mech);
 		case CardIds.TravelmasterDungar_WORK_043:
