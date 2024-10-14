@@ -64,7 +64,7 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionStoreCo
 	private buildValue(matchStats: readonly GameStat[], heroId: string) {
 		const mmrDeltas = matchStats
 			.filter((match) => match.playerCardId === heroId)
-			.filter((match) => match.playerRank && match.newPlayerRank)
+			.filter((match) => match.playerRank && match.newPlayerRank && +match.newPlayerRank >= 0)
 			.map((match) => parseInt(match.newPlayerRank) - parseInt(match.playerRank))
 			.reverse();
 		const finalResult = [0];

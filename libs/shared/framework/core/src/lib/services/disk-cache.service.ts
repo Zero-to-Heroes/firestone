@@ -9,6 +9,7 @@ export class DiskCacheService {
 	public static DISK_CACHE_KEYS = {
 		ACHIEVEMENTS_HISTORY: 'achievements-history.json',
 		ARENA_REWARDS: 'arena-rewards.json',
+		ARENA_DECK_STATS: 'arena-deck-stats.json',
 		COLLECTION: 'collection.json',
 		COLLECTION_PACK_STATS: 'collection-pack-stats.json',
 		CARDS_HISTORY: 'cards-history.json',

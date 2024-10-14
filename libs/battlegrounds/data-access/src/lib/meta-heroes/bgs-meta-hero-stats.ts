@@ -80,7 +80,7 @@ const buildPlayerPlacementDistribution = (
 };
 
 const buildNetMmr = (game: GameStat): number => {
-	if (!game.playerRank || !game.newPlayerRank) {
+	if (!game.playerRank || !game.newPlayerRank || +game.newPlayerRank < 0) {
 		return null;
 	}
 	return parseInt(game.newPlayerRank) - parseInt(game.playerRank);

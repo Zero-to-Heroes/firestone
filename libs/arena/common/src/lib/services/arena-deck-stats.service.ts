@@ -5,6 +5,7 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	DiskCacheService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -18,6 +19,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 
 	private api: ApiRunner;
 	private user: UserService;
+	private diskCache: DiskCacheService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaDeckStatsService', () => !!this.deckStats$$);
@@ -31,14 +33,11 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		this.deckStats$$ = new SubscriberAwareBehaviorSubject<readonly DraftDeckStats[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.user = AppInjector.get(UserService);
+		this.diskCache = AppInjector.get(DiskCacheService);
 
 		this.deckStats$$.onFirstSubscribe(async () => {
 			const currentUser = await this.user.getCurrentUser();
-			const existingStats: readonly DraftDeckStats[] | null = await this.api.callPostApi(RETRIEVE_URL, {
-				userId: currentUser?.userId,
-				userName: currentUser?.username,
-			});
-			console.debug('[arena-deck-stats] retrieved deck stats', existingStats);
+			const existingStats: readonly DraftDeckStats[] | null = await this.loadArenaDeckStats(currentUser);
 			this.deckStats$$.next(existingStats);
 		});
 	}
@@ -54,8 +53,32 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		const existingStats = await this.deckStats$$.getValueWithInit();
 		const newStats = [...(existingStats ?? []), newStat];
 		this.deckStats$$.next(newStats);
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS, newStats);
 
 		const result = await this.api.callPostApi(SAVE_URL, newStat);
 		console.debug('[arena-deck-stats] uploaded deck stats');
+	}
+
+	private async loadArenaDeckStats(
+		currentUser: overwolf.profile.GetCurrentUserResult | null,
+		skipLocal = false,
+	): Promise<readonly DraftDeckStats[] | null> {
+		if (!skipLocal) {
+			const localRewards = await this.diskCache.getItem<readonly DraftDeckStats[]>(
+				DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS,
+			);
+			if (localRewards != null) {
+				return localRewards;
+			}
+		}
+
+		const resultFromRemote = await this.api.callPostApi<readonly DraftDeckStats[] | null>(RETRIEVE_URL, {
+			userId: currentUser?.userId,
+			userName: currentUser?.username,
+		});
+		console.debug('[arena-deck-stats] retrieved deck stats', resultFromRemote);
+		const result = resultFromRemote ?? [];
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS, result);
+		return result;
 	}
 }

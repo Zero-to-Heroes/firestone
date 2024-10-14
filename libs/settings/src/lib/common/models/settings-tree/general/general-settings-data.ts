@@ -3,10 +3,11 @@ import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
 import { DropdownOption, SettingContext, SettingNode } from '../../settings.types';
 
 const isRefreshingGames$$ = new BehaviorSubject<boolean>(false);
-const isRefreshingPacks$$ = new BehaviorSubject<boolean>(false);
-const isRefreshingAchievements$$ = new BehaviorSubject<boolean>(false);
-const isRefreshingArenaRewards$$ = new BehaviorSubject<boolean>(false);
+// const isRefreshingPacks$$ = new BehaviorSubject<boolean>(false);
+// const isRefreshingAchievements$$ = new BehaviorSubject<boolean>(false);
+// const isRefreshingArenaRewards$$ = new BehaviorSubject<boolean>(false);
 const isClearingGames$$ = new BehaviorSubject<boolean>(false);
+const isClearingLocalCache$$ = new BehaviorSubject<boolean>(false);
 
 export const generalDataSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -43,6 +44,17 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 									context.services.diskCache.clearCache();
 								}
 							},
+						},
+					},
+					{
+						label: context.i18n.translateString('settings.general.data.clear-local-cache'),
+						text: clearCacheButtonText$(context),
+						tooltip: context.i18n.translateString('settings.general.data.clear-local-cache-tooltip'),
+						action: async () => {
+							isClearingLocalCache$$.next(true);
+							// Make sure we don't return too quickly, otherwise the user might think nothing happened
+							await Promise.all([context.services.diskCache.clearCache(), sleep(1000)]);
+							isClearingLocalCache$$.next(false);
 						},
 					},
 				],
@@ -85,43 +97,43 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 					},
 				],
 			},
-			{
-				id: 'general-data-other',
-				title: context.i18n.translateString('settings.general.data.other-title'),
-				settings: [
-					{
-						label: context.i18n.translateString('settings.general.data.packs'),
-						text: refreshPacksButtonText$(context),
-						tooltip: context.i18n.translateString('settings.general.data.packs-tooltip'),
-						action: async () => {
-							isRefreshingPacks$$.next(true);
-							// Make sure we don't return too quickly, otherwise the user might think nothing happened
-							await Promise.all([context.services.packService.refreshPackStats(), sleep(1000)]);
-							isRefreshingPacks$$.next(false);
-						},
-					},
-					{
-						label: context.i18n.translateString('settings.general.data.achievements'),
-						text: refreshAchievementsButtonText$(context),
-						tooltip: context.i18n.translateString('settings.general.data.achievements-tooltip'),
-						action: async () => {
-							isRefreshingAchievements$$.next(true);
-							await Promise.all([await context.services.remoteAchievements.loadAchievements(), sleep(1000)]);
-							isRefreshingAchievements$$.next(false);
-						},
-					},
-					{
-						label: context.i18n.translateString('settings.general.data.arena-rewards'),
-						text: refreshArenaRewardsButtonText$(context),
-						tooltip: context.i18n.translateString('settings.general.data.arena-rewards-tooltip'),
-						action: async () => {
-							isRefreshingArenaRewards$$.next(true);
-							await Promise.all([await context.services.arenaRewards.refreshRewards(), sleep(1000)]);
-							isRefreshingArenaRewards$$.next(false);
-						},
-					},
-				],
-			},
+			// {
+			// 	id: 'general-data-other',
+			// 	title: context.i18n.translateString('settings.general.data.other-title'),
+			// 	settings: [
+			// 		{
+			// 			label: context.i18n.translateString('settings.general.data.packs'),
+			// 			text: refreshPacksButtonText$(context),
+			// 			tooltip: context.i18n.translateString('settings.general.data.packs-tooltip'),
+			// 			action: async () => {
+			// 				isRefreshingPacks$$.next(true);
+			// 				// Make sure we don't return too quickly, otherwise the user might think nothing happened
+			// 				await Promise.all([context.services.packService.refreshPackStats(), sleep(1000)]);
+			// 				isRefreshingPacks$$.next(false);
+			// 			},
+			// 		},
+			// 		{
+			// 			label: context.i18n.translateString('settings.general.data.achievements'),
+			// 			text: refreshAchievementsButtonText$(context),
+			// 			tooltip: context.i18n.translateString('settings.general.data.achievements-tooltip'),
+			// 			action: async () => {
+			// 				isRefreshingAchievements$$.next(true);
+			// 				await Promise.all([await context.services.remoteAchievements.loadAchievements(), sleep(1000)]);
+			// 				isRefreshingAchievements$$.next(false);
+			// 			},
+			// 		},
+			// 		{
+			// 			label: context.i18n.translateString('settings.general.data.arena-rewards'),
+			// 			text: refreshArenaRewardsButtonText$(context),
+			// 			tooltip: context.i18n.translateString('settings.general.data.arena-rewards-tooltip'),
+			// 			action: async () => {
+			// 				isRefreshingArenaRewards$$.next(true);
+			// 				await Promise.all([await context.services.arenaRewards.refreshRewards(), sleep(1000)]);
+			// 				isRefreshingArenaRewards$$.next(false);
+			// 			},
+			// 		},
+			// 	],
+			// },
 		],
 	};
 };
@@ -130,17 +142,21 @@ const refreshGamesButtonText$ = (context: SettingContext): Observable<string> =>
 	return isRefreshingGames$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
 };
 
-const refreshPacksButtonText$ = (context: SettingContext): Observable<string> => {
-	return isRefreshingPacks$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+const clearCacheButtonText$ = (context: SettingContext): Observable<string> => {
+	return isClearingLocalCache$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
 };
 
-const refreshAchievementsButtonText$ = (context: SettingContext): Observable<string> => {
-	return isRefreshingAchievements$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
-};
+// const refreshPacksButtonText$ = (context: SettingContext): Observable<string> => {
+// 	return isRefreshingPacks$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+// };
 
-const refreshArenaRewardsButtonText$ = (context: SettingContext): Observable<string> => {
-	return isRefreshingArenaRewards$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
-};
+// const refreshAchievementsButtonText$ = (context: SettingContext): Observable<string> => {
+// 	return isRefreshingAchievements$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+// };
+
+// const refreshArenaRewardsButtonText$ = (context: SettingContext): Observable<string> => {
+// 	return isRefreshingArenaRewards$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+// };
 
 const clearGamesButtonText$ = (context: SettingContext): Observable<string> => {
 	return isClearingGames$$.pipe(map((isClearing) => (isClearing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.clear-button-label'))));

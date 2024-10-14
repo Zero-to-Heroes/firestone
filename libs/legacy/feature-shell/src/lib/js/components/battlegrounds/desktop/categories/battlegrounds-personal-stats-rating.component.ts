@@ -120,7 +120,10 @@ export class BattlegroundsPersonalStatsRatingComponent
 		mmrGroupFilter: MmrGroupFilterType,
 		currentBattlegroundsMetaPatch: PatchInfo,
 	): ChartData<'line'> {
-		const data = [...stats].filter((stat) => +stat.playerRank >= mmrFilter).reverse();
+		const data = [...stats]
+			.filter((stat) => +stat.playerRank >= mmrFilter)
+			.filter((match) => +match.newPlayerRank >= 0)
+			.reverse();
 		if (!data.length) {
 			return {
 				datasets: [],
