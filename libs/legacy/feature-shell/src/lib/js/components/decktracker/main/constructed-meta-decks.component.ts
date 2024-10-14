@@ -4,7 +4,7 @@ import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds } from '@firestone-hs/reference-data';
 import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
@@ -254,20 +254,35 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 			}),
 		);
 
+		const prefs = await this.prefs.getPreferences();
+		this.sortCriteria$$.next(
+			(prefs.constructedMetaDecksSortCriteria as SortCriteria<ColumnSortType>) ?? {
+				criteria: 'games',
+				direction: 'desc',
+			},
+		);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	onSortClick(rawCriteria: string) {
+	async onSortClick(rawCriteria: string) {
 		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
-		this.sortCriteria$$.next({
+		const newCrit = {
 			criteria: criteria,
 			direction:
 				criteria === this.sortCriteria$$.value?.criteria
 					? invertDirection(this.sortCriteria$$.value.direction)
 					: 'desc',
-		});
+		};
+		this.sortCriteria$$.next(newCrit);
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			constructedMetaDecksSortCriteria: newCrit,
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 
 	trackByDeck(index: number, item: DeckStat) {
