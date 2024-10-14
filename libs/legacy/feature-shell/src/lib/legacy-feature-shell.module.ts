@@ -420,6 +420,7 @@ import { ConstructedMetaDeckCardSearchComponent } from '@components/decktracker/
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
+import { DecktrackerPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/decktracker-player-class-filter-dropdown.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
@@ -1236,6 +1237,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ConstructedTimeFilterDropdownComponent,
 		ConstructedMyDecksSearchComponent,
 		ConstructedPlayerClassFilterDropdownComponent,
+		DecktrackerPlayerClassFilterDropdownComponent,
 		ConstructedPlayerArchetypeFilterDropdownComponent,
 		ConstructedMetaDeckCardSearchComponent,
 

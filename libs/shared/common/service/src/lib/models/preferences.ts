@@ -160,6 +160,7 @@ export class Preferences implements IPreferences {
 	readonly desktopDeckShowMatchupAsPercentages: boolean = true;
 	readonly desktopStatsShowGoingFirstOnly: boolean = false;
 	readonly desktopStatsShowGoingSecondOnly: boolean = false;
+	readonly desktopPlayerClassFilter: readonly string[] = [];
 	// When impementing this for other areas, don't forget to update the prefs update in app-bootstrap
 	readonly desktopDeckStatsReset: { [deckstring: string]: readonly number[] } = {};
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};

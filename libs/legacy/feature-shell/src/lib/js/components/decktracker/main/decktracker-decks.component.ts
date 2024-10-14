@@ -113,13 +113,15 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 					(prefs) => ({
 						sort: prefs.desktopDeckFilters?.sort,
 						search: prefs.constructedDecksSearchString,
+						playerClass: prefs.desktopPlayerClassFilter,
 					}),
 					(a, b) => deepEqual(a, b),
 				),
 			),
 		]).pipe(
-			this.mapData(([decks, { sort, search }]) => {
+			this.mapData(([decks, { sort, search, playerClass }]) => {
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
+					.filter((deck) => !playerClass?.length || playerClass.includes(deck.class))
 					.filter(
 						(deck) =>
 							!search?.length ||

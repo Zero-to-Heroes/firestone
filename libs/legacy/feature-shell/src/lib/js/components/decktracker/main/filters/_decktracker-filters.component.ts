@@ -31,6 +31,9 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			<decktracker-rank-group-dropdown class="filter rank-group"></decktracker-rank-group-dropdown>
 			<decktracker-time-filter-dropdown class="filter time-filter"></decktracker-time-filter-dropdown>
 			<decktracker-rank-filter-dropdown class="filter rank-filter"></decktracker-rank-filter-dropdown>
+			<decktracker-player-class-filter-dropdown
+				class="filter rank-filter"
+			></decktracker-player-class-filter-dropdown>
 			<replays-deckstring-filter-dropdown class="filter deckstring-filter"></replays-deckstring-filter-dropdown>
 			<decktracker-deck-sort-dropdown class="filter deck-sort"></decktracker-deck-sort-dropdown>
 
