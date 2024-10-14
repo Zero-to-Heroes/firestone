@@ -59,9 +59,9 @@
 
 	.board {
 		display: flex;
-		margin-right: 20px;
 		align-items: center;
 		width: 270px;
+		margin-right: 0;
 		flex-shrink: 0;
 
 		.minion-container {
