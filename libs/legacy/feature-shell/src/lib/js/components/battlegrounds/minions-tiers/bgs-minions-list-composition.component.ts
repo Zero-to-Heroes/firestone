@@ -14,6 +14,7 @@ import { BehaviorSubject, combineLatest, Observable, tap } from 'rxjs';
 		<div class="composition" [ngClass]="{ collapsed: collapsed$ | async }">
 			<div class="header" (click)="toggleCollapsed()">
 				<div class="header-text">{{ name }}</div>
+				<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 			</div>
 			<div class="cards core">
 				<div class="header">

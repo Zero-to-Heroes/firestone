@@ -65,7 +65,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					</div>
 					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tribes'"></div>
 				</div>
-				<!-- <div
+				<div
 					class="tier compositions-category"
 					*ngIf="compositions?.length"
 					(click)="selectCategory('compositions')"
@@ -82,7 +82,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 						class="label"
 						[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
 					></div>
-				</div> -->
+				</div>
 			</nav>
 			<ng-container [ngSwitch]="selectedCategory$ | async">
 				<ul class="tiers tier-levels" *ngSwitchCase="'tiers'">
@@ -142,7 +142,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		// so that we don't change the display if the user wants to keep the focus on another
 		// tier (eg tier 5 or 6 to see their endgame options)
 		if (this.lockedTier && this.lockedTier.tavernTier === this.currentTavernTier) {
-			console.debug('will set locked tier', this.lockedTier, this.currentTavernTier);
+			// console.debug('will set locked tier', this.lockedTier, this.currentTavernTier);
 			this.setLockedTier(this.getAllTiers().find((t) => t.tavernTier === value));
 		}
 		this.currentTavernTier = value;
@@ -176,7 +176,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		const unselecting = this.selectedCategory$$.getValue() === category;
 		this.setLockedTier(undefined);
 		this.setDisplayedTier(undefined);
-		console.debug('selecting', category, this.selectedCategory$$.getValue(), unselecting);
+		// console.debug('selecting', category, this.selectedCategory$$.getValue(), unselecting);
 		this.selectedCategory$$.next(category);
 		if (!unselecting) {
 			switch (category) {
@@ -250,13 +250,13 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	}
 
 	private setLockedTier(tavernTier: Tier) {
-		console.debug('setLockedTier', tavernTier, new Error().stack);
+		// console.debug('setLockedTier', tavernTier, new Error().stack);
 		this.lockedTier = tavernTier;
 		this.lockedTierChange.next(tavernTier);
 	}
 
 	private setDisplayedTier(tavernTier: Tier) {
-		console.debug('setDisplayedTier', tavernTier, new Error().stack);
+		// console.debug('setDisplayedTier', tavernTier, new Error().stack);
 		this.displayedTier = tavernTier;
 		this.displayedTierChange.next(tavernTier);
 	}
