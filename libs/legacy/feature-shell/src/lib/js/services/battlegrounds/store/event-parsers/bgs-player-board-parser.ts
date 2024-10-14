@@ -302,7 +302,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			lastFaceOff.opponentPlayerId !== opponentTeammateBoard?.playerId
 		) {
 			console.error(
-				'[bgs-player-board-parser] got incorrect matching face-off',
+				'[debug] [bgs-player-board-parser] got incorrect matching face-off',
 				lastFaceOff?.opponentPlayerId,
 				event.opponentBoard.playerId,
 				lastFaceOff,

@@ -7,8 +7,11 @@
 }
 
 .tiers-selection {
-	display: flex;
-	height: 50px;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	// grid-gap: 10px;
+	// height: 50px;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-image: var(--bgs-minions-list-widget-background-image);
@@ -17,16 +20,18 @@
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
 	border-image-slice: 1;
 	color: var(--color-1);
-	// min-width: 312px;
 
 	.tier {
 		display: flex;
 		align-items: center;
-		width: 50px;
-		height: 100%;
 		flex-grow: 0;
 		flex-shrink: 0;
 		opacity: 0.4;
+		align-items: center;
+		justify-content: center;
+		padding: 10px;
+		background: var(--color-4);
+		margin: 5px;
 
 		.icon-container {
 			display: none;

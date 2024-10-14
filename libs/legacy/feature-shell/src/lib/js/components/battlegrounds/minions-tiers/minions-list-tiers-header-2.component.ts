@@ -1,5 +1,6 @@
 import {
 	AfterContentInit,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -64,7 +65,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					</div>
 					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tribes'"></div>
 				</div>
-				<div
+				<!-- <div
 					class="tier compositions-category"
 					*ngIf="compositions?.length"
 					(click)="selectCategory('compositions')"
@@ -81,7 +82,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 						class="label"
 						[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
 					></div>
-				</div>
+				</div> -->
 			</nav>
 			<ng-container [ngSwitch]="selectedCategory$ | async">
 				<ul class="tiers tier-levels" *ngSwitchCase="'tiers'">
@@ -120,7 +121,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class BattlegroundsMinionsListTiersHeader2Component
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit
+	implements AfterContentInit, AfterViewInit
 {
 	selectedCategory$: Observable<MinionTierCategory>;
 
@@ -155,9 +156,9 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 	displayedTier: Tier;
 	lockedTier: Tier;
-	currentTavernTier: number;
+	currentTavernTier = 1;
 
-	private selectedCategory$$ = new BehaviorSubject<MinionTierCategory>('tiers');
+	private selectedCategory$$ = new BehaviorSubject<MinionTierCategory | null>(null);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef) {
 		super(cdr);
@@ -167,16 +168,35 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		this.selectedCategory$ = this.selectedCategory$$.asObservable();
 	}
 
+	ngAfterViewInit(): void {
+		this.selectCategory('tiers');
+	}
+
 	selectCategory(category: MinionTierCategory) {
-		console.debug('selecting', category);
+		const unselecting = this.selectedCategory$$.getValue() === category;
 		this.setLockedTier(undefined);
 		this.setDisplayedTier(undefined);
+		console.debug('selecting', category, this.selectedCategory$$.getValue(), unselecting);
 		this.selectedCategory$$.next(category);
-		switch (category) {
-			case 'compositions':
-				this.setDisplayedTier({ tavernTier: 'compositions' } as Tier);
-				this.setLockedTier({ tavernTier: 'compositions' } as Tier);
-				break;
+		if (!unselecting) {
+			switch (category) {
+				case 'compositions':
+					this.setDisplayedTier({ tavernTier: 'compositions' } as Tier);
+					this.setLockedTier({ tavernTier: 'compositions' } as Tier);
+					break;
+				case 'tiers':
+					this.setDisplayedTier(this.tierLevels.find((tier) => tier.tavernTier === this.currentTavernTier));
+					this.setLockedTier(this.tierLevels.find((tier) => tier.tavernTier === this.currentTavernTier));
+					break;
+				case 'mechanics':
+					this.setDisplayedTier(this.mechanicalTiers[0]);
+					this.setLockedTier(this.mechanicalTiers[0]);
+					break;
+				case 'tribes':
+					this.setDisplayedTier(this.tribeTiers[0]);
+					this.setLockedTier(this.tribeTiers[0]);
+					break;
+			}
 		}
 	}
 
@@ -230,11 +250,13 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	}
 
 	private setLockedTier(tavernTier: Tier) {
+		console.debug('setLockedTier', tavernTier, new Error().stack);
 		this.lockedTier = tavernTier;
 		this.lockedTierChange.next(tavernTier);
 	}
 
 	private setDisplayedTier(tavernTier: Tier) {
+		console.debug('setDisplayedTier', tavernTier, new Error().stack);
 		this.displayedTier = tavernTier;
 		this.displayedTierChange.next(tavernTier);
 	}

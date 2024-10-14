@@ -16,7 +16,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 	selector: 'battlegrounds-minions-tiers-view',
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './battlegrounds-minions-tiers-view.component.scss'],
 	template: `
-		<div class="battlegrounds-minions-tiers" *ngIf="tierLevels?.length" (mouseleave)="onTavernMouseLeave()">
+		<div class="battlegrounds-minions-tiers-view" *ngIf="tierLevels?.length" (mouseleave)="onTavernMouseLeave()">
 			<div class="tiers-container">
 				<ng-container>
 					<div class="logo-container" *ngIf="currentTurn && showTurnNumber">
@@ -29,7 +29,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 						></div>
 					</div>
 					<ng-container *ngIf="showMinionsList">
-						<minions-list-tiers-header
+						<minions-list-tiers-header-2
 							[tierLevels]="tierLevels"
 							[mechanicalTiers]="mechanicalTiers"
 							[tribeTiers]="tribeTiers"
@@ -39,7 +39,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 							[mouseLeaveTrigger]="mouseLeaveTrigger$ | async"
 							(displayedTierChange)="onDisplayedTier($event)"
 							(lockedTierChange)="onDisplayedTier($event)"
-						></minions-list-tiers-header>
+						></minions-list-tiers-header-2>
 						<ng-container *ngIf="displayedTierId$ | async as displayedTierId">
 							<ng-container *ngIf="displayedTierId !== 'compositions'">
 								<bgs-minions-list
@@ -143,7 +143,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	}
 
 	onDisplayedTier(tavernTier: Tier) {
-		console.debug('setting displayed tier', tavernTier?.tavernTier, tavernTier);
+		// console.debug('setting displayed tier', tavernTier?.tavernTier, tavernTier);
 		this.displayedTierId$$.next(tavernTier?.tavernTier);
 	}
 

@@ -14,6 +14,7 @@ battlegrounds-minions-tiers-view {
 	position: relative;
 	min-height: 0;
 	height: 100%;
+	width: 100%;
 }
 
 .battlegrounds-minions-tiers {
@@ -22,6 +23,8 @@ battlegrounds-minions-tiers-view {
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
+	// width: 250px;
+	width: calc(max(250px, 10vw));
 }
 
 .scalable {
