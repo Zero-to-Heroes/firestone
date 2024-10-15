@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IRemoteAchievementsService } from '@firestone/achievements/common';
-import { ApiRunner, LocalStorageService, UserService } from '@firestone/shared/framework/core';
+import { ApiRunner, DiskCacheService, UserService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../../models/achievement';
 import { CompletedAchievement } from '../../../models/completed-achievement';
@@ -18,16 +18,17 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 		private readonly api: ApiRunner,
 		private readonly userService: UserService,
 		private readonly gameService: GameStateService,
-		private readonly localStorage: LocalStorageService,
+		private readonly diskCache: DiskCacheService,
 	) {}
 
 	public async loadAchievements() {
-		const localResult = this.localStorage.getItem<LocalRemoteAchievements>(
-			LocalStorageService.ACHIEVEMENTS_USER_COMPLETED,
+		const localResult = await this.diskCache.getItem<LocalRemoteAchievements>(
+			DiskCacheService.DISK_CACHE_KEYS.ACHIEVEMENTS_USER_COMPLETED,
 		);
 		if (!!localResult?.achievements?.length) {
-			console.debug('[achievements] loading achievements from local storage', localResult.achievements);
+			console.debug('[achievements] loading achievements from local cache', localResult.achievements);
 			this.remoteAchievements$$.next(localResult.achievements);
+			return;
 		}
 
 		const currentUser = await this.userService.getCurrentUser();
@@ -43,7 +44,7 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 		};
 		console.debug('[achievements] loading achievements from remote', newResult?.achievements);
 		if (!!newResult?.achievements?.length) {
-			this.localStorage.setItem(LocalStorageService.ACHIEVEMENTS_USER_COMPLETED, newResult);
+			this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ACHIEVEMENTS_USER_COMPLETED, newResult);
 			this.remoteAchievements$$.next(newResult.achievements);
 		}
 	}
@@ -82,7 +83,7 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 			lastUpdateDate: new Date(),
 			achievements: newCompletedAchievements,
 		};
-		this.localStorage.setItem(LocalStorageService.ACHIEVEMENTS_USER_COMPLETED, newLocalResult);
+		this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ACHIEVEMENTS_USER_COMPLETED, newLocalResult);
 	}
 }
 

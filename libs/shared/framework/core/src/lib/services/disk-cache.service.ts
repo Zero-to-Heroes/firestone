@@ -7,6 +7,7 @@ import { OverwolfService } from './overwolf.service';
 @Injectable()
 export class DiskCacheService {
 	public static DISK_CACHE_KEYS = {
+		ACHIEVEMENTS_USER_COMPLETED: 'achievements-completed.json',
 		ACHIEVEMENTS_HISTORY: 'achievements-history.json',
 		ARENA_REWARDS: 'arena-rewards.json',
 		ARENA_DECK_STATS: 'arena-deck-stats.json',
