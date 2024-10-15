@@ -859,6 +859,23 @@ export class OverwolfService {
 		});
 	}
 
+	public async openLocalCacheFolder(): Promise<void> {
+		const path = await this.getStoragePath();
+		return new Promise<void>((resolve) => {
+			overwolf.utils.openWindowsExplorer(path, (res) => {
+				resolve();
+			});
+		});
+	}
+
+	public async getStoragePath(): Promise<string> {
+		return new Promise<string>((resolve) => {
+			overwolf.extensions.io.getStoragePath(overwolf.extensions.io.enums.StorageSpace.appData, (res) => {
+				resolve(res.path);
+			});
+		});
+	}
+
 	public openStore() {
 		overwolf.utils.openStore({
 			page: overwolf.utils.enums.eStorePage.SubscriptionPage,

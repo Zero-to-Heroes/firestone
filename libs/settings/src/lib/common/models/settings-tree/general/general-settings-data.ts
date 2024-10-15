@@ -47,6 +47,12 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 						},
 					},
 					{
+						label: context.i18n.translateString('settings.general.data.open-local-cache-folder'),
+						text: context.i18n.translateString('settings.general.data.open-local-cache-folder-button'),
+						tooltip: null,
+						action: async () => context.ow.openLocalCacheFolder(),
+					},
+					{
 						label: context.i18n.translateString('settings.general.data.clear-local-cache'),
 						text: clearCacheButtonText$(context),
 						tooltip: context.i18n.translateString('settings.general.data.clear-local-cache-tooltip'),
