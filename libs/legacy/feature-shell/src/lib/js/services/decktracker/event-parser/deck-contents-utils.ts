@@ -1,4 +1,4 @@
-import { CardClass, CardIds, CardType, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { hasRace } from '../../hs-utils';
@@ -18,6 +18,8 @@ export const modifyDecksForSpecialCards = (
 	deckState = trackFizzle(deckState, cardId, entityId, helper);
 	if (!isCardCountered) {
 		switch (cardId) {
+			case CardIds.RottenRodent:
+				return [handleRottenRodent(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.CelestialAlignment:
 				return [handleCelestialAlignment(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.Embiggen:
@@ -146,6 +148,19 @@ const handleEmbiggen = (
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) => Math.min(10, card.getEffectiveManaCost() + 1),
+		deckState,
+		allCards,
+	);
+};
+
+const handleRottenRodent = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCostInDeck(
+		(card, refCard) => refCard?.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]),
+		(card) => Math.min(0, card.getEffectiveManaCost() - 1),
 		deckState,
 		allCards,
 	);
