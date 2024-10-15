@@ -65,7 +65,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					</div>
 					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tribes'"></div>
 				</div>
-				<div
+				<!-- <div
 					class="tier compositions-category"
 					*ngIf="compositions?.length"
 					(click)="selectCategory('compositions')"
@@ -82,7 +82,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 						class="label"
 						[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
 					></div>
-				</div>
+				</div> -->
 			</nav>
 			<ng-container [ngSwitch]="selectedCategory$ | async">
 				<ul class="tiers tier-levels" *ngSwitchCase="'tiers'">
