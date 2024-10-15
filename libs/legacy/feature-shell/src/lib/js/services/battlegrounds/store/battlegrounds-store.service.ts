@@ -657,22 +657,22 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			console.debug(
-				'[debug] [bgs-store] emitting new state',
-				gameEvent.type,
-				JSON.stringify(
-					this.state.currentGame?.players?.map((p) => ({
-						name: this.allCards.getCard(p.cardId).name,
-						playerId: p.playerId,
-					})),
-				),
-				this.state.currentGame?.players?.map((p) => ({
-					name: this.allCards.getCard(p.cardId).name,
-					playerId: p.playerId,
-				})),
-				gameEvent,
-				this.state,
-			);
+			// console.debug(
+			// 	'[bgs-store] emitting new state',
+			// 	gameEvent.type,
+			// 	JSON.stringify(
+			// 		this.state.currentGame?.players?.map((p) => ({
+			// 			name: this.allCards.getCard(p.cardId).name,
+			// 			playerId: p.playerId,
+			// 		})),
+			// 	),
+			// 	this.state.currentGame?.players?.map((p) => ({
+			// 		name: this.allCards.getCard(p.cardId).name,
+			// 		playerId: p.playerId,
+			// 	})),
+			// 	gameEvent,
+			// 	this.state,
+			// );
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay$$.next();
 		}

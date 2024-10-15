@@ -86,14 +86,14 @@ export class NewTurnParser implements EventParser {
 			minionsDeadThisTurn: [] as readonly ShortCard[],
 			turnTimings: opponentTurnTimings,
 		} as DeckState);
-		console.debug(
-			'[debug] [turn-start] playerDeck',
-			isPlayerActive,
-			playerDeck.cardsPlayedLastTurn,
-			playerDeck.cardsPlayedThisTurn,
-			opponentDeck.cardsPlayedLastTurn,
-			opponentDeck.cardsPlayedThisTurn,
-		);
+		// console.debug(
+		// 	'[turn-start] playerDeck',
+		// 	isPlayerActive,
+		// 	playerDeck.cardsPlayedLastTurn,
+		// 	playerDeck.cardsPlayedThisTurn,
+		// 	opponentDeck.cardsPlayedLastTurn,
+		// 	opponentDeck.cardsPlayedThisTurn,
+		// );
 
 		const startOfTurnState = currentState.update({
 			currentTurn: currentTurn,
