@@ -74,16 +74,6 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			});
 	}
 
-	public async refreshRewards() {
-		return this.mainInstance.refreshRewardsInternal();
-	}
-
-	private async refreshRewardsInternal() {
-		const currentUser = await this.userService.getCurrentUser();
-		const result: readonly ArenaRewardInfo[] | null = await this.loadArenaRewards(currentUser, true);
-		this.arenaRewards$$.next(result);
-	}
-
 	public async addRewards(rewards: Input) {
 		const currentRewards = await this.arenaRewards$$.getValueWithInit();
 		if (currentRewards?.some((reward) => reward.runId === rewards.runId)) {
@@ -98,15 +88,12 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 
 	private async loadArenaRewards(
 		currentUser: overwolf.profile.GetCurrentUserResult | null,
-		skipLocal = false,
 	): Promise<readonly ArenaRewardInfo[] | null> {
-		if (!skipLocal) {
-			const localRewards = await this.diskCache.getItem<readonly ArenaRewardInfo[]>(
-				DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS,
-			);
-			if (localRewards != null) {
-				return localRewards;
-			}
+		const localRewards = await this.diskCache.getItem<readonly ArenaRewardInfo[]>(
+			DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS,
+		);
+		if (localRewards != null) {
+			return localRewards;
 		}
 
 		console.log('[arena-rewards] fetching rewards from remote');
