@@ -116,7 +116,7 @@ export class BgsBattleSimulationService {
 			if (!!resultForLog) {
 				delete resultForLog.outcomeSamples;
 			}
-			console.log('[bgs-simulation] battle simulation result', resultForLog);
+			// console.log('[bgs-simulation] battle simulation result', resultForLog);
 			this.battleInfo$$.next({
 				battleId: battleId,
 				result: result,

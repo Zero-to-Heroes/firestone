@@ -507,7 +507,6 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		console.log('[bgs-simulation-desktop] battle simulation request prepared');
 		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
 		this.simulationService.simulateLocalBattle(battleInfo, prefs, (newSim) => {
-			console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
 			if (!!newSim) {
 				const intermediateResult = !newSim.outcomeSamples;
 				this.battleResult$$.next(
@@ -517,6 +516,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 					}),
 				);
 				if (!intermediateResult) {
+					console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
 					this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulate-button');
 					this.simulateButtonDisabled = false;
 				}
