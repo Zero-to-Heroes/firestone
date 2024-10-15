@@ -31,8 +31,8 @@ export class PackStatsService implements ICollectionPackService {
 		const localPackResult = await this.diskCache.getItem<LocalPackStats>(
 			DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS,
 		);
-		// Cache the local results for one hour
-		if (localPackResult && Date.now() - new Date(localPackResult.lastUpdateDate).getTime() <= 60 * 60 * 1000) {
+
+		if (localPackResult?.packs != null) {
 			return localPackResult.packs;
 		}
 
