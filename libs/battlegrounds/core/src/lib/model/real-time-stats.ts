@@ -22,6 +22,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 
 	readonly playerIdToCardIdMapping: { [playerId: string]: string } = {};
 
+	readonly heroesOffered: readonly string[];
 	readonly resourcesAvailableThisTurn: number = 0;
 	readonly resourcesUsedThisTurn: number = 0;
 	// Coins means any form of mana resource

@@ -129,6 +129,7 @@ export class ReplayMetadataBuilderService {
 			bgsRunStats.faceOffs,
 			this.allCards.getService(),
 		);
+
 		const warbandStats = buildWarbandStats(postMatchStats);
 		const finalPostMatchStats: any =
 			postMatchStats == null
@@ -144,6 +145,7 @@ export class ReplayMetadataBuilderService {
 			hasQuests: game.replay.hasBgsQuests,
 			hasAnomalies: game.replay.hasBgsAnomalies,
 			hasTrinkets: game.replay.hasBgsTrinkets,
+			heroesOffered: postMatchStats.heroesOffered,
 			bannedTribes: game.bannedTribes,
 			availableTribes: game.availableTribes,
 			mainPlayerId: game.replay.mainPlayerId,

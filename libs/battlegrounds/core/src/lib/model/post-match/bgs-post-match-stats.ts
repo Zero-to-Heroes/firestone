@@ -22,6 +22,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 
 	readonly playerIdToCardIdMapping: { [playerId: string]: string } = {};
 
+	readonly heroesOffered: readonly string[];
 	readonly boardHistory: readonly BgsBoard[] = [];
 	readonly compositionsOverTurn: readonly BgsComposition[] = [];
 	readonly rerollsOverTurn: readonly NumericTurnInfo[] = [];
