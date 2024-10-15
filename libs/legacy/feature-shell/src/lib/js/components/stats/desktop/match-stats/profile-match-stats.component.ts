@@ -16,7 +16,7 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 	],
 	template: `
 		<div
-			class="player-match-stats"
+			class="player-match-stats {{ currentMode$ | async }}"
 			*ngIf="{ currentMode: currentMode$ | async, missingContentText: missingContentText$ | async } as value"
 		>
 			<div class="mode-selection">

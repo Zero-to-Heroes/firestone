@@ -11,6 +11,13 @@
 	min-height: 0;
 	max-height: 100%;
 	flex-grow: 1;
+
+	&.battlegrounds {
+		.winrate,
+		.total-matches {
+			display: none;
+		}
+	}
 }
 
 .mode-selection {

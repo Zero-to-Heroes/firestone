@@ -137,4 +137,19 @@
 	.negative {
 		color: #ff4747;
 	}
+
+	&.battlegrounds {
+		.winrate {
+			opacity: 0;
+		}
+		.losses {
+			display: none;
+		}
+		.wins {
+			padding: 0 10px;
+			&:after {
+				content: '';
+			}
+		}
+	}
 }
