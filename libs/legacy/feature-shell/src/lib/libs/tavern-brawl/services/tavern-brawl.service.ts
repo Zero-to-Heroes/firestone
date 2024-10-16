@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TavernBrawlState } from '../tavern-brawl-state';
 
-const TAVERN_BRAWL_URL = 'https://static.zerotoheroes.com/api/tavern-brawl/tavern-brawl-stats.gz.json';
+const TAVERN_BRAWL_URL = 'https://static.zerotoheroes.com/api/tavern-brawl/tavern-brawl-stats.gz-2.json';
 
 @Injectable()
 export class TavernBrawlService {
