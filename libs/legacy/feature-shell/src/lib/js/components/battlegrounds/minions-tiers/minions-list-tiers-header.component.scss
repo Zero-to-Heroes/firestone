@@ -20,6 +20,7 @@
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
 	border-image-slice: 1;
 	color: var(--color-1);
+	padding: 5px;
 
 	.tier {
 		display: flex;
@@ -29,9 +30,9 @@
 		opacity: 0.4;
 		align-items: center;
 		justify-content: center;
-		padding: 10px;
+		padding: 5px 10px;
 		background: var(--color-4);
-		margin: 5px;
+		margin: 2px;
 
 		.icon-container {
 			display: none;
