@@ -65,6 +65,11 @@ import {
 					<span class="value">{{ abs(tribeImpactPosition).toFixed(2) }}</span>
 				</div>
 			</div>
+			<div class="pickrate">
+				<div class="global">
+					{{ pickrate }}
+				</div>
+			</div>
 			<div class="placement">
 				<basic-bar-chart-2
 					class="placement-distribution"
@@ -136,6 +141,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 				  })
 				: null;
 		this.averagePosition = value.averagePosition.toFixed(2);
+		this.pickrate = value.pickrate == null ? '-' : (100 * value.pickrate).toFixed(1) + '%';
 		this.tribeImpactPosition = showPlayerData ? null : value.positionTribesModifier + value.positionAnomalyModifier;
 		this.playerAveragePosition = showPlayerData ? value.playerAveragePosition?.toFixed(2) : null;
 		this.averagePositionTooltipInput = {
@@ -179,6 +185,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	dataPoints: string;
 	playerDataPoints: string;
 	averagePosition: string;
+	pickrate: string;
 	playerAveragePosition: string;
 	tribeImpactPosition: number;
 	placementChartData: SimpleBarChartData[];

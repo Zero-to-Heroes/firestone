@@ -250,6 +250,7 @@ export const buildHeroStats = (
 					: 999_999_999,
 				useTribesModifier ? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0) : 999_999_999,
 			);
+			const pickrate = stat.totalOffered ? stat.totalPicked / stat.totalOffered : null;
 			const result: BgsMetaHeroStatTierItem = {
 				id: stat.heroCardId,
 				dataPoints: dataPoints,
@@ -260,6 +261,7 @@ export const buildHeroStats = (
 					allTribesAveragePositionModifierDetails: allTribesAveragePositionModifierDetails,
 					anomalyModifiers: anomaliesAveragePositionModifierDetails,
 				},
+				pickrate: pickrate,
 				tribesFilter: tribes,
 				anomaliesFilter: anomalies,
 				positionTribesModifier: tribesModifier,

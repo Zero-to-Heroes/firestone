@@ -46,6 +46,7 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 					<div class="portrait"></div>
 					<div class="hero-details" [fsTranslate]="'app.battlegrounds.tier-list.header-hero-details'"></div>
 					<div class="position" [fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"></div>
+					<div class="pickrate" [fsTranslate]="'app.battlegrounds.tier-list.header-pickrate'"></div>
 					<div
 						class="placement"
 						[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"

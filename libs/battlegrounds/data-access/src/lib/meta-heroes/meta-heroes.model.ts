@@ -28,6 +28,7 @@ export interface BgsMetaHeroStatTierItem {
 			impact: number;
 		}[];
 	};
+	readonly pickrate: number;
 	readonly tribesFilter?: readonly Race[];
 	readonly anomaliesFilter: readonly string[];
 
