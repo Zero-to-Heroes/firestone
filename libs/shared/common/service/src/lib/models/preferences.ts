@@ -671,6 +671,7 @@ export class Preferences implements IPreferences {
 	readonly bgsShowTrinketStatsOverlay = true;
 	readonly bgsTribesOverlaySingleRow = false;
 	readonly bgsForceShowPostMatchStats2 = false;
+	readonly bgsUseNewTiersHeaderStyle = true;
 	readonly bgsUseRemoteSimulator = false;
 	readonly bgsSimShowIntermediaryResults = true;
 	readonly bgsEnableSimulation = true;

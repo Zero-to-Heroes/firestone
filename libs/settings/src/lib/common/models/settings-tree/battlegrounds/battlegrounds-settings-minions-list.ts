@@ -34,6 +34,13 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 					},
 					{
 						type: 'toggle',
+						field: 'bgsUseNewTiersHeaderStyle',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsGroupMinionsIntoTheirTribeGroup',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-tooltip'),

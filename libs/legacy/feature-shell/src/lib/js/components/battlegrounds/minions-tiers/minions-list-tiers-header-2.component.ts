@@ -25,7 +25,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					*ngIf="tierLevels?.length"
 					(click)="selectCategory('tiers')"
 					[ngClass]="{ selected: category === 'tiers' }"
-					[helpTooltip]="'battlegrounds.in-game.minions-list.navigation.tiers' | fsTranslate"
+					[helpTooltip]="'battlegrounds.in-game.minions-list.navigation.tiers-tribes' | fsTranslate"
 				>
 					<div class="icon-container">
 						<img
@@ -33,7 +33,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/battlegrounds/minions-list/tiers.png"
 						/>
 					</div>
-					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tiers'"></div>
+					<div
+						class="label"
+						[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tiers-tribes'"
+					></div>
 				</div>
 				<div
 					class="tier mechanics-category"
@@ -50,7 +53,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					</div>
 					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.mechanics'"></div>
 				</div>
-				<div
+				<!-- <div
 					class="tier tribes-category"
 					*ngIf="tribeTiers?.length"
 					(click)="selectCategory('tribes')"
@@ -64,7 +67,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 						/>
 					</div>
 					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tribes'"></div>
-				</div>
+				</div> -->
 				<!-- <div
 					class="tier compositions-category"
 					*ngIf="compositions?.length"
@@ -85,31 +88,33 @@ import { BehaviorSubject, Observable } from 'rxjs';
 				</div> -->
 			</nav>
 			<ng-container [ngSwitch]="selectedCategory$ | async">
-				<ul class="tiers tier-levels" *ngSwitchCase="'tiers'">
-					<tier-icon
-						*ngFor="let currentTier of tierLevels; trackBy: trackByFn"
-						[tier]="currentTier"
-						[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
-						(mouseover)="onTavernMouseOver(currentTier)"
-						(click)="onTavernClick(currentTier)"
-					></tier-icon>
-				</ul>
+				<ng-container *ngSwitchCase="'tiers'">
+					<ul class="tiers tier-levels">
+						<tier-icon
+							*ngFor="let currentTier of tierLevels; trackBy: trackByFn"
+							[tier]="currentTier"
+							[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
+							(mouseover)="onTavernMouseOver(currentTier)"
+							(click)="onTavernClick(currentTier)"
+						></tier-icon>
+					</ul>
+					<ul class="tiers tribe">
+						<tier-icon
+							*ngFor="let currentTier of tribeTiers; trackBy: trackByFn"
+							[tier]="currentTier"
+							[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
+							[additionalClass]="'tribe'"
+							(mouseover)="onTavernMouseOver(currentTier)"
+							(click)="onTavernClick(currentTier)"
+						></tier-icon>
+					</ul>
+				</ng-container>
 				<ul class="tiers mechanical" *ngSwitchCase="'mechanics'">
 					<tier-icon
 						*ngFor="let currentTier of mechanicalTiers; trackBy: trackByFn"
 						[tier]="currentTier"
 						[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
 						[additionalClass]="'mechanics'"
-						(mouseover)="onTavernMouseOver(currentTier)"
-						(click)="onTavernClick(currentTier)"
-					></tier-icon>
-				</ul>
-				<ul class="tiers tribe" *ngSwitchCase="'tribes'">
-					<tier-icon
-						*ngFor="let currentTier of tribeTiers; trackBy: trackByFn"
-						[tier]="currentTier"
-						[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
-						[additionalClass]="'tribe'"
 						(mouseover)="onTavernMouseOver(currentTier)"
 						(click)="onTavernClick(currentTier)"
 					></tier-icon>

@@ -30,6 +30,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 					</div>
 					<ng-container *ngIf="showMinionsList">
 						<minions-list-tiers-header-2
+							*ngIf="useNewTiersHeaderStyle"
 							[tierLevels]="tierLevels"
 							[mechanicalTiers]="mechanicalTiers"
 							[tribeTiers]="tribeTiers"
@@ -40,6 +41,18 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 							(displayedTierChange)="onDisplayedTier($event)"
 							(lockedTierChange)="onDisplayedTier($event)"
 						></minions-list-tiers-header-2>
+						<minions-list-tiers-header
+							*ngIf="!useNewTiersHeaderStyle"
+							[tierLevels]="tierLevels"
+							[mechanicalTiers]="mechanicalTiers"
+							[tribeTiers]="tribeTiers"
+							[tavernTier]="currentTavernTier"
+							[compositions]="compositions"
+							[enableMouseOver]="enableMouseOver"
+							[mouseLeaveTrigger]="mouseLeaveTrigger$ | async"
+							(displayedTierChange)="onDisplayedTier($event)"
+							(lockedTierChange)="onDisplayedTier($event)"
+						></minions-list-tiers-header>
 						<ng-container *ngIf="displayedTierId$ | async as displayedTierId">
 							<ng-container *ngIf="displayedTierId !== 'compositions'">
 								<bgs-minions-list
@@ -98,6 +111,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() highlightedMinions: readonly string[];
 	@Input() showTribesHighlight: boolean;
+	@Input() useNewTiersHeaderStyle = true;
 
 	@Input() set tiers(value: readonly Tier[]) {
 		if (!value) {

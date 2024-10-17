@@ -25,7 +25,17 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, takeUntil, tap } from 'rxjs';
+import {
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	map,
+	shareReplay,
+	startWith,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -52,6 +62,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[showGoldenCards]="showGoldenCards$ | async"
 				[showTrinketTips]="showTrinketTips$ | async"
 				[showTurnNumber]="showTurnNumber$ | async"
+				[useNewTiersHeaderStyle]="useNewTiersHeaderStyle$ | async"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -75,6 +86,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	enableMouseOver$: Observable<boolean>;
 	showGoldenCards$: Observable<boolean>;
 	showTrinketTips$: Observable<boolean>;
+	useNewTiersHeaderStyle$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -274,6 +286,11 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.mapData((prefs) => prefs.bgsMinionListShowGoldenCard),
 		);
 		this.showTrinketTips$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowTrinketTipsOverlay));
+		this.useNewTiersHeaderStyle$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsUseNewTiersHeaderStyle),
+			startWith(true),
+			takeUntil(this.destroyed$),
+		);
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListScale)).subscribe((scale) => {
 			let element = this.el.nativeElement.querySelector('.scalable');
 			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
