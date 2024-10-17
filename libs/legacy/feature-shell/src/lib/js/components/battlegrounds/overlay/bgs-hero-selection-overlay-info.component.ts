@@ -1,5 +1,14 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { DAILY_FREE_USES_HERO } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -152,6 +161,8 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		private readonly i18n: ILocalizationService,
 		private readonly ads: AdService,
 		private readonly prefs: PreferencesService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
 	}
@@ -166,6 +177,12 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.showAchievementsOverlay$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements),
 		);
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.bgsHeroSelectionOverlayScale))
+			.subscribe((scale) => {
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

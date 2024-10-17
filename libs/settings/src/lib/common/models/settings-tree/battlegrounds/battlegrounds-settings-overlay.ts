@@ -22,6 +22,19 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
 					},
 					{
+						type: 'slider',
+						field: 'bgsHeroSelectionOverlayScale',
+						label: context.i18n.translateString('settings.battlegrounds.general.hero-stats-overlay-scale'),
+						tooltip: null,
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsShowHeroSelectionTiers,
+						sliderConfig: {
+							min: 50,
+							max: 150,
+							snapSensitivity: 3,
+							knobs: sizeKnobs(context),
+						},
+					},
+					{
 						type: 'toggle',
 						field: 'bgsShowHeroTipsOverlay',
 						label: context.i18n.translateString('settings.battlegrounds.general.show-hero-tips-label'),
