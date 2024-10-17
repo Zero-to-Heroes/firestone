@@ -74,12 +74,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs, this.bgsState, this.ads, this.playerHeroStats, this.achievements, this.guardian);
 
-		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$])
-			.pipe(
-				debounceTime(200),
-				this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
-			)
-			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
+		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
+			debounceTime(200),
+			this.mapData(([hasPremiumSub, freeUsesLeft]) => hasPremiumSub || freeUsesLeft > 0),
+		);
+		// .subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
 		this.freeUsesLeft$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => (hasPremiumSub ? 0 : freeUsesLeft)),
@@ -154,7 +153,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
 					const tooltipPosition: TooltipPositionType = 'fixed-top-center';
-					return {
+					const result: InternalBgsHeroStat = {
 						...statWithDefault,
 						id: cardId,
 						name: this.allCards.getCard(cardId)?.name,
@@ -165,6 +164,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						tooltipPosition: tooltipPosition,
 						tooltipClass: `hero-selection-overlay ${tooltipPosition}`,
 					};
+					return result;
 				});
 				// console.debug('heroOverviews', heroOverviews, tiers);
 				if (heroOverviews.length === 2) {

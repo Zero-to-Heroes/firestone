@@ -37,6 +37,12 @@ import {
 							{{ averagePosition }}
 						</div>
 					</div>
+					<div class="item pickrate">
+						<div class="text" [fsTranslate]="'battlegrounds.hero-selection.pickrate'"></div>
+						<div class="value">
+							{{ pickrate }}
+						</div>
+					</div>
 					<div
 						class="item tribes-impact"
 						componentTooltip
@@ -88,6 +94,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 	achievementsToDisplay: readonly InternalAchievement[] = [];
 	tier: BgsHeroTier;
 	averagePosition: string;
+	pickrate: string;
 	tribesImpact: string;
 	tribesImpactCss: string;
 	tribeDetailsTooltipInput: BgsTribesImpactDetails;
@@ -99,6 +106,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this._hero = value;
 		this.tier = value?.tier;
 		this.averagePosition = value?.averagePosition?.toFixed(2);
+		this.pickrate = value?.pickrate == null ? '-' : (value.pickrate * 100).toFixed(1) + '%';
 		const tribesImpactValue = !value?.tribesFilter?.length
 			? null
 			: value?.tribeStats?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0;
