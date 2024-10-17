@@ -1616,11 +1616,11 @@ export class GameEvents {
 
 		// Hack to try and get the board state a bit early
 		// See comments in BattlegroundsPLayerBoardParser
-		if (data.includes('BACON_CHOSEN_BOARD_SKIN_ID') && !postponed) {
-			console.debug('[game-events] postponing BACON_CHOSEN_BOARD_SKIN_ID', data);
-			setTimeout(() => this.receiveLogLine(data, true), 1000);
-			return;
-		}
+		// if (data.includes('BACON_CHOSEN_BOARD_SKIN_ID') && !postponed) {
+		// 	console.debug('[game-events] postponing BACON_CHOSEN_BOARD_SKIN_ID', data);
+		// 	setTimeout(() => this.receiveLogLine(data, true), 1000);
+		// 	return;
+		// }
 
 		if (this.existingLogLines.length > 0) {
 			// Put them in a "waiting" list, to be processed once we're done catching up
