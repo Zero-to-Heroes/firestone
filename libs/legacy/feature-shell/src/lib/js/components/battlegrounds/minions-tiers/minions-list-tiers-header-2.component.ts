@@ -143,6 +143,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		// tier (eg tier 5 or 6 to see their endgame options)
 		if (this.lockedTier && this.lockedTier.tavernTier === this.currentTavernTier) {
 			// console.debug('will set locked tier', this.lockedTier, this.currentTavernTier);
+			this.setDisplayedTier(null);
 			this.setLockedTier(this.getAllTiers().find((t) => t.tavernTier === value));
 		}
 		this.currentTavernTier = value;
@@ -181,19 +182,19 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		if (!unselecting) {
 			switch (category) {
 				case 'compositions':
-					this.setDisplayedTier({ tavernTier: 'compositions' } as Tier);
+					// this.setDisplayedTier({ tavernTier: 'compositions' } as Tier);
 					this.setLockedTier({ tavernTier: 'compositions' } as Tier);
 					break;
 				case 'tiers':
-					this.setDisplayedTier(this.tierLevels.find((tier) => tier.tavernTier === this.currentTavernTier));
+					// this.setDisplayedTier(this.tierLevels.find((tier) => tier.tavernTier === this.currentTavernTier));
 					this.setLockedTier(this.tierLevels.find((tier) => tier.tavernTier === this.currentTavernTier));
 					break;
 				case 'mechanics':
-					this.setDisplayedTier(this.mechanicalTiers[0]);
+					// this.setDisplayedTier(this.mechanicalTiers[0]);
 					this.setLockedTier(this.mechanicalTiers[0]);
 					break;
 				case 'tribes':
-					this.setDisplayedTier(this.tribeTiers[0]);
+					// this.setDisplayedTier(this.tribeTiers[0]);
 					this.setLockedTier(this.tribeTiers[0]);
 					break;
 			}

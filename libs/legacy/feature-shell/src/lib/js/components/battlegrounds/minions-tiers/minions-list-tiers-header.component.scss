@@ -4,6 +4,13 @@
 	min-height: 0;
 	max-height: 100%;
 	width: 100%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: var(--bgs-minions-list-widget-background-image);
+	border-width: 2px;
+	border-style: solid;
+	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	border-image-slice: 1;
 }
 
 .tiers-selection {
@@ -12,13 +19,6 @@
 	grid-template-rows: repeat(2, minmax(0, 1fr));
 	// grid-gap: 10px;
 	// height: 50px;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	background-image: var(--bgs-minions-list-widget-background-image);
-	border-width: 2px;
-	border-style: solid;
-	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
-	border-image-slice: 1;
 	color: var(--color-1);
 	padding: 5px;
 
@@ -75,18 +75,6 @@
 
 .tiers {
 	display: flex;
-	// width: 250px;
-	// width: fit-content;
-	// height: 50px;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	// background-image: radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
-	// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png');
-	background-image: var(--bgs-minions-list-widget-background-image);
-	border-width: 2px;
-	border-style: solid;
-	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
-	border-image-slice: 1;
 	position: relative;
 	// Handle special tiers on a second line
 	width: 100%;
