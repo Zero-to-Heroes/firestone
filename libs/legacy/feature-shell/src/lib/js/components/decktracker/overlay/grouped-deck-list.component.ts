@@ -275,7 +275,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				.filter((c) => !!c.cardId || !!c.creatorCardId),
 			...cardsToShowNotInDeck,
 		];
-		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
+		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))].sort();
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
 				const matchingCards = cardsToShow.filter((c) => c.cardName === cardName);
@@ -292,12 +292,12 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 					const displayMode = !quantityInDeck ? 'dim' : null;
 					const statModifiers = !showStatsChange
 						? [null]
-						: [...new Set(matchingCards.map((c) => c.mainAttributeChange))];
+						: [...new Set(matchingCards.map((c) => c.mainAttributeChange ?? null))];
 					for (const statsModifier of statModifiers) {
 						const quantityInDeckWithStat = deck.filter(
 							(c) =>
 								c.cardName === cardName &&
-								(showStatsChange ? c.mainAttributeChange === statsModifier : true),
+								(showStatsChange ? c.mainAttributeChange == statsModifier : true),
 						).length;
 						result.push(
 							...Array(Math.max(1, quantityInDeckWithStat)).fill(
