@@ -72,6 +72,7 @@ import { HeroPowerDamageParser } from '../event-parser/hero-power-damage-parser'
 import { HeroRevealedParser } from '../event-parser/hero-revealed-parser';
 import { LinkedEntityParser } from '../event-parser/linked-entity-parser';
 import { LocalPlayerParser } from '../event-parser/local-player-parser';
+import { LocationDestroyedParser } from '../event-parser/location-destroyed-parser';
 import { LocationUsedParser } from '../event-parser/location-used-parser';
 import { MainStepReadyParser } from '../event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from '../event-parser/match-metadata-parser';
@@ -212,6 +213,7 @@ export class GameStateParsersService {
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n)],
 			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards, this.deckParser, this.deckHandler)],
 			[GameEvent.LOCATION_USED]: [new LocationUsedParser(this.allCards)],
+			[GameEvent.LOCATION_DESTROYED]: [new LocationDestroyedParser(this.helper)],
 			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser(this.allCards)],
 			[GameEvent.MATCH_INFO]: [new PlayersInfoParser()],
 			[GameEvent.MATCH_METADATA]: [

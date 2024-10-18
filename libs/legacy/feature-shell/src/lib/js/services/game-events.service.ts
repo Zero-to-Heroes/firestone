@@ -837,6 +837,9 @@ export class GameEvents {
 			case 'LOCATION_USED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.LOCATION_USED, gameEvent));
 				break;
+			case 'LOCATION_DESTROYED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.LOCATION_DESTROYED, gameEvent));
+				break;
 			case 'BLOOD_GEM_BUFF_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BLOOD_GEM_BUFF_CHANGED, gameEvent, {
