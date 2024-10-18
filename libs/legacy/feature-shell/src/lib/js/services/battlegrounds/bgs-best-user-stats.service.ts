@@ -5,7 +5,7 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	LocalStorageService,
+	DiskCacheService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -18,7 +18,7 @@ export class BgsBestUserStatsService extends AbstractFacadeService<BgsBestUserSt
 
 	private api: ApiRunner;
 	private userService: UserService;
-	private localStorage: LocalStorageService;
+	private diskCache: DiskCacheService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'bgsBestUserStats', () => !!this.bestStats$$);
@@ -32,13 +32,16 @@ export class BgsBestUserStatsService extends AbstractFacadeService<BgsBestUserSt
 		this.bestStats$$ = new SubscriberAwareBehaviorSubject<readonly BgsBestStat[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.userService = AppInjector.get(UserService);
-		this.localStorage = AppInjector.get(LocalStorageService);
+		this.diskCache = AppInjector.get(DiskCacheService);
 
 		this.bestStats$$.onFirstSubscribe(async () => {
-			const localInfo = this.localStorage.getItem<LocalBgsBestStats>(LocalStorageService.USER_BGS_BEST_STATS);
+			const localInfo = await this.diskCache.getItem<LocalBgsBestStats>(
+				DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_USER_BEST_STATS,
+			);
 			if (localInfo?.stats?.length) {
 				console.debug('[bgs-best-user-stats] using local info', localInfo);
 				this.bestStats$$.next(localInfo.stats);
+				return;
 			}
 
 			const currentUser = await this.userService.getCurrentUser();
@@ -50,7 +53,7 @@ export class BgsBestUserStatsService extends AbstractFacadeService<BgsBestUserSt
 				lastUpdateDate: new Date(),
 				stats: remoteData,
 			};
-			this.localStorage.setItem(LocalStorageService.USER_BGS_BEST_STATS, newInfo);
+			await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_USER_BEST_STATS, newInfo);
 			console.debug('[bgs-best-user-stats] using remote info', remoteData);
 			this.bestStats$$.next(remoteData);
 		});
