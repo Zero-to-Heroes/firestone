@@ -21,6 +21,7 @@ export class BgsMetaHeroStatsAccessService {
 		timeFilter: BgsActiveTimeFilterType,
 		mmr: 100 | 50 | 25 | 10 | 1,
 	): Promise<BgsHeroStatsV2> {
+		mmr = (mmr as any) === 'all' ? 100 : mmr;
 		const url = META_HERO_STATS_URL.replace('%mmr-folder%', `mmr-${mmr}`).replace('%timeSuffix%', timeFilter);
 		console.debug('[bgs-meta-hero] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
@@ -40,6 +41,7 @@ export class BgsMetaHeroStatsAccessService {
 		timeFilter: BgsActiveTimeFilterType,
 		mmr: 100 | 50 | 25 | 10 | 1,
 	): Promise<BgsHeroStatsV2> {
+		mmr = (mmr as any) === 'all' ? 100 : mmr;
 		const url = META_HERO_STATS_DUO_URL.replace('%mmr-folder%', `mmr-${mmr}`).replace('%timeSuffix%', timeFilter);
 		console.debug('[bgs-meta-hero-duo] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
