@@ -195,6 +195,7 @@ export const globalEffectCards = [
 	CardIds.InvigoratingSermon,
 	CardIds.LunasPocketGalaxy,
 	CardIds.MenAtArmsTavernBrawlToken,
+	CardIds.NewHeights_VAC_949,
 	CardIds.PursuitOfJustice,
 	CardIds.ReductomaraToken,
 	// CardIds.RelicOfDimensions,
