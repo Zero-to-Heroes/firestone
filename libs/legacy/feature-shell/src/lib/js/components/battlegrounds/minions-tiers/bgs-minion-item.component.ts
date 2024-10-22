@@ -154,7 +154,7 @@ export class BattlegroundsMinionItemComponent
 					highlighted: highlightedMinions.includes(card.id),
 					banned: card.banned,
 					bannedReason: card.bannedReason,
-					goldCost: isBgsSpell(card) || isBgsTrinket(card) ? card.cost : null,
+					goldCost: isBgsSpell(card) || isBgsTrinket(card) ? card.cost ?? 0 : null,
 					techLevel: card.techLevel,
 
 					hasBattlecry: hasBattlecry,

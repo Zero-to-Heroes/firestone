@@ -26,15 +26,20 @@ export const getAllCardsInGame = (
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
+		// Exclude the placeholder trinket cards
+		.filter(
+			(card) =>
+				![CardIds.LesserTrinketToken_BG30_Trinket_1st, CardIds.GreaterTrinket_BG30_Trinket_2nd].includes(
+					card.id as CardIds,
+				),
+		)
 		.filter(
 			(card) =>
 				(card.techLevel && card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET]) ||
 				(hasTrinkets &&
 					card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
 					// Manual exclusions
-					!allCards.getCard(card.id).otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL]) &&
-					// Exclude the placeholder trinket cards
-					card.cost != null),
+					!allCards.getCard(card.id).otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL])),
 		)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) =>
@@ -117,6 +122,12 @@ const isValidTrinketForTribes = (
 		return true;
 	}
 
+	console.debug(
+		'[debug] is trinket available for tribes',
+		allCards.getCard(cardId).name,
+		availableTribes.map((r) => Race[r]),
+		cardRules[cardId],
+	);
 	const rule: CardRule | null = cardRules[cardId];
 	if (!rule) {
 		return true;

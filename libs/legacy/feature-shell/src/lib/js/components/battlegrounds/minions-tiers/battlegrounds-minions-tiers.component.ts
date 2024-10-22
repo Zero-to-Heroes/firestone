@@ -176,6 +176,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
 						: null;
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
+					console.debug(
+						'[debug] cardsInGame',
+						this.allCards.getCards().find((c) => c.id === 'BG30_MagicItem_418'),
+					);
 					const cardsInGame = getAllCardsInGame(
 						races,
 						hasSpells,
@@ -184,6 +188,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						gameMode,
 						this.allCards,
 						cardRules,
+					);
+					console.debug(
+						'[debug] all cardsInGame',
+						cardsInGame.find((c) => c.id === 'BG30_MagicItem_418'),
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const result = buildTiers(
