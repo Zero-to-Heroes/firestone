@@ -1,4 +1,4 @@
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 
 export interface ExtendedReferenceCard extends ReferenceCard {
 	readonly banned?: boolean;
@@ -10,6 +10,7 @@ export interface ExtendedReferenceCard extends ReferenceCard {
 export interface Tier {
 	readonly type: TierViewType;
 	readonly tavernTier: TavernTierType;
+	readonly tavernTierData?: Race | GameTag;
 	readonly tavernTierIcon: string | null;
 	readonly tooltip: string;
 	readonly groups: readonly TierGroup[];

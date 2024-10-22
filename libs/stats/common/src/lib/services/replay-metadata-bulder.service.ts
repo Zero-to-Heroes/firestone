@@ -1,12 +1,13 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Inject, Injectable } from '@angular/core';
 import {
+	BgsBoard,
 	BgsPostMatchStats,
 	extractTotalDuration,
 	extractTotalTurns,
 	parseBattlegroundsGame,
 } from '@firestone-hs/hs-replay-xml-parser';
-import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
+import { BgsBoardLight, EntityLight, ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
@@ -139,6 +140,7 @@ export class ReplayMetadataBuilderService {
 						oldMmr: game.playerRank,
 						newMmr: game.newPlayerRank,
 				  };
+		const boardHistory: readonly BgsBoardLight[] = buildBoardHistory(postMatchStats.boardHistory);
 		return {
 			hasPrizes: game.hasBgsPrizes,
 			hasSpells: game.hasBgsSpells,
@@ -159,10 +161,32 @@ export class ReplayMetadataBuilderService {
 			battleOdds: !!game.bgBattleOdds?.length ? game.bgBattleOdds : null,
 			warbandStats: warbandStats,
 			postMatchStats: finalPostMatchStats,
+			boardHistory: boardHistory,
 			isPerfectGame: isBgPerfectGame(postMatchStats, game.additionalResult, game.replay.mainPlayerId),
 		};
 	}
 }
+
+const buildBoardHistory = (boardHistory: readonly BgsBoard[]): readonly BgsBoardLight[] => {
+	return boardHistory?.map((board) => {
+		const result: BgsBoardLight = {
+			turn: board.turn,
+			board: board.board.map((entity) => {
+				const tags: { [tagName: string]: number } = {};
+				for (const tag of entity.tags) {
+					tags[tag[0]] = tag[1];
+				}
+				const entityLight: EntityLight = {
+					cardID: entity.cardID,
+					id: entity.id,
+					tags: tags,
+				};
+				return entityLight;
+			}),
+		};
+		return result;
+	});
+};
 
 const buildWarbandStats = (bgParsedInfo: BgsPostMatchStats): ReplayUploadMetadata['bgs']['warbandStats'] | null => {
 	try {

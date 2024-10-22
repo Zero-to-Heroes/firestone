@@ -28,76 +28,26 @@ export const buildMechanicsTiers = (
 ): readonly Tier[] => {
 	const allBuddies = buildBuddies(availableTribes, playerCardId, allPlayerCardIds, allCards, config);
 	const result: Tier[] = [
-		buildTier(
-			'B',
-			cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.BATTLECRY)),
-			i18n.translateString(`global.mechanics.${GameTag[GameTag.BATTLECRY].toLowerCase()}`),
-			tiersToInclude,
-			i18n,
-			config,
-		),
-		buildTier(
-			'D',
-			cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.DEATHRATTLE)),
-			i18n.translateString(`global.mechanics.${GameTag[GameTag.DEATHRATTLE].toLowerCase()}`),
-			tiersToInclude,
-			i18n,
-			config,
-		),
-		buildTier(
-			'DS',
-			cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.DIVINE_SHIELD)),
-			i18n.translateString(`global.mechanics.${GameTag[GameTag.DIVINE_SHIELD].toLowerCase()}`),
-			tiersToInclude,
-			i18n,
-			config,
-		),
-		buildTier(
-			'T',
-			cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.TAUNT)),
-			i18n.translateString(`global.mechanics.${GameTag[GameTag.TAUNT].toLowerCase()}`),
-			tiersToInclude,
-			i18n,
-			config,
-		),
-		buildTier(
-			'E',
-			cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.END_OF_TURN)),
-			i18n.translateString(`global.mechanics.${GameTag[GameTag.END_OF_TURN].toLowerCase()}`),
-			tiersToInclude,
-			i18n,
-			config,
-		),
-		buildTier(
-			'R',
-			cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.REBORN)),
-			i18n.translateString(`global.mechanics.${GameTag[GameTag.REBORN].toLowerCase()}`),
-			tiersToInclude,
-			i18n,
-			config,
-		),
+		buildTier('B', GameTag.BATTLECRY, cardsToInclude, tiersToInclude, i18n, config),
+		buildTier('D', GameTag.DEATHRATTLE, cardsToInclude, tiersToInclude, i18n, config),
+		buildTier('DS', GameTag.DIVINE_SHIELD, cardsToInclude, tiersToInclude, i18n, config),
+		buildTier('T', GameTag.TAUNT, cardsToInclude, tiersToInclude, i18n, config),
+		buildTier('E', GameTag.END_OF_TURN, cardsToInclude, tiersToInclude, i18n, config),
+		buildTier('R', GameTag.REBORN, cardsToInclude, tiersToInclude, i18n, config),
 	];
 	if (config?.spells) {
-		result.push(
-			buildTier(
-				'S',
-				cardsToInclude.filter((c) => isInMechanicalTier(c, GameTag.BG_SPELL)),
-				i18n.translateString(`global.mechanics.${GameTag[GameTag.BG_SPELL].toLowerCase()}`),
-				tiersToInclude,
-				i18n,
-				config,
-			),
-		);
+		result.push(buildTier('S', GameTag.BG_SPELL, cardsToInclude, tiersToInclude, i18n, config));
 	}
 	if (allBuddies.length > 0) {
 		result.push(
 			buildTier(
 				'Buds',
+				GameTag.BACON_BUDDY,
 				allBuddies,
-				i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
 				tiersToInclude,
 				i18n,
 				config,
+				i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
 			),
 		);
 	}
@@ -106,17 +56,21 @@ export const buildMechanicsTiers = (
 
 const buildTier = (
 	tavernTier: TavernTierType,
-	cardsForMechanics: readonly ReferenceCard[],
-	label: string,
+	gameTag: GameTag,
+	cardsToInclude: readonly ReferenceCard[],
 	tiersToInclude: readonly number[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
+	inputLabel?: string,
 ): Tier => {
+	const cardsForMechanics = cardsToInclude.filter((c) => isInMechanicalTier(c, gameTag));
+	const label = inputLabel ?? i18n.translateString(`global.mechanics.${GameTag[gameTag].toLowerCase()}`);
 	const groups: readonly TierGroup[] = buildGroups(cardsForMechanics, tiersToInclude, i18n, config);
 	const result: Tier = {
 		type: 'mechanics',
 		tavernTier: tavernTier,
 		tavernTierIcon: null,
+		tavernTierData: gameTag,
 		tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 			value: label,
 		}),

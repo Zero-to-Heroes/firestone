@@ -10,9 +10,14 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { GameTag, Race } from '@firestone-hs/reference-data';
 import { Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsToggleHighlightMechanicsOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-mechanics-on-board-event';
+import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 
 @Component({
 	selector: 'minions-list-tiers-header-2',
@@ -110,6 +115,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 								[additionalClass]="'tribe'"
 								(mouseover)="onTavernMouseOver(currentTier)"
 								(click)="onTavernClick(currentTier)"
+								(contextmenu)="onTavernRightClick(currentTier)"
 							></tier-icon>
 						</ul>
 					</ng-container>
@@ -121,6 +127,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 							[additionalClass]="'mechanics'"
 							(mouseover)="onTavernMouseOver(currentTier)"
 							(click)="onTavernClick(currentTier)"
+							(contextmenu)="onTavernRightClick(currentTier)"
 						></tier-icon>
 					</ul>
 				</ng-container>
@@ -171,15 +178,18 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 	private selectedCategory$$ = new BehaviorSubject<MinionTierCategory | null>(null);
 
-	constructor(protected override readonly cdr: ChangeDetectorRef) {
+	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
+
+	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {
 		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
 		this.selectedCategory$ = this.selectedCategory$$.asObservable();
 	}
 
-	ngAfterViewInit(): void {
+	async ngAfterViewInit() {
 		// Can be annoying to have it open by default
 		this.selectCategory('tiers', false);
 	}
@@ -225,6 +235,26 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
+		}
+	}
+
+	onTavernRightClick(tavernTier: Tier) {
+		console.debug('right click', tavernTier);
+		if (!tavernTier?.tavernTierData) {
+			return;
+		}
+
+		switch (tavernTier.type) {
+			case 'tribe':
+				this.battlegroundsUpdater.next(
+					new BgsToggleHighlightTribeOnBoardEvent(tavernTier.tavernTierData as Race),
+				);
+				break;
+			case 'mechanics':
+				this.battlegroundsUpdater.next(
+					new BgsToggleHighlightMechanicsOnBoardEvent(tavernTier.tavernTierData as GameTag),
+				);
+				break;
 		}
 	}
 

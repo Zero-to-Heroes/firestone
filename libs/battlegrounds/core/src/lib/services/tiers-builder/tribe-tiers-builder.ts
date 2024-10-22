@@ -51,7 +51,7 @@ const buildTrinketsTier = (
 		type: 'tribe',
 		tavernTier: 'trinket',
 		tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.JarOGems_BG30_MagicItem_546}.jpg`,
-		tooltip: 'Trinkets',
+		tooltip: i18n.translateString('battlegrounds.in-game.opponents.trinkets-title'),
 		groups: trinketGroups.filter((g) => !!g?.cards?.length),
 	};
 	return result;
@@ -101,7 +101,7 @@ const buildSpellsTier = (
 		type: 'tribe',
 		tavernTier: 'spells',
 		tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.CarefulInvestment_BG28_800}.jpg`,
-		tooltip: 'Spells',
+		tooltip: i18n.translateString('battlegrounds.in-game.minions-list.spells-tier-tooltip'),
 		groups: spellGroups.filter((g) => !!g?.cards?.length),
 	};
 	return result;
@@ -152,10 +152,21 @@ const buildSingleTribeTier = (
 		type: 'tribe',
 		tavernTier: Race[targetTribe].toLowerCase(),
 		tavernTierIcon: getTribeIcon(targetTribe),
-		tooltip: getTribeName(targetTribe, i18n),
+		tavernTierData: targetTribe,
+		tooltip: getTribeTooltipForTribeName(targetTribe, i18n),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
 	return result;
+};
+
+const getTribeTooltipForTribeName = (
+	tribe: Race,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+): string => {
+	const tribeName = getTribeName(tribe, i18n);
+	return i18n.translateString('battlegrounds.in-game.minions-list.tribe-category-tooltip', {
+		tribeName: tribeName,
+	});
 };
 
 const buildTrinketGroup = (

@@ -1,5 +1,13 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+} from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket } from '@firestone/battlegrounds/core';
@@ -7,6 +15,8 @@ import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/fram
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
+import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
@@ -21,6 +31,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			[cardTooltip]="minion.displayedCardIds"
 			[cardTooltipRelatedCardIds]="minion.relatedCardIds"
 			[cardTooltipBgs]="true"
+			(contextmenu)="highlightMinion(minion, $event)"
 		>
 			<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 			<div class="name">
@@ -57,7 +68,10 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsMinionItemComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit
+{
 	componentType: ComponentType<BgsTrinketStrategyTipsTooltipComponent> = BgsTrinketStrategyTipsTooltipComponent;
 
 	minion$: Observable<Minion>;
@@ -90,6 +104,8 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 	private highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
+
+	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -219,8 +235,21 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		);
 	}
 
+	async ngAfterViewInit() {
+		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
+	}
+
 	trackByFn(index: number, minion: Minion) {
 		return minion.cardId;
+	}
+
+	highlightMinion(minion: Minion, event: MouseEvent) {
+		// Only trigger on right click
+		if (event.button !== 2) {
+			return;
+		}
+
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent([minion.cardId]));
 	}
 
 	private buildAllCardIds(id: string, showGoldenCards: boolean): string {
