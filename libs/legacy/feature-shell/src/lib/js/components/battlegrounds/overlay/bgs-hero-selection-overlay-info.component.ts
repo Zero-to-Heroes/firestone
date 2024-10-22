@@ -12,7 +12,7 @@ import {
 import { DAILY_FREE_USES_HERO } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -179,8 +179,17 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		);
 		this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => prefs.bgsHeroSelectionOverlayScale))
-			.subscribe((scale) => {
-				const element = this.el.nativeElement.querySelector('.scalable');
+			.subscribe(async (scale) => {
+				let element = this.el.nativeElement.querySelector('.scalable');
+				let retriesLeft = 10;
+				while (!element && retriesLeft > 0) {
+					await sleep(100);
+					retriesLeft--;
+					element = this.el.nativeElement.querySelector('.scalable');
+				}
+				if (!element) {
+					return;
+				}
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 			});
 
