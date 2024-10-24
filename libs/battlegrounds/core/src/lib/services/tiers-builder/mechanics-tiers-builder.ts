@@ -71,6 +71,7 @@ const buildTier = (
 		tavernTier: tavernTier,
 		tavernTierIcon: null,
 		tavernTierData: gameTag,
+		tierName: i18n.translateString(`global.mechanics.${GameTag[gameTag].toLowerCase()}`),
 		tooltip: i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 			value: label,
 		}),

@@ -11,6 +11,7 @@ export interface Tier {
 	readonly type: TierViewType;
 	readonly tavernTier: TavernTierType;
 	readonly tavernTierData?: Race | GameTag;
+	readonly tierName?: string;
 	readonly tavernTierIcon: string | null;
 	readonly tooltip: string;
 	readonly groups: readonly TierGroup[];

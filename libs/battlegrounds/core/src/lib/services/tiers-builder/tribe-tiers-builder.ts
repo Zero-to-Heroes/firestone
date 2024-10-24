@@ -153,6 +153,7 @@ const buildSingleTribeTier = (
 		tavernTier: Race[targetTribe].toLowerCase(),
 		tavernTierIcon: getTribeIcon(targetTribe),
 		tavernTierData: targetTribe,
+		tierName: getTribeName(targetTribe, i18n),
 		tooltip: getTribeTooltipForTribeName(targetTribe, i18n),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
