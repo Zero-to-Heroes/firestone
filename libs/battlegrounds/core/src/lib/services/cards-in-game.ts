@@ -122,12 +122,6 @@ const isValidTrinketForTribes = (
 		return true;
 	}
 
-	console.debug(
-		'[debug] is trinket available for tribes',
-		allCards.getCard(cardId).name,
-		availableTribes.map((r) => Race[r]),
-		cardRules[cardId],
-	);
 	const rule: CardRule | null = cardRules[cardId];
 	if (!rule) {
 		return true;
