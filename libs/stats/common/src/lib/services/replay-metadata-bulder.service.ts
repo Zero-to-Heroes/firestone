@@ -3,9 +3,11 @@ import { Inject, Injectable } from '@angular/core';
 import {
 	BgsBoard,
 	BgsPostMatchStats,
+	CardsPlayedByTurnParser,
 	extractTotalDuration,
 	extractTotalTurns,
 	parseBattlegroundsGame,
+	parseGame,
 } from '@firestone-hs/hs-replay-xml-parser';
 import { BgsBoardLight, EntityLight, ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
@@ -43,6 +45,13 @@ export class ReplayMetadataBuilderService {
 		const replayKey = `hearthstone/replay-${newSuffix}/${today.getUTCFullYear()}/${
 			today.getUTCMonth() + 1
 		}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
+		const matchAnalysis = this.matchAnalysisService.buildMatchStats(game);
+
+		const parser = new CardsPlayedByTurnParser();
+		parseGame(replay, [parser]);
+		console.debug('cards played by turn', parser.cardsPlayedByTurn);
+		const playerPlayedCardsByTurn = parser.cardsPlayedByTurn[game.replay.mainPlayerId];
+
 		const metadata: ReplayUploadMetadata = {
 			user: {
 				userId: userId,
@@ -98,12 +107,11 @@ export class ReplayMetadataBuilderService {
 			},
 			bgs: bgs as ReplayUploadMetadata['bgs'],
 			stats: {
-				matchAnalysis: this.matchAnalysisService.buildMatchStats(game),
-				playerPlayedCards: this.matchAnalysisService.buildCardsPlayed(game.replay.mainPlayerId, game.replay),
-				opponentPlayedCards: this.matchAnalysisService.buildCardsPlayed(
-					game.replay.opponentPlayerId,
-					game.replay,
-				),
+				matchAnalysis: matchAnalysis,
+				playerPlayedCards: playerPlayedCardsByTurn?.map((c) => c.cardId),
+				playerPlayedCardsByTurn: playerPlayedCardsByTurn,
+				opponentPlayedCards: parser.cardsPlayedByTurn[game.replay.opponentPlayerId]?.map((c) => c.cardId),
+				opponentPlayedCardsByTurn: parser.cardsPlayedByTurn[game.replay.opponentPlayerId],
 			},
 		};
 		return metadata;
