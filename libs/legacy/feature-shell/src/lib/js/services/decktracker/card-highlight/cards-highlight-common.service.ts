@@ -5,6 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
 import {
 	and,
@@ -153,6 +154,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	): readonly SelectorInput[] {
 		const result: SelectorInput[] = [];
 		const selector: Selector = this.buildSelector(cardId, card, side);
+		const selectorSort: SelectorSort = cardIdSelectorSort(cardId);
 
 		const allPlayerCards = this.getAllCards(
 			!!playerDeckProvider ? playerDeckProvider() : null,
@@ -181,6 +183,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
 				result.push(oppCard);
 			}
+		}
+
+		if (!!selectorSort) {
+			result.sort(selectorSort);
 		}
 		return result;
 	}
@@ -309,3 +315,4 @@ export interface SelectorInput {
 }
 export type SelectorOutput = boolean | number | 'tooltip';
 export type Selector = (info: SelectorInput) => SelectorOutput;
+export type SelectorSort = (a: SelectorInput, b: SelectorInput) => number;
