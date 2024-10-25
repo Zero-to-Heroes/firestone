@@ -55,19 +55,19 @@ export class DiskCacheService {
 		await this.ow.deleteAppFile('./');
 	}
 
-	public async storeItem(key: string, value: any) {
+	public async storeItem(key: string, value: any, timeout = 5000) {
 		console.debug('[disk-cache] storing item', key, this.cacheDisabled);
 		if (this.cacheDisabled) {
 			return true;
 		}
-		const saved = await this.storeItemInternal(key, value).withTimeout(5000, key);
-		if (!saved) {
-			console.warn('[disk-cache] Could not saveitem on disk', key);
-			const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
-			saveInfo[key] = true;
-			this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
-			console.debug('[disk-cache] updated disk cache status', saveInfo);
-		}
+		const saved = await this.storeItemInternal(key, value).withTimeout(timeout ?? 5000, key);
+		// if (!saved) {
+		// 	console.warn('[disk-cache] Could not saveitem on disk', key);
+		// 	const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
+		// 	saveInfo[key] = true;
+		// 	this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
+		// 	console.debug('[disk-cache] updated disk cache status', saveInfo);
+		// }
 		return saved;
 	}
 
@@ -94,22 +94,22 @@ export class DiskCacheService {
 	}
 
 	public async getItem<T>(key: string): Promise<T | null> {
-		const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
-		console.debug('[disk-cache] getting item', key, this.cacheDisabled, saveInfo);
+		// const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
+		console.debug('[disk-cache] getting item', key, this.cacheDisabled);
 		if (this.cacheDisabled) {
 			return null;
 		}
-		const shouldSkipDisk = saveInfo[key];
-		if (shouldSkipDisk) {
-			console.debug('[disk-cache] skipping disk cache for', key);
-			saveInfo[key] = false;
-			this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
-			return null;
-		}
+		// const shouldSkipDisk = saveInfo[key];
+		// if (shouldSkipDisk) {
+		// 	console.debug('[disk-cache] skipping disk cache for', key);
+		// 	saveInfo[key] = false;
+		// 	this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
+		// 	return null;
+		// }
 
 		const result = this.getItemInternal<T>(key).withTimeout(5000, key);
-		saveInfo[key] = false;
-		this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
+		// saveInfo[key] = false;
+		// this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
 		return result;
 	}
 

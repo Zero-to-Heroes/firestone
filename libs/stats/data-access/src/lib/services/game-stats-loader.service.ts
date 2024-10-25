@@ -231,7 +231,12 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	private async saveLocalStats(gameStats: readonly GameStat[]) {
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY, gameStats);
+		// TODO: this might be too resource-consuming where there are too many games stored locally.
+		// Maybe find a way to partition the data, eg by month, or simply limit each file to a max number of
+		// games?
+		const start = Date.now();
+		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY, gameStats, 20000);
+		console.log('[game-stats-loader] saved', gameStats.length, 'local stats in', Date.now() - start);
 	}
 
 	private async loadLocalGameStats(): Promise<readonly GameStat[]> {
