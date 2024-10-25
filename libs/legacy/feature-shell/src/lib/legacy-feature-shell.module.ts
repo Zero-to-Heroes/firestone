@@ -453,6 +453,7 @@ import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overl
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
+import { OpponentDeadMinionsThisGameWidgetWrapperComponent } from '@components/overlays/counters/opponent-dead-minions-this-game-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
 import { OpponentEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/opponent-earthen-golem-widget-wrapper.component';
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
@@ -1571,6 +1572,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentWheelOfDeathWidgetWrapperComponent,
 		OpponentDragonsSummonedWidgetWrapperComponent,
 		OpponentElementalStreakWidgetWrapperComponent,
+		OpponentDeadMinionsThisGameWidgetWrapperComponent,
 
 		FtueComponent,
 

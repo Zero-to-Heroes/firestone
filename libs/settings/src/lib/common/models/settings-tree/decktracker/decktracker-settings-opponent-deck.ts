@@ -378,6 +378,12 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		showLimitedOption: true,
 	},
 	{
+		id: 'deadMinionsThisGame',
+		field: 'opponentDeadMinionsThisGameCounter',
+		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-label'),
+		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.dead-minions-this-game-tooltip'),
+	},
+	{
 		id: 'dragonsSummoned',
 		field: 'opponentDragonsSummonedCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),

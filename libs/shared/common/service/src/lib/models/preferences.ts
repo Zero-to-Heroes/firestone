@@ -471,6 +471,7 @@ export class Preferences implements IPreferences {
 	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerDeadMinionsThisGameCounterWidgetPosition: { left: number; top: number };
+	readonly opponentDeadMinionsThisGameCounter: boolean = false;
 
 	readonly playerDamageTakenOnYourTurnCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
