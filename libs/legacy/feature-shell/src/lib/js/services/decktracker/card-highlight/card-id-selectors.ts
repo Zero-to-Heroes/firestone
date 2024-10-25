@@ -1,6 +1,6 @@
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
-import { pickLast, sortByProperties } from '@firestone/shared/framework/common';
+import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
@@ -873,7 +873,22 @@ export const cardIdSelector = (
 		case CardIds.GaiaTheTechtonic_TSC_029:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.TheGalacticProjectionOrb_TOY_378:
-			return tooltip(and(side(inputSide), spellPlayedThisMatch));
+			return (input: SelectorInput): SelectorOutput => {
+				const spellsPlayed = input.deckState?.spellsPlayedThisMatch;
+				if (!spellsPlayed) {
+					return null;
+				}
+
+				const groupedByCost = groupByFunction((c: DeckCard) => c.manaCost)(spellsPlayed);
+				const firstOfEachCost = Object.keys(groupedByCost)
+					.sort()
+					.map((key) => groupedByCost[key][0])
+					.map((c) => c.entityId);
+				return highlightConditions(
+					tooltip(and(side(inputSide), entityIs(...firstOfEachCost))),
+					and(side(inputSide), spellPlayedThisMatch),
+				)(input);
+			};
 		case CardIds.GameMasterNemsy_TOY_524:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.GatherYourParty:
