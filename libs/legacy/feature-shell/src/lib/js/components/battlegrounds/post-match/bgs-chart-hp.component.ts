@@ -435,7 +435,7 @@ export class BgsChartHpComponent {
 		leaderboardPositionOverTurn: { [playerId: string]: readonly NumericTurnInfo[] },
 		hpOverTurn: { [playerId: string]: readonly NumericTurnInfo[] },
 	): readonly number[] {
-		if (!!leaderboardPositionOverTurn && Object.keys(leaderboardPositionOverTurn)?.length) {
+		if (!!leaderboardPositionOverTurn && Object.keys(leaderboardPositionOverTurn)?.length > 4) {
 			const lastTurn = leaderboardPositionOverTurn[0]?.length ?? 0;
 			return Object.keys(leaderboardPositionOverTurn)
 				.map((playerId) => {
@@ -468,21 +468,6 @@ export class BgsChartHpComponent {
 					b.lastKnownHp - a.lastKnownHp,
 			)
 			.map((playerInfo) => playerInfo.playerId);
-		// Legacy issue - the heroes that were offered during the hero selection phase are
-		// also proposed there
-		// if (playerOrder.length > 8) {
-		// 	const candidatesToRemove = turnAtWhichEachPlayerDies
-		// 		.filter((info) => info.turnDeath === 99)
-		// 		.filter(
-		// 			(info) =>
-		// 				info.lastKnownHp ===
-		// 				defaultStartingHp(GameType.GT_BATTLEGROUNDS, info.playerCardId, this.allCards),
-		// 		)
-		// 		.filter((info) => info.playerCardId !== this._mainPlayerCardId);
-		// 	playerOrder = playerOrder.filter(
-		// 		(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
-		// 	);
-		// }
 		return playerOrder;
 	}
 

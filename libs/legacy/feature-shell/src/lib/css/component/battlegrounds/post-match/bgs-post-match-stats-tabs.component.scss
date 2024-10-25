@@ -26,6 +26,7 @@
 		flex-grow: 0;
 		flex-shrink: 0;
 		font-size: var(--variable-title-font-size);
+		z-index: 2;
 
 		.tab {
 			margin-right: 30px;
