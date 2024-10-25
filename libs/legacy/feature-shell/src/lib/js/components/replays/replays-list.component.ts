@@ -28,9 +28,17 @@ import { GameStatsProviderService } from '../../services/stats/game/game-stats-p
 				<replays-player-class-filter-dropdown class="filter"></replays-player-class-filter-dropdown>
 				<replays-opponent-class-filter-dropdown class="filter"></replays-opponent-class-filter-dropdown>
 				<fs-text-input
+					class="hero-search"
+					(fsModelUpdate)="onHeroNameChanged($event)"
+					[placeholder]="'app.replays.filters.hero-search.placeholder' | fsTranslate"
+					*ngIf="showHeroSearch$ | async"
+				>
+				</fs-text-input>
+				<fs-text-input
 					class="opponent-search"
 					(fsModelUpdate)="onOpponentNameChanged($event)"
 					[placeholder]="'app.replays.filters.opponent-search.placeholder' | fsTranslate"
+					*ngIf="showOpponentSearch$ | async"
 				>
 				</fs-text-input>
 				<replays-icon-toggle
@@ -52,10 +60,13 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
 	showUseClassIconsToggle$: Observable<boolean>;
 	showMercDetailsToggle$: Observable<boolean>;
+	showHeroSearch$: Observable<boolean>;
+	showOpponentSearch$: Observable<boolean>;
 	replays$: Observable<readonly GameStat[]>;
 
 	scrollDebounceTime = 0;
 
+	private heroSearchString$$ = new BehaviorSubject<string>(undefined);
 	private opponentSearchString$$ = new BehaviorSubject<string>(undefined);
 
 	constructor(
@@ -83,6 +94,12 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		this.showMercDetailsToggle$ = this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter))
 			.pipe(this.mapData((gameModeFilter) => gameModeFilter?.startsWith('mercenaries')));
+		this.showHeroSearch$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => !prefs.replaysActiveGameModeFilter?.startsWith('mercenaries')),
+		);
+		this.showOpponentSearch$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => !prefs.replaysActiveGameModeFilter?.startsWith('battlegrounds')),
+		);
 		this.replaysIconToggleAbsolutePosition$ = this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter))
 			.pipe(
@@ -114,6 +131,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 					(a, b) => deepEqual(a, b),
 				),
 			),
+			this.heroSearchString$$,
 			this.opponentSearchString$$,
 		]).pipe(
 			filter(([gameStats]) => !!gameStats?.length),
@@ -121,6 +139,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 				([
 					gameStats,
 					{ gameModeFilter, bgHeroFilter, deckstringsFilter, playerClassFilter, opponentClassFilter },
+					heroSearchString,
 					opponentSearchString,
 				]) => {
 					return this.applyFilters(
@@ -130,6 +149,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 						deckstringsFilter,
 						playerClassFilter,
 						opponentClassFilter,
+						heroSearchString,
 						opponentSearchString,
 					);
 				},
@@ -148,6 +168,10 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		}
 	}
 
+	onHeroNameChanged(searchString: string) {
+		this.heroSearchString$$.next(searchString);
+	}
+
 	onOpponentNameChanged(searchString: string) {
 		this.opponentSearchString$$.next(searchString);
 	}
@@ -159,6 +183,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		deckstringsFilter: readonly string[],
 		playerClassFilter: string,
 		opponentClassFilter: string,
+		heroSearchString: string,
 		opponentSearchString: string,
 	): readonly GameStat[] {
 		const result = replays
@@ -166,9 +191,21 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter, gameModeFilter))
 			.filter((replay) => this.deckstringFilter(replay, deckstringsFilter, gameModeFilter))
 			.filter((replay) => this.playerClassFilter(replay, playerClassFilter, gameModeFilter))
+			.filter((replay) => this.playerHeroFilter(replay, heroSearchString))
 			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter, gameModeFilter))
 			.filter((replay) => this.opponentNameFilter(replay, opponentSearchString));
 		return result;
+	}
+
+	private playerHeroFilter(stat: GameStat, filter: string): boolean {
+		return (
+			!filter ||
+			this.i18n
+				.translateString(`global.class.${stat.playerClass?.toLowerCase()}`)
+				.toLowerCase()
+				.includes(filter.toLowerCase()) ||
+			this.allCards.getCard(stat.playerCardId)?.name?.toLowerCase().includes(filter.toLowerCase())
+		);
 	}
 
 	private opponentNameFilter(stat: GameStat, filter: string): boolean {
