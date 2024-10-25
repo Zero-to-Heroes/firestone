@@ -84,7 +84,11 @@ import { BgsSimulatorTrinketSelectionComponent } from './bgs-simulator-trinket-s
 							[forceHidePremiumBanner]="true"
 						></bgs-battle-status>
 					</div>
-					<div class="controls position" [ngClass]="{ busy: processingReposition }">
+					<div
+						class="controls position"
+						[ngClass]="{ busy: processingReposition }"
+						*ngIf="(isDuos$ | async) === false"
+					>
 						<div
 							class="button best-position cancel"
 							[fsTranslate]="'battlegrounds.sim.reposition-button-cancel'"
@@ -148,6 +152,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 	player$: Observable<BgsBoardInfo | null>;
 	playerTeammate$: Observable<BgsBoardInfo | null>;
 	turnNumber$: Observable<number | null>;
+	isDuos$: Observable<boolean>;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		// Because it's already set in the controller state
@@ -216,6 +221,13 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			this.mapData((faceOff) => faceOff?.battleInfo?.playerTeammateBoard ?? null),
 		);
 		this.turnNumber$ = this.controller.faceOff$$.pipe(this.mapData((faceOff) => faceOff?.turn ?? null));
+		this.isDuos$ = this.controller.faceOff$$.pipe(
+			this.mapData(
+				(faceOff) =>
+					(!!faceOff?.battleInfo?.playerTeammateBoard || !!faceOff?.battleInfo?.opponentTeammateBoard) ??
+					false,
+			),
+		);
 
 		this.initControllerRequests();
 
