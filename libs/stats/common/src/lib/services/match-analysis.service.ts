@@ -74,6 +74,7 @@ export class MatchAnalysisService {
 		});
 		parser.parse();
 
+		const finalCardsBeforeMulligan = [...cardsBeforeMulligan];
 		const finalCardsAfterMulligan = [...cardsAfterMulligan];
 		const finalCardsDrawn = [...cardsDrawn];
 		const finalCardsPlayed = [...cardsPlayed];
@@ -122,6 +123,7 @@ export class MatchAnalysisService {
 		);
 		const result: MatchAnalysis = {
 			cardsAnalysis: cardsAnalysis,
+			cardsBeforeMulligan: finalCardsBeforeMulligan,
 			cardsAfterMulligan: finalCardsAfterMulligan,
 			cardsDrawn: finalCardsDrawn,
 		};
