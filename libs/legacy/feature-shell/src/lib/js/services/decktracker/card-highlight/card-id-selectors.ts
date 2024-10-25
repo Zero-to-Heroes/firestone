@@ -148,6 +148,8 @@ export const cardIdSelector = (
 		case CardIds.AegwynnTheGuardianCore:
 		case CardIds.AegwynnTheGuardian_LEG_CS3_001:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.AirGuitarist:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.AkaliTheRhino:
 			return and(side(inputSide), inDeck, minion, rush);
 		case CardIds.AlakirTheWindsOfTime_WON_092h:
@@ -176,6 +178,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.AmberWhelp:
 			return and(side(inputSide), or(inDeck, inHand), minion, dragon);
+		case CardIds.AmitusThePeacekeeper:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.AmitusThePeacekeeper_ReinforcedToken:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.AmuletOfUndying:
@@ -947,6 +951,9 @@ export const cardIdSelector = (
 					and(side(inputSide), inDeck, effectiveCostEqual(highestCost)),
 				)(input);
 			};
+		case CardIds.GrimestreetOutfitter:
+		case CardIds.GrimestreetOutfitterCore:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.GrimtotemBuzzkill:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.GrizzledGuardian:
@@ -1447,6 +1454,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, effectiveCostLess(3));
 		case CardIds.OrbOfRevelationTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
+		case CardIds.OutfitTailor:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.OverflowSurger_WW_424:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.OvergrownBeanstalk_MIS_301:
