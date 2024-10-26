@@ -187,7 +187,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 					</div>
 					<div class="quest-content">
 						<!-- <div class="header">{{ task.header }}</div> -->
-						<div class="description">{{ quest.description }}</div>
+						<div class="description" [innerHTML]="quest.description"></div>
 						<div class="progress">
 							<div class="background"></div>
 							<div class="current-progress" [style.width.%]="quest.progressPercentage"></div>

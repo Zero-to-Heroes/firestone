@@ -109,6 +109,15 @@
 
 			.description {
 				margin-bottom: 5px;
+
+				::ng-deep i {
+					display: inline-block;
+					width: auto;
+					height: auto;
+					color: currentColor;
+					background: transparent;
+					font-style: italic;
+				}
 			}
 
 			.progress {
