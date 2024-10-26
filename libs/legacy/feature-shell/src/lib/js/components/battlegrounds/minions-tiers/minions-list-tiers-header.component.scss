@@ -84,12 +84,15 @@
 	padding-left: 5px;
 	flex-shrink: 0;
 
-	.tier {
+	.tier-icon {
 		position: relative;
-		margin-right: 3px;
 
 		&:last-child {
 			margin-right: 0;
 		}
+	}
+
+	&.tribe .tier-icon {
+		margin-right: 1px;
 	}
 }

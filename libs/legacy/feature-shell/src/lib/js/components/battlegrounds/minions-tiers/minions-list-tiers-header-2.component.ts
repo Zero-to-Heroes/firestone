@@ -110,6 +110,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 						<ul class="tiers tribe">
 							<tier-icon
 								*ngFor="let currentTier of tribeTiers; trackBy: trackByFn"
+								class="tier-icon"
 								[tier]="currentTier"
 								[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
 								[additionalClass]="'tribe'"
@@ -122,6 +123,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 					<ul class="tiers mechanical" *ngSwitchCase="'mechanics'">
 						<tier-icon
 							*ngFor="let currentTier of mechanicalTiers; trackBy: trackByFn"
+							class="tier-icon"
 							[tier]="currentTier"
 							[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
 							[additionalClass]="'mechanics'"
