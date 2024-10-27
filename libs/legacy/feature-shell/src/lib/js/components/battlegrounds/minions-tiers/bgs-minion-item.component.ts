@@ -33,7 +33,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			[cardTooltipBgs]="true"
 			(contextmenu)="highlightMinion(minion, $event)"
 		>
-			<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
+			<img class="icon tile-icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 			<div class="name">
 				<div class="gold-cost" *ngIf="minion.goldCost != null">
 					<img
