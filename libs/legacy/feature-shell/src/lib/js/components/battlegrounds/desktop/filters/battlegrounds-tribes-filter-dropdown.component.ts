@@ -67,14 +67,13 @@ export class BattlegroundsTribesFilterDropdownComponent
 			this.mapData(
 				([categoryId, [currentView]]) =>
 					!['categories', 'category'].includes(currentView) &&
-					![
-						'bgs-category-personal-stats',
-						'bgs-category-simulator',
+					[
+						'bgs-category-personal-heroes',
+						'bgs-category-meta-heroes',
+						'bgs-category-personal-quests',
+						'bgs-category-personal-hero-details',
 						'bgs-category-personal-rating',
-						'bgs-category-meta-quests',
-						'bgs-category-meta-trinkets',
-						'bgs-category-leaderboard',
-						// 'bgs-category-perfect-games',
+						'bgs-category-perfect-games',
 					].includes(categoryId),
 			),
 		);

@@ -42,7 +42,6 @@ import { BgsBannedTribeComponent } from './js/components/battlegrounds/bgs-banne
 import { BgsBannedTribesComponent } from './js/components/battlegrounds/bgs-banned-tribes.component';
 import { BattlegroundsCategoryDetailsComponent } from './js/components/battlegrounds/desktop/battlegrounds-category-details.component';
 import { BattlegroundsDesktopComponent } from './js/components/battlegrounds/desktop/battlegrounds-desktop.component';
-import { BattlegroundsDesktopOverviewComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-desktop-overview.component';
 import { BattlegroundsPerfectGamesComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsQuestsComponent } from './js/components/battlegrounds/desktop/categories/battlegrounds-personal-stats-quests.component';
@@ -391,6 +390,7 @@ import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@componen
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
 import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
 import { BattlegroundsTrinketTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-trinket-type-filter-dropdown.component';
+import { BattlegroundsYourStatsTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-your-stats-type-filter-dropdown.component';
 import { BgsStrategiesWrapperComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-wrapper.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
@@ -1267,7 +1267,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,
-		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsMetaStatsHeroesComponent,
 		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsQuestVignetteComponent,
@@ -1300,6 +1299,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsModeFilterDropdownComponent,
 		BattlegroundsLeaderboardRegionFilterDropdownComponent,
 		BattlegroundsTrinketTypeFilterDropdownComponent,
+		BattlegroundsYourStatsTypeFilterDropdownComponent,
 
 		DuelsDesktopComponent,
 		DuelsEmptyStateComponent,

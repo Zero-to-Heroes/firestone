@@ -84,11 +84,15 @@ export class BattlegroundsTimeFilterDropdownComponent
 						this.i18n.translateString('app.battlegrounds.filters.time.past-30'),
 					visible:
 						!['categories', 'category'].includes(currentView) &&
-						![
-							'bgs-category-personal-stats',
-							'bgs-category-perfect-games',
-							'bgs-category-simulator',
-							'bgs-category-leaderboard',
+						[
+							'bgs-category-your-stats',
+							'bgs-category-personal-heroes',
+							'bgs-category-meta-heroes',
+							'bgs-category-meta-quests',
+							'bgs-category-meta-trinkets',
+							'bgs-category-personal-quests',
+							'bgs-category-personal-hero-details',
+							'bgs-category-personal-rating',
 						].includes(selectedCategoryId),
 				};
 			}),

@@ -16,6 +16,9 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	template: `
 		<div class="battlegrounds-filters" [attr.aria-label]="'Battlegrounds filters'" role="list">
 			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
+			<battlegrounds-your-stats-type-filter-dropdown
+				class="filter"
+			></battlegrounds-your-stats-type-filter-dropdown>
 			<battlegrounds-mode-filter-dropdown class="filter"></battlegrounds-mode-filter-dropdown>
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-quest-type-filter-dropdown class="filter"></battlegrounds-quest-type-filter-dropdown>

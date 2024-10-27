@@ -23,6 +23,7 @@ export class BattlegroundsNavigationService extends AbstractFacadeService<Battle
 }
 
 export type CategoryId =
+	| 'bgs-category-your-stats'
 	| 'bgs-category-personal-heroes'
 	| 'bgs-category-meta-heroes'
 	| 'bgs-category-meta-quests'

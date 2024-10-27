@@ -61,12 +61,14 @@ export class BattlegroundsRankFilterDropdownComponent
 			this.mapData(
 				([categoryId, [currentView]]) =>
 					!['categories', 'category'].includes(currentView) &&
-					![
-						'bgs-category-personal-stats',
-						'bgs-category-simulator',
-						'bgs-category-personal-rating',
-						'bgs-category-leaderboard',
-						'bgs-category-meta-trinkets',
+					[
+						// 'bgs-category-your-stats',
+						'bgs-category-personal-heroes',
+						'bgs-category-meta-heroes',
+						'bgs-category-meta-quests',
+						'bgs-category-personal-quests',
+						'bgs-category-personal-hero-details',
+						'bgs-category-perfect-games',
 					].includes(categoryId),
 			),
 		);

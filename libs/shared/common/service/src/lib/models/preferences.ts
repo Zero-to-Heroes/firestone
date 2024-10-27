@@ -761,6 +761,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveGameMode: 'battlegrounds' | 'battlegrounds-duo' = 'battlegrounds';
 	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' = 'EU';
 	readonly bgsLeaderboardPlayerSearch: string;
+	readonly bgsYourStatsTypeFilter: 'hero' | 'trinket' = 'hero';
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

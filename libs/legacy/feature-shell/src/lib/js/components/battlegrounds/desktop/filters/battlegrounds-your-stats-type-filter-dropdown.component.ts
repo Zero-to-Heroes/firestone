@@ -10,7 +10,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
-	selector: 'battlegrounds-mode-filter-dropdown',
+	selector: 'battlegrounds-your-stats-type-filter-dropdown',
 	styleUrls: [],
 	template: `
 		<filter-dropdown
@@ -25,7 +25,7 @@ import { arraysEqual } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsModeFilterDropdownComponent
+export class BattlegroundsYourStatsTypeFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
@@ -48,16 +48,16 @@ export class BattlegroundsModeFilterDropdownComponent
 
 		this.options = [
 			{
-				value: 'battlegrounds',
-				label: this.i18n.translateString('global.game-mode.battlegrounds'),
+				value: 'hero',
+				label: this.i18n.translateString('app.battlegrounds.filters.stat-type.hero'),
 			},
-			{
-				value: 'battlegrounds-duo',
-				label: this.i18n.translateString('global.game-mode.battlegrounds-duo'),
-			},
+			// {
+			// 	value: 'trinket',
+			// 	label: this.i18n.translateString('app.battlegrounds.filters.stat-type.hero'),
+			// },
 		];
 		this.filter$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveGameMode)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsYourStatsTypeFilter)),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
 			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
@@ -65,12 +65,7 @@ export class BattlegroundsModeFilterDropdownComponent
 			this.mapData(([filter, selectedCategoryId]) => ({
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,
-				visible: [
-					'bgs-category-your-stats',
-					'bgs-category-meta-heroes',
-					'bgs-category-leaderboard',
-					'bgs-category-personal-rating',
-				].includes(selectedCategoryId),
+				visible: ['bgs-category-your-stats'].includes(selectedCategoryId),
 			})),
 		);
 
@@ -83,7 +78,7 @@ export class BattlegroundsModeFilterDropdownComponent
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsActiveGameMode: option.value as 'battlegrounds' | 'battlegrounds-duo',
+			bgsYourStatsTypeFilter: option.value as 'hero' | 'trinket',
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}

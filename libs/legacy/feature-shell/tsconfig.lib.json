@@ -6,5 +6,9 @@
 		"declarationMap": true
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-	"include": ["**/*.ts"]
+	"include": [
+		"**/*.ts",
+		"../../battlegrounds/view/src/lib/personal-stats/your-stats.model.ts",
+		"../../battlegrounds/view/src/lib/personal-stats/battlegrounds-desktop-your-stats.component.ts"
+	]
 }
