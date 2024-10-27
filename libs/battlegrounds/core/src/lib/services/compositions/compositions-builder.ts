@@ -1,28 +1,29 @@
-import { BgsCompAdvice, TribeList } from '@firestone-hs/content-craetor-input';
-import { Race } from '@firestone-hs/reference-data';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export const buildCompositions = (
 	availableTribes: readonly Race[],
 	strategies: readonly BgsCompAdvice[],
+	allCards: CardsFacadeService,
 ): readonly BgsCompAdvice[] => {
 	// return strategies;
 	return (
 		strategies?.filter((s) => {
-			const result = isAvailableStat(s.needAnyTribeCombinaisonInLobby, availableTribes);
-			console.debug('isAvailableStat', s.needAnyTribeCombinaisonInLobby, availableTribes, result);
+			const result = isAvailable(s, availableTribes, allCards);
+			console.debug('isAvailableStat', s, availableTribes, result);
 			return result;
 		}) ?? []
 	);
 };
 
-const isAvailableStat = (tribesCombinations: readonly TribeList[], availableTribes: readonly Race[]): boolean => {
-	return (
-		!tribesCombinations?.length ||
-		!availableTribes?.length ||
-		tribesCombinations.some((tribes) => isAvailableTribes(tribes, availableTribes))
-	);
+const isAvailable = (comp: BgsCompAdvice, availableTribes: readonly Race[], allCards: CardsFacadeService): boolean => {
+	return comp.cards
+		.filter((c) => c.status === 'CORE')
+		.map((c) => allCards.getCard(c.cardId))
+		.every((c) => isCardAvailable(c, availableTribes));
 };
 
-const isAvailableTribes = (tribes: TribeList, availableTribes: readonly Race[]): boolean => {
-	return tribes.every((tribe) => availableTribes.includes(Race[tribe]));
+const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[]): boolean => {
+	return !card.races?.length || !availableTribes?.length || card.races.some((r) => availableTribes.includes(Race[r]));
 };

@@ -13,6 +13,9 @@ import { BehaviorSubject, combineLatest, Observable, tap } from 'rxjs';
 	template: `
 		<div class="composition" [ngClass]="{ collapsed: collapsed$ | async }">
 			<div class="header" (click)="toggleCollapsed()">
+				<div class="header-images" *ngIf="!!headerImages?.length">
+					<img *ngFor="let img of headerImages" class="header-image" [src]="img" />
+				</div>
 				<div class="header-text">{{ name }}</div>
 				<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 			</div>
@@ -56,6 +59,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	collapsed$: Observable<boolean>;
 
 	name: string;
+	headerImages: readonly string[] = [];
 	coreCards: readonly ExtendedReferenceCard[];
 	addonCards: readonly ExtendedReferenceCard[];
 
@@ -80,6 +84,10 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				};
 				return result;
 			});
+		this.headerImages = this.coreCards
+			// .map((c) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${c.id}.jpg`)
+			.map((c) => `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c.id}.jpg`)
+			.slice(0, 1);
 	}
 
 	@Input() highlightedTribes: readonly Race[];

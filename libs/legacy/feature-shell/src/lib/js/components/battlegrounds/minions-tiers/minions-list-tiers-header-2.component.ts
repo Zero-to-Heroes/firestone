@@ -62,39 +62,26 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 							[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.mechanics'"
 						></div>
 					</div>
-					<!-- <div
-					class="tier tribes-category"
-					*ngIf="tribeTiers?.length"
-					(click)="selectCategory('tribes')"
-					[ngClass]="{ selected: category === 'tribes' }"
-					[helpTooltip]="'battlegrounds.in-game.minions-list.navigation.tribes' | fsTranslate"
-				>
-					<div class="icon-container">
-						<img
-							class="icon"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/battlegrounds/minions-list/tribes.png"
-						/>
-					</div>
-					<div class="label" [fsTranslate]="'battlegrounds.in-game.minions-list.navigation.tribes'"></div>
-				</div> -->
-					<!-- <div
-					class="tier compositions-category"
-					*ngIf="compositions?.length"
-					(click)="selectCategory('compositions')"
-					[ngClass]="{ selected: category === 'compositions' }"
-					[helpTooltip]="'battlegrounds.in-game.minions-list.navigation.compositions-tooltip' | fsTranslate"
-				>
-					<div class="icon-container">
-						<img
-							class="icon"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/battlegrounds/minions-list/compositions.png"
-						/>
-					</div>
 					<div
-						class="label"
-						[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
-					></div>
-				</div> -->
+						class="tier compositions-category"
+						*ngIf="compositions?.length"
+						(click)="selectCategory('compositions')"
+						[ngClass]="{ selected: value.category === 'compositions' }"
+						[helpTooltip]="
+							'battlegrounds.in-game.minions-list.navigation.compositions-tooltip' | fsTranslate
+						"
+					>
+						<div class="icon-container">
+							<img
+								class="icon"
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/battlegrounds/minions-list/compositions.png"
+							/>
+						</div>
+						<div
+							class="label"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
+						></div>
+					</div>
 				</nav>
 				<ng-container [ngSwitch]="value.category">
 					<ng-container *ngSwitchCase="'tiers'">

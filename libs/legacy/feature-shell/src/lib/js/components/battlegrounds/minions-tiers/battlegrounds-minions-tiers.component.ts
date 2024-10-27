@@ -257,7 +257,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.bgGameState.gameState$$.pipe(this.mapData((state) => state?.currentGame?.availableRaces)),
 			this.strategies.strategies$$,
 		]).pipe(
-			this.mapData(([availableTribes, strategies]) => buildCompositions(availableTribes, strategies)),
+			this.mapData(([availableTribes, strategies]) =>
+				buildCompositions(availableTribes, strategies, this.allCards),
+			),
 			tap((comps) => console.debug('comps', comps)),
 		);
 

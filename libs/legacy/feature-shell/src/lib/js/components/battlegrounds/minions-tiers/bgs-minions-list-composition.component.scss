@@ -9,10 +9,23 @@
 		display: flex;
 		align-items: center;
 		// justify-content: center;
-		margin-bottom: 2px;
 		justify-content: flex-start;
 		padding-left: 10px;
 		padding-right: 10px;
+
+		.header-images {
+			display: flex;
+			height: 100%;
+			overflow: hidden;
+
+			.header-image {
+				height: 100%;
+				aspect-ratio: 1;
+				clip-path: circle(10px at 50% 50%);
+				transform: scale(1.5);
+				margin-right: 5px;
+			}
+		}
 
 		.header-text {
 			font-size: 15px;
@@ -29,6 +42,7 @@
 	}
 
 	.cards {
+		margin-top: 2px;
 		.header {
 			background: var(--color-5);
 			justify-content: center;
