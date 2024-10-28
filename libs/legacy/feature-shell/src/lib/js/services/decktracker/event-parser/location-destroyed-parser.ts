@@ -28,6 +28,7 @@ export class LocationDestroyedParser implements EventParser {
 		});
 		const result = Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			miscCardsDestroyed: [...(currentState.miscCardsDestroyed || []), cardId],
 		});
 		return result;
 	}

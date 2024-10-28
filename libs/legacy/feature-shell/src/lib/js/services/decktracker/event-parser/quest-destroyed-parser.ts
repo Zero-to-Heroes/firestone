@@ -34,6 +34,7 @@ export class QuestDestroyedParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			miscCardsDestroyed: [...(currentState.miscCardsDestroyed || []), cardId],
 		});
 	}
 

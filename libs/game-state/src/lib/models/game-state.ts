@@ -27,6 +27,7 @@ export class GameState {
 	readonly gameEnded: boolean;
 	readonly spectating: boolean;
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
+	readonly miscCardsDestroyed: readonly string[] = [];
 
 	readonly reconnectOngoing: boolean;
 	readonly hasReconnected: boolean;

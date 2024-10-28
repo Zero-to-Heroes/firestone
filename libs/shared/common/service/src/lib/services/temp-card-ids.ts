@@ -1,5 +1,6 @@
 export const enum TempCardIds {
 	AstralVigilant = '',
+	TheCeaselessExpanse = 'TheCeaselessExpanse',
 	ExpeditionSergeant = '',
 	Jettison = '',
 	CrystallineGreatmace = '',

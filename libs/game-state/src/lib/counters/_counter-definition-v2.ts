@@ -28,7 +28,7 @@ export abstract class CounterDefinitionV2<T> {
 		};
 	};
 
-	protected abstract tooltip(side: 'player' | 'opponent', gameState: GameState): string;
+	protected abstract tooltip(side: 'player' | 'opponent', gameState: GameState): string | null;
 
 	public emit(side: 'player' | 'opponent', gameState: GameState): CounterInstance<T> {
 		// console.debug('emitting counter', this.id, this);
@@ -78,7 +78,7 @@ export abstract class CounterDefinitionV2<T> {
 export interface CounterInstance<T> {
 	readonly id: CounterType;
 	readonly image: string;
-	readonly tooltip: string;
+	readonly tooltip: string | null;
 	readonly value: T | undefined;
 	readonly valueImg?: string;
 }

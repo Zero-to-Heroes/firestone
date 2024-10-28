@@ -28,6 +28,7 @@ export class WeaponDestroyedParser implements EventParser {
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			miscCardsDestroyed: [...(currentState.miscCardsDestroyed || []), cardId],
 		});
 	}
 

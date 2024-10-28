@@ -13,7 +13,7 @@ export class SecretDestroyedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -25,6 +25,7 @@ export class SecretDestroyedParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			miscCardsDestroyed: [...(currentState.miscCardsDestroyed || []), cardId],
 		});
 	}
 
