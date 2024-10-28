@@ -62,7 +62,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 							[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.mechanics'"
 						></div>
 					</div>
-					<div
+					<!-- <div
 						class="tier compositions-category"
 						*ngIf="compositions?.length"
 						(click)="selectCategory('compositions')"
@@ -81,7 +81,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 							class="label"
 							[fsTranslate]="'battlegrounds.in-game.minions-list.navigation.compositions'"
 						></div>
-					</div>
+					</div> -->
 				</nav>
 				<ng-container [ngSwitch]="value.category">
 					<ng-container *ngSwitchCase="'tiers'">
