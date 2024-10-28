@@ -258,6 +258,7 @@ export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
 export const overload = hasMechanic(GameTag.OVERLOAD);
 export const quickdraw = hasMechanic(GameTag.QUICKDRAW);
+export const reborn = hasMechanic(GameTag.REBORN);
 export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
@@ -316,6 +317,7 @@ export const race =
 export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
+export const draenei = race(Race.DRAENEI);
 export const elemental = race(Race.ELEMENTAL);
 export const imp = hasMechanic(GameTag.IMP);
 export const mech = race(Race.MECH);
@@ -360,4 +362,8 @@ export const spendCorpse = (input: SelectorInput): boolean => {
 };
 export const generateCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]);
+};
+export const starshipPiece = (input: SelectorInput): boolean => {
+	return false;
+	// return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };

@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
 
 export const tutors = [
 	CardIds.AbyssalDepths,
@@ -24,6 +25,7 @@ export const tutors = [
 	CardIds.Bogshaper,
 	CardIds.BookOfSpecters,
 	CardIds.BrightEyedScout,
+	CardIds.Burndown_WORK_026,
 	CardIds.Buttons_VAC_437,
 	CardIds.BwonsamdiTheDead,
 	CardIds.CactusCutter_WW_327,
@@ -158,6 +160,7 @@ export const tutors = [
 	CardIds.RedscaleDragontamer,
 	CardIds.RelicOfDimensions,
 	CardIds.RingmasterWhatley,
+	CardIds.Robocaller_WORK_006,
 	CardIds.RollTheBones_CORE_ICC_201,
 	CardIds.RollTheBones_ICC_201,
 	CardIds.Runeforging_LEG_RLK_715,
@@ -225,6 +228,8 @@ export const tutors = [
 	CardIds.TrinketTracker,
 	CardIds.TrustyCompanion_WW_027,
 	CardIds.TwilightDeceptor,
+	CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
+	CardIds.UngoroBrochure_WORK_050,
 	CardIds.Ursatron,
 	CardIds.UrzulHorror,
 	CardIds.UtgardeGrapplesniper,
@@ -240,8 +245,11 @@ export const tutors = [
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion_CFM_806,
-	CardIds.UngoroBrochure_WORK_050,
-	CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
-	CardIds.Burndown_WORK_026,
-	CardIds.Robocaller_WORK_006,
+	TempCardIds.TroubledMechanic,
+	TempCardIds.EtherealOracle,
+	TempCardIds.WarpDrive,
+	TempCardIds.DirdraRebelCaptain,
+	TempCardIds.ArkoniteOfRevelation,
+	TempCardIds.NaielleTracking,
+	TempCardIds.BlazingAccretion,
 ];

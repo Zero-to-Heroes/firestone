@@ -10,6 +10,7 @@ import { cardIdSelector } from './card-id-selectors';
 import {
 	and,
 	damage,
+	highlightConditions,
 	inDeck,
 	inHand,
 	mech,
@@ -274,14 +275,21 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 
 		// Mechanic-specific highlights
+		const selectors = [];
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.MODULAR])) {
-			return and(side(inputSide), or(inDeck, inHand), minion, mech);
+			selectors.push(and(side(inputSide), or(inDeck, inHand), minion, mech));
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SPELLPOWER])) {
-			return and(side(inputSide), or(inDeck, inHand), spell, damage);
+			selectors.push(and(side(inputSide), or(inDeck, inHand), spell, damage));
+		}
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SPELLBURST])) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), spell));
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
-			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
+			selectors.push(and(side(inputSide), or(inDeck, inHand), restoreHealth));
+		}
+		if (selectors.filter((s) => !!s).length) {
+			return highlightConditions(...selectors.filter((s) => !!s));
 		}
 	}
 }
