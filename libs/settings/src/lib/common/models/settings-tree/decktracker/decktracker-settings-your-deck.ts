@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
+import { allCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
@@ -191,13 +193,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		field: 'playerTreantCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.treant-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.treant-tooltip'),
-		showLimitedOption: true,
-	},
-	{
-		id: 'dragonsSummoned',
-		field: 'playerDragonsSummonedCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-tooltip'),
 		showLimitedOption: true,
 	},
 	{
@@ -546,4 +541,19 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
 	},
+	// {
+	// 	id: 'dragonsSummoned',
+	// 	field: 'playerDragonsSummonedCounter',
+	// 	label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
+	// 	tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-tooltip'),
+	// 	showLimitedOption: true,
+	// },
+	...allCounters(context.i18n)
+		.filter((counter) => counter.player?.pref)
+		.map((counter) => ({
+			id: counter.id,
+			field: counter.player!.pref,
+			label: counter.player!.setting.label(context.i18n),
+			tooltip: counter.player!.setting.tooltip(context.i18n),
+		})),
 ];

@@ -9,13 +9,12 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { CounterType, GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { CounterType } from '../../game-counters/definitions/_counter-definition';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 export const templateBase = `

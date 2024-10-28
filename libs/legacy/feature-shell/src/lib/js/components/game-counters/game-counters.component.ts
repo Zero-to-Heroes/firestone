@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
-import { GameState, GameStateFacadeService } from '@firestone/game-state';
+import { CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -9,7 +9,7 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { deepEqual } from '../../services/utils';
-import { CounterDefinition, CounterType } from './definitions/_counter-definition';
+import { CounterDefinition } from './definitions/_counter-definition';
 import { AbyssalCurseCounterDefinition } from './definitions/abyssal-curse-counter';
 import { AnachronosCounterDefinition } from './definitions/anachronos-counter';
 import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';

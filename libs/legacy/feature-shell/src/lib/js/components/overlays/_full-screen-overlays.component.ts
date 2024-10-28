@@ -12,13 +12,14 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { allCounters, CounterInstance, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
@@ -133,9 +134,14 @@ import { DebugService } from '../../services/debug.service';
 			<player-relic-widget-wrapper></player-relic-widget-wrapper>
 			<player-chained-guardian-widget-wrapper></player-chained-guardian-widget-wrapper>
 			<player-treant-widget-wrapper></player-treant-widget-wrapper>
-			<player-dragons-summoned-widget-wrapper></player-dragons-summoned-widget-wrapper>
+			<!-- <player-dragons-summoned-widget-wrapper></player-dragons-summoned-widget-wrapper> -->
 			<player-pirates-summoned-widget-wrapper></player-pirates-summoned-widget-wrapper>
 			<player-earthen-golem-widget-wrapper></player-earthen-golem-widget-wrapper>
+			<counter-wrapper
+				*ngFor="let counter of playerCounters$ | async"
+				side="player"
+				[counter]="counter"
+			></counter-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
@@ -187,6 +193,7 @@ export class FullScreenOverlaysComponent
 	@ViewChild('container', { static: false }) container: ElementRef;
 
 	activeTheme$: Observable<CurrentAppType>;
+	playerCounters$: Observable<readonly CounterInstance<any>[]>;
 
 	windowId: string;
 
@@ -198,14 +205,16 @@ export class FullScreenOverlaysComponent
 		private readonly ow: OverwolfService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly prefs: PreferencesService,
 		private readonly customStyles: CustomAppearanceService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		console.debug('full screen getting ready');
-		await waitForReady(this.scene, this.gameState, this.customStyles);
+		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs);
 		console.debug('full screen ready');
 
 		this.activeTheme$ = combineLatest([
@@ -233,6 +242,16 @@ export class FullScreenOverlaysComponent
 						return 'decktracker';
 				}
 			}),
+		);
+		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
+			debounceTime(500),
+			this.mapData(([gameState, prefs]) => {
+				return allCounters(this.i18n)
+					.filter((c) => c.isActive('player', gameState, prefs))
+					.map((c) => c.emit('player', gameState));
+			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			takeUntil(this.destroyed$),
 		);
 		this.customStyles.register();
 

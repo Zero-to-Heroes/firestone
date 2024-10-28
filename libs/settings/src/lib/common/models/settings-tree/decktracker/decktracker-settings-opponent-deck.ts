@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // prettier-ignore
 import { CardIds } from '@firestone-hs/reference-data';
+import { allCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
@@ -383,13 +385,13 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.dead-minions-this-game-tooltip'),
 	},
-	{
-		id: 'dragonsSummoned',
-		field: 'opponentDragonsSummonedCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
-		showLimitedOption: false,
-	},
+	// {
+	// 	id: 'dragonsSummoned',
+	// 	field: 'opponentDragonsSummonedCounter',
+	// 	label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
+	// 	tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
+	// 	showLimitedOption: false,
+	// },
 	{
 		id: 'elementalStreak',
 		field: 'opponentElementalStreakCounter',
@@ -397,6 +399,14 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elemental-streak-tooltip'),
 		showLimitedOption: false,
 	},
+	...allCounters(context.i18n)
+		.filter((counter) => counter.opponent?.pref)
+		.map((counter) => ({
+			id: counter.id,
+			field: counter.opponent!.pref,
+			label: counter.opponent!.setting.label(context.i18n),
+			tooltip: counter.opponent!.setting.tooltip(context.i18n),
+		})),
 ];
 
 const handSizeKnobs = (context: SettingContext) => [
