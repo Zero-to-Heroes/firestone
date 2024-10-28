@@ -7,7 +7,7 @@ import { BattlegroundsYourStat } from './your-stats.model';
 
 @Component({
 	selector: 'battlegrounds-presonal-stats-info',
-	styleUrls: [`./battlegrounds-personal-stats-columns.scss`, `./battlegrounds-presonal-stats-info.component.scss`],
+	styleUrls: [`./battlegrounds-personal-stats-columns.scss`, `./battlegrounds-personal-stats-info.component.scss`],
 	template: `
 		<div class="info">
 			<bgs-hero-portrait
