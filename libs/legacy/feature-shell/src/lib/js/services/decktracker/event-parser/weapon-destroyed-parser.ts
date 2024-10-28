@@ -18,11 +18,9 @@ export class WeaponDestroyedParser implements EventParser {
 			zone: null,
 			entityId: -deck.weapon.entityId,
 		});
-		let newOtherZone = this.helper.removeSingleCardFromZone(
-			deck.otherZone,
-			updatedWeapon.cardId,
-			updatedWeapon.entityId,
-		)[0];
+		let newOtherZone = !!updatedWeapon
+			? this.helper.removeSingleCardFromZone(deck.otherZone, updatedWeapon.cardId, updatedWeapon.entityId)[0]
+			: deck.otherZone;
 		newOtherZone = this.helper.addSingleCardToZone(newOtherZone, updatedWeapon);
 		const newPlayerDeck = deck.update({
 			weapon: deck.weapon?.cardId === cardId ? null : deck.weapon,
