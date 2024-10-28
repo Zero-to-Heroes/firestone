@@ -11,7 +11,10 @@ export class AllTimeBoostersInternalService extends AbstractCollectionInternalSe
 	protected memoryReadingOperation = () => this.memoryReading.getBoostersInfo();
 	protected isMemoryInfoEmpty = (collection: readonly PackInfo[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getAllTimeBoosters();
-	protected localDbSaveOperation = (collection: readonly PackInfo[]) => this.db.saveAllTimeBoosters(collection);
+	protected localDbSaveOperation = (collection: readonly PackInfo[]) => {
+		console.log('[all-time-boosters] saving collection', collection?.length);
+		return this.db.saveAllTimeBoosters(collection);
+	};
 
 	constructor(
 		protected readonly events: Events,

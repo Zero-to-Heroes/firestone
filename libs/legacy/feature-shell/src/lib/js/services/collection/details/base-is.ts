@@ -73,13 +73,13 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 			this.gameStatus.inGame$$
 				.pipe(
 					filter((inGame) => inGame),
-					tap(() => console.debug(`[collection-manager] [${this.type()}] in game`)),
+					tap(() => console.log(`[collection-manager] [${this.type()}] in game`)),
 					switchMap(() => this.memoryReadingOperation()),
 					filter((collection) => !this.isMemoryInfoEmpty(collection)),
 					take(1),
 				)
 				.subscribe(async (collection) => {
-					console.debug(`[collection-manager] [${this.type()}] initial collection`, collection?.length);
+					console.log(`[collection-manager] [${this.type()}] initial collection`, collection?.length);
 					await this.performMemoryUpdate(collection);
 				});
 
