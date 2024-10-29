@@ -1,5 +1,4 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 export const tutors = [
 	CardIds.AbyssalDepths,
@@ -245,11 +244,11 @@ export const tutors = [
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion_CFM_806,
-	TempCardIds.TroubledMechanic,
-	TempCardIds.EtherealOracle,
-	TempCardIds.WarpDrive,
-	TempCardIds.DirdraRebelCaptain,
-	TempCardIds.ArkoniteOfRevelation,
-	TempCardIds.NaielleTracking,
-	TempCardIds.BlazingAccretion,
+	CardIds.TroubledMechanic_GDB_463,
+	CardIds.EtherealOracle_GDB_310,
+	CardIds.WarpDrive_GDB_474,
+	CardIds.DirdraRebelCaptain_GDB_117,
+	CardIds.ArkoniteRevelation_GDB_852,
+	CardIds.Tracking_GDB_846hp,
+	CardIds.BlazingAccretion_GDB_302,
 ];

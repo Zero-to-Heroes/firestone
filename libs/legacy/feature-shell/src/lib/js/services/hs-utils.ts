@@ -8,7 +8,6 @@ import {
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -93,7 +92,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.ArchVillainRafaam_CORE_DAL_422,
 	CardIds.AudioAmplifier,
 	CardIds.BladeOfTheBurningSun,
-	TempCardIds.BolideBehemoth,
+	CardIds.BolideBehemoth_GDB_434,
 	CardIds.CardboardGolem_TOY_809,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.DarkInquisitorXanesh,
@@ -103,7 +102,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.DemonslayerKurtrusToken,
 	CardIds.DrBoomMadGenius,
 	CardIds.EliteTaurenChampion,
-	TempCardIds.ForebodingFlame,
+	CardIds.ForebodingFlame_GDB_121,
 	CardIds.FrizzKindleroost,
 	CardIds.FrostLichJaina_CORE_ICC_833,
 	CardIds.FrostLichJaina_ICC_833,
@@ -179,7 +178,7 @@ export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
 	...startOfGameGlobalEffectCards,
 	...deathrattleGlobalEffectCards,
-	TempCardIds.AirlockBreach,
+	CardIds.AirlockBreach_GDB_113,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.JourneyToTheEast_UberApocalypseTavernBrawl,
 	CardIds.BestialMadness_YOG_505,
@@ -201,7 +200,7 @@ export const globalEffectCards = [
 	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.NewHeights_VAC_949,
 	CardIds.PursuitOfJustice,
-	TempCardIds.Quasar,
+	CardIds.Quasar_GDB_467,
 	CardIds.ReductomaraToken,
 	// CardIds.RelicOfDimensions,
 	// CardIds.RelicOfExtinction,
