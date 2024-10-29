@@ -364,6 +364,5 @@ export const generateCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]);
 };
 export const starshipPiece = (input: SelectorInput): boolean => {
-	return false;
-	// return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
+	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
