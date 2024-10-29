@@ -399,7 +399,7 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elemental-streak-tooltip'),
 		showLimitedOption: false,
 	},
-	...allCounters(context.i18n)
+	...allCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.opponent?.pref)
 		.map((counter) => ({
 			id: counter.id,

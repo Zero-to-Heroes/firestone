@@ -548,7 +548,7 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 	// 	tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-tooltip'),
 	// 	showLimitedOption: true,
 	// },
-	...allCounters(context.i18n)
+	...allCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.player?.pref)
 		.map((counter) => ({
 			id: counter.id,

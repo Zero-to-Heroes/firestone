@@ -17,9 +17,14 @@ import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
-import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	ILocalizationService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { combineLatest, debounceTime, distinctUntilChanged, Observable, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
@@ -138,7 +143,7 @@ import { DebugService } from '../../services/debug.service';
 			<player-pirates-summoned-widget-wrapper></player-pirates-summoned-widget-wrapper>
 			<player-earthen-golem-widget-wrapper></player-earthen-golem-widget-wrapper>
 			<counter-wrapper
-				*ngFor="let counter of playerCounters$ | async"
+				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
 				[counter]="counter"
 			></counter-wrapper>
@@ -207,6 +212,7 @@ export class FullScreenOverlaysComponent
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly customStyles: CustomAppearanceService,
+		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
@@ -245,8 +251,9 @@ export class FullScreenOverlaysComponent
 		);
 		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
 			debounceTime(500),
+			filter(([gameState, prefs]) => !!gameState && !!prefs),
 			this.mapData(([gameState, prefs]) => {
-				return allCounters(this.i18n)
+				return allCounters(this.i18n, this.allCards)
 					.filter((c) => c.isActive('player', gameState, prefs))
 					.map((c) => c.emit('player', gameState));
 			}),
@@ -276,6 +283,10 @@ export class FullScreenOverlaysComponent
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
+	}
+
+	trackForCounter(index: number, counter: CounterInstance<any>) {
+		return counter.id;
 	}
 
 	// Just make it full screen, always

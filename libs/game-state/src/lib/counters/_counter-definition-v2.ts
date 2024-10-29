@@ -30,24 +30,16 @@ export abstract class CounterDefinitionV2<T> {
 
 	protected abstract tooltip(side: 'player' | 'opponent', gameState: GameState): string | null;
 
-	public emit(side: 'player' | 'opponent', gameState: GameState): CounterInstance<T> {
-		// console.debug('emitting counter', this.id, this);
-		const result: CounterInstance<T> = {
-			id: this.id,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.image}.jpg`,
-			tooltip: this.tooltip(side, gameState),
-			value: side === 'player' ? this.player?.value(gameState) : this.opponent?.value(gameState),
-		};
-		return result;
-	}
-
 	public isActive(side: 'player' | 'opponent', gameState: GameState, prefs: Preferences): boolean {
 		if (side === 'player') {
 			if (!this.player?.pref || !prefs[this.player.pref]) {
 				// console.debug('not visible from prefs', this.player?.pref, prefs[this.player?.pref ?? '']);
 				return false;
 			}
-			if (!gameState.playerDeck?.hasRelevantCard(this.cards) && !this.player.display(gameState)) {
+			if (!gameState.playerDeck?.hasRelevantCard(this.cards)) {
+				return false;
+			}
+			if (!this.player.display(gameState)) {
 				// console.debug(
 				// 	'not visible from deck',
 				// 	gameState.playerDeck?.hasRelevantCard(this.cards),
@@ -63,7 +55,10 @@ export abstract class CounterDefinitionV2<T> {
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
 				return false;
 			}
-			if (!gameState.opponentDeck?.hasRelevantCard(this.cards) && !this.opponent.display(gameState)) {
+			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
+				return true;
+			}
+			if (!this.opponent.display(gameState)) {
 				return false;
 			}
 			if (!this.opponent.value(gameState)) {
@@ -72,6 +67,17 @@ export abstract class CounterDefinitionV2<T> {
 			return true;
 		}
 		return false;
+	}
+
+	public emit(side: 'player' | 'opponent', gameState: GameState): CounterInstance<T> {
+		// console.debug('emitting counter', this.id, this);
+		const result: CounterInstance<T> = {
+			id: this.id,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.image}.jpg`,
+			tooltip: this.tooltip(side, gameState),
+			value: side === 'player' ? this.player?.value(gameState) : this.opponent?.value(gameState),
+		};
+		return result;
 	}
 }
 
