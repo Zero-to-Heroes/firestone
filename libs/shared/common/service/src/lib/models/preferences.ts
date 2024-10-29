@@ -260,6 +260,7 @@ export class Preferences implements IPreferences {
 	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly overlaySortByManaInOtherZone: boolean = false;
 	readonly overlayShowTopCardsSeparately: boolean = true;
+	readonly overlayRemoveDuplicatesInTooltip: boolean;
 	readonly overlayShowBottomCardsSeparately: boolean = true;
 	readonly overlayDarkenUsedCards: boolean = true;
 	readonly decktrackerNoDeckMode: boolean = false;

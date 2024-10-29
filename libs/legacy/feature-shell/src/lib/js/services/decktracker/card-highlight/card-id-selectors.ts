@@ -205,7 +205,7 @@ export const cardIdSelector = (
 		case CardIds.AncientMysteries:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.AnimateDead:
-			return and(side(inputSide), inGraveyard, minion, effectiveCostLess(4));
+			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(4)));
 		case CardIds.AnimatedAvalanche:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.AntiqueFlinger_WW_413:
@@ -1710,7 +1710,7 @@ export const cardIdSelector = (
 		case CardIds.QueenAzshara_TSC_641:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RaiseDead_SCH_514:
-			return and(side(inputSide), inGraveyard, minion);
+			return tooltip(and(side(inputSide), inGraveyard, minion));
 		case CardIds.ImpendingCatastrophe:
 			return and(side(inputSide), or(inDeck, inHand), minion, imp);
 		case CardIds.ImpKingRafaam_REV_789:

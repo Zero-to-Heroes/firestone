@@ -63,6 +63,7 @@ import { SetCard } from '../../../models/set';
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[darkenUsedCards]="darkenUsedCards"
 					[showTotalCardsInZone]="showTotalCardsInZone"
+					[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"
 					[side]="side"
 				>
 				</deck-list-by-zone>
@@ -82,6 +83,7 @@ import { SetCard } from '../../../models/set';
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
 					[side]="side"
 					[showTotalCardsInZone]="showTotalCardsInZone"
+					[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"
 					[collection]="collection"
 					(cardClicked)="onCardClicked($event)"
 				>
@@ -113,6 +115,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showUnknownCards: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() darkenUsedCards: boolean;
+	@Input() removeDuplicatesInTooltip: boolean;
 	@Input() hideGeneratedCardsInOtherZone: boolean;
 	@Input() sortCardsByManaCostInOtherZone: boolean;
 	@Input() showBottomCardsSeparately: boolean;

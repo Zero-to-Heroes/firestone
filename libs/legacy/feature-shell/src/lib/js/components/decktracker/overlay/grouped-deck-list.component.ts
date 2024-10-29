@@ -37,6 +37,7 @@ import { shouldKeepOriginalCost } from '../../../services/hs-utils';
 				[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 				[side]="side"
 				[showTotalCardsInZone]="showTotalCardsInZone"
+				[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"
 				[collection]="collection"
 				(cardClicked)="onCardClicked($event)"
 			></deck-zone>
@@ -59,6 +60,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	@Input() showUnknownCards: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showTotalCardsInZone: boolean;
+	@Input() removeDuplicatesInTooltip: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
 

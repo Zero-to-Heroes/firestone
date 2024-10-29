@@ -36,6 +36,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 					[darkenUsedCards]="darkenUsedCards"
 					[showTotalCardsInZone]="showTotalCardsInZone"
+					[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"
 					[side]="side"
 				></deck-zone>
 			</li>
@@ -57,6 +58,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	@Input() groupSameCardsTogether: boolean;
 	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
+	@Input() removeDuplicatesInTooltip: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 
 	@Input() set showGlobalEffectsZone(value: boolean) {

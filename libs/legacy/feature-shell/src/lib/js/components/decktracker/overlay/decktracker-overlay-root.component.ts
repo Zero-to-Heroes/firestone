@@ -81,6 +81,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								[showStatsChange]="showStatsChange$ | async"
 								[cardsGoToBottom]="cardsGoToBottom$ | async"
 								[darkenUsedCards]="darkenUsedCards$ | async"
+								[removeDuplicatesInTooltip]="removeDuplicatesInTooltip$ | async"
 								[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone$ | async"
 								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone$ | async"
 								[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
@@ -151,6 +152,7 @@ export class DeckTrackerOverlayRootComponent
 	showDeckWinrate$: Observable<boolean>;
 	showMatchupWinrate$: Observable<boolean>;
 	darkenUsedCards$: Observable<boolean>;
+	removeDuplicatesInTooltip$: Observable<boolean>;
 	hideGeneratedCardsInOtherZone$: Observable<boolean>;
 	sortCardsByManaCostInOtherZone$: Observable<boolean>;
 	showBottomCardsSeparately$: Observable<boolean>;
@@ -397,6 +399,9 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.darkenUsedCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.darkenUsedCardsExtractor(preferences)),
+		);
+		this.removeDuplicatesInTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayRemoveDuplicatesInTooltip),
 		);
 		this.hideGeneratedCardsInOtherZone$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.hideGeneratedCardsInOtherZoneExtractor(preferences)),

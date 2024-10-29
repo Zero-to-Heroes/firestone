@@ -239,6 +239,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
+	@Input() removeDuplicatesInTooltip: boolean;
+
 	cardId: string;
 	entityId: number;
 	cardImage: string;
@@ -399,7 +401,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			}))
 			.sort((a, b) => a.timing - b.timing)
 			.map((info) => info.cardId);
-		if (CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES.includes(this.cardId as CardIds)) {
+		if (
+			this.removeDuplicatesInTooltip ||
+			CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES.includes(this.cardId as CardIds)
+		) {
 			this.relatedCardIds = [...new Set(this.relatedCardIds)];
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -49,6 +49,12 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 					},
 					{
 						type: 'toggle',
+						field: 'overlayRemoveDuplicatesInTooltip',
+						label: context.i18n.translateString('settings.collection.general.remove-duplicate-in-tooltip-label'),
+						tooltip: context.i18n.translateString('settings.collection.general.remove-duplicate-in-tooltip-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'overlayShowTransformedInto',
 						label: context.i18n.translateString('settings.decktracker.global.show-transformed-into-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.show-transformed-into-tooltip'),

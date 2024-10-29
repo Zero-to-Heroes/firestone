@@ -55,6 +55,7 @@ import { groupByFunction } from '../../../services/utils';
 							[showUnknownCards]="showUnknownCards && (showTotalCardsInZone$ | async)"
 							[showUpdatedCost]="showUpdatedCost$ | async"
 							[showStatsChange]="showStatsChange$ | async"
+							[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"
 							[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 							[zone]="zone$ | async"
 							[side]="side$ | async"
@@ -88,6 +89,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	@Input() showTransformedInto: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() darkenUsedCards: boolean;
+	@Input() removeDuplicatesInTooltip: boolean;
 
 	@Input() set zone(zone: DeckZone) {
 		this.zone$$.next(zone);
