@@ -33,7 +33,7 @@ export class GenericCountersV2Component extends AbstractSubscriptionComponent im
 	value: number | string | undefined;
 	valueImg: string | undefined;
 	image: string;
-	helpTooltipText: string;
+	helpTooltipText: string | null;
 
 	@Input() set side(value: 'player' | 'opponent') {
 		this.side$$.next(value);
