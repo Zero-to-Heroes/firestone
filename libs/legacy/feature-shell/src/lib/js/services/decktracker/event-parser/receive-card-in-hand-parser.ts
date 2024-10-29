@@ -1,4 +1,4 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -37,6 +37,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		// const cardId = guessCardId(initialCardId, deck, creatorCardId);
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
@@ -125,7 +126,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		// 	creatorCardId,
 		// 	otherCardWithObfuscation,
 		// );
-		const newCardId = (isCardInfoPublic ? guessCardId(cardId, deck, gameEvent) : null) ?? cardWithDefault.cardId;
+		const newCardId =
+			(isCardInfoPublic ? guessCardId(cardId, deck, gameEvent, this.allCards) : null) ?? cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
 				? cardWithDefault
@@ -304,7 +306,12 @@ const addGuessedInfo = (card: DeckCard, gameEvent: GameEvent): DeckCard => {
 	return card;
 };
 
-const guessCardId = (cardId: string, deckState: DeckState, gameEvent: GameEvent): string => {
+const guessCardId = (
+	cardId: string,
+	deckState: DeckState,
+	gameEvent: GameEvent,
+	allCards: CardsFacadeService,
+): string => {
 	// console.debug('[receive-card-in-hand] guessing cardId', cardId, deckState, gameEvent);
 	if (!!cardId?.length) {
 		return cardId;
@@ -314,20 +321,20 @@ const guessCardId = (cardId: string, deckState: DeckState, gameEvent: GameEvent)
 			const existingBox: DeckCard = deckState.otherZone.find(
 				(c) => Math.abs(c.entityId) === gameEvent.additionalData.creatorEntityId,
 			);
-			// console.debug(
-			// 	'[receive-card-in-hand] existingBox',
-			// 	existingBox,
-			// 	deckState.otherZone,
-			// 	gameEvent.additionalData.creatorEntityId,
-			// );
 			const guessedCardId = existingBox?.relatedCardIds?.[0];
-			// console.debug('[receive-card-in-hand] guessedCardId', guessedCardId, existingBox?.relatedCardIds);
 			if (guessedCardId) {
 				// FIXME: didn't want to have to handle a full DeckState return for this
 				(existingBox as any).relatedCardIds = existingBox.relatedCardIds.slice(1);
-				// console.debug('[receive-card-in-hand] updated box', existingBox);
 				return guessedCardId;
 			}
+			break;
+		case CardIds.AstralVigilant_GDB_461:
+			const candidates = deckState.cardsPlayedThisMatch
+				.map((c) => allCards.getCard(c.cardId))
+				.filter(
+					(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI),
+				);
+			return !!candidates?.length ? candidates[candidates.length - 1].id : null;
 	}
 	return cardId;
 };
