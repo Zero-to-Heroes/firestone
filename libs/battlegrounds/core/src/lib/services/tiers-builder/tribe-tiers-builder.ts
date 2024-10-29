@@ -193,7 +193,7 @@ const buildTrinketGroup = (
 		.filter((card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET])
 		.sort(
 			(a, b) =>
-				a.name.localeCompare(b.name) || (SpellSchool[a.spellSchool!] ?? 0) - (SpellSchool[b.spellSchool!] ?? 0),
+				(SpellSchool[a.spellSchool!] ?? 0) - (SpellSchool[b.spellSchool!] ?? 0) || a.name.localeCompare(b.name),
 		)
 		.map((card) => ({
 			...card,
