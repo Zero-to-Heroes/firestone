@@ -443,17 +443,11 @@ const updateMistahVistah = (
 		return deck;
 	}
 
-	console.debug('[debug] updating mistah vistah', mistahVistah, playedCard, deck);
 	const scenicVista = deck.otherZone.find(
 		(c) =>
 			c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 &&
 			Math.abs(c.creatorEntityId) === Math.abs(mistahVistah.entityId) &&
 			c.zone !== 'REMOVEDFROMGAME',
-	);
-	console.debug(
-		'[debug] scenicVista',
-		scenicVista,
-		deck.otherZone.filter((c) => c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3),
 	);
 	if (!scenicVista) {
 		return deck;
@@ -468,15 +462,12 @@ const updateMistahVistah = (
 	const newMistahVistah = mistahVistah.update({
 		relatedCardIds: relatedCardIds,
 	});
-	console.debug('[debug] newMistahVistah', newMistahVistah);
 	const newBoard = deck.board.some((c) => c.entityId === mistahVistah.entityId)
 		? deck.board.map((c) => (c.entityId === mistahVistah.entityId ? newMistahVistah : c))
 		: deck.board;
-	console.debug('[debug] newBoard', newBoard);
 	const newOtherZone = deck.otherZone.some((c) => c.entityId === mistahVistah.entityId)
 		? deck.otherZone.map((c) => (c.entityId === mistahVistah.entityId ? newMistahVistah : c))
 		: deck.otherZone;
-	console.debug('[debug] newOtherZone', newOtherZone);
 
 	const relatedCardIdsForGlobalEffect = relatedCardIds.filter(
 		(c) => c != CardIds.MistahVistah_ScenicVistaToken_VAC_519t3,
@@ -488,12 +479,10 @@ const updateMistahVistah = (
 					: c,
 		  )
 		: newOtherZone;
-	console.debug('[debug] newOtherZone2', newOtherZone2);
 
 	const scenicVistaGlobalEffect = deck.globalEffects.find(
 		(c) => c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3,
 	);
-	console.debug('[debug] scenicVistaGlobalEffect', scenicVistaGlobalEffect);
 	const newGlobalEffects = scenicVistaGlobalEffect
 		? deck.globalEffects.map((c) =>
 				c.cardId === scenicVistaGlobalEffect.cardId
@@ -501,7 +490,6 @@ const updateMistahVistah = (
 					: c,
 		  )
 		: deck.globalEffects;
-	console.debug('[debug] newGlobalEffects', newGlobalEffects);
 	return deck.update({
 		board: newBoard,
 		otherZone: newOtherZone2,
