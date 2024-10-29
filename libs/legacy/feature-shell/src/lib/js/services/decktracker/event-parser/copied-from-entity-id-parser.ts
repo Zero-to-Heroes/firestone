@@ -1,5 +1,6 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckCard, DeckState, GameState, SecretOption } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -8,7 +9,11 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CopiedFromEntityIdParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -64,7 +69,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
 		// There seems to be info leaks in the logs when the opponent discovers a card in their deck
 		// e.g. when they play Fracking or From the Depths
-		const shouldObfuscate = !isCopiedPlayer && (copiedCardZone === Zone.HAND || copiedCardZone === Zone.DECK);
+		const shouldObfuscate = !isCopiedPlayer;
+		// 		&& (copiedCardZone === Zone.HAND || copiedCardZone === Zone.DECK);
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
 		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
@@ -78,9 +84,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 			// Some manual patches
 			// Adding the info directly to the forcedHiddenCardCreators would prevent the card to be flagged when WE play the Suspicious
 			// cards
-			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment) ||
-			shouldObfuscate
-				? copiedCard?.cardId
+			isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment
+				? // || shouldObfuscate
+				  copiedCard?.cardId
 				: updatedCardId;
 		console.debug(
 			'[copied-from-entity] obfuscatedCardId',
@@ -96,19 +102,20 @@ export class CopiedFromEntityIdParser implements EventParser {
 			copiedCard?.update({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardName),
-				manaCost: newCopy?.manaCost ?? copiedCard.manaCost,
+				manaCost: newCopy?.manaCost ?? copiedCard.manaCost ?? this.allCards.getCard(obfuscatedCardId)?.cost,
 				// Always set the entityId to null when it's the opponent's deck to avoid info leaks
 				// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
 				// to differentiate the cards (e.g. when discovering copies of the same card)
-				entityId: copiedCardZone === Zone.DECK ? copiedCardEntityId : null,
+				entityId: copiedCardZone === Zone.DECK && !shouldObfuscate ? copiedCardEntityId : null,
 			} as DeckCard) ??
 			DeckCard.create({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId),
-				entityId: copiedCardEntityId,
+				entityId: !shouldObfuscate ? copiedCardEntityId : null,
 				// This was introduced so that discovering cards from deck would update the info of the card in deck
 				// with the updated info from the Discover (initially for Lady Prestor)
-				manaCost: isCopiedPlayer ? newCopy?.manaCost : null,
+				// UPDATE 2024-10-29: not sure what this means...
+				manaCost: (isCopiedPlayer ? newCopy?.manaCost : null) ?? this.allCards.getCard(obfuscatedCardId)?.cost,
 				zone: undefined,
 			} as DeckCard);
 		const updatedCopiedCardWithPosition = updatedCopiedCard.update({
