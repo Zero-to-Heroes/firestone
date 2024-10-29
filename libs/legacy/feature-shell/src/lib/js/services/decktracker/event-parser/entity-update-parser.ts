@@ -67,14 +67,14 @@ export class EntityUpdateParser implements EventParser {
 					this.allCards,
 			  )
 			: null;
-		console.debug(
-			'[entity-update] newCardInHand',
-			obfsucatedCardId,
-			newCardInHand,
-			shouldShowCardIdInHand,
-			cardInHand,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[entity-update] newCardInHand',
+		// 	obfsucatedCardId,
+		// 	newCardInHand,
+		// 	shouldShowCardIdInHand,
+		// 	cardInHand,
+		// 	gameEvent,
+		// );
 
 		const newCardInDeck = addAdditionalAttribuesInDeck(
 			cardInDeck?.cardId !== obfsucatedCardId
@@ -165,7 +165,7 @@ export const addAdditionalAttribuesInDeck = (
 	gameEvent: GameEvent,
 	allCards: CardsFacadeService,
 ): DeckCard => {
-	console.debug('[entity-update] addAdditionalAttribuesInDeck', card?.cardName, card, gameEvent);
+	// console.debug('[entity-update] addAdditionalAttribuesInDeck', card?.cardName, card, gameEvent);
 	switch (card?.cardId) {
 		case CardIds.Incindius_EruptionToken_VAC_321t:
 			return card.update({

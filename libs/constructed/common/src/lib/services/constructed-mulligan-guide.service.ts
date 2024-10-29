@@ -117,7 +117,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				return true;
 			}),
 			distinctUntilChanged(),
-			tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
+			// tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
 			shareReplay(1),
 		);
 
@@ -209,7 +209,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			}),
 			// filter((archetype) => !!archetype),
 			// map(archetype => archetype as ArchetypeStat),
-			tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
+			// tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
 			// shareReplay(1),
 		);
 		const deckDetails$: Observable<DeckStat | null> = combineLatest([showWidget$, format$, timeFrame$]).pipe(
@@ -247,7 +247,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			}),
 			// filter((archetype) => !!archetype),
 			// map(archetype => archetype as ArchetypeStat),
-			tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
+			// tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
 			// shareReplay(1),
 		);
 
@@ -262,7 +262,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				return cardsInHand.length > 0 ? cardsInHand : null;
 			}),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			tap((cardsInHand) => console.debug('[mulligan-guide] cardsInHand', cardsInHand)),
 			shareReplay(1),
 		);
 		const deckCards$ = showWidget$.pipe(

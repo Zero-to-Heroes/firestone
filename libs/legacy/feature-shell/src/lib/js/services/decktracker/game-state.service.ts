@@ -345,17 +345,13 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug(
-			// 	'[game-state] emitting event',
-			// 	emittedEvent.event.name,
-			// 	emittedEvent.state.playerDeck?.cardsPlayedLastTurn,
-			// 	emittedEvent.state.playerDeck?.cardsPlayedThisTurn,
-			// 	emittedEvent.state.opponentDeck?.cardsPlayedLastTurn,
-			// 	emittedEvent.state.opponentDeck?.cardsPlayedThisTurn,
-			// 	gameEvent.cardId,
-			// 	gameEvent,
-			// 	emittedEvent.state,
-			// );
+			console.debug(
+				'[game-state] emitting event',
+				emittedEvent.event.name,
+				gameEvent.cardId,
+				gameEvent,
+				emittedEvent.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
