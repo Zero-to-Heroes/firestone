@@ -1,6 +1,7 @@
 import { GameFormat } from '@firestone-hs/reference-data';
 
 export type StatGameFormatType = 'unknown' | 'all' | 'standard' | 'wild' | 'classic' | 'twist';
+export type StatGameFormatTypeExtended = StatGameFormatType | 'tavern-brawl';
 export const gameFormatToStatGameFormatType = (source: GameFormat): StatGameFormatType => {
 	switch (source) {
 		case GameFormat.FT_CLASSIC:

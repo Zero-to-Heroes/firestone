@@ -11,7 +11,12 @@ import {
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { GameStat, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
+import {
+	GameStat,
+	StatGameFormatType,
+	StatGameFormatTypeExtended,
+	StatGameModeType,
+} from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
@@ -132,7 +137,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 
 	private buildState(
 		stats: readonly GameStat[],
-		filters: DeckFilters,
+		inputFilters: DeckFilters,
 		patch: PatchInfo,
 		personalDecks: readonly DeckSummary[],
 		desktopDeckDeletes: { [deckstring: string]: readonly number[] },
@@ -141,6 +146,18 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		constructedDeckVersions: readonly ConstructedDeckVersions[],
 		desktopDeckShowHiddenDecks: boolean,
 	): readonly DeckSummary[] {
+		const filters: DeckFilters = {
+			...inputFilters,
+			gameFormat:
+				(inputFilters.gameFormat as StatGameFormatTypeExtended) === 'tavern-brawl'
+					? 'wild'
+					: inputFilters.gameFormat,
+			gameMode:
+				(inputFilters.gameFormat as StatGameFormatTypeExtended) === 'tavern-brawl'
+					? 'tavern-brawl'
+					: inputFilters.gameMode,
+		};
+
 		// console.debug('[decks-provider] building state', stats?.length, filters, patch, personalDecks?.length);
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
 		if (!stats || !stats?.length) {
@@ -148,7 +165,11 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		}
 		const rankedStats = stats
 			.filter((stat) => stat.result === 'won' || stat.result === 'lost')
-			.filter((stat) => stat.gameMode === 'ranked')
+			.filter(
+				(stat) =>
+					stat.gameMode === 'ranked' ||
+					(filters.gameMode === 'tavern-brawl' && stat.gameMode === 'tavern-brawl'),
+			)
 			.filter((stat) => !!stat.playerDecklist);
 		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
 		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
@@ -167,11 +188,6 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				statsByDeck[deckstring][0],
 			),
 		);
-		// console.debug(
-		// 	'[decks-provider] decks',
-		// 	decks.map((d) => d.deckstring),
-		// 	decks,
-		// );
 
 		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
 		const finalPersonalDecks = personalDecks
@@ -204,7 +220,8 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		// 	versionedDecks,
 		// );
 
-		return [...versionedDecks, ...finalPersonalDecks];
+		const result = [...versionedDecks, ...finalPersonalDecks];
+		return result;
 	}
 
 	private consolidateDeckVersions(
@@ -463,7 +480,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		} catch (e) {
 			console.error('Could not decode deck name', deckName, e);
 		}
-		return {
+		const result = {
 			class: deckClass,
 			deckName: decodedDeckName,
 			deckArchetype: deckArchetype,
@@ -478,6 +495,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			format: this.buildFormat(deckstring),
 			replays: validStats,
 		} as DeckSummary;
+		return result;
 	}
 
 	private buildFormat(deckstring: string): StatGameFormatType {

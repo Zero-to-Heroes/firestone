@@ -74,13 +74,17 @@ export class DecktrackerFormatFilterDropdownComponent
 						value: 'wild',
 						label: this.i18n.translateString('app.decktracker.filters.format-filter.wild'),
 					} as FormatFilterOption,
-					{
-						value: 'classic',
-						label: this.i18n.translateString('app.decktracker.filters.format-filter.classic'),
-					} as FormatFilterOption,
+					// {
+					// 	value: 'classic',
+					// 	label: this.i18n.translateString('app.decktracker.filters.format-filter.classic'),
+					// } as FormatFilterOption,
 					{
 						value: 'twist',
 						label: this.i18n.translateString('app.decktracker.filters.format-filter.twist'),
+					} as FormatFilterOption,
+					{
+						value: 'tavern-brawl' as any,
+						label: this.i18n.translateString('app.replays.filters.game-mode.tavern-brawl'),
 					} as FormatFilterOption,
 				];
 				return {
