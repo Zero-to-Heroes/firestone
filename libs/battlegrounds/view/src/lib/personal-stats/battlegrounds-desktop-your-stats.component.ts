@@ -60,6 +60,10 @@ import { BattlegroundsYourStat } from './your-stats.model';
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
+					<div
+						class="cell placement"
+						[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
+					></div>
 				</div>
 				<div class="stats-list">
 					<battlegrounds-presonal-stats-info
@@ -187,9 +191,8 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 			normalizeHeroCardId(game.playerCardId, this.allCards),
 		)(games);
 		return Object.keys(groupedByHero).map((heroCardId) => {
-			const heroGames = groupedByHero[heroCardId].filter((g) => !!+g.playerRank);
-			const gamesWithMmrInfo = heroGames.filter((g) => g.playerRank != null && g.newPlayerRank != null);
-			const totalMmr = gamesWithMmrInfo.map((g) => +g.newPlayerRank - +g.playerRank).reduce((a, b) => a + b, 0);
+			const heroGames = groupedByHero[heroCardId];
+			const totalMmr = heroGames.map((g) => +g.newPlayerRank - +g.playerRank).reduce((a, b) => a + b, 0);
 			const result: BattlegroundsYourStat = {
 				cardId: heroCardId,
 				name: this.allCards.getCard(heroCardId)?.name,
@@ -198,7 +201,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 					heroGames.map((game) => +game.additionalResult).reduce((a, b) => a + b, 0) / heroGames.length,
 				placementDistribution: this.buildPlacementDistribution(heroGames),
 				pickRate: null,
-				netMmr: gamesWithMmrInfo?.length ? totalMmr / gamesWithMmrInfo.length : null,
+				netMmr: heroGames?.length ? totalMmr / heroGames.length : null,
 			};
 			return result;
 		});
@@ -209,7 +212,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 	): readonly { readonly placement: number; readonly totalMatches: number }[] {
 		const distribution = [];
 		for (let i = 1; i <= 8; i++) {
-			const totalMatches = games.filter((game) => +game.playerRank === i).length;
+			const totalMatches = games.filter((game) => +game.additionalResult === i).length;
 			distribution.push({ placement: i, totalMatches: totalMatches });
 		}
 		return distribution;

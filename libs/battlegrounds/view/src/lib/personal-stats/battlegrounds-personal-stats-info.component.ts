@@ -2,6 +2,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 
+import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsYourStat } from './your-stats.model';
 
@@ -40,6 +41,15 @@ import { BattlegroundsYourStat } from './your-stats.model';
 					{{ buildValue(netMmr) }}
 				</div>
 			</div>
+			<div class="placement">
+				<basic-bar-chart-2
+					class="placement-distribution"
+					[data]="placementChartData"
+					[id]="'placementDistribution' + heroCardId"
+					[midLineValue]="100 / 8"
+					[offsetValue]="1"
+				></basic-bar-chart-2>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +65,23 @@ export class BattlegroundsPersonalStatsInfoComponent {
 		});
 		this.averagePosition = value.averagePosition.toFixed(2);
 		this.netMmr = value.netMmr;
+
+		const globalPlacementChartData: SimpleBarChartData = !!value.totalMatches
+			? {
+					data: value.placementDistribution.map((p) => ({
+						label: '' + p.placement,
+						value: (100 * p.totalMatches) / value.totalMatches,
+					})),
+			  }
+			: null;
+		this.placementChartData = !!globalPlacementChartData ? [globalPlacementChartData] : null;
+		console.debug(
+			'placementChartData',
+			value.name,
+			this.placementChartData,
+			globalPlacementChartData,
+			value.placementDistribution,
+		);
 	}
 
 	heroCardId: string;
@@ -64,6 +91,7 @@ export class BattlegroundsPersonalStatsInfoComponent {
 	gamesPlayed: string;
 	averagePosition: string;
 	netMmr: number;
+	placementChartData: SimpleBarChartData[];
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 

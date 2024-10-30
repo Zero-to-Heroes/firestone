@@ -60,3 +60,25 @@
 		color: inherit;
 	}
 }
+
+.placement {
+	padding-top: 5px;
+
+	.placement-distribution {
+		height: 100%;
+
+		::ng-deep .label {
+			font-size: 10px;
+			margin-bottom: -5px;
+		}
+
+		::ng-deep .chart-container {
+			.bar-container:nth-child(n + 6) .bar {
+				opacity: 0.3;
+			}
+			.mid-line {
+				display: none;
+			}
+		}
+	}
+}
