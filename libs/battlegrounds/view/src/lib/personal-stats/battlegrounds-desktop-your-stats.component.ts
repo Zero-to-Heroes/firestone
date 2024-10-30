@@ -109,7 +109,19 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 		);
 
 		const bgGames$ = this.gameStats.gameStats$$.pipe(
-			this.mapData((stats) => stats?.stats?.filter((stat) => stat.isBattlegrounds())),
+			this.mapData(
+				(stats) =>
+					stats?.stats
+						?.filter((stat) => stat.isBattlegrounds())
+						.filter(
+							(stat) =>
+								!!stat.additionalResult?.length &&
+								!!stat.playerRank?.length &&
+								!!stat.newPlayerRank?.length,
+						)
+						// Remove games where the rank difference is too big, as it's likely a bug due to season reset
+						.filter((stat) => Math.abs(+stat.playerRank - +stat.newPlayerRank) < 500) ?? [],
+			),
 			distinctUntilChanged((a, b) => a.length === b.length),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			shareReplay(1),
