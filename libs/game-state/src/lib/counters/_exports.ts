@@ -1,6 +1,6 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
-import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expense';
+import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 

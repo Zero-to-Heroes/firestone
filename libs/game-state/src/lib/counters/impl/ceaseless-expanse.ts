@@ -16,7 +16,9 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 			state.playerDeck.cardDrawnThisGame +
 			state.opponentDeck.cardDrawnThisGame +
 			state.cardsPlayedThisMatch.length +
-			state.miscCardsDestroyed.length,
+			state.miscCardsDestroyed.length +
+			state.playerDeck.minionsDeadThisMatch.length +
+			state.opponentDeck.minionsDeadThisMatch.length,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.ceaseless-expanse-label'),
@@ -32,7 +34,9 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 			state.playerDeck.cardDrawnThisGame +
 			state.opponentDeck.cardDrawnThisGame +
 			state.cardsPlayedThisMatch.length +
-			state.miscCardsDestroyed.length,
+			state.miscCardsDestroyed.length +
+			state.playerDeck.minionsDeadThisMatch.length +
+			state.opponentDeck.minionsDeadThisMatch.length,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.ceaseless-expanse-label'),
