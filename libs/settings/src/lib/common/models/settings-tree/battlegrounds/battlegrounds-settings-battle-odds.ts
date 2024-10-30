@@ -84,7 +84,7 @@ export const battlegroundsBattleOddsSettings = (context: SettingContext): Settin
 						field: 'bgsHideSimResultsOnRecruit',
 						label: context.i18n.translateString('settings.battlegrounds.general.hide-simulation-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.hide-simulation-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || !prefs.bgsShowSimResultsOnlyOnRecruit,
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || !prefs.bgsEnableBattleSimulationOverlay,
 					},
 					{
 						type: 'toggle',
