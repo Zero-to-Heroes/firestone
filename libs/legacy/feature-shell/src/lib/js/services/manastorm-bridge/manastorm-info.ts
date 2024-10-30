@@ -1,3 +1,4 @@
+import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { GameForUpload } from '@firestone/stats/common';
 
 export interface ManastormInfo {
@@ -6,4 +7,5 @@ export interface ManastormInfo {
 	readonly replayUrl: string;
 	readonly game: GameForUpload;
 	readonly xml: string;
+	readonly metadata: ReplayUploadMetadata;
 }

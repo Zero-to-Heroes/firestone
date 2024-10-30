@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'battlegrounds-empty-state',
-	styleUrls: [`../../../css/component/battlegrounds/battlegrounds-empty-state.component.scss`],
+	styleUrls: [`./battlegrounds-empty-state.component.scss`],
 	template: `
 		<div class="empty-state">
 			<div class="loading-icon" [inlineSVG]="emptyStateIcon"></div>
@@ -18,5 +18,5 @@ export class BattlegroundsEmptyStateComponent {
 	@Input() subtitle = this.i18n.translateString('battlegrounds.empty-state-subtitle');
 	@Input() emptyStateIcon = 'assets/svg/ftue/battlegrounds.svg';
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: ILocalizationService) {}
 }

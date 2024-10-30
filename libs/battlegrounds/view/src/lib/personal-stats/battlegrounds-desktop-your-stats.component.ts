@@ -24,55 +24,64 @@ import { BattlegroundsYourStat } from './your-stats.model';
 				<!-- Placement summary -->
 				<!-- MMR Graph (small)? -->
 			</div>
-			<div class="stats">
-				<div class="header" *ngIf="sortCriteria$ | async as sort">
-					<div class="portrait"></div>
-					<sortable-table-label
-						class="cell hero-details"
-						[name]="'app.battlegrounds.tier-list.header-hero-details' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'name'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell position"
-						[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'position'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell games-played"
-						[name]="'app.battlegrounds.tier-list.header-games-played' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'games-played'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell net-mmr"
-						[name]="'app.battlegrounds.tier-list.header-net-mmr' | fsTranslate"
-						[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'net-mmr'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<div
-						class="cell placement"
-						[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
-					></div>
+			<ng-container *ngIf="{ stats: stats$ | async } as value">
+				<ng-container *ngIf="value.stats?.length > 0">
+					<div class="stats">
+						<div class="header" *ngIf="sortCriteria$ | async as sort">
+							<div class="portrait"></div>
+							<sortable-table-label
+								class="cell hero-details"
+								[name]="'app.battlegrounds.tier-list.header-hero-details' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'name'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell position"
+								[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'position'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell games-played"
+								[name]="'app.battlegrounds.tier-list.header-games-played' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'games-played'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell net-mmr"
+								[name]="'app.battlegrounds.tier-list.header-net-mmr' | fsTranslate"
+								[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'net-mmr'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<div
+								class="cell placement"
+								[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
+							></div>
+						</div>
+						<div class="stats-list">
+							<battlegrounds-presonal-stats-info
+								*ngFor="let stat of value.stats"
+								class="stat"
+								[stat]="stat"
+							></battlegrounds-presonal-stats-info>
+						</div>
+					</div>
+				</ng-container>
+				<div class="empty-state-container" *ngIf="!value.stats?.length">
+					<battlegrounds-empty-state
+						[subtitle]="'app.battlegrounds.personal-stats.hero.empty-state-text' | fsTranslate"
+					></battlegrounds-empty-state>
 				</div>
-				<div class="stats-list">
-					<battlegrounds-presonal-stats-info
-						*ngFor="let stat of stats$ | async"
-						class="stat"
-						[stat]="stat"
-					></battlegrounds-presonal-stats-info>
-				</div>
-			</div>
+			</ng-container>
 		</section>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -185,6 +194,28 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 				return this.buildTrinketStats(games);
 		}
 	}
+	private buildTrinketStats(games: readonly GameStat[]): readonly BattlegroundsYourStat[] {
+		const denormalized: readonly GameStat[] = games
+			.filter((g) => !!g.bgsTrinkets?.length)
+			.flatMap((g) => g.bgsTrinkets.map((t) => GameStat.create({ ...g, bgsTrinkets: [t] })));
+		const groupedByTrinket = groupByFunction((game: GameStat) => game.bgsTrinkets[0])(denormalized);
+		const result: readonly BattlegroundsYourStat[] = Object.keys(groupedByTrinket).map((trinketCardId) => {
+			const trinketGames = groupedByTrinket[trinketCardId];
+			const totalMmr = trinketGames.map((g) => +g.newPlayerRank - +g.playerRank).reduce((a, b) => a + b, 0);
+			const result: BattlegroundsYourStat = {
+				cardId: trinketCardId,
+				name: this.allCards.getCard(trinketCardId)?.name,
+				totalMatches: trinketGames.length,
+				averagePosition:
+					trinketGames.map((game) => +game.additionalResult).reduce((a, b) => a + b, 0) / trinketGames.length,
+				placementDistribution: this.buildPlacementDistribution(trinketGames),
+				pickRate: null,
+				netMmr: trinketGames?.length ? totalMmr / trinketGames.length : null,
+			};
+			return result;
+		});
+		return result;
+	}
 
 	private buildHeroStats(games: readonly GameStat[]): readonly BattlegroundsYourStat[] {
 		const groupedByHero = groupByFunction((game: GameStat) =>
@@ -237,10 +268,6 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 
 	private filterRank(game: GameStat, rank: BgsRankFilterType): boolean {
 		return true;
-	}
-
-	private buildTrinketStats(games: readonly GameStat[]): readonly BattlegroundsYourStat[] {
-		return [];
 	}
 
 	private sortCards(

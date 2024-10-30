@@ -5,6 +5,7 @@ import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { BattlegroundsEmptyStateComponent } from './common/battlegrounds-empty-state.component';
 import { BgsHeroPortraitComponent } from './common/bgs-hero-portrait.component';
 import { BattlegroundsAnomaliesFilterDropdownViewComponent } from './filters/battlegrounds-anomalies-filter-dropdown-view.component';
 import { BattlegroundsRankFilterDropdownViewComponent } from './filters/battlegrounds-rank-filter-dropdown-view.component';
@@ -46,7 +47,9 @@ const components = [
 	BattlegroundsDesktopYourStatsComponent,
 	BattlegroundsPersonalStatsInfoComponent,
 	BgsHeroPortraitComponent,
+
 	CircularProgressComponent,
+	BattlegroundsEmptyStateComponent,
 
 	BattlegroundsRankFilterDropdownViewComponent,
 	BattlegroundsTimeFilterDropdownViewComponent,

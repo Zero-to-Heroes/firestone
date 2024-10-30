@@ -51,10 +51,10 @@ export class BattlegroundsYourStatsTypeFilterDropdownComponent
 				value: 'hero',
 				label: this.i18n.translateString('app.battlegrounds.filters.stat-type.hero'),
 			},
-			// {
-			// 	value: 'trinket',
-			// 	label: this.i18n.translateString('app.battlegrounds.filters.stat-type.hero'),
-			// },
+			{
+				value: 'trinket',
+				label: this.i18n.translateString('app.battlegrounds.filters.stat-type.trinket'),
+			},
 		];
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsYourStatsTypeFilter)),

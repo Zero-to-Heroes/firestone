@@ -35,7 +35,6 @@ import { ArenaFiltersComponent } from './js/components/arena/desktop/filters/_ar
 import { ArenaClassFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-class-filter-dropdown.component';
 import { ArenaTimeFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-time-filter-dropdown.component';
 import { BattlegroundsContentComponent } from './js/components/battlegrounds/battlegrounds-content.component';
-import { BattlegroundsEmptyStateComponent } from './js/components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from './js/components/battlegrounds/battlegrounds.component';
 import { BgsBattlesComponent } from './js/components/battlegrounds/battles/bgs-battles.component';
 import { BgsBannedTribeComponent } from './js/components/battlegrounds/bgs-banned-tribe.component';
@@ -1285,7 +1284,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,
 		BgsHeroDetailedStatsComponent,
-		BattlegroundsEmptyStateComponent,
 		BgsGlobalValueComponent,
 		BattlegroundsFiltersComponent,
 		BattlegroundsHeroSortDropdownComponent,

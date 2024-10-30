@@ -13,6 +13,7 @@ import { GameForUpload } from '@firestone/stats/common';
 import { extractPlayerInfoFromDeckstring, GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { BehaviorSubject } from 'rxjs';
 
+import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
@@ -49,14 +50,19 @@ export class GameStatsUpdaterService {
 		// For now we keep the main store as the source of truth, but maybe this should be moved away at some point?
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
 			const info: ManastormInfo = data.data[0];
-			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game, info.xml);
+			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game, info.xml, info.metadata);
 			console.log('​[manastorm-bridge] built new game stat', newGameStat.reviewId);
 			console.debug('​[manastorm-bridge] built new game stat', newGameStat);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
 
-	private async buildGameStat(reviewId: string, game: GameForUpload, xml: string): Promise<GameStat> {
+	private async buildGameStat(
+		reviewId: string,
+		game: GameForUpload,
+		xml: string,
+		metadata: ReplayUploadMetadata,
+	): Promise<GameStat> {
 		const replay = parseHsReplayString(xml, this.allCards.getService());
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
@@ -112,6 +118,7 @@ export class GameStatsUpdaterService {
 			bgsQuestsCompletedTimings: quests.map((q) => q.turnCompleted) as readonly number[],
 			bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],
 			bgsAnomalies: game.bgsAnomalies,
+			bgsTrinkets: metadata.bgs?.trinkets?.map((t) => t.cardId) ?? [],
 		});
 
 		if (!isMercenaries(game.gameMode)) {

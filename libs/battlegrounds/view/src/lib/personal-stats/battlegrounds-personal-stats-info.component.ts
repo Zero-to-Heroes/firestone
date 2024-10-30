@@ -75,13 +75,6 @@ export class BattlegroundsPersonalStatsInfoComponent {
 			  }
 			: null;
 		this.placementChartData = !!globalPlacementChartData ? [globalPlacementChartData] : null;
-		console.debug(
-			'placementChartData',
-			value.name,
-			this.placementChartData,
-			globalPlacementChartData,
-			value.placementDistribution,
-		);
 	}
 
 	heroCardId: string;

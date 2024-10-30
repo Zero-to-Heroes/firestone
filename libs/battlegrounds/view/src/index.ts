@@ -1,4 +1,5 @@
 export * from './lib/battlegrounds-view.module';
+export * from './lib/common/battlegrounds-empty-state.component';
 export * from './lib/common/bgs-hero-portrait.component';
 export * from './lib/filters/battlegrounds-anomalies-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-rank-filter-dropdown-view.component';

@@ -44,6 +44,7 @@ export class GameStat {
 	readonly bgsQuestsCompletedTimings: readonly number[];
 	readonly bgsHeroQuestRewards: readonly string[];
 	readonly region: BnetRegion;
+	readonly bgsTrinkets: readonly string[];
 
 	readonly postMatchStats?: BgsPostMatchStats;
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];

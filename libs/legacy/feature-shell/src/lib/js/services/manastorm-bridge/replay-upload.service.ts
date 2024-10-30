@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/common';
@@ -19,7 +20,7 @@ export class ReplayUploadService {
 		private readonly bgsRunStatsService: BgsRunStatsService,
 	) {}
 
-	public async uploadGame(game: GameForUpload, xml: string) {
+	public async uploadGame(game: GameForUpload, xml: string): Promise<ReplayUploadMetadata> {
 		if (!game.reviewId) {
 			console.error('[manastorm-bridge] Could not upload game, no review id is associated to it');
 			return;
@@ -29,10 +30,16 @@ export class ReplayUploadService {
 		// console.debug('[manastorm-bridge] uploading game', game);
 		const user = await this.ow.getCurrentUser();
 		console.log('[manastorm-bridge] retrieved current user');
-		this.postFullReview(game.reviewId, user.userId, user.username, game, xml);
+		return this.postFullReview(game.reviewId, user.userId, user.username, game, xml);
 	}
 
-	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload, xml: string) {
+	private async postFullReview(
+		reviewId: string,
+		userId: string,
+		userName: string,
+		game: GameForUpload,
+		xml: string,
+	): Promise<ReplayUploadMetadata> {
 		const prefs = await this.prefs.getPreferences();
 		const start = Date.now();
 		const bgsRunStats =
@@ -93,6 +100,7 @@ export class ReplayUploadService {
 		console.log('[manastorm-bridge] built file key for meta data', fileKey);
 		await this.uploadMetaData(fileKey, metaDataBlob);
 		console.log('[manastorm-bridge] uploaded metadata');
+		return fullMetaData;
 	}
 
 	private async uploadReplay(replayKey: string, fileReplayBlob: Blob, tags: { userType: string }) {
