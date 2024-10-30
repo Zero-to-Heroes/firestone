@@ -7,7 +7,7 @@ import {
 	PatchInfo,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { invertDirection, SortCriteria, SortDirection } from '@firestone/shared/common/view';
+import { invertDirection, SimpleBarChartData, SortCriteria, SortDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
@@ -20,8 +20,27 @@ import { BattlegroundsYourStat } from './your-stats.model';
 	template: `
 		<section class="battlegrounds-desktop-your-stats">
 			<div class="summary">
-				<!-- Total time played (since time of first game recorded) -->
-				<!-- Placement summary -->
+				<div class="group highest-mmr">
+					<div class="label">Highest MMR</div>
+					<div class="value">{{ highestMmr$ | async }}</div>
+				</div>
+				<div class="group matches">
+					<div class="label">Matches</div>
+					<div class="value">{{ totalGames$ | async }}</div>
+				</div>
+				<div class="group time">
+					<div class="label">Time played</div>
+					<div class="value">{{ timePlayed$ | async }}</div>
+				</div>
+				<div class="group placement-summary">
+					<basic-bar-chart-2
+						class="placement-distribution"
+						[data]="placementChartData$ | async"
+						[id]="'placementDistributionGlobal'"
+						[midLineValue]="100 / 8"
+						[offsetValue]="1"
+					></basic-bar-chart-2>
+				</div>
 				<!-- MMR Graph (small)? -->
 			</div>
 			<ng-container *ngIf="{ stats: stats$ | async } as value">
@@ -88,6 +107,10 @@ import { BattlegroundsYourStat } from './your-stats.model';
 })
 export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly BattlegroundsYourStat[]>;
+	highestMmr$: Observable<number>;
+	totalGames$: Observable<number>;
+	timePlayed$: Observable<string>;
+	placementChartData$: Observable<SimpleBarChartData[]>;
 
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 
@@ -151,6 +174,47 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 			),
 			distinctUntilChanged((a, b) => a.length === b.length),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+
+		this.highestMmr$ = filteredGames$.pipe(
+			tap((games) =>
+				console.log(
+					'highest mmr games',
+					games.filter((game) => +game.newPlayerRank > 6000),
+				),
+			),
+			this.mapData((games) => Math.max(...games.map((game) => +game.newPlayerRank))),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.totalGames$ = filteredGames$.pipe(
+			this.mapData((games) => games.length),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.timePlayed$ = filteredGames$.pipe(
+			this.mapData((games) => {
+				const totalSeconds = games.map((game) => game.gameDurationSeconds).reduce((a, b) => a + b, 0);
+				const totalMinutes = Math.floor(totalSeconds / 60);
+				const totalHours = Math.floor(totalMinutes / 60);
+				return `${totalHours}h ${totalMinutes % 60}m`;
+			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.placementChartData$ = filteredGames$.pipe(
+			this.mapData((games) => {
+				const totalGames = games.length;
+				const placementDistribution = [];
+				for (let i = 1; i <= 8; i++) {
+					const totalMatches = games.filter((game) => +game.additionalResult === i).length;
+					placementDistribution.push({ label: i, value: (totalMatches * 100) / totalGames });
+				}
+
+				return [{ data: placementDistribution }];
+			}),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

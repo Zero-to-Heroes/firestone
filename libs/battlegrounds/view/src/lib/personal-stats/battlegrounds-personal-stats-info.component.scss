@@ -76,6 +76,9 @@
 			.bar-container:nth-child(n + 6) .bar {
 				opacity: 0.3;
 			}
+			.bar-container .label {
+				display: none;
+			}
 			.mid-line {
 				display: none;
 			}
