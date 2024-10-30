@@ -115,10 +115,10 @@ export class BattlegroundsDesktopComponent
 		await waitForReady(this.nav);
 
 		this.categories = [
-			// {
-			// 	id: 'bgs-category-your-stats',
-			// 	name: this.i18n.translateString('app.battlegrounds.menu.your-stats'),
-			// },
+			{
+				id: 'bgs-category-your-stats',
+				name: this.i18n.translateString('app.battlegrounds.menu.your-stats'),
+			},
 			{
 				id: 'bgs-category-meta-heroes',
 				name: this.i18n.translateString('app.battlegrounds.menu.heroes'),

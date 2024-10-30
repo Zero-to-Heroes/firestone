@@ -58,7 +58,9 @@ export class BattlegroundsTimeFilterDropdownComponent
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',
-						label: this.i18n.translateString('app.battlegrounds.filters.time.past-30'),
+						label: ['bgs-category-your-stats'].includes(selectedCategoryId)
+							? this.i18n.translateString('app.battlegrounds.filters.time.all-time')
+							: this.i18n.translateString('app.battlegrounds.filters.time.past-30'),
 					} as TimeFilterOption,
 					{
 						value: 'last-patch',

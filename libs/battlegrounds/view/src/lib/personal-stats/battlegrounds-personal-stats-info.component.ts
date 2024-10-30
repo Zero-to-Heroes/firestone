@@ -20,15 +20,15 @@ import { BattlegroundsYourStat } from './your-stats.model';
 			<div class="hero-details">
 				<div class="name">{{ heroName }}</div>
 			</div>
-			<div class="position">
+			<div class="cell position">
 				<span class="value">{{ averagePosition }}</span>
 			</div>
-			<div class="games-played">
+			<div class="cell games-played">
 				<div class="value">
 					{{ gamesPlayed ?? '-' }}
 				</div>
 			</div>
-			<div class="net-mmr">
+			<div class="cell net-mmr">
 				<div
 					class="value"
 					[ngClass]="{

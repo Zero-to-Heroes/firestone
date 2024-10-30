@@ -1,3 +1,9 @@
+.cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .portrait {
 	width: 40px;
 	margin-right: 20px;
@@ -10,14 +16,12 @@
 }
 
 .position {
-	width: 8cqb;
+	width: 120px;
 	flex-shrink: 0;
 }
 
-.placement {
-	width: 170px;
-	margin-left: 15px;
-	margin-right: 15px;
+.games-played {
+	width: 120px;
 	flex-shrink: 0;
 }
 
@@ -26,7 +30,9 @@
 	flex-shrink: 0;
 }
 
-.games-played {
-	width: 120px;
+.placement {
+	width: 170px;
+	margin-left: 15px;
+	margin-right: 15px;
 	flex-shrink: 0;
 }

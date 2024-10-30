@@ -7,10 +7,11 @@ import {
 	PatchInfo,
 	PreferencesService,
 } from '@firestone/shared/common/service';
+import { invertDirection, SortCriteria, SortDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
-import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';
 import { BattlegroundsYourStat } from './your-stats.model';
 
 @Component({
@@ -24,24 +25,46 @@ import { BattlegroundsYourStat } from './your-stats.model';
 				<!-- MMR Graph (small)? -->
 			</div>
 			<div class="stats">
-				<div class="header">
+				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<div class="portrait"></div>
-					<div class="hero-details" [fsTranslate]="'app.battlegrounds.tier-list.header-hero-details'"></div>
-					<div class="position" [fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"></div>
-					<div
-						class="player-games-played"
-						[fsTranslate]="'app.battlegrounds.tier-list.header-games-played'"
-						[helpTooltip]="'app.battlegrounds.tier-list.header-games-played-tooltip' | fsTranslate"
-					></div>
-					<div
-						class="net-mmr"
-						[fsTranslate]="'app.battlegrounds.tier-list.header-net-mmr'"
+					<sortable-table-label
+						class="cell hero-details"
+						[name]="'app.battlegrounds.tier-list.header-hero-details' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'name'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell position"
+						[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'position'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell games-played"
+						[name]="'app.battlegrounds.tier-list.header-games-played' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'games-played'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell net-mmr"
+						[name]="'app.battlegrounds.tier-list.header-net-mmr' | fsTranslate"
 						[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
-					></div>
+						[sort]="sort"
+						[criteria]="'net-mmr'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 				</div>
 				<div class="stats-list">
 					<battlegrounds-presonal-stats-info
 						*ngFor="let stat of stats$ | async"
+						class="stat"
 						[stat]="stat"
 					></battlegrounds-presonal-stats-info>
 				</div>
@@ -52,6 +75,13 @@ import { BattlegroundsYourStat } from './your-stats.model';
 })
 export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly BattlegroundsYourStat[]>;
+
+	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
+
+	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
+		criteria: 'games-played',
+		direction: 'desc',
+	});
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -66,6 +96,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs, this.gameStats, this.patch);
 
+		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		const prefs$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => ({
 				mode: prefs.bgsActiveGameMode,
@@ -86,6 +117,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 		);
 
 		const filteredGames$ = combineLatest([bgGames$, prefs$, this.patch.currentBattlegroundsMetaPatch$$]).pipe(
+			tap(([games, prefs, patch]) => console.log('games', games, prefs, patch)),
 			this.mapData(([games, prefs, patch]) =>
 				games
 					.filter((game) => this.filterGameMode(game, prefs.mode))
@@ -109,10 +141,24 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
+		this.stats$ = combineLatest([unsortedStats$, this.sortCriteria$$]).pipe(
+			this.mapData(([stats, sortCriteria]) => [...stats].sort((a, b) => this.sortCards(a, b, sortCriteria))),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onSortClick(rawCriteria: string) {
+		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
+		this.sortCriteria$$.next({
+			criteria: criteria,
+			direction:
+				criteria === this.sortCriteria$$.value?.criteria
+					? invertDirection(this.sortCriteria$$.value.direction)
+					: 'desc',
+		});
 	}
 
 	private buildStats(games: readonly GameStat[], statsType: 'hero' | 'trinket'): readonly BattlegroundsYourStat[] {
@@ -137,7 +183,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 				name: this.allCards.getCard(heroCardId)?.name,
 				totalMatches: heroGames.length,
 				averagePosition:
-					heroGames.map((game) => +game.playerRank).reduce((a, b) => a + b, 0) / heroGames.length,
+					heroGames.map((game) => +game.additionalResult).reduce((a, b) => a + b, 0) / heroGames.length,
 				placementDistribution: this.buildPlacementDistribution(heroGames),
 				pickRate: null,
 				netMmr: gamesWithMmrInfo?.length ? totalMmr / gamesWithMmrInfo.length : null,
@@ -181,4 +227,43 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 	private buildTrinketStats(games: readonly GameStat[]): readonly BattlegroundsYourStat[] {
 		return [];
 	}
+
+	private sortCards(
+		a: BattlegroundsYourStat,
+		b: BattlegroundsYourStat,
+		sortCriteria: SortCriteria<ColumnSortType>,
+	): number {
+		switch (sortCriteria?.criteria) {
+			case 'name':
+				return this.sortByName(a, b, sortCriteria.direction);
+			case 'position':
+				return this.sortByPosition(a, b, sortCriteria.direction);
+			case 'games-played':
+				return this.sortByGamesPlayed(a, b, sortCriteria.direction);
+			case 'net-mmr':
+				return this.sortByNetMmr(a, b, sortCriteria.direction);
+			default:
+				return 0;
+		}
+	}
+
+	private sortByGamesPlayed(a: BattlegroundsYourStat, b: BattlegroundsYourStat, direction: SortDirection): number {
+		return direction === 'asc' ? a.totalMatches - b.totalMatches : b.totalMatches - a.totalMatches;
+	}
+
+	private sortByNetMmr(a: BattlegroundsYourStat, b: BattlegroundsYourStat, direction: SortDirection): number {
+		return direction === 'asc' ? a.netMmr - b.netMmr : b.netMmr - a.netMmr;
+	}
+
+	private sortByPosition(a: BattlegroundsYourStat, b: BattlegroundsYourStat, direction: SortDirection): number {
+		return direction === 'asc' ? a.averagePosition - b.averagePosition : b.averagePosition - a.averagePosition;
+	}
+
+	private sortByName(a: BattlegroundsYourStat, b: BattlegroundsYourStat, direction: SortDirection): number {
+		const aData = this.allCards.getCard(a.cardId)?.name;
+		const bData = this.allCards.getCard(b.cardId)?.name;
+		return direction === 'asc' ? aData.localeCompare(bData) : bData.localeCompare(aData);
+	}
 }
+
+type ColumnSortType = 'name' | 'position' | 'net-mmr' | 'games-played';

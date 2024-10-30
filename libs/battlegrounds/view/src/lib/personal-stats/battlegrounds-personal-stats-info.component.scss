@@ -1,0 +1,62 @@
+.info {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	padding: 5px;
+	background: rgba(255, 255, 255, 0.08);
+	flex-wrap: wrap;
+	overflow: hidden;
+
+	& > * {
+		height: 100%;
+	}
+}
+
+.portrait {
+	height: 100%;
+	aspect-ratio: 1;
+	margin-right: 20px;
+
+	::ng-deep {
+		.health {
+			bottom: 0;
+		}
+	}
+}
+
+.hero-details {
+	display: flex;
+	align-items: center;
+
+	.name {
+		display: flex;
+		align-items: center;
+	}
+}
+
+.position {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	color: var(--color-1);
+}
+
+.net-mmr {
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.value.negative {
+		color: #ff4747;
+	}
+
+	.value.positive {
+		color: #61ff47;
+	}
+
+	.value.missing {
+		color: inherit;
+	}
+}
