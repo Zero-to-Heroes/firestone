@@ -259,6 +259,7 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 	BoosterType.STANDARD_WARRIOR,
 	BoosterType.WHIZBANG_CATCH_UP,
 	BoosterType.ISLAND_VACATION_CATCH_UP,
+	BoosterType.SPACE_CATCH_UP,
 ];
 
 const buildPityTimer = (

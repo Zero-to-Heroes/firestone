@@ -42,12 +42,7 @@ export const CLASS_PACKS = [
 	BoosterType.STANDARD_WARLOCK,
 ];
 
-export const YEAR_PACKS = [
-	BoosterType.YEAR_OF_DRAGON,
-	BoosterType.YEAR_OF_PHOENIX,
-	BoosterType.WHIZBANG_CATCH_UP,
-	BoosterType.ISLAND_VACATION_CATCH_UP,
-];
+export const YEAR_PACKS = [BoosterType.YEAR_OF_DRAGON, BoosterType.YEAR_OF_PHOENIX, BoosterType.WHIZBANG_CATCH_UP];
 
 export const NON_BUYABLE_BOOSTER_IDS = [
 	...GOLDEN_SET_PACKS,
@@ -58,4 +53,8 @@ export const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.GOLDEN_WILD_PACK,
 	BoosterType.GOLDEN_YEAR_OF_THE_PHOENIX,
 ];
-export const SPECIAL_BOOSTER_IDS = [BoosterType.WHIZBANG_CATCH_UP, BoosterType.ISLAND_VACATION_CATCH_UP];
+export const SPECIAL_BOOSTER_IDS = [
+	BoosterType.WHIZBANG_CATCH_UP,
+	BoosterType.ISLAND_VACATION_CATCH_UP,
+	BoosterType.SPACE_CATCH_UP,
+];
