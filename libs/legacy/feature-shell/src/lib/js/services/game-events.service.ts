@@ -359,6 +359,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'TOURIST_REVEALED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.TOURIST_REVEALED, gameEvent, {
+						touristFor: gameEvent.Value.AdditionalProps?.TouristFor,
+					}),
+				);
+				break;
 			case 'MINIONS_DIED':
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new MinionsDiedEvent(), {

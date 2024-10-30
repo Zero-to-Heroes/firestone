@@ -115,6 +115,7 @@ import { SpecificSummonsParser } from '../event-parser/special-cases/specific-su
 import { SphereOfSapienceParser } from '../event-parser/special-cases/sphere-of-sapience-parser';
 import { WheelOfDeathCounterUpdatedParser } from '../event-parser/special-cases/wheel-of-death-counter-updated-parser';
 import { StartOfGameEffectParser } from '../event-parser/start-of-game-effect-parser';
+import { TouristRevealedParser } from '../event-parser/tourist-revealed-parser';
 import { TurnDurationUpdatedParser } from '../event-parser/turn-duration-updated-parser';
 import { WeaponDestroyedParser } from '../event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from '../event-parser/weapon-equipped-parser';
@@ -300,6 +301,7 @@ export class GameStateParsersService {
 				new CthunRevealedParser(this.helper, this.allCards, this.i18n),
 				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			],
+			[GameEvent.TOURIST_REVEALED]: [new TouristRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs)],
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
 			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs)],
