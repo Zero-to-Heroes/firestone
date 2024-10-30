@@ -25,6 +25,7 @@ export const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_WILD_WEST,
 	BoosterType.GOLDEN_WHIZBANGS_WORKSHOP,
 	BoosterType.GOLDEN_ISLAND_VACATION,
+	BoosterType.GOLDEN_SPACE,
 ];
 
 export const CLASS_PACKS = [
