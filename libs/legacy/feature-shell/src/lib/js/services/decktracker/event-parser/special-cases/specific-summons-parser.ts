@@ -4,29 +4,6 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../models/game-event';
 import { EventParser } from '../event-parser';
 
-export const TREANT_CARD_IDS = [
-	CardIds.PoisonTreantToken,
-	CardIds.Treenforcements_TreantToken,
-	CardIds.Move_AngryTreantToken,
-	CardIds.PlotOfSin_TreantToken,
-	CardIds.DrumCircle_TreantToken,
-	CardIds.SowTheSoil_TreantToken,
-	CardIds.GardenGnome_TreantToken,
-	CardIds.PoisonSeeds_TreantToken,
-	CardIds.FaireArborist_TreantToken,
-	CardIds.TheForestsAid_TreantToken,
-	CardIds.LivingMana_ManaTreantToken,
-	CardIds.WitchwoodApple_TreantToken,
-	CardIds.ForestSeedlings_TreantToken,
-	CardIds.TreantLegacy,
-	CardIds.TreantVanilla,
-	CardIds.Treant_TreantVanilla,
-	CardIds.BloodTreant,
-	CardIds.Cenarius_TreantLegacyToken,
-	CardIds.RunicCarvings_TreantTotemToken,
-	CardIds.SoulOfTheForest_TreantLegacyToken,
-];
-
 const PROCESSORS = [
 	{
 		cardSelector: (card: ReferenceCard) => [CardIds.AstralAutomaton].includes(card?.id as CardIds),
@@ -39,7 +16,7 @@ const PROCESSORS = [
 			deck.update({ earthenGolemsSummoned: (deck.earthenGolemsSummoned ?? 0) + 1 }),
 	},
 	{
-		cardSelector: (card: ReferenceCard) => TREANT_CARD_IDS.includes(card?.id as CardIds),
+		cardSelector: (card: ReferenceCard) => card.isTreant,
 		updater: (deck: DeckState): DeckState => deck.update({ treantsSummoned: (deck.treantsSummoned ?? 0) + 1 }),
 	},
 	{
