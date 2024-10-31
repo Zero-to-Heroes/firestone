@@ -11,7 +11,18 @@ export const buildCompositions = (
 	return (
 		strategies?.filter((s) => {
 			const result = isAvailable(s, availableTribes, allCards);
-			console.debug('isAvailableStat', s, availableTribes, result);
+			// console.debug(
+			// 	'isAvailableStat',
+			// 	s.compId,
+			// 	availableTribes,
+			// 	result,
+			// 	// s,
+			// 	s.cards
+			// 		.filter((c) => c.status === 'CORE')
+			// 		.map((c) => allCards.getCard(c.cardId))
+			// 		.map((c) => ({ name: c.name, available: isCardAvailable(c, availableTribes) })),
+			// 	s,
+			// );
 			return result;
 		}) ?? []
 	);
