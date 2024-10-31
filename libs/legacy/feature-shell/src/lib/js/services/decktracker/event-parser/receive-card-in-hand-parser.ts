@@ -1,5 +1,5 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -34,7 +34,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
 		const creatorEntityId = gameEvent.additionalData.creatorEntityId;
 
-		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+		console.debug('[debug] [receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		// const cardId = guessCardId(initialCardId, deck, creatorCardId);
@@ -329,12 +329,23 @@ const guessCardId = (
 			}
 			break;
 		case CardIds.AstralVigilant_GDB_461:
-			const candidates = deckState.cardsPlayedThisMatch
-				.map((c) => allCards.getCard(c.cardId))
-				.filter(
-					(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI),
-				);
-			return !!candidates?.length ? candidates[candidates.length - 1].id : null;
+			return deckState.cardsPlayedThisMatch
+				.map((c) => getProcessedCard(c.cardId, deckState, allCards))
+				.filter((c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI))
+				.pop()?.id;
+		case CardIds.MonstrousParrot:
+			console.debug(
+				'[debug] guessing cardId for Monstrous Parrot',
+				deckState.minionsDeadThisMatch,
+				deckState.minionsDeadThisMatch.map((c) => getProcessedCard(c.cardId, deckState, allCards)),
+				deckState.minionsDeadThisMatch
+					.map((c) => getProcessedCard(c.cardId, deckState, allCards))
+					.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])),
+			);
+			return deckState.minionsDeadThisMatch
+				.map((c) => getProcessedCard(c.cardId, deckState, allCards))
+				.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]))
+				.pop()?.id;
 	}
 	return cardId;
 };

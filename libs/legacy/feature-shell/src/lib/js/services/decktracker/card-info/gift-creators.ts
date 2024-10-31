@@ -958,4 +958,5 @@ export const giftCreators = [
 	CardIds.Cosmonaut_GDB_443,
 	CardIds.AbductionRay_GDB_123,
 	CardIds.Jettison_GDB_227,
+	CardIds.MonstrousParrot,
 ];

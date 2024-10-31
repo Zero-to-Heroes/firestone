@@ -6,6 +6,7 @@ export * from './lib/counters/widget-wrapper.component';
 export * from './lib/game-state.module';
 export * from './lib/models/_barrel';
 export * from './lib/services/_bootstrap-game-state.service';
+export * from './lib/services/card-utils';
 export * from './lib/services/deck-handler.service';
 export * from './lib/services/game-events-facade.service';
 export * from './lib/services/game-state-facade.service';

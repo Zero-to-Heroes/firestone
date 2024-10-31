@@ -1,5 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, SpellSchool } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -2575,10 +2575,5 @@ export const cardIdSelector = (
 };
 
 const hasTaunt = (cardId: string, deckState: DeckState, allCards: CardsFacadeService): boolean => {
-	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
-		const sideboard = deckState.sideboards?.find((s) => s.keyCardId === cardId);
-		const modules = sideboard?.cards?.map((c) => allCards.getCard(c)) ?? [];
-		return modules?.some((m) => m.mechanics?.includes(GameTag[GameTag.TAUNT])) ?? false;
-	}
-	return allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.TAUNT]);
+	return getProcessedCard(cardId, deckState, allCards).mechanics?.includes(GameTag[GameTag.TAUNT]) ?? false;
 };

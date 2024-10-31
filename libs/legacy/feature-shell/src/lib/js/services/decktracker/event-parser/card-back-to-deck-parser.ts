@@ -1,5 +1,5 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { forcedHiddenCardCreators } from '../../hs-utils';
@@ -60,15 +60,10 @@ export class CardBackToDeckParser implements EventParser {
 
 		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
 		// the enchantments, cost reduction, etc.
-		const refCard = this.allCards.getCard(card.cardId);
+		const refCard = getProcessedCard(card.cardId, deck, this.allCards); // this.allCards.getCard(card.cardId);
 		const cardWithInfoReset = card?.update({
-			// Otherwise the cost goes back to 0
-			manaCost:
-				(card.cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330) ? card.manaCost : refCard?.cost) ??
-				card?.manaCost,
-			actualManaCost:
-				(card.cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330) ? card.manaCost : refCard?.cost) ??
-				card?.manaCost,
+			manaCost: refCard?.cost ?? card?.manaCost,
+			actualManaCost: refCard?.cost ?? card?.manaCost,
 			buffCardIds: [],
 			buffingEntityCardIds: [],
 			entityId: Math.abs(card.entityId),
