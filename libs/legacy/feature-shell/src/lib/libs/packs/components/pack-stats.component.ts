@@ -120,6 +120,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							packType: boosterId,
 							totalObtained: totalPacksReceived ?? 0,
 							unopened: unopenedPacks,
+							// TODO: use Booster json file?
 							name: boosterIdToBoosterName(boosterId, this.i18n),
 							setId: boosterIdToSetId(boosterId),
 							nextLegendary: buildPityTimer(
@@ -259,7 +260,7 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 	BoosterType.STANDARD_WARRIOR,
 	BoosterType.WHIZBANG_CATCH_UP,
 	BoosterType.ISLAND_VACATION_CATCH_UP,
-	BoosterType.SPACE_CATCH_UP,
+	BoosterType.THE_GREAT_DARK_BEYOND_CATCH_UP,
 ];
 
 const buildPityTimer = (

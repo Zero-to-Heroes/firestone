@@ -1,13 +1,18 @@
 import { BoosterType } from '@firestone-hs/reference-data';
 
 export const EXCLUDED_BOOSTER_IDS = [
-	BoosterType.INVALID,
-	BoosterType.SIGNUP_INCENTIVE,
-	BoosterType.FIRST_PURCHASE,
-	BoosterType.FIRST_PURCHASE_OLD,
+	BoosterType.CLASSIC_1,
+	BoosterType.WELCOME_BUNDLE_1,
+	BoosterType.WELCOME_BUNDLE,
 	BoosterType.MAMMOTH_BUNDLE,
 	BoosterType.WAILING_CAVERNS,
 	BoosterType.PATH_OF_ARTHAS,
+	BoosterType.WAILING_CAVERNS,
+	BoosterType.DRAFT_HERO,
+	BoosterType.DRAFT_COMMON,
+	BoosterType.DRAFT_RARE,
+	BoosterType.DRAFT_HERO_POWER,
+	BoosterType.EPIC_PACK,
 ];
 
 export const GOLDEN_SET_PACKS = [
@@ -25,7 +30,8 @@ export const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_WILD_WEST,
 	BoosterType.GOLDEN_WHIZBANGS_WORKSHOP,
 	BoosterType.GOLDEN_ISLAND_VACATION,
-	BoosterType.GOLDEN_SPACE,
+	BoosterType.GOLDEN_THE_GREAT_DARK_BEYOND,
+	BoosterType.GOLDEN_ASHES_OF_OUTLAND,
 ];
 
 export const CLASS_PACKS = [
@@ -42,19 +48,20 @@ export const CLASS_PACKS = [
 	BoosterType.STANDARD_WARLOCK,
 ];
 
-export const YEAR_PACKS = [BoosterType.YEAR_OF_DRAGON, BoosterType.YEAR_OF_PHOENIX, BoosterType.WHIZBANG_CATCH_UP];
+export const YEAR_PACKS = [BoosterType.YEAR_OF_DRAGON, BoosterType.YEAR_OF_PHOENIX, BoosterType.YEAR_OF_THE_PEGASUS];
 
 export const NON_BUYABLE_BOOSTER_IDS = [
 	...GOLDEN_SET_PACKS,
 	...CLASS_PACKS,
 	...YEAR_PACKS,
-	BoosterType.GOLDEN_CLASSIC_PACK,
+	BoosterType.GOLDEN_CLASSIC,
 	BoosterType.GOLDEN_STANDARD_PACK,
 	BoosterType.GOLDEN_WILD_PACK,
 	BoosterType.GOLDEN_YEAR_OF_THE_PHOENIX,
+	BoosterType.GOLDEN_YEAR_OF_THE_PEGASUS,
 ];
 export const SPECIAL_BOOSTER_IDS = [
 	BoosterType.WHIZBANG_CATCH_UP,
 	BoosterType.ISLAND_VACATION_CATCH_UP,
-	BoosterType.SPACE_CATCH_UP,
+	BoosterType.THE_GREAT_DARK_BEYOND_CATCH_UP,
 ];
