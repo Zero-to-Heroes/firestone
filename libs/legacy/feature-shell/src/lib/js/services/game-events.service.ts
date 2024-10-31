@@ -95,7 +95,7 @@ export class GameEvents {
 				});
 			});
 
-		interval(1000).subscribe(() => {
+		interval(2000).subscribe(() => {
 			if (!this.lastProcessedTimestamp) {
 				return;
 			}
@@ -103,7 +103,7 @@ export class GameEvents {
 			const timeSinceLastLog = new Date().getTime() - this.lastProcessedTimestamp;
 			// Only ask for a game state update if we have received an event in the last 2 seconds
 			if (timeSinceLastLog < 1500) {
-				console.debug('[game-events] asking for game state update', timeSinceLastLog);
+				// console.debug('[game-events] asking for game state update', timeSinceLastLog);
 				this.plugin.askForGameStateUpdate();
 			}
 		});
@@ -134,9 +134,10 @@ export class GameEvents {
 		if (!gameEvent) {
 			return;
 		}
-		// console.debug('game event', gameEvent.Type, gameEvent);
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
 			this.lastProcessedTimestamp = new Date().getTime();
+		} else {
+			// console.debug('game event', gameEvent.Type, gameEvent);
 		}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
