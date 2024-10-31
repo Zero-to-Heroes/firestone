@@ -359,6 +359,7 @@ export const giftCreators = [
 	CardIds.GiftOfTheOldGodsTavernBrawlToken,
 	CardIds.GildedGargoyle_LOOT_534,
 	CardIds.GoldenKobold,
+	CardIds.MarinTheManager_GoldenKoboldToken_VAC_702t4,
 	CardIds.GoldenScarab,
 	CardIds.Gorgonzormu_VAC_955,
 	CardIds.GorillabotA3,
