@@ -4,7 +4,7 @@ import { GameEventsFacadeService, GameUniqueIdService } from '@firestone/game-st
 import { SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { filter, take } from 'rxjs';
+import { filter, interval, take } from 'rxjs';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { ChoosingOptionsGameEvent } from '../models/mainwindow/game-events/choosing-options-game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
@@ -29,6 +29,8 @@ export class GameEvents {
 		500,
 		'game-events',
 	);
+
+	private lastProcessedTimestamp: number;
 
 	constructor(
 		private readonly gameEventsPlugin: GameEventsPluginService,
@@ -69,14 +71,6 @@ export class GameEvents {
 						} as GameEvent),
 					);
 				});
-				// this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
-				// 	this.gameEventsEmitter.allEvents.next(
-				// 		Object.assign(new GameEvent(), {
-				// 			type: GameEvent.GAME_STATS_UPDATED,
-				// 			additionalData: { gameStats: event.data[0] },
-				// 		} as GameEvent),
-				// 	);
-				// });
 				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
 					// console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
 					this.gameEventsEmitter.allEvents.next(
@@ -100,6 +94,19 @@ export class GameEvents {
 					}
 				});
 			});
+
+		interval(1000).subscribe(() => {
+			if (!this.lastProcessedTimestamp) {
+				return;
+			}
+
+			const timeSinceLastLog = new Date().getTime() - this.lastProcessedTimestamp;
+			// Only ask for a game state update if we have received an event in the last 2 seconds
+			if (timeSinceLastLog < 1500) {
+				console.debug('[game-events] asking for game state update', timeSinceLastLog);
+				this.plugin.askForGameStateUpdate();
+			}
+		});
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
@@ -112,6 +119,9 @@ export class GameEvents {
 	}
 
 	private async processLogs(eventQueue: readonly string[]): Promise<void> {
+		// if (!!eventQueue.length) {
+		// 	this.lastProcessedTimestamp = new Date().getTime();
+		// }
 		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
 		return new Promise<void>((resolve) => {
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
@@ -124,9 +134,10 @@ export class GameEvents {
 		if (!gameEvent) {
 			return;
 		}
-		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		// 	console.debug('game event', gameEvent.Type, gameEvent);
-		// }
+		// console.debug('game event', gameEvent.Type, gameEvent);
+		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+			this.lastProcessedTimestamp = new Date().getTime();
+		}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event', gameEvent);

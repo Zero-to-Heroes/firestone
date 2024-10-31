@@ -292,7 +292,7 @@ export class GameStateService {
 			}
 		}
 		try {
-			if (this.state && this.state !== previousState) {
+			if (gameEvent.gameState != null || (this.state && this.state !== previousState)) {
 				const previousState = this.state;
 				// console.debug('[game-state] state post-processing');
 				const postProcessedState = this.statePostProcessService.postProcess(this.state);
