@@ -1,14 +1,22 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
 import { Card } from '@firestone/memory';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TavernBrawlService } from '../../services/tavern-brawl.service';
 
 @Component({
 	selector: 'tavern-brawl-meta',
@@ -37,15 +45,17 @@ export class TavernBrawlMetaComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly brawl: TavernBrawlService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.brawlInfo$ = this.store.tavernBrawl$().pipe(
-			map((state) => state.getCurrentStats()),
+	async ngAfterContentInit() {
+		await waitForReady(this.brawl);
+		const debug = await this.brawl.tavernBrawl$$.getValueWithInit();
+
+		this.brawlInfo$ = this.brawl.tavernBrawl$$.pipe(
 			this.mapData((stats) => {
-				console.debug('[tavern-brawl-meta] stats', stats);
 				if (!stats?.info) {
 					return null;
 				}
@@ -68,8 +78,8 @@ export class TavernBrawlMetaComponent
 				};
 			}),
 		);
-		this.stats$ = combineLatest([this.store.tavernBrawl$(), this.store.collection$()]).pipe(
-			map(([state, collection]) => ({ stats: state.getCurrentStats(), collection: collection })),
+		this.stats$ = combineLatest([this.brawl.tavernBrawl$$, this.store.collection$()]).pipe(
+			map(([stats, collection]) => ({ stats: stats, collection: collection })),
 			this.mapData((info) => {
 				return (
 					info.stats?.stats
@@ -95,9 +105,17 @@ export class TavernBrawlMetaComponent
 				);
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private canBuild(deck: DeckStat, collection: readonly Card[]): boolean {
+		if (!deck.decklist?.length || deck.decklist === 'null') {
+			return false;
+		}
+
 		const deckDefinition = decode(deck.decklist);
 		const flatDeckCardIds = deckDefinition.cards
 			.flatMap((pair) => new Array(pair[1]).fill(pair[0]))

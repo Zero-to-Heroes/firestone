@@ -15,7 +15,6 @@ import { DeckSummary } from '@firestone/constructed/common';
 import { DuelsDeckSummary, DuelsRun } from '@firestone/duels/general';
 import { AdventuresInfo, Card, CardBack } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
-import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
@@ -198,10 +197,6 @@ export class AppUiStoreFacadeService {
 
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
 		return this.store.allTimeBoosters$();
-	}
-
-	public tavernBrawl$(): Observable<TavernBrawlState> {
-		return this.store.tavernBrawl$();
 	}
 
 	public showAds$(): Observable<boolean> {

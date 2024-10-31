@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TavernBrawlService } from '../../libs/tavern-brawl/services/tavern-brawl.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { QuestsService } from './quests.service';
 
@@ -10,7 +9,6 @@ export class LazyDataInitService {
 	constructor(
 		private readonly globalStatsService: GlobalStatsService,
 		private readonly questsService: QuestsService,
-		private readonly tavernBrawlService: TavernBrawlService,
 	) {}
 
 	public async requestLoad(dataType: StateDataType) {
@@ -19,8 +17,6 @@ export class LazyDataInitService {
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'reference-quests':
 				return this.questsService.loadReferenceQuests();
-			case 'tavern-brawl-stats':
-				return this.tavernBrawlService.loadStats();
 		}
 	}
 }

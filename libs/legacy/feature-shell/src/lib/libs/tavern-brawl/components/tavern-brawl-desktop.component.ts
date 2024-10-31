@@ -1,9 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { Observable } from 'rxjs';
-import { TavernBrawlCategoryType } from '../tavern-brawl-state';
+import { from, Observable } from 'rxjs';
 
 @Component({
 	selector: 'tavern-brawl-desktop',
@@ -48,10 +54,14 @@ export class TavernBrawlDesktopComponent
 	}
 
 	ngAfterContentInit() {
-		this.menuDisplayType$ = this.store.tavernBrawl$().pipe(this.mapData((state) => state.menuDisplayType));
-		this.category$ = this.store.tavernBrawl$().pipe(this.mapData((state) => state.selectedCategoryId));
-		this.categories$ = this.store.tavernBrawl$().pipe(this.mapData((state) => state.categories));
+		this.menuDisplayType$ = from(['menu']);
+		this.category$ = from(['meta' as TavernBrawlCategoryType]);
+		this.categories$ = from([['meta' as TavernBrawlCategoryType]]);
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectCategory(categoryId: TavernBrawlCategoryType) {
@@ -62,3 +72,5 @@ export class TavernBrawlDesktopComponent
 		return this.i18n.translateString(`app.tavern-brawl.category.${categoryId}`);
 	}
 }
+
+export type TavernBrawlCategoryType = 'meta';

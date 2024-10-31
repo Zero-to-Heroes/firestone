@@ -89,7 +89,6 @@ export class BootstrapStoreServicesService {
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
 		private readonly mercenariesSynergiesStore: MercenariesSynergiesHighlightService,
 		private readonly mails: MailsService,
-		private readonly tavernBrawl: TavernBrawlService,
 		private readonly duelsDecksProviderService: DuelsDecksProviderService,
 		private readonly decksProviderService: DecksProviderService,
 		private readonly gameStatsProviderService: GameStatsProviderService,
@@ -142,6 +141,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_HearthpwnService: HearthpwnService,
 		private readonly init_CardRulesService: CardRulesService,
 		private readonly init_ExpertContributorsService: ExpertContributorsService,
+		private readonly init_TavernBrawlService: TavernBrawlService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

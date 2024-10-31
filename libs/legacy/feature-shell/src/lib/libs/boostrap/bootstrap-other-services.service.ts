@@ -41,7 +41,6 @@ import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
 import { PackMonitor } from '../packs/services/pack-monitor.service';
 import { PackStatsService } from '../packs/services/pack-stats.service';
-import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';
 
 @Injectable()
 export class BootstrapOtherServicesService {
@@ -83,7 +82,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_GameStatsProviderService: GameStatsProviderService,
 		private readonly init_DuelsDecksProviderService: DuelsDecksProviderService,
 		private readonly init_MailsService: MailsService,
-		private readonly init_TavernBrawlService: TavernBrawlService,
 		private readonly dev: DevService,
 		private readonly init_SystemTrayService: SystemTrayService,
 		private readonly init_HearthArenaAnalyticsService: HearthArenaAnalyticsService,

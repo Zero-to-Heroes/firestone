@@ -21,8 +21,6 @@ import { DuelsDeckSummary } from '@firestone/duels/general';
 import { GameState } from '@firestone/game-state';
 import { AdventuresInfo, Card, CardBack } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
-import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
@@ -92,7 +90,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private duelsBuckets: Observable<readonly DuelsBucketsData[]>;
 	private duelsLeaderboard: Observable<DuelsLeaderboard>;
 	private mails: Observable<MailState>;
-	private tavernBrawl: Observable<TavernBrawlState>;
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
 	private coins: Observable<readonly Coin[]>;
@@ -336,10 +333,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.allTimeBoosters;
 	}
 
-	public tavernBrawl$(): Observable<TavernBrawlState> {
-		return this.tavernBrawl;
-	}
-
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.decks;
 	}
@@ -421,7 +414,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initBgHeroSkins();
 		this.initSets();
 		this.initAllTimeBoosters();
-		this.initTavernBrawl();
 		this.initShouldTrackLottery();
 		this.initShouldShowLotteryOverlay();
 		this.initLottery();
@@ -436,10 +428,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initCardsHistory();
 		this.initHighlightedBgsMinions();
 		this.initialized = true;
-	}
-
-	private initTavernBrawl() {
-		this.tavernBrawl = (this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService).tavernBrawl$;
 	}
 
 	private initAllTimeBoosters() {

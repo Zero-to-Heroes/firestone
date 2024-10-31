@@ -1,59 +1,32 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { TavernBrawlStats } from '@firestone-hs/tavern-brawl-stats';
-import { ApiRunner, LocalStorageService } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { TavernBrawlState } from '../tavern-brawl-state';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
-const TAVERN_BRAWL_URL = 'https://static.zerotoheroes.com/api/tavern-brawl/tavern-brawl-stats.gz-2.json';
+const TAVERN_BRAWL_URL = 'https://static.zerotoheroes.com/api/tavern-brawl/tavern-brawl-stats-2.gz.json';
 
 @Injectable()
-export class TavernBrawlService {
-	public tavernBrawl$ = new BehaviorSubject<TavernBrawlState>(TavernBrawlState.create({}));
+export class TavernBrawlService extends AbstractFacadeService<TavernBrawlService> {
+	public tavernBrawl$$: SubscriberAwareBehaviorSubject<TavernBrawlStats | null>;
 
-	private requestedLoad = new BehaviorSubject<boolean>(null);
+	private api: ApiRunner;
 
-	constructor(
-		private readonly store: AppUiStoreFacadeService,
-		private readonly api: ApiRunner,
-		private readonly localStorage: LocalStorageService,
-	) {
-		window['tavernBrawlProvider'] = this;
-		this.init();
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'TavernBrawlService', () => !!this.tavernBrawl$$);
 	}
 
-	private async init() {
-		await this.store.initComplete();
-
-		this.requestedLoad
-			.asObservable()
-			.pipe(filter((load) => load != null))
-			.subscribe(() => this.loadStats());
+	protected override assignSubjects() {
+		this.tavernBrawl$$ = this.mainInstance.tavernBrawl$$;
 	}
 
-	public async loadStats() {
-		console.debug('[tavern-brawl] loading stats');
-		const localInfo = this.localStorage.getItem<TavernBrawlStats>(LocalStorageService.TAVERN_BRAWL_STATS);
-		if (!!localInfo?.stats?.length) {
-			console.debug('loaded tavern brawl stats');
-			this.updateStats(localInfo);
-		}
+	protected async init() {
+		this.tavernBrawl$$ = new SubscriberAwareBehaviorSubject<TavernBrawlStats | null>(null);
+		this.api = AppInjector.get(ApiRunner);
 
-		const result = await this.api.callGetApi<TavernBrawlStats>(TAVERN_BRAWL_URL);
-		if (result == null) {
-			return;
-		}
-
-		this.updateStats(result);
-	}
-
-	private updateStats(result: TavernBrawlStats) {
-		const newState = this.tavernBrawl$.value.update({
-			currentStats: result,
+		this.tavernBrawl$$.onFirstSubscribe(async () => {
+			const result = await this.api.callGetApi<TavernBrawlStats>(TAVERN_BRAWL_URL);
+			this.tavernBrawl$$.next(result);
 		});
-		this.localStorage.setItem(LocalStorageService.TAVERN_BRAWL_STATS, result);
-		this.tavernBrawl$.next(newState);
 	}
 }
