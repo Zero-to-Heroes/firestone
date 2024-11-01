@@ -64,6 +64,8 @@ export class DeckCard {
 	// When an entity is "copied from" another entity, the game logs store the link only one way.
 	// This can be used to store the link in both ways, when we know about it
 	readonly cardCopyLink?: number;
+	readonly storedInformation?: StoredInformation | null;
+	readonly guessedInfo = {};
 	readonly cardMatchCondition?: (card: ReferenceCard, cardInfos?: { cost?: number }) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {
@@ -95,4 +97,14 @@ export class DeckCard {
 		// Because it's used in grouping keys, and we don't want to differentiate null and undefined in that case
 		return this.actualManaCost ?? this.manaCost ?? null;
 	}
+}
+
+export interface StoredInformation {
+	// WARNING: not sure this is a good idea to not make the values read-only, but it makes it SO much
+	// easier to work with
+	tagScriptValues?: (number | null)[];
+}
+
+export interface GuessedInfo {
+	readonly cost?: number;
 }

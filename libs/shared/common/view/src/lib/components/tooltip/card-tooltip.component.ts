@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AfterContentInit,
@@ -77,6 +78,15 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 					</div>
 				</div>
 			</div>
+			<div class="additional-info" *ngIf="additionalInfo$ | async as info">
+				<div class="header" [fsTranslate]="'decktracker.guessed-info.header'"></div>
+				<div class="info">
+					<div class="info-item cost" *ngIf="info.cost !== null">
+						<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
+						<div class="value">{{ info.cost }}</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -93,6 +103,7 @@ export class CardTooltipComponent
 	relativePosition$: Observable<'left' | 'right'>;
 	displayBuffs$: Observable<boolean>;
 	opacity$: Observable<number>;
+	additionalInfo$: Observable<CardTooltipAdditionalInfo>;
 
 	hasScrollbar: boolean;
 
@@ -119,6 +130,9 @@ export class CardTooltipComponent
 	}
 	@Input() set displayBuffs(value: boolean) {
 		this.displayBuffs$$.next(value);
+	}
+	@Input() set additionalInfo(value: CardTooltipAdditionalInfo) {
+		this.additionalInfo$$.next(value);
 	}
 	// @Input() set opacity(value: number) {
 	// 	this.opacity$$.next(value);
@@ -157,6 +171,7 @@ export class CardTooltipComponent
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
 	private opacity$$ = new BehaviorSubject<number>(0);
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
+	private additionalInfo$$ = new BehaviorSubject<CardTooltipAdditionalInfo>(null);
 
 	private keepInBound$$ = new BehaviorSubject<number>(null);
 	private resizeObserver: ResizeObserver;
@@ -365,6 +380,16 @@ export class CardTooltipComponent
 				0,
 			),
 		);
+		this.additionalInfo$ = this.additionalInfo$$.pipe(
+			filter((info) => !!info),
+			this.mapData((info) => {
+				const hasInfo = info!.cost !== null;
+				return {
+					...info,
+					hasInfo: hasInfo,
+				};
+			}),
+		);
 
 		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -430,6 +455,11 @@ export class CardTooltipComponent
 			setTimeout(() => this.ngAfterViewInit(), 50);
 		}, 50);
 	}
+}
+
+/** Same as GuessedInfo */
+export interface CardTooltipAdditionalInfo {
+	readonly cost?: number;
 }
 
 interface InternalCard {

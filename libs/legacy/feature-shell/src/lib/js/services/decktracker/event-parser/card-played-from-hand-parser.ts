@@ -1,5 +1,12 @@
 import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckState,
+	GameState,
+	ShortCard,
+	ShortCardWithTurn,
+	storeInformationOnCardPlayed,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -145,8 +152,9 @@ export class CardPlayedFromHandParser implements EventParser {
 			// When dealing with the opponent, the creator card id is hidden / removed when put in deck / drawn to
 			// avoid info leaks, so if the info is present in the event, we add it
 			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
+			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags),
 		});
-		// console.debug('cardWithZone', cardWithZone, isCardCountered, additionalInfo);
+		// console.debug('cardWithInfo', cardWithInfo, gameEvent);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card

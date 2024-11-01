@@ -340,6 +340,7 @@ export class GameEvents {
 									dormant: gameEvent.Value.AdditionalProps.Dormant,
 									cost: gameEvent.Value.AdditionalProps.Cost,
 									magnetized: gameEvent.Value.AdditionalProps.Magnetized,
+									tags: gameEvent.Value.AdditionalProps.Tags,
 							  }
 							: {},
 					),
@@ -723,10 +724,12 @@ export class GameEvents {
 					GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent, {
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
 						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
 						dataTag1: gameEvent.Value.AdditionalProps?.DataTag1,
 						cost: gameEvent.Value.AdditionalProps?.Cost,
 						drawnByCardId: gameEvent.Value.AdditionalProps?.DrawnByCardId,
+						drawnByEntityId: gameEvent.Value.AdditionalProps?.DrawnByEntityId,
 					}),
 				);
 				break;

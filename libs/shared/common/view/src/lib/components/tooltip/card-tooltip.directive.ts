@@ -13,7 +13,7 @@ import {
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
-import { CardTooltipComponent } from './card-tooltip.component';
+import { CardTooltipAdditionalInfo, CardTooltipComponent } from './card-tooltip.component';
 
 @Directive({
 	selector: '[cardTooltip]',
@@ -32,6 +32,7 @@ export class CardTooltipDirective implements OnDestroy {
 	@Input() cardTooltipBgs: boolean;
 	@Input() cardTooltipLocalized = true;
 	@Input() cardTooltipShowRelatedCards: boolean;
+	@Input() cardTooltipAdditionalInfo: CardTooltipAdditionalInfo;
 
 	// So that the related card ids can be refreshed while the tooltip is displayed
 	// (otherwise it only refreshes on mouseenter)
@@ -47,13 +48,6 @@ export class CardTooltipDirective implements OnDestroy {
 				? this._cardTooltipRelatedCardIds
 				: this.relatedCardIds;
 			this.tooltipRef.instance.relatedCardIds = relatedCards;
-			// console.debug(
-			// 	'setting related cards in directive input 2',
-			// 	shouldShowRelatedCards,
-			// 	relatedCards,
-			// 	this.cardTooltipShowRelatedCards,
-			// 	this._cardTooltipRelatedCardIds,
-			// );
 		}
 	}
 
@@ -178,6 +172,7 @@ export class CardTooltipDirective implements OnDestroy {
 			this.tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
 			this.tooltipRef.instance.localized = this.cardTooltipLocalized;
 		}
+		this.tooltipRef.instance.additionalInfo = this.cardTooltipAdditionalInfo;
 
 		this.positionStrategy.apply();
 
@@ -202,6 +197,7 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseleave', ['$event'])
 	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
+		// return;
 		if (event?.shiftKey) {
 			return;
 		}

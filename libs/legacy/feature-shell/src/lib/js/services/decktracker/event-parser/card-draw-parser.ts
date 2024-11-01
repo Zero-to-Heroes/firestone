@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameState } from '@firestone/game-state';
+import { addGuessInfoToDrawnCard, DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -159,7 +159,13 @@ export class CardDrawParser implements EventParser {
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 			zone: 'HAND',
 		} as DeckCard);
-		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, lastInfluencedByCardId);
+		const cardWithGuessInfo = addGuessInfoToDrawnCard(
+			cardWithCreator,
+			gameEvent.additionalData.drawnByCardId,
+			gameEvent.additionalData.drawnByEntityId,
+			deck,
+		);
+		// console.debug('cardWithGuessInfo', cardWithGuessInfo, gameEvent);
 		const previousDeck = deck.deck;
 
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
@@ -190,7 +196,7 @@ export class CardDrawParser implements EventParser {
 		}
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
+		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
 		// console.debug('added card to hand', newHand);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,

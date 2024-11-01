@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard } from '@firestone/game-state';
+import { DeckCard, GuessedInfo } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -16,6 +16,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
 			[cardTooltipDisplayBuffs]="displayBuff"
+			[cardTooltipAdditionalInfo]="guessedInfo"
 			[ngClass]="{ buffed: hasBuffs }"
 		>
 			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" (error)="handleMissingImage($event)" />
@@ -41,12 +42,15 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	`,
 })
 export class OpponentCardInfoIdComponent {
+	// componentType: ComponentType<CardInHandGuessedInfoTooltipComponent> = CardInHandGuessedInfoTooltipComponent;
+
 	cardId: string;
 	cardUrl: string;
 	createdBy: boolean;
 	drawnBy: boolean;
 	forged: boolean;
 	hasBuffs: boolean;
+	guessedInfo: GuessedInfo;
 	_card: DeckCard;
 
 	@Input() displayGuess: boolean;
@@ -90,6 +94,7 @@ export class OpponentCardInfoIdComponent {
 			// We probably don't need to update the other fields, as they are not displayed
 			cardName: this.cardId === value.cardId ? value.cardName : this.i18n.getCardName(this.cardId),
 		} as DeckCard);
+		this.guessedInfo = value.guessedInfo;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

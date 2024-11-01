@@ -32,9 +32,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		}
 
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
-		const creatorEntityId = gameEvent.additionalData.creatorEntityId;
 
-		console.debug('[debug] [receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		// const cardId = guessCardId(initialCardId, deck, creatorCardId);
@@ -334,14 +333,6 @@ const guessCardId = (
 				.filter((c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI))
 				.pop()?.id;
 		case CardIds.MonstrousParrot:
-			console.debug(
-				'[debug] guessing cardId for Monstrous Parrot',
-				deckState.minionsDeadThisMatch,
-				deckState.minionsDeadThisMatch.map((c) => getProcessedCard(c.cardId, deckState, allCards)),
-				deckState.minionsDeadThisMatch
-					.map((c) => getProcessedCard(c.cardId, deckState, allCards))
-					.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])),
-			);
 			return deckState.minionsDeadThisMatch
 				.map((c) => getProcessedCard(c.cardId, deckState, allCards))
 				.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]))
