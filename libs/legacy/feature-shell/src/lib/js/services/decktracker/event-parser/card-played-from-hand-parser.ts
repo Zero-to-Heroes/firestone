@@ -178,9 +178,11 @@ export class CardPlayedFromHandParser implements EventParser {
 		// console.debug('newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		const hasBrann = deck.board.some((c) =>
+		const doubleBattlecries = deck.board.some((c) =>
 			[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
 		);
+		// Should use the current enchantment attached to the hero
+		// || deck.heroPower?.cardId === CardIds.CorruptTheWaters_HeartOfVirnaal;
 		if (
 			!isCardCountered &&
 			globalEffectCards.includes(card?.cardId as CardIds) &&
@@ -188,7 +190,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			!deathrattleGlobalEffectCards.includes(card?.cardId as CardIds)
 		) {
 			let numberOfGlobalEffectsToAdd = 1;
-			if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && hasBrann) {
+			if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && doubleBattlecries) {
 				numberOfGlobalEffectsToAdd = 2;
 			}
 			// console.debug(
@@ -245,7 +247,8 @@ export class CardPlayedFromHandParser implements EventParser {
 					deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
 				chaoticTendrilsPlayedThisMatch:
 					deck.chaoticTendrilsPlayedThisMatch +
-					(hasBrann ? 2 : 1) * (!isCardCountered && refCard.id === CardIds.ChaoticTendril_YOG_514 ? 1 : 0),
+					(doubleBattlecries ? 2 : 1) *
+						(!isCardCountered && refCard.id === CardIds.ChaoticTendril_YOG_514 ? 1 : 0),
 				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 			})
 			.updateSpellsPlayedThisMatch(
