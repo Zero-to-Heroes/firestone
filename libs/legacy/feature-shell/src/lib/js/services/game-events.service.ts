@@ -95,7 +95,7 @@ export class GameEvents {
 				});
 			});
 
-		interval(2000).subscribe(() => {
+		interval(1000).subscribe(() => {
 			if (!this.lastProcessedTimestamp) {
 				return;
 			}
