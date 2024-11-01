@@ -242,6 +242,12 @@ export class DeckState {
 		];
 	}
 
+	public getAllCardsFromStarterDeck(): readonly DeckCard[] {
+		return [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone].filter(
+			(c) => !c.creatorCardId?.length && !c.stolenFromOpponent,
+		);
+	}
+
 	// TODO: Probably not the place for these methods
 	public containsGalakrond(allCards?: CardsFacadeService): boolean {
 		if (this.galakrondInvokesCount > 0) {

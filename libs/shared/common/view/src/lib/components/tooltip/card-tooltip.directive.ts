@@ -33,6 +33,7 @@ export class CardTooltipDirective implements OnDestroy {
 	@Input() cardTooltipLocalized = true;
 	@Input() cardTooltipShowRelatedCards: boolean;
 	@Input() cardTooltipAdditionalInfo: CardTooltipAdditionalInfo;
+	@Input() cardTooltipRelatedCardIdsHeader: string;
 
 	// So that the related card ids can be refreshed while the tooltip is displayed
 	// (otherwise it only refreshes on mouseenter)
@@ -153,13 +154,7 @@ export class CardTooltipDirective implements OnDestroy {
 			? this._cardTooltipRelatedCardIds
 			: this.relatedCardIds;
 		this.tooltipRef.instance.relatedCardIds = relatedCards;
-		// console.debug(
-		// 	'will set related cards',
-		// 	relatedCards,
-		// 	shouldShowRelatedCards,
-		// 	this._cardTooltipRelatedCardIds,
-		// 	this.relatedCardIds,
-		// );
+		this.tooltipRef.instance.relatedCardIdsHeader = this.cardTooltipRelatedCardIdsHeader;
 		this.tooltipRef.instance.viewRef = this.tooltipRef;
 
 		if (this.cardTooltipCard) {

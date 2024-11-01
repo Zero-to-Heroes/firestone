@@ -66,6 +66,7 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 				[ngStyle]="{ opacity: value.opacity }"
 			>
 				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards?.length > 6 }">
+					<div class="header" *ngIf="relatedCardIdsHeader">{{ relatedCardIdsHeader }}</div>
 					<div class="related-cards" #relatedCards>
 						<div
 							*ngIf="hasScrollbar"
@@ -110,6 +111,7 @@ export class CardTooltipComponent
 	@Input() set cardId(value: string) {
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
 	}
+	@Input() relatedCardIdsHeader: string;
 	@Input() set relatedCardIds(value: readonly string[]) {
 		this.relatedCardIds$$.next(value ?? []);
 	}
@@ -382,13 +384,7 @@ export class CardTooltipComponent
 		);
 		this.additionalInfo$ = this.additionalInfo$$.pipe(
 			filter((info) => !!info),
-			this.mapData((info) => {
-				const hasInfo = info!.cost !== null;
-				return {
-					...info,
-					hasInfo: hasInfo,
-				};
-			}),
+			this.mapData((info) => (isGuessedInfoEmpty(info) ? null : info)),
 		);
 
 		// Because we can't rely on the lifecycle methods
@@ -461,6 +457,9 @@ export class CardTooltipComponent
 export interface CardTooltipAdditionalInfo {
 	readonly cost?: number;
 }
+export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo) => {
+	return info?.cost == null;
+};
 
 interface InternalCard {
 	readonly cardId: string;

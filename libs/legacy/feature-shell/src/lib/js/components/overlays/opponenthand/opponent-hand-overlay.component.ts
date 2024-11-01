@@ -1,10 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { DeckCard } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
-import { DebugService } from '../../../services/debug.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { DeckCard, DeckState, GameStateFacadeService, Metadata } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { distinctUntilChanged, Observable } from 'rxjs';
 
 @Component({
 	selector: 'opponent-hand-overlay',
@@ -13,6 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 		<div class="opponent-hand-overlay">
 			<opponent-card-infos
 				[cards]="hand$ | async"
+				[context]="context$ | async"
 				[displayTurnNumber]="displayTurnNumber$ | async"
 				[displayGuess]="displayGuess$ | async"
 				[displayBuff]="displayBuff$ | async"
@@ -21,30 +28,46 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpponentHandOverlayComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	hand$: Observable<readonly DeckCard[]>;
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
 	displayBuff$: Observable<boolean>;
+	context$: Observable<{ deck: DeckState; metadata: Metadata }>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly init_DebugService: DebugService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.hand$ = this.store
-			.listenDeckState$((deckState) => deckState?.opponentDeck?.hand)
-			.pipe(this.mapData(([hand]) => hand));
-		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentTurnDraw);
-		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
-		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentBuffInHand);
+	async ngAfterContentInit() {
+		await waitForReady(this.gameState, this.prefs);
+
+		this.hand$ = this.gameState.gameState$$.pipe(
+			this.mapData((gameState) => gameState?.opponentDeck?.hand),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		);
+		this.context$ = this.gameState.gameState$$.pipe(
+			this.mapData((gameState) => ({
+				deck: gameState?.opponentDeck,
+				metadata: gameState?.metadata,
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		);
+		this.displayTurnNumber$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.dectrackerShowOpponentTurnDraw),
+		);
+		this.displayGuess$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.dectrackerShowOpponentGuess));
+		this.displayBuff$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.dectrackerShowOpponentBuffInHand),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

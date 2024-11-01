@@ -58,14 +58,6 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 				})),
 			);
 			const groupedByRune = groupByFunction((rune: any) => rune.rune)(allRuneEntries);
-			console.debug(
-				'[opponent-corpse-spent] grouped by runes',
-				groupedByRune,
-				costs,
-				state.opponentDeck.cardsPlayedFromInitialDeck,
-				entityIdsPlayed,
-				cardsPlayedThisMatch,
-			);
 			return Object.keys(groupedByRune).length === 3;
 		};
 	}

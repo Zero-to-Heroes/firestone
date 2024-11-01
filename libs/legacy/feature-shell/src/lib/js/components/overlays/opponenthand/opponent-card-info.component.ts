@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
-import { DeckCard } from '@firestone/game-state';
+import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { DebugService } from '../../../services/debug.service';
@@ -11,12 +11,13 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-info.component.scss'],
 	template: `
 		<div class="opponent-card-info scalable" [style.left.vh]="leftVwOffset" [style.top.vh]="topVwOffset">
-			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>
+			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="card"></opponent-card-turn-number>
 			<opponent-card-info-id
 				*ngIf="displayGuess || displayBuff"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
-				[card]="_card"
+				[card]="card"
+				[context]="context"
 			></opponent-card-info-id>
 		</div>
 	`,
@@ -30,11 +31,8 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponen
 	// the play area are cropped
 	@Input() leftVwOffset: number;
 	@Input() topVwOffset: number;
-	@Input() set card(value: DeckCard) {
-		this._card = value;
-	}
-
-	_card: DeckCard;
+	@Input() context: { deck: DeckState; metadata: Metadata };
+	@Input() card: DeckCard;
 
 	constructor(
 		private readonly el: ElementRef,

@@ -35,8 +35,17 @@
 	margin-left: -10px;
 	margin-right: -10px;
 	display: flex;
+	flex-direction: column;
 	height: fit-content;
 	pointer-events: none;
+
+	.header {
+		color: var(--color-1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 10px;
+	}
 
 	.related-cards {
 		display: flex;

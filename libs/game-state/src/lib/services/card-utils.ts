@@ -1,5 +1,14 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-case-declarations */
-import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	CardClass,
+	CardIds,
+	GameFormat,
+	GameTag,
+	isValidSet,
+	ReferenceCard,
+	SetId,
+} from '@firestone-hs/reference-data';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, StoredInformation } from '../models/deck-card';
@@ -60,4 +69,41 @@ export const addGuessInfoToDrawnCard = (
 		default:
 			return card;
 	}
+};
+
+export const getPossibleForgedCards = (
+	format: GameFormat,
+	inputCardClasses: readonly CardClass[],
+	allCards: CardsFacadeService,
+): readonly string[] => {
+	const cardClasses = [...(inputCardClasses ?? []), CardClass.NEUTRAL];
+	console.debug(
+		'[debug] getPossibleForgedCards',
+		format,
+		cardClasses,
+		allCards
+			.getCards()
+			.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format) : false))
+			.filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE]))
+			.filter((c) => c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
+			.map((c) => allCards.getCard(c.relatedCardDbfIds?.[0] ?? 0)?.id),
+	);
+	return allCards
+		.getCards()
+		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format) : false))
+		.filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE]))
+		.filter((c) => c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
+		.map((c) => allCards.getCard(c.relatedCardDbfIds?.[0] ?? 0))
+		.filter((c) => !!c.id)
+		.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0) || a.name.localeCompare(b.name))
+		.sort((a, b) => {
+			if (a.classes![0] === CardClass[CardClass.NEUTRAL]) {
+				return 1;
+			}
+			if (b.classes![0] === CardClass[CardClass.NEUTRAL]) {
+				return -1;
+			}
+			return a.classes![0]?.localeCompare(b.classes![0]);
+		})
+		.map((c) => c.id);
 };

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DeckCard } from '@firestone/game-state';
+import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 
@@ -7,13 +7,14 @@ import { Map } from 'immutable';
 	selector: 'opponent-card-infos',
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-infos.component.scss'],
 	template: `
-		<ul class="opponent-card-infos">
+		<ul class="opponent-card-infos" *ngIf="!!cards?.length">
 			<opponent-card-info
-				*ngFor="let card of _cards; let i = index; trackBy: trackById"
+				*ngFor="let card of cards; let i = index; trackBy: trackById"
 				[card]="card"
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
+				[context]="context"
 				[leftVwOffset]="cardPositionLeft(i)"
 				[topVwOffset]="cardPositionTop(i)"
 				[attr.data-entity-id]="card.entityId"
@@ -25,24 +26,20 @@ export class OpponentCardInfosComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;
-	_cards: readonly DeckCard[];
+	@Input() context: { deck: DeckState; metadata: Metadata };
+	@Input() cards: readonly DeckCard[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
 	constructor(private ow: OverwolfService) {}
 
-	@Input() set cards(value: readonly DeckCard[]) {
-		// console.debug('setting opponent cards', value);
-		this._cards = value;
-	}
-
 	cardPositionLeft(i: number) {
-		const totalCards = this._cards.length;
+		const totalCards = this.cards.length;
 		return 0.2 * this.handAdjustment.get(totalCards, Adjustment.create()).positionLeft.get(i, 0);
 	}
 
 	cardPositionTop(i: number) {
-		const totalCards = this._cards.length;
+		const totalCards = this.cards.length;
 		return 0.2 * this.handAdjustment.get(totalCards, Adjustment.create()).positionTop.get(i, 0);
 	}
 
