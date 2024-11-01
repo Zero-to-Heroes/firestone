@@ -960,4 +960,5 @@ export const giftCreators = [
 	CardIds.AbductionRay_GDB_123,
 	CardIds.Jettison_GDB_227,
 	CardIds.MonstrousParrot,
+	CardIds.MarinTheManager_TolinsGobletToken_VAC_702t2,
 ];

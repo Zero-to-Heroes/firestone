@@ -251,4 +251,5 @@ export const tutors = [
 	CardIds.ArkoniteRevelation_GDB_852,
 	CardIds.Tracking_GDB_846hp,
 	CardIds.BlazingAccretion_GDB_302,
+	CardIds.MarinTheManager_TolinsGobletToken_VAC_702t2,
 ];
