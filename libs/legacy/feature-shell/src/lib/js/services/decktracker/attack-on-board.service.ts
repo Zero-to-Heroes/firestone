@@ -25,7 +25,7 @@ export class AttackOnBoardService {
 		// 	deck.board
 		// 		.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
 		// 		.filter((entity) => entity)
-		// 		.filter((entity) => this.canAttack(entity, deck.isActivePlayer)),
+		// 		.map((e) => e.tags.map((t) => ({ tag: GameTag[t.Name], value: t.Value }))),
 		// );
 		const totalAttackOnBoard = entitiesOnBoardThatCanAttack
 			.map(
@@ -135,6 +135,7 @@ export class AttackOnBoardService {
 			(hasTag(entity, GameTag.TITAN_ABILITY_USED_1) &&
 				hasTag(entity, GameTag.TITAN_ABILITY_USED_2) &&
 				hasTag(entity, GameTag.TITAN_ABILITY_USED_3));
+		const canStarshipAttack = !hasTag(entity, GameTag.STARSHIP) || !hasTag(entity, GameTag.LAUNCHPAD);
 		const hasSummoningSickness =
 			!isHero &&
 			isActivePlayer &&
@@ -153,7 +154,7 @@ export class AttackOnBoardService {
 		// 	canTitanAttack,
 		// 	hasSummoningSickness,
 		// );
-		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack && canTitanAttack;
+		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack && canTitanAttack && canStarshipAttack;
 	}
 }
 
