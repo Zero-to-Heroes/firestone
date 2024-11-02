@@ -198,6 +198,15 @@
 		height: 100%;
 		min-width: 50%;
 	}
+
+	.remove-teammate-button {
+		--icon-color: var(--default-text-color);
+
+		&:hover {
+			background: var(--default-text-color);
+			--icon-color: var(--color-7);
+		}
+	}
 }
 
 .switch-teammate-container {

@@ -327,6 +327,26 @@ export class StateManagerService {
 			  });
 	}
 
+	public removeTeammate(value: BgsFaceOffWithSimulation, side: Side): BgsFaceOffWithSimulation {
+		if (!value.battleInfo) {
+			return value;
+		}
+
+		return side === 'player'
+			? value.update({
+					battleInfo: {
+						...value.battleInfo,
+						playerTeammateBoard: undefined,
+					},
+			  })
+			: value.update({
+					battleInfo: {
+						...value.battleInfo,
+						opponentTeammateBoard: undefined,
+					},
+			  });
+	}
+
 	public addTeammate(value: BgsFaceOffWithSimulation, side: Side): BgsFaceOffWithSimulation {
 		if (!value.battleInfo) {
 			return value;

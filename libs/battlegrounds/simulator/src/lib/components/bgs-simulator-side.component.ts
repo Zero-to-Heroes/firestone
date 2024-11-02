@@ -35,6 +35,12 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 						[helpTooltip]="'battlegrounds.sim.teammate-board-tooltip' | fsTranslate"
 						(click)="switchTeammates()"
 					></bgs-simulator-player-overview>
+					<div
+						class="remove-teammate-button"
+						inlineSVG="assets/svg/close.svg"
+						(click)="removeTeammate()"
+						[helpTooltip]="'battlegrounds.sim.remove-teammate-button' | fsTranslate"
+					></div>
 				</div>
 			</div>
 			<div class="hero">
@@ -229,6 +235,11 @@ export class BgsSimulatorSideComponent {
 
 	addTeammate() {
 		this.controller.addTeammate(this.side);
+		console.debug('teammateShownInfo', this.teammateShownInfo, this._teammate);
+	}
+
+	removeTeammate() {
+		this.controller.removeTeammate(this.side);
 		console.debug('teammateShownInfo', this.teammateShownInfo, this._teammate);
 	}
 

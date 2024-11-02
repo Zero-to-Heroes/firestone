@@ -154,6 +154,11 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		this.faceOff$$.next(faceOff);
 	}
 
+	public removeTeammate(side: Side) {
+		const faceOff = this.stateManager.removeTeammate(this.faceOff$$.value!, side);
+		this.faceOff$$.next(faceOff);
+	}
+
 	public switchTeammates(side: Side) {
 		const faceOff = this.stateManager.switchTeammates(this.faceOff$$.value!, side);
 		this.faceOff$$.next(faceOff);
