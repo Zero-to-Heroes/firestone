@@ -160,7 +160,11 @@ export class DeckParserService {
 		} else if (metadata.gameType === GameType.GT_TAVERNBRAWL) {
 			console.log('[deck-parser] trying to read tavern brawl previous deck from logs', metadata.scenarioId);
 			// This could work, because it looks like that the deck is named "Brawl Deck" in all languages
-			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType, 'Brawl Deck');
+			// UPDATE 2024-11-02: the pre-release Brawl Deck is named "乱斗模式套牌" in chinese
+			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType, [
+				'Brawl Deck',
+				'乱斗模式套牌',
+			]);
 		} else {
 			console.warn('[deck-parser] could not read any deck from memory');
 			deckInfo = null;
@@ -412,7 +416,7 @@ export class DeckParserService {
 	private async readDeckFromLogFile(
 		scenarioId: number,
 		gameType: GameType,
-		targetDeckName: string = null,
+		targetDeckNames: readonly string[] = null,
 	): Promise<DeckInfo> {
 		const lines: readonly string[] = await this.readAllLogLines();
 
@@ -451,8 +455,8 @@ export class DeckParserService {
 			const deckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
 				? this.handler.normalizeDeckstring(match[1])
 				: undefined;
-			if (targetDeckName && deckName !== targetDeckName) {
-				console.log('[deck-parser] deck name does not match', deckName, targetDeckName);
+			if (!!targetDeckNames?.length && !targetDeckNames.includes(deckName)) {
+				console.log('[deck-parser] deck name does not match', deckName, targetDeckNames);
 				return null;
 			}
 			if (!deckstring) {
