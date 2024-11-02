@@ -66,19 +66,9 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 									[showTrinketTips]="showTrinketTips"
 								></bgs-minions-list>
 							</ng-container>
-							<div class="compositions-list" *ngIf="displayedTierId === 'compositions'">
-								<bgs-minions-list-composition
-									*ngFor="let comp of compositions ?? []; trackBy: trackByCompFn"
-									class="composition"
-									[composition]="comp"
-									[showTribesHighlight]="showTribesHighlight"
-									[highlightedMinions]="highlightedMinions"
-									[highlightedTribes]="highlightedTribes"
-									[highlightedMechanics]="highlightedMechanics"
-									[showGoldenCards]="showGoldenCards"
-									[showTrinketTips]="showTrinketTips"
-								></bgs-minions-list-composition>
-							</div>
+							<ng-container *ngIf="displayedTierId === 'compositions'">
+								<bgs-compositions-list [compositions]="compositions"></bgs-compositions-list>
+							</ng-container>
 						</ng-container>
 					</ng-container>
 				</ng-container>
@@ -150,10 +140,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 
 	trackByFn(index: number, tavernTier: Tier) {
 		return tavernTier?.tavernTier;
-	}
-
-	trackByCompFn(index: number, comp: BgsCompAdvice) {
-		return comp?.compId;
 	}
 
 	onDisplayedTier(tavernTier: Tier) {

@@ -1,0 +1,11 @@
+.compositions-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	// margin-top: 3px;
+	background: var(--color-7);
+
+	.composition:not(:last-child) {
+		margin-bottom: 2px;
+	}
+}

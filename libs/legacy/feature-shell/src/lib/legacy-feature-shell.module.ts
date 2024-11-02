@@ -393,6 +393,7 @@ import { BattlegroundsYourStatsTypeFilterDropdownComponent } from '@components/b
 import { BgsStrategiesWrapperComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies-wrapper.component';
 import { BgsStrategiesComponent } from '@components/battlegrounds/desktop/strategy/bgs-strategies.component';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
+import { BgsCompositionsListComponent } from '@components/battlegrounds/minions-tiers/bgs-compositions-list.component';
 import { BattlegroundsMinionItemComponent } from '@components/battlegrounds/minions-tiers/bgs-minion-item.component';
 import { BgsMinionsListCompositionComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-list-composition.component';
 import { BattlegroundsMinionsHighlightButtonsComponent } from '@components/battlegrounds/minions-tiers/minion-highlight-buttons.component';
@@ -952,6 +953,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsStrategiesWrapperComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
+		BgsCompositionsListComponent,
 		BattlegroundsMinionsListComponent,
 		BattlegroundsMinionsGroupComponent,
 		BattlegroundsMinionsTierIconComponent,
