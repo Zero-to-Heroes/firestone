@@ -1,10 +1,11 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardRemovedFromHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -23,7 +24,9 @@ export class CardRemovedFromHandParser implements EventParser {
 		// See card-played-from-hand
 		const newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
+		const refCard = getProcessedCard(card?.cardId, deck, this.allCards);
 		const cardWithZone = card.update({
+			manaCost: card.manaCost ?? refCard?.cost,
 			zone: 'SETASIDE',
 		} as DeckCard);
 

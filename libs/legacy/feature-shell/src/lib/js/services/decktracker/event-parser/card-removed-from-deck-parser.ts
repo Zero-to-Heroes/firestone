@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { FAKE_JOUST_CARDS } from '../../hs-utils';
@@ -32,14 +32,17 @@ export class CardRemovedFromDeckParser implements EventParser {
 				cost: gameEvent.additionalData.cost,
 			},
 		)[0];
+		const refCard = getProcessedCard(card?.cardId, deck, this.allCards);
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
+			manaCost: card.manaCost ?? refCard?.cost,
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
 			milled:
 				card.createdByJoust || gameEvent.additionalData.removedByCardId === CardIds.Overplanner_VAC_444
 					? false
 					: true,
 		} as DeckCard);
+		console.debug('[card-removed]', 'cardWithZone', card?.cardId, cardWithZone, refCard);
 
 		// If the JOUST card isn't present in the deck yet, add it to the known cards
 		if (card.createdByJoust && !FAKE_JOUST_CARDS.includes(card.creatorCardId as CardIds)) {
@@ -53,12 +56,11 @@ export class CardRemovedFromDeckParser implements EventParser {
 				newDeck.filter((c) => !c.temporaryCard && !c.createdByJoust).filter((c) => c.cardId === card.cardId),
 			);
 			if (!isCardKnownInDeckYet) {
-				const cardData = this.allCards.getCard(card.cardId);
 				const newCard = DeckCard.create({
 					cardId: cardId,
-					cardName: cardData.name,
-					manaCost: cardData.cost,
-					rarity: cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+					cardName: refCard.name,
+					manaCost: refCard.cost,
+					rarity: refCard.rarity ? refCard.rarity.toLowerCase() : undefined,
 				} as DeckCard);
 				console.debug('[card-removed] adding JOUST card to known cards', newCard);
 				newDeck = this.helper.addSingleCardToZone(newDeck, newCard);

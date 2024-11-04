@@ -170,7 +170,7 @@ export class GameStateParsersService {
 			],
 			[GameEvent.CARD_REMOVED_FROM_BOARD]: [new CardRemovedFromBoardParser(this.helper)],
 			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
-			[GameEvent.CARD_REMOVED_FROM_HAND]: [new CardRemovedFromHandParser(this.helper)],
+			[GameEvent.CARD_REMOVED_FROM_HAND]: [new CardRemovedFromHandParser(this.helper, this.allCards)],
 			[GameEvent.REMOVE_FROM_HISTORY]: [new CardRemovedFromHistoryParser(this.helper)],
 			[GameEvent.CARD_REVEALED]: [new CardRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_STOLEN]: [new CardStolenParser(this.helper, this.i18n)],
