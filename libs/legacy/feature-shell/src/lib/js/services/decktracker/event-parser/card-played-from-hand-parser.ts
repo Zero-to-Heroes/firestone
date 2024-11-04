@@ -1,8 +1,9 @@
-import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
 import {
 	DeckCard,
 	DeckState,
 	GameState,
+	getProcessedCard,
 	ShortCard,
 	ShortCardWithTurn,
 	storeInformationOnCardPlayed,
@@ -10,10 +11,10 @@ import {
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
+	battlecryGlobalEffectCards,
 	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
 	CARDS_THAT_REMEMBER_SPELLS_PLAYED,
 	COUNTERSPELLS,
-	battlecryGlobalEffectCards,
 	deathrattleGlobalEffectCards,
 	globalEffectCards,
 	hasRace,
@@ -67,7 +68,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
+		console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -123,14 +124,15 @@ export class CardPlayedFromHandParser implements EventParser {
 		card = !!card?.cardId?.length ? card : removedCard;
 		card = !!card.entityId ? card : card.update({ entityId: entityId });
 		card = !!card.cardId ? card : card.update({ cardId: cardId });
-		// console.debug('[card-played] card', card, removedCard);
+		console.debug('[card-played] card', card, removedCard);
 		// Only minions end up on the board
-		const refCard = this.allCards.getCard(card?.cardId ?? cardId);
+		const refCard = getProcessedCard(card?.cardId ?? cardId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
+		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
-				manaCost: card.manaCost ?? refCard?.cost,
+				manaCost: costFromTags ?? card.manaCost ?? refCard?.cost,
 				cardName: card.cardName ?? refCard?.name,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
@@ -139,11 +141,11 @@ export class CardPlayedFromHandParser implements EventParser {
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
+				manaCost: costFromTags ?? refCard?.cost,
+				zone: isOnBoard ? 'PLAY' : null,
 				cardId: cardId,
 				cardName: this.i18n.getCardName(refCard?.id),
-				manaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
-				zone: isOnBoard ? 'PLAY' : null,
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				countered: isCardCountered,
@@ -154,7 +156,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
 			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags),
 		});
-		// console.debug('cardWithInfo', cardWithInfo, gameEvent);
+		console.debug('cardWithInfo', cardWithInfo, gameEvent);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
@@ -175,7 +177,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(deck.otherZone, cardToAdd);
-		// console.debug('newOtherZone', newOtherZone);
+		console.debug('newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		const doubleBattlecries = deck.board.some((c) =>
