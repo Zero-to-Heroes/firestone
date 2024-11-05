@@ -4,7 +4,7 @@ import { BgsFaceOffWithSimulation, BgsNextOpponentOverviewPanel, BgsPlayer } fro
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
@@ -126,7 +126,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 		const opponents$ = this.state.gameState$$.pipe(
 			debounceTime(1000),
 			map((state) => state.currentGame?.players),
-			tap((players) => console.debug('[bgs-next-opponent-overview] players', players)),
 			filter((players) => !!players?.length),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData((players) =>

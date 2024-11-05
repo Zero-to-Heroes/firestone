@@ -43,6 +43,24 @@ const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): Extende
 		.map((r) => Race[r]);
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
+		minionIcon: comp.cards.filter((c) => c.status === 'CORE')[0].cardId,
+		cards: [...comp.cards]
+			.sort((a, b) => {
+				const cardA = allCards.getCard(a.cardId);
+				const cardB = allCards.getCard(b.cardId);
+				return cardA.name.localeCompare(cardB.name);
+			})
+			.sort((a, b) => {
+				const cardA = allCards.getCard(a.cardId);
+				const cardB = allCards.getCard(b.cardId);
+				if (!cardA.techLevel) {
+					return 1;
+				}
+				if (!cardB.techLevel) {
+					return -1;
+				}
+				return cardA.techLevel - cardB.techLevel;
+			}),
 		tribes: allTribes.filter((tribe, index) => allTribes.indexOf(tribe) === index).sort(),
 	};
 	return result;

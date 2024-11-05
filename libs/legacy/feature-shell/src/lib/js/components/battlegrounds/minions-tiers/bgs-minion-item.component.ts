@@ -34,7 +34,10 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			(contextmenu)="highlightMinion(minion, $event)"
 		>
 			<img class="icon tile-icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
-			<div class="name">
+			<div class="name" [style.paddingLeft.px]="leftPadding">
+				<div class="tavern-tier" *ngIf="minion.techLevel != null && showTavernTierIcon">
+					<tavern-level-icon [level]="minion.techLevel" class="tavern"></tavern-level-icon>
+				</div>
 				<div class="gold-cost" *ngIf="minion.goldCost != null">
 					<img
 						class="icon"
@@ -97,6 +100,8 @@ export class BattlegroundsMinionItemComponent
 	}
 
 	@Input() showTribesHighlight: boolean;
+	@Input() showTavernTierIcon: boolean;
+	@Input() leftPadding = 0;
 
 	private minion$$ = new BehaviorSubject<ExtendedReferenceCard | null>(null);
 	private showGoldenCards$$ = new BehaviorSubject<boolean>(true);

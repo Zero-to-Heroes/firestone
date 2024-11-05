@@ -767,6 +767,7 @@ export class Preferences implements IPreferences {
 	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' = 'EU';
 	readonly bgsLeaderboardPlayerSearch: string;
 	readonly bgsYourStatsTypeFilter: 'hero' | 'trinket' = 'hero';
+	readonly bgsCompositionsListMode: BgsCompositionsListMode = 'exploring';
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
@@ -899,3 +900,4 @@ export class Preferences implements IPreferences {
 
 export type CollectionSetStatsTypeFilterType = 'cards-stats' | 'cards-history';
 export type BooleanWithLimited = boolean | 'limited';
+export type BgsCompositionsListMode = 'exploring' | 'browsing';

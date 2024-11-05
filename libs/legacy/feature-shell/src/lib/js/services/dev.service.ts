@@ -159,6 +159,9 @@ export class DevService {
 				.sort(sortByProperties((info) => [info.manaCost, info.name]));
 			console.debug(result);
 		};
+		window['normalizeDeck'] = (deckstring: string) => {
+			console.debug(this.allCards.normalizeDeckList(deckstring));
+		};
 		window['santizeDeckForDuels'] = (deckstring) => {
 			const decoded = decode(deckstring);
 			const newCards = decoded.cards.filter(([cardDbfId, quantity]) => {

@@ -1,69 +1,104 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard } from '@firestone/battlegrounds/core';
+import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, tap } from 'rxjs';
+import { ExtendedBgsCompAdvice } from 'libs/battlegrounds/core/src/lib/services/compositions/model';
+import { BehaviorSubject, combineLatest, Observable, startWith, tap } from 'rxjs';
 
 @Component({
 	selector: 'bgs-minions-list-composition',
 	styleUrls: [`./bgs-minions-list-composition.component.scss`],
 	template: `
-		<div class="composition" [ngClass]="{ collapsed: collapsed$ | async }">
-			<div class="header" (click)="toggleCollapsed()">
-				<div class="header-images" *ngIf="!!headerImages?.length">
-					<img *ngFor="let img of headerImages" class="header-image" [src]="img" />
+		<ng-container *ngIf="{ collapsed: collapsed$ | async, displayMode: displayMode$ | async } as value">
+			<div class="composition {{ value.displayMode ?? '' }}" [ngClass]="{ collapsed: value.collapsed }">
+				<div class="header" (click)="toggleCollapsed()">
+					<div class="header-images" *ngIf="!!headerImages?.length">
+						<img *ngFor="let img of headerImages" class="header-image" [src]="img" />
+					</div>
+					<div class="header-text">{{ name }}</div>
+					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 				</div>
-				<div class="header-text">{{ name }}</div>
-				<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
-			</div>
-			<div class="cards core">
-				<div class="header">
-					<div class="header-text">Core cards</div>
+				<div
+					class="cards enablers"
+					*ngIf="(!value.collapsed || value.displayMode === 'exploring') && enablerCards?.length"
+				>
+					<div class="header" *ngIf="!value.collapsed || value.displayMode !== 'exploring'">
+						<div class="header-text">Enablers</div>
+					</div>
+					<!-- TODO: highlight enablers that are on the board, and highlight (differently) enablers that are in the shop -->
+					<bgs-minion-item
+						class="minion"
+						*ngFor="let minion of enablerCards; trackBy: trackByFn"
+						[ngClass]="{
+							controlled: minionsOnBoardAndHand?.includes(minion.id),
+							inShop: minionsInShop?.includes(minion.id)
+						}"
+						[minion]="minion"
+						[showGoldenCards]="showGoldenCards"
+						[showTrinketTips]="showTrinketTips"
+						[highlightedMinions]="highlightedMinions"
+						[highlightedTribes]="highlightedTribes"
+						[highlightedMechanics]="highlightedMechanics"
+						[showTribesHighlight]="showTribesHighlight"
+						[showTavernTierIcon]="true"
+						[leftPadding]="20"
+					></bgs-minion-item>
 				</div>
-				<bgs-minion-item
-					class="minion"
-					*ngFor="let minion of coreCards; trackBy: trackByFn"
-					[minion]="minion"
-					[showGoldenCards]="showGoldenCards"
-					[showTrinketTips]="showTrinketTips"
-					[highlightedMinions]="highlightedMinions"
-					[highlightedTribes]="highlightedTribes"
-					[highlightedMechanics]="highlightedMechanics"
-					[showTribesHighlight]="showTribesHighlight"
-				></bgs-minion-item>
-			</div>
-			<div class="cards addons">
-				<div class="header">
-					<div class="header-text">Add-ons</div>
+				<div class="cards core" *ngIf="!value.collapsed && coreCards?.length">
+					<div class="header">
+						<div class="header-text">Core cards</div>
+					</div>
+					<bgs-minion-item
+						class="minion"
+						*ngFor="let minion of coreCards; trackBy: trackByFn"
+						[minion]="minion"
+						[showGoldenCards]="showGoldenCards"
+						[showTrinketTips]="showTrinketTips"
+						[highlightedMinions]="highlightedMinions"
+						[highlightedTribes]="highlightedTribes"
+						[highlightedMechanics]="highlightedMechanics"
+						[showTribesHighlight]="showTribesHighlight"
+						[showTavernTierIcon]="true"
+						[leftPadding]="20"
+					></bgs-minion-item>
 				</div>
-				<bgs-minion-item
-					class="minion"
-					*ngFor="let minion of addonCards; trackBy: trackByFn"
-					[minion]="minion"
-					[showGoldenCards]="showGoldenCards"
-					[showTrinketTips]="showTrinketTips"
-					[highlightedMinions]="highlightedMinions"
-					[highlightedTribes]="highlightedTribes"
-					[highlightedMechanics]="highlightedMechanics"
-					[showTribesHighlight]="showTribesHighlight"
-				></bgs-minion-item>
+				<div class="cards addons" *ngIf="!value.collapsed && addonCards?.length">
+					<div class="header">
+						<div class="header-text">Add-ons</div>
+					</div>
+					<bgs-minion-item
+						class="minion"
+						*ngFor="let minion of addonCards; trackBy: trackByFn"
+						[minion]="minion"
+						[showGoldenCards]="showGoldenCards"
+						[showTrinketTips]="showTrinketTips"
+						[highlightedMinions]="highlightedMinions"
+						[highlightedTribes]="highlightedTribes"
+						[highlightedMechanics]="highlightedMechanics"
+						[showTribesHighlight]="showTribesHighlight"
+						[showTavernTierIcon]="true"
+						[leftPadding]="20"
+					></bgs-minion-item>
+				</div>
 			</div>
-		</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	collapsed$: Observable<boolean>;
+	displayMode$: Observable<BgsCompositionsListMode>;
 
 	name: string;
 	headerImages: readonly string[] = [];
 	coreCards: readonly ExtendedReferenceCard[];
 	addonCards: readonly ExtendedReferenceCard[];
+	enablerCards: readonly ExtendedReferenceCard[];
 
-	@Input() set composition(value: BgsCompAdvice) {
+	@Input() set composition(value: ExtendedBgsCompAdvice) {
 		this.compId$$.next(value.compId);
 		this.name = value.name;
 		this.coreCards = value.cards
@@ -84,10 +119,20 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				};
 				return result;
 			});
-		this.headerImages = this.coreCards
-			// .map((c) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${c.id}.jpg`)
-			.map((c) => `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c.id}.jpg`)
-			.slice(0, 1);
+		this.enablerCards = value.cards
+			.filter((c) => c.status === 'ENABLER')
+			.map((c) => {
+				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
+				const result: ExtendedReferenceCard = {
+					...ref,
+				};
+				return result;
+			});
+		this.headerImages = [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.minionIcon}.jpg`];
+	}
+
+	@Input() set displayMode(value: BgsCompositionsListMode) {
+		this.displayMode$$.next(value);
 	}
 
 	@Input() highlightedTribes: readonly Race[];
@@ -96,8 +141,11 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	@Input() highlightedMinions: readonly string[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() showTribesHighlight: boolean;
+	@Input() minionsOnBoardAndHand: readonly string[];
+	@Input() minionsInShop: readonly string[];
 
 	private compId$$ = new BehaviorSubject<string | null>(null);
+	private displayMode$$ = new BehaviorSubject<BgsCompositionsListMode>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -113,8 +161,10 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				console.debug('setting collapsed 1', expandedIds, compId, expandedIds.includes(compId)),
 			),
 			this.mapData(([expandedIds, compId]) => !expandedIds.includes(compId)),
+			startWith(true),
 			tap((collapsed) => console.debug('setting collapsed 2', collapsed)),
 		);
+		this.displayMode$ = this.displayMode$$.pipe(this.mapData((mode) => mode));
 	}
 
 	trackByFn(index: number, minion: ExtendedReferenceCard) {

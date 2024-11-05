@@ -9,7 +9,6 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsMetaCompositionStrategiesService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import {
@@ -25,11 +24,13 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { ExtendedBgsCompAdvice } from 'libs/battlegrounds/core/src/lib/services/compositions/model';
 import {
 	Observable,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
+	filter,
 	map,
 	shareReplay,
 	startWith,
@@ -63,6 +64,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[showTrinketTips]="showTrinketTips$ | async"
 				[showTurnNumber]="showTurnNumber$ | async"
 				[useNewTiersHeaderStyle]="useNewTiersHeaderStyle$ | async"
+				[minionsOnBoardAndHand]="minionsOnBoardAndHand$ | async"
+				[minionsInShop]="minionsInShop$ | async"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -74,7 +77,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	implements AfterContentInit, OnDestroy
 {
 	tiers$: Observable<readonly Tier[]>;
-	compositions$: Observable<readonly BgsCompAdvice[]>;
+	compositions$: Observable<readonly ExtendedBgsCompAdvice[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
 	highlightedMinions$: Observable<readonly string[]>;
@@ -87,6 +90,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showGoldenCards$: Observable<boolean>;
 	showTrinketTips$: Observable<boolean>;
 	useNewTiersHeaderStyle$: Observable<boolean>;
+	minionsOnBoardAndHand$: Observable<readonly string[]>;
+	minionsInShop$: Observable<readonly string[]>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -213,10 +218,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		);
 
 		const boardComposition$: Observable<readonly MinionInfo[]> = combineLatest([
+			this.bgGameState.gameState$$,
 			this.gameState.gameState$$,
 			playerTrinkets$,
 		]).pipe(
-			this.mapData(([gameState, trinkets]) => {
+			filter(([bgGameState, gameState, trinkets]) => bgGameState?.currentGame?.phase === 'recruit'),
+			this.mapData(([bgGameState, gameState, trinkets]) => {
 				const trinketsArray = [trinkets.lesser, trinkets.greater].filter((trinket) => !!trinket);
 				const allEntities = [...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])];
 				const composition = allEntities.map((e) => {
@@ -232,6 +239,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
 		);
+		this.minionsOnBoardAndHand$ = boardComposition$.pipe(this.mapData((board) => board.map((b) => b.cardId)));
 		this.tiers$ = combineLatest([
 			staticTiers$,
 			this.bgGameState.gameState$$.pipe(this.mapData((state) => state?.currentGame?.getMainPlayer()?.cardId)),
@@ -258,7 +266,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.strategies.strategies$$,
 		]).pipe(
 			this.mapData(([availableTribes, strategies]) =>
-				buildCompositions(availableTribes, strategies, this.allCards),
+				buildCompositions(availableTribes, strategies, this.allCards, this.i18n),
 			),
 			tap((comps) => console.debug('comps', comps)),
 		);

@@ -1,15 +1,8 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	Input,
-	ViewEncapsulation,
-} from '@angular/core';
-import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { TavernTierType, Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ExtendedBgsCompAdvice } from 'libs/battlegrounds/core/src/lib/services/compositions/model';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({
@@ -67,7 +60,11 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 								></bgs-minions-list>
 							</ng-container>
 							<ng-container *ngIf="displayedTierId === 'compositions'">
-								<bgs-compositions-list [compositions]="compositions"></bgs-compositions-list>
+								<bgs-compositions-list
+									[compositions]="compositions"
+									[minionsOnBoardAndHand]="minionsOnBoardAndHand"
+									[minionsInShop]="minionsInShop"
+								></bgs-compositions-list>
 							</ng-container>
 						</ng-container>
 					</ng-container>
@@ -76,7 +73,6 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersViewOverlayComponent
 	extends AbstractSubscriptionComponent
@@ -100,6 +96,8 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	@Input() highlightedTribes: readonly Race[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() highlightedMinions: readonly string[];
+	@Input() minionsOnBoardAndHand: readonly string[];
+	@Input() minionsInShop: readonly string[];
 	@Input() showTribesHighlight: boolean;
 	@Input() useNewTiersHeaderStyle = true;
 
@@ -114,7 +112,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 		this.allTiers$$.next([...this.tierLevels, ...this.mechanicalTiers, ...this.tribeTiers]);
 	}
 
-	@Input() compositions: readonly BgsCompAdvice[];
+	@Input() compositions: readonly ExtendedBgsCompAdvice[];
 
 	@Input() set tavernTier(value: number) {
 		this.currentTavernTier = value;

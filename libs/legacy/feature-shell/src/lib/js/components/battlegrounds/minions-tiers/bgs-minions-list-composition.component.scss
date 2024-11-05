@@ -39,15 +39,29 @@
 	& > .header {
 		background: var(--color-9);
 		height: 35px;
+		padding-left: 2px;
 	}
 
 	.cards {
 		margin-top: 2px;
+
 		.header {
 			background: var(--color-5);
 			justify-content: center;
+
 			.header-text {
 				font-size: 0.8em;
+			}
+		}
+
+		.minion {
+			&.controlled {
+				outline: 2px solid;
+				outline-color: linear-gradient(to left, rgba(255, 185, 72, 0), #f1af0d) 1;
+			}
+			&.inShop {
+				outline: 2px solid;
+				outline-color: linear-gradient(to left, rgba(220, 16, 238, 0), #dc10ee) 1;
 			}
 		}
 	}
@@ -55,9 +69,6 @@
 	&.collapsed {
 		.header .caret {
 			transform: rotate(-90deg);
-		}
-		.cards {
-			display: none;
 		}
 	}
 }

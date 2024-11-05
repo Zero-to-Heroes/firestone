@@ -3,8 +3,10 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
+// const META_COMPOSITION_STRATEGIES_URL =
+// 	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json';
 const META_COMPOSITION_STRATEGIES_URL =
-	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json';
+	'https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json';
 
 @Injectable()
 export class BgsMetaCompositionStrategiesService extends AbstractFacadeService<BgsMetaCompositionStrategiesService> {

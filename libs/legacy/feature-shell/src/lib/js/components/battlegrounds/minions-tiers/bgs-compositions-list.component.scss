@@ -5,6 +5,17 @@
 	// margin-top: 3px;
 	background: var(--color-7);
 
+	.header {
+		display: flex;
+		color: var(--color-1);
+		align-items: center;
+		padding: 10px;
+
+		.header-filters {
+			margin-left: 10px;
+		}
+	}
+
 	.composition:not(:last-child) {
 		margin-bottom: 2px;
 	}
