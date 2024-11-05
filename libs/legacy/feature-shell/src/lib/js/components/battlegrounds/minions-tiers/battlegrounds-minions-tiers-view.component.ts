@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
-import { TavernTierType, Tier } from '@firestone/battlegrounds/core';
+import { ExtendedBgsCompAdvice, TavernTierType, Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ExtendedBgsCompAdvice } from 'libs/battlegrounds/core/src/lib/services/compositions/model';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({

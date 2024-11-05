@@ -12,6 +12,7 @@ import {
 import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsMetaCompositionStrategiesService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import {
+	ExtendedBgsCompAdvice,
 	MinionInfo,
 	Tier,
 	buildCompositions,
@@ -24,7 +25,6 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { ExtendedBgsCompAdvice } from 'libs/battlegrounds/core/src/lib/services/compositions/model';
 import {
 	Observable,
 	combineLatest,

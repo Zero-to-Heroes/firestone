@@ -10,6 +10,7 @@ export * from './lib/services/card-rules/tavern-tier';
 export * from './lib/services/card-utils';
 export * from './lib/services/cards-in-game';
 export * from './lib/services/compositions/compositions-builder';
+export * from './lib/services/compositions/model';
 export * from './lib/services/simulation/bgs-battle-simulation-executor.service';
 export * from './lib/services/simulation/bgs-battle-simulation-mock-executor.service';
 export * from './lib/services/simulation/bgs-battle-simulation.service';
