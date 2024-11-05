@@ -70,7 +70,9 @@ const inZoneName =
 export const inDeck = inZoneName('deck');
 export const inHand = inZoneName('hand');
 export const inOther = inZoneName('other') || inZoneName('other-generated') || inZoneName('board');
-export const inGraveyard = inZoneName('graveyard');
+export const inGraveyard = (input: SelectorInput) =>
+	input.zone?.toLowerCase() === 'graveyard'?.toLowerCase() ||
+	input.deckState.minionsDeadThisMatch.map((m) => Math.abs(m.entityId)).includes(Math.abs(input.entityId));
 export const discarded = inZoneName('discard');
 export const inPlay = (input: SelectorInput): boolean =>
 	input.deckCard.zone !== 'BURNED' &&

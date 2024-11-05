@@ -477,7 +477,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.CatrinaMuerteCore:
 		case CardIds.CatrinaMuerte:
-			return and(side(inputSide), inGraveyard, undead, minion);
+			return tooltip(and(side(inputSide), inGraveyard, undead, minion));
 		case CardIds.CattleRustler_WW_351:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.CenarionHold_WON_015:
