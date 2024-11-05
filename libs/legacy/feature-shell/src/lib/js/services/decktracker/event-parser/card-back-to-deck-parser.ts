@@ -15,6 +15,7 @@ const CARD_SENDING_TO_BOTTOM = [
 	CardIds.Drown,
 ];
 const CARD_SENDING_TO_TOP = [CardIds.EnvoyOfProsperity_WORK_031];
+
 export class CardBackToDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -61,6 +62,7 @@ export class CardBackToDeckParser implements EventParser {
 		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
 		// the enchantments, cost reduction, etc.
 		const refCard = getProcessedCard(card.cardId, deck, this.allCards); // this.allCards.getCard(card.cardId);
+		console.debug('[card-back-to-deck] refCard', refCard, card.cardId, deck, card);
 		const cardWithInfoReset = card?.update({
 			manaCost: refCard?.cost ?? card?.manaCost,
 			actualManaCost: refCard?.cost ?? card?.manaCost,
@@ -126,7 +128,7 @@ export class CardBackToDeckParser implements EventParser {
 		}
 		// console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
 
-		const dbCard = (cardId && this.allCards.getCard(cardId)) || ({} as ReferenceCard);
+		const dbCard = (cardId && getProcessedCard(cardId, deckState, this.allCards)) || ({} as ReferenceCard);
 		return (
 			result ??
 			DeckCard.create({

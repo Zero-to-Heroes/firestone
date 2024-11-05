@@ -15,18 +15,23 @@ import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
 
 export const getProcessedCard = (cardId: string, deckState: DeckState, allCards: CardsFacadeService): ReferenceCard => {
-	const refCard: Mutable<ReferenceCard> = allCards.getCard(cardId);
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
-		const sideboard = deckState.sideboards?.find((s) => s.keyCardId === cardId);
+		const updatedRefCard: Mutable<ReferenceCard> = { ...allCards.getCard(cardId) };
+		console.debug('[debug] adding modules to Zilliax', cardId, updatedRefCard);
+		const sideboard = deckState.sideboards?.find((s) => s.keyCardId.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330));
+		console.debug('[debug] sideboard', sideboard);
 		// Remove the cosmetic module
 		const modules = sideboard?.cards?.map((c) => allCards.getCard(c)).filter((c) => c.health) ?? [];
-		refCard.mechanics = refCard.mechanics ?? [];
-		refCard.mechanics.push(...modules.flatMap((m) => m.mechanics ?? []));
-		refCard.attack = modules.reduce((a, b) => a + (b.attack ?? 0), refCard.attack ?? 0);
-		refCard.health = modules.reduce((a, b) => a + (b.health ?? 0), refCard.health ?? 0);
-		refCard.cost = modules.reduce((a, b) => a + (b.cost ?? 0), refCard.cost ?? 0);
+		console.debug('[debug] modules', modules);
+		updatedRefCard.mechanics = [...(updatedRefCard.mechanics ?? [])];
+		updatedRefCard.mechanics.push(...modules.flatMap((m) => m.mechanics ?? []));
+		updatedRefCard.attack = modules.reduce((a, b) => a + (b.attack ?? 0), 0);
+		updatedRefCard.health = modules.reduce((a, b) => a + (b.health ?? 0), 0);
+		updatedRefCard.cost = modules.reduce((a, b) => a + (b.cost ?? 0), 0);
+		console.debug('[debug] updated refCard', updatedRefCard);
+		return updatedRefCard;
 	}
-	return refCard;
+	return allCards.getCard(cardId);
 };
 
 // Ideally I would access the tag information directly from the card, but the way the parser works today
