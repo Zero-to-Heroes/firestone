@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -14,6 +14,10 @@ const SUPPORTED_EFFECTS = [
 	{
 		cardId: null,
 		effect: 'REVFX_Relics_RestOfGameAE_Super',
+	},
+	{
+		cardId: 'GDB_116',
+		effect: 'ReuseFX_Generic_HandAE_FriendlySide_Green_ScaleUp_Super',
 	},
 ];
 
@@ -38,6 +42,8 @@ export class CustomEffectsParser implements EventParser {
 		switch (effect.cardId) {
 			case CardIds.RunedMithrilRod:
 				return this.handleRunedMithrilRod(currentState, gameEvent);
+			case CardIds.EldritchBeing_GDB_116:
+				return this.shuffleHand(currentState, gameEvent);
 			default:
 				switch (effect.effect) {
 					case 'REVFX_Relics_RestOfGameAE_Super':
@@ -45,6 +51,23 @@ export class CustomEffectsParser implements EventParser {
 				}
 				return currentState;
 		}
+	}
+
+	private shuffleHand(currentState: GameState, gameEvent: GameEvent): GameState {
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const newHand = deck.hand.map((card) =>
+			DeckCard.create({
+				entityId: card.entityId,
+				zone: 'HAND',
+			}),
+		);
+		return currentState.update({
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: deck.update({
+				hand: newHand,
+			}),
+		});
 	}
 
 	private handleRunedMithrilRod(currentState: GameState, gameEvent: GameEvent): GameState {
