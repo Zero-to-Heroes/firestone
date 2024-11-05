@@ -20,7 +20,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
-		console.debug('[card-removed] found card', card, cardId, entityId, deck.deck);
+		// console.debug('[card-removed] found card', card, cardId, entityId, deck.deck);
 		const previousDeck = deck.deck;
 		let newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			previousDeck,
@@ -42,19 +42,19 @@ export class CardRemovedFromDeckParser implements EventParser {
 					? false
 					: true,
 		} as DeckCard);
-		console.debug('[card-removed]', 'cardWithZone', card?.cardId, cardWithZone, refCard);
+		// console.debug('[card-removed]', 'cardWithZone', card?.cardId, cardWithZone, refCard);
 
 		// If the JOUST card isn't present in the deck yet, add it to the known cards
 		if (card.createdByJoust && !FAKE_JOUST_CARDS.includes(card.creatorCardId as CardIds)) {
-			console.debug('[card-removed] handling removal of JOUST card', card);
+			// console.debug('[card-removed] handling removal of JOUST card', card);
 			const isCardKnownInDeckYet =
 				!!card.cardId &&
 				newDeck.filter((c) => !c.temporaryCard && !c.createdByJoust).some((c) => c.cardId === card.cardId);
-			console.debug(
-				'[card-removed] is card known in deck yet?',
-				isCardKnownInDeckYet,
-				newDeck.filter((c) => !c.temporaryCard && !c.createdByJoust).filter((c) => c.cardId === card.cardId),
-			);
+			// console.debug(
+			// 	'[card-removed] is card known in deck yet?',
+			// 	isCardKnownInDeckYet,
+			// 	newDeck.filter((c) => !c.temporaryCard && !c.createdByJoust).filter((c) => c.cardId === card.cardId),
+			// );
 			if (!isCardKnownInDeckYet) {
 				const newCard = DeckCard.create({
 					cardId: cardId,
@@ -62,19 +62,19 @@ export class CardRemovedFromDeckParser implements EventParser {
 					manaCost: refCard.cost,
 					rarity: refCard.rarity ? refCard.rarity.toLowerCase() : undefined,
 				} as DeckCard);
-				console.debug('[card-removed] adding JOUST card to known cards', newCard);
+				// console.debug('[card-removed] adding JOUST card to known cards', newCard);
 				newDeck = this.helper.addSingleCardToZone(newDeck, newCard);
-				console.debug('[card-removed] new deck', newDeck);
+				// console.debug('[card-removed] new deck', newDeck);
 			}
 		}
-		console.debug('[card-removed]', 'update card', card, cardWithZone);
+		// console.debug('[card-removed]', 'update card', card, cardWithZone);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			otherZone: newOtherZone,
 		} as DeckState);
-		console.debug('[card-removed]', 'newPlayerDeck', newPlayerDeck);
+		// console.debug('[card-removed]', 'newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

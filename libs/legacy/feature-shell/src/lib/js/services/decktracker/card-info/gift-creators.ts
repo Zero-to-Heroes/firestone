@@ -961,4 +961,5 @@ export const giftCreators = [
 	CardIds.Jettison_GDB_227,
 	CardIds.MonstrousParrot,
 	CardIds.MarinTheManager_TolinsGobletToken_VAC_702t2,
+	CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 ];
