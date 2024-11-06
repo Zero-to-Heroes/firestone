@@ -1767,6 +1767,15 @@ export const cardIdSelector = (
 		case CardIds.RenoTheRelicologist:
 		case CardIds.ZephrysTheGreat_ULD_003:
 			return and(side(inputSide), inDeck, hasMultipleCopies);
+		case CardIds.SporeEmpressMoldara_ReplicatingSporeToken_GDB_234t:
+			return (input: SelectorInput): SelectorOutput => {
+				const summoned = input.deckState
+					.getAllCardsInDeckWithoutOptions()
+					.filter((c) => c.creatorCardId === CardIds.SporeEmpressMoldara_ReplicatingSporeToken_GDB_234t)
+					// Won't work if two spores summon the same minion
+					.map((c) => c.cardId as CardIds);
+				return tooltip(and(side(inputSide), cardIs(...summoned)))(input);
+			};
 		case CardIds.RestInPeace_VAC_457:
 			return (input: SelectorInput): SelectorOutput => {
 				const highestDeadMinionCost = Math.max(

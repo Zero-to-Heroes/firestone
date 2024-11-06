@@ -232,6 +232,16 @@ export class DeckState {
 		);
 	}
 
+	public getAllCardsInDeckWithoutOptions(): readonly DeckCard[] {
+		return [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
+	}
+
 	public getAllCardsInDeck(): readonly { entityId: number; cardId: string }[] {
 		return [
 			...this.deckList,
