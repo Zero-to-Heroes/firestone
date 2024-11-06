@@ -140,6 +140,9 @@ export class DeckState {
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 	readonly turnTimings: readonly TurnTiming[] = [];
 	readonly turnDuration: number;
+	readonly enchantments: readonly { entityId: number; cardId: string }[] = [];
+	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
+	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);

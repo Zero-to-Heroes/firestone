@@ -180,28 +180,36 @@ export class CardPlayedFromHandParser implements EventParser {
 		console.debug('newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		const doubleBattlecries = deck.board.some((c) =>
-			[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
-		);
-		// Should use the current enchantment attached to the hero
-		// || deck.heroPower?.cardId === CardIds.CorruptTheWaters_HeartOfVirnaal;
+		let battlecriesMultiplier = 1;
 		if (
 			!isCardCountered &&
 			globalEffectCards.includes(card?.cardId as CardIds) &&
 			!startOfGameGlobalEffectCards.includes(card?.cardId as CardIds) &&
 			!deathrattleGlobalEffectCards.includes(card?.cardId as CardIds)
 		) {
-			let numberOfGlobalEffectsToAdd = 1;
+			battlecriesMultiplier = 1;
+			const doubleBattlecries = deck.board.some((c) =>
+				[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
+			);
 			if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && doubleBattlecries) {
-				numberOfGlobalEffectsToAdd = 2;
+				battlecriesMultiplier = 2;
 			}
-			// console.debug(
-			// 	'numberOfGlobalEffects',
-			// 	numberOfGlobalEffectsToAdd,
-			// 	deck.board.map((c) => c.cardId),
-			// );
+			if (
+				battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
+				deck.enchantments.map((e) => e.cardId).includes(CardIds.HeartOfVirnaal_HeartOfVirnaalEnchantment)
+			) {
+				battlecriesMultiplier = 2;
+			}
 
-			for (let i = 0; i < numberOfGlobalEffectsToAdd; i++) {
+			// Hero enchantments, like Shudderblock and Heart of Vir'naal
+			if (
+				battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
+				deck.enchantments.map((e) => e.cardId).includes(CardIds.Shudderblock_ReadyForActionEnchantment_TOY_501e)
+			) {
+				battlecriesMultiplier = 3;
+			}
+
+			for (let i = 0; i < battlecriesMultiplier; i++) {
 				newGlobalEffects = this.helper.addSingleCardToZone(
 					newGlobalEffects,
 					cardToAdd?.update({
@@ -249,8 +257,7 @@ export class CardPlayedFromHandParser implements EventParser {
 					deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
 				chaoticTendrilsPlayedThisMatch:
 					deck.chaoticTendrilsPlayedThisMatch +
-					(doubleBattlecries ? 2 : 1) *
-						(!isCardCountered && refCard.id === CardIds.ChaoticTendril_YOG_514 ? 1 : 0),
+					battlecriesMultiplier * (!isCardCountered && refCard.id === CardIds.ChaoticTendril_YOG_514 ? 1 : 0),
 				elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 			})
 			.updateSpellsPlayedThisMatch(

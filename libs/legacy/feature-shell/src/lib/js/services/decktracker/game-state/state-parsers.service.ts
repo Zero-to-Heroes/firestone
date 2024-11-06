@@ -55,6 +55,8 @@ import { DeckManipulationHelper } from '../event-parser/deck-manipulation-helper
 import { DecklistUpdateParser } from '../event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from '../event-parser/deckstring-override-parser';
 import { DiscardedCardParser } from '../event-parser/discarded-card-parser';
+import { EnchantmentAttachedParser } from '../event-parser/enchantment-attached-parser';
+import { EnchantmentDetachedParser } from '../event-parser/enchantment-detached-parser';
 import { EndOfEchoInHandParser } from '../event-parser/end-of-echo-in-hand-parser';
 import { EntityChosenParser } from '../event-parser/entity-chosen-parser';
 import { EntityUpdateParser } from '../event-parser/entity-update-parser';
@@ -195,6 +197,8 @@ export class GameStateParsersService {
 			[GameEvent.DECKSTRING_OVERRIDE]: [new DeckstringOverrideParser(this.deckHandler)],
 			[GameEvent.DISCARD_CARD]: [new DiscardedCardParser(this.helper)],
 			[GameEvent.END_OF_ECHO_IN_HAND]: [new EndOfEchoInHandParser(this.helper)],
+			[GameEvent.ENCHANTMENT_ATTACHED]: [new EnchantmentAttachedParser(this.helper, this.allCards)],
+			[GameEvent.ENCHANTMENT_DETACHED]: [new EnchantmentDetachedParser(this.helper, this.allCards)],
 			[GameEvent.ENTITY_CHOSEN]: [
 				new EntityChosenParser(this.helper, this.allCards),
 				new SphereOfSapienceParser(this.helper),

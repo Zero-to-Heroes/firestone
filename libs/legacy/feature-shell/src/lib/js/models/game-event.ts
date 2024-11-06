@@ -82,6 +82,8 @@ export class GameEvent implements GameStateEvent {
 	public static readonly CARD_CREATOR_CHANGED = 'CARD_CREATOR_CHANGED';
 	public static readonly END_OF_ECHO_IN_HAND = 'END_OF_ECHO_IN_HAND';
 	public static readonly CREATE_CARD_IN_DECK = 'CREATE_CARD_IN_DECK';
+	public static readonly ENCHANTMENT_ATTACHED = 'ENCHANTMENT_ATTACHED';
+	public static readonly ENCHANTMENT_DETACHED = 'ENCHANTMENT_DETACHED';
 	public static readonly CARD_BACK_TO_DECK = 'CARD_BACK_TO_DECK';
 	public static readonly TRADE_CARD = 'TRADE_CARD';
 	public static readonly CARD_REMOVED_FROM_DECK = 'CARD_REMOVED_FROM_DECK';
