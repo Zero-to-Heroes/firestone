@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -40,6 +40,13 @@ export class CardPlayedByEffectParser implements EventParser {
 		},
 	): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const creatorCardId = gameEvent.additionalData.creatorCardId;
+
+		// Hack to avoid showing the the "choose one" options, which sometimes cause a "card-play-by-effect" event
+		// to be triggered
+		if (this.allCards.getCard(creatorCardId)?.mechanics?.includes(GameTag[GameTag.CHOOSE_ONE])) {
+			return currentState;
+		}
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -65,7 +72,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			temporaryCard: false,
 			playTiming: isOnBoard ? GameState.playTiming++ : null,
 			countered: isCardCountered,
-			creatorCardId: gameEvent.additionalData.creatorCardId,
+			creatorCardId: creatorCardId,
 			putIntoPlay: true,
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
