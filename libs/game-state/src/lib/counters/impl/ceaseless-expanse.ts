@@ -12,13 +12,7 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 	readonly player = {
 		pref: 'playerCeaselessExpanseCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
-			state.playerDeck.cardDrawnThisGame +
-			state.opponentDeck.cardDrawnThisGame +
-			state.cardsPlayedThisMatch.length +
-			state.miscCardsDestroyed.length +
-			state.playerDeck.minionsDeadThisMatch.length +
-			state.opponentDeck.minionsDeadThisMatch.length,
+		value: (state: GameState): number => this.getValue(state),
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.ceaseless-expanse-label'),
@@ -30,13 +24,7 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 	readonly opponent = {
 		pref: 'opponentCeaselessExpanseCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
-			state.playerDeck.cardDrawnThisGame +
-			state.opponentDeck.cardDrawnThisGame +
-			state.cardsPlayedThisMatch.length +
-			state.miscCardsDestroyed.length +
-			state.playerDeck.minionsDeadThisMatch.length +
-			state.opponentDeck.minionsDeadThisMatch.length,
+		value: (state: GameState): number => this.getValue(state),
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.ceaseless-expanse-label'),
@@ -50,6 +38,25 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
-		return null;
+		return this.i18n.translateString(`counters.ceaseless.player`, {
+			value: this.player.value(gameState),
+		});
+	}
+
+	private getValue(state: GameState): number {
+		return (
+			state.playerDeck.cardDrawnThisGame +
+			state.opponentDeck.cardDrawnThisGame +
+			state.cardsPlayedThisMatch.length +
+			state.miscCardsDestroyed.length +
+			state.playerDeck.minionsDeadThisMatch.length +
+			state.opponentDeck.minionsDeadThisMatch.length +
+			state.playerDeck.destroyedCardsInDeck.length +
+			state.opponentDeck.destroyedCardsInDeck.length
+			// Tested this, and it looks like Ceaseless doesn't get discounted when drawing cards with
+			// my hand full
+			// + state.playerDeck.burnedCards.length +
+			// state.opponentDeck.burnedCards.length
+		);
 	}
 }

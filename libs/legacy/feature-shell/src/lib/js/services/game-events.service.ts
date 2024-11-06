@@ -612,6 +612,20 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'ENCHANTMENT_ATTACHED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ENCHANTMENT_ATTACHED, gameEvent, {
+						attachedTo: gameEvent.Value.AdditionalProps?.AttachedTo,
+					}),
+				);
+				break;
+			case 'ENCHANTMENT_DETACHED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ENCHANTMENT_DETACHED, gameEvent, {
+						attachedTo: gameEvent.Value.AdditionalProps?.AttachedTo,
+					}),
+				);
+				break;
 			case 'SECRET_PLAYED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent, {

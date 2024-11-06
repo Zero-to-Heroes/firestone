@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { FAKE_JOUST_CARDS } from '../../hs-utils';
@@ -70,10 +70,13 @@ export class CardRemovedFromDeckParser implements EventParser {
 		// console.debug('[card-removed]', 'update card', card, cardWithZone);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			otherZone: newOtherZone,
-		} as DeckState);
+			destroyedCardsInDeck: cardWithZone.milled
+				? [...deck.destroyedCardsInDeck, { cardId, entityId }]
+				: deck.destroyedCardsInDeck,
+		});
 		// console.debug('[card-removed]', 'newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

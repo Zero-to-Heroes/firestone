@@ -31,10 +31,11 @@ export class CardRemovedFromBoardParser implements EventParser {
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			board: newBoard,
 			otherZone: newOtherZone,
-		} as DeckState);
+			destroyedCardsInDeck: [...deck.destroyedCardsInDeck, { cardId, entityId }],
+		});
 
 		const newState = currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

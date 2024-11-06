@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -38,11 +38,12 @@ export class CardRemovedFromHandParser implements EventParser {
 			// for now let's give it a try and document it when that happens
 			true,
 		);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			hand: newHand,
 			otherZone: newOtherZone,
 			deck: newDeck,
-		} as DeckState);
+			destroyedCardsInDeck: [...deck.destroyedCardsInDeck, { cardId, entityId }],
+		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

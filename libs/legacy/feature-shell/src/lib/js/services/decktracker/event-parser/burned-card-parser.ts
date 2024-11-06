@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -35,10 +35,11 @@ export class BurnedCardParser implements EventParser {
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			otherZone: newOtherZone,
-		} as DeckState);
+			burnedCards: [...deck.burnedCards, { cardId, entityId }],
+		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
