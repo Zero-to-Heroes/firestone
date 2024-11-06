@@ -59,6 +59,7 @@ export const addGuessInfoToDrawnCard = (
 	creatorCardId: string,
 	creatorEntityId: number,
 	deckState: DeckState,
+	allCards: CardsFacadeService,
 ): DeckCard => {
 	switch (creatorCardId) {
 		case CardIds.Robocaller_WORK_006:
@@ -69,6 +70,28 @@ export const addGuessInfoToDrawnCard = (
 				guessedInfo: {
 					...card.guessedInfo,
 					cost: nextCost,
+				},
+			});
+		case CardIds.DirdraRebelCaptain_GDB_117:
+			const allCrewmates =
+				allCards.getCard(creatorCardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId)?.id) ?? [];
+			const crewmatesLeftInDeck = allCrewmates.filter((crewmate) =>
+				deckState
+					.getAllCardsInDeck()
+					.map((c) => c.cardId)
+					.includes(crewmate),
+			);
+			console.debug(
+				'[debug] crewmatesLeftInDeck',
+				crewmatesLeftInDeck,
+				allCrewmates,
+				deckState,
+				allCards.getCard(creatorCardId),
+			);
+			return card.update({
+				guessedInfo: {
+					...card.guessedInfo,
+					possibleCards: crewmatesLeftInDeck,
 				},
 			});
 		default:

@@ -65,7 +65,7 @@ export class DeckCard {
 	// This can be used to store the link in both ways, when we know about it
 	readonly cardCopyLink?: number;
 	readonly storedInformation?: StoredInformation | null;
-	readonly guessedInfo = {};
+	readonly guessedInfo: GuessedInfo = {};
 	readonly cardMatchCondition?: (card: ReferenceCard, cardInfos?: { cost?: number }) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {
@@ -106,5 +106,6 @@ export interface StoredInformation {
 }
 
 export interface GuessedInfo {
-	readonly cost?: number;
+	readonly cost?: number | null;
+	readonly possibleCards?: readonly string[] | null;
 }

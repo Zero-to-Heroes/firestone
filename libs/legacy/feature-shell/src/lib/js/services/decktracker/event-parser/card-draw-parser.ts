@@ -164,8 +164,9 @@ export class CardDrawParser implements EventParser {
 			gameEvent.additionalData.drawnByCardId,
 			gameEvent.additionalData.drawnByEntityId,
 			deck,
+			this.allCards,
 		);
-		// console.debug('cardWithGuessInfo', cardWithGuessInfo, gameEvent);
+		console.debug('[debug] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
 		const previousDeck = deck.deck;
 
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck

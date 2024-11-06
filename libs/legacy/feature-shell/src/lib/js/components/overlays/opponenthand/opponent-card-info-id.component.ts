@@ -118,7 +118,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			cardName: this.cardId === card.cardId ? card.cardName : this.i18n.getCardName(this.cardId),
 		} as DeckCard);
 		this.guessedInfo = card.guessedInfo;
-		if (this.forged) {
+		if (this.guessedInfo?.possibleCards) {
+			this.possibleCards = this.guessedInfo.possibleCards;
+		} else if (this.forged) {
 			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
 			// and the hero classes
 			const cardClasses: readonly CardClass[] = context
