@@ -8,6 +8,7 @@ export * from './lib/models/_barrel';
 export * from './lib/services/_bootstrap-game-state.service';
 export * from './lib/services/card-utils';
 export * from './lib/services/deck-handler.service';
+export * from './lib/services/deck-utils';
 export * from './lib/services/game-events-facade.service';
 export * from './lib/services/game-state-facade.service';
 export * from './lib/services/game-state-updates.service';

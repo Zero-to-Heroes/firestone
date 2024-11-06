@@ -11,12 +11,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { DeckState, GameState, GameStateFacadeService, StatsRecap } from '@firestone/game-state';
+import { DeckState, enrichDeck, GameState, GameStateFacadeService, StatsRecap } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, shareReplay, takeUntil } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
@@ -222,7 +222,9 @@ export class DeckTrackerOverlayRootComponent
 		this.deck$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => {
 				const deck = !gameState ? null : this.deckExtractor(gameState);
-				return deck;
+				// Add some information so that we can have it even when global effects are hidden
+				const enrichedDeck = enrichDeck(deck);
+				return enrichedDeck;
 			}),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
