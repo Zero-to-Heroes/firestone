@@ -1,5 +1,6 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -13,14 +14,29 @@ const CARDS_THAT_PUT_ON_TOP = [
 ];
 
 export class EntityChosenParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const newState = this.handleEvent(currentState, gameEvent);
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const originCardId = gameEvent.additionalData?.context?.creatorCardId;
+		const isDiscover = this.allCards.getCard(originCardId)?.mechanics?.includes(GameTag[GameTag.DISCOVER]);
+
+		let stateAfterDiscover = currentState;
+		if (isDiscover) {
+			const isPlayer = controllerId === localPlayer.PlayerId;
+			const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+			stateAfterDiscover = stateAfterDiscover.update({
+				[isPlayer ? 'playerDeck' : 'opponentDeck']: deck.update({
+					discoversThisGame: deck.discoversThisGame + 1,
+				}),
+			});
+		}
+
+		const newState = this.handleEvent(stateAfterDiscover, gameEvent);
 		return newState.update({
 			playerDeck: newState.playerDeck.update({
 				currentOptions: [],

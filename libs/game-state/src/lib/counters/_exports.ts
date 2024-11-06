@@ -1,6 +1,7 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
+import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 
@@ -11,6 +12,7 @@ export const allCounters: (
 	new DragonsSummonedCounterDefinitionV2(i18n),
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),
+	new DiscoversCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -18,6 +20,7 @@ export type CounterType =
 	| 'galakrond'
 	| 'pogo'
 	| 'ceaselessExpanse'
+	| 'discovers'
 	| 'astralAutomaton'
 	| 'chainedGuardian'
 	| 'earthenGolem'

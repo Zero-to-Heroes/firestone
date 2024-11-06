@@ -130,6 +130,7 @@ export class DeckState {
 	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	readonly cardDrawnThisGame: number = 0;
+	readonly discoversThisGame: number = 0;
 	readonly lastDeathrattleTriggered?: string;
 	readonly manaUsedThisTurn: number = 0;
 	readonly manaLeft: number = 0;

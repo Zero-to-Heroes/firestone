@@ -195,7 +195,10 @@ export class GameStateParsersService {
 			[GameEvent.DECKSTRING_OVERRIDE]: [new DeckstringOverrideParser(this.deckHandler)],
 			[GameEvent.DISCARD_CARD]: [new DiscardedCardParser(this.helper)],
 			[GameEvent.END_OF_ECHO_IN_HAND]: [new EndOfEchoInHandParser(this.helper)],
-			[GameEvent.ENTITY_CHOSEN]: [new EntityChosenParser(this.helper), new SphereOfSapienceParser(this.helper)],
+			[GameEvent.ENTITY_CHOSEN]: [
+				new EntityChosenParser(this.helper, this.allCards),
+				new SphereOfSapienceParser(this.helper),
+			],
 			[GameEvent.ENTITY_UPDATE]: [new EntityUpdateParser(this.helper, this.i18n, this.allCards)],
 			[GameEvent.EXCAVATE_TIER_CHANGED]: [new ExcavateTierParser()],
 			[GameEvent.FATIGUE_DAMAGE]: [new FatigueParser()],
