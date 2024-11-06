@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-case-declarations */
 import {
@@ -13,6 +14,7 @@ import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
+import { cardsInfoCache } from './cards/_mapping';
 
 export const getProcessedCard = (cardId: string, deckState: DeckState, allCards: CardsFacadeService): ReferenceCard => {
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
@@ -72,30 +74,18 @@ export const addGuessInfoToDrawnCard = (
 					cost: nextCost,
 				},
 			});
-		case CardIds.DirdraRebelCaptain_GDB_117:
-			const allCrewmates =
-				allCards.getCard(creatorCardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId)?.id) ?? [];
-			const crewmatesLeftInDeck = allCrewmates.filter((crewmate) =>
-				deckState
-					.getAllCardsInDeck()
-					.map((c) => c.cardId)
-					.includes(crewmate),
-			);
-			console.debug(
-				'[debug] crewmatesLeftInDeck',
-				crewmatesLeftInDeck,
-				allCrewmates,
-				deckState,
-				allCards.getCard(creatorCardId),
-			);
-			return card.update({
-				guessedInfo: {
-					...card.guessedInfo,
-					possibleCards: crewmatesLeftInDeck,
-				},
-			});
 		default:
-			return card;
+			const possibleCards: readonly string[] | undefined = cardsInfoCache[
+				creatorCardId as keyof typeof cardsInfoCache
+			]?.getPossibleCardsReceivedInHand(creatorCardId, deckState, allCards);
+			return !!possibleCards?.length
+				? card.update({
+						guessedInfo: {
+							...card.guessedInfo,
+							possibleCards: possibleCards,
+						},
+				  })
+				: card;
 	}
 };
 
