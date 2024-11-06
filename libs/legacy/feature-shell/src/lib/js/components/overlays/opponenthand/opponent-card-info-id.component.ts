@@ -123,6 +123,10 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		} else if (this.forged) {
 			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
 			// and the hero classes
+			// This is a bit difficult, because we have two scenarios at odd with each other:
+			// - We compute the class when the card is created, but we might not know it (because of tourists)
+			// - We compute the class afterwards, but the hero might have changed
+			// - temp fix: remove the hero classes
 			const cardClasses: readonly CardClass[] = context
 				.getAllCardsFromStarterDeck()
 				.filter((c) => c?.cardId)
@@ -130,7 +134,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				.filter((value, index, self) => self.indexOf(value) === index)
 				.map((cardClass) => CardClass[cardClass]);
 			console.debug('[debug] cardClasses', cardClasses);
-			const heroClasses: readonly CardClass[] = context.hero?.classes ?? [];
+			const heroClasses: readonly CardClass[] = []; // context.hero?.classes ?? [];
 			console.debug('[debug] heroClasses', heroClasses);
 			const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
 				(value, index, self) => self.indexOf(value) === index,
