@@ -2226,6 +2226,15 @@ export const cardIdSelector = (
 		case CardIds.TessGreymane_GIL_598:
 		case CardIds.TessGreymaneCore:
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral))));
+		case CardIds.The8HandsFromBeyond_GDB_477:
+			return (input: SelectorInput): SelectorOutput => {
+				const orderedByCost = [...input.deckState.deck].sort((a, b) => b.manaCost - a.manaCost);
+				const highest8th =
+					orderedByCost.length < 8 ? orderedByCost[orderedByCost.length - 1] : orderedByCost[7];
+				const highest8thCost = highest8th?.manaCost ?? 0;
+				const candidates = orderedByCost.filter((c) => c.manaCost >= highest8thCost).map((c) => c.entityId);
+				return and(side(inputSide), inDeck, minion, entityIs(...candidates))(input);
+			};
 		case CardIds.TheBoomReaver:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheBoomship:
