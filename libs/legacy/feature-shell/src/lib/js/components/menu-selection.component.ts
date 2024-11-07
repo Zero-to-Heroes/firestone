@@ -278,7 +278,7 @@ export class MenuSelectionComponent
 		this.avatarUrl$ = this.userService.user$$.pipe(
 			this.mapData(
 				(currentUser) =>
-					currentUser?.avatar ??
+					currentUser?.avatar ||
 					'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/social-share-login.png',
 			),
 		);
