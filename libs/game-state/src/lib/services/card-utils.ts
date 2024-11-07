@@ -62,8 +62,17 @@ export const addGuessInfoToDrawnCard = (
 	creatorEntityId: number,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
+	options?: {
+		positionInHand?: number;
+		tags?: readonly { Name: GameTag; Value: number }[];
+	},
 ): DeckCard => {
 	switch (creatorCardId) {
+		case CardIds.HarthStonebrew_CORE_GIFT_01:
+		case CardIds.HarthStonebrew_GIFT_01:
+			return card.update({
+				creatorAdditionalInfo: options?.positionInHand,
+			});
 		case CardIds.Robocaller_WORK_006:
 			const tagScripts = deckState.findCard(creatorEntityId)?.card?.storedInformation?.tagScriptValues;
 			// WARNING: mutable data
@@ -75,14 +84,16 @@ export const addGuessInfoToDrawnCard = (
 				},
 			});
 		default:
-			const possibleCards: readonly string[] | undefined = cardsInfoCache[
-				creatorCardId as keyof typeof cardsInfoCache
-			]?.getPossibleCardsReceivedInHand(creatorCardId, deckState, allCards);
-			return !!possibleCards?.length
+			const guessedInfo = cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache]?.guessInfo(
+				deckState,
+				allCards,
+				options,
+			);
+			return guessedInfo != null
 				? card.update({
 						guessedInfo: {
 							...card.guessedInfo,
-							possibleCards: possibleCards,
+							...guessedInfo,
 						},
 				  })
 				: card;
@@ -95,17 +106,6 @@ export const getPossibleForgedCards = (
 	allCards: CardsFacadeService,
 ): readonly string[] => {
 	const cardClasses = [...(inputCardClasses ?? []), CardClass.NEUTRAL];
-	console.debug(
-		'[debug] getPossibleForgedCards',
-		format,
-		cardClasses,
-		allCards
-			.getCards()
-			.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format) : false))
-			.filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE]))
-			.filter((c) => c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
-			.map((c) => allCards.getCard(c.relatedCardDbfIds?.[0] ?? 0)?.id),
-	);
 	return allCards
 		.getCards()
 		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format) : false))

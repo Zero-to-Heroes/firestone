@@ -1,21 +1,26 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
 export const DirdraRebelCaptain: Card & GeneratingCard = {
-	getPossibleCardsReceivedInHand: (
-		creatorCardId: string,
-		deckState: DeckState,
-		allCards: CardsFacadeService,
-	): readonly string[] => {
+	guessInfo: (deckState: DeckState, allCards: CardsFacadeService): GuessedInfo | null => {
 		const allCrewmates =
-			allCards.getCard(creatorCardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId)?.id) ?? [];
-		const crewmatesLeftInDeck = allCrewmates.filter((crewmate) =>
+			allCards
+				.getCard(CardIds.DirdraRebelCaptain_GDB_117)
+				.relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId)?.id) ?? [];
+		const possibleCards = allCrewmates.filter((crewmate) =>
 			deckState
 				.getAllCardsInDeck()
 				.map((c) => c.cardId)
 				.includes(crewmate),
 		);
-		return crewmatesLeftInDeck;
+		return !!possibleCards?.length
+			? {
+					possibleCards: possibleCards,
+			  }
+			: null;
 	},
 };
