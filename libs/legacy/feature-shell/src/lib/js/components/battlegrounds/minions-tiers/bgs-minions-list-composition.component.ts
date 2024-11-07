@@ -5,7 +5,7 @@ import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battleg
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, startWith, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 
 @Component({
 	selector: 'bgs-minions-list-composition',
@@ -20,14 +20,13 @@ import { BehaviorSubject, combineLatest, Observable, startWith, tap } from 'rxjs
 					<div class="header-text">{{ name }}</div>
 					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 				</div>
-				<div
+				<!-- <div
 					class="cards enablers"
 					*ngIf="(!value.collapsed || value.displayMode === 'exploring') && enablerCards?.length"
 				>
 					<div class="header" *ngIf="!value.collapsed || value.displayMode !== 'exploring'">
 						<div class="header-text">Enablers</div>
 					</div>
-					<!-- TODO: highlight enablers that are on the board, and highlight (differently) enablers that are in the shop -->
 					<bgs-minion-item
 						class="minion"
 						*ngFor="let minion of enablerCards; trackBy: trackByFn"
@@ -45,10 +44,13 @@ import { BehaviorSubject, combineLatest, Observable, startWith, tap } from 'rxjs
 						[showTavernTierIcon]="true"
 						[leftPadding]="20"
 					></bgs-minion-item>
-				</div>
+				</div> -->
 				<div class="cards core" *ngIf="!value.collapsed && coreCards?.length">
 					<div class="header">
-						<div class="header-text">Core cards</div>
+						<div
+							class="header-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.core-cards-header'"
+						></div>
 					</div>
 					<bgs-minion-item
 						class="minion"
@@ -66,7 +68,10 @@ import { BehaviorSubject, combineLatest, Observable, startWith, tap } from 'rxjs
 				</div>
 				<div class="cards addons" *ngIf="!value.collapsed && addonCards?.length">
 					<div class="header">
-						<div class="header-text">Add-ons</div>
+						<div
+							class="header-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.add-ons-header'"
+						></div>
 					</div>
 					<bgs-minion-item
 						class="minion"
@@ -156,14 +161,10 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 
 	ngAfterContentInit() {
 		this.collapsed$ = combineLatest([this.controller.expandedCompositions$$, this.compId$$]).pipe(
-			tap(([expandedIds, compId]) =>
-				console.debug('setting collapsed 1', expandedIds, compId, expandedIds.includes(compId)),
-			),
 			this.mapData(([expandedIds, compId]) => !expandedIds.includes(compId)),
 			startWith(true),
-			tap((collapsed) => console.debug('setting collapsed 2', collapsed)),
 		);
-		this.displayMode$ = this.displayMode$$.pipe(this.mapData((mode) => mode));
+		// this.displayMode$ = this.displayMode$$.pipe(this.mapData((mode) => mode));
 	}
 
 	trackByFn(index: number, minion: ExtendedReferenceCard) {

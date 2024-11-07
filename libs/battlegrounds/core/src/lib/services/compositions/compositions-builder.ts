@@ -10,8 +10,7 @@ export const buildCompositions = (
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly ExtendedBgsCompAdvice[] => {
-	// return strategies;
-	return (
+	const result =
 		compositions
 			?.map((s) => enhanceComp(s, allCards))
 			.filter((s) => {
@@ -31,8 +30,8 @@ export const buildCompositions = (
 						.localeCompare(i18n.translateString(`global.tribe.${Race[b.tribes[0]].toLocaleLowerCase()}`)) ||
 					(a.name ?? '').localeCompare(b.name ?? '')
 				);
-			}) ?? []
-	);
+			}) ?? [];
+	return result;
 };
 
 const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): ExtendedBgsCompAdvice => {
@@ -43,7 +42,7 @@ const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): Extende
 		.map((r) => Race[r]);
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
-		minionIcon: comp.cards.filter((c) => c.status === 'CORE')[0].cardId,
+		minionIcon: comp.cards.filter((c) => c.status === 'CORE')[0]?.cardId,
 		cards: [...comp.cards]
 			.sort((a, b) => {
 				const cardA = allCards.getCard(a.cardId);

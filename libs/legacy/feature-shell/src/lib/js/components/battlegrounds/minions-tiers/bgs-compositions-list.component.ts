@@ -20,8 +20,8 @@ import { Observable } from 'rxjs';
 				- Exapand / collapse all
 			-->
 			<div class="header">
-				<div class="header-text">Compositions</div>
-				<div class="header-filters"><bgs-comps-view-select-dropdown></bgs-comps-view-select-dropdown></div>
+				<div class="header-text" [fsTranslate]="'battlegrounds.in-game.minions-list.compositions.header'"></div>
+				<!-- <div class="header-filters"><bgs-comps-view-select-dropdown></bgs-comps-view-select-dropdown></div> -->
 				<!-- TODO: add a "pin" button next to "exploring" to pin all the enablers? -->
 			</div>
 			<bgs-minions-list-composition
