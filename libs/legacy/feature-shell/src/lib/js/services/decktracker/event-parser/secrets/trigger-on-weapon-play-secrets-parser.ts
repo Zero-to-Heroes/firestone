@@ -18,11 +18,7 @@ export class TriggerOnWeaponPlaySecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return (
-			state &&
-			gameEvent.gameState &&
-			(gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.WEAPON_EQUIPPED)
-		);
+		return state && (gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.WEAPON_EQUIPPED);
 	}
 
 	async parse(

@@ -53,7 +53,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
-			// gameEvent.gameState &&
 			(gameEvent.type === GameEvent.ATTACKING_HERO ||
 				gameEvent.type === GameEvent.ATTACKING_MINION ||
 				gameEvent.type === GameEvent.SECRET_TRIGGERED)
@@ -91,7 +90,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 
 		const isPlayerTheAttackedParty = defenderControllerId === gameEvent.localPlayer.PlayerId;
 
-		// const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerTheAttackedParty && currentState.playerDeck.isActivePlayer) {
 			return currentState;
@@ -201,12 +199,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			...currentState.opponentDeck.board.map((entity) => entity.entityId),
 		];
 
-		// const allEntities = [
-		// 	gameEvent.gameState.Player.Hero,
-		// 	...gameEvent.gameState.Player.Board,
-		// 	gameEvent.gameState.Opponent.Hero,
-		// 	...gameEvent.gameState.Opponent.Board,
-		// ];
 		const otherTargets = allEntities.filter((entity) => ![attackerId, defenderId].includes(entity));
 
 		// Misdirection only triggers if there is another entity on the board that can be attacked

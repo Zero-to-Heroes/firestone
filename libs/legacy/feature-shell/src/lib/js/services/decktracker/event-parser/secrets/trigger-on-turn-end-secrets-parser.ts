@@ -15,12 +15,12 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.gameState && gameEvent.type === GameEvent.TURN_START;
+		return state && gameEvent.type === GameEvent.TURN_START;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [, , localPlayer] = gameEvent.parse();
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
+		const activePlayerId = gameEvent.additionalData.activePlayerId;
 		// Can happen at the very start of the game
 		if (!localPlayer) {
 			return currentState;

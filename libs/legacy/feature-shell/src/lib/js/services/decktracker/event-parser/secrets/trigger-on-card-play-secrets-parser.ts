@@ -19,7 +19,6 @@ export class TriggerOnCardPlaySecretsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
-			gameEvent.gameState &&
 			(gameEvent.type === GameEvent.CARD_PLAYED ||
 				gameEvent.type === GameEvent.SECRET_PLAYED ||
 				gameEvent.type === GameEvent.QUEST_PLAYED)

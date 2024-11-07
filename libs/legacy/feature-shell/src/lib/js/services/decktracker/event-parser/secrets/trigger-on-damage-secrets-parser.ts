@@ -18,7 +18,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.gameState && gameEvent.type === GameEvent.DAMAGE;
+		return state && gameEvent.type === GameEvent.DAMAGE;
 	}
 
 	async parse(
@@ -38,7 +38,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 	): Promise<GameState> {
 		const [, , localPlayer] = gameEvent.parse();
 		//const sourceControllerId = gameEvent.additionalData.sourceControllerId;
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
+		const activePlayerId = gameEvent.additionalData.activePlayerId;
 
 		if (!localPlayer || activePlayerId == null) {
 			console.error(
@@ -83,8 +83,8 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		}
 
 		const enemyHeroEntityId = isPlayerActive
-			? gameEvent.gameState.Opponent?.Hero.entityId
-			: gameEvent.gameState.Player?.Hero.entityId;
+			? currentState.opponentDeck?.hero?.entityId
+			: currentState.playerDeck?.hero?.entityId;
 		const heroTarget = gameEvent.additionalData.targets
 			? Object.values(gameEvent.additionalData.targets).find(
 					(target) => target.TargetEntityId === enemyHeroEntityId,

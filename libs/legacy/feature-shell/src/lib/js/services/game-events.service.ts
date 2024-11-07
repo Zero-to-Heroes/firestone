@@ -385,9 +385,9 @@ export class GameEvents {
 						type: GameEvent.MINIONS_DIED,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
-						gameState: gameEvent.Value.GameState,
 						additionalData: {
 							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
+							activePlayerId: gameEvent.Value.AdditionalProps.ActivePlayerId,
 						},
 					} as MinionsDiedEvent),
 				);
@@ -398,7 +398,6 @@ export class GameEvents {
 						type: GameEvent.MINIONS_WILL_DIE,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
-						gameState: gameEvent.Value.GameState,
 						additionalData: {
 							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
 						},
@@ -569,6 +568,7 @@ export class GameEvents {
 								? gameEvent.Value.AdditionalProps?.Position - 1
 								: null,
 						referencedCardIds: gameEvent.Value.AdditionalProps?.ReferencedCardIds,
+						tags: gameEvent.Value.AdditionalProps?.GuessedTags ?? [],
 					}),
 				);
 				break;
@@ -998,12 +998,12 @@ export class GameEvents {
 						type: GameEvent.DAMAGE,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
-						gameState: gameEvent.Value.GameState,
 						additionalData: {
 							sourceCardId: gameEvent.Value.SourceCardId,
 							sourceEntityId: gameEvent.Value.SourceEntityId,
 							sourceControllerId: gameEvent.Value.SourceControllerId,
 							targets: gameEvent.Value.Targets,
+							activePlayerId: gameEvent.Value.ActivePlayerId,
 						},
 					} as DamageGameEvent),
 				);
@@ -1044,7 +1044,6 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
-						gameState: gameEvent.Value.GameState,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {

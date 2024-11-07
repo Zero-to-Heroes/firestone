@@ -8,6 +8,7 @@ export class DamageGameEvent extends GameEvent {
 		targets: {
 			[targetCardId: string]: DamageGameEventTarget;
 		};
+		activePlayerId: number;
 	};
 
 	public findTarget(cardId: string): DamageGameEventTarget {

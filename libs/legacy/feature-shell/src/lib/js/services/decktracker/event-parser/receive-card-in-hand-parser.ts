@@ -1,5 +1,5 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { addGuessInfoToDrawnCard, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -158,13 +158,24 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
 				: cardWithZone;
-		const cardWithGuessedInfo = addGuessedInfo(otherCardWithBuffs, gameEvent);
+		const cardWithGuessedInfo = addGuessInfoToDrawnCard(
+			otherCardWithBuffs,
+			gameEvent.additionalData.creatorCardId,
+			null,
+			deck,
+			this.allCards,
+			{
+				positionInHand: gameEvent.additionalData.position,
+				tags: gameEvent.additionalData.tags,
+			},
+		);
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
 			cardWithGuessedInfo,
 			deck,
 			gameEvent,
 			this.allCards,
 		);
+
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithAdditionalAttributes',
 		// 	cardWithAdditionalAttributes,
@@ -290,17 +301,6 @@ export const addAdditionalAttribuesInHand = (
 						relatedCardIds: gameEvent.additionalData.referencedCardIds,
 				  })
 				: card;
-	}
-	return card;
-};
-
-const addGuessedInfo = (card: DeckCard, gameEvent: GameEvent): DeckCard => {
-	switch (gameEvent.additionalData.creatorCardId) {
-		case CardIds.HarthStonebrew_CORE_GIFT_01:
-		case CardIds.HarthStonebrew_GIFT_01:
-			return card.update({
-				creatorAdditionalInfo: gameEvent.additionalData.position,
-			});
 	}
 	return card;
 };

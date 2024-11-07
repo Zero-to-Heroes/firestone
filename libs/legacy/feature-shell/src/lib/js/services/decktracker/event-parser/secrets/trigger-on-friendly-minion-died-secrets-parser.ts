@@ -23,12 +23,12 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.gameState && gameEvent.type === GameEvent.MINIONS_DIED;
+		return state && gameEvent.type === GameEvent.MINIONS_DIED;
 	}
 
 	async parse(currentState: GameState, gameEvent: MinionsDiedEvent): Promise<GameState> {
 		const [, , localPlayer] = gameEvent.parse();
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
+		const activePlayerId = gameEvent.additionalData.activePlayerId;
 
 		const deadEnemyMinions = gameEvent.additionalData.deadMinions.filter(
 			(deadMinion) => deadMinion.ControllerId !== activePlayerId,

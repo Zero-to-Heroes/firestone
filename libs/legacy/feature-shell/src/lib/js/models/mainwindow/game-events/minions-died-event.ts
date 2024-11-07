@@ -11,5 +11,6 @@ export class MinionsDiedEvent extends GameEvent {
 				Timestamp: string;
 			},
 		];
+		activePlayerId: number;
 	};
 }

@@ -11,7 +11,7 @@ export class TriggerOnNumCardDrawSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.gameState && gameEvent.type === GameEvent.NUM_CARDS_DRAW_THIS_TURN;
+		return state && gameEvent.type === GameEvent.NUM_CARDS_DRAW_THIS_TURN;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
