@@ -142,13 +142,15 @@
 		.winrate {
 			opacity: 0;
 		}
-		.losses {
-			display: none;
-		}
-		.wins {
-			padding: 0 10px;
-			&:after {
-				content: '';
+		.win-loss {
+			.losses {
+				display: none;
+			}
+			.wins {
+				padding: 0 10px;
+				&:after {
+					content: '';
+				}
 			}
 		}
 	}
