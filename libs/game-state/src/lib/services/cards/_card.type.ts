@@ -1,6 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckState, GuessedInfo } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GuessedInfo } from '../../models/deck-card';
+import { DeckState } from '../../models/deck-state';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Card {}
