@@ -155,8 +155,9 @@ export class CardPlayedFromHandParser implements EventParser {
 			// avoid info leaks, so if the info is present in the event, we add it
 			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
 			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags),
+			tags: gameEvent.additionalData.tags,
 		});
-		console.debug('cardWithInfo', cardWithInfo, gameEvent);
+		// console.debug('cardWithInfo', cardWithInfo, gameEvent);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card

@@ -19,18 +19,14 @@ import { cardsInfoCache } from './cards/_mapping';
 export const getProcessedCard = (cardId: string, deckState: DeckState, allCards: CardsFacadeService): ReferenceCard => {
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
 		const updatedRefCard: Mutable<ReferenceCard> = { ...allCards.getCard(cardId) };
-		console.debug('[debug] adding modules to Zilliax', cardId, updatedRefCard);
 		const sideboard = deckState.sideboards?.find((s) => s.keyCardId.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330));
-		console.debug('[debug] sideboard', sideboard);
 		// Remove the cosmetic module
 		const modules = sideboard?.cards?.map((c) => allCards.getCard(c)).filter((c) => c.health) ?? [];
-		console.debug('[debug] modules', modules);
 		updatedRefCard.mechanics = [...(updatedRefCard.mechanics ?? [])];
 		updatedRefCard.mechanics.push(...modules.flatMap((m) => m.mechanics ?? []));
 		updatedRefCard.attack = modules.reduce((a, b) => a + (b.attack ?? 0), 0);
 		updatedRefCard.health = modules.reduce((a, b) => a + (b.health ?? 0), 0);
 		updatedRefCard.cost = modules.reduce((a, b) => a + (b.cost ?? 0), 0);
-		console.debug('[debug] updated refCard', updatedRefCard);
 		return updatedRefCard;
 	}
 	return allCards.getCard(cardId);
@@ -38,6 +34,7 @@ export const getProcessedCard = (cardId: string, deckState: DeckState, allCards:
 
 // Ideally I would access the tag information directly from the card, but the way the parser works today
 // (keep the "real" state on the parser, and only send events) this is not possible
+/** @deprecated use the DeckCard.tags field directly */
 export const storeInformationOnCardPlayed = (
 	cardId: string,
 	tags: readonly { Name: GameTag; Value: number }[],
@@ -87,6 +84,7 @@ export const addGuessInfoToDrawnCard = (
 			const guessedInfo = cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache]?.guessInfo(
 				deckState,
 				allCards,
+				creatorEntityId,
 				options,
 			);
 			return guessedInfo != null

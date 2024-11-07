@@ -10,6 +10,7 @@ export interface GeneratingCard {
 	guessInfo: (
 		deckState: DeckState,
 		allCards: CardsFacadeService,
+		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;
 			tags?: readonly { Name: GameTag; Value: number }[];

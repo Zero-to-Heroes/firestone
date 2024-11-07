@@ -66,6 +66,7 @@ export class DeckCard {
 	readonly cardCopyLink?: number;
 	readonly storedInformation?: StoredInformation | null;
 	readonly guessedInfo: GuessedInfo = {};
+	readonly tags: readonly { Name: number; Value: number }[] = [];
 	readonly cardMatchCondition?: (card: ReferenceCard, cardInfos?: { cost?: number }) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {
