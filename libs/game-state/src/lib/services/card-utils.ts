@@ -32,9 +32,6 @@ export const getProcessedCard = (cardId: string, deckState: DeckState, allCards:
 	return allCards.getCard(cardId);
 };
 
-// Ideally I would access the tag information directly from the card, but the way the parser works today
-// (keep the "real" state on the parser, and only send events) this is not possible
-/** @deprecated use the DeckCard.tags field directly */
 export const storeInformationOnCardPlayed = (
 	cardId: string,
 	tags: readonly { Name: GameTag; Value: number }[],
