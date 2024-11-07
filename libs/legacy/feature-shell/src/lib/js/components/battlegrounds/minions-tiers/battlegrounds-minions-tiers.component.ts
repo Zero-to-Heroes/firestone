@@ -35,7 +35,6 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -222,7 +221,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.gameState.gameState$$,
 			playerTrinkets$,
 		]).pipe(
-			filter(([bgGameState, gameState, trinkets]) => bgGameState?.currentGame?.phase === 'recruit'),
+			filter(([bgGameState, gameState, trinkets]) => bgGameState?.currentGame?.phase !== 'combat'),
 			this.mapData(([bgGameState, gameState, trinkets]) => {
 				const trinketsArray = [trinkets.lesser, trinkets.greater].filter((trinket) => !!trinket);
 				const allEntities = [...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])];
@@ -268,7 +267,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.mapData(([availableTribes, strategies]) =>
 				buildCompositions(availableTribes, strategies, this.allCards, this.i18n),
 			),
-			tap((comps) => console.debug('comps', comps)),
 		);
 
 		this.highlightedTribes$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedTribes));

@@ -140,7 +140,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	}
 
 	onDisplayedTier(tavernTier: Tier) {
-		// console.debug('setting displayed tier', tavernTier?.tavernTier, tavernTier);
 		this.displayedTierId$$.next(tavernTier?.tavernTier);
 	}
 
