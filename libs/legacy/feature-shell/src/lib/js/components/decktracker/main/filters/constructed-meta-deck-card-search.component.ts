@@ -5,7 +5,7 @@ import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'constructed-meta-deck-card-search',
@@ -59,12 +59,10 @@ export class ConstructedMetaDeckCardSearchComponent extends AbstractSubscription
 			}),
 		);
 		this.filter$ = this.constructedMetaStats.cardSearch$$.pipe(
-			tap((filter) => console.debug('[multiselect] before setting filter', filter)),
 			this.mapData((filter) => ({
 				selected: filter?.map((a) => '' + a) ?? [],
 				placeholder: this.i18n.translateString(`app.decktracker.filters.card-filter.all`),
 			})),
-			tap((filter) => console.debug('[multiselect] setting filter', filter)),
 		) as any;
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

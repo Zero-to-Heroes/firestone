@@ -18,7 +18,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'filter-dropdown-multiselect',
@@ -153,7 +153,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			)
 			.subscribe((tempSelected) => this.tempSelected$.next(tempSelected));
 		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
-			tap(([options, selected]) => console.debug('[multiselect] showing text', options, selected)),
 			filter(([options, selected]) => !!options?.length),
 			this.mapData(([options, selected]) => {
 				if (!selected?.length || selected.length === options.length) {
@@ -165,7 +164,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 						.filter((option) => !!option)
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				);
-				console.debug('[multiselect] showing text', result, selected);
 				return result;
 			}),
 		);
@@ -282,11 +280,15 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		if (!validSelection) {
 			return;
 		}
-		const value = this.tempSelected$.value.filter((option) =>
-			!this.currentSearch$$.value?.length
-				? true
-				: option.label.toLowerCase().includes(this.currentSearch$$.value.toLowerCase()),
-		);
+		// If you do this, selected items that don't match the current search won't be returned
+		// Since all selected items are always displayed, I think we can only rely on the selected / unselected
+		// character of an option
+		// const value = this.tempSelected$.value.filter((option) =>
+		// 	!this.currentSearch$$.value?.length
+		// 		? true
+		// 		: option.label.toLowerCase().includes(this.currentSearch$$.value.toLowerCase()),
+		// );
+		const value = this.tempSelected$.value;
 		this.optionSelected.next(value.map((o) => o.value));
 		this.toggle();
 	}
