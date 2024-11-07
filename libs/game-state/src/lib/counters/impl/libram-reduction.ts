@@ -17,8 +17,14 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 		display: (state: GameState): boolean => true,
 		value: (state: GameState): number =>
 			state.playerDeck.enchantments.filter(
-				(e) => e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e,
-			).length,
+				(e) =>
+					e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e ||
+					e.cardId === CardIds.AldorAttendant_AldorAttendantEnchantment,
+			).length +
+			2 *
+				state.playerDeck.enchantments.filter(
+					(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
+				).length,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.libram-reduction-label'),
@@ -32,8 +38,14 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 		display: (state: GameState): boolean => true,
 		value: (state: GameState): number =>
 			state.opponentDeck.enchantments.filter(
-				(e) => e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e,
-			).length,
+				(e) =>
+					e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e ||
+					e.cardId === CardIds.AldorAttendant_AldorAttendantEnchantment,
+			).length +
+			2 *
+				state.opponentDeck.enchantments.filter(
+					(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
+				).length,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.libram-reduction-label'),
