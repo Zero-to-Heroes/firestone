@@ -4,6 +4,7 @@ import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
+import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 
 export const allCounters: (
 	i18n: ILocalizationService,
@@ -13,6 +14,7 @@ export const allCounters: (
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),
 	new DiscoversCounterDefinitionV2(i18n),
+	new LibramReductionCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -37,6 +39,7 @@ export type CounterType =
 	| 'elemental'
 	| 'watchpost'
 	| 'libram'
+	| 'libramReduction'
 	| 'bolner'
 	| 'brilliantMacaw'
 	| 'monstrousParrot'
