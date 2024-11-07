@@ -188,7 +188,12 @@ export const cardIs =
 export const entityIs =
 	(...entityIds: readonly number[]) =>
 	(input: SelectorInput): boolean =>
-		!!entityIds?.length && entityIds.map((id) => Math.abs(id)).includes(Math.abs(input.entityId));
+		!!entityIds?.filter((e) => e != null)?.length &&
+		input.entityId != null &&
+		entityIds
+			.filter((e) => e != null)
+			.map((id) => Math.abs(id))
+			.includes(Math.abs(input.entityId));
 
 export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(input.entityId) ||
