@@ -133,15 +133,12 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				.flatMap((card) => this.allCards.getCard(card.cardId).classes ?? [])
 				.filter((value, index, self) => self.indexOf(value) === index)
 				.map((cardClass) => CardClass[cardClass]);
-			console.debug('[debug] cardClasses', cardClasses);
 			const heroClasses: readonly CardClass[] = []; // context.hero?.classes ?? [];
-			console.debug('[debug] heroClasses', heroClasses);
 			const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
 				(value, index, self) => self.indexOf(value) === index,
 			);
 			const possibleForgedCards = getPossibleForgedCards(metadata.formatType, allClasses, this.allCards);
 			this.possibleCards = possibleForgedCards;
-			console.debug('[debug] possibleForgedCards', possibleForgedCards);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
