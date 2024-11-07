@@ -54,9 +54,9 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 	private scene: SceneService;
 
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
-		gameWidth * 0.5 + 150 + this.defaultRandomLeft * 150;
+		gameWidth * 0.5 + gameHeight * 0.3;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) =>
-		this.side === 'player' ? gameHeight * 0.65 : gameHeight * 0.1;
+		this.side === 'player' ? gameHeight * 0.75 : gameHeight * 0.1;
 	protected positionUpdater = (left: number, top: number) =>
 		this.prefs.updateCounterPosition(this.counter.id, this.side, left, top);
 	protected positionExtractor = () => this.prefs.getCounterPosition(this.counter.id, this.side);
