@@ -2232,8 +2232,10 @@ export const cardIdSelector = (
 				const highest8th =
 					orderedByCost.length < 8 ? orderedByCost[orderedByCost.length - 1] : orderedByCost[7];
 				const highest8thCost = highest8th?.manaCost ?? 0;
-				const candidates = orderedByCost.filter((c) => c.manaCost >= highest8thCost).map((c) => c.entityId);
-				return and(side(inputSide), inDeck, minion, entityIs(...candidates))(input);
+				const candidates = orderedByCost
+					.filter((c) => c.manaCost >= highest8thCost)
+					.map((c) => c.cardId as CardIds);
+				return and(side(inputSide), inDeck, cardIs(...candidates))(input);
 			};
 		case CardIds.TheBoomReaver:
 			return and(side(inputSide), inDeck, minion);
