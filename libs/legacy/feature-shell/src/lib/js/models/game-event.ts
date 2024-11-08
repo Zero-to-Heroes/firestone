@@ -116,6 +116,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
 	public static readonly GALAKROND_INVOKED = 'GALAKROND_INVOKED';
+	public static readonly PARENT_CARD_CHANGED = 'PARENT_CARD_CHANGED';
 	public static readonly MINION_GO_DORMANT = 'MINION_GO_DORMANT';
 	public static readonly CARD_FORGED = 'CARD_FORGED';
 	public static readonly JADE_GOLEM = 'JADE_GOLEM';

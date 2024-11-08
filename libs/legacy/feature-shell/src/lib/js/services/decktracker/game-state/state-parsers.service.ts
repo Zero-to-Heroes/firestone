@@ -88,6 +88,7 @@ import { MulliganOverParser } from '../event-parser/mulligan-over-parser';
 import { NewTurnParser } from '../event-parser/new-turn-parser';
 import { OpponentPlayerParser } from '../event-parser/opponent-player-parser';
 import { OverloadParser } from '../event-parser/overload-parser';
+import { ParentCardChangedParser } from '../event-parser/parent-card-changed-parser';
 import { PassiveTriggeredParser } from '../event-parser/passive-triggered-parser';
 import { PlayersInfoParser } from '../event-parser/players-info-parser';
 import { QuestCompletedParser } from '../event-parser/quest-completed-parser';
@@ -260,6 +261,7 @@ export class GameStateParsersService {
 				),
 			],
 			[GameEvent.OVERLOADED_CRYSTALS_CHANGED]: [new OverloadParser()],
+			[GameEvent.PARENT_CARD_CHANGED]: [new ParentCardChangedParser(this.helper, this.allCards)],
 			[GameEvent.PASSIVE_BUFF]: [new PassiveTriggeredParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper)],
 			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n)],

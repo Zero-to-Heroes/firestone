@@ -16,9 +16,15 @@ import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
 import { cardsInfoCache } from './cards/_mapping';
 
-export const getProcessedCard = (cardId: string, deckState: DeckState, allCards: CardsFacadeService): ReferenceCard => {
+export const getProcessedCard = (
+	cardId: string,
+	entityId: number,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+): ReferenceCard => {
+	const refCard = allCards.getCard(cardId);
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
-		const updatedRefCard: Mutable<ReferenceCard> = { ...allCards.getCard(cardId) };
+		const updatedRefCard: Mutable<ReferenceCard> = { ...refCard };
 		const sideboard = deckState.sideboards?.find((s) => s.keyCardId.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330));
 		// Remove the cosmetic module
 		const modules = sideboard?.cards?.map((c) => allCards.getCard(c)).filter((c) => c.health) ?? [];
@@ -29,7 +35,38 @@ export const getProcessedCard = (cardId: string, deckState: DeckState, allCards:
 		updatedRefCard.cost = modules.reduce((a, b) => a + (b.cost ?? 0), 0);
 		return updatedRefCard;
 	}
-	return allCards.getCard(cardId);
+	const isStarship = refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]);
+	if (isStarship) {
+		const starshipCard = deckState.findCard(entityId)?.card;
+		// TODO: if a piece is buffed, we need to use its actual attack / health / cost instead of the ref values
+		const pieces =
+			starshipCard?.storedInformation?.cards
+				?.map((c) => allCards.getCard(c?.cardId))
+				.filter((c) => c.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE])) ?? [];
+		const updatedRefCard: Mutable<ReferenceCard> = { ...refCard };
+		updatedRefCard.mechanics = [...(updatedRefCard.mechanics ?? [])];
+		updatedRefCard.mechanics.push(...pieces.flatMap((m) => m.mechanics ?? []));
+		updatedRefCard.attack = pieces.reduce((a, b) => a + (b.attack ?? 0), 0);
+		updatedRefCard.health = pieces.reduce((a, b) => a + (b.health ?? 0), 0);
+		updatedRefCard.cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
+		return updatedRefCard;
+	}
+	return refCard;
+};
+
+export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFacadeService): number | null => {
+	const refCard = allCards.getCard(card.cardId);
+	const isStarship = refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]);
+	if (isStarship) {
+		const pieces =
+			card?.storedInformation?.cards
+				?.map((c) => allCards.getCard(c?.cardId))
+				.filter((c) => c.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE])) ?? [];
+		const cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
+		console.debug('[card-utils] computed cost for starship', refCard.name, pieces, cost, card);
+		return cost;
+	}
+	return card.getEffectiveManaCost();
 };
 
 export const storeInformationOnCardPlayed = (

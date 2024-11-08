@@ -95,7 +95,6 @@ export class DeckCard {
 	}
 
 	public getEffectiveManaCost(): number {
-		// Because it's used in grouping keys, and we don't want to differentiate null and undefined in that case
 		return this.actualManaCost ?? this.manaCost ?? null;
 	}
 }
@@ -104,6 +103,7 @@ export interface StoredInformation {
 	// WARNING: not sure this is a good idea to not make the values read-only, but it makes it SO much
 	// easier to work with
 	tagScriptValues?: (number | null)[];
+	cards?: readonly { cardId: string; entityId: number }[];
 }
 
 export interface GuessedInfo {

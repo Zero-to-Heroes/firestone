@@ -9,6 +9,7 @@ import {
 	RarityTYpe,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { getCost } from '@firestone/game-state';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
 export const and = (...filters: Selector[]): Selector => {
@@ -104,15 +105,21 @@ export const hasMultipleCopies = (input: SelectorInput): boolean =>
 export const effectiveCostLess =
 	(cost: number) =>
 	(input: SelectorInput): boolean =>
-		input.deckCard?.getEffectiveManaCost() < cost;
+		getCost(input.deckCard, input.deckState, input.allCards) < cost;
 
 export const effectiveCostLessThanRemainingMana = (input: SelectorInput): boolean =>
-	input.deckCard?.getEffectiveManaCost() < input.deckState.hero.manaLeft;
+	getCost(input.deckCard, input.deckState, input.allCards) < input.deckState.hero.manaLeft;
 
 export const effectiveCostMore =
 	(cost: number) =>
-	(input: SelectorInput): boolean =>
-		input.deckCard?.getEffectiveManaCost() > cost;
+	(input: SelectorInput): boolean => {
+		console.debug(
+			'checking cost',
+			input.allCards.getCard(input.deckCard.cardId).name,
+			input.allCards.getCard(input.deckCard.cardId),
+		);
+		return getCost(input.deckCard, input.deckState, input.allCards) > cost;
+	};
 
 export const costMore =
 	(cost: number) =>
@@ -122,7 +129,7 @@ export const costMore =
 export const effectiveCostEqual =
 	(cost: number) =>
 	(input: SelectorInput): boolean =>
-		input.deckCard?.getEffectiveManaCost() === cost;
+		getCost(input.deckCard, input.deckState, input.allCards) === cost;
 
 export const baseCostEqual =
 	(cost: number) =>

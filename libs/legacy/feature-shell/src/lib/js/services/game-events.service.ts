@@ -1072,6 +1072,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'PARENT_CARD_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.PARENT_CARD_CHANGED, gameEvent, {
+						newParentEntityId: gameEvent.Value.AdditionalProps.NewParentEntityId,
+					}),
+				);
+				break;
 			case 'BATTLEGROUNDS_HERO_SELECTION':
 				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(

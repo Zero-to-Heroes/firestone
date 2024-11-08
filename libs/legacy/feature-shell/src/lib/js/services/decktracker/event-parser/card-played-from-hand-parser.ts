@@ -126,7 +126,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		card = !!card.cardId ? card : card.update({ cardId: cardId });
 		console.debug('[card-played] card', card, removedCard);
 		// Only minions end up on the board
-		const refCard = getProcessedCard(card?.cardId ?? cardId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
+		const refCard = getProcessedCard(card?.cardId ?? cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
 		const cardWithZone =

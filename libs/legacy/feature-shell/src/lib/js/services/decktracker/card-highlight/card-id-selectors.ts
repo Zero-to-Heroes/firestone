@@ -1,5 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, SpellSchool } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -1170,18 +1170,25 @@ export const cardIdSelector = (
 				}
 
 				const candidates = input.deckState.minionsDeadThisMatch
-					.filter((c) => hasTaunt(c.cardId, input.deckState, allCards))
-					.sort(sortByProperties((c) => [-allCards.getCard(c.cardId).cost]));
+					.filter((c) => hasTaunt(c.cardId, c.entityId, input.deckState, allCards))
+					.filter((c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost != null)
+					.sort(
+						sortByProperties((c) => [
+							-getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost,
+						]),
+					);
 				if (!candidates.length) {
 					return null;
 				}
 
 				const targets = candidates.slice(0, 3);
 				const lowestCostTarget = targets[targets.length - 1];
-				const lowestCost = allCards.getCard(lowestCostTarget.cardId).cost;
-				return tooltip(and(side(inputSide), inGraveyard, minion, taunt, effectiveCostMore(lowestCost - 1)))(
-					input,
+				const lowestCostDeckCard = input.deckState.findCard(lowestCostTarget.entityId)?.card;
+				const lowestCost = getCost(lowestCostDeckCard, input.deckState, allCards);
+				const finalCandidates = candidates.filter(
+					(c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost >= lowestCost,
 				);
+				return tooltip(and(side(inputSide), entityIs(...finalCandidates.map((c) => c.entityId))))(input);
 			};
 		case CardIds.IcebloodTower:
 			return and(side(inputSide), inDeck, spell);
@@ -2595,6 +2602,8 @@ export const cardIdSelector = (
 	return null;
 };
 
-const hasTaunt = (cardId: string, deckState: DeckState, allCards: CardsFacadeService): boolean => {
-	return getProcessedCard(cardId, deckState, allCards).mechanics?.includes(GameTag[GameTag.TAUNT]) ?? false;
+const hasTaunt = (cardId: string, entityId: number, deckState: DeckState, allCards: CardsFacadeService): boolean => {
+	const result =
+		getProcessedCard(cardId, entityId, deckState, allCards).mechanics?.includes(GameTag[GameTag.TAUNT]) ?? false;
+	return result;
 };

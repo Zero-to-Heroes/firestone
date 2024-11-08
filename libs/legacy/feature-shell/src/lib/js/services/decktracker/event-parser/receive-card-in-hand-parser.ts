@@ -329,12 +329,12 @@ const guessCardId = (
 			break;
 		case CardIds.AstralVigilant_GDB_461:
 			return deckState.cardsPlayedThisMatch
-				.map((c) => getProcessedCard(c.cardId, deckState, allCards))
+				.map((c) => getProcessedCard(c.cardId, c.entityId, deckState, allCards))
 				.filter((c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI))
 				.pop()?.id;
 		case CardIds.MonstrousParrot:
 			return deckState.minionsDeadThisMatch
-				.map((c) => getProcessedCard(c.cardId, deckState, allCards))
+				.map((c) => getProcessedCard(c.cardId, c.entityId, deckState, allCards))
 				.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]))
 				.pop()?.id;
 	}

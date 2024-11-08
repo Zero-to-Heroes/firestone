@@ -61,7 +61,7 @@ export class CardBackToDeckParser implements EventParser {
 
 		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
 		// the enchantments, cost reduction, etc.
-		const refCard = getProcessedCard(card.cardId, deck, this.allCards); // this.allCards.getCard(card.cardId);
+		const refCard = getProcessedCard(card.cardId, card.entityId, deck, this.allCards); // this.allCards.getCard(card.cardId);
 		console.debug('[card-back-to-deck] refCard', refCard, card.cardId, deck, card);
 		const cardWithInfoReset = card?.update({
 			manaCost: refCard?.cost ?? card?.manaCost,
@@ -128,7 +128,8 @@ export class CardBackToDeckParser implements EventParser {
 		}
 		// console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
 
-		const dbCard = (cardId && getProcessedCard(cardId, deckState, this.allCards)) || ({} as ReferenceCard);
+		const dbCard =
+			(cardId && getProcessedCard(cardId, entityId, deckState, this.allCards)) || ({} as ReferenceCard);
 		return (
 			result ??
 			DeckCard.create({

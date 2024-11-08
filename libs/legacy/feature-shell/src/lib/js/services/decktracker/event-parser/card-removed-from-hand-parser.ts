@@ -24,7 +24,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		// See card-played-from-hand
 		const newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
-		const refCard = getProcessedCard(card?.cardId, deck, this.allCards);
+		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
 		const cardWithZone = card.update({
 			manaCost: card.manaCost ?? refCard?.cost,
 			zone: 'SETASIDE',
