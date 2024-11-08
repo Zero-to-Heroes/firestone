@@ -69,6 +69,13 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 					},
 					{
 						type: 'toggle',
+						field: 'bgsMinionsListShowCompositions',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsShowTierSeven',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tier-7-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tier-7-tooltip'),
