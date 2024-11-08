@@ -10,14 +10,11 @@ export const buildCompositions = (
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly ExtendedBgsCompAdvice[] => {
-	console.debug('[debug] building compositions', availableTribes, compositions, allCards);
 	const result =
 		compositions
 			?.map((s) => enhanceComp(s, allCards))
-			.filter((s) => {
-				const result = isAvailable(s, availableTribes, allCards);
-				return result;
-			})
+			.filter((s) => isAvailable(s, availableTribes, allCards))
+			.map((s) => trimComp(s, availableTribes, allCards))
 			.sort((a, b) => {
 				if (!a.tribes?.length) {
 					return 1;
@@ -66,6 +63,18 @@ const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): Extende
 	return result;
 };
 
+const trimComp = (
+	comp: ExtendedBgsCompAdvice,
+	availableTribes: readonly Race[],
+	allCards: CardsFacadeService,
+): ExtendedBgsCompAdvice => {
+	const result: ExtendedBgsCompAdvice = {
+		...comp,
+		cards: comp.cards.filter((c) => isCardAvailable(allCards.getCard(c.cardId), availableTribes)),
+	};
+	return result;
+};
+
 const isAvailable = (comp: BgsCompAdvice, availableTribes: readonly Race[], allCards: CardsFacadeService): boolean => {
 	return comp.cards
 		.filter((c) => c.status === 'CORE')
@@ -74,9 +83,9 @@ const isAvailable = (comp: BgsCompAdvice, availableTribes: readonly Race[], allC
 };
 
 const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[]): boolean => {
-	return (
+	const result =
 		!card.races?.length ||
 		!availableTribes?.length ||
-		card.races.some((r) => availableTribes.includes(Race[r]) || card.races?.includes(Race[Race.ALL]))
-	);
+		card.races.some((r) => availableTribes.includes(Race[r]) || card.races!.includes(Race[Race.ALL]));
+	return result;
 };
