@@ -11,7 +11,13 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 	selector: 'bgs-minions-list-composition',
 	styleUrls: [`./bgs-minions-list-composition.component.scss`],
 	template: `
-		<ng-container *ngIf="{ collapsed: collapsed$ | async, displayMode: displayMode$ | async } as value">
+		<ng-container
+			*ngIf="{
+				collapsed: collapsed$ | async,
+				displayMode: displayMode$ | async,
+				highlightedMinions: highlightedMinions$ | async
+			} as value"
+		>
 			<div class="composition {{ value.displayMode ?? '' }}" [ngClass]="{ collapsed: value.collapsed }">
 				<div class="header" (click)="toggleCollapsed()">
 					<div class="header-images" *ngIf="!!headerImages?.length">
@@ -20,7 +26,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 					<div class="header-text">{{ name }}</div>
 					<div
 						class="highlight-comp-button"
-						[ngClass]="{ highlighted: isCompHighlighted() }"
+						[ngClass]="{ highlighted: isCompHighlighted$ | async }"
 						inlineSVG="assets/svg/pinned.svg"
 						(click)="highlightComp($event)"
 						[helpTooltip]="'battlegrounds.in-game.minions-list.compositions.pin-tooltip' | fsTranslate"
@@ -45,7 +51,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
 						[showTrinketTips]="showTrinketTips"
-						[highlightedMinions]="highlightedMinions"
+						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
@@ -66,7 +72,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
 						[showTrinketTips]="showTrinketTips"
-						[highlightedMinions]="highlightedMinions"
+						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
@@ -90,7 +96,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
 						[showTrinketTips]="showTrinketTips"
-						[highlightedMinions]="highlightedMinions"
+						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
@@ -109,6 +115,8 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	collapsed$: Observable<boolean>;
 	displayMode$: Observable<BgsCompositionsListMode>;
+	highlightedMinions$: Observable<readonly string[]>;
+	isCompHighlighted$: Observable<boolean>;
 
 	name: string;
 	headerImages: readonly string[] = [];
@@ -147,6 +155,11 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				return result;
 			});
 		this.headerImages = [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.minionIcon}.jpg`];
+		this.compCards$$.next([...(this.coreCards ?? []), ...(this.addonCards ?? [])]);
+	}
+
+	@Input() set highlightedMinions(value: readonly string[]) {
+		this.highlightedMinions$$.next(value);
 	}
 
 	@Input() set displayMode(value: BgsCompositionsListMode) {
@@ -156,7 +169,6 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	@Input() highlightedTribes: readonly Race[];
 	@Input() showGoldenCards: boolean;
 	@Input() showTrinketTips: boolean;
-	@Input() highlightedMinions: readonly string[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() showTribesHighlight: boolean;
 	@Input() minionsOnBoardAndHand: readonly string[];
@@ -166,6 +178,8 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 
 	private compId$$ = new BehaviorSubject<string | null>(null);
 	private displayMode$$ = new BehaviorSubject<BgsCompositionsListMode>(null);
+	private compCards$$ = new BehaviorSubject<readonly ExtendedReferenceCard[]>([]);
+	private highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -181,6 +195,16 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			this.mapData(([expandedIds, compId]) => !expandedIds.includes(compId)),
 			startWith(true),
 		);
+		this.highlightedMinions$ = this.highlightedMinions$$.pipe(this.mapData((minions) => minions));
+		this.isCompHighlighted$ = combineLatest([this.compCards$$, this.highlightedMinions$$]).pipe(
+			this.mapData(([cards, highlightedMinions]) => {
+				if (!cards?.length || !highlightedMinions?.length) {
+					return false;
+				}
+				return cards.every((c) => highlightedMinions.includes(c.id));
+			}),
+		);
+
 		// this.displayMode$ = this.displayMode$$.pipe(this.mapData((mode) => mode));
 	}
 
@@ -196,21 +220,9 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		this.controller.expandedCompositions$$.next(newExpanded);
 	}
 
-	isCompHighlighted(): boolean {
-		console.debug('checking if comp is highlighted', this.coreCards, this.addonCards, this.highlightedMinions);
-		if (!this.coreCards?.length || !this.addonCards?.length || !this.highlightedMinions?.length) {
-			return false;
-		}
-		return (
-			this.coreCards.every((c) => this.highlightedMinions.includes(c.id)) &&
-			this.addonCards.every((c) => this.highlightedMinions.includes(c.id))
-		);
-	}
-
 	highlightComp(event: MouseEvent) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.debug('highlighting comp', this.coreCards, this.addonCards);
 		if (!this.coreCards?.length || !this.addonCards?.length) {
 			return;
 		}
