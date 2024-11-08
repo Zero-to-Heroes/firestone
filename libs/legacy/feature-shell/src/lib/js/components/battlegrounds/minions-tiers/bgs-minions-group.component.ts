@@ -1,19 +1,9 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, TierGroup } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -51,10 +41,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsGroupComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BattlegroundsMinionsGroupComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	highlighted$: Observable<boolean>;
 	highlightedTribes$: Observable<readonly Race[]>;
 
@@ -85,18 +72,12 @@ export class BattlegroundsMinionsGroupComponent
 	private group$$ = new BehaviorSubject<TierGroup | null>(null);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {
 		super(cdr);
-	}
-
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
 	}
 
 	ngAfterContentInit(): void {
@@ -107,7 +88,7 @@ export class BattlegroundsMinionsGroupComponent
 	}
 
 	highlightTribe(tribe: Race) {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(tribe));
+		this.highlighter.toggleTribesToHighlight([tribe]);
 	}
 
 	trackByFn(index: number, minion: ReferenceCard) {

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ShopMinion } from '../../../services/battlegrounds/bgs-board-highlighter.service';
+import { ShopMinion } from '@firestone/battlegrounds/common';
 
 @Component({
 	selector: 'bgs-tavern-minion',

@@ -33,6 +33,7 @@ import { BgsTrinketStrategyTipsTooltipComponent } from './components/strategies/
 import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
 import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
 import { BattlegroundsCompositionsViewSelectDropdownComponent } from './compositions/bgs-comps-view-select-dropdown';
+import { BgsBoardHighlighterService } from './highlights/bgs-board-highlighter.service';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsInGameCompositionsService } from './services/bgs-in-game-compositions.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
@@ -119,6 +120,7 @@ const components = [
 		BgsMetaTrinketStrategiesService,
 		BgsMetaCompositionStrategiesService,
 		BgsInGameCompositionsService,
+		BgsBoardHighlighterService,
 	],
 	declarations: components,
 	exports: components,

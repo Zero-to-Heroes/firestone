@@ -21,7 +21,6 @@ import { Coin } from '../../models/coin';
 import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { Set } from '../../models/set';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
-import { ShopMinion } from '../battlegrounds/bgs-board-highlighter.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
@@ -238,10 +237,6 @@ export class AppUiStoreFacadeService {
 
 	public cardHistory$(): Observable<readonly CardHistory[]> {
 		return this.store.cardHistory$();
-	}
-
-	public highlightedBgsMinions$(): Observable<readonly ShopMinion[]> {
-		return this.store.highlightedBgsMinions$();
 	}
 
 	public send(event: MainWindowStoreEvent) {

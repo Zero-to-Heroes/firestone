@@ -1,21 +1,9 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { Tier, TierGroup, TierViewType } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, uuid } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
-import { BgsToggleHighlightMechanicsOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-mechanics-on-board-event';
-import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 
 @Component({
 	selector: 'bgs-minions-list',
@@ -57,10 +45,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsListComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BattlegroundsMinionsListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	highlighted$: Observable<boolean>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
@@ -92,14 +77,13 @@ export class BattlegroundsMinionsListComponent
 	@Input() showGoldenCards: boolean;
 	@Input() showTrinketTips: boolean;
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private type: TierViewType;
 
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 	private tavernTierData$$ = new BehaviorSubject<GameTag | Race | null>(null);
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {
+	constructor(protected readonly cdr: ChangeDetectorRef, private readonly highlighter: BgsBoardHighlighterService) {
 		super(cdr);
 	}
 
@@ -120,12 +104,8 @@ export class BattlegroundsMinionsListComponent
 		);
 	}
 
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
-	}
-
 	resetHighlights() {
-		this.battlegroundsUpdater.next(new BgsResetHighlightsEvent());
+		this.highlighter.resetHighlights();
 	}
 
 	trackByGroup(index, item: TierGroup) {
@@ -139,14 +119,10 @@ export class BattlegroundsMinionsListComponent
 
 		switch (this.type) {
 			case 'tribe':
-				this.battlegroundsUpdater.next(
-					new BgsToggleHighlightTribeOnBoardEvent(this.tavernTierData$$.value as Race),
-				);
+				this.highlighter.toggleTribesToHighlight([this.tavernTierData$$.value as Race]);
 				break;
 			case 'mechanics':
-				this.battlegroundsUpdater.next(
-					new BgsToggleHighlightMechanicsOnBoardEvent(this.tavernTierData$$.value as GameTag),
-				);
+				this.highlighter.toggleMechanicsToHighlight([this.tavernTierData$$.value as GameTag]);
 				break;
 		}
 	}

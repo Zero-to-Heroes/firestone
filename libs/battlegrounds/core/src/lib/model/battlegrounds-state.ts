@@ -1,4 +1,3 @@
-import { GameTag, Race } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BgsGame } from './bgs-game';
 import { BgsPanel } from './bgs-panel';
@@ -18,10 +17,6 @@ export class BattlegroundsState {
 	// It is a pretty big object
 	// On the other hand, it changes frequently, maybe as often as the state itself, so I'm not sure
 	readonly postMatchStats: BgsPostMatchStats;
-
-	readonly highlightedTribes: readonly Race[] = [];
-	readonly highlightedMechanics: readonly GameTag[] = [];
-	readonly highlightedMinions: readonly string[] = [];
 
 	public static create(base: Partial<NonFunctionProperties<BattlegroundsState>>): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), base);

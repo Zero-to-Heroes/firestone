@@ -10,7 +10,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsMetaCompositionStrategiesService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import {
+	BgsBoardHighlighterService,
+	BgsMetaCompositionStrategiesService,
+	BgsStateFacadeService,
+} from '@firestone/battlegrounds/common';
 import {
 	ExtendedBgsCompAdvice,
 	MinionInfo,
@@ -105,12 +109,20 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		private readonly cardRules: CardRulesService,
 		private readonly strategies: BgsMetaCompositionStrategiesService,
 		private readonly contributors: ExpertContributorsService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.bgGameState, this.gameState, this.cardRules, this.strategies);
+		await waitForReady(
+			this.prefs,
+			this.bgGameState,
+			this.gameState,
+			this.cardRules,
+			this.strategies,
+			this.highlighter,
+		);
 		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 
 		const playerTrinkets$ = this.bgGameState.gameState$$.pipe(
@@ -270,11 +282,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 		);
 
-		this.highlightedTribes$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedTribes));
-		this.highlightedMechanics$ = this.bgGameState.gameState$$.pipe(
-			this.mapData((main) => main?.highlightedMechanics),
-		);
-		this.highlightedMinions$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.highlightedMinions));
+		this.highlightedTribes$ = this.highlighter.highlightedTribes$$.pipe(this.mapData((info) => info));
+		this.highlightedMechanics$ = this.highlighter.highlightedMechanics$$.pipe(this.mapData((info) => info));
+		this.highlightedMinions$ = this.highlighter.highlightedMinions$$.pipe(this.mapData((info) => info));
 		this.currentTurn$ = this.bgGameState.gameState$$.pipe(this.mapData((main) => main?.currentGame?.currentTurn));
 		this.tavernTier$ = this.bgGameState.gameState$$.pipe(
 			this.mapData((main) => main?.currentGame?.getMainPlayer()?.getCurrentTavernTier()),

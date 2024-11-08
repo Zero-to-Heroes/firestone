@@ -8,12 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { BgsBoardHighlighterService, ShopMinion } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import {} from 'jszip';
 import { Observable, combineLatest } from 'rxjs';
-import { ShopMinion } from '../../services/battlegrounds/bgs-board-highlighter.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -51,12 +51,13 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.highlighter);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -70,7 +71,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 			),
 			this.handleReposition(),
 		);
-		this.highlightedMinions$ = this.store.highlightedBgsMinions$().pipe(
+		this.highlightedMinions$ = this.highlighter.shopMinions$$.pipe(
 			this.mapData((highlightedMinion) => {
 				return highlightedMinion;
 			}),

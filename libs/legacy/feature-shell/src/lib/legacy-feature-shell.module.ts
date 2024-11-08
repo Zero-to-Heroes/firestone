@@ -680,7 +680,6 @@ import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena
 import { ArenaDraftManagerService } from './js/services/arena/arena-draft-manager.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
-import { BgsBoardHighlighterService } from './js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
@@ -1705,7 +1704,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsBestUserStatsService,
 		RealTimeStatsService,
 		BgsCustomSimulationService,
-		BgsBoardHighlighterService,
 
 		MercenariesMemoryCacheService,
 		MercenariesStoreService,

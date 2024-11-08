@@ -1,22 +1,12 @@
 import { ComponentType } from '@angular/cdk/portal';
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
+import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
@@ -34,7 +24,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			(contextmenu)="highlightMinion(minion, $event)"
 		>
 			<img class="icon tile-icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
-			<div class="name" [style.paddingLeft.px]="leftPadding">
+			<div class="name" [ngStyle]="leftPadding != null ? { 'padding-left.px': leftPadding } : {}">
 				<div class="tavern-tier" *ngIf="minion.techLevel != null && showTavernTierIcon">
 					<tavern-level-icon [level]="minion.techLevel" class="tavern"></tavern-level-icon>
 				</div>
@@ -72,10 +62,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionItemComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BattlegroundsMinionItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	componentType: ComponentType<BgsTrinketStrategyTipsTooltipComponent> = BgsTrinketStrategyTipsTooltipComponent;
 
 	minion$: Observable<Minion>;
@@ -109,7 +96,7 @@ export class BattlegroundsMinionItemComponent
 	@Input() showTribesHighlight: boolean;
 	@Input() hideMechanicsHighlight: boolean;
 	@Input() showTavernTierIcon: boolean;
-	@Input() leftPadding = 0;
+	@Input() leftPadding = null;
 
 	private minion$$ = new BehaviorSubject<ExtendedReferenceCard | null>(null);
 	private showGoldenCards$$ = new BehaviorSubject<boolean>(true);
@@ -120,13 +107,12 @@ export class BattlegroundsMinionItemComponent
 	private fadeHigherTierCards$$ = new BehaviorSubject<boolean>(false);
 	private tavernTier$$ = new BehaviorSubject<number | null>(null);
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {
 		super(cdr);
 	}
@@ -265,10 +251,6 @@ export class BattlegroundsMinionItemComponent
 		);
 	}
 
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
-	}
-
 	trackByFn(index: number, minion: Minion) {
 		return minion.cardId;
 	}
@@ -279,7 +261,7 @@ export class BattlegroundsMinionItemComponent
 			return;
 		}
 
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent([minion.cardId]));
+		this.highlighter.toggleMinionsToHighlight([minion.cardId]);
 	}
 
 	private buildAllCardIds(id: string, showGoldenCards: boolean): string {

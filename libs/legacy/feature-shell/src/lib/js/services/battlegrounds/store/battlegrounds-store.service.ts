@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import {
+	BgsBoardHighlighterService,
 	BgsMatchMemoryInfoService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
@@ -67,7 +68,6 @@ import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-ma
 import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-stats-updated-parser';
 import { BgsReconnectStatusParser } from './event-parsers/bgs-reconnect-status-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
-import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-processor';
 import { BgsRewardGainedParser } from './event-parsers/bgs-reward-gained-parser';
 import { BgsRewardRevealedParser } from './event-parsers/bgs-reward-revealed-parser';
 import { BgsSelectBattleParser } from './event-parsers/bgs-select-battle-parser';
@@ -76,9 +76,6 @@ import { BgsSpectatingParser } from './event-parsers/bgs-spectating-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
-import { BgsToggleHighlightMechanicsOnBoardParser } from './event-parsers/bgs-toggle-highlight-mechanics-on-board-parser';
-import { BgsToggleHighlightMinionOnBoardParser } from './event-parsers/bgs-toggle-highlight-minion-on-board-parser';
-import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle-highlight-tribe-on-board-parser';
 import { BgsTrinketSelectedEvent, BgsTrinketSelectedParser } from './event-parsers/bgs-trinket-selected-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
@@ -174,6 +171,7 @@ export class BattlegroundsStoreService {
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly intermediateSimGuardian: BgsIntermediateResultsSimGuardianService,
 		private readonly adService: AdService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -708,7 +706,7 @@ export class BattlegroundsStoreService {
 	private buildEventParsers(): readonly EventParser[] {
 		const eventParsers = [
 			new NoBgsMatchParser(),
-			new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n),
+			new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n, this.highlighter),
 			new BgsGameSettingsParser(this.allCards),
 			// new BattlegroundsResetBattleStateParser(),
 			// new BgsInitParser(this.prefs, this.i18n),
@@ -735,7 +733,7 @@ export class BattlegroundsStoreService {
 			new BgsTrinketSelectedParser(this.allCards),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(this.logsUploader, this.i18n),
-			new BgsGameEndParser(this.prefs, this.i18n, () => this.stateUpdater),
+			new BgsGameEndParser(this.prefs, this.i18n, this.highlighter),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService, this.bugService),
 			new BgsArmorChangedParser(this.allCards),
@@ -752,10 +750,6 @@ export class BattlegroundsStoreService {
 			new BgsStartComputingPostMatchStatsParser(),
 			new BgsInitMmrParser(this.memory, this.gameStateService, this.prefs, () => this.stateUpdater),
 			new BgsCardPlayedParser(),
-			new BgsToggleHighlightTribeOnBoardParser(),
-			new BgsToggleHighlightMechanicsOnBoardParser(),
-			new BgsToggleHighlightMinionOnBoardParser(),
-			new BgsResetHighlightsParser(),
 			new BgsReconnectStatusParser(),
 			new BgsSpectatingParser(),
 			new BgsSelectBattleParser(),

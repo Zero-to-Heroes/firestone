@@ -1,9 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsToggleHighlightMechanicsOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-mechanics-on-board-event';
-import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
 import { Minion } from './bgs-minion-item.component';
 
 @Component({
@@ -79,48 +77,42 @@ import { Minion } from './bgs-minion-item.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsHighlightButtonsComponent implements AfterViewInit {
+export class BattlegroundsMinionsHighlightButtonsComponent {
 	@Input() minion: Minion;
 	@Input() hideMechanicsHighlight: boolean;
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService) {}
-
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
-	}
+	constructor(private readonly ow: OverwolfService, private readonly highlighter: BgsBoardHighlighterService) {}
 
 	highlightMinion(minion: Minion) {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent([minion.cardId]));
+		this.highlighter.toggleMinionsToHighlight([minion.cardId]);
 	}
 
 	highlightBattlecry() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.BATTLECRY));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.BATTLECRY]);
 	}
 
 	highlightDeathrattle() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DEATHRATTLE));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.DEATHRATTLE]);
 	}
 
 	highlightEndOfTurn() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.END_OF_TURN));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.END_OF_TURN]);
 	}
 
 	highlightTaunt() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.TAUNT));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.TAUNT]);
 	}
 
 	highlightDivineShield() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DIVINE_SHIELD));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.DIVINE_SHIELD]);
 	}
 
 	highlightReborn() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.REBORN));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.REBORN]);
 	}
 
 	highlightBgSpell() {
-		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.BG_SPELL));
+		this.highlighter.toggleMechanicsToHighlight([GameTag.BG_SPELL]);
 	}
 
 	trackByFn(index: number, minion: Minion) {

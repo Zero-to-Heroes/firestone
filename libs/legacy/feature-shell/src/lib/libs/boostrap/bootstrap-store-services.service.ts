@@ -43,7 +43,6 @@ import { ExpertContributorsService, PreferencesService } from '@firestone/shared
 import { CardRulesService } from '@firestone/shared/framework/core';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
-import { BgsBoardHighlighterService } from '../../js/services/battlegrounds/bgs-board-highlighter.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
@@ -96,7 +95,6 @@ export class BootstrapStoreServicesService {
 		private readonly ini_LotterService: LotteryService,
 		private readonly achievementsMonitor: AchievementsLiveProgressTrackingService,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
-		private readonly init_BgsBoardHighlighterService: BgsBoardHighlighterService,
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 		private readonly init_ProfileUploaderService: ProfileUploaderService,
 		private readonly init_ConstructedMetaDecksStateService: ConstructedMetaDecksStateService,

@@ -1,10 +1,8 @@
-import { EventEmitter } from '@angular/core';
-import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import {
 	BattlegroundsState,
 	BgsBattlesPanel,
-	BgsGame,
 	BgsPanel,
 	BgsPlayer,
 	BgsPostMatchStats,
@@ -12,7 +10,6 @@ import {
 } from '@firestone/battlegrounds/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { EventParser } from './_event-parser';
@@ -22,7 +19,7 @@ export class BgsGameEndParser implements EventParser {
 	constructor(
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly stateUpdaterProvider: () => EventEmitter<MainWindowStoreEvent>,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -53,20 +50,17 @@ export class BgsGameEndParser implements EventParser {
 		const panels: readonly BgsPanel[] = currentState.panels
 			.map((panel) => (panel.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : panel))
 			.map((panel) => (panel.id === newBattlesPanel.id ? newBattlesPanel : panel));
+		this.highlighter.resetHighlights();
 		return currentState.update({
 			panels: panels,
-			// currentPanelId: 'bgs-post-match-stats',
 			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats2 && prefs.bgsFullToggle ? true : false,
-			highlightedMinions: [] as readonly string[],
-			highlightedTribes: [] as readonly Race[],
-			highlightedMechanics: [] as readonly GameTag[],
 			heroSelectionDone: false,
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
 				phase: 'recruit',
-			} as BgsGame),
-		} as BattlegroundsState);
+			}),
+		});
 	}
 
 	private buildBattlesPanel(currentState: BattlegroundsState, prefs: Preferences): BgsBattlesPanel {

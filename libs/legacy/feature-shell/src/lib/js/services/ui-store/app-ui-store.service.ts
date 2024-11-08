@@ -38,7 +38,6 @@ import {
 } from '../achievement/achievements-live-progress-tracking.service';
 import { AchievementsStateManagerService } from '../achievement/achievements-state-manager.service';
 import { AdService } from '../ad.service';
-import { BgsBoardHighlighterService, ShopMinion } from '../battlegrounds/bgs-board-highlighter.service';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
@@ -106,7 +105,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
 	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
-	private highlightedBgsMinions: Observable<readonly ShopMinion[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -377,10 +375,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.cardHistory;
 	}
 
-	public highlightedBgsMinions$(): Observable<readonly ShopMinion[]> {
-		return this.highlightedBgsMinions;
-	}
-
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -426,7 +420,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		).achievementsHistory$$;
 		this.initPackStats();
 		this.initCardsHistory();
-		this.initHighlightedBgsMinions();
 		this.initialized = true;
 	}
 
@@ -520,12 +513,6 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initGameStats() {
 		this.gameStats = this.gameStatsProvider.gameStats$$;
-	}
-
-	private initHighlightedBgsMinions() {
-		this.highlightedBgsMinions = (
-			this.ow.getMainWindow().bgsBoardHighlighter as BgsBoardHighlighterService
-		).shopMinions$$;
 	}
 }
 

@@ -1,5 +1,5 @@
 import { BgsPlayer } from '@firestone-hs/hs-replay-xml-parser';
-import { GameTag, Race } from '@firestone-hs/reference-data';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import {
 	BattlegroundsState,
 	BgsBattlesPanel,
@@ -22,6 +22,7 @@ export class BgsMatchStartParser implements EventParser {
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -35,6 +36,7 @@ export class BgsMatchStartParser implements EventParser {
 		} else {
 			const reviewId = await this.gameState.getCurrentReviewId();
 			const prefs: Preferences = await this.prefs.getPreferences();
+			this.highlighter.resetHighlights();
 			if (event.simpleInit) {
 				const newGame: BgsGame = BgsGame.create({
 					reviewId: reviewId,
@@ -45,11 +47,8 @@ export class BgsMatchStartParser implements EventParser {
 					panels: buildEmptyPanels(currentState, prefs, this.i18n),
 					heroSelectionDone: false,
 					currentPanelId: 'bgs-hero-selection-overview',
-					highlightedMinions: [] as readonly string[],
-					highlightedTribes: [] as readonly Race[],
-					highlightedMechanics: [] as readonly GameTag[],
 					postMatchStats: undefined,
-				} as BattlegroundsState);
+				});
 			}
 
 			console.log('created new bgs game with reviewId', reviewId);
@@ -60,11 +59,8 @@ export class BgsMatchStartParser implements EventParser {
 				heroSelectionDone: false,
 				currentPanelId: 'bgs-hero-selection-overview',
 				spectating: event.spectating,
-				highlightedMinions: [] as readonly string[],
-				highlightedTribes: [] as readonly Race[],
-				highlightedMechanics: [] as readonly GameTag[],
 				postMatchStats: undefined,
-			} as BattlegroundsState);
+			});
 		}
 	}
 }
