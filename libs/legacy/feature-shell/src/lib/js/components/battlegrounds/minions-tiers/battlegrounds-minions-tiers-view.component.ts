@@ -63,6 +63,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 									[compositions]="compositions"
 									[minionsOnBoardAndHand]="minionsOnBoardAndHand"
 									[minionsInShop]="minionsInShop"
+									[tavernTier]="currentTavernTier"
 								></bgs-compositions-list>
 							</ng-container>
 						</ng-container>

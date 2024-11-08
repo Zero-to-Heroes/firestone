@@ -35,6 +35,8 @@ import { Observable } from 'rxjs';
 				[showGoldenCards]="showGoldenCards"
 				[showTrinketTips]="showTrinketTips"
 				[displayMode]="displayMode$ | async"
+				[fadeHigherTierCards]="fadeHigherTierCards$ | async"
+				[tavernTier]="tavernTier"
 				[minionsOnBoardAndHand]="minionsOnBoardAndHand"
 				[minionsInShop]="minionsInShop"
 			></bgs-minions-list-composition>
@@ -44,6 +46,7 @@ import { Observable } from 'rxjs';
 })
 export class BgsCompositionsListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	displayMode$: Observable<BgsCompositionsListMode>;
+	fadeHigherTierCards$: Observable<boolean>;
 
 	@Input() compositions: readonly ExtendedBgsCompAdvice[];
 	@Input() highlightedTribes: readonly Race[];
@@ -54,6 +57,7 @@ export class BgsCompositionsListComponent extends AbstractSubscriptionComponent 
 	@Input() showTrinketTips: boolean;
 	@Input() minionsOnBoardAndHand: readonly string[];
 	@Input() minionsInShop: readonly string[];
+	@Input() tavernTier: number;
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
 		super(cdr);
@@ -63,6 +67,9 @@ export class BgsCompositionsListComponent extends AbstractSubscriptionComponent 
 		await waitForReady(this.prefs);
 
 		this.displayMode$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsCompositionsListMode));
+		this.fadeHigherTierCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsMinionsListCompositionsFadeHigherTierCards),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -84,6 +84,8 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
+						[fadeHigherTierCards]="fadeHigherTierCards"
+						[tavernTier]="tavernTier"
 						[leftPadding]="20"
 					></bgs-minion-item>
 				</div>
@@ -147,6 +149,8 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	@Input() showTribesHighlight: boolean;
 	@Input() minionsOnBoardAndHand: readonly string[];
 	@Input() minionsInShop: readonly string[];
+	@Input() fadeHigherTierCards: boolean;
+	@Input() tavernTier: number;
 
 	private compId$$ = new BehaviorSubject<string | null>(null);
 	private displayMode$$ = new BehaviorSubject<BgsCompositionsListMode>(null);

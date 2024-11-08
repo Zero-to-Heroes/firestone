@@ -22,6 +22,13 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 					},
 					{
 						type: 'toggle',
+						field: 'bgsUseNewTiersHeaderStyle',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsShowTribeTiers',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tribe-tiers-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-tribe-tiers-tooltip'),
@@ -39,7 +46,7 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 						field: 'bgsMinionsListShowCompositions',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay || !prefs.bgsUseNewTiersHeaderStyle,
 					},
 					{
 						type: 'toggle',
@@ -52,13 +59,6 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 							messageWhenToggleValue: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-on-mouse-over-confirmation'),
 							valueToDisplayMessageOn: false,
 						},
-					},
-					{
-						type: 'toggle',
-						field: 'bgsUseNewTiersHeaderStyle',
-						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
 					},
 					{
 						type: 'toggle',
@@ -128,6 +128,19 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 							snapSensitivity: 3,
 							knobs: minionsListSizeKnobs(context),
 						},
+					},
+				],
+			},
+			{
+				id: 'battlegrounds-minions-list-overlay-compositions',
+				title: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-compositions.header'),
+				settings: [
+					{
+						type: 'toggle',
+						field: 'bgsMinionsListCompositionsFadeHigherTierCards',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-compositions.fade-higher-tier-cards-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-compositions.fade-higher-tier-cards-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsMinionsListShowCompositions,
 					},
 				],
 			},

@@ -20,6 +20,11 @@
 			opacity: 0.3;
 		}
 	}
+	&.faded {
+		.name-text {
+			opacity: 0.5;
+		}
+	}
 
 	&:not(.banned):hover {
 		transform: scale(1.1);
