@@ -25,7 +25,7 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 	template: `
 		<div class="tiers-header">
 			<ng-container *ngIf="{ category: selectedCategory$ | async } as value">
-				<nav class="tiers-selection">
+				<nav class="tiers-selection" *ngIf="!onlyOneActive(tierLevels, mechanicalTiers, compositions)">
 					<div
 						class="tier tiers-category"
 						*ngIf="tierLevels?.length"
@@ -274,6 +274,10 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 	isDisplayed(tavernTier: Tier) {
 		return this.displayedTier?.tavernTier === tavernTier.tavernTier;
+	}
+
+	onlyOneActive(...tiers: (readonly any[])[]): boolean {
+		return tiers.filter((tier) => tier?.length).length === 1;
 	}
 
 	private getAllTiers(): readonly Tier[] {
