@@ -63,6 +63,9 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
+						[hideMechanicsHighlight]="true"
+						[fadeHigherTierCards]="fadeHigherTierCards"
+						[tavernTier]="tavernTier"
 						[leftPadding]="20"
 					></bgs-minion-item>
 				</div>
@@ -84,6 +87,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
+						[hideMechanicsHighlight]="true"
 						[fadeHigherTierCards]="fadeHigherTierCards"
 						[tavernTier]="tavernTier"
 						[leftPadding]="20"

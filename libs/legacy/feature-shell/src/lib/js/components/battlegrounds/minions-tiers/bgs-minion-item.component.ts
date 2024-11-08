@@ -66,6 +66,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				class="highlight-buttons"
 				*ngIf="showTribesHighlight && !minion.hidePins"
 				[minion]="minion"
+				[hideMechanicsHighlight]="hideMechanicsHighlight"
 			></minion-highlight-buttons>
 		</div>
 	`,
@@ -106,6 +107,7 @@ export class BattlegroundsMinionItemComponent
 	}
 
 	@Input() showTribesHighlight: boolean;
+	@Input() hideMechanicsHighlight: boolean;
 	@Input() showTavernTierIcon: boolean;
 	@Input() leftPadding = 0;
 
