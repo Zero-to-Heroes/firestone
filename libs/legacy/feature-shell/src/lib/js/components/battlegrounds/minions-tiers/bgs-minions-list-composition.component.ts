@@ -64,6 +64,10 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						<div
 							class="header-text"
 							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.core-cards-header'"
+							[helpTooltip]="
+								'battlegrounds.in-game.minions-list.compositions.core-cards-header-tooltip'
+									| fsTranslate
+							"
 						></div>
 					</div>
 					<bgs-minion-item
@@ -88,6 +92,9 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						<div
 							class="header-text"
 							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.add-ons-header'"
+							[helpTooltip]="
+								'battlegrounds.in-game.minions-list.compositions.add-ons-header-tooltip' | fsTranslate
+							"
 						></div>
 					</div>
 					<bgs-minion-item
