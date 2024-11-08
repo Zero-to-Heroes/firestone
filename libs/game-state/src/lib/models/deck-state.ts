@@ -217,7 +217,7 @@ export class DeckState {
 			{ id: 'other', cards: this.otherZone },
 		];
 		for (const zone of zones) {
-			const result = zone.cards.find((card) => card.entityId === entityId);
+			const result = zone.cards.find((card) => Math.abs(card.entityId) === Math.abs(entityId));
 			if (!!result) {
 				return { zone: zone.id, card: result };
 			}

@@ -256,6 +256,7 @@ export const cardIdSelector = (
 							allCards.getCard(c.cardId).races?.includes(Race[Race.ALL]),
 					)
 					.map((c) => input.deckState.findCard(c.entityId)?.card)
+					.filter((c) => !!c)
 					.filter((c) => c.creatorCardId != null || c.stolenFromOpponent);
 				return tooltip(and(side(inputSide), entityIs(...demonsPlayed.map((c) => c.entityId))))(input);
 			};
