@@ -380,3 +380,15 @@ export const generateCorpse = (input: SelectorInput): boolean => {
 export const starshipPiece = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
+export const isStarshipPieceFor =
+	(entityId: number) =>
+	(input: SelectorInput): boolean => {
+		const isStarshipPiece = input.allCards
+			.getCard(input.cardId)
+			?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
+		if (!isStarshipPiece) {
+			return false;
+		}
+		const starship = input.deckState.findCard(entityId)?.card;
+		return !!starship.storedInformation?.cards?.map((c) => c.entityId).includes(input.entityId);
+	};

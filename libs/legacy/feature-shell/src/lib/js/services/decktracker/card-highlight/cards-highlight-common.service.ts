@@ -13,6 +13,7 @@ import {
 	highlightConditions,
 	inDeck,
 	inHand,
+	isStarshipPieceFor,
 	mech,
 	minion,
 	or,
@@ -20,6 +21,7 @@ import {
 	restoreHealth,
 	side,
 	spell,
+	tooltip,
 } from './selectors';
 
 export abstract class CardsHighlightCommonService extends AbstractSubscriptionComponent {
@@ -287,6 +289,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), restoreHealth));
+		}
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
+			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
 		}
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));
