@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
+import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -18,6 +18,14 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						<img *ngFor="let img of headerImages" class="header-image" [src]="img" />
 					</div>
 					<div class="header-text">{{ name }}</div>
+					<div
+						class="highlight-comp-button"
+						[ngClass]="{ highlighted: isCompHighlighted() }"
+						inlineSVG="assets/svg/pinned.svg"
+						(click)="highlightComp($event)"
+						[helpTooltip]="'battlegrounds.in-game.minions-list.compositions.pin-tooltip' | fsTranslate"
+						[helpTooltipPosition]="'left'"
+					></div>
 					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 				</div>
 				<!-- <div
@@ -163,6 +171,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly controller: BgsInGameCompositionsService,
+		private readonly highlighter: BgsBoardHighlighterService,
 	) {
 		super(cdr);
 	}
@@ -185,5 +194,29 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			? currentlyExpanded.filter((id) => id !== this.compId$$.value)
 			: [...currentlyExpanded, this.compId$$.value];
 		this.controller.expandedCompositions$$.next(newExpanded);
+	}
+
+	isCompHighlighted(): boolean {
+		console.debug('checking if comp is highlighted', this.coreCards, this.addonCards, this.highlightedMinions);
+		if (!this.coreCards?.length || !this.addonCards?.length || !this.highlightedMinions?.length) {
+			return false;
+		}
+		return (
+			this.coreCards.every((c) => this.highlightedMinions.includes(c.id)) &&
+			this.addonCards.every((c) => this.highlightedMinions.includes(c.id))
+		);
+	}
+
+	highlightComp(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		console.debug('highlighting comp', this.coreCards, this.addonCards);
+		if (!this.coreCards?.length || !this.addonCards?.length) {
+			return;
+		}
+		this.highlighter.toggleMinionsToHighlight([
+			...this.coreCards.map((c) => c.id),
+			...this.addonCards.map((c) => c.id),
+		]);
 	}
 }

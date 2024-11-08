@@ -10,6 +10,7 @@ export const buildCompositions = (
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly ExtendedBgsCompAdvice[] => {
+	console.debug('[debug] building compositions', availableTribes, compositions, allCards);
 	const result =
 		compositions
 			?.map((s) => enhanceComp(s, allCards))
