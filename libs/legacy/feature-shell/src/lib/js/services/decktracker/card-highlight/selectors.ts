@@ -9,7 +9,7 @@ import {
 	RarityTYpe,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { getCost } from '@firestone/game-state';
+import { getCost, getProcessedCard } from '@firestone/game-state';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
 export const and = (...filters: Selector[]): Selector => {
@@ -249,8 +249,10 @@ export const minionsDeadSinceLastTurn = (input: SelectorInput): boolean =>
 
 const hasMechanic =
 	(mechanic: GameTag) =>
-	(input: SelectorInput): boolean =>
-		(input.card?.mechanics ?? []).includes(GameTag[mechanic]);
+	(input: SelectorInput): boolean => {
+		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return refCard?.mechanics?.includes(GameTag[mechanic]);
+	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const charge = hasMechanic(GameTag.CHARGE);
@@ -390,5 +392,5 @@ export const isStarshipPieceFor =
 			return false;
 		}
 		const starship = input.deckState.findCard(entityId)?.card;
-		return !!starship.storedInformation?.cards?.map((c) => c.entityId).includes(input.entityId);
+		return !!starship?.storedInformation?.cards?.map((c) => c.entityId).includes(input.entityId);
 	};

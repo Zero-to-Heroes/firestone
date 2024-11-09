@@ -1165,10 +1165,6 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.HydrationStation_VAC_948:
 			return (input: SelectorInput): SelectorOutput => {
-				if (!input.deckState.minionsDeadThisMatch?.length) {
-					return null;
-				}
-
 				const candidates = input.deckState.minionsDeadThisMatch
 					.filter((c) => hasTaunt(c.cardId, c.entityId, input.deckState, allCards))
 					.filter((c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost != null)
@@ -1177,18 +1173,20 @@ export const cardIdSelector = (
 							-getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost,
 						]),
 					);
-				if (!candidates.length) {
-					return null;
+				let finalCandidates = [];
+				if (!!candidates?.length) {
+					const targets = candidates.slice(0, 3);
+					const lowestCostTarget = targets[targets.length - 1];
+					const lowestCostDeckCard = input.deckState.findCard(lowestCostTarget.entityId)?.card;
+					const lowestCost = getCost(lowestCostDeckCard, input.deckState, allCards);
+					finalCandidates = candidates.filter(
+						(c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost >= lowestCost,
+					);
 				}
-
-				const targets = candidates.slice(0, 3);
-				const lowestCostTarget = targets[targets.length - 1];
-				const lowestCostDeckCard = input.deckState.findCard(lowestCostTarget.entityId)?.card;
-				const lowestCost = getCost(lowestCostDeckCard, input.deckState, allCards);
-				const finalCandidates = candidates.filter(
-					(c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost >= lowestCost,
-				);
-				return tooltip(and(side(inputSide), entityIs(...finalCandidates.map((c) => c.entityId))))(input);
+				return highlightConditions(
+					tooltip(and(side(inputSide), entityIs(...finalCandidates.map((c) => c.entityId)))),
+					and(side(inputSide), or(inHand, inDeck, inPlay), taunt, minion),
+				)(input);
 			};
 		case CardIds.IcebloodTower:
 			return and(side(inputSide), inDeck, spell);
@@ -1508,6 +1506,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.MinecartCruiser_WW_326:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
+		case CardIds.MistahVistah_VAC_519:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.Mixtape:
 			return tooltip(and(opposingSide(inputSide), cardsPlayedThisMatch));
 		case CardIds.MoatLurker:
