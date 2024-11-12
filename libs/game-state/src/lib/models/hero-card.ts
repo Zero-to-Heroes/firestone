@@ -6,6 +6,9 @@ export class HeroCard {
 	readonly cardId: string;
 	readonly entityId: number;
 	readonly playerName: string;
+	// So that we can still keep track of cards that might be in the deck if the hero class changes
+	// (eg becoming NEUTRAL with Reno)
+	readonly initialClasses: readonly CardClass[] = [];
 	readonly classes: readonly CardClass[] = [];
 	readonly maxHealth: number;
 	readonly manaLeft: number;
@@ -18,3 +21,11 @@ export class HeroCard {
 		return Object.assign(new HeroCard(), this, base);
 	}
 }
+
+export const hasOrHadHeroClass = (card: HeroCard | undefined, cardClasses: readonly CardClass[]): boolean => {
+	return (
+		card?.initialClasses.some((c) => cardClasses.includes(c)) ||
+		card?.classes.some((c) => cardClasses.includes(c)) ||
+		false
+	);
+};

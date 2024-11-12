@@ -7,6 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { hasOrHadHeroClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,9 +38,11 @@ export class OpponentMulticasterWidgetWrapperComponent
 		this.prefExtractor = (prefs) => prefs.opponentMulticasterCounter;
 		this.deckStateExtractor = (state) =>
 			(state.opponentDeck?.spellsPlayedThisMatch?.length > 0 &&
-				(state.opponentDeck?.hero?.classes?.includes(CardClass.MAGE) ||
-					state.opponentDeck?.hero?.classes?.includes(CardClass.SHAMAN) ||
-					state.opponentDeck?.hero?.classes?.includes(CardClass.DEATHKNIGHT))) ||
+				hasOrHadHeroClass(state.opponentDeck.hero, [
+					CardClass.MAGE,
+					CardClass.SHAMAN,
+					CardClass.DEATHKNIGHT,
+				])) ||
 			state?.opponentDeck?.hasRelevantCard(
 				[
 					CardIds.Multicaster,

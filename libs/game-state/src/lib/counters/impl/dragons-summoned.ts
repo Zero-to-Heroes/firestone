@@ -1,6 +1,7 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { hasOrHadHeroClass } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -24,9 +25,7 @@ export class DragonsSummonedCounterDefinitionV2 extends CounterDefinitionV2<numb
 	readonly opponent = {
 		pref: 'opponentDragonsSummonedCounter' as const,
 		display: (state: GameState): boolean =>
-			!!state.opponentDeck?.hero?.classes?.some((playerClass) =>
-				[CardClass.PRIEST, CardClass.DRUID].includes(playerClass),
-			),
+			hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.PRIEST, CardClass.DRUID]),
 		value: (state: GameState): number => state.opponentDeck?.dragonsSummoned,
 		setting: {
 			label: (i18n: ILocalizationService): string =>

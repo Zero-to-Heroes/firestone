@@ -7,6 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { hasOrHadHeroClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -36,7 +37,7 @@ export class OpponentDeadMinionsThisGameWidgetWrapperComponent
 		this.activeCounter = 'deadMinionsThisGame';
 		this.prefExtractor = (prefs) => prefs.opponentDeadMinionsThisGameCounter;
 		this.deckStateExtractor = (state, prefValue) =>
-			state.opponentDeck?.hero?.classes?.includes(CardClass.DEATHKNIGHT) ||
+			hasOrHadHeroClass(state.opponentDeck.hero, [CardClass.DEATHKNIGHT]) ||
 			state.opponentDeck?.hasRelevantCard([CardIds.ReskaThePitBoss_WW_373]);
 	}
 }
