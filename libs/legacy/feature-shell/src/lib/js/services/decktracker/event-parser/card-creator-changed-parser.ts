@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameState } from '@firestone/game-state';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { GameEvent } from '../../../models/game-event';
 import { forcedHiddenCardCreators } from '../../hs-utils';
@@ -34,12 +34,16 @@ export class CardCreatorChangedParser implements EventParser {
 			? cardInHand.update({
 					// To avoid info leaks from Mask of Mimicry
 					creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
-			  } as DeckCard)
+					lastAffectedByCardId: null,
+					guessedInfo: {},
+			  })
 			: null;
 		const newCardInDeck = cardInDeck
 			? cardInDeck.update({
 					creatorCardId: gameEvent.additionalData.creatorCardId,
-			  } as DeckCard)
+					lastAffectedByCardId: null,
+					guessedInfo: {},
+			  })
 			: null;
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
