@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-category-details',
@@ -29,16 +28,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				role="region"
 			>
 			</battlegrounds-meta-stats-trinkets>
-			<!-- <battlegrounds-personal-stats-heroes
-				*ngIf="selectedCategoryId === 'bgs-category-personal-heroes'"
-				role="region"
-			>
-			</battlegrounds-personal-stats-heroes> -->
-			<!-- <battlegrounds-personal-stats-quests
-				*ngIf="selectedCategoryId === 'bgs-category-personal-quests'"
-				role="region"
-			>
-			</battlegrounds-personal-stats-quests> -->
+			<battlegrounds-meta-stats-cards *ngIf="selectedCategoryId === 'bgs-category-meta-cards'" role="region">
+			</battlegrounds-meta-stats-cards>
 			<battlegrounds-personal-stats-rating *ngIf="selectedCategoryId === 'bgs-category-personal-rating'">
 			</battlegrounds-personal-stats-rating>
 			<battlegrounds-personal-stats-stats *ngIf="selectedCategoryId === 'bgs-category-personal-stats'">
@@ -56,18 +47,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsCategoryDetailsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class BattlegroundsCategoryDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	selectedCategoryId$: Observable<string>;
 
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly nav: BattlegroundsNavigationService,
-	) {
-		super(store, cdr);
+	constructor(protected readonly cdr: ChangeDetectorRef, private readonly nav: BattlegroundsNavigationService) {
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

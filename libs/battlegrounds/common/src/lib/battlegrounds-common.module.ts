@@ -12,6 +12,10 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { BattlegroundsMetaStatsCardInfoComponent } from './cards/battlegrounds-meta-stats-card-info.component';
+import { BattlegroundsMetaStatsCardTierComponent } from './cards/battlegrounds-meta-stats-card-tier.component';
+import { BattlegroundsMetaStatsCardsComponent } from './cards/battlegrounds-meta-stats-cards.component';
+import { BattlegroundsCardsService } from './cards/bgs-cards.service';
 import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboards.component';
 import { BgsBattleRecapPlayerComponent } from './components/battles/bgs-battle-recap-player.component';
 import { BgsBattleRecapComponent } from './components/battles/bgs-battle-recap.component';
@@ -77,6 +81,9 @@ const components = [
 	BgsBattleRecapPlayerComponent,
 	BgsBattleRecapComponent,
 	BattlegroundsCompositionsViewSelectDropdownComponent,
+	BattlegroundsMetaStatsCardsComponent,
+	BattlegroundsMetaStatsCardInfoComponent,
+	BattlegroundsMetaStatsCardTierComponent,
 ];
 
 @NgModule({
@@ -121,6 +128,7 @@ const components = [
 		BgsMetaCompositionStrategiesService,
 		BgsInGameCompositionsService,
 		BgsBoardHighlighterService,
+		BattlegroundsCardsService,
 	],
 	declarations: components,
 	exports: components,

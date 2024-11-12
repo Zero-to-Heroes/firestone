@@ -40,6 +40,14 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				[placeholder]="'app.battlegrounds.filters.leaderboard.search-placeholder' | fsTranslate"
 			>
 			</fs-text-input>
+			<!-- <fs-text-input
+				class="search"
+				*ngIf="showCardSearch$ | async"
+				[placeholder]="'app.battlegrounds.tier-list.card-search-placeholder' | fsTranslate"
+				[debounceTime]="100"
+				(fsModelUpdate)="onCardSearchStringUpdated($event)"
+			>
+			</fs-text-input> -->
 
 			<preference-toggle
 				class="use-conservative-estimate-link"
