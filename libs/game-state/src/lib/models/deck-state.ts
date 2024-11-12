@@ -140,7 +140,11 @@ export class DeckState {
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 	readonly turnTimings: readonly TurnTiming[] = [];
 	readonly turnDuration: number;
-	readonly enchantments: readonly { entityId: number; cardId: string }[] = [];
+	readonly enchantments: readonly {
+		entityId: number;
+		cardId: string;
+		tags?: readonly { Name: number; Value: number }[];
+	}[] = [];
 	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
 	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];
 

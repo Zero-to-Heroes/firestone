@@ -28,24 +28,23 @@ export class DataScriptChangedParser implements EventParser {
 		);
 
 		const cardInHand = updatedDeck.hand.find((c) => c.entityId === entityId);
-		if (!cardInHand) {
-			// console.warn('[data-script-changed] no card', gameEvent, deck.hand);
-			return currentState;
-		}
+		// if (!cardInHand) {
+		// 	// console.warn('[data-script-changed] no card', gameEvent, deck.hand);
+		// 	return currentState;
+		// }
 
-		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
-			cardInHand,
-			updatedDeck,
-			gameEvent,
-			this.allCards,
-		);
+		const cardWithAdditionalAttributes = !cardInHand
+			? null
+			: addAdditionalAttribuesInHand(cardInHand, updatedDeck, gameEvent, this.allCards);
 		const previousHand = updatedDeck.hand;
-		const newHand: readonly DeckCard[] = this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
+		const newHand: readonly DeckCard[] = !cardInHand
+			? previousHand
+			: this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
 
 		const newPlayerDeck = Object.assign(new DeckState(), updatedDeck, {
 			hand: newHand,
 			abyssalCurseHighestValue:
-				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
+				cardWithAdditionalAttributes?.cardId === CardIds.SirakessCultist_AbyssalCurseToken
 					? Math.max(
 							updatedDeck.abyssalCurseHighestValue ?? 0,
 							// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
@@ -76,6 +75,22 @@ const updateDataScriptInfo = (
 ): DeckState => {
 	const found = deck.findCard(entityId);
 	if (!found?.card || !found?.zone) {
+		if (deck.enchantments.find((e) => e.entityId === entityId)) {
+			const enchantment = deck.enchantments.find((e) => e.entityId === entityId);
+			const newEnchantment = {
+				...enchantment,
+				tags: [
+					...(enchantment.tags ?? []).filter(
+						(t) => t.Name !== GameTag.TAG_SCRIPT_DATA_NUM_1 && t.Name !== GameTag.TAG_SCRIPT_DATA_NUM_2,
+					),
+					{ Name: GameTag.TAG_SCRIPT_DATA_NUM_1, Value: dataNum1 },
+					{ Name: GameTag.TAG_SCRIPT_DATA_NUM_2, Value: dataNum2 },
+				],
+			};
+			return deck.update({
+				enchantments: [...deck.enchantments.filter((e) => e.entityId !== entityId), newEnchantment],
+			});
+		}
 		return deck;
 	}
 

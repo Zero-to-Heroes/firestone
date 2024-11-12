@@ -82,9 +82,23 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 			<div class="additional-info" *ngIf="additionalInfo$ | async as info">
 				<div class="header" [fsTranslate]="'decktracker.guessed-info.header'"></div>
 				<div class="info">
-					<div class="info-item cost" *ngIf="info.cost !== null">
+					<div class="info-item cost" *ngIf="info.cost !== null && info.cost !== undefined">
 						<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
 						<div class="value">{{ info.cost }}</div>
+					</div>
+					<div
+						class="info-item attack-buff"
+						*ngIf="info.attackBuff !== null && info.attackBuff !== undefined"
+					>
+						<div class="label" [fsTranslate]="'decktracker.guessed-info.attack-buff'"></div>
+						<div class="value">{{ info.attackBuff }}</div>
+					</div>
+					<div
+						class="info-item health-buff"
+						*ngIf="info.healthBuff !== null && info.healthBuff !== undefined"
+					>
+						<div class="label" [fsTranslate]="'decktracker.guessed-info.health-buff'"></div>
+						<div class="value">{{ info.healthBuff }}</div>
 					</div>
 				</div>
 			</div>
@@ -456,9 +470,11 @@ export class CardTooltipComponent
 /** Same as GuessedInfo */
 export interface CardTooltipAdditionalInfo {
 	readonly cost?: number;
+	readonly attackBuff?: number;
+	readonly healthBuff?: number;
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo) => {
-	return info?.cost == null;
+	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null;
 };
 
 interface InternalCard {

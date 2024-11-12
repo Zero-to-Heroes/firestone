@@ -39,27 +39,24 @@ export class CardDrawParser implements EventParser {
 					: true,
 			);
 		// console.debug('cards with matching card id', cardsWithMatchingCardId);
+		let drawnByCardId = gameEvent.additionalData.drawnByCardId;
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
 		// the bottom of the deck
 		// If no cardId is provided, we use the entityId
 		const shouldUseEntityId =
-			isPlayer && // Initially, it was !isPlayer, but I don't understand why. If it's the opponent, we don't want to use the entityId
+			// Initially, it was !isPlayer, but I don't understand why. If it's the opponent, we don't want to use the entityId
+			isPlayer &&
 			(!cardId ||
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
-		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(
-			gameEvent.additionalData.drawnByCardId,
-		);
+		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(drawnByCardId);
 		const useBottomOfDeckToIdentifyCard =
 			!isPlayer &&
 			cardDrawnFromBottom &&
-			deck.deck.some(
-				(c) =>
-					c.positionFromBottom != null && c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId,
-			);
+			deck.deck.some((c) => c.positionFromBottom != null && c.lastAffectedByCardId !== drawnByCardId);
 		// console.debug(
 		// 	'useTopOfDeckToIdentifyCard',
 		// 	useTopOfDeckToIdentifyCard,
@@ -73,13 +70,13 @@ export class CardDrawParser implements EventParser {
 		const deckToDrawnFromTop = deck.deck.some((c) => c.positionFromBottom == null)
 			? deck.deck.filter((c) => c.positionFromBottom == null)
 			: deck.deck;
-		const card = useTopOfDeckToIdentifyCard
+		let card = useTopOfDeckToIdentifyCard
 			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: useBottomOfDeckToIdentifyCard
 			? deck.deck
 					.filter((c) => c.positionFromBottom != null)
 					// Because Finley puts the cards at the bottom before drawing
-					.filter((c) => c.lastAffectedByCardId !== gameEvent.additionalData.drawnByCardId)
+					.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
 					.sort((c) => c.positionFromBottom)[0]
 			: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
 		// console.debug(
@@ -91,6 +88,15 @@ export class CardDrawParser implements EventParser {
 		// 	useTopOfDeckToIdentifyCard,
 		// 	useBottomOfDeckToIdentifyCard,
 		// );
+		if (
+			(!card?.entityId || !card?.cardId) &&
+			deck.enchantments.some(
+				(enchantment) => enchantment.cardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
+			)
+		) {
+			card = deck.deck.find((c) => c.entityId === entityId);
+			drawnByCardId = CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
+		}
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 
 		// console.debug(
@@ -107,7 +113,6 @@ export class CardDrawParser implements EventParser {
 		// So the C# parser hides some info when emitting the "CARD_DRAW_FROM_DECK" event, but the info isn't removed
 		// from the state in the app.
 		// So we use this flag to know whether we should display something
-		const drawnByCardId = gameEvent.additionalData.drawnByCardId;
 		const isDrawnByCardIdPublic = tutors.includes(drawnByCardId);
 		// console.debug('isDrawnByCardIdPublic', isDrawnByCardIdPublic, drawnByCardId);
 		const lastInfluencedByCardId = gameEvent.additionalData.lastInfluencedByCardId ?? card.lastAffectedByCardId;
@@ -161,7 +166,7 @@ export class CardDrawParser implements EventParser {
 		} as DeckCard);
 		const cardWithGuessInfo = addGuessInfoToDrawnCard(
 			cardWithCreator,
-			gameEvent.additionalData.drawnByCardId,
+			drawnByCardId,
 			gameEvent.additionalData.drawnByEntityId,
 			deck,
 			this.allCards,

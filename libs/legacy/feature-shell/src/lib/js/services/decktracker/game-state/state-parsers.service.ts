@@ -198,7 +198,7 @@ export class GameStateParsersService {
 			[GameEvent.DECKSTRING_OVERRIDE]: [new DeckstringOverrideParser(this.deckHandler)],
 			[GameEvent.DISCARD_CARD]: [new DiscardedCardParser(this.helper)],
 			[GameEvent.END_OF_ECHO_IN_HAND]: [new EndOfEchoInHandParser(this.helper)],
-			[GameEvent.ENCHANTMENT_ATTACHED]: [new EnchantmentAttachedParser(this.helper, this.allCards)],
+			[GameEvent.ENCHANTMENT_ATTACHED]: [new EnchantmentAttachedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.ENCHANTMENT_DETACHED]: [new EnchantmentDetachedParser(this.helper, this.allCards)],
 			[GameEvent.ENTITY_CHOSEN]: [
 				new EntityChosenParser(this.helper, this.allCards),

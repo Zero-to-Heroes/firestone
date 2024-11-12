@@ -121,6 +121,7 @@ export const addGuessInfoToDrawnCard = (
 				creatorEntityId,
 				options,
 			);
+			console.debug('[debug] guessedInfo', creatorCardId, guessedInfo, creatorEntityId, options);
 			return guessedInfo != null
 				? card.update({
 						guessedInfo: {

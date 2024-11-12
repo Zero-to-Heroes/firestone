@@ -266,6 +266,15 @@ export const globalEffectQuestlines = [
 
 export const globalEffectQuestlinesTriggers = globalEffectQuestlines.map((effect) => effect.questStepCreated);
 
+export const getCardForGlobalEffect = (cardId: CardIds): string => {
+	switch (cardId) {
+		case CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e:
+			return CardIds.Kiljaeden_GDB_145;
+		default:
+			return cardId;
+	}
+};
+
 export const cardsRevealedWhenDrawn = [
 	CardIds.AncientShade_AncientCurseToken,
 	CardIds.BeneathTheGrounds_NerubianAmbushToken,

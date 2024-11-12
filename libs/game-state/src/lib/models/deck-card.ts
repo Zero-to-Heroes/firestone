@@ -108,5 +108,7 @@ export interface StoredInformation {
 
 export interface GuessedInfo {
 	readonly cost?: number | null;
+	readonly attackBuff?: number | null;
+	readonly healthBuff?: number | null;
 	readonly possibleCards?: readonly string[] | null;
 }

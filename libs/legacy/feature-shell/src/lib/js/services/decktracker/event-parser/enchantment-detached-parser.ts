@@ -1,6 +1,8 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
+import { getCardForGlobalEffect, globalEffectCards } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -26,8 +28,15 @@ export class EnchantmentDetachedParser implements EventParser {
 			return currentState;
 		}
 
+		let newGlobalEffects = deck.globalEffects;
+		if (globalEffectCards.includes(cardId as CardIds)) {
+			const globalEffectCardId = getCardForGlobalEffect(cardId as CardIds);
+			newGlobalEffects = deck.globalEffects.filter((effect) => effect.cardId !== globalEffectCardId);
+		}
+
 		const newPlayerDeck = deck.update({
 			enchantments: deck.enchantments.filter((enchantment) => enchantment.entityId !== entityId),
+			globalEffects: newGlobalEffects,
 		});
 
 		return currentState.update({
