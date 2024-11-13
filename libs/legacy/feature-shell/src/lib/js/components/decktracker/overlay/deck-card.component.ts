@@ -24,6 +24,7 @@ import {
 	distinctUntilChanged,
 	filter,
 	map,
+	Observable,
 	pairwise,
 	takeUntil,
 } from 'rxjs';
@@ -57,6 +58,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[cardTooltipPosition]="'auto'"
 			[cardTooltipShowRelatedCards]="_showRelatedCards"
 			[cardTooltipRelatedCardIds]="relatedCardIds"
+			[cardTooltipForceMouseOver]="forceMouseOver$ | async"
 			(mouseenter)="onMouseEnter($event)"
 			(mouseleave)="onMouseLeave($event)"
 			(click)="onCardClicked($event)"
@@ -171,6 +173,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckCardComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	forceMouseOver$: Observable<boolean>;
+
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	@Input() set showUpdatedCost(value: boolean) {
@@ -284,6 +288,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
 	private card$$ = new BehaviorSubject<VisualDeckCard | null>(null);
 	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
+	private forceMouseOver$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -301,6 +306,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		await this.cardMouseOverService.isReady();
 		await this.ads.isReady();
 
+		this.forceMouseOver$ = this.forceMouseOver$$.pipe(this.mapData((value) => value));
+
 		combineLatest([this.card$$, this.showUpdatedCost$$, this.showStatsChange$$, this.groupSameCardsTogether$$])
 			.pipe(
 				filter(([card]) => !!card),
@@ -316,12 +323,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			.pipe(
 				filter(([enablePremiumFeatures]) => enablePremiumFeatures),
 				map(([enablePremiumFeatures, mousedOverCard]) => mousedOverCard),
-				distinctUntilChanged((a, b) => a?.CardId === b?.CardId && a?.Zone === b?.Zone && a?.Side === b?.Side),
+				distinctUntilChanged(
+					(a, b) => a?.EntityId === b?.EntityId && a?.Zone === b?.Zone && a?.Side === b?.Side,
+				),
 				pairwise(),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([previousMouseOverCard, mousedOverCard]) => {
-				if (!this.cardId) {
+				if (!this.entityId) {
 					return;
 				}
 				if (mousedOverCard?.Side === Side.OPPOSING && this._side === 'player') {
@@ -331,12 +340,23 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 					return;
 				}
 
-				if (mousedOverCard?.CardId === this.cardId) {
+				if (mousedOverCard?.EntityId === this.entityId) {
 					this.onMouseEnter(null);
-				} else if (previousMouseOverCard?.CardId === this.cardId) {
+					// Not sure we actually want this, as it could start to show up too often and
+					// get annoying
+					// this.forceMouseOver$$.next(true);
+				} else if (previousMouseOverCard?.EntityId === this.entityId) {
 					this.onMouseLeave(null);
+					// this.forceMouseOver$$.next(false);
 				}
 			});
+		this.forceMouseOver$$.pipe(this.mapData((value) => value)).subscribe((value) => {
+			if (value) {
+				this.onMouseEnter(null);
+			} else {
+				this.onMouseLeave(null);
+			}
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -430,7 +450,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.entityId = card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
-		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
+		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : this._referenceCard?.cost ?? card.manaCost;
 		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.manaCost;
 		this.cardName =

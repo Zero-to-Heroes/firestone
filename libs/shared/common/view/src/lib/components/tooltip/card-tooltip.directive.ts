@@ -1,6 +1,7 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
+	AfterContentInit,
 	ChangeDetectorRef,
 	ComponentRef,
 	Directive,
@@ -12,14 +13,15 @@ import {
 } from '@angular/core';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
-import { CardTooltipAdditionalInfo, CardTooltipComponent } from './card-tooltip.component';
+import { CardTooltipAdditionalInfo, CardTooltipComponent, isGuessedInfoEmpty } from './card-tooltip.component';
 
 @Directive({
 	selector: '[cardTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class CardTooltipDirective implements OnDestroy {
+export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	@Input() cardTooltipType: 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE' = 'NORMAL';
 	@Input() cardTooltipCard: {
 		cardId: string;
@@ -74,6 +76,10 @@ export class CardTooltipDirective implements OnDestroy {
 		}
 	}
 
+	@Input('cardTooltipForceMouseOver') set forceMouseOver(value: boolean) {
+		this.forceMouseOver$$.next(value);
+	}
+
 	cardId: string;
 
 	private relatedCardIds: readonly string[];
@@ -87,6 +93,9 @@ export class CardTooltipDirective implements OnDestroy {
 
 	private positionStrategyDirty = true;
 
+	private forceMouseOver$$ = new BehaviorSubject<boolean>(false);
+	private mouseOverSub: Subscription;
+
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
@@ -94,6 +103,16 @@ export class CardTooltipDirective implements OnDestroy {
 		private readonly overlay: Overlay,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
+
+	ngAfterContentInit(): void {
+		this.mouseOverSub = this.forceMouseOver$$.subscribe((value) => {
+			if (value) {
+				this.onMouseEnter(true);
+			} else {
+				this.onMouseLeave(null);
+			}
+		});
+	}
 
 	private updatePositionStrategy() {
 		if (this.positionStrategy) {
@@ -123,14 +142,26 @@ export class CardTooltipDirective implements OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.onMouseLeave(null, true);
+		this.mouseOverSub?.unsubscribe();
 	}
 
 	@HostListener('mouseenter')
-	async onMouseEnter() {
+	async onMouseEnter(forced?: boolean) {
 		if (!this.cardId && !this.cardTooltipCard && !this._cardTooltipRelatedCardIds?.length) {
 			return;
 		}
 		if (this._position === 'none') {
+			return;
+		}
+
+		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
+		const relatedCards = !shouldShowRelatedCards
+			? []
+			: this._cardTooltipRelatedCardIds?.length
+			? this._cardTooltipRelatedCardIds
+			: this.relatedCardIds;
+
+		if (forced && !relatedCards?.length && isGuessedInfoEmpty(this.cardTooltipAdditionalInfo)) {
 			return;
 		}
 
@@ -143,16 +174,10 @@ export class CardTooltipDirective implements OnDestroy {
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 
 		// Attach tooltip portal to overlay
-		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
 		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 		// Pass content to tooltip component instance
 		// this.tooltipRef.instance.opacity = 0;
 		this.tooltipRef.instance.additionalClass = this.cardTooltipClass;
-		const relatedCards = !shouldShowRelatedCards
-			? []
-			: this._cardTooltipRelatedCardIds?.length
-			? this._cardTooltipRelatedCardIds
-			: this.relatedCardIds;
 		this.tooltipRef.instance.relatedCardIds = relatedCards;
 		this.tooltipRef.instance.relatedCardIdsHeader = this.cardTooltipRelatedCardIdsHeader;
 		this.tooltipRef.instance.viewRef = this.tooltipRef;
