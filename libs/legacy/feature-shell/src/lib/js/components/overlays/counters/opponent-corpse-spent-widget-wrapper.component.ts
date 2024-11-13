@@ -42,10 +42,10 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 				return false;
 			}
 
-			const entityIdsPlayed = state.opponentDeck.cardsPlayedThisMatch.map((c) => c.entityId);
+			const entityIdsPlayed = state.opponentDeck.cardsPlayedThisMatch.map((c) => Math.abs(c.entityId));
 			const cardsPlayedThisMatch = state.opponentDeck
 				.getAllCardsInDeck()
-				.filter((c) => entityIdsPlayed.includes(c.entityId));
+				.filter((c) => entityIdsPlayed.includes(Math.abs(c.entityId)));
 			const costs = cardsPlayedThisMatch
 				.filter((c) => !!c.cardId)
 				.map((c) => this.allCards.getCard(c.cardId))
