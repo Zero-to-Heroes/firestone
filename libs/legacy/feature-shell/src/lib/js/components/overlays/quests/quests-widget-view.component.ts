@@ -102,7 +102,8 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 						const result: Quest = {
 							name: refQuest?.name ?? 'Unknown quest',
 							description:
-								refQuest?.description?.replaceAll('$q', '' + refQuest?.quota) ?? 'Unknown description',
+								refQuest?.description?.replaceAll('$q', '' + refQuest?.quota).replaceAll('[x]', '') ??
+								'Unknown description',
 							quota: refQuest?.quota,
 							progress: quest.Progress ?? 0,
 							progressPercentage: !!refQuest?.quota ? (100 * (quest.Progress ?? 0)) / refQuest.quota : 0,
