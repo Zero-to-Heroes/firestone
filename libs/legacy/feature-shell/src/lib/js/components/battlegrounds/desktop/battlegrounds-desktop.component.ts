@@ -135,10 +135,10 @@ export class BattlegroundsDesktopComponent
 						name: this.i18n.translateString('app.battlegrounds.menu.trinkets'),
 				  }
 				: null,
-			// {
-			// 	id: 'bgs-category-meta-cards',
-			// 	name: this.i18n.translateString('app.battlegrounds.menu.cards'),
-			// },
+			{
+				id: 'bgs-category-meta-cards',
+				name: this.i18n.translateString('app.battlegrounds.menu.cards'),
+			},
 			{
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),

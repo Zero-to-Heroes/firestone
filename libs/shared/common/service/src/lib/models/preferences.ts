@@ -753,6 +753,9 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
+	readonly bgsActiveCardsCardType: BgsCardTypeFilterType = 'minion';
+	readonly bgsActiveCardsSearch: string | null = null;
+	readonly bgsActiveCardsTier: BgsCardTierFilterType = 1;
 	readonly bgsSelectedTabs2: readonly BgsStatsFilterId[] = [
 		'hp-by-turn',
 		'winrate-per-turn',
@@ -908,3 +911,5 @@ export class Preferences implements IPreferences {
 export type CollectionSetStatsTypeFilterType = 'cards-stats' | 'cards-history';
 export type BooleanWithLimited = boolean | 'limited';
 export type BgsCompositionsListMode = 'exploring' | 'browsing';
+export type BgsCardTypeFilterType = 'minion' | 'spell';
+export type BgsCardTierFilterType = 1 | 2 | 3 | 4 | 5 | 6 | 7;

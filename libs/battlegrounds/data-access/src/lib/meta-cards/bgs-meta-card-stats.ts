@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 
 import { BgsCardStat } from '@firestone-hs/bgs-global-stats';
+import { CardType } from '@firestone-hs/reference-data';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -12,6 +13,13 @@ export const buildCardStats = (
 ): readonly BgsMetaCardStatTierItem[] => {
 	console.debug('building card stats', stats);
 	const mainStats = stats
+		.filter((s) => {
+			const ref = allCards.getCard(s.cardId);
+			return (
+				ref.isBaconPool ||
+				(ref.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL] && !!ref.techLevel)
+			);
+		})
 		.map((s) => {
 			const result: BgsMetaCardStatTierItem = {
 				cardId: s.cardId,

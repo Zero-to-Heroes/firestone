@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { BgsCardStats } from '@firestone-hs/bgs-global-stats';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { map } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs';
 
 const BGS_CARDS_URL = 'https://static.zerotoheroes.com/api/bgs/card-stats/%timePeriod%/overview-from-hourly.gz.json';
 
@@ -37,6 +37,7 @@ export class BattlegroundsCardsService extends AbstractFacadeService<Battlegroun
 					map((prefs) => ({
 						timeFilter: prefs.bgsActiveTimeFilter,
 					})),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe(async ({ timeFilter }) => {
 					const cards = await this.loadCardsInternal(timeFilter);

@@ -385,6 +385,8 @@ import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
+import { BattlegroundsCardTierFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-tier-filter-dropdown.component';
+import { BattlegroundsCardTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-type-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
 import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
@@ -1299,6 +1301,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsLeaderboardRegionFilterDropdownComponent,
 		BattlegroundsTrinketTypeFilterDropdownComponent,
 		BattlegroundsYourStatsTypeFilterDropdownComponent,
+		BattlegroundsCardTypeFilterDropdownComponent,
+		BattlegroundsCardTierFilterDropdownComponent,
 
 		DuelsDesktopComponent,
 		DuelsEmptyStateComponent,

@@ -23,6 +23,8 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-time-filter-dropdown class="time-filter"></battlegrounds-time-filter-dropdown>
 			<battlegrounds-quest-type-filter-dropdown class="filter"></battlegrounds-quest-type-filter-dropdown>
 			<battlegrounds-trinket-type-filter-dropdown class="filter"></battlegrounds-trinket-type-filter-dropdown>
+			<battlegrounds-card-type-filter-dropdown class="filter"></battlegrounds-card-type-filter-dropdown>
+			<battlegrounds-card-tier-filter-dropdown class="filter"></battlegrounds-card-tier-filter-dropdown>
 			<battlegrounds-hero-filter-dropdown class="hero-filter"></battlegrounds-hero-filter-dropdown>
 			<battlegrounds-rank-filter-dropdown class="rank-filter"></battlegrounds-rank-filter-dropdown>
 			<battlegrounds-anomalies-filter-dropdown class="anomalies-filter"></battlegrounds-anomalies-filter-dropdown>
@@ -40,14 +42,14 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 				[placeholder]="'app.battlegrounds.filters.leaderboard.search-placeholder' | fsTranslate"
 			>
 			</fs-text-input>
-			<!-- <fs-text-input
+			<fs-text-input
 				class="search"
 				*ngIf="showCardSearch$ | async"
 				[placeholder]="'app.battlegrounds.tier-list.card-search-placeholder' | fsTranslate"
 				[debounceTime]="100"
 				(fsModelUpdate)="onCardSearchStringUpdated($event)"
 			>
-			</fs-text-input> -->
+			</fs-text-input>
 
 			<preference-toggle
 				class="use-conservative-estimate-link"
@@ -64,6 +66,7 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 	showRegionFilter$: Observable<boolean>;
 	showConservativeEstimateLink$: Observable<boolean>;
 	showLeaderboardPlayerSearch$: Observable<boolean>;
+	showCardSearch$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -97,6 +100,10 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 			filter((currentView) => !!currentView),
 			this.mapData((currentView) => currentView === 'bgs-category-leaderboard'),
 		);
+		this.showCardSearch$ = this.nav.selectedCategoryId$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => currentView === 'bgs-category-meta-cards'),
+		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -108,6 +115,15 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 		const newPrefs: Preferences = {
 			...prefs,
 			bgsLeaderboardPlayerSearch: value,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	}
+
+	async onCardSearchStringUpdated(value: string) {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			bgsActiveCardsSearch: value,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}

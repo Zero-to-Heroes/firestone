@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { CardType } from '@firestone-hs/reference-data';
 import {
 	BgsMetaCardStatTier,
 	BgsMetaCardStatTierItem,
@@ -8,7 +9,7 @@ import {
 	buildCardStats,
 	buildCardTiers,
 } from '@firestone/battlegrounds/data-access';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
@@ -23,9 +24,10 @@ import { BattlegroundsCardsService } from './bgs-cards.service';
 			<div class="data-info">
 				<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
 				<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
-				<div class="separator">-</div>
+				<!-- TODO: improve total games -->
+				<!-- <div class="separator">-</div>
 				<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
-				<div class="value">{{ totalGames$ | async }}</div>
+				<div class="value">{{ totalGames$ | async }}</div> -->
 			</div>
 
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
@@ -83,8 +85,6 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 		direction: 'asc',
 	});
 
-	private stats$$ = new BehaviorSubject<readonly BgsMetaCardStatTierItem[] | null>(null);
-
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
@@ -108,22 +108,26 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		const stats$ = this.bgCards.cardStats$$.pipe(
 			this.mapData((stats) => buildCardStats(stats?.cardStats ?? [], this.allCards)),
+			tap((stats) => console.debug('received stats for cards', stats)),
 		);
 		this.tiers$ = combineLatest([
 			stats$,
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
-					cardType: null, //prefs.bgsActiveCardsCardType,
-					cardTier: null, // prefs.bgsActiveCardsTier,
+					cardType: prefs.bgsActiveCardsCardType,
+					cardTier: prefs.bgsActiveCardsTier,
+					searchString: prefs.bgsActiveCardsSearch,
 				})),
 			),
 			this.sortCriteria$$,
 		]).pipe(
 			tap((info) => console.debug('received info for cards', info)),
-			filter(([stats, { cardType, cardTier }, sortCriteria]) => !!stats?.length),
-			this.mapData(([stats, { cardType, cardTier }, sortCriteria]) => {
-				const searchString: string | null = '';
-				const filtered = stats ?? [];
+			filter(([stats, { cardType, cardTier, searchString }, sortCriteria]) => !!stats?.length),
+			this.mapData(([stats, { cardType, cardTier, searchString }, sortCriteria]) => {
+				const filtered =
+					stats
+						.filter((stat) => this.allCards.getCard(stat.cardId).techLevel === cardTier)
+						.filter((stat) => this.isCorrectType(stat, cardType)) ?? [];
 				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n);
 				const result = !!searchString?.length
 					? tiers
@@ -198,6 +202,17 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			criteria: criteria,
 			direction: getDefaultDirection(criteria),
 		});
+	}
+
+	private isCorrectType(stat: BgsMetaCardStatTierItem, cardType: BgsCardTypeFilterType): boolean {
+		switch (cardType) {
+			case 'minion':
+				return this.allCards.getCard(stat.cardId).type?.toUpperCase() === CardType[CardType.MINION];
+			case 'spell':
+				return this.allCards.getCard(stat.cardId).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL];
+			default:
+				return false;
+		}
 	}
 }
 
