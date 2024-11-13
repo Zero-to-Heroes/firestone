@@ -135,7 +135,9 @@ export class AttackOnBoardService {
 			(hasTag(entity, GameTag.TITAN_ABILITY_USED_1) &&
 				hasTag(entity, GameTag.TITAN_ABILITY_USED_2) &&
 				hasTag(entity, GameTag.TITAN_ABILITY_USED_3));
-		const canStarshipAttack = !hasTag(entity, GameTag.STARSHIP) || !hasTag(entity, GameTag.LAUNCHPAD);
+		const canStarshipAttack =
+			!hasTag(entity, GameTag.STARSHIP) ||
+			(!hasTag(entity, GameTag.LAUNCHPAD) && (!isActivePlayer || getTag(entity, GameTag.NUM_TURNS_IN_PLAY) > 1));
 		const hasSummoningSickness =
 			!isHero &&
 			isActivePlayer &&
