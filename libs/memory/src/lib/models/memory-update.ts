@@ -75,6 +75,7 @@ export interface DuelsTreasureSelection {
 }
 
 export interface MousedOverCard {
+	readonly EntityId: number;
 	readonly CardId: string;
 	readonly Zone: Zone;
 	readonly Side: Side;
