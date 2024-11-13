@@ -88,3 +88,39 @@
 		}
 	}
 }
+
+.explanation {
+	display: flex;
+	flex-direction: column;
+	color: var(--color-1);
+	padding-left: 10px;
+	font-size: 0.8em;
+	margin-bottom: 10px;
+
+	.explanation-header {
+		font-size: 1em;
+		margin-bottom: 10px;
+		opacity: 0.8;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.text {
+		margin-left: 20px;
+		border-left: 1px solid var(--color-3);
+		padding-left: 15px;
+		padding-right: 30px;
+
+		p {
+			margin-bottom: 5px;
+		}
+	}
+
+	&.collapsed {
+		.text {
+			display: none;
+		}
+	}
+}

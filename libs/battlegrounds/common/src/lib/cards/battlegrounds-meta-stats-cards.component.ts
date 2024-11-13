@@ -9,7 +9,7 @@ import {
 	buildCardStats,
 	buildCardTiers,
 } from '@firestone/battlegrounds/data-access';
-import { BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
@@ -25,9 +25,25 @@ import { BattlegroundsCardsService } from './bgs-cards.service';
 				<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
 				<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
 				<!-- TODO: improve total games -->
-				<!-- <div class="separator">-</div>
+				<div class="separator">-</div>
 				<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
-				<div class="value">{{ totalGames$ | async }}</div> -->
+				<div class="value">{{ totalGames$ | async }}</div>
+			</div>
+			<div class="explanation" [ngClass]="{ collapsed: headerCollapsed }">
+				<div class="explanation-header" (click)="toggleHeader()">How does this work?</div>
+				<div class="text">
+					<p>
+						Card stats look at how individual cards perform in Battlegrounds games. More specifically, we
+						look at all games a single card has been played at some point during the game, and use this to
+						compute the final average placement.
+					</p>
+					<p>
+						If you select multiple tiers at the same time, we only consider the turns that are relevant from
+						the higher tiers. For instance, if you select all tiers at once, you will see stats only
+						including turns 10+. This is to avoid the inherent bias of the higher tiers naturally having a
+						lower average placement - because to play one you need to have survived for that long already.
+					</p>
+				</div>
 			</div>
 
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
@@ -80,6 +96,8 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 
 	sortCriteria$: Observable<SortCriteria<ColumnSortTypeCard>>;
 
+	headerCollapsed = true;
+
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeCard>>({
 		criteria: 'average-position',
 		direction: 'asc',
@@ -106,8 +124,18 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 		await waitForReady(this.bgCards, this.prefs);
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
-		const stats$ = this.bgCards.cardStats$$.pipe(
-			this.mapData((stats) => buildCardStats(stats?.cardStats ?? [], this.allCards)),
+		const stats$ = combineLatest([
+			this.bgCards.cardStats$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					cardTiers: prefs.bgsActiveCardsTiers,
+				})),
+			),
+		]).pipe(
+			this.mapData(([stats, { cardTiers }]) => {
+				const minTurn = buildMinTurn(cardTiers);
+				return buildCardStats(stats?.cardStats ?? [], minTurn, this.allCards);
+			}),
 			tap((stats) => console.debug('received stats for cards', stats)),
 		);
 		this.tiers$ = combineLatest([
@@ -115,18 +143,24 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					cardType: prefs.bgsActiveCardsCardType,
-					cardTier: prefs.bgsActiveCardsTier,
 					searchString: prefs.bgsActiveCardsSearch,
+					cardTiers: prefs.bgsActiveCardsTiers,
 				})),
 			),
 			this.sortCriteria$$,
 		]).pipe(
 			tap((info) => console.debug('received info for cards', info)),
-			filter(([stats, { cardType, cardTier, searchString }, sortCriteria]) => !!stats?.length),
-			this.mapData(([stats, { cardType, cardTier, searchString }, sortCriteria]) => {
+			filter(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => !!stats?.length),
+			this.mapData(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => {
 				const filtered =
 					stats
-						.filter((stat) => this.allCards.getCard(stat.cardId).techLevel === cardTier)
+						.filter(
+							(stat) =>
+								!cardTiers?.length ||
+								cardTiers.includes(
+									this.allCards.getCard(stat.cardId).techLevel as BgsCardTierFilterType,
+								),
+						)
 						.filter((stat) => this.isCorrectType(stat, cardType)) ?? [];
 				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n);
 				const result = !!searchString?.length
@@ -204,6 +238,13 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 		});
 	}
 
+	toggleHeader() {
+		this.headerCollapsed = !this.headerCollapsed;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private isCorrectType(stat: BgsMetaCardStatTierItem, cardType: BgsCardTypeFilterType): boolean {
 		switch (cardType) {
 			case 'minion':
@@ -225,5 +266,29 @@ const getDefaultDirection = (criteria: ColumnSortTypeCard): 'asc' | 'desc' => {
 		// case 'pick-rate-high-mmr':
 		default:
 			return 'desc';
+	}
+};
+
+const buildMinTurn = (cardTier: readonly BgsCardTierFilterType[] | undefined): number => {
+	if (!cardTier?.length) {
+		return 1;
+	}
+	const maxTier = Math.max(...cardTier);
+	switch (maxTier) {
+		case 1:
+			return 1;
+		case 2:
+			return 2;
+		case 3:
+			return 4;
+		case 4:
+			return 6;
+		case 5:
+			return 8;
+		case 6:
+		case 7:
+			return 10;
+		default:
+			return 1;
 	}
 };

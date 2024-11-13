@@ -9,6 +9,7 @@ import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './met
 
 export const buildCardStats = (
 	stats: readonly BgsCardStat[],
+	minTurn: number,
 	allCards: CardsFacadeService,
 ): readonly BgsMetaCardStatTierItem[] => {
 	console.debug('building card stats', stats);
@@ -21,15 +22,21 @@ export const buildCardStats = (
 			);
 		})
 		.map((s) => {
+			const relevantStats = s.turnStats.filter((stat) => stat.turn >= minTurn);
+			const dataPoints = relevantStats.map((turnStat) => turnStat.totalPlayedAtTurn).reduce((a, b) => a + b, 0);
+			const totalPlacement = relevantStats
+				.map((turnStat) => turnStat.averagePlacement * turnStat.totalPlayedAtTurn)
+				.reduce((a, b) => a + b, 0);
+			const averagePlacement = totalPlacement / dataPoints;
 			const result: BgsMetaCardStatTierItem = {
 				cardId: s.cardId,
 				name: allCards.getCard(s.cardId).name,
-				dataPoints: s.totalPlayed,
-				averagePlacement: s.averagePlacement,
+				dataPoints: dataPoints,
+				averagePlacement: averagePlacement,
 			};
 			return result;
-		})
-		.filter((s) => s.dataPoints > 100);
+		});
+	// .filter((s) => s.dataPoints > 100);
 	return mainStats;
 };
 

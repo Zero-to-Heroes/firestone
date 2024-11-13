@@ -754,8 +754,8 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
 	readonly bgsActiveCardsCardType: BgsCardTypeFilterType = 'minion';
-	readonly bgsActiveCardsSearch: string | null = null;
-	readonly bgsActiveCardsTier: BgsCardTierFilterType = 1;
+	readonly bgsActiveCardsSearch: string = null;
+	readonly bgsActiveCardsTiers: readonly BgsCardTierFilterType[] = [1];
 	readonly bgsSelectedTabs2: readonly BgsStatsFilterId[] = [
 		'hp-by-turn',
 		'winrate-per-turn',

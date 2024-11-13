@@ -1,27 +1,25 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { BgsCardTierFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
-import { Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { arraysEqual } from '../../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-card-tier-filter-dropdown',
-	styleUrls: [],
+	styleUrls: ['./battlegrounds-card-tier-filter-dropdown.component.scss'],
 	template: `
-		<filter-dropdown
+		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"
-			class="battlegrounds-card-tier-filter-dropdown"
+			class="filter-dropdown"
 			[options]="options"
-			[filter]="value.filter"
+			[selected]="value.selected"
 			[placeholder]="value.placeholder"
-			[visible]="value.visible"
-			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+			[visible]="visible$ | async"
+			(optionSelected)="onSelected($event)"
+		></filter-dropdown-multiselect>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,9 +27,9 @@ export class BattlegroundsCardTierFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
-	options: IOption[];
-
-	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
+	visible$: Observable<boolean>;
+	options: MultiselectOption[];
+	filter$: Observable<{ selected: readonly string[]; placeholder: string }>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -45,47 +43,21 @@ export class BattlegroundsCardTierFilterDropdownComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.nav, this.prefs);
 
-		this.options = [
-			{
-				value: '1',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 1 }),
-			} as IOption,
-			{
-				value: '2',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 2 }),
-			} as IOption,
-			{
-				value: '3',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 3 }),
-			} as IOption,
-			{
-				value: '4',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 4 }),
-			} as IOption,
-			{
-				value: '5',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 5 }),
-			} as IOption,
-			{
-				value: '6',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 6 }),
-			} as IOption,
-			{
-				value: '7',
-				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: 7 }),
-			} as IOption,
-		];
-		this.filter$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => '' + prefs.bgsActiveCardsTier)),
-			this.nav.selectedCategoryId$$,
-		]).pipe(
-			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([filter, selectedCategoryId]) => ({
-				filter: filter,
-				placeholder: this.options.find((option) => option.value === filter)?.label,
-				visible: selectedCategoryId === 'bgs-category-meta-cards',
+		this.options = [1, 2, 3, 4, 5, 6, 7].map((tier) => ({
+			value: '' + tier,
+			label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: tier }),
+			image: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${tier}.png`,
+		}));
+		this.filter$ = this.prefs.preferences$$.pipe(
+			tap((prefs) => console.debug('[bgs-card-tier-filter] prefs', prefs)),
+			this.mapData((prefs) => ({
+				selected: prefs.bgsActiveCardsTiers?.map((a) => '' + a) ?? [],
+				placeholder: this.i18n.translateString(`app.battlegrounds.filters.tier.all-tiers`),
 			})),
+			tap((filter) => console.debug('[bgs-card-tier-filter] filter', filter)),
+		);
+		this.visible$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((selectedCategoryId) => selectedCategoryId === 'bgs-category-meta-cards'),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -93,11 +65,11 @@ export class BattlegroundsCardTierFilterDropdownComponent
 		}
 	}
 
-	async onSelected(option: IOption) {
+	async onSelected(selected: readonly string[]) {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsActiveCardsTier: parseInt(option.value) as BgsCardTierFilterType,
+			bgsActiveCardsTiers: selected.map((tier) => parseInt(tier) as BgsCardTierFilterType),
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}
