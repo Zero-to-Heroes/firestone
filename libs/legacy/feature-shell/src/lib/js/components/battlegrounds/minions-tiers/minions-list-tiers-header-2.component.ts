@@ -14,7 +14,7 @@ import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
@@ -169,6 +169,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
 	}
@@ -189,6 +190,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		// console.debug('selecting', category, this.selectedCategory$$.getValue(), unselecting);
 		this.selectedCategory$$.next(category);
 		if (selectItem && !unselecting) {
+			this.analytics.trackEvent('bgs-minions-list', { category: category });
 			switch (category) {
 				case 'compositions':
 					// this.setDisplayedTier({ tavernTier: 'compositions' } as Tier);
