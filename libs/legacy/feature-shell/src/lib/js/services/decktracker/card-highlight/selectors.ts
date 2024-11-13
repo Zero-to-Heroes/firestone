@@ -113,11 +113,6 @@ export const effectiveCostLessThanRemainingMana = (input: SelectorInput): boolea
 export const effectiveCostMore =
 	(cost: number) =>
 	(input: SelectorInput): boolean => {
-		console.debug(
-			'checking cost',
-			input.allCards.getCard(input.deckCard.cardId).name,
-			input.allCards.getCard(input.deckCard.cardId),
-		);
 		return getCost(input.deckCard, input.deckState, input.allCards) > cost;
 	};
 
