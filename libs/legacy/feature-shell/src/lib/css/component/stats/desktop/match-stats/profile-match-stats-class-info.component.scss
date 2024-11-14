@@ -10,6 +10,8 @@
 			clip-path: circle(40% at 50% 50%);
 			transform: scale(1.3);
 		}
+	}
+	&.battlegrounds {
 		.winrate,
 		.total-matches {
 			display: none;
