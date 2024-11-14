@@ -40,7 +40,6 @@ export class GenericCountersV2Component extends AbstractSubscriptionComponent im
 	}
 
 	@Input() set counter(value: CounterInstance<any>) {
-		console.debug('setting counter', value);
 		this.image = value.image;
 		this.helpTooltipText = value.tooltip;
 		this.value = value.value;

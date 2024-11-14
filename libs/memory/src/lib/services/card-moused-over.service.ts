@@ -25,7 +25,6 @@ export class CardMousedOverService extends AbstractFacadeService<CardMousedOverS
 		this.mousedOverCard$$.onFirstSubscribe(async () => {
 			this.memoryUpdates.memoryUpdates$$.subscribe((changes) => {
 				const mousedOverCard = changes.MousedOverCard;
-				console.debug('[memory] [card-moused-over] new moused over card', mousedOverCard);
 				this.mousedOverCard$$.next(mousedOverCard);
 			});
 		});

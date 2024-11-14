@@ -70,7 +70,6 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		} else {
 			highlightedMinions = highlightedMinions.filter((minion) => !minionsToHighlight.includes(minion));
 		}
-		console.debug('[debug] [bgs-board-highlighter] new highlighted minions', highlightedMinions);
 		this.highlightedMinions$$.next(highlightedMinions);
 	}
 
