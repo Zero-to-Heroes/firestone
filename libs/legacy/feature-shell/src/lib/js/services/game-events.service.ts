@@ -352,6 +352,7 @@ export class GameEvents {
 						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
 						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						castWhenDrawn: gameEvent.Value.AdditionalProps.CastWhenDrawn,
 					}),
 				);
 				break;

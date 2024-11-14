@@ -61,7 +61,18 @@ export class CardPlayedByEffectParser implements EventParser {
 
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
-		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
+		const isOnBoard =
+			!isCardCountered &&
+			// Because CASTS_WHEN_DRAWN cards create another card on the board
+			!gameEvent.additionalData.castWhenDrawn &&
+			refCard &&
+			(refCard.type === 'Minion' || refCard.type === 'Location');
+		// Some of these cards can come from hand, when the event is triggered by "casts when drawn" effects
+		const cardFromHand = this.helper.findCardInZone(deck.hand, cardId, entityId, true, false);
+		let newHand = deck.hand;
+		if (!!cardFromHand) {
+			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
+		}
 		const cardWithZone = DeckCard.create({
 			entityId: entityId,
 			cardId: cardId,
@@ -102,6 +113,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			);
 		}
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+			hand: newHand,
 			board: newBoard,
 			otherZone: newOtherZone,
 			globalEffects: newGlobalEffects,

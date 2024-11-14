@@ -349,6 +349,9 @@ export class GameStateService {
 				'[game-state] emitting event',
 				emittedEvent.event.name,
 				gameEvent.cardId,
+				gameEvent.entityId,
+				emittedEvent.state.playerDeck.board.map((card) => card.cardId),
+				emittedEvent.state.playerDeck.board,
 				gameEvent,
 				emittedEvent.state,
 			);
