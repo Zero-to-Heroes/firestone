@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { ConstructedMetaDecksStateService, ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
+import { ConstructedNavigationService } from '../services/constructed-navigation.service';
 
 @Component({
 	selector: 'mulligan-deck-guide-archetype-selection',
@@ -33,10 +34,10 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 	options$: Observable<MultiselectOption[]>;
 	filter$: Observable<{ selected: readonly string[]; placeholder: string }>;
 
-	@Input() set deckstring(value: string) {
+	@Input() set deckstring(value: string | null) {
 		this.deckstring$$.next(value);
 	}
-	@Input() set archetypeId(value: number) {
+	@Input() set archetypeId(value: number | null) {
 		this.archetypeId$$.next(value);
 	}
 

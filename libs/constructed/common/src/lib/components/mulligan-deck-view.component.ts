@@ -109,7 +109,7 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 						[ngClass]="{ selected: card.selected }"
 					>
 						<div class="cell keep-rate" [style.color]="card.keptColor">
-							{{ card.keepRate === null ? '-' : card.keepRate.toFixed(2) + '%' }}
+							{{ card.keepRate === null ? '-' : card.keepRate?.toFixed(2) + '%' }}
 						</div>
 						<card-tile class="cell card" [cardId]="card.cardId"></card-tile>
 						<div class="cell impact" [style.color]="card.impactColor">

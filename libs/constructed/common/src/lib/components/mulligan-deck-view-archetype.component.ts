@@ -36,10 +36,10 @@ export class MulliganDeckViewArchetypeComponent extends AbstractSubscriptionComp
 	archetypeId$: Observable<number | null>;
 	archetypeName$: Observable<string | null>;
 
-	@Input() set archetypeId(value: number) {
+	@Input() set archetypeId(value: number | null) {
 		this.archetypeId$$.next(value);
 	}
-	@Input() set deckstring(value: string) {
+	@Input() set deckstring(value: string | null) {
 		this.deckstring$$.next(value);
 	}
 
