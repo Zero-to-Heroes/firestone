@@ -102,6 +102,8 @@ export class ArenaMulliganDeckComponent
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
 				const result: MulliganDeckData = {
+					deckstring: guide!.deckstring,
+					archetypeId: null,
 					mulliganData: guide!.allDeckCards.map((advice) => ({
 						cardId: advice.cardId,
 						label: advice.cardId,

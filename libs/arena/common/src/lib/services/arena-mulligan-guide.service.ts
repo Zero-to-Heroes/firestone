@@ -263,6 +263,8 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					opponentClass: opponentClass,
 					format: 'wild',
 					rankBracket: 'all',
+					archetypeId: null,
+					deckstring: null,
 				};
 				return result;
 			}),

@@ -345,16 +345,16 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug(
-				'[game-state] emitting event',
-				emittedEvent.event.name,
-				gameEvent.cardId,
-				gameEvent.entityId,
-				emittedEvent.state.playerDeck.board.map((card) => card.cardId),
-				emittedEvent.state.playerDeck.board,
-				gameEvent,
-				emittedEvent.state,
-			);
+			// console.debug(
+			// 	'[game-state] emitting event',
+			// 	emittedEvent.event.name,
+			// 	gameEvent.cardId,
+			// 	gameEvent.entityId,
+			// 	emittedEvent.state.playerDeck.board.map((card) => card.cardId),
+			// 	emittedEvent.state.playerDeck.board,
+			// 	gameEvent,
+			// 	emittedEvent.state,
+			// );
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 

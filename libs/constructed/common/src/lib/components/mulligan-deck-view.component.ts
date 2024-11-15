@@ -36,6 +36,13 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 		<div class="mulligan-deck-overview scalable" *ngIf="showMulliganOverview">
 			<div class="widget-header">
 				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
+				<mulligan-deck-view-archetype
+					*ngIf="showArchetypeSelection"
+					class="archetype-info"
+					[archetypeId]="archetypeId$ | async"
+					[deckstring]="deckstring$ | async"
+				>
+				</mulligan-deck-view-archetype>
 				<div class="filters">
 					<div
 						class="filter rank-bracket"
@@ -119,7 +126,13 @@ export class MulliganDeckViewComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
+	sortedDeckMulliganInfo$: Observable<readonly MulliganChartDataCard[] | null>;
+	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
+	deckstring$: Observable<string | null>;
+	archetypeId$: Observable<number | null>;
+
 	@Input() showMulliganOverview: boolean | null;
+	@Input() showArchetypeSelection: boolean | null;
 	@Input() showFilters: boolean;
 	@Input() rankBracketTooltip: string | null;
 	@Input() rankBracketLabel: string | null;
@@ -136,16 +149,17 @@ export class MulliganDeckViewComponent
 
 	@Input() set deckMulliganInfo(value: MulliganDeckData | null) {
 		this.deckMulliganInfo$$.next(value);
+		this.deckstring$$.next(value?.deckstring ?? null);
+		this.archetypeId$$.next(value?.archetypeId ?? null);
 	}
-
-	sortedDeckMulliganInfo$: Observable<readonly MulliganChartDataCard[] | null>;
-	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'impact',
 		direction: 'desc',
 	});
 	private deckMulliganInfo$$ = new BehaviorSubject<MulliganDeckData | null>(null);
+	private deckstring$$ = new BehaviorSubject<string | null>(null);
+	private archetypeId$$ = new BehaviorSubject<number | null>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -165,7 +179,9 @@ export class MulliganDeckViewComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
 
-		this.sortCriteria$ = this.sortCriteria$$;
+		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((info) => info));
+		this.deckstring$ = this.deckstring$$.pipe(this.mapData((info) => info));
+		this.archetypeId$ = this.archetypeId$$.pipe(this.mapData((info) => info));
 		this.sortedDeckMulliganInfo$ = combineLatest([this.deckMulliganInfo$$, this.sortCriteria$$]).pipe(
 			this.mapData(([mulliganInfo, sortCriteria]) =>
 				[...(mulliganInfo?.mulliganData ?? [])].sort((a, b) => this.sortCards(a, b, sortCriteria)),

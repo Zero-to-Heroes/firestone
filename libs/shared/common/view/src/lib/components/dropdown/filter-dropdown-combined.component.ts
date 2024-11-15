@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -16,13 +17,13 @@ import {
 	arraysEqual,
 	removeFromReadonlyArray,
 } from '@firestone/shared/framework/common';
-import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { MultiselectOption } from './filter-dropdown-multiselect.component';
 
 @Component({
-	selector: 'filter-dropdown-multiselect',
-	styleUrls: [`./filter-dropdown-multiselect.component.scss`],
+	selector: 'filter-dropdown-combined',
+	styleUrls: [`./filter-dropdown-combined.component.scss`],
 	template: `
 		<div class="filter-dropdown-multiselect" [ngClass]="{ showing: showing }" *ngIf="_visible">
 			<div class="value" (click)="toggle()">
@@ -34,7 +35,8 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 				*ngIf="
 					showing && {
 						workingOptions: (workingOptions$ | async) || [],
-						validSelection: validSelection$ | async
+						validSelection: validSelection$ | async,
+						allowMultipleSelection: allowMultipleSelection$ | async
 					} as value
 				"
 			>
@@ -59,15 +61,35 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 				>
 					<div class="option" *ngFor="let option of scroll.viewPortItems; trackBy: trackByFn">
 						<checkbox
+							class="checkbox-option"
+							*ngIf="value.allowMultipleSelection"
 							[label]="option.label"
 							[value]="option.selected"
 							[image]="option.image"
 							[labelTooltip]="option.tooltip"
 							(valueChanged)="select(option, $event)"
 						></checkbox>
+						<div *ngIf="!value.allowMultipleSelection" class="single-option" (click)="select(option, true)">
+							<img class="image" *ngIf="option.image" [src]="option.image" />
+							<span
+								[helpTooltip]="option.tooltip ?? option.label"
+								[ngClass]="{ unselectable: option.unselectable }"
+								[innerHTML]="option?.label"
+							></span>
+							<div class="tooltip" *ngIf="option.tooltip" [helpTooltip]="option.tooltip">
+								<svg>
+									<use xlink:href="assets/svg/sprite.svg#info" />
+								</svg>
+							</div>
+							<i class="i-30 selected-icon" *ngIf="option.selected">
+								<svg class="svg-icon-fill">
+									<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />
+								</svg>
+							</i>
+						</div>
 					</div>
 				</virtual-scroller>
-				<div class="controls">
+				<div class="controls" *ngIf="value.allowMultipleSelection">
 					<div
 						class="button clear"
 						(click)="clearSelection()"
@@ -91,7 +113,16 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class FilterDropdownCombinedComponent
+	extends AbstractSubscriptionComponent
+	implements OnDestroy, AfterContentInit
+{
+	valueText$: Observable<string>;
+	workingOptions$: Observable<InternalOption[]>;
+	validSelection$: Observable<boolean>;
+	currentSearch$: Observable<string>;
+	allowMultipleSelection$: Observable<boolean>;
+
 	@ViewChild('search') searchInput: ElementRef;
 
 	@Output() optionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
@@ -113,16 +144,15 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
+	@Input() set allowMultipleSelection(value: boolean) {
+		this.allowMultipleSelection$$.next(value);
+	}
+
 	@Input() resetIsClear: boolean;
 	@Input() allowSearch: boolean;
 	@Input() validSelectionNumber: number;
 	@Input() validationErrorTooltip: string;
 	@Input() debounceTime = 200;
-
-	valueText$: Observable<string>;
-	workingOptions$: Observable<InternalOption[]>;
-	validSelection$: Observable<boolean>;
-	currentSearch$: Observable<string>;
 
 	showing: boolean;
 
@@ -134,11 +164,16 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	private options$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
 	private selected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
 	private currentSearch$$ = new BehaviorSubject<string>(null);
+	private allowMultipleSelection$$ = new BehaviorSubject<boolean>(false);
 
 	private sub$$: Subscription;
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
 		super(cdr);
+	}
+
+	ngAfterContentInit() {
+		this.allowMultipleSelection$ = this.allowMultipleSelection$$.pipe(this.mapData((v) => v));
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
 		// the first time (maybe because of "visible"?)
 		combineLatest([this.options$, this.tempSelectedValues$])
@@ -152,19 +187,28 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 				}),
 			)
 			.subscribe((tempSelected) => this.tempSelected$.next(tempSelected));
-		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
+		this.valueText$ = combineLatest([
+			this.options$.asObservable(),
+			this.selected$.asObservable(),
+			this.allowMultipleSelection$$,
+		]).pipe(
 			filter(([options, selected]) => !!options?.length),
-			this.mapData(([options, selected]) => {
-				if (!selected?.length || selected.length === options.length) {
-					return this.placeholder;
+			this.mapData(([options, selected, allowMultipleSelection]) => {
+				if (allowMultipleSelection) {
+					if (!selected?.length || selected.length === options.length) {
+						return this.placeholder;
+					}
+					const result = this.buildIcons(
+						selected
+							.map((sel) => options.find((option) => option.value === sel))
+							.filter((option) => !!option)
+							.sort((a, b) => (a.label < b.label ? -1 : 1)),
+					);
+					return result;
+				} else {
+					const selectedOption = options.find((option) => option.value === selected[0]);
+					return selectedOption?.label ?? this.placeholder;
 				}
-				const result = this.buildIcons(
-					selected
-						.map((sel) => options.find((option) => option.value === sel))
-						.filter((option) => !!option)
-						.sort((a, b) => (a.label < b.label ? -1 : 1)),
-				);
-				return result;
 			}),
 		);
 		// Reset the info every time the input options change
@@ -237,16 +281,21 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	select(option: MultiselectOption, isSelected: boolean) {
-		let tempSelected = this.tempSelected$.value;
-		if (isSelected && !tempSelected.some((o) => o.value === option.value)) {
-			tempSelected = [...tempSelected, option];
-		} else if (!isSelected && tempSelected.some((o) => o.value === option.value)) {
-			tempSelected = removeFromReadonlyArray(
-				tempSelected,
-				tempSelected.map((e) => e.value).indexOf(option.value),
-			);
+		if (!this.allowMultipleSelection) {
+			this.tempSelected$.next([option]);
+			this.confirmSelection(true);
+		} else {
+			let tempSelected = this.tempSelected$.value;
+			if (isSelected && !tempSelected.some((o) => o.value === option.value)) {
+				tempSelected = [...tempSelected, option];
+			} else if (!isSelected && tempSelected.some((o) => o.value === option.value)) {
+				tempSelected = removeFromReadonlyArray(
+					tempSelected,
+					tempSelected.map((e) => e.value).indexOf(option.value),
+				);
+			}
+			this.tempSelected$.next(tempSelected);
 		}
-		this.tempSelected$.next(tempSelected);
 	}
 
 	clearSelection() {
@@ -309,11 +358,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		const icons = options.map((option) => `<img src="${option.image}" class="icon" />`).join('');
 		return `<div class="selection-icons">${icons}</div>`;
 	}
-}
-
-export interface MultiselectOption extends IOption {
-	readonly image: string | null;
-	readonly tooltip?: string;
 }
 
 interface InternalOption extends MultiselectOption {

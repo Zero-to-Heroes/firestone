@@ -44,6 +44,7 @@ import { buildColor } from './mulligan-deck-view.component';
 			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
 			[showMulliganOverview]="showMulliganOverview$ | async"
 			[showFilters]="true"
+			[showArchetypeSelection]="true"
 			[rankBracketTooltip]="rankBracketTooltip$ | async"
 			[rankBracketLabel]="rankBracketLabel$ | async"
 			[opponentTooltip]="opponentTooltip$ | async"
@@ -110,6 +111,8 @@ export class ConstructedMulliganDeckComponent
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
 				const result: MulliganDeckData = {
+					deckstring: guide!.deckstring,
+					archetypeId: guide!.archetypeId,
 					mulliganData: guide!.allDeckCards.map((advice) => ({
 						cardId: advice.cardId,
 						label: advice.cardId,

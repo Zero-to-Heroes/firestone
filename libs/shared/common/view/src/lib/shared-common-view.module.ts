@@ -13,6 +13,7 @@ import { CardTileComponent } from './components/card/card-tile.component';
 import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.component';
 import { CopyDesckstringComponent } from './components/deck/copy-deckstring.component';
 import { DeckListBasicComponent } from './components/deck/deck-list-basic.component';
+import { FilterDropdownCombinedComponent } from './components/dropdown/filter-dropdown-combined.component';
 import { FilterDropdownMultiselectComponent } from './components/dropdown/filter-dropdown-multiselect.component';
 import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
 import { PreferenceDropdownComponent } from './components/dropdown/preference-dropdown.component';
@@ -53,6 +54,7 @@ const components = [
 
 	FilterDropdownComponent,
 	FilterDropdownMultiselectComponent,
+	FilterDropdownCombinedComponent,
 	PreferenceDropdownComponent,
 	PreferenceYNLimitedComponent,
 

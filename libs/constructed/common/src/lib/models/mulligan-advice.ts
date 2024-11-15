@@ -2,6 +2,8 @@ import { RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { GameFormatString } from '@firestone-hs/reference-data';
 
 export interface MulliganGuide {
+	readonly deckstring: string | null;
+	readonly archetypeId: number | null;
 	readonly allDeckCards: readonly MulliganCardAdvice[];
 	readonly cardsInHand: readonly string[];
 	readonly sampleSize: number;
@@ -39,6 +41,8 @@ export interface MulliganChartDataCard {
 }
 
 export interface MulliganDeckData {
+	deckstring: string | null;
+	archetypeId: number | null;
 	mulliganData: readonly MulliganChartDataCard[];
 	format: string;
 	sampleSize: number;

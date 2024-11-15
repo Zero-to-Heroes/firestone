@@ -165,6 +165,7 @@ export class Preferences implements IPreferences {
 	readonly desktopDeckStatsReset: { [deckstring: string]: readonly number[] } = {};
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 	readonly constructedDeckVersions: readonly ConstructedDeckVersions[] = [];
+	readonly constructedDeckArchetypeOverrides: { [deckstring: string]: number | null } = {};
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
 	readonly constructedDecksSearchString: string;
 	readonly constructedMetaDecksFormatFilter: GameFormat = 'standard';

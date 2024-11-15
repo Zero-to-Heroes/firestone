@@ -4,7 +4,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, filter, tap } from 'rxjs';
+import { Observable, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
@@ -88,7 +88,6 @@ export class ConstructedPlayerArchetypeFilterDropdownComponent
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksArchetypeFilter)),
 			this.nav.currentView$$,
 		]).pipe(
-			tap((filter) => console.debug('[archetype-filter] filter', filter)),
 			this.mapData(([filter, currentView]) => ({
 				selected: filter.map((a) => '' + a),
 				placeholder: this.i18n.translateString(`app.decktracker.filters.archetype-filter.all`),
