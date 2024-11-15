@@ -1175,7 +1175,11 @@ export const cardIdSelector = (
 					);
 				let finalCandidates = [];
 				if (!!candidates?.length) {
-					const targets = candidates.slice(0, 3);
+					// First remove duplicate cardIds
+					const withoutDuplicates = candidates.filter(
+						(c, index) => candidates.findIndex((c2) => c2.cardId === c.cardId) === index,
+					);
+					const targets = withoutDuplicates.slice(0, 3);
 					const lowestCostTarget = targets[targets.length - 1];
 					const lowestCostDeckCard = input.deckState.findCard(lowestCostTarget.entityId)?.card;
 					const lowestCost = getCost(lowestCostDeckCard, input.deckState, allCards);
