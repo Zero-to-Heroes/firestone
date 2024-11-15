@@ -116,8 +116,8 @@ export class ConstructedMulliganDeckComponent
 					mulliganData: guide!.allDeckCards.map((advice) => ({
 						cardId: advice.cardId,
 						label: advice.cardId,
-						value: advice.score ?? 0,
-						keepRate: 100 * (advice.keepRate ?? 0),
+						value: advice.score ?? null,
+						keepRate: advice.keepRate == null ? null : 100 * advice.keepRate,
 						selected: !!guide?.cardsInHand
 							.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
 							.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),

@@ -31,7 +31,7 @@ export interface MulliganChartData {
 export interface MulliganChartDataCard {
 	readonly cardId: string;
 	readonly label: string;
-	readonly value: number;
+	readonly value: number | null;
 	readonly rawValue?: number;
 	readonly keepRate?: number | null;
 	readonly selected: boolean;
