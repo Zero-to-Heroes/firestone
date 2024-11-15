@@ -25,7 +25,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		right: -20,
 		bottom: -20,
 	};
-	protected forceKeepInBounds = false;
+	protected forceKeepInBounds = true;
 
 	protected debug = false;
 
@@ -45,7 +45,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			distinctUntilChanged(),
 			switchMap(async (visible: boolean) => {
 				if (visible) {
-					console.debug('repositioning', this);
 					const repositioned = await this.reposition();
 				}
 				return visible;
@@ -56,6 +55,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 	private repositioning: boolean;
 	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
+		this.debug && console.debug('repositioning', this.repositioning);
 		if (this.repositioning) {
 			return;
 		}
@@ -67,6 +67,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			this.repositioning = false;
 			return;
 		}
+		this.debug && console.debug('gameInfo', gameInfo);
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
@@ -80,6 +81,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
 		}
+		this.debug && console.debug('positionFromPrefs', positionFromPrefs, this.forceKeepInBounds);
 		if (positionFromPrefs) {
 			this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
 			this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
@@ -120,6 +122,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				Math.max(this.bounds.top, positionFromPrefs.top),
 			),
 		};
+		this.debug && console.debug('boundPositionFromPrefs', boundPositionFromPrefs);
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
