@@ -50,22 +50,22 @@
 .filters {
 	display: flex;
 
-	.filter {
-		display: flex;
-		.text {
-			text-decoration: underline;
-		}
-
-		&:hover {
-			.text {
-				color: var(--color-1);
-			}
-		}
-	}
-
 	& > *:not(:last-child)::after {
 		content: '-';
 		margin: 0 5px;
+	}
+}
+
+.filter {
+	display: flex;
+	.text {
+		text-decoration: underline;
+	}
+
+	&:hover {
+		.text {
+			color: var(--color-1);
+		}
 	}
 }
 

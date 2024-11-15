@@ -10,7 +10,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
+import { CardClass, GameFormat, formatFormatReverse, getBaseCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -55,6 +55,7 @@ import { buildColor } from './mulligan-deck-view.component';
 			[cycleRanks]="cycleRanks"
 			[cycleOpponent]="cycleOpponent"
 			[cycleTime]="cycleTime"
+			[cycleFormat]="cycleFormat"
 		>
 		</mulligan-deck-view>
 	`,
@@ -288,6 +289,20 @@ export class ConstructedMulliganDeckComponent
 		const newPrefs: Preferences = {
 			...prefs,
 			decktrackerMulliganTime: nextTime,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cycleFormat = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentFormat =
+			prefs.decktrackerMulliganFormatOverride ??
+			formatFormatReverse(this.mulligan.mulliganAdvice$$.value!.format);
+		const options: readonly GameFormat[] = [GameFormat.FT_STANDARD, GameFormat.FT_WILD];
+		const nextFormat = options[(options.indexOf(currentFormat) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganFormatOverride: nextFormat,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};

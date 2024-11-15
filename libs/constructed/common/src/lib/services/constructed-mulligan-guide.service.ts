@@ -121,10 +121,32 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			shareReplay(1),
 		);
 
+		this.scene.currentScene$$
+			.pipe(
+				distinctUntilChanged(),
+				filter((scene) => scene === SceneMode.GAMEPLAY),
+			)
+			.subscribe(async () => {
+				const prefs = await this.prefs.getPreferences();
+				const newPrefs: Preferences = {
+					...prefs,
+					decktrackerMulliganFormatOverride: null,
+				};
+				console.debug('[debug] [mulligan-guide] resetting format override', newPrefs);
+				await this.prefs.savePreferences(newPrefs);
+			});
+
+		const formatOverride$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganFormatOverride),
+			distinctUntilChanged(),
+		);
 		const format$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
-			switchMap(() => this.gameState.gameState$$),
-			map((gameState) => gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD),
+			switchMap(() => combineLatest([this.gameState.gameState$$, formatOverride$])),
+			map(
+				([gameState, formatOverride]) =>
+					formatOverride ?? gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD,
+			),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);

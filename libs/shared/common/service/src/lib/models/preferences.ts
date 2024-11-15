@@ -1,5 +1,5 @@
 import { GameFormat, RankBracket, TimePeriod } from '@firestone-hs/constructed-deck-stats';
-import { BnetRegion, Race, allDuelsHeroes } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, BnetRegion, GameFormat as GameFormatEnum, Race } from '@firestone-hs/reference-data';
 import { IPreferences } from '@firestone/shared/framework/common';
 import 'reflect-metadata';
 import {
@@ -211,6 +211,7 @@ export class Preferences implements IPreferences {
 		'legend-diamond';
 	readonly decktrackerMulliganOpponent: 'all' | string = 'all';
 	readonly decktrackerMulliganTime: 'last-patch' | 'past-3' | 'past-7' = 'last-patch';
+	readonly decktrackerMulliganFormatOverride: GameFormatEnum | null = null;
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;

@@ -58,7 +58,9 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 					</div>
 				</div>
 				<div class="additional-info">
-					<div class="format" *ngIf="formatLabel">{{ formatLabel }}</div>
+					<div class="filter format" *ngIf="formatLabel" (click)="cycleFormat()">
+						<div class="text">{{ formatLabel }}</div>
+					</div>
 					<div class="sample-size">{{ sampleSize }}</div>
 				</div>
 			</div>
@@ -130,6 +132,7 @@ export class MulliganDeckViewComponent
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
 	@Input() cycleTime: () => void;
+	@Input() cycleFormat: () => void;
 
 	@Input() set deckMulliganInfo(value: MulliganDeckData | null) {
 		this.deckMulliganInfo$$.next(value);
