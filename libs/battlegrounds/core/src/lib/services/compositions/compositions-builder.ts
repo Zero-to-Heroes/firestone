@@ -83,6 +83,10 @@ const isAvailable = (comp: BgsCompAdvice, availableTribes: readonly Race[], allC
 };
 
 const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[]): boolean => {
+	if (!card.techLevel) {
+		return false;
+	}
+
 	const result =
 		!card.races?.length ||
 		!availableTribes?.length ||
