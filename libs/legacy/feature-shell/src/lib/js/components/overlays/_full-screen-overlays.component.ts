@@ -175,6 +175,11 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-dragons-summoned-widget-wrapper></opponent-dragons-summoned-widget-wrapper>
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
 			<opponent-dead-minions-this-game-widget-wrapper></opponent-dead-minions-this-game-widget-wrapper>
+			<counter-wrapper
+				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
+				side="opponent"
+				[counter]="counter"
+			></counter-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
@@ -199,6 +204,7 @@ export class FullScreenOverlaysComponent
 
 	activeTheme$: Observable<CurrentAppType>;
 	playerCounters$: Observable<readonly CounterInstance<any>[]>;
+	opponentCounters$: Observable<readonly CounterInstance<any>[]>;
 
 	windowId: string;
 
@@ -219,9 +225,7 @@ export class FullScreenOverlaysComponent
 	}
 
 	async ngAfterContentInit() {
-		console.debug('full screen getting ready');
 		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs);
-		console.debug('full screen ready');
 
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
@@ -256,6 +260,17 @@ export class FullScreenOverlaysComponent
 				return allCounters(this.i18n, this.allCards)
 					.filter((c) => c.isActive('player', gameState, prefs))
 					.map((c) => c.emit('player', gameState));
+			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			takeUntil(this.destroyed$),
+		);
+		this.opponentCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
+			debounceTime(500),
+			filter(([gameState, prefs]) => !!gameState && !!prefs),
+			this.mapData(([gameState, prefs]) => {
+				return allCounters(this.i18n, this.allCards)
+					.filter((c) => c.isActive('opponent', gameState, prefs))
+					.map((c) => c.emit('opponent', gameState));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
