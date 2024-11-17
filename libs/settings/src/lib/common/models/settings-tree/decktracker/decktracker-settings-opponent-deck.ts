@@ -265,7 +265,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		field: 'opponentChaoticTendrilCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.chaotic-tendril-tooltip'),
-		showLimitedOption: true,
 	},
 	{
 		id: 'jade',
@@ -368,7 +367,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		field: 'opponentExcavateCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.excavate-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.excavate-tooltip'),
-		showLimitedOption: true,
 	},
 	{
 		id: 'wheelOfDeath',
@@ -377,7 +375,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.wheel-of-death-tooltip', {
 			cardName: context.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
 		}),
-		showLimitedOption: true,
 	},
 	{
 		id: 'deadMinionsThisGame',

@@ -330,25 +330,7 @@ export class DeckState {
 			includesOtherZone?: boolean;
 		},
 	) {
-		if (this.hasRelevantCardLimited(cardIds, options?.onlyLimited ? !options.excludesDeckInLimited : true)) {
-			return true;
-		}
-
-		if (options?.onlyLimited) {
-			return false;
-		}
-
-		let updatedPool = [...this.deckList, ...this.board];
-		if (options?.includesOtherZone) {
-			updatedPool = updatedPool.concat(this.otherZone.filter((card) => card.zone !== 'SETASIDE'));
-		}
-		return updatedPool
-			.map((card) => card.cardId)
-			.concat(this.getCardsInSideboards())
-			.filter((cardId: string) => !!cardId)
-			.some((cardId) =>
-				Array.isArray(cardIds) ? cardIds.includes(cardId as CardIds) : (cardIds as any)(cardId),
-			);
+		return this.hasRelevantCardLimited(cardIds, true);
 	}
 
 	public hasRelevantMechanics(
