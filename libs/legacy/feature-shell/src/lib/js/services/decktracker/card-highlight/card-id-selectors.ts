@@ -707,6 +707,7 @@ export const cardIdSelector = (
 		case CardIds.DeepwaterEvoker:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Demonfuse:
+		case CardIds.Demonfuse_WON_093:
 		case CardIds.Demonfuse_DarkFusionEnchantment:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.DefenseAttorneyNathanos:
