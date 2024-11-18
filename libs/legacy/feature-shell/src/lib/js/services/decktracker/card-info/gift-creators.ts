@@ -371,6 +371,7 @@ export const giftCreators = [
 	CardIds.GreaseMonkey,
 	CardIds.GreedyPartner_WW_901,
 	CardIds.Griftah,
+	CardIds.GriftahTrustedVendor_VAC_959,
 	CardIds.GrimestreetInformant_WON_331,
 	CardIds.GrimestreetInformant,
 	CardIds.Guidance_YOP_024,
