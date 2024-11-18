@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CardClass, CardIds, getDynamicRelatedCardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../localization-facade.service';
+import { getDynamicRelatedCardIds } from './card-highlight/dynamic-pools';
 
 @Injectable()
 export class DeckCardService {
@@ -79,12 +80,6 @@ export class DeckCardService {
 			case CardIds.StarlightWhelp:
 			case CardIds.HexLordMalacrass:
 				return deckState.cardsInStartingHand?.map((c) => c.cardId) ?? [];
-			case CardIds.MaestraMaskMerchant_VAC_336:
-				return getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
-					format: metaData.formatType,
-					currentClass: !deckState?.hero?.classes?.[0] ? null : CardClass[deckState?.hero?.classes?.[0]],
-				});
-			case CardIds.FlintFirearm_WW_379:
 			default:
 				const dynamicCards = getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
 					format: metaData.formatType,

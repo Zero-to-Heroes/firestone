@@ -421,7 +421,7 @@ export const cardIdSelector = (
 		case CardIds.BreathOfDreams:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.BrittleboneBuccaneer_VAC_436:
-			return and(side(inputSide), or(inDeck, inHand), deathrattle);
+			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.BronzeSignetTavernBrawl:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BunnyStomper_WW_435:
