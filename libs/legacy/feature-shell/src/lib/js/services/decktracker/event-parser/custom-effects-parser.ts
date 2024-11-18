@@ -1,5 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameState } from '@firestone/game-state';
+import { addGuessInfoToCardInHand, DeckCard, GameState } from '@firestone/game-state';
+import { pickLast } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -19,10 +21,14 @@ const SUPPORTED_EFFECTS = [
 		cardId: 'GDB_116',
 		effect: 'ReuseFX_Generic_HandAE_FriendlySide_Green_ScaleUp_Super',
 	},
+	{
+		cardId: CardIds.NorthernNavigation,
+		effect: 'ReuseFX_Frost_DeathKnight_Missile_VerySmall_Super_Simultaneous',
+	},
 ];
 
 export class CustomEffectsParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -44,6 +50,8 @@ export class CustomEffectsParser implements EventParser {
 				return this.handleRunedMithrilRod(currentState, gameEvent);
 			case CardIds.EldritchBeing_GDB_116:
 				return this.shuffleHand(currentState, gameEvent);
+			case CardIds.NorthernNavigation:
+				return this.handleNortherNavigation(currentState, gameEvent);
 			default:
 				switch (effect.effect) {
 					case 'REVFX_Relics_RestOfGameAE_Super':
@@ -51,6 +59,36 @@ export class CustomEffectsParser implements EventParser {
 				}
 				return currentState;
 		}
+	}
+
+	private handleNortherNavigation(currentState: GameState, gameEvent: GameEvent): GameState {
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		if (isPlayer) {
+			return currentState;
+		}
+
+		const deck = currentState.opponentDeck;
+		const lastDrawnCardInHand = pickLast(
+			deck.hand.filter((c) => c.lastAffectedByEntityId === gameEvent.additionalData.parentEntityId),
+		);
+		if (!lastDrawnCardInHand) {
+			return currentState;
+		}
+
+		const updatedCard = addGuessInfoToCardInHand(
+			lastDrawnCardInHand,
+			CardIds.NorthernNavigation,
+			gameEvent.additionalData.parentEntityId,
+			deck,
+			this.allCards,
+		);
+		const newHand = deck.hand.map((card) => (card.entityId === lastDrawnCardInHand.entityId ? updatedCard : card));
+		return currentState.update({
+			opponentDeck: deck.update({
+				hand: newHand,
+			}),
+		});
 	}
 
 	private shuffleHand(currentState: GameState, gameEvent: GameEvent): GameState {

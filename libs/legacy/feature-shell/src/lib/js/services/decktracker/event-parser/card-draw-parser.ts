@@ -160,6 +160,11 @@ export class CardDrawParser implements EventParser {
 				: isDrawnByCardIdPublic
 				? drawnByCardId
 				: undefined,
+			lastAffectedByEntityId: isCreatorPublic
+				? gameEvent.additionalData.drawnByEntityId ?? card.lastAffectedByEntityId
+				: isDrawnByCardIdPublic
+				? gameEvent.additionalData.drawnByEntityId
+				: undefined,
 			manaCost: isCardInfoPublic ? card.manaCost ?? card.manaCost : null,
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 			zone: 'HAND',

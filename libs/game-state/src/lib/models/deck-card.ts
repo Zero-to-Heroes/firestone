@@ -1,4 +1,4 @@
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardMetaInfo } from './card-meta-info';
 
@@ -111,4 +111,5 @@ export interface GuessedInfo {
 	readonly attackBuff?: number | null;
 	readonly healthBuff?: number | null;
 	readonly possibleCards?: readonly string[] | null;
+	readonly spellSchools?: readonly SpellSchool[] | null;
 }

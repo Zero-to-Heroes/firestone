@@ -591,7 +591,7 @@ export const cardIdSelector = (
 		case CardIds.CosmicKeyboard:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Cosmonaut_GDB_443:
-			return and(side(inputSide), or(inDeck, inHand), spell);
+			return and(side(inputSide), inDeck, spell);
 		case CardIds.CostumedSinger:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.CorruptedFelstoneTavernBrawl:

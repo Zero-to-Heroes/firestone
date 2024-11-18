@@ -15,6 +15,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
+import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
@@ -99,6 +100,17 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 					>
 						<div class="label" [fsTranslate]="'decktracker.guessed-info.health-buff'"></div>
 						<div class="value">{{ info.healthBuff }}</div>
+					</div>
+					<div
+						class="info-item spell-schools"
+						*ngIf="
+							info.spellSchools !== null &&
+							info.spellSchools !== undefined &&
+							info.spellSchools.length > 0
+						"
+					>
+						<div class="label" [fsTranslate]="'decktracker.guessed-info.spell-schools'"></div>
+						<div class="value">{{ formatSpellSchools(info.spellSchools) }}</div>
 					</div>
 				</div>
 			</div>
@@ -411,6 +423,12 @@ export class CardTooltipComponent
 		return item.cardId;
 	}
 
+	formatSpellSchools(schools: readonly SpellSchool[]): string {
+		return schools
+			.map((school) => this.i18n.translateString(`global.spellschool.${SpellSchool[school].toLowerCase()}`))
+			.join(', ');
+	}
+
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
 		// console.debug('keeping in bounds', top, left, height, width);
 		const gameInfo = await this.ow?.getRunningGameInfo();
@@ -472,9 +490,10 @@ export interface CardTooltipAdditionalInfo {
 	readonly cost?: number;
 	readonly attackBuff?: number;
 	readonly healthBuff?: number;
+	readonly spellSchools?: readonly SpellSchool[];
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo) => {
-	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null;
+	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null && !info?.spellSchools?.length;
 };
 
 interface InternalCard {

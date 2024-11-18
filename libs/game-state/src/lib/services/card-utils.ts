@@ -14,6 +14,7 @@ import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
+import { GeneratingCard, UpdatingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 
 export const getProcessedCard = (
@@ -115,12 +116,36 @@ export const addGuessInfoToDrawnCard = (
 				},
 			});
 		default:
-			const guessedInfo = cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache]?.guessInfo(
-				deckState,
-				allCards,
-				creatorEntityId,
-				options,
-			);
+			const guessedInfo = (
+				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
+			)?.guessInfo?.(deckState, allCards, creatorEntityId, options);
+			return guessedInfo != null
+				? card.update({
+						guessedInfo: {
+							...card.guessedInfo,
+							...guessedInfo,
+						},
+				  })
+				: card;
+	}
+};
+
+export const addGuessInfoToCardInHand = (
+	card: DeckCard,
+	creatorCardId: string,
+	creatorEntityId: number,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	options?: {
+		positionInHand?: number;
+		tags?: readonly { Name: GameTag; Value: number }[];
+	},
+): DeckCard => {
+	switch (creatorCardId) {
+		default:
+			const guessedInfo = (
+				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as UpdatingCard
+			)?.updateGuessInfo(deckState, allCards, creatorEntityId, options);
 			return guessedInfo != null
 				? card.update({
 						guessedInfo: {

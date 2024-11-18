@@ -306,7 +306,7 @@ export class GameStateParsersService {
 			[GameEvent.START_OF_GAME]: [new StartOfGameEffectParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.SUB_SPELL_END]: [new CustomEffects2Parser(this.helper, this.allCards)],
 			[GameEvent.SUB_SPELL_START]: [
-				new CustomEffectsParser(this.helper),
+				new CustomEffectsParser(this.helper, this.allCards),
 				new CthunRevealedParser(this.helper, this.allCards, this.i18n),
 				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			],
