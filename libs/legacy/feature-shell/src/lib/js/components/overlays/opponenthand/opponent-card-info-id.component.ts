@@ -2,6 +2,7 @@
 import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getPossibleForgedCards, GuessedInfo, Metadata } from '@firestone/game-state';
+import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
@@ -22,7 +23,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[cardTooltipAdditionalInfo]="guessedInfo"
 			[cardTooltipRelatedCardIds]="possibleCards"
 			[cardTooltipRelatedCardIdsHeader]="'decktracker.guessed-info.possible-cards' | fsTranslate"
-			[ngClass]="{ buffed: hasBuffs }"
+			[ngClass]="{ buffed: hasBuffs || guessedInfo != null }"
 		>
 			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" (error)="handleMissingImage($event)" />
 			<img
@@ -117,7 +118,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// We probably don't need to update the other fields, as they are not displayed
 			cardName: this.cardId === card.cardId ? card.cardName : this.i18n.getCardName(this.cardId),
 		} as DeckCard);
-		this.guessedInfo = card.guessedInfo;
+		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
 		if (this.guessedInfo?.possibleCards) {
 			this.possibleCards = this.guessedInfo.possibleCards;
 		} else if (this.forged) {
