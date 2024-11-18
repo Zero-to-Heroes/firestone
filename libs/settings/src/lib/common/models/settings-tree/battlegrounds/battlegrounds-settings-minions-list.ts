@@ -45,7 +45,9 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 						type: 'toggle',
 						field: 'bgsMinionsListShowCompositions',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-label'),
-						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-tooltip'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-compositions-tooltip', {
+							newHeaderOption: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-new-header-label'),
+						}),
 						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay || !prefs.bgsUseNewTiersHeaderStyle,
 					},
 					{

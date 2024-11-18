@@ -43,6 +43,8 @@
 	.info {
 		margin-left: 5px;
 		margin-top: 2px;
+		// Make it accessible even when disabled
+		pointer-events: all;
 
 		.zth-tooltip {
 			position: absolute;
