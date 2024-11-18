@@ -248,10 +248,17 @@ const hasMechanic =
 		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
 		return refCard?.mechanics?.includes(GameTag[mechanic]);
 	};
+const hasMechanicStr =
+	(mechanic: string) =>
+	(input: SelectorInput): boolean => {
+		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return refCard?.mechanics?.includes(mechanic);
+	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const charge = hasMechanic(GameTag.CHARGE);
-export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
+export const chooseOne =
+	hasMechanic(GameTag.CHOOSE_ONE) && not(hasMechanicStr('CHOOSE_TWICE')) && not(hasMechanicStr('CHOOSE_THRICE'));
 export const combo = hasMechanic(GameTag.COMBO);
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
