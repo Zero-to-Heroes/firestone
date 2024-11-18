@@ -64,16 +64,16 @@
 .mulligan-info {
 	display: flex;
 	flex-direction: column;
-	background: var(--color-6);
-	border-radius: 15px;
-	width: fit-content;
 	color: var(--color-1);
-	padding: 10px;
-	margin-left: auto;
-	margin-right: auto;
 
 	.stat-container {
 		display: flex;
+		background: var(--color-6);
+		border-radius: 15px;
+		width: fit-content;
+		padding: 10px;
+		margin-left: auto;
+		margin-right: auto;
 
 		.stat {
 			display: flex;
