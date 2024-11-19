@@ -10,7 +10,7 @@ import {
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, map } from 'rxjs';
+import { distinctUntilChanged, interval, map } from 'rxjs';
 
 const OFFICIAL_LEADERBOARD_URL = 'https://static.zerotoheroes.com/api/bgs/leaderboards/global.gz.json';
 const OFFICIAL_LEADERBOARD_URL_DUOS = 'https://static.zerotoheroes.com/api/bgs/duo/leaderboards/global.gz.json';
@@ -47,6 +47,13 @@ export class BattlegroundsOfficialLeaderboardService extends AbstractFacadeServi
 					const leaderboards = await this.loadLeaderboardsInternal(gameMode);
 					this.leaderboards$$.next(leaderboards);
 				});
+
+			// Auto-refresh every 2 hours
+			interval(2 * 3600 * 1000).subscribe(async () => {
+				const prefs = await this.prefs.getPreferences();
+				const leaderboards = await this.loadLeaderboardsInternal(prefs.bgsActiveGameMode);
+				this.leaderboards$$.next(leaderboards);
+			});
 		});
 	}
 
