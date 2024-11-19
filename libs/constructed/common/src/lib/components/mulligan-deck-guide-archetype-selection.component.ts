@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, from, switchMap } from 'rxjs';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
+import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { ConstructedNavigationService } from '../services/constructed-navigation.service';
 
 @Component({
@@ -51,14 +53,34 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly nav: ConstructedNavigationService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mulligan: ConstructedMulliganGuideService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.constructedMetaStats, this.prefs, this.nav);
+		await waitForReady(this.constructedMetaStats, this.prefs, this.nav, this.mulligan);
 
-		this.options$ = combineLatest([this.deckstring$$, this.constructedMetaStats.constructedMetaArchetypes$$]).pipe(
+		const effectiveFormat$ = this.mulligan.mulliganAdvice$$.pipe(this.mapData((info) => info?.format));
+		const effectiveRank$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.decktrackerMulliganRankBracket),
+		);
+
+		this.options$ = combineLatest([this.deckstring$$, effectiveFormat$, effectiveRank$]).pipe(
+			filter(
+				([deckstring, effectiveFormat, effectiveRank]) =>
+					!!deckstring?.length && !!effectiveFormat?.length && !!effectiveRank?.length,
+			),
+			switchMap(([deckstring, effectiveFormat, effectiveRank]) =>
+				combineLatest([
+					from([deckstring]),
+					this.constructedMetaStats.loadNewArchetypes(
+						effectiveFormat! as GameFormat,
+						'last-patch',
+						effectiveRank,
+					),
+				]),
+			),
 			filter(([deckstring, archetypes]) => !!deckstring?.length && !!archetypes?.archetypeStats?.length),
 			this.mapData(([deckstring, refArchetypes]) => {
 				const deckDefinition = decode(deckstring!);

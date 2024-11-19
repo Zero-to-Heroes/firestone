@@ -278,7 +278,15 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		return deck;
 	}
 
-	private async loadNewArchetypes(
+	public async loadNewArchetypes(
+		format: GameFormat,
+		time: TimePeriod,
+		rank: RankBracket,
+	): Promise<ArchetypeStats | null> {
+		return this.mainInstance.loadNewArchetypesInternal(format, time, rank);
+	}
+
+	private async loadNewArchetypesInternal(
 		format: GameFormat,
 		time: TimePeriod,
 		rank: RankBracket,
