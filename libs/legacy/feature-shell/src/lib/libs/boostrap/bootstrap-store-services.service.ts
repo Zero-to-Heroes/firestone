@@ -45,6 +45,7 @@ import { AchievementsLiveProgressTrackingService } from '../../js/services/achie
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
+import { DeckParserFacadeService } from '../../js/services/decktracker/deck-parser-facade.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
@@ -140,6 +141,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_CardRulesService: CardRulesService,
 		private readonly init_ExpertContributorsService: ExpertContributorsService,
 		private readonly init_TavernBrawlService: TavernBrawlService,
+		private readonly init_DeckParserFacadeService: DeckParserFacadeService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

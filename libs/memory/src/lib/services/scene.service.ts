@@ -60,6 +60,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 			return;
 		}
 
+		console.debug('[scene-service] new scene', SceneMode[scene]);
 		this.currentScene$$.next(scene);
 		if (scene !== SceneMode.GAMEPLAY) {
 			this.lastNonGamePlayScene$$.next(scene);

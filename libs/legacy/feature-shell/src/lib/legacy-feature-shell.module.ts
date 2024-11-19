@@ -450,6 +450,8 @@ import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { ConstructedMulliganDeckWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-deck-widget-wrapper.component';
 import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-hand-widget-wrapper.component';
+import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
+import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
@@ -703,6 +705,7 @@ import { CardsHighlightService } from './js/services/decktracker/card-highlight/
 import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
+import { DeckParserFacadeService } from './js/services/decktracker/deck-parser-facade.service';
 import { DeckParserService } from './js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
 import { DeckManipulationHelper } from './js/services/decktracker/event-parser/deck-manipulation-helper';
@@ -1456,6 +1459,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaCardSelectionWidgetWrapperComponent,
 		ArenaDecktrackerOocWidgetWrapperComponent,
 		ArenaDecktrackerOocComponent,
+		ConstructedDecktrackerOocComponent,
+		ConstructedDecktrackerOocWidgetWrapperComponent,
 		ConstructedMulliganHandWidgetWrapperComponent,
 		ConstructedMulliganDeckWidgetWrapperComponent,
 		ArenaMulliganDeckWidgetWrapperComponent,
@@ -1725,6 +1730,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OverlayDisplayService,
 		DeckCardService,
 		DeckParserService,
+		DeckParserFacadeService,
 		DuelsLootParserService,
 		DuelsRewardsService,
 		DuelsRunIdService,

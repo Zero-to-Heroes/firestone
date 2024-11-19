@@ -21,6 +21,7 @@ import { ConstructedAchievementsProgressionEvent } from './event/constructed-ach
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
 import { StatePostProcessService } from './game-state/state-post-process.service';
+import { OverlayDisplayService } from './overlay-display.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
@@ -70,6 +71,8 @@ export class GameStateService {
 		private readonly gameStateUpdates: GameStateUpdatesService,
 		private readonly parserService: GameStateParsersService,
 		private readonly statePostProcessService: StatePostProcessService,
+		// Just to make sure decktrackerDisplayEventBus is defined
+		private readonly display: OverlayDisplayService,
 	) {
 		this.init();
 	}
@@ -345,16 +348,14 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug(
-			// 	'[game-state] emitting event',
-			// 	emittedEvent.event.name,
-			// 	gameEvent.cardId,
-			// 	gameEvent.entityId,
-			// 	emittedEvent.state.playerDeck.board.map((card) => card.cardId),
-			// 	emittedEvent.state.playerDeck.board,
-			// 	gameEvent,
-			// 	emittedEvent.state,
-			// );
+			console.debug(
+				'[game-state] emitting event',
+				emittedEvent.event.name,
+				gameEvent.cardId,
+				gameEvent.entityId,
+				gameEvent,
+				emittedEvent.state,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 

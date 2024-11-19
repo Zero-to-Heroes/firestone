@@ -179,6 +179,9 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksPlayerClassFilter: readonly string[] = [];
 	readonly constructedMetaDecksArchetypeFilter: readonly number[] = [];
 	readonly constructedMetaDecksSortCriteria: { criteria: string; direction: string } = null;
+	readonly constructedShowOocTracker: boolean = true;
+	readonly constructedOocTrackerScale: number = 100;
+	readonly constructedOocTrackerPosition: { left: number; top: number };
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

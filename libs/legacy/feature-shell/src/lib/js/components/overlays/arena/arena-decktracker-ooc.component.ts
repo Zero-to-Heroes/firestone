@@ -9,14 +9,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable, distinctUntilChanged, tap } from 'rxjs';
 import { ArenaDraftManagerService } from '../../../services/arena/arena-draft-manager.service';
 import { explodeDecklist, normalizeWithDbfIds } from '../../../services/decktracker/deck-parser.service';
@@ -45,14 +43,10 @@ import { explodeDecklist, normalizeWithDbfIds } from '../../../services/decktrac
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaDecktrackerOocComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	deckstring$: Observable<string>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly cardsHighlight: CardsHighlightFacadeService,
 		private readonly allCards: CardsFacadeService,
@@ -61,7 +55,7 @@ export class ArenaDecktrackerOocComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

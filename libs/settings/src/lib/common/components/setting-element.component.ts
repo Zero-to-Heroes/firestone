@@ -1,7 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { Setting } from '../models/settings.types';
 
@@ -88,17 +96,21 @@ export class SettingElementComponent extends AbstractSubscriptionComponent imple
 
 	private setting$$ = new BehaviorSubject<Setting | null>(null);
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.ads);
 
-		combineLatest([this.setting$$, this.prefs.preferences$$])
+		combineLatest([this.setting$$, this.prefs.preferences$$, this.ads.hasPremiumSub$$])
 			.pipe(
-				filter(([setting, prefs]) => !!setting && !!prefs),
-				this.mapData(([setting, prefs]) => setting?.disabledIf?.(prefs)),
+				filter(([setting, prefs, premium]) => !!setting && !!prefs),
+				this.mapData(([setting, prefs, premium]) => setting?.disabledIf?.(prefs, premium)),
 			)
 			.subscribe((disabled) => {
 				this.disabled = disabled;

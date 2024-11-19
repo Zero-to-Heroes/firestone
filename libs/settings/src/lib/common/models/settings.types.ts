@@ -80,7 +80,7 @@ export interface Setting {
 	readonly tooltip: string | null;
 	// E.g. if a setting can only be activated when the parent is on, and we want to display them as indented below them
 	// readonly childSettings?: readonly Setting[];
-	readonly disabledIf?: (prefs: Preferences) => boolean;
+	readonly disabledIf?: (prefs: Preferences, premium: boolean) => boolean;
 	readonly keywords?: readonly string[] | null;
 	readonly advancedSetting?: boolean;
 	readonly premiumSetting?: boolean;

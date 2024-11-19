@@ -1,0 +1,29 @@
+:host {
+	width: 190px;
+}
+
+.root {
+	width: 100%;
+	height: 95vh;
+	height: fit-content;
+
+	.decktracker-container {
+		height: fit-content;
+	}
+
+	.scalable {
+		transform: scale(1);
+		transform-origin: top left;
+		position: relative;
+		opacity: 1;
+		transition-property: transform, opacity;
+		transition-duration: 0.3s;
+		transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+		height: calc(100% / var(--decktracker-scale));
+		width: 100%;
+	}
+
+	.decktracker {
+		height: fit-content;
+	}
+}

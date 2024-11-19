@@ -1,6 +1,7 @@
 import { SettingContext, SettingNode } from '../../settings.types';
 import { decktrackerGlobalSettings } from './decktracker-settings-global';
 import { decktrackerLaunchSettings } from './decktracker-settings-launch';
+import { decktrackerLobbySettings } from './decktracker-settings-lobby';
 import { decktrackerMulliganSettings } from './decktracker-settings-mulligan';
 import { decktrackerOpponentDeckSettings } from './decktracker-settings-opponent-deck';
 import { decktrackerTurnTimerSettings } from './decktracker-settings-turn-timer';
@@ -16,6 +17,7 @@ export const decktrackerSettings = (context: SettingContext): SettingNode => {
 			decktrackerLaunchSettings(context),
 			decktrackerYourDeckSettings(context),
 			decktrackerOpponentDeckSettings(context),
+			decktrackerLobbySettings(context),
 			decktrackerMulliganSettings(context),
 			decktrackerTurnTimerSettings(context),
 		],

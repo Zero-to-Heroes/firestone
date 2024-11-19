@@ -17,7 +17,7 @@ import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/sh
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
-import { distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
@@ -30,6 +30,7 @@ export class DeckParserService {
 	// We store this separately because we retrieve it with a different timing (we have to
 	// get it from the hub screen, instead of when moving away to the match)
 	public duelsDeck: DeckInfoFromMemory;
+	public currentDeck$$ = new BehaviorSubject<DeckInfo | null>(null);
 
 	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
@@ -325,6 +326,7 @@ export class DeckParserService {
 
 	private setCurrentDeck(deck: DeckInfo) {
 		this.currentDeck = deck;
+		this.currentDeck$$.next(deck);
 		if (this.currentDeck) {
 			console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
 		}

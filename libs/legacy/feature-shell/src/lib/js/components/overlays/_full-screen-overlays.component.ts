@@ -63,6 +63,7 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
 			<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
 			<constructed-mulligan-deck-widget-wrapper></constructed-mulligan-deck-widget-wrapper>
+			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 
 			<!-- Duels -->
 			<duels-decktracker-ooc-widget-wrapper></duels-decktracker-ooc-widget-wrapper>
