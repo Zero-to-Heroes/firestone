@@ -15,6 +15,7 @@ import { ADS_SERVICE_TOKEN, CardsFacadeService, OverwolfService } from '@firesto
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { MatchAnalysisService } from './match-analysis.service';
 
+import { isMercenaries } from '@firestone-hs/reference-data';
 import { IAdsService } from '@firestone/shared/framework/core';
 
 @Injectable()
@@ -49,8 +50,8 @@ export class ReplayMetadataBuilderService {
 
 		const parser = new CardsPlayedByTurnParser();
 		parseGame(replay, [parser]);
-		console.debug('cards played by turn', parser.cardsPlayedByTurn);
 		const playerPlayedCardsByTurn = parser.cardsPlayedByTurn[game.replay.mainPlayerId];
+		console.debug('deckstring', game.deckstring);
 
 		const metadata: ReplayUploadMetadata = {
 			user: {
@@ -75,7 +76,9 @@ export class ReplayMetadataBuilderService {
 				deckstring: game.deckstring,
 				normalizedDeckstring: !game.deckstring?.length
 					? null
-					: this.allCards.getService().normalizeDeckList(game.deckstring),
+					: isMercenaries(game.gameMode)
+					? game.deckstring
+					: normalizeDeckstring(game.deckstring, this.allCards),
 				deckName: game.deckName,
 				scenarioId: game.scenarioId,
 				buildNumber: game.buildNumber,
@@ -225,4 +228,12 @@ const isBgPerfectGame = (bgParsedInfo: BgsPostMatchStats, additionalResult: stri
 	const startingHp = maxHp;
 	const endHp = mainPlayerHpOverTurn[mainPlayerHpOverTurn.length - 1].value;
 	return endHp === startingHp;
+};
+
+const normalizeDeckstring = (deckstring: string, allCards: CardsFacadeService): string => {
+	try {
+		return allCards.getService().normalizeDeckList(deckstring);
+	} catch (e) {
+		return deckstring;
+	}
 };
