@@ -94,6 +94,10 @@ export class CustomEffectsParser implements EventParser {
 	private shuffleHand(currentState: GameState, gameEvent: GameEvent): GameState {
 		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
+		if (isPlayer) {
+			return currentState;
+		}
+
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const newHand = deck.hand.map((card) =>
 			DeckCard.create({
