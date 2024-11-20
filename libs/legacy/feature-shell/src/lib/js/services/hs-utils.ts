@@ -116,6 +116,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.HobartGrapplehammer_WON_117,
 	CardIds.InfiniteMurloc,
 	CardIds.InterstellarStarslicer_GDB_726,
+	CardIds.InterstellarWayfarer_GDB_721,
 	CardIds.Inzah,
 	CardIds.IronweaveBloodletterTavernBrawl,
 	CardIds.JotunTheEternal,
