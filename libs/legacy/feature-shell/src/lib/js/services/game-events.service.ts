@@ -814,6 +814,8 @@ export class GameEvents {
 					GameEvent.build(GameEvent.CARD_STOLEN, gameEvent, {
 						newControllerId: gameEvent.Value.AdditionalProps.newControllerId,
 						zone: gameEvent.Value.AdditionalProps.zone,
+						stolenByCardId: gameEvent.Value.AdditionalProps.StolenByCardId,
+						stolenByEntityId: gameEvent.Value.AdditionalProps.StolenByEntityId,
 					}),
 				);
 				break;
