@@ -59,8 +59,9 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
+		const value = this[side].value(gameState);
 		return this.i18n.translateString(`counters.libram-reduction.${side}`, {
-			value: this.player.value(gameState),
+			value: value,
 		});
 	}
 }
