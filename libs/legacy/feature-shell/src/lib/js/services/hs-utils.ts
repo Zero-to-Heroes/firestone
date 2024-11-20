@@ -177,10 +177,8 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.ChogallTwilightChieftain_YOG_530,
 ];
 
-export const globalEffectCards = [
+export const globalEffectCardsPlayed = [
 	...battlecryGlobalEffectCards,
-	...startOfGameGlobalEffectCards,
-	...deathrattleGlobalEffectCards,
 	CardIds.AirlockBreach_GDB_113,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.JourneyToTheEast_UberApocalypseTavernBrawl,
@@ -217,6 +215,11 @@ export const globalEffectCards = [
 	CardIds.UpgradedPackMule,
 	CardIds.Wildfire,
 	CardIds.WishUponAStar_TOY_877,
+];
+export const globalEffectCards = [
+	...globalEffectCardsPlayed,
+	...startOfGameGlobalEffectCards,
+	...deathrattleGlobalEffectCards,
 ];
 
 // Also whitelist in the parser

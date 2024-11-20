@@ -15,10 +15,8 @@ import {
 	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
 	CARDS_THAT_REMEMBER_SPELLS_PLAYED,
 	COUNTERSPELLS,
-	deathrattleGlobalEffectCards,
-	globalEffectCards,
+	globalEffectCardsPlayed,
 	hasRace,
-	startOfGameGlobalEffectCards,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
@@ -180,47 +178,12 @@ export class CardPlayedFromHandParser implements EventParser {
 			: this.helper.addSingleCardToZone(deck.otherZone, cardToAdd);
 		console.debug('newOtherZone', newOtherZone);
 
-		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		let battlecriesMultiplier = 1;
-		if (
-			!isCardCountered &&
-			globalEffectCards.includes(card?.cardId as CardIds) &&
-			!startOfGameGlobalEffectCards.includes(card?.cardId as CardIds) &&
-			!deathrattleGlobalEffectCards.includes(card?.cardId as CardIds)
-		) {
-			battlecriesMultiplier = 1;
-			const doubleBattlecries = deck.board.some((c) =>
-				[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
-			);
-			if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && doubleBattlecries) {
-				battlecriesMultiplier = 2;
-			}
-			if (
-				battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
-				deck.enchantments.map((e) => e.cardId).includes(CardIds.HeartOfVirnaal_HeartOfVirnaalEnchantment)
-			) {
-				battlecriesMultiplier = 2;
-			}
-
-			// Hero enchantments, like Shudderblock and Heart of Vir'naal
-			if (
-				battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
-				deck.enchantments.map((e) => e.cardId).includes(CardIds.Shudderblock_ReadyForActionEnchantment_TOY_501e)
-			) {
-				battlecriesMultiplier = 3;
-			}
-
-			for (let i = 0; i < battlecriesMultiplier; i++) {
-				newGlobalEffects = this.helper.addSingleCardToZone(
-					newGlobalEffects,
-					cardToAdd?.update({
-						// So that if the card is sent back to hand, we can track multiple plays of it
-						entityId: null,
-					} as DeckCard),
-				);
-				// console.debug('added global effect', newGlobalEffects);
-			}
-		}
+		const { newGlobalEffects, battlecriesMultiplier } = updateGlobalEffects(
+			deck,
+			cardToAdd,
+			this.helper,
+			isCardCountered,
+		);
 
 		const handAfterCardsRemembered = rememberCardsInHand(
 			card.cardId,
@@ -516,4 +479,49 @@ const updateMistahVistah = (
 		otherZone: newOtherZone2,
 		globalEffects: newGlobalEffects,
 	});
+};
+
+export const updateGlobalEffects = (
+	deck: DeckState,
+	card: DeckCard,
+	helper: DeckManipulationHelper,
+	isCardCountered: boolean,
+): { battlecriesMultiplier: number; newGlobalEffects: readonly DeckCard[] } => {
+	let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
+	let battlecriesMultiplier = 1;
+	if (!isCardCountered && globalEffectCardsPlayed.includes(card?.cardId as CardIds)) {
+		battlecriesMultiplier = 1;
+		const doubleBattlecries = deck.board.some((c) =>
+			[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
+		);
+		if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && doubleBattlecries) {
+			battlecriesMultiplier = 2;
+		}
+		if (
+			battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
+			deck.enchantments.map((e) => e.cardId).includes(CardIds.HeartOfVirnaal_HeartOfVirnaalEnchantment)
+		) {
+			battlecriesMultiplier = 2;
+		}
+
+		// Hero enchantments, like Shudderblock and Heart of Vir'naal
+		if (
+			battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
+			deck.enchantments.map((e) => e.cardId).includes(CardIds.Shudderblock_ReadyForActionEnchantment_TOY_501e)
+		) {
+			battlecriesMultiplier = 3;
+		}
+
+		for (let i = 0; i < battlecriesMultiplier; i++) {
+			newGlobalEffects = helper.addSingleCardToZone(
+				newGlobalEffects,
+				card?.update({
+					// So that if the card is sent back to hand, we can track multiple plays of it
+					entityId: null,
+				}),
+			);
+			// console.debug('added global effect', newGlobalEffects);
+		}
+	}
+	return { battlecriesMultiplier, newGlobalEffects };
 };
