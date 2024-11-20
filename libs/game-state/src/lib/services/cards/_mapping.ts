@@ -5,6 +5,7 @@ import { DirdraRebelCaptain } from './dirdra-rebel-captain';
 import { Kiljaeden } from './kiljaeden';
 import { Metrognome } from './metrognome';
 import { NorthernNavigation } from './northern-navigation';
+import { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 
 export const cardsInfoCache: { [cardId: string]: GeneratingCard | UpdatingCard } = {
 	[CardIds.DirdraRebelCaptain_GDB_117]: DirdraRebelCaptain,
@@ -12,4 +13,5 @@ export const cardsInfoCache: { [cardId: string]: GeneratingCard | UpdatingCard }
 	[CardIds.Metrognome]: Metrognome,
 	[CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e]: Kiljaeden,
 	[CardIds.NorthernNavigation]: NorthernNavigation,
+	[CardIds.YrelBeaconOfHope_GDB_141]: YrelBeaconOfHope,
 };

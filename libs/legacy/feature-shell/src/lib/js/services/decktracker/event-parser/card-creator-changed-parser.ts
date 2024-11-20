@@ -35,7 +35,7 @@ export class CardCreatorChangedParser implements EventParser {
 					// To avoid info leaks from Mask of Mimicry
 					creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
 					lastAffectedByCardId: null,
-					guessedInfo: {},
+					guessedInfo: isCardInfoPublic ? cardInHand.guessedInfo : {},
 			  })
 			: null;
 		const newCardInDeck = cardInDeck
