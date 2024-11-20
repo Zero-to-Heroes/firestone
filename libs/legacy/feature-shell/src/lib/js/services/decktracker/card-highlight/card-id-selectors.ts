@@ -90,7 +90,6 @@ import {
 	race,
 	reborn,
 	restoreHealth,
-	rogue,
 	rush,
 	secret,
 	secretsTriggeredThisMatch,
@@ -564,18 +563,19 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ConnivingConman_VAC_333:
 			return (input: SelectorInput): SelectorOutput => {
-				const cardsPlayedFromNonRogueClass = input.deckState.cardsPlayedThisMatch.filter(
+				const currentClassInfo = input.deckState.hero?.classes?.[0];
+				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch.filter(
 					(c) =>
 						!!allCards.getCard(c.cardId).classes?.length &&
 						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.NEUTRAL]) &&
-						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.ROGUE]),
+						!allCards.getCard(c.cardId).classes.includes(CardClass[currentClassInfo]),
 				);
-				const lastCardPlayed = cardsPlayedFromNonRogueClass.length
-					? cardsPlayedFromNonRogueClass[cardsPlayedFromNonRogueClass.length - 1]
+				const lastCardPlayed = cardsPlayedFromAnotherClass.length
+					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
 					: null;
 				return highlightConditions(
 					tooltip(and(side(inputSide), entityIs(lastCardPlayed?.entityId))),
-					and(side(inputSide), or(inDeck, inHand), not(rogue), not(neutral)),
+					and(side(inputSide), or(inDeck, inHand), not(currentClass), not(neutral)),
 				)(input);
 			};
 		case CardIds.ConservatorNymph:
@@ -1893,7 +1893,7 @@ export const cardIdSelector = (
 		case CardIds.Scaleworm:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SeaShill_VAC_332:
-			return and(side(inputSide), or(inHand, inDeck), not(rogue), not(neutral));
+			return and(side(inputSide), or(inHand, inDeck), not(currentClass), not(neutral));
 		case CardIds.SigilOfReckoning:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.SirFinleyMrrgglton_ScalesOfJustice_THD_044p:
