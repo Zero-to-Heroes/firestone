@@ -6,6 +6,7 @@ import {
 	CardIds,
 	GameFormat,
 	GameTag,
+	GameType,
 	isValidSet,
 	ReferenceCard,
 	SetId,
@@ -159,13 +160,14 @@ export const addGuessInfoToCardInHand = (
 
 export const getPossibleForgedCards = (
 	format: GameFormat,
+	gameType: GameType,
 	inputCardClasses: readonly CardClass[],
 	allCards: CardsFacadeService,
 ): readonly string[] => {
 	const cardClasses = [...(inputCardClasses ?? []), CardClass.NEUTRAL];
 	return allCards
 		.getCards()
-		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format) : false))
+		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false))
 		.filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE]))
 		.filter((c) => c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
 		.map((c) => allCards.getCard(c.relatedCardDbfIds?.[0] ?? 0))

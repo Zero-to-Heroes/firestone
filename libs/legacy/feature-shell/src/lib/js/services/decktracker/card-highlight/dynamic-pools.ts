@@ -6,6 +6,7 @@ import {
 	CREWMATES,
 	GameFormat,
 	GameTag,
+	GameType,
 	hasCorrectTribe,
 	hasMechanic,
 	isValidSet,
@@ -20,25 +21,26 @@ export const getDynamicRelatedCardIds = (
 	allCards: AllCardsService,
 	options: {
 		format: GameFormat;
+		gameType: GameType;
 		currentClass?: string;
 	},
 ): readonly string[] => {
 	switch (cardId) {
 		case CardIds.FlintFirearm_WW_379:
-			return filterCards(allCards, options.format, (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]));
+			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]));
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
-			return filterCards(allCards, options.format, (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION]);
+			return filterCards(allCards, options, (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION]);
 		case CardIds.TravelSecurity_WORK_010:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 8,
 			);
 		case CardIds.DemonicDeal_WORK_014:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost >= 5 &&
@@ -47,19 +49,22 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.Nebula_GDB_479:
 			return filterCards(
 				allCards,
-				options.format,
-				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 8,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					c?.cost === 8 &&
+					canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.FirstContact_GDB_864:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 1,
 			);
 		case CardIds.AssimilatingBlight_GDB_478:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost === 3 &&
@@ -69,14 +74,14 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 3,
 			);
 		case CardIds.Blasteroid_GDB_303:
 		case CardIds.Supernova_GDB_301:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.spellSchool?.includes(SpellSchool[SpellSchool.FIRE]),
@@ -84,7 +89,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.DetailedNotes_GDB_844:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasCorrectTribe(c, Race.BEAST) &&
@@ -94,9 +99,9 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.FinalFrontier_GDB_857:
 			return filterCards(
 				allCards,
-				GameFormat.FT_WILD,
+				{ ...options, format: GameFormat.FT_WILD },
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD) &&
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost === 10,
 			);
@@ -104,13 +109,13 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.DwarfPlanet_GDB_233:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 2,
 			);
 		case CardIds.ExarchOthaar_GDB_856:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]),
@@ -120,7 +125,7 @@ export const getDynamicRelatedCardIds = (
 				...CREWMATES,
 				...filterCards(
 					allCards,
-					options.format,
+					options,
 					(c) =>
 						c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 						c?.cost <= 3 &&
@@ -130,27 +135,27 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.HuddleUp_WORK_012:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.NAGA),
 			);
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI),
 			);
 		case CardIds.RelentlessWrathguard_GDB_132:
 		case CardIds.AbductionRay_GDB_123:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DEMON),
 			);
 		case CardIds.GalacticCrusader_GDB_862:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]),
@@ -159,7 +164,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.StarshipSchematic_GDB_102:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) &&
 					(c?.classes?.length > 1 || c?.classes?.[0] !== options.currentClass?.toUpperCase()),
@@ -167,7 +172,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.LuckyComet_GDB_873:
 			return filterCards(
 				allCards,
-				options.format,
+				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.mechanics?.includes(GameTag[GameTag.COMBO]),
@@ -183,8 +188,8 @@ export const getDynamicRelatedCardIds = (
 					// Usable in Wild, but not in Standard ("from the past")
 					.filter((c) =>
 						!!c.set
-							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD) &&
-							  isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD)
+							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+							  isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
 					.sort(
@@ -200,13 +205,16 @@ export const getDynamicRelatedCardIds = (
 
 const filterCards = (
 	allCards: AllCardsService,
-	format: GameFormat,
+	options: {
+		format: GameFormat;
+		gameType: GameType;
+	},
 	...filters: ((ref: ReferenceCard) => boolean)[]
 ) => {
 	return allCards
 		.getCards()
 		.filter((c) => c.collectible)
-		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format) : false))
+		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false))
 		.filter((c) => filters.every((f) => f(c)))
 		.sort(
 			(a, b) => a.cost - b.cost || a.classes?.[0]?.localeCompare(b.classes?.[0]) || a.name.localeCompare(b.name),

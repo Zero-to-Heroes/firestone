@@ -138,7 +138,12 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
 				(value, index, self) => self.indexOf(value) === index,
 			);
-			const possibleForgedCards = getPossibleForgedCards(metadata.formatType, allClasses, this.allCards);
+			const possibleForgedCards = getPossibleForgedCards(
+				metadata.formatType,
+				metadata.gameType,
+				allClasses,
+				this.allCards,
+			);
 			this.possibleCards = possibleForgedCards;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
