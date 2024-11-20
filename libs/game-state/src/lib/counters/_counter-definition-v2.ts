@@ -54,24 +54,15 @@ export abstract class CounterDefinitionV2<T> {
 			return true;
 		} else if (side === 'opponent') {
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
-				this.debug &&
-					console.debug(
-						'[debug] not visible from prefs',
-						this.opponent?.pref,
-						prefs[this.opponent?.pref ?? ''],
-					);
 				return false;
 			}
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
-				this.debug && console.debug('[debug] has relevant card', this.cards);
 				return true;
 			}
 			if (!this.opponent.display(gameState)) {
-				this.debug && console.debug('[debug] no opponent display from gameState');
 				return false;
 			}
 			if (!this.opponent.value(gameState)) {
-				this.debug && console.debug('[debug] no opponent value from gameState');
 				return false;
 			}
 			return true;

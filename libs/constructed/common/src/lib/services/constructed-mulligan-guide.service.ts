@@ -132,7 +132,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					...prefs,
 					decktrackerMulliganFormatOverride: null,
 				};
-				console.debug('[debug] [mulligan-guide] resetting format override', newPrefs);
 				await this.prefs.savePreferences(newPrefs);
 			});
 
