@@ -115,6 +115,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.HobartGrapplehammer,
 	CardIds.HobartGrapplehammer_WON_117,
 	CardIds.InfiniteMurloc,
+	CardIds.InterstellarStarslicer_GDB_726,
 	CardIds.Inzah,
 	CardIds.IronweaveBloodletterTavernBrawl,
 	CardIds.JotunTheEternal,
@@ -162,6 +163,7 @@ export const deathrattleGlobalEffectCards = [
 	CardIds.UnluckyPowderman_WW_367,
 	CardIds.Therazane_DEEP_036,
 	CardIds.ElizaGoreblade_VAC_426,
+	CardIds.InterstellarStarslicer_GDB_726,
 ];
 
 export const startOfGameGlobalEffectCards = [
