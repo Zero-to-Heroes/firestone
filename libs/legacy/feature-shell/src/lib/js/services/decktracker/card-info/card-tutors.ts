@@ -254,4 +254,5 @@ export const tutors = [
 	CardIds.MarinTheManager_TolinsGobletToken_VAC_702t2,
 	CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 	CardIds.Triangulate_GDB_451,
+	CardIds.Grillmaster_VAC_917,
 ];
