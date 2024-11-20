@@ -20,39 +20,42 @@ import { ArenaCardOption } from './model';
 	selector: 'arena-card-option',
 	styleUrls: ['./arena-card-option.component.scss'],
 	template: `
-		<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
-			<div class="info-container scalable" *ngIf="value.showWidget">
-				<div class="stats impact">
-					<div class="stat winrate draw">
-						<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-impact'"></span>
-						<span class="value {{ drawWinrateClass }}" [helpTooltip]="drawnImpactTooltip">{{
-							drawImpact
-						}}</span>
+		<ng-container *ngIf="widgetActive$ | async">
+			<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
+				<div class="info-container scalable" *ngIf="value.showWidget">
+					<div class="stats impact">
+						<div class="stat winrate draw">
+							<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-impact'"></span>
+							<span class="value {{ drawWinrateClass }}" [helpTooltip]="drawnImpactTooltip">{{
+								drawImpact
+							}}</span>
+						</div>
+						<div class="stat winrate ">
+							<span class="label" [fsTranslate]="'app.arena.draft.card-deck-impact'"></span>
+							<span class="value {{ deckWinrateClass }}" [helpTooltip]="deckImpactTooltip">{{
+								deckImpact
+							}}</span>
+						</div>
 					</div>
-					<div class="stat winrate ">
-						<span class="label" [fsTranslate]="'app.arena.draft.card-deck-impact'"></span>
-						<span class="value {{ deckWinrateClass }}" [helpTooltip]="deckImpactTooltip">{{
-							deckImpact
-						}}</span>
+					<div class="stats pick">
+						<div class="stat pickrate">
+							<span class="label" [fsTranslate]="'app.arena.card-stats.header-pickrate'"></span>
+							<span class="value">{{ pickrate }}</span>
+						</div>
+						<div class="stat pickrate-delta">
+							<span class="label" [helpTooltip]="pickRateImpactTooltip">{{ pickRateHighWinsLabel }}</span>
+							<span class="value">{{ pickRateHighWins }}</span>
+						</div>
 					</div>
 				</div>
-				<div class="stats pick">
-					<div class="stat pickrate">
-						<span class="label" [fsTranslate]="'app.arena.card-stats.header-pickrate'"></span>
-						<span class="value">{{ pickrate }}</span>
-					</div>
-					<div class="stat pickrate-delta">
-						<span class="label" [helpTooltip]="pickRateImpactTooltip">{{ pickRateHighWinsLabel }}</span>
-						<span class="value">{{ pickRateHighWins }}</span>
-					</div>
-				</div>
+				<arena-option-info-premium *ngIf="!value.showWidget"></arena-option-info-premium>
 			</div>
-			<arena-option-info-premium *ngIf="!value.showWidget"></arena-option-info-premium>
-		</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaCardOptionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	widgetActive$: Observable<boolean>;
 	showWidget$: Observable<boolean>;
 
 	@Input() set card(value: ArenaCardOption) {
@@ -111,6 +114,9 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 	async ngAfterContentInit() {
 		await this.ads.isReady();
 
+		this.widgetActive$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay),
+		);
 		this.showWidget$ = combineLatest([this.pickNumber$$, this.ads.hasPremiumSub$$]).pipe(
 			tap((info) => console.debug('[arena-card-option] showWidget', info)),
 			this.mapData(([pickNumber, hasPremium]) => pickNumber === 0 || hasPremium),

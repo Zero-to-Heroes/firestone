@@ -7,7 +7,6 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -59,7 +58,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly arenaCardStats: ArenaCardStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
-		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -74,7 +72,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		await this.draftManager.isReady();
 		await this.arenaCardStats.isReady();
 		await this.arenaClassStats.isReady();
-		await this.prefs.isReady();
 		await this.ads.isReady();
 		console.debug('[arena-card-selection] ready');
 

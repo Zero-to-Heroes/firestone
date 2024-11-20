@@ -56,15 +56,14 @@ export class ArenaCardSelectionWidgetWrapperComponent
 		await this.arenaDraftManager.isReady();
 
 		this.showWidget$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay)),
+			// this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay)),
 			this.arenaDraftManager.currentStep$$,
 			this.scene.currentScene$$,
 		]).pipe(
-			this.mapData(([displayFromPrefs, currentStep, currentScene]) => {
+			this.mapData(([currentStep, currentScene]) => {
 				return (
-					displayFromPrefs &&
-					currentStep === DraftSlotType.DRAFT_SLOT_CARD &&
-					currentScene === SceneMode.DRAFT
+					// displayFromPrefs &&
+					currentStep === DraftSlotType.DRAFT_SLOT_CARD && currentScene === SceneMode.DRAFT
 				);
 			}),
 			this.handleReposition(),
