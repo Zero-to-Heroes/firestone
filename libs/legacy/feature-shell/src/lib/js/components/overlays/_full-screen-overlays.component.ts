@@ -173,7 +173,7 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
-			<opponent-dragons-summoned-widget-wrapper></opponent-dragons-summoned-widget-wrapper>
+			<!-- <opponent-dragons-summoned-widget-wrapper></opponent-dragons-summoned-widget-wrapper> -->
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
 			<opponent-dead-minions-this-game-widget-wrapper></opponent-dead-minions-this-game-widget-wrapper>
 			<counter-wrapper
