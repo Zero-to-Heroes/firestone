@@ -34,7 +34,7 @@ export class CardRecruitedParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			cardName: this.i18n.getCardName(cardId, dbCard.name),
-			manaCost: card.manaCost ?? dbCard.cost,
+			refManaCost: card.refManaCost ?? dbCard.cost,
 			zone: 'PLAY',
 			temporaryCard: false,
 			rarity: card.rarity ?? dbCard.rarity?.toLowerCase(),

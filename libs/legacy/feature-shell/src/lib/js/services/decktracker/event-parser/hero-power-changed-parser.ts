@@ -29,7 +29,7 @@ export class HeroPowerChangedParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			cardName: this.i18n.getCardName(cardId, dbCard.name),
-			manaCost: dbCard.cost,
+			refManaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'PLAY',
 			temporaryCard: false,

@@ -40,7 +40,7 @@ export class EnchantmentAttachedParser implements EventParser {
 				entityId: null,
 				cardId: globalEffectCardId,
 				cardName: this.i18n.getCardName(globalEffectCardId, refCard.name),
-				manaCost: refCard?.cost,
+				refManaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: null,
 			} as DeckCard);

@@ -77,7 +77,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			entityId: entityId,
 			cardId: cardId,
 			cardName: this.i18n.getCardName(refCard?.id),
-			manaCost: refCard?.cost,
+			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: isOnBoard ? 'PLAY' : null,
 			temporaryCard: false,

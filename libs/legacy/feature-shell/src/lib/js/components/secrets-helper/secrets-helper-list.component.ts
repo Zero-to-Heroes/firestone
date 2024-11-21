@@ -116,7 +116,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 				return VisualDeckCard.create({
 					cardId: refOption.cardId,
 					cardName: this.i18n.getCardName(dbCard.id),
-					manaCost: dbCard.cost,
+					refManaCost: dbCard.cost,
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
 					highlight: refOption.isValidOption ? 'normal' : 'dim',
 					classes: dbCard.classes?.map((c) => CardClass[c]) ?? [],

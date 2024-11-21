@@ -303,7 +303,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 							deckCard: VisualDeckCard.create({
 								cardId: card.id,
 								cardName: card.name,
-								manaCost: this.getManaCost(card, firstCopyData?.sideboard),
+								refManaCost: this.getManaCost(card, firstCopyData?.sideboard),
 								rarity: card.rarity,
 								totalQuantity: copies,
 								internalEntityId: internalEntityId,
@@ -355,7 +355,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 
 	private sortByCost(a: InternalCardData, b: InternalCardData, direction: SortDirection): number {
 		const compare =
-			(a.deckCard?.manaCost ?? -1) - (b.deckCard?.manaCost ?? -1) || a.cardName.localeCompare(b.cardName);
+			(a.deckCard?.refManaCost ?? -1) - (b.deckCard?.refManaCost ?? -1) || a.cardName.localeCompare(b.cardName);
 
 		return direction === 'asc' ? compare : -compare;
 	}

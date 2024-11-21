@@ -28,7 +28,7 @@ export class AnomalyRevealedParser implements EventParser {
 			entityId: null,
 			cardId: cardId,
 			cardName: this.i18n.getCardName(cardId, refCard.name),
-			manaCost: refCard?.cost,
+			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: null,
 		} as DeckCard);

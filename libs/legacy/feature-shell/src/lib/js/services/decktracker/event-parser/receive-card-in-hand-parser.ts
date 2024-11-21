@@ -112,7 +112,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				cardId: isCardInfoPublic ? cardId : null,
 				entityId: entityId,
 				cardName: isCardInfoPublic && cardData ? this.i18n.getCardName(cardId, cardData.name) : null,
-				manaCost: isCardInfoPublic && cardData ? cardData.cost : null,
+				refManaCost: isCardInfoPublic && cardData ? cardData.cost : null,
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
@@ -133,7 +133,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				: cardWithDefault.update({
 						cardId: newCardId,
 						cardName: this.allCards.getCard(newCardId).name,
-						manaCost: this.allCards.getCard(newCardId).cost,
+						refManaCost: this.allCards.getCard(newCardId).cost,
 						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
 				  });
 		const cardWithZone = cardWithKnownInfo.update({

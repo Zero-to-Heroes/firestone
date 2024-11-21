@@ -45,7 +45,7 @@ export class CardChangedOnBoardParser implements EventParser {
 		const updatedCard = card.update({
 			cardId: cardId,
 			cardName: this.i18n.getCardName(dbCard.id),
-			manaCost: dbCard.cost,
+			refManaCost: dbCard.cost,
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 			creatorCardId: creatorCardId,
 		} as DeckCard);

@@ -450,9 +450,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.entityId = card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
-		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : this._referenceCard?.cost ?? card.manaCost;
+		// We can't use the reference card cost, because of cards like Zilliax. So we need to make sure that the manaCost field
+		// is a strict reflection of the "raw" cost, and the actualManaCost is what gets updated after discounts
+		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
 		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
-		this.manaCostReduction = this.manaCost != null && this.manaCost < card.manaCost;
+		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
 		this.cardName =
 			(!!card.cardName?.length
 				? card.cardName + this.buildSuffix(card, showStatsChange)
@@ -481,7 +483,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			? VisualDeckCard.create({
 					cardId: card.transformedInto,
 					entityId: card.entityId,
-					manaCost: this.cards.getCard(card.transformedInto)?.cost,
+					refManaCost: this.cards.getCard(card.transformedInto)?.cost,
 					cardName: this.cards.getCard(card.transformedInto)?.name,
 					rarity: this.cards.getCard(card.transformedInto)?.rarity?.toLowerCase(),
 			  })

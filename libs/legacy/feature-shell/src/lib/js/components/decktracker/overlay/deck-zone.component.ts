@@ -370,6 +370,6 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 
 	private getCost(card: VisualDeckCard, showUpdatedCost: boolean): number {
 		const refCard = this.allCards.getCard(card.cardId);
-		return refCard.hideStats ? null : showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
+		return refCard.hideStats ? null : showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
 	}
 }

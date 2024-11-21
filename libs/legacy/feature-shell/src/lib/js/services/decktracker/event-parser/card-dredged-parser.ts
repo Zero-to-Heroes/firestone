@@ -43,7 +43,7 @@ export class CardDredgedParser implements EventParser {
 				cardId: cardId,
 				entityId: entityId,
 				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
-				manaCost: cardData ? cardData.cost : undefined,
+				refManaCost: cardData ? cardData.cost : undefined,
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 				creatorCardId: gameEvent.additionalData.creatorCardId,
 			} as DeckCard)
@@ -84,12 +84,12 @@ export class CardDredgedParser implements EventParser {
 			case CardIds.ExcavationSpecialist_TSC_911:
 			case CardIds.ExcavationSpecialist_Story_11_ExcavationPuzzle:
 				return card.update({
-					actualManaCost: card.manaCost - 1,
+					actualManaCost: card.getEffectiveManaCost() - 1,
 				});
 			case CardIds.HarpoonGun:
 				return hasRace(this.allCards.getCard(card.cardId), Race.BEAST)
 					? card.update({
-							actualManaCost: Math.max(0, card.manaCost - 3),
+							actualManaCost: Math.max(0, card.getEffectiveManaCost() - 3),
 					  })
 					: card;
 		}

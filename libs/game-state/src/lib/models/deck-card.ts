@@ -10,7 +10,7 @@ export class DeckCard {
 	readonly entityId: number;
 	readonly cardName: string;
 	// The reference mana cost of the card, as it is in the reference data
-	readonly manaCost: number;
+	readonly refManaCost: number;
 	// Some cards change the cost of a card, this field will reflect it
 	// For now still only implementing a few effects, like Incanter's Flow
 	readonly actualManaCost: number;
@@ -95,7 +95,7 @@ export class DeckCard {
 	}
 
 	public getEffectiveManaCost(): number {
-		return this.actualManaCost ?? this.manaCost ?? null;
+		return this.actualManaCost ?? this.refManaCost ?? null;
 	}
 }
 

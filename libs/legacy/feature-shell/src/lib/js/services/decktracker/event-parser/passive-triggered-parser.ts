@@ -34,7 +34,7 @@ export class PassiveTriggeredParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			cardName: cardData?.name,
-			manaCost: cardData?.cost,
+			refManaCost: cardData?.cost,
 			rarity: cardData?.rarity?.toLowerCase(),
 		} as DeckCard);
 

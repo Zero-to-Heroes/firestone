@@ -38,7 +38,7 @@ export class CardChangedInHandParser implements EventParser {
 					cardName: isCardInfoPublic
 						? this.i18n.getCardName(cardData.id)
 						: this.i18n.getCardName(cardInHand.cardId),
-					manaCost: isCardInfoPublic && cardData ? cardData.cost : undefined,
+					refManaCost: isCardInfoPublic && cardData ? cardData.cost : undefined,
 					actualManaCost: isCardInfoPublic && cardData ? cardData.cost : undefined,
 					rarity:
 						isCardInfoPublic && cardData && cardData.rarity

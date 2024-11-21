@@ -260,7 +260,7 @@ export class TwitchAuthService {
 			deck: this.cleanZone(deckState.deck, isBattlegrounds),
 			otherZone: this.cleanZone(deckState.otherZone, isBattlegrounds),
 			deckList: deckState.deckList?.map(
-				(c) => ({ cardId: c.cardId, manaCost: c.manaCost } as DeckCard),
+				(c) => ({ cardId: c.cardId, refManaCost: c.refManaCost } as DeckCard),
 			) as readonly DeckCard[],
 			sideboards: deckState.sideboards,
 		};
@@ -284,7 +284,7 @@ export class TwitchAuthService {
 			// delete newCard.zone;
 			delete newCard.playTiming;
 			delete newCard.stolenFromOpponent;
-			delete newCard.manaCost;
+			delete newCard.refManaCost;
 			delete newCard.actualManaCost;
 			delete newCard.internalEntityId;
 		}

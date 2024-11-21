@@ -130,9 +130,10 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const cheapestMinions = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => a.manaCost - b.manaCost)
+					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())
 					.slice(0, 2);
-				const secondCheapestMinionCost = (cheapestMinions[1] ?? cheapestMinions[0])?.manaCost ?? 0;
+				const secondCheapestMinionCost =
+					(cheapestMinions[1] ?? cheapestMinions[0])?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostLess(secondCheapestMinionCost + 1)),
 					and(side(inputSide), inDeck, minion),
@@ -445,8 +446,8 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const cheapestMinion = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => a.manaCost - b.manaCost)[0];
-				const cheapestMinionCost = cheapestMinion?.manaCost ?? 0;
+					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())[0];
+				const cheapestMinionCost = cheapestMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostEqual(cheapestMinionCost)),
 					and(side(inputSide), inDeck, minion),
@@ -965,7 +966,7 @@ export const cardIdSelector = (
 					return null;
 				}
 
-				const groupedByCost = groupByFunction((c: DeckCard) => c.manaCost)(spellsPlayed);
+				const groupedByCost = groupByFunction((c: DeckCard) => c.refManaCost)(spellsPlayed);
 				const firstOfEachCost = Object.keys(groupedByCost)
 					.sort()
 					.map((key) => groupedByCost[key][0])
@@ -1042,9 +1043,9 @@ export const cardIdSelector = (
 					return null;
 				}
 
-				const highestCost = Math.max(...input.deckState.deck.map((c) => c.manaCost ?? 0));
+				const highestCost = Math.max(...input.deckState.deck.map((c) => c.getEffectiveManaCost() ?? 0));
 				const lowestCost = Math.min(
-					...input.deckState.deck.map((c) => c.manaCost).filter((cost) => cost != null),
+					...input.deckState.deck.map((c) => c.getEffectiveManaCost()).filter((cost) => cost != null),
 				);
 
 				return highlightConditions(
@@ -2109,7 +2110,7 @@ export const cardIdSelector = (
 				}
 				const numberToResurrect = cardId === CardIds.StaffOfRenewal ? 7 : 5;
 				const mostExpensiveMinions = deadMinions
-					.sort((a, b) => a.manaCost - b.manaCost)
+					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())
 					.reverse()
 					.slice(0, numberToResurrect);
 				const lastMinion = mostExpensiveMinions[mostExpensiveMinions.length - 1];
@@ -2211,8 +2212,8 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const highestCostMinion = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => b.manaCost - a.manaCost)[0];
-				const highestMinionCost = highestCostMinion?.manaCost ?? 0;
+					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
+				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
 					and(side(inputSide), inDeck, minion),
@@ -2241,12 +2242,14 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral))));
 		case CardIds.The8HandsFromBeyond_GDB_477:
 			return (input: SelectorInput): SelectorOutput => {
-				const orderedByCost = [...input.deckState.deck].sort((a, b) => b.manaCost - a.manaCost);
+				const orderedByCost = [...input.deckState.deck].sort(
+					(a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost(),
+				);
 				const highest8th =
 					orderedByCost.length < 8 ? orderedByCost[orderedByCost.length - 1] : orderedByCost[7];
-				const highest8thCost = highest8th?.manaCost ?? 0;
+				const highest8thCost = highest8th?.getEffectiveManaCost() ?? 0;
 				const candidates = orderedByCost
-					.filter((c) => c.manaCost >= highest8thCost)
+					.filter((c) => c.getEffectiveManaCost() >= highest8thCost)
 					.map((c) => c.cardId as CardIds);
 				return and(side(inputSide), inDeck, cardIs(...candidates))(input);
 			};

@@ -123,7 +123,7 @@ export class MatchMetadataParser implements EventParser {
 				// [dbfid, count] pair
 				.map((pair) => this.buildDeckCards(pair, sideboards))
 				.reduce((a, b) => a.concat(b), [])
-				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
+				.sort((a: DeckCard, b: DeckCard) => a.refManaCost - b.refManaCost)
 		);
 	}
 

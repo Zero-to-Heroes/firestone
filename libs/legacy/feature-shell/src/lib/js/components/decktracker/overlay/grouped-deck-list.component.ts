@@ -306,7 +306,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 								VisualDeckCard.create({
 									...refCard,
 									// Always show the base cost in this display mode
-									manaCost: this.allCards.getCard(refCard.cardId).hideStats
+									refManaCost: this.allCards.getCard(refCard.cardId).hideStats
 										? null
 										: this.getManaCost(refCard),
 									actualManaCost: this.getManaCost(refCard),
@@ -332,7 +332,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						...Array(quantityNotInDeck).fill(
 							VisualDeckCard.create({
 								...refCard,
-								manaCost: this.allCards.getCard(refCard.cardId).hideStats
+								refManaCost: this.allCards.getCard(refCard.cardId).hideStats
 									? null
 									: this.getManaCost(refCard),
 								actualManaCost: this.getManaCost(refCard),
@@ -345,7 +345,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				}
 				return result;
 			})
-			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
+			.sort(sortByProperties((a: VisualDeckCard) => [a.refManaCost]));
 		return result;
 	}
 
@@ -414,7 +414,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 									VisualDeckCard.create({
 										...refCard,
 										// Always show the base cost in this display mode
-										manaCost: this.getManaCost(refCard),
+										refManaCost: this.getManaCost(refCard),
 										actualManaCost: this.getManaCost(refCard),
 										creatorCardIds: [],
 										highlight: null,
@@ -435,7 +435,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 								VisualDeckCard.create({
 									...refCard,
 									// Always show the base cost in this display mode
-									manaCost: this.allCards.getCard(refCard.cardId).hideStats
+									refManaCost: this.allCards.getCard(refCard.cardId).hideStats
 										? null
 										: this.getManaCost(refCard),
 									actualManaCost: this.getManaCost(refCard),
@@ -458,7 +458,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						...Array(quantityNotInDeck).fill(
 							VisualDeckCard.create({
 								...refCard,
-								manaCost: this.allCards.getCard(refCard.cardId).hideStats
+								refManaCost: this.allCards.getCard(refCard.cardId).hideStats
 									? null
 									: this.getManaCost(refCard),
 								actualManaCost: this.getManaCost(refCard),
@@ -471,15 +471,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				}
 				return result;
 			})
-			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
+			.sort(sortByProperties((a: VisualDeckCard) => [a.refManaCost]));
 		return result;
 	}
 
 	private getManaCost(refCard: DeckCard): number {
 		if (shouldKeepOriginalCost(refCard.cardId)) {
-			return refCard.manaCost;
+			return refCard.refManaCost;
 		}
-		return this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost;
+		return this.allCards.getCard(refCard.cardId).cost ?? refCard.refManaCost;
 	}
 
 	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean, showGiftsSeparately: boolean): number {

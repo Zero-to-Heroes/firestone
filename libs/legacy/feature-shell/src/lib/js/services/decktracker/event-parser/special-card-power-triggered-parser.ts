@@ -37,7 +37,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 				cardId: cardId,
 				entityId: 0,
 				cardName: cardData?.name,
-				manaCost: cardData?.cost,
+				refManaCost: cardData?.cost,
 				rarity: cardData?.rarity ? cardData.rarity.toLowerCase() : null,
 			} as DeckCard);
 			const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

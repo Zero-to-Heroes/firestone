@@ -341,7 +341,7 @@ export class DeckTrackerOverlayContainerComponent
 		return DeckCard.create({
 			...card,
 			cardName: card.cardName ?? refCard.name,
-			manaCost: refCard.hideStats ? null : card.manaCost ?? refCard.cost,
+			refManaCost: refCard.hideStats ? null : card.refManaCost ?? refCard.cost,
 			rarity: card.rarity ?? refCard.rarity,
 			cardType: card.cardType ?? refCard.type,
 		});

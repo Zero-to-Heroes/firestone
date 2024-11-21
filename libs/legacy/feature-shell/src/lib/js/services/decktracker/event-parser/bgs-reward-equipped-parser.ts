@@ -20,7 +20,7 @@ export class BgsRewardEquippedParser implements EventParser {
 			cardId: dbCard.id,
 			entityId: entityId,
 			cardName: this.i18n.getCardName(dbCard.id),
-			manaCost: dbCard.cost,
+			refManaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'PLAY',
 			temporaryCard: false,

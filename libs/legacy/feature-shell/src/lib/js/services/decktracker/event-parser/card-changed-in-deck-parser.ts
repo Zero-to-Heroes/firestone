@@ -50,7 +50,7 @@ export class CardChangedInDeckParser implements EventParser {
 			cardId: realCardId,
 			entityId: entityId ?? theCard.entityId,
 			cardName: this.i18n.getCardName(cardData.id),
-			manaCost: cardData ? cardData.cost : undefined,
+			refManaCost: cardData?.cost,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData?.creatorCardId ?? theCard.creatorCardId,
 			lastAffectedByCardId: gameEvent.additionalData.lastInfluencedByCardId ?? theCard.lastAffectedByCardId,

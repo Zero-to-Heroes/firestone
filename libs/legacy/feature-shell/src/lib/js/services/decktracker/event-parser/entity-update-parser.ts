@@ -58,8 +58,8 @@ export class EntityUpdateParser implements EventParser {
 					cardInHand.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-						manaCost: shouldKeepOriginalCost(obfsucatedCardId)
-							? cardInHand.manaCost
+						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
+							? cardInHand.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
 					} as DeckCard),
 					deck,
@@ -81,8 +81,8 @@ export class EntityUpdateParser implements EventParser {
 				? cardInDeck?.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-						manaCost: shouldKeepOriginalCost(obfsucatedCardId)
-							? cardInDeck.manaCost
+						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
+							? cardInDeck.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
 				  })
 				: cardInDeck,
@@ -96,8 +96,8 @@ export class EntityUpdateParser implements EventParser {
 				? cardInOther.update({
 						cardId: obfsucatedCardId,
 						cardName: this.i18n.getCardName(obfsucatedCardId),
-						manaCost: shouldKeepOriginalCost(obfsucatedCardId)
-							? cardInOther.manaCost
+						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
+							? cardInOther.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
 				  } as DeckCard)
 				: null;
@@ -127,7 +127,7 @@ export class EntityUpdateParser implements EventParser {
 				entityId: null,
 				cardId: cardId,
 				cardName: dbCard.name,
-				manaCost: dbCard.cost,
+				refManaCost: dbCard.cost,
 				rarity: dbCard.rarity?.toLowerCase(),
 				zone: null,
 			} as DeckCard);

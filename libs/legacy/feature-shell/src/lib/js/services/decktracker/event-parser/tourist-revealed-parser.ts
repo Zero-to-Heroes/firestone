@@ -31,7 +31,7 @@ export class TouristRevealedParser implements EventParser {
 					`global.class.${CardClass[gameEvent.additionalData.touristFor].toLowerCase()}`,
 				),
 			}),
-			manaCost: refCard?.cost,
+			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: null,
 		} as DeckCard);
@@ -45,7 +45,7 @@ export class TouristRevealedParser implements EventParser {
 				entityId: null,
 				cardId: cardId,
 				cardName: refCard.name,
-				manaCost: refCard?.cost,
+				refManaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: null,
 			} as DeckCard);

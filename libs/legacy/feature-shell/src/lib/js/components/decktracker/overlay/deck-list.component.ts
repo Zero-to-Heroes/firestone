@@ -48,7 +48,7 @@ export class DeckListComponent {
 				return DeckCard.create({
 					cardId: card.id,
 					cardName: this.i18n.getCardName(card.id),
-					manaCost: card.cost,
+					refManaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
 				} as DeckCard);
 			});

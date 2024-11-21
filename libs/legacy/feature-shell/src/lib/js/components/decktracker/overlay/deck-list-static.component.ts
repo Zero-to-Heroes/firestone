@@ -184,12 +184,12 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 						: getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
 				const cardCost =
 					card.id === CardIds.ZilliaxDeluxe3000_TOY_330
-						? sideboard?.map((c) => c.manaCost).reduce((a, b) => a + b, 0) ?? 0
+						? sideboard?.map((c) => c.refManaCost).reduce((a, b) => a + b, 0) ?? 0
 						: card.cost;
 				return CardWithSideboard.create({
 					cardId: card.id,
 					cardName: card.name,
-					manaCost: card.hideStats ? null : cardCost,
+					refManaCost: card.hideStats ? null : cardCost,
 					rarity: card.rarity,
 					totalQuantity: miniCard.quantity,
 					sideboard: sideboard,
@@ -198,7 +198,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 					internalEntityIds: [internalEntityId],
 				});
 			})
-			.sort(sortByProperties((c: CardWithSideboard) => [c.manaCost, c.cardName]));
+			.sort(sortByProperties((c: CardWithSideboard) => [c.refManaCost, c.cardName]));
 	}
 
 	private buildMinimalSideboard(sideboardFromList: Sideboard): readonly MinimalCard[] {
@@ -229,14 +229,14 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 				return VisualDeckCard.create({
 					cardId: card.id,
 					cardName: card.name,
-					manaCost: card.cost,
+					refManaCost: card.cost,
 					rarity: card.rarity,
 					totalQuantity: miniCard.quantity,
 					internalEntityId: internalEntityId,
 					internalEntityIds: [internalEntityId],
 				});
 			})
-			.sort(sortByProperties((a: VisualDeckCard) => [a.manaCost]));
+			.sort(sortByProperties((a: VisualDeckCard) => [a.refManaCost]));
 	}
 }
 

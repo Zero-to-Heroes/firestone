@@ -119,7 +119,7 @@ export const effectiveCostMore =
 export const costMore =
 	(cost: number) =>
 	(input: SelectorInput): boolean =>
-		input.deckCard?.manaCost > cost;
+		input.deckCard?.refManaCost > cost;
 
 export const effectiveCostEqual =
 	(cost: number) =>

@@ -61,7 +61,7 @@ export class CustomEffects2Parser implements EventParser {
 		const refCard = this.allCards.getCard(CardIds.Plaguespreader);
 		const transformedCard = cardToUpdate.update({
 			cardId: refCard.id,
-			manaCost: refCard.cost,
+			refManaCost: refCard.cost,
 			cardName: refCard.name,
 			actualManaCost: null,
 			creatorCardId: CardIds.Plaguespreader,

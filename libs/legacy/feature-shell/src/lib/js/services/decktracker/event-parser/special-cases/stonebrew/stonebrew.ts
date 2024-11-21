@@ -214,7 +214,7 @@ const newHand = (
 		return card.update({
 			cardId: refCard.id,
 			cardName: refCard.name,
-			manaCost: refCard.cost,
+			refManaCost: refCard.cost,
 			rarity: refCard.rarity,
 		});
 	});

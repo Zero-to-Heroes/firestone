@@ -64,8 +64,8 @@ export class CardBackToDeckParser implements EventParser {
 		const refCard = getProcessedCard(card.cardId, card.entityId, deck, this.allCards); // this.allCards.getCard(card.cardId);
 		console.debug('[card-back-to-deck] refCard', refCard, card.cardId, deck, card);
 		const cardWithInfoReset = card?.update({
-			manaCost: refCard?.cost ?? card?.manaCost,
-			actualManaCost: refCard?.cost ?? card?.manaCost,
+			refManaCost: refCard?.cost ?? card?.refManaCost,
+			actualManaCost: refCard?.cost ?? card?.actualManaCost,
 			buffCardIds: [],
 			buffingEntityCardIds: [],
 			entityId: Math.abs(card.entityId),
@@ -136,7 +136,7 @@ export class CardBackToDeckParser implements EventParser {
 				cardId: cardId,
 				entityId: entityId,
 				cardName: this.i18n.getCardName(dbCard.id),
-				manaCost: dbCard.cost,
+				refManaCost: dbCard.cost,
 				rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 				playTiming: null,
 			} as DeckCard)

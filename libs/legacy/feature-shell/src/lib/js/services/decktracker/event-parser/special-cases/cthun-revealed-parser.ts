@@ -42,7 +42,7 @@ export class CthunRevealedParser implements EventParser {
 					cardId: cardId,
 					entityId: null,
 					cardName: this.i18n.getCardName(cardData.id, cardData.name),
-					manaCost: cardData ? cardData.cost : undefined,
+					refManaCost: cardData ? cardData.cost : undefined,
 					rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 					creatorCardId: gameEvent.cardId,
 				} as DeckCard),

@@ -101,7 +101,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({})).update({
 			cardId: obfuscatedCardId,
 			cardName: this.i18n.getCardName(obfuscatedCardId),
-			manaCost: (isCopiedPlayer ? newCopy?.manaCost : null) ?? this.allCards.getCard(obfuscatedCardId)?.cost,
+			refManaCost:
+				(isCopiedPlayer ? newCopy?.refManaCost : null) ?? this.allCards.getCard(obfuscatedCardId)?.cost,
 			// Always set the entityId to null when it's the opponent's deck to avoid info leaks
 			// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
 			// to differentiate the cards (e.g. when discovering copies of the same card)
@@ -134,7 +135,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const newCopiedDeck =
 			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
 				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
-						cost: updatedCopiedCardWithPosition.manaCost,
+						cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
 				  })
 				: copiedDeck.deck;
 		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);

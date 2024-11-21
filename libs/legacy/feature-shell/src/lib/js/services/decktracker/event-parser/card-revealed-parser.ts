@@ -65,7 +65,8 @@ export class CardRevealedParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			cardName: this.i18n.getCardName(dbCard.id, dbCard.name),
-			manaCost: gameEvent.additionalData.cost ?? dbCard.cost,
+			refManaCost: dbCard.cost,
+			actualManaCost: gameEvent.additionalData.cost ?? dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
 			temporaryCard: true,
@@ -94,7 +95,7 @@ export class CardRevealedParser implements EventParser {
 				entityId: null,
 				cardId: card.cardId,
 				cardName: this.i18n.getCardName(card.cardId),
-				manaCost: dbCard?.cost,
+				refManaCost: dbCard?.cost,
 				rarity: dbCard?.rarity?.toLowerCase(),
 				zone: null,
 			} as DeckCard);

@@ -37,7 +37,7 @@ export class LootBundleComponent {
 				: VisualDeckCard.create({
 						cardId: cardId,
 						cardName: this.i18n.getCardName(card.id),
-						manaCost: card.cost,
+						refManaCost: card.cost,
 						internalEntityIds: [uuidShort()],
 				  });
 		});

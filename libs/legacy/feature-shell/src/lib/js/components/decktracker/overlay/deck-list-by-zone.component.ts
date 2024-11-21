@@ -277,7 +277,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					'board',
 					this.i18n.translateString('decktracker.zones.board'),
 					sortCardsByManaCostInOtherZone
-						? (a, b) => a.manaCost - b.manaCost
+						? (a, b) => a.refManaCost - b.refManaCost
 						: (a, b) => this.sortByIcon(a, b),
 					null,
 				),
@@ -289,7 +289,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				DeckCard.create({
 					cardId: o.cardId,
 					entityId: o.entityId,
-					manaCost: this.allCards.getCard(o.cardId)?.hideStats ? null : this.allCards.getCard(o.cardId)?.cost,
+					refManaCost: this.allCards.getCard(o.cardId)?.hideStats
+						? null
+						: this.allCards.getCard(o.cardId)?.cost,
 				}),
 			);
 			zones.push(
@@ -332,7 +334,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				null,
 				'other',
 				this.i18n.translateString('decktracker.zones.other'),
-				sortCardsByManaCostInOtherZone ? (a, b) => a.manaCost - b.manaCost : (a, b) => this.sortByIcon(a, b),
+				sortCardsByManaCostInOtherZone
+					? (a, b) => a.refManaCost - b.refManaCost
+					: (a, b) => this.sortByIcon(a, b),
 				null,
 				// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 				// not show them in the zones
@@ -365,7 +369,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					'other-generated',
 					this.i18n.translateString('decktracker.zones.other-generated'),
 					sortCardsByManaCostInOtherZone
-						? (a, b) => a.manaCost - b.manaCost
+						? (a, b) => a.refManaCost - b.refManaCost
 						: (a, b) => this.sortByIcon(a, b),
 					null,
 					(a: VisualDeckCard) => (!a.temporaryCard || a.zone !== 'SETASIDE') && !a.createdByJoust,

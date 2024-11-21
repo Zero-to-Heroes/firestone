@@ -48,7 +48,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			cardName: cardData && this.i18n.getCardName(cardData.id, cardData.name),
-			manaCost: cardData?.cost,
+			refManaCost: cardData?.cost,
 			rarity: cardData?.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,
 			lastAffectedByEntityId: gameEvent.additionalData.lastAffectedByEntityId,

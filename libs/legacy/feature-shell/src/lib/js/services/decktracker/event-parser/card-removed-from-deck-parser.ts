@@ -35,7 +35,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
-			manaCost: card.manaCost ?? refCard?.cost,
+			refManaCost: card.refManaCost ?? refCard?.cost,
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
 			milled:
 				card.createdByJoust || gameEvent.additionalData.removedByCardId === CardIds.Overplanner_VAC_444
@@ -59,7 +59,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 				const newCard = DeckCard.create({
 					cardId: cardId,
 					cardName: refCard.name,
-					manaCost: refCard.cost,
+					refManaCost: refCard.cost,
 					rarity: refCard.rarity ? refCard.rarity.toLowerCase() : undefined,
 				} as DeckCard);
 				// console.debug('[card-removed] adding JOUST card to known cards', newCard);

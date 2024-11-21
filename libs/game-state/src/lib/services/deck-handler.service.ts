@@ -28,7 +28,7 @@ export class DeckHandlerService {
 					// [dbfid, count] pair
 					.map((pair) => this.buildDeckCards(pair, sideboards))
 					.reduce((a, b) => a.concat(b), [])
-					.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
+					.sort((a: DeckCard, b: DeckCard) => a.refManaCost - b.refManaCost)
 			: [];
 	}
 
@@ -54,7 +54,7 @@ export class DeckHandlerService {
 				DeckCard.create({
 					cardId: card.id,
 					cardName: this.i18n.getCardName(card.id),
-					manaCost: card.cost,
+					refManaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
 					relatedCardIds: !!sideboard ? sideboard.cards : [],
 				} as DeckCard),
@@ -100,7 +100,7 @@ export class DeckHandlerService {
 		// 	return deckCard;
 		// }
 		const newCard = this.allCards.getCard(newCardId);
-		let newCost = deckCard.manaCost;
+		let newCost = deckCard.refManaCost;
 		if (newCard.id === CardIds.ZilliaxDeluxe3000_TOY_330) {
 			const modules = deckCard.relatedCardIds?.map((c) => this.allCards.getCard(c)) ?? [];
 			newCost = modules.map((c) => c.cost).reduce((a, b) => (a ?? 0) + (b ?? 0), 0)!;
@@ -109,9 +109,11 @@ export class DeckHandlerService {
 		}
 		return deckCard.update({
 			cardId: newCardId,
-			cardName: this.i18n.getCardName(newCardId),
-			manaCost: newCost,
-		} as DeckCard);
+			cardName: this.i18n.getCardName(newCardId) ?? undefined,
+			// Here we update the ref mana cost, because it's Zilliax-like cards for which the reference cost depends on some
+			// global info
+			refManaCost: newCost,
+		});
 	}
 
 	/** @deprecated: use allCards.normalizeDeckstring() */
