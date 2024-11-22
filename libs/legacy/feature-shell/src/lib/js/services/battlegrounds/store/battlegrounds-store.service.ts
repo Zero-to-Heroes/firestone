@@ -13,7 +13,7 @@ import {
 	RealTimeStatsState,
 } from '@firestone/battlegrounds/core';
 import { GameState, GameUniqueIdService } from '@firestone/game-state';
-import { MemoryInspectionService } from '@firestone/memory';
+import { MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
 import {
 	BugReportService,
 	GameStatusService,
@@ -142,6 +142,7 @@ export class BattlegroundsStoreService {
 	private duoPendingBoards: { playerBoard: PlayerBoard; opponentBoard: PlayerBoard }[] = [];
 	// private teammateBoard: MemoryBgsPlayerInfo;
 	private playerBoard: PlayerBoard;
+	private playerTeams: MemoryBgsTeamInfo;
 
 	private updateOverlay$$ = new BehaviorSubject<void>(null);
 
@@ -445,13 +446,20 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD) {
 				// this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
 				this.playerBoard = gameEvent.additionalData.playerBoard;
+				const playerTeams = await this.memory.getBgsPlayerBoard();
 				console.debug(
 					'[bgs-simulation] BATTLEGROUNDS_ACTIVE_PLAYER_BOARD snapshot player board',
 					gameEvent.additionalData.playerBoard.board,
-					// this.teammateBoard?.Board,
 					gameEvent,
-					// this.teammateBoard,
+					playerTeams,
 				);
+				if (
+					playerTeams?.Teammate?.Hero?.CardId &&
+					playerTeams.Teammate.Hero.CardId !== playerTeams.Player.Hero.CardId
+				) {
+					console.debug('player teams from memory', playerTeams);
+					this.playerTeams = playerTeams;
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD) {
 				this.duoPendingBoards.push({
 					playerBoard: {
@@ -529,6 +537,7 @@ export class BattlegroundsStoreService {
 						this.playerBoard,
 						// this.teammateBoard,
 						this.duoPendingBoards,
+						this.playerTeams,
 					),
 					GameEvent.BATTLEGROUNDS_COMBAT_START,
 				);

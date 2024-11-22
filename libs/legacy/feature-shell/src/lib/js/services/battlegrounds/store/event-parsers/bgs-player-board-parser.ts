@@ -148,7 +148,8 @@ export class BgsPlayerBoardParser implements EventParser {
 		// We need to flag the sim result as "possibly inaccurate" in this case
 		// So TODO list:
 		// - identify, based on the duoPendingBoards info, which teammate info is missing
-		// - if it is the player's teammate, get the info from the memory (this might have to be move forward when receiving the "duoPendingBoards" event, or even earlier)
+		// - if it is the player's teammate, get the info from the memory (this might have to be move forward when receiving the "duoPendingBoards"
+		// event, or even earlier)
 		// - if the opponent's teammate is missing, this means that it will be present (at least partially) in the opponent pendingDuoBoard info
 		//    - if the board total length is <= 7, we more or less have the full info (we'll miss the hand), and can do a sim
 		//    - if the board total length is > 7, we'll have to make do with the partial info
@@ -192,19 +193,31 @@ export class BgsPlayerBoardParser implements EventParser {
 					'[bgs-simulation] found teammate board from memory',
 					teammateBoardFromMemory?.Board?.map((e) => e.CardId),
 				);
-				playerTeammateBoard = this.buildTeammateBoard(
+				playerTeammateBoard = this.buildBoardFromMemory(
 					teammateBoardFromMemory,
 					currentState.currentGame.players,
 				);
 				console.warn('[bgs-simulation] assigned playerTeammateBoard from memory teammateBoard');
 				console.debug(playerTeammateBoard, teammateBoardFromMemory, currentState.currentGame.players);
 			} else {
-				// FIXME: this doesn't work, because if we are in a battle, and haven't found the main player,
-				// it means that the current board will be the teammate's. Since this only use the board state,
-				// it will get the teammate's board (+ maybe some stuff from the player's), but not the player's board
-				playerTeammateBoard = this.buildPlayerBoard(event.playerBoard);
-				console.warn('[bgs-simulation] assigned playerTeammateBoard from base playerBoard.');
-				console.debug(playerTeammateBoard, event.playerBoard);
+				const playerTeams = event.playerTeams;
+				if (playerTeams) {
+					const playerBoardFromMemory = playerTeams?.Player;
+					console.log(
+						'[bgs-simulation] found player board from memory',
+						playerBoardFromMemory?.Board?.map((e) => e.CardId),
+					);
+					playerTeammateBoard = this.buildBoardFromMemory(
+						playerBoardFromMemory,
+						currentState.currentGame.players,
+					);
+					// FIXME: this doesn't work, because if we are in a battle, and haven't found the main player,
+					// it means that the current board will be the teammate's. Since this only use the board state,
+					// it will get the teammate's board (+ maybe some stuff from the player's), but not the player's board
+					// playerTeammateBoard = this.buildPlayerBoard(event.playerBoard);
+					console.warn('[bgs-simulation] assigned playerTeammateBoard from memory playerBoard.');
+					console.debug(playerTeammateBoard, event.playerBoard);
+				}
 			}
 		}
 		if (!!event.duoPendingBoards?.length && opponentTeammateBoard == null) {
@@ -350,7 +363,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		return result;
 	}
 
-	private buildTeammateBoard(
+	private buildBoardFromMemory(
 		teammateBoardFromMemory: MemoryBgsPlayerInfo,
 		players: readonly BgsPlayer[],
 	): PlayerBoard {
