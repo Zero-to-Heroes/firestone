@@ -423,6 +423,7 @@ export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 
 // These cards are added to the deck only for the Joust, but are not part of the initial deck
 export const FAKE_JOUST_CARDS = [CardIds.ProGamer_RoshamboEnchantment_MIS_916e];
+export const dontActuallyDestroyCardsInDeck = [CardIds.Overplanner_VAC_444, CardIds.Kiljaeden_GDB_145];
 
 export const supportedAdditionalData = [
 	CardIds.Ignite,

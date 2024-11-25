@@ -2,7 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
-import { FAKE_JOUST_CARDS } from '../../hs-utils';
+import { dontActuallyDestroyCardsInDeck, FAKE_JOUST_CARDS } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -38,7 +38,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 			refManaCost: card.refManaCost ?? refCard?.cost,
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
 			milled:
-				card.createdByJoust || gameEvent.additionalData.removedByCardId === CardIds.Overplanner_VAC_444
+				card.createdByJoust || dontActuallyDestroyCardsInDeck.includes(gameEvent.additionalData.removedByCardId)
 					? false
 					: true,
 		} as DeckCard);
