@@ -2431,7 +2431,7 @@ export const cardIdSelector = (
 					);
 				return highlightConditions(
 					tooltip(and(side(inputSide), entityIs(...candidates.map((c) => c.entityId)))),
-					and(side(inputSide), or(inDeck, inHand), draenei),
+					and(side(inputSide), or(inDeck, inHand), draenei, or(battlecry, deathrattle)),
 				)(input);
 			};
 		case CardIds.VengefulSpirit_BAR_328:
