@@ -1576,6 +1576,8 @@ export const cardIdSelector = (
 		case CardIds.OldMilitiaHorn_MilitiaHornTavernBrawl:
 		case CardIds.OldMilitiaHorn_VeteransMilitiaHornTavernBrawl:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.TheOneAmalgamBand:
+			return and(side(inputSide), or(inHand, inDeck), minion, not(tribeless));
 		case CardIds.OnyxBishop:
 		case CardIds.OnyxBishop_WON_057:
 			return tooltip(and(side(inputSide), inGraveyard));
