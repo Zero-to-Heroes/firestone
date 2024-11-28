@@ -69,7 +69,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			(refCard.type === 'Minion' || refCard.type === 'Location');
 		// Some of these cards can come from hand, when the event is triggered by "casts when drawn" effects
 		const cardFromHand = deck.hand.find((card) => card.entityId === entityId);
-		console.debug('[debug]card from hand', cardFromHand, deck.hand, cardId, entityId, gameEvent, currentState);
+		// console.debug('card from hand', cardFromHand, deck.hand, cardId, entityId, gameEvent, currentState);
 		let newHand = deck.hand;
 		if (!!cardFromHand) {
 			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
