@@ -308,6 +308,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, murloc);
 		case CardIds.BabaNaga:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.BackstageBouncer:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.BadlandsBrawler_WW_349:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.BadOmen_GDB_124:
