@@ -7,6 +7,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -16,6 +17,7 @@ import {
 	ICardsHighlightService,
 	ILocalizationService,
 	OverwolfService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, takeUntil, tap } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
@@ -60,6 +62,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly arenaClassStats: ArenaClassStatsService,
+		private readonly prefs: PreferencesService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		// Provided in the app
 		@Inject(ARENA_DRAFT_MANAGER_SERVICE_TOKEN) private readonly draftManager: IArenaDraftManagerService,
@@ -69,10 +72,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 	}
 
 	async ngAfterContentInit() {
-		await this.draftManager.isReady();
-		await this.arenaCardStats.isReady();
-		await this.arenaClassStats.isReady();
-		await this.ads.isReady();
+		await waitForReady(this.draftManager, this.arenaCardStats, this.arenaClassStats, this.ads, this.prefs);
 		console.debug('[arena-card-selection] ready');
 
 		const isHearthArenaRunning = await this.ow.getExtensionRunningState(`eldaohcjmecjpkpdhhoiolhhaeapcldppbdgbnbc`);
@@ -82,12 +82,17 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			this.mapData((deck) => deck?.DeckList?.length ?? 0),
 		);
-		this.showingSideBanner$ = combineLatest([this.ads.hasPremiumSub$$, this.pickNumber$]).pipe(
+		this.showingSideBanner$ = combineLatest([
+			this.ads.hasPremiumSub$$,
+			this.pickNumber$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay)),
+		]).pipe(
 			tap((info) =>
 				console.debug('[arena-card-selection] showingSideBanner', info, isHearthArenaRunning.isRunning),
 			),
 			this.mapData(
-				([hasPremium, pickNumber]) => pickNumber >= 1 && !hasPremium && isHearthArenaRunning?.isRunning,
+				([hasPremium, pickNumber, arenaShowCardSelectionOverlay]) =>
+					arenaShowCardSelectionOverlay && pickNumber >= 1 && !hasPremium && isHearthArenaRunning?.isRunning,
 			),
 		);
 		// TODO: load the context of the current class
