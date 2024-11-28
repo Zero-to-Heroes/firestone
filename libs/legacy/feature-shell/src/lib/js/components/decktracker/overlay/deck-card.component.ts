@@ -340,12 +340,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 					return;
 				}
 
-				if (mousedOverCard?.EntityId === this.entityId) {
+				// We use cardId instead of entityId so that it still works when we have multiple cards in hand (since only one entity
+				// id is assigned)
+				if (mousedOverCard?.CardId === this.cardId) {
 					this.onMouseEnter(null);
 					// Not sure we actually want this, as it could start to show up too often and
 					// get annoying
 					// this.forceMouseOver$$.next(true);
-				} else if (previousMouseOverCard?.EntityId === this.entityId) {
+				} else if (previousMouseOverCard?.CardId === this.cardId) {
 					this.onMouseLeave(null);
 					// this.forceMouseOver$$.next(false);
 				}
