@@ -9,7 +9,6 @@ import {
 	GameType,
 	getTribesForInclusion,
 	isBattlegroundsDuo,
-	NON_BUYABLE_MINION_IDS,
 	Race,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
@@ -26,6 +25,8 @@ export const getAllCardsInGame = (
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
+		// Keep only minions that are in the bacon pool
+		.filter((card) => card.type?.toUpperCase() !== CardType[CardType.MINION] || card.isBaconPool)
 		// Exclude the placeholder trinket cards
 		.filter(
 			(card) =>
@@ -47,7 +48,7 @@ export const getAllCardsInGame = (
 		)
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]))
-		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
+		// .filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
 			if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL]) {
 				return hasSpells && isValidBgSpellForTribes(card.id, availableTribes);
