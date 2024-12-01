@@ -304,6 +304,12 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 921;
 		case CardIds.MarinTheManager_BG30_HERO_304:
 			return 990;
+		case CardIds.FarseerNobundo_BG31_HERO_003:
+			return 1043;
+		case CardIds.ExarchOthaar_BG31_HERO_006:
+			return 1044;
+		case CardIds.ZerekMasterCloner_BG31_HERO_005:
+			return 1045;
 		// case CardIds.Diablo:
 		// 	return;
 		default:

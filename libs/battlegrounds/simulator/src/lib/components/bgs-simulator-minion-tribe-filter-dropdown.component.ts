@@ -39,7 +39,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
-		const battlegroundsCards = this.allCards.getCards().filter((card) => !!card.techLevel);
+		const battlegroundsCards = this.allCards.getCards().filter((card) => card.isBaconPool);
 		const uniqueTribes = [
 			...new Set(battlegroundsCards.flatMap((card) => card.races ?? []).map((race) => race?.toLowerCase())),
 		].filter((race) => !!race && race !== 'all');

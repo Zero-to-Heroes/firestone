@@ -246,11 +246,8 @@ export class BgsSimulatorMinionSelectionComponent
 				this.mapData(([searchString, { tribeFilter, tierFilter }, showBuddies]) => {
 					const result = this.allCards
 						.getCards()
-						.filter(
-							(card) =>
-								(card.battlegroundsPremiumDbfId && card.techLevel) ||
-								TOKEN_CARD_IDS.includes(card.id as CardIds),
-						)
+						.filter((card) => card.isBaconPool)
+						// .filter((card) => card.battlegroundsPremiumDbfId || TOKEN_CARD_IDS.includes(card.id as CardIds))
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
 						.filter((card) =>
 							showBuddies ? true : !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]),
