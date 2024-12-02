@@ -138,11 +138,12 @@ export class AttackOnBoardService {
 		const canStarshipAttack =
 			!hasTag(entity, GameTag.STARSHIP) ||
 			(!hasTag(entity, GameTag.LAUNCHPAD) && (!isActivePlayer || getTag(entity, GameTag.NUM_TURNS_IN_PLAY) > 1));
+		const exhausted = hasTag(entity, GameTag.EXHAUSTED) || getTag(entity, GameTag.NUM_TURNS_IN_PLAY) === 0;
 		const hasSummoningSickness =
 			!isHero &&
 			isActivePlayer &&
 			!hasTag(entity, GameTag.CHARGE) &&
-			(hasTag(entity, GameTag.EXHAUSTED) ||
+			(exhausted ||
 				hasTag(entity, GameTag.JUST_PLAYED) ||
 				// Ignore rush minions in the attack counter
 				hasTag(entity, GameTag.ATTACKABLE_BY_RUSH));
@@ -155,6 +156,7 @@ export class AttackOnBoardService {
 		// 	isFrozen,
 		// 	canTitanAttack,
 		// 	hasSummoningSickness,
+		// 	isActivePlayer,
 		// );
 		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack && canTitanAttack && canStarshipAttack;
 	}
