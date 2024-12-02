@@ -130,7 +130,8 @@ export class CardPlayedFromHandParser implements EventParser {
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
-				refManaCost: costFromTags ?? card.refManaCost ?? refCard?.cost,
+				refManaCost: refCard?.cost,
+				actualManaCost: costFromTags ?? card.actualManaCost,
 				cardName: card.cardName ?? refCard?.name,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
@@ -139,7 +140,8 @@ export class CardPlayedFromHandParser implements EventParser {
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
-				refManaCost: costFromTags ?? refCard?.cost,
+				refManaCost: refCard?.cost,
+				actualManaCost: costFromTags ?? card.actualManaCost,
 				zone: isOnBoard ? 'PLAY' : null,
 				cardId: cardId,
 				cardName: this.i18n.getCardName(refCard?.id),
