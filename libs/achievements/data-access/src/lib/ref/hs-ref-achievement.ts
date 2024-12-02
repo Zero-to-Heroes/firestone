@@ -15,17 +15,20 @@ export interface HsRefAchievement {
 	readonly rewardTrackXp: number;
 	readonly rewardListId: number;
 	readonly nextTierId: number;
+	readonly locales: HsRefAchievementLocale[];
 }
-
 export interface HsRefCategory {
 	readonly id: number;
 	readonly name: string; // Default name
 	readonly locales: readonly HsRefCategoryLocale[];
-
 }
-
 export interface HsRefCategoryLocale {
 	readonly name: string;
 	readonly locale: string;
 	readonly localeId: number;
+}
+export interface HsRefAchievementLocale {
+	readonly locale: string;
+	readonly description: string;
+	readonly name: string;
 }

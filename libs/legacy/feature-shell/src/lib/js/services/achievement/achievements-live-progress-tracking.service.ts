@@ -118,13 +118,22 @@ export class AchievementsLiveProgressTrackingService {
 							);
 						});
 
-					combineLatest([currentAchievementProgress$, achievementsOnGameStart$, this.achievementIdsToTrack$$])
+					combineLatest([
+						currentAchievementProgress$,
+						achievementsOnGameStart$,
+						this.achievementIdsToTrack$$,
+						this.prefs.preferences$$.pipe(
+							map((prefs) => prefs.locale),
+							distinctUntilChanged(),
+						),
+					])
 						// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-						.subscribe(async ([progress, achievementsOnGameStart, achievementIdsToTrack]) => {
+						.subscribe(async ([progress, achievementsOnGameStart, achievementIdsToTrack, locale]) => {
 							const finalAchievements = await this.buildAchievementsProgressTracking(
 								achievementsOnGameStart,
 								progress,
 								achievementIdsToTrack,
+								locale,
 							);
 							// console.debug(
 							// 	'[achievements-live-progress-tracking] emitting achievements progress',
@@ -173,6 +182,7 @@ export class AchievementsLiveProgressTrackingService {
 		achievementsOnGameStart: readonly HsAchievementInfo[],
 		progress: readonly HsAchievementInfo[],
 		achievementIdsToTrack: readonly number[],
+		locale: string,
 	): Promise<readonly AchievementsProgressTracking[]> {
 		const groupedAchievements = await this.stateManager.groupedAchievements$$.getValueWithInit();
 		return (
@@ -181,10 +191,11 @@ export class AchievementsLiveProgressTrackingService {
 				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === id);
 				const refAchievement = this.refAchievements.find((a) => a.id === id);
 				const quota = this.achievementQuotas[id];
+				const refLocale = refAchievement.locales?.find((l) => l.locale === locale);
 				const result: AchievementsProgressTracking = {
 					id: id,
-					name: refAchievement?.name ?? 'Unknown achievement',
-					text: refAchievement?.description?.replaceAll('$q', '' + quota),
+					name: refLocale?.name ?? refAchievement?.name ?? 'Unknown achievement',
+					text: (refLocale ?? refAchievement)?.description?.replaceAll('$q', '' + quota),
 					quota: quota,
 					progressThisGame: !!currentProgress
 						? currentProgress.progress - (previousAchievement?.progress ?? 0)
