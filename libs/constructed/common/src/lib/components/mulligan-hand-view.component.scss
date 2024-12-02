@@ -100,7 +100,16 @@
 		}
 	}
 
-	.no-data .label {
-		margin-right: 0;
+	.no-data {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.label {
+			background: var(--color-6);
+			border-radius: 15px;
+			margin-right: 0;
+			padding: 10px;
+		}
 	}
 }
