@@ -53,23 +53,23 @@ export abstract class CounterDefinitionV2<T> {
 			}
 			return true;
 		} else if (side === 'opponent') {
-			console.debug('checking opponent', this, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
+			// console.debug('checking opponent', this, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
 				return false;
 			}
-			console.debug('hasRelevantCard?', this, gameState.opponentDeck?.hasRelevantCard(this.cards));
+			// console.debug('hasRelevantCard?', this, gameState.opponentDeck?.hasRelevantCard(this.cards));
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
 				return true;
 			}
-			console.debug('display', this, this.opponent.display(gameState));
+			// console.debug('display', this, this.opponent.display(gameState));
 			if (!this.opponent.display(gameState)) {
 				return false;
 			}
-			console.debug('value', this, this.opponent.value(gameState));
+			// console.debug('value', this, this.opponent.value(gameState));
 			if (!this.opponent.value(gameState)) {
 				return false;
 			}
-			console.debug('returning true', this);
+			// console.debug('returning true', this);
 			return true;
 		}
 		return false;
