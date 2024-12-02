@@ -46,15 +46,6 @@ export const getDynamicRelatedCardIds = (
 					c?.cost >= 5 &&
 					hasCorrectTribe(c, Race.DEMON),
 			);
-		case CardIds.Nebula_GDB_479:
-			return filterCards(
-				allCards,
-				options,
-				(c) =>
-					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-					c?.cost === 8 &&
-					canBeDiscoveredByClass(c, options.currentClass),
-			);
 		case CardIds.FirstContact_GDB_864:
 			return filterCards(
 				allCards,
@@ -146,11 +137,32 @@ export const getDynamicRelatedCardIds = (
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI),
 			);
 		case CardIds.RelentlessWrathguard_GDB_132:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasCorrectTribe(c, Race.DEMON) &&
+					canBeDiscoveredByClass(c, options.currentClass) &&
+					c?.id !== CardIds.RelentlessWrathguard_GDB_132,
+			);
 		case CardIds.AbductionRay_GDB_123:
 			return filterCards(
 				allCards,
 				options,
-				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DEMON),
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasCorrectTribe(c, Race.DEMON) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.Nebula_GDB_479:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					c?.cost === 8 &&
+					canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.GalacticCrusader_GDB_862:
 			return filterCards(
