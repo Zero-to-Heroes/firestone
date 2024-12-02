@@ -11,6 +11,7 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
@@ -186,7 +187,14 @@ export class ReplayInfoGenericComponent
 		const heroCard: ReferenceCard = isPlayer
 			? this.allCards.getCard(info.playerCardId)
 			: this.allCards.getCard(info.opponentCardId);
-		const name = heroCard.name;
+		let name = heroCard.name;
+		if (!replaysShowClassIcon) {
+			const className = capitalizeFirstLetter(
+				this.i18n.translateString(`global.class.${heroCard.classes?.[0]?.toLowerCase()}`),
+			);
+			name += ` (${className})`;
+		}
+
 		const encodedDeckName = info.playerDeckName;
 		let decodedTeamName: string = null;
 		try {

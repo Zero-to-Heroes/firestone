@@ -2,7 +2,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AbstractSubscriptionComponent, capitalizeEachWord } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	capitalizeEachWord,
+	capitalizeFirstLetter,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 
@@ -135,7 +139,14 @@ export class ReplayInfoGeneric2Component extends AbstractSubscriptionComponent {
 		const heroCard: ReferenceCard = isPlayer
 			? this.allCards.getCard(info.playerCardId)
 			: this.allCards.getCard(info.opponentCardId);
-		const name = heroCard.name;
+		let name = heroCard.name;
+		if (!replaysShowClassIcon) {
+			const className = capitalizeFirstLetter(
+				this.i18n.translateString(`global.class.${heroCard.classes?.[0]?.toLowerCase()}`),
+			);
+			name += ` (${className})`;
+		}
+
 		const encodedDeckName = info.playerDeckName ?? '';
 		let decodedTeamName: string | null = null;
 		try {
