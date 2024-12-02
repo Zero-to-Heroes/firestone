@@ -7,7 +7,7 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil } from 'rxjs';
@@ -285,15 +285,16 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		}
 
 		if (showDiscoveryZone && !!deckState.currentOptions?.length) {
-			const discoveryCards = deckState.currentOptions.map((o) =>
-				DeckCard.create({
+			const discoveryCards = deckState.currentOptions.map((o) => {
+				const defaultCard = DeckCard.create({
 					cardId: o.cardId,
 					entityId: o.entityId,
 					refManaCost: this.allCards.getCard(o.cardId)?.hideStats
 						? null
-						: this.allCards.getCard(o.cardId)?.cost,
-				}),
-			);
+						: getProcessedCard(o.cardId, o.entityId, deckState, this.allCards).cost,
+				});
+				return defaultCard;
+			});
 			zones.push(
 				this.buildZone(
 					discoveryCards,

@@ -1,5 +1,5 @@
-import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardIds } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -43,7 +43,7 @@ export class CardRevealedParser implements EventParser {
 
 		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const dbCard = this.cards.getCard(cardId, false) ?? ({} as ReferenceCard);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
 		let positionFromBottom = undefined;
 		if (gameEvent.additionalData.revealedFromBlock === 'DREDGE') {
 			// Make sure there is no overlap with existing cards
