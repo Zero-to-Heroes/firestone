@@ -476,6 +476,10 @@ export class BgsPlayerBoardParser implements EventParser {
 				AstralAutomatonsSummonedThisGame: opponentBoard.globalInfo?.AstralAutomatonsSummonedThisGame ?? 0,
 				BloodGemAttackBonus: opponentBoard.globalInfo?.BloodGemAttackBonus ?? 0,
 				BloodGemHealthBonus: opponentBoard.globalInfo?.BloodGemHealthBonus ?? 0,
+				BeetleAttackBuff: opponentBoard.globalInfo?.BeetleAttackBuff ?? 0,
+				BeetleHealthBuff: opponentBoard.globalInfo?.BeetleHealthBuff ?? 0,
+				BattlecriesTriggeredThisGame: opponentBoard.globalInfo?.BattlecriesTriggeredThisGame ?? 0,
+				FriendlyMinionsDeadLastCombat: opponentBoard.globalInfo?.FriendlyMinionsDeadLastCombat ?? 0,
 			},
 		};
 		return result;
@@ -537,6 +541,10 @@ export class BgsPlayerBoardParser implements EventParser {
 					AstralAutomatonsSummonedThisGame: playerBoard.globalInfo?.AstralAutomatonsSummonedThisGame ?? 0,
 					BloodGemAttackBonus: playerBoard.globalInfo?.BloodGemAttackBonus ?? 0,
 					BloodGemHealthBonus: playerBoard.globalInfo?.BloodGemHealthBonus ?? 0,
+					BeetleAttackBuff: playerBoard.globalInfo?.BeetleAttackBuff ?? 0,
+					BeetleHealthBuff: playerBoard.globalInfo?.BeetleHealthBuff ?? 0,
+					BattlecriesTriggeredThisGame: playerBoard.globalInfo?.BattlecriesTriggeredThisGame ?? 0,
+					FriendlyMinionsDeadLastCombat: playerBoard.globalInfo?.FriendlyMinionsDeadLastCombat ?? 0,
 				},
 				debugArmor: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value,
 				debugHealth: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
