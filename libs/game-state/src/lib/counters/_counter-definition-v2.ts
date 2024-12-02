@@ -1,6 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../models/game-state';
 import { CounterType } from './_exports';
 
@@ -16,7 +16,7 @@ export abstract class CounterDefinitionV2<T> {
 		value: (state: GameState) => T;
 		setting: {
 			label: (i18n: ILocalizationService) => string;
-			tooltip: (i18n: ILocalizationService) => string;
+			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
 		};
 	};
 	public abstract readonly opponent?: {
@@ -25,7 +25,7 @@ export abstract class CounterDefinitionV2<T> {
 		value: (state: GameState) => T;
 		setting: {
 			label: (i18n: ILocalizationService) => string;
-			tooltip: (i18n: ILocalizationService) => string;
+			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
 		};
 	};
 
@@ -53,18 +53,23 @@ export abstract class CounterDefinitionV2<T> {
 			}
 			return true;
 		} else if (side === 'opponent') {
+			console.debug('checking opponent', this, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
 				return false;
 			}
+			console.debug('hasRelevantCard?', this, gameState.opponentDeck?.hasRelevantCard(this.cards));
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
 				return true;
 			}
+			console.debug('display', this, this.opponent.display(gameState));
 			if (!this.opponent.display(gameState)) {
 				return false;
 			}
+			console.debug('value', this, this.opponent.value(gameState));
 			if (!this.opponent.value(gameState)) {
 				return false;
 			}
+			console.debug('returning true', this);
 			return true;
 		}
 		return false;

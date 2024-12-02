@@ -402,7 +402,7 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 			id: counter.id,
 			field: counter.opponent!.pref,
 			label: counter.opponent!.setting.label(context.i18n),
-			tooltip: counter.opponent!.setting.tooltip(context.i18n),
+			tooltip: counter.opponent!.setting.tooltip(context.i18n, context.allCards),
 		})),
 ];
 

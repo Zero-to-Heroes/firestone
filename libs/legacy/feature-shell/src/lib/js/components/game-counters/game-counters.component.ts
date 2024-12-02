@@ -26,7 +26,6 @@ import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-rai
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
-import { CardsDrawnCounterDefinition } from './definitions/cards-drawn-counter';
 import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
 import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian-counter';
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
@@ -235,8 +234,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ThirstyDrifterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'cardsPlayedFromAnotherClass':
 				return CardsPlayedFromAnotherClassCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'cardsDrawn':
-				return CardsDrawnCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elementalStreak':
 				return ElementalStreakCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'tramHeist':

@@ -343,14 +343,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip'),
 	},
 	{
-		id: 'cardsDrawn',
-		field: 'playerCardsDrawnCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-tooltip', {
-			cardName: context.allCards.getCard(CardIds.PlayhouseGiant_TOY_530)?.name,
-		}),
-	},
-	{
 		id: 'elementalStreak',
 		field: 'playerElementalStreakCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),
@@ -492,19 +484,12 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
 	},
-	// {
-	// 	id: 'dragonsSummoned',
-	// 	field: 'playerDragonsSummonedCounter',
-	// 	label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
-	// 	tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-tooltip'),
-	//
-	// },
 	...allCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.player?.pref)
 		.map((counter) => ({
 			id: counter.id,
 			field: counter.player!.pref,
 			label: counter.player!.setting.label(context.i18n),
-			tooltip: counter.player!.setting.tooltip(context.i18n),
+			tooltip: counter.player!.setting.tooltip(context.i18n, context.allCards),
 		})),
 ];

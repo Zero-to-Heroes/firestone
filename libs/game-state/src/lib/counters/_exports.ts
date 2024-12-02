@@ -1,5 +1,6 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
+import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
@@ -15,6 +16,7 @@ export const allCounters: (
 	new CeaselessExpanseCounterDefinitionV2(i18n),
 	new DiscoversCounterDefinitionV2(i18n),
 	new LibramReductionCounterDefinitionV2(i18n),
+	new CardsDrawnCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
