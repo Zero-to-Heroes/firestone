@@ -55,7 +55,6 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 		this.componentClass = value.additionalClasses;
 		this.buddiesEnabled = value.config?.hasBuddies;
 		this.questsEnabled = value.config?.hasQuests;
-		console.debug('set opp', this._opponent.lesserTrinket, this._opponent.greaterTrinket);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -66,7 +66,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
+		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -122,7 +122,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		card = !!card?.cardId?.length ? card : removedCard;
 		card = !!card.entityId ? card : card.update({ entityId: entityId });
 		card = !!card.cardId ? card : card.update({ cardId: cardId });
-		console.debug('[card-played] card', card, removedCard);
+		// console.debug('[card-played] card', card, removedCard);
 		// Only minions end up on the board
 		const refCard = getProcessedCard(card?.cardId ?? cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
@@ -178,7 +178,6 @@ export class CardPlayedFromHandParser implements EventParser {
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(deck.otherZone, cardToAdd);
-		console.debug('newOtherZone', newOtherZone);
 
 		const { newGlobalEffects, battlecriesMultiplier } = updateGlobalEffects(
 			deck,
