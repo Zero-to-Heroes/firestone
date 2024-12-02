@@ -31,7 +31,7 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponen
 	// the play area are cropped
 	@Input() leftVwOffset: number;
 	@Input() topVwOffset: number;
-	@Input() context: { deck: DeckState; metadata: Metadata };
+	@Input() context: { deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' };
 	@Input() card: DeckCard;
 
 	constructor(

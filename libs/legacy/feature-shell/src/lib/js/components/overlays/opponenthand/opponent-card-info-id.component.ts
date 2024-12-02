@@ -61,14 +61,18 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 
-	@Input() set context(value: { deck: DeckState; metadata: Metadata }) {
+	@Input() set context(value: { deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' }) {
 		this.context$$.next(value);
 	}
 	@Input() set card(value: DeckCard) {
 		this.card$$.next(value);
 	}
 
-	private context$$ = new BehaviorSubject<{ deck: DeckState; metadata: Metadata } | null>(null);
+	private context$$ = new BehaviorSubject<{
+		deck: DeckState;
+		metadata: Metadata;
+		currentTurn: number | 'mulligan';
+	} | null>(null);
 	private card$$ = new BehaviorSubject<DeckCard | null>(null);
 
 	constructor(
@@ -83,7 +87,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		combineLatest([this.context$$, this.card$$])
 			.pipe(
 				filter(([context, card]) => !!context?.deck && !!context?.metadata && !!card),
-				this.mapData(([context, card]) => this.buildInfo(context!.deck, context!.metadata, card)),
+				this.mapData(([context, card]) =>
+					this.buildInfo(context!.deck, context!.metadata, context!.currentTurn as number, card),
+				),
 			)
 			.subscribe();
 	}
@@ -92,7 +98,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		console.warn('missing image', this.cardId, this.cardUrl, this.createdBy, this.drawnBy);
 	}
 
-	private buildInfo(context: DeckState, metadata: Metadata, card: DeckCard): void {
+	private buildInfo(context: DeckState, metadata: Metadata, currentTurn: number, card: DeckCard): void {
 		// Keep the || to handle empty card id
 		const realCardId = this.normalizeEnchantment(card.cardId, card.lastAffectedByCardId || card.creatorCardId);
 		this.createdBy = !card.cardId && !!card.creatorCardId;
@@ -118,9 +124,14 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// We probably don't need to update the other fields, as they are not displayed
 			cardName: this.cardId === card.cardId ? card.cardName : this.i18n.getCardName(this.cardId),
 		} as DeckCard);
-		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
-		if (card.guessedInfo?.possibleCards) {
-			this.possibleCards = card.guessedInfo.possibleCards;
+		const enhancedGuessInfo = enhanceGuessedInfo(card.guessedInfo, {
+			card: card,
+			createdBy: this.createdBy ? this.cardId : null,
+			currentTurn: currentTurn,
+		});
+		this.guessedInfo = isGuessedInfoEmpty(enhancedGuessInfo) ? null : enhancedGuessInfo;
+		if (enhancedGuessInfo?.possibleCards) {
+			this.possibleCards = enhancedGuessInfo.possibleCards;
 		} else if (this.forged) {
 			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
 			// and the hero classes
@@ -200,3 +211,20 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		return creatorCardId;
 	}
 }
+
+const enhanceGuessedInfo = (
+	guessedInfo: GuessedInfo,
+	input: { card: DeckCard; createdBy: string; currentTurn: number },
+): GuessedInfo => {
+	switch (input.card.cardId) {
+		case CardIds.Gorgonzormu_DeliciousCheeseToken_VAC_955t:
+			const createdAtTurn = input.card.metaInfo?.turnAtWhichCardEnteredHand as number;
+			const turnsInHand = input.currentTurn - createdAtTurn;
+			const cheeseCost = 1 + turnsInHand;
+			return {
+				...(guessedInfo ?? {}),
+				cost: cheeseCost,
+			};
+	}
+	return guessedInfo;
+};

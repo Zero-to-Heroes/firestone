@@ -26,7 +26,7 @@ export class OpponentCardInfosComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;
-	@Input() context: { deck: DeckState; metadata: Metadata };
+	@Input() context: { deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' };
 	@Input() cards: readonly DeckCard[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();

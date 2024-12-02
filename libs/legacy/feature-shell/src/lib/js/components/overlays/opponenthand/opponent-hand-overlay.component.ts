@@ -33,7 +33,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
 	displayBuff$: Observable<boolean>;
-	context$: Observable<{ deck: DeckState; metadata: Metadata }>;
+	context$: Observable<{ deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' }>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -55,6 +55,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 			this.mapData((gameState) => ({
 				deck: gameState?.opponentDeck,
 				metadata: gameState?.metadata,
+				currentTurn: gameState?.currentTurn,
 			})),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 		);
