@@ -51,7 +51,7 @@ export class BattlegroundsLeaderboardRegionFilterDropdownComponent
 		]).pipe(
 			filter(([selectedCategoryId, filter]) => !!selectedCategoryId),
 			this.mapData(([selectedCategoryId, filter]) => {
-				const allRegions = ['EU', 'US', 'AP'];
+				const allRegions = ['EU', 'US', 'AP', 'CN'];
 				const options: FilterOption[] = allRegions.map(
 					(option) =>
 						({
@@ -78,7 +78,7 @@ export class BattlegroundsLeaderboardRegionFilterDropdownComponent
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsLeaderboardRegionFilter: option?.value as 'EU' | 'US' | 'AP',
+			bgsLeaderboardRegionFilter: option?.value as 'EU' | 'US' | 'AP' | 'CN',
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}

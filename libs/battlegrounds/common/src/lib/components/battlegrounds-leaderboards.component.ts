@@ -77,9 +77,8 @@ export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent impl
 					!!leaderboards?.leaderboards?.length && !!region,
 			),
 			this.mapData(([leaderboards, { region, bgsLeaderboardPlayerSearch }]) => {
-				const entries = leaderboards!.leaderboards!.find(
-					(leaderboard) => leaderboard.region === region,
-				)!.entries;
+				const entries =
+					leaderboards!.leaderboards!.find((leaderboard) => leaderboard.region === region)?.entries ?? [];
 				return !bgsLeaderboardPlayerSearch?.length
 					? entries
 					: entries.filter((entry) =>

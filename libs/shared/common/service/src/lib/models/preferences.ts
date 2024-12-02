@@ -780,7 +780,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveUseTribesFilterInHeroSelection: boolean = true;
 	readonly bgsActiveUseAnomalyFilterInHeroSelection: boolean = true;
 	readonly bgsActiveGameMode: 'battlegrounds' | 'battlegrounds-duo' = 'battlegrounds';
-	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' = 'EU';
+	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' | 'CN' = 'EU';
 	readonly bgsLeaderboardPlayerSearch: string;
 	readonly bgsYourStatsTypeFilter: 'hero' | 'trinket' = 'hero';
 	readonly bgsCompositionsListMode: BgsCompositionsListMode = 'exploring';
