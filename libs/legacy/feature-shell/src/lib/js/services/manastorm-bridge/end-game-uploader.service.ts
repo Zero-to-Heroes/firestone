@@ -92,6 +92,7 @@ export class EndGameUploaderService {
 		const currentReviewId = info.reviewId;
 		// const gameResult = info.gameEnded.game;
 		const replayXml = info.gameEnded.replayXml;
+		console.debug('[manastorm-bridge]', currentReviewId, 'replayXml', replayXml);
 
 		if (!replayXml) {
 			console.warn('[manastorm-bridge]', currentReviewId, 'could not convert replay');
@@ -375,7 +376,7 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'added meta data');
 		// We don't want to store this, as it will drastically increase the memory footprint over time
 		// game.uncompressedXmlReplay = replayXml;
-		console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
+		// console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
 		this.gameParserService.extractMatchup(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
 		this.gameParserService.extractDuration(replay, game);
