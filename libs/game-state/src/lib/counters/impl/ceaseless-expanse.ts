@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
@@ -37,9 +37,16 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 		super();
 	}
 
-	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
+	protected override tooltip(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		allCards: CardsFacadeService,
+	): string | null {
+		const value = this.player.value(gameState);
 		return this.i18n.translateString(`counters.ceaseless.player`, {
-			value: this.player.value(gameState),
+			value: value,
+			cardName: allCards.getCard(CardIds.TheCeaselessExpanse_GDB_142).name,
+			cost: (allCards.getCard(CardIds.TheCeaselessExpanse_GDB_142).cost ?? 100) - value,
 		});
 	}
 

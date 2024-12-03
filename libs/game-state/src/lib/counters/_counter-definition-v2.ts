@@ -29,7 +29,11 @@ export abstract class CounterDefinitionV2<T> {
 		};
 	};
 
-	protected abstract tooltip(side: 'player' | 'opponent', gameState: GameState): string | null;
+	protected abstract tooltip(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		allCards: CardsFacadeService,
+	): string | null;
 
 	public isActive(side: 'player' | 'opponent', gameState: GameState, prefs: Preferences): boolean {
 		if (side === 'player') {
@@ -75,12 +79,12 @@ export abstract class CounterDefinitionV2<T> {
 		return false;
 	}
 
-	public emit(side: 'player' | 'opponent', gameState: GameState): CounterInstance<T> {
+	public emit(side: 'player' | 'opponent', gameState: GameState, allCards: CardsFacadeService): CounterInstance<T> {
 		// console.debug('emitting counter', this.id, this);
 		const result: CounterInstance<T> = {
 			id: this.id,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.image}.jpg`,
-			tooltip: this.tooltip(side, gameState),
+			tooltip: this.tooltip(side, gameState, allCards),
 			value: side === 'player' ? this.player?.value(gameState) : this.opponent?.value(gameState),
 		};
 		return result;
