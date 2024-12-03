@@ -259,7 +259,7 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, prefs]) => {
 				return allCounters(this.i18n, this.allCards)
 					.filter((c) => c.isActive('player', gameState, prefs))
-					.map((c) => c.emit('player', gameState));
+					.map((c) => c.emit('player', gameState, this.allCards));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
@@ -270,7 +270,7 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, prefs]) => {
 				return allCounters(this.i18n, this.allCards)
 					.filter((c) => c.isActive('opponent', gameState, prefs))
-					.map((c) => c.emit('opponent', gameState));
+					.map((c) => c.emit('opponent', gameState, this.allCards));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
