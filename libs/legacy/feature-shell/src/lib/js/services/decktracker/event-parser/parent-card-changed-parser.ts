@@ -19,7 +19,6 @@ export class ParentCardChangedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const { zone, card } = deck.findCard(newParentEntityId) ?? { zone: null, card: null };
-		console.debug('[parent-card-changed] found card', zone, card, deck, newParentEntityId);
 		if (!card) {
 			return currentState;
 		}
@@ -30,7 +29,6 @@ export class ParentCardChangedParser implements EventParser {
 				cards: [...(card.storedInformation?.cards || []), { cardId, entityId }],
 			},
 		});
-		console.debug('[parent-card-changed] updated parent card', updatedCard);
 		let newDeck = deck;
 		switch (zone) {
 			case 'board':
