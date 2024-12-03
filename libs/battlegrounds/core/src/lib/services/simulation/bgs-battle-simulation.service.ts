@@ -64,7 +64,7 @@ export class BgsBattleSimulationService {
 				currentTurn: currentTurn,
 			},
 		};
-		console.debug('[bgs-simulation] battle simulation request prepared', battleInfo);
+		console.log('[bgs-simulation] battle simulation request prepared', battleInfo);
 
 		const shouldUseLocalSimulator = !prefs.bgsUseRemoteSimulator || !this.isPremium;
 		const shouldUseIntermediateResults =
@@ -82,7 +82,7 @@ export class BgsBattleSimulationService {
 		// Don't show intermediate results
 		if (shouldUseLocalSimulator && shouldUseIntermediateResults && !reconnectOngoing) {
 			(battleInfoInput.options as any).intermediateResults = 200;
-			// console.debug('[bgs-simulation] starting sim with partial results');
+			console.log('[bgs-simulation] starting sim with partial results');
 			this.simulateLocalBattle(battleInfoInput, prefs, async (result: SimulationResult | null) => {
 				await sleep(0);
 				const resultForLog = !!result ? { ...result } : null;
@@ -107,7 +107,7 @@ export class BgsBattleSimulationService {
 				}
 			});
 		} else {
-			// console.debug('[bgs-simulation] starting sim for single use');
+			console.log('[bgs-simulation] starting sim for single use');
 			(battleInfoInput.options as any).intermediateResults = 0;
 			const result: SimulationResult | null = shouldUseLocalSimulator
 				? await this.simulateLocalBattleOnce(battleInfoInput, prefs)
