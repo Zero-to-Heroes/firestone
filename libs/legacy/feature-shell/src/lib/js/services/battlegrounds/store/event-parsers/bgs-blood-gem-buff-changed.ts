@@ -3,6 +3,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBloodGemBuffChangedEvent extends BattlegroundsStoreEvent {
+	public static eventName = 'BgsBloodGemBuffChangedEvent' as const;
 	constructor(public readonly attack: number, public readonly health: number) {
 		super('BgsBloodGemBuffChangedEvent');
 	}

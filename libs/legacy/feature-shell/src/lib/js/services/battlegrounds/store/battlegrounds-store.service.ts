@@ -86,9 +86,13 @@ import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsBattleSimulationEvent } from './events/battlegrounds-battle-simulation-event';
 import { BgsArmorChangedEvent } from './events/bgs-armor-changed-event';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
+import { BgsBattleSimulationResetEvent } from './events/bgs-battle-simulation-reset-event';
+import { BgsBattleSimulationUpdateEvent } from './events/bgs-battle-simulation-update-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
+import { BgsChangePostMatchStatsTabsNumberEvent } from './events/bgs-change-post-match-stats-tabs-number-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
+import { BgsGameEndEvent } from './events/bgs-game-end-event';
 import { BgsGameSettingsEvent } from './events/bgs-game-settings-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
@@ -99,12 +103,16 @@ import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
 import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
+import { BgsPostMatchStatsFilterChangeEvent } from './events/bgs-post-match-stats-filter-change-event';
 import { BgsRealTimeStatsUpdatedEvent } from './events/bgs-real-time-stats-updated-event';
 import { BgsReconnectStatusEvent } from './events/bgs-reconnect-status-event';
 import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
 import { BgsRewardGainedEvent } from './events/bgs-reward-gained-event';
 import { BgsRewardRevealedEvent } from './events/bgs-reward-revealed-event';
+import { BgsSelectBattleEvent } from './events/bgs-select-battle-event';
+import { BgsShowPostMatchStatsEvent } from './events/bgs-show-post-match-stats-event';
 import { BgsSpectatingEvent } from './events/bgs-spectating-event';
+import { BgsStageChangeEvent } from './events/bgs-stage-change-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
 import { BgsToggleOverlayWindowEvent } from './events/bgs-toggle-overlay-window-event';
@@ -123,7 +131,7 @@ export class BattlegroundsStoreService {
 	private mainWindowState: MainWindowState;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private deckState: GameState;
-	private eventParsers: readonly EventParser[] = [];
+	private eventParsers: { [eventName: string]: readonly EventParser[] } = {};
 	private battlegroundsStoreEventBus = new BehaviorSubject<BattlegroundsState>(null);
 	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -656,7 +664,8 @@ export class BattlegroundsStoreService {
 			}
 		}
 		let newState = this.state;
-		for (const parser of this.eventParsers) {
+		const parsers = this.eventParsers[gameEvent.type];
+		for (const parser of parsers ?? []) {
 			try {
 				if (parser.applies(gameEvent, newState)) {
 					newState = (await parser.parse(newState, gameEvent, this.deckState)) ?? newState;
@@ -715,66 +724,70 @@ export class BattlegroundsStoreService {
 		}
 	}
 
-	private buildEventParsers(): readonly EventParser[] {
-		const eventParsers = [
-			new NoBgsMatchParser(),
-			new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n, this.highlighter),
-			new BgsGameSettingsParser(this.allCards),
-			// new BattlegroundsResetBattleStateParser(),
-			// new BgsInitParser(this.prefs, this.i18n),
-			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs, this.i18n),
-			new BgsHeroSelectedParser(this.allCards, this.i18n),
-			new BgsHeroRerollParser(this.allCards, this.i18n),
-			new BgsNextOpponentParser(this.i18n, this.allCards),
-			new BgsTavernUpgradeParser(this.gameEventsService, this.allCards),
-			new BgsBuddyGainedParser(this.gameEventsService, this.allCards),
-			new BgsRewardRevealedParser(this.allCards),
-			new BgsRewardGainedParser(this.allCards),
-			new BgsExtraGoldNextTurnParser(this.allCards),
-			new BgsPlayerBoardParser(
-				this.simulation,
-				this.logsUploader,
-				this.gameEventsService,
-				this.allCards,
-				this.memory,
-				this.gameIdService,
-				this.prefs,
-				this.intermediateSimGuardian,
-				this.adService,
-			),
-			new BgsTripleCreatedParser(this.allCards),
-			new BgsTrinketSelectedParser(this.allCards),
-			new BgsOpponentRevealedParser(this.allCards),
-			new BgsTurnStartParser(this.logsUploader, this.i18n),
-			new BgsGameEndParser(this.prefs, this.i18n, this.highlighter),
-			new BgsStageChangeParser(),
-			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService, this.bugService),
-			new BgsArmorChangedParser(this.allCards),
-			new BgsBloodGemBuffChangedParser(),
-			// new BgsResetBattleStateParser(),
-			new BgsBattleSimulationParser(this.allCards),
-			new BgsPostMatchStatsFilterChangeParser(this.prefs),
-			new BgsChangePostMatchStatsTabsNumberParser(this.prefs),
-			// new BgsDamageDealtParser(),
-			new BgsLeaderboardPlaceParser(this.allCards),
-			new BgsCombatStartParser(),
-			new BgsRecruitStartParser(this.owUtils, this.prefs),
-			new BgsGlobalInfoUpdatedParser(this.allCards),
-			new BgsStartComputingPostMatchStatsParser(),
-			new BgsInitMmrParser(this.memory, this.gameStateService, this.prefs, () => this.stateUpdater),
-			new BgsCardPlayedParser(),
-			new BgsReconnectStatusParser(),
-			new BgsSpectatingParser(),
-			new BgsSelectBattleParser(),
-			new BgsBattleSimulationUpdateParser(),
-			new BgsBattleSimulationResetParser(),
-
-			new BgsRealTimeStatsUpdatedParser(this.i18n),
-
-			new BgsShowPostMatchStatsParser(),
-		];
-
-		return eventParsers;
+	private buildEventParsers(): { [eventName: string]: readonly EventParser[] } {
+		return {
+			[NoBgsMatchEvent.eventName]: [new NoBgsMatchParser()],
+			[BgsMatchStartEvent.eventName]: [
+				new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n, this.highlighter),
+			],
+			[BgsGameSettingsEvent.eventName]: [new BgsGameSettingsParser(this.allCards)],
+			[BgsHeroSelectionEvent.eventName]: [
+				new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs, this.i18n),
+			],
+			[BgsHeroSelectedEvent.eventName]: [new BgsHeroSelectedParser(this.allCards, this.i18n)],
+			[BgsHeroRerollEvent.eventName]: [new BgsHeroRerollParser(this.allCards, this.i18n)],
+			[BgsNextOpponentEvent.eventName]: [new BgsNextOpponentParser(this.i18n, this.allCards)],
+			[BgsTavernUpgradeEvent.eventName]: [new BgsTavernUpgradeParser(this.gameEventsService, this.allCards)],
+			[BgsBuddyGainedEvent.eventName]: [new BgsBuddyGainedParser(this.gameEventsService, this.allCards)],
+			[BgsRewardRevealedEvent.eventName]: [new BgsRewardRevealedParser(this.allCards)],
+			[BgsRewardGainedEvent.eventName]: [new BgsRewardGainedParser(this.allCards)],
+			[BgsExtraGoldNextTurnEvent.eventName]: [new BgsExtraGoldNextTurnParser(this.allCards)],
+			[BgsPlayerBoardEvent.eventName]: [
+				new BgsPlayerBoardParser(
+					this.simulation,
+					this.logsUploader,
+					this.gameEventsService,
+					this.allCards,
+					this.memory,
+					this.gameIdService,
+					this.prefs,
+					this.intermediateSimGuardian,
+					this.adService,
+				),
+			],
+			[BgsTripleCreatedEvent.eventName]: [new BgsTripleCreatedParser(this.allCards)],
+			[BgsTrinketSelectedEvent.eventName]: [new BgsTrinketSelectedParser(this.allCards)],
+			[BgsOpponentRevealedEvent.eventName]: [new BgsOpponentRevealedParser(this.allCards)],
+			[BgsTurnStartEvent.eventName]: [new BgsTurnStartParser(this.logsUploader, this.i18n)],
+			[BgsGameEndEvent.eventName]: [new BgsGameEndParser(this.prefs, this.i18n, this.highlighter)],
+			[BgsStageChangeEvent.eventName]: [new BgsStageChangeParser()],
+			[BgsBattleResultEvent.eventName]: [
+				new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService, this.bugService),
+			],
+			[BgsArmorChangedEvent.eventName]: [new BgsArmorChangedParser(this.allCards)],
+			[BgsBloodGemBuffChangedEvent.eventName]: [new BgsBloodGemBuffChangedParser()],
+			[BattlegroundsBattleSimulationEvent.eventName]: [new BgsBattleSimulationParser(this.allCards)],
+			[BgsPostMatchStatsFilterChangeEvent.eventName]: [new BgsPostMatchStatsFilterChangeParser(this.prefs)],
+			[BgsChangePostMatchStatsTabsNumberEvent.eventName]: [
+				new BgsChangePostMatchStatsTabsNumberParser(this.prefs),
+			],
+			[BgsLeaderboardPlaceEvent.eventName]: [new BgsLeaderboardPlaceParser(this.allCards)],
+			[BgsCombatStartEvent.eventName]: [new BgsCombatStartParser()],
+			[BgsRecruitStartEvent.eventName]: [new BgsRecruitStartParser(this.owUtils, this.prefs)],
+			[BgsGlobalInfoUpdatedEvent.eventName]: [new BgsGlobalInfoUpdatedParser(this.allCards)],
+			[BgsStartComputingPostMatchStatsEvent.eventName]: [new BgsStartComputingPostMatchStatsParser()],
+			[BgsInitMmrEvent.eventName]: [
+				new BgsInitMmrParser(this.memory, this.gameStateService, this.prefs, () => this.stateUpdater),
+			],
+			[BgsCardPlayedEvent.eventName]: [new BgsCardPlayedParser()],
+			[BgsReconnectStatusEvent.eventName]: [new BgsReconnectStatusParser()],
+			[BgsSpectatingEvent.eventName]: [new BgsSpectatingParser()],
+			[BgsSelectBattleEvent.eventName]: [new BgsSelectBattleParser()],
+			[BgsBattleSimulationUpdateEvent.eventName]: [new BgsBattleSimulationUpdateParser()],
+			[BgsBattleSimulationResetEvent.eventName]: [new BgsBattleSimulationResetParser()],
+			[BgsRealTimeStatsUpdatedEvent.eventName]: [new BgsRealTimeStatsUpdatedParser(this.i18n)],
+			[BgsShowPostMatchStatsEvent.eventName]: [new BgsShowPostMatchStatsParser()],
+		};
 	}
 
 	private buildOverlayHandlers() {

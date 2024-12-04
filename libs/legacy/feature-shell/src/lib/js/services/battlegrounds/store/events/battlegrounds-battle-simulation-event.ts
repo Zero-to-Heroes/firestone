@@ -2,6 +2,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BattlegroundsBattleSimulationEvent extends BattlegroundsStoreEvent {
+	public static readonly eventName = 'BattlegroundsBattleSimulationEvent' as const;
 	constructor(
 		public readonly battleId: string,
 		public readonly result: SimulationResult,

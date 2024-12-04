@@ -5,6 +5,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTrinketSelectedEvent extends BattlegroundsStoreEvent {
+	public static eventName = 'BgsTrinketSelectedEvent' as const;
 	constructor(
 		public readonly heroCardId: string,
 		public readonly playerId: number,

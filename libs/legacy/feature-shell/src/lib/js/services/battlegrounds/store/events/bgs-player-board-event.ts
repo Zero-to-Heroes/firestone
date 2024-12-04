@@ -3,6 +3,7 @@ import { MemoryBgsTeamInfo } from '@firestone/memory';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {
+	public static eventName = 'BgsPlayerBoardEvent' as const;
 	constructor(
 		// Boards at the start of the battle. The playerBoard is the board of the first fighter, so it can be
 		// either the player board or the teammate board

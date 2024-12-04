@@ -5,6 +5,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsExtraGoldNextTurnEvent extends BattlegroundsStoreEvent {
+	public static eventName = 'BgsExtraGoldNextTurnEvent' as const;
 	constructor(
 		public readonly gold: number,
 		public readonly overconfidences: number,

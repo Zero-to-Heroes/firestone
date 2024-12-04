@@ -1,6 +1,7 @@
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsOpponentRevealedEvent extends BattlegroundsStoreEvent {
+	public static eventName = 'BgsOpponentRevealedEvent' as const;
 	constructor(
 		public readonly cardId: string,
 		public readonly playerId: number,

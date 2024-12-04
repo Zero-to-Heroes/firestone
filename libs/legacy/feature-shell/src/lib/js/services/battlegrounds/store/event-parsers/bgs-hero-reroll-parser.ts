@@ -5,6 +5,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsHeroRerollEvent extends BattlegroundsStoreEvent {
+	public static eventName = 'BgsHeroRerollEvent' as const;
 	constructor(public readonly entityId: number, public readonly cardId: string) {
 		super('BgsHeroRerollEvent');
 	}
