@@ -2,10 +2,10 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
-import { ExtendedReferenceCard, isBgsTrinket } from '@firestone/battlegrounds/core';
+import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable } from 'rxjs';
 import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
@@ -141,22 +141,30 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					fadeHigherTierCards,
 					tavernTier,
 				]) => {
-					const hasBattlecry = card.mechanics?.includes(GameTag[GameTag.BATTLECRY]);
-					const hasDeathrattle = card.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]);
-					const hasTaunt = card.mechanics?.includes(GameTag[GameTag.TAUNT]);
-					const hasDivineShield = card.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
-					const hasEndOfTurn = card.mechanics?.includes(GameTag[GameTag.END_OF_TURN]);
-					const hasReborn = card.mechanics?.includes(GameTag[GameTag.REBORN]);
-					const hasBgSpell = card.mechanics?.includes(GameTag[GameTag.BG_SPELL]);
-
-					const battlecryHighlight = hasBattlecry && highlightedMechanics.includes(GameTag.BATTLECRY);
-					const deathrattleHighlight = hasDeathrattle && highlightedMechanics.includes(GameTag.DEATHRATTLE);
-					const tauntHighlight = hasTaunt && highlightedMechanics.includes(GameTag.TAUNT);
-					const divineShieldHighlight =
-						hasDivineShield && highlightedMechanics.includes(GameTag.DIVINE_SHIELD);
-					const endOfTurnHighlight = hasEndOfTurn && highlightedMechanics.includes(GameTag.END_OF_TURN);
-					const rebornHighlight = hasReborn && highlightedMechanics.includes(GameTag.REBORN);
-					const bgSpellHighlight = hasBgSpell && highlightedMechanics.includes(GameTag.BG_SPELL);
+					const mechanicsHighlights: readonly MinionHighlight[] = MECHANICS_IN_GAME.filter(
+						(m) => m.canBeHighlighted !== false,
+					).map((m) => {
+						const hasMechanics = card.mechanics?.includes(GameTag[m.mechanic]);
+						const highlighted = hasMechanics && highlightedMechanics.includes(m.mechanic);
+						const mechanicsName = this.i18n.translateString(
+							`global.mechanics.${GameTag[m.mechanic].toLowerCase()}`,
+						);
+						const result: MinionHighlight = {
+							mechanic: m.mechanic,
+							label: m.tierId,
+							hasMechanics: hasMechanics,
+							highlighted: highlighted,
+							tooltip: highlighted
+								? this.i18n.translateString(
+										'battlegrounds.in-game.minions-list.unhighlight-mechanics',
+										{ value: mechanicsName },
+								  )
+								: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
+										value: mechanicsName,
+								  }),
+						};
+						return result;
+					});
 
 					const result: Minion = {
 						cardId: card.id,
@@ -170,77 +178,18 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 						goldCost: isBgsSpell(card) || isBgsTrinket(card) ? card.cost ?? 0 : null,
 						techLevel: card.techLevel,
 
-						hasBattlecry: hasBattlecry,
-						hasDeathrattle: hasDeathrattle,
-						hasTaunt: hasTaunt,
-						hasDivineShield: hasDivineShield,
-						hasEndOfTurn: hasEndOfTurn,
-						hasReborn: hasReborn,
-						hasBgSpell: hasBgSpell,
-
 						trinketLocked: card.trinketLocked,
 						trinketLockedReason: card.trinketLockedReason?.join('<br />'),
+						faded: fadeHigherTierCards && card.techLevel > tavernTier,
 
 						hidePins: isBgsTrinket(card),
-
-						battlecryHighlight: battlecryHighlight,
-						deathrattleHighlight: deathrattleHighlight,
-						tauntHighlight: tauntHighlight,
-						divineShieldHighlight: divineShieldHighlight,
-						endOfTurnHighlight: endOfTurnHighlight,
-						rebornHighlight: rebornHighlight,
-						bgSpellHighlight: bgSpellHighlight,
-
 						hightMinionTooltip: this.i18n.translateString(
 							'battlegrounds.in-game.minions-list.highlight-minion',
 							{
 								value: card.name,
 							},
 						),
-						highlightBattlecryTooltip: battlecryHighlight
-							? this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.battlecry'),
-							  })
-							: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.battlecry'),
-							  }),
-						highlightDeathrattleTooltip: deathrattleHighlight
-							? this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.deathrattle'),
-							  })
-							: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.deathrattle'),
-							  }),
-						highlightTauntTooltip: tauntHighlight
-							? this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.taunt'),
-							  })
-							: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.taunt'),
-							  }),
-						divineShieldHighlightTooltip: divineShieldHighlight
-							? this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.divine-shield'),
-							  })
-							: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.divine-shield'),
-							  }),
-						endOfTurnHighlightTooltip: endOfTurnHighlight
-							? this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.end-of-turn'),
-							  })
-							: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.end-of-turn'),
-							  }),
-						rebornHighlightTooltip: rebornHighlight
-							? this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.reborn'),
-							  })
-							: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
-									value: this.i18n.translateString('global.mechanics.reborn'),
-							  }),
-
-						faded: fadeHigherTierCards && card.techLevel > tavernTier,
+						mechanicsHighlights: mechanicsHighlights,
 					};
 					return result;
 				},
@@ -298,36 +247,46 @@ export interface Minion {
 	readonly bannedReason?: string;
 	readonly techLevel?: number;
 	readonly goldCost: number;
+
 	readonly highlighted: boolean;
-	readonly hasTaunt?: boolean;
-	readonly hasEndOfTurn?: boolean;
-	readonly hasBattlecry?: boolean;
-	readonly hasReborn?: boolean;
-	readonly hasBgSpell?: boolean;
+	readonly hightMinionTooltip?: string;
+	readonly mechanicsHighlights: readonly MinionHighlight[];
+
+	// readonly hasTaunt?: boolean;
+	// readonly hasEndOfTurn?: boolean;
+	// readonly hasBattlecry?: boolean;
+	// readonly hasReborn?: boolean;
+	// readonly hasBgSpell?: boolean;
 
 	readonly trinketLocked?: boolean;
 	readonly trinketLockedReason?: string;
 
-	readonly battlecryHighlight?: boolean;
-	readonly deathrattleHighlight?: boolean;
-	readonly tauntHighlight?: boolean;
-	readonly divineShieldHighlight?: boolean;
-	readonly endOfTurnHighlight?: boolean;
-	readonly rebornHighlight?: boolean;
-	readonly bgSpellHighlight?: boolean;
-	readonly hasDeathrattle?: boolean;
-	readonly hasDivineShield?: boolean;
+	// readonly battlecryHighlight?: boolean;
+	// readonly deathrattleHighlight?: boolean;
+	// readonly tauntHighlight?: boolean;
+	// readonly divineShieldHighlight?: boolean;
+	// readonly endOfTurnHighlight?: boolean;
+	// readonly rebornHighlight?: boolean;
+	// readonly bgSpellHighlight?: boolean;
+	// readonly hasDeathrattle?: boolean;
+	// readonly hasDivineShield?: boolean;
 
-	readonly hightMinionTooltip?: string;
-	readonly highlightBattlecryTooltip?: string;
-	readonly highlightDeathrattleTooltip?: string;
-	readonly highlightTauntTooltip?: string;
-	readonly divineShieldHighlightTooltip?: string;
-	readonly endOfTurnHighlightTooltip?: string;
-	readonly rebornHighlightTooltip?: string;
+	// readonly highlightBattlecryTooltip?: string;
+	// readonly highlightDeathrattleTooltip?: string;
+	// readonly highlightTauntTooltip?: string;
+	// readonly divineShieldHighlightTooltip?: string;
+	// readonly endOfTurnHighlightTooltip?: string;
+	// readonly rebornHighlightTooltip?: string;
 
 	readonly hidePins?: boolean;
 	readonly faded?: boolean;
+}
+export interface MinionHighlight {
+	readonly mechanic: GameTag;
+	readonly label: string;
+	readonly hasMechanics: boolean;
+	readonly highlighted: boolean;
+	readonly tooltip: string;
 }
 
 const enhanceCardName = (card: ReferenceCard, group: BgsMinionsGroup): string => {

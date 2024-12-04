@@ -16,6 +16,23 @@ import { ExtendedReferenceCard, TavernTierType, Tier, TierGroup } from '../tiers
 import { TierBuilderConfig } from './tiers-config.model';
 import { getTrinketNameKey } from './utils';
 
+export const MECHANICS_IN_GAME = [
+	{ mechanic: GameTag.BATTLECRY, tierId: 'B' },
+	{ mechanic: GameTag.DEATHRATTLE, tierId: 'D' },
+	{ mechanic: GameTag.DIVINE_SHIELD, tierId: 'DS' },
+	{ mechanic: GameTag.TAUNT, tierId: 'T' },
+	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
+	{ mechanic: GameTag.REBORN, tierId: 'R' },
+	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'C' },
+	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
+	{
+		mechanic: GameTag.BACON_BUDDY,
+		tierId: 'Buds',
+		tooltip: 'battlegrounds.in-game.minions-list.buddies-tier-tooltip',
+		canBeHighlighted: false,
+	},
+];
+
 export const buildMechanicsTiers = (
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
@@ -27,30 +44,24 @@ export const buildMechanicsTiers = (
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
 	const allBuddies = buildBuddies(availableTribes, playerCardId, allPlayerCardIds, allCards, config);
-	const result: Tier[] = [
-		buildTier('B', GameTag.BATTLECRY, cardsToInclude, tiersToInclude, i18n, config),
-		buildTier('D', GameTag.DEATHRATTLE, cardsToInclude, tiersToInclude, i18n, config),
-		buildTier('DS', GameTag.DIVINE_SHIELD, cardsToInclude, tiersToInclude, i18n, config),
-		buildTier('T', GameTag.TAUNT, cardsToInclude, tiersToInclude, i18n, config),
-		buildTier('E', GameTag.END_OF_TURN, cardsToInclude, tiersToInclude, i18n, config),
-		buildTier('R', GameTag.REBORN, cardsToInclude, tiersToInclude, i18n, config),
-	];
-	if (config?.spells) {
-		result.push(buildTier('S', GameTag.BG_SPELL, cardsToInclude, tiersToInclude, i18n, config));
+	let mechanicsInGame = [...MECHANICS_IN_GAME];
+	if (!config?.spells) {
+		mechanicsInGame = mechanicsInGame.filter((mechanic) => mechanic.mechanic !== GameTag.BG_SPELL);
 	}
-	if (allBuddies.length > 0) {
-		result.push(
-			buildTier(
-				'Buds',
-				GameTag.BACON_BUDDY,
-				allBuddies,
-				tiersToInclude,
-				i18n,
-				config,
-				i18n.translateString('battlegrounds.in-game.minions-list.buddies-tier-tooltip'),
-			),
-		);
+	if (allBuddies.length === 0) {
+		mechanicsInGame = mechanicsInGame.filter((mechanic) => mechanic.mechanic !== GameTag.BACON_BUDDY);
 	}
+	const result: Tier[] = mechanicsInGame.map((mechanics) =>
+		buildTier(
+			mechanics.tierId,
+			mechanics.mechanic,
+			cardsToInclude,
+			tiersToInclude,
+			i18n,
+			config,
+			mechanics?.tooltip ? i18n.translateString(mechanics.tooltip) : undefined,
+		),
+	);
 	return result.filter((t) => t?.groups?.length);
 };
 

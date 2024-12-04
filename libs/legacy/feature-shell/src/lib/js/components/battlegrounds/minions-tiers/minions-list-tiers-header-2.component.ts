@@ -16,6 +16,7 @@ import { Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { FeatureFlags } from '../../../services/feature-flags';
 
 @Component({
 	selector: 'minions-list-tiers-header-2',
@@ -62,7 +63,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 					</div>
 					<div
 						class="tier compositions-category"
-						*ngIf="compositions?.length"
+						*ngIf="compositions?.length && enableComps"
 						(click)="selectCategory('compositions')"
 						[ngClass]="{ selected: value.category === 'compositions' }"
 						[helpTooltip]="
@@ -127,6 +128,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
+	enableComps = FeatureFlags.ENABLE_BGS_COMPS;
 	selectedCategory$: Observable<MinionTierCategory>;
 
 	@Output() displayedTierChange = new EventEmitter<Tier>();

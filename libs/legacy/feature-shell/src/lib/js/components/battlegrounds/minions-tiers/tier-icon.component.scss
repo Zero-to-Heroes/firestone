@@ -47,59 +47,6 @@
 		width: 36px;
 	}
 
-	&.mechanics {
-		.number {
-			color: var(--color-5);
-		}
-		&.B {
-			.number {
-				--color-7: #4376d8;
-			}
-		}
-
-		&.D {
-			.number {
-				--color-7: #ff8a48;
-			}
-		}
-
-		&.DS {
-			.number {
-				--color-7: #ffb948;
-			}
-		}
-
-		&.T {
-			.number {
-				--color-7: #42d8a2;
-			}
-		}
-
-		&.E {
-			.number {
-				--color-7: #b346e7;
-			}
-		}
-
-		&.R {
-			.number {
-				--color-7: #6aaeb9;
-			}
-		}
-
-		&.S {
-			.number {
-				--color-7: #a11e1e;
-			}
-		}
-
-		&.Buds {
-			.number {
-				--color-7: #ffb948;
-			}
-		}
-	}
-
 	&.tribe {
 		border-radius: 50%;
 		overflow: hidden;
