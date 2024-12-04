@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isMercenaries } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
 import { GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
@@ -14,6 +15,7 @@ import {
 	map,
 	shareReplay,
 	startWith,
+	switchMap,
 	take,
 	tap,
 	withLatestFrom,
@@ -56,7 +58,7 @@ export class EndGameListenerService {
 	}
 
 	private async init() {
-		await waitForReady(this.gameState);
+		await waitForReady(this.gameState, this.mercsMemoryCache);
 
 		this.gameStatus.inGame$$
 			.pipe(
@@ -69,13 +71,15 @@ export class EndGameListenerService {
 					filter((event) => event.type === GameEvent.MATCH_METADATA),
 					map((event) => event.additionalData.metaData as HsGameMetaData),
 					startWith(null),
+					shareReplay(1),
 				);
 				const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 					filter((event) => event.type === GameEvent.MATCH_INFO),
 					map((event) => event.additionalData.matchInfo as MatchInfo),
 					startWith(null),
+					shareReplay(1),
 				);
-				const uniqueId$ = this.gameUniqueId.uniqueId$$.asObservable().pipe(startWith(null));
+				const uniqueId$ = this.gameUniqueId.uniqueId$$.asObservable().pipe(startWith(null), shareReplay(1));
 				// Why use this instead of the deckstring from the game state?
 				// How to make sure the "new" version doesn't override the old one once the game is over?
 				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.fullGameState$$
@@ -96,50 +100,23 @@ export class EndGameListenerService {
 						startWith(null),
 						distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
 						tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
+						shareReplay(1),
 					);
-				// const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.gameState$$
-				// .asObservable()
-				// .pipe(
-				// 	filter((state) => !!state?.playerDeck?.deckstring),
-				// 	map(
-				// 		(state) => ({
-				// 			name: state.playerDeck.name,
-				// 			deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
-				// 		}),
-				// 		// Remove signature treasures from the decklists
-				// 		// isDuels(state?.metadata?.gameType)
-				// 		// 	? {
-				// 		// 			name: state.playerDeck.name,
-				// 		// 			deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
-				// 		// 	  }
-				// 		// 	: deck,
-				// 	),
-				// 	startWith(null),
-				// 	distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
-				// 	tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
-				// );
-				// const playerDeck$ = this.gameEvents.allEvents.asObservable().pipe(
-				// 	filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
-				// 	map((event) => event.additionalData.playerDeck as DeckInfo),
-				// 	startWith(null),
-				// 	map((deck) =>
-				// 		// Remove signature treasures from the decklists
-				// 		isDuels(deck?.gameType)
-				// 			? {
-				// 					...deck,
-				// 					deckstring: sanitizeDeckstring(deck.deckstring, this.allCards),
-				// 			  }
-				// 			: deck,
-				// 	),
-				// 	tap((info) => console.log('[manastorm-bridge] playerDeck', info)),
-				// );
-				const duelsInfo$ = this.duelsState.duelsInfo$$;
-				const duelsRunId$ = duelsInfo$.pipe(map((info) => info?.DeckId));
+
 				const arenaInfo$ = this.arenaInfo.arenaInfo$$;
 
-				await this.mercsMemoryCache.isReady();
-				const mercsInfo$ = this.mercsMemoryCache.memoryMapInfo$$.pipe(startWith(null));
-				const mercsCollectionInfo$ = this.mercsMemoryCache.memoryCollectionInfo$$.pipe(startWith(null));
+				// TODO: only if in mercs game
+				const mercsInfo$ = metadata$.pipe(
+					filter((meta) => isMercenaries(meta?.GameType)),
+					switchMap((meta) => this.mercsMemoryCache.memoryMapInfo$$),
+					startWith(null),
+				);
+				const mercsCollectionInfo$ = metadata$.pipe(
+					filter((meta) => isMercenaries(meta?.GameType)),
+					switchMap((meta) => this.mercsMemoryCache.memoryCollectionInfo$$),
+					startWith(null),
+				);
+
 				const bgInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 					filter((event) => event.type === GameEvent.BATTLEGROUNDS_INFO),
 					map((event) => event.additionalData.bgInfo as BattlegroundsInfo),
@@ -245,8 +222,6 @@ export class EndGameListenerService {
 					gameSettings$,
 					mercsInfo$,
 					mercsCollectionInfo$,
-					duelsRunId$,
-					duelsInfo$,
 					matchInfo$,
 					playerDeck$,
 					arenaInfo$,
@@ -264,8 +239,6 @@ export class EndGameListenerService {
 									gameSettings,
 									mercsInfo,
 									mercsCollectionInfo,
-									duelsRunId,
-									duelsInfo,
 									matchInfo,
 									playerDeck,
 									arenaInfo,
@@ -282,11 +255,9 @@ export class EndGameListenerService {
 									matchInfo: matchInfo,
 									uniqueId: uniqueId,
 									playerDeck: playerDeck,
-									duelsInfo: duelsInfo,
 									arenaInfo: arenaInfo,
 									mercsInfo: mercsInfo,
 									mercsCollectionInfo: mercsCollectionInfo,
-									duelsRunId: duelsRunId,
 									bgInfo: bgInfo,
 									bgNewRating: bgNewRating,
 									battlegroundsInfoAfterGameOver: bgMemoryInfo,

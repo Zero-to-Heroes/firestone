@@ -6,7 +6,6 @@ import { BgsGame } from '@firestone/battlegrounds/core';
 import {
 	ArenaInfo,
 	BattlegroundsInfo,
-	DuelsInfo,
 	MatchInfo,
 	MemoryMercenariesCollectionInfo,
 	MemoryMercenariesInfo,
@@ -19,8 +18,6 @@ import { toFormatType, toGameType } from '@firestone/stats/data-access';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
-import { DuelsLootParserService } from '../duels/duels-loot-parser.service';
-import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
@@ -55,7 +52,6 @@ export class EndGameUploaderService {
 	constructor(
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
-		private dungeonLootParser: DuelsLootParserService,
 		private logService: LogsUploaderService,
 		private mainWindowStore: MainWindowStoreService,
 		private readonly bgsStore: BattlegroundsStoreService,
@@ -212,27 +208,6 @@ export class EndGameUploaderService {
 				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
 					? await this.buildOpponentName(info.mercsInfo)
 					: null;
-		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
-			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
-			console.log('[manastorm-bridge]', currentReviewId, 'got duels info');
-			playerRank = game.gameMode === 'duels' ? info.duelsInfo?.Rating : info.duelsInfo?.PaidRating;
-			const wins = info.duelsInfo?.Wins;
-			const losses = info.duelsInfo?.Losses;
-			if (wins != null && losses != null) {
-				game.additionalResult = wins + '-' + losses;
-				console.log('[manastorm-bridge]', currentReviewId, 'duels result', game.additionalResult);
-			}
-			try {
-				if ((replay.result === 'won' && wins === 11) || (replay.result === 'lost' && losses === 2)) {
-					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
-					if (info.duelsPlayerRankAfterGameOver != null) {
-						game.newPlayerRank = '' + info.duelsPlayerRankAfterGameOver;
-					}
-				}
-			} catch (e) {
-				console.error('[manastorm-bridge]', currentReviewId, 'Could not handle rating change in duels', e);
-			}
-			// }
 		} else if (game.gameMode === 'arena') {
 			// TODO: move away from player rank for arena to match what is done in duels
 			playerRank = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
@@ -302,7 +277,7 @@ export class EndGameUploaderService {
 			}
 		}
 		let opponentRank;
-		if (isBattlegrounds(game.gameMode) || isDuels(game.gameMode) || isMercenaries(game.gameMode)) {
+		if (isBattlegrounds(game.gameMode) || isMercenaries(game.gameMode)) {
 			// Do nothing
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			if (opponentInfo && game.gameFormat === 'standard') {
@@ -382,9 +357,7 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
-		if (isDuels(game.gameMode)) {
-			game.runId = info.duelsRunId;
-		} else if (game.gameMode === 'arena') {
+		if (game.gameMode === 'arena') {
 			game.runId = info.arenaInfo?.runId;
 		}
 
@@ -483,7 +456,6 @@ export interface UploadInfo {
 	matchInfo: MatchInfo;
 	uniqueId: string;
 	playerDeck: { deckstring: string; name: string };
-	duelsInfo: DuelsInfo;
 	arenaInfo: ArenaInfo;
 	mercsInfo: MemoryMercenariesInfo;
 	mercsCollectionInfo: MemoryMercenariesCollectionInfo;
@@ -494,7 +466,6 @@ export interface UploadInfo {
 		battlegroundsQuests: boolean;
 		battlegroundsAnomalies: readonly string[];
 	};
-	duelsRunId: string;
 	battlegroundsInfoAfterGameOver?: BattlegroundsInfo;
 	duelsPlayerRankAfterGameOver?: number;
 	xpForGame?: XpForGameInfo;
