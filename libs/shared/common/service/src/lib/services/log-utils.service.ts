@@ -1,24 +1,39 @@
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, interval } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, interval, startWith, Subscription, take } from 'rxjs';
 import { Preferences } from '../models/preferences';
+import { GameStatusService } from './game-status.service';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class LogUtilsService {
 	public logsDirRoot$$ = new BehaviorSubject<string>(null);
 
-	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
+	private watcherSub: Subscription;
+
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly gameStatus: GameStatusService,
+	) {
 		this.init();
 	}
 
 	private async init() {
-		const timer$ = interval(5000);
-		timer$.subscribe(async () => {
-			const gameInfo = await this.ow.getRunningGameInfo();
-			const prefs = await this.prefs.getPreferences();
-			const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
-			this.logsDirRoot$$.next(logsDir);
+		this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
+			if (inGame) {
+				this.watcherSub = interval(1000)
+					// Assume that after some time in game nothing will change
+					.pipe(startWith(0), take(20))
+					.subscribe(async () => {
+						const gameInfo = await this.ow.getRunningGameInfo();
+						const prefs = await this.prefs.getPreferences();
+						const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
+						this.logsDirRoot$$.next(logsDir);
+					});
+			} else {
+				this.watcherSub?.unsubscribe();
+			}
 		});
 	}
 }
