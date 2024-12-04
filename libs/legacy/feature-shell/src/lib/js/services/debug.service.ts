@@ -12,6 +12,9 @@ export class DebugService {
 			console.debug = (message?: any, ...optionalParams: any[]) => {
 				// Do nothing
 			};
+			console.trace = (message?: any, ...optionalParams: any[]) => {
+				// Do nothing
+			};
 		}
 	}
 
