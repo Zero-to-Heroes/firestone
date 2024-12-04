@@ -1088,10 +1088,14 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_HERO_SELECTION,
 						additionalData: {
-							heroCardIds: gameEvent.Value.CardIds,
+							options: gameEvent.Value.Options?.map((o) => ({ cardId: o.CardId, entityId: o.EntityId })),
 						},
 					} as GameEvent),
 				);
+				break;
+			case 'BATTLEGROUNDS_HERO_REROLL':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_REROLL, gameEvent));
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTED':
 				console.log(gameEvent.Type + ' event', gameEvent);

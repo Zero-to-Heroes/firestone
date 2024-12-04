@@ -135,9 +135,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				}
 
 				const selectionOptions =
-					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
+					panel?.heroOptions?.map((o) => o.cardId) ??
+					(panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
 				if (!selectionOptions?.length) {
 					console.log('no selection options', selectionOptions);
+					console.debug('panel', panel);
 					return [];
 				}
 

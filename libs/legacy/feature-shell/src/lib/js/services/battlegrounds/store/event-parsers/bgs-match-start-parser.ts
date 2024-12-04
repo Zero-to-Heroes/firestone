@@ -81,8 +81,8 @@ const buildEmptyPanels = (
 const buildBgsHeroSelectionOverview = (i18n: LocalizationFacadeService): BgsHeroSelectionOverviewPanel => {
 	return BgsHeroSelectionOverviewPanel.create({
 		name: i18n.translateString('battlegrounds.menu.hero-selection'),
-		heroOptionCardIds: [] as readonly string[],
-	} as BgsHeroSelectionOverviewPanel);
+		heroOptions: [],
+	});
 };
 
 const buildBgsNextOpponentOverviewPanel = (i18n: LocalizationFacadeService): BgsNextOpponentOverviewPanel => {

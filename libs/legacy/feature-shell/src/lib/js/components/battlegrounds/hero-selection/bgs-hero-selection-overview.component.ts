@@ -148,7 +148,8 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 				}
 
 				const selectionOptions =
-					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
+					panel?.heroOptions?.map((o) => o.cardId) ??
+					(panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
 				if (!selectionOptions?.length) {
 					return [];
 				}

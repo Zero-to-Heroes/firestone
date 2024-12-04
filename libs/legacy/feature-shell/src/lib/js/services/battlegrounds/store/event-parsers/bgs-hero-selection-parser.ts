@@ -31,7 +31,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.Game?.AvailableRaces);
 		const newHeroSelectionPanel: BgsHeroSelectionOverviewPanel = this.buildHeroSelectionPanel(
 			currentState,
-			event.heroCardIds,
+			event.options,
 		);
 		console.debug('[bgs-hero-selection] newHeroSelectionPanel', newHeroSelectionPanel);
 		const panels: readonly BgsPanel[] = currentState.panels.map((panel) =>
@@ -50,11 +50,11 @@ export class BgsHeroSelectionParser implements EventParser {
 
 	private buildHeroSelectionPanel(
 		currentState: BattlegroundsState,
-		heroCardIds: readonly string[],
+		heroOptions: readonly { cardId: string; entityId: number }[],
 	): BgsHeroSelectionOverviewPanel {
 		return BgsHeroSelectionOverviewPanel.create({
 			name: this.i18n.translateString('battlegrounds.menu.hero-selection'),
-			heroOptionCardIds: heroCardIds,
-		} as BgsHeroSelectionOverviewPanel);
+			heroOptions: heroOptions,
+		});
 	}
 }

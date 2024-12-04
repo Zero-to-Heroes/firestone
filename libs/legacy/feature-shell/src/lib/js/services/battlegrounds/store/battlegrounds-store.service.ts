@@ -56,6 +56,7 @@ import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsGameSettingsParser } from './event-parsers/bgs-game-settings-parser';
 import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
+import { BgsHeroRerollEvent, BgsHeroRerollParser } from './event-parsers/bgs-hero-reroll-parser';
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
 import { BgsInitMmrParser } from './event-parsers/bgs-init-mmr-parser';
@@ -303,10 +304,12 @@ export class BattlegroundsStoreService {
 				const heroStats = await this.metaHeroStats.metaHeroStats$$.getValueWithInit();
 				const heroStatsDuo = await this.metaHeroStatsDuo.metaHeroStats$$.getValueWithInit();
 				// Order is important here, so that when the MMR is set the races are already populated
-				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
+				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.options));
 				this.battlegroundsUpdater.next(
 					new BgsInitMmrEvent(heroStats?.mmrPercentiles, heroStatsDuo?.mmrPercentiles),
 				);
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_REROLL) {
+				this.battlegroundsUpdater.next(new BgsHeroRerollEvent(gameEvent.entityId, gameEvent.cardId));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(
 					new BgsHeroSelectedEvent(
@@ -721,6 +724,7 @@ export class BattlegroundsStoreService {
 			// new BgsInitParser(this.prefs, this.i18n),
 			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs, this.i18n),
 			new BgsHeroSelectedParser(this.allCards, this.i18n),
+			new BgsHeroRerollParser(this.allCards, this.i18n),
 			new BgsNextOpponentParser(this.i18n, this.allCards),
 			new BgsTavernUpgradeParser(this.gameEventsService, this.allCards),
 			new BgsBuddyGainedParser(this.gameEventsService, this.allCards),
