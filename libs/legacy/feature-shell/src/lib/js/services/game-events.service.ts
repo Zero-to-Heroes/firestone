@@ -895,6 +895,21 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'TOTAL_MAGNETIZE_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.TOTAL_MAGNETIZE_CHANGED, gameEvent, {
+						newValue: gameEvent.Value.AdditionalProps.NewValue,
+					}),
+				);
+				break;
+			case 'BALLER_BUFF_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BALLER_BUFF_CHANGED, gameEvent, {
+						attack: gameEvent.Value.AdditionalProps.Attack,
+						health: gameEvent.Value.AdditionalProps.Health,
+					}),
+				);
+				break;
 			case 'EXCAVATE_TIER_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.EXCAVATE_TIER_CHANGED, gameEvent, {

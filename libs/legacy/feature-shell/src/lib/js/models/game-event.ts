@@ -98,6 +98,8 @@ export class GameEvent implements GameStateEvent {
 	public static readonly LOCATION_DESTROYED = 'LOCATION_DESTROYED';
 	public static readonly BLOOD_GEM_BUFF_CHANGED = 'BLOOD_GEM_BUFF_CHANGED';
 	public static readonly BEETLE_ARMY_CHANGED = 'BEETLE_ARMY_CHANGED';
+	public static readonly TOTAL_MAGNETIZE_CHANGED = 'TOTAL_MAGNETIZE_CHANGED';
+	public static readonly BALLER_BUFF_CHANGED = 'BALLER_BUFF_CHANGED';
 	public static readonly EXCAVATE_TIER_CHANGED = 'EXCAVATE_TIER_CHANGED';
 	public static readonly CORPSES_SPENT_THIS_GAME_CHANGED = 'CORPSES_SPENT_THIS_GAME_CHANGED';
 	public static readonly OVERLOADED_CRYSTALS_CHANGED = 'OVERLOADED_CRYSTALS_CHANGED';

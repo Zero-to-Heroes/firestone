@@ -45,6 +45,7 @@ import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { isBattlegrounds } from '../bgs-utils';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsArmorChangedParser } from './event-parsers/bgs-armor-changed-parser';
+import { BgsBallerBuffChangedEvent, BgsBallerBuffChangedParser } from './event-parsers/bgs-baller-buff-changed';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsBattleSimulationResetParser } from './event-parsers/bgs-battle-simulation-reset-parser';
@@ -62,6 +63,7 @@ import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser'
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
 import { BgsInitMmrParser } from './event-parsers/bgs-init-mmr-parser';
 import { BgsLeaderboardPlaceParser } from './event-parsers/bgs-leaderboard-place-parser';
+import { BgsMagnetizedChangedEvent, BgsMagnetizedChangedParser } from './event-parsers/bgs-magnetized-changed';
 import { BgsMatchStartParser } from './event-parsers/bgs-match-start-parser';
 import { BgsNextOpponentParser } from './event-parsers/bgs-next-opponent-parser';
 import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed-parser';
@@ -461,6 +463,16 @@ export class BattlegroundsStoreService {
 						new BgsBeetleArmyChangedEvent(gameEvent.additionalData.attack, gameEvent.additionalData.health),
 					);
 				}
+			} else if (gameEvent.type === GameEvent.BALLER_BUFF_CHANGED) {
+				if (gameEvent.controllerId === gameEvent.localPlayer.PlayerId) {
+					this.battlegroundsUpdater.next(
+						new BgsBallerBuffChangedEvent(gameEvent.additionalData.attack, gameEvent.additionalData.health),
+					);
+				}
+			} else if (gameEvent.type === GameEvent.TOTAL_MAGNETIZE_CHANGED) {
+				if (gameEvent.controllerId === gameEvent.localPlayer.PlayerId) {
+					this.battlegroundsUpdater.next(new BgsMagnetizedChangedEvent(gameEvent.additionalData.newValue));
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD) {
 				// this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
 				this.playerBoard = gameEvent.additionalData.playerBoard;
@@ -774,6 +786,8 @@ export class BattlegroundsStoreService {
 			[BgsArmorChangedEvent.eventName]: [new BgsArmorChangedParser(this.allCards)],
 			[BgsBloodGemBuffChangedEvent.eventName]: [new BgsBloodGemBuffChangedParser()],
 			[BgsBeetleArmyChangedEvent.eventName]: [new BgsBeetleArmyChangedParser()],
+			[BgsBallerBuffChangedEvent.eventName]: [new BgsBallerBuffChangedParser()],
+			[BgsMagnetizedChangedEvent.eventName]: [new BgsMagnetizedChangedParser()],
 			[BattlegroundsBattleSimulationEvent.eventName]: [new BgsBattleSimulationParser(this.allCards)],
 			[BgsPostMatchStatsFilterChangeEvent.eventName]: [new BgsPostMatchStatsFilterChangeParser(this.prefs)],
 			[BgsChangePostMatchStatsTabsNumberEvent.eventName]: [

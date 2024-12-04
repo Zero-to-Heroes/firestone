@@ -19,6 +19,9 @@ export class BgsGame {
 	readonly bloodGemHealthBuff: number;
 	readonly beetlesAttackBuff: number;
 	readonly beetlesHealthBuff: number;
+	readonly ballerAttackBuff: number;
+	readonly ballerHealthBuff: number;
+	readonly magnetized: number;
 	readonly availableRaces: readonly Race[];
 	readonly bannedRaces: readonly Race[];
 

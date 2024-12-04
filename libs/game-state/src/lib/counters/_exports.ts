@@ -1,6 +1,8 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
+import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
+import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
@@ -20,6 +22,8 @@ export const getAllCounters: (
 	new CardsDrawnCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
+	new BallerBuffCounterDefinitionV2(i18n),
+	new MagnetizedCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -93,4 +97,6 @@ export type CounterType =
 	| 'bgsGoldDelta'
 	| 'bgsLordOfGains'
 	| 'bgsTuskarrRaider'
+	| 'bgsMagnetized'
+	| 'ballerBuff'
 	| 'bgsMajordomo';
