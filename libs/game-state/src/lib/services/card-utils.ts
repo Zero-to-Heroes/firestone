@@ -106,16 +106,18 @@ export const addGuessInfoToDrawnCard = (
 			return card.update({
 				creatorAdditionalInfo: options?.positionInHand,
 			});
-		case CardIds.Robocaller_WORK_006:
-			const tagScripts = deckState.findCard(creatorEntityId)?.card?.storedInformation?.tagScriptValues;
-			// WARNING: mutable data
-			const nextCost = tagScripts?.shift();
-			return card.update({
-				guessedInfo: {
-					...card.guessedInfo,
-					cost: nextCost,
-				},
-			});
+		// Disable this, as if one card isn't drawn (eg no 7-cost card in deck), we have no way to know
+		// and would display incorrect info
+		// case CardIds.Robocaller_WORK_006:
+		// 	const tagScripts = deckState.findCard(creatorEntityId)?.card?.storedInformation?.tagScriptValues;
+		// 	// WARNING: mutable data
+		// 	const nextCost = tagScripts?.shift();
+		// 	return card.update({
+		// 		guessedInfo: {
+		// 			...card.guessedInfo,
+		// 			cost: nextCost,
+		// 		},
+		// 	});
 		default:
 			const guessedInfo = (
 				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
