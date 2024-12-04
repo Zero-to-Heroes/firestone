@@ -887,6 +887,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'BEETLE_ARMY_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BEETLE_ARMY_CHANGED, gameEvent, {
+						attack: gameEvent.Value.AdditionalProps.Attack,
+						health: gameEvent.Value.AdditionalProps.Health,
+					}),
+				);
+				break;
 			case 'EXCAVATE_TIER_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.EXCAVATE_TIER_CHANGED, gameEvent, {

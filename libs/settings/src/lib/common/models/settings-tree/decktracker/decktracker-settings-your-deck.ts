@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
-import { allCounters } from '@firestone/game-state';
+import { getAllCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
@@ -484,7 +484,8 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
 	},
-	...allCounters(context.i18n, context.allCards)
+	...getAllCounters(context.i18n, context.allCards)
+		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)
 		.map((counter) => ({
 			id: counter.id,

@@ -12,7 +12,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { allCounters, CounterInstance, GameStateFacadeService } from '@firestone/game-state';
+import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { CounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -24,7 +25,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil, tap } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
@@ -216,6 +217,7 @@ export class FullScreenOverlaysComponent
 		private readonly ow: OverwolfService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly bgState: BgsStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly customStyles: CustomAppearanceService,
 		private readonly allCards: CardsFacadeService,
@@ -225,7 +227,7 @@ export class FullScreenOverlaysComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs);
+		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs, this.bgState);
 
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
@@ -253,24 +255,35 @@ export class FullScreenOverlaysComponent
 				}
 			}),
 		);
-		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
+		const allCounters = getAllCounters(this.i18n, this.allCards);
+		this.playerCounters$ = combineLatest([
+			this.gameState.gameState$$,
+			this.bgState.gameState$$,
+			this.prefs.preferences$$,
+		]).pipe(
 			debounceTime(500),
-			filter(([gameState, prefs]) => !!gameState && !!prefs),
-			this.mapData(([gameState, prefs]) => {
-				return allCounters(this.i18n, this.allCards)
-					.filter((c) => c.isActive('player', gameState, prefs))
-					.map((c) => c.emit('player', gameState, this.allCards));
+			filter(([gameState, bgState, prefs]) => !!gameState && !!prefs),
+			this.mapData(([gameState, bgState, prefs]) => {
+				const result = allCounters
+					.filter((c) => c.isActive('player', gameState, bgState, prefs))
+					.map((c) => c.emit('player', gameState, bgState, this.allCards));
+				return result;
 			}),
+			tap((counters) => console.debug('player counters', counters)),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
 		);
-		this.opponentCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
+		this.opponentCounters$ = combineLatest([
+			this.gameState.gameState$$,
+			this.bgState.gameState$$,
+			this.prefs.preferences$$,
+		]).pipe(
 			debounceTime(500),
-			filter(([gameState, prefs]) => !!gameState && !!prefs),
-			this.mapData(([gameState, prefs]) => {
-				return allCounters(this.i18n, this.allCards)
-					.filter((c) => c.isActive('opponent', gameState, prefs))
-					.map((c) => c.emit('opponent', gameState, this.allCards));
+			filter(([gameState, bgState, prefs]) => !!gameState && !!prefs),
+			this.mapData(([gameState, bgState, prefs]) => {
+				return allCounters
+					.filter((c) => c.isActive('opponent', gameState, bgState, prefs))
+					.map((c) => c.emit('opponent', gameState, bgState, this.allCards));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),

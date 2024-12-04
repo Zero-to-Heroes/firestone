@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 // prettier-ignore
 import { CardIds } from '@firestone-hs/reference-data';
-import { allCounters } from '@firestone/game-state';
+import { getAllCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
@@ -396,7 +396,8 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elemental-streak-tooltip'),
 		showLimitedOption: false,
 	},
-	...allCounters(context.i18n, context.allCards)
+	...getAllCounters(context.i18n, context.allCards)
+		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.opponent?.pref)
 		.map((counter) => ({
 			id: counter.id,

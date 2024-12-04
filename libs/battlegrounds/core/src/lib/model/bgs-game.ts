@@ -17,6 +17,8 @@ export class BgsGame {
 	readonly pogoHoppersCount: number;
 	readonly bloodGemAttackBuff: number;
 	readonly bloodGemHealthBuff: number;
+	readonly beetlesAttackBuff: number;
+	readonly beetlesHealthBuff: number;
 	readonly availableRaces: readonly Race[];
 	readonly bannedRaces: readonly Race[];
 

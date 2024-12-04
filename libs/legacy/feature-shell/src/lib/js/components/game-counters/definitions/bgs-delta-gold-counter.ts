@@ -96,7 +96,6 @@ export class BgsGoldDeltaCounterDefinition
 		},
 		countersUseExpandedView: boolean,
 	): NonFunctionProperties<BgsGoldDeltaCounterDefinition> {
-		console.debug('emitting bgs gold delta counter', input);
 		const allCards = [...input.cardsPlayedThisTurn, ...input.boardAndEnchantments.map((c) => c.cardId)];
 		const groupedByCard = groupByFunction((cardId: string) => cardId)(allCards);
 		const cardsStrArray = Object.keys(groupedByCard).map((cardId) => {
@@ -105,18 +104,6 @@ export class BgsGoldDeltaCounterDefinition
 			return this.i18n.translateString('counters.bgs-gold-delta.card', { cardName, count });
 		});
 		const cardsStr = countersUseExpandedView ? '<br/>' + cardsStrArray.join('<br/>') : cardsStrArray.join(', ');
-
-		// const groupedByCardOnBoard = groupByFunction((card: { cardId: string; gold: number }) => card.cardId)(
-		// 	input.boardAndEnchantments,
-		// );
-		// const cardsStrArrayOnBoard = Object.keys(groupedByCardOnBoard).map((cardId) => {
-		// 	const cardName = this.allCards.getCard(cardId)?.name;
-		// 	const count = groupedByCardOnBoard[cardId].length;
-		// 	return this.i18n.translateString('counters.bgs-gold-delta.card', { cardName, count });
-		// });
-		// const cardsStrOnBoard = countersUseExpandedView
-		// 	? '<br/>' + cardsStrArrayOnBoard.join('<br/>') + '<br/>'
-		// 	: cardsStrArrayOnBoard.join(', ') + '<br/>';
 
 		const goldFromBoard = input.boardAndEnchantments.reduce((a, b) => a + b.gold, 0);
 		const goldDelta: number = input.extraGold + goldFromBoard + 3 * input.overconfidences;
@@ -128,21 +115,6 @@ export class BgsGoldDeltaCounterDefinition
 				: ` (${this.i18n.translateString('counters.bgs-gold-delta.up-to', {
 						maxValue: goldDelta,
 				  })})`;
-		console.debug('gold delta', goldDelta, goldDeltaSure, goldDelta === goldDeltaSure, maxValueText);
-
-		// const cardBuffs = [...(cardsStrArray ?? []), ...(cardsStrArrayOnBoard ?? [])];
-		// const cardsPlayedText =
-		// 	cardsStrArray.length > 0
-		// 		? this.i18n.translateString('counters.bgs-gold-delta.cards-played', { cards: cardsStr })
-		// 		: '';
-		// const cardsOnBoardText =
-		// 	cardsStrArrayOnBoard.length > 0
-		// 		? this.i18n.translateString('counters.bgs-gold-delta.cards-on-board', { cardsOnBoard: cardsStrOnBoard })
-		// 		: '';
-		// const andText =
-		// 	cardsStrArray.length > 0 && cardsStrArrayOnBoard.length > 0
-		// 		? '<br/>' + this.i18n.translateString('counters.bgs-gold-delta.and')
-		// 		: '';
 		const tooltip = this.i18n.translateString(`counters.bgs-gold-delta.${this.side}`, {
 			value: goldDeltaSure,
 			maxValueText: maxValueText,

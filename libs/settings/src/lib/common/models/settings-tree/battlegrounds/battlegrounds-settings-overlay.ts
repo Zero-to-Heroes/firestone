@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { getAllCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
@@ -207,4 +209,13 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-soutshsea-label'),
 		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-soutshsea-tooltip'),
 	},
+	...getAllCounters(context.i18n, context.allCards)
+		.filter((counter) => counter.type === 'battlegrounds')
+		.filter((counter) => counter.player?.pref)
+		.map((counter) => ({
+			id: counter.id,
+			field: counter.player!.pref,
+			label: counter.player!.setting.label(context.i18n),
+			tooltip: counter.player!.setting.tooltip(context.i18n, context.allCards),
+		})),
 ];

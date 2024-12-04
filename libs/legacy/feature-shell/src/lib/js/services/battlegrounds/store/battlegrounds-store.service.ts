@@ -49,6 +49,7 @@ import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser'
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsBattleSimulationResetParser } from './event-parsers/bgs-battle-simulation-reset-parser';
 import { BgsBattleSimulationUpdateParser } from './event-parsers/bgs-battle-simulation-update-parser';
+import { BgsBeetleArmyChangedEvent, BgsBeetleArmyChangedParser } from './event-parsers/bgs-beetle-army-changed';
 import { BgsBloodGemBuffChangedEvent, BgsBloodGemBuffChangedParser } from './event-parsers/bgs-blood-gem-buff-changed';
 import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
@@ -454,6 +455,12 @@ export class BattlegroundsStoreService {
 						),
 					);
 				}
+			} else if (gameEvent.type === GameEvent.BEETLE_ARMY_CHANGED) {
+				if (gameEvent.controllerId === gameEvent.localPlayer.PlayerId) {
+					this.battlegroundsUpdater.next(
+						new BgsBeetleArmyChangedEvent(gameEvent.additionalData.attack, gameEvent.additionalData.health),
+					);
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD) {
 				// this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
 				this.playerBoard = gameEvent.additionalData.playerBoard;
@@ -766,6 +773,7 @@ export class BattlegroundsStoreService {
 			],
 			[BgsArmorChangedEvent.eventName]: [new BgsArmorChangedParser(this.allCards)],
 			[BgsBloodGemBuffChangedEvent.eventName]: [new BgsBloodGemBuffChangedParser()],
+			[BgsBeetleArmyChangedEvent.eventName]: [new BgsBeetleArmyChangedParser()],
 			[BattlegroundsBattleSimulationEvent.eventName]: [new BgsBattleSimulationParser(this.allCards)],
 			[BgsPostMatchStatsFilterChangeEvent.eventName]: [new BgsPostMatchStatsFilterChangeParser(this.prefs)],
 			[BgsChangePostMatchStatsTabsNumberEvent.eventName]: [

@@ -13,7 +13,7 @@ import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { GameState } from '../models/game-state';
 import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { CounterInstance } from './_counter-definition-v2';
@@ -49,8 +49,6 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 		bgsState?: BattlegroundsState,
 	) => boolean;
 
-	private defaultRandomLeft = Math.random();
-	protected onBgs: boolean;
 	private scene: SceneService;
 
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
@@ -77,28 +75,17 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 	async ngAfterContentInit() {
 		await waitForReady(this.scene);
 
-		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.gameState.gameState$$.pipe(
 				this.mapData((gameState) => ({
 					gameStarted: gameState?.gameStarted,
 					gameEnded: gameState?.gameEnded,
-					isBgs: gameState?.isBattlegrounds(),
-					isMercs: gameState?.isMercenaries(),
 				})),
 			),
-			displayFromGameMode$,
 		]).pipe(
-			this.mapData(([currentScene, { gameStarted, gameEnded, isBgs, isMercs }, displayFromGameMode]) => {
-				if (
-					!gameStarted ||
-					(this.onBgs && !isBgs) ||
-					(!this.onBgs && isBgs) ||
-					isMercs ||
-					(!this.onBgs && !displayFromGameMode)
-				) {
+			this.mapData(([currentScene, { gameStarted, gameEnded }]) => {
+				if (!gameStarted) {
 					return false;
 				}
 

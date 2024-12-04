@@ -1,5 +1,6 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
+import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
@@ -7,7 +8,7 @@ import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 
-export const allCounters: (
+export const getAllCounters: (
 	i18n: ILocalizationService,
 	allCards: CardsFacadeService,
 ) => readonly CounterDefinitionV2<any>[] = (i18n: ILocalizationService, allCards: CardsFacadeService) => [
@@ -17,6 +18,8 @@ export const allCounters: (
 	new DiscoversCounterDefinitionV2(i18n),
 	new LibramReductionCounterDefinitionV2(i18n),
 	new CardsDrawnCounterDefinitionV2(i18n),
+	// BG
+	new BeetlesBuffCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -82,6 +85,7 @@ export type CounterType =
 	| 'elwynnBoar'
 	| 'volatileSkeleton'
 	| 'relic'
+	| 'beetlesBuff'
 	| 'bgsPogo'
 	| 'bgsSouthsea'
 	| 'bgsMagmaloc'
