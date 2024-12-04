@@ -228,6 +228,11 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 
 	private initPremiumHighlights() {
 		// console.debug('[bgs-board-highlighter] init premium highlights');
+		const board$ = this.deckState.gameState$$.pipe(
+			map((state) => state?.playerDeck.board?.map((entity) => entity.cardId)),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+		);
+
 		combineLatest([
 			this.ads.enablePremiumFeatures$$,
 			this.prefs.preferences$$.pipe(
@@ -239,15 +244,15 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				distinctUntilChanged(),
 			),
 			this.bgState.gameState$$.pipe(
-				map(
-					(state) => ({
-						hasCurrentGame: !!state?.currentGame,
-						gameEnded: state?.currentGame?.gameEnded,
-						heroCardId: state?.currentGame?.getMainPlayer()?.cardId,
-					}),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
-				),
+				map((bgState) => ({
+					hasCurrentGame: !!bgState?.currentGame,
+					gameEnded: bgState?.currentGame?.gameEnded,
+					heroCardId: bgState?.currentGame?.getMainPlayer()?.cardId,
+				})),
+				filter((info) => !!info.heroCardId),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
+			board$,
 		])
 			.pipe(
 				debounceTime(1000),
@@ -256,24 +261,49 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 						hasCurrentGame && premium,
 				),
 			)
-			.subscribe(([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId }]) => {
+			.subscribe(([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId }, board]) => {
 				if (gameEnded) {
 					return;
 				}
 
-				const minionsToHighlight: readonly string[] = this.buildMinionToHighlight(heroCardId);
+				const minionsToHighlight: readonly string[] = this.buildMinionToHighlightFromHero(heroCardId);
 				if (!!minionsToHighlight?.length && minionAuto) {
-					this.highlightedMinions$$.next(minionsToHighlight);
+					const existingHighlights = this.highlightedMinions$$.value;
+					const newHighlights = [...existingHighlights, ...minionsToHighlight];
+					this.highlightedMinions$$.next(newHighlights);
 				}
 
 				const tribeToHighlight: readonly Race[] | null = this.buildTribesToHighlight(heroCardId);
 				if (!!tribeToHighlight?.length && tribeAuto) {
-					this.highlightedTribes$$?.next(tribeToHighlight);
+					const existingHighlights = this.highlightedTribes$$.value;
+					const newHighlights = [...existingHighlights, ...tribeToHighlight];
+					this.highlightedTribes$$?.next(newHighlights);
+				}
+
+				const mechanicsToHighlight: readonly GameTag[] = this.buildMechanicsToHighlightFromBoard(board);
+				if (!!mechanicsToHighlight?.length && minionAuto) {
+					const existingHighlights = this.highlightedMechanics$$.value;
+					const newHighlights = [...existingHighlights, ...mechanicsToHighlight];
+					this.highlightedMechanics$$?.next(newHighlights);
 				}
 			});
 	}
 
-	private buildMinionToHighlight(heroCardId: string | null | undefined): readonly string[] {
+	private buildMechanicsToHighlightFromBoard(board: readonly string[] | undefined): readonly GameTag[] {
+		return (
+			board?.flatMap((cardId) => {
+				switch (cardId) {
+					case CardIds.TurboHogrider_BG31_323:
+					case CardIds.TurboHogrider_BG31_323_G:
+						return [GameTag.CHOOSE_BOTH];
+					default:
+						return [];
+				}
+			}) ?? []
+		);
+	}
+
+	private buildMinionToHighlightFromHero(heroCardId: string | null | undefined): readonly string[] {
 		switch (heroCardId) {
 			case CardIds.CapnHoggarr_BG26_HERO_101:
 				return [CardIds.FreedealingGambler_BGS_049];
