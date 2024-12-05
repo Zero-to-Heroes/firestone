@@ -19,6 +19,7 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 			[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,
 			[GameTag[GameTag.WINDFURY]]: minion.windfury ? 1 : 0,
 			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]]: minion.scriptDataNum1,
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_2]]: minion.scriptDataNum2,
 			[GameTag[GameTag.PREMIUM]]: allCards.getCard(minion.cardId)?.premium ? 1 : 0,
 		},
 		// This probably won't work with positioning auras, but I don't think there are many

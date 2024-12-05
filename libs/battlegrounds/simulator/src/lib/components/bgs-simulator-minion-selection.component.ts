@@ -208,6 +208,7 @@ export class BgsSimulatorMinionSelectionComponent
 	summonPlants: boolean;
 	sneeds = 0;
 	scriptDataNum1: number;
+	scriptDataNum2: number;
 
 	searchString = new BehaviorSubject<string | null>(null);
 
@@ -427,6 +428,11 @@ export class BgsSimulatorMinionSelectionComponent
 		this.updateCard();
 	}
 
+	onDataScript2Changed(value: number) {
+		this.scriptDataNum2 = value;
+		this.updateCard();
+	}
+
 	selectMinion(minion: Minion) {
 		this.cardId = minion.id;
 		this.ref = this.allCards.getCard(this.cardId);
@@ -460,6 +466,7 @@ export class BgsSimulatorMinionSelectionComponent
 			venomous: this.venomous,
 			poisonous: this.poisonous,
 			scriptDataNum1: this.scriptDataNum1,
+			scriptDataNum2: this.scriptDataNum2,
 			taunt: this.taunt,
 			reborn: this.reborn,
 			stealth: this.stealth,
@@ -508,6 +515,7 @@ export class BgsSimulatorMinionSelectionComponent
 		this.venomous = !!this._entity.venomous;
 		this.poisonous = !!this._entity.poisonous;
 		this.scriptDataNum1 = this._entity.scriptDataNum1 ?? 0;
+		this.scriptDataNum2 = this._entity.scriptDataNum2 ?? 0;
 		this.reborn = !!this._entity.reborn;
 		this.taunt = !!this._entity.taunt;
 		this.stealth = !!this._entity.stealth;

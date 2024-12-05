@@ -160,6 +160,7 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 			logEntity.Tags.find((tag) => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
 			logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
 		scriptDataNum1: logEntity.Tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0,
+		scriptDataNum2: logEntity.Tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value ?? 0,
 		locked:
 			logEntity.Tags.find((tag) => tag.Name === GameTag.UNPLAYABLE_VISUALS)?.Value === 1 ||
 			logEntity.Tags.find((tag) => tag.Name === GameTag.LITERALLY_UNPLAYABLE)?.Value === 1,
