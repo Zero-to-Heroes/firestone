@@ -7,7 +7,7 @@ import { CounterType } from '../_exports';
 export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'libramReduction';
 	public override image = CardIds.InterstellarWayfarer_GDB_721;
-	protected override cards: readonly CardIds[] = [
+	public override cards: readonly CardIds[] = [
 		CardIds.InterstellarWayfarer_GDB_721,
 		CardIds.InterstellarStarslicer_GDB_726,
 	];

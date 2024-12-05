@@ -23,6 +23,7 @@ export const toSetting = (counter: CounterSetting): Setting => {
 			field: counter.field,
 			label: counter.label,
 			tooltip: counter.tooltip,
+			keywords: counter.keywords,
 		};
 	} else {
 		return {
@@ -30,6 +31,7 @@ export const toSetting = (counter: CounterSetting): Setting => {
 			field: counter.field,
 			label: counter.label,
 			tooltip: counter.tooltip,
+			keywords: counter.keywords,
 		};
 	}
 };

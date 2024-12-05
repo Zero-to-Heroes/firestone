@@ -9,7 +9,7 @@ export class BeetlesBuffCounterDefinitionV2 extends CounterDefinitionV2<string> 
 	public override id: CounterType = 'beetlesBuff';
 	public override image = CardIds.BoonOfBeetles_BeetleToken_BG28_603t;
 	public override type: 'hearthstone' | 'battlegrounds' = 'battlegrounds';
-	protected override cards: readonly CardIds[] = [];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerBgsBeetleCounter' as const,

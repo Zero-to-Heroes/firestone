@@ -9,7 +9,7 @@ export abstract class CounterDefinitionV2<T> {
 	public abstract readonly id: CounterType;
 	public abstract readonly image: string;
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	protected abstract readonly cards: readonly CardIds[];
+	public abstract readonly cards: readonly CardIds[];
 	protected debug = false;
 
 	public abstract readonly player?: {

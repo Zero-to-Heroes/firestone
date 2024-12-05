@@ -7,7 +7,7 @@ import { CounterType } from '../_exports';
 export class SpellCastOnFriendlyCharacterCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'spellsOnFriendly';
 	public override image = CardIds.DevoutPupil;
-	protected override cards: readonly CardIds[] = [CardIds.DevoutPupil];
+	public override cards: readonly CardIds[] = [CardIds.DevoutPupil];
 
 	readonly player = {
 		pref: 'playerSpellsOnFriendlyCharactersCounter' as const,

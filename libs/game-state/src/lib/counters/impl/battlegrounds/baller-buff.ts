@@ -9,7 +9,7 @@ export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<string> {
 	public override id: CounterType = 'ballerBuff';
 	public override image = CardIds.FireBaller_BG31_816;
 	public override type: 'hearthstone' | 'battlegrounds' = 'battlegrounds';
-	protected override cards: readonly CardIds[] = [];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerBgsBallerCounter' as const,

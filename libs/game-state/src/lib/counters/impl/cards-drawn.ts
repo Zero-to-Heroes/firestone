@@ -8,7 +8,7 @@ import { CounterType } from '../_exports';
 export class CardsDrawnCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'cardsDrawn';
 	public override image = CardIds.PlayhouseGiant_TOY_530;
-	protected override cards: readonly CardIds[] = [CardIds.PlayhouseGiant_TOY_530];
+	public override cards: readonly CardIds[] = [CardIds.PlayhouseGiant_TOY_530];
 
 	readonly player = {
 		pref: 'playerCardsDrawnCounter' as const,

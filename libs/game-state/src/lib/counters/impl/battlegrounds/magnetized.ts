@@ -9,7 +9,7 @@ export class MagnetizedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'bgsMagnetized';
 	public override image = CardIds.DrBoomsMonster_BG31_176;
 	public override type: 'hearthstone' | 'battlegrounds' = 'battlegrounds';
-	protected override cards: readonly CardIds[] = [];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerBgsMagnetizedCounter' as const,

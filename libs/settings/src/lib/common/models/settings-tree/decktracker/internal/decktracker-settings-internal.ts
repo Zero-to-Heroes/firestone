@@ -6,4 +6,5 @@ export interface CounterSetting {
 	readonly label: string;
 	readonly tooltip: string;
 	readonly showLimitedOption?: boolean;
+	readonly keywords?: readonly string[] | null;
 }

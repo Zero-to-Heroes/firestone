@@ -399,12 +399,16 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.opponent?.pref)
-		.map((counter) => ({
-			id: counter.id,
-			field: counter.opponent!.pref,
-			label: counter.opponent!.setting.label(context.i18n),
-			tooltip: counter.opponent!.setting.tooltip(context.i18n, context.allCards),
-		})),
+		.map((counter) => {
+			const result: CounterSetting = {
+				id: counter.id,
+				field: counter.player!.pref,
+				label: counter.player!.setting.label(context.i18n),
+				tooltip: counter.player!.setting.tooltip(context.i18n, context.allCards),
+				keywords: counter.cards?.map((cardId) => context.allCards.getCard(cardId)?.name) ?? null,
+			};
+			return result;
+		}),
 ];
 
 const handSizeKnobs = (context: SettingContext) => [

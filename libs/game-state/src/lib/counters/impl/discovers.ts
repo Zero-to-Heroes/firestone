@@ -7,7 +7,7 @@ import { CounterType } from '../_exports';
 export class DiscoversCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'discovers';
 	public override image = CardIds.AlienEncounters_GDB_237;
-	protected override cards: readonly CardIds[] = [CardIds.AlienEncounters_GDB_237];
+	public override cards: readonly CardIds[] = [CardIds.AlienEncounters_GDB_237];
 
 	readonly player = {
 		pref: 'playerDiscoversCounter' as const,
