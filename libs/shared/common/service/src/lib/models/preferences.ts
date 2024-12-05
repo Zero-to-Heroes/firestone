@@ -515,6 +515,8 @@ export class Preferences implements IPreferences {
 	readonly playerCardsDrawnCounterWidgetPosition: { left: number; top: number };
 	readonly opponentCardsDrawnCounter: boolean = false;
 
+	readonly playerSpellsOnFriendlyCharactersCounter: boolean = true;
+
 	readonly playerElementalStreakCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalStreakCounterWidgetPosition: { left: number; top: number };

@@ -9,6 +9,7 @@ import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
+import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -20,6 +21,7 @@ export const getAllCounters: (
 	new DiscoversCounterDefinitionV2(i18n),
 	new LibramReductionCounterDefinitionV2(i18n),
 	new CardsDrawnCounterDefinitionV2(i18n),
+	new SpellCastOnFriendlyCharacterCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -29,6 +31,7 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'spellsOnFriendly'
 	| 'pogo'
 	| 'ceaselessExpanse'
 	| 'discovers'
