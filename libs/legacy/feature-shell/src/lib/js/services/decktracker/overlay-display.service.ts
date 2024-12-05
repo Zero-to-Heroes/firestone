@@ -1,30 +1,32 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { GameStatusService, Preferences } from '@firestone/shared/common/service';
+import { GameStateFacadeService } from '@firestone/game-state';
+import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class OverlayDisplayService {
 	private decktrackerDisplayEventBus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly gameStatus: GameStatusService) {
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly gameStatus: GameStatusService,
+	) {
 		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
 		this.init();
 	}
 
 	private async init() {
-		await this.store.initComplete();
-		combineLatest([
-			this.store.listenDeckState$((gameState) => gameState),
-			this.store.listen$(([main, nav, prefs]) => prefs),
-			this.gameStatus.inGame$$,
-		])
+		await waitForReady(this.prefs, this.gameState);
+
+		combineLatest([this.gameState.gameState$$, this.prefs.preferences$$, this.gameStatus.inGame$$])
 			.pipe(
 				debounceTime(200),
 				filter(([gameState, prefs, inGame]) => inGame),
-				map(([[gameState], [prefs]]) => ({
+				map(([gameState, prefs]) => ({
 					gameType: gameState?.metadata?.gameType,
 					hasPlayerDeck: true, // gameState?.playerDeck?.deckList?.length > 0,
 					prefs: prefs,
