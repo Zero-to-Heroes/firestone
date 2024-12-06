@@ -10,6 +10,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { getCost, getProcessedCard } from '@firestone/game-state';
+import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
 export const and = (...filters: Selector[]): Selector => {
@@ -316,6 +317,7 @@ export const isTreant = (input: SelectorInput): boolean => TREANT_DBF_IDS.includ
 
 const PLAGUE_GENERATORS = [CardIds.DistressedKvaldir, CardIds.DownWithTheShip, CardIds.Helya, CardIds.StaffOfThePrimus];
 export const generatesPlague = (input: SelectorInput): boolean => PLAGUE_GENERATORS.includes(input.cardId as CardIds);
+export const isPlague = (input: SelectorInput): boolean => PLAGUES.includes(input.cardId as CardIds);
 
 export const spellSchool =
 	(spellSchool: SpellSchool) =>

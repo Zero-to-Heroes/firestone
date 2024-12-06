@@ -63,6 +63,7 @@ import {
 	inHand,
 	inOther,
 	inPlay,
+	isPlague,
 	isSi7,
 	isTreant,
 	lastAffectedByCardId,
@@ -2315,6 +2316,8 @@ export const cardIdSelector = (
 		case CardIds.TombLurker_CORE_ICC_098:
 		case CardIds.TombLurker_ICC_098:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
+		case CardIds.TombTraitor:
+			return and(side(inputSide), inDeck, isPlague);
 		case CardIds.TortollanPilgrim:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.TortollanTraveler_VAC_518:
