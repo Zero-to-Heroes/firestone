@@ -36,7 +36,12 @@ export abstract class CounterDefinitionV2<T> {
 		gameState: GameState,
 		allCards: CardsFacadeService,
 		bgState: BattlegroundsState,
+		countersUseExpandedView: boolean,
 	): string | null;
+
+	protected formatValue(value: T | null | undefined): null | undefined | number | string {
+		return value == null ? null : `${value}`;
+	}
 
 	public isActive(
 		side: 'player' | 'opponent',
@@ -45,14 +50,6 @@ export abstract class CounterDefinitionV2<T> {
 		prefs: Preferences,
 	): boolean {
 		if (this.type === 'battlegrounds' && !isBattlegrounds(gameState.metadata.gameType)) {
-			this.debug &&
-				console.debug(
-					'|debug] not active',
-					this.type,
-					isBattlegrounds(gameState.metadata.gameType),
-					gameState,
-					bgState,
-				);
 			return false;
 		} else if (this.type === 'hearthstone' && isBattlegrounds(gameState.metadata.gameType)) {
 			return false;
@@ -108,13 +105,17 @@ export abstract class CounterDefinitionV2<T> {
 		gameState: GameState,
 		bgState: BattlegroundsState,
 		allCards: CardsFacadeService,
+		countersUseExpandedView: boolean,
 	): CounterInstance<T> {
+		const rawValue =
+			side === 'player' ? this.player?.value(gameState, bgState) : this.opponent?.value(gameState, bgState);
+		const formattedValue = this.formatValue(rawValue);
 		const result: CounterInstance<T> = {
 			id: this.id,
+			type: this.type,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.image}.jpg`,
-			tooltip: this.tooltip(side, gameState, allCards, bgState),
-			value:
-				side === 'player' ? this.player?.value(gameState, bgState) : this.opponent?.value(gameState, bgState),
+			tooltip: this.tooltip(side, gameState, allCards, bgState, countersUseExpandedView),
+			value: formattedValue,
 		};
 		this.debug && console.debug('[debug] emitting counter', this.id, result);
 		return result;
@@ -123,8 +124,9 @@ export abstract class CounterDefinitionV2<T> {
 
 export interface CounterInstance<T> {
 	readonly id: CounterType;
+	readonly type: 'hearthstone' | 'battlegrounds';
 	readonly image: string;
 	readonly tooltip: string | null;
-	readonly value: T | undefined | null;
+	readonly value: string | number | undefined | null;
 	readonly valueImg?: string;
 }

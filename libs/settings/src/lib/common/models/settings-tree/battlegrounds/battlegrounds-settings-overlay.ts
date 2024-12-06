@@ -180,12 +180,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-blood-gem-tooltip'),
 	},
 	{
-		id: 'goldDelta',
-		field: 'playerBgsGoldDeltaCounter',
-		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-gold-delta-label'),
-		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-gold-delta-tooltip'),
-	},
-	{
 		id: 'lordOfGains',
 		field: 'playerBgsLordOfGainsCounter',
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-lord-of-gains-label'),

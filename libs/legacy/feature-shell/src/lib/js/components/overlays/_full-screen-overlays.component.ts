@@ -187,7 +187,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
 			<player-bgs-blood-gem-widget-wrapper></player-bgs-blood-gem-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
-			<player-bgs-gold-delta-widget-wrapper></player-bgs-gold-delta-widget-wrapper>
 			<player-bgs-lord-of-gains-widget-wrapper></player-bgs-lord-of-gains-widget-wrapper>
 			<player-bgs-tuskarr-raider-widget-wrapper></player-bgs-tuskarr-raider-widget-wrapper>
 
@@ -266,7 +265,7 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				const result = allCounters
 					.filter((c) => c.isActive('player', gameState, bgState, prefs))
-					.map((c) => c.emit('player', gameState, bgState, this.allCards));
+					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 				return result;
 			}),
 			tap((counters) => console.debug('player counters', counters)),
@@ -283,7 +282,7 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				return allCounters
 					.filter((c) => c.isActive('opponent', gameState, bgState, prefs))
-					.map((c) => c.emit('opponent', gameState, bgState, this.allCards));
+					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),

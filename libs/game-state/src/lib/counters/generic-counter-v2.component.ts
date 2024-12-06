@@ -17,7 +17,7 @@ import { CounterInstance } from './_counter-definition-v2';
 	selector: 'generic-counter-v2',
 	styleUrls: ['./generic-counter-v2.component.scss'],
 	template: `
-		<div class="counter generic-counter scalable" [helpTooltip]="helpTooltipText">
+		<div class="counter generic-counter scalable {{ theme }}" [helpTooltip]="helpTooltipText">
 			<img class="image" [src]="image" />
 			<div class="frame"></div>
 			<div class="value" *ngIf="value !== null && value !== undefined">{{ value }}</div>
@@ -30,10 +30,11 @@ import { CounterInstance } from './_counter-definition-v2';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericCountersV2Component extends AbstractSubscriptionComponent implements AfterViewInit {
-	value: number | string | undefined;
+	value: number | string | undefined | null;
 	valueImg: string | undefined;
 	image: string;
 	helpTooltipText: string | null;
+	theme: string;
 
 	@Input() set side(value: 'player' | 'opponent') {
 		this.side$$.next(value);
@@ -44,6 +45,7 @@ export class GenericCountersV2Component extends AbstractSubscriptionComponent im
 		this.helpTooltipText = value.tooltip;
 		this.value = value.value;
 		this.valueImg = value.valueImg;
+		this.theme = value.type === 'battlegrounds' ? 'battlegrounds-theme' : 'decktracker-theme';
 	}
 
 	private side$$ = new BehaviorSubject<'player' | 'opponent'>('player');

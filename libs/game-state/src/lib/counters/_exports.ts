@@ -2,6 +2,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
+import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
@@ -26,6 +27,7 @@ export const getAllCounters: (
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
 	new MagnetizedCounterDefinitionV2(i18n),
+	new GoldNextTurnCounterDefinitionV2(i18n, allCards),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names

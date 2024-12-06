@@ -4,8 +4,8 @@
 	justify-content: center;
 	position: relative;
 
-	--counter-border-color: #9fb6d7;
-	--counter-value-color: #303352;
+	--counter-border-color: var(--color-1);
+	--counter-value-color: var(--color-4);
 }
 
 .counter {
