@@ -245,7 +245,6 @@ export class TwitchAuthService {
 			} as DeckState;
 		}
 		const result: Partial<NonFunctionProperties<DeckState>> = {
-			// ...deckState,
 			secrets: deckState.secrets,
 			deckstring: deckState.deckstring,
 			duelsStartingDeckstring: deckState.duelsStartingDeckstring,
@@ -302,6 +301,10 @@ export class TwitchAuthService {
 		delete newCard.rarity;
 		delete newCard.playTiming;
 		delete newCard.putIntoPlay;
+		delete newCard.guessedInfo;
+		delete newCard.storedInformation;
+		delete newCard.tags;
+		delete newCard.cardMatchCondition;
 
 		this.removeFalsyProperties(newCard);
 
@@ -346,6 +349,7 @@ export class TwitchAuthService {
 						JSON.stringify(newEvent),
 					);
 				}
+				console.debug('ERROR', 'Twitch message too large', newEvent);
 			},
 			(error) => {
 				if (!this.hasLoggedInfoOnce) {
