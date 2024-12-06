@@ -1,6 +1,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { EntityGameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { EntityGameState, GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../models/game-event';
 import {
 	BattleMercenary,
 	BattleSpeedModifier,

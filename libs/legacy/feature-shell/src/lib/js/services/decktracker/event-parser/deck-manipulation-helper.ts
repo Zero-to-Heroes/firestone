@@ -1,8 +1,17 @@
 import { Injectable } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckCard, DeckState, GameState, SecretOption } from '@firestone/game-state';
+import {
+	BoardSecret,
+	DeckCard,
+	DeckState,
+	EntityGameState,
+	FullGameState,
+	GameState,
+	PlayerGameState,
+	SecretOption,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { EntityGameState, GameState as EventGameState, GameEvent, PlayerGameState } from '../../../models/game-event';
+import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 
 @Injectable()
@@ -485,7 +494,7 @@ export class DeckManipulationHelper {
 		return secrets.map((secret) => this.removeSecretOptionFromSecret(secret, secretCardId));
 	}
 
-	public findEntityInGameState(gameState: EventGameState, entityId: number): EntityGameState {
+	public findEntityInGameState(gameState: FullGameState, entityId: number): EntityGameState {
 		const playerState: PlayerGameState = gameState.Player || ({} as PlayerGameState);
 		const opponentState: PlayerGameState = gameState.Opponent || ({} as PlayerGameState);
 		const allEntities = [

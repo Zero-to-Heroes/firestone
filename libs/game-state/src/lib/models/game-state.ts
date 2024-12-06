@@ -3,6 +3,7 @@ import { MatchInfo } from '@firestone/memory';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckState } from './deck-state';
+import { FullGameState } from './full-game-state';
 import { Metadata } from './metadata';
 
 // The goal of this state is ultimately to store all the information linked to the live data
@@ -28,6 +29,10 @@ export class GameState {
 	readonly spectating: boolean;
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly miscCardsDestroyed: readonly string[] = [];
+
+	// Can use this for non time-sensitive info, as it's only send back every now and then
+	// (e.g. for counters)
+	readonly fullGameState?: FullGameState;
 
 	readonly reconnectOngoing: boolean;
 	readonly hasReconnected: boolean;

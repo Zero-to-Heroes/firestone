@@ -6,7 +6,6 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { getGoldFromCardId } from '@components/game-counters/definitions/bgs-delta-gold-counter';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -39,11 +38,12 @@ export class PlayerBgsGoldDeltaWidgetWrapperComponent
 		this.onBgs = true;
 		this.prefExtractor = (prefs) => prefs.playerBgsGoldDeltaCounter;
 		this.deckStateExtractor = (state: GameState, pref, bgState: BattlegroundsState) => {
-			return (
-				bgState.currentGame?.extraGoldNextTurn > 0 ||
-				bgState.currentGame?.overconfidences > 0 ||
-				bgState.currentGame?.boardAndEnchantments.some((c) => getGoldFromCardId(c, state, this.allCards) > 0)
-			);
+			return true;
+			// return (
+			// 	bgState.currentGame?.extraGoldNextTurn > 0 ||
+			// 	bgState.currentGame?.overconfidences > 0 ||
+			// 	bgState.currentGame?.boardAndEnchantments.some((c) => getGoldFromCardId(c, state, this.allCards) > 0)
+			// );
 		};
 	}
 }

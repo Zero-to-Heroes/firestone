@@ -48,7 +48,16 @@ export class EnchantmentAttachedParser implements EventParser {
 		}
 
 		const newPlayerDeck = deck.update({
-			enchantments: [...deck.enchantments, { cardId, entityId }],
+			enchantments: [
+				...deck.enchantments,
+				{
+					cardId,
+					entityId,
+					tags: gameEvent.additionalData.tags,
+					creatorEntityId: gameEvent.additionalData.creatorEntityId,
+					creatorCardId: gameEvent.additionalData.creatorCardId,
+				},
+			],
 			globalEffects: newGlobalEffects,
 		});
 

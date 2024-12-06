@@ -1,6 +1,6 @@
-import { CardIds, Race } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { DeckState, GameState, TagGameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { NonFunctionProperties, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -8,24 +8,29 @@ import { Observable, distinctUntilChanged, map } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-const GOLD_DELTA_VALUES: { [cardId: string]: number } = {
-	[CardIds.Overconfidence_BG28_884]: 3, // Or 1 for ties?
-	[CardIds.SouthseaBusker_BG26_135]: 1,
-	[CardIds.SouthseaBusker_BG26_135_G]: 2,
-	[CardIds.CarefulInvestment_BG28_800]: 2,
-	[CardIds.RecklessInvestment_BG28_513]: -2,
-};
-export const CARD_IDS_FOR_GOLD_DELTA = Object.keys(GOLD_DELTA_VALUES) as CardIds[];
+const GOLD_DELTA_PLAYER_ENCHANTMENTS = [
+	CardIds.SouthseaBusker_ExtraGoldNextTurnDntEnchantment,
+	CardIds.Overconfidence_OverconfidentDntEnchantment_BG28_884e,
+	CardIds.GraceFarsail_ExtraGoldIn2TurnsDntEnchantment_BG31_825e2,
+];
+// const GOLD_DELTA_VALUES: { [cardId: string]: number } = {
+// 	[CardIds.Overconfidence_BG28_884]: 3, // Or 1 for ties?
+// 	// [CardIds.SouthseaBusker_BG26_135]: 1,
+// 	// [CardIds.SouthseaBusker_BG26_135_G]: 2,
+// 	[CardIds.CarefulInvestment_BG28_800]: 2,
+// 	[CardIds.RecklessInvestment_BG28_513]: -2,
+// 	// [CardIds.GraceFarsail_BG31_825]: 2,
+// 	// [CardIds.GraceFarsail_BG31_825_G]: 4,
+// };
+// export const CARD_IDS_FOR_GOLD_DELTA = Object.keys(GOLD_DELTA_VALUES) as CardIds[];
 
 export class BgsGoldDeltaCounterDefinition
 	implements
 		CounterDefinition<
 			{ deckState: GameState; bgState: BattlegroundsState },
 			{
-				extraGold: number;
 				overconfidences: number;
-				boardAndEnchantments: readonly { cardId: string; gold: number }[];
-				cardsPlayedThisTurn: readonly string[];
+				enchantments: readonly { cardId: string; gold: number }[];
 			},
 			boolean
 		>
@@ -61,25 +66,37 @@ export class BgsGoldDeltaCounterDefinition
 	}
 
 	public select(input: { deckState: GameState; bgState: BattlegroundsState }): {
-		extraGold: number;
 		overconfidences: number;
-		boardAndEnchantments: readonly { cardId: string; gold: number }[];
-		cardsPlayedThisTurn: readonly string[];
+		enchantments: readonly { cardId: string; gold: number }[];
 	} {
+		const playerEnchants = input.deckState.playerDeck.enchantments.filter((e) =>
+			GOLD_DELTA_PLAYER_ENCHANTMENTS.includes(e.cardId as CardIds),
+		);
+		const minionEnchants = input.deckState.fullGameState?.Player?.Board?.flatMap((m) => m.enchantments);
+		console.debug('[debug] playerEnchants', playerEnchants, 'minionEnchants', minionEnchants, input);
+		const playerEnchantGold =
+			playerEnchants
+				.filter((e) => e.cardId !== CardIds.Overconfidence_BG28_884)
+				.map((e) => ({ cardId: e.cardId, gold: getGoldForPlayerEnchant(e) }))
+				.filter((e) => e.gold !== 0) ?? [];
+		const minionEnchantGold =
+			minionEnchants
+				?.map((e) => ({
+					cardId: e.cardId,
+					gold: getGoldForMinion(e, input.deckState.playerDeck, this.allCards),
+				}))
+				.filter((e) => e.gold !== 0) ?? [];
+		const minionsBoardGold =
+			input.deckState.playerDeck.board
+				?.map((e) => ({
+					cardId: e.cardId,
+					gold: getGoldForMinion(e, input.deckState.playerDeck, this.allCards),
+				}))
+				.filter((e) => e.gold !== 0) ?? [];
+		const enchants = [...playerEnchantGold, ...minionEnchantGold, ...minionsBoardGold];
 		return {
-			extraGold: input.bgState.currentGame.extraGoldNextTurn,
-			overconfidences: input.bgState.currentGame.overconfidences,
-			boardAndEnchantments:
-				input.bgState.currentGame.boardAndEnchantments
-					?.map((cardId) => ({
-						cardId: this.allCards.getCard(cardId)?.id,
-						gold: getGoldFromCardId(cardId, input.deckState, this.allCards),
-					}))
-					.filter((c) => c.gold > 0) ?? [],
-			cardsPlayedThisTurn:
-				input.deckState.playerDeck.cardsPlayedThisTurn
-					?.map((c) => c.cardId)
-					.filter((c) => CARD_IDS_FOR_GOLD_DELTA.includes(c as CardIds)) ?? [],
+			overconfidences: playerEnchants.filter((e) => e.cardId === CardIds.Overconfidence_BG28_884).length,
+			enchantments: enchants,
 		};
 	}
 
@@ -89,15 +106,14 @@ export class BgsGoldDeltaCounterDefinition
 
 	public emit(
 		input: {
-			extraGold: number;
 			overconfidences: number;
-			boardAndEnchantments: readonly { cardId: string; gold: number }[];
-			cardsPlayedThisTurn: readonly string[];
+			enchantments: readonly { cardId: string; gold: number }[];
 		},
 		countersUseExpandedView: boolean,
 	): NonFunctionProperties<BgsGoldDeltaCounterDefinition> {
-		const allCards = [...input.cardsPlayedThisTurn, ...input.boardAndEnchantments.map((c) => c.cardId)];
-		const groupedByCard = groupByFunction((cardId: string) => cardId)(allCards);
+		console.debug('[debug] considering gold next turn', input);
+
+		const groupedByCard = groupByFunction((e: { cardId: string; gold: number }) => e.cardId)(input.enchantments);
 		const cardsStrArray = Object.keys(groupedByCard).map((cardId) => {
 			const cardName = this.allCards.getCard(cardId)?.name;
 			const count = groupedByCard[cardId].length;
@@ -105,9 +121,8 @@ export class BgsGoldDeltaCounterDefinition
 		});
 		const cardsStr = countersUseExpandedView ? '<br/>' + cardsStrArray.join('<br/>') : cardsStrArray.join(', ');
 
-		const goldFromBoard = input.boardAndEnchantments.reduce((a, b) => a + b.gold, 0);
-		const goldDelta: number = input.extraGold + goldFromBoard + 3 * input.overconfidences;
-		const goldDeltaSure: number = input.extraGold + goldFromBoard;
+		const goldDeltaSure: number = input.enchantments.reduce((a, b) => a + b.gold, 0);
+		const goldDelta: number = goldDeltaSure + 3 * input.overconfidences;
 		const goldDeltaStr = goldDelta === goldDeltaSure ? '' : ` (${goldDelta})`;
 		const maxValueText =
 			goldDelta === goldDeltaSure
@@ -131,9 +146,25 @@ export class BgsGoldDeltaCounterDefinition
 	}
 }
 
-export const getGoldFromCardId = (id: string | number, gameState: GameState, allCards: CardsFacadeService): number => {
-	const cardId = allCards.getCard(id)?.id;
-	switch (cardId) {
+const getGoldForPlayerEnchant = (enchantment: { cardId: string; tags?: readonly TagGameState[] }): number => {
+	switch (enchantment.cardId) {
+		case CardIds.SouthseaBusker_ExtraGoldNextTurnDntEnchantment:
+			return enchantment.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0;
+		case CardIds.GraceFarsail_ExtraGoldIn2TurnsDntEnchantment_BG31_825e2:
+			return enchantment.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value === 1
+				? enchantment.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0
+				: 0; // Not next turn
+		default:
+			return 0;
+	}
+};
+
+const getGoldForMinion = (
+	enchantment: { cardId: string; tags?: readonly TagGameState[] },
+	playerDeck: DeckState,
+	allCards: CardsFacadeService,
+): number => {
+	switch (enchantment.cardId) {
 		case CardIds.AccordOTron_BG26_147:
 		case CardIds.AccordOTron_AccordOTronEnchantment_BG26_147e:
 			return 1;
@@ -142,10 +173,10 @@ export const getGoldFromCardId = (id: string | number, gameState: GameState, all
 			return 2;
 		case CardIds.RecordSmuggler_BG26_812:
 		case CardIds.RecordSmuggler_BG26_812_G:
-			const smugglerMultiplier = cardId === CardIds.RecordSmuggler_BG26_812 ? 1 : 2;
+			const smugglerMultiplier = enchantment.cardId === CardIds.RecordSmuggler_BG26_812 ? 1 : 2;
 			const extraGold =
-				gameState?.playerDeck.board.filter((e) => allCards.getCard(e.cardId).races?.includes(Race[Race.PIRATE]))
-					.length >= 3
+				playerDeck.board.filter((e) => allCards.getCard(e.cardId).races?.includes(Race[Race.PIRATE])).length >=
+				3
 					? 2
 					: 0;
 			return smugglerMultiplier * (2 + extraGold);

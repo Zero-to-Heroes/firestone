@@ -1,3 +1,4 @@
+import { FullGameState } from '@firestone/game-state';
 import { Rank } from '@firestone/memory';
 import { DeckInfo } from '../services/decktracker/deck-parser.service';
 import { GameStateEvent } from './decktracker/game-state-event';
@@ -196,7 +197,7 @@ export class GameEvent implements GameStateEvent {
 	readonly localPlayer: GameEventPlayer;
 	readonly opponentPlayer: GameEventPlayer;
 	readonly entityId: number;
-	readonly gameState: GameState = {} as GameState;
+	readonly gameState: FullGameState = {} as FullGameState;
 
 	readonly additionalData: any;
 
@@ -235,36 +236,4 @@ export interface GameEventPlayer {
 	// wildLegendRank: number;
 	cardBackId: number;
 	deck: DeckInfo;
-}
-
-export interface GameState {
-	readonly ActivePlayerId: number;
-	readonly Player: PlayerGameState;
-	readonly Opponent: PlayerGameState;
-}
-
-export interface PlayerGameState {
-	readonly Hero: EntityGameState;
-	readonly Weapon: EntityGameState;
-	readonly Hand: readonly EntityGameState[];
-	readonly Board: readonly EntityGameState[];
-	readonly Deck: readonly EntityGameState[];
-	readonly LettuceAbilities: readonly EntityGameState[];
-}
-
-export interface EntityGameState {
-	readonly entityId: number;
-	readonly cardId: string;
-	readonly attack: number;
-	readonly health: number;
-	readonly durability: number;
-	readonly tags: readonly { Name: number; Value: number }[];
-	// Used only for mercs, removing for now to improve perfs
-	// readonly enchantments: readonly EnchantmentGameState[];
-}
-
-export interface EnchantmentGameState {
-	readonly entityId: number;
-	readonly cardId: string;
-	readonly tags: readonly { Name: number; Value: number }[];
 }

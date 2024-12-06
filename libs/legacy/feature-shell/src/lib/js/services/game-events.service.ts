@@ -617,6 +617,9 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ENCHANTMENT_ATTACHED, gameEvent, {
 						attachedTo: gameEvent.Value.AdditionalProps?.AttachedTo,
+						tags: gameEvent.Value.AdditionalProps?.Tags ?? [],
+						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 					}),
 				);
 				break;
@@ -1256,16 +1259,16 @@ export class GameEvents {
 			case 'BATTLEGROUNDS_MINION_SOLD':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_SOLD, gameEvent));
 				break;
-			case 'BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN':
-				console.debug('[game-events] emitting BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN, gameEvent, {
-						extraGold: gameEvent.Value.AdditionalProps.ExtraGoldNextTurn,
-						overconfidences: gameEvent.Value.AdditionalProps.Overconfidences,
-						boardAndEnchantments: gameEvent.Value.AdditionalProps.BoardAndEnchantments,
-					}),
-				);
-				break;
+			// case 'BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN':
+			// 	console.debug('[game-events] emitting BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN', gameEvent);
+			// 	this.gameEventsEmitter.allEvents.next(
+			// 		GameEvent.build(GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN, gameEvent, {
+			// 			extraGold: gameEvent.Value.AdditionalProps.ExtraGoldNextTurn,
+			// 			overconfidences: gameEvent.Value.AdditionalProps.Overconfidences,
+			// 			boardAndEnchantments: gameEvent.Value.AdditionalProps.BoardAndEnchantments,
+			// 		}),
+			// 	);
+			// 	break;
 			case 'BATTLEGROUNDS_ENEMY_HERO_KILLED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent),
@@ -1472,6 +1475,7 @@ export class GameEvents {
 				break;
 			// TODO: at some point we might want to debounce these events
 			case 'GAME_STATE_UPDATE':
+				console.debug('[debug]', gameEvent.Type, gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
 				break;
 			case 'ENTITY_UPDATE':

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { AttackOnBoard, DeckCard, DeckState } from '@firestone/game-state';
-import { EntityGameState, PlayerGameState } from '../../models/game-event';
+import { AttackOnBoard, DeckCard, DeckState, EntityGameState, PlayerGameState } from '@firestone/game-state';
 
 @Injectable()
 export class AttackOnBoardService {

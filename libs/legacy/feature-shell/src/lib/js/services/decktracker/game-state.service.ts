@@ -1,6 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, GameStateUpdatesService, HeroCard } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckState,
+	GameState,
+	GameStateUpdatesService,
+	HeroCard,
+	PlayerGameState,
+} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
@@ -8,7 +15,7 @@ import { TwitchAuthService } from '@firestone/twitch/common';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
-import { GameEvent, PlayerGameState } from '../../models/game-event';
+import { GameEvent } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -356,6 +363,11 @@ export class GameStateService {
 			// 	gameEvent,
 			// 	emittedEvent.state,
 			// );
+			console.debug(
+				'[debug] [game-state] emitting event',
+				emittedEvent.event.name,
+				emittedEvent.state.playerDeck.enchantments,
+			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
