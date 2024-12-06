@@ -15,7 +15,6 @@ export class DataScriptChangedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.debug('[debug] parsing data script changed', cardId, controllerId, localPlayer, entityId, gameEvent);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -75,11 +74,8 @@ const updateDataScriptInfo = (
 	helper: DeckManipulationHelper,
 ): DeckState => {
 	const found = deck.findCard(entityId);
-	console.debug('[debug] found', found, deck);
 	if (!found?.card || !found?.zone) {
-		console.debug('[debug] could not find card', entityId, deck);
 		if (deck.enchantments.find((e) => e.entityId === entityId)) {
-			console.debug('[debug] found enchantment', entityId, deck);
 			const enchantment = deck.enchantments.find((e) => e.entityId === entityId);
 			const newEnchantment = {
 				...enchantment,
@@ -91,7 +87,6 @@ const updateDataScriptInfo = (
 					{ Name: GameTag.TAG_SCRIPT_DATA_NUM_2, Value: dataNum2 },
 				],
 			};
-			console.debug('[debug] new enchantment', newEnchantment);
 			return deck.update({
 				enchantments: [...deck.enchantments.filter((e) => e.entityId !== entityId), newEnchantment],
 			});

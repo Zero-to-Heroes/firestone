@@ -50,7 +50,6 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		bgState: BattlegroundsState,
 		countersUseExpandedView: boolean,
 	): string {
-		console.debug('[debug] building tooltip');
 		const input = this.player.value(gameState, bgState)!;
 		const groupedByCard = groupByFunction(
 			(e: { cardId: string; creatorCardId?: string; gold: number }) => e.creatorCardId ?? e.cardId,
@@ -88,7 +87,6 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 			| null
 			| undefined,
 	): null | undefined | number | string {
-		console.debug('[debug] formatting value', value);
 		if (!value) {
 			return null;
 		}
@@ -102,7 +100,6 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		overconfidences: number;
 		enchantments: readonly { cardId: string; creatorCardId?: string; gold: number }[];
 	} | null {
-		console.debug('[debug] building value');
 		const playerEnchants = deckState.playerDeck.enchantments.filter((e) =>
 			GOLD_DELTA_PLAYER_ENCHANTMENTS.includes(e.cardId as CardIds),
 		);
@@ -135,7 +132,6 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		const overconfidences = playerEnchants.filter((e) => e.cardId === CardIds.Overconfidence_BG28_884).length;
 
 		const totalMaybe = enchants.reduce((a, b) => a + b.gold, 0) + 3 * overconfidences;
-		console.debug('[debug] totalMaybe', totalMaybe);
 		if (totalMaybe === 0) {
 			return null;
 		}
@@ -144,7 +140,6 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 			overconfidences: playerEnchants.filter((e) => e.cardId === CardIds.Overconfidence_BG28_884).length,
 			enchantments: enchants,
 		};
-		console.debug('[debug] result', result);
 		return result;
 	}
 }

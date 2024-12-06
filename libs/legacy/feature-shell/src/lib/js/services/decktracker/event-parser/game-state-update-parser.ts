@@ -8,7 +8,6 @@ export class GameStateUpdateParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.debug('[debug] [game-state-update] updating game state', gameEvent);
 		return currentState.update({
 			fullGameState: gameEvent.gameState,
 		});

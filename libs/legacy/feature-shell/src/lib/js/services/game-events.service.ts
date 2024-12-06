@@ -1475,7 +1475,6 @@ export class GameEvents {
 				break;
 			// TODO: at some point we might want to debounce these events
 			case 'GAME_STATE_UPDATE':
-				console.debug('[debug]', gameEvent.Type, gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
 				break;
 			case 'ENTITY_UPDATE':

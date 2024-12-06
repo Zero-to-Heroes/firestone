@@ -363,11 +363,6 @@ export class GameStateService {
 			// 	gameEvent,
 			// 	emittedEvent.state,
 			// );
-			console.debug(
-				'[debug] [game-state] emitting event',
-				emittedEvent.event.name,
-				emittedEvent.state.playerDeck.enchantments,
-			);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
