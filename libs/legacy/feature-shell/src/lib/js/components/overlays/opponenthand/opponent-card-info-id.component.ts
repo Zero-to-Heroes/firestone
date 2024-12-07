@@ -222,7 +222,7 @@ const enhanceGuessedInfo = (
 		case CardIds.Gorgonzormu_DeliciousCheeseToken_VAC_955t:
 			const createdAtTurn = input.card.metaInfo?.turnAtWhichCardEnteredHand as number;
 			const turnsInHand = input.currentTurn - createdAtTurn;
-			const cheeseCost = 1 + turnsInHand;
+			const cheeseCost = Math.min(10, 1 + turnsInHand);
 			return {
 				...(guessedInfo ?? {}),
 				cost: cheeseCost,
