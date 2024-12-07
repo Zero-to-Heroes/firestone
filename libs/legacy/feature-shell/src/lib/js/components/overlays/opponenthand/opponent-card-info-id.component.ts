@@ -142,7 +142,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			const cardClasses: readonly CardClass[] = context
 				.getAllCardsFromStarterDeck()
 				.filter((c) => c?.cardId)
-				.flatMap((card) => this.allCards.getCard(card.cardId).classes ?? [])
+				.map((card) => this.allCards.getCard(card.cardId).classes ?? [])
+				.filter((classes) => classes.length === 1)
+				.flat()
 				.filter((value, index, self) => self.indexOf(value) === index)
 				.map((cardClass) => CardClass[cardClass]);
 			const heroClasses: readonly CardClass[] = []; // context.hero?.classes ?? [];
