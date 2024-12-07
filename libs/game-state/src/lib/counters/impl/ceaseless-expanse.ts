@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameFormat } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -23,7 +23,7 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 
 	readonly opponent = {
 		pref: 'opponentCeaselessExpanseCounter' as const,
-		display: (state: GameState): boolean => true,
+		display: (state: GameState): boolean => state.metadata?.formatType !== GameFormat.FT_TWIST,
 		value: (state: GameState): number => this.getValue(state),
 		setting: {
 			label: (i18n: ILocalizationService): string =>
