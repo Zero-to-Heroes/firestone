@@ -64,8 +64,8 @@ export class BgsBattleSimulationService {
 				currentTurn: currentTurn,
 			},
 		};
-		console.log('[bgs-simulation] battle simulation request prepared', battleInfo);
-		console.debug('[bgs-simulation] battle simulation request prepared', JSON.stringify(battleInfo));
+		// console.log('[bgs-simulation] battle simulation request prepared', battleInfo);
+		// console.debug('[bgs-simulation] battle simulation request prepared', JSON.stringify(battleInfo));
 
 		const shouldUseLocalSimulator = !prefs.bgsUseRemoteSimulator || !this.isPremium;
 		const shouldUseIntermediateResults =
