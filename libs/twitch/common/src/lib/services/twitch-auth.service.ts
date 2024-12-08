@@ -294,6 +294,8 @@ export class TwitchAuthService {
 			delete newCard.relatedCardIds;
 		}
 
+		// Added again in the twitch extension upon receiving the message
+		delete newCard.refManaCost;
 		delete newCard.cardName;
 		delete newCard.metaInfo;
 		delete newCard.temporaryCard;
@@ -500,6 +502,7 @@ export class TwitchAuthService {
 			notificationId: 'expired-token-notif-' + new Date().getTime(),
 			content: content,
 			type: 'expired-token-notif',
+			timeout: 90000,
 		} as Message);
 	}
 
