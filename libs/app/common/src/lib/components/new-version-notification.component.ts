@@ -249,6 +249,7 @@ export class NewVersionNotificationComponent
 
 	private async loadVersions(): Promise<readonly AppVersion[]> {
 		const versions: readonly AppVersion[] = [
+			{ version: '14.2.15', date: '2024-12-09' },
 			{ version: '14.2.8', date: '2024-12-03' },
 			{ version: '14.1.8', date: '2024-11-25' },
 			{ version: '14.1.6', date: '2024-11-21' },
