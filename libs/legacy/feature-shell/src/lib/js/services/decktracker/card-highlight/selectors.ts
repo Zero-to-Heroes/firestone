@@ -135,6 +135,9 @@ export const baseCostEqual =
 export const notInInitialDeck = (input: SelectorInput): boolean =>
 	input.deckCard.creatorCardId != null || input.deckCard.stolenFromOpponent;
 
+export const inStartingHand = (input: SelectorInput): boolean =>
+	input.deckState.cardsInStartingHand?.some((c) => Math.abs(c.entityId) === Math.abs(input.entityId));
+
 export const excludeEntityId =
 	(entityId: number) =>
 	(input: SelectorInput): boolean =>
