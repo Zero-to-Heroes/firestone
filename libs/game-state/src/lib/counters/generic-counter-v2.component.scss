@@ -32,23 +32,32 @@
 	background: transparent;
 }
 
-.value {
-	width: 32px;
-	height: 32px;
-	border-radius: 50%;
-	background: var(--counter-border-color);
-	font-family: Sumana;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 15px;
-	line-height: 15px;
+.value-container {
+	position: absolute;
+	top: -12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: var(--counter-value-color);
-	position: absolute;
-	top: -12px;
-	left: 22px;
+	height: 28px;
+	width: 100%;
+
+	.value {
+		width: fit-content;
+		min-width: 32px;
+		height: 100%;
+		border-radius: 10px;
+		padding: 0 5px;
+		background: var(--counter-border-color);
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: bold;
+		font-size: 15px;
+		line-height: 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--counter-value-color);
+	}
 }
 
 .value-img {

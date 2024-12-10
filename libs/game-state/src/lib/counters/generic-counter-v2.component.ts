@@ -20,7 +20,9 @@ import { CounterInstance } from './_counter-definition-v2';
 		<div class="counter generic-counter scalable {{ theme }}" [helpTooltip]="helpTooltipText">
 			<img class="image" [src]="image" />
 			<div class="frame"></div>
-			<div class="value" *ngIf="value !== null && value !== undefined">{{ value }}</div>
+			<div class="value-container" *ngIf="value !== null && value !== undefined">
+				<div class="value">{{ value }}</div>
+			</div>
 			<div class="value-img" *ngIf="valueImg !== null && valueImg !== undefined">
 				<img class="image" [src]="valueImg" />
 				<div class="frame"></div>
