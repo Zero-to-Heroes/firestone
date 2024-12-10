@@ -15,7 +15,7 @@ export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'playerBgsBallerCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) =>
-			bgState?.currentGame.ballerBuff ?? 0,
+			bgState?.currentGame.ballerBuff || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.battlegrounds.overlay.counter-baller-label'),

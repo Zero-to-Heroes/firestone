@@ -19,7 +19,7 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { filter } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs';
 import { GameStat } from '../models/game-stat';
 import { GameStats } from '../models/game-stats';
 
@@ -59,10 +59,15 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 
 		this.gameStats$$.onFirstSubscribe(async () => {
 			console.debug('[game-stats-loader] first subscriber, loading stats', new Error().stack);
-			this.gameStats$$.pipe(filter((gameStats) => !!gameStats?.stats?.length)).subscribe((gameStats) => {
-				console.debug('[game-stats-loader] updating local games');
-				this.saveLocalStats(gameStats.stats);
-			});
+			this.gameStats$$
+				.pipe(
+					filter((gameStats) => !!gameStats?.stats?.length),
+					distinctUntilChanged((a, b) => a.stats.length === b.stats.length),
+				)
+				.subscribe((gameStats) => {
+					console.debug('[game-stats-loader] updating local games');
+					this.saveLocalStats(gameStats.stats);
+				});
 
 			await this.retrieveStats();
 		});
