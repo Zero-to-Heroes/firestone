@@ -66,7 +66,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
+		console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -103,8 +103,8 @@ export class CardPlayedFromHandParser implements EventParser {
 					entityId,
 					false, // Only remove known cards
 				);
-				// console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 				if (removedCardFromDeck) {
+					console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 					removedCard = removedCardFromDeck;
 					newDeck = newDeckAfterReveal;
 				}
@@ -120,11 +120,13 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		// When it's the opponent, sometimes we miss some info like related card ids
 		card = !!card?.cardId?.length ? card : removedCard;
+		console.debug('[card-played] card 0', card);
 		card = !!card.entityId ? card : card.update({ entityId: entityId });
-		card = !!card.cardId ? card : card.update({ cardId: cardId });
-		// console.debug('[card-played] card', card, removedCard);
-		// Only minions end up on the board
+		console.debug('[card-played] card 1', card);
 		const refCard = getProcessedCard(card?.cardId ?? cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
+		card = !!card.cardId ? card : card.update({ cardId: cardId, cardName: refCard.name });
+		console.debug('[card-played] card 2', card, removedCard);
+		// Only minions end up on the board
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
 		const cardWithZone =
@@ -132,7 +134,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				zone: isOnBoard ? 'PLAY' : null,
 				refManaCost: refCard?.cost,
 				actualManaCost: costFromTags ?? card.actualManaCost,
-				cardName: card.cardName ?? refCard?.name,
+				cardName: card.cardName || refCard?.name,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
@@ -144,7 +146,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				actualManaCost: costFromTags ?? card.actualManaCost,
 				zone: isOnBoard ? 'PLAY' : null,
 				cardId: cardId,
-				cardName: this.i18n.getCardName(refCard?.id),
+				cardName: refCard.name,
 				rarity: refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
