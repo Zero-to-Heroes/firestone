@@ -4,7 +4,7 @@ import { EventParser } from './_event-parser';
 
 export class BgsBallerBuffChangedEvent extends BattlegroundsStoreEvent {
 	public static eventName = 'BgsBallerBuffChangedEvent' as const;
-	constructor(public readonly attack: number, public readonly health: number) {
+	constructor(public readonly buff: number) {
 		super('BgsBallerBuffChangedEvent');
 	}
 }
@@ -20,8 +20,7 @@ export class BgsBallerBuffChangedParser implements EventParser {
 	): Promise<BattlegroundsState> {
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
-				ballerAttackBuff: event.attack,
-				ballerHealthBuff: event.health,
+				ballerBuff: event.buff,
 			}),
 		});
 	}

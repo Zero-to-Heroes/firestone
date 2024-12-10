@@ -465,9 +465,7 @@ export class BattlegroundsStoreService {
 				}
 			} else if (gameEvent.type === GameEvent.BALLER_BUFF_CHANGED) {
 				if (gameEvent.controllerId === gameEvent.localPlayer.PlayerId) {
-					this.battlegroundsUpdater.next(
-						new BgsBallerBuffChangedEvent(gameEvent.additionalData.attack, gameEvent.additionalData.health),
-					);
+					this.battlegroundsUpdater.next(new BgsBallerBuffChangedEvent(gameEvent.additionalData.buff));
 				}
 			} else if (gameEvent.type === GameEvent.TOTAL_MAGNETIZE_CHANGED) {
 				if (gameEvent.controllerId === gameEvent.localPlayer.PlayerId) {

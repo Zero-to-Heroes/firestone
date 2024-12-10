@@ -908,8 +908,7 @@ export class GameEvents {
 			case 'BALLER_BUFF_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BALLER_BUFF_CHANGED, gameEvent, {
-						attack: gameEvent.Value.AdditionalProps.Attack,
-						health: gameEvent.Value.AdditionalProps.Health,
+						buff: gameEvent.Value.AdditionalProps.Buff,
 					}),
 				);
 				break;

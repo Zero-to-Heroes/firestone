@@ -5,7 +5,7 @@ import { GameState } from '../../../models/game-state';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../_exports';
 
-export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<string> {
+export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'ballerBuff';
 	public override image = CardIds.FireBaller_BG31_816;
 	public override type: 'hearthstone' | 'battlegrounds' = 'battlegrounds';
@@ -15,9 +15,7 @@ export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<string> {
 		pref: 'playerBgsBallerCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) =>
-			!!bgState?.currentGame.ballerAttackBuff || !!bgState?.currentGame.ballerHealthBuff
-				? `${bgState.currentGame.ballerAttackBuff ?? 0}/${bgState.currentGame.ballerHealthBuff ?? 0}`
-				: null,
+			bgState?.currentGame.ballerBuff ?? 0,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.battlegrounds.overlay.counter-baller-label'),
@@ -37,10 +35,9 @@ export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<string> {
 		allCards: CardsFacadeService,
 		bgState: BattlegroundsState,
 	): string {
-		const [atk, health] = this.player.value(gameState, bgState)?.split('/') ?? [];
+		const value = this.player.value(gameState, bgState);
 		return this.i18n.translateString(`counters.bgs-baller.${side}`, {
-			atk: atk,
-			health: health,
+			value: value,
 		});
 	}
 }
