@@ -205,7 +205,7 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS');
 			}),
 		);
-		this.lastUpdateFull$ = this.lastUpdate$.pipe(
+		this.lastUpdateFull$ = lastUpdate$.pipe(
 			filter((date): date is string => !!date),
 			this.mapData((dateStr) => {
 				const date = new Date(dateStr!);
