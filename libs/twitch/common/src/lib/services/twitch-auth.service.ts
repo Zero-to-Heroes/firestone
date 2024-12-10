@@ -351,7 +351,9 @@ export class TwitchAuthService {
 						JSON.stringify(newEvent),
 					);
 				}
-				console.debug('ERROR', 'Twitch message too large', newEvent);
+				if (data.statusCode === 422) {
+					console.debug('ERROR', 'Twitch message too large', newEvent);
+				}
 			},
 			(error) => {
 				if (!this.hasLoggedInfoOnce) {
