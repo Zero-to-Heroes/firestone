@@ -101,6 +101,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 				GameStats.create({
 					stats: localStats
 						.map((stat) => GameStat.create({ ...stat }))
+						.map((stat) => deleteOutcomeSamples(stat))
 						.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
 						// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
 						// appear anywhere
@@ -272,4 +273,16 @@ export const extractPlayerInfoFromDeckstring = (
 		console.error('could not extract info from deckstring', deckstring, info, e);
 		return null;
 	}
+};
+
+const deleteOutcomeSamples = (stat: GameStat): GameStat => {
+	if (!stat?.postMatchStats?.battleResultHistory?.length) {
+		return stat;
+	}
+
+	for (const history of stat.postMatchStats.battleResultHistory) {
+		(history.simulationResult as any).outcomeSamples = undefined;
+	}
+
+	return stat;
 };

@@ -178,6 +178,10 @@ export class BgsRunStatsService {
 					? new Array(realTimeStatsState.triplesPerHero[mainPlayerId])
 					: [],
 			playerIdToCardIdMapping: realTimeStatsState.playerIdToCardIdMapping,
+			battleResultHistory: realTimeStatsState.battleResultHistory?.map((history) => ({
+				...history,
+				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
+			})),
 		});
 		const newBestStats = buildNewStats(
 			existingBestStats,
