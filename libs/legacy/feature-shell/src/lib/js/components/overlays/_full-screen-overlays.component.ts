@@ -25,7 +25,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
@@ -268,7 +268,6 @@ export class FullScreenOverlaysComponent
 					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 				return result;
 			}),
-			tap((counters) => console.debug('player counters', counters)),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
 		);
