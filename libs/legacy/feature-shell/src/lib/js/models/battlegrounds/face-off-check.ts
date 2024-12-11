@@ -1,6 +1,7 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { BgsFaceOffWithSimulation, BgsGame } from '@firestone/battlegrounds/core';
 import { BugReportService } from '@firestone/shared/common/service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
 
 export const checkIntegrity = (
@@ -9,15 +10,16 @@ export const checkIntegrity = (
 	bugService: BugReportService,
 	hasReconnected: boolean,
 	gameType: GameType,
+	allCards: CardsFacadeService,
 ) => {
 	if (faceOff.battleResult?.won === 0 && faceOff.result === 'won') {
-		report('victory', faceOff, gameState, bugService, hasReconnected, gameType);
+		report('victory', faceOff, gameState, bugService, hasReconnected, gameType, allCards);
 	}
 	if (faceOff.battleResult?.lost === 0 && faceOff.result === 'lost') {
-		report('loss', faceOff, gameState, bugService, hasReconnected, gameType);
+		report('loss', faceOff, gameState, bugService, hasReconnected, gameType, allCards);
 	}
 	if (faceOff.battleResult?.tied === 0 && faceOff.result === 'tied') {
-		report('tie', faceOff, gameState, bugService, hasReconnected, gameType);
+		report('tie', faceOff, gameState, bugService, hasReconnected, gameType, allCards);
 	}
 
 	if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH' || faceOff.opponentCardId === 'TB_BaconShop_HERO_PH') {
@@ -32,6 +34,7 @@ const report = async (
 	bugService: BugReportService,
 	hasReconnected: boolean,
 	gameType: GameType,
+	allCards: CardsFacadeService,
 ) => {
 	// const user = await this.ow.getCurrentUser();
 	if (hasReconnected) {
@@ -49,15 +52,17 @@ const report = async (
 			faceOff.battleInfo,
 			faceOff.battleResult,
 		);
-		bugService.submitAutomatedReport({
-			type: 'bg-sim',
-			info: JSON.stringify({
-				message: '[bgs-simulation] Impossible battle ' + status,
-				reviewId: game.reviewId,
-				currentTurn: game.currentTurn,
-				gameType: gameType,
-				battleInfo: faceOff.battleInfo,
-			}),
-		});
+		if (!!allCards.getCards().length) {
+			bugService.submitAutomatedReport({
+				type: 'bg-sim',
+				info: JSON.stringify({
+					message: '[bgs-simulation] Impossible battle ' + status,
+					reviewId: game.reviewId,
+					currentTurn: game.currentTurn,
+					gameType: gameType,
+					battleInfo: faceOff.battleInfo,
+				}),
+			});
+		}
 	}
 };
