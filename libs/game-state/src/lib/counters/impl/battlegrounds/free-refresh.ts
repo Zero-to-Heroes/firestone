@@ -15,7 +15,6 @@ export class FreeRefreshCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		pref: 'playerBgsFreeRefreshCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
-			console.debug('player enchants', state.playerDeck.enchantments);
 			return (
 				state.playerDeck.enchantments
 					?.filter((e) => e.cardId === CardIds.RefreshingAnomaly_RefreshCosts0Enchantment)

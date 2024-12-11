@@ -206,7 +206,6 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 			max: DAILY_FREE_USES_HERO,
 			left: value,
 		});
-		console.debug('set free users left', this._freeUsesLeft);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
