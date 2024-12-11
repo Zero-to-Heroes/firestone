@@ -2530,6 +2530,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), outcast);
 		case CardIds.Xb931Housekeeper_VAC_956:
 			return and(side(inputSide), or(inDeck, inHand), location);
+		case CardIds.WyrmrestPurifier:
+			return and(side(inputSide), inDeck, neutral);
 		case CardIds.XyrellaTheDevout:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
 		case CardIds.YellingYodeler:
