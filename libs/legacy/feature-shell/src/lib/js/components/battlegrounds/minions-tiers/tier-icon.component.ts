@@ -10,13 +10,7 @@ import { Tier } from '@firestone/battlegrounds/core';
 			[ngClass]="{ selected: selected }"
 			[helpTooltip]="tier.tooltip"
 		>
-			<img
-				class="icon"
-				[src]="
-					tier.tavernTierIcon ??
-					'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs/star.png'
-				"
-			/>
+			<img class="icon" *ngIf="tier.tavernTierIcon" [src]="tier.tavernTierIcon" />
 			<div class="number" *ngIf="!tier.tavernTierIcon">{{ tier.tavernTier }}</div>
 		</div>
 	`,

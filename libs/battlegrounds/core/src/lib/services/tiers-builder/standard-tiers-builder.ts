@@ -33,7 +33,8 @@ const buildTier = (
 	const result: Tier = {
 		type: 'standard',
 		tavernTier: tier,
-		tavernTierIcon: null,
+		// tavernTierIcon: null,
+		tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${tier}.png`,
 		tooltip: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: tier }),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};

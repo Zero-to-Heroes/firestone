@@ -1,31 +1,9 @@
 .tier {
 	position: relative;
-
-	&::before {
-		content: '';
-		position: absolute;
-		background: rgba(0, 0, 0, 0)
-			url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/star_highlight.png') no-repeat
-			scroll center center / contain;
-		opacity: 0;
-		// transition: opacity 0.5s ease 0s;
-		width: 140%;
-		height: 140%;
-		top: -7px;
-		left: -7px;
-		z-index: 1;
-	}
-
-	&.selected,
-	&:hover {
-		&::before {
-			opacity: 1;
-		}
-	}
+	opacity: 0.5;
 
 	.number {
 		position: absolute;
-		top: 3px;
 		left: 0;
 		width: 100%;
 		height: 100%;
@@ -39,6 +17,7 @@
 		text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
 			-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
 		z-index: 2;
+		font-size: 0.95em;
 	}
 
 	.icon {
@@ -47,27 +26,32 @@
 		width: 36px;
 	}
 
-	&.tribe {
+	&.tribe,
+	&.mechanics {
 		border-radius: 50%;
 		overflow: hidden;
 		height: 31px;
-		width: 31px;
+		aspect-ratio: 1;
 		margin: 2px;
-		// margin-right: 6px;
 		position: relative;
 		top: 2px;
 
 		.icon {
-			// clip-path: circle(35% at 50% 50%);
 			transform: scale(1.5);
 		}
 
-		&.selected,
-		&:hover {
-			&:before {
-				opacity: 0;
-			}
+		&.selected {
 			outline: 2px solid var(--color-1);
 		}
+	}
+
+	&.mechanics {
+		background: var(--color-4);
+		height: 28px;
+	}
+
+	&.selected,
+	&:hover {
+		opacity: 1;
 	}
 }
