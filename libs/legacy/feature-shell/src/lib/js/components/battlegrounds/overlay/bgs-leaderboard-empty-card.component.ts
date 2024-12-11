@@ -36,7 +36,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
-				<div class="name-container" *ngIf="showMmr$ | async">
+				<div class="name-container" *ngIf="_bgsPlayer?.player?.name && (showMmr$ | async)">
 					<div class="name">{{ _bgsPlayer?.player?.name }}</div>
 					<div class="mmr" *ngIf="mmr">{{ mmr }}</div>
 				</div>
