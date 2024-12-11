@@ -57,7 +57,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					this.buildNewBgsBattleHistory(currentState, playerFromMemory),
 				];
 				return player.update({
-					name: playerFromMemory.Name,
+					name: playerFromMemory.Name?.length ? playerFromMemory.Name : player.name,
 					displayedCardId: playerFromMemory.CardId,
 					damageTaken: newDamage,
 					initialHealth: playerFromMemory.MaxHealth ?? player.initialHealth,
