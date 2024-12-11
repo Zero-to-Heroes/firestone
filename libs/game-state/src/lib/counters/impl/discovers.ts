@@ -24,7 +24,7 @@ export class DiscoversCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	readonly opponent = {
 		pref: 'opponentDiscoversCounter' as const,
 		display: (state: GameState): boolean => state.opponentDeck.hasRelevantCard(this.cards),
-		value: (state: GameState): number => state.playerDeck?.discoversThisGame,
+		value: (state: GameState): number => state.opponentDeck?.discoversThisGame,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.discovers-label'),
