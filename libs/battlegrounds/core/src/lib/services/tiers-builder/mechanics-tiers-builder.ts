@@ -24,6 +24,7 @@ export const MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
 	{ mechanic: GameTag.REBORN, tierId: 'R' },
 	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'C' },
+	{ mechanic: GameTag.MODULAR, tierId: 'M' },
 	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
 	{
 		mechanic: GameTag.BACON_BUDDY,
