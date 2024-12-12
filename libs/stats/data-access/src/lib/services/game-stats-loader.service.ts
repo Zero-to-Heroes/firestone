@@ -281,7 +281,9 @@ const deleteOutcomeSamples = (stat: GameStat): GameStat => {
 	}
 
 	for (const history of stat.postMatchStats.battleResultHistory) {
-		(history.simulationResult as any).outcomeSamples = undefined;
+		if (history?.simulationResult) {
+			(history.simulationResult as any).outcomeSamples = undefined;
+		}
 	}
 
 	return stat;
