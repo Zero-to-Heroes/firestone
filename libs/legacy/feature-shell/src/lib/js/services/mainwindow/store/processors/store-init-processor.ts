@@ -5,6 +5,7 @@ import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
@@ -44,6 +45,8 @@ export class StoreInitProcessor implements Processor {
 		navigationState: NavigationState,
 		prefs: Preferences,
 	): Promise<NavigationState> {
+		await waitForReady(this.mainNav);
+
 		const currentNavApp = this.mainNav.currentApp$$.value;
 		// Don't change it if the user has already started to navigate
 		if (currentNavApp) {
