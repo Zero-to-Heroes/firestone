@@ -34,31 +34,6 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 					></div>
 					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 				</div>
-				<!-- <div
-					class="cards enablers"
-					*ngIf="(!value.collapsed || value.displayMode === 'exploring') && enablerCards?.length"
-				>
-					<div class="header" *ngIf="!value.collapsed || value.displayMode !== 'exploring'">
-						<div class="header-text">Enablers</div>
-					</div>
-					<bgs-minion-item
-						class="minion"
-						*ngFor="let minion of enablerCards; trackBy: trackByFn"
-						[ngClass]="{
-							controlled: minionsOnBoardAndHand?.includes(minion.id),
-							inShop: minionsInShop?.includes(minion.id)
-						}"
-						[minion]="minion"
-						[showGoldenCards]="showGoldenCards"
-						[showTrinketTips]="showTrinketTips"
-						[highlightedMinions]="value.highlightedMinions"
-						[highlightedTribes]="highlightedTribes"
-						[highlightedMechanics]="highlightedMechanics"
-						[showTribesHighlight]="showTribesHighlight"
-						[showTavernTierIcon]="true"
-						[leftPadding]="20"
-					></bgs-minion-item>
-				</div> -->
 				<div class="cards core" *ngIf="!value.collapsed && coreCards?.length">
 					<div class="header">
 						<div
@@ -114,6 +89,37 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[leftPadding]="20"
 					></bgs-minion-item>
 				</div>
+				<div
+					class="cards cycle"
+					*ngIf="(!value.collapsed || value.displayMode === 'exploring') && cycleCards?.length"
+				>
+					<div class="header" *ngIf="!value.collapsed || value.displayMode !== 'exploring'">
+						<div
+							class="header-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.cycles-header'"
+							[helpTooltip]="
+								'battlegrounds.in-game.minions-list.compositions.cycles-header-tooltip' | fsTranslate
+							"
+						></div>
+					</div>
+					<bgs-minion-item
+						class="minion"
+						*ngFor="let minion of cycleCards; trackBy: trackByFn"
+						[ngClass]="{
+							controlled: minionsOnBoardAndHand?.includes(minion.id),
+							inShop: minionsInShop?.includes(minion.id)
+						}"
+						[minion]="minion"
+						[showGoldenCards]="showGoldenCards"
+						[showTrinketTips]="showTrinketTips"
+						[highlightedMinions]="value.highlightedMinions"
+						[highlightedTribes]="highlightedTribes"
+						[highlightedMechanics]="highlightedMechanics"
+						[showTribesHighlight]="showTribesHighlight"
+						[showTavernTierIcon]="true"
+						[leftPadding]="20"
+					></bgs-minion-item>
+				</div>
 			</div>
 		</ng-container>
 	`,
@@ -129,6 +135,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	headerImages: readonly string[] = [];
 	coreCards: readonly ExtendedReferenceCard[];
 	addonCards: readonly ExtendedReferenceCard[];
+	cycleCards: readonly ExtendedReferenceCard[];
 	enablerCards: readonly ExtendedReferenceCard[];
 
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
@@ -145,6 +152,15 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			});
 		this.addonCards = value.cards
 			.filter((c) => c.status === 'ADDON')
+			.map((c) => {
+				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
+				const result: ExtendedReferenceCard = {
+					...ref,
+				};
+				return result;
+			});
+		this.cycleCards = value.cards
+			.filter((c) => c.status === 'CYCLE')
 			.map((c) => {
 				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
 				const result: ExtendedReferenceCard = {
