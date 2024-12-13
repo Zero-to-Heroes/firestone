@@ -66,7 +66,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
+		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -104,7 +104,7 @@ export class CardPlayedFromHandParser implements EventParser {
 					false, // Only remove known cards
 				);
 				if (removedCardFromDeck) {
-					console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
+					// console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 					removedCard = removedCardFromDeck;
 					newDeck = newDeckAfterReveal;
 				}
@@ -120,14 +120,16 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		// When it's the opponent, sometimes we miss some info like related card ids
 		card = !!card?.cardId?.length ? card : removedCard;
-		console.debug('[card-played] card 0', card);
+		// console.debug('[card-played] card 0', card);
 		card = !!card.entityId ? card : card.update({ entityId: entityId });
-		console.debug('[card-played] card 1', card);
-		const refCard = getProcessedCard(card?.cardId ?? cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
+		// console.debug('[card-played] card 1', card);
+		const refCard = getProcessedCard(card?.cardId || cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
+		// console.debug('[card-played] refCard', refCard, card, cardId);
 		card = !!card.cardId ? card : card.update({ cardId: cardId, cardName: refCard.name });
-		console.debug('[card-played] card 2', card, removedCard);
+		// console.debug('[card-played] card 2', card, removedCard);
 		// Only minions end up on the board
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
+		// console.debug('[card-played] isOnBoard', isOnBoard, refCard, card);
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
 		const cardWithZone =
 			card?.update({
@@ -152,6 +154,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				countered: isCardCountered,
 			} as DeckCard);
+		// console.debug('[card-played] cardWithZone', cardWithZone, card, refCard);
 		const cardWithInfo = cardWithZone.update({
 			// When dealing with the opponent, the creator card id is hidden / removed when put in deck / drawn to
 			// avoid info leaks, so if the info is present in the event, we add it
@@ -176,6 +179,7 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const newBoard: readonly DeckCard[] =
 			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardToAdd) : deck.board;
+		// console.debug('[card-played] newBoard', newBoard, deck.board, cardToAdd);
 
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
