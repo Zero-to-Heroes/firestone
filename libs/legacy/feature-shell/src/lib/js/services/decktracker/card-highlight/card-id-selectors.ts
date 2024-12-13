@@ -2284,6 +2284,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), starshipPiece);
 		case CardIds.TheFistOfRaDen:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.TheGardensGrace:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.ThePurator:
