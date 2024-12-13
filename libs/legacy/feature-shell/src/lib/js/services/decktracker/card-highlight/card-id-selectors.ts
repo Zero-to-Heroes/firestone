@@ -2169,6 +2169,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, taunt);
 		case CardIds.StonehearthVindicator:
 			return and(side(inputSide), inDeck, spell, effectiveCostLess(4));
+		case CardIds.Stormhammer:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.StormpikeBattleRam:
 			return and(side(inputSide), or(inDeck, inHand), minion, beast);
 		case CardIds.StrandedSpaceman_GDB_861:
