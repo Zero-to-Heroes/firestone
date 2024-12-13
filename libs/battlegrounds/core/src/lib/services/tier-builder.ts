@@ -16,7 +16,7 @@ export const buildTiers = (
 	showMechanicsTiers: boolean,
 	showTribeTiers: boolean,
 	showTierSeven: boolean,
-	showTrinkets: boolean,
+	showTrinketsInput: boolean,
 	availableTribes: readonly Race[],
 	anomalies: readonly string[],
 	playerCardId: string,
@@ -62,9 +62,12 @@ export const buildTiers = (
 		i18n,
 	);
 
+	const showTrinkets =
+		(showTrinketsInput && hasTrinkets) || [CardIds.MarinTheManager_BG30_HERO_304].includes(playerCardId as CardIds);
+
 	const config: TierBuilderConfig = {
 		spells: hasSpells,
-		trinkets: hasTrinkets && showTrinkets,
+		trinkets: showTrinkets,
 		playerTrinkets: playerTrinkets,
 		groupMinionsIntoTheirTribeGroup: groupMinionsIntoTheirTribeGroup,
 		includeTrinketsInTribeGroups: includeTrinketsInTribeGroups,
