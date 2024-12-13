@@ -1759,6 +1759,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
 		case CardIds.RambunctiousStuffy_TOY_821:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
+		case CardIds.RangariScout_GDB_841:
+			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.ForestWardenOmu_RapidGrowth_THD_007p:
 			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
 		case CardIds.RayllaSandSculptor_VAC_424:
