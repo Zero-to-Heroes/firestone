@@ -479,6 +479,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				BeetleAttackBuff: opponentBoard.globalInfo?.BeetleAttackBuff ?? 0,
 				BeetleHealthBuff: opponentBoard.globalInfo?.BeetleHealthBuff ?? 0,
 				BattlecriesTriggeredThisGame: opponentBoard.globalInfo?.BattlecriesTriggeredThisGame ?? 0,
+				SanlaynScribesDeadThisGame: opponentBoard.globalInfo?.SanlaynScribesDeadThisGame ?? 0,
 				FriendlyMinionsDeadLastCombat: opponentBoard.globalInfo?.FriendlyMinionsDeadLastCombat ?? 0,
 			},
 		};
@@ -544,6 +545,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					BeetleAttackBuff: playerBoard.globalInfo?.BeetleAttackBuff ?? 0,
 					BeetleHealthBuff: playerBoard.globalInfo?.BeetleHealthBuff ?? 0,
 					BattlecriesTriggeredThisGame: playerBoard.globalInfo?.BattlecriesTriggeredThisGame ?? 0,
+					SanlaynScribesDeadThisGame: playerBoard.globalInfo?.SanlaynScribesDeadThisGame ?? 0,
 					FriendlyMinionsDeadLastCombat: playerBoard.globalInfo?.FriendlyMinionsDeadLastCombat ?? 0,
 				},
 				debugArmor: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value,
