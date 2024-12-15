@@ -34,6 +34,7 @@ export const getAllCardsInGame = (
 					card.id as CardIds,
 				),
 		)
+		.filter((card) => card.set !== 'Vanilla')
 		.filter(
 			(card) =>
 				(card.techLevel && card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET]) ||
@@ -42,9 +43,10 @@ export const getAllCardsInGame = (
 					// Manual exclusions
 					!allCards.getCard(card.id).otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL])),
 		)
-		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) =>
-			isBattlegroundsDuo(gameMode) ? true : !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
+			isBattlegroundsDuo(gameMode)
+				? !card.mechanics?.includes(GameTag[GameTag.BG_SOLO_EXCLUSIVE])
+				: !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
 		)
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]))
