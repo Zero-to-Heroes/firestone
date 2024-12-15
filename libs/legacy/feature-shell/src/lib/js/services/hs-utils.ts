@@ -152,6 +152,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.TheAzeriteMurlocToken_DEEP_999t5,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.TheStonewright,
+	CardIds.Turbulus_WORK_013,
 	CardIds.ValdrisFelgorge,
 	CardIds.VampiricBlood_RLK_051,
 	CardIds.WildheartGuff,
