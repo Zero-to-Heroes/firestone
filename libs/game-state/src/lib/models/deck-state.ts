@@ -266,7 +266,8 @@ export class DeckState {
 	public getAllCardsFromStarterDeck(): readonly DeckCard[] {
 		return [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone]
 			.filter((c) => !!c)
-			.filter((c) => !c.creatorCardId?.length && !c.stolenFromOpponent);
+			.filter((c) => !c.creatorCardId?.length && !c.stolenFromOpponent)
+			.filter((c) => !c.temporaryCard);
 	}
 
 	// TODO: Probably not the place for these methods
