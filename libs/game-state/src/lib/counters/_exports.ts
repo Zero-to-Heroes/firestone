@@ -6,6 +6,7 @@ import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refres
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
+import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
@@ -24,6 +25,7 @@ export const getAllCounters: (
 	new LibramReductionCounterDefinitionV2(i18n),
 	new CardsDrawnCounterDefinitionV2(i18n),
 	new SpellCastOnFriendlyCharacterCounterDefinitionV2(i18n),
+	new GiftsPlayedCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -37,6 +39,7 @@ export type CounterType =
 	| 'galakrond'
 	| 'spellsOnFriendly'
 	| 'pogo'
+	| 'giftsPlayed'
 	| 'freeRefresh'
 	| 'ceaselessExpanse'
 	| 'discovers'

@@ -1472,6 +1472,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.ManaCyclone:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.ManaGiant:
+			return and(side(inputSide), or(inDeck, inHand, inOther), notInInitialDeck);
 		case CardIds.MantleShaper_DEEP_004:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ManufacturingError_TOY_371:
