@@ -28,7 +28,7 @@ export const MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
 	{
 		mechanic: GameTag.BACON_BUDDY,
-		tierId: 'Buds',
+		tierId: 'Bdy',
 		tooltip: 'battlegrounds.in-game.minions-list.buddies-tier-tooltip',
 		canBeHighlighted: false,
 	},
@@ -176,6 +176,20 @@ const buildBuddies = (
 		.filter((c) => !!c.battlegroundsPremiumDbfId)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+	console.debug(
+		'allBuddies',
+		allCards
+			.getCards()
+			.filter((c) => !!c.techLevel)
+			.filter((c) => !!c.battlegroundsPremiumDbfId)
+			.filter((card) => card.set !== 'Vanilla')
+			.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY])),
+		allCards
+			.getCards()
+			.filter((c) => !!c.battlegroundsPremiumDbfId)
+			.filter((card) => card.set !== 'Vanilla')
+			.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY])),
+	);
 	const allPlayerBuddies = allPlayerCardIds
 		.map((p) => getBuddy(p as CardIds, allCards.getService()))
 		.map((b) => allCards.getCard(b!));
