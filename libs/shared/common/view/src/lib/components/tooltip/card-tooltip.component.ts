@@ -370,16 +370,14 @@ export class CardTooltipComponent
 			this.mapData(
 				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, { locale, highRes }]) => {
 					return (
-						([...cardIds] ?? [])
+						[...(cardIds ?? [])]
 							// Empty card IDs are necessary when showing buff only
 							// .filter((cardId) => cardId)
 							.reverse()
 							.map((cardId) => {
 								const card = this.allCards.getCard(cardId);
 								const adjustedCardType =
-									cardId?.endsWith('_golden') || !!card.premium || !!card.battlegroundsNormalDbfId
-										? 'GOLDEN'
-										: cardType;
+									cardId?.endsWith('_golden') || !!card.premium ? 'GOLDEN' : cardType;
 								const realCardId = cardId?.split('_golden')[0];
 								const image = !!realCardId
 									? localized
