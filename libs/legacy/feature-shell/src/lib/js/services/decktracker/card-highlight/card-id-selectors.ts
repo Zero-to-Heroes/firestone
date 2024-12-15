@@ -1688,6 +1688,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.PotionOfSparkingTavernBrawl:
 			return and(side(inputSide), minion, rush);
+		case CardIds.PowerSlider:
+			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 		case CardIds.PredatoryInstincts:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.PreparationCore:
