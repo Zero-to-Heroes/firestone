@@ -2482,7 +2482,7 @@ export const cardIdSelector = (
 		case CardIds.WakenerOfSouls_GDB_468:
 			return highlightConditions(
 				tooltip(and(side(inputSide), inGraveyard, deathrattle, not(cardIs(CardIds.WakenerOfSouls_GDB_468)))),
-				and(side(inputSide), inGraveyard, deathrattle, not(cardIs(CardIds.WakenerOfSouls_GDB_468))),
+				and(side(inputSide), deathrattle, not(cardIs(CardIds.WakenerOfSouls_GDB_468))),
 			);
 		case CardIds.WarCommandsTavernBrawl:
 			return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
