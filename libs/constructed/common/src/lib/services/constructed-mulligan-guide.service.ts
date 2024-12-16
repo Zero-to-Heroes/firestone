@@ -434,11 +434,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 	}
 
-	public getMulliganAdvice$(deckstring: string): Observable<MulliganGuide | null> {
+	public getMulliganAdvice$(deckstring: string): Observable<MulliganGuideWithDeckStats | null> {
 		return this.mainInstance.getMulliganAdviceInternal$(deckstring);
 	}
 
-	private getMulliganAdviceInternal$(deckstring: string): Observable<MulliganGuide | null> {
+	private getMulliganAdviceInternal$(deckstring: string): Observable<MulliganGuideWithDeckStats | null> {
 		// TODO: use current format of the lobby screen
 		const formatOverride$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
@@ -464,13 +464,29 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			),
 			this.archetypeService.getArchetypeForDeck(deckstring),
 		]).pipe(
+			tap(([overrides, archetypeId]) =>
+				console.debug('[debug] [mulligan-guide] archetypeId', overrides, archetypeId),
+			),
 			map(([overrides, archetypeId]) => (!!deckstring ? overrides[deckstring] : null) ?? archetypeId),
 			distinctUntilChanged(),
 		);
 		const archetype$: Observable<ArchetypeStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
 			debounceTime(200),
+			tap(([format, timeFrame]) =>
+				console.debug('[debug] [mulligan-guide] fill get archetype', format, timeFrame),
+			),
 			switchMap(([format, timeFrame]) =>
 				combineLatest([archetypeId$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
+			),
+			tap(([archetypeId, playerRank, opponentClass, format, timeFrame]) =>
+				console.debug(
+					'[debug] [mulligan-guide] will archetype 2',
+					archetypeId,
+					playerRank,
+					opponentClass,
+					format,
+					timeFrame,
+				),
 			),
 			map(([archetypeId, playerRank, opponentClass, format, timeFrame]) => ({
 				archetypeId: archetypeId,
@@ -497,6 +513,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				);
 				return result;
 			}),
+			tap((archetype) => console.debug('[debug] [mulligan-guide] archetype result', archetype)),
 		);
 		const deckDetails$: Observable<DeckStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
 			debounceTime(200),
@@ -583,7 +600,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						return mulliganAdvice;
 					}) ?? [];
 
-				const result: MulliganGuide = {
+				const result: MulliganGuideWithDeckStats = {
 					noData: !cardsData.length,
 					againstAi: false,
 					cardsInHand: [],
@@ -594,6 +611,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					format: toFormatType(format) as GameFormatString,
 					archetypeId: archetype?.id ?? null,
 					deckstring: deckstring ?? null,
+					deckStats: deckDetails,
 				};
 				return result;
 			}),
@@ -602,4 +620,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 		return mulliganAdvice$;
 	}
+}
+
+export interface MulliganGuideWithDeckStats extends MulliganGuide {
+	deckStats: DeckStat | null;
 }

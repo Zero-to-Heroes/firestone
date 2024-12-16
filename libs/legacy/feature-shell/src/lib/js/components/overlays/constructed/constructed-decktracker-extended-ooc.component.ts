@@ -10,6 +10,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
+import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { ALL_CLASSES, GameFormat, getBaseCardId } from '@firestone-hs/reference-data';
 import {
 	ConstructedMulliganGuideGuardianService,
@@ -34,25 +35,31 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 	selector: 'constructed-decktracker-extended-ooc',
 	styleUrls: ['./constructed-decktracker-extended-ooc.component.scss'],
 	template: `
-		<mulligan-deck-view
-			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
-			[showMulliganOverview]="true"
-			[showFilters]="true"
-			[showArchetypeSelection]="true"
-			[rankBracketTooltip]="rankBracketTooltip$ | async"
-			[rankBracketLabel]="rankBracketLabel$ | async"
-			[opponentTooltip]="opponentTooltip$ | async"
-			[opponentLabel]="opponentLabel$ | async"
-			[timeTooltip]="timeTooltip$ | async"
-			[timeLabel]="timeLabel$ | async"
-			[formatLabel]="formatLabel$ | async"
-			[sampleSize]="sampleSize$ | async"
-			[cycleRanks]="cycleRanks"
-			[cycleOpponent]="cycleOpponent"
-			[cycleTime]="cycleTime"
-			[cycleFormat]="cycleFormat"
-		>
-		</mulligan-deck-view>
+		<ng-container *ngIf="{ info: allDeckMulliganInfo$ | async } as value">
+			<mulligan-deck-view
+				[deckMulliganInfo]="value.info"
+				[showMulliganOverview]="true"
+				[showFilters]="true"
+				[showArchetypeSelection]="true"
+				[rankBracketTooltip]="rankBracketTooltip$ | async"
+				[rankBracketLabel]="rankBracketLabel$ | async"
+				[opponentTooltip]="opponentTooltip$ | async"
+				[opponentLabel]="opponentLabel$ | async"
+				[timeTooltip]="timeTooltip$ | async"
+				[timeLabel]="timeLabel$ | async"
+				[formatLabel]="formatLabel$ | async"
+				[sampleSize]="sampleSize$ | async"
+				[cycleRanks]="cycleRanks"
+				[cycleOpponent]="cycleOpponent"
+				[cycleTime]="cycleTime"
+				[cycleFormat]="cycleFormat"
+			>
+			</mulligan-deck-view>
+			<!-- <div class="deck-stats" *ngIf="value.info?.deckStats">
+			<div class="subtitle">Deck Stats</div>
+			<
+		</div> -->
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -60,7 +67,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
-	allDeckMulliganInfo$: Observable<MulliganDeckData>;
+	allDeckMulliganInfo$: Observable<MulliganDeckDataWithDeckStats>;
 	showMulliganOverview$: Observable<boolean | null>;
 
 	rankBracketLabel$: Observable<string>;
@@ -99,7 +106,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 			tap((info) => console.debug('[mulligan] received mulligan info', info)),
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
-				const result: MulliganDeckData = {
+				const result: MulliganDeckDataWithDeckStats = {
 					deckstring: guide!.deckstring,
 					archetypeId: guide!.archetypeId,
 					mulliganData: guide!.allDeckCards.map((advice) => ({
@@ -123,6 +130,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 					sampleSize: guide!.sampleSize,
 					rankBracket: guide!.rankBracket,
 					opponentClass: guide!.opponentClass,
+					deckStats: guide!.deckStats,
 				};
 				return result;
 			}),
@@ -291,4 +299,8 @@ export class ConstructedDecktrackerExtendedOocComponent
 		console.debug('[mulligan] cycling format', currentFormat, nextFormat, options);
 		await this.prefs.savePreferences(newPrefs);
 	};
+}
+
+export interface MulliganDeckDataWithDeckStats extends MulliganDeckData {
+	deckStats: DeckStat | null;
 }
