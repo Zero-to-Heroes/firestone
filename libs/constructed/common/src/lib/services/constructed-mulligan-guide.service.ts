@@ -449,7 +449,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			distinctUntilChanged(),
 		);
 		const opponentClass$: Observable<'all' | string> = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganOpponent),
+			map((prefs) => prefs.decktrackerOocMulliganOpponent),
 			distinctUntilChanged(),
 		);
 		const timeFrame$ = this.prefs.preferences$$.pipe(

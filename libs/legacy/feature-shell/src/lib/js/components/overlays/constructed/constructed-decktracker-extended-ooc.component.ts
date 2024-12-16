@@ -10,7 +10,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { ALL_CLASSES, GameFormat, formatFormatReverse, getBaseCardId } from '@firestone-hs/reference-data';
+import { ALL_CLASSES, GameFormat, getBaseCardId } from '@firestone-hs/reference-data';
 import {
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
@@ -27,7 +27,7 @@ import {
 	ILocalizationService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, filter, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
@@ -94,6 +94,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 
 		this.allDeckMulliganInfo$ = deckstring$.pipe(
 			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
+			distinctUntilChanged(),
 			switchMap((deckstring) => this.mulligan.getMulliganAdvice$(deckstring)),
 			tap((info) => console.debug('[mulligan] received mulligan info', info)),
 			filter((advice) => !!advice),
@@ -159,12 +160,12 @@ export class ConstructedDecktrackerExtendedOocComponent
 			this.mapData(
 				(prefs) =>
 					this.i18n.translateString(`app.decktracker.meta.matchup-vs-tooltip`, {
-						className: this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`),
+						className: this.i18n.translateString(`global.class.${prefs.decktrackerOocMulliganOpponent}`),
 					})!,
 			),
 		);
 		this.opponentTooltip$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => this.i18n.translateString(`global.class.${prefs.decktrackerMulliganOpponent}`)),
+			this.mapData((prefs) => this.i18n.translateString(`global.class.${prefs.decktrackerOocMulliganOpponent}`)),
 			this.mapData(
 				(opponentInfo) =>
 					this.i18n.translateString(`decktracker.overlay.mulligan.deck-mulligan-filter-opponent-tooltip`, {
@@ -255,13 +256,14 @@ export class ConstructedDecktrackerExtendedOocComponent
 
 	cycleOpponent = async () => {
 		const prefs = await this.prefs.getPreferences();
-		const currentOpponent = prefs.decktrackerMulliganOpponent;
+		const currentOpponent = prefs.decktrackerOocMulliganOpponent;
 		const options = ['all', ...ALL_CLASSES];
 		const nextOpponent = options[(options.indexOf(currentOpponent) + 1) % options.length];
 		const newPrefs: Preferences = {
 			...prefs,
-			decktrackerMulliganOpponent: nextOpponent,
+			decktrackerOocMulliganOpponent: nextOpponent,
 		};
+		console.debug('[mulligan] cycling opponent', currentOpponent, nextOpponent, options);
 		await this.prefs.savePreferences(newPrefs);
 	};
 
@@ -279,15 +281,14 @@ export class ConstructedDecktrackerExtendedOocComponent
 
 	cycleFormat = async () => {
 		const prefs = await this.prefs.getPreferences();
-		const currentFormat =
-			prefs.decktrackerMulliganFormatOverride ??
-			formatFormatReverse(this.mulligan.mulliganAdvice$$.value!.format);
+		const currentFormat = prefs.decktrackerMulliganFormatOverride ?? GameFormat.FT_STANDARD;
 		const options: readonly GameFormat[] = [GameFormat.FT_STANDARD, GameFormat.FT_WILD];
 		const nextFormat = options[(options.indexOf(currentFormat) + 1) % options.length];
 		const newPrefs: Preferences = {
 			...prefs,
 			decktrackerMulliganFormatOverride: nextFormat,
 		};
+		console.debug('[mulligan] cycling format', currentFormat, nextFormat, options);
 		await this.prefs.savePreferences(newPrefs);
 	};
 }

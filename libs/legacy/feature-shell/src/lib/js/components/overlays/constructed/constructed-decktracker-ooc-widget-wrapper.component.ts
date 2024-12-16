@@ -21,29 +21,38 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 	selector: 'constructed-decktracker-ooc-widget-wrapper',
 	styleUrls: [
 		'../../../../css/component/overlays/foreground-widget.component.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
+		// '../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss',
+		'./constructed-decktracker-ooc-widget-wrapper.component.scss',
 	],
 	template: `
 		<!-- TODO: make the basic version free, and add limited uses for the advanced one -->
 		<!-- Maybe add a toggle on the widget itself, and use that to count the free uses?  -->
 		<!-- Could maybe be free for one full day per week? Would be easier to manage that way -->
-		<constructed-decktracker-ooc
-			class="widget"
-			*ngIf="showWidgetListOnly$ | async"
+		<div
+			class="widget container"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
-		></constructed-decktracker-ooc>
-		<constructed-decktracker-extended-ooc
-			class="widget"
-			*ngIf="showWidgetExtended$ | async"
-			cdkDrag
-			(cdkDragStarted)="startDragging()"
-			(cdkDragReleased)="stopDragging()"
-			(cdkDragEnded)="dragEnded($event)"
-		></constructed-decktracker-extended-ooc>
+		>
+			<div class="title-bar">
+				<button
+					class="toggle-button"
+					(click)="toggleMode()"
+					inlineSVG="assets/svg/restore.svg"
+					[helpTooltip]="'decktracker.overlay.lobby.toggle-button-tooltip' | fsTranslate"
+				></button>
+				<control-close
+					[eventProvider]="closeHandler"
+					[helpTooltip]="'decktracker.overlay.lobby.close-button-tooltip' | fsTranslate"
+				></control-close>
+			</div>
+			<constructed-decktracker-ooc *ngIf="showWidgetListOnly$ | async"></constructed-decktracker-ooc>
+			<constructed-decktracker-extended-ooc
+				*ngIf="showWidgetExtended$ | async"
+			></constructed-decktracker-extended-ooc>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -115,6 +124,24 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	closeHandler = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			constructedShowOocTracker: false,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	async toggleMode() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			constructedShowOocTrackerExtended: !getValue(prefs),
+		};
+		await this.prefs.savePreferences(newPrefs);
 	}
 
 	private async updatePosition(left: number, top: number) {
