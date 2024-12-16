@@ -98,18 +98,14 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		);
 
 		this.showWidgetListOnly$ = combineLatest([
-			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => prefs.constructedShowOocTracker && !prefs.constructedShowOocTrackerExtended),
-			),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedShowOocTracker && !getValue(prefs))),
 			canShowWidget$,
 		]).pipe(
 			this.mapData(([displayFromPrefs, canShowWidget]) => canShowWidget && displayFromPrefs),
 			this.handleReposition(),
 		);
 		this.showWidgetExtended$ = combineLatest([
-			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => prefs.constructedShowOocTracker && prefs.constructedShowOocTrackerExtended),
-			),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedShowOocTracker && getValue(prefs))),
 			canShowWidget$,
 		]).pipe(
 			this.mapData(([displayFromPrefs, canShowWidget]) => canShowWidget && displayFromPrefs),
@@ -130,3 +126,5 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		await this.prefs.savePreferences(newPrefs);
 	}
 }
+
+const getValue = (prefs: Preferences) => prefs.constructedShowOocTrackerExtended;

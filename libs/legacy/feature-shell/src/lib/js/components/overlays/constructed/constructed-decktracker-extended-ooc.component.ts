@@ -27,7 +27,7 @@ import {
 	ILocalizationService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, filter, shareReplay, switchMap, takeUntil } from 'rxjs';
+import { Observable, combineLatest, filter, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
@@ -36,7 +36,7 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 	template: `
 		<mulligan-deck-view
 			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
-			[showMulliganOverview]="showMulliganOverview$ | async"
+			[showMulliganOverview]="true"
 			[showFilters]="true"
 			[showArchetypeSelection]="true"
 			[rankBracketTooltip]="rankBracketTooltip$ | async"
@@ -88,12 +88,14 @@ export class ConstructedDecktrackerExtendedOocComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches, this.deck);
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches, this.deck, this.mulligan);
 
 		const deckstring$ = this.deck.currentDeck$$.pipe(this.mapData((deck) => deck?.deckstring));
 
 		this.allDeckMulliganInfo$ = deckstring$.pipe(
+			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
 			switchMap((deckstring) => this.mulligan.getMulliganAdvice$(deckstring)),
+			tap((info) => console.debug('[mulligan] received mulligan info', info)),
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
 				const result: MulliganDeckData = {

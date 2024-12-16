@@ -435,6 +435,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 	}
 
 	public getMulliganAdvice$(deckstring: string): Observable<MulliganGuide | null> {
+		return this.mainInstance.getMulliganAdviceInternal$(deckstring);
+	}
+
+	private getMulliganAdviceInternal$(deckstring: string): Observable<MulliganGuide | null> {
 		// TODO: use current format of the lobby screen
 		const formatOverride$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
