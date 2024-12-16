@@ -39,6 +39,7 @@ import {
 	tap,
 } from 'rxjs';
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
+import { ConstructedArchetypeService } from './constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { MULLIGAN_GUIDE_IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
 
@@ -54,6 +55,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 	private ads: IAdsService;
 	private archetypes: ConstructedMetaDecksStateService;
 	private allCards: CardsFacadeService;
+	private archetypeService: ConstructedArchetypeService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ConstructedMulliganGuideService', () => !!this.mulliganAdvice$$);
@@ -71,6 +73,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
 		this.archetypes = AppInjector.get(ConstructedMetaDecksStateService);
 		this.allCards = AppInjector.get(CardsFacadeService);
+		this.archetypeService = AppInjector.get(ConstructedArchetypeService);
 
 		await waitForReady(this.scene, this.prefs, this.archetypes, this.gameState);
 		await this.ads.isReady();
@@ -429,5 +432,170 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) =>
 			this.mulliganAdvice$$.next(showWidget ? advice : null),
 		);
+	}
+
+	public getMulliganAdvice$(deckstring: string): Observable<MulliganGuide | null> {
+		// TODO: use current format of the lobby screen
+		const formatOverride$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
+			distinctUntilChanged(),
+		);
+		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganRankBracket),
+			distinctUntilChanged(),
+		);
+		const opponentClass$: Observable<'all' | string> = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganOpponent),
+			distinctUntilChanged(),
+		);
+		const timeFrame$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganTime),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+		const archetypeId$ = combineLatest([
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.constructedDeckArchetypeOverrides),
+				distinctUntilChanged(),
+			),
+			this.archetypeService.getArchetypeForDeck(deckstring),
+		]).pipe(
+			map(([overrides, archetypeId]) => (!!deckstring ? overrides[deckstring] : null) ?? archetypeId),
+			distinctUntilChanged(),
+		);
+		const archetype$: Observable<ArchetypeStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
+			debounceTime(200),
+			switchMap(([format, timeFrame]) =>
+				combineLatest([archetypeId$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
+			),
+			map(([archetypeId, playerRank, opponentClass, format, timeFrame]) => ({
+				archetypeId: archetypeId,
+				format: format,
+				playerRank: playerRank,
+				opponentClass: opponentClass,
+				timeFrame: timeFrame,
+			})),
+			filter((info) => !!info.format),
+			distinctUntilChanged(
+				(a, b) =>
+					a.archetypeId === b.archetypeId &&
+					a.format === b.format &&
+					a.playerRank === b.playerRank &&
+					a.timeFrame === b.timeFrame &&
+					a.opponentClass === b.opponentClass,
+			),
+			switchMap(({ archetypeId, format, playerRank, opponentClass, timeFrame }) => {
+				const result = this.archetypes.loadNewArchetypeDetails(
+					archetypeId as number,
+					toFormatType(format as any) as GameFormat,
+					timeFrame,
+					playerRank,
+				);
+				return result;
+			}),
+		);
+		const deckDetails$: Observable<DeckStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
+			debounceTime(200),
+			switchMap(([format, timeFrame]) =>
+				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
+			),
+			map(([gameState, playerRank, opponentClass, format, timeFrame]) => ({
+				deckString: this.allCards.normalizeDeckList(gameState?.playerDeck?.deckstring),
+				format: format,
+				playerRank: playerRank,
+				opponentClass: opponentClass,
+				timeFrame: timeFrame,
+			})),
+			filter((info) => !!info.format),
+			distinctUntilChanged(
+				(a, b) =>
+					a.deckString === b.deckString &&
+					a.format === b.format &&
+					a.playerRank === b.playerRank &&
+					a.timeFrame === b.timeFrame &&
+					a.opponentClass === b.opponentClass,
+			),
+			switchMap(({ deckString, format, playerRank, opponentClass, timeFrame }) => {
+				const result = this.archetypes.loadNewDeckDetails(
+					deckString,
+					toFormatType(format as any) as GameFormat,
+					timeFrame,
+					playerRank,
+				);
+				return result;
+			}),
+		);
+		const deckCards = decode(deckstring)
+			?.cards?.map((card) => card[0])
+			.map((dbfId) => this.allCards.getCard(dbfId));
+		const mulliganAdvice$ = combineLatest([
+			archetype$,
+			deckDetails$,
+			formatOverride$,
+			playerRank$,
+			opponentClass$,
+		]).pipe(
+			map(([archetype, deckDetails, format, playerRank, opponentClass]) => {
+				const archetypeMatchup =
+					opponentClass === 'all'
+						? null
+						: archetype?.matchupInfo.find((info) => info.opponentClass === opponentClass);
+				const deckMatchup =
+					opponentClass === 'all'
+						? null
+						: deckDetails?.matchupInfo.find((info) => info.opponentClass === opponentClass);
+				const archetypeWinrate =
+					opponentClass === 'all'
+						? archetype?.winrate ?? deckDetails?.winrate ?? 0
+						: archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0;
+				const cardsData =
+					opponentClass === 'all'
+						? archetype?.cardsData ?? deckDetails?.cardsData ?? []
+						: archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? [];
+				const sampleSize =
+					opponentClass === 'all'
+						? archetype?.totalGames ?? deckDetails?.totalGames ?? 0
+						: archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0;
+				const allDeckCards: readonly MulliganCardAdvice[] =
+					deckCards?.map((refCard) => {
+						const cardData =
+							cardsData.find((card) => getBaseCardId(card.cardId) === getBaseCardId(refCard.id)) ??
+							cardsData.find(
+								(card) =>
+									this.allCards.getRootCardId(getBaseCardId(card.cardId)) ===
+									this.allCards.getRootCardId(getBaseCardId(refCard.id)),
+							);
+						const rawImpact = !!cardData?.inHandAfterMulligan
+							? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate
+							: null;
+						const rawKeepRate = !!cardData?.drawnBeforeMulligan
+							? cardData?.keptInMulligan / cardData.drawnBeforeMulligan
+							: null;
+						const mulliganAdvice: MulliganCardAdvice = {
+							cardId: refCard.id,
+							score: rawImpact == null ? null : 100 * rawImpact,
+							keepRate: rawKeepRate,
+						};
+						return mulliganAdvice;
+					}) ?? [];
+
+				const result: MulliganGuide = {
+					noData: !cardsData.length,
+					againstAi: false,
+					cardsInHand: [],
+					allDeckCards: allDeckCards,
+					sampleSize: sampleSize,
+					rankBracket: playerRank,
+					opponentClass: opponentClass,
+					format: toFormatType(format) as GameFormatString,
+					archetypeId: archetype?.id ?? null,
+					deckstring: deckstring ?? null,
+				};
+				return result;
+			}),
+			tap((mulliganAdvice) => console.debug('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
+			shareReplay(1),
+		);
+		return mulliganAdvice$;
 	}
 }

@@ -25,14 +25,25 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 		'../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss',
 	],
 	template: `
+		<!-- TODO: make the basic version free, and add limited uses for the advanced one -->
+		<!-- Maybe add a toggle on the widget itself, and use that to count the free uses?  -->
+		<!-- Could maybe be free for one full day per week? Would be easier to manage that way -->
 		<constructed-decktracker-ooc
 			class="widget"
-			*ngIf="showWidget$ | async"
+			*ngIf="showWidgetListOnly$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
 		></constructed-decktracker-ooc>
+		<constructed-decktracker-extended-ooc
+			class="widget"
+			*ngIf="showWidgetExtended$ | async"
+			cdkDrag
+			(cdkDragStarted)="startDragging()"
+			(cdkDragReleased)="stopDragging()"
+			(cdkDragEnded)="dragEnded($event)"
+		></constructed-decktracker-extended-ooc>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,7 +63,8 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		bottom: -50,
 	};
 
-	showWidget$: Observable<boolean>;
+	showWidgetListOnly$: Observable<boolean>;
+	showWidgetExtended$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -71,20 +83,36 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs, this.deck, this.ads);
 
-		this.showWidget$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedShowOocTracker)),
+		const canShowWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.deck.currentDeck$$,
 			this.ads.enablePremiumFeatures$$,
 		]).pipe(
-			this.mapData(([displayFromPrefs, currentScene, deck, premium]) => {
+			this.mapData(([currentScene, deck, premium]) => {
 				const result =
 					premium &&
-					displayFromPrefs &&
 					[SceneMode.TOURNAMENT, SceneMode.FRIENDLY].includes(currentScene) &&
 					deck?.deckstring?.length > 0;
 				return result;
 			}),
+		);
+
+		this.showWidgetListOnly$ = combineLatest([
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => prefs.constructedShowOocTracker && !prefs.constructedShowOocTrackerExtended),
+			),
+			canShowWidget$,
+		]).pipe(
+			this.mapData(([displayFromPrefs, canShowWidget]) => canShowWidget && displayFromPrefs),
+			this.handleReposition(),
+		);
+		this.showWidgetExtended$ = combineLatest([
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => prefs.constructedShowOocTracker && prefs.constructedShowOocTrackerExtended),
+			),
+			canShowWidget$,
+		]).pipe(
+			this.mapData(([displayFromPrefs, canShowWidget]) => canShowWidget && displayFromPrefs),
 			this.handleReposition(),
 		);
 

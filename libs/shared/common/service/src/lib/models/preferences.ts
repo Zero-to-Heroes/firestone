@@ -180,6 +180,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksArchetypeFilter: readonly number[] = [];
 	readonly constructedMetaDecksSortCriteria: { criteria: string; direction: string } = null;
 	readonly constructedShowOocTracker: boolean = true;
+	readonly constructedShowOocTrackerExtended: boolean = false;
 	readonly constructedOocTrackerScale: number = 100;
 	readonly constructedOocTrackerPosition: { left: number; top: number };
 

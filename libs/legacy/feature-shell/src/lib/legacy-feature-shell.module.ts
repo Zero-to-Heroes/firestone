@@ -450,6 +450,7 @@ import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { ConstructedMulliganDeckWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-deck-widget-wrapper.component';
 import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-hand-widget-wrapper.component';
+import { ConstructedDecktrackerExtendedOocComponent } from '@components/overlays/constructed/constructed-decktracker-extended-ooc.component';
 import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
@@ -1458,6 +1459,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ArenaDecktrackerOocWidgetWrapperComponent,
 		ArenaDecktrackerOocComponent,
 		ConstructedDecktrackerOocComponent,
+		ConstructedDecktrackerExtendedOocComponent,
 		ConstructedDecktrackerOocWidgetWrapperComponent,
 		ConstructedMulliganHandWidgetWrapperComponent,
 		ConstructedMulliganDeckWidgetWrapperComponent,
