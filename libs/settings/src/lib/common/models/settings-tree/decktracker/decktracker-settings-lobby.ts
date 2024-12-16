@@ -18,13 +18,12 @@ export const decktrackerLobbySettings = (context: SettingContext): SettingNode =
 						field: 'constructedShowOocTracker',
 						label: context.i18n.translateString('settings.decktracker.lobby.show-lobby-tracker'),
 						tooltip: context.i18n.translateString('settings.decktracker.lobby.show-lobby-tracker-tooltip'),
-						premiumSetting: true,
 					},
 					{
 						type: 'slider',
 						field: 'constructedOocTrackerScale',
 						label: context.i18n.translateString('settings.arena.general.tracker-size'),
-						disabledIf: (prefs: Preferences, premium: boolean) => !prefs?.constructedShowOocTracker || !premium,
+						disabledIf: (prefs: Preferences) => !prefs?.constructedShowOocTracker,
 						tooltip: null,
 						sliderConfig: {
 							min: 50,

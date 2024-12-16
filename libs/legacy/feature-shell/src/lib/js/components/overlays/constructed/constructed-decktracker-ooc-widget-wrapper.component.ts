@@ -10,7 +10,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
@@ -31,17 +31,19 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 		<!-- Could maybe be free for one full day per week? Would be easier to manage that way -->
 		<div
 			class="widget container"
+			*ngIf="{ premium: hasPremium$ | async } as value"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
+			[ngClass]="{ premium: value.premium }"
 		>
 			<div class="title-bar">
 				<button
 					class="toggle-button"
-					(click)="toggleMode()"
+					(click)="toggleMode(value.premium)"
 					inlineSVG="assets/svg/restore.svg"
-					[helpTooltip]="'decktracker.overlay.lobby.toggle-button-tooltip' | fsTranslate"
+					[helpTooltip]="toggleButtonTooltip$ | async"
 				></button>
 				<control-close
 					[eventProvider]="closeHandler"
@@ -74,6 +76,8 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 
 	showWidgetListOnly$: Observable<boolean>;
 	showWidgetExtended$: Observable<boolean>;
+	hasPremium$: Observable<boolean>;
+	toggleButtonTooltip$: Observable<string>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -85,6 +89,7 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		private readonly scene: SceneService,
 		private readonly deck: DeckParserFacadeService,
 		private readonly ads: AdService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
@@ -92,32 +97,41 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs, this.deck, this.ads);
 
-		const canShowWidget$ = combineLatest([
-			this.scene.currentScene$$,
-			this.deck.currentDeck$$,
-			this.ads.enablePremiumFeatures$$,
-		]).pipe(
-			this.mapData(([currentScene, deck, premium]) => {
+		this.hasPremium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
+		this.toggleButtonTooltip$ = this.ads.enablePremiumFeatures$$.pipe(
+			this.mapData((premium) =>
+				premium
+					? this.i18n.translateString('decktracker.overlay.lobby.toggle-button-tooltip')
+					: this.i18n.translateString('decktracker.overlay.lobby.toggle-button-locked-tooltip'),
+			),
+		);
+
+		const canShowWidget$ = combineLatest([this.scene.currentScene$$, this.deck.currentDeck$$]).pipe(
+			this.mapData(([currentScene, deck]) => {
 				const result =
-					premium &&
-					[SceneMode.TOURNAMENT, SceneMode.FRIENDLY].includes(currentScene) &&
-					deck?.deckstring?.length > 0;
+					[SceneMode.TOURNAMENT, SceneMode.FRIENDLY].includes(currentScene) && deck?.deckstring?.length > 0;
 				return result;
 			}),
 		);
 
 		this.showWidgetListOnly$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedShowOocTracker && !getValue(prefs))),
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({ ooc: prefs.constructedShowOocTracker, displayList: !getValue(prefs) })),
+			),
 			canShowWidget$,
+			this.ads.enablePremiumFeatures$$,
 		]).pipe(
-			this.mapData(([displayFromPrefs, canShowWidget]) => canShowWidget && displayFromPrefs),
+			this.mapData(
+				([{ ooc, displayList }, canShowWidget, premium]) => canShowWidget && ooc && (displayList || !premium),
+			),
 			this.handleReposition(),
 		);
 		this.showWidgetExtended$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedShowOocTracker && getValue(prefs))),
 			canShowWidget$,
+			this.ads.enablePremiumFeatures$$,
 		]).pipe(
-			this.mapData(([displayFromPrefs, canShowWidget]) => canShowWidget && displayFromPrefs),
+			this.mapData(([displayFromPrefs, canShowWidget, premium]) => canShowWidget && premium && displayFromPrefs),
 			this.handleReposition(),
 		);
 
@@ -135,7 +149,12 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		await this.prefs.savePreferences(newPrefs);
 	};
 
-	async toggleMode() {
+	async toggleMode(hasPremium: boolean) {
+		if (!hasPremium) {
+			this.ow.openStore();
+			return;
+		}
+
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
