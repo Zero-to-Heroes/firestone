@@ -50,6 +50,7 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 				[formatLabel]="formatLabel$ | async"
 				[sampleSize]="sampleSize$ | async"
 				[sampleSizeTooltip]="'decktracker.overlay.mulligan.sample-size-tooltip' | fsTranslate"
+				[allowResize]="false"
 				[cycleRanks]="cycleRanks"
 				[cycleOpponent]="cycleOpponent"
 				[cycleTime]="cycleTime"

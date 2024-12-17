@@ -22,18 +22,15 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 	],
 	template: `
 		<div class="root active" [activeTheme]="'decktracker'">
-			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
-			<div class="scalable">
-				<ng-container *ngIf="deckstring$ | async as deckstring">
-					<div class="decktracker-container">
-						<div class="decktracker" *ngIf="!!deckstring">
-							<div class="background"></div>
-							<deck-list-static class="played-cards" [deckstring]="deckstring"> </deck-list-static>
-							<!-- <div class="backdrop" *ngIf="showBackdrop"></div> -->
-						</div>
+			<ng-container *ngIf="deckstring$ | async as deckstring">
+				<div class="decktracker-container">
+					<div class="decktracker" *ngIf="!!deckstring">
+						<div class="background"></div>
+						<deck-list-static class="played-cards" [deckstring]="deckstring"> </deck-list-static>
+						<!-- <div class="backdrop" *ngIf="showBackdrop"></div> -->
 					</div>
-				</ng-container>
-			</div>
+				</div>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,13 +59,6 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 			this.mapData((deck) => deck?.deckstring),
 		);
 
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedOocTrackerScale)).subscribe((scale) => {
-			this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
-			this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
-			const newScale = scale / 100;
-			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		});
 		this.cardsHighlight.initForDuels();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

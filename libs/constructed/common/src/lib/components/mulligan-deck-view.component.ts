@@ -143,6 +143,7 @@ export class MulliganDeckViewComponent
 	@Input() formatLabel: string | null;
 	@Input() sampleSize: string | null;
 	@Input() sampleSizeTooltip: string | null;
+	@Input() allowResize = true;
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
 	@Input() cycleTime: () => void;
@@ -205,9 +206,11 @@ export class MulliganDeckViewComponent
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(async (scale) => {
-				const newScale = scale / 100;
-				const elements = await this.getScalableElements();
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
+				if (this.allowResize) {
+					const newScale = scale / 100;
+					const elements = await this.getScalableElements();
+					elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
+				}
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

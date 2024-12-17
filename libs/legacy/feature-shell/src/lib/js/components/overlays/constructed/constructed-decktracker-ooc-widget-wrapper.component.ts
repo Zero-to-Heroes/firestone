@@ -30,7 +30,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 		<!-- Maybe add a toggle on the widget itself, and use that to count the free uses?  -->
 		<!-- Could maybe be free for one full day per week? Would be easier to manage that way -->
 		<div
-			class="widget container"
+			class="widget container scalable"
 			*ngIf="{ premium: hasPremium$ | async } as value"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
@@ -134,6 +134,14 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			this.mapData(([displayFromPrefs, canShowWidget, premium]) => canShowWidget && premium && displayFromPrefs),
 			this.handleReposition(),
 		);
+
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedOocTrackerScale)).subscribe((scale) => {
+			this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
+			this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
+			const newScale = scale / 100;
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
