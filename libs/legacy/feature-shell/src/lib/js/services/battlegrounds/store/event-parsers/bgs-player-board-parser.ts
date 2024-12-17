@@ -12,6 +12,7 @@ import {
 	BgsGame,
 	BgsIntermediateResultsSimGuardianService,
 	BgsPlayer,
+	buildBgsEntities,
 	PlayerBoard,
 	PlayerBoardEntity,
 } from '@firestone/battlegrounds/core';
@@ -38,7 +39,28 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly prefs: PreferencesService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly adService: AdService,
-	) {}
+	) {
+		window['buildSimulationResut'] = (input: string) => {
+			const boardEvent = window['buildPlayerBoardGameEvent'](input);
+			const boardBgsEvent = window['buildBgsPlayerBoardEvent'](boardEvent);
+			const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(boardBgsEvent.playerBoard);
+			const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(boardBgsEvent.opponentBoard);
+			const battleInfo: BgsBattleInfo = {
+				playerBoard: bgsPlayer,
+				opponentBoard: bgsOpponent,
+				options: {
+					maxAcceptableDuration: 8000,
+					numberOfSimulations: 8000,
+					skipInfoLogs: false,
+				},
+				gameState: {
+					currentTurn: 1,
+					validTribes: [],
+				},
+			};
+			console.debug('[bgs-simulation] built battle info', battleInfo);
+		};
+	}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsPlayerBoardEvent';
@@ -270,10 +292,10 @@ export class BgsPlayerBoardParser implements EventParser {
 				!!opponentTeammatePlayer && p.playerId === opponentTeammatePlayer.playerId ? opponentTeammatePlayer : p,
 			);
 
-		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(player, event.playerBoard);
-		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
-		const playerTeammate: BgsBoardInfo = this.buildBgsBoardInfo(player, playerTeammateBoard);
-		const opponentTeammate: BgsBoardInfo = this.buildBgsBoardInfo(player, opponentTeammateBoard);
+		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(event.playerBoard);
+		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(event.opponentBoard);
+		const playerTeammate: BgsBoardInfo = this.buildBgsBoardInfo(playerTeammateBoard);
+		const opponentTeammate: BgsBoardInfo = this.buildBgsBoardInfo(opponentTeammateBoard);
 
 		console.log(
 			'[bgs-simulation] found boards',
@@ -495,19 +517,17 @@ export class BgsPlayerBoardParser implements EventParser {
 		return result;
 	}
 
-	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
+	private buildBgsBoardInfo(playerBoard: PlayerBoard): BgsBoardInfo {
 		if (!playerBoard) {
 			return null;
 		}
 
-		console.debug('[bgs-simulation] building board info', playerBoard, player);
-		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board, this.allCards);
-		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets, this.allCards);
+		console.debug('[bgs-simulation] building board info', playerBoard);
+		const bgsBoard: BoardEntity[] = buildBgsEntities(playerBoard.board, this.allCards);
+		const secrets: BoardSecret[] = buildBgsEntities(playerBoard.secrets, this.allCards);
 		const trinkets: BoardTrinket[] = [...(playerBoard.trinkets ?? [])];
-		const hand: BoardEntity[] = player.buildBgsEntities(playerBoard.hand, this.allCards);
-		let tavernTier =
-			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
-			player.getCurrentTavernTier();
+		const hand: BoardEntity[] = buildBgsEntities(playerBoard.hand, this.allCards);
+		let tavernTier = playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value;
 		if (!tavernTier) {
 			console.warn('[bgs-simulation] no tavern tier', event);
 			tavernTier = 1;
@@ -528,7 +548,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				hpLeft: hpLeft,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				entityId: playerBoard.hero.Entity,
-				nonGhostCardId: player.getNormalizedHeroCardId(this.allCards),
+				nonGhostCardId: null,
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,

@@ -108,17 +108,6 @@ export class BgsPlayer implements IBgsPlayer {
 	public getLastBoardStateTurn(): number | undefined {
 		return !this.boardHistory?.length ? undefined : this.boardHistory[this.boardHistory.length - 1].turn;
 	}
-
-	public buildBgsEntities(
-		logEntities: readonly PlayerBoardEntity[],
-		allCards: CardsFacadeService,
-	): (BoardEntity | null)[] {
-		if (!logEntities?.length) {
-			return [];
-		}
-
-		return logEntities.map((entity) => buildBgsEntity(entity, allCards));
-	}
 }
 
 export interface QuestReward {
@@ -127,6 +116,17 @@ export interface QuestReward {
 	readonly completedTurn: number;
 	readonly isHeroPower: boolean;
 }
+
+export const buildBgsEntities = (
+	logEntities: readonly PlayerBoardEntity[],
+	allCards: CardsFacadeService,
+): (BoardEntity | null)[] => {
+	if (!logEntities?.length) {
+		return [];
+	}
+
+	return logEntities.map((entity) => buildBgsEntity(entity, allCards));
+};
 
 export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity | null => {
 	if (!logEntity) {

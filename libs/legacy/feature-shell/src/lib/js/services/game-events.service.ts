@@ -45,6 +45,8 @@ export class GameEvents {
 		private readonly eventsFacade: GameEventsFacadeService,
 	) {
 		this.init();
+		window['buildPlayerBoardGameEvent'] = (rawEvent: string) =>
+			this.buildBattlegroundsPlayerBoardEvent('BATTLEGROUNDS_PLAYER_BOARD', JSON.parse(rawEvent));
 	}
 
 	async init() {
@@ -1315,47 +1317,8 @@ export class GameEvents {
 						? GameEvent.BATTLEGROUNDS_PLAYER_BOARD
 						: GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD;
 				console.debug('[game-events] receiving ' + gameEvent.Type, gameEvent, eventName);
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: eventName,
-						additionalData: {
-							playerBoard: {
-								cardId: gameEvent.Value.PlayerBoard.CardId,
-								playerId: gameEvent.Value.PlayerBoard.PlayerId,
-								board: gameEvent.Value.PlayerBoard.Board, // as is
-								secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
-								trinkets: gameEvent.Value.PlayerBoard.Trinkets, // as is
-								hand: gameEvent.Value.PlayerBoard.Hand, // as is
-								hero: gameEvent.Value.PlayerBoard.Hero, // as is
-								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
-								heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
-								heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
-								heroPowerInfo2: gameEvent.Value.PlayerBoard.HeroPowerInfo2,
-								questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
-								questRewardEntities: gameEvent.Value.PlayerBoard.QuestRewardEntities,
-								questEntities: gameEvent.Value.PlayerBoard.QuestEntities,
-								globalInfo: gameEvent.Value.PlayerBoard.GlobalInfo,
-							},
-							opponentBoard: {
-								cardId: gameEvent.Value.OpponentBoard.CardId,
-								playerId: gameEvent.Value.OpponentBoard.PlayerId,
-								board: gameEvent.Value.OpponentBoard.Board, // as is
-								secrets: gameEvent.Value.OpponentBoard.Secrets, // as is
-								trinkets: gameEvent.Value.OpponentBoard.Trinkets, // as is
-								hand: gameEvent.Value.OpponentBoard.Hand, // as is
-								hero: gameEvent.Value.OpponentBoard.Hero, // as is
-								heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
-								heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
-								heroPowerInfo: gameEvent.Value.OpponentBoard.HeroPowerInfo,
-								heroPowerInfo2: gameEvent.Value.OpponentBoard.HeroPowerInfo2,
-								questRewards: gameEvent.Value.OpponentBoard.QuestRewards,
-								questRewardEntities: gameEvent.Value.OpponentBoard.QuestRewardEntities,
-								questEntities: gameEvent.Value.OpponentBoard.QuestEntities,
-								globalInfo: gameEvent.Value.OpponentBoard.GlobalInfo,
-							},
-						},
-					} as GameEvent),
-				);
+				const playerBoardEvent = this.buildBattlegroundsPlayerBoardEvent(eventName, gameEvent);
+				this.gameEventsEmitter.allEvents.next(playerBoardEvent);
 				break;
 			case 'BATTLEGROUNDS_LEADERBOARD_PLACE':
 				this.gameEventsEmitter.allEvents.next(
@@ -1865,5 +1828,47 @@ export class GameEvents {
 			});
 		}
 		this.pluginBeingInitialized = false;
+	}
+
+	private buildBattlegroundsPlayerBoardEvent(eventName: string, gameEvent: any) {
+		return Object.assign(new GameEvent(), {
+			type: eventName,
+			additionalData: {
+				playerBoard: {
+					cardId: gameEvent.Value.PlayerBoard.CardId,
+					playerId: gameEvent.Value.PlayerBoard.PlayerId,
+					board: gameEvent.Value.PlayerBoard.Board, // as is
+					secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
+					trinkets: gameEvent.Value.PlayerBoard.Trinkets, // as is
+					hand: gameEvent.Value.PlayerBoard.Hand, // as is
+					hero: gameEvent.Value.PlayerBoard.Hero, // as is
+					heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
+					heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
+					heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
+					heroPowerInfo2: gameEvent.Value.PlayerBoard.HeroPowerInfo2,
+					questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
+					questRewardEntities: gameEvent.Value.PlayerBoard.QuestRewardEntities,
+					questEntities: gameEvent.Value.PlayerBoard.QuestEntities,
+					globalInfo: gameEvent.Value.PlayerBoard.GlobalInfo,
+				},
+				opponentBoard: {
+					cardId: gameEvent.Value.OpponentBoard.CardId,
+					playerId: gameEvent.Value.OpponentBoard.PlayerId,
+					board: gameEvent.Value.OpponentBoard.Board, // as is
+					secrets: gameEvent.Value.OpponentBoard.Secrets, // as is
+					trinkets: gameEvent.Value.OpponentBoard.Trinkets, // as is
+					hand: gameEvent.Value.OpponentBoard.Hand, // as is
+					hero: gameEvent.Value.OpponentBoard.Hero, // as is
+					heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
+					heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
+					heroPowerInfo: gameEvent.Value.OpponentBoard.HeroPowerInfo,
+					heroPowerInfo2: gameEvent.Value.OpponentBoard.HeroPowerInfo2,
+					questRewards: gameEvent.Value.OpponentBoard.QuestRewards,
+					questRewardEntities: gameEvent.Value.OpponentBoard.QuestRewardEntities,
+					questEntities: gameEvent.Value.OpponentBoard.QuestEntities,
+					globalInfo: gameEvent.Value.OpponentBoard.GlobalInfo,
+				},
+			},
+		} as GameEvent);
 	}
 }
