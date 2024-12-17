@@ -548,7 +548,6 @@ export class BgsPlayerBoardParser implements EventParser {
 				hpLeft: hpLeft,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				entityId: playerBoard.hero.Entity,
-				nonGhostCardId: null,
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,

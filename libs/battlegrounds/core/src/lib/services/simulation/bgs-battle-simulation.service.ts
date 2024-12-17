@@ -100,7 +100,7 @@ export class BgsBattleSimulationService {
 						result: result,
 						intermediateResult: !result.outcomeSamples,
 						heroCardId: normalizeHeroCardId(
-							battleInfoInput.opponentBoard.player.nonGhostCardId ??
+							battleInfoInput.opponentBoard.player.cardId ??
 								CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
 							this.cards,
 						),
@@ -122,8 +122,7 @@ export class BgsBattleSimulationService {
 				battleId: battleId,
 				result: result,
 				heroCardId: normalizeHeroCardId(
-					battleInfoInput.opponentBoard.player.nonGhostCardId ??
-						CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+					battleInfoInput.opponentBoard.player.cardId ?? CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
 					this.cards,
 				),
 			});
