@@ -153,7 +153,7 @@ export class BattlegroundsStoreService {
 
 	private duoPendingBoards: { playerBoard: PlayerBoard; opponentBoard: PlayerBoard }[] = [];
 	// private teammateBoard: MemoryBgsPlayerInfo;
-	private playerBoard: PlayerBoard;
+	// private playerBoard: PlayerBoard;
 	private playerTeams: MemoryBgsTeamInfo;
 
 	private updateOverlay$$ = new BehaviorSubject<void>(null);
@@ -473,11 +473,11 @@ export class BattlegroundsStoreService {
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD) {
 				// this.teammateBoard = await this.memory.getBgsPlayerTeammateBoard();
-				this.playerBoard = gameEvent.additionalData.playerBoard;
+				// this.playerBoard = gameEvent.additionalData.playerBoard;
 				const playerTeams = await this.memory.getBgsPlayerBoard();
 				console.debug(
 					'[bgs-simulation] BATTLEGROUNDS_ACTIVE_PLAYER_BOARD snapshot player board',
-					gameEvent.additionalData.playerBoard.board,
+					// gameEvent.additionalData.playerBoard.board,
 					gameEvent,
 					playerTeams,
 				);
@@ -562,7 +562,7 @@ export class BattlegroundsStoreService {
 							questEntities: gameEvent.additionalData.opponentBoard.questEntities,
 							globalInfo: gameEvent.additionalData.opponentBoard.globalInfo,
 						},
-						this.playerBoard,
+						// this.playerBoard,
 						// this.teammateBoard,
 						this.duoPendingBoards,
 						this.playerTeams,

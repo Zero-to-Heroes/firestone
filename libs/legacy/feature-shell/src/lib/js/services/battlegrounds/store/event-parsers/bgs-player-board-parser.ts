@@ -49,34 +49,43 @@ export class BgsPlayerBoardParser implements EventParser {
 		event: BgsPlayerBoardEvent,
 		gameState: GameState,
 	): Promise<BattlegroundsState> {
+		console.log('[bgs-simulation] received board infos');
 		console.log(
-			'[bgs-simulation] received player boards',
+			'[bgs-simulation] player info',
+			event.playerBoard.playerId,
+			event.playerBoard.heroCardId,
 			event.playerBoard?.board?.map((e) => e.CardId),
-			event.opponentBoard?.board?.map((e) => e.CardId),
-			// event.teammateBoard?.Board?.map((e) => e.CardId),
-			event.duoPendingBoards?.map((p) => p.playerBoard?.board?.map((e) => e.CardId).join(',')),
-			event.duoPendingBoards?.map((p) => p.opponentBoard?.board?.map((e) => e.CardId).join(',')),
 		);
+		for (let i = 0; i < event.duoPendingBoards?.length; i++) {
+			const team = event.duoPendingBoards[i];
+			console.log(
+				`[bgs-simulation] player friendly team ${i}`,
+				team?.playerBoard?.playerId,
+				team?.playerBoard?.heroCardId,
+				team?.playerBoard?.board?.map((e) => e.CardId),
+			);
+		}
+		console.log(
+			'[bgs-simulation] opponent info',
+			event.opponentBoard?.playerId,
+			event.opponentBoard?.heroCardId,
+			event.opponentBoard?.board?.map((e) => e.CardId),
+		);
+		for (let i = 0; i < event.duoPendingBoards?.length; i++) {
+			const team = event.duoPendingBoards[i];
+			console.log(
+				'[bgs-simulation] player opponent team',
+				team?.opponentBoard?.playerId,
+				team?.opponentBoard?.heroCardId,
+				team?.opponentBoard?.board?.map((e) => e.CardId),
+			);
+		}
+
 		console.debug(
 			'[bgs-simulation] received player boards',
 			event,
 			currentState.currentGame.getMainPlayer(),
 			currentState,
-		);
-		console.log(
-			'[bgs-simulation] received hero cards',
-			event.playerBoard?.heroCardId,
-			event.opponentBoard?.heroCardId,
-			// event.teammateBoard?.Hero?.CardId,
-			event.duoPendingBoards?.map((p) => p.playerBoard?.heroCardId).join(','),
-			event.duoPendingBoards?.map((p) => p.opponentBoard?.heroCardId).join(','),
-		);
-		console.log(
-			'[bgs-simulation] received hero power info',
-			event.playerBoard?.heroPowerInfo,
-			event.opponentBoard?.heroPowerInfo,
-			event.duoPendingBoards?.map((p) => p.playerBoard?.heroPowerInfo).join(','),
-			event.duoPendingBoards?.map((p) => p.opponentBoard?.heroPowerInfo).join(','),
 		);
 
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
