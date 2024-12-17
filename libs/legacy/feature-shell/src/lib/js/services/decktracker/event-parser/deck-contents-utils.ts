@@ -287,6 +287,7 @@ const handleWyrmrestPurifier = (
 				cardType: undefined,
 				refManaCost: undefined,
 				actualManaCost: undefined,
+				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
 			} as DeckCard),
 		deckState,
@@ -311,6 +312,7 @@ const handleExploreUngoro = (
 				refManaCost: refCard.cost,
 				rarity: refCard.rarity,
 				cardType: refCard.type,
+				relatedCardIds: undefined,
 			} as DeckCard),
 		deckState,
 		allCards,
@@ -333,6 +335,7 @@ const handleDeckOfLunacy = (
 				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Spell',
+				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) =>
 					(!other.type || other.type === 'Spell') && other.cost === card.getEffectiveManaCost() + 3,
 			} as DeckCard),
@@ -359,6 +362,7 @@ const handleTheAzeriteMurloc = (
 				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Minion',
+				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) =>
 					(!other.type || other.type === 'Minion') && other.cost === card.getEffectiveManaCost() + 3,
 			} as DeckCard),
@@ -383,6 +387,7 @@ const handleFiresOfZinAzshari = (
 				actualManaCost: 5,
 				rarity: 'unknown',
 				cardType: 'Minion',
+				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) => other.cost >= 5,
 			} as DeckCard),
 		deckState,
@@ -406,6 +411,7 @@ const handleLadyPrestor = (
 				actualManaCost: card.getEffectiveManaCost(),
 				rarity: 'unknown',
 				cardType: 'Minion',
+				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard, cardInfos) => {
 					const result =
 						cardInfos?.cost != null
@@ -436,6 +442,7 @@ const handleArchVillainRafaam = (
 				actualManaCost: undefined,
 				rarity: 'legendary',
 				cardType: 'Minion',
+				relatedCardIds: undefined,
 			} as DeckCard),
 		deckState,
 		allCards,
@@ -542,6 +549,7 @@ const handlePrinceLiam = (
 				cardType: 'Minion',
 				refManaCost: undefined,
 				actualManaCost: undefined,
+				relatedCardIds: undefined,
 				cardMatchCondition: (drawnCard: ReferenceCard) => drawnCard.rarity?.toLowerCase() === 'legendary',
 			} as DeckCard),
 		deckState,
