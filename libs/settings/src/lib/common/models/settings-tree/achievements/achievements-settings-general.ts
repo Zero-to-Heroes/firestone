@@ -10,7 +10,7 @@ export const achievementsGeneralSettings = (context: SettingContext): SettingNod
 		sections: [
 			{
 				id: 'achievements-general',
-				title: context.i18n.translateString('settings.achievements.general.title'),
+				title: context.i18n.translateString('settings.achievements.menu.general'),
 				settings: [
 					{
 						type: 'toggle',
