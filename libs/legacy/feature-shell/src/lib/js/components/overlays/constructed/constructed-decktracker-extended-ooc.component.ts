@@ -10,12 +10,12 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { ALL_CLASSES, GameFormat, getBaseCardId } from '@firestone-hs/reference-data';
 import {
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
 	MulliganDeckData,
+	MulliganDeckStats,
 	buildColor,
 } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
@@ -49,16 +49,62 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 				[timeLabel]="timeLabel$ | async"
 				[formatLabel]="formatLabel$ | async"
 				[sampleSize]="sampleSize$ | async"
+				[sampleSizeTooltip]="'decktracker.overlay.mulligan.sample-size-tooltip' | fsTranslate"
 				[cycleRanks]="cycleRanks"
 				[cycleOpponent]="cycleOpponent"
 				[cycleTime]="cycleTime"
 				[cycleFormat]="cycleFormat"
 			>
 			</mulligan-deck-view>
-			<!-- <div class="deck-stats" *ngIf="value.info?.deckStats">
-			<div class="subtitle">Deck Stats</div>
-			<
-		</div> -->
+			<div class="deck-stats" *ngIf="value.info?.globalDeckStats">
+				<div class="title" [fsTranslate]="'decktracker.overlay.lobby.deck-stats.title'"></div>
+				<div class="category global-stats">
+					<div
+						class="subtitle"
+						[fsTranslate]="'decktracker.overlay.lobby.deck-stats.global-stats-subtitle'"
+					></div>
+					<div class="stats ">
+						<div class="stat total-games">
+							<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+							<div class="value">{{ value.info.globalDeckStats?.totalGames }}</div>
+						</div>
+						<div class="stat winrate">
+							<div class="label" [fsTranslate]="'app.decktracker.stats.winrate'"></div>
+							<div class="value">
+								{{
+									value.info.globalDeckStats?.winrate != null
+										? (100 * value.info.globalDeckStats.winrate).toFixed(1) + '%'
+										: '-'
+								}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="category player-stats">
+					<div
+						class="subtitle"
+						[fsTranslate]="'decktracker.overlay.lobby.deck-stats.your-stats-subtitle'"
+					></div>
+					<div class="stats ">
+						<div class="stat total-games">
+							<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+							<div class="value">
+								{{ value.info.playerDeckStats?.totalGames }}
+							</div>
+						</div>
+						<div class="stat winrate">
+							<div class="label" [fsTranslate]="'app.decktracker.stats.winrate'"></div>
+							<div class="value">
+								{{
+									value.info.playerDeckStats?.winrate != null
+										? (100 * value.info.playerDeckStats.winrate).toFixed(1) + '%'
+										: '-'
+								}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -130,7 +176,8 @@ export class ConstructedDecktrackerExtendedOocComponent
 					sampleSize: guide!.sampleSize,
 					rankBracket: guide!.rankBracket,
 					opponentClass: guide!.opponentClass,
-					deckStats: guide!.deckStats,
+					globalDeckStats: guide!.globalDeckStats,
+					playerDeckStats: guide!.playerDeckStats,
 				};
 				return result;
 			}),
@@ -302,5 +349,6 @@ export class ConstructedDecktrackerExtendedOocComponent
 }
 
 export interface MulliganDeckDataWithDeckStats extends MulliganDeckData {
-	deckStats: DeckStat | null;
+	globalDeckStats: MulliganDeckStats;
+	playerDeckStats: MulliganDeckStats;
 }

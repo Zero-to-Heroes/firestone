@@ -1,3 +1,57 @@
 :host {
 	display: flex;
+	flex-direction: column;
+}
+
+::ng-deep constructed-decktracker-extended-ooc .mulligan-deck-overview.mulligan-deck-overview {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.deck-stats {
+	display: flex;
+	flex-direction: column;
+	background: var(--color-7);
+	color: var(--color-1);
+	align-items: center;
+	gap: 20px;
+	padding-bottom: 20px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+
+	.title {
+		color: var(--default-title-color);
+		font-size: 18px;
+		margin-bottom: -5px;
+		margin-top: 15px;
+	}
+
+	.category {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.subtitle {
+		color: var(--default-title-color);
+		font-size: 16px;
+		margin-bottom: 10px;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px;
+
+		.stat {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			.label {
+				color: var(--color-2);
+			}
+		}
+	}
 }

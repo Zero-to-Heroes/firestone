@@ -68,7 +68,7 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 					<div class="filter format" *ngIf="formatLabel" (click)="cycleFormat()">
 						<div class="text">{{ formatLabel }}</div>
 					</div>
-					<div class="sample-size">{{ sampleSize }}</div>
+					<div class="sample-size" [helpTooltip]="sampleSizeTooltip">{{ sampleSize }}</div>
 				</div>
 			</div>
 			<div class="content">
@@ -142,6 +142,7 @@ export class MulliganDeckViewComponent
 	@Input() timeLabel: string | null;
 	@Input() formatLabel: string | null;
 	@Input() sampleSize: string | null;
+	@Input() sampleSizeTooltip: string | null;
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
 	@Input() cycleTime: () => void;
