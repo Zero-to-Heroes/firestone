@@ -70,10 +70,10 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 	protected positionExtractor = async (prefs: Preferences) => prefs.constructedOocTrackerPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected bounds = {
-		left: -100,
-		right: -100,
-		top: -50,
-		bottom: -50,
+		left: -200,
+		right: -200,
+		top: -200,
+		bottom: -200,
 	};
 
 	showWidgetListOnly$: Observable<boolean>;
