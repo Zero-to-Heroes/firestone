@@ -33,6 +33,18 @@
 	}
 }
 
+.scalable {
+	transform: scale(1);
+	transform-origin: right top;
+	position: relative;
+	opacity: 1;
+	transition-property: transform, opacity;
+	transition-duration: 0.3s;
+	transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+	height: calc(100% / var(--decktracker-scale));
+	width: 100%;
+}
+
 .title-bar {
 	opacity: 0;
 	background: var(--color-7);

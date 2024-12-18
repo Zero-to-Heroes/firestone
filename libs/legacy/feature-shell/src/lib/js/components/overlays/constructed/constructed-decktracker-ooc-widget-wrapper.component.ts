@@ -30,7 +30,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 		<!-- Maybe add a toggle on the widget itself, and use that to count the free uses?  -->
 		<!-- Could maybe be free for one full day per week? Would be easier to manage that way -->
 		<div
-			class="widget container scalable"
+			class="widget"
 			*ngIf="{ premium: hasPremium$ | async } as value"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
@@ -38,22 +38,24 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 			(cdkDragEnded)="dragEnded($event)"
 			[ngClass]="{ premium: value.premium }"
 		>
-			<div class="title-bar">
-				<button
-					class="toggle-button"
-					(click)="toggleMode(value.premium)"
-					inlineSVG="assets/svg/restore.svg"
-					[helpTooltip]="toggleButtonTooltip$ | async"
-				></button>
-				<control-close
-					[eventProvider]="closeHandler"
-					[helpTooltip]="'decktracker.overlay.lobby.close-button-tooltip' | fsTranslate"
-				></control-close>
+			<div class="scalable container">
+				<div class="title-bar">
+					<button
+						class="toggle-button"
+						(click)="toggleMode(value.premium)"
+						inlineSVG="assets/svg/restore.svg"
+						[helpTooltip]="toggleButtonTooltip$ | async"
+					></button>
+					<control-close
+						[eventProvider]="closeHandler"
+						[helpTooltip]="'decktracker.overlay.lobby.close-button-tooltip' | fsTranslate"
+					></control-close>
+				</div>
+				<constructed-decktracker-ooc *ngIf="showWidgetListOnly$ | async"></constructed-decktracker-ooc>
+				<constructed-decktracker-extended-ooc
+					*ngIf="showWidgetExtended$ | async"
+				></constructed-decktracker-extended-ooc>
 			</div>
-			<constructed-decktracker-ooc *ngIf="showWidgetListOnly$ | async"></constructed-decktracker-ooc>
-			<constructed-decktracker-extended-ooc
-				*ngIf="showWidgetExtended$ | async"
-			></constructed-decktracker-extended-ooc>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
