@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CardIds, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -248,6 +248,7 @@ export class BgsSimulatorMinionSelectionComponent
 					const result = this.allCards
 						.getCards()
 						.filter((card) => card.isBaconPool)
+						.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
 						// .filter((card) => card.battlegroundsPremiumDbfId || TOKEN_CARD_IDS.includes(card.id as CardIds))
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
 						.filter((card) =>
