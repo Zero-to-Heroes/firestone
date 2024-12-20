@@ -525,6 +525,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ClearancePromoter_TOY_390:
 			return and(side(inputSide), or(inHand, inDeck), spell);
+		case CardIds.ClearTheWay:
+			return and(side(inputSide), or(inHand, inDeck), minion, rush);
 		case CardIds.ClericOfAnshe:
 			return highlightConditions(
 				and(side(inputSide), inDeck, spell),
