@@ -207,6 +207,24 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 				settings: counters(context).map((counter) => toSetting(counter)),
 			},
 			{
+				id: 'decktracker-counters-size-other',
+				title: context.i18n.translateString('settings.decktracker.global.attack-counter-size'),
+				settings: [
+					{
+						type: 'slider',
+						field: 'countersScaleOpponentOther',
+						label: context.i18n.translateString('settings.decktracker.global.counters-size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 30,
+							max: 200,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
+				],
+			},
+			{
 				id: 'decktracker-counters-size',
 				title: context.i18n.translateString('settings.decktracker.global.counters-size'),
 				settings: [

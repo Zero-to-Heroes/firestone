@@ -39,7 +39,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 		</div>
 		<div
 			*ngIf="!standardCounter"
-			class="counter generic-counter {{ counterClass }}"
+			class="counter generic-counter scalable-other {{ counterClass }}"
 			[helpTooltip]="helpTooltipText"
 		>
 			<div class="frame">{{ value }}</div>
@@ -80,13 +80,24 @@ export class GenericCountersComponent extends AbstractSubscriptionComponent impl
 				this.mapData((prefs) => ({
 					scalePlayer: prefs.countersScale,
 					scaleOpponent: prefs.countersScaleOpponent,
+					// For the attack counter
+					scalePlayerOther: prefs.countersScaleOther,
+					scaleOpponentOther: prefs.countersScaleOpponentOther,
 				})),
 			),
-		]).subscribe(([side, { scalePlayer, scaleOpponent }]) => {
-			const scale = side === 'player' ? scalePlayer : scaleOpponent;
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (element) {
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+		]).subscribe(([side, { scalePlayer, scaleOpponent, scalePlayerOther, scaleOpponentOther }]) => {
+			if (this.standardCounter) {
+				const scale = side === 'player' ? scalePlayer : scaleOpponent;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (element) {
+					this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+				}
+			} else {
+				const scale = side === 'player' ? scalePlayerOther : scaleOpponentOther;
+				const element = this.el.nativeElement.querySelector('.scalable-other');
+				if (element) {
+					this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+				}
 			}
 		});
 
