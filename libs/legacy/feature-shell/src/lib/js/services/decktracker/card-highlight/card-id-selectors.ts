@@ -931,7 +931,10 @@ export const cardIdSelector = (
 		case CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.Flowrider:
-			return and(side(inputSide), inDeck, spell);
+			return highlightConditions(
+				and(side(inputSide), inDeck, spell),
+				and(side(inputSide), or(inDeck, inHand), overload),
+			);
 		case CardIds.FlyOffTheShelves_TOY_714:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.Foamrender_MIS_101:
@@ -1732,6 +1735,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Psychopomp:
 			return and(side(inputSide), inGraveyard, minion);
+		case CardIds.Pyrotechnician:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.QualityAssurance_TOY_605:
 			return and(side(inputSide), inDeck, minion, taunt);
 		case CardIds.QueenAzshara_TSC_641:
