@@ -34,7 +34,8 @@ export class CardRemovedFromBoardParser implements EventParser {
 		const newPlayerDeck = deck.update({
 			board: newBoard,
 			otherZone: newOtherZone,
-			destroyedCardsInDeck: [...deck.destroyedCardsInDeck, { cardId, entityId }],
+			// Reno removes cards from board, but that doesn't count as "cards destroyed in deck"
+			// destroyedCardsInDeck: [...deck.destroyedCardsInDeck, { cardId, entityId }],
 		});
 
 		const newState = currentState.update({
