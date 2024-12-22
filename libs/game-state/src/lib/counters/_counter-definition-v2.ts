@@ -11,6 +11,9 @@ export abstract class CounterDefinitionV2<T> {
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public abstract readonly cards: readonly CardIds[];
 	protected debug = false;
+	// Only show one instance of the counter at the same time. Useful for counters like
+	// Ceaseless expanse which tracks things game-wide, instead of per-player
+	protected singleton = false;
 
 	public abstract readonly player?: {
 		pref: keyof Preferences;
@@ -54,6 +57,10 @@ export abstract class CounterDefinitionV2<T> {
 		} else if (this.type === 'hearthstone' && isBattlegrounds(gameState.metadata.gameType)) {
 			return false;
 		}
+		if (this.singleton && side === 'opponent' && this.isActive('player', gameState, bgState, prefs)) {
+			return false;
+		}
+
 		if (side === 'player') {
 			this.debug && console.debug('|debug] considering', gameState, bgState);
 			if (!this.player?.pref || !prefs[this.player.pref]) {
