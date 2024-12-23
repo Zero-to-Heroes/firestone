@@ -900,6 +900,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, fel);
 		case CardIds.IllidanStormrage_FelInside_THD_004p:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
+		case CardIds.Felosophy:
+			return and(side(inputSide), or(inHand, inDeck), demon);
 		case CardIds.FelscaleEvoker:
 			return and(side(inputSide), inDeck, demon, not(cardIs(CardIds.FelscaleEvoker)));
 		case CardIds.Fetch_TOY_352:
