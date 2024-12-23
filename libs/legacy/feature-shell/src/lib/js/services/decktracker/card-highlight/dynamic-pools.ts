@@ -234,6 +234,7 @@ const filterCards = (
 		.filter((c) => c.collectible)
 		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false))
 		.filter((c) => filters.every((f) => f(c)))
+		.filter((c) => !c.mechanics?.includes(GameTag[GameTag.TITAN]))
 		.sort(
 			(a, b) => a.cost - b.cost || a.classes?.[0]?.localeCompare(b.classes?.[0]) || a.name.localeCompare(b.name),
 		)
