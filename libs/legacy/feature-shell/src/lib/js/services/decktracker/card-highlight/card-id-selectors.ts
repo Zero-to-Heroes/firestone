@@ -295,6 +295,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.AuctionhouseGavel:
 			return and(side(inputSide), or(inDeck, inHand), battlecry, minion);
+		case CardIds.AudioSplitter:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Aviana:
 		case CardIds.Aviana_WON_012:
 			return and(side(inputSide), or(inDeck, inHand), minion);
