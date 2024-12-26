@@ -399,7 +399,11 @@ export const cardIdSelector = (
 		case CardIds.BonecrusherTavernBrawlToken:
 			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 		case CardIds.Boneshredder:
-			return and(side(inputSide), inGraveyard, minion, deathrattle);
+			return highlightConditions(
+				tooltip(and(side(inputSide), inGraveyard, minion, deathrattle)),
+				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
+				and(side(inputSide), inGraveyard, minion, deathrattle),
+			);
 		case CardIds.BoogieDown:
 			return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 		case CardIds.DrBoom_BoomBarrage_THD_034p:
@@ -428,6 +432,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.BronzeSignetTavernBrawl:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.BumblingBellhop_VAC_521:
+			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.BunnyStomper_WW_435:
 			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.BusyBot_WORK_002:
@@ -952,6 +958,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, fel);
 		case CardIds.FrequencyOscillator:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
+		case CardIds.PeacefulPiper_FriendlyFace:
+			return and(side(inputSide), inDeck, beast);
 		case CardIds.FrizzKindleroost:
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.FrostLichJaina_ICC_833:
@@ -1212,6 +1220,13 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.IceRevenant:
 			return and(side(inputSide), inDeck, spell, frost);
+		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t37:
+		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t38:
+		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t39:
+			return highlightConditions(
+				tooltip(and(side(inputSide), inGraveyard, minion)),
+				and(side(inputSide), or(inHand, inDeck), minion),
+			);
 		case CardIds.IdolsOfEluneTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.IngeniousArtificer_GDB_135:
@@ -2192,6 +2207,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.StranglethornHeart:
 			return tooltip(and(side(inputSide), inGraveyard, beast, effectiveCostMore(4)));
+		case CardIds.StrengthInNumbers:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Suffocate_GDB_476:
 			return and(side(inputSide), or(inHand, inDeck), starshipPiece);
 		case CardIds.SummerFlowerchild:
@@ -2492,8 +2509,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.WakenerOfSouls_GDB_468:
 			return highlightConditions(
-				tooltip(and(side(inputSide), inGraveyard, deathrattle, not(cardIs(CardIds.WakenerOfSouls_GDB_468)))),
-				and(side(inputSide), deathrattle, not(cardIs(CardIds.WakenerOfSouls_GDB_468))),
+				tooltip(
+					and(side(inputSide), inGraveyard, deathrattle, minion, not(cardIs(CardIds.WakenerOfSouls_GDB_468))),
+				),
+				and(side(inputSide), deathrattle, minion, not(cardIs(CardIds.WakenerOfSouls_GDB_468))),
 			);
 		case CardIds.WarCommandsTavernBrawl:
 			return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
