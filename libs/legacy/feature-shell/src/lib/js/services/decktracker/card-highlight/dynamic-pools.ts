@@ -170,13 +170,88 @@ export const getDynamicRelatedCardIds = (
 					c?.cost === 8 &&
 					canBeDiscoveredByClass(c, options.currentClass),
 			);
+		case CardIds.Wandmaker:
+		case CardIds.Wandmaker_CORE_SCH_160:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+					c?.cost === 1 &&
+					c?.classes?.includes(options.currentClass.toUpperCase()),
+			);
+		case CardIds.PrimordialStudies_SCH_270:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasMechanic(c, GameTag.SPELLPOWER) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.CarrionStudies:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasMechanic(c, GameTag.DEATHRATTLE) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.AthleticStudies_SCH_237:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasMechanic(c, GameTag.RUSH) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.IllidariStudiesCore:
+		case CardIds.IllidariStudies_YOP_001:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasMechanic(c, GameTag.OUTCAST) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.NatureStudies_SCH_333:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.DemonicStudies:
+		case CardIds.DemonicStudies_CORE_SCH_158:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasCorrectTribe(c, Race.DEMON) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case CardIds.DraconicStudies:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasCorrectTribe(c, Race.DRAGON) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
 		case CardIds.GalacticCrusader_GDB_862:
 			return filterCards(
 				allCards,
 				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-					c.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]),
+					c.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]) &&
+					canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.ScroungingShipwright_GDB_876:
 		case CardIds.StarshipSchematic_GDB_102:
@@ -193,7 +268,8 @@ export const getDynamicRelatedCardIds = (
 				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-					c?.mechanics?.includes(GameTag[GameTag.COMBO]),
+					c?.mechanics?.includes(GameTag[GameTag.COMBO]) &&
+					canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.MaestraMaskMerchant_VAC_336:
 			return (

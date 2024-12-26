@@ -84,7 +84,7 @@ export class DeckCardService {
 				const dynamicCards = getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
 					format: metaData.formatType,
 					gameType: metaData.gameType,
-					currentClass: !deckState?.hero?.classes?.[0] ? null : CardClass[deckState?.hero?.classes?.[0]],
+					currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 				});
 				return !!dynamicCards?.length ? dynamicCards : card.relatedCardIds;
 		}
