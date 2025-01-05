@@ -236,9 +236,9 @@ export const minionPlayedThisMatch = (input: SelectorInput): boolean => {
 	const minionsPlayedThisMatch = input.deckState?.cardsPlayedThisMatch.filter(
 		(c) => input.allCards.getCard(c.cardId).type === 'Minion',
 	);
-	const result =
-		minionsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||
-		minionsPlayedThisMatch.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
+	const result = minionsPlayedThisMatch.some(
+		(c) => c.cardId === input.cardId && Math.abs(c.entityId) === Math.abs(input.entityId),
+	);
 	return result;
 };
 
