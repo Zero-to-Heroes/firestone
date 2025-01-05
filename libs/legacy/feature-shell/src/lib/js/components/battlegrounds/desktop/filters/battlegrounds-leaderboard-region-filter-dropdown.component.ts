@@ -51,7 +51,12 @@ export class BattlegroundsLeaderboardRegionFilterDropdownComponent
 		]).pipe(
 			filter(([selectedCategoryId, filter]) => !!selectedCategoryId),
 			this.mapData(([selectedCategoryId, filter]) => {
-				const allRegions = ['EU', 'US', 'AP', 'CN'];
+				const allRegions = [
+					'EU',
+					'US',
+					'AP',
+					// 'CN'
+				];
 				const options: FilterOption[] = allRegions.map(
 					(option) =>
 						({
