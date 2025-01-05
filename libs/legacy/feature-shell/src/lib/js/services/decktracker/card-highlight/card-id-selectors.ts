@@ -260,7 +260,12 @@ export const cardIdSelector = (
 					.map((c) => input.deckState.findCard(c.entityId)?.card)
 					.filter((c) => !!c)
 					.filter((c) => c.creatorCardId != null || c.stolenFromOpponent);
-				return tooltip(and(side(inputSide), entityIs(...demonsPlayed.map((c) => c.entityId))))(input);
+				return tooltip(
+					and(
+						side(inputSide),
+						entityIs(...demonsPlayed.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
+					),
+				)(input);
 			};
 
 		case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
@@ -279,7 +284,12 @@ export const cardIdSelector = (
 				);
 				const lastCardPlayed = draeneiPlayed.length ? draeneiPlayed[draeneiPlayed.length - 1] : null;
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(lastCardPlayed?.entityId))),
+					tooltip(
+						and(
+							side(inputSide),
+							entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId }),
+						),
+					),
 					and(side(inputSide), or(inDeck, inHand), draenei),
 				)(input);
 			};
@@ -508,7 +518,13 @@ export const cardIdSelector = (
 							input.deckState.spellsPlayedOnEnemyEntities.length - 1
 					  ]
 					: null;
-				return tooltip(and(side(inputSide), entityIs(lastSpellOnEnemy?.entityId), spell))(input);
+				return tooltip(
+					and(
+						side(inputSide),
+						entityIs({ entityId: lastSpellOnEnemy?.entityId, cardId: lastSpellOnEnemy?.cardId }),
+						spell,
+					),
+				)(input);
 			};
 		case CardIds.ChemicalSpill_TOY_602:
 			return and(side(inputSide), or(inHand, inDeck), minion);
@@ -589,7 +605,12 @@ export const cardIdSelector = (
 					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
 					: null;
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(lastCardPlayed?.entityId))),
+					tooltip(
+						and(
+							side(inputSide),
+							entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId }),
+						),
+					),
 					and(side(inputSide), or(inDeck, inHand), not(currentClass), not(neutral)),
 				)(input);
 			};
@@ -858,7 +879,15 @@ export const cardIdSelector = (
 				const last = deadDemons[deadDemons.length - 1];
 				return highlightConditions(
 					and(side(inputSide), or(inHand, inDeck), minion, demon),
-					tooltip(and(side(inputSide), inGraveyard, minion, demon, entityIs(last.entityId))),
+					tooltip(
+						and(
+							side(inputSide),
+							inGraveyard,
+							minion,
+							demon,
+							entityIs({ entityId: last.entityId, cardId: last.cardId }),
+						),
+					),
 				)(input);
 			};
 		case CardIds.EnduranceTrainingTavernBrawl:
@@ -896,7 +925,12 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const lastCardPlayed =
 					input.deckState.cardsPlayedThisMatch?.[input.deckState.cardsPlayedThisMatch.length - 1];
-				return tooltip(and(side(inputSide), entityIs(lastCardPlayed?.entityId)))(input);
+				return tooltip(
+					and(
+						side(inputSide),
+						entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId }),
+					),
+				)(input);
 			};
 		case CardIds.FeldoreiWarband:
 			return and(side(inputSide), inDeck, minion);
@@ -991,7 +1025,7 @@ export const cardIdSelector = (
 				const firstOfEachCost = Object.keys(groupedByCost)
 					.sort()
 					.map((key) => groupedByCost[key][0])
-					.map((c) => c.entityId);
+					.map((c) => ({ entityId: c.entityId, cardId: c.cardId }));
 				return highlightConditions(
 					tooltip(and(side(inputSide), entityIs(...firstOfEachCost))),
 					and(side(inputSide), spellPlayedThisMatch),
@@ -1213,7 +1247,12 @@ export const cardIdSelector = (
 					);
 				}
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(...finalCandidates.map((c) => c.entityId)))),
+					tooltip(
+						and(
+							side(inputSide),
+							entityIs(...finalCandidates.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
+						),
+					),
 					and(side(inputSide), or(inHand, inDeck, inPlay), taunt, minion),
 				)(input);
 			};
@@ -1402,7 +1441,14 @@ export const cardIdSelector = (
 				}
 
 				return highlightConditions(
-					tooltip(and(side(inputSide), inGraveyard, minion, entityIs(...candidates.map((c) => c.entityId)))),
+					tooltip(
+						and(
+							side(inputSide),
+							inGraveyard,
+							minion,
+							entityIs(...candidates.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
+						),
+					),
 				)(input);
 			};
 		case CardIds.KureTheLightBeyond_GDB_442:
@@ -1677,7 +1723,7 @@ export const cardIdSelector = (
 				);
 				const target = pickLast(oneCostCardsPlayed);
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(target?.entityId))),
+					tooltip(and(side(inputSide), entityIs({ entityId: target?.entityId, cardId: target?.cardId }))),
 					and(side(inputSide), or(inHand, inDeck), baseCostEqual(1)),
 				)(input);
 			};
@@ -1841,7 +1887,7 @@ export const cardIdSelector = (
 				);
 				const targets = input.deckState.minionsDeadThisMatch
 					.filter((c) => (c.effectiveCost ?? allCards.getCard(c.cardId).cost) === highestDeadMinionCost)
-					.map((c) => c.entityId);
+					.map((c) => ({ entityId: c.entityId, cardId: c.cardId }));
 				return tooltip(and(side(inputSide), entityIs(...targets)))(input);
 			};
 		case CardIds.Resurrect_BRM_017:
@@ -2229,7 +2275,9 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const lastSpell = pickLast(input.deckState.spellsPlayedOnFriendlyMinions);
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(lastSpell?.entityId))),
+					tooltip(
+						and(side(inputSide), entityIs({ entityId: lastSpell?.entityId, cardId: lastSpell?.cardId })),
+					),
 					and(side(inputSide), inDeck, spell),
 				)(input);
 			};
@@ -2487,7 +2535,12 @@ export const cardIdSelector = (
 							allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.DEATHRATTLE]),
 					);
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(...candidates.map((c) => c.entityId)))),
+					tooltip(
+						and(
+							side(inputSide),
+							entityIs(...candidates.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
+						),
+					),
 					and(side(inputSide), or(inDeck, inHand), draenei, or(battlecry, deathrattle)),
 				)(input);
 			};

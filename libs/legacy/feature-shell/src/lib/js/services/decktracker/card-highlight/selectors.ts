@@ -74,7 +74,9 @@ export const inHand = inZoneName('hand');
 export const inOther = inZoneName('other') || inZoneName('other-generated') || inZoneName('board');
 export const inGraveyard = (input: SelectorInput) =>
 	input.zone?.toLowerCase() === 'graveyard'?.toLowerCase() ||
-	input.deckState.minionsDeadThisMatch.map((m) => Math.abs(m.entityId)).includes(Math.abs(input.entityId));
+	input.deckState.minionsDeadThisMatch.some(
+		(m) => Math.abs(m.entityId) === Math.abs(input.entityId) && m.cardId === input.cardId,
+	);
 export const discarded = inZoneName('discard');
 export const inPlay = (input: SelectorInput): boolean =>
 	input.deckCard.zone !== 'BURNED' &&
@@ -136,7 +138,9 @@ export const notInInitialDeck = (input: SelectorInput): boolean =>
 	input.deckCard.creatorCardId != null || input.deckCard.stolenFromOpponent;
 
 export const inStartingHand = (input: SelectorInput): boolean =>
-	input.deckState.cardsInStartingHand?.some((c) => Math.abs(c.entityId) === Math.abs(input.entityId));
+	input.deckState.cardsInStartingHand?.some(
+		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
+	);
 
 export const excludeEntityId =
 	(entityId: number) =>
@@ -191,46 +195,45 @@ export const cardIs =
 	(input: SelectorInput): boolean =>
 		!!cardIds?.length && cardIds.includes(input.card?.id as CardIds);
 
+// Fix issues where there are multiple entities with the same entityId, because the card got transformed
 export const entityIs =
-	(...entityIds: readonly number[]) =>
+	(...entities: readonly { entityId: number; cardId: string }[]) =>
 	(input: SelectorInput): boolean =>
-		!!entityIds?.filter((e) => e != null)?.length &&
+		!!entities?.filter((e) => e?.entityId != null)?.length &&
 		input.entityId != null &&
-		entityIds
-			.filter((e) => e != null)
-			.map((id) => Math.abs(id))
-			.includes(Math.abs(input.entityId));
+		!!entities
+			.filter((e) => e?.entityId != null)
+			.find((e) => Math.abs(e.entityId) === Math.abs(input.entityId) && e.cardId === input.cardId);
 
 export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
-	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(input.entityId) ||
-	input.deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(-input.entityId);
+	input.deckState?.spellsPlayedThisMatch.some(
+		(spell) => Math.abs(spell.entityId) === Math.abs(input.entityId) && spell.cardId === input.cardId,
+	);
 
 export const spellPlayedThisMatchOnFriendly = (input: SelectorInput): boolean =>
-	input.deckState?.spellsPlayedOnFriendlyEntities.map((spell) => spell.entityId).includes(input.entityId) ||
-	input.deckState?.spellsPlayedOnFriendlyEntities.map((spell) => spell.entityId).includes(-input.entityId);
+	input.deckState?.spellsPlayedOnFriendlyEntities.some(
+		(spell) => Math.abs(spell.entityId) === Math.abs(input.entityId) && spell.cardId === input.cardId,
+	);
 
 export const spellPlayedThisMatchOnFriendlyMinion = (input: SelectorInput): boolean =>
-	input.deckState?.spellsPlayedOnFriendlyMinions.map((spell) => spell.entityId).includes(input.entityId) ||
-	input.deckState?.spellsPlayedOnFriendlyMinions.map((spell) => spell.entityId).includes(-input.entityId);
+	input.deckState?.spellsPlayedOnFriendlyMinions.some(
+		(spell) => Math.abs(spell.entityId) === Math.abs(input.entityId) && spell.cardId === input.cardId,
+	);
 
-export const cardsPlayedThisMatch = (input: SelectorInput): boolean => {
-	const result =
-		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(input.entityId) ||
-		input.deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
-	return result;
-};
+export const cardsPlayedThisMatch = (input: SelectorInput): boolean =>
+	input.deckState?.cardsPlayedThisMatch.some(
+		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
+	);
 
-export const cardsPlayedLastTurn = (input: SelectorInput): boolean => {
-	const result =
-		input.deckState?.cardsPlayedLastTurn.map((card) => card.entityId).includes(input.entityId) ||
-		input.deckState?.cardsPlayedLastTurn.map((card) => card.entityId).includes(-(input?.entityId ?? 0));
-	return result;
-};
+export const cardsPlayedLastTurn = (input: SelectorInput): boolean =>
+	input.deckState?.cardsPlayedLastTurn.some(
+		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
+	);
 
-export const secretsTriggeredThisMatch = (input: SelectorInput): boolean => {
-	const result = input.deckState?.secretsTriggeredThisMatch.map((card) => card.entityId).includes(input.entityId);
-	return result;
-};
+export const secretsTriggeredThisMatch = (input: SelectorInput): boolean =>
+	input.deckState?.secretsTriggeredThisMatch.some(
+		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
+	);
 
 export const minionPlayedThisMatch = (input: SelectorInput): boolean => {
 	const minionsPlayedThisMatch = input.deckState?.cardsPlayedThisMatch.filter(
@@ -243,33 +246,20 @@ export const minionPlayedThisMatch = (input: SelectorInput): boolean => {
 };
 
 export const minionsDeadSinceLastTurn = (input: SelectorInput): boolean =>
-	input.deckState?.minionsDeadSinceLastTurn.map((card) => card.entityId).includes(input.entityId) ||
-	input.deckState?.minionsDeadSinceLastTurn.map((card) => card.entityId).includes(-(input.entityId ?? 0));
+	input.deckState?.minionsDeadSinceLastTurn.some(
+		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
+	);
 
 const hasMechanic =
 	(mechanic: GameTag) =>
 	(input: SelectorInput): boolean => {
 		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
-		// console.debug(
-		// 	'hasMechanic?',
-		// 	refCard?.name,
-		// 	GameTag[mechanic],
-		// 	refCard?.mechanics?.includes(GameTag[mechanic]),
-		// 	refCard?.mechanics,
-		// );
 		return refCard?.mechanics?.includes(GameTag[mechanic]);
 	};
 const hasMechanicStr =
 	(mechanic: string) =>
 	(input: SelectorInput): boolean => {
 		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
-		// console.debug(
-		// 	'hasMechanic?',
-		// 	refCard?.name,
-		// 	mechanic,
-		// 	refCard?.mechanics?.includes(mechanic),
-		// 	refCard?.mechanics,
-		// );
 		return refCard?.mechanics?.includes(mechanic);
 	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
