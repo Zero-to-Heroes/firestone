@@ -2115,7 +2115,7 @@ export const cardIdSelector = (
 		case CardIds.SnatchAndGrab_VAC_700:
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.SonyaWaterdancer_TOY_515:
-			return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1));
+			return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1), minion);
 		case CardIds.SootSpewer:
 		case CardIds.SootSpewer_WON_033:
 			return and(side(inputSide), or(inDeck, inHand), mech);
