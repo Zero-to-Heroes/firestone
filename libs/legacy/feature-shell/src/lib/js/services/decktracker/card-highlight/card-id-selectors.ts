@@ -1038,6 +1038,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, undead);
 		case CardIds.GlacialDownpourTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
+		case CardIds.GoboglideTech:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.GolgannethTheThunderer:
 			return highlightConditions(
 				and(side(inputSide), inDeck, overload),
