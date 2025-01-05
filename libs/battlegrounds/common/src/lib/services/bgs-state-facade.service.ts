@@ -6,6 +6,7 @@ import {
 	AbstractFacadeService,
 	AppInjector,
 	OverwolfService,
+	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { auditTime, BehaviorSubject, combineLatest } from 'rxjs';
@@ -30,6 +31,8 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 		this.gameState$$ = new SubscriberAwareBehaviorSubject<BattlegroundsState | null>(null);
 		this.ow = AppInjector.get(OverwolfService);
 		this.matchPlayers = AppInjector.get(BgsMatchPlayersMmrService);
+
+		await waitForReady(this.matchPlayers);
 
 		while (!this.ow.getMainWindow().battlegroundsStore) {
 			await sleep(50);

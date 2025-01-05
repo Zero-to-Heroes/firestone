@@ -14,7 +14,7 @@ const MIN_RATING = 0; // 6000
 
 @Injectable()
 export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPlayersMmrService> {
-	public playersMatchMmr$$ = new SubscriberAwareBehaviorSubject<readonly PlayerMatchMmr[] | null>(null);
+	public playersMatchMmr$$: SubscriberAwareBehaviorSubject<readonly PlayerMatchMmr[] | null>;
 
 	private memoryInfo: BgsMatchMemoryInfoService;
 	private leaderboards: BattlegroundsOfficialLeaderboardService;
@@ -63,7 +63,6 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 			]).pipe(
 				debounceTime(500),
 				filter(([memoryInfo, gameState, useLeaderboardData]) => useLeaderboardData),
-				tap((info) => console.debug('[bgs-match-players-mmr] before game info', info)),
 				map(([memoryInfo, gameState]) => {
 					if (!memoryInfo?.Game?.Players?.length || !gameState?.region) {
 						return null;
@@ -81,7 +80,6 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 					};
 				}),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				tap((info) => console.debug('[bgs-match-players-mmr] game info', info)),
 			);
 
 			combineLatest([gameInfo$, leaderboards$])
@@ -99,7 +97,6 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 								const leaderboardPlayer = leaderboard?.entries.find(
 									(leaderboardPlayer) => leaderboardPlayer.accountId === player.name,
 								);
-								console.debug('[bgs-match-players-mmr] player', player, leaderboardPlayer);
 								return {
 									playerId: player.id,
 									playerName: player.name,
@@ -115,7 +112,6 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 					this.playersMatchMmr$$.next(players);
 				});
 		});
-		this.playersMatchMmr$$.subscribe();
 	}
 }
 
