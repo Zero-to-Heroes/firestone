@@ -47,7 +47,7 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 		return this.i18n.translateString(`counters.ceaseless.player`, {
 			value: value,
 			cardName: allCards.getCard(CardIds.TheCeaselessExpanse_GDB_142).name,
-			cost: (allCards.getCard(CardIds.TheCeaselessExpanse_GDB_142).cost ?? 100) - value,
+			cost: Math.max(0, (allCards.getCard(CardIds.TheCeaselessExpanse_GDB_142).cost ?? 100) - value),
 		});
 	}
 
