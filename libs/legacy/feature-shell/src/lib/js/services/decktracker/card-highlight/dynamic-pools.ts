@@ -30,13 +30,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]));
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
-			return filterCards(
-				allCards,
-				options,
-				(c) =>
-					c?.type?.toUpperCase() === CardType[CardType.LOCATION] &&
-					!c?.classes?.includes(CardClass[CardClass.NEUTRAL]),
-			);
+			return filterCards(allCards, options, (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION]);
 		case CardIds.TravelSecurity_WORK_010:
 			return filterCards(
 				allCards,
