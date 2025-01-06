@@ -27,6 +27,8 @@ export class GameState {
 	readonly matchStartTimestamp: number;
 	readonly gameEnded: boolean;
 	readonly spectating: boolean;
+	// Not used anymore?
+	/** @deprecated */
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly miscCardsDestroyed: readonly string[] = [];
 

@@ -55,8 +55,9 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 		return (
 			state.playerDeck.cardDrawnThisGame +
 			state.opponentDeck.cardDrawnThisGame +
-			state.cardsPlayedThisMatch.length +
 			state.miscCardsDestroyed.length +
+			state.playerDeck.cardsPlayedThisMatch.length +
+			state.opponentDeck.cardsPlayedThisMatch.length +
 			state.playerDeck.minionsDeadThisMatch.length +
 			state.opponentDeck.minionsDeadThisMatch.length +
 			state.playerDeck.destroyedCardsInDeck.length +
