@@ -1342,8 +1342,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.JoymancerJepetto_TOY_960:
 			return highlightConditions(
-				and(side(inputSide), or(inDeck, inHand), or(attackIs(1), healthIs(1))),
 				tooltip(and(side(inputSide), minionPlayedThisMatch, or(attackIs(1), healthIs(1)))),
+				and(side(inputSide), or(inDeck, inHand), or(attackIs(1), healthIs(1))),
 			);
 		case CardIds.JuicyPsychmelon:
 			return and(
