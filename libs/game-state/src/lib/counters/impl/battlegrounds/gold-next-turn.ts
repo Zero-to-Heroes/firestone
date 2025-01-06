@@ -56,7 +56,11 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		)(input.enchantments);
 		const cardsStrArray = Object.keys(groupedByCard).map((cardId) => {
 			const cardName = this.allCards.getCard(cardId)?.name;
-			const count = groupedByCard[cardId].length;
+			const goldForCard = getGoldForCard(cardId);
+			const count =
+				goldForCard > 0
+					? groupedByCard[cardId].map((c) => c.gold).reduce((a, b) => a + b, 0) / goldForCard
+					: groupedByCard[cardId].length;
 			return this.i18n.translateString('counters.bgs-gold-delta.card', { cardName, count });
 		});
 		const cardsStr = countersUseExpandedView ? '<br/>' + cardsStrArray.join('<br/>') : cardsStrArray.join(', ');
@@ -178,6 +182,15 @@ const getGoldForMinion = (
 					? 2
 					: 0;
 			return smugglerMultiplier * (2 + extraGold);
+		default:
+			return 0;
+	}
+};
+
+const getGoldForCard = (cardId: string): number => {
+	switch (cardId) {
+		case CardIds.CarefulInvestment_BG28_800:
+			return 2;
 		default:
 			return 0;
 	}
