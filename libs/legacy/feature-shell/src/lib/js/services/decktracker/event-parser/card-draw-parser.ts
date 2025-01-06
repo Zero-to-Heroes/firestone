@@ -14,6 +14,8 @@ import { tutors } from '../card-info/card-tutors';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
+
 export class CardDrawParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -39,7 +41,7 @@ export class CardDrawParser implements EventParser {
 					: true,
 			);
 		// console.debug('cards with matching card id', cardsWithMatchingCardId);
-		let drawnByCardId = gameEvent.additionalData.drawnByCardId;
+		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId;
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
@@ -52,7 +54,9 @@ export class CardDrawParser implements EventParser {
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
-		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(drawnByCardId);
+		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(
+			drawnByCardId as CardIds,
+		);
 		const useBottomOfDeckToIdentifyCard =
 			!isPlayer &&
 			cardDrawnFromBottom &&
@@ -113,7 +117,7 @@ export class CardDrawParser implements EventParser {
 		// So the C# parser hides some info when emitting the "CARD_DRAW_FROM_DECK" event, but the info isn't removed
 		// from the state in the app.
 		// So we use this flag to know whether we should display something
-		const isDrawnByCardIdPublic = tutors.includes(drawnByCardId);
+		const isDrawnByCardIdPublic = tutors.includes(drawnByCardId as CardIds);
 		// console.debug('isDrawnByCardIdPublic', isDrawnByCardIdPublic, drawnByCardId);
 		const lastInfluencedByCardId = gameEvent.additionalData.lastInfluencedByCardId ?? card.lastAffectedByCardId;
 
@@ -215,6 +219,8 @@ export class CardDrawParser implements EventParser {
 			cardDrawnThisGame:
 				currentState.currentTurn === 'mulligan' || currentState.currentTurn === 0
 					? 0
+					: NOT_REAL_DRAW?.includes(drawnByCardId as CardIds)
+					? deck.cardDrawnThisGame
 					: deck.cardDrawnThisGame + 1,
 		});
 		// console.debug('new player deck', newPlayerDeck);
