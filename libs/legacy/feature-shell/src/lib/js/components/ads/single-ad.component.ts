@@ -10,7 +10,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 declare let adsReady: any;
@@ -18,7 +18,7 @@ declare let OwAd: any;
 
 @Component({
 	selector: 'single-ad',
-	styleUrls: [`../../../css/component/ads/single-ad.component.scss`],
+	styleUrls: [`./single-ad.component.scss`],
 	template: `
 		<div class="ad-container" [ngClass]="{ 'overlay-ad': overlayAd }">
 			<div class="no-ads-placeholder">
@@ -27,7 +27,10 @@ declare let OwAd: any;
 						<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 					</svg>
 				</i>
-				<ad-tip class="tip" *ngIf="tip"></ad-tip>
+				<div class="bazaar-tracker-ad" *ngIf="bazaarTrackerAdActive">
+					<img src="https://i.imgur.com/NhQA7El.png" />
+				</div>
+				<ad-tip class="tip" *ngIf="tip && !bazaarTrackerAdActive"></ad-tip>
 			</div>
 			<div class="ads" id="ads-div-{{ this.adId }}"></div>
 		</div>
@@ -38,9 +41,12 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
 	@Input() tip: boolean;
+	@Input() showBazaarTrackerAd: boolean;
 	@Input() adId: string;
 	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
 	@Input() overlayAd = false;
+
+	bazaarTrackerAdActive: boolean;
 
 	private adRef;
 	private adInit = false;
@@ -56,6 +62,19 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	async ngAfterViewInit() {
 		this.initializeAds();
 		this.initializeVisibilityCheck();
+
+		await sleep(1000);
+		console.debug(
+			'[cross-promotion] considering BazaarTracker ad',
+			this.showBazaarTrackerAd,
+			this.bazaarTrackerAdActive,
+		);
+		if (this.showBazaarTrackerAd) {
+			this.bazaarTrackerAdActive = !this.bazaarTrackerAdActive;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
 	}
 
 	@HostListener('window:beforeunload')

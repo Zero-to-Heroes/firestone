@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -6,11 +7,12 @@ import {
 	HostListener,
 	OnDestroy,
 	Output,
+	ViewRef,
 } from '@angular/core';
+import { CrossPromotionService } from '@firestone/app/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { FeatureFlags } from '../../services/feature-flags';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'ads',
@@ -31,9 +33,13 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				</div>
 				<div
 					class="features-link"
+					*ngIf="!showBazaarTrackerAd"
 					(click)="showFeatures()"
 					[owTranslate]="'app.global.ads.features-link'"
 				></div>
+				<div class="features-link" *ngIf="showBazaarTrackerAd" (click)="openBazaarTrackerPage()">
+					Get BazaarTracker on Overwolf
+				</div>
 			</div>
 
 			<!-- In large layouts -->
@@ -42,6 +48,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 					[adId]="'double'"
 					[adSize]="doubleAdSize"
 					[tip]="true"
+					[showBazaarTrackerAd]="showBazaarTrackerAd"
 					(adVisibility)="onAdVisibilityChanged($event)"
 				></single-ad>
 			</div>
@@ -49,19 +56,30 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdsComponent extends AbstractSubscriptionStoreComponent implements OnDestroy {
+export class AdsComponent extends AbstractSubscriptionComponent implements OnDestroy, AfterContentInit {
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
 	showBottomTip = FeatureFlags.APP_TIPS;
 	doubleAdSize = { width: 400, height: 600 };
+	showBazaarTrackerAd = false;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
+		private readonly crossPromotion: CrossPromotionService,
 	) {
-		super(store, cdr);
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		const isBazaarInstalled = await this.crossPromotion.isBazaarInstalled();
+		const isBazaarTrackerInstalled = await this.crossPromotion.isBazaarTrackerInstalled();
+		console.debug('[cross-promotion] bazaar installed', isBazaarInstalled, isBazaarTrackerInstalled);
+		this.showBazaarTrackerAd = isBazaarInstalled && !isBazaarTrackerInstalled;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')
@@ -77,6 +95,11 @@ export class AdsComponent extends AbstractSubscriptionStoreComponent implements 
 	showFeatures() {
 		this.ow.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features');
 		this.analytics.trackEvent('show-premium-features');
+	}
+
+	openBazaarTrackerPage() {
+		console.log('[cross-promotion] opening BazaarTracker page');
+		this.ow.openUrlInDefaultBrowser('https://www.overwolf.com/app/Sebastien_Tromp-BazaarTracker');
 	}
 
 	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {

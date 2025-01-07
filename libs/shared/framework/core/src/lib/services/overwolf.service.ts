@@ -467,6 +467,13 @@ export class OverwolfService {
 			});
 		});
 	}
+	public async getGameInfo(gameId: number) {
+		return new Promise<overwolf.games.GetGameInfoResult>((resolve) => {
+			overwolf.games.getGameInfo(gameId, (info: overwolf.games.GetGameInfoResult) => {
+				resolve(info);
+			});
+		});
+	}
 
 	public async getHotKey(hotkeyName: string) {
 		return new Promise<any>((resolve) => {
