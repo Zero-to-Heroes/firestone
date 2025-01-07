@@ -85,7 +85,7 @@ import { extractTime } from './replay-info-ranked.component';
 					<div class="text" [owTranslate]="'app.replays.replay-info.mmr'"></div>
 				</div>
 
-				<div class="group time" *ngIf="gameTime && displayTime">
+				<div class="group time" *ngIf="gameTime && displayTime" [helpTooltip]="replayDate">
 					<div class="value">{{ gameTime }}</div>
 				</div>
 			</div>
@@ -149,6 +149,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	hasMatchStats: boolean;
 	deltaMmr: number;
 	gameTime: string;
+	replayDate: string;
 
 	hasPrizes: boolean;
 	availableTribes: readonly InternalTribe[];
@@ -247,6 +248,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
+		this.replayDate = new Date(this.replayInfo.creationTimestamp).toLocaleString(this.i18n.formatCurrentLocale());
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {

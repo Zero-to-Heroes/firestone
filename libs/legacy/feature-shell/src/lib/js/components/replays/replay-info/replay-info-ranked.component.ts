@@ -57,7 +57,7 @@ import { capitalizeEachWord } from '../../../services/utils';
 					></div>
 				</div>
 
-				<div class="group time" *ngIf="gameTime && displayTime">
+				<div class="group time" *ngIf="gameTime && displayTime" [helpTooltip]="replayDate">
 					<div class="value">{{ gameTime }}</div>
 				</div>
 			</div>
@@ -108,6 +108,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	gameTime: string;
+	replayDate: string;
 	reviewId: string;
 
 	private bgsPerfectGame: boolean;
@@ -179,6 +180,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
+		this.replayDate = new Date(this.replayInfo.creationTimestamp).toLocaleString(this.i18n.formatCurrentLocale());
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {

@@ -67,7 +67,7 @@ import { extractTime } from './replay-info-ranked.component';
 					<div class="text" [owTranslate]="'app.replays.replay-info.mmr'"></div>
 				</div>
 
-				<div class="group time" *ngIf="gameTime && displayTime">
+				<div class="group time" *ngIf="gameTime && displayTime" [helpTooltip]="replayDate">
 					<div class="value">{{ gameTime }}</div>
 				</div>
 			</div>
@@ -101,6 +101,7 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionStoreCom
 	reviewId: string;
 	deltaMmr: number;
 	gameTime: string;
+	replayDate: string;
 
 	constructor(
 		private readonly sanitizer: DomSanitizer,
@@ -147,6 +148,7 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionStoreCom
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
+		this.replayDate = new Date(this.replayInfo.creationTimestamp).toLocaleString(this.i18n.formatCurrentLocale());
 	}
 
 	private buildPlayerTeam(info: GameStat, isPlayer: boolean, isStarter: boolean): readonly MercenaryHero[] {
