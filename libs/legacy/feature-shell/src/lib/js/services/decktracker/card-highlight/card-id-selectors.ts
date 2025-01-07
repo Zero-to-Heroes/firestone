@@ -2330,6 +2330,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, inGraveyard, deathrattle);
 		case CardIds.TangledWrath:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.TastyFlyfish:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TavishStormpike_BAR_038:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.TenGallonHat_WW_811:
