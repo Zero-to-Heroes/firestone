@@ -167,6 +167,7 @@ export class BgsBattleSimulationService {
 			try {
 				this.executor.simulateLocalBattle(battleInfo, prefs, (result) => resolve(result));
 			} catch (e: any) {
+				console.log('no-format', '[bgs-simulation] could not simulate battle', JSON.stringify(battleInfo));
 				console.error('[bgs-simulation] could not simulate battle', e.message, e);
 				if (!e.message?.includes('Maximum call stack size exceeded')) {
 					if (!!this.cards.getCards().length) {
@@ -191,6 +192,7 @@ export class BgsBattleSimulationService {
 		try {
 			this.executor.simulateLocalBattle(battleInfo, prefs, onResultReceived);
 		} catch (e: any) {
+			console.log('no-format', '[bgs-simulation] could not simulate battle', JSON.stringify(battleInfo));
 			console.error('[bgs-simulation] could not simulate battle', e.message, e);
 			if (!e.message?.includes('Maximum call stack size exceeded')) {
 				this.bugService.submitAutomatedReport({
