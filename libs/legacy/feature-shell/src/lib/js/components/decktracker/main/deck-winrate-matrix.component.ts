@@ -183,13 +183,15 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	private buildPieChartData(): readonly InputPieChartData[] {
-		return classesForPieChart.map((className) => {
-			return {
-				label: formatClass(className, this.i18n),
-				data: this.matchups.find((matchup) => matchup.opponentClass === className)?.totalGames ?? 0,
-				color: `${colorForClass(className)}`,
-			};
-		});
+		return classesForPieChart
+			.map((className) => {
+				return {
+					label: formatClass(className, this.i18n),
+					data: this.matchups.find((matchup) => matchup.opponentClass === className)?.totalGames ?? 0,
+					color: `${colorForClass(className)}`,
+				};
+			})
+			.sort((a, b) => a.label.localeCompare(b.label));
 	}
 }
 
