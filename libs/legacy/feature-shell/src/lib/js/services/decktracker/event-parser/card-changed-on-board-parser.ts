@@ -1,5 +1,5 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -36,7 +36,7 @@ export class CardChangedOnBoardParser implements EventParser {
 		)[0];
 
 		// The CARD_CHANGED* events keep the same entityId, but change the cardId, and thus the card name
-		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards) || ({} as ReferenceCard);
 		// So that we can keep track of transformed cards
 		const oldCard = card.update({
 			zone: 'TRANSFORMED_INTO_OTHER',

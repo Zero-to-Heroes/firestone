@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -21,7 +21,7 @@ export class WeaponEquippedParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const dbCard = this.cards.getCard(cardId);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
 		// const creator = gameEvent.additionalData.creatorId;
 		const card = DeckCard.create({
 			cardId: cardId,

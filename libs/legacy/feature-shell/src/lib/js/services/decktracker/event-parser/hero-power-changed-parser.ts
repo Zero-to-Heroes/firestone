@@ -1,6 +1,6 @@
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { GameType } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { sanitizeDeckDefinition } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -24,7 +24,7 @@ export class HeroPowerChangedParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const dbCard = this.allCards.getCard(cardId);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,

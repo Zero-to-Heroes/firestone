@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { publicCardCreators, shouldKeepOriginalCost } from '@services/hs-utils';
 import { GameEvent } from '../../../models/game-event';
@@ -122,7 +122,7 @@ export class EntityUpdateParser implements EventParser {
 
 		let globalEffects = deck.globalEffects;
 		if (WHIZBANG_DECK_CARD_IDS.includes(cardId as CardIds) && !globalEffects?.some((c) => c.cardId === cardId)) {
-			const dbCard = this.allCards.getCard(cardId);
+			const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 			const globalEffectCard = DeckCard.create({
 				entityId: null,
 				cardId: cardId,

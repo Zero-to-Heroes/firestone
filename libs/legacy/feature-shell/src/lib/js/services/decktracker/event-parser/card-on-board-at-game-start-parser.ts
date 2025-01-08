@@ -1,5 +1,5 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -25,7 +25,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const dbCard = this.allCards.getCard(cardId);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 		if (dbCard.type && CardType[dbCard.type.toUpperCase()] === CardType.HERO) {
 			// Do nothing, as we don't want to add the starting hero to the deck tracker
 			return currentState;

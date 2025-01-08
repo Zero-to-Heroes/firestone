@@ -1,4 +1,4 @@
-import { BoardSecret, DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { BoardSecret, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -26,7 +26,7 @@ export class SecretCreatedInGameParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const secretClass: string = gameEvent.additionalData.playerClass;
 
-		const dbCard = this.cards.getCard(cardId);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
 		const existingCard = deck.otherZone.find((c) => Math.abs(c.entityId) === entityId);
 		// console.debug(
 		// 	'[secret-created] existingCard',

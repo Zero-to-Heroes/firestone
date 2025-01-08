@@ -47,11 +47,6 @@ export class DeckCardService {
 	}
 
 	private doFillCard(card: DeckCard, deckState: DeckState, metaData: Metadata): DeckCard {
-		// const dbCard = this.cards.getCard(card.cardId);
-		// if (!dbCard) {
-		// 	return card;
-		// }
-
 		if (!!card.relatedCardIds?.length) {
 			return card;
 		}

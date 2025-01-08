@@ -1,5 +1,5 @@
 import { CardClass } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
@@ -16,7 +16,7 @@ export class HeroChangedParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const dbCard = this.allCards.getCard(cardId);
+		const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 		const newHero = deck.hero?.update({
 			cardId: cardId,
 			initialClasses: deck.hero.classes ?? [],
