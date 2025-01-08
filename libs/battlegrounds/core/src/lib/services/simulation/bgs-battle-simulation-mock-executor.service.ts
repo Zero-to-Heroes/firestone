@@ -9,6 +9,7 @@ export class BgsBattleSimulationMockExecutorService extends BgsBattleSimulationE
 	public simulateLocalBattle(
 		battleInfo: BgsBattleInfo,
 		prefs: Preferences,
+		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void {
 		onResultReceived(null);

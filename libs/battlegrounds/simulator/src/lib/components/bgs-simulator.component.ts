@@ -518,7 +518,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		};
 		console.log('[bgs-simulation-desktop] battle simulation request prepared');
 		console.debug('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
-		this.simulationService.simulateLocalBattle(battleInfo, prefs, (newSim) => {
+		this.simulationService.simulateLocalBattle(battleInfo, prefs, true, (newSim) => {
 			if (!!newSim) {
 				const intermediateResult = !newSim.outcomeSamples;
 				this.battleResult$$.next(

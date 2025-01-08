@@ -387,6 +387,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				result?.currentGame?.availableRaces ?? [],
 				result.currentGame?.currentTurn ?? 0,
 				gameState?.reconnectOngoing,
+				prefs.bgsEnableSimulationSampleInOverlay,
 			);
 		} catch (e) {
 			console.error('[bgs-player-board-parser] could not start simulation', e.message, e);

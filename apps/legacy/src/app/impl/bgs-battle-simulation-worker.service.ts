@@ -15,12 +15,14 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 	public simulateLocalBattle(
 		battleInfo: BgsBattleInfo,
 		prefs: Preferences,
+		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void {
 		const numberOfWorkers = 1; // Math.max(1, (this.cpuCount ?? 1) - 1);
 		this.simulateLocalBattleInstance(
 			battleInfo,
 			Math.floor((battleInfo.options?.numberOfSimulations ?? prefs.bgsSimulatorNumberOfSims) / numberOfWorkers),
+			includeOutcomeSamples,
 			onResultReceived,
 		);
 		// const results = await Promise.all(
@@ -79,6 +81,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 	private simulateLocalBattleInstance(
 		battleInfo: BgsBattleInfo,
 		numberOfSims: number,
+		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void {
 		const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
@@ -109,6 +112,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 				options: {
 					...battleInfo.options,
 					numberOfSimulations: numberOfSims,
+					includeOutcomeSamples: includeOutcomeSamples,
 				},
 			} as BgsBattleInfo,
 			cards: this.cards.getService(),

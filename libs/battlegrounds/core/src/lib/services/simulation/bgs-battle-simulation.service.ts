@@ -47,6 +47,7 @@ export class BgsBattleSimulationService {
 		races: readonly Race[],
 		currentTurn: number,
 		reconnectOngoing: boolean,
+		includeOutcomeSamples: boolean,
 	) {
 		const prefs = await this.prefs?.getPreferences();
 		if (!prefs.bgsEnableSimulation || !prefs.bgsFullToggle) {
@@ -55,6 +56,7 @@ export class BgsBattleSimulationService {
 		}
 		const options: BgsBattleOptions = {
 			...battleInfo.options,
+			includeOutcomeSamples: includeOutcomeSamples,
 		} as BgsBattleOptions;
 		const battleInfoInput: BgsBattleInfo = {
 			...battleInfo,
@@ -84,34 +86,40 @@ export class BgsBattleSimulationService {
 		if (shouldUseLocalSimulator && shouldUseIntermediateResults && !reconnectOngoing) {
 			(battleInfoInput.options as any).intermediateResults = 200;
 			console.log('[bgs-simulation] starting sim with partial results');
-			this.simulateLocalBattle(battleInfoInput, prefs, async (result: SimulationResult | null) => {
-				await sleep(0);
-				const resultForLog = !!result ? { ...result } : null;
-				if (!!resultForLog) {
-					delete resultForLog.outcomeSamples;
-				}
-				if (!!result) {
-					// console.debug('[bgs-simulation] partial battle simulation result', resultForLog);
-					if (result.outcomeSamples) {
-						console.log('[bgs-simulation] battle simulation result', resultForLog);
+			this.simulateLocalBattle(
+				battleInfoInput,
+				prefs,
+				includeOutcomeSamples,
+				async (result: SimulationResult | null) => {
+					// console.debug('[bgs-simulation] partial battle simulation result', result);
+					await sleep(0);
+					const resultForLog = !!result ? { ...result } : null;
+					if (!!resultForLog) {
+						delete resultForLog.outcomeSamples;
 					}
-					this.battleInfo$$.next({
-						battleId: battleId,
-						result: result,
-						intermediateResult: !result.outcomeSamples,
-						heroCardId: normalizeHeroCardId(
-							battleInfoInput.opponentBoard.player.cardId ??
-								CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
-							this.cards,
-						),
-					});
-				}
-			});
+					if (!!result) {
+						// console.debug('[bgs-simulation] partial battle simulation result', resultForLog);
+						if (result.outcomeSamples) {
+							console.log('[bgs-simulation] battle simulation result', resultForLog);
+						}
+						this.battleInfo$$.next({
+							battleId: battleId,
+							result: result,
+							intermediateResult: !result.outcomeSamples,
+							heroCardId: normalizeHeroCardId(
+								battleInfoInput.opponentBoard.player.cardId ??
+									CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+								this.cards,
+							),
+						});
+					}
+				},
+			);
 		} else {
 			console.log('[bgs-simulation] starting sim for single use');
 			(battleInfoInput.options as any).intermediateResults = 0;
 			const result: SimulationResult | null = shouldUseLocalSimulator
-				? await this.simulateLocalBattleOnce(battleInfoInput, prefs)
+				? await this.simulateLocalBattleOnce(battleInfoInput, includeOutcomeSamples, prefs)
 				: await this.api.callPostApi<SimulationResult>(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput);
 			const resultForLog = !!result ? { ...result } : null;
 			if (!!resultForLog) {
@@ -162,10 +170,16 @@ export class BgsBattleSimulationService {
 		}
 	}
 
-	public simulateLocalBattleOnce(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult | null> {
+	public simulateLocalBattleOnce(
+		battleInfo: BgsBattleInfo,
+		includeOutcomeSamples: boolean,
+		prefs: Preferences,
+	): Promise<SimulationResult | null> {
 		return new Promise<SimulationResult | null>((resolve) => {
 			try {
-				this.executor.simulateLocalBattle(battleInfo, prefs, (result) => resolve(result));
+				this.executor.simulateLocalBattle(battleInfo, prefs, includeOutcomeSamples, (result) =>
+					resolve(result),
+				);
 			} catch (e: any) {
 				console.log('no-format', '[bgs-simulation] could not simulate battle', JSON.stringify(battleInfo));
 				console.error('[bgs-simulation] could not simulate battle', e.message, e);
@@ -187,10 +201,11 @@ export class BgsBattleSimulationService {
 	public simulateLocalBattle(
 		battleInfo: BgsBattleInfo,
 		prefs: Preferences,
+		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void {
 		try {
-			this.executor.simulateLocalBattle(battleInfo, prefs, onResultReceived);
+			this.executor.simulateLocalBattle(battleInfo, prefs, includeOutcomeSamples, onResultReceived);
 		} catch (e: any) {
 			console.log('no-format', '[bgs-simulation] could not simulate battle', JSON.stringify(battleInfo));
 			console.error('[bgs-simulation] could not simulate battle', e.message, e);

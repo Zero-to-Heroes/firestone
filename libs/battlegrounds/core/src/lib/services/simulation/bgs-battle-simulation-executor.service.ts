@@ -8,6 +8,7 @@ export abstract class BgsBattleSimulationExecutorService {
 	public abstract simulateLocalBattle(
 		battleInfo: BgsBattleInfo,
 		prefs: Preferences,
+		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void;
 }
