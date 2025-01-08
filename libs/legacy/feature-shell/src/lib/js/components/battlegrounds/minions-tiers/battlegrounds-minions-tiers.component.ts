@@ -186,6 +186,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				}) => {
 					// hasSpells = true;
 					const willShowBuddies = hasBuddies || showBuddies;
+					// console.debug('[debug] willShowBuddies', willShowBuddies, hasBuddies, showBuddies);
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = willShowBuddies

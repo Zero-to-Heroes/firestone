@@ -78,7 +78,8 @@
 	position: relative;
 	// Handle special tiers on a second line
 	width: 100%;
-	height: 40px;
+	// Keep that to auto so that it can handle wraps
+	// height: 40px;
 	flex-wrap: wrap;
 	// height: fit-content;
 	padding-bottom: 5px;

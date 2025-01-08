@@ -29,7 +29,6 @@ export const MECHANICS_IN_GAME = [
 	{
 		mechanic: GameTag.BACON_BUDDY,
 		tierId: 'Bdy',
-		tooltip: 'battlegrounds.in-game.minions-list.buddies-tier-tooltip',
 		canBeHighlighted: false,
 	},
 ];
@@ -53,16 +52,9 @@ export const buildMechanicsTiers = (
 		mechanicsInGame = mechanicsInGame.filter((mechanic) => mechanic.mechanic !== GameTag.BACON_BUDDY);
 	}
 	const result: Tier[] = mechanicsInGame.map((mechanics) =>
-		buildTier(
-			mechanics.tierId,
-			mechanics.mechanic,
-			cardsToInclude,
-			tiersToInclude,
-			i18n,
-			config,
-			mechanics?.tooltip ? i18n.translateString(mechanics.tooltip) : undefined,
-		),
+		buildTier(mechanics.tierId, mechanics.mechanic, cardsToInclude, allBuddies, tiersToInclude, i18n, config),
 	);
+	console.debug('[debug] tiers', result);
 	return result.filter((t) => t?.groups?.length);
 };
 
@@ -70,12 +62,15 @@ const buildTier = (
 	tavernTier: TavernTierType,
 	gameTag: GameTag,
 	cardsToInclude: readonly ReferenceCard[],
+	allBuddies: readonly ReferenceCard[],
 	tiersToInclude: readonly number[],
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 	inputLabel?: string,
 ): Tier => {
-	const cardsForMechanics = cardsToInclude.filter((c) => isInMechanicalTier(c, gameTag));
+	const cardsForMechanics =
+		gameTag === GameTag.BACON_BUDDY ? allBuddies : cardsToInclude.filter((c) => isInMechanicalTier(c, gameTag));
+	console.debug('[debug] cardsForMechanics', GameTag[gameTag], cardsForMechanics, cardsToInclude);
 	const label = inputLabel ?? i18n.translateString(`global.mechanics.${GameTag[gameTag].toLowerCase()}`);
 	const groups: readonly TierGroup[] = buildGroups(cardsForMechanics, tiersToInclude, i18n, config);
 	const result: Tier = {
@@ -152,7 +147,7 @@ const buildTierGroup = (
 ): TierGroup => {
 	{
 		const cards = cardsForMechanics
-			.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
+			// .filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
 			.filter((card) => card.techLevel === techLevel);
 		const result: TierGroup = {
 			label: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: techLevel }),
@@ -176,23 +171,11 @@ const buildBuddies = (
 		.filter((c) => !!c.battlegroundsPremiumDbfId)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
-	console.debug(
-		'allBuddies',
-		allCards
-			.getCards()
-			.filter((c) => !!c.techLevel)
-			.filter((c) => !!c.battlegroundsPremiumDbfId)
-			.filter((card) => card.set !== 'Vanilla')
-			.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY])),
-		allCards
-			.getCards()
-			.filter((c) => !!c.battlegroundsPremiumDbfId)
-			.filter((card) => card.set !== 'Vanilla')
-			.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY])),
-	);
+	console.debug('[debug] allBuddies', allBuddies);
 	const allPlayerBuddies = allPlayerCardIds
 		.map((p) => getBuddy(p as CardIds, allCards.getService()))
 		.map((b) => allCards.getCard(b!));
+	console.debug('[debug] allPlayerBuddies', allPlayerBuddies);
 	const allPlayerBuddiesCardIds = allPlayerBuddies.map((b) => b.id);
 	const buddies: readonly ReferenceCard[] = !config?.showBuddiesTier
 		? []
@@ -215,6 +198,7 @@ const buildBuddies = (
 		  )
 		? allPlayerBuddies
 		: [];
+	console.debug('[debug] buddies', config?.showAllBuddyCards, buddies);
 	return buddies;
 };
 
