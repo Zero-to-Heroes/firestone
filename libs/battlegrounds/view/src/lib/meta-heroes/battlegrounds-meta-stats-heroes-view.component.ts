@@ -139,6 +139,9 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 						return this.buildMonoTier(
 							[...stats].sort(sortByProperties((s) => [s.playerAveragePosition ?? 9])),
 						);
+					case 'pick-rate':
+						// Make sure we keep the items without data at the end
+						return this.buildMonoTier([...stats].sort(sortByProperties((s) => [-(s.pickrate ?? 0)])));
 					case 'games-played':
 						return this.buildMonoTier([...stats].sort(sortByProperties((s) => [-s.playerDataPoints])));
 					case 'mmr':

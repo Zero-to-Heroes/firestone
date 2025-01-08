@@ -96,7 +96,7 @@ export type BgsActiveTimeFilterType = 'all-time' | 'past-three' | 'past-seven' |
 export type BgsRankFilterType = 100 | 50 | 25 | 10 | 1;
 export type BgsQuestActiveTabType = 'quests' | 'rewards';
 export type BgsTrinketActiveTabType = 'lesser' | 'greater';
-export type BgsHeroSortFilterType = 'tier' | 'average-position' | 'games-played' | 'mmr' | 'last-played';
+export type BgsHeroSortFilterType = 'tier' | 'pick-rate' | 'average-position' | 'games-played' | 'mmr' | 'last-played';
 export type BgsStatsFilterId =
 	| 'hp-by-turn'
 	| 'warband-total-stats-by-turn'

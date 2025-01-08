@@ -21,7 +21,7 @@ import { BattlegroundsYourStat } from './your-stats.model';
 		<section class="battlegrounds-desktop-your-stats">
 			<div class="summary">
 				<div class="group highest-mmr">
-					<div class="label">Highest MMR</div>
+					<div class="label">Highest Rating</div>
 					<div class="value">{{ highestMmr$ | async }}</div>
 				</div>
 				<div class="group matches">
