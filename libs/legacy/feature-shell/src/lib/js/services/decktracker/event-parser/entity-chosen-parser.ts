@@ -24,6 +24,7 @@ export class EntityChosenParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const originCardId = gameEvent.additionalData?.context?.creatorCardId;
 		const isDiscover = this.allCards.getCard(originCardId)?.mechanics?.includes(GameTag[GameTag.DISCOVER]);
+		// console.debug('[entity-chosen] isDiscover', isDiscover, originCardId, gameEvent);
 
 		let stateAfterDiscover = currentState;
 		if (isDiscover) {
@@ -34,6 +35,7 @@ export class EntityChosenParser implements EventParser {
 					discoversThisGame: deck.discoversThisGame + 1,
 				}),
 			});
+			// console.debug('[entity-chosen] stateAfterDiscover', stateAfterDiscover);
 		}
 
 		const newState = this.handleEvent(stateAfterDiscover, gameEvent);

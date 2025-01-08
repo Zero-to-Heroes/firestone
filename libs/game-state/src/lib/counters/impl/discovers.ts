@@ -1,6 +1,7 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { hasOrHadHeroClass } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -8,6 +9,12 @@ export class DiscoversCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'discovers';
 	public override image = CardIds.AlienEncounters_GDB_237;
 	public override cards: readonly CardIds[] = [CardIds.AlienEncounters_GDB_237];
+	private opponentRelevantCards: readonly CardIds[] = [
+		CardIds.TrackingCore,
+		CardIds.TrackingLegacy,
+		CardIds.Birdwatching_VAC_408,
+		CardIds.ExarchNaielle_GDB_846,
+	];
 
 	readonly player = {
 		pref: 'playerDiscoversCounter' as const,
@@ -23,7 +30,20 @@ export class DiscoversCounterDefinitionV2 extends CounterDefinitionV2<number> {
 
 	readonly opponent = {
 		pref: 'opponentDiscoversCounter' as const,
-		display: (state: GameState): boolean => state.opponentDeck.hasRelevantCard(this.cards),
+		display: (state: GameState): boolean => {
+			console.debug(
+				'checking opponent discovers',
+				hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.HUNTER]),
+				state.opponentDeck?.discoversThisGame,
+				state.opponentDeck,
+			);
+			return (
+				state.opponentDeck.hasRelevantCard(this.cards) ||
+				(hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.HUNTER]) &&
+					(state.opponentDeck.hasRelevantCard(this.opponentRelevantCards) ||
+						state.opponentDeck?.discoversThisGame > 0))
+			);
+		},
 		value: (state: GameState): number => state.opponentDeck?.discoversThisGame,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
