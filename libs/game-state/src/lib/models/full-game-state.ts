@@ -5,6 +5,7 @@ export interface FullGameState {
 }
 
 export interface PlayerGameState {
+	readonly PlayerEntity: EntityGameState;
 	readonly Hero: EntityGameState;
 	readonly Weapon: EntityGameState;
 	readonly Hand: readonly EntityGameState[];

@@ -5,6 +5,7 @@ import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buf
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
+import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
@@ -31,6 +32,7 @@ export const getAllCounters: (
 	new BallerBuffCounterDefinitionV2(i18n),
 	new MagnetizedCounterDefinitionV2(i18n),
 	new FreeRefreshCounterDefinitionV2(i18n),
+	new SpellsPlayedCounterDefinitionV2(i18n),
 	new GoldNextTurnCounterDefinitionV2(i18n, allCards),
 ];
 
@@ -109,5 +111,6 @@ export type CounterType =
 	| 'bgsLordOfGains'
 	| 'bgsTuskarrRaider'
 	| 'bgsMagnetized'
+	| 'bgsSpellsPlayed'
 	| 'ballerBuff'
 	| 'bgsMajordomo';
