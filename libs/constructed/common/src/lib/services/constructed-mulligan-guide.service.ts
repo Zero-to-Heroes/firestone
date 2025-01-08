@@ -468,29 +468,13 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			),
 			this.archetypeService.getArchetypeForDeck(deckstring),
 		]).pipe(
-			tap(([overrides, archetypeId]) =>
-				console.debug('[debug] [mulligan-guide] archetypeId', overrides, archetypeId),
-			),
 			map(([overrides, archetypeId]) => (!!deckstring ? overrides[deckstring] : null) ?? archetypeId),
 			distinctUntilChanged(),
 		);
 		const archetype$: Observable<ArchetypeStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
 			debounceTime(200),
-			tap(([format, timeFrame]) =>
-				console.debug('[debug] [mulligan-guide] fill get archetype', format, timeFrame),
-			),
 			switchMap(([format, timeFrame]) =>
 				combineLatest([archetypeId$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
-			),
-			tap(([archetypeId, playerRank, opponentClass, format, timeFrame]) =>
-				console.debug(
-					'[debug] [mulligan-guide] will archetype 2',
-					archetypeId,
-					playerRank,
-					opponentClass,
-					format,
-					timeFrame,
-				),
 			),
 			map(([archetypeId, playerRank, opponentClass, format, timeFrame]) => ({
 				archetypeId: archetypeId,
@@ -517,7 +501,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				);
 				return result;
 			}),
-			tap((archetype) => console.debug('[debug] [mulligan-guide] archetype result', archetype)),
 		);
 		const deckDetails$: Observable<DeckStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
 			debounceTime(200),

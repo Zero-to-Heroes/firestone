@@ -50,7 +50,6 @@ export const buildTiers = (
 			[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
 				playerCardId as CardIds,
 			));
-	// console.debug('[debug] showBuddiesTier', showBuddiesTier, hasBuddies);
 
 	const tiersToInclude = buildTiersToInclude(showTierSeven, anomalies, playerCardId, playerTrinkets);
 	const cardsToInclude: readonly ExtendedReferenceCard[] = filterCardsToInclude(
