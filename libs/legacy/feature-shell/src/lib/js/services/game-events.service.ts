@@ -362,6 +362,7 @@ export class GameEvents {
 				const summonFromHandAdditionProps = gameEvent.Value.AdditionalProps
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
 					  }
 					: null;
 				this.gameEventsEmitter.allEvents.next(
@@ -408,7 +409,11 @@ export class GameEvents {
 				);
 				break;
 			case 'RECRUIT_CARD':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent, {
+						tags: gameEvent.Value.AdditionalProps.Tags,
+					}),
+				);
 				break;
 			case 'MINION_BACK_ON_BOARD':
 				this.gameEventsEmitter.allEvents.next(

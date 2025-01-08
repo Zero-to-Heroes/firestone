@@ -1,3 +1,4 @@
+import { GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -23,11 +24,13 @@ export class MinionSummonedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
+		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: this.i18n.getCardName(cardId, dbCard.name),
 			refManaCost: dbCard.cost,
+			actualManaCost: costFromTags ?? dbCard.cost,
 			rarity: dbCard.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,
 			zone: 'PLAY',
