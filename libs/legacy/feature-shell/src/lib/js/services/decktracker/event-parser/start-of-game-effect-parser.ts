@@ -35,6 +35,10 @@ export class StartOfGameEffectParser implements EventParser {
 			zone: null,
 		} as DeckCard);
 		const newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
+		let newDeckContents = deck.deck;
+		if (!deck.getAllCardsInDeckWithoutOptions().some((card) => card.cardId === cardId)) {
+			newDeckContents = this.helper.addSingleCardToZone(deck.deck, card);
+		}
 		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
 			cardId,
 			deck,
@@ -43,6 +47,7 @@ export class StartOfGameEffectParser implements EventParser {
 		);
 		const newPlayerDeck: DeckState = deckAfterSpecialCaseUpdate.update({
 			globalEffects: newGlobalEffects,
+			deck: newDeckContents,
 		} as DeckState);
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
