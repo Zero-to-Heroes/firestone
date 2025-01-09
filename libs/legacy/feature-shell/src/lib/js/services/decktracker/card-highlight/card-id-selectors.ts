@@ -1323,6 +1323,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), spell, holy);
 		case CardIds.InvigoratingSermon:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.Inzah:
+			return and(side(inputSide), or(inDeck, inHand), overload);
 		case CardIds.IronRootsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature);
 		case CardIds.ItsRainingFin:
