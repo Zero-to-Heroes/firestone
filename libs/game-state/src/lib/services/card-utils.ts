@@ -4,6 +4,7 @@
 import {
 	CardClass,
 	CardIds,
+	CardType,
 	GameFormat,
 	GameTag,
 	GameType,
@@ -185,4 +186,13 @@ export const getPossibleForgedCards = (
 			return a.classes![0]?.localeCompare(b.classes![0]);
 		})
 		.map((c) => c.id);
+};
+
+export const isTakePlaceOnBoard = (card: ReferenceCard): boolean => {
+	return (
+		card.type != null &&
+		[CardType.MINION, CardType.LOCATION, CardType.BATTLEGROUND_HERO_BUDDY].includes(
+			CardType[card.type.toUpperCase()],
+		)
+	);
 };

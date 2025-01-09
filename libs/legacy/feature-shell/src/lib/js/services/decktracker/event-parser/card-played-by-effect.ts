@@ -1,4 +1,4 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -47,6 +47,11 @@ export class CardPlayedByEffectParser implements EventParser {
 		if (this.allCards.getCard(creatorCardId)?.mechanics?.includes(GameTag[GameTag.CHOOSE_ONE])) {
 			return currentState;
 		}
+		const refCard = this.allCards.getCard(cardId);
+		// Weapons trigger a WEAPON_EQUIPPED event
+		if (refCard.type?.toUpperCase() === CardType[CardType.WEAPON]) {
+			return currentState;
+		}
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -60,7 +65,6 @@ export class CardPlayedByEffectParser implements EventParser {
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 
 		// Only minions end up on the board
-		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard =
 			!isCardCountered &&
 			// Because CASTS_WHEN_DRAWN cards create another card on the board

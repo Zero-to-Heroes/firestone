@@ -1,4 +1,4 @@
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -23,8 +23,11 @@ export class CardRecruitedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
-
 		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
+		if (dbCard.type?.toUpperCase() !== CardType[CardType.MINION]) {
+			return currentState;
+		}
+
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
 		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.deck,
