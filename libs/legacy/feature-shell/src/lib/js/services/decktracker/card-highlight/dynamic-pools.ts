@@ -221,6 +221,7 @@ export const getDynamicRelatedCardIds = (
 			);
 		case CardIds.DemonicStudies:
 		case CardIds.DemonicStudies_CORE_SCH_158:
+		case CardIds.DemonicDynamics:
 			return filterCards(
 				allCards,
 				options,
