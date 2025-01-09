@@ -24,6 +24,7 @@ export const templateBase = `
 		class="widget"
 		*ngIf="showWidget$ | async"
 		cdkDrag
+		[cdkDragDisabled]="!draggable"
 		(cdkDragStarted)="startDragging()"
 		(cdkDragReleased)="stopDragging()"
 		(cdkDragEnded)="dragEnded($event)"

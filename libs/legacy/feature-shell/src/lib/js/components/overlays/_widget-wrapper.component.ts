@@ -1,7 +1,7 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { Observable, UnaryFunction, pipe } from 'rxjs';
 import { distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		bottom: -20,
 	};
 	protected forceKeepInBounds = true;
+	protected draggable = true;
 
 	protected debug = false;
 
@@ -38,6 +39,19 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+		this.init();
+	}
+
+	private async init() {
+		await waitForReady(this.prefs);
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.lockWidgetPositions))
+			.subscribe((lockWidgetPositions) => {
+				this.draggable = !lockWidgetPositions;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {

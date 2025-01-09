@@ -33,6 +33,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 			class="widget"
 			*ngIf="{ premium: hasPremium$ | async } as value"
 			cdkDrag
+			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"

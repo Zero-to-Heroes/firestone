@@ -30,6 +30,7 @@ import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 			[counter]="counter"
 			*ngIf="showWidget$ | async"
 			cdkDrag
+			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"

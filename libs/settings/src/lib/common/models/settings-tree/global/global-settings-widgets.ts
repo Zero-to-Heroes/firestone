@@ -12,6 +12,12 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 				title: context.i18n.translateString('settings.general.menu.widgets'),
 				settings: [
 					{
+						type: 'toggle',
+						field: 'lockWidgetPositions',
+						label: context.i18n.translateString('settings.general.widgets.lock-widgets-label'),
+						tooltip: context.i18n.translateString('settings.general.widgets.lock-widgets-tooltip'),
+					},
+					{
 						// label: context.i18n.translateString('settings.decktracker.global.reset-button'),
 						text: context.i18n.translateString('settings.decktracker.global.reset-button'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.reset-button-tooltip'),

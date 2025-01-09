@@ -25,6 +25,7 @@ import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.co
 			[activeTheme]="'decktracker'"
 			*ngIf="showWidget$ | async"
 			cdkDrag
+			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"

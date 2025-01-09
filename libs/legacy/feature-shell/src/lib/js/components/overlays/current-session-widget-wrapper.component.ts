@@ -25,6 +25,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 			class="widget"
 			[ngClass]="{ hidden: hidden$ | async }"
 			cdkDrag
+			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"

@@ -87,6 +87,7 @@ export class Preferences implements IPreferences {
 	readonly showQuestsInGame: boolean = true;
 	readonly useStreamerMode: boolean = false;
 	readonly regionFilter: BnetRegion | 'all' = 'all';
+	readonly lockWidgetPositions: boolean = false;
 
 	readonly enableMailbox: boolean = true;
 	readonly enableMailboxUnread: boolean = true;
