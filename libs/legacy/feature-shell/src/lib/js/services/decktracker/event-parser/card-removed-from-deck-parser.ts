@@ -6,6 +6,8 @@ import { dontActuallyDestroyCardsInDeck, FAKE_JOUST_CARDS } from '../../hs-utils
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const DONT_REVEAL_REMOVED_CARDS = [CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken];
+
 export class CardRemovedFromDeckParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
@@ -14,10 +16,26 @@ export class CardRemovedFromDeckParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-
+		// eslint-disable-next-line prefer-const
+		let [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const removedByCardId = gameEvent.additionalData.removedByCardId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		// When the opponent plays Hooktusk, the logs reveal everything, but not the UI
+		// So we override the information here
+		// console.debug(
+		// 	'[debug] [card-removed] card removed',
+		// 	isPlayer,
+		// 	DONT_REVEAL_REMOVED_CARDS.includes(removedByCardId as CardIds),
+		// 	cardId,
+		// 	entityId,
+		// 	removedByCardId,
+		// );
+		if (isPlayer && DONT_REVEAL_REMOVED_CARDS.includes(removedByCardId as CardIds)) {
+			cardId = null;
+			entityId = null;
+		}
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		// console.debug('[card-removed] found card', card, cardId, entityId, deck.deck);
@@ -37,10 +55,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 			zone: 'SETASIDE',
 			refManaCost: card.refManaCost ?? refCard?.cost,
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
-			milled:
-				card.createdByJoust || dontActuallyDestroyCardsInDeck.includes(gameEvent.additionalData.removedByCardId)
-					? false
-					: true,
+			milled: card.createdByJoust || dontActuallyDestroyCardsInDeck.includes(removedByCardId) ? false : true,
 		} as DeckCard);
 		// console.debug('[card-removed]', 'cardWithZone', card?.cardId, cardWithZone, refCard);
 
