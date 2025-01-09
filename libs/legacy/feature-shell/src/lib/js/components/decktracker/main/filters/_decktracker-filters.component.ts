@@ -54,6 +54,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 				class="filter search"
 				*ngIf="showMetaDeckCardSearch$ | async"
 			></constructed-meta-deck-card-search>
+			<replays-icon-toggle class="use-class-icons" *ngIf="showUseClassCardIcon$ | async"></replays-icon-toggle>
 
 			<div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
 				<svg>
@@ -86,6 +87,7 @@ export class DecktrackerFiltersComponent
 	showHiddenDecksLink$: Observable<boolean>;
 	showUseConservativeWinrateLink$: Observable<boolean>;
 	showMetaDeckCardSearch$: Observable<boolean>;
+	showUseClassCardIcon$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
@@ -144,6 +146,10 @@ export class DecktrackerFiltersComponent
 						'constructed-meta-archetype-details',
 					].includes(currentView),
 			),
+		);
+		this.showUseClassCardIcon$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => ['decks'].includes(currentView)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

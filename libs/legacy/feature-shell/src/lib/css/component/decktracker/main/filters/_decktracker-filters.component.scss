@@ -36,6 +36,7 @@
 		width: 20px;
 		height: 20px;
 		--icon-color: var(--secondary-text-color);
+		margin-left: auto;
 	}
 
 	.show-hidden-decks-link {
@@ -80,6 +81,13 @@
 			opacity: 1;
 			color: var(--color-1);
 		}
+	}
+
+	.use-class-icons {
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.filter.search {

@@ -1,7 +1,20 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
+import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { DeckSummary } from '@firestone/constructed/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { StatGameFormatType } from '@firestone/stats/data-access';
+import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
@@ -21,7 +34,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 		<div class="decktracker-deck-summary" tabindex="0" [ngClass]="{ hidden: hidden }" (click)="selectDeck($event)">
 			<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
 			<div class="deck-image" aria-hidden="true">
-				<img class="skin" [src]="skin" />
+				<img class="skin" [src]="skin$ | async" />
 				<img
 					class="frame"
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/hero_frame.png"
@@ -106,7 +119,12 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckSummaryComponent implements AfterViewInit {
+export class DecktrackerDeckSummaryComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, AfterContentInit
+{
+	skin$: Observable<string>;
+
 	@Input() set deck(value: DeckSummary) {
 		this._deck = value;
 		this.deckName = value.deckName || this.i18n.translateString('app.decktracker.deck-summary.default-deck-name');
@@ -121,7 +139,8 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 				  })
 				: null;
 		this.lastUsed = value.lastUsedTimestamp ? this.buildLastUsedDate(value.lastUsedTimestamp) : 'N/A';
-		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.skin}.jpg`;
+
+		this.skin$$.next(value.skin);
 		this.hidden = value.hidden;
 		this.decoration = this.buildDecoration(value.format);
 	}
@@ -133,16 +152,49 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	totalGames: number;
 	winRatePercentage: string;
 	lastUsed: string;
-	skin: string;
 	hidden: boolean;
 	decoration: string;
 	format: StatGameFormatType;
 
 	deleteDeckTooltip = this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip');
 
+	private skin$$ = new BehaviorSubject<string | null>(null);
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly allCards: CardsFacadeService,
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.skin$ = combineLatest([
+			this.skin$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon)),
+		]).pipe(
+			filter(([skin, showClassIcon]) => !!skin),
+			this.mapData(([skin, showClassIcon]) => {
+				if (!showClassIcon) {
+					return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${skin}.jpg`;
+				}
+				const card = this.allCards.getCard(skin);
+				const defaultHero = getDefaultHeroDbfIdForClass(card.classes?.[0]);
+				const defaultHeroCard = this.allCards.getCard(defaultHero);
+				return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${defaultHeroCard.id}.jpg`;
+			}),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
