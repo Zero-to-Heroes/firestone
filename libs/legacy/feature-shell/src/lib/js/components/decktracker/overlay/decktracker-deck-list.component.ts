@@ -81,6 +81,7 @@ import { SetCard } from '../../../models/set';
 					[showTopCardsSeparately]="showTopCardsSeparately"
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
+					[showPlaguesOnTop]="showPlaguesOnTop"
 					[side]="side"
 					[showTotalCardsInZone]="showTotalCardsInZone"
 					[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"

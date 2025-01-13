@@ -8,6 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -16,6 +17,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
+import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
 import { shouldKeepOriginalCost } from '../../../services/hs-utils';
 
 @Component({
@@ -68,33 +70,29 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.deckState$$.next(deckState);
 		this.showWarning$$.next(deckState?.showDecklistWarning);
 	}
-
 	@Input() set cardsGoToBottom(value: boolean) {
 		this.cardsGoToBottom$$.next(value);
 	}
-
 	@Input() set showBottomCardsSeparately(value: boolean) {
 		this.showBottomCardsSeparately$$.next(value);
 	}
-
 	@Input() set showTopCardsSeparately(value: boolean) {
 		this.showTopCardsSeparately$$.next(value);
 	}
-
 	@Input() set showGiftsSeparately(value: boolean) {
 		this.showGiftsSeparately$$.next(value);
 	}
-
 	@Input() set groupSameCardsTogether(value: boolean) {
 		this.groupSameCardsTogether$$.next(value);
 	}
-
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
 		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
-
 	@Input() set showStatsChange(value: boolean) {
 		this.showStatsChange$$.next(value);
+	}
+	@Input() set showPlaguesOnTop(value: boolean) {
+		this.showPlaguesOnTop$$.next(value);
 	}
 
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
@@ -106,6 +104,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
+	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -133,6 +132,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			this.showGiftsSeparately$,
 			this.showStatsChange$$,
 			this.groupSameCardsTogether$,
+			this.showPlaguesOnTop$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -145,6 +145,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 					showGiftsSeparately,
 					showStatsChange,
 					groupSameCardsTogether,
+					showPlaguesOnTop,
 				]) =>
 					this.buildGroupedList(
 						deckState,
@@ -156,6 +157,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						showGiftsSeparately,
 						showStatsChange,
 						groupSameCardsTogether,
+						showPlaguesOnTop,
 					),
 			),
 		);
@@ -175,14 +177,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		showGiftsSeparately: boolean,
 		showStatsChange: boolean,
 		groupSameCardsTogether: boolean,
+		showPlaguesOnTop: boolean,
 	) {
 		if (!deckState) {
 			return null;
 		}
 
 		const sortingFunction = (a: VisualDeckCard, b: VisualDeckCard) =>
-			this.sortOrder(a, cardsGoToBottom, showGiftsSeparately) -
-			this.sortOrder(b, cardsGoToBottom, showGiftsSeparately);
+			this.sortOrder(a, cardsGoToBottom, showGiftsSeparately, showPlaguesOnTop) -
+			this.sortOrder(b, cardsGoToBottom, showGiftsSeparately, showPlaguesOnTop);
 
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
@@ -482,7 +485,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		return this.allCards.getCard(refCard.cardId).cost ?? refCard.refManaCost;
 	}
 
-	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean, showGiftsSeparately: boolean): number {
+	private sortOrder(
+		card: VisualDeckCard,
+		cardsGoToBottom: boolean,
+		showGiftsSeparately: boolean,
+		showPlaguesOnTop: boolean,
+	): number {
+		if (showPlaguesOnTop && PLAGUES.includes(card.cardId as CardIds)) {
+			return -1;
+		}
 		const isGift = !!card.creatorCardId?.length || !!card.creatorCardIds?.length;
 		// if (showGiftsSeparately && isGift) {
 		// 	return 4;
