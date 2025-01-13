@@ -178,6 +178,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				(c) => c?.id !== CardIds.Sif,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasMechanic(c, GameTag.SPELLPOWER) &&
