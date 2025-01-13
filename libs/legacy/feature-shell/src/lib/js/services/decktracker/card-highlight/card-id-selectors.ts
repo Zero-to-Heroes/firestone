@@ -1900,7 +1900,10 @@ export const cardIdSelector = (
 				and(side(inputSide), inGraveyard, minion),
 			);
 		case CardIds.ReturnPolicy_MIS_102:
-			return and(side(inputSide), cardsPlayedThisMatch, deathrattle);
+			return highlightConditions(
+				tooltip(and(side(inputSide), cardsPlayedThisMatch, deathrattle)),
+				and(side(inputSide), cardsPlayedThisMatch, deathrattle),
+			);
 		case CardIds.RevivePet:
 			return tooltip(and(side(inputSide), inGraveyard, minion, beast));
 		case CardIds.Rewind_ETC_532:
