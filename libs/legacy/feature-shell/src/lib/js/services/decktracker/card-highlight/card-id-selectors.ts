@@ -2620,6 +2620,8 @@ export const cardIdSelector = (
 					CardIds.StagCharge,
 				),
 			);
+		case CardIds.WingCommander:
+			return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 		case CardIds.WingCommanderIchman_AV_336:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.WitchingHour:
