@@ -1,9 +1,9 @@
 .container {
 	position: relative;
 	left: 0;
-	top: 28vh;
+	top: 22vh;
 	width: 112vh;
-	height: 40vh;
+	height: 47vh;
 	pointer-events: none;
 }
 
@@ -78,5 +78,34 @@
 			bottom: auto;
 			top: -8vh;
 		}
+	}
+}
+
+.option {
+	::ng-deep arena-card-option-view {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.info-container.info-container {
+			.stats.pick {
+				display: none;
+			}
+			.stats.impact .deck {
+				display: none;
+			}
+			.stats {
+				display: flex;
+				border: 0;
+				padding: 0;
+			}
+		}
+	}
+
+	.premium {
+		height: 2vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }

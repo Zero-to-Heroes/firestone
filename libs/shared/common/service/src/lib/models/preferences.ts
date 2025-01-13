@@ -882,6 +882,7 @@ export class Preferences implements IPreferences {
 	// TODO: add settings
 	readonly arenaShowHeroSelectionOverlay: boolean = true;
 	readonly arenaShowCardSelectionOverlay: boolean = true;
+	readonly arenaShowCardStatDuringDiscovers: boolean = true;
 	readonly arenaShowOocTracker: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly arenaOocTrackerScale: number = 100;

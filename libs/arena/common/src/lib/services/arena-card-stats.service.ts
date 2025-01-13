@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { DraftCardCombinedStat, DraftStatsByContext } from '@firestone-hs/arena-draft-pick';
-import { ArenaCardStat, ArenaCardStats } from '@firestone-hs/arena-stats';
+import { ArenaCardStat, ArenaCardStats, PlayerClass } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
@@ -64,7 +64,20 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		});
 	}
 
+	public async getStatsFor(cardId: string, playerClass: PlayerClass): Promise<ArenaCombinedCardStat | null> {
+		return this.mainInstance.getStatsForInternal(cardId, playerClass);
+	}
+
+	private async getStatsForInternal(cardId: string, playerClass: PlayerClass): Promise<ArenaCombinedCardStat | null> {
+		const cardStats = await this.buildCardStats(playerClass, 'last-patch');
+		return cardStats?.stats?.find((s) => s.cardId === cardId) ?? null;
+	}
+
 	public async buildCardStats(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
+		return this.mainInstance.buildCardStatsInternal(context, timePeriod);
+	}
+
+	private async buildCardStatsInternal(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
 		const [cardPerformanceStats, cardDraftStats] = await Promise.all([
 			this.api.callGetApi<ArenaCardStats>(
 				ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context),

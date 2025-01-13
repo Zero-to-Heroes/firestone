@@ -22,32 +22,11 @@ import { ArenaCardOption } from './model';
 	template: `
 		<ng-container *ngIf="widgetActive$ | async">
 			<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
-				<div class="info-container scalable" *ngIf="value.showWidget">
-					<div class="stats impact">
-						<div class="stat winrate draw">
-							<span class="label" [fsTranslate]="'app.arena.draft.card-drawn-impact'"></span>
-							<span class="value {{ drawWinrateClass }}" [helpTooltip]="drawnImpactTooltip">{{
-								drawImpact
-							}}</span>
-						</div>
-						<div class="stat winrate ">
-							<span class="label" [fsTranslate]="'app.arena.draft.card-deck-impact'"></span>
-							<span class="value {{ deckWinrateClass }}" [helpTooltip]="deckImpactTooltip">{{
-								deckImpact
-							}}</span>
-						</div>
-					</div>
-					<div class="stats pick">
-						<div class="stat pickrate">
-							<span class="label" [fsTranslate]="'app.arena.card-stats.header-pickrate'"></span>
-							<span class="value">{{ pickrate }}</span>
-						</div>
-						<div class="stat pickrate-delta">
-							<span class="label" [helpTooltip]="pickRateImpactTooltip">{{ pickRateHighWinsLabel }}</span>
-							<span class="value">{{ pickRateHighWins }}</span>
-						</div>
-					</div>
-				</div>
+				<arena-card-option-view
+					class="info-view"
+					[card]="card"
+					*ngIf="value.showWidget"
+				></arena-card-option-view>
 				<arena-option-info-premium *ngIf="!value.showWidget"></arena-option-info-premium>
 			</div>
 		</ng-container>
@@ -58,23 +37,7 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 	widgetActive$: Observable<boolean>;
 	showWidget$: Observable<boolean>;
 
-	@Input() set card(value: ArenaCardOption) {
-		console.debug('[arena-card-option] setting card', value);
-		this.drawnWinrate = value.drawnWinrate == null ? '-' : (100 * value.drawnWinrate).toFixed(1) + '%';
-		this.deckWinrate = value.deckWinrate == null ? '-' : (100 * value.deckWinrate).toFixed(1) + '%';
-		this.drawImpact = value.drawnImpact == null ? '-' : (100 * value.drawnImpact).toFixed(2);
-		this.deckImpact = value.deckImpact == null ? '-' : (100 * value.deckImpact).toFixed(2);
-		this.drawWinrateClass = value.drawnImpact == null ? '' : value.drawnImpact > 0 ? 'positive' : 'negative';
-		this.deckWinrateClass = value.deckImpact == null ? '' : value.deckImpact > 0 ? 'positive' : 'negative';
-		this.pickrate = value.pickRate == null ? '-' : (100 * value.pickRate).toFixed(1) + '%';
-		this.pickRateHighWins = value.pickRateHighWins == null ? '-' : (100 * value.pickRateHighWins).toFixed(1) + '%';
-		this.drawnImpactTooltip = this.i18n.translateString(`app.arena.draft.card-drawn-impact-tooltip`, {
-			drawWinrate: this.drawnWinrate,
-		});
-		this.deckImpactTooltip = this.i18n.translateString(`app.arena.draft.card-deck-impact-tooltip`, {
-			deckWinrate: this.deckWinrate,
-		});
-	}
+	@Input() card: ArenaCardOption;
 
 	@Input() set pickNumber(value: number) {
 		this.pickNumber$$.next(value);

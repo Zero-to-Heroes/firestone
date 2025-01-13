@@ -21,6 +21,12 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 					{
 						type: 'toggle',
 						field: 'arenaShowCardSelectionOverlay',
+						label: context.i18n.translateString('settings.arena.general.show-card-stats-discover'),
+						tooltip: context.i18n.translateString('settings.arena.general.show-card-stats-discover-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'arenaShowCardStatDuringDiscovers',
 						label: context.i18n.translateString('settings.arena.general.show-card-selection-overlay'),
 						tooltip: context.i18n.translateString('settings.arena.general.show-card-selection-overlay-tooltip'),
 					},
