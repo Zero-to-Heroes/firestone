@@ -927,15 +927,6 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const lastCardPlayed =
 					input.deckState?.cardsPlayedThisMatch?.[input.deckState.cardsPlayedThisMatch.length - 1];
-				console.debug(
-					'lastCardPlayed',
-					input.card?.name,
-					lastCardPlayed,
-					input,
-					opposingSide(inputSide)(input),
-					side(inputSide)(input),
-					entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId })(input),
-				);
 				return tooltip(
 					and(
 						opposingSide(inputSide),
