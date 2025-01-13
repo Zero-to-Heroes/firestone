@@ -13,7 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameType, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
-import { ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
+import { ArenaCardOption, ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -26,7 +26,6 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { ArenaCardOption } from 'libs/arena/common/src/lib/components/overlays/model';
 import { BehaviorSubject, Observable, combineLatest, filter, from, shareReplay, switchMap } from 'rxjs';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

@@ -13,6 +13,7 @@ export * from './lib/components/overlays/arena-card-selection.component';
 export * from './lib/components/overlays/arena-hero-option.component';
 export * from './lib/components/overlays/arena-hero-selection.component';
 export * from './lib/components/overlays/arena-option-info-premium.component';
+export * from './lib/components/overlays/model';
 export * from './lib/components/overlays/mulligan/arena-mulligan-deck.component';
 export * from './lib/components/overlays/mulligan/arena-mulligan-hand.component';
 export * from './lib/components/personal-stats/arena-personal-stats-overview.component';
