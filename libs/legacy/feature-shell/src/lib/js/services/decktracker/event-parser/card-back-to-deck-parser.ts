@@ -14,7 +14,10 @@ const CARD_SENDING_TO_BOTTOM = [
 	CardIds.ForgottenDepthsTavernBrawl,
 	CardIds.Drown,
 ];
-const CARD_SENDING_TO_TOP = [CardIds.EnvoyOfProsperity_WORK_031];
+const CARD_SENDING_TO_TOP = [
+	CardIds.EnvoyOfProsperity_WORK_031,
+	CardIds.Doommaiden_DoomInterrogationEnchantment_GDB_129e,
+];
 
 export class CardBackToDeckParser implements EventParser {
 	constructor(
