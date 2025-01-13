@@ -5,6 +5,7 @@ import {
 	Component,
 	ElementRef,
 	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
@@ -22,10 +23,9 @@ import { MainWindowStateFacadeService } from '../../../services/mainwindow/store
 		'../../../../css/component/overlays/quests/quests-widget-view.component.scss',
 	],
 	template: `
-		<div class="quests-widget {{ theme }}">
+		<div class="quests-widget {{ theme }}" *ngIf="showQuests$ | async">
 			<div
 				class="widget-icon"
-				*ngIf="showQuests$ | async"
 				(mouseenter)="onMouseEnter()"
 				(mouseleave)="onMouseLeave()"
 				(click)="onMouseLeave()"
@@ -49,7 +49,7 @@ import { MainWindowStateFacadeService } from '../../../services/mainwindow/store
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() theme: string;
 	@Input() widgetIcon: string;
 	@Input() xpIcon: string;
@@ -130,6 +130,11 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	ngOnDestroy(): void {
+		super.ngOnDestroy();
+		this.showWidget$$.next(false);
 	}
 
 	onMouseEnter() {
