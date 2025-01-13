@@ -9,7 +9,7 @@ import {
 	ReferenceCard,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { isBgsSpell, isBgsTrinket } from '../card-utils';
+import { isBgsSpell } from '../card-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
 import { getActualTribes } from '../tribe-utils';
 import { TierBuilderConfig } from './tiers-config.model';
@@ -129,9 +129,9 @@ const buildSingleTribeTier = (
 			config?.groupMinionsIntoTheirTribeGroup ?? false,
 			config?.playerTrinkets,
 		);
-		const isTrinket = isBgsTrinket(card);
+		// const isTrinket = isBgsTrinket(card);
 		const isSpell = isBgsSpell(card);
-		const cardTrinketTribes = [
+		const requiredCardTribes = [
 			...(cardRules?.[card.id]?.bgsMinionTypesRules?.needTypesInLobby ?? []),
 			...(cardRules?.[card.id]?.bgsMinionTypesRules?.needBoardTypes ?? []),
 		]
@@ -140,16 +140,16 @@ const buildSingleTribeTier = (
 		if (targetTribe === null || targetTribe === Race.BLANK) {
 			return (
 				(!isSpell && cardTribes.filter((t) => t !== Race.BLANK).length === 0) ||
-				(isTrinket && cardTrinketTribes.filter((t) => t !== Race.BLANK).length === 0)
+				requiredCardTribes.filter((t) => t !== Race.BLANK).length === 0
 			);
 		}
-		if (cardTribes.length === 0 && cardTrinketTribes.length === 0) {
+		if (cardTribes.length === 0 && requiredCardTribes.length === 0) {
 			return false;
 		}
 		return (
 			cardTribes.includes(Race.ALL) ||
 			cardTribes.includes(targetTribe) ||
-			(isTrinket && cardTrinketTribes.includes(targetTribe))
+			requiredCardTribes.includes(targetTribe)
 		);
 	});
 	const tribeGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForTribe, tiersToInclude, i18n, config);

@@ -52,12 +52,17 @@ export const getAllCardsInGame = (
 		.filter((card) => hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]))
 		// .filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
-			if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL]) {
-				return hasSpells && isValidBgSpellForTribes(card.id, availableTribes);
+			const isValid = isValidCardForTribes(card.id, availableTribes, allCards, cardRules);
+			if (!isValid) {
+				return false;
 			}
-			if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]) {
-				return hasTrinkets && isValidTrinketForTribes(card.id, availableTribes, allCards, cardRules);
-			}
+			// This shouldn't be needed anymore since we have card-based rules
+			// if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL]) {
+			// 	return hasSpells && isValidBgSpellForTribes(card.id, availableTribes);
+			// }
+			// if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET]) {
+			// 	return hasTrinkets && isValidTrinketForTribes(card.id, availableTribes, allCards, cardRules);
+			// }
 			return true;
 		})
 		.filter((card) => {
@@ -115,18 +120,22 @@ const isValidBgSpellForTribes = (cardId: string, availableTribes: readonly Race[
 	return true;
 };
 
-const isValidTrinketForTribes = (
+const isValidCardForTribes = (
 	cardId: string,
 	availableTribes: readonly Race[],
 	allCards: CardsFacadeService,
 	cardRules: CardRules | null,
 ): boolean => {
+	const debug = cardId == 'BG31_819';
+	debug && console.debug('checking card', cardId, availableTribes, cardRules);
 	if (!availableTribes?.length || !cardRules) {
+		debug && console.debug('no tribes, ok');
 		return true;
 	}
 
 	const rule: CardRule | null = cardRules[cardId];
 	if (!rule) {
+		debug && console.debug('no rule, ok');
 		return true;
 	}
 
@@ -134,6 +143,7 @@ const isValidTrinketForTribes = (
 		availableTribes.includes(Race[bannedRace]),
 	);
 	if (isBanned) {
+		debug && console.debug('banned', false);
 		// console.debug(
 		// 	'banned trinket',
 		// 	allCards.getCard(cardId).name,
@@ -147,6 +157,7 @@ const isValidTrinketForTribes = (
 		? rule.bgsMinionTypesRules?.needTypesInLobby?.some((neededTribe) => availableTribes.includes(Race[neededTribe]))
 		: true;
 	if (!isRestrictionMet) {
+		debug && console.debug('not isRestrictionMet', false);
 		// console.debug(
 		// 	'restriction not met trinket',
 		// 	allCards.getCard(cardId).name,
@@ -156,5 +167,6 @@ const isValidTrinketForTribes = (
 		return false;
 	}
 
+	debug && console.debug('ok', true);
 	return true;
 };
