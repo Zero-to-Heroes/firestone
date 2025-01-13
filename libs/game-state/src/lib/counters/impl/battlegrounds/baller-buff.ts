@@ -7,7 +7,7 @@ import { CounterType } from '../../_exports';
 
 export class BallerBuffCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'ballerBuff';
-	public override image = CardIds.FireBaller_BG31_816;
+	public override image = CardIds.TemperatureShift_BG31_819;
 	public override type: 'hearthstone' | 'battlegrounds' = 'battlegrounds';
 	public override cards: readonly CardIds[] = [];
 
