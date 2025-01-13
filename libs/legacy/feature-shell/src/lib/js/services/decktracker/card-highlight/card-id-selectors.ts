@@ -156,6 +156,8 @@ export const cardIdSelector = (
 		case CardIds.AegwynnTheGuardianCore:
 		case CardIds.AegwynnTheGuardian_LEG_CS3_001:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.Aeroponics:
+			return and(side(inputSide), or(inHand, inDeck), or(summonsTreant, isTreant));
 		case CardIds.AirGuitarist:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.AkaliTheRhino:
