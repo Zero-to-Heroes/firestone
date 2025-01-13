@@ -926,10 +926,19 @@ export const cardIdSelector = (
 		case CardIds.FateSplitter:
 			return (input: SelectorInput): SelectorOutput => {
 				const lastCardPlayed =
-					input.deckState.cardsPlayedThisMatch?.[input.deckState.cardsPlayedThisMatch.length - 1];
+					input.deckState?.cardsPlayedThisMatch?.[input.deckState.cardsPlayedThisMatch.length - 1];
+				console.debug(
+					'lastCardPlayed',
+					input.card?.name,
+					lastCardPlayed,
+					input,
+					opposingSide(inputSide)(input),
+					side(inputSide)(input),
+					entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId })(input),
+				);
 				return tooltip(
 					and(
-						side(inputSide),
+						opposingSide(inputSide),
 						entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId }),
 					),
 				)(input);
