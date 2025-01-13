@@ -2419,7 +2419,7 @@ export const cardIdSelector = (
 		case CardIds.TombLurker_ICC_098:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
 		case CardIds.TombTraitor:
-			return and(side(inputSide), inDeck, isPlague);
+			return and(side(inputSide), inDeck, or(isPlague, generatesPlague));
 		case CardIds.TortollanPilgrim:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.TortollanTraveler_VAC_518:
