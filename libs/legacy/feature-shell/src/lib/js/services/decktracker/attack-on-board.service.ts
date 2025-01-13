@@ -6,10 +6,11 @@ import { AttackOnBoard, DeckCard, DeckState, EntityGameState, PlayerGameState } 
 export class AttackOnBoardService {
 	public computeAttackOnBoard(deck: DeckState, playerFromTracker: PlayerGameState): AttackOnBoard {
 		// console.debug('[attack-on-board] computing attack on board', deck, playerFromTracker);
-		const numberOfVoidtouchedAttendants =
-			deck.board
-				.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant)
-				.filter((entity) => !this.isSilenced(entity.entityId, playerFromTracker.Board)).length || 0;
+		// Remove voidtouched attendants, as their effect only triggers when attacking the enemy hero
+		const numberOfVoidtouchedAttendants = 0;
+		// deck.board
+		// 	.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant)
+		// 	.filter((entity) => !this.isSilenced(entity.entityId, playerFromTracker.Board)).length || 0;
 		const entitiesOnBoardThatCanAttack = deck.board
 			.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
 			.filter((entity) => entity)
