@@ -137,7 +137,8 @@ export class DeckState {
 	readonly manaLeft: number = 0;
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
-	readonly damageTakenByTurn: readonly TurnDamage[] = [];
+	// Only accounts for damage taken on your turns
+	readonly damageTakenOnYourTurns: readonly TurnDamage[] = [];
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 	readonly turnTimings: readonly TurnTiming[] = [];
 	readonly turnDuration: number;

@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { TurnDamage } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
+import { hasOrHadHeroClass } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
+
+const opponentClasses = [CardClass.PRIEST, CardClass.WARLOCK, CardClass.DEMONHUNTER, CardClass.ROGUE];
 
 export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV2<readonly TurnDamage[]> {
 	public override id: CounterType = 'damageTakenOnYourTurn';
@@ -14,9 +17,7 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 	readonly player = {
 		pref: 'playerDamageTakenOnYourTurnCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): readonly TurnDamage[] | null => {
-			return state.playerDeck.damageTakenByTurn;
-		},
+		value: (state: GameState): readonly TurnDamage[] | null => state.playerDeck.damageTakenOnYourTurns,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-label'),
@@ -25,7 +26,31 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 		},
 	};
 
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentDamageTakenOnYourTurnCounter' as const,
+		display: (state: GameState): boolean => {
+			const result =
+				hasOrHadHeroClass(state.opponentDeck?.hero, opponentClasses) &&
+				!!state.opponentDeck?.damageTakenOnYourTurns.length;
+			console.debug(
+				'displaying opponent damage taken on your turn',
+				result,
+				state.opponentDeck?.damageTakenOnYourTurns,
+			);
+			return result;
+		},
+		value: (state: GameState): readonly TurnDamage[] | null => state.opponentDeck?.damageTakenOnYourTurns,
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.opponent-deck.counters.damage-taken-on-your-turn-tooltip', {
+					classes: opponentClasses
+						.map((c) => i18n.translateString(`global.class.${CardClass[c].toLowerCase()}`))
+						.join(', '),
+				}),
+		},
+	};
 
 	constructor(private readonly i18n: ILocalizationService) {
 		super();
@@ -43,7 +68,7 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const damageByTurn = side === 'player' ? this.player.value(gameState) : null;
+		const damageByTurn = side === 'player' ? this.player.value(gameState) : this.opponent.value(gameState);
 		const totalDamageTakenOnYourTurns = damageByTurn!.flatMap((d) => d.damage).reduce((a, b) => a + b, 0);
 		const numberOfTimesDamageTakenOnYourTurns = damageByTurn!.flatMap((d) => d.damage).length;
 		const tooltip = this.i18n.translateString(`counters.damage-taken-on-your-turn.${side}`, {

@@ -31,9 +31,9 @@ export class DamageTakenParser implements EventParser {
 			return currentState;
 		}
 
-		let playerDamageByTurn = currentState.playerDeck.damageTakenByTurn;
+		let playerDamageByTurn = currentState.playerDeck.damageTakenOnYourTurns;
 		if (currentState.playerDeck.isActivePlayer && localPlayerDamage > 0) {
-			let playerDamageThisTurn = currentState.playerDeck.damageTakenByTurn.find(
+			let playerDamageThisTurn = currentState.playerDeck.damageTakenOnYourTurns.find(
 				(d) => d.turn === currentState.currentTurn,
 			);
 			if (!playerDamageThisTurn) {
@@ -50,12 +50,12 @@ export class DamageTakenParser implements EventParser {
 		}
 		const playerDeck = currentState.playerDeck.update({
 			damageTakenThisTurn: (currentState.playerDeck.damageTakenThisTurn ?? 0) + localPlayerDamage,
-			damageTakenByTurn: playerDamageByTurn,
+			damageTakenOnYourTurns: playerDamageByTurn,
 		});
 
-		let opponentDamageByTurn = currentState.opponentDeck.damageTakenByTurn;
+		let opponentDamageByTurn = currentState.opponentDeck.damageTakenOnYourTurns;
 		if (currentState.opponentDeck.isActivePlayer && opponentPlayerDamage > 0) {
-			let opponentDamageThisTurn = currentState.opponentDeck.damageTakenByTurn.find(
+			let opponentDamageThisTurn = currentState.opponentDeck.damageTakenOnYourTurns.find(
 				(d) => d.turn === currentState.currentTurn,
 			);
 			if (!opponentDamageThisTurn) {
@@ -72,7 +72,7 @@ export class DamageTakenParser implements EventParser {
 		}
 		const opponentDeck = currentState.opponentDeck.update({
 			damageTakenThisTurn: (currentState.opponentDeck.damageTakenThisTurn ?? 0) + opponentPlayerDamage,
-			damageTakenByTurn: opponentDamageByTurn,
+			damageTakenOnYourTurns: opponentDamageByTurn,
 		});
 
 		return Object.assign(new GameState(), currentState, {
