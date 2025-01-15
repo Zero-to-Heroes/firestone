@@ -1910,6 +1910,8 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), spellPlayedThisMatch, not(cardIs(CardIds.Rewind_ETC_532))));
 		case CardIds.RhoninsScryingOrbTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.RhymeSpinner:
+			return and(side(inputSide), or(inDeck, inHand), combo);
 		case CardIds.RighteousReservesTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
 		case CardIds.RimefangSwordCore:
