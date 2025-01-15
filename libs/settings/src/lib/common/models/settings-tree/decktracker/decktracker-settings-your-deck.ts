@@ -323,12 +323,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-tooltip'),
 	},
 	{
-		id: 'damageTakenOnYourTurn',
-		field: 'playerDamageTakenOnYourTurnCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.damage-taken-on-your-turn-tooltip'),
-	},
-	{
 		id: 'locationsUsed',
 		field: 'playerLocationsUsedCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-label'),

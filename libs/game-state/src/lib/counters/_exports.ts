@@ -10,6 +10,7 @@ import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
+import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
@@ -29,6 +30,7 @@ export const getAllCounters: (
 	new SpellCastOnFriendlyCharacterCounterDefinitionV2(i18n),
 	new GiftsPlayedCounterDefinitionV2(i18n),
 	new ComboCardsPlayedCounterDefinitionV2(i18n, allCards),
+	new DamageTakenOnYourTurnCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

@@ -16,7 +16,6 @@ export class ComboCardsPlayedCounterDefinitionV2 extends CounterDefinitionV2<num
 			const comboCardsPlayed = state.playerDeck?.cardsPlayedThisMatch?.filter((c) =>
 				this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.COMBO]),
 			);
-			console.debug('combo cards played', comboCardsPlayed);
 			return comboCardsPlayed?.length;
 		},
 		setting: {

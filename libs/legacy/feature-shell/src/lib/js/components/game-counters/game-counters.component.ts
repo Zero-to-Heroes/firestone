@@ -30,7 +30,6 @@ import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
-import { DamageTakenOnYourTurnCounterDefinition } from './definitions/damage-taken-on-your-turn-counter';
 import { DeadMinionsThisGameCounterDefinition } from './definitions/dead-minions-this-game-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { EarthenGolemCounterDefinition } from './definitions/earthen-golem-counter';
@@ -221,8 +220,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'deadMinionsThisGame':
 				return DeadMinionsThisGameCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'damageTakenOnYourTurn':
-				return DamageTakenOnYourTurnCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'locationsUsed':
 				return LocationsUsedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'seaShanty':

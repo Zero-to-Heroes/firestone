@@ -106,7 +106,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
 			<player-dead-minions-this-game-widget-wrapper></player-dead-minions-this-game-widget-wrapper>
-			<player-damage-taken-on-your-turn-widget-wrapper></player-damage-taken-on-your-turn-widget-wrapper>
 			<player-locations-used-widget-wrapper></player-locations-used-widget-wrapper>
 			<player-sea-shanty-widget-wrapper></player-sea-shanty-widget-wrapper>
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
