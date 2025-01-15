@@ -81,6 +81,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
+			filter(([gameState, bgState, prefs]) => !!gameState && !!bgState && !!prefs),
 			this.mapData(([gameState, bgState, prefs]) => {
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',

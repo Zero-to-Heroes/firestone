@@ -12,6 +12,7 @@ import {
 	BG_USE_QUESTS_IN_DESKTOP,
 	BG_USE_TRINKETS,
 	BattlegroundsNavigationService,
+	CategoryId,
 } from '@firestone/battlegrounds/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -181,6 +182,10 @@ export class BattlegroundsDesktopComponent
 	}
 
 	showSidebar(categoryId: string): boolean {
-		return categoryId !== 'bgs-category-simulator' && categoryId !== 'bgs-category-leaderboard';
+		const sidebar: CategoryId[] = ['bgs-category-personal-rating'];
+		return (
+			sidebar.includes(categoryId as CategoryId) ||
+			categoryId.indexOf('bgs-category-personal-hero-details') !== -1
+		);
 	}
 }

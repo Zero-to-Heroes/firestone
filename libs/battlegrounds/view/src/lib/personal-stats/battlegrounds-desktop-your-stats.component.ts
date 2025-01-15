@@ -165,7 +165,6 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 		);
 
 		const filteredGames$ = combineLatest([bgGames$, prefs$, this.patch.currentBattlegroundsMetaPatch$$]).pipe(
-			tap(([games, prefs, patch]) => console.log('games', games, prefs, patch)),
 			this.mapData(([games, prefs, patch]) =>
 				games
 					.filter((game) => this.filterGameMode(game, prefs.mode))

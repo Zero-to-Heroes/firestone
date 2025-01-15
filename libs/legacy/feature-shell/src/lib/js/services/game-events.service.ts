@@ -3,6 +3,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEventsFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filter, interval, take } from 'rxjs';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
@@ -125,6 +126,7 @@ export class GameEvents {
 		// 	this.lastProcessedTimestamp = new Date().getTime();
 		// }
 		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
+		await this.waitForPluginReady();
 		return new Promise<void>((resolve) => {
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve();
@@ -1833,6 +1835,12 @@ export class GameEvents {
 			});
 		}
 		this.pluginBeingInitialized = false;
+	}
+
+	private async waitForPluginReady() {
+		while (!this.plugin || this.pluginBeingInitialized) {
+			await sleep(100);
+		}
 	}
 
 	private buildBattlegroundsPlayerBoardEvent(eventName: string, gameEvent: any) {

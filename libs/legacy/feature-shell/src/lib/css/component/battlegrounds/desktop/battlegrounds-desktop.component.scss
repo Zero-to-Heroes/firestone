@@ -18,10 +18,10 @@
 		position: relative;
 		width: 100%;
 
-		&.divider {
-			border-right: 1px solid var(--menu-bar-bottom-border-color);
-			height: 100%;
-		}
+		// &.divider {
+		// 	border-right: 1px solid var(--menu-bar-bottom-border-color);
+		// 	height: 100%;
+		// }
 
 		with-loading {
 			flex-grow: 1;
@@ -52,6 +52,7 @@
 		display: flex;
 		flex-direction: column;
 		flex-grow: 0;
+		border-left: 1px solid var(--menu-bar-bottom-border-color);
 		margin-left: 15px;
 		margin-right: 5px;
 		width: 400px;
