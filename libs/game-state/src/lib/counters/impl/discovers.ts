@@ -31,12 +31,6 @@ export class DiscoversCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	readonly opponent = {
 		pref: 'opponentDiscoversCounter' as const,
 		display: (state: GameState): boolean => {
-			console.debug(
-				'checking opponent discovers',
-				hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.HUNTER]),
-				state.opponentDeck?.discoversThisGame,
-				state.opponentDeck,
-			);
 			return (
 				state.opponentDeck.hasRelevantCard(this.cards) ||
 				(hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.HUNTER]) &&
