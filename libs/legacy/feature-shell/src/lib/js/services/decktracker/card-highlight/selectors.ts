@@ -359,6 +359,19 @@ export const undead = race(Race.UNDEAD);
 export const whelp = hasMechanic(GameTag.WHELP);
 export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
+export const hasTribeNotPlayedThisMatch = (input: SelectorInput): boolean => {
+	if (!input.card.races?.length) {
+		return false;
+	}
+	if (input.card.races.includes(Race[Race.ALL])) {
+		return true;
+	}
+	const uniqueRacesPlayedThisMatch = input.deckState.cardsPlayedThisMatch
+		.flatMap((c) => input.allCards.getCard(c.cardId).races)
+		.filter((r, index, self) => self.indexOf(r) === index)
+		.filter((r) => r != Race[Race.ALL]);
+	return input.card.races.some((r) => !uniqueRacesPlayedThisMatch.includes(r));
+};
 
 export const cardClass =
 	(cardClass: CardClass) =>

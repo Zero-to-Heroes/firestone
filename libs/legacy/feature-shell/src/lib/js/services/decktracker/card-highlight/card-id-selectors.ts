@@ -52,6 +52,7 @@ import {
 	generatesPlague,
 	hasMultipleCopies,
 	hasSpellSchool,
+	hasTribeNotPlayedThisMatch,
 	healthBiggerThanAttack,
 	healthIs,
 	healthLessThan,
@@ -1659,7 +1660,10 @@ export const cardIdSelector = (
 		case CardIds.OldMilitiaHorn_VeteransMilitiaHornTavernBrawl:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.TheOneAmalgamBand:
-			return and(side(inputSide), or(inHand, inDeck), minion, not(tribeless));
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, hasTribeNotPlayedThisMatch, not(tribeless)),
+				and(side(inputSide), or(inHand, inDeck), minion, not(tribeless)),
+			);
 		case CardIds.OnyxBishop:
 		case CardIds.OnyxBishop_WON_057:
 			return tooltip(and(side(inputSide), inGraveyard));
@@ -1767,7 +1771,10 @@ export const cardIdSelector = (
 		case CardIds.PotionOfSparkingTavernBrawl:
 			return and(side(inputSide), minion, rush);
 		case CardIds.PowerSlider:
-			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, hasTribeNotPlayedThisMatch, not(tribeless)),
+				and(side(inputSide), or(inHand, inDeck), minion, not(tribeless)),
+			);
 		case CardIds.PredatoryInstincts:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.PreparationCore:
