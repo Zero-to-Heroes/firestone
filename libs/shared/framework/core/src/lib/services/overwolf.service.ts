@@ -427,19 +427,14 @@ export class OverwolfService {
 
 	public inAnotherGame(gameInfoResult: any): boolean {
 		return (
-			gameInfoResult &&
-			gameInfoResult.gameInfo &&
-			gameInfoResult.gameInfo.isRunning &&
-			Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID
+			gameInfoResult?.gameInfo?.isRunning && Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID
 		);
 	}
 
 	public exitGame(gameInfoResult: any): boolean {
 		return (
-			!gameInfoResult ||
-			!gameInfoResult.gameInfo ||
-			!gameInfoResult.gameInfo.isRunning ||
-			Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID
+			Math.floor(gameInfoResult?.gameInfo?.id ?? 0 / 10) === HEARTHSTONE_GAME_ID &&
+			!gameInfoResult?.gameInfo?.isRunning
 		);
 	}
 
@@ -952,10 +947,7 @@ export class OverwolfService {
 	}
 
 	public gameRunning(gameInfo: any): boolean {
-		if (!gameInfo) {
-			return false;
-		}
-		if (!gameInfo.isRunning) {
+		if (!gameInfo?.isRunning) {
 			return false;
 		}
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
@@ -966,13 +958,7 @@ export class OverwolfService {
 	}
 
 	public gameLaunched(gameInfoResult: any): boolean {
-		if (!gameInfoResult) {
-			return false;
-		}
-		if (!gameInfoResult.gameInfo) {
-			return false;
-		}
-		if (!gameInfoResult.gameInfo.isRunning) {
+		if (!gameInfoResult?.gameInfo?.isRunning) {
 			return false;
 		}
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
