@@ -35,6 +35,7 @@ import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 import { ArenDeckDetailsService } from './services/arena-deck-details.service';
 import { ArenaDeckStatsService } from './services/arena-deck-stats.service';
+import { ArenaDiscoversGuardianService } from './services/arena-discovers-guardian.service';
 import { ArenaHighWinsRunsService } from './services/arena-high-wins-runs.service';
 import { ArenaInfoService } from './services/arena-info.service';
 import { ArenaMulliganGuideGuardianService } from './services/arena-mulligan-guide-guardian.service';
@@ -91,6 +92,7 @@ const components = [
 		ArenaHighWinsRunsService,
 		ArenaMulliganGuideService,
 		ArenaMulliganGuideGuardianService,
+		ArenaDiscoversGuardianService,
 		ArenaDeckStatsService,
 		ArenaRunsService,
 		ArenaInfoService,

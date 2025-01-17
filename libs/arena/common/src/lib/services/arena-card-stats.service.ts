@@ -21,6 +21,8 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	private api: ApiRunner;
 	private prefs: PreferencesService;
 
+	private cachedStats: ArenaCombinedCardStats | null;
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'arenaCardStats', () => !!this.cardStats$$);
 	}
@@ -37,7 +39,6 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		this.prefs = AppInjector.get(PreferencesService);
 
 		this.cardStats$$.onFirstSubscribe(async () => {
-			console.debug('[arena-card-stats] init');
 			await this.prefs.isReady();
 
 			this.prefs.preferences$$
@@ -69,7 +70,11 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	}
 
 	private async getStatsForInternal(cardId: string, playerClass: PlayerClass): Promise<ArenaCombinedCardStat | null> {
-		const cardStats = await this.buildCardStats(playerClass, 'last-patch');
+		let cardStats = this.cachedStats;
+		if (this.cachedStats?.context !== playerClass || this.cachedStats?.timePeriod !== 'last-patch') {
+			cardStats = await this.buildCardStats(playerClass, 'last-patch');
+			this.cachedStats = cardStats;
+		}
 		return cardStats?.stats?.find((s) => s.cardId === cardId) ?? null;
 	}
 
@@ -78,6 +83,10 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	}
 
 	private async buildCardStatsInternal(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
+		if (this.cachedStats?.context === context && this.cachedStats?.timePeriod === timePeriod) {
+			return this.cachedStats;
+		}
+
 		const [cardPerformanceStats, cardDraftStats] = await Promise.all([
 			this.api.callGetApi<ArenaCardStats>(
 				ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context),
@@ -100,6 +109,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 
 		const result: ArenaCombinedCardStats = {
 			context: context,
+			timePeriod: timePeriod,
 			lastUpdated: cardPerformanceStats.lastUpdated,
 			stats: this.buildCombinedStats(cardPerformanceStats.stats, cardDraftStats.stats),
 		};

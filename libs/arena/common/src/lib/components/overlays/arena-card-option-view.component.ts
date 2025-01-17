@@ -47,7 +47,6 @@ import { ArenaCardOption } from './model';
 })
 export class ArenaCardOptionViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set card(value: ArenaCardOption | null) {
-		console.debug('[arena-card-option] setting card', value);
 		this.drawnWinrate = value?.drawnWinrate == null ? '-' : (100 * value.drawnWinrate).toFixed(1) + '%';
 		this.deckWinrate = value?.deckWinrate == null ? '-' : (100 * value.deckWinrate).toFixed(1) + '%';
 		this.drawImpact = value?.drawnImpact == null ? '-' : (100 * value.drawnImpact).toFixed(2);

@@ -1,3 +1,4 @@
+import { ARENA_DISCOVERS_DAILY_FREE_USES } from '@firestone/arena/common';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs } from '../common';
 
@@ -21,14 +22,16 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 					{
 						type: 'toggle',
 						field: 'arenaShowCardSelectionOverlay',
-						label: context.i18n.translateString('settings.arena.general.show-card-stats-discover'),
-						tooltip: context.i18n.translateString('settings.arena.general.show-card-stats-discover-tooltip'),
+						label: context.i18n.translateString('settings.arena.general.show-card-selection-overlay'),
+						tooltip: context.i18n.translateString('settings.arena.general.show-card-selection-overlay-tooltip'),
 					},
 					{
 						type: 'toggle',
 						field: 'arenaShowCardStatDuringDiscovers',
-						label: context.i18n.translateString('settings.arena.general.show-card-selection-overlay'),
-						tooltip: context.i18n.translateString('settings.arena.general.show-card-selection-overlay-tooltip'),
+						label: context.i18n.translateString('settings.arena.general.show-card-stats-discover'),
+						tooltip: context.i18n.translateString('settings.arena.general.show-card-stats-discover-tooltip', {
+							freeUses: ARENA_DISCOVERS_DAILY_FREE_USES,
+						}),
 					},
 					{
 						type: 'toggle',

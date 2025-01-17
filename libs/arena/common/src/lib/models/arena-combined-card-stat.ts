@@ -3,6 +3,7 @@ import { ArenaCardStat, PlayerClass } from '@firestone-hs/arena-stats';
 export interface ArenaCombinedCardStats {
 	lastUpdated: Date;
 	context: 'global' | PlayerClass;
+	timePeriod: string;
 	stats: ArenaCombinedCardStat[];
 }
 

@@ -13,12 +13,17 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameType, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
-import { ArenaCardOption, ArenaCardStatsService, ArenaClassStatsService } from '@firestone/arena/common';
+import {
+	ArenaCardOption,
+	ArenaCardStatsService,
+	ArenaClassStatsService,
+	ArenaDiscoversGuardianService,
+} from '@firestone/arena/common';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -26,7 +31,19 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, from, shareReplay, switchMap } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	from,
+	shareReplay,
+	switchMap,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -155,6 +172,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 					return result;
 				});
 			}),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			takeUntil(this.destroyed$),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -179,24 +198,6 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
 									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
 							);
-						console.debug(
-							'[murloc-holmes] mulligan help',
-							option,
-							isInStartingHand,
-							state.opponentDeck
-								.getAllCardsInDeck()
-								.filter((c) => !!(c as DeckCard).metaInfo)
-								.filter(
-									(c) =>
-										(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
-										(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
-								)
-								.map((c) => ({
-									cardId: c.cardId,
-									turnAtWhichCardEnteredHand: (c as DeckCard).metaInfo.turnAtWhichCardEnteredHand,
-									metaInfo: (c as DeckCard).metaInfo,
-								})),
-						);
 						return isInStartingHand ? 'flag' : null;
 					case 2:
 						const isInHand = !!state.opponentDeck.hand.filter((c) => c.cardId === option.cardId).length;
@@ -228,7 +229,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 					></arena-card-option-view>
 					<arena-option-info-premium
 						class="premium"
-						*ngIf="!(canSeeWidget$ | async)"
+						*ngIf="(canSeeWidget$ | async) === false"
 					></arena-option-info-premium>
 				</ng-container>
 			</ng-container>
@@ -296,23 +297,46 @@ export class ChoosingCardOptionComponent extends AbstractSubscriptionComponent i
 		private readonly arenaCardStats: ArenaCardStatsService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly prefs: PreferencesService,
+		private readonly guardian: ArenaDiscoversGuardianService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.arenaCardStats);
+		await waitForReady(this.arenaCardStats, this.guardian, this.prefs);
 
 		this.showArenaCardStatDuringDiscovers$ = this.prefs.preferences$$.pipe(
+			tap((info) => console.debug('[arena-card-option] preferences$', info)),
 			this.mapData((prefs) => prefs.arenaShowCardStatDuringDiscovers),
+			tap((info) => console.debug('[arena-card-option] arenaShowCardStatDuringDiscovers', info)),
+			debounceTime(500),
+			distinctUntilChanged(),
+			shareReplay(1),
+			tap((info) => console.debug('[arena-card-option] showArenaCardStatDuringDiscovers$', info)),
+			takeUntil(this.destroyed$),
 		);
-		this.canSeeWidget$ = this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => hasPremium));
+		this.canSeeWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
+			this.mapData(([hasPremium, freeUsesLeft]) => hasPremium || freeUsesLeft > 0),
+			debounceTime(500),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		combineLatest([this.showArenaCardStatDuringDiscovers$, this.canSeeWidget$])
+			.pipe(
+				filter(([show, canSee]) => show && canSee),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+			)
+			.subscribe(([show, canSee]) => {
+				this.guardian.acknowledgeDiscoverStatsSeen();
+			});
 		this.arenaCardStats$ = combineLatest([this.cardId$$, this.arenaCard$$, this.playerClass$$]).pipe(
 			filter(([cardId, arenaCard]) => !!cardId && !!arenaCard),
 			switchMap(([cardId, arenaCard, playerClass]) =>
 				from(this.arenaCardStats.getStatsFor(cardId, playerClass)).pipe(
 					this.mapData((stat) => ({ stat, playerClass })),
+					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				),
 			),
 			switchMap(async ({ stat, playerClass }) => {
