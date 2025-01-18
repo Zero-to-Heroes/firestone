@@ -1,10 +1,29 @@
-import { CardIds } from '@firestone-hs/reference-data';
-import { SelectorSort } from './cards-highlight-common.service';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
+import { SelectorInput, SelectorSort } from './cards-highlight-common.service';
 
 export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
 	switch (cardId) {
 		case CardIds.TheGalacticProjectionOrb_TOY_378:
-			return (a, b) => a.deckCard.refManaCost - b.deckCard.refManaCost;
+			return (original: SelectorInput[]) =>
+				original.sort((a, b) => a.deckCard.refManaCost - b.deckCard.refManaCost);
+		case TempCardIds.JimRaynor:
+		case TempCardIds.ThorExplosivePayload:
+			return (original: SelectorInput[]) => {
+				const starships = original.filter((selectorInput) =>
+					selectorInput.allCards
+						.getCard(selectorInput.deckCard.cardId)
+						?.mechanics?.includes(GameTag[GameTag.STARSHIP]),
+				);
+				const result = starships.flatMap((starship) => [
+					starship,
+					...starship.deckCard.storedInformation?.cards
+						?.map((c) => original.find((o) => o.deckCard.entityId === c.entityId))
+						.filter((c) => !!c),
+				]);
+				console.debug('sorting starships', result, starships, original);
+				return result;
+			};
 	}
 	return null;
 };

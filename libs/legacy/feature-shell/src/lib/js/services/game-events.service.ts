@@ -476,6 +476,7 @@ export class GameEvents {
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
 					  }
 					: null;
 				this.gameEventsEmitter.allEvents.next(
@@ -484,6 +485,13 @@ export class GameEvents {
 				break;
 			case 'CARD_FORGED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_FORGED, gameEvent));
+				break;
+			case 'STARSHIP_LAUNCHED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.STARSHIP_LAUNCHED, gameEvent, {
+						tags: gameEvent.Value.AdditionalProps.Tags,
+					}),
+				);
 				break;
 			case 'JADE_GOLEM':
 				this.gameEventsEmitter.allEvents.next(

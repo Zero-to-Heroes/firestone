@@ -123,6 +123,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly PARENT_CARD_CHANGED = 'PARENT_CARD_CHANGED';
 	public static readonly MINION_GO_DORMANT = 'MINION_GO_DORMANT';
 	public static readonly CARD_FORGED = 'CARD_FORGED';
+	public static readonly STARSHIP_LAUNCHED = 'STARSHIP_LAUNCHED';
 	public static readonly JADE_GOLEM = 'JADE_GOLEM';
 	public static readonly CTHUN = 'CTHUN';
 	public static readonly MINDRENDER_ILLUCIA_START = 'MINDRENDER_ILLUCIA_START';

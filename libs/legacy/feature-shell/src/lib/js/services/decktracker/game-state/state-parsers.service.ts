@@ -118,6 +118,7 @@ import { PogoPlayedParser } from '../event-parser/special-cases/pogo-played-pars
 import { SpecificSummonsParser } from '../event-parser/special-cases/specific-summons-parser';
 import { SphereOfSapienceParser } from '../event-parser/special-cases/sphere-of-sapience-parser';
 import { WheelOfDeathCounterUpdatedParser } from '../event-parser/special-cases/wheel-of-death-counter-updated-parser';
+import { StarshipLaunchedParser } from '../event-parser/starship-launched-parser';
 import { StartOfGameEffectParser } from '../event-parser/start-of-game-effect-parser';
 import { TouristRevealedParser } from '../event-parser/tourist-revealed-parser';
 import { TurnDurationUpdatedParser } from '../event-parser/turn-duration-updated-parser';
@@ -305,6 +306,7 @@ export class GameStateParsersService {
 				new SphereOfSapienceParser(this.helper),
 			],
 			[GameEvent.SPECTATING]: [new GameEndParser(this.prefs, this.owUtils)],
+			[GameEvent.STARSHIP_LAUNCHED]: [new StarshipLaunchedParser(this.helper)],
 			[GameEvent.START_OF_GAME]: [new StartOfGameEffectParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.SUB_SPELL_END]: [new CustomEffects2Parser(this.helper, this.allCards)],
 			[GameEvent.SUB_SPELL_START]: [

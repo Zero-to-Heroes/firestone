@@ -15,6 +15,7 @@ export const enum TempCardIds {
 	LiftOff = 'LiftOff',
 	Stimpack = 'Stimpack',
 	JimRaynor = 'JimRaynor',
+	ThorExplosivePayload = 'ThorExplosivePayload',
 	Hellion = 'Hellion',
 	Hellbat = 'Hellbat',
 	ChronoBoost = 'ChronoBoost',

@@ -155,7 +155,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		playerDeckProvider: () => DeckState,
 		opponentDeckProvider: () => DeckState,
 	): readonly SelectorInput[] {
-		const result: SelectorInput[] = [];
+		let result: SelectorInput[] = [];
 		const selector: Selector = this.buildSelector(cardId, card, side);
 		const selectorSort: SelectorSort = cardIdSelectorSort(cardId);
 
@@ -189,7 +189,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 
 		if (!!selectorSort) {
-			result.sort(selectorSort);
+			let timing = 0;
+			result = selectorSort(result).map((info) => ({
+				...info,
+				deckCard: DeckCard.create({ ...info.deckCard, playTiming: timing++ }),
+			}));
 		}
 		return result;
 	}
@@ -328,4 +332,4 @@ export interface SelectorInput {
 }
 export type SelectorOutput = boolean | number | 'tooltip';
 export type Selector = (info: SelectorInput) => SelectorOutput;
-export type SelectorSort = (a: SelectorInput, b: SelectorInput) => number;
+export type SelectorSort = (original: SelectorInput[]) => SelectorInput[];

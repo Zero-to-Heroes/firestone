@@ -1390,10 +1390,31 @@ export const cardIdSelector = (
 		case CardIds.JewelOfNzoth:
 			return and(side(inputSide), minion, inGraveyard, deathrattle);
 		case TempCardIds.JimRaynor:
-			return highlightConditions(
-				and(side(inputSide), or(inHand, inDeck), starshipPiece),
-				and(side(inputSide), or(inHand, inDeck), starshipPiece),
-			);
+		case TempCardIds.ThorExplosivePayload:
+			return (input: SelectorInput): SelectorOutput => {
+				const starships = input.deckState
+					.getAllCardsInDeckWithoutOptions()
+					.filter((c) => input.allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
+					.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
+				console.debug('starships', starships);
+				const entityIds = starships.flatMap((c) => [
+					{ cardId: c.cardId, entityId: c.entityId },
+					...(c.storedInformation?.cards
+						.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
+						?.map((c) => ({ cardId: c.cardId, entityId: c.entityId })) ?? []),
+				]);
+				console.debug('entityIds', entityIds);
+
+				return highlightConditions(
+					tooltip(
+						and(
+							side(inputSide),
+							entityIs(...entityIds.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
+						),
+					),
+					and(side(inputSide), or(inHand, inDeck), starshipPiece),
+				)(input);
+			};
 		case CardIds.JotunTheEternal:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.JoymancerJepetto_TOY_960:
