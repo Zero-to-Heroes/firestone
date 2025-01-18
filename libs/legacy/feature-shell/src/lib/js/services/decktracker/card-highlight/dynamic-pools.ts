@@ -15,6 +15,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { TempCardIds, TempMultiClassGroup } from '@firestone/shared/common/service';
 
 export const getDynamicRelatedCardIds = (
 	cardId: string,
@@ -77,6 +78,32 @@ export const getDynamicRelatedCardIds = (
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.spellSchool?.includes(SpellSchool[SpellSchool.FIRE]),
 			);
+		case TempCardIds.ResonanceCoil:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+					c?.mechanics?.includes(TempMultiClassGroup[TempMultiClassGroup.PROTOSS]),
+			);
+		case TempCardIds.Mothership:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					c?.mechanics?.includes(TempMultiClassGroup[TempMultiClassGroup.PROTOSS]),
+			);
+		case TempCardIds.Larva:
+			return filterCards(
+				allCards,
+				options,
+				(c) =>
+					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					c?.mechanics?.includes(TempMultiClassGroup[TempMultiClassGroup.ZERG]),
+			);
+		case TempCardIds.WaywardProbe:
+			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]));
 		case CardIds.DetailedNotes_GDB_844:
 			return filterCards(
 				allCards,
