@@ -42,7 +42,6 @@ import {
 	shareReplay,
 	switchMap,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -307,13 +306,10 @@ export class ChoosingCardOptionComponent extends AbstractSubscriptionComponent i
 		await waitForReady(this.arenaCardStats, this.guardian, this.prefs);
 
 		this.showArenaCardStatDuringDiscovers$ = this.prefs.preferences$$.pipe(
-			tap((info) => console.debug('[arena-card-option] preferences$', info)),
 			this.mapData((prefs) => prefs.arenaShowCardStatDuringDiscovers),
-			tap((info) => console.debug('[arena-card-option] arenaShowCardStatDuringDiscovers', info)),
 			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
-			tap((info) => console.debug('[arena-card-option] showArenaCardStatDuringDiscovers$', info)),
 			takeUntil(this.destroyed$),
 		);
 		this.canSeeWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(

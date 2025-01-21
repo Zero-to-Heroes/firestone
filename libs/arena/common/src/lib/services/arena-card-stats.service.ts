@@ -22,6 +22,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	private prefs: PreferencesService;
 
 	private cachedStats: ArenaCombinedCardStats | null;
+	private cachedGlobalStats: ArenaCombinedCardStats | null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'arenaCardStats', () => !!this.cardStats$$);
@@ -70,12 +71,26 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	}
 
 	private async getStatsForInternal(cardId: string, playerClass: PlayerClass): Promise<ArenaCombinedCardStat | null> {
-		let cardStats = this.cachedStats;
-		if (this.cachedStats?.context !== playerClass || this.cachedStats?.timePeriod !== 'last-patch') {
+		let cardStats = playerClass === 'global' ? this.cachedGlobalStats : this.cachedStats;
+		if (playerClass === 'global') {
+			if (!this.cachedGlobalStats?.stats?.length || this.cachedGlobalStats?.timePeriod !== 'last-patch') {
+				cardStats = await this.buildCardStats('global', 'last-patch');
+				this.cachedGlobalStats = cardStats;
+			}
+		} else if (this.cachedStats?.context !== playerClass || this.cachedStats?.timePeriod !== 'last-patch') {
 			cardStats = await this.buildCardStats(playerClass, 'last-patch');
 			this.cachedStats = cardStats;
 		}
-		return cardStats?.stats?.find((s) => s.cardId === cardId) ?? null;
+		const cardStat = cardStats?.stats?.find((s) => s.cardId === cardId) ?? null;
+		console.debug('[debug] cardStat', playerClass, cardStat);
+		if (
+			playerClass !== 'global' &&
+			(!cardStat?.matchStats?.stats?.drawn || cardStat.matchStats.stats.drawn < 200)
+		) {
+			console.debug('[debug] fetching again with global context', cardStat);
+			return this.getStatsFor(cardId, 'global');
+		}
+		return cardStat;
 	}
 
 	public async buildCardStats(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
