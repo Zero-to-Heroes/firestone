@@ -1,5 +1,4 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { SelectorInput, SelectorSort } from './cards-highlight-common.service';
 
 export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
@@ -7,8 +6,8 @@ export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
 		case CardIds.TheGalacticProjectionOrb_TOY_378:
 			return (original: SelectorInput[]) =>
 				original.sort((a, b) => a.deckCard.refManaCost - b.deckCard.refManaCost);
-		case TempCardIds.JimRaynor:
-		case TempCardIds.ThorExplosivePayload:
+		case CardIds.JimRaynor_SC_400:
+		case CardIds.Thor_ThorExplosivePayloadToken_SC_414t:
 			return (original: SelectorInput[]) => {
 				const starships = original.filter((selectorInput) =>
 					selectorInput.allCards

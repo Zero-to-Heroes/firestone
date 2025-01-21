@@ -5,13 +5,11 @@ import {
 	CardType,
 	GameTag,
 	Locale,
-	MultiClassGroup,
 	Race,
 	RarityTYpe,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { getCost, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds, TempMultiClassGroup } from '@firestone/shared/common/service';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
@@ -363,12 +361,12 @@ export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
 
 export const classGroup =
-	(classGroup: TempMultiClassGroup[MultiClassGroup]) =>
+	(classGroup: GameTag.PROTOSS | GameTag.ZERG | GameTag.TERRAN) =>
 	(input: SelectorInput): boolean =>
-		input.card?.mechanics?.includes(MultiClassGroup[classGroup]);
-export const protoss = classGroup(TempMultiClassGroup.PROTOSS);
-export const terran = classGroup(TempMultiClassGroup.TERRAN);
-export const zerg = classGroup(TempMultiClassGroup.ZERG);
+		input.card?.mechanics?.includes(GameTag[classGroup]);
+export const protoss = classGroup(GameTag.PROTOSS);
+export const terran = classGroup(GameTag.TERRAN);
+export const zerg = classGroup(GameTag.ZERG);
 
 export const hasTribeNotPlayedThisMatch = (input: SelectorInput): boolean => {
 	if (!input.card.races?.length) {
@@ -421,7 +419,7 @@ export const starshipPiece = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
 export const templar = (input: SelectorInput): boolean => {
-	return [TempCardIds.DarkTemplar, TempCardIds.HighTemplar].includes(input.cardId as TempCardIds);
+	return [CardIds.DarkTemplar_SC_752, CardIds.HighTemplar_SC_765].includes(input.cardId as CardIds);
 };
 export const isStarshipPieceFor =
 	(entityId: number) =>

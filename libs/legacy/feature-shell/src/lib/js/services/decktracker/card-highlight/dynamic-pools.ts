@@ -15,7 +15,6 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { TempCardIds, TempMultiClassGroup } from '@firestone/shared/common/service';
 
 export const getDynamicRelatedCardIds = (
 	cardId: string,
@@ -78,31 +77,31 @@ export const getDynamicRelatedCardIds = (
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.spellSchool?.includes(SpellSchool[SpellSchool.FIRE]),
 			);
-		case TempCardIds.ResonanceCoil:
+		case CardIds.ResonanceCoil_SC_760:
 			return filterCards(
 				allCards,
 				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-					c?.mechanics?.includes(TempMultiClassGroup[TempMultiClassGroup.PROTOSS]),
+					c?.mechanics?.includes(GameTag[GameTag.PROTOSS]),
 			);
-		case TempCardIds.Mothership:
+		case CardIds.Mothership_SC_762:
 			return filterCards(
 				allCards,
 				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-					c?.mechanics?.includes(TempMultiClassGroup[TempMultiClassGroup.PROTOSS]),
+					c?.mechanics?.includes(GameTag[GameTag.PROTOSS]),
 			);
-		case TempCardIds.Larva:
+		case CardIds.BroodQueen_LarvaToken_SC_003t:
 			return filterCards(
 				allCards,
 				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-					c?.mechanics?.includes(TempMultiClassGroup[TempMultiClassGroup.ZERG]),
+					c?.mechanics?.includes(GameTag[GameTag.ZERG]),
 			);
-		case TempCardIds.WaywardProbe:
+		case CardIds.WaywardProbe_SC_500:
 			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]));
 		case CardIds.DetailedNotes_GDB_844:
 			return filterCards(

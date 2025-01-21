@@ -1,5 +1,4 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -966,7 +965,7 @@ export const giftCreators = [
 	CardIds.ZephrysTheGreat_ULD_003,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
-	TempCardIds.SpawningPool,
-	TempCardIds.Roach,
-	TempCardIds.WaywardProbe,
+	CardIds.SpawningPool_SC_000,
+	CardIds.Roach_SC_012,
+	CardIds.WaywardProbe_SC_500,
 ];

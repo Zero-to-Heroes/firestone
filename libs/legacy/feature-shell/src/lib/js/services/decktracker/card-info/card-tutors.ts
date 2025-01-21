@@ -1,5 +1,4 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 export const tutors = [
 	CardIds.AbyssalDepths,
@@ -256,8 +255,8 @@ export const tutors = [
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion_CFM_806,
-	TempCardIds.LiftOff,
-	TempCardIds.ChronoBoost,
-	TempCardIds.Blink,
-	TempCardIds.NydusWorm,
+	CardIds.LiftOff_SC_410,
+	CardIds.ChronoBoost_SC_750,
+	CardIds.Blink_SC_761,
+	CardIds.NydusWorm_SC_015,
 ];

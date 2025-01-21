@@ -8,7 +8,6 @@ import {
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -91,7 +90,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.ArchbishopBenedictus_ICC_215,
 	CardIds.ArchVillainRafaam_DAL_422,
 	CardIds.ArchVillainRafaam_CORE_DAL_422,
-	TempCardIds.Artanis,
+	CardIds.Artanis_SC_754,
 	CardIds.AudioAmplifier,
 	CardIds.BladeOfTheBurningSun,
 	CardIds.BolideBehemoth_GDB_434,
@@ -164,10 +163,10 @@ export const battlecryGlobalEffectCards = [
 export const deathrattleGlobalEffectCards = [
 	CardIds.BonelordFrostwhisper,
 	CardIds.ElizaGoreblade_VAC_426,
-	TempCardIds.Infestor,
+	CardIds.Infestor_SC_002,
 	CardIds.InterstellarStarslicer_GDB_726,
 	CardIds.JadeDisplay_TOY_803,
-	TempCardIds.Sentry,
+	CardIds.Sentry_SC_764,
 	CardIds.Therazane_DEEP_036,
 	CardIds.UnluckyPowderman_WW_367,
 ];
@@ -296,7 +295,7 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.CurseOfAgony_AgonyToken,
 	CardIds.DeckOfWonders_ScrollOfWonderToken,
 	CardIds.EncumberedPackMule,
-	TempCardIds.Roach,
+	CardIds.Roach_SC_012,
 	CardIds.FaldoreiStrider_SpiderAmbush,
 	CardIds.Framester_FramedToken,
 	CardIds.DreadlichTamsin_FelRiftToken,
