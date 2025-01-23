@@ -32,11 +32,6 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 			const result =
 				hasOrHadHeroClass(state.opponentDeck?.hero, opponentClasses) &&
 				!!state.opponentDeck?.damageTakenOnYourTurns.length;
-			console.debug(
-				'displaying opponent damage taken on your turn',
-				result,
-				state.opponentDeck?.damageTakenOnYourTurns,
-			);
 			return result;
 		},
 		value: (state: GameState): readonly TurnDamage[] | null => state.opponentDeck?.damageTakenOnYourTurns,

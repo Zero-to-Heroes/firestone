@@ -680,6 +680,7 @@ export class BattlegroundsStoreService {
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {
+				console.log('Twitch token is not valid BGS, removing it');
 				this.prefs.setTwitchAccessToken(undefined);
 				// Don't send the notif, as it's already sent by game-state.service
 				// await this.twitch.sendExpiredTwitchTokenNotification();

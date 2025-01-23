@@ -526,7 +526,7 @@ export class TwitchAuthService {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);
 			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
 				(data: any) => {
-					console.log('[twitch-auth] validating token', data);
+					console.log('[twitch-auth] valid token', data);
 					// this.twitchUserId = data.user_id;
 					resolve(true);
 				},
@@ -559,7 +559,8 @@ export class TwitchAuthService {
 	}
 
 	private async saveAccessToken(accessToken: string) {
-		await this.validateToken(accessToken);
+		const valid = await this.validateToken(accessToken);
+		console.log('[twitch-auth] saving access token', valid);
 		await this.prefs.setTwitchAccessToken(accessToken);
 		await this.retrieveUserName(accessToken);
 	}

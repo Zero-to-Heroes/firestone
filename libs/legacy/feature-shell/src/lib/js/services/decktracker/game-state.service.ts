@@ -490,6 +490,7 @@ export class GameStateService {
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {
+				console.log('Twitch token is not valid, removing it');
 				this.prefs.setTwitchAccessToken(undefined);
 				await this.twitch.sendExpiredTwitchTokenNotification();
 			} else {
