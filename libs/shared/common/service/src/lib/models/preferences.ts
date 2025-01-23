@@ -638,6 +638,7 @@ export class Preferences implements IPreferences {
 	readonly opponentLibramReductionCounter: boolean = true;
 	readonly playerGiftsPlayedCounter: boolean = true;
 	readonly playerProtossMinionReductionCounter: boolean = true;
+	readonly playerProtossSpellsCounter: boolean = true;
 
 	readonly playerBgsPogoCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

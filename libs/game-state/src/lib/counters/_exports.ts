@@ -16,6 +16,7 @@ import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
+import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 
 export const getAllCounters: (
@@ -33,6 +34,7 @@ export const getAllCounters: (
 	new ComboCardsPlayedCounterDefinitionV2(i18n, allCards),
 	new DamageTakenOnYourTurnCounterDefinitionV2(i18n),
 	new ProtossMinionReductionCounterDefinitionV2(i18n),
+	new ProtossSpellsCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -46,6 +48,7 @@ export const getAllCounters: (
 export type CounterType =
 	| 'galakrond'
 	| 'protossMinionReduction'
+	| 'protossSpells'
 	| 'spellsOnFriendly'
 	| 'pogo'
 	| 'giftsPlayed'
