@@ -253,6 +253,10 @@ export class DeckState {
 		];
 	}
 
+	public getAllPotentialFutureCards(): readonly { entityId: number; cardId: string }[] {
+		return [...this.hand, ...this.deck, ...this.board, ...this.currentOptions];
+	}
+
 	public getAllCardsInDeck(): readonly { entityId: number; cardId: string }[] {
 		return [
 			...this.deckList,
