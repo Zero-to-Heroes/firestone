@@ -1,4 +1,3 @@
-import { IRemoteAchievementsService } from '@firestone/achievements/common';
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { ICollectionPackService } from '@firestone/collection/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -26,7 +25,6 @@ export interface SettingContext {
 		readonly diskCache: DiskCacheService;
 		readonly gamesLoader: GameStatsLoaderService;
 		readonly packService: ICollectionPackService;
-		readonly remoteAchievements: IRemoteAchievementsService;
 		readonly arenaRewards: ArenaRewardsService;
 	};
 }
