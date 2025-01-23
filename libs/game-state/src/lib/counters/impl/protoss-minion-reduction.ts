@@ -28,9 +28,10 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 			// 	state.playerDeck.enchantments.filter(
 			// 		(e) => e.cardId === CardIds.ConstructPylons_PsionicMatrixEnchantment_SC_755e2,
 			// 	).length;
-			const gameReductionCost = state.playerDeck.enchantments.filter(
-				(e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e,
-			).length;
+			const gameReductionCost = state.playerDeck.enchantments
+				.filter((e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e)
+				.map((e) => (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1))
+				.reduce((a, b) => a + b, 0);
 			console.debug('nextReductions', state.playerDeck.enchantments);
 			return nextReductionCost > 0 || gameReductionCost > 0 ? `${gameReductionCost}/${nextReductionCost}` : null;
 		},
