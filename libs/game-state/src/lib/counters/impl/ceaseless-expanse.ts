@@ -61,11 +61,12 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 			state.playerDeck.minionsDeadThisMatch.length +
 			state.opponentDeck.minionsDeadThisMatch.length +
 			state.playerDeck.destroyedCardsInDeck.length +
-			state.opponentDeck.destroyedCardsInDeck.length
+			state.opponentDeck.destroyedCardsInDeck.length +
 			// Tested this, and it looks like Ceaseless doesn't get discounted when drawing cards with
 			// my hand full
-			// + state.playerDeck.burnedCards.length +
-			// state.opponentDeck.burnedCards.length
+			// Update: this seems to have been fixed on HS' side in 31.4, so putting it back in
+			state.playerDeck.burnedCards.length +
+			state.opponentDeck.burnedCards.length
 		);
 	}
 }
