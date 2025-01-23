@@ -20,7 +20,6 @@ export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
 						?.map((c) => original.find((o) => o.deckCard.entityId === c.entityId))
 						.filter((c) => !!c),
 				]);
-				console.debug('sorting starships', result, starships, original);
 				return result;
 			};
 	}

@@ -8,7 +8,6 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 	public override id: CounterType = 'protossSpells';
 	public override image = CardIds.Colossus_SC_758;
 	public override cards: readonly CardIds[] = [CardIds.Colossus_SC_758];
-	protected override debug = true;
 
 	readonly player = {
 		pref: 'playerProtossSpellsCounter' as const,
