@@ -968,4 +968,5 @@ export const giftCreators = [
 	CardIds.SpawningPool_SC_000,
 	CardIds.Roach_SC_012,
 	CardIds.WaywardProbe_SC_500,
+	CardIds.BroodQueen_SC_003,
 ];

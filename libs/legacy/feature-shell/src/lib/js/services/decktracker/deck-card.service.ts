@@ -52,6 +52,9 @@ export class DeckCardService {
 		}
 
 		const relatedCardIds = this.buildContextRelatedCardIds(card, deckState, metaData);
+		if (card.cardId === CardIds.BroodQueen_LarvaToken_SC_003t) {
+			console.debug('[deck-card] doFillCard', card.cardId, card.relatedCardIds, relatedCardIds);
+		}
 		if (arraysEqual(relatedCardIds, card.relatedCardIds)) {
 			return card;
 		}

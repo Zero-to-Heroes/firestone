@@ -1,8 +1,9 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { addGuessInfoToCardInHand, DeckCard, GameState } from '@firestone/game-state';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
+import { getDynamicRelatedCardIds } from '../card-highlight/dynamic-pools';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -12,11 +13,6 @@ const SUPPORTED_EFFECTS = [
 		cardId: CardIds.RunedMithrilRod,
 		effect: 'ReuseFX_Generic_HandAE_FriendlySide_Purple_ScaleUp_Super',
 	},
-	// Relic improvement
-	{
-		cardId: null,
-		effect: 'REVFX_Relics_RestOfGameAE_Super',
-	},
 	{
 		cardId: 'GDB_116',
 		effect: 'ReuseFX_Generic_HandAE_FriendlySide_Green_ScaleUp_Super',
@@ -24,6 +20,15 @@ const SUPPORTED_EFFECTS = [
 	{
 		cardId: CardIds.NorthernNavigation,
 		effect: 'ReuseFX_Frost_DeathKnight_Missile_VerySmall_Super_Simultaneous',
+	},
+	{
+		cardId: CardIds.BroodQueen_LarvaToken_SC_003t,
+		effect: 'ReuseFX_Fel_Impact_Transform_CardInHand_Super',
+	},
+	// Relic improvement
+	{
+		cardId: null,
+		effect: 'REVFX_Relics_RestOfGameAE_Super',
 	},
 ];
 
@@ -52,6 +57,8 @@ export class CustomEffectsParser implements EventParser {
 				return this.shuffleHand(currentState, gameEvent);
 			case CardIds.NorthernNavigation:
 				return this.handleNortherNavigation(currentState, gameEvent);
+			case CardIds.BroodQueen_LarvaToken_SC_003t:
+				return this.handleBroodQueenLarvaToken(currentState, gameEvent);
 			default:
 				switch (effect.effect) {
 					case 'REVFX_Relics_RestOfGameAE_Super':
@@ -59,6 +66,37 @@ export class CustomEffectsParser implements EventParser {
 				}
 				return currentState;
 		}
+	}
+
+	private handleBroodQueenLarvaToken(currentState: GameState, gameEvent: GameEvent): GameState {
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		if (isPlayer) {
+			return currentState;
+		}
+
+		const deck = currentState.opponentDeck;
+		const transformedCardInHand = DeckCard.create({
+			entityId: entityId,
+			creatorCardId: CardIds.BroodQueen_LarvaToken_SC_003t,
+			relatedCardIds: getDynamicRelatedCardIds(
+				CardIds.BroodQueen_LarvaToken_SC_003t,
+				this.allCards.getService(),
+				{
+					format: currentState.metadata.formatType,
+					gameType: currentState.metadata.gameType,
+					currentClass: currentState.playerDeck.hero?.classes?.[0]
+						? CardClass[currentState.playerDeck.hero.classes[0]]
+						: null,
+				},
+			),
+		});
+		const newHand = deck.hand.map((card) => (card.entityId === entityId ? transformedCardInHand : card));
+		return currentState.update({
+			opponentDeck: deck.update({
+				hand: newHand,
+			}),
+		});
 	}
 
 	private handleNortherNavigation(currentState: GameState, gameEvent: GameEvent): GameState {
