@@ -15,6 +15,7 @@ import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
+import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 
 export const getAllCounters: (
@@ -31,6 +32,7 @@ export const getAllCounters: (
 	new GiftsPlayedCounterDefinitionV2(i18n),
 	new ComboCardsPlayedCounterDefinitionV2(i18n, allCards),
 	new DamageTakenOnYourTurnCounterDefinitionV2(i18n),
+	new ProtossMinionReductionCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -43,6 +45,7 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'protossMinionReduction'
 	| 'spellsOnFriendly'
 	| 'pogo'
 	| 'giftsPlayed'
