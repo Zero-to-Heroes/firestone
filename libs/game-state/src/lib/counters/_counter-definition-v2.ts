@@ -62,7 +62,7 @@ export abstract class CounterDefinitionV2<T> {
 		}
 
 		if (side === 'player') {
-			this.debug && console.debug('|debug] considering', gameState, bgState);
+			this.debug && console.debug('[debug] considering', gameState, bgState);
 			if (!this.player?.pref || !prefs[this.player.pref]) {
 				this.debug &&
 					console.debug('[debug] not visible from prefs', this.player?.pref, prefs[this.player?.pref ?? '']);

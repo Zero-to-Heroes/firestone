@@ -13,7 +13,6 @@ export class NextStarshipLaunchCounterDefinitionV2 extends CounterDefinitionV2<n
 		CardIds.LockOn_SC_407,
 		CardIds.ConcussiveShells_SC_411,
 	];
-	protected override debug = true;
 
 	readonly player = {
 		pref: 'playerProtossSpellsCounter' as const,
