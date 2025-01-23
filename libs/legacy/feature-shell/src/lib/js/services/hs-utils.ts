@@ -90,7 +90,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.ArchbishopBenedictus_ICC_215,
 	CardIds.ArchVillainRafaam_DAL_422,
 	CardIds.ArchVillainRafaam_CORE_DAL_422,
-	CardIds.Artanis_SC_754,
+	// CardIds.Artanis_SC_754,
 	CardIds.AudioAmplifier,
 	CardIds.BladeOfTheBurningSun,
 	CardIds.BolideBehemoth_GDB_434,
@@ -258,6 +258,14 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'ReuseFX_Blood_DeathKnight_BuffImpact_GainHealth_Small_Super_SourceHero',
 		cardId: CardIds.VampiricBlood_RLK_051,
+	},
+	{
+		effectPrefab: 'SCFX_Artanis_Protoss_CostReduction_BuffImpact_Super',
+		cardId: CardIds.PhotonCannon_SC_753,
+	},
+	{
+		effectPrefab: 'SCFX_Artanis_Protoss_CostReduction_BuffImpact_Super',
+		cardId: CardIds.Artanis_SC_754,
 	},
 ];
 
