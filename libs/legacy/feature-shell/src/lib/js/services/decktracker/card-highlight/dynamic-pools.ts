@@ -74,6 +74,7 @@ export const getDynamicRelatedCardIds = (
 				allCards,
 				options,
 				(c) =>
+					c?.id !== cardId &&
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.spellSchool?.includes(SpellSchool[SpellSchool.FIRE]),
 			);

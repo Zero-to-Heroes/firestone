@@ -594,6 +594,8 @@ export const cardIdSelector = (
 			return and(not(side(inputSide)), inDeck, minion);
 		case CardIds.CoilCastingTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), naga);
+		case CardIds.CoilskarCommander:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ColdFeet:
 			return and(not(side(inputSide)), or(inDeck, inHand), minion);
 		case CardIds.ColiferoTheArtist_TOY_703:
@@ -1236,6 +1238,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.HeraldOfChaos:
 			return and(side(inputSide), or(inHand, inDeck), spell, fel);
+		case CardIds.HeraldOfFlame_TRLA_176:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.HeraldOfLight:
+			return and(side(inputSide), or(inHand, inDeck), spell, holy);
 		case CardIds.HeraldOfLokholar:
 			return and(side(inputSide), inDeck, spell, frost);
 		case CardIds.HeraldOfNature:
@@ -1910,6 +1916,8 @@ export const cardIdSelector = (
 				tooltip(and(side(inputSide), inGraveyard, minion, imp)),
 				and(side(inputSide), or(inDeck, inHand), minion, imp),
 			);
+		case CardIds.RadarDetector_TSC_079:
+			return and(side(inputSide), inDeck, mech);
 		case CardIds.RaDen:
 			return tooltip(and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen))));
 		case CardIds.RaidBossOnyxia_ONY_004:
