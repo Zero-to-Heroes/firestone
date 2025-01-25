@@ -2217,6 +2217,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, baseCostEqual(1));
 		case CardIds.SlagmawTheSlumbering_WW_375:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
+		case CardIds.SlitheringDeathscale:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.SmallTimeBuccaneer:
 		case CardIds.SmallTimeBuccaneer_WON_351:
 			return and(side(inputSide), or(inHand, inDeck), weapon);
