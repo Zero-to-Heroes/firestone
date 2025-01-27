@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { CardType, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LotteryState } from '../lottery.model';
@@ -19,7 +19,9 @@ export class LotteryCardPlayedProcessor implements LotteryProcessor {
 			return currentState;
 		}
 
-		const isSpell = this.allCards.getCard(cardId).type === 'Spell';
+		const isSpell = [CardType[CardType.SPELL], CardType[CardType.BATTLEGROUND_SPELL]].includes(
+			this.allCards.getCard(cardId).type?.toUpperCase(),
+		);
 		const cardRaces = this.allCards.getCard(cardId).races;
 
 		return currentState.update({
