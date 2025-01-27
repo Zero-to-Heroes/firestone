@@ -244,10 +244,7 @@ import { BgsQuestsWidgetWrapperComponent } from './js/components/overlays/bgs-qu
 import { BgsWindowButtonWidgetWrapperComponent } from './js/components/overlays/bgs-window-button-widget-wrapper.component';
 import { HeroPowerOverlayComponent } from './js/components/overlays/board/hero-power-overlay.component';
 import { MinionOnBoardOverlayComponent } from './js/components/overlays/board/minion-on-board-overlay.component';
-import {
-	ChoosingCardOptionComponent,
-	ChoosingCardWidgetWrapperComponent,
-} from './js/components/overlays/card-choice/choosing-card-widget-wrapper.component';
+import { ChoosingCardWidgetWrapperComponent } from './js/components/overlays/card-choice/choosing-card-widget-wrapper.component';
 import { ConstructedBoardWidgetWrapperComponent } from './js/components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from './js/components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentAbyssalCurseWidgetWrapperComponent } from './js/components/overlays/counters/opponent-abyssal-curse-widget-wrapper.component';
@@ -448,6 +445,9 @@ import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/a
 import { ArenaMulliganDeckWidgetWrapperComponent } from '@components/overlays/arena-mulligan-deck-widget-wrapper.component';
 import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-mulligan-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
+import { ChoosingCardOptionArenaComponent } from '@components/overlays/card-choice/choosing-card-option-arena.component';
+import { ChoosingCardOptionConstructedComponent } from '@components/overlays/card-choice/choosing-card-option-constructed.component';
+import { ChoosingCardOptionComponent } from '@components/overlays/card-choice/choosing-card-option.component';
 import { ConstructedMulliganDeckWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-deck-widget-wrapper.component';
 import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overlays/constructed-mulligan-hand-widget-wrapper.component';
 import { ConstructedDecktrackerExtendedOocComponent } from '@components/overlays/constructed/constructed-decktracker-extended-ooc.component';
@@ -1435,6 +1435,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		MercsQuestsWidgetWrapperComponent,
 		ChoosingCardWidgetWrapperComponent,
 		ChoosingCardOptionComponent,
+		ChoosingCardOptionArenaComponent,
+		ChoosingCardOptionConstructedComponent,
 		ChoosingBgsQuestWidgetWrapperComponent,
 		ChoosingCardBgsQuestOptionComponent,
 		ChoosingBgsTrinketWidgetWrapperComponent,

@@ -251,6 +251,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 							cardId: refCard.id,
 							score: rawImpact == null ? null : 100 * rawImpact,
 							keepRate: rawKeepRate,
+							drawnWinrateImpact: null,
 						};
 						return mulliganAdvice;
 					}) ?? [];

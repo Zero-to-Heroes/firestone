@@ -139,12 +139,6 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 					},
 					{
 						type: 'toggle',
-						field: 'overlayEnableDiscoverHelp',
-						label: context.i18n.translateString('settings.decktracker.global.discover-help'),
-						tooltip: context.i18n.translateString('settings.decktracker.global.discover-help-tooltip'),
-					},
-					{
-						type: 'toggle',
 						field: 'decktrackerCloseOnGameEnd',
 						label: context.i18n.translateString('settings.decktracker.global.close-tracker-on-end'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.close-tracker-on-end-tooltip'),
@@ -153,24 +147,6 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 							messageWhenToggleValue: context.i18n.translateString('settings.decktracker.global.close-tracker-on-end-advanced'),
 							valueToDisplayMessageOn: false,
 						},
-					},
-					{
-						type: 'toggle',
-						field: 'decktrackerShowMinionPlayOrderOnBoard',
-						label: context.i18n.translateString('settings.decktracker.global.minions-play-order'),
-						tooltip: context.i18n.translateString('settings.decktracker.global.minions-play-order-tooltip'),
-					},
-				],
-			},
-			{
-				id: 'decktracker-global-counters',
-				title: null,
-				settings: [
-					{
-						type: 'toggle',
-						field: 'countersUseExpandedView',
-						label: context.i18n.translateString('settings.decktracker.global.counters-use-expanded-view-label'),
-						tooltip: context.i18n.translateString('settings.decktracker.global.counters-use-expanded-view-tooltip'),
 					},
 				],
 			},

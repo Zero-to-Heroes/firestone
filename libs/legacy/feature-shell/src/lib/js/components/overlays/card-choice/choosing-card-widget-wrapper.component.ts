@@ -5,45 +5,17 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
-	Inject,
-	Input,
-	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, GameType, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
-import {
-	ArenaCardOption,
-	ArenaCardStatsService,
-	ArenaClassStatsService,
-	ArenaDiscoversGuardianService,
-} from '@firestone/arena/common';
+import { CardClass, CardIds, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
-import {
-	ADS_SERVICE_TOKEN,
-	CardsFacadeService,
-	IAdsService,
-	OverwolfService,
-	waitForReady,
-} from '@firestone/shared/framework/core';
-import {
-	BehaviorSubject,
-	Observable,
-	combineLatest,
-	debounceTime,
-	distinctUntilChanged,
-	filter,
-	from,
-	shareReplay,
-	switchMap,
-	takeUntil,
-} from 'rxjs';
-import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
+import { deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
@@ -58,13 +30,31 @@ import { buildBasicCardChoiceValue } from './card-choice-values';
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
 			>
-				<choosing-card-option
-					class="option-container"
-					*ngFor="let option of value.options"
-					[option]="option"
-					[arenaCard]="isArenaCard$ | async"
-					[playerClass]="playerClass$ | async"
-				></choosing-card-option>
+				<ng-container [ngSwitch]="gameMode$ | async">
+					<ng-container *ngSwitchCase="'arena'">
+						<choosing-card-option-arena
+							class="option-container"
+							*ngFor="let option of value.options"
+							[option]="option"
+							[playerClass]="playerClass$ | async"
+						></choosing-card-option-arena>
+					</ng-container>
+					<!-- <ng-container *ngSwitchCase="'constructed'">
+						<choosing-card-option-constructed
+							class="option-container"
+							*ngFor="let option of value.options"
+							[option]="option"
+							[playerClass]="playerClass$ | async"
+						></choosing-card-option-constructed>
+					</ng-container> -->
+					<ng-container *ngSwitchDefault>
+						<choosing-card-option
+							class="option-container"
+							*ngFor="let option of value.options"
+							[option]="option"
+						></choosing-card-option>
+					</ng-container>
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -78,7 +68,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	protected getRect = null;
 
 	showWidget$: Observable<boolean>;
-	isArenaCard$: Observable<boolean>;
+	gameMode$: Observable<'arena' | 'battlegrounds' | 'constructed' | null>;
 	playerClass$: Observable<string | null>;
 	options$: Observable<readonly CardChoiceOption[]>;
 
@@ -104,8 +94,20 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.quests, this.gameState);
 
-		this.isArenaCard$ = this.gameState.gameState$$.pipe(
-			this.mapData((state) => state?.metadata?.gameType === GameType.GT_ARENA),
+		this.gameMode$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => {
+				switch (state?.metadata?.gameType) {
+					case GameType.GT_ARENA:
+						return 'arena' as const;
+					case GameType.GT_CASUAL:
+					case GameType.GT_RANKED:
+					case GameType.GT_VS_AI:
+					case GameType.GT_VS_FRIEND:
+						return 'constructed' as const;
+					default:
+						return null;
+				}
+			}),
 			shareReplay(1),
 		);
 		this.playerClass$ = this.gameState.gameState$$.pipe(
@@ -215,199 +217,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	}
 }
 
-@Component({
-	selector: 'choosing-card-option',
-	styleUrls: ['./choosing-card-widget-wrapper.component.scss'],
-	template: `
-		<div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
-			<ng-container *ngIf="arenaCard$$ | async">
-				<ng-container *ngIf="showArenaCardStatDuringDiscovers$ | async">
-					<arena-card-option-view
-						[card]="arenaCardStats$ | async"
-						*ngIf="canSeeWidget$ | async"
-					></arena-card-option-view>
-					<arena-option-info-premium
-						class="premium"
-						*ngIf="(canSeeWidget$ | async) === false"
-					></arena-option-info-premium>
-				</ng-container>
-			</ng-container>
-			<ng-container *ngIf="!(arenaCard$$ | async)">
-				<div class="flag-container" *ngIf="showFlag">
-					<div class="flag" [inlineSVG]="'assets/svg/new_record.svg'"></div>
-				</div>
-				<div class="flag-container value-container" *ngIf="showValue">
-					<div class="value">
-						{{ value }}
-					</div>
-				</div>
-			</ng-container>
-		</div>
-	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ChoosingCardOptionComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	arenaCardStats$: Observable<ArenaCardOption>;
-	showArenaCardStatDuringDiscovers$: Observable<boolean | null>;
-	canSeeWidget$: Observable<boolean | null>;
-
-	@Input() set option(value: CardChoiceOption) {
-		this._option = value;
-		this._referenceCard = this.allCards.getCard(value?.cardId);
-		this.shouldHighlight = !NO_HIGHLIGHT_CARD_IDS.includes(value?.cardId as CardIds);
-
-		this.showFlag = value?.flag === 'flag';
-		this.showValue = value?.flag === 'value';
-		this.value = value.value;
-		this.cardId$$.next(value?.cardId);
-		// this.tooltip = value.tooltip;
-		this.registerHighlight();
-	}
-
-	@Input() set arenaCard(value: boolean | null) {
-		this.arenaCard$$.next(value ?? false);
-	}
-
-	@Input() set playerClass(value: string | null) {
-		this.playerClass$$.next(value);
-	}
-
-	@Input() tallOption: boolean;
-
-	_option: CardChoiceOption;
-	showFlag: boolean;
-	showValue: boolean;
-	value: string;
-	// tooltip: string;
-
-	private _referenceCard: ReferenceCard;
-	private side: 'player' | 'opponent' = 'player';
-	private _uniqueId: string;
-	private shouldHighlight: boolean;
-
-	private cardId$$ = new BehaviorSubject<string | null>(null);
-	private playerClass$$ = new BehaviorSubject<string | null>(null);
-	arenaCard$$ = new BehaviorSubject<boolean>(false);
-
-	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly cardsHighlightService: CardsHighlightFacadeService,
-		private readonly allCards: CardsFacadeService,
-		private readonly arenaCardStats: ArenaCardStatsService,
-		private readonly arenaClassStats: ArenaClassStatsService,
-		private readonly prefs: PreferencesService,
-		private readonly guardian: ArenaDiscoversGuardianService,
-		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
-	) {
-		super(cdr);
-	}
-
-	async ngAfterContentInit() {
-		await waitForReady(this.arenaCardStats, this.guardian, this.prefs);
-
-		this.showArenaCardStatDuringDiscovers$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.arenaShowCardStatDuringDiscovers),
-			debounceTime(500),
-			distinctUntilChanged(),
-			shareReplay(1),
-			takeUntil(this.destroyed$),
-		);
-		this.canSeeWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
-			this.mapData(([hasPremium, freeUsesLeft]) => hasPremium || freeUsesLeft > 0),
-			debounceTime(500),
-			distinctUntilChanged(),
-			shareReplay(1),
-			takeUntil(this.destroyed$),
-		);
-		combineLatest([this.showArenaCardStatDuringDiscovers$, this.canSeeWidget$])
-			.pipe(
-				filter(([show, canSee]) => show && canSee),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-			)
-			.subscribe(([show, canSee]) => {
-				this.guardian.acknowledgeDiscoverStatsSeen();
-			});
-		this.arenaCardStats$ = combineLatest([this.cardId$$, this.arenaCard$$, this.playerClass$$]).pipe(
-			filter(([cardId, arenaCard]) => !!cardId && !!arenaCard),
-			switchMap(([cardId, arenaCard, playerClass]) =>
-				from(this.arenaCardStats.getStatsFor(cardId, playerClass)).pipe(
-					this.mapData((stat) => ({ stat, playerClass })),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
-				),
-			),
-			switchMap(async ({ stat, playerClass }) => {
-				if (!stat) {
-					return null;
-				}
-				const heroStats = await this.arenaClassStats.classStats$$.getValueWithInit();
-				const heroStat = heroStats?.stats.find(
-					(s) => s.playerClass?.toUpperCase() === playerClass?.toUpperCase(),
-				);
-				const currentHeroWinrate = !heroStat?.totalGames
-					? null
-					: (heroStat?.totalsWins ?? 0) / heroStat.totalGames;
-				const drawnWinrate = !stat?.matchStats?.stats?.drawn
-					? null
-					: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
-				const drawnImpact =
-					currentHeroWinrate == null || drawnWinrate == null ? null : drawnWinrate - currentHeroWinrate;
-				const result: ArenaCardOption = {
-					cardId: stat.cardId,
-					drawnImpact: drawnImpact,
-				} as ArenaCardOption;
-				return result;
-			}),
-			this.mapData((stat) => stat),
-		);
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	registerHighlight() {
-		this._uniqueId && this.cardsHighlightService.unregister(this._uniqueId, this.side);
-		this._uniqueId = this._uniqueId || uuidShort();
-		if (this.shouldHighlight) {
-			this.cardsHighlightService.register(
-				this._uniqueId,
-				{
-					referenceCardProvider: () => this._referenceCard,
-					// We don't react to highlights, only trigger them
-					deckCardProvider: () => null,
-					zoneProvider: () => null,
-					highlightCallback: () => {},
-					unhighlightCallback: () => {},
-					side: () => 'player',
-				},
-				'player',
-			);
-		}
-	}
-
-	onMouseEnter(event: MouseEvent) {
-		if (!this.shouldHighlight) {
-			return;
-		}
-		this.cardsHighlightService?.onMouseEnter(this._option?.cardId, this.side, null);
-	}
-
-	onMouseLeave(event: MouseEvent) {
-		if (!this.shouldHighlight) {
-			return;
-		}
-		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
-		this.cardsHighlightService.unregister(this._uniqueId, this.side);
-	}
-}
-
 // For discovers for which knowing the effect on your deck isn't relevant
-const NO_HIGHLIGHT_CARD_IDS = [CardIds.MurlocHolmes_REV_022, CardIds.MurlocHolmes_REV_770];
+export const NO_HIGHLIGHT_CARD_IDS = [CardIds.MurlocHolmes_REV_022, CardIds.MurlocHolmes_REV_770];
 
 export interface CardChoiceOption {
 	readonly cardId: string;

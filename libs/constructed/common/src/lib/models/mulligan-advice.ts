@@ -18,6 +18,7 @@ export interface MulliganCardAdvice {
 	readonly cardId: string;
 	readonly score: number | null;
 	readonly keepRate: number | null;
+	readonly drawnWinrateImpact: number | null;
 }
 
 export interface MulliganChartData {

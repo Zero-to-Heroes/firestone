@@ -4,6 +4,7 @@ import { decktrackerLaunchSettings } from './decktracker-settings-launch';
 import { decktrackerLobbySettings } from './decktracker-settings-lobby';
 import { decktrackerMulliganSettings } from './decktracker-settings-mulligan';
 import { decktrackerOpponentDeckSettings } from './decktracker-settings-opponent-deck';
+import { decktrackerOverlaysSettings } from './decktracker-settings-overlays';
 import { decktrackerTurnTimerSettings } from './decktracker-settings-turn-timer';
 import { decktrackerYourDeckSettings } from './decktracker-settings-your-deck';
 
@@ -14,6 +15,7 @@ export const decktrackerSettings = (context: SettingContext): SettingNode => {
 		keywords: null,
 		children: [
 			decktrackerGlobalSettings(context),
+			decktrackerOverlaysSettings(context),
 			decktrackerLaunchSettings(context),
 			decktrackerYourDeckSettings(context),
 			decktrackerOpponentDeckSettings(context),

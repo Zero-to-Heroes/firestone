@@ -15,6 +15,8 @@ import { MulliganDeckViewComponent } from './components/mulligan-deck-view.compo
 import { MulliganHandViewComponent } from './components/mulligan-hand-view.component';
 import { MulliganInfoPremiumComponent } from './components/mulligan-info-premium.component';
 import { ConstructedArchetypeService } from './services/constructed-archetype.service';
+import { ConstructedDiscoverService } from './services/constructed-discover.service';
+import { ConstructedDiscoversGuardianService } from './services/constructed-discovers-guardian.service';
 import { ConstructedMetaDecksStateService } from './services/constructed-meta-decks-state-builder.service';
 import { ConstructedMulliganGuideGuardianService } from './services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from './services/constructed-mulligan-guide.service';
@@ -50,7 +52,9 @@ const components = [
 		ConstructedNavigationService,
 		ConstructedMetaDecksStateService,
 		ConstructedMulliganGuideService,
+		ConstructedDiscoverService,
 		ConstructedMulliganGuideGuardianService,
+		ConstructedDiscoversGuardianService,
 	],
 })
 export class ConstructedCommonModule {}
