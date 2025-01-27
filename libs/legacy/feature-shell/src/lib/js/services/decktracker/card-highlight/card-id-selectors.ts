@@ -353,6 +353,8 @@ export const cardIdSelector = (
 				spell,
 				or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)),
 			);
+		case CardIds.BarbedNets:
+			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.BargainBin_MIS_105:
 			return highlightConditions(
 				and(side(inputSide), inDeck, minion),
