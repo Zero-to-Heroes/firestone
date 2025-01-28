@@ -34,6 +34,7 @@ const parser = (structure: ParsingStructure) => {
 				creatorEntityId: parseInt(element.find(`.Tag[@tag='${GameTag.CREATOR}']`)?.get('value') || '0'),
 				creatorDBId: parseInt(element.find(`.Tag[@tag='${GameTag.CREATOR_DBID}']`)?.get('value') || '0'),
 				topDeck: parseInt(element.find(`.Tag[@tag='${GameTag.CASTS_WHEN_DRAWN}']`)?.get('value') || '0') === 1,
+				discover: parseInt(element.find(`.Tag[@tag='${GameTag.DISCOVER}']`)?.get('value') || '0') === 1,
 				transformedFromCard: parseInt(
 					element.find(`.Tag[@tag='${GameTag.TRANSFORMED_FROM_CARD}']`)?.get('value') || '0',
 				),
@@ -59,6 +60,7 @@ const parser = (structure: ParsingStructure) => {
 				creatorEntityId: parseInt(element.find(`.Tag[@tag='${GameTag.CREATOR}']`)?.get('value') || '0'),
 				creatorDBId: parseInt(element.find(`.Tag[@tag='${GameTag.CREATOR_DBID}']`)?.get('value') || '0'),
 				topDeck: parseInt(element.find(`.Tag[@tag='${GameTag.CASTS_WHEN_DRAWN}']`)?.get('value') || '0') === 1,
+				discover: parseInt(element.find(`.Tag[@tag='${GameTag.DISCOVER}']`)?.get('value') || '0') === 1,
 				transformedFromCard: parseInt(
 					element.find(`.Tag[@tag='${GameTag.TRANSFORMED_FROM_CARD}']`)?.get('value') || '0',
 				),
@@ -101,6 +103,9 @@ const parser = (structure: ParsingStructure) => {
 			}
 			if (parseInt(element.get('tag')) === GameTag.CASTS_WHEN_DRAWN) {
 				structure.entities[element.get('entity')].topDeck = parseInt(element.get('value')) === 1;
+			}
+			if (parseInt(element.get('tag')) === GameTag.DISCOVER) {
+				structure.entities[element.get('entity')].discover = parseInt(element.get('value')) === 1;
 			}
 			if (parseInt(element.get('tag')) === GameTag.TRANSFORMED_FROM_CARD) {
 				structure.entities[element.get('entity')].transformedFromCard = parseInt(element.get('value'));

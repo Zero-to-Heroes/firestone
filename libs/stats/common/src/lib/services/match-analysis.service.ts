@@ -6,6 +6,7 @@ import { CardAnalysis, MatchAnalysis } from '@firestone-hs/replay-metadata';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
 import { GameForUpload } from '../model/game-for-upload/game-for-upload';
+import { cardDiscovered } from './match-analysis/parsers/cards-discovered-parser';
 import { cardDrawn } from './match-analysis/parsers/cards-draw-parser';
 import { cardsInHand } from './match-analysis/parsers/cards-in-hand-parser';
 import { cardPlayed } from './match-analysis/parsers/cards-play-parser';
@@ -38,10 +39,11 @@ export class MatchAnalysisService {
 
 		const replay: Replay = game.replay;
 
-		const parser = new ReplayParser(replay, [cardsInHand, cardDrawn, cardPlayed]);
+		const parser = new ReplayParser(replay, this.allCards, [cardsInHand, cardDrawn, cardPlayed, cardDiscovered]);
 		let cardsAfterMulligan: { cardId: string; kept: boolean }[] = [];
 		let cardsBeforeMulligan: string[] = [];
-		let cardsDrawn: { cardId: string; cardDbfId: number; turn: number }[] = [];
+		let cardsDrawn: MatchAnalysis['cardsDrawn'] = [];
+		let cardsDiscovered: MatchAnalysis['cardsDiscovered'] = [];
 		let cardsPlayed: { cardId: string; cardDbfId: number; turn: number }[] = [];
 		parser.on('cards-in-hand', (event) => {
 			if (cardsBeforeMulligan?.length === 0) {
@@ -70,6 +72,20 @@ export class MatchAnalysisService {
 			cardsPlayed = [
 				...cardsPlayed,
 				{ cardId: baseCardId, cardDbfId: this.allCards.getCard(baseCardId).dbfId, turn: event.turn },
+			];
+		});
+		parser.on('card-discovered', (event) => {
+			const baseCardId = getBaseCardId(event.cardId);
+			const sourceCardId = getBaseCardId(event.sourceCardId);
+			// console.debug('card created', event.cardId, event.sourceCardId);
+			cardsDiscovered = [
+				...cardsDiscovered,
+				{
+					cardId: baseCardId,
+					cardDbfId: this.allCards.getCard(baseCardId).dbfId,
+					turn: event.turn,
+					sourceCardId: sourceCardId,
+				},
 			];
 		});
 		parser.parse();
@@ -117,12 +133,16 @@ export class MatchAnalysisService {
 			};
 		});
 
-		console.debug(
-			'cards played',
-			cardsAnalysis.filter((c) => c.playedTurn),
-		);
+		// console.debug(
+		// 	'cards played',
+		// 	cardsAnalysis.filter((c) => c.playedTurn),
+		// );
+		// console.debug('cardsCreated', cardsDiscovered);
 		const result: MatchAnalysis = {
 			cardsAnalysis: cardsAnalysis,
+			// type: 'discovered' | 'generated'
+			// sourceCardId: string
+			cardsDiscovered: cardsDiscovered,
 			cardsBeforeMulligan: finalCardsBeforeMulligan,
 			cardsAfterMulligan: finalCardsAfterMulligan,
 			cardsDrawn: finalCardsDrawn,

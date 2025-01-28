@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Replay } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, Step } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Element } from 'elementtree';
 import { EventEmitter } from 'events';
 import { EventName } from './json-event';
@@ -11,6 +12,7 @@ export interface ParserFunction {
 	parser?: (
 		replay: Replay,
 		structure: ParsingStructure,
+		allCards: CardsFacadeService,
 		emitter: (eventName: EventName, event: any) => void,
 	) => (element: Element) => void;
 	endOfTurn?: (
@@ -21,7 +23,11 @@ export interface ParserFunction {
 }
 
 export class ReplayParser extends EventEmitter {
-	constructor(private readonly replay: Replay, private readonly parseFunctions: readonly ParserFunction[]) {
+	constructor(
+		private readonly replay: Replay,
+		private readonly allCards: CardsFacadeService,
+		private readonly parseFunctions: readonly ParserFunction[],
+	) {
 		super();
 	}
 
@@ -46,7 +52,7 @@ export class ReplayParser extends EventEmitter {
 					.map((fn) => fn.parser)
 					.filter((fn) => !!fn)
 					.map((fn) =>
-						fn!(this.replay, structure, (eventName: string, event: any) => {
+						fn!(this.replay, structure, this.allCards, (eventName: string, event: any) => {
 							this.emit(eventName, event);
 						}),
 					),

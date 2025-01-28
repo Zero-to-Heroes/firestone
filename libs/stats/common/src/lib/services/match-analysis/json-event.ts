@@ -9,5 +9,6 @@ export type EventName =
 	| 'bgsBattleResult'
 	| 'bgsBattleStart'
 	| 'cards-in-hand'
+	| 'card-discovered'
 	| 'card-draw'
 	| 'card-play';

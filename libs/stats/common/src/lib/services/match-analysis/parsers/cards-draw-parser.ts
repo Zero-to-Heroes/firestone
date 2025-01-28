@@ -2,14 +2,19 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Replay } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Element } from 'elementtree';
 import { EventName } from '../json-event';
 import { ParsingStructure } from '../parsing-structure';
 import { toTimestamp } from './utils';
 
 export const cardDrawn = {
-	parser: (replay: Replay, structure: ParsingStructure, emitter: (eventName: EventName, event: any) => void) =>
-		handleCardDraw(replay, structure, emitter),
+	parser: (
+		replay: Replay,
+		structure: ParsingStructure,
+		allCards: CardsFacadeService,
+		emitter: (eventName: EventName, event: any) => void,
+	) => handleCardDraw(replay, structure, emitter),
 };
 
 const handleCardDraw = (
