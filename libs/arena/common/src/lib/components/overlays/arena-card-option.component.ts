@@ -29,7 +29,7 @@ import { ArenaCardOption } from './model';
 				></arena-card-option-view>
 				<arena-option-info-premium
 					*ngIf="!value.showWidget"
-					[conditionalOnField]="'showArenaCardStatDuringDiscoversPremiumBanner'"
+					[conditionalOnField]="'arenaShowCardSelectionOverlayPremiumBanner'"
 				></arena-option-info-premium>
 			</div>
 		</ng-container>
