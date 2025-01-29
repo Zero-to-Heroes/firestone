@@ -168,4 +168,11 @@
 			}
 		}
 	}
+
+	.help-tooltip.premium {
+		.text {
+			background-color: var(--default-title-color);
+			color: var(--color-common-2-dark);
+		}
+	}
 }

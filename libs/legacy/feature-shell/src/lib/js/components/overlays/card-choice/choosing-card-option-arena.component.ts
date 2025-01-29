@@ -48,6 +48,8 @@ import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-
 				<arena-option-info-premium
 					class="premium"
 					*ngIf="(canSeeWidget$ | async) === false"
+					[showTooltip]="false"
+					[conditionalOnField]="'showArenaCardStatDuringDiscoversPremiumBanner'"
 				></arena-option-info-premium>
 			</ng-container>
 		</div>

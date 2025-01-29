@@ -185,6 +185,7 @@ export class Preferences implements IPreferences {
 	readonly constructedOocTrackerScale: number = 100;
 	readonly constructedOocTrackerPosition: { left: number; top: number };
 	readonly constructedShowCardStatDuringDiscovers: boolean = true;
+	readonly showArenaCardStatDuringDiscoversPremiumBanner: boolean = true;
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

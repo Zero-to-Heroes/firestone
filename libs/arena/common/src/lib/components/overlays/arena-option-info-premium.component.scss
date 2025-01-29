@@ -11,6 +11,7 @@
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	position: relative;
 
 	.extended-info {
 		display: none;
@@ -71,6 +72,26 @@
 			.text {
 				font-size: 14px;
 			}
+		}
+	}
+
+	.hide-banner-button {
+		position: absolute;
+		top: -15px;
+		right: -15px;
+		background: var(--default-title-color);
+		border-radius: 50%;
+		display: none;
+
+		&:hover {
+			--icon-color: var(--default-title-color);
+			background: var(--color-common-2-dark);
+		}
+	}
+
+	&:hover {
+		.hide-banner-button {
+			display: flex;
 		}
 	}
 }

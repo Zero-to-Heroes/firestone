@@ -75,6 +75,15 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		// this.storage.getUserPreferences();
 	}
 
+	public async updatePrefs<K extends keyof Preferences>(key: K, value: Preferences[K]) {
+		const prefs = this.preferences$$.getValue();
+		const newPrefs = {
+			...prefs,
+			[key]: value,
+		};
+		this.preferences$$.next(newPrefs);
+	}
+
 	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		// console.debug('saving prefs', new Error().stack);
 		const finalPrefs = {
