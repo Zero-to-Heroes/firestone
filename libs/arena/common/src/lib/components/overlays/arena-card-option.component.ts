@@ -27,7 +27,10 @@ import { ArenaCardOption } from './model';
 					[card]="card"
 					*ngIf="value.showWidget"
 				></arena-card-option-view>
-				<arena-option-info-premium *ngIf="!value.showWidget"></arena-option-info-premium>
+				<arena-option-info-premium
+					*ngIf="!value.showWidget"
+					[conditionalOnField]="'showArenaCardStatDuringDiscoversPremiumBanner'"
+				></arena-option-info-premium>
 			</div>
 		</ng-container>
 	`,
