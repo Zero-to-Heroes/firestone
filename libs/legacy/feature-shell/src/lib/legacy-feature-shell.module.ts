@@ -383,6 +383,7 @@ import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/d
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsCardTierFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-tier-filter-dropdown.component';
+import { BattlegroundsCardTurnFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-turn-filter-dropdown.component';
 import { BattlegroundsCardTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-type-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
@@ -1304,6 +1305,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsYourStatsTypeFilterDropdownComponent,
 		BattlegroundsCardTypeFilterDropdownComponent,
 		BattlegroundsCardTierFilterDropdownComponent,
+		BattlegroundsCardTurnFilterDropdownComponent,
 
 		DuelsDesktopComponent,
 		DuelsEmptyStateComponent,

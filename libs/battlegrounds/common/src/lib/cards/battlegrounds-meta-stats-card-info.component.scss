@@ -30,6 +30,12 @@
 			clip-path: ellipse(34% 34% at 50% 50%);
 			position: relative;
 		}
+
+		.tavern {
+			aspect-ratio: 1;
+			height: 90%;
+			margin-right: -15px;
+		}
 	}
 
 	.name {
@@ -45,6 +51,23 @@
 		.data-points {
 			font-size: 0.75em;
 			display: flex;
+		}
+	}
+
+	.impact {
+		&.positive {
+			color: #61ff47;
+
+			&:before {
+				content: '-';
+			}
+		}
+		&.negative {
+			color: #ff4747;
+
+			&:before {
+				content: '+';
+			}
 		}
 	}
 }

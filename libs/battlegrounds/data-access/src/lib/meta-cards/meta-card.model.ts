@@ -12,6 +12,7 @@ export interface BgsMetaCardStatTierItem {
 	// readonly pickRate: number;
 	// readonly pickRateTop25: number;
 	readonly averagePlacement: number;
+	readonly impact: number;
 	// readonly averagePlacementTop25: number;
 }
 

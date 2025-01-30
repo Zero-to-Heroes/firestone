@@ -778,6 +778,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveCardsCardType: BgsCardTypeFilterType = 'minion';
 	readonly bgsActiveCardsSearch: string = null;
 	readonly bgsActiveCardsTiers: readonly BgsCardTierFilterType[] = [1];
+	readonly bgsActiveCardsTurn: number | null = 1;
 	readonly bgsSelectedTabs2: readonly BgsStatsFilterId[] = [
 		'hp-by-turn',
 		'winrate-per-turn',

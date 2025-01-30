@@ -124,6 +124,10 @@ export class BattlegroundsDesktopComponent
 				id: 'bgs-category-meta-heroes',
 				name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
 			},
+			{
+				id: 'bgs-category-meta-cards',
+				name: this.i18n.translateString('app.battlegrounds.menu.cards'),
+			},
 			BG_USE_QUESTS || BG_USE_QUESTS_IN_DESKTOP
 				? {
 						id: 'bgs-category-meta-quests',
@@ -136,10 +140,6 @@ export class BattlegroundsDesktopComponent
 						name: this.i18n.translateString('app.battlegrounds.menu.trinkets'),
 				  }
 				: null,
-			{
-				id: 'bgs-category-meta-cards',
-				name: this.i18n.translateString('app.battlegrounds.menu.cards'),
-			},
 			{
 				id: 'bgs-category-personal-rating',
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),
@@ -185,7 +185,7 @@ export class BattlegroundsDesktopComponent
 		const sidebar: CategoryId[] = ['bgs-category-personal-rating'];
 		return (
 			sidebar.includes(categoryId as CategoryId) ||
-			categoryId.indexOf('bgs-category-personal-hero-details') !== -1
+			categoryId?.indexOf('bgs-category-personal-hero-details') !== -1
 		);
 	}
 }

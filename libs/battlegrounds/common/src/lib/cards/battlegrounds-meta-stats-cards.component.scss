@@ -8,11 +8,14 @@
 
 	.data-info {
 		display: flex;
-		margin-bottom: 20px;
 		align-items: center;
 		justify-content: flex-end;
 		padding-right: 10px;
 		font-size: 0.8em;
+		// margin-bottom: 20px;
+		position: absolute;
+		top: 12px;
+		right: 0;
 
 		.label {
 			color: var(--color-2);

@@ -11,65 +11,95 @@ import {
 } from '@firestone/battlegrounds/data-access';
 import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	shareReplay,
+	switchMap,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { BattlegroundsCardsService } from './bgs-cards.service';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-cards',
 	styleUrls: [`./battlegrounds-meta-stats-cards-columns.scss`, `./battlegrounds-meta-stats-cards.component.scss`],
 	template: `
-		<section class="battlegrounds-meta-stats-cards" [attr.aria-label]="'Battlegrounds meta card stats'">
-			<div class="data-info">
-				<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
-				<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
-				<!-- TODO: improve total games -->
-				<div class="separator">-</div>
-				<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
-				<div class="value">{{ totalGames$ | async }}</div>
-			</div>
-			<div class="explanation" [ngClass]="{ collapsed: headerCollapsed }">
-				<div class="explanation-header" (click)="toggleHeader()">How does this work?</div>
-				<div class="text">
-					<p>
-						Card stats look at how individual cards perform in Battlegrounds games. More specifically, we
-						look at all games a single card has been played at some point during the game, and use this to
-						compute the final average placement.
-					</p>
-					<p>
-						If you select multiple tiers at the same time, we only consider the turns that are relevant from
-						the higher tiers. For instance, if you select all tiers at once, you will see stats only
-						including turns 10+. This is to avoid the inherent bias of the higher tiers naturally having a
-						lower average placement - because to play one you need to have survived for that long already.
-					</p>
+		<ng-container *ngIf="{ loading: loading$ | async, tiers: tiers$ | async } as value">
+			<section
+				class="battlegrounds-meta-stats-cards"
+				[attr.aria-label]="'Battlegrounds meta card stats'"
+				*ngIf="value.loading === false; else loadingState"
+			>
+				<div class="data-info">
+					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+					<!-- TODO: improve total games -->
+					<div class="separator">-</div>
+					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+					<div class="value">{{ totalGames$ | async }}</div>
 				</div>
-			</div>
+				<div class="explanation" [ngClass]="{ collapsed: headerCollapsed }">
+					<div class="explanation-header" (click)="toggleHeader()">How does this work?</div>
+					<div class="text">
+						<p>
+							Card stats look at how individual cards perform in Battlegrounds games. More specifically,
+							we look at all games a single card has been played at some point during the game, and use
+							this to compute its impact on your final average placement.
+						</p>
+						<p>Only cards that were played at least 50 times on your selected turn will appear.</p>
+						<!-- <p>
+							If you select multiple tiers at the same time, we only consider the turns that are relevant
+							from the higher tiers. For instance, if you select all tiers at once, you will see stats
+							only including turns 10+. This is to avoid the inherent bias of the higher tiers naturally
+							having a lower average placement - because to play one you need to have survived for that
+							long already.
+						</p> -->
+					</div>
+				</div>
 
-			<div class="header" *ngIf="sortCriteria$ | async as sort">
-				<div class="cell image"></div>
-				<div class="cell name" [fsTranslate]="'app.battlegrounds.tier-list.header-card-details'"></div>
-				<sortable-table-label
+				<div class="header" *ngIf="sortCriteria$ | async as sort">
+					<div class="cell image"></div>
+					<div class="cell name" [fsTranslate]="'app.battlegrounds.tier-list.header-card-details'"></div>
+					<sortable-table-label
+						class="cell impact"
+						[name]="'app.battlegrounds.tier-list.header-impact' | fsTranslate"
+						[helpTooltip]="'app.battlegrounds.tier-list.header-impact-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'impact'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<!-- <sortable-table-label
 					class="cell average-placement"
 					[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
 					[sort]="sort"
 					[criteria]="'average-position'"
 					(sortClick)="onSortClick($event)"
 				>
-				</sortable-table-label>
-			</div>
-			<div class="cards-list" role="list" scrollable>
-				<ng-container *ngIf="sortCriteria$ | async as sort">
-					<ng-container
-						*ngIf="sort.criteria === 'average-position' || sort.criteria === 'average-position-high-mmr'"
-					>
-						<battlegrounds-meta-stats-card-tier
-							*ngFor="let tier of tiers$ | async; trackBy: trackByFn"
-							role="listitem"
-							[tier]="tier"
-						></battlegrounds-meta-stats-card-tier>
-					</ng-container>
-					<!-- <ng-container
+				</sortable-table-label> -->
+				</div>
+				<div class="cards-list" role="list" scrollable>
+					<ng-container *ngIf="sortCriteria$ | async as sort">
+						<ng-container
+							*ngIf="
+								sort.criteria === 'average-position' ||
+								sort.criteria === 'average-position-high-mmr' ||
+								sort.criteria === 'impact'
+							"
+						>
+							<battlegrounds-meta-stats-card-tier
+								*ngFor="let tier of value.tiers; trackBy: trackByFn"
+								role="listitem"
+								[tier]="tier"
+							></battlegrounds-meta-stats-card-tier>
+						</ng-container>
+						<!-- <ng-container
 						*ngIf="sort.criteria !== 'average-position' && sort.criteria !== 'average-position-high-mmr'"
 					>
 						<ng-container *ngFor="let tier of tiers$ | async">
@@ -81,14 +111,22 @@ import { BattlegroundsCardsService } from './bgs-cards.service';
 							></battlegrounds-meta-stats-card-info>
 						</ng-container>
 					</ng-container> -->
-				</ng-container>
-			</div>
-		</section>
+					</ng-container>
+				</div>
+			</section>
+			<ng-template #loadingState>
+				<battlegrounds-empty-state
+					[subtitle]="'Loading data'"
+					[emptyStateIcon]="'Please wait while we load the data'"
+				></battlegrounds-empty-state
+			></ng-template>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tiers$: Observable<readonly BgsMetaCardStatTier[]>;
+	loading$: Observable<boolean>;
 
 	lastUpdate$: Observable<string | null>;
 	lastUpdateFull$: Observable<string | null>;
@@ -99,9 +137,10 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 	headerCollapsed = true;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeCard>>({
-		criteria: 'average-position',
+		criteria: 'impact',
 		direction: 'asc',
 	});
+	private loading$$ = new BehaviorSubject<boolean>(true);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -123,20 +162,30 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 	async ngAfterContentInit() {
 		await waitForReady(this.bgCards, this.prefs);
 
-		this.sortCriteria$ = this.sortCriteria$$.asObservable();
+		this.loading$ = this.loading$$.pipe(this.mapData((loading) => loading));
+		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((criteria) => criteria));
+		const baseStats$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => ({
+				timeFilter: prefs.bgsActiveTimeFilter,
+				rankFilter: prefs.bgsActiveRankFilter,
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			tap(() => this.loading$$.next(true)),
+			switchMap(({ timeFilter, rankFilter }) => this.bgCards.loadCardStats(timeFilter, rankFilter)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const stats$ = combineLatest([
-			this.bgCards.cardStats$$,
-			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					cardTiers: prefs.bgsActiveCardsTiers,
-				})),
-			),
+			baseStats$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTiers)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn)),
 		]).pipe(
-			this.mapData(([stats, { cardTiers }]) => {
+			this.mapData(([stats, cardTiers, turnNumber]) => {
 				const minTurn = buildMinTurn(cardTiers);
-				return buildCardStats(stats?.cardStats ?? [], minTurn, this.allCards);
+				return buildCardStats(stats?.cardStats ?? [], minTurn, turnNumber, this.allCards);
 			}),
-			tap((stats) => console.debug('received stats for cards', stats)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.tiers$ = combineLatest([
 			stats$,
@@ -161,7 +210,11 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 									this.allCards.getCard(stat.cardId).techLevel as BgsCardTierFilterType,
 								),
 						)
-						.filter((stat) => this.isCorrectType(stat, cardType)) ?? [];
+						.filter((stat) => this.isCorrectType(stat, cardType))
+						.filter(
+							(stat) => stat.dataPoints > 50 && stat.averagePlacement != null && stat.impact != null,
+						) ?? [];
+				console.debug('filtered', filtered);
 				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n);
 				const result = !!searchString?.length
 					? tiers
@@ -177,17 +230,16 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 					: tiers;
 				return result;
 			}),
+			tap(() => this.loading$$.next(false)),
+			takeUntil(this.destroyed$),
 		);
-		this.totalGames$ = this.tiers$.pipe(
+		this.totalGames$ = baseStats$.pipe(
 			filter((stats) => !!stats),
 			this.mapData(
-				(stats) =>
-					Math.max(...(stats?.flatMap((s) => s.items)?.map((i) => i.dataPoints) ?? [])).toLocaleString(
-						this.i18n.formatCurrentLocale() ?? 'enUS',
-					) ?? '-',
+				(stats) => stats!.dataPoints?.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
 			),
 		);
-		const lastUpdate$: Observable<string | null> = this.bgCards.cardStats$$.pipe(
+		const lastUpdate$: Observable<string | null> = baseStats$.pipe(
 			this.mapData((stats) => (stats ? '' + stats.lastUpdateDate : null)),
 		);
 		this.lastUpdate$ = lastUpdate$.pipe(
