@@ -103,12 +103,12 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 				</div>
 			</div>
 			<ng-template #emptyState>
-				<duels-empty-state
+				<battlegrounds-empty-state
 					class="empty-state"
 					[title]="'app.profile.match-stats.no-data.title' | owTranslate"
 					[subtitle]="missingContentText$ | async"
 				>
-				</duels-empty-state>
+				</battlegrounds-empty-state>
 			</ng-template>
 		</div>
 	`,
@@ -116,12 +116,12 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 })
 export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	modeOverviews$: Observable<readonly ModeOverview[]>;
-	currentMode$: Observable<'constructed' | 'duels' | 'arena' | 'battlegrounds'>;
+	currentMode$: Observable<'constructed' | 'arena' | 'battlegrounds'>;
 	classInfos$: Observable<readonly ClassInfo[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	missingContentText$: Observable<string>;
 
-	private currentMode$$ = new BehaviorSubject<'constructed' | 'duels' | 'arena' | 'battlegrounds'>('constructed');
+	private currentMode$$ = new BehaviorSubject<'constructed' | 'arena' | 'battlegrounds'>('constructed');
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: null,
 		direction: 'asc',
@@ -142,11 +142,10 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 		this.classInfos$ = combineLatest([
 			this.store.profileClassesProgress$(),
 			this.store.profileBgHeroStat$(),
-			this.store.profileDuelsHeroStats$(),
 			this.currentMode$,
 			this.sortCriteria$$,
 		]).pipe(
-			this.mapData(([classProgress, bgHeroStat, duelsHeroStats, currentMode, sortCriteria]) => {
+			this.mapData(([classProgress, bgHeroStat, currentMode, sortCriteria]) => {
 				console.debug('building class infos', classProgress, currentMode, sortCriteria);
 				const hsClassProgress: readonly ClassInfo[] =
 					currentMode === 'constructed' || currentMode === 'arena'
@@ -187,25 +186,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 								return classInfo;
 						  })
 						: [];
-				const duelsClassProgress: readonly ClassInfo[] =
-					currentMode === 'duels'
-						? duelsHeroStats.map((info) => {
-								const classInfo: ClassInfo = {
-									playerClass: info.heroCardId,
-									icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.heroCardId}.jpg`,
-									name: this.allCards.getCard(info.heroCardId).name,
-									totalMatches: info.wins + info.losses,
-									wins: info.wins,
-									losses: info.losses,
-									winrate:
-										info.wins + info.losses === 0
-											? null
-											: (100 * info.wins) / (info.wins + info.losses),
-								};
-								return classInfo;
-						  })
-						: [];
-				return [...hsClassProgress, ...bgClassProgress, ...duelsClassProgress].sort((a, b) =>
+				return [...hsClassProgress, ...bgClassProgress].sort((a, b) =>
 					this.sortClassProgress(a, b, sortCriteria),
 				);
 			}),
@@ -214,9 +195,8 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 		this.modeOverviews$ = combineLatest([
 			this.store.profileClassesProgress$(),
 			this.store.profileBgHeroStat$(),
-			this.store.profileDuelsHeroStats$(),
 		]).pipe(
-			this.mapData(([classProgress, bgHeroStat, duelsHeroStats]) => {
+			this.mapData(([classProgress, bgHeroStat]) => {
 				const modes = ['constructed', 'arena'] as const;
 				const hsModes = modes.map((mode) => {
 					console.debug('getting wins for mode', mode, classProgress);
@@ -262,18 +242,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 					}),
 				};
 
-				const duelsWins = duelsHeroStats.map((info) => info.wins).reduce((a, b) => a + b, 0);
-				const duelsLosses = duelsHeroStats.map((info) => info.losses).reduce((a, b) => a + b, 0);
-				const duelsMode: ModeOverview = {
-					mode: 'duels',
-					title: this.i18n.translateString(`global.game-mode.duels`),
-					icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/duels.webp?v=2`,
-					wins: duelsWins,
-					losses: duelsLosses,
-					winrate: duelsWins + duelsLosses === 0 ? null : (100 * duelsWins) / (duelsWins + duelsLosses),
-					winsTooltip: this.i18n.translateString('app.profile.match-stats.header-wins'),
-				};
-				return [...hsModes, bgMode, duelsMode];
+				return [...hsModes, bgMode];
 			}),
 		);
 
@@ -293,16 +262,12 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 						return !!modeOverviews.find((m) => m.mode === 'battlegrounds')?.wins
 							? null
 							: this.i18n.translateString('app.profile.match-stats.no-data.battlegrounds');
-					case 'duels':
-						return !!modeOverviews.find((m) => m.mode === 'duels')?.wins
-							? null
-							: this.i18n.translateString('app.profile.match-stats.no-data.duels');
 				}
 			}),
 		);
 	}
 
-	selectMode(mode: 'constructed' | 'duels' | 'arena' | 'battlegrounds') {
+	selectMode(mode: 'constructed' | 'arena' | 'battlegrounds') {
 		this.currentMode$$.next(mode);
 	}
 

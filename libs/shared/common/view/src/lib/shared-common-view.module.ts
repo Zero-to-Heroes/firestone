@@ -11,6 +11,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { CardTileComponent } from './components/card/card-tile.component';
 import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.component';
+import { StatCellComponent } from './components/charts/stat-cell.component';
 import { CopyDesckstringComponent } from './components/deck/copy-deckstring.component';
 import { DeckListBasicComponent } from './components/deck/deck-list-basic.component';
 import { FilterDropdownCombinedComponent } from './components/dropdown/filter-dropdown-combined.component';
@@ -65,6 +66,7 @@ const components = [
 	CheckboxComponent,
 
 	BasicBarChart2Component,
+	StatCellComponent,
 
 	SortableLabelComponent,
 

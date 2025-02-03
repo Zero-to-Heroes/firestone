@@ -235,7 +235,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
-	@Input() set side(value: 'player' | 'opponent' | 'duels') {
+	@Input() set side(value: 'player' | 'opponent' | 'single') {
 		this._side = value;
 		this.registerHighlight();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -278,7 +278,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	mouseOverRight = 0;
 	_showUnknownCards = true;
 	isUnknownCard: boolean;
-	_side: 'player' | 'opponent' | 'duels';
+	_side: 'player' | 'opponent' | 'single';
 
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;

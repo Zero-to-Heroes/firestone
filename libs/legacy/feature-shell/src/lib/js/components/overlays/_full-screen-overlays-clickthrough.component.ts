@@ -27,7 +27,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		`../../../css/themes/decktracker-theme.scss`,
 		`../../../css/themes/decktracker-desktop-theme.scss`,
 		`../../../css/themes/replays-theme.scss`,
-		`../../../css/themes/duels-theme.scss`,
 		`../../../css/themes/general-theme.scss`,
 		'../../../css/component/overlays/full-screen-overlays-clickthrough.component.scss',
 	],
@@ -48,10 +47,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
 
 			<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
-
-			<duels-max-life-opponent-widget-wrapper></duels-max-life-opponent-widget-wrapper>
-			<duels-ooc-treasure-selection-widget-wrapper></duels-ooc-treasure-selection-widget-wrapper>
-			<duels-ooc-hero-selection-widget-wrapper></duels-ooc-hero-selection-widget-wrapper>
 
 			<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
 			<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>

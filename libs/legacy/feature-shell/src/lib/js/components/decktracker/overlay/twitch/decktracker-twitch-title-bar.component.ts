@@ -39,7 +39,7 @@ import { TwitchPreferences, TwitchPreferencesService } from '@firestone/twitch/c
 })
 export class DeckTrackerTwitchTitleBarComponent {
 	@Input() set deckState(value: DeckState) {
-		this.deckstring = value?.duelsStartingDeckstring ?? value?.deckstring;
+		this.deckstring = value?.deckstring;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

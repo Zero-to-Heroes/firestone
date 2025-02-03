@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
 import { Metadata } from '@firestone/game-state';
-import { ArenaInfo, DuelsInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
+import { ArenaInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
@@ -10,8 +10,6 @@ import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs
 import { GameEvent } from '../../models/game-event';
 import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
-import { isDuels } from '../duels/duels-utils';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -29,7 +27,6 @@ export class TwitchPresenceService {
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly duelsState: DuelsStateBuilderService,
 		private readonly arenaInfo: ArenaInfoService,
 		private readonly prefs: PreferencesService,
 	) {
@@ -45,7 +42,6 @@ export class TwitchPresenceService {
 			map((event) => event.additionalData.matchInfo as MatchInfo),
 			startWith(null),
 		);
-		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable();
 		const arenaInfo$ = this.arenaInfo.arenaInfo$$;
 		const mercsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MERCENARIES_INFO),
@@ -100,10 +96,10 @@ export class TwitchPresenceService {
 			),
 		);
 
-		combineLatest([hearthstoneInfo$, duelsInfo$, arenaInfo$, matchInfo$])
+		combineLatest([hearthstoneInfo$, arenaInfo$, matchInfo$])
 			.pipe(
 				debounceTime(1000),
-				filter(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
+				filter(([hearthstoneInfo, arenaInfo, matchInfo]) => {
 					if (!hearthstoneInfo.gameStarted) {
 						return false;
 					}
@@ -113,15 +109,12 @@ export class TwitchPresenceService {
 					if (hearthstoneInfo.metadata.gameType === GameType.GT_ARENA) {
 						return !!arenaInfo;
 					}
-					if (isDuels(hearthstoneInfo.metadata.gameType)) {
-						return !!duelsInfo;
-					}
 					return true;
 				}),
-				map(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
-					console.debug('[twitch-presence] sending new game event?', hearthstoneInfo, duelsInfo, arenaInfo);
+				map(([hearthstoneInfo, arenaInfo, matchInfo]) => {
+					console.debug('[twitch-presence] sending new game event?', hearthstoneInfo, arenaInfo);
 					return {
-						playerRank: buildRankInfo(hearthstoneInfo.metadata, duelsInfo, arenaInfo, matchInfo),
+						playerRank: buildRankInfo(hearthstoneInfo.metadata, arenaInfo, matchInfo),
 						metaData: hearthstoneInfo.metadata,
 						playerCardId: hearthstoneInfo.playerCardId,
 						playerClass: hearthstoneInfo.playerClass,
@@ -328,19 +321,10 @@ export class TwitchPresenceService {
 	}
 }
 
-const buildRankInfo = (
-	metadata: Metadata,
-	duelsInfo: DuelsInfo,
-	arenaInfo: ArenaInfo,
-	matchInfo: MatchInfo,
-): string => {
+const buildRankInfo = (metadata: Metadata, arenaInfo: ArenaInfo, matchInfo: MatchInfo): string => {
 	switch (metadata?.gameType) {
 		case GameType.GT_RANKED:
 			return buildRankedRankInfo(metadata, matchInfo);
-		case GameType.GT_PVPDR:
-			return '' + duelsInfo.Rating;
-		case GameType.GT_PVPDR_PAID:
-			return '' + duelsInfo.PaidRating;
 		case GameType.GT_ARENA:
 			return `${arenaInfo.wins}-${arenaInfo.losses}`;
 	}

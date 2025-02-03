@@ -1,12 +1,4 @@
-import {
-	allDuelsHeroesExtended,
-	BoosterType,
-	CardClass,
-	CardIds,
-	GameTag,
-	Race,
-	ReferenceCard,
-} from '@firestone-hs/reference-data';
+import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
@@ -605,8 +597,7 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 export const normalizeDeckHeroDbfId = (
 	heroDbfId: number,
 	cards: CardsFacadeService,
-	duelsClass?: CardClass,
-	// Should probably not be needed, but it's a safeguard in case we can't figure out the class from the Duels sign treasure
+	// Should probably not be needed
 	deckClass?: CardClass,
 ): number => {
 	const cardFromHeroDbfId = cards.getCardFromDbfId(heroDbfId);
@@ -614,7 +605,7 @@ export const normalizeDeckHeroDbfId = (
 	switch (cardFromHeroDbfId.id) {
 		// Sometimes a neutral hero is provided even though the deck has class cards
 		case CardIds.VanndarStormpikeTavernBrawl:
-			switch (duelsClass ?? deckClass) {
+			switch (deckClass) {
 				case CardClass.DEMONHUNTER:
 					return cards.getCard(CardIds.VanndarStormpike_VanndarStormpikeTavernBrawl_PVPDR_Hero_Vanndarv1)
 						.dbfId;
@@ -633,7 +624,7 @@ export const normalizeDeckHeroDbfId = (
 			}
 			break;
 		case CardIds.DrektharTavernBrawl:
-			switch (duelsClass ?? deckClass) {
+			switch (deckClass) {
 				case CardClass.DRUID:
 					return cards.getCard(CardIds.Drekthar_DrektharTavernBrawl_PVPDR_Hero_DrekTharv1).dbfId;
 				case CardClass.MAGE:
@@ -648,16 +639,7 @@ export const normalizeDeckHeroDbfId = (
 			break;
 	}
 
-	// No need for further normalization, all heroes are supported in Duels
-	if (duelsClass || allDuelsHeroesExtended.includes(cardFromHeroDbfId.id as CardIds)) {
-		return heroDbfId;
-	}
-
 	const playerClass: CardClass = CardClass[cards.getCardFromDbfId(heroDbfId)?.playerClass?.toUpperCase()];
-	// Not sure this should happen anymore now that all Duels heroes are supported
-	if (!playerClass) {
-		return heroDbfId;
-	}
 
 	// Used for all the skins
 	switch (playerClass) {

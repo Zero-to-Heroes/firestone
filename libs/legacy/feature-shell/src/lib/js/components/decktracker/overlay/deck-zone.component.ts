@@ -74,7 +74,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	cardSections$: Observable<readonly DeckZoneSection[]>;
 	open$: Observable<boolean>;
 	zone$: Observable<DeckZone>;
-	side$: Observable<'player' | 'opponent' | 'duels'>;
+	side$: Observable<'player' | 'opponent' | 'single'>;
 	showUpdatedCost$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
@@ -97,7 +97,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	@Input() set collection(value: readonly SetCard[]) {
 		this.collection$$.next(value);
 	}
-	@Input() set side(value: 'player' | 'opponent' | 'duels') {
+	@Input() set side(value: 'player' | 'opponent' | 'single') {
 		this.side$$.next(value);
 	}
 	@Input() set showUpdatedCost(value: boolean) {
@@ -124,7 +124,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 
 	private zone$$ = new BehaviorSubject<DeckZone>(null);
 	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
-	private side$$ = new BehaviorSubject<'player' | 'opponent' | 'duels'>(null);
+	private side$$ = new BehaviorSubject<'player' | 'opponent' | 'single'>(null);
 	private open$$ = new BehaviorSubject<boolean>(true);
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(true);
 	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);

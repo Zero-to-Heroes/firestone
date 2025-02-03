@@ -3,7 +3,6 @@ import { AppInjector } from '@firestone/shared/framework/core';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { ArenaState } from '../arena/arena-state';
-import { DuelsState } from '../duels/duels-state';
 import { MercenariesState } from '../mercenaries/mercenaries-state';
 import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
@@ -22,7 +21,6 @@ export class MainWindowState {
 	readonly achievements: AchievementsState = new AchievementsState();
 	readonly decktracker: DecktrackerState = new DecktrackerState();
 	readonly battlegrounds: BattlegroundsAppState = new BattlegroundsAppState();
-	readonly duels: DuelsState = new DuelsState();
 	readonly arena: ArenaState = new ArenaState();
 	readonly mercenaries: MercenariesState = new MercenariesState();
 	// readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();

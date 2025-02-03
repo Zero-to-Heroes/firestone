@@ -13,7 +13,6 @@ import { getSets } from '../+state/website/profile.selectors';
 		<website-profile>
 			<div class="overview">
 				<website-profile-ranked-overviews></website-profile-ranked-overviews>
-				<website-profile-duels-overviews></website-profile-duels-overviews>
 				<website-profile-arena-overviews></website-profile-arena-overviews>
 				<website-profile-battlegrounds-overviews [showBgTitle]="true"></website-profile-battlegrounds-overviews>
 				<!-- <website-profile-class-recap></website-profile-class-recap> -->

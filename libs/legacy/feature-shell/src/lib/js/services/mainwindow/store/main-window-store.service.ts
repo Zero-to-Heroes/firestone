@@ -6,43 +6,14 @@ import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common'
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
-import { DuelsMetaHeroStatsAccessService } from '@firestone/duels/data-access';
-import { DuelsPersonalDecksService } from '@firestone/duels/general';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { DuelsAdventureInfoService } from '@legacy-import/src/lib/js/services/duels/duels-adventure-info.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationService } from '@services/localization.service';
-import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
-import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
-import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
-import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
-import { DuelsDeckbuilderGoBackEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-go-back-event';
-import { DuelsDeckbuilderHeroPowerSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-power-selected-decks-event';
-import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
-import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
-import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
-import { DuelsDeletePersonalDeckSummaryEvent } from '@services/mainwindow/store/events/duels/duels-delete-personal-deck-summary-event';
-import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
-import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
-import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
-import { DuelsBuildDeckParser } from '@services/mainwindow/store/processors/duels/duels-build-deck-parser';
-import { DuelsChoosingHeroParser } from '@services/mainwindow/store/processors/duels/duels-choosing-hero-parser';
-import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
-import { DuelsCurrentOptionParser } from '@services/mainwindow/store/processors/duels/duels-current-option-parser';
-import { DuelsDeckbuilderGoBackProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-go-back-parser';
-import { DuelsDeckbuilderHeroPowerSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-power-selected-parser';
-import { DuelsDeckbuilderHeroSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-selected-parser';
-import { DuelsDeckbuilderSaveDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-save-deck-processor';
-import { DuelsDeckbuilderSignatureTreasureSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-signature-treasure-selected-parser';
-import { DuelsDeletePersonalDeckSummaryProcessor } from '@services/mainwindow/store/processors/duels/duels-delete-personal-deck-summary-processor';
-import { DuelsExploreDecksParser } from '@services/mainwindow/store/processors/duels/duels-explore-decks-parser';
-import { DuelsIsOnDeckBuildingLobbyScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-deck-building-lobby-screen-processor';
-import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
@@ -63,10 +34,6 @@ import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
-import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
-import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
-import { DuelsTopDeckService } from '../../duels/duels-top-decks.service';
-import { DuelsUserRunsService } from '../../duels/duels-user-runs.service';
 import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { ProcessingQueue } from '../../processing-queue.service';
@@ -123,32 +90,6 @@ import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summa
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
-import { DuelsDeckbuilderImportDeckEvent } from './events/duels/duels-deckbuilder-import-deck-event';
-import { DuelsDecksSearchEvent } from './events/duels/duels-decks-search-event';
-import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
-import { DuelsHeroPowerFilterSelectedEvent } from './events/duels/duels-hero-power-filter-selected-event';
-import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
-import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
-import { DuelsLeaderboardGameModeFilterSelectedEvent } from './events/duels/duels-leaderboard-game-mode-filter-selected-event';
-import { DuelsMmrFilterSelectedEvent } from './events/duels/duels-mmr-filter-selected-event';
-import { DuelsPassivesFilterSelectedEvent } from './events/duels/duels-passives-filter-selected-event';
-import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
-import { DuelsRestorePersonalDeckSummaryEvent } from './events/duels/duels-restore-personal-deck-summary-event';
-import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
-import { DuelsSignatureTreasureFilterSelectedEvent } from './events/duels/duels-signature-treasure-filter-selected-event';
-import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
-import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
-import { DuelsToggleExpandedRunEvent } from './events/duels/duels-toggle-expanded-run-event';
-import { DuelsToggleShowHiddenPersonalDecksEvent } from './events/duels/duels-toggle-show-hidden-personal-decks-event';
-import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
-import { DuelsTopDecksHeroFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
-import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
-import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
-import { DuelsTreasureSearchEvent } from './events/duels/duels-treasure-search-event';
-import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
-import { DuelsViewDeckDetailsEvent } from './events/duels/duels-view-deck-details-event';
-import { DuelsViewPersonalDeckDetailsEvent } from './events/duels/duels-view-personal-deck-details-event';
-import { DungeonLootInfoUpdatedEvent } from './events/duels/dungeon-loot-info-updated-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
@@ -259,32 +200,6 @@ import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-de
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
-import { DuelsDeckbuilderImportDeckProcessor } from './processors/duels/duels-deckbuilder-import-deck-processor';
-import { DuelsDecksSearchProcessor } from './processors/duels/duels-decks-search-processor';
-import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
-import { DuelsHeroPowerFilterSelectedProcessor } from './processors/duels/duels-hero-power-filter-selected-processor';
-import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
-import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
-import { DuelsLeaderboardGameModeFilterSelectedProcessor } from './processors/duels/duels-leaderboard-game-mode-filter-selected-processor';
-import { DuelsMmrFilterSelectedProcessor } from './processors/duels/duels-mmr-filter-selected-processor';
-import { DuelsPassivesFilterSelectedProcessor } from './processors/duels/duels-passives-filter-selected-processor';
-import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
-import { DuelsRestorePersonalDeckSummaryProcessor } from './processors/duels/duels-restore-personal-deck-summary-processor';
-import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
-import { DuelsSignatureTreasureFilterSelectedProcessor } from './processors/duels/duels-signature-treasure-filter-selected-processor';
-import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
-import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
-import { DuelsToggleExpandedRunProcessor } from './processors/duels/duels-toggle-expanded-run-processor';
-import { DuelsToggleShowHiddenPersonalDecksProcessor } from './processors/duels/duels-toggle-show-hidden-personal-decks-processor';
-import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
-import { DuelsHeroFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
-import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
-import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
-import { DuelsTreasureSearchProcessor } from './processors/duels/duels-treasure-search-processor';
-import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
-import { DuelsViewDeckDetailsProcessor } from './processors/duels/duels-view-deck-details-processor';
-import { DuelsViewPersonalDeckDetailsProcessor } from './processors/duels/duels-view-personal-deck-details-processor';
-import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot-info-updated-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
@@ -363,27 +278,20 @@ export class MainWindowStoreService {
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly prefs: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
-		private readonly duelsDeckProvider: DuelsDecksProviderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
-		private readonly duelsBuilder: DuelsStateBuilderService,
-		private readonly duelsUserRuns: DuelsUserRunsService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
-		private readonly duelsMemoryCache: DuelsAdventureInfoService,
 		private readonly translate: TranslateService,
 		private readonly i18n: LocalizationService,
 		private readonly packsService: PackStatsService,
 		private readonly streamsService: LiveStreamsService,
-		private readonly duelsAccess: DuelsMetaHeroStatsAccessService,
 		private readonly setsManager: SetsManagerService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
-		private readonly duelsTopDecks: DuelsTopDeckService,
 		private readonly achievementsManager: AchievementsMemoryMonitor,
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly arenaRewards: ArenaRewardsService,
 		private readonly bgsPerfectGames: BgsPerfectGamesService,
-		private readonly duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly constructedNavigation: ConstructedNavigationService,
 		private readonly collectionNavigation: CollectionNavigationService,
@@ -796,111 +704,6 @@ export class MainWindowStoreService {
 				MercenariesRemoveMercToBackupTeamEvent.eventName(),
 				new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 			],
-			// Duels
-			[DungeonLootInfoUpdatedEvent.eventName(), new DungeonLootInfoUpdatedProcessor(this.duelsUserRuns)],
-			[DuelsSelectCategoryEvent.eventName(), new DuelsSelectCategoryProcessor()],
-			[
-				DuelsHeroSortFilterSelectedEvent.eventName(),
-				new DuelsHeroSortFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsStatTypeFilterSelectedEvent.eventName(),
-				new DuelsStatTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsTreasureSortFilterSelectedEvent.eventName(),
-				new DuelsTreasureSortFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsGameModeFilterSelectedEvent.eventName(),
-				new DuelsGameModeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsLeaderboardGameModeFilterSelectedEvent.eventName(),
-				new DuelsLeaderboardGameModeFilterSelectedProcessor(this.prefs),
-			],
-			[DuelsTimeFilterSelectedEvent.eventName(), new DuelsTimeFilterSelectedProcessor(this.prefs)],
-			[
-				DuelsTreasurePassiveTypeFilterSelectedEvent.eventName(),
-				new DuelsTreasurePassiveTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsTopDecksHeroFilterSelectedEvent.eventName(),
-				new DuelsHeroFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[DuelsPassivesFilterSelectedEvent.eventName(), new DuelsPassivesFilterSelectedProcessor(this.prefs)],
-			[
-				DuelsTopDecksDustFilterSelectedEvent.eventName(),
-				new DuelsTopDecksDustFilterSelectedProcessor(this.duelsBuilder, this.prefs),
-			],
-			[DuelsMmrFilterSelectedEvent.eventName(), new DuelsMmrFilterSelectedProcessor(this.prefs)],
-			[DuelsHeroPowerFilterSelectedEvent.eventName(), new DuelsHeroPowerFilterSelectedProcessor(this.prefs)],
-			[
-				DuelsSignatureTreasureFilterSelectedEvent.eventName(),
-				new DuelsSignatureTreasureFilterSelectedProcessor(this.prefs),
-			],
-			[
-				DuelsPersonalDeckRenameEvent.eventName(),
-				new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsViewDeckDetailsEvent.eventName(),
-				new DuelsViewDeckDetailsProcessor(this.events, this.i18n, this.duelsTopDecks, this.mainNavigation),
-			],
-			[
-				DuelsViewPersonalDeckDetailsEvent.eventName(),
-				new DuelsViewPersonalDeckDetailsProcessor(
-					this.prefs,
-					this.i18n,
-					this.duelsDeckProvider,
-					this.mainNavigation,
-				),
-			],
-			[DuelsTopDeckRunDetailsLoadedEvent.eventName(), new DuelsTopDeckRunDetailsLoadedProcessor()],
-			[
-				DuelsHidePersonalDeckSummaryEvent.eventName(),
-				new DuelsHidePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsDeletePersonalDeckSummaryEvent.eventName(),
-				new DuelsDeletePersonalDeckSummaryProcessor(this.prefs, this.duelsPersonalDecksService),
-			],
-			[
-				DuelsRestorePersonalDeckSummaryEvent.eventName(),
-				new DuelsRestorePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
-			],
-			[
-				DuelsToggleShowHiddenPersonalDecksEvent.eventName(),
-				new DuelsToggleShowHiddenPersonalDecksProcessor(this.duelsBuilder, this.prefs),
-			],
-			[DuelsToggleExpandedRunEvent.eventName(), new DuelsToggleExpandedRunProcessor()],
-			[DuelsTreasureSearchEvent.eventName(), new DuelsTreasureSearchProcessor()],
-			[DuelsDecksSearchEvent.eventName(), new DuelsDecksSearchProcessor()],
-			[DuelsCurrentDeckEvent.eventName(), new DuelsCurrentDeckProcessor()],
-			[DuelsIsOnMainScreenEvent.eventName(), new DuelsIsOnMainScreenProcessor()],
-			[
-				DuelsIsOnDeckBuildingLobbyScreenEvent.eventName(),
-				new DuelsIsOnDeckBuildingLobbyScreenProcessor(this.memoryReading, this.cards),
-			],
-			[DuelsCurrentOptionEvent.eventName(), new DuelsCurrentOptionParser(this.cards, this.memoryReading)],
-			[
-				DuelsChoosingHeroEvent.eventName(),
-				new DuelsChoosingHeroParser(this.memoryReading, this.duelsMemoryCache),
-			],
-			[DuelsExploreDecksEvent.eventName(), new DuelsExploreDecksParser(this.prefs, this.mainNavigation)],
-			[DuelsBuildDeckEvent.eventName(), new DuelsBuildDeckParser(this.cards, this.mainNavigation)],
-			[DuelsDeckbuilderGoBackEvent.eventName(), new DuelsDeckbuilderGoBackProcessor()],
-			[DuelsDeckbuilderHeroSelectedEvent.eventName(), new DuelsDeckbuilderHeroSelectedProcessor(this.cards)],
-			[DuelsDeckbuilderHeroPowerSelectedEvent.eventName(), new DuelsDeckbuilderHeroPowerSelectedProcessor()],
-			[
-				DuelsDeckbuilderSignatureTreasureSelectedEvent.eventName(),
-				new DuelsDeckbuilderSignatureTreasureSelectedProcessor(this.cards),
-			],
-			[
-				DuelsDeckbuilderSaveDeckEvent.eventName(),
-				new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsPersonalDecksService),
-			],
-			[DuelsDeckbuilderImportDeckEvent.eventName(), new DuelsDeckbuilderImportDeckProcessor(this.cards)],
 			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],

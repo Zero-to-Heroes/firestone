@@ -1,9 +1,6 @@
 // When changing these feature flags, don't forget to update the new-version component
 export class FeatureFlags {
 	// To be removed
-	public static readonly ENABLE_DUELS_OOC = true;
-	public static readonly ENABLE_DUELS_DECK_BUILDER = true;
-	public static readonly ENABLE_DUELS_DECK_BUILDER_BUCKETS = true;
 	public static readonly ENABLE_DECK_VERSIONS = true;
 	public static readonly ENABLE_MAILBOX_TAB = true;
 	public static readonly APP_TIPS = true;

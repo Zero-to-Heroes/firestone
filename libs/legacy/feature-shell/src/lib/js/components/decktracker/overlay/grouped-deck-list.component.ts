@@ -63,7 +63,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	@Input() showUpdatedCost: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() removeDuplicatesInTooltip: boolean;
-	@Input() side: 'player' | 'opponent' | 'duels';
+	@Input() side: 'player' | 'opponent' | 'single';
 	@Input() collection: readonly SetCard[];
 
 	@Input() set deckState(deckState: DeckState) {

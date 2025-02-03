@@ -81,7 +81,6 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 						</battlegrounds-desktop>
 						<mercenaries-desktop class="main-section" *ngIf="value.currentApp === 'mercenaries'">
 						</mercenaries-desktop>
-						<duels-desktop class="main-section" *ngIf="value.currentApp === 'duels'"> </duels-desktop>
 						<arena-desktop class="main-section" *ngIf="value.currentApp === 'arena'"> </arena-desktop>
 						<tavern-brawl-desktop class="main-section" *ngIf="value.currentApp === 'tavern-brawl'">
 						</tavern-brawl-desktop>

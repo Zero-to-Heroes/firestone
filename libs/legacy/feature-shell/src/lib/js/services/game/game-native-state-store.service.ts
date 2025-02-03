@@ -21,12 +21,6 @@ export class GameNativeStateStoreService {
 						isFriendsListOpen: changes.isFriendsListOpen,
 					}),
 				);
-			} else if (changes.IsDuelsChoosingHero != null) {
-				this.store$.next(
-					this.store$.value.update({
-						isDuelsChoosingHero: changes.IsDuelsChoosingHero,
-					}),
-				);
 			}
 		} catch (e) {
 			console.error('[game-native-state] could not process event', e);

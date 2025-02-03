@@ -123,7 +123,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showTopCardsSeparately: boolean;
 	@Input() showDkRunes: boolean;
 	@Input() showTotalCardsInZone: boolean;
-	@Input() side: 'player' | 'opponent' | 'duels';
+	@Input() side: 'player' | 'opponent' | 'single';
 	@Input() collection: readonly SetCard[];
 
 	@Input() set deckState(deckState: DeckState) {

@@ -78,9 +78,6 @@ export class SecretConfigService {
 			// Non-generated cards come from the draft pool, which is a curated list
 			return 'arena-deckbuilding';
 		}
-		if (metadata.gameType === GameType.GT_PVPDR || metadata.gameType === GameType.GT_PVPDR_PAID) {
-			return 'duels';
-		}
 		// Tavern brawl specific exceptions
 		if (
 			[

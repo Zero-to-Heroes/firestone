@@ -38,16 +38,7 @@ import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
 export class EndGameUploaderService {
-	private readonly supportedModesDeckRetrieve = [
-		'practice',
-		'friendly',
-		'ranked',
-		'casual',
-		'arena',
-		'tavern-brawl',
-		'duels',
-		'paid-duels',
-	];
+	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavern-brawl'];
 
 	constructor(
 		private replayUploadService: ReplayUploadService,
@@ -209,7 +200,6 @@ export class EndGameUploaderService {
 					? await this.buildOpponentName(info.mercsInfo)
 					: null;
 		} else if (game.gameMode === 'arena') {
-			// TODO: move away from player rank for arena to match what is done in duels
 			playerRank = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
 			game.additionalResult = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
@@ -433,12 +423,6 @@ export interface UploadParams {
 		newRating: number;
 		currentRating: number;
 	};
-	duelsInfo: {
-		wins: number;
-		losses: number;
-		rating: number;
-		paidRating: number;
-	};
 }
 
 export interface UploadInfo {
@@ -467,7 +451,6 @@ export interface UploadInfo {
 		battlegroundsAnomalies: readonly string[];
 	};
 	battlegroundsInfoAfterGameOver?: BattlegroundsInfo;
-	duelsPlayerRankAfterGameOver?: number;
 	xpForGame?: XpForGameInfo;
 	bgNewRating: number;
 	bgBattleOdds?: readonly { turn: number; wonPercent: number }[];

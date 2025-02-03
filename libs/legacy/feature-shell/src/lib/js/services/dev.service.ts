@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
-import { CardIds, ReferenceCard, allDuelsSignatureTreasures } from '@firestone-hs/reference-data';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -161,15 +161,6 @@ export class DevService {
 		};
 		window['normalizeDeck'] = (deckstring: string) => {
 			console.debug(this.allCards.normalizeDeckList(deckstring));
-		};
-		window['santizeDeckForDuels'] = (deckstring) => {
-			const decoded = decode(deckstring);
-			const newCards = decoded.cards.filter(([cardDbfId, quantity]) => {
-				const card = this.allCards.getCardFromDbfId(cardDbfId);
-				return !allDuelsSignatureTreasures.includes(card.id as CardIds);
-			});
-			decoded.cards = newCards;
-			console.debug(encode(decoded));
 		};
 		window['buildDeck'] = async (decklist, hero) => {
 			const cards = decklist.split('\n');

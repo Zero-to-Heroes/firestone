@@ -27,23 +27,18 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 
 			<ng-container
 				*ngIf="{
-					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
-					isShowingDuels: isShowingDuels$ | async
+					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async
 				} as value"
 			>
 				<section
 					class="secondary"
 					*ngIf="
-						!(showAds$ | async) &&
-						showSidebar(currentView, value.isShowingDuels, value.bgsPostMatchStatsPanel?.player?.cardId)
+						!(showAds$ | async) && showSidebar(currentView, value.bgsPostMatchStatsPanel?.player?.cardId)
 					"
 				>
 					<div class="match-stats" *ngIf="value.bgsPostMatchStatsPanel?.player?.cardId">
 						<div class="title" [owTranslate]="'app.replays.bg-stats.title'"></div>
 						<bgs-post-match-stats-recap [stats]="value.bgsPostMatchStatsPanel"></bgs-post-match-stats-recap>
-					</div>
-					<div class="replays-list" *ngIf="value.isShowingDuels && currentView === 'match-details'">
-						<duels-replays-recap-for-run></duels-replays-recap-for-run>
 					</div>
 				</section>
 			</ng-container>
@@ -56,7 +51,6 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 	showGlobalHeader$: Observable<boolean>;
 	currentView$: Observable<CurrentViewType>;
 	bgsPostMatchStatsPanel$: Observable<BgsPostMatchStatsPanel>;
-	isShowingDuels$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 
 	constructor(
@@ -77,9 +71,6 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 		this.bgsPostMatchStatsPanel$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.bgsPostMatchStatsPanel)
 			.pipe(this.mapData(([bgsPostMatchStatsPanel]) => bgsPostMatchStatsPanel));
-		this.isShowingDuels$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.replayInfo)
-			.pipe(this.mapData(([replayInfo]) => replayInfo?.isDuels()));
 		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -87,7 +78,7 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 		}
 	}
 
-	showSidebar(currentView: CurrentViewType, isShowingDuels: boolean, bgsPlayerCardId: string): boolean {
-		return !(currentView === 'list' || (currentView === 'match-details' && !isShowingDuels && !bgsPlayerCardId));
+	showSidebar(currentView: CurrentViewType, bgsPlayerCardId: string): boolean {
+		return !(currentView === 'list' || (currentView === 'match-details' && !bgsPlayerCardId));
 	}
 }

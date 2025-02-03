@@ -39,7 +39,6 @@ import { DebugService } from '../../services/debug.service';
 		`../../../css/themes/decktracker-theme.scss`,
 		`../../../css/themes/decktracker-desktop-theme.scss`,
 		`../../../css/themes/replays-theme.scss`,
-		`../../../css/themes/duels-theme.scss`,
 		`../../../css/themes/general-theme.scss`,
 		'../../../css/component/overlays/full-screen-overlays.component.scss',
 	],
@@ -65,10 +64,6 @@ import { DebugService } from '../../services/debug.service';
 			<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
 			<constructed-mulligan-deck-widget-wrapper></constructed-mulligan-deck-widget-wrapper>
 			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
-
-			<!-- Duels -->
-			<duels-decktracker-ooc-widget-wrapper></duels-decktracker-ooc-widget-wrapper>
-			<duels-ooc-deck-select-widget-wrapper></duels-ooc-deck-select-widget-wrapper>
 
 			<!-- BG -->
 			<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>

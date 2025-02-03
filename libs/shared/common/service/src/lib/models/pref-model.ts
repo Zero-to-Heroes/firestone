@@ -1,7 +1,5 @@
 // TODO: this has been copy-pasted from the models everywhere just to remove
 
-import { allDuelsHeroes } from '@firestone-hs/reference-data';
-
 // external dependencies. We should find a better way to do this
 export type CurrentAppType =
 	| 'collection'
@@ -11,7 +9,6 @@ export type CurrentAppType =
 	| 'battlegrounds'
 	| 'mercenaries'
 	| 'general'
-	| 'duels'
 	| 'arena'
 	| 'tavern-brawl'
 	| 'profile'
@@ -59,13 +56,11 @@ export type StatGameModeType =
 	| 'battlegrounds'
 	| 'battlegrounds-friendly'
 	| 'battlegrounds-duo'
-	| 'duels'
 	| 'mercenaries-ai-vs-ai'
 	| 'mercenaries-pve'
 	| 'mercenaries-pve-coop'
 	| 'mercenaries-pvp'
-	| 'mercenaries-friendly'
-	| 'paid-duels';
+	| 'mercenaries-friendly';
 export type DeckTimeFilterType = 'all-time' | 'season-start' | 'last-patch' | 'past-30' | 'past-7' | 'past-1';
 export type DeckSortType = 'last-played' | 'games-played' | 'winrate';
 export type DeckRankFilterType =
@@ -105,20 +100,6 @@ export type BgsStatsFilterId =
 	| 'winrate-per-turn'
 	// For stats of past games
 	| 'battles';
-export type DuelsHeroSortFilterType = 'player-winrate' | 'global-winrate' | 'games-played';
-export type DuelsDeckSortFilterType = 'last-played' | 'winrate';
-export type DuelsHeroFilterType = typeof allDuelsHeroes[number][];
-export type DuelsTimeFilterType = 'all-time' | 'past-three' | 'past-seven' | 'last-patch';
-export type DuelsGameModeFilterType = 'all' | 'duels' | 'paid-duels';
-export type DuelsStatTypeFilterType = 'hero' | 'hero-power' | 'signature-treasure';
-export type DuelsTreasureStatTypeFilterType =
-	| 'treasure-1'
-	| 'treasure-2'
-	| 'treasure-3'
-	| 'passive-1'
-	| 'passive-2'
-	| 'passive-3';
-export type DuelsTopDecksDustFilterType = 'all' | '3200' | '1600' | '400' | '100' | '40' | '0';
 export type MercenariesHeroLevelFilterType = 0 | 1 | 5 | 15 | 30; // 0 for all levels
 export type MercenariesModeFilterType = 'pve' | 'pvp';
 export type MercenariesPveDifficultyFilterType = 'all' | 'normal' | 'heroic' | 'legendary';

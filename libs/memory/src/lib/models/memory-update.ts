@@ -1,4 +1,4 @@
-import { DraftSlotType, DungeonCrawlOptionType, RewardTrackType, SceneMode, Zone } from '@firestone-hs/reference-data';
+import { DraftSlotType, RewardTrackType, SceneMode, Zone } from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
@@ -34,13 +34,6 @@ export interface MemoryUpdate {
 	readonly BattlegroundsNewRating: number;
 	readonly BattlegroundsSelectedGameMode: string;
 
-	readonly IsDuelsMainRunScreen: boolean;
-	readonly IsDuelsDeckBuildingLobbyScreen: boolean;
-	readonly IsDuelsChoosingHero: boolean;
-	readonly DuelsCurrentOptionSelection: DungeonCrawlOptionType;
-	readonly DuelsCurrentCardsInDeck: number;
-	readonly IsDuelsRewardsPending: boolean;
-
 	readonly MousedOverCard: MousedOverCard;
 
 	// These are not populated by the regular info updates, as they are costly to compute
@@ -67,10 +60,6 @@ export interface Reward {
 
 export interface MercenaryTreasureSelection {
 	readonly MercenaryId: number;
-	readonly Options: readonly number[];
-}
-
-export interface DuelsTreasureSelection {
 	readonly Options: readonly number[];
 }
 

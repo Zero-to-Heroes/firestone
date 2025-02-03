@@ -97,12 +97,12 @@ export class CardTileComponent {
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.cardsHighlightService?.onMouseLeave(this._cardId);
-		this.cardsHighlightService?.unregister(this._uniqueId, 'duels');
+		this.cardsHighlightService?.unregister(this._uniqueId, 'single');
 	}
 
 	onMouseEnter() {
 		// console.debug('mouse enter', this._cardId, this.cardsHighlightService);
-		this.cardsHighlightService?.onMouseEnter(this._cardId, 'duels');
+		this.cardsHighlightService?.onMouseEnter(this._cardId, 'single');
 	}
 
 	onMouseLeave() {
@@ -137,12 +137,12 @@ export class CardTileComponent {
 					internalEntityIds: [this._uniqueId],
 				}),
 				zoneProvider: () => null,
-				side: () => 'duels',
+				side: () => 'single',
 				highlightCallback: (highlight: any /*SelectorOutput*/) => this.doHighlight(highlight),
 				unhighlightCallback: () => this.doUnhighlight(),
 				debug: this,
 			} /*as Handler*/,
-			'duels',
+			'single',
 		);
 		// console.debug('registering highlight', this._card?.cardId, this.el.nativeElement);
 	}

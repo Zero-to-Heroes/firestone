@@ -59,7 +59,7 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 			this.mapData((deck) => deck?.deckstring),
 		);
 
-		this.cardsHighlight.initForDuels();
+		this.cardsHighlight.initForSingle();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

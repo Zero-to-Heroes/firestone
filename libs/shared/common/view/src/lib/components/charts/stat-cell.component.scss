@@ -1,0 +1,15 @@
+.entry {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 60px;
+	position: relative;
+
+	.filler {
+		flex-grow: 1;
+	}
+
+	.value {
+		color: var(--default-text-color);
+	}
+}

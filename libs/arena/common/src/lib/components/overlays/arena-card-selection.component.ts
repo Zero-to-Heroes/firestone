@@ -159,7 +159,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
 		);
 
-		this.cardsHighlightService.initForDuels();
+		this.cardsHighlightService.initForSingle();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -168,7 +168,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 
 	onMouseEnter(cardId: string) {
 		console.debug('mouseenter', cardId);
-		this.cardsHighlightService.onMouseEnter(cardId, 'duels');
+		this.cardsHighlightService.onMouseEnter(cardId, 'single');
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {

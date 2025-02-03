@@ -237,10 +237,8 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 		case CardIds.Brukan_BG22_HERO_001:
 			return 372;
 		case CardIds.Drekthar_BG22_HERO_002:
-			// There is also a 376 for Duels, don't mix them up!
 			return 373;
 		case CardIds.VanndarStormpike_BG22_HERO_003:
-			// There is also a 375 for Duels, don't mix them up!
 			return 374;
 		case CardIds.TavishStormpike_BG22_HERO_000:
 			return 370;

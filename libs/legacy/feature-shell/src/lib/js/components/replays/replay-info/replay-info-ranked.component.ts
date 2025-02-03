@@ -16,7 +16,6 @@ import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
-import { RunStep } from '../../../models/duels/run-step';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
@@ -89,7 +88,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	@Input() displayCoin = true;
 	@Input() displayTime = true;
 
-	@Input() set replay(value: GameStat | RunStep) {
+	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}

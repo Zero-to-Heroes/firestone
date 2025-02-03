@@ -15,7 +15,6 @@ import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
-import { RunStep } from '../../../models/duels/run-step';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -93,7 +92,7 @@ export class ReplayInfoGenericComponent
 	@Input() displayCoin = true;
 	@Input() displayTime = true;
 
-	@Input() set replay(value: GameStat | RunStep) {
+	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}

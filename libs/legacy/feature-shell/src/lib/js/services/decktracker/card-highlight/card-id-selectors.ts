@@ -125,7 +125,7 @@ import {
 export const cardIdSelector = (
 	cardId: string,
 	card: DeckCard,
-	inputSide: 'player' | 'opponent' | 'duels',
+	inputSide: 'player' | 'opponent' | 'single',
 	allCards: CardsFacadeService,
 ): Selector => {
 	switch (cardId) {

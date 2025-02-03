@@ -21,7 +21,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 export class WebsiteProfileModeOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() wins: number | null;
 	@Input() losses: number | null;
-	@Input() set mode(value: 'ranked' | 'duels' | 'arena') {
+	@Input() set mode(value: 'ranked' | 'arena') {
 		this.mode$$.next(value);
 	}
 
@@ -29,7 +29,7 @@ export class WebsiteProfileModeOverviewComponent extends AbstractSubscriptionCom
 	tooltip: string;
 	icon: string;
 
-	private mode$$ = new BehaviorSubject<'ranked' | 'duels' | 'arena'>('ranked');
+	private mode$$ = new BehaviorSubject<'ranked' | 'arena'>('ranked');
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: WebsiteLocalizationService) {
 		super(cdr);

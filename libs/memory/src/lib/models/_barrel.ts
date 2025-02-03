@@ -3,7 +3,6 @@ export * from './battlegrounds-player-state';
 export * from './boosters-info';
 export * from './coin-info';
 export * from './deck-info-from-memory';
-export * from './memory-duels';
 export * from './memory-mercenaries-collection-info';
 export * from './memory-mercenaries-info';
 export * from './memory-profile-info';

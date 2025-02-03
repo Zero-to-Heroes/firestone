@@ -141,60 +141,6 @@ import { DecktrackerTimeFilterDropdownComponent } from './js/components/decktrac
 import { MenuSelectionDecktrackerComponent } from './js/components/decktracker/main/menu-selection-decktracker.component';
 import { DeckTrackerOverlayOpponentComponent } from './js/components/decktracker/overlay/decktracker-overlay-opponent.component';
 import { DeckTrackerOverlayPlayerComponent } from './js/components/decktracker/overlay/decktracker-overlay-player.component';
-import { DuelsBucketCardComponent } from './js/components/duels/desktop/deckbuilder/duels-bucket-card.component';
-import { DuelsBucketCardsListComponent } from './js/components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
-import { DuelsDeckbuilderBreadcrumbsComponent } from './js/components/duels/desktop/deckbuilder/duels-deckbuilder-breadcrumbs.component';
-import { DuelsDeckbuilderCardsComponent } from './js/components/duels/desktop/deckbuilder/duels-deckbuilder-cards.component';
-import { DuelsDeckbuilderHeroPowerComponent } from './js/components/duels/desktop/deckbuilder/duels-deckbuilder-hero-power.component';
-import { DuelsDeckbuilderHeroComponent } from './js/components/duels/desktop/deckbuilder/duels-deckbuilder-hero.component';
-import { DuelsDeckbuilderSignatureTreasureComponent } from './js/components/duels/desktop/deckbuilder/duels-deckbuilder-signature-treasure.component';
-import { DuelsDeckbuilderComponent } from './js/components/duels/desktop/deckbuilder/duels-deckbuilder.component';
-import { DuelsBucketsComponent } from './js/components/duels/desktop/duels-buckets.component';
-import { DuelsDeckStatVignetteComponent } from './js/components/duels/desktop/duels-deck-stat-vignette.component';
-import { DuelsDesktopComponent } from './js/components/duels/desktop/duels-desktop.component';
-import { DuelsEmptyStateComponent } from './js/components/duels/desktop/duels-empty-state.component';
-import { DuelsGroupedTopDecksComponent } from './js/components/duels/desktop/duels-grouped-top-decks.component';
-import {
-	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent,
-} from './js/components/duels/desktop/duels-hero-stat-vignette.component';
-import { DuelsHeroStatsComponent } from './js/components/duels/desktop/duels-hero-stats.component';
-import { DuelsLeaderboardComponent } from './js/components/duels/desktop/duels-leaderboard.component';
-import { DuelsPersonalDeckDetailsComponent } from './js/components/duels/desktop/duels-personal-deck-details.component';
-import { DuelsPersonalDecksVignetteComponent } from './js/components/duels/desktop/duels-personal-deck-vignette.component';
-import { DuelsPersonalDecksComponent } from './js/components/duels/desktop/duels-personal-decks.component';
-import { DuelsRunComponent } from './js/components/duels/desktop/duels-run.component';
-import { DuelsRunsListComponent } from './js/components/duels/desktop/duels-runs-list.component';
-import { DuelsTopDecksComponent } from './js/components/duels/desktop/duels-top-decks.component';
-import { DuelsTreasureStatsComponent } from './js/components/duels/desktop/duels-treasure-stat.component';
-import { DuelsFiltersComponent } from './js/components/duels/desktop/filters/_duels-filters.component';
-import { DuelsDeckSortDropdownComponent } from './js/components/duels/desktop/filters/duels-deck-sort-dropdown.component';
-import { DuelsDustFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-dust-filter-dropdown.component';
-import { DuelsGameModeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
-import { DuelsHeroFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-hero-filter-dropdown.component';
-import { DuelsHeroPowerFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-hero-power-filter-dropdown.component';
-import { DuelsHeroSortDropdownComponent } from './js/components/duels/desktop/filters/duels-hero-sort-dropdown.component';
-import { DuelsLeaderboardGameModeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-leaderboard-game-mode-filter-dropdown.component';
-import { DuelsMmrFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-mmr-filter-dropdown.component';
-import { DuelsPassiveFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-passive-filter-dropdown.component';
-import { DuelsSignatureTreasureFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-signature-treasure-filter-dropdown.component';
-import { DuelsStatTypeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-stat-type-filter-dropdown.component';
-import { DuelsTimeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-time-filter-dropdown.component';
-import { DuelsTreasurePassiveTypeFilterDropdownComponent } from './js/components/duels/desktop/filters/duels-treasure-passive-type-filter-dropdown.component';
-import { DuelsTreasuresSortDropdownComponent } from './js/components/duels/desktop/filters/duels-treasures-sort-dropdown.component';
-import { LootBundleComponent } from './js/components/duels/desktop/loot-bundle.component';
-import {
-	DuelsClassesRecapComponent,
-	DuelsStatCellComponent,
-} from './js/components/duels/desktop/secondary/duels-classes-recap.component';
-import { DuelsDeckStatsComponent } from './js/components/duels/desktop/secondary/duels-deck-stats.component';
-import { DuelsHeroSearchComponent } from './js/components/duels/desktop/secondary/duels-hero-search.component';
-import { DuelsHeroTierListComponent } from './js/components/duels/desktop/secondary/duels-hero-tier-list.component';
-import { DuelsReplaysRecapForRunComponent } from './js/components/duels/desktop/secondary/duels-replays-recap-for-run.component';
-import { DuelsReplaysRecapComponent } from './js/components/duels/desktop/secondary/duels-replays-recap.component';
-import { DuelsTierComponent } from './js/components/duels/desktop/secondary/duels-tier.component';
-import { DuelsTreasureSearchComponent } from './js/components/duels/desktop/secondary/duels-treasure-search.component';
-import { DuelsTreasureTierListComponent } from './js/components/duels/desktop/secondary/duels-treasure-tier-list.component';
 import { GameCountersComponent } from './js/components/game-counters/game-counters.component';
 import { GenericCountersComponent } from './js/components/game-counters/generic-counter.component';
 import { LoadingComponent } from './js/components/loading/loading.component';
@@ -290,20 +236,6 @@ import { PlayerWatchpostCounterWidgetWrapperComponent } from './js/components/ov
 import { CurrentSessionWidgetWrapperComponent } from './js/components/overlays/current-session-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from './js/components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from './js/components/overlays/decktracker-player-widget-wrapper.component';
-import { DuelsDecktrackerOocWidgetWrapperComponent } from './js/components/overlays/duels-decktracker-ooc-widget-wrapper.component';
-import { DuelsMaxLifeOpponentWidgetWrapperComponent } from './js/components/overlays/duels-max-life-player-widget-wrapper.component';
-import { DuelsMaxLifeWidgetComponent } from './js/components/overlays/duels-max-life/duels-max-life-widget.component';
-import { DuelsOocDeckSelectWidgetWrapperComponent } from './js/components/overlays/duels-ooc-deck-select-widget-wrapper.component';
-import { DuelsOutOfCombatHeroSelectionWidgetWrapperComponent } from './js/components/overlays/duels-ooc-hero-selection-widget-wrapper.component';
-import { DuelsOutOfCombatTreasureSelectionWidgetWrapperComponent } from './js/components/overlays/duels-ooc-treasure-selection-widget-wrapper.component';
-import { DuelsDeckWidgetComponent } from './js/components/overlays/duels-ooc/duels-deck-widget.component';
-import { DuelsDecktrackerOocComponent } from './js/components/overlays/duels-ooc/duels-decktracker-ooc.component';
-import { DuelsHeroInfoComponent } from './js/components/overlays/duels-ooc/duels-hero-info.component';
-import { DuelsHeroPowerInfoComponent } from './js/components/overlays/duels-ooc/duels-hero-power-info.component';
-import { DuelsOutOfCombatDeckSelectComponent } from './js/components/overlays/duels-ooc/duels-ooc-deck-select.component';
-import { DuelsOutOfCombatHeroSelectionComponent } from './js/components/overlays/duels-ooc/duels-ooc-hero-selection.component';
-import { DuelsOutOfCombatTreasureSelectionComponent } from './js/components/overlays/duels-ooc/duels-ooc-treasure-selection.component';
-import { DuelsSignatureTreasureInfoComponent } from './js/components/overlays/duels-ooc/duels-signature-treasure-info.component';
 import { HsQuestsWidgetWrapperComponent } from './js/components/overlays/hs-quests-widget-wrapper.component';
 import { MercsActionQueueWidgetWrapperComponent } from './js/components/overlays/mercs-action-queue-widget-wrapper.component';
 import { MercsOpponentTeamWidgetWrapperComponent } from './js/components/overlays/mercs-opponent-team-widget-wrapper.component';
@@ -344,7 +276,6 @@ import { GroupedReplaysComponent } from './js/components/replays/grouped-replays
 import { MatchDetailsComponent } from './js/components/replays/match-details.component';
 import { ReplayInfoComponent } from './js/components/replays/replay-info/_replay-info.component';
 import { ReplayInfoBattlegroundsComponent } from './js/components/replays/replay-info/replay-info-battlegrounds.component';
-import { ReplayInfoDuelsComponent } from './js/components/replays/replay-info/replay-info-duels.component';
 import { ReplayInfoGenericComponent } from './js/components/replays/replay-info/replay-info-generic.component';
 import {
 	ReplayInfoMercPlayerComponent,
@@ -432,7 +363,6 @@ import { StateMouseOverComponent } from '@components/decktracker/overlay/twitch/
 import { TwitchCardsFacadeManagerService } from '@components/decktracker/overlay/twitch/twitch-cards-facade-manager.service';
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchLocalizationManagerService } from '@components/decktracker/overlay/twitch/twitch-localization-manager.service';
-import { DuelsTopDecksSearchComponent } from '@components/duels/desktop/filters/duels-top-decks-search.component';
 import { LotteryAchievementComponent } from '@components/lottery/lottery-achievement.component';
 import { LotteryAchievementsWidgetComponent } from '@components/lottery/lottery-achievements.component';
 import { LotteryLotteryWidgetComponent } from '@components/lottery/lottery-lottery.component';
@@ -537,9 +467,6 @@ import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DiscordModule } from '@firestone/discord';
-import { DuelsDataAccessModule } from '@firestone/duels/data-access';
-import { DuelsGeneralModule } from '@firestone/duels/general';
-import { DuelsViewModule } from '@firestone/duels/view';
 import { GameStateModule, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
 import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
@@ -719,18 +646,6 @@ import { OverlayDisplayService } from './js/services/decktracker/overlay-display
 import { SecretConfigService } from './js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
-import { DuelsAdventureInfoService } from './js/services/duels/duels-adventure-info.service';
-import { DuelsBucketsService } from './js/services/duels/duels-buckets.service';
-import { DuelsDecksProviderService } from './js/services/duels/duels-decks-provider.service';
-import { DuelsHeroStatsService } from './js/services/duels/duels-hero-stats.service';
-import { DuelsLeaderboardService } from './js/services/duels/duels-leaderboard.service';
-import { DuelsLootParserService } from './js/services/duels/duels-loot-parser.service';
-import { DuelsMetaStatsService } from './js/services/duels/duels-meta-stats.service';
-import { DuelsRewardsService } from './js/services/duels/duels-rewards.service';
-import { DuelsRunIdService } from './js/services/duels/duels-run-id.service';
-import { DuelsStateBuilderService } from './js/services/duels/duels-state-builder.service';
-import { DuelsTopDeckService } from './js/services/duels/duels-top-decks.service';
-import { DuelsUserRunsService } from './js/services/duels/duels-user-runs.service';
 import { Events } from './js/services/events.service';
 import { GameEventsEmitterService } from './js/services/game-events-emitter.service';
 import { GameEvents } from './js/services/game-events.service';
@@ -835,13 +750,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsSimulatorModule,
 		BattlegroundsCoreModule,
 		StatsDataAccessModule,
-		DuelsViewModule,
-		DuelsDataAccessModule,
 		CollectionViewModule,
 		AchievementsViewModule,
 		AchievementsDataAccessModule,
 		AchievementsCommonModule,
-		DuelsGeneralModule,
 		ArenaCommonModule,
 		DiscordModule,
 		MemoryModule,
@@ -1126,7 +1038,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		CurrentSessionWidgetComponent,
 		TurnTimerWidgetComponent,
 		TurnTimerPlayerComponent,
-		DuelsMaxLifeWidgetComponent,
 
 		GenericCountersComponent,
 
@@ -1256,7 +1167,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ReplayInfoBattlegroundsComponent,
 		ReplayInfoMercenariesComponent,
 		ReplayInfoMercPlayerComponent,
-		ReplayInfoDuelsComponent,
 		ReplayInfoGenericComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,
@@ -1306,60 +1216,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BattlegroundsCardTypeFilterDropdownComponent,
 		BattlegroundsCardTierFilterDropdownComponent,
 		BattlegroundsCardTurnFilterDropdownComponent,
-
-		DuelsDesktopComponent,
-		DuelsEmptyStateComponent,
-		DuelsRunsListComponent,
-		DuelsRunComponent,
-		// LootInfoComponent,
-		LootBundleComponent,
-		DuelsHeroStatsComponent,
-		DuelsHeroStatVignetteComponent,
-		DuelsGlobalValueComponent,
-		DuelsTreasureStatsComponent,
-		// DuelsTreasureStatVignetteComponent,
-		DuelsTopDecksComponent,
-		DuelsDeckStatVignetteComponent,
-		DuelsGroupedTopDecksComponent,
-		DuelsPersonalDecksComponent,
-		DuelsPersonalDecksVignetteComponent,
-		DuelsPersonalDeckDetailsComponent,
-		DuelsClassesRecapComponent,
-		DuelsStatCellComponent,
-		DuelsReplaysRecapComponent,
-		DuelsReplaysRecapForRunComponent,
-		DuelsDeckStatsComponent,
-		DuelsTreasureTierListComponent,
-		DuelsHeroTierListComponent,
-		DuelsTierComponent,
-		DuelsTreasureSearchComponent,
-		DuelsHeroSearchComponent,
-		DuelsTopDecksSearchComponent,
-		DuelsLeaderboardComponent,
-		DuelsDeckbuilderComponent,
-		DuelsDeckbuilderBreadcrumbsComponent,
-		DuelsDeckbuilderCardsComponent,
-		DuelsDeckbuilderHeroComponent,
-		DuelsDeckbuilderHeroPowerComponent,
-		DuelsDeckbuilderSignatureTreasureComponent,
-		DuelsBucketsComponent,
-		DuelsBucketCardsListComponent,
-		DuelsBucketCardComponent,
-		DuelsFiltersComponent,
-		DuelsGameModeFilterDropdownComponent,
-		DuelsTreasuresSortDropdownComponent,
-		DuelsStatTypeFilterDropdownComponent,
-		DuelsTreasurePassiveTypeFilterDropdownComponent,
-		DuelsHeroSortDropdownComponent,
-		DuelsDeckSortDropdownComponent,
-		DuelsTimeFilterDropdownComponent,
-		DuelsHeroFilterDropdownComponent,
-		DuelsPassiveFilterDropdownComponent,
-		DuelsDustFilterDropdownComponent,
-		DuelsMmrFilterDropdownComponent,
-		DuelsLeaderboardGameModeFilterDropdownComponent,
-		DuelsHeroPowerFilterDropdownComponent,
-		DuelsSignatureTreasureFilterDropdownComponent,
 
 		ArenaDesktopComponent,
 		ArenaEmptyStateComponent,
@@ -1444,19 +1300,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		ChoosingBgsTrinketWidgetWrapperComponent,
 		ChoosingCardBgsTrinketOptionComponent,
 
-		DuelsMaxLifeOpponentWidgetWrapperComponent,
-		DuelsDecktrackerOocWidgetWrapperComponent,
-		DuelsDecktrackerOocComponent,
-		DuelsOutOfCombatTreasureSelectionWidgetWrapperComponent,
-		DuelsOutOfCombatTreasureSelectionComponent,
-		DuelsOutOfCombatHeroSelectionWidgetWrapperComponent,
-		DuelsOutOfCombatHeroSelectionComponent,
-		DuelsHeroInfoComponent,
-		DuelsHeroPowerInfoComponent,
-		DuelsSignatureTreasureInfoComponent,
-		DuelsOocDeckSelectWidgetWrapperComponent,
-		DuelsOutOfCombatDeckSelectComponent,
-		DuelsDeckWidgetComponent,
 		ArenaHeroSelectionWidgetWrapperComponent,
 		ArenaCardSelectionWidgetWrapperComponent,
 		ArenaDecktrackerOocWidgetWrapperComponent,
@@ -1731,24 +1574,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckCardService,
 		DeckParserService,
 		DeckParserFacadeService,
-		DuelsLootParserService,
-		DuelsRewardsService,
-		DuelsRunIdService,
-		DuelsDecksProviderService,
 		ReviewIdService,
 		GameStateService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,
 		GameStateMetaInfoService,
-
-		DuelsStateBuilderService,
-		DuelsTopDeckService,
-		DuelsAdventureInfoService,
-		DuelsBucketsService,
-		DuelsLeaderboardService,
-		DuelsMetaStatsService,
-		DuelsHeroStatsService,
-		DuelsUserRunsService,
 
 		ArenaLastMatchService,
 		ArenaDraftManagerService,

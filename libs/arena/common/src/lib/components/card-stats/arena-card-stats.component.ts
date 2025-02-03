@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardClass, CardIds, allDuelsTreasureCardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import {
 	ArenaCardClassFilterType,
 	ArenaCardTypeFilterType,
@@ -396,19 +396,13 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			return true;
 		}
 		if (cardType === 'legendary') {
-			return (
-				this.allCards.getCard(cardId)?.rarity === 'Legendary' &&
-				!allDuelsTreasureCardIds.includes(cardId as CardIds)
-			);
+			return this.allCards.getCard(cardId)?.rarity === 'Legendary';
 		}
 		if (cardType === 'treasure') {
-			return allDuelsTreasureCardIds.includes(cardId as CardIds);
+			return false;
 		}
 		if (cardType === 'other') {
-			return (
-				!allDuelsTreasureCardIds.includes(cardId as CardIds) &&
-				this.allCards.getCard(cardId)?.rarity !== 'Legendary'
-			);
+			return this.allCards.getCard(cardId)?.rarity !== 'Legendary';
 		}
 		return true;
 	}

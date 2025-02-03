@@ -87,19 +87,19 @@ export const inPlay = (input: SelectorInput): boolean =>
 	!!and(inOther, not(inGraveyard))(input);
 
 export const side =
-	(side: 'player' | 'opponent' | 'duels') =>
+	(side: 'player' | 'opponent' | 'single') =>
 	(input: SelectorInput): boolean => {
 		return input.side === side;
 	};
 
 export const opposingSide =
-	(side: 'player' | 'opponent' | 'duels') =>
+	(side: 'player' | 'opponent' | 'single') =>
 	(input: SelectorInput): boolean => {
 		return side === 'player'
 			? input.side === 'opponent'
 			: side === 'opponent'
 			? input.side === 'player'
-			: input.side === 'duels';
+			: input.side === 'single';
 	};
 
 export const hasMultipleCopies = (input: SelectorInput): boolean =>

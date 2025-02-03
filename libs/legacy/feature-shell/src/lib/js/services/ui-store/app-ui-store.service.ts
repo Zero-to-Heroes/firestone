@@ -1,30 +1,24 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsRun } from '@firestone/duels/general';
 import { PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
-import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
-import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
-import { DuelsDeckSummary } from '@firestone/duels/general';
 import { GameState } from '@firestone/game-state';
-import { AdventuresInfo, Card, CardBack } from '@firestone/memory';
+import { Card, CardBack } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
-import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
@@ -41,12 +35,6 @@ import { AdService } from '../ad.service';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
-import { DuelsAdventureInfoService } from '../duels/duels-adventure-info.service';
-import { DuelsBucketsService } from '../duels/duels-buckets.service';
-import { DuelsDecksProviderService } from '../duels/duels-decks-provider.service';
-import { DuelsHeroStatsService } from '../duels/duels-hero-stats.service';
-import { DuelsLeaderboardService } from '../duels/duels-leaderboard.service';
-import { DuelsMetaStatsService } from '../duels/duels-meta-stats.service';
 import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
@@ -54,7 +42,6 @@ import { LotteryService } from '../lottery/lottery.service';
 import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
-import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual } from '../utils';
 
@@ -82,12 +69,6 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private gameStats: Observable<readonly GameStat[]>;
 	private decks: Observable<readonly DeckSummary[]>;
-	private duelsRuns: Observable<readonly DuelsRun[]>;
-	private duelsDecks: Observable<readonly DuelsDeckSummary[]>;
-	// private duelsTopDecks: Observable<readonly DuelsGroupedDecks[]>;
-	private duelsAdventureInfo: Observable<AdventuresInfo>;
-	private duelsBuckets: Observable<readonly DuelsBucketsData[]>;
-	private duelsLeaderboard: Observable<DuelsLeaderboard>;
 	private mails: Observable<MailState>;
 	private cardBacks: Observable<readonly CardBack[]>;
 	private allTimeBoosters: Observable<readonly PackInfo[]>;
@@ -104,7 +85,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private cardHistory: Observable<readonly CardHistory[]>;
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
-	private profileDuelsHeroStats: Observable<readonly ProfileDuelsHeroStat[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -118,9 +98,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly prefsService: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly gameStatsProvider: GameStatsProviderService,
-		private readonly duelsDecksProviderService: DuelsDecksProviderService,
-		private readonly duelsHeroStatsService: DuelsHeroStatsService,
-		private readonly duelsMetaStatsService: DuelsMetaStatsService,
 		private readonly collectionManager: CollectionManager,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly setsManager: SetsManagerService,
@@ -259,40 +236,8 @@ export class AppUiStoreService extends Store<Preferences> {
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }>;
 	}
 
-	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		return this.duelsHeroStatsService.duelsHeroStats$$.asObservable();
-	}
-
 	public gameStats$(): Observable<readonly GameStat[]> {
 		return this.gameStats;
-	}
-
-	public duelsRuns$(): Observable<readonly DuelsRun[]> {
-		return this.duelsRuns;
-	}
-
-	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
-		return this.duelsDecks;
-	}
-
-	// public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-	// 	return this.duelsTopDecks;
-	// }
-
-	public duelsAdventureInfo$(): Observable<AdventuresInfo> {
-		return this.duelsAdventureInfo;
-	}
-
-	public duelsBuckets$(): Observable<readonly DuelsBucketsData[]> {
-		return this.duelsBuckets;
-	}
-
-	public duelsMetaStats$(): Observable<DuelsStat> {
-		return this.duelsMetaStatsService.duelsMetaStats$$.asObservable();
-	}
-
-	public duelsLeaderboard$(): Observable<DuelsLeaderboard> {
-		return this.duelsLeaderboard;
 	}
 
 	public mails$(): Observable<MailState> {
@@ -355,10 +300,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.profileClassesProgress;
 	}
 
-	public profileDuelsHeroStats$(): Observable<readonly ProfileDuelsHeroStat[]> {
-		return this.profileDuelsHeroStats;
-	}
-
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
 		return this.profileBgHeroStat;
 	}
@@ -383,24 +324,11 @@ export class AppUiStoreService extends Store<Preferences> {
 	// start appearing
 	private async init() {
 		await this.patchesConfig.isReady();
-		await this.duelsMetaStatsService.isReady();
-		await this.duelsHeroStatsService.isReady();
-		await this.duelsDecksProviderService.isReady();
 
 		// Has to be first, since other observables depend on it
 		this.initGameStats();
-		// Needs to be before duels stuff
-		this.initDuelsRuns();
 		// The rest
 		this.initDecks();
-		this.initDuelsDecks();
-		this.duelsAdventureInfo = (
-			this.ow.getMainWindow().duelsAdventureInfo as DuelsAdventureInfoService
-		).duelsAdventureInfo$$;
-		this.duelsBuckets = (this.ow.getMainWindow().duelsBuckets as DuelsBucketsService).duelsBuckets$$;
-		this.duelsLeaderboard = (
-			this.ow.getMainWindow().duelsLeaderboard as DuelsLeaderboardService
-		).duelsLeaderboard$$;
 		this.initMails();
 		this.initCardBacks();
 		this.initCoins();
@@ -413,7 +341,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initLottery();
 		this.initAchievementsProgressTracking();
 		this.initProfileClassProgress();
-		this.initProfileDuelsHeroStat();
 		this.initProfileBgHeroStat();
 		this.achievementsHistory = (
 			this.ow.getMainWindow().achievementsHistory as AchievementHistoryService
@@ -479,12 +406,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		>;
 	}
 
-	private initProfileDuelsHeroStat() {
-		this.profileDuelsHeroStats = this.ow.getMainWindow().profileDuelsHeroStats as BehaviorSubject<
-			readonly ProfileDuelsHeroStat[]
-		>;
-	}
-
 	private initProfileBgHeroStat() {
 		this.profileBgHeroStat = this.ow.getMainWindow().profileBgHeroStat as BehaviorSubject<
 			readonly ProfileBgHeroStat[]
@@ -497,14 +418,6 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private initCardsHistory() {
 		this.cardHistory = this.collectionBootstrapService.cardHistory$$;
-	}
-
-	private initDuelsDecks() {
-		this.duelsDecks = this.duelsDecksProviderService.duelsDecks$$;
-	}
-
-	private initDuelsRuns() {
-		this.duelsRuns = this.duelsDecksProviderService.duelsRuns$$;
 	}
 
 	private initDecks() {

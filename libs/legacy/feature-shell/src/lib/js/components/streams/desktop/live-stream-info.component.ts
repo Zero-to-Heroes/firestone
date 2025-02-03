@@ -3,7 +3,6 @@ import { GameType, ReferenceCard, isBattlegrounds, normalizeHeroCardId } from '@
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, toFormatType, toGameType } from '@firestone/stats/data-access';
-import { isDuels } from '../../../services/duels/duels-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
 
@@ -132,10 +131,6 @@ export class StreamHeroInfosComponent {
 			return [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCard.id}.jpg`, heroCard.name];
 		} else if (isMercenaries(gameType)) {
 			return [null, null];
-		} else if (isDuels(gameType)) {
-			const normalizedCardId = normalizeHeroCardId(cardId, this.allCards);
-			const heroCard: ReferenceCard = this.allCards.getCard(normalizedCardId);
-			return [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCard.id}.jpg`, heroCard.name];
 		} else {
 			const heroCard: ReferenceCard = this.allCards.getCard(cardId);
 			return [

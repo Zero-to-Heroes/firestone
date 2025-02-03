@@ -13,13 +13,11 @@ export type StatGameModeType =
 	| 'battlegrounds'
 	| 'battlegrounds-friendly'
 	| 'battlegrounds-duo'
-	| 'duels'
 	| 'mercenaries-ai-vs-ai'
 	| 'mercenaries-pve'
 	| 'mercenaries-pve-coop'
 	| 'mercenaries-pvp'
-	| 'mercenaries-friendly'
-	| 'paid-duels';
+	| 'mercenaries-friendly';
 
 export const toGameTypeEnum = (gameType: StatGameModeType): GameType => {
 	switch (gameType) {
@@ -55,10 +53,6 @@ export const toGameTypeEnum = (gameType: StatGameModeType): GameType => {
 			return GameType.GT_MERCENARIES_PVP;
 		case 'mercenaries-pve-coop':
 			return GameType.GT_MERCENARIES_PVE_COOP;
-		case 'duels':
-			return GameType.GT_PVPDR;
-		case 'paid-duels':
-			return GameType.GT_PVPDR_PAID;
 		default:
 			console.warn('unsupported game type', gameType);
 			return GameType.GT_UNKNOWN;
@@ -112,10 +106,6 @@ export const toGameType = (gameType: GameType): StatGameModeType => {
 			return 'mercenaries-pvp';
 		case GameType.GT_MERCENARIES_PVE_COOP:
 			return 'mercenaries-pve-coop';
-		case GameType.GT_PVPDR:
-			return 'duels';
-		case GameType.GT_PVPDR_PAID:
-			return 'paid-duels';
 		default:
 			console.warn('unsupported game type', gameType);
 			return 'unknown';

@@ -20,19 +20,19 @@ import { groupByFunction } from '../../../services/utils';
 		<div class="arena-classes-recap">
 			<div class="header" [owTranslate]="'app.arena.stats.title'"></div>
 			<div class="stats" *ngIf="stats$ | async as stats">
-				<duels-stat-cell
+				<stat-cell-simple
 					class="stat-cell"
 					[label]="'app.arena.stats.total-runs' | owTranslate"
 					[value]="stats.totalRuns"
 				>
-				</duels-stat-cell>
-				<duels-stat-cell
+				</stat-cell-simple>
+				<stat-cell-simple
 					class="stat-cell"
 					[label]="'app.arena.stats.wins-per-run' | owTranslate"
 					[value]="stats.averageWinsPerRun"
 					[decimals]="1"
 				>
-				</duels-stat-cell>
+				</stat-cell-simple>
 				<div class="stat-cell classes-list">
 					<div class="entry">
 						<div class="label" [owTranslate]="'app.arena.stats.most-played-classes'"></div>

@@ -11,13 +11,6 @@ import {
 	BgsStatsFilterId,
 	CurrentAppType,
 	DeckFilters,
-	DuelsGameModeFilterType,
-	DuelsHeroFilterType,
-	DuelsHeroSortFilterType,
-	DuelsStatTypeFilterType,
-	DuelsTimeFilterType,
-	DuelsTopDecksDustFilterType,
-	DuelsTreasureStatTypeFilterType,
 	Ftue,
 	MercenariesHeroLevelFilterType,
 	MercenariesModeFilterType,
@@ -282,18 +275,6 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateDuelsOocTrackerPosition(left: number, top: number) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsOocTrackerPosition: { left, top } };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsOocDeckSelectPosition(left: number, top: number) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsOocDeckSelectPosition: { left, top } };
-		await this.savePreferences(newPrefs);
-	}
-
 	public async updateTrackerPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, decktrackerPosition: { left, top } };
@@ -494,86 +475,6 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		return newPrefs;
 	}
 
-	public async updateDuelsHeroSortFilter(value: DuelsHeroSortFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveHeroSortFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	// public async updateDuelsTreasureSortFilter(value: DuelsTreasureSortFilterType) {
-	// 	const prefs = await this.getPreferences();
-	// 	const newPrefs: Preferences = { ...prefs, duelsActiveTreasureSortFilter: value };
-	// 	await this.savePreferences(newPrefs);
-	// }
-
-	public async updateDuelsTreasurePassiveTypeFilter(value: DuelsTreasureStatTypeFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveTreasureStatTypeFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsStatTypeFilter(value: DuelsStatTypeFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveStatTypeFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsGameModeFilter(value: DuelsGameModeFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveGameModeFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsLeaderboardGameModeFilter(value: DuelsGameModeFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveLeaderboardModeFilter: value as any };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsTimeFilter(value: DuelsTimeFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveTimeFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsHeroFilter(value: DuelsHeroFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveHeroesFilter2: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsTopDecksDustFilter(value: DuelsTopDecksDustFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveTopDecksDustFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsMmrFilter(value: 100 | 50 | 25 | 10 | 1) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveMmrFilter: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsHeroPowerFilter(value: readonly string[]) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveHeroPowerFilter2: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsSignatureTreasureFilter(value: readonly string[]) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveSignatureTreasureFilter2: value };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateDuelsDeckName(deckstring: string, newName: string) {
-		const prefs = await this.getPreferences();
-		const names = prefs.duelsPersonalDeckNames;
-		names[deckstring] = newName;
-		const newPrefs: Preferences = { ...prefs, duelsPersonalDeckNames: names };
-		await this.savePreferences(newPrefs);
-	}
-
 	public async updateArenaTimeFilter(value: ArenaTimeFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, arenaActiveTimeFilter: value };
@@ -628,27 +529,9 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		return newPrefs;
 	}
 
-	public async setDuelsDeckDeleteDates(deckstring: string, newDeleteDates: readonly number[]) {
-		const prefs = await this.getPreferences();
-		const newDelete = {
-			...prefs.duelsDeckDeletes,
-			[deckstring]: newDeleteDates,
-		};
-		const newPrefs: Preferences = { ...prefs, duelsDeckDeletes: newDelete };
-		await this.savePreferences(newPrefs);
-		return newPrefs;
-	}
-
 	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckHiddenDeckCodes: value };
-		this.savePreferences(newPrefs);
-		return newPrefs;
-	}
-
-	public async setDuelsPersonalDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsPersonalDeckHiddenDeckCodes: value };
 		this.savePreferences(newPrefs);
 		return newPrefs;
 	}

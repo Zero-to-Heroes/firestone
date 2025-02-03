@@ -1,6 +1,7 @@
 export * from './lib/components/card/card-tile.component';
 export * from './lib/components/charts/basic-bar-chart-2.component';
 export * from './lib/components/charts/simple-bar-chart-data';
+export * from './lib/components/charts/stat-cell.component';
 export * from './lib/components/deck/copy-deckstring.component';
 export * from './lib/components/deck/deck-list-basic.component';
 export * from './lib/components/dropdown/filter-dropdown-combined.component';

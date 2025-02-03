@@ -29,7 +29,6 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 		`../../css/themes/decktracker-theme.scss`,
 		`../../css/themes/decktracker-desktop-theme.scss`,
 		`../../css/themes/replays-theme.scss`,
-		`../../css/themes/duels-theme.scss`,
 		`../../css/themes/general-theme.scss`,
 	],
 	template: `

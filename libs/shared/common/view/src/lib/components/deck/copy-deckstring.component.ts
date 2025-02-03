@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
-import { CardClass, CardIds, allDuelsSignatureTreasures, normalizeDeckHeroDbfId } from '@firestone-hs/reference-data';
 import {
 	AnalyticsService,
 	CardsFacadeService,
@@ -94,32 +93,5 @@ export const sanitizeDeckDefinition = (
 	deckDefinition: DeckDefinition,
 	allCards: CardsFacadeService,
 ): DeckDefinition => {
-	// Filter for Duels - remove the signature treasure, as it breaks the HS deck builder
-	const newCards = deckDefinition.cards.filter(([cardDbfId, quantity]) => {
-		const card = allCards.getCardFromDbfId(cardDbfId);
-		return !allDuelsSignatureTreasures.includes(card.id as CardIds);
-	});
-	const duelsSignatureTreasures = deckDefinition.cards
-		.map(([cardDbfId, quantity]) => {
-			const card = allCards.getCardFromDbfId(cardDbfId);
-			return allDuelsSignatureTreasures.includes(card.id as CardIds) ? card : null;
-		})
-		.filter((card) => !!card);
-	const duelsClass: CardClass = !duelsSignatureTreasures?.length
-		? null
-		: duelsSignatureTreasures[0].classes?.length !== 1
-		? null
-		: CardClass[duelsSignatureTreasures[0].classes[0]?.toUpperCase()];
-	const deckClass = deckDefinition.cards
-		.map(([dbfId, quantity]) => allCards.getCardFromDbfId(dbfId))
-		.flatMap((card) => card?.classes ?? [])
-		.map((c) => CardClass[c.toUpperCase()] as CardClass)
-		.filter((c: CardClass) => c !== CardClass.NEUTRAL)[0];
-	deckDefinition.heroes = deckDefinition.heroes.map((hero) => {
-		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
-		const result = normalizeDeckHeroDbfId(hero, allCards.getService(), duelsClass, deckClass) ?? 7;
-		return result;
-	});
-	deckDefinition.cards = newCards;
 	return deckDefinition;
 };

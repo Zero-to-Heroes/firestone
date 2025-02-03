@@ -77,40 +77,6 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 							icon: 'assets/svg/whatsnew/battlegrounds.svg',
 							name: this.i18n.translateString('app.menu.battlegrounds-header'),
 					  };
-				const duelsNode = !!watchingOtherPlayer?.length
-					? null
-					: {
-							id: 'duels',
-							icon: 'assets/svg/whatsnew/duels.svg',
-							name: this.i18n.translateString('app.menu.duels-header'),
-							nodes: [
-								{
-									id: 'duels/hero',
-									icon: 'assets/svg/hero.svg',
-									name: this.i18n.translateString('app.menu.duels-hero-header'),
-								},
-								{
-									id: 'duels/hero-power',
-									icon: 'assets/svg/hero-power.svg',
-									name: this.i18n.translateString('app.menu.duels-hero-power-header'),
-								},
-								{
-									id: 'duels/signature-treasure',
-									icon: 'assets/svg/signature-treasure.svg',
-									name: this.i18n.translateString('app.menu.duels-signature-treasure-header'),
-								},
-								{
-									id: 'duels/passive-treasure',
-									icon: 'assets/svg/passive-treasure.svg',
-									name: this.i18n.translateString('app.menu.duels-passive-treasure-header'),
-								},
-								{
-									id: 'duels/active-treasure',
-									icon: 'assets/svg/active-treasure.svg',
-									name: this.i18n.translateString('app.menu.duels-active-treasure-header'),
-								},
-							],
-					  };
 
 				const profileButtonLabel = !!alias?.length
 					? this.i18n.translateString('app.menu.profile-shared-button-text')
@@ -126,7 +92,7 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 				const profileWatchFragment = watchingOtherPlayer?.length ? `/${watchingOtherPlayer}` : '';
 				return [
 					battlegroundsNode,
-					duelsNode,
+					null,
 					{
 						id: 'profile',
 						icon: 'assets/svg/profile.svg',
@@ -146,11 +112,6 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 								id: `profile${profileWatchFragment}/battlegrounds`,
 								icon: 'assets/svg/whatsnew/battlegrounds.svg',
 								name: this.i18n.translateString('app.menu.battlegrounds-header'),
-							},
-							{
-								id: `profile${profileWatchFragment}/duels`,
-								icon: 'assets/svg/whatsnew/duels.svg',
-								name: this.i18n.translateString('app.menu.duels-header'),
 							},
 							{
 								id: `profile${profileWatchFragment}/arena`,

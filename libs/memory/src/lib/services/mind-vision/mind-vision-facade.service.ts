@@ -3,13 +3,11 @@
 /* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
 import { Board } from '@firestone-hs/reference-data';
-import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../external-models/arena-info';
 import { MemoryBgsPlayerInfo } from '../../models/battlegrounds-player-state';
 import { BoostersInfo } from '../../models/boosters-info';
 import { CoinInfo } from '../../models/coin-info';
 import { DeckInfoFromMemory } from '../../models/deck-info-from-memory';
-import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '../../models/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory-mercenaries-info';
 import { MemoryPlayerProfileInfo } from '../../models/memory-profile-info';
@@ -183,104 +181,6 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getAdventuresInfo(): Promise<AdventuresInfo | null> {
-		return new Promise<AdventuresInfo | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getAdventuresInfo((info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse getAdventuresInfo', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async getDuelsInfo(forceReset = false): Promise<any | null> {
-		return new Promise<any | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsInfo(forceReset, (info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse duelsInfo', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async getDuelsDeck(): Promise<DuelsDeck | null> {
-		return new Promise<DuelsDeck | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsDeck((info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse getDuelsDeck', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async getDuelsDeckFromCollection(): Promise<DeckInfoFromMemory | null> {
-		return new Promise<DeckInfoFromMemory | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsDeckFromCollection((info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse getDuelsDeckFromCollection', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async getDuelsHeroOptions(): Promise<readonly MemoryDuelsHeroPowerOption[] | null> {
-		return new Promise<readonly MemoryDuelsHeroPowerOption[] | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsHeroOptions((info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse getDuelsHeroOptions', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async getDuelsHeroPowerOptions(): Promise<readonly MemoryDuelsHeroPowerOption[] | null> {
-		return new Promise<readonly MemoryDuelsHeroPowerOption[] | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsHeroPowerOptions((info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse getDuelsHeroPowerOptions', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async getDuelsSignatureTreasureOptions(): Promise<readonly MemoryDuelsHeroPowerOption[] | null> {
-		return new Promise<readonly MemoryDuelsHeroPowerOption[] | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsSignatureTreasureOptions((info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse getDuelsSignatureTreasureOptions', e);
-				resolve(null);
-			}
-		});
-	}
-
 	public async getBgsPlayerTeammateBoard(): Promise<MemoryBgsPlayerInfo | null> {
 		return new Promise<MemoryBgsPlayerInfo | null>(async (resolve) => {
 			const plugin = await this.get();
@@ -449,20 +349,6 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo | null> {
-		return new Promise<DuelsRewardsInfo | null>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.getDuelsRewardsInfo(forceReset, (info) => {
-					resolve(info ? JSON.parse(info) : null);
-				});
-			} catch (e) {
-				console.warn('[mind-vision] could not parse rewards track info', e);
-				resolve(null);
-			}
-		});
-	}
-
 	public async getAchievementsInfo(forceReset = false): Promise<InternalHsAchievementsInfo | null> {
 		return new Promise<InternalHsAchievementsInfo | null>(async (resolve, reject) => {
 			const plugin = await this.get();
@@ -606,20 +492,6 @@ export class MindVisionFacadeService {
 			}
 		});
 	}
-
-	// public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
-	// 	return new Promise<boolean>(async (resolve) => {
-	// 		const plugin = await this.get();
-	// 		try {
-	// 			plugin.isMaybeOnDuelsRewardsScreen((result) => {
-	// 				resolve(result);
-	// 			});
-	// 		} catch (e) {
-	// 			console.log('[mind-vision] could not parse isMaybeOnDuelsRewardsScreen', e);
-	// 			resolve(null);
-	// 		}
-	// 	});
-	// }
 
 	public async reset(): Promise<void> {
 		console.log('[mind-vision] calling reset');

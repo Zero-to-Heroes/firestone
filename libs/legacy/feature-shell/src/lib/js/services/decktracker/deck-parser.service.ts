@@ -16,8 +16,7 @@ import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, Scen
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
@@ -27,9 +26,6 @@ const OPEN_BRAWL_LISTS_URL = `https://static.zerotoheroes.com/hearthstone/data/b
 
 @Injectable()
 export class DeckParserService {
-	// We store this separately because we retrieve it with a different timing (we have to
-	// get it from the hub screen, instead of when moving away to the match)
-	public duelsDeck: DeckInfoFromMemory;
 	public currentDeck$$ = new BehaviorSubject<DeckInfo | null>(null);
 
 	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
@@ -50,7 +46,6 @@ export class DeckParserService {
 		private readonly ow: OverwolfService,
 		private readonly handler: DeckHandlerService,
 		private readonly api: ApiRunner,
-		private readonly duelsService: DuelsStateBuilderService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
@@ -60,7 +55,7 @@ export class DeckParserService {
 			this.retrieveCurrentDeck(false, {
 				gameType: gameType ?? GameType.GT_PVPDR,
 				formatType: formatType ?? GameFormat.FT_WILD,
-				scenarioId: ScenarioId.WIZARD_DUELS,
+				scenarioId: ScenarioId._314_ARENA_SEASON,
 			});
 	}
 
@@ -112,8 +107,6 @@ export class DeckParserService {
 			);
 		}
 
-		// This doesn't work for Duels for instance - we keep the same sceanrio ID, but
-		// need to regenerate the deck
 		console.log(
 			'[deck-parser] rebuilding deck',
 			this.selectedDeckId,
@@ -125,12 +118,9 @@ export class DeckParserService {
 			'[deck-parser] active deck from memory',
 			this.selectedDeckId,
 			deckFromMemory,
-			this.duelsDeck,
 			this.scene.lastNonGamePlayScene$$.value,
 		);
-		const currentNonGamePlayScene = await this.scene.lastNonGamePlayScene$$.getValueWithInit();
-		const activeDeck =
-			(currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ?? deckFromMemory;
+		const activeDeck = deckFromMemory;
 
 		console.log(
 			'[deck-parser] active deck',
@@ -254,10 +244,6 @@ export class DeckParserService {
 					this.selectedDeckId = null;
 				}
 			}
-		});
-		this.duelsService.duelsInfo$$.pipe(distinctUntilChanged()).subscribe((duelsInfo) => {
-			console.debug('[duels] got deck', duelsInfo);
-			this.duelsDeck = duelsInfo?.DuelsDeck;
 		});
 
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
@@ -401,14 +387,6 @@ export class DeckParserService {
 			ScenarioId.TWIST___UNGORO,
 			ScenarioId.TWIST___WONDERS,
 			ScenarioId.TWIST___WONDERS_XL,
-			ScenarioId.WIZARD_DUELS,
-			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
-			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY_HEROES,
-			ScenarioId.WIZARD_DUELS___REVENDRETH,
-			ScenarioId.WIZARD_DUELS___THE_SUNKEN_CITY,
-			ScenarioId.WIZARD_DUELS___DEATH_KNIGHT,
-			ScenarioId.WIZARD_DUELS___TITANS_MINISET,
-			ScenarioId.WIZARD_DUELS___SHOWDOWN_IN_THE_BADLANDS,
 			ScenarioId.TAVERN_BRAWL_BRAWLISEUM,
 			ScenarioId.TAVERN_BRAWL_WILD_BRAWLISEUM,
 		];
@@ -444,13 +422,9 @@ export class DeckParserService {
 
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3], gameType);
-			const deckNameLogLine = (await this.isDuelsDeck(lines[lines.length - 4], gameType))
-				? lines[lines.length - 4]
-				: lines[lines.length - 3];
+			const deckNameLogLine = lines[lines.length - 3];
 			console.log('[deck-parser] deckName', deckNameLogLine);
-			const deckstringLogLine = (await this.isDuelsDeck(lines[lines.length - 4], gameType))
-				? lines[lines.length - 2]
-				: lines[lines.length - 1];
+			const deckstringLogLine = lines[lines.length - 1];
 			console.log('[deck-parser] deckstring', deckstringLogLine);
 			let match: RegExpExecArray;
 			const deckName = (match = this.deckNameRegex.exec(deckNameLogLine)) ? match[1] : undefined;
@@ -490,28 +464,6 @@ export class DeckParserService {
 			.filter((line) => line && line.length > 0)
 			.map((line) => line.trim());
 		return lines;
-	}
-
-	private async isDuelsDeck(logLine: string, gameType: GameType): Promise<boolean> {
-		if (!logLine?.length) {
-			return false;
-		}
-		// The "Duels deck" name in fact only appears in English.
-		// But we at least check that we have a deck name...
-		if (!logLine.includes('###')) {
-			return false;
-		}
-		// ...and that we are on the Duels screen
-		const [lastNonGamePlayScene, currentScene] = await Promise.all([
-			this.scene.lastNonGamePlayScene$$.getValueWithInit(),
-			this.scene.currentScene$$.getValueWithInit(),
-		]);
-		console.log('[deck-parser] current scene', lastNonGamePlayScene);
-		return (
-			lastNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ||
-			// In case we launch the app mid-game
-			(currentScene === SceneMode.GAMEPLAY && [GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(gameType))
-		);
 	}
 }
 

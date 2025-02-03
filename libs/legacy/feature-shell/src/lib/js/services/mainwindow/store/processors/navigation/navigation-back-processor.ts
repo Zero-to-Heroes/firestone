@@ -89,8 +89,6 @@ export class NavigationBackProcessor implements Processor {
 				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState, mainNav);
 			case 'battlegrounds':
 				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState, mainNav);
-			case 'duels':
-				return NavigationBackProcessor.buildParentDuelsState(navigationState, dataState);
 			case 'mercenaries':
 				return NavigationBackProcessor.buildParentMercenariesState(navigationState, dataState);
 			case 'arena':
@@ -112,20 +110,6 @@ export class NavigationBackProcessor implements Processor {
 		const hierarchy = builCategoryHierarchy(categoryId, groupedAchievements);
 		mainNav.text$$.next(hierarchy?.categories?.map((cat) => cat.name).join(' › '));
 		return null;
-	}
-
-	private static buildParentDuelsState(
-		navigationState: NavigationState,
-		dataState: MainWindowState,
-	): NavigationState {
-		if (!navigationState || !dataState) {
-			// console.warn('Missing state for processing back navigation');
-			return null;
-		}
-		switch (navigationState.navigationDuels.selectedCategoryId) {
-			default:
-				return null;
-		}
 	}
 
 	private static buildParentMercenariesState(

@@ -13,7 +13,6 @@ import { MinionStat } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
-import { RunStep } from '../../../models/duels/run-step';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
@@ -130,7 +129,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayTime = true;
 
-	@Input() set replay(value: GameStat | RunStep) {
+	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}

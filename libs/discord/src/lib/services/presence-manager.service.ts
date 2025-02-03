@@ -46,7 +46,7 @@ export class PresenceManagerService {
 			});
 	}
 
-	// TODO: support Arena (W-L), Duels (MMR + W-L), Battlegrounds (MMR), Mercs
+	// TODO: support Arena (W-L), Battlegrounds (MMR), Mercs
 	private buildPresence() {
 		const metaData$ = this.gameStateUpdates.gameState$$.pipe(
 			map((gameState) => gameState?.metadata),
@@ -154,7 +154,6 @@ export class PresenceManagerService {
 		switch (metaData.gameType) {
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
-				console.warn('missing duels support for now');
 				return this.i18n.translateString('settings.general.discord.in-game-text.mmr', {
 					value: '???',
 				});

@@ -1,5 +1,5 @@
 import { GameFormat, RankBracket, TimePeriod } from '@firestone-hs/constructed-deck-stats';
-import { allDuelsHeroes, BnetRegion, GameFormat as GameFormatEnum, Race } from '@firestone-hs/reference-data';
+import { BnetRegion, GameFormat as GameFormatEnum, Race } from '@firestone-hs/reference-data';
 import { IPreferences } from '@firestone/shared/framework/common';
 import 'reflect-metadata';
 import {
@@ -24,14 +24,6 @@ import {
 	ConstructedStatsTab,
 	CurrentAppType,
 	DeckFilters,
-	DuelsDeckSortFilterType,
-	DuelsGameModeFilterType,
-	DuelsHeroFilterType,
-	DuelsHeroSortFilterType,
-	DuelsStatTypeFilterType,
-	DuelsTimeFilterType,
-	DuelsTopDecksDustFilterType,
-	DuelsTreasureStatTypeFilterType,
 	Ftue,
 	LotteryTabType,
 	MercenariesFullyUpgradedFilterType,
@@ -188,7 +180,6 @@ export class Preferences implements IPreferences {
 	readonly showArenaCardStatDuringDiscoversPremiumBanner: boolean = true;
 
 	readonly decktrackerShowRanked: boolean = true;
-	readonly decktrackerShowDuels: boolean = true;
 	readonly decktrackerShowArena: boolean = true;
 	readonly decktrackerShowTavernBrawl: boolean = true;
 	readonly decktrackerShowPractice: boolean = true;
@@ -801,37 +792,6 @@ export class Preferences implements IPreferences {
 	readonly bgsLeaderboardPlayerSearch: string;
 	readonly bgsYourStatsTypeFilter: 'hero' | 'trinket' = 'hero';
 	readonly bgsCompositionsListMode: BgsCompositionsListMode = 'exploring';
-
-	// readonly duelsRunUuid: string;
-	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
-	readonly duelsActiveDeckSortFilter: DuelsDeckSortFilterType = 'last-played';
-	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
-	// readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';
-	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';
-	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
-	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
-	readonly duelsActivePassiveTreasuresFilter: readonly string[] = [];
-	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
-	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
-	readonly duelsActiveHeroesFilter2: DuelsHeroFilterType = allDuelsHeroes;
-	readonly duelsActiveHeroPowerFilter2: readonly string[] = [];
-	readonly duelsActiveSignatureTreasureFilter2: readonly string[] = [];
-	readonly duelsActiveLeaderboardModeFilter: 'paid-duels' | 'duels' = 'paid-duels';
-	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
-	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
-	readonly duelsPersonalDeckShowHiddenDecks: boolean;
-	readonly duelsHideStatsBelowThreshold: boolean;
-	readonly duelsShowMaxLifeWidget2: 'off' | 'mouseover' | 'blink' = 'mouseover';
-	readonly duelsShowOocTracker: boolean = true;
-	readonly duelsShowOocDeckSelect: boolean = true;
-	readonly duelsHighlightTreasureSynergies: boolean = true;
-	readonly duelsShowInfoOnHeroSelection: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly duelsOocTrackerPosition: { left: number; top: number };
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly duelsOocDeckSelectPosition: { left: number; top: number };
-	readonly duelsDeckbuilderShowBuckets: boolean;
-	readonly duelsDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';

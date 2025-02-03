@@ -59,7 +59,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() removeDuplicatesInTooltip: boolean;
-	@Input() side: 'player' | 'opponent' | 'duels';
+	@Input() side: 'player' | 'opponent' | 'single';
 
 	@Input() set showGlobalEffectsZone(value: boolean) {
 		this.showGlobalEffectsZone$$.next(value);

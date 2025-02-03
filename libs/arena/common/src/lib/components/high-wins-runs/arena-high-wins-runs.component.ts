@@ -40,7 +40,6 @@ import { ArenaHighWinsRunsService } from '../../services/arena-high-wins-runs.se
 							<arena-run-vignette *ngIf="stat.creationDate" [stat]="stat"></arena-run-vignette>
 						</ng-container>
 					</virtual-scroller>
-					<!-- <duels-empty-state *ngIf="!value.runGroups?.length"></duels-empty-state> -->
 				</with-loading>
 			</div>
 		</ng-container>

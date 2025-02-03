@@ -11,8 +11,7 @@ import { ClassInfo } from './profile-match-stats.model';
 		<div
 			class="player-match-stats-class-info"
 			[ngClass]="{
-				battlegrounds: currentMode === 'battlegrounds' || currentMode === 'battlegrounds-duo',
-				duels: currentMode === 'duels'
+				battlegrounds: currentMode === 'battlegrounds' || currentMode === 'battlegrounds-duo'
 			}"
 		>
 			<div class="cell player-class">

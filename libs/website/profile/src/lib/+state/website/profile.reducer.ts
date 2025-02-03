@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { LocalStorageService } from '@firestone/shared/framework/core';
 import { WebsitePreferences } from '@firestone/website/core';
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import * as WebsiteProfileActions from './pofile.actions';
 import { WebsiteProfileState } from './profile.models';
 
@@ -63,23 +63,19 @@ const reducer = createReducer(
 
 	on(WebsiteProfileActions.startProfileShare, (state) => ({ ...state, showingShareDialog: true })),
 	on(WebsiteProfileActions.stopProfileShare, (state) => ({ ...state, showingShareDialog: false })),
-	on(WebsiteProfileActions.shareProfile, (state) => ({ ...state, shareStatusMessage: 'sharing' })),
-	on(WebsiteProfileActions.shareProfileSuccess, (state, { shareAlias }) => ({
-		...state,
-		shareStatusMessage: 'success',
-		shareAlias: shareAlias,
-	})),
-	on(WebsiteProfileActions.shareProfileFailure, (state, { errorCode }) => ({
-		...state,
-		shareStatusMessage: errorCode === 409 ? 'existing-alias' : 'error',
-	})),
+	// on(WebsiteProfileActions.shareProfile, (state) => ({ ...state, shareStatusMessage: 'sharing' })),
+	// on(WebsiteProfileActions.shareProfileSuccess, (state, { shareAlias }) => ({
+	// 	...state,
+	// 	shareStatusMessage: 'success',
+	// 	shareAlias: shareAlias,
+	// })),
+	// on(WebsiteProfileActions.shareProfileFailure, (state, { errorCode }) => ({
+	// 	...state,
+	// 	shareStatusMessage: errorCode === 409 ? 'existing-alias' : 'error',
+	// })),
 	on(WebsiteProfileActions.unshareProfileSuccess, (state) => ({
 		...state,
 		shareStatusMessage: undefined,
 		shareAlias: null,
 	})),
 );
-
-export function websiteDuelsReducer(state: WebsiteProfileState | undefined, action: Action) {
-	return reducer(state, action);
-}

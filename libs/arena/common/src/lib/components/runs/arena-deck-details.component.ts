@@ -51,7 +51,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 							</div>
 
 							<div class="group rewards" *ngIf="overview.rewards?.length">
-								<duels-reward *ngFor="let reward of overview.rewards" [reward]="reward"></duels-reward>
+								<arena-reward *ngFor="let reward of overview.rewards" [reward]="reward"></arena-reward>
 							</div>
 						</div>
 

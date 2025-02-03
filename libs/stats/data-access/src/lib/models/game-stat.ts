@@ -60,10 +60,6 @@ export class GameStat {
 		return Object.assign(new GameStat(), this, base);
 	}
 
-	public isDuels(): boolean {
-		return this.gameMode === 'duels' || this.gameMode === 'paid-duels';
-	}
-
 	public isBattlegrounds(): boolean {
 		return (
 			this.gameMode === 'battlegrounds' ||
@@ -148,12 +144,6 @@ export class GameStat {
 		} else if (this.gameMode === 'friendly') {
 			rankIcon = 'friendly';
 			rankIconTooltip = i18n.translateString('global.game-mode.friendly');
-		} else if (this.gameMode === 'duels') {
-			rankIcon = `casual_duels`;
-			rankIconTooltip = i18n.translateString('global.game-mode.casual-duels');
-		} else if (this.gameMode === 'paid-duels') {
-			rankIcon = `heroic_duels`;
-			rankIconTooltip = i18n.translateString('global.game-mode.heroic-duels');
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
 			if (!this.playerRank) {
@@ -223,18 +213,6 @@ export class GameStat {
 }
 
 export const buildRankText = (playerRank: string | undefined, gameMode: string, additionalResult: string): string => {
-	if (gameMode === 'duels' || gameMode === 'paid-duels') {
-		if (additionalResult && additionalResult.indexOf('-') !== -1) {
-			const [wins, losses] = additionalResult.split('-');
-			if (wins != null && losses != null) {
-				return `${wins}-${losses}`;
-			}
-		}
-		if (!!playerRank) {
-			return `${playerRank}`;
-		}
-		return null;
-	}
 	if (playerRank == null) {
 		return null;
 	}

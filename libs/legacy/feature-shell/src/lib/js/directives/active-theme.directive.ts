@@ -24,9 +24,6 @@ export class ActiveThemeDirective {
 	@HostBinding('class.replays-theme') get replaysTheme() {
 		return this.activeTheme === 'replays';
 	}
-	@HostBinding('class.duels-theme') get duelsTheme() {
-		return this.activeTheme === 'duels';
-	}
 	@HostBinding('class.general-theme') get generalTheme() {
 		return this.activeTheme === 'general';
 	}

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Board, SceneMode } from '@firestone-hs/reference-data';
-import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { PackInfo } from '@firestone/collection/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { HsAchievementCategory, HsAchievementsInfo } from '../external-models/achievements-info';
@@ -12,7 +11,6 @@ import { BattlegroundsInfo } from '../models/battlegrounds-info';
 import { MemoryBgsPlayerInfo, MemoryBgsTeamInfo } from '../models/battlegrounds-player-state';
 import { CoinInfo } from '../models/coin-info';
 import { DeckInfoFromMemory } from '../models/deck-info-from-memory';
-import { AdventuresInfo, DuelsDeck, DuelsInfo, MemoryDuelsHeroPowerOption } from '../models/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '../models/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../models/memory-mercenaries-info';
 import { MemoryPlayerProfileInfo } from '../models/memory-profile-info';
@@ -25,7 +23,6 @@ import { GetAchievementCategoriesOperation } from './mind-vision/operations/get-
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';
 import { GetActiveQuestsOperation } from './mind-vision/operations/get-active-quests-operation';
-import { GetAdventuresInfoOperation } from './mind-vision/operations/get-adventures-info-operation';
 import { GetArenaDeckOperation } from './mind-vision/operations/get-arena-deck-operation';
 import { GetArenaInfoOperation } from './mind-vision/operations/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/operations/get-battlegrounds-end-game-operation';
@@ -41,13 +38,6 @@ import { GetCardBacksOperation } from './mind-vision/operations/get-card-backs-o
 import { GetCoinsOperation } from './mind-vision/operations/get-coins-operation';
 import { GetCollectionOperation } from './mind-vision/operations/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/operations/get-current-scene-operation';
-import { GetDuelsDeckFromCollectionOperation } from './mind-vision/operations/get-duels-deck-from-collection-operation';
-import { GetDuelsDeckOperation } from './mind-vision/operations/get-duels-deck-operation';
-import { GetDuelsHeroOptionsOperation } from './mind-vision/operations/get-duels-hero-options-operation';
-import { GetDuelsHeroPowerOptionsOperation } from './mind-vision/operations/get-duels-hero-power-options-operation';
-import { GetDuelsInfoOperation } from './mind-vision/operations/get-duels-info-operation';
-import { GetDuelsRewardsInfoOperation } from './mind-vision/operations/get-duels-rewards-info-operation';
-import { GetDuelsSignatureTreasureOptionsOperation } from './mind-vision/operations/get-duels-signature-treasure-options-operation';
 import { GetGameUniqueIdOperation } from './mind-vision/operations/get-game-unique-id-operation';
 import { GetInGameAchievementsProgressInfoByIndexOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-by-index-operation';
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/operations/get-in-game-achievements-progress-info-operation';
@@ -97,20 +87,6 @@ export class MemoryInspectionService {
 	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
 	private getArenaDeckOperation = new GetArenaDeckOperation(this.mindVisionFacade, this.ow);
-	private getAdventuresInfoOperation = new GetAdventuresInfoOperation(this.mindVisionFacade, this.ow);
-	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow);
-	private getDuelsDeckOperation = new GetDuelsDeckOperation(this.mindVisionFacade, this.ow);
-	private getDuelsDeckFromCollectionOperation = new GetDuelsDeckFromCollectionOperation(
-		this.mindVisionFacade,
-		this.ow,
-	);
-	private getDuelsHeroOptionsOperation = new GetDuelsHeroOptionsOperation(this.mindVisionFacade, this.ow);
-	private getDuelsHeroPowerOptionsOperation = new GetDuelsHeroPowerOptionsOperation(this.mindVisionFacade, this.ow);
-	private getDuelsSignatureTreasureOptionsOperation = new GetDuelsSignatureTreasureOptionsOperation(
-		this.mindVisionFacade,
-		this.ow,
-	);
-	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVisionFacade, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.ow);
 	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.ow);
 	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVisionFacade, this.ow);
@@ -127,10 +103,6 @@ export class MemoryInspectionService {
 	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.ow);
 	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.ow);
 	private getGameUniqueIdOperation = new GetGameUniqueIdOperation(this.mindVisionFacade, this.ow);
-	// private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
-	// 	this.mindVisionFacade,
-	// 	this.ow,
-	// );
 
 	private listenersRegistered: boolean;
 
@@ -239,42 +211,6 @@ export class MemoryInspectionService {
 
 	public async getArenaDeck(): Promise<DeckInfoFromMemory | null> {
 		return this.mindVision.callMindVision(() => this.getArenaDeckOperation.call());
-	}
-
-	public async getAdventuresInfo(): Promise<AdventuresInfo | null> {
-		return this.mindVision.callMindVision(() => this.getAdventuresInfoOperation.call());
-	}
-
-	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo | null> {
-		return this.mindVision.callMindVision(() => this.getDuelsInfoOperation.call(numberOfRetries, forceReset));
-	}
-
-	public async getDuelsDeck(): Promise<DuelsDeck | null> {
-		return this.mindVision.callMindVision(() => this.getDuelsDeckOperation.call());
-	}
-
-	public async getDuelsDeckFromCollection(): Promise<DeckInfoFromMemory | null> {
-		return this.mindVision.callMindVision(() => this.getDuelsDeckFromCollectionOperation.call());
-	}
-
-	public async getDuelsHeroOptions(numberOfRetries = 1): Promise<readonly MemoryDuelsHeroPowerOption[] | null> {
-		return this.mindVision.callMindVision(() => this.getDuelsHeroOptionsOperation.call(numberOfRetries));
-	}
-
-	public async getDuelsHeroPowerOptions(numberOfRetries = 1): Promise<readonly MemoryDuelsHeroPowerOption[] | null> {
-		return this.mindVision.callMindVision(() => this.getDuelsHeroPowerOptionsOperation.call(numberOfRetries));
-	}
-
-	public async getDuelsSignatureTreasureOptions(
-		numberOfRetries = 1,
-	): Promise<readonly MemoryDuelsHeroPowerOption[] | null> {
-		return this.mindVision.callMindVision(() =>
-			this.getDuelsSignatureTreasureOptionsOperation.call(numberOfRetries),
-		);
-	}
-
-	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo | null> {
-		return this.mindVision.callMindVision(() => this.getDuelsRewardsInfoOperation.call(1, forceReset));
 	}
 
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfos | null> {

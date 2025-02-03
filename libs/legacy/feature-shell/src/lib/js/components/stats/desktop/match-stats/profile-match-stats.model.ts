@@ -11,7 +11,7 @@ export interface ClassInfo {
 }
 
 export interface ModeOverview {
-	readonly mode: 'constructed' | 'duels' | 'arena' | 'battlegrounds';
+	readonly mode: 'constructed' | 'arena' | 'battlegrounds';
 	readonly title: string;
 	readonly icon: string;
 	readonly wins: number;

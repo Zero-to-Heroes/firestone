@@ -3,27 +3,21 @@ import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
-import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
-import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
-import { DuelsDeckSummary, DuelsRun } from '@firestone/duels/general';
-import { AdventuresInfo, Card, CardBack } from '@firestone/memory';
+import { Card, CardBack } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
-import { DuelsBucketsData } from '../../models/duels/duels-state';
 import { Set } from '../../models/set';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { ProfileDuelsHeroStat } from '../profile/internal/internal-profile-info.service';
 import { sleep } from '../utils';
 import {
 	AppUiStoreService,
@@ -118,43 +112,8 @@ export class AppUiStoreFacadeService {
 	}
 
 	/** @deprecated */
-	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		return this.store.duelsHeroStats$();
-	}
-
-	/** @deprecated */
 	public gameStats$(): Observable<readonly GameStat[]> {
 		return this.store.gameStats$();
-	}
-
-	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
-		return this.store.duelsDecks$();
-	}
-
-	// public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-	// 	return this.store.duelsTopDecks$();
-	// }
-
-	/** @deprecated */
-	public duelsRuns$(): Observable<readonly DuelsRun[]> {
-		return this.store.duelsRuns$();
-	}
-
-	public duelsAdventureInfo$(): Observable<AdventuresInfo> {
-		return this.store.duelsAdventureInfo$();
-	}
-
-	public duelsBuckets$(): Observable<readonly DuelsBucketsData[]> {
-		return this.store.duelsBuckets$();
-	}
-
-	/** @deprecated */
-	public duelsMetaStats$(): Observable<DuelsStat> {
-		return this.store.duelsMetaStats$();
-	}
-
-	public duelsLeaderboard$(): Observable<DuelsLeaderboard> {
-		return this.store.duelsLeaderboard$();
 	}
 
 	/** @deprecated */
@@ -217,10 +176,6 @@ export class AppUiStoreFacadeService {
 
 	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {
 		return this.store.profileClassesProgress$();
-	}
-
-	public profileDuelsHeroStats$(): Observable<readonly ProfileDuelsHeroStat[]> {
-		return this.store.profileDuelsHeroStats$();
 	}
 
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {

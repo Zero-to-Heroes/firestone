@@ -82,9 +82,6 @@ export class OverlayDisplayService {
 			case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
 			case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
 				return false;
-			case GameType.GT_PVPDR:
-			case GameType.GT_PVPDR_PAID:
-				return prefs.decktrackerShowDuels;
 			case GameType.GT_MERCENARIES_AI_VS_AI:
 			case GameType.GT_MERCENARIES_FRIENDLY:
 			case GameType.GT_MERCENARIES_PVP:

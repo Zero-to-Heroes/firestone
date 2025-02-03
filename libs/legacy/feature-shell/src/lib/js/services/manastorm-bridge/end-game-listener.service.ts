@@ -24,7 +24,6 @@ import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
-import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
@@ -44,7 +43,6 @@ export class EndGameListenerService {
 		private readonly mercsMemoryCache: MercenariesMemoryCacheService,
 		private readonly memoryInspection: MemoryInspectionService,
 		private readonly rewards: RewardMonitorService,
-		private readonly duelsState: DuelsStateBuilderService,
 		private readonly reviewIdService: ReviewIdService,
 		private readonly bgStore: BattlegroundsStoreService,
 		private readonly lottery: LotteryService,
@@ -305,13 +303,6 @@ export class EndGameListenerService {
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge] preparing to upload');
 		// Here we get the information that is only available once the game is over
-		// TODO: move this elsewhere? So that this method doesn't care about memory reading at all anymore
-		// const duelsInitialRank =
-		// 	info.metadata.GameType === GameType.GT_PVPDR_PAID
-		// 		? info.duelsInfo?.PaidRating
-		// 		: info.metadata.GameType === GameType.GT_PVPDR
-		// 		? info.duelsInfo?.Rating
-		// 		: null;
 		// Try to get the BG new rank info as soon as possible. If that doesn't work, we have a fallback
 		const bgNewRatingMemoryUpdate = info.bgNewRating && info.bgNewRating !== -1 ? info.bgNewRating : null;
 		const afterInfoNewRating =
@@ -344,7 +335,6 @@ export class EndGameListenerService {
 		const augmentedInfo: UploadInfo = {
 			...info,
 			battlegroundsInfoAfterGameOver: newBgInfoWithRating,
-			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
 			bgBattleOdds: battleOdds,
 			// Here we purposefully don't want to init the lottery if it hasn't been initialized yet
@@ -365,24 +355,4 @@ export class EndGameListenerService {
 		);
 		return result;
 	}
-
-	// private async getDuelsNewPlayerRank(initialRank: number, existingDuelsInfo: DuelsInfo): Promise<number> {
-	// 	// Ideally should trigger this only when winning at 11 or losing at 2, but we don't have the match result yet
-	// 	// Could add it somewhere, but for now I think it's good enough like that
-	// 	if (existingDuelsInfo.Wins !== 11 && existingDuelsInfo.Losses !== 2) {
-	// 		return null;
-	// 	}
-	// 	// This only matters when a run is over, so we need to be careful no to take too much time
-	// 	let duelsInfo = await this.memoryInspection.getDuelsInfo();
-	// 	let retriesLeft = 10;
-	// 	while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
-	// 		await sleep(500);
-	// 		duelsInfo = await this.memoryInspection.getDuelsInfo();
-	// 		retriesLeft--;
-	// 	}
-	// 	if (!duelsInfo) {
-	// 		return null;
-	// 	}
-	// 	return duelsInfo.LastRatingChange + initialRank;
-	// }
 }

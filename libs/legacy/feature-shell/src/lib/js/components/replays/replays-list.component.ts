@@ -267,8 +267,6 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		switch (filter) {
 			case null:
 				return !isMercenariesPvE(gameMode);
-			case 'both-duels':
-				return gameMode === 'duels' || gameMode === 'paid-duels';
 			case 'ranked-standard':
 				return gameMode === 'ranked' && format === 'standard';
 			case 'ranked-wild':

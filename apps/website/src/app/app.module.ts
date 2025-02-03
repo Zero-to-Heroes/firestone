@@ -6,7 +6,6 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBattlegroundsModule } from '@firestone/website/battlegrounds';
 import { WebsiteBootstrapModule } from '@firestone/website/core';
-import { WebsiteDuelsModule } from '@firestone/website/duels';
 import { WebsiteProfileModule } from '@firestone/website/profile';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -48,7 +47,6 @@ const components = [AppComponent, WebsiteNavigationComponent, WebsiteNavigationN
 		WebsiteProfileModule,
 		WebsiteBootstrapModule,
 		WebsiteBattlegroundsModule,
-		WebsiteDuelsModule,
 	],
 	providers: [AuthGuard, PremiumRedirectGuard],
 	bootstrap: [AppComponent],

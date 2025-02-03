@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
-import {
-	CardClass,
-	GameType,
-	getDefaultHeroDbfIdForClass,
-	normalizeDuelsHeroCardId,
-} from '@firestone-hs/reference-data';
+import { CardClass, GameType, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { MemoryInspectionService, MemoryPlayerRecord } from '@firestone/memory';
-import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
 import { GameEvent } from '../../../models/game-event';
@@ -70,7 +64,6 @@ class HeroSkinAchievements {
 export class InternalProfileInfoService {
 	public winsForMode$$ = new BehaviorSubject<readonly ProfileWinsForMode[]>([]);
 	public classesProgress$$ = new BehaviorSubject<readonly ProfileClassProgress[]>([]);
-	public duelsHeroStats$$ = new BehaviorSubject<readonly ProfileDuelsHeroStat[]>([]);
 
 	private shouldTrigger$$ = new BehaviorSubject<boolean>(false);
 
@@ -100,19 +93,6 @@ export class InternalProfileInfoService {
 		);
 		if (!!cachedClassProgress?.length) {
 			this.classesProgress$$.next(cachedClassProgress);
-		}
-
-		this.duelsHeroStats$$.subscribe((duelsHeroStats) => {
-			// console.debug('[profile-info] will update local cache', duelsHeroStats);
-			if (!!duelsHeroStats?.length) {
-				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_DUELS_HERO_STATS, duelsHeroStats);
-			}
-		});
-		const cachedDuelsHeroStats = this.localStorage.getItem<readonly ProfileDuelsHeroStat[]>(
-			LocalStorageService.LOCAL_STORAGE_DUELS_HERO_STATS,
-		);
-		if (!!cachedDuelsHeroStats?.length) {
-			this.duelsHeroStats$$.next(cachedDuelsHeroStats);
 		}
 	}
 
@@ -172,55 +152,6 @@ export class InternalProfileInfoService {
 		if (!!winsForMode?.length) {
 			this.winsForMode$$.next(winsForMode);
 		}
-
-		const duelsStats = profileInfo?.PlayerRecords.filter((r) =>
-			[GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(r.RecordType),
-		).filter((r) => r.Data > 0);
-		if (!!duelsStats?.length) {
-			const groupedByHero = groupByFunction((s: MemoryPlayerRecord) =>
-				normalizeDuelsHeroCardId(this.allCards.getCard(s.Data).id),
-			)(duelsStats);
-			const duelsHeroStats: readonly ProfileDuelsHeroStat[] = Object.keys(groupedByHero).map(
-				(normalizedHeroCardId) => {
-					const heroCard = this.allCards.getCard(normalizedHeroCardId);
-					const records = groupedByHero[normalizedHeroCardId];
-					const result: ProfileDuelsHeroStat = {
-						heroCardId: heroCard.id,
-						wins: records.map((r) => r.Wins).reduce((a, b) => a + b, 0),
-						losses: records.map((r) => r.Losses).reduce((a, b) => a + b, 0),
-						winsByMode: [
-							{
-								mode: 'duels',
-								wins: records
-									.filter((r) => r.RecordType === GameType.GT_PVPDR)
-									.map((r) => r.Wins)
-									.reduce((a, b) => a + b, 0),
-								losses: records
-
-									.filter((r) => r.RecordType === GameType.GT_PVPDR)
-									.map((r) => r.Losses)
-									.reduce((a, b) => a + b, 0),
-							},
-							{
-								mode: 'paid-duels',
-								wins: records
-
-									.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
-									.map((r) => r.Wins)
-									.reduce((a, b) => a + b, 0),
-								losses: records
-									.filter((r) => r.RecordType === GameType.GT_PVPDR_PAID)
-									.map((r) => r.Losses)
-									.reduce((a, b) => a + b, 0),
-							},
-						],
-					};
-					// console.debug('built duels hero stats', heroCard.name, result, records);
-					return result;
-				},
-			);
-			this.duelsHeroStats$$.next(duelsHeroStats);
-		}
 	}
 
 	private buildWinsForModes(playerRecords: MemoryPlayerRecord[]) {
@@ -228,8 +159,8 @@ export class InternalProfileInfoService {
 			return [];
 		}
 
-		const winsForMode: readonly ProfileWinsForMode[] = ['constructed', 'duels', 'arena'].map(
-			(mode: 'constructed' | 'duels' | 'arena') => {
+		const winsForMode: readonly ProfileWinsForMode[] = ['constructed', 'arena'].map(
+			(mode: 'constructed' | 'arena') => {
 				const recordsForMode = playerRecords.filter((r) =>
 					mode === 'constructed'
 						? r.RecordType === GameType.GT_RANKED
@@ -248,18 +179,4 @@ export class InternalProfileInfoService {
 		);
 		return winsForMode;
 	}
-}
-
-// Until it's integrated into the profile API
-export interface ProfileDuelsHeroStat {
-	readonly heroCardId: string;
-	readonly wins: number;
-	readonly losses: number;
-	readonly winsByMode: readonly ProfileDuelsWinsByMode[];
-}
-
-export interface ProfileDuelsWinsByMode {
-	readonly mode: 'duels' | 'paid-duels';
-	readonly wins: number;
-	readonly losses: number;
 }

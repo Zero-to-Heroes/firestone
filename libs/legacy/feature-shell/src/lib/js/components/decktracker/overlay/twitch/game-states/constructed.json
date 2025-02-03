@@ -4,7 +4,6 @@
 		"playerDeck": {
 			"secrets": [],
 			"deckstring": "AAEBAQcI1ASoigSJoASj7wT9xAW0+AWQ+wWLlAYLpLYDqbMErbMEjLcEkLcE784EjtQEpeQE8M0FofsF7KkGAAEDhxf9xAX76AP9xAXHsgT9xAUAAA==",
-			"duelsStartingDeckstring": null,
 			"name": "Dredge",
 			"hero": {
 				"classes": [10],
@@ -130,7 +129,6 @@
 		},
 		"opponentDeck": {
 			"secrets": [],
-			"duelsStartingDeckstring": null,
 			"hero": {
 				"classes": [8],
 				"playerName": "The Innkeeper",

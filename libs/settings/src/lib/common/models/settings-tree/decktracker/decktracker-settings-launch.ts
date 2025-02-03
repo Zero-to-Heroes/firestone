@@ -19,12 +19,6 @@ export const decktrackerLaunchSettings = (context: SettingContext): SettingNode 
 					},
 					{
 						type: 'toggle',
-						field: 'decktrackerShowDuels',
-						label: context.i18n.translateString('settings.decktracker.modes.duels'),
-						tooltip: null,
-					},
-					{
-						type: 'toggle',
 						field: 'decktrackerShowArena',
 						label: context.i18n.translateString('settings.decktracker.modes.arena'),
 						tooltip: null,

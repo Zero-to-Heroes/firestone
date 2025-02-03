@@ -247,7 +247,6 @@ export class TwitchAuthService {
 		const result: Partial<NonFunctionProperties<DeckState>> = {
 			secrets: deckState.secrets,
 			deckstring: deckState.deckstring,
-			duelsStartingDeckstring: deckState.duelsStartingDeckstring,
 			name: deckState.name,
 			hero: deckState.hero,
 			cardsLeftInDeck: deckState.cardsLeftInDeck,

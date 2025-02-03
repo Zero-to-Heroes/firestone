@@ -4,7 +4,6 @@ import { ScenarioId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest, Observable } from 'rxjs';
-import { RunStep } from '../../../models/duels/run-step';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -82,7 +81,7 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionStoreCom
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayTime = true;
 
-	@Input() set replay(value: GameStat | RunStep) {
+	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}

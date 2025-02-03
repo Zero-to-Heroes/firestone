@@ -24,7 +24,7 @@ export class DeckCard {
 	readonly lastAffectedByEntityId?: number;
 	readonly dormant?: boolean;
 	// Put into play is different from "played", which is important in the case of cards like
-	// the Duels Tomb Divers, or Tess / Contraband Stash
+	// Tess / Contraband Stash
 	readonly putIntoPlay?: boolean;
 	readonly buffingEntityCardIds?: readonly string[];
 	readonly buffCardIds?: readonly string[];

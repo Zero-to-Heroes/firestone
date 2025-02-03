@@ -45,15 +45,15 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		this.options = options;
 	}
 
-	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'duels') {
+	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'single') {
 		this.handlers[_uniqueId] = handler;
 	}
 
-	unregister(_uniqueId: string, side: 'player' | 'opponent' | 'duels') {
+	unregister(_uniqueId: string, side: 'player' | 'opponent' | 'single') {
 		delete this.handlers[_uniqueId];
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard) {
+	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard) {
 		// Happens when using the deck-list component outside of a game
 		// console.debug('[cards-highlight] mouse enter', cardId, side, card, this.options);
 		if (!this.options?.skipGameState && !this.gameState) {
@@ -107,7 +107,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	getHighlightedCards(
 		cardId: string,
-		side: 'player' | 'opponent' | 'duels',
+		side: 'player' | 'opponent' | 'single',
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number; highlight: SelectorOutput }[] {
 		// Happens when using the deck-list component outside of a game
@@ -149,7 +149,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	}
 
 	private buildCardsToHighlight(
-		side: 'player' | 'opponent' | 'duels',
+		side: 'player' | 'opponent' | 'single',
 		cardId: string,
 		card: DeckCard,
 		playerDeckProvider: () => DeckState,
@@ -161,7 +161,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		const allPlayerCards = this.getAllCards(
 			!!playerDeckProvider ? playerDeckProvider() : null,
-			side === 'duels' ? side : 'player',
+			side === 'single' ? side : 'player',
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const playerCard of allPlayerCards) {
@@ -176,7 +176,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		const allOpponentCards = this.getAllCards(
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
-			side === 'duels' ? side : 'opponent',
+			side === 'single' ? side : 'opponent',
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const oppCard of allOpponentCards) {
@@ -202,7 +202,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private getAllCards(deckState: DeckState, side: 'player' | 'opponent' | 'duels'): readonly SelectorInput[] {
+	private getAllCards(deckState: DeckState, side: 'player' | 'opponent' | 'single'): readonly SelectorInput[] {
 		if (!deckState) {
 			return [];
 		}
@@ -262,7 +262,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		return result;
 	}
 
-	private buildSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
+	private buildSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'single'): Selector {
 		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide);
 		const cardContextSelector = this.buildCardContextSelector(card);
 		return orWithHighlight(cardIdSelector, cardContextSelector);
@@ -274,7 +274,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 	}
 
-	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'duels'): Selector {
+	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'single'): Selector {
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
 		if (!!selector) {
 			return selector;
@@ -307,7 +307,7 @@ export interface Handler {
 	readonly referenceCardProvider: () => ReferenceCard;
 	readonly deckCardProvider: () => VisualDeckCard;
 	readonly zoneProvider: () => DeckZone;
-	readonly side: () => 'player' | 'opponent' | 'duels';
+	readonly side: () => 'player' | 'opponent' | 'single';
 	readonly highlightCallback: (highlight?: SelectorOutput) => void;
 	readonly unhighlightCallback: () => void;
 }
@@ -319,7 +319,7 @@ export interface SelectorOptions {
 }
 
 export interface SelectorInput {
-	side: 'player' | 'opponent' | 'duels';
+	side: 'player' | 'opponent' | 'single';
 	entityId: number;
 	internalEntityId: string;
 	cardId: string;

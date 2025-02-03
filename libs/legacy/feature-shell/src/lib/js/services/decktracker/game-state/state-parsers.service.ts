@@ -4,7 +4,6 @@ import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OwUtilsService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
-import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
@@ -139,7 +138,6 @@ export class GameStateParsersService {
 		private readonly owUtils: OwUtilsService,
 		private readonly prefs: PreferencesService,
 		private readonly deckParser: DeckParserService,
-		private readonly duelsRunService: DuelsDecksProviderService,
 		private readonly secretsConfig: SecretConfigService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 	) {}
@@ -217,9 +215,7 @@ export class GameStateParsersService {
 			[GameEvent.GAME_START]: [new GameStartParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
 			[GameEvent.HERO_CHANGED]: [new HeroChangedParser(this.allCards)],
-			[GameEvent.HERO_POWER_CHANGED]: [
-				new HeroPowerChangedParser(this.allCards, this.i18n, this.duelsRunService),
-			],
+			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
 			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n)],

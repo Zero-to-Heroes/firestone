@@ -99,7 +99,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			const element = this.el.nativeElement.querySelector('.scalable');
 			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 		});
-		this.cardsHighlight.initForDuels();
+		this.cardsHighlight.initForSingle();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

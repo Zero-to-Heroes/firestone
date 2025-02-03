@@ -326,13 +326,7 @@ export class AppStartupService {
 	}
 
 	private async addAnalytics() {
-		const toRemovePrefix = [
-			'overlayZoneToggle',
-			'duelsPersonalDeckNames',
-			'desktopDeckStatsReset',
-			'desktopDeckDeletes',
-			'duelsDeckDeletes',
-		];
+		const toRemovePrefix = ['overlayZoneToggle', 'desktopDeckStatsReset', 'desktopDeckDeletes'];
 		const toRemoveSuffix = ['.top', '.bottom', '.left', '.right'];
 		const prefs = await this.prefs.getPreferences();
 		// Log an event for each of the prefs

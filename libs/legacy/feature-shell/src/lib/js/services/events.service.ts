@@ -46,8 +46,6 @@ export class Events {
 	public static readonly START_BGS_RUN_STATS = 'start-bgs-run-stats';
 	public static readonly POPULATE_HERO_DETAILS_FOR_BG = 'POPULATE_HERO_DETAILS_FOR_BG';
 
-	public static readonly DUELS_LOAD_TOP_DECK_RUN_DETAILS = 'DUELS_LOAD_TOP_DECK_RUN_DETAILS';
-
 	public static readonly ACHIEVEMENT_PROGRESSION = 'ACHIEVEMENT_PROGRESSION';
 
 	public static readonly SHOW_SCREEN_CAPTURE_EFFECT = 'SHOW_SCREEN_CAPTURE_EFFECT';

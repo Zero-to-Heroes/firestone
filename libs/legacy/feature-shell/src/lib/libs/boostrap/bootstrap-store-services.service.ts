@@ -34,7 +34,6 @@ import {
 	ConstructedMulliganGuideService,
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
-import { DuelsConfigService, DuelsPersonalDecksService } from '@firestone/duels/general';
 import { BootstrapGameStateService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
@@ -50,12 +49,6 @@ import { DeckParserFacadeService } from '../../js/services/decktracker/deck-pars
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
-import { DuelsAdventureInfoService } from '../../js/services/duels/duels-adventure-info.service';
-import { DuelsBucketsService } from '../../js/services/duels/duels-buckets.service';
-import { DuelsDecksProviderService } from '../../js/services/duels/duels-decks-provider.service';
-import { DuelsHeroStatsService } from '../../js/services/duels/duels-hero-stats.service';
-import { DuelsLeaderboardService } from '../../js/services/duels/duels-leaderboard.service';
-import { DuelsMetaStatsService } from '../../js/services/duels/duels-meta-stats.service';
 import { GameNativeStateStoreService } from '../../js/services/game/game-native-state-store.service';
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
@@ -90,7 +83,6 @@ export class BootstrapStoreServicesService {
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
 		private readonly mercenariesSynergiesStore: MercenariesSynergiesHighlightService,
 		private readonly mails: MailsService,
-		private readonly duelsDecksProviderService: DuelsDecksProviderService,
 		private readonly decksProviderService: DecksProviderService,
 		private readonly gameStatsProviderService: GameStatsProviderService,
 		private readonly modsConfig: ModsConfigService,
@@ -100,12 +92,6 @@ export class BootstrapStoreServicesService {
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 		private readonly init_ProfileUploaderService: ProfileUploaderService,
 		private readonly init_ConstructedMetaDecksStateService: ConstructedMetaDecksStateService,
-		private readonly init_DuelsAdventureInfoService: DuelsAdventureInfoService,
-		private readonly init_DuelsBucketsService: DuelsBucketsService,
-		private readonly init_DuelsLeaderboardService: DuelsLeaderboardService,
-		private readonly init_DuelsMetaStatsService: DuelsMetaStatsService,
-		private readonly init_DuelsHeroStatsService: DuelsHeroStatsService,
-		private readonly init_DuelsConfigService: DuelsConfigService,
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		private readonly init_BgsInGameQuestsService: BgsInGameQuestsService,
 		private readonly init_BgsInGameQuestsGuardianService: BgsInGameQuestsGuardianService,
@@ -125,7 +111,6 @@ export class BootstrapStoreServicesService {
 		private readonly init_ArenaDraftManagerService: ArenaDraftManagerService,
 		private readonly init_ArenaHighWinsRunsService: ArenaHighWinsRunsService,
 		private readonly init_ArenaRunsService: ArenaRunsService,
-		private readonly init_duelsPersonalDecksService: DuelsPersonalDecksService,
 		private readonly init_constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly init_ConstructedMulliganGuideService: ConstructedMulliganGuideService,
 		private readonly init_ArenaMulliganGuideService: ArenaMulliganGuideService,

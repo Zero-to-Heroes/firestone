@@ -89,13 +89,6 @@ export class FtueComponent implements AfterViewInit {
 			progressIndex: 1,
 		},
 		{
-			id: 'duels',
-			title: this.i18n.translateString('ftue.steps.duels.title'),
-			text: this.i18n.translateString('ftue.steps.duels.text'),
-			icon: `assets/svg/ftue/duels.svg`,
-			progressIndex: 2,
-		},
-		{
 			id: 'arena',
 			title: this.i18n.translateString('ftue.steps.arena.title'),
 			text: this.i18n.translateString('ftue.steps.arena.text'),

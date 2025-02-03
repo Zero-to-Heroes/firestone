@@ -11,10 +11,8 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { WebsiteBootstrapModule } from '@firestone/website/core';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { WebsiteProfileEffects } from './+state/website/profile.effects';
-import * as fromWebsiteProfile from './+state/website/profile.reducer';
 import { WebsiteProfileAchievementsOverviewComponent } from './achievements/website-profile-achievements-overview.component';
 import { WebsiteProfileAchievementsComponent } from './achievements/website-profile-achievements.component';
 import { WebsiteProfileArenaOverviewsComponent } from './arena/website-profile-arena-overviews.component';
@@ -26,8 +24,6 @@ import { WebsiteProfileBattlegroundsComponent } from './battlegrounds/website-pr
 import { WebsiteProfileCollectionOverviewComponent } from './collection/website-profile-collection-overview.component';
 import { WebsiteProfileCollectionComponent } from './collection/website-profile-collection.component';
 import { WebsiteProfileSetsComponent } from './collection/website-profile-sets.component';
-import { WebsiteProfileDuelsOverviewsComponent } from './duels/website-profile-duels-overviews.component';
-import { WebsiteProfileDuelsComponent } from './duels/website-profile-duels.component';
 import { WebsiteProfileClassStatComponent } from './modes/website-profile-class-stat.component';
 import { WebsiteProfileClassStatsComponent } from './modes/website-profile-class-stats.component';
 import { WebsiteProfileModeOverviewComponent } from './modes/website-profile-mode-overview.component';
@@ -57,8 +53,6 @@ const components = [
 	WebsiteProfileModeOverviewComponent,
 	WebsiteProfileRankedComponent,
 	WebsiteProfileRankedOverviewsComponent,
-	WebsiteProfileDuelsComponent,
-	WebsiteProfileDuelsOverviewsComponent,
 	WebsiteProfileArenaComponent,
 	WebsiteProfileArenaOverviewsComponent,
 	WebsiteProfileClassStatsComponent,
@@ -74,7 +68,6 @@ const components = [
 
 		InlineSVGModule.forRoot(),
 
-		StoreModule.forFeature(fromWebsiteProfile.WEBSITE_PROFILE_FEATURE_KEY, fromWebsiteProfile.websiteDuelsReducer),
 		EffectsModule.forFeature([WebsiteProfileEffects]),
 
 		SharedFrameworkCoreModule,

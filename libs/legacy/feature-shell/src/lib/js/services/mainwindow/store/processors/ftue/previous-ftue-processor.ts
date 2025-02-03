@@ -28,9 +28,6 @@ export class PreviousFtueProcessor implements Processor {
 				nextStep = 'arena';
 				break;
 			case 'arena':
-				nextStep = 'duels';
-				break;
-			case 'duels':
 				nextStep = 'battlegrounds';
 				break;
 			case 'battlegrounds':

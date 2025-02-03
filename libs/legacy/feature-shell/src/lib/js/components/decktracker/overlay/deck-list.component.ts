@@ -29,7 +29,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class DeckListComponent {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
-	@Input() side: 'player' | 'opponent' | 'duels' = 'player';
+	@Input() side: 'player' | 'opponent' | 'single' = 'player';
 
 	@Input() set deckstring(value: string) {
 		const decklist = this.deckHandler.buildDeckList(value);

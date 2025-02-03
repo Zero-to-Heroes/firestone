@@ -26,7 +26,6 @@ export type StateDataType =
 	| 'mercenaries-reference-data'
 	| 'user-global-stats'
 	| 'reference-quests'
-	| 'duels-top-decks'
 	| 'bgs-meta-hero-stats'
 	| 'tavern-brawl-stats';
 // | 'battlegrounds-perfect-games';

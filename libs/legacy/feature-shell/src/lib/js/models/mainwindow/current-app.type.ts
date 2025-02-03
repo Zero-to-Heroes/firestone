@@ -7,7 +7,6 @@ export type CurrentAppType =
 	| 'battlegrounds'
 	| 'mercenaries'
 	| 'general'
-	| 'duels'
 	| 'arena'
 	| 'tavern-brawl'
 	| 'profile'

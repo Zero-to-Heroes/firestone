@@ -44,10 +44,10 @@ import { GameStat } from '@firestone/stats/data-access';
 				</div>
 
 				<div class="group rewards" *ngIf="rewards?.length">
-					<duels-reward
+					<arena-reward
 						*ngFor="let reward of rewards; trackBy: trackByRewardFn"
 						[reward]="reward"
-					></duels-reward>
+					></arena-reward>
 				</div>
 			</div>
 			<div class="right-info">
@@ -108,7 +108,6 @@ export class ArenaRunComponent {
 	) {}
 
 	toggleShowMore() {
-		// Duels goes through a state event here, not sure why?
 		this._isExpanded = !this._isExpanded;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

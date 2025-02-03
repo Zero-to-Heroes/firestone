@@ -60,23 +60,6 @@
 							}
 						}
 					}
-					&.duels,
-					&.paid-duels {
-						left: -2px;
-						.frame {
-							left: auto;
-						}
-						.rank-text {
-							font-size: 20px;
-							bottom: 0;
-							padding: 0;
-							margin: 0;
-							height: 80%;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-						}
-					}
 					&.arena {
 						left: -6px;
 						top: -9px;
