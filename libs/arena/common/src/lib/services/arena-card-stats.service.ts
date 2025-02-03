@@ -51,6 +51,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe(async ({ timeFilter, classFilter }) => {
+					// console.debug('building arena card stats', new Error().stack);
 					const timePeriod =
 						timeFilter === 'all-time'
 							? 'past-20'

@@ -47,7 +47,6 @@ export class ArenaDraftManagerService
 	private arenaDeckStats: ArenaDeckStatsService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
-	// private previousCardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
@@ -61,7 +60,6 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = this.mainInstance.currentStep$$;
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
-		// this.previousCardOptions$$ = this.mainInstance.previousCardOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
@@ -70,7 +68,6 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
-		// this.previousCardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
@@ -98,7 +95,7 @@ export class ArenaDraftManagerService
 
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
 			await this.scene.isReady();
-			console.debug('[arena-draft-maanger] init');
+			console.debug('[arena-draft-manager] init', new Error().stack);
 
 			this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 				if (changes.ArenaDraftStep != null) {
