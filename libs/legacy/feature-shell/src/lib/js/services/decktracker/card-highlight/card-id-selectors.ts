@@ -1129,6 +1129,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, fel);
 		case CardIds.GreedyGainsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.GreenThumbGardener:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GreySageParrot:
 			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(5));
 		case CardIds.Grillmaster_VAC_917:
@@ -1317,6 +1319,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.IceRevenant:
 			return and(side(inputSide), inDeck, spell, frost);
+		case CardIds.Illuminate:
+			return and(side(inputSide), inDeck, spell);
 		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t37:
 		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t38:
 		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t39:
@@ -1693,6 +1697,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.Murmur_GDB_448:
 			return and(side(inputSide), or(inDeck, inHand), minion, battlecry);
+		case CardIds.MurmuringElemental:
+			return and(side(inputSide), or(inDeck, inHand), battlecry);
 		case CardIds.MuscleOTron_YOG_525:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.MutatingInjection_NAX11_04:
