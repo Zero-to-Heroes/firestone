@@ -95,7 +95,7 @@ export class ArenaDraftManagerService
 
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
 			await this.scene.isReady();
-			console.debug('[arena-draft-manager] init', new Error().stack);
+			console.debug('[arena-draft-manager] init');
 
 			this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 				if (changes.ArenaDraftStep != null) {

@@ -38,15 +38,15 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		});
 
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
-			console.debug('[scene-service] init');
+			// console.debug('[scene-service] init');
 			const scene = await this.memory.getCurrentSceneFromMindVision();
-			console.debug('[scene-service] init - got scene', scene);
+			// console.debug('[scene-service] init - got scene', scene);
 			this.updateScene(scene);
-			console.debug(
-				'[scene-service] init - updated scene',
-				this.currentScene$$.value,
-				this.lastNonGamePlayScene$$.value,
-			);
+			// console.debug(
+			// 	'[scene-service] init - updated scene',
+			// 	this.currentScene$$.value,
+			// 	this.lastNonGamePlayScene$$.value,
+			// );
 
 			this.memoryUpdates.memoryUpdates$$.subscribe((changes) => {
 				const newScene = changes.CurrentScene;

@@ -44,7 +44,6 @@ export class AchievementsStateManagerService extends AbstractFacadeService<Achie
 	}
 
 	protected async init() {
-		console.debug('[achievements-state] init');
 		this.groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[] | null>(
 			null,
 		);

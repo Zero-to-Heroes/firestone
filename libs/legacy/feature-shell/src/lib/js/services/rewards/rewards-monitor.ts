@@ -35,7 +35,6 @@ export class RewardMonitorService {
 				take(1),
 			)
 			.subscribe(async () => {
-				console.log('[rewards-monitor] game started, init');
 				this.gameEvents.onGameStart.subscribe(() => {
 					this.xpForGameInfo$$.next(null);
 				});

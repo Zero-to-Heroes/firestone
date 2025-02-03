@@ -41,7 +41,6 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 	}
 
 	protected async init() {
-		console.debug('[arena-high-wins-runs] global init');
 		this.runs$$ = new SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>(null);
 		this.notableCards$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null | undefined>(null);
 		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null | undefined>(null);
