@@ -11,7 +11,7 @@ import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, filter, switchMap } from 'rxjs';
+import { Observable, combineLatest, mergeMap, of, takeUntil } from 'rxjs';
 import { ArenaDraftManagerService } from '../../services/arena/arena-draft-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -50,13 +50,19 @@ export class ArenaHeroSelectionWidgetWrapperComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs, this.arenaDraftManager);
 
-		this.showWidget$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.arenaShowHeroSelectionOverlay),
-			filter((displayFromPrefs) => displayFromPrefs),
-			switchMap(() => this.scene.currentScene$$),
-			filter((currentScene) => currentScene === SceneMode.DRAFT),
-			switchMap(() => this.arenaDraftManager.currentStep$$),
-			this.mapData((currentStep) => currentStep === DraftSlotType.DRAFT_SLOT_HERO),
+		this.showWidget$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowHeroSelectionOverlay)),
+			this.scene.currentScene$$,
+		]).pipe(
+			mergeMap(([displayFromPrefs, currentScene]) => {
+				if (!displayFromPrefs || currentScene !== SceneMode.DRAFT) {
+					return of(false);
+				}
+				return this.arenaDraftManager.currentStep$$.pipe(
+					this.mapData((currentStep) => currentStep === DraftSlotType.DRAFT_SLOT_HERO),
+				);
+			}),
+			takeUntil(this.destroyed$),
 			this.handleReposition(),
 		);
 

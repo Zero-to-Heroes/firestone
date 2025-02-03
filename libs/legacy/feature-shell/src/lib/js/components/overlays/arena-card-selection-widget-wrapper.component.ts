@@ -12,7 +12,7 @@ import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, filter, switchMap, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, mergeMap, of, takeUntil } from 'rxjs';
 import { AdService } from '../../services/ad.service';
 import { ArenaDraftManagerService } from '../../services/arena/arena-draft-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -54,9 +54,15 @@ export class ArenaCardSelectionWidgetWrapperComponent
 		await waitForReady(this.scene, this.prefs, this.arenaDraftManager);
 
 		this.showWidget$ = this.scene.currentScene$$.pipe(
-			filter((scene) => scene === SceneMode.DRAFT),
-			switchMap(() => this.arenaDraftManager.currentStep$$),
-			this.mapData((currentStep) => currentStep === DraftSlotType.DRAFT_SLOT_CARD),
+			mergeMap((scene) => {
+				if (scene !== SceneMode.DRAFT) {
+					return of(false);
+				}
+				return this.arenaDraftManager.currentStep$$.pipe(
+					this.mapData((currentStep) => currentStep === DraftSlotType.DRAFT_SLOT_CARD),
+				);
+			}),
+			takeUntil(this.destroyed$),
 			this.handleReposition(),
 		);
 
