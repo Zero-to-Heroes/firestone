@@ -62,7 +62,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		await this.patchesConfig.isReady();
 
 		this.gameStats$$.onFirstSubscribe(async () => {
-			console.debug('[game-stats-loader] first subscriber, loading stats', new Error().stack);
+			console.debug('[game-stats-loader] first subscriber, loading stats');
 			this.gameStats$$
 				.pipe(
 					filter((gameStats) => !!gameStats?.stats?.length),
