@@ -82,6 +82,7 @@
 		"crypto-browserify": "^3.12.0",
 		"deep-equal": "^2.1.0",
 		"deepmerge": "^4.2.2",
+		"dexie": "^4.0.11",
 		"dom-to-image-more": "^3.4.5",
 		"elementtree": "^0.1.7",
 		"flag-icons": "^6.6.6",

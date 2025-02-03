@@ -19,6 +19,7 @@ export class DiskCacheService {
 		COLLECTION_PACK_STATS: 'collection-pack-stats.json',
 		CARDS_HISTORY: 'cards-history.json',
 		ADVENTURES_INFO: 'adventures-info.json',
+		/** @deprecated, can be removed in June 2025 */
 		USER_MATCH_HISTORY: 'user-match-history.json',
 		MERCENARIES_COLLECTION: 'mercenaries-memory-collection-info.json',
 		MERCENARIES_REFERENCE_DATA: 'mercenaries-reference-data.json',

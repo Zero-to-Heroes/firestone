@@ -16,6 +16,8 @@ import {
 	AppInjector,
 	CardsFacadeService,
 	DiskCacheService,
+	IndexedDbService,
+	MATCH_HISTORY,
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -37,6 +39,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private allCards: CardsFacadeService;
 	private diskCache: DiskCacheService;
 	private patchesConfig: PatchesConfigService;
+	private indexedDb: IndexedDbService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
@@ -54,6 +57,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
+		this.indexedDb = AppInjector.get(IndexedDbService);
 
 		await this.patchesConfig.isReady();
 
@@ -237,16 +241,43 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	private async saveLocalStats(gameStats: readonly GameStat[]) {
-		// TODO: this might be too resource-consuming where there are too many games stored locally.
-		// Maybe find a way to partition the data, eg by month, or simply limit each file to a max number of
-		// games?
+		// Only add to MATCH_HISTORY table the new stats
 		const start = Date.now();
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY, gameStats, 20000);
-		console.log('[game-stats-loader] saved', gameStats.length, 'local stats in', Date.now() - start);
+		const existingKeys = await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).toCollection().primaryKeys();
+		console.debug('[game-stats-loader] existing keys', existingKeys.length, 'in', Date.now() - start);
+		const newStats = gameStats.filter((stat) => !existingKeys.includes(stat.reviewId));
+		console.debug('[game-stats-loader] new keys', newStats.length, 'in', Date.now() - start);
+		if (newStats.length) {
+			await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).bulkAdd(newStats, { allKeys: true });
+			console.debug('[game-stats-loader] added', newStats.length, 'new stats in', Date.now() - start);
+		}
 	}
 
 	private async loadLocalGameStats(): Promise<readonly GameStat[]> {
-		return await this.diskCache.getItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY);
+		let existingGameStats = await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).toArray();
+		if (!existingGameStats?.length) {
+			existingGameStats = await this.diskCache.getItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY);
+			if (existingGameStats?.length) {
+				const start = Date.now();
+				console.debug('[game-stats-loader] retrieved stats from disk cache', existingGameStats.length);
+				const reviewIdCount = existingGameStats.reduce((acc, stat) => {
+					acc[stat.reviewId] = (acc[stat.reviewId] || 0) + 1;
+					return acc;
+				}, {} as Record<string, number>);
+				const duplicateReviewIdStats = existingGameStats.filter((stat) => reviewIdCount[stat.reviewId] > 1);
+				console.debug('[game-stats-loader] duplicate reviewId stats', duplicateReviewIdStats);
+				const nonDuplicates = existingGameStats.filter((stat) => reviewIdCount[stat.reviewId] === 1);
+				await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).bulkAdd(nonDuplicates);
+				console.debug(
+					'[game-stats-loader] added',
+					nonDuplicates.length,
+					'non-duplicate stats in',
+					Date.now() - start,
+				);
+				existingGameStats = nonDuplicates;
+			}
+		}
+		return existingGameStats;
 	}
 }
 

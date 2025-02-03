@@ -10,7 +10,6 @@ export class BgsPerfectGamesService extends AbstractFacadeService<BgsPerfectGame
 	public perfectGames$$: SubscriberAwareBehaviorSubject<readonly GameStat[]>;
 
 	private api: ApiRunner;
-	// private diskCache: DiskCacheService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'bgsPerfectGames', () => !!this.perfectGames$$);
@@ -23,15 +22,8 @@ export class BgsPerfectGamesService extends AbstractFacadeService<BgsPerfectGame
 	protected async init() {
 		this.perfectGames$$ = new SubscriberAwareBehaviorSubject<readonly GameStat[]>(null);
 		this.api = AppInjector.get(ApiRunner);
-		// this.diskCache = AppInjector.get(DiskCacheService);
 
 		this.perfectGames$$.onFirstSubscribe(async () => {
-			// const localPercectGames = await this.diskCache.getItem<readonly GameStat[]>(
-			// 	DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_PERFECT_GAMES,
-			// );
-			// if (!!localPercectGames?.length) {
-			// 	this.perfectGames$$.next(localPercectGames);
-			// }
 			console.log('[bgs-perfect-games] loading perfect games');
 			const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
 			const remotePerfectGames: readonly GameStat[] = (result ?? [])
@@ -45,7 +37,6 @@ export class BgsPerfectGamesService extends AbstractFacadeService<BgsPerfectGame
 					} as GameStat),
 				)
 				.filter((stat) => stat.playerRank);
-			// this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_PERFECT_GAMES, remotePerfectGames);
 			this.perfectGames$$.next(remotePerfectGames);
 			console.debug('[bgs-perfect-games] loaded perfect games', remotePerfectGames);
 		});

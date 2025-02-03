@@ -2,7 +2,13 @@ import { Injectable } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
 import { ICollectionPackService } from '@firestone/collection/common';
-import { ApiRunner, DiskCacheService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	ApiRunner,
+	COLLECTION_PACK_STATS,
+	DiskCacheService,
+	IndexedDbService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
 import { Events } from '../../../js/services/events.service';
@@ -21,23 +27,34 @@ export class PackStatsService implements ICollectionPackService {
 		private readonly api: ApiRunner,
 		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly indexedDb: IndexedDbService,
 	) {
 		this.events.on(Events.NEW_PACK).subscribe((event) => this.publishPackStat(event));
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
-		// Ideally this would be fully reactive, but there are too many processes that depend on it,
-		// so for now I will just use a local cache
-		const localPackResult = await this.diskCache.getItem<LocalPackStats>(
-			DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS,
-		);
-
-		if (localPackResult?.packs != null) {
-			return localPackResult.packs;
+		let existingPackStats = (await this.indexedDb
+			.table<PackResult, string>(COLLECTION_PACK_STATS)
+			.toArray()) as readonly PackResult[];
+		console.debug('[pack-stats] existing pack stats in db', existingPackStats);
+		if (!existingPackStats?.length) {
+			const localResult = await this.diskCache.getItem<LocalPackStats>(
+				DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS,
+			);
+			console.debug('[pack-stats] existing pack stats in cache', localResult);
+			if (localResult?.packs?.length) {
+				existingPackStats = localResult.packs.filter((p) => !!p.id);
+				await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).bulkAdd(existingPackStats);
+				console.debug('[pack-stats] added local pack stats to db', existingPackStats);
+			}
 		}
 
-		const packs: readonly PackResult[] = await this.loadPacksFromRemote();
-		return packs;
+		if (!existingPackStats?.length) {
+			console.debug('[pack-stats] no pack stats found, loading from remote');
+			existingPackStats = await this.loadPacksFromRemote();
+		}
+
+		return existingPackStats;
 	}
 
 	public async refreshPackStats() {
@@ -61,20 +78,19 @@ export class PackStatsService implements ICollectionPackService {
 			// Because of how pack logging used to work, when you received the 5 galakrond cards,
 			// the app flagged that as a new pack
 			.filter((pack) => !this.isPackAllGalakronds(pack))
-			.map((pack: PackResult) => {
-				if (!!pack.boosterId) {
-					return pack;
-				}
-				return {
-					...pack,
-					boosterId: getDefaultBoosterIdForSetId(pack.setId),
-				};
-			});
-		const newPackResults: LocalPackStats = {
-			lastUpdateDate: new Date(),
-			packs: packs,
-		};
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
+			.map((pack: PackResult) =>
+				!!pack.boosterId
+					? pack
+					: {
+							...pack,
+							boosterId: getDefaultBoosterIdForSetId(pack.setId),
+					  },
+			);
+		if (packs.length) {
+			await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).clear();
+			await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).bulkAdd(packs);
+			console.debug('[pack-stats] added remote pack stats to db', packs);
+		}
 		return packs;
 	}
 
@@ -119,47 +135,23 @@ export class PackStatsService implements ICollectionPackService {
 			userName: user.username,
 			cardsJson: cards,
 		};
-		// for (let i = 0; i < cards.length; i++) {
-		// 	statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId?.toLowerCase();
-		// 	statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType?.toLowerCase();
-		// 	const dbCard = this.allCards.getCard(cards[i].cardId);
-		// 	statEvent['card' + (i + 1) + 'Rarity'] =
-		// 		dbCard?.rarity?.toLowerCase() ??
-		// 		this.allCards.getCard(cards[i].mercenaryCardId)?.rarity?.toLowerCase() ??
-		// 		'free';
-		// 	statEvent['card' + (i + 1) + 'CurrencyAmount'] = cards[i].currencyAmount;
-		// 	statEvent['card' + (i + 1) + 'MercenaryCardId'] = cards[i].mercenaryCardId;
-		// 	statEvent['card' + (i + 1) + 'IsNew'] = cards[i].isNew;
-		// 	statEvent['card' + (i + 1) + 'IsSecondCopy'] = cards[i].isSecondCopy;
-		// }
 		console.debug('[pack-stats] publishing pack stat', statEvent);
 		this.api.callPostApi(PACKS_UPDATE_URL, statEvent);
 		this.updateLocalPackStats(boosterId, setId, cards);
 	}
 
 	private async updateLocalPackStats(boosterId: BoosterType, setId: string, cards: readonly InternalCardInfo[]) {
-		const localPackResult = await this.diskCache.getItem<LocalPackStats>(
-			DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS,
-		);
-		if (!localPackResult) {
-			console.debug('Empty local packs, not updating local pack history');
-			return;
-		}
-
+		// The "id" field in indexedDb is a kind of auto-increment. How can I get the next value?
+		const id = await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).count();
 		const newPack: PackResult = {
-			id: 0,
+			id: id,
 			boosterId: boosterId,
 			creationDate: Date.now(),
 			setId: setId,
 			cards: this.buildCards(cards),
 			cardsJson: cards,
 		};
-		const newPackResults: LocalPackStats = {
-			...localPackResult,
-			lastUpdateDate: new Date(localPackResult.lastUpdateDate),
-			packs: [...localPackResult.packs, newPack],
-		};
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.COLLECTION_PACK_STATS, newPackResults);
+		await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).add(newPack);
 	}
 
 	private isPackAllGalakronds(pack: PackResult): boolean {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SettingsControllerService } from '@firestone/settings';
 import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
+import { IndexedDbService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
@@ -22,9 +22,11 @@ export class BootstrapEssentialServicesService {
 		private readonly translate: TranslateService,
 		private readonly init_SettingsControllerService: SettingsControllerService,
 		private readonly ow: OverwolfService,
+		private readonly db: IndexedDbService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
+		await this.db.init();
 		// First initialize the cards DB, as some of the dependencies injected in
 		// app-bootstrap won't be able to start without the cards DB in place
 		window['translateService'] = this.translate;
