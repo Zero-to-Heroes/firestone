@@ -10,8 +10,6 @@ const BGS_CARDS_URL =
 
 @Injectable()
 export class BattlegroundsCardsService extends AbstractFacadeService<BattlegroundsCardsService> {
-	// public cardStats$$: SubscriberAwareBehaviorSubject<BgsCardStats | null>;
-
 	private prefs: PreferencesService;
 	private api: ApiRunner;
 
@@ -19,30 +17,14 @@ export class BattlegroundsCardsService extends AbstractFacadeService<Battlegroun
 		super(windowManager, 'BattlegroundsCardsService', () => true);
 	}
 
-	protected override assignSubjects() {
-		// this.cardStats$$ = this.mainInstance.cardStats$$;
-	}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	protected override assignSubjects() {}
 
 	protected async init() {
-		// this.cardStats$$ = new SubscriberAwareBehaviorSubject<BgsCardStats | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 
 		await this.prefs.isReady();
-
-		// this.cardStats$$.onFirstSubscribe(async () => {
-		// 	this.prefs.preferences$$
-		// 		.pipe(
-		// 			map((prefs) => ({
-		// 				timeFilter: prefs.bgsActiveTimeFilter,
-		// 			})),
-		// 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-		// 		)
-		// 		.subscribe(async ({ timeFilter }) => {
-		// 			const cards = await this.loadCardsInternal(timeFilter);
-		// 			this.cardStats$$.next(cards);
-		// 		});
-		// });
 	}
 
 	public async loadCardStats(
