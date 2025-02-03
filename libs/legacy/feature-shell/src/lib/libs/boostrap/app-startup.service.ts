@@ -21,8 +21,8 @@ import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-
 
 @Injectable()
 export class AppStartupService {
-	private static readonly STATES = ['INIT', 'READY'];
-	private static readonly LOADING_SCREEN_DURATION = 20000;
+	// private static readonly STATES = ['INIT', 'READY'];
+	private static readonly LOADING_SCREEN_DURATION = 10000;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private currentState = 'INIT';
@@ -96,10 +96,6 @@ export class AppStartupService {
 			}
 		});
 
-		// const prefs = await this.prefs.getPreferences();
-		// await this.ow.hideCollectionWindow(prefs);
-
-		// this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
 		// TOOD: move this elsewhere
 		this.ow.addAppLaunchTriggeredListener(async (info) => {
@@ -292,7 +288,7 @@ export class AppStartupService {
 	// }
 
 	private async showCollectionWindow() {
-		// console.log('showing collection window', new Error().stack);
+		// console.debug('showing collection window');
 		// We do both store and direct restore to keep things snappier
 		const prefs = await this.prefs.getPreferences();
 		const window = await this.ow.getCollectionWindow(prefs);
@@ -300,6 +296,7 @@ export class AppStartupService {
 		this.ow.bringToFront(window.id);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
+		console.debug('[startup] GOOOOOOOOOOOOOOOOOOOOO collection window restored', window);
 	}
 
 	private async showFullScreenOverlaysWindow() {
