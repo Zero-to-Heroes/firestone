@@ -27,8 +27,8 @@ export class LogRegisterService {
 		// the app from starting to parse the game logs while in an uninitialized state, which in
 		// turn can lead to some weird behavior (previous match still updating while the current match
 		// is being played, and some events being delayed because not all the states have been initialized)
-		// this.init();
-		this.events.on(Events.STORE_READY).subscribe(() => this.init());
+		this.init();
+		// this.events.on(Events.STORE_READY).subscribe(() => this.init());
 	}
 
 	private init(): void {

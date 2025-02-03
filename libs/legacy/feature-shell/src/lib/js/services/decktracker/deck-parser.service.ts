@@ -120,7 +120,7 @@ export class DeckParserService {
 			this.currentDeck?.scenarioId,
 			metadata.scenarioId,
 		);
-		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 4);
+		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 0);
 		console.log(
 			'[deck-parser] active deck from memory',
 			this.selectedDeckId,
