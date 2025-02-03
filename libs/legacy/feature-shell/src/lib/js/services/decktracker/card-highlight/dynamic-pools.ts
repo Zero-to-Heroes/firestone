@@ -28,6 +28,12 @@ export const getDynamicRelatedCardIds = (
 	switch (cardId) {
 		case CardIds.FlintFirearm_WW_379:
 			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]));
+		case CardIds.StickUp_WW_411:
+			return filterCards(
+				allCards,
+				options,
+				(c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]) && fromAnotherClass(c, options.currentClass),
+			);
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
 			return filterCards(allCards, options, (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION]);
@@ -100,7 +106,8 @@ export const getDynamicRelatedCardIds = (
 				options,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-					c?.mechanics?.includes(GameTag[GameTag.ZERG]),
+					c?.mechanics?.includes(GameTag[GameTag.ZERG]) &&
+					c?.id !== CardIds.BroodQueen_SC_003,
 			);
 		case CardIds.WaywardProbe_SC_500:
 			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]));
@@ -283,7 +290,7 @@ export const getDynamicRelatedCardIds = (
 				options,
 				(c) =>
 					c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) &&
-					(c?.classes?.length > 1 || c?.classes?.[0] !== options.currentClass?.toUpperCase()),
+					fromAnotherClass(c, options.currentClass),
 			);
 		case CardIds.LuckyComet_GDB_873:
 			return filterCards(
@@ -349,4 +356,8 @@ const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): bool
 		return true;
 	}
 	return card.classes.includes(currentClass.toUpperCase()) || card.classes.includes(CardClass[CardClass.NEUTRAL]);
+};
+
+const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean => {
+	return card?.classes?.length > 1 || card?.classes?.[0] !== currentClass?.toUpperCase();
 };
