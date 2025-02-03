@@ -19,6 +19,7 @@ import { AppVersion } from '../model/app-version';
 import { isVersionBefore } from '../services/notifications-utils';
 
 const versions: readonly AppVersion[] = [
+	{ version: '14.8.0', date: '2025-00-03' },
 	{ version: '14.7.1', date: '2025-01-30' },
 	{ version: '14.6.3', date: '2025-01-27' },
 	{ version: '14.6.2', date: '2025-01-23' },
