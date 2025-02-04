@@ -42,7 +42,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	activeCounter: CounterType;
 	side: 'player' | 'opponent';
 
-	private defaultRandomLeft = Math.random();
+	// It makes the widgets feel like they move around
+	private defaultRandomLeft = 0; //Math.random();
 
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
 		gameWidth * 0.5 + 150 + this.defaultRandomLeft * 150;
