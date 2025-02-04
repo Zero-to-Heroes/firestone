@@ -6,12 +6,16 @@ import {
 	Input,
 	Optional,
 } from '@angular/core';
-import { ConstructedCardData, ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
+import {
+	ConstructedCardData,
+	ConstructedDiscoverCardData,
+	ConstructedMatchupInfo,
+} from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaArchetypeShowDecksEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-decks';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -124,6 +128,13 @@ import { ConstructedMatchupDetails } from './constructed-meta-deck-details-match
 								[deckWinrate]="winrateNumber"
 								[totalGames]="gamesPlayedNumber"
 							></constructed-meta-deck-details-card-stats>
+							<constructed-meta-deck-details-discover-stats
+								*ngIf="value.selectedTab === 'discover-stats'"
+								[cards]="discoverCards"
+								[showRelativeInfo]="showRelativeInfo"
+								[deckWinrate]="winrateNumber"
+								[totalGames]="gamesPlayedNumber"
+							></constructed-meta-deck-details-discover-stats>
 							<constructed-meta-deck-details-matchups
 								*ngIf="value.selectedTab === 'matchups'"
 								[matchupDetails]="matchupInfo"
@@ -163,6 +174,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	winrate: string;
 	winrateNumber: number;
 	cards: readonly ConstructedCardData[];
+	discoverCards: readonly ConstructedDiscoverCardData[];
 	matchupInfo: readonly ConstructedMatchupDetails[];
 
 	deckstring?: string;
@@ -199,8 +211,13 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 				matchups: value?.matchups,
 			},
 		];
+		this.discoverCards = value.discoverData;
+		if (value.discoverData?.length) {
+			this.hasDiscoverTab$$.next(true);
+		}
 	}
 
+	private hasDiscoverTab$$ = new BehaviorSubject<boolean>(false);
 	private selectedTab$$ = new BehaviorSubject<TabType>('cards');
 
 	constructor(
@@ -215,26 +232,12 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 
 	ngAfterContentInit(): void {
 		this.selectedTab$ = this.selectedTab$$.asObservable();
-		const refTabs = [
-			{
-				id: 'cards' as const,
-				name: this.i18n.translateString('app.decktracker.meta.cards-header'),
-			},
-			{
-				id: 'card-stats' as const,
-				name: this.i18n.translateString('app.decktracker.meta.card-stats-header'),
-				tooltip: this.i18n.translateString('app.decktracker.meta.card-stats-header-tooltip'),
-				isPremium: true,
-			},
-			{
-				id: 'matchups' as const,
-				name: this.i18n.translateString('app.decktracker.meta.matchups-header'),
-				tooltip: this.i18n.translateString('app.decktracker.meta.matchups-header-tooltip'),
-				isPremium: true,
-			},
-		];
-		this.tabs$ = this.selectedTab$$.pipe(
-			this.mapData((selectedTab) =>
+		const refTabs$ = this.hasDiscoverTab$$.pipe(
+			distinctUntilChanged(),
+			this.mapData((showDiscoverTab) => this.buildRefTabs(showDiscoverTab)),
+		);
+		this.tabs$ = combineLatest([refTabs$, this.selectedTab$$]).pipe(
+			this.mapData(([refTabs, selectedTab]) =>
 				refTabs.map((tab) => ({
 					...tab,
 					selected: tab.id === selectedTab,
@@ -268,6 +271,34 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 			// Navigate to the correct URL
 		}
 	}
+
+	private buildRefTabs(showDiscoverTab: boolean) {
+		return [
+			{
+				id: 'cards' as const,
+				name: this.i18n.translateString('app.decktracker.meta.cards-header'),
+			},
+			{
+				id: 'card-stats' as const,
+				name: this.i18n.translateString('app.decktracker.meta.card-stats-header'),
+				// isPremium: true,
+			},
+			showDiscoverTab
+				? {
+						id: 'discover-stats' as const,
+						name: this.i18n.translateString('app.decktracker.meta.discover-stats-header'),
+						tooltip: this.i18n.translateString('app.decktracker.meta.discover-stats-header-tooltip'),
+						// isPremium: true,
+				  }
+				: null,
+			{
+				id: 'matchups' as const,
+				name: this.i18n.translateString('app.decktracker.meta.matchups-header'),
+				tooltip: this.i18n.translateString('app.decktracker.meta.matchups-header-tooltip'),
+				isPremium: true,
+			},
+		].filter((t) => !!t);
+	}
 }
 
 interface Tab {
@@ -279,7 +310,7 @@ interface Tab {
 	readonly restricted?: 'archetype' | 'deck';
 }
 
-type TabType = 'cards' | 'card-stats' | 'matchups';
+type TabType = 'cards' | 'card-stats' | 'discover-stats' | 'matchups';
 
 export interface ConstructedDeckDetails {
 	readonly type: 'deck' | 'archetype';
@@ -290,6 +321,7 @@ export interface ConstructedDeckDetails {
 	readonly winrate: number;
 	readonly archetypeId: number;
 	readonly cardsData: readonly ExtendedConstructedCardData[];
+	readonly discoverData: readonly ConstructedDiscoverCardData[];
 	readonly matchups: readonly ConstructedMatchupInfo[];
 	readonly archetypeCoreCards: readonly string[];
 	readonly cardVariations?: {

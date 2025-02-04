@@ -273,7 +273,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		}
 
 		const deck: DeckStat = JSON.parse(resultStr);
-		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames);
+		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
 		this.cache[cacheKey] = deck;
 		return deck;
 	}

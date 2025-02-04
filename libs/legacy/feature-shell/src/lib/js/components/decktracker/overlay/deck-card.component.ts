@@ -413,7 +413,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, card);
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this.card$$.value);
 		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this.card$$.value);
-		console.debug('cards to show', cardsToShow);
 		if (!cardsToShow?.length) {
 			return;
 		}

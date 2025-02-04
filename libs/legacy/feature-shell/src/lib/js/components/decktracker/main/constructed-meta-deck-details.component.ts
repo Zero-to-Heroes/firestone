@@ -94,6 +94,7 @@ export class ConstructedMetaDeckDetailsComponent
 					cardsData: stat.cardsData
 						.filter((c) => c.inStartingDeck > stat.totalGames / 50)
 						.map((c) => enrichCard(c, deckDefinition.sideboards, this.allCards)),
+					discoverData: stat.discoverData.filter((c) => c.discovered > 10),
 					matchups: stat.matchupInfo,
 					cardVariations: stat.cardVariations,
 					archetypeCoreCards: stat.archetypeCoreCards,
