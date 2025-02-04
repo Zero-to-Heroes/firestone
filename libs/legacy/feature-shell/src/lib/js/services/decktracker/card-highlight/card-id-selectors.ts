@@ -558,7 +558,7 @@ export const cardIdSelector = (
 		case CardIds.ChorusRiff:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ChronoBoost_SC_750:
-			return and(side(inputSide), or(inHand, inDeck), protoss);
+			return and(side(inputSide), inDeck, protoss);
 		case CardIds.ClassActionLawyer:
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.ClawMachine:
