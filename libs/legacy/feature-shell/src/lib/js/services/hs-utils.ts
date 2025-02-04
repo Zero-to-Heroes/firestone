@@ -259,6 +259,14 @@ export const globalEffectTriggers = [
 		effectPrefab: 'SCFX_Artanis_Protoss_CostReduction_BuffImpact_Super',
 		cardId: CardIds.Artanis_SC_754,
 	},
+	{
+		effectPrefab: 'ReuseFX_Beast_Impact_FangBite_Gold_Super',
+		cardId: CardIds.GroovyCat,
+	},
+	{
+		effectPrefab: 'ReuseFX_Beast_BuffImpact_Paw_Super',
+		cardId: CardIds.FreeSpirit,
+	},
 ];
 
 export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => effect.effectPrefab);
