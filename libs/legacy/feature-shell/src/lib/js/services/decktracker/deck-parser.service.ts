@@ -113,7 +113,7 @@ export class DeckParserService {
 			this.currentDeck?.scenarioId,
 			metadata.scenarioId,
 		);
-		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 0);
+		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 1);
 		console.log(
 			'[deck-parser] active deck from memory',
 			this.selectedDeckId,
@@ -160,6 +160,7 @@ export class DeckParserService {
 			console.warn('[deck-parser] could not read any deck from memory');
 			deckInfo = null;
 		}
+
 		this.setCurrentDeck(deckInfo);
 		return this.currentDeck;
 	}
@@ -414,7 +415,8 @@ export class DeckParserService {
 		// TODO: test other languages
 		if (
 			!lines.some((line) => line.includes('Finding Game With Deck')) &&
-			!lines.some((line) => line.includes('Finding Game With Hero'))
+			!lines.some((line) => line.includes('Finding Game With Hero')) &&
+			!lines.some((line) => line.includes('Starting Arena Game With Deck'))
 		) {
 			console.log('[deck-parser] ignoring deck log lines because there is no "finding game with deck"');
 			return;
