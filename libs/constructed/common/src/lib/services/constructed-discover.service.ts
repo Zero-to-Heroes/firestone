@@ -1,23 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { ConstructedMulliganGuideService } from './constructed-mulligan-guide.service';
+import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 
 @Injectable()
 export class ConstructedDiscoverService extends AbstractFacadeService<ConstructedDiscoverService> {
-	private mulliganService!: ConstructedMulliganGuideService;
-	private prefs!: PreferencesService;
-
-	private cachedInfo;
+	private constructedMetaStats: ConstructedMetaDecksStateService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'ConstructedDiscoverService', () => !!this.mulliganService);
+		super(windowManager, 'ConstructedDiscoverService', () => !!this.constructedMetaStats);
 	}
 
 	protected override assignSubjects() {
@@ -25,36 +22,81 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 	}
 
 	protected async init() {
-		this.mulliganService = AppInjector.get(ConstructedMulliganGuideService);
-		this.prefs = AppInjector.get(PreferencesService);
+		this.constructedMetaStats = AppInjector.get(ConstructedMetaDecksStateService);
 
-		await waitForReady(this.mulliganService);
+		await waitForReady(this.constructedMetaStats);
 	}
 
 	public async getStatsFor(
-		cardId: string,
-		playerClass: string,
 		deckstring: string,
+		cardId: string,
+		opponentClass: string,
+		formatFilter: GameFormat,
 	): Promise<ConstructedCardStat | null> {
-		return null;
-		// const prefs = await this.prefs.getPreferences();
+		const deckStat = await this.constructedMetaStats.loadNewDeckDetails(
+			deckstring,
+			formatFilter,
+			'last-patch',
+			'competitive',
+		);
+		console.debug('[constructed-discover] deckStat', deckStat);
+		if (!deckStat) {
+			return null;
+		}
 
-		// const archetypeId =
-		// 	prefs.constructedDeckArchetypeOverrides?.[deckstring] ??
-		// 	(await this.archetypeService.getArchetypeForDeck(deckstring));
-		// const archetype = this.archetypes.loadNewArchetypeDetails(
-		// 	archetypeId as number,
-		// 	format,
-		// 	'last-patch',
-		// 	'competitive',
-		// );
-		// const deck = this.archetypes.loadNewDeckDetails(deckstring, format, 'last-patch', 'competitive');
+		const archetypeStat = await this.constructedMetaStats.loadNewArchetypeDetails(
+			deckStat.archetypeId,
+			formatFilter,
+			'last-patch',
+			'competitive',
+		);
+		console.debug('[constructed-discover] archetypeStat', archetypeStat);
 
-		// const statsInfo = await this.mulliganService.getMulliganAdvice$(deckstring);
+		let drawnData = deckStat.matchupInfo
+			.find((m) => m.opponentClass === opponentClass)
+			?.cardsData.find((c) => c.cardId === cardId);
+		console.debug('[constructed-discover] drawnData', drawnData);
+		if (drawnData?.drawn == null || drawnData.drawn < 50) {
+			drawnData = deckStat.cardsData.find((c) => c.cardId === cardId);
+			console.debug('[constructed-discover] drawnData fallback 1', drawnData);
+		}
+		if (drawnData?.drawn == null || drawnData.drawn < 50) {
+			drawnData = archetypeStat?.cardsData.find((c) => c.cardId === cardId);
+			console.debug('[constructed-discover] drawnData fallback 2', drawnData);
+		}
+
+		let discoverData = deckStat.matchupInfo
+			.find((m) => m.opponentClass === opponentClass)
+			?.discoverData.find((c) => c.cardId === cardId);
+		console.debug('[constructed-discover] discoverData', discoverData);
+		if (discoverData?.discovered == null || discoverData.discovered < 50) {
+			discoverData = deckStat.discoverData.find((c) => c.cardId === cardId);
+			console.debug('[constructed-discover] discoverData fallback 1', discoverData);
+		}
+		if (discoverData?.discovered == null || discoverData.discovered < 50) {
+			discoverData = archetypeStat?.discoverData.find((c) => c.cardId === cardId);
+			console.debug('[constructed-discover] discoverData fallback 2', discoverData);
+		}
+
+		const deckWinrate = deckStat.winrate;
+		const drawWinrate = !drawnData?.drawn ? null : drawnData.drawnThenWin / drawnData.drawn;
+		const discoveredWinrate = !discoverData?.discovered
+			? null
+			: discoverData.discoveredThenWin / discoverData.discovered;
+		const result: ConstructedCardStat = {
+			cardId: cardId,
+			discoverNumber: discoverData?.discovered ?? null,
+			discoverImpact: discoveredWinrate != null ? discoveredWinrate - deckWinrate : null,
+			drawnImpact: drawWinrate != null ? drawWinrate - deckWinrate : null,
+		};
+		console.debug('[constructed-discover] result', result);
+		return result;
 	}
 }
 
 export interface ConstructedCardStat {
 	readonly cardId: string;
 	readonly drawnImpact: number | null;
+	readonly discoverImpact: number | null;
+	readonly discoverNumber: number | null;
 }

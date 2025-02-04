@@ -44,7 +44,7 @@ import { buildBasicCardChoiceValue } from './card-choice-values';
 							class="option-container"
 							*ngFor="let option of value.options"
 							[option]="option"
-							[playerClass]="playerClass$ | async"
+							[opponentClass]="opponentClass$ | async"
 						></choosing-card-option-constructed>
 					</ng-container> -->
 					<ng-container *ngSwitchDefault>
@@ -70,6 +70,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	showWidget$: Observable<boolean>;
 	gameMode$: Observable<'arena' | 'battlegrounds' | 'constructed' | null>;
 	playerClass$: Observable<string | null>;
+	opponentClass$: Observable<string | null>;
 	options$: Observable<readonly CardChoiceOption[]>;
 
 	windowWidth: number;
@@ -114,6 +115,14 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			this.mapData((state) =>
 				state?.playerDeck?.hero?.classes?.[0]
 					? CardClass[state.playerDeck.hero.classes[0]].toLowerCase()
+					: null,
+			),
+			shareReplay(1),
+		);
+		this.opponentClass$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) =>
+				state?.opponentDeck?.hero?.classes?.[0]
+					? CardClass[state.opponentDeck.hero.classes[0]].toLowerCase()
 					: null,
 			),
 			shareReplay(1),

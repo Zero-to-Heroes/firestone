@@ -10,7 +10,8 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { GameFormat } from '@firestone-hs/constructed-deck-stats';
+import { CardIds, formatFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import {
 	ConstructedCardStat,
 	ConstructedDiscoverService,
@@ -41,10 +42,10 @@ import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-
 	template: `
 		<div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
 			<ng-container *ngIf="showDiscoverStat$ | async">
-				<!-- <constructed-card-option-view
+				<constructed-card-option-view
 					*ngIf="(showPremiumBanner$ | async) === false"
 					[card]="cardStat$ | async"
-				></constructed-card-option-view> -->
+				></constructed-card-option-view>
 				<mulligan-info-premium
 					*ngIf="showPremiumBanner$ | async"
 					[type]="'constructed'"
@@ -72,8 +73,8 @@ export class ChoosingCardOptionConstructedComponent
 		this.registerHighlight();
 	}
 
-	@Input() set playerClass(value: string | null) {
-		this.playerClass$$.next(value);
+	@Input() set opponentClass(value: string | null) {
+		this.opponentClass$$.next(value);
 	}
 
 	_option: CardChoiceOption;
@@ -84,7 +85,7 @@ export class ChoosingCardOptionConstructedComponent
 	private shouldHighlight: boolean;
 
 	private cardId$$ = new BehaviorSubject<string | null>(null);
-	private playerClass$$ = new BehaviorSubject<string | null>(null);
+	private opponentClass$$ = new BehaviorSubject<string | null>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -122,10 +123,13 @@ export class ChoosingCardOptionConstructedComponent
 		const deckstring$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => gameState?.playerDeck?.deckstring),
 		);
-		this.cardStat$ = combineLatest([this.cardId$$, this.playerClass$$, deckstring$]).pipe(
+		const format$ = this.gameState.gameState$$.pipe(
+			this.mapData((gameState) => formatFormat(gameState?.metadata?.formatType) as GameFormat),
+		);
+		this.cardStat$ = combineLatest([this.cardId$$, this.opponentClass$$, deckstring$, format$]).pipe(
 			filter(([cardId]) => !!cardId),
-			switchMap(([cardId, playerClass, deckstring]) =>
-				from(this.statsService.getStatsFor(cardId, playerClass, deckstring)),
+			switchMap(([cardId, opponentClass, deckstring, format]) =>
+				from(this.statsService.getStatsFor(deckstring, cardId, opponentClass, format)),
 			),
 			this.mapData((stat) => stat ?? null),
 			shareReplay(1),

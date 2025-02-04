@@ -1,3 +1,4 @@
+export * from './lib/components/constructed-card-option-view.component';
 export * from './lib/components/constructed-mulligan-deck.component';
 export * from './lib/components/constructed-mulligan-hand.component';
 export * from './lib/components/mulligan-deck-guide-archetype-selection.component';

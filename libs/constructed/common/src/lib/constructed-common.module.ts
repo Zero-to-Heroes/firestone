@@ -7,6 +7,7 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { ConstructedCardOptionViewComponent } from './components/constructed-card-option-view.component';
 import { ConstructedMulliganDeckComponent } from './components/constructed-mulligan-deck.component';
 import { ConstructedMulliganHandComponent } from './components/constructed-mulligan-hand.component';
 import { MulliganDeckGuideArchetypeSelectionDropdownComponent } from './components/mulligan-deck-guide-archetype-selection.component';
@@ -26,6 +27,7 @@ import { ConstructedPersonalDecksService } from './services/constructed-personal
 const components = [
 	ConstructedMulliganHandComponent,
 	ConstructedMulliganDeckComponent,
+	ConstructedCardOptionViewComponent,
 	MulliganInfoPremiumComponent,
 	MulliganHandViewComponent,
 	MulliganDeckViewComponent,
