@@ -8,6 +8,7 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { MarkdownModule } from 'ngx-markdown';
 import { NewVersionNotificationComponent } from './components/new-version-notification.component';
+import { LocalizationLoaderWithCache } from './services/localization-loader.service';
 
 const components = [NewVersionNotificationComponent];
 @NgModule({
@@ -25,6 +26,6 @@ const components = [NewVersionNotificationComponent];
 	],
 	declarations: components,
 	exports: components,
-	providers: [],
+	providers: [LocalizationLoaderWithCache],
 })
 export class AppCommonModule {}

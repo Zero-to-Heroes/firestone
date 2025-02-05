@@ -7,13 +7,12 @@ import {
 	BgsMetaHeroStatsAccessService,
 	buildHeroStats,
 } from '@firestone/battlegrounds/data-access';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	CardsFacadeService,
-	DiskCacheService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs';

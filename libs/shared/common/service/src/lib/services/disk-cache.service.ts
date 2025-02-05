@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IPreferences, Store } from '@firestone/shared/framework/common';
-import { LocalStorageService } from './local-storage';
-import { OverwolfService } from './overwolf.service';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { distinctUntilChanged, map } from 'rxjs';
+import { PreferencesService } from './preferences.service';
 
 // Only move items that are too big for localstorage
 @Injectable()
@@ -34,22 +34,23 @@ export class DiskCacheService {
 	private cacheDisabled = false;
 	private savingFiles: { [fileKey: string]: boolean } = {};
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly store: Store<IPreferences>,
-		private readonly localStorage: LocalStorageService,
-	) {
+	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
 		this.init();
 	}
 
 	private async init() {
-		await this.store.initComplete();
+		console.debug('[debug] init disk cache service');
+		await waitForReady(this.prefs);
 
-		this.store
-			.listenPrefs$((prefs) => prefs.disableLocalCache)
-			.subscribe(([disableLocalCache]) => {
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs.disableLocalCache),
+				distinctUntilChanged(),
+			)
+			.subscribe((disableLocalCache) => {
 				this.cacheDisabled = disableLocalCache;
 			});
+		console.debug('[debug] init complete');
 	}
 
 	public async clearCache() {
@@ -62,13 +63,6 @@ export class DiskCacheService {
 			return true;
 		}
 		const saved = await this.storeItemInternal(key, value).withTimeout(timeout ?? 5000, key);
-		// if (!saved) {
-		// 	console.warn('[disk-cache] Could not saveitem on disk', key);
-		// 	const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
-		// 	saveInfo[key] = true;
-		// 	this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
-		// 	console.debug('[disk-cache] updated disk cache status', saveInfo);
-		// }
 		return saved;
 	}
 
@@ -100,17 +94,8 @@ export class DiskCacheService {
 		if (this.cacheDisabled) {
 			return null;
 		}
-		// const shouldSkipDisk = saveInfo[key];
-		// if (shouldSkipDisk) {
-		// 	console.debug('[disk-cache] skipping disk cache for', key);
-		// 	saveInfo[key] = false;
-		// 	this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
-		// 	return null;
-		// }
 
 		const result = this.getItemInternal<T>(key).withTimeout(5000, key);
-		// saveInfo[key] = false;
-		// this.localStorage.setItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD, saveInfo);
 		return result;
 	}
 

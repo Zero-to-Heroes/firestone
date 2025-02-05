@@ -1,11 +1,10 @@
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { ICollectionPackService } from '@firestone/collection/common';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
 import {
 	AnalyticsService,
 	CardsFacadeService,
-	DiskCacheService,
 	IAdsService,
 	ILocalizationService,
 	OverwolfService,

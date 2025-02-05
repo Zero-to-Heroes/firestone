@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { VillageVisitorType } from '@firestone-hs/reference-data';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	DiskCacheService,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';

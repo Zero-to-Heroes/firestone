@@ -9,13 +9,12 @@ import {
 } from '@angular/core';
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { COLLECTION_PACK_SERVICE_TOKEN, ICollectionPackService } from '@firestone/collection/common';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
 	CardsFacadeService,
-	DiskCacheService,
 	IAdsService,
 	ILocalizationService,
 	OverwolfService,

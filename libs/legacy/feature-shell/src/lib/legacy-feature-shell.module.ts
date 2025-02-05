@@ -2,7 +2,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -444,7 +444,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
-import { AppCommonModule } from '@firestone/app/common';
+import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
 import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import {
@@ -476,7 +476,7 @@ import { ModsCommonModule } from '@firestone/mods/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SettingsModule } from '@firestone/settings';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
-import { CdkOverlayContainer, Store, translationFileVersion } from '@firestone/shared/framework/common';
+import { CdkOverlayContainer, Store } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
@@ -494,7 +494,6 @@ import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailb
 import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
 import { MailsService } from '@mails/services/mails.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PackDisplayComponent } from '@packs/components/pack-display.component';
 import { PackHistoryItemComponent } from '@packs/components/pack-history-item.component';
 import { PackHistoryComponent } from '@packs/components/pack-history.component';
@@ -718,15 +717,6 @@ try {
 	console.log('could not gt overwolf info, continuing', e);
 }
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(
-		http,
-		'https://static.firestoneapp.com/data/i18n/',
-		!!translationFileVersion?.length ? `.json?v=${translationFileVersion}` : undefined,
-	);
-}
-
 @NgModule({
 	imports: [
 		// Needed for Twitch
@@ -774,11 +764,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		NgChartsModule,
 		TranslateModule.forRoot({
 			defaultLanguage: 'enUS',
-			loader: {
-				provide: TranslateLoader,
-				useFactory: HttpLoaderFactory,
-				deps: [HttpClient],
-			},
+			loader: { provide: TranslateLoader, useExisting: LocalizationLoaderWithCache },
 		}),
 		DragDropModule,
 

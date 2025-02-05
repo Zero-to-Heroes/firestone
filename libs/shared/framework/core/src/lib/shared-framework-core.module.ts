@@ -14,7 +14,6 @@ import { ApiRunner } from './services/api-runner';
 import { CardRulesService } from './services/card-rules.service';
 import { CardsFacadeStandaloneService } from './services/cards-facade-standalone.service';
 import { CardsFacadeService } from './services/cards-facade.service';
-import { DiskCacheService } from './services/disk-cache.service';
 import { LocalStorageService } from './services/local-storage';
 import { OverwolfService } from './services/overwolf.service';
 import { OwUtilsService } from './services/ow-utils.service';
@@ -39,7 +38,6 @@ const components = [FsTranslateDirective, FsTranslatePipe, WithLoadingComponent,
 		CardsFacadeService,
 		CardsFacadeStandaloneService,
 		CardRulesService,
-		DiskCacheService,
 		LocalStorageService,
 		WindowManagerService,
 		LocalizationStandaloneService,

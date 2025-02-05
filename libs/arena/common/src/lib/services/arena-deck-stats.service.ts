@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
+import { DiskCacheService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	DiskCacheService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';

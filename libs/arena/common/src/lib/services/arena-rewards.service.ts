@@ -4,12 +4,12 @@ import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Input } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
 import { IReviewIdService, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
 import { ArenaInfo, MemoryUpdatesService, Reward } from '@firestone/memory';
+import { DiskCacheService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	DiskCacheService,
 	OverwolfService,
 	UserService,
 	WindowManagerService,

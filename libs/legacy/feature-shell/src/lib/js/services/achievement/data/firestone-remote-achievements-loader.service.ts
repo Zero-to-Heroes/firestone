@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IRemoteAchievementsService } from '@firestone/achievements/common';
-import { ApiRunner, DiskCacheService, UserService } from '@firestone/shared/framework/core';
+import { DiskCacheService } from '@firestone/shared/common/service';
+import { ApiRunner, UserService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../../models/achievement';
 import { CompletedAchievement } from '../../../models/completed-achievement';

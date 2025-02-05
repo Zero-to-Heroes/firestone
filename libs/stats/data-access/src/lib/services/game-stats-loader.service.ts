@@ -4,6 +4,7 @@ import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { getDefaultHeroDbfIdForClass, isMercenaries } from '@firestone-hs/reference-data';
 import {
+	DiskCacheService,
 	PatchesConfigService,
 	PatchInfo,
 	PreferencesService,
@@ -15,7 +16,6 @@ import {
 	ApiRunner,
 	AppInjector,
 	CardsFacadeService,
-	DiskCacheService,
 	IndexedDbService,
 	MATCH_HISTORY,
 	OverwolfService,

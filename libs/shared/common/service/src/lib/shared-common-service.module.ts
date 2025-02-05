@@ -4,6 +4,7 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { AdvancedSettingDirective } from './directives/advanced-setting.directive';
 import { BugReportService } from './services/bug-report.service';
+import { DiskCacheService } from './services/disk-cache.service';
 import { ExpertContributorsService } from './services/expert-contributors.service';
 import { GameStatusService } from './services/game-status.service';
 import { LogUtilsService } from './services/log-utils.service';
@@ -31,6 +32,7 @@ const components = [AdvancedSettingDirective];
 		LogsUploaderService,
 		BugReportService,
 		ExpertContributorsService,
+		DiskCacheService,
 	],
 	declarations: components,
 	exports: components,

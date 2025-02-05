@@ -38,6 +38,10 @@ export class LocalizationService {
 	// }
 
 	public async start(translateService: TranslateService) {
+		if (this.translate) {
+			return;
+		}
+
 		this.translate = translateService;
 		window['localizationService'] = this;
 
