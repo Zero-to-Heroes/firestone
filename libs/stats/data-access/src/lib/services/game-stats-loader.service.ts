@@ -116,7 +116,8 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 								prefs.desktopDeckDeletes[stat.playerDecklist][
 									prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
 								] < stat.creationTimestamp,
-						),
+						)
+						.sort((a, b) => b.creationTimestamp - a.creationTimestamp),
 				}),
 			);
 		} else {
@@ -190,7 +191,8 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 				};
 			})
 			.map((stat) => Object.assign(new GameStat(), stat))
-			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod));
+			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
+			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
 		await this.saveLocalStats(stats);
 		console.log('[game-stats-loader] Retrieved game stats for user', stats?.length);
 		//console.debug('[game-stats-loader] Retrieved game stats for user', stats);
