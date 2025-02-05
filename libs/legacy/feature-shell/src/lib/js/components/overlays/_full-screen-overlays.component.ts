@@ -185,6 +185,8 @@ import { DebugService } from '../../services/debug.service';
 			<player-bgs-tuskarr-raider-widget-wrapper></player-bgs-tuskarr-raider-widget-wrapper>
 
 			<lottery-widget-wrapper></lottery-widget-wrapper>
+
+			<notifications></notifications>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

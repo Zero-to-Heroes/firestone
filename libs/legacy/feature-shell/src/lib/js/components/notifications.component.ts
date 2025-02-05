@@ -1,11 +1,8 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
-	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
@@ -40,7 +37,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 // TODO: https://github.com/scttcper/ngx-toastr (19/11/2020)
-export class NotificationsComponent implements AfterViewInit, OnDestroy {
+export class NotificationsComponent {
 	timeout = 6000;
 	// timeout = 9999999;
 	toastOptions = {
@@ -50,8 +47,8 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		maxStack: 5,
 	};
 
-	private windowId: string;
-	private gameInfoListener: (message: any) => void;
+	// private windowId: string;
+	// private gameInfoListener: (message: any) => void;
 
 	private activeNotifications: ActiveNotification[] = [];
 	private notifications$: Observable<Message>;
@@ -69,9 +66,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	private async init() {
 		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		await this.ow.restoreWindow(this.windowId);
-		await this.ow.bringToFront(this.windowId);
+		// this.windowId = (await this.ow.getCurrentWindow()).id;
+		// await this.ow.restoreWindow(this.windowId);
+		// await this.ow.bringToFront(this.windowId);
 
 		this.notifications$
 			.pipe(
@@ -91,19 +88,19 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async ngAfterViewInit() {
-		this.gameInfoListener = this.ow.addGameInfoUpdatedListener((message) => {
-			if (message.resolutionChanged || message.runningChanged) {
-				this.resize();
-			}
-		});
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.resize();
+		// this.gameInfoListener = this.ow.addGameInfoUpdatedListener((message) => {
+		// 	if (message.resolutionChanged || message.runningChanged) {
+		// 		this.resize();
+		// 	}
+		// });
+		// this.windowId = (await this.ow.getCurrentWindow()).id;
+		// this.resize();
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoListener);
-	}
+	// @HostListener('window:beforeunload')
+	// ngOnDestroy(): void {
+	// 	this.ow.removeGameInfoUpdatedListener(this.gameInfoListener);
+	// }
 
 	created(event) {
 		console.log('notif created', event.id);
@@ -213,23 +210,23 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		}, 500);
 	}
 
-	private resize() {
-		setTimeout(async () => {
-			const width = 500;
-			const gameInfo = await this.ow.getRunningGameInfo();
-			if (!gameInfo) {
-				return;
-			}
+	// private resize() {
+	// 	setTimeout(async () => {
+	// 		const width = 500;
+	// 		const gameInfo = await this.ow.getRunningGameInfo();
+	// 		if (!gameInfo) {
+	// 			return;
+	// 		}
 
-			const gameWidth = gameInfo.logicalWidth;
-			const dpi = gameWidth / gameInfo.width;
-			await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
-			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-			const newLeft = gameWidth - width * dpi;
-			const newTop = 1;
-			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-		});
-	}
+	// 		const gameWidth = gameInfo.logicalWidth;
+	// 		const dpi = gameWidth / gameInfo.width;
+	// 		await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
+	// 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+	// 		const newLeft = gameWidth - width * dpi;
+	// 		const newTop = 1;
+	// 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+	// 	});
+	// }
 }
 
 interface ActiveNotification {

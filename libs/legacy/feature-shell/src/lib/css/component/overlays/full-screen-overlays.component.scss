@@ -24,4 +24,12 @@
 		bottom: 6vh; // Don't hide friends list
 		left: 0;
 	}
+
+	notifications {
+		height: 100%;
+		width: 500px;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
 }

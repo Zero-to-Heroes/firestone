@@ -21,7 +21,6 @@ import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 				<app-root *ngSwitchCase="'MainWindow'"></app-root>
 				<main-window *ngSwitchCase="'CollectionWindow'"></main-window>
 				<loading *ngSwitchCase="'LoadingWindow'"></loading>
-				<notifications *ngSwitchCase="'NotificationsWindow'"></notifications>
 				<settings *ngSwitchCase="'SettingsWindow'"></settings>
 				<battlegrounds *ngSwitchCase="'BattlegroundsWindow'"></battlegrounds>
 				<out-of-cards-callback *ngSwitchCase="'OutOfCardsAuthWindow'"></out-of-cards-callback>
@@ -84,8 +83,6 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 				return 'Overlays clickthrough';
 			case 'LoadingWindow':
 				return 'Loading';
-			case 'NotificationsWindow':
-				return 'Notifications';
 			case 'SettingsOverlayWindow':
 			case 'SettingsWindow':
 				return 'Settings';

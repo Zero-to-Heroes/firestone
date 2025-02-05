@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
@@ -7,25 +6,16 @@ import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class OwNotificationsService {
-	private windowId: string;
-	private messageId = 0;
-	// Because if we start the app during a game, it might take some time for the notif window to
-	// be created
-	private retriesLeft = 30;
 	private isDev: boolean;
 	private isBeta: boolean;
 
 	private stateEmitter = new BehaviorSubject<Message>(undefined);
 
 	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
-		// Give it time to boot
-		this.startNotificationsWindow();
-
 		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
 			filter((message) => !!message),
 			tap((message) => console.debug('[notifications] emitting new message', message)),
 		);
-
 		this.init();
 	}
 
@@ -50,18 +40,6 @@ export class OwNotificationsService {
 		if (!bypassPrefs && !(await this.prefs.getPreferences()).setAllNotifications) {
 			console.debug('[notifications] not showing any notification');
 			return;
-		}
-		if (!this.windowId) {
-			if (this.retriesLeft <= 0) {
-				throw new Error('NotificationsWindow was not identified at app start');
-			} else {
-				console.debug('[notifications] retrying', this.retriesLeft, htmlMessage);
-				this.retriesLeft--;
-				setTimeout(() => {
-					this.emitNewNotification(htmlMessage);
-				}, 500);
-				return;
-			}
 		}
 		console.debug('emitting new notification', htmlMessage);
 		this.stateEmitter.next(htmlMessage);
@@ -148,22 +126,6 @@ export class OwNotificationsService {
 			},
 			true,
 		);
-	}
-
-	private async startNotificationsWindow() {
-		while (!this.windowId) {
-			console.log('[notifs] waiting for notifications window to be created');
-			this.detectNotificationsWindow();
-			await sleep(2000);
-		}
-	}
-
-	private async detectNotificationsWindow() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.NOTIFICATIONS_WINDOW);
-		const windowId = window.id;
-		// await this.ow.restoreWindow(windowId);
-		await this.ow.hideWindow(windowId);
-		this.windowId = windowId;
 	}
 }
 
