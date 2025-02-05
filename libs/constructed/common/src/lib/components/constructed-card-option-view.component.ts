@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -52,8 +53,15 @@ export class ConstructedCardOptionViewComponent extends AbstractSubscriptionComp
 			value?.discoverImpact == null ? '' : value.discoverImpact > 0 ? 'positive' : 'negative';
 		this.lowData = value?.discoverNumber == null || value.discoverNumber < 50;
 		this.discoverTooltip = this.lowData
-			? this.i18n.translateString('app.decktracker.meta.details.cards.discovered-winrate-impact-tooltip-low-data')
-			: null;
+			? this.i18n.translateString(
+					'app.decktracker.meta.details.cards.discovered-winrate-impact-tooltip-low-data',
+					{
+						value: value?.discoverNumber ?? 0,
+					},
+			  )
+			: this.i18n.translateString('app.decktracker.meta.details.cards.discovered-winrate-impact-tooltip-data', {
+					value: value?.discoverNumber ?? 0,
+			  });
 	}
 
 	drawImpact: string;

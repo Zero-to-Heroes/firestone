@@ -29,6 +29,8 @@ import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulato
 import { HearthpwnService } from '@firestone/collection/common';
 import { CommunityBootstrapService } from '@firestone/communities/common';
 import {
+	ConstructedDiscoverService,
+	ConstructedDiscoversGuardianService,
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
@@ -119,6 +121,8 @@ export class BootstrapStoreServicesService {
 		private readonly init_ArenaNavigationService: ArenaNavigationService,
 		private readonly init_ArenDeckDetailsService: ArenDeckDetailsService,
 		private readonly init_ConstructedMulliganGuideGuardianService: ConstructedMulliganGuideGuardianService,
+		private readonly init_ConstructedDiscoversGuardianService: ConstructedDiscoversGuardianService,
+		private readonly init_ConstructedDiscoverService: ConstructedDiscoverService,
 		private readonly init_CardMousedOverService: CardMousedOverService,
 		private readonly init_CommunityBootstrapService: CommunityBootstrapService,
 		private readonly init_AchievementsNavigationService: AchievementsNavigationService,

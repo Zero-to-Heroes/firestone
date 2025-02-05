@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
-import { CardIds, formatFormat, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import {
 	ConstructedCardStat,
 	ConstructedDiscoverService,
@@ -32,6 +32,7 @@ import {
 	shareReplay,
 	switchMap,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-wrapper.component';
@@ -103,6 +104,7 @@ export class ChoosingCardOptionConstructedComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.statsService, this.guardian, this.prefs);
 
+		console.debug('[debug] [constructed-card-option] init');
 		this.freeUses$ = this.guardian.freeUsesLeft$$.pipe(this.mapData((uses) => uses));
 		this.showPremiumBanner$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			filter(([hasPremium, freeUsesLeft]) => hasPremium != null && freeUsesLeft != null),
@@ -114,6 +116,7 @@ export class ChoosingCardOptionConstructedComponent
 		);
 		this.showDiscoverStat$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.constructedShowCardStatDuringDiscovers),
+			tap((show) => console.debug('[debug] [constructed-card-option] showDiscoverStat', show)),
 			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
@@ -124,7 +127,7 @@ export class ChoosingCardOptionConstructedComponent
 			this.mapData((gameState) => gameState?.playerDeck?.deckstring),
 		);
 		const format$ = this.gameState.gameState$$.pipe(
-			this.mapData((gameState) => formatFormat(gameState?.metadata?.formatType) as GameFormat),
+			this.mapData((gameState) => 'standard' /*formatFormat(gameState?.metadata?.formatType)*/ as GameFormat),
 		);
 		this.cardStat$ = combineLatest([this.cardId$$, this.opponentClass$$, deckstring$, format$]).pipe(
 			filter(([cardId]) => !!cardId),

@@ -1,6 +1,7 @@
 import { CONSTRUCTED_DISCOVERS_DAILY_FREE_USES } from '@firestone/constructed/common';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
+import { sizeKnobs } from '../common';
 
 export const decktrackerOverlaysSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -27,6 +28,18 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 							freeUses: CONSTRUCTED_DISCOVERS_DAILY_FREE_USES,
 						}),
 						disabledIf: (prefs: Preferences) => !prefs.overlayEnableDiscoverHelp,
+					},
+					{
+						type: 'slider',
+						field: 'arenaDraftOverlayScale',
+						label: context.i18n.translateString('settings.arena.general.draft-overlay-size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 50,
+							max: 175,
+							snapSensitivity: 3,
+							knobs: sizeKnobs(context),
+						},
 					},
 					{
 						type: 'toggle',

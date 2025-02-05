@@ -14,7 +14,7 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 	private constructedMetaStats: ConstructedMetaDecksStateService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'ConstructedDiscoverService', () => !!this.constructedMetaStats);
+		super(windowManager, 'ConstructedDiscoverService', () => true);
 	}
 
 	protected override assignSubjects() {
@@ -33,13 +33,22 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 		opponentClass: string,
 		formatFilter: GameFormat,
 	): Promise<ConstructedCardStat | null> {
+		return this.mainInstance.getStatsForInternal(deckstring, cardId, opponentClass, formatFilter);
+	}
+
+	private async getStatsForInternal(
+		deckstring: string,
+		cardId: string,
+		opponentClass: string,
+		formatFilter: GameFormat,
+	): Promise<ConstructedCardStat | null> {
 		const deckStat = await this.constructedMetaStats.loadNewDeckDetails(
 			deckstring,
 			formatFilter,
 			'last-patch',
 			'competitive',
 		);
-		console.debug('[constructed-discover] deckStat', deckStat);
+		console.debug('[constructed-discover] deckStat', cardId, deckStat, deckstring, opponentClass, formatFilter);
 		if (!deckStat) {
 			return null;
 		}
@@ -50,32 +59,32 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 			'last-patch',
 			'competitive',
 		);
-		console.debug('[constructed-discover] archetypeStat', archetypeStat);
+		console.debug('[constructed-discover] archetypeStat', cardId, archetypeStat);
 
 		let drawnData = deckStat.matchupInfo
 			.find((m) => m.opponentClass === opponentClass)
 			?.cardsData.find((c) => c.cardId === cardId);
-		console.debug('[constructed-discover] drawnData', drawnData);
+		console.debug('[constructed-discover] drawnData', cardId, drawnData);
 		if (drawnData?.drawn == null || drawnData.drawn < 50) {
 			drawnData = deckStat.cardsData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] drawnData fallback 1', drawnData);
+			console.debug('[constructed-discover] drawnData fallback 1', cardId, drawnData);
 		}
 		if (drawnData?.drawn == null || drawnData.drawn < 50) {
 			drawnData = archetypeStat?.cardsData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] drawnData fallback 2', drawnData);
+			console.debug('[constructed-discover] drawnData fallback 2', cardId, drawnData);
 		}
 
 		let discoverData = deckStat.matchupInfo
 			.find((m) => m.opponentClass === opponentClass)
 			?.discoverData.find((c) => c.cardId === cardId);
-		console.debug('[constructed-discover] discoverData', discoverData);
+		console.debug('[constructed-discover] discoverData', cardId, discoverData);
 		if (discoverData?.discovered == null || discoverData.discovered < 50) {
 			discoverData = deckStat.discoverData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] discoverData fallback 1', discoverData);
+			console.debug('[constructed-discover] discoverData fallback 1', cardId, discoverData);
 		}
 		if (discoverData?.discovered == null || discoverData.discovered < 50) {
 			discoverData = archetypeStat?.discoverData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] discoverData fallback 2', discoverData);
+			console.debug('[constructed-discover] discoverData fallback 2', cardId, discoverData);
 		}
 
 		const deckWinrate = deckStat.winrate;
