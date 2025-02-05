@@ -1,10 +1,11 @@
 .container {
 	position: relative;
-	left: 0;
+	left: 15vh;
 	top: 22vh;
-	width: 112vh;
-	height: 47vh;
+	width: 108vh;
+	height: 5vh;
 	pointer-events: none;
+	display: flex;
 }
 
 // :host {
@@ -17,19 +18,18 @@
 	width: 100%;
 	height: 100%;
 	justify-content: flex-start;
+	display: grid;
 
 	.option-container {
-		width: 27vh;
-		margin-right: 9vh;
+		// width: 27vh;
+		// margin-right: 9vh;
 	}
 
 	&.items-2 {
-		margin-left: 38vh;
-		margin-right: 30vh;
+		grid-template-columns: 1fr 1fr;
 	}
 
 	&.items-3 {
-		margin-left: 20vh;
-		margin-right: 15vh;
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
