@@ -126,16 +126,12 @@ const isValidCardForTribes = (
 	allCards: CardsFacadeService,
 	cardRules: CardRules | null,
 ): boolean => {
-	const debug = cardId == 'BG31_819';
-	debug && console.debug('checking card', cardId, availableTribes, cardRules);
 	if (!availableTribes?.length || !cardRules) {
-		debug && console.debug('no tribes, ok');
 		return true;
 	}
 
 	const rule: CardRule | null = cardRules[cardId];
 	if (!rule) {
-		debug && console.debug('no rule, ok');
 		return true;
 	}
 
@@ -143,13 +139,6 @@ const isValidCardForTribes = (
 		availableTribes.includes(Race[bannedRace]),
 	);
 	if (isBanned) {
-		debug && console.debug('banned', false);
-		// console.debug(
-		// 	'banned trinket',
-		// 	allCards.getCard(cardId).name,
-		// 	rule.bgsMinionTypesRules?.bannedWithTypesInLobby?.map((r) => Race[r]),
-		// 	availableTribes.map((r) => Race[r]),
-		// );
 		return false;
 	}
 
@@ -157,16 +146,8 @@ const isValidCardForTribes = (
 		? rule.bgsMinionTypesRules?.needTypesInLobby?.some((neededTribe) => availableTribes.includes(Race[neededTribe]))
 		: true;
 	if (!isRestrictionMet) {
-		debug && console.debug('not isRestrictionMet', false);
-		// console.debug(
-		// 	'restriction not met trinket',
-		// 	allCards.getCard(cardId).name,
-		// 	rule.bgsMinionTypesRules?.needTypesInLobby?.map((r) => Race[r]),
-		// 	availableTribes.map((r) => Race[r]),
-		// );
 		return false;
 	}
 
-	debug && console.debug('ok', true);
 	return true;
 };

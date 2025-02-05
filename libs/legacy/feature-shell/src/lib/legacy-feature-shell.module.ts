@@ -332,7 +332,9 @@ import { BattlegroundsMinionsListTiersHeader2Component } from '@components/battl
 import { BattlegroundsMinionsListTiersHeaderComponent } from '@components/battlegrounds/minions-tiers/minions-list-tiers-header.component';
 import { BattlegroundsMinionsTierIconComponent } from '@components/battlegrounds/minions-tiers/tier-icon.component';
 import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegrounds/overlay/battlegrounds-tribe-details-tooltip.component';
+import { BgsHeroOverviewWidgetWrapperComponent } from '@components/battlegrounds/overlay/bgs-hero-overview-widget-wrapper.component';
 import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
+import { BgsOverlayHeroOverviewService } from '@components/battlegrounds/overlay/bgs-overlay-hero-overview.service';
 import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
 import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
 import { ControlCloseComponent } from '@components/controls/control-close.component';
@@ -1315,6 +1317,7 @@ try {
 		BgsWindowButtonWidgetWrapperComponent,
 		BgsHeroSelectionWidgetWrapperComponent,
 		BgsLeaderboardWidgetWrapperComponent,
+		BgsHeroOverviewWidgetWrapperComponent,
 		BgsBoardWidgetWrapperComponent,
 
 		MercsPlayerTeamWidgetWrapperComponent,
@@ -1544,6 +1547,7 @@ try {
 		BgsBestUserStatsService,
 		RealTimeStatsService,
 		BgsCustomSimulationService,
+		BgsOverlayHeroOverviewService,
 
 		MercenariesMemoryCacheService,
 		MercenariesStoreService,

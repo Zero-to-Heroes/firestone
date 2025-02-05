@@ -19,7 +19,6 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 		pref: 'playerBgsSpellsPlayedCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
-			console.debug('[debug] getting spells played', bgState?.currentGame?.availableRaces, state.fullGameState);
 			return !bgState?.currentGame?.availableRaces?.includes(Race.NAGA)
 				? null
 				: state.fullGameState?.Player?.PlayerEntity?.tags?.find(

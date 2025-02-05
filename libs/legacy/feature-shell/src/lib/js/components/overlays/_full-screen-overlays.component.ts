@@ -40,7 +40,7 @@ import { DebugService } from '../../services/debug.service';
 		`../../../css/themes/decktracker-desktop-theme.scss`,
 		`../../../css/themes/replays-theme.scss`,
 		`../../../css/themes/general-theme.scss`,
-		'../../../css/component/overlays/full-screen-overlays.component.scss',
+		'./_full-screen-overlays.component.scss',
 	],
 	template: `
 		<div
@@ -49,6 +49,12 @@ import { DebugService } from '../../services/debug.service';
 			class="full-screen-overlays drag-boundary overlay-container-parent"
 			[activeTheme]="activeTheme$ | async"
 		>
+			<div class="game-area-container">
+				<div class="game-area">
+					<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
+					<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
+				</div>
+			</div>
 			<!-- Global -->
 			<current-session-widget-wrapper></current-session-widget-wrapper>
 			<!-- Use different wrappers to make it easier to position each one differently -->

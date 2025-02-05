@@ -66,6 +66,7 @@ export interface MercenaryTreasureSelection {
 export interface MousedOverCard {
 	readonly EntityId: number;
 	readonly CardId: string;
+	readonly PlayerId: number;
 	readonly Zone: Zone;
 	readonly Side: Side;
 }

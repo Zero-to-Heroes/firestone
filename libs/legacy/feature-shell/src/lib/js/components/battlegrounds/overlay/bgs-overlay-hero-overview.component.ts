@@ -11,8 +11,7 @@ import {
 } from '@angular/core';
 import { BgsPlayer } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 
 @Component({
 	selector: 'bgs-overlay-hero-overview',
@@ -38,7 +37,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set config(value: {
 		player: BgsPlayer;
 		config: {
@@ -74,13 +73,12 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionStoreCo
 	questsEnabled: boolean;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.init();
 	}
 

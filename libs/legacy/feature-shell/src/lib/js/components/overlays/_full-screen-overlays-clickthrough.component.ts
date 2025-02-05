@@ -28,7 +28,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 		`../../../css/themes/decktracker-desktop-theme.scss`,
 		`../../../css/themes/replays-theme.scss`,
 		`../../../css/themes/general-theme.scss`,
-		'../../../css/component/overlays/full-screen-overlays-clickthrough.component.scss',
+		'./_full-screen-overlays-clickthrough.component.scss',
 	],
 	template: `
 		<div
@@ -36,7 +36,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			[activeTheme]="activeTheme$ | async"
 		>
 			<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
-			<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
 			<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
 			<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
 			<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>

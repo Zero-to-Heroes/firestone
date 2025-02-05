@@ -10,12 +10,19 @@ import {
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/core';
+import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	ILocalizationService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
+import { BgsOverlayHeroOverviewService, PlayerInfo } from './bgs-overlay-hero-overview.service';
 
 @Component({
 	selector: 'bgs-leaderboard-empty-card',
@@ -23,41 +30,32 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	template: `
 		<div class="card">
 			<div
-				class="mouse-leave-container"
-				componentTooltip
-				[componentType]="componentType"
-				[componentInput]="opponentBoardMouseOver ? _bgsPlayer : null"
-				[componentTooltipPosition]="position"
-			>
-				<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-				<div
-					class="last-opponent-icon"
-					*ngIf="isLastOpponent && showLastOpponentIcon"
-					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
-					inlineSVG="assets/svg/last_opponent.svg"
-				></div>
-				<div class="name-container" *ngIf="_bgsPlayer?.player?.name && (showMmr$ | async)">
-					<div class="name">{{ _bgsPlayer?.player?.name }}</div>
-					<div class="mmr" *ngIf="mmr">{{ mmr }}</div>
-				</div>
-
-				<bgs-hero-short-recap
-					class="short-recap"
-					[ngClass]="{ active: showLiveInfo$ | async }"
-					[buddiesEnabled]="buddiesEnabled"
-					[tavernTier]="tavernTier"
-					[triples]="triples"
-					[winStreak]="winStreak"
-					[tribeImage]="tribeImage"
-					[tribeCount]="tribeCount"
-					[damage]="damage"
-					[questRewards]="questRewards"
-					[buddyImage]="buddyImage"
-					[buddyClass]="buddyClass"
-					[lesserTrinket]="lesserTrinket"
-					[greaterTrinket]="greaterTrinket"
-				></bgs-hero-short-recap>
+				class="last-opponent-icon"
+				*ngIf="isLastOpponent && showLastOpponentIcon"
+				[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
+				inlineSVG="assets/svg/last_opponent.svg"
+			></div>
+			<div class="name-container" *ngIf="_bgsPlayer?.player?.name && (showMmr$ | async)">
+				<div class="name">{{ _bgsPlayer?.player?.name }}</div>
+				<div class="mmr" *ngIf="mmr">{{ mmr }}</div>
 			</div>
+
+			<bgs-hero-short-recap
+				class="short-recap"
+				[ngClass]="{ active: showLiveInfo$ | async }"
+				[buddiesEnabled]="buddiesEnabled"
+				[tavernTier]="tavernTier"
+				[triples]="triples"
+				[winStreak]="winStreak"
+				[tribeImage]="tribeImage"
+				[tribeCount]="tribeCount"
+				[damage]="damage"
+				[questRewards]="questRewards"
+				[buddyImage]="buddyImage"
+				[buddyClass]="buddyClass"
+				[lesserTrinket]="lesserTrinket"
+				[greaterTrinket]="greaterTrinket"
+			></bgs-hero-short-recap>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,15 +101,7 @@ export class BgsLeaderboardEmptyCardComponent
 	position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';
 
 	componentClass: string;
-	_bgsPlayer: {
-		player: BgsPlayer;
-		config: {
-			hasBuddies: boolean;
-		};
-		currentTurn: number;
-		isLastOpponent: boolean;
-		additionalClasses: string;
-	};
+	_bgsPlayer: PlayerInfo;
 
 	_previousPlayer: BgsPlayer;
 	_currentTurn: number;
@@ -147,19 +137,30 @@ export class BgsLeaderboardEmptyCardComponent
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly ads: AdService,
+		private readonly mouseOver: CardMousedOverService,
+		private readonly controller: BgsOverlayHeroOverviewService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.prefs.isReady();
-		await this.ads.isReady();
+		await waitForReady(this.prefs, this.ads, this.mouseOver);
 
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((value) => {
-			this.position = value ? 'global-top-left' : 'global-bottom-left';
-			this.componentClass = value ? null : 'bottom';
-			this.updateInfo();
-		});
+		// this.mouseOver.mousedOverCard$$.pipe(this.mapData((card) => card)).subscribe((card) => {
+		// 	if (card?.PlayerId != null && card.PlayerId === this._previousPlayer.playerId) {
+		// 		console.debug('show info', this._bgsPlayer, card)
+		// 		this.controller.showInfo(this._bgsPlayer);
+		// 	} else {
+		// 		console.debug('hide info', this._bgsPlayer, card)
+		// 		this.controller.hideInfo(this._bgsPlayer);
+		// 	}
+		// });
+
+		// this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((value) => {
+		// 	this.position = value ? 'global-top-left' : 'global-bottom-left';
+		// 	this.componentClass = value ? null : 'bottom';
+		// 	this.updateInfo();
+		// });
 
 		this.ads.enablePremiumFeatures$$.pipe(takeUntil(this.destroyed$)).subscribe((premium) => {
 			// console.debug('isPremiumUser', premium);
@@ -223,6 +224,7 @@ export class BgsLeaderboardEmptyCardComponent
 			}),
 			config: {
 				hasBuddies: this.buddiesEnabled,
+				hasQuests: this._previousPlayer?.questRewards?.length > 0,
 			},
 			currentTurn: this._currentTurn,
 			isLastOpponent: this.isLastOpponent,
@@ -258,6 +260,34 @@ export class BgsLeaderboardEmptyCardComponent
 		// console.debug('set trinkets', this.lesserTrinket, this.greaterTrinket, this._previousPlayer);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
+		}
+	}
+
+	private isMousingOver = false;
+
+	private simulateMouseOver(element: HTMLElement) {
+		if (!this.isMousingOver) {
+			console.debug('simulating mouse over', this._previousPlayer);
+			this.isMousingOver = true;
+			const event = new MouseEvent('mouseenter', {
+				view: window,
+				bubbles: false,
+				cancelable: true,
+			});
+			element.dispatchEvent(event);
+		}
+	}
+
+	private simulateMouseLeave(element: HTMLElement) {
+		if (this.isMousingOver) {
+			console.debug('simulating mouse leave', this._previousPlayer);
+			this.isMousingOver = false;
+			const event = new MouseEvent('mouseleave', {
+				view: window,
+				bubbles: false,
+				cancelable: true,
+			});
+			element.dispatchEvent(event);
 		}
 	}
 }

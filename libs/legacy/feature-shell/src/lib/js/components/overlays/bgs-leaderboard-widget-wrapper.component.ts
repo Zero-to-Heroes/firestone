@@ -46,8 +46,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 					[style.left.%]="getLeftOffset(i)"
 				>
 				</bgs-leaderboard-empty-card>
-				<div class="mouse-leave-fix top"></div>
-				<div class="mouse-leave-fix right"></div>
+				<!-- <div class="mouse-leave-fix top"></div>
+				<div class="mouse-leave-fix right"></div> -->
 			</div>
 		</ng-container>
 	`,

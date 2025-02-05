@@ -1,24 +1,19 @@
 :host {
 	height: 11.8%;
-	width: 100%;
+	// width: 100%;
+	aspect-ratio: 1;
 	position: relative;
+	pointer-events: none;
 }
 
-.card,
-.mouse-leave-container {
-	pointer-events: all;
+.card {
+	pointer-events: none;
 	height: 100%;
-	width: 100%;
+	aspect-ratio: 1;
 	position: relative;
 	align-items: center;
 	justify-content: center;
 	display: flex;
-	// background: rgba(0, 0, 0, 0.5); // dev
-
-	img {
-		height: 100%;
-		width: 100%;
-	}
 }
 
 .card {
@@ -36,19 +31,12 @@
 	}
 }
 
-.mouse-leave-container {
-	background: rgba(255, 255, 255, 0.01);
-	width: calc(100% - 45px);
-	height: calc(100% - 15px);
-	// background: rgba(255, 0, 0, 0.5); // dev
-}
-
 .last-opponent-icon {
 	width: 28px;
 	height: 28px; // 15% works with higher DPI, test this on normal DPI
 	position: absolute;
-	top: 30px;
-	left: 0vh;
+	top: 4vh;
+	left: 1vh;
 }
 
 .name-container {
@@ -57,7 +45,7 @@
 	color: white;
 	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
 	top: 1vh;
-	left: 4vh;
+	left: 0;
 	width: 70%;
 	font-size: 0.8vh;
 	white-space: nowrap;
@@ -67,4 +55,9 @@
 	width: fit-content;
 	padding: 3px 10px;
 	border-radius: 15px;
+	pointer-events: none;
+
+	.name {
+		pointer-events: none;
+	}
 }
