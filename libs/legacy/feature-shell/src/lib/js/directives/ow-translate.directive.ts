@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Directive, ElementRef, Input, Optional } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ChangeDetectorRef, Directive, ElementRef, Input } from '@angular/core';
+import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateDirective, TranslateService } from '@ngx-translate/core';
 
 @Directive({
@@ -10,15 +10,11 @@ export class OwTranslateDirective extends TranslateDirective {
 		super.translate = key;
 	}
 
-	constructor(
-		ow: OverwolfService,
-		element: ElementRef,
-		_ref: ChangeDetectorRef,
-		// Used when OW is not available
-		@Optional() translate: TranslateService,
-	) {
-		const translateService: TranslateService =
-			(ow?.isOwEnabled() ? ow?.getMainWindow()?.translateService : null) ?? translate;
+	constructor(ow: OverwolfService, element: ElementRef, _ref: ChangeDetectorRef) {
+		let translateService: TranslateService = ow?.isOwEnabled() ? ow?.getMainWindow()?.translateService : null;
+		if (!translateService) {
+			translateService = AppInjector.get(TranslateService);
+		}
 		super(translateService, element, _ref);
 	}
 }
