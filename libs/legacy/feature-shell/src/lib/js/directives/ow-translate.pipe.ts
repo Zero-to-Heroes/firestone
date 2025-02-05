@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Injectable, Optional, Pipe, PipeTransform } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { ChangeDetectorRef, Injectable, Pipe, PipeTransform } from '@angular/core';
+import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Injectable()
@@ -8,14 +8,11 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 	pure: false, // required to update the value when the promise is resolved
 })
 export class OwTranslatePipe extends TranslatePipe implements PipeTransform {
-	constructor(
-		ow: OverwolfService,
-		_ref: ChangeDetectorRef,
-		// Used when OW is not available
-		@Optional() translate: TranslateService,
-	) {
-		const translateService: TranslateService =
-			(ow?.isOwEnabled() ? ow?.getMainWindow()?.translateService : null) ?? translate;
+	constructor(ow: OverwolfService, _ref: ChangeDetectorRef) {
+		let translateService: TranslateService = ow?.isOwEnabled() ? ow?.getMainWindow()?.translateService : null;
+		if (!translateService) {
+			translateService = AppInjector.get(TranslateService);
+		}
 		super(translateService, _ref);
 	}
 }
