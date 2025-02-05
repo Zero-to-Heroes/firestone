@@ -27,26 +27,34 @@ export const getDynamicRelatedCardIds = (
 ): readonly string[] => {
 	switch (cardId) {
 		case CardIds.FlintFirearm_WW_379:
-			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]));
+			return filterCards(allCards, options, cardId, (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]));
 		case CardIds.StickUp_WW_411:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]) && fromAnotherClass(c, options.currentClass),
 			);
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
-			return filterCards(allCards, options, (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION]);
+			return filterCards(
+				allCards,
+				options,
+				cardId,
+				(c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION],
+			);
 		case CardIds.TravelSecurity_WORK_010:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 8,
 			);
 		case CardIds.DemonicDeal_WORK_014:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost >= 5 &&
@@ -56,12 +64,14 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 1,
 			);
 		case CardIds.AssimilatingBlight_GDB_478:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost === 3 &&
@@ -72,6 +82,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 3,
 			);
 		case CardIds.Blasteroid_GDB_303:
@@ -79,6 +90,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.id !== cardId &&
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
@@ -88,6 +100,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.mechanics?.includes(GameTag[GameTag.PROTOSS]),
@@ -96,6 +109,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.mechanics?.includes(GameTag[GameTag.PROTOSS]),
@@ -104,17 +118,21 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.mechanics?.includes(GameTag[GameTag.ZERG]) &&
 					c?.id !== CardIds.BroodQueen_SC_003,
 			);
 		case CardIds.WaywardProbe_SC_500:
-			return filterCards(allCards, options, (c) => c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]));
+			return filterCards(allCards, options, cardId, (c) =>
+				c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]),
+			);
 		case CardIds.DetailedNotes_GDB_844:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasCorrectTribe(c, Race.BEAST) &&
@@ -125,6 +143,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				{ ...options, format: GameFormat.FT_WILD },
+				cardId,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
@@ -135,12 +154,14 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 2,
 			);
 		case CardIds.ExarchOthaar_GDB_856:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]),
@@ -151,6 +172,7 @@ export const getDynamicRelatedCardIds = (
 				...filterCards(
 					allCards,
 					options,
+					cardId,
 					(c) =>
 						c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 						c?.cost <= 3 &&
@@ -161,6 +183,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.NAGA),
 			);
 		case CardIds.HologramOperator_GDB_723:
@@ -168,12 +191,14 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI),
 			);
 		case CardIds.RelentlessWrathguard_GDB_132:
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasCorrectTribe(c, Race.DEMON) &&
@@ -184,6 +209,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasCorrectTribe(c, Race.DEMON) &&
@@ -193,6 +219,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost === 8 &&
@@ -203,6 +230,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c?.cost === 1 &&
@@ -212,6 +240,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) => c?.id !== CardIds.Sif,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
@@ -222,6 +251,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasMechanic(c, GameTag.DEATHRATTLE) &&
@@ -231,6 +261,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasMechanic(c, GameTag.RUSH) &&
@@ -241,6 +272,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasMechanic(c, GameTag.OUTCAST) &&
@@ -250,6 +282,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					canBeDiscoveredByClass(c, options.currentClass),
@@ -260,6 +293,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasCorrectTribe(c, Race.DEMON) &&
@@ -269,6 +303,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					hasCorrectTribe(c, Race.DRAGON) &&
@@ -278,6 +313,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 					c.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]) &&
@@ -288,6 +324,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) &&
 					fromAnotherClass(c, options.currentClass),
@@ -296,6 +333,7 @@ export const getDynamicRelatedCardIds = (
 			return filterCards(
 				allCards,
 				options,
+				cardId,
 				(c) =>
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.mechanics?.includes(GameTag[GameTag.COMBO]) &&
@@ -327,24 +365,66 @@ export const getDynamicRelatedCardIds = (
 	}
 };
 
+const BAN_LIST = [
+	// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=2&WikiBanPool_form_only%5BgameMode%5D=1
+	CardIds.BounceAroundFtGarona,
+	CardIds.CthunTheShattered,
+	CardIds.ClimacticNecroticExplosion,
+	CardIds.TheGalacticProjectionOrb_TOY_378,
+	// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=12&WikiBanPool_form_only%5BgameMode%5D=1
+	CardIds.Magtheridon_BT_850,
+	CardIds.TheDarkness_LOOT_526,
+];
+
 const filterCards = (
 	allCards: AllCardsService,
 	options: {
 		format: GameFormat;
 		gameType: GameType;
 	},
+	sourceCardId: string,
 	...filters: ((ref: ReferenceCard) => boolean)[]
 ) => {
-	return allCards
-		.getCards()
-		.filter((c) => c.collectible)
-		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false))
-		.filter((c) => filters.every((f) => f(c)))
-		.filter((c) => !c.mechanics?.includes(GameTag[GameTag.TITAN]))
-		.sort(
-			(a, b) => a.cost - b.cost || a.classes?.[0]?.localeCompare(b.classes?.[0]) || a.name.localeCompare(b.name),
-		)
-		.map((c) => c.id);
+	return (
+		allCards
+			.getCards()
+			.filter((c) => c.collectible)
+			.filter((c) =>
+				!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false,
+			)
+			.filter((c) => filters.every((f) => f(c)))
+			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
+			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.TITAN]))
+			.filter((c) => BAN_LIST.includes(c.id as CardIds))
+			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=6&WikiBanPool_form_only%5BgameMode%5D=1
+			.filter(
+				(c) =>
+					!c.mechanics?.includes(GameTag[GameTag.QUEST]) &&
+					!c.mechanics?.includes(GameTag[GameTag.QUESTLINE]) &&
+					!c.mechanics?.includes(GameTag[GameTag.QUESTLINE_PART]),
+			)
+			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.COLOSSAL]))
+			.filter((c) => !hasThreeRunes(c))
+			.filter((c) => !sourceCardId || c.id !== sourceCardId)
+			.sort(
+				(a, b) =>
+					a.cost - b.cost || a.classes?.[0]?.localeCompare(b.classes?.[0]) || a.name.localeCompare(b.name),
+			)
+			.map((c) => c.id)
+	);
+};
+
+// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=10&WikiBanPool_form_only%5BgameMode%5D=1
+const hasThreeRunes = (card: ReferenceCard): boolean => {
+	if (!card.additionalCosts) {
+		return false;
+	}
+	return (
+		Object.keys(card.additionalCosts)
+			.filter((key) => key.includes('RUNE'))
+			.map((key) => card.additionalCosts[key])
+			.reduce((a, b) => a + b, 0) >= 3
+	);
 };
 
 const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
@@ -359,5 +439,7 @@ const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): bool
 };
 
 const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean => {
-	return card?.classes?.length > 1 || card?.classes?.[0] !== currentClass?.toUpperCase();
+	return (
+		!card?.classes?.includes(CardClass[CardClass.NEUTRAL]) && !card?.classes?.includes(currentClass?.toUpperCase())
+	);
 };
