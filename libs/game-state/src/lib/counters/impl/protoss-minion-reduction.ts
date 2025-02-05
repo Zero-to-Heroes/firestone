@@ -7,13 +7,7 @@ import { CounterType } from '../_exports';
 export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinitionV2<string> {
 	public override id: CounterType = 'protossMinionReduction';
 	public override image = CardIds.Artanis_SC_754;
-	public override cards: readonly CardIds[] = [
-		CardIds.Artanis_SC_754,
-		CardIds.PhotonCannon_SC_753,
-		CardIds.ConstructPylons_SC_755,
-		CardIds.WarpGate_SC_751,
-		CardIds.Sentry_SC_764,
-	];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerProtossMinionReductionCounter' as const,
@@ -24,10 +18,6 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 				state.playerDeck.enchantments.filter(
 					(e) => e.cardId === CardIds.WarpGate_WarpConduitEnchantment_SC_751e,
 				).length;
-			//+ 2 *
-			// 	state.playerDeck.enchantments.filter(
-			// 		(e) => e.cardId === CardIds.ConstructPylons_PsionicMatrixEnchantment_SC_755e2,
-			// 	).length;
 			const gameReductionCost = state.playerDeck.enchantments
 				.filter((e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e)
 				.map((e) => (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1))
