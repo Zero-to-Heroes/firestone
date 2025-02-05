@@ -178,7 +178,6 @@ import {
 } from './js/components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from './js/components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from './js/components/notifications.component';
-import { FullScreenOverlaysClickthroughComponent } from './js/components/overlays/_full-screen-overlays-clickthrough.component';
 import { FullScreenOverlaysComponent } from './js/components/overlays/_full-screen-overlays.component';
 import { BgsBannedTribesWidgetWrapperComponent } from './js/components/overlays/bgs-banned-tribes-widget-wrapper.component';
 import { BgsBattleSimulationWidgetWrapperComponent } from './js/components/overlays/bgs-battle-simulation-widget-wrapper.component';
@@ -982,7 +981,6 @@ try {
 		NotificationsComponent,
 		BattlegroundsComponent,
 		FullScreenOverlaysComponent,
-		FullScreenOverlaysClickthroughComponent,
 		BattlegroundsMinionsTiersOverlayComponent,
 		BattlegroundsOverlayButtonComponent,
 		BgsBannedTribesComponent,
@@ -1610,7 +1608,6 @@ try {
 		BattlegroundsComponent,
 		OutOfCardsCallbackComponent,
 		FullScreenOverlaysComponent,
-		FullScreenOverlaysClickthroughComponent,
 		LotteryWindowComponent,
 
 		DeckTrackerOverlayContainerComponent,

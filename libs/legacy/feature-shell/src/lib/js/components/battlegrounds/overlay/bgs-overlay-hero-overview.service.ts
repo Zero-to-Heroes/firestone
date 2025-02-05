@@ -24,7 +24,7 @@ export class BgsOverlayHeroOverviewService {
 	private async init() {
 		await waitForReady(this.gameState, this.prefs, this.bgState);
 
-		this.gameState.gameState$$.pipe(map((state) => state.gameEnded)).subscribe((gameEnded) => {
+		this.gameState.gameState$$.pipe(map((state) => state?.gameEnded)).subscribe((gameEnded) => {
 			if (gameEnded) {
 				this.hideInfo(null);
 			}

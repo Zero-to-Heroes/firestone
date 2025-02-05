@@ -53,6 +53,21 @@ import { DebugService } from '../../services/debug.service';
 				<div class="game-area">
 					<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
 					<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
+					<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
+					<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
+					<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
+					<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
+
+					<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
+					<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
+					<player-hero-power-widget-wrapper></player-hero-power-widget-wrapper>
+					<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
+
+					<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
+
+					<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
+					<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
+					<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
 				</div>
 			</div>
 			<!-- Global -->

@@ -20,7 +20,6 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static FULL_SCREEN_OVERLAYS_WINDOW = 'FullScreenOverlaysWindow';
-	public static FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW = 'FullScreenOverlaysClickthroughWindow';
 	public static LOTTERY_WINDOW = 'LotteryWindow';
 
 	private twitterUserInfo: TwitterUserInfo;

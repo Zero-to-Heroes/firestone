@@ -1,14 +1,8 @@
 .card {
-	pointer-events: all;
+	pointer-events: none;
 	height: 100%;
 	width: 100%;
 	position: relative;
-	background: rgba(255, 255, 255, 0.01);
-
-	img {
-		height: 100%;
-		width: 100%;
-	}
 
 	.highlight {
 		position: absolute;

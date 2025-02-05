@@ -4,7 +4,6 @@ export * from './lib/js/components/loading/loading.component';
 export * from './lib/js/components/lottery/lottery-window.component';
 export * from './lib/js/components/main-window.component';
 export * from './lib/js/components/notifications.component';
-export * from './lib/js/components/overlays/_full-screen-overlays-clickthrough.component';
 export * from './lib/js/components/overlays/_full-screen-overlays.component';
 export * from './lib/js/components/settings/settings.component';
 export * from './lib/js/components/third-party/out-of-cards-callback.component';

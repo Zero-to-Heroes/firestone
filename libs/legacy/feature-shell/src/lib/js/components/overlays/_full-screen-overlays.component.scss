@@ -21,8 +21,13 @@
 			width: 140vh;
 			position: relative;
 
-			bgs-hero-overview-widget-wrapper {
+			& > * {
 				position: absolute;
+				display: flex;
+				z-index: 1;
+			}
+
+			bgs-hero-overview-widget-wrapper {
 				top: 0;
 			}
 
@@ -31,7 +36,6 @@
 				width: 8vh;
 				left: 3vh;
 				top: 15vh;
-				position: absolute;
 			}
 		}
 	}
