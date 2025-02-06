@@ -101,25 +101,26 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		if (!!localStats?.length) {
 			console.log('[game-stats-loader] retrieved stats locally', localStats.length);
 			const prefs = await this.prefs.getPreferences();
-			this.gameStats$$.next(
-				GameStats.create({
-					stats: localStats
-						.map((stat) => GameStat.create({ ...stat }))
-						.map((stat) => deleteOutcomeSamples(stat))
-						.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
-						// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
-						// appear anywhere
-						.filter(
-							(stat) =>
-								!prefs?.desktopDeckDeletes ||
-								!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
-								prefs.desktopDeckDeletes[stat.playerDecklist][
-									prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
-								] < stat.creationTimestamp,
-						)
-						.sort((a, b) => b.creationTimestamp - a.creationTimestamp),
-				}),
-			);
+			const result = GameStats.create({
+				stats: localStats
+					.map((stat) => GameStat.create({ ...stat }))
+					.map((stat) => deleteOutcomeSamples(stat))
+					.filter((stat) => !!stat.gameMode && !stat.gameMode.includes('duels'))
+					.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
+					// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
+					// appear anywhere
+					.filter(
+						(stat) =>
+							!prefs?.desktopDeckDeletes ||
+							!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
+							prefs.desktopDeckDeletes[stat.playerDecklist][
+								prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
+							] < stat.creationTimestamp,
+					)
+					.sort((a, b) => b.creationTimestamp - a.creationTimestamp),
+			});
+			console.debug('[game-stats-loader] Retrieved game stats for user', result?.stats);
+			this.gameStats$$.next(result);
 		} else {
 			console.log('[game-stats-loader] no stats locally, retrieving from server');
 			const stats = await this.refreshGameStats(false);
