@@ -307,7 +307,7 @@ const handleExploreUngoro = (
 		(card) =>
 			card.update({
 				cardId: refCard.id,
-				cardName: i18n.getCardName(refCard.id, refCard.name),
+				cardName: refCard.name,
 				creatorCardId: CardIds.ExploreUngoro,
 				refManaCost: refCard.cost,
 				rarity: refCard.rarity,

@@ -53,7 +53,7 @@ export class DeckHandlerService {
 			result.push(
 				DeckCard.create({
 					cardId: card.id,
-					cardName: this.i18n.getCardName(card.id),
+					cardName: card.name,
 					refManaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
 					relatedCardIds: !!sideboard ? sideboard.cards : [],
@@ -109,7 +109,7 @@ export class DeckHandlerService {
 		}
 		return deckCard.update({
 			cardId: newCardId,
-			cardName: this.i18n.getCardName(newCardId) ?? undefined,
+			cardName: newCard.name ?? undefined,
 			// Here we update the ref mana cost, because it's Zilliax-like cards for which the reference cost depends on some
 			// global info
 			refManaCost: newCost,

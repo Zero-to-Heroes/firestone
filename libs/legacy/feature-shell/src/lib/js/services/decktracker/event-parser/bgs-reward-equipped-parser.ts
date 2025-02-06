@@ -19,7 +19,7 @@ export class BgsRewardEquippedParser implements EventParser {
 		const rewardCard = DeckCard.create({
 			cardId: dbCard.id,
 			entityId: entityId,
-			cardName: this.i18n.getCardName(dbCard.id),
+			cardName: dbCard.name,
 			refManaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'PLAY',

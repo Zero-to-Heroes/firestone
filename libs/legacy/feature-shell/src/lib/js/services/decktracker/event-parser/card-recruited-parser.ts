@@ -38,7 +38,7 @@ export class CardRecruitedParser implements EventParser {
 		const cardWithZone = card.update({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: this.i18n.getCardName(cardId, dbCard.name),
+			cardName: dbCard.name,
 			refManaCost: card.refManaCost ?? dbCard.cost,
 			actualManaCost: costFromTags ?? dbCard.cost,
 			zone: 'PLAY',

@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
@@ -182,12 +182,12 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 	}
 
-	private buildCardName(card: any, creatorCardId: string): string {
+	private buildCardName(card: ReferenceCard, creatorCardId: string): string {
 		if (card) {
-			return this.i18n.getCardName(card.id);
+			return card.name;
 		}
 		if (creatorCardId) {
-			return this.i18n.getCreatedByCardName(creatorCardId);
+			return this.i18n.getCreatedByCardName(this.allCards.getCard(creatorCardId).name);
 		}
 		return null;
 	}

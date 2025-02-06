@@ -8,9 +8,7 @@ import { LocalizationService } from './localization.service';
 export class LocalizationFacadeService implements ILocalizationService {
 	private service: LocalizationService;
 
-	constructor(private readonly ow: OverwolfService) {
-		this.init();
-	}
+	constructor(private readonly ow: OverwolfService) {}
 
 	public getTranslateService(): TranslateService {
 		return this.service.getTranslateService();
@@ -48,12 +46,8 @@ export class LocalizationFacadeService implements ILocalizationService {
 		return this.service.getNonLocalizedCardImage(cardId, options);
 	}
 
-	public getCardName(cardId: string, defaultName: string = null): string {
-		return this.service.getCardName(cardId, defaultName);
-	}
-
-	public getCreatedByCardName(creatorCardId: string): string {
-		return this.service.getCreatedByCardName(creatorCardId);
+	public getCreatedByCardName(cardName: string): string {
+		return this.service.getCreatedByCardName(cardName);
 	}
 
 	public getUnknownCardName(playerClass: string = null): string {

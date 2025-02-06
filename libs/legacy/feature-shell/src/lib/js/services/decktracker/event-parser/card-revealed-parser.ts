@@ -64,7 +64,7 @@ export class CardRevealedParser implements EventParser {
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: this.i18n.getCardName(dbCard.id, dbCard.name),
+			cardName: dbCard.name,
 			refManaCost: dbCard.cost,
 			actualManaCost: gameEvent.additionalData.cost ?? dbCard.cost,
 			rarity: dbCard.rarity,
@@ -94,7 +94,7 @@ export class CardRevealedParser implements EventParser {
 			const globalEffectCard = DeckCard.create({
 				entityId: null,
 				cardId: card.cardId,
-				cardName: this.i18n.getCardName(card.cardId),
+				cardName: dbCard.name,
 				refManaCost: dbCard?.cost,
 				rarity: dbCard?.rarity?.toLowerCase(),
 				zone: null,

@@ -81,7 +81,7 @@ export class CardPlayedByEffectParser implements EventParser {
 		const cardWithZone = DeckCard.create({
 			entityId: entityId,
 			cardId: cardId,
-			cardName: this.i18n.getCardName(refCard?.id),
+			cardName: refCard?.name,
 			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: isOnBoard ? 'PLAY' : null,

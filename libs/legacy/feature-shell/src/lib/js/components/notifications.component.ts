@@ -47,9 +47,6 @@ export class NotificationsComponent implements AfterViewInit {
 		maxStack: 5,
 	};
 
-	// private windowId: string;
-	// private gameInfoListener: (message: any) => void;
-
 	private activeNotifications: ActiveNotification[] = [];
 	private notifications$: Observable<Message>;
 
@@ -67,7 +64,7 @@ export class NotificationsComponent implements AfterViewInit {
 			.pipe(
 				filter((message) => !!message),
 				map((message) => {
-					console.debug('handling new notification', message);
+					console.log('handling new notification', message?.type);
 					// Don't await them because we don't want to block the main thread
 					const toast = this.buildToastNotification(message);
 					if (!toast) {
@@ -193,29 +190,9 @@ export class NotificationsComponent implements AfterViewInit {
 			this.notificationService.remove(toast.id);
 		}, 500);
 	}
-
-	// private resize() {
-	// 	setTimeout(async () => {
-	// 		const width = 500;
-	// 		const gameInfo = await this.ow.getRunningGameInfo();
-	// 		if (!gameInfo) {
-	// 			return;
-	// 		}
-
-	// 		const gameWidth = gameInfo.logicalWidth;
-	// 		const dpi = gameWidth / gameInfo.width;
-	// 		await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
-	// 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-	// 		const newLeft = gameWidth - width * dpi;
-	// 		const newTop = 1;
-	// 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-	// 	});
-	// }
 }
 
 interface ActiveNotification {
 	readonly toast: Notification;
-	// readonly subscription: Subscription;
 	readonly notificationId: string;
-	// readonly type?: string;
 }

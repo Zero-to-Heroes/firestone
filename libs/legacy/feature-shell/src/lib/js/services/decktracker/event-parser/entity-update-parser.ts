@@ -57,7 +57,7 @@ export class EntityUpdateParser implements EventParser {
 			? addAdditionalAttribuesInHand(
 					cardInHand.update({
 						cardId: obfsucatedCardId,
-						cardName: this.i18n.getCardName(obfsucatedCardId),
+						cardName: this.allCards.getCard(obfsucatedCardId).name,
 						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
 							? cardInHand.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
@@ -80,7 +80,7 @@ export class EntityUpdateParser implements EventParser {
 			cardInDeck?.cardId !== obfsucatedCardId
 				? cardInDeck?.update({
 						cardId: obfsucatedCardId,
-						cardName: this.i18n.getCardName(obfsucatedCardId),
+						cardName: this.allCards.getCard(obfsucatedCardId).name,
 						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
 							? cardInDeck.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
@@ -95,7 +95,7 @@ export class EntityUpdateParser implements EventParser {
 			cardInOther && cardInOther.cardId !== obfsucatedCardId
 				? cardInOther.update({
 						cardId: obfsucatedCardId,
-						cardName: this.i18n.getCardName(obfsucatedCardId),
+						cardName: this.allCards.getCard(obfsucatedCardId).name,
 						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
 							? cardInOther.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,

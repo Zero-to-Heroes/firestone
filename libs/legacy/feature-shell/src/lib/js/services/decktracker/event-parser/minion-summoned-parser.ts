@@ -28,7 +28,7 @@ export class MinionSummonedParser implements EventParser {
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: this.i18n.getCardName(cardId, dbCard.name),
+			cardName: dbCard.name,
 			refManaCost: dbCard.cost,
 			actualManaCost: costFromTags ?? dbCard.cost,
 			rarity: dbCard.rarity?.toLowerCase(),

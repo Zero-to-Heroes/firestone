@@ -47,7 +47,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 		const cardWithDefault = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: cardData && this.i18n.getCardName(cardData.id, cardData.name),
+			cardName: cardData?.name,
 			refManaCost: cardData?.cost,
 			rarity: cardData?.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,

@@ -41,7 +41,7 @@ export class CthunRevealedParser implements EventParser {
 				DeckCard.create({
 					cardId: cardId,
 					entityId: null,
-					cardName: this.i18n.getCardName(cardData.id, cardData.name),
+					cardName: cardData.name,
 					refManaCost: cardData ? cardData.cost : undefined,
 					rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 					creatorCardId: gameEvent.cardId,

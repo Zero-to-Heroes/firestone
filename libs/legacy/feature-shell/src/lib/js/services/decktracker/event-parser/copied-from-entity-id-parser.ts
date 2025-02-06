@@ -100,7 +100,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// We don't add the initial cards in the deck, so if no card is found, we create it
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({})).update({
 			cardId: obfuscatedCardId,
-			cardName: this.i18n.getCardName(obfuscatedCardId),
+			cardName: this.allCards.getCard(obfuscatedCardId).name,
 			refManaCost:
 				(isCopiedPlayer ? newCopy?.refManaCost : null) ?? this.allCards.getCard(obfuscatedCardId)?.cost,
 			// Always set the entityId to null when it's the opponent's deck to avoid info leaks

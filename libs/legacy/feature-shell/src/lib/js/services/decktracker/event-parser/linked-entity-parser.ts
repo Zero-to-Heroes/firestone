@@ -1,5 +1,6 @@
 import { Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { reverseIfNeeded } from './card-dredged-parser';
@@ -7,7 +8,11 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class LinkedEntityParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -46,7 +51,7 @@ export class LinkedEntityParser implements EventParser {
 				deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
 				newCard = DeckCard.create({
 					cardId: cardId,
-					cardName: this.i18n.getCardName(cardId),
+					cardName: this.allCards.getCard(cardId).name,
 					entityId: entityId,
 				} as DeckCard);
 			}
@@ -67,7 +72,7 @@ export class LinkedEntityParser implements EventParser {
 		if (originalCard) {
 			const updatedCard = originalCard.update({
 				cardId: newCard.cardId,
-				cardName: this.i18n.getCardName(cardId),
+				cardName: this.allCards.getCard(cardId).name,
 				// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
 				// even ones who already had a position previously
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,

@@ -63,7 +63,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 			DeckCard.create({
 				entityId: entityId,
 				cardId: cardId,
-				cardName: this.i18n.getCardName(cardId, refCard.name),
+				cardName: refCard.name,
 				refManaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: isOnBoard ? 'PLAY' : null,

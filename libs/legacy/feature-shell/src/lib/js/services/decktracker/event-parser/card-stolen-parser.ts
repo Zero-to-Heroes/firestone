@@ -1,12 +1,17 @@
 import { Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardStolenParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -82,7 +87,8 @@ export class CardStolenParser implements EventParser {
 						stealingToDeck.hand,
 						cardInHand.update({
 							cardId: cardInHand.cardId || cardId,
-							cardName: this.i18n.getCardName(cardInHand.cardId) ?? this.i18n.getCardName(cardId),
+							cardName:
+								this.allCards.getCard(cardInHand.cardId).name ?? this.allCards.getCard(cardId).name,
 							stolenFromOpponent: !cardInHand.stolenFromOpponent,
 							positionFromBottom: undefined,
 							positionFromTop: undefined,
@@ -97,7 +103,8 @@ export class CardStolenParser implements EventParser {
 						stealingToDeck.board,
 						cardInBoard.update({
 							cardId: cardInBoard.cardId || cardId,
-							cardName: this.i18n.getCardName(cardInBoard.cardId) ?? this.i18n.getCardName(cardId),
+							cardName:
+								this.allCards.getCard(cardInBoard.cardId).name ?? this.allCards.getCard(cardId).name,
 							stolenFromOpponent: !cardInBoard.stolenFromOpponent,
 							positionFromBottom: undefined,
 							positionFromTop: undefined,
@@ -110,7 +117,8 @@ export class CardStolenParser implements EventParser {
 						stealingToDeck.deck,
 						cardInDeck.update({
 							cardId: cardInDeck.cardId || cardId,
-							cardName: this.i18n.getCardName(cardInDeck.cardId) ?? this.i18n.getCardName(cardId),
+							cardName:
+								this.allCards.getCard(cardInDeck.cardId).name ?? this.allCards.getCard(cardId).name,
 							stolenFromOpponent: !cardInDeck.stolenFromOpponent,
 							positionFromBottom: undefined,
 							positionFromTop: undefined,

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { SettingsControllerService } from '@firestone/settings';
+import { Injectable, Injector } from '@angular/core';
+import { GlobalErrorService } from '@firestone/app/common';
 import { DiskCacheService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { IndexedDbService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
+import { IndexedDbService, OverwolfService, WindowManagerService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
@@ -11,30 +11,32 @@ import { LocalizationService } from '../../js/services/localization.service';
 @Injectable()
 export class BootstrapEssentialServicesService {
 	// All the constructors are there to start bootstrapping / registering everything
+	// The dependency graph should only include services that are in this constructor, and in this specific order
 	constructor(
-		private readonly debugService: DebugService,
-		private readonly prefs: PreferencesService,
-		private readonly diskCache: DiskCacheService,
-		private readonly db: IndexedDbService,
-		private readonly initCardsService: CardsInitService,
-		private readonly translate: TranslateService,
-		private readonly localizationService: LocalizationService,
-		private readonly localizationFacadeService: LocalizationFacadeService,
-		private readonly notifs: OwNotificationsService,
-		private readonly init_OWUtilsService: OwUtilsService,
-		// private readonly translateCacheService: TranslateCacheService,
-		private readonly init_SettingsControllerService: SettingsControllerService,
-		private readonly ow: OverwolfService,
+		private readonly injector: Injector,
+		private readonly debugService: DebugService, // No deps
+		private readonly ow: OverwolfService, // No deps
+		private readonly db: IndexedDbService, // No deps
+		private readonly windowManager: WindowManagerService, // OverwolfService
+		private readonly prefs: PreferencesService, // WindowManager
+		private readonly diskCache: DiskCacheService, // Overwolf, Prefs
+		// Localization indirectly depend on diskCache because of the loader
+		private readonly translate: TranslateService, // No deps
+		private readonly localizationService: LocalizationService, // Prefs
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
 		await this.db.init();
-		// First initialize the cards DB, as some of the dependencies injected in
-		// app-bootstrap won't be able to start without the cards DB in place
+		// Localization needs to be created before other services, so we can show errors
 		await this.initLocalization();
-		// Init is started in the constructor, but we make sure that all cards are properly retrieved before moving forward
-		await this.initCardsService.init();
-		// this.init_OWUtilsService.initialize();
+
+		// Bootstrap
+		const _notifs = this.injector.get(OwNotificationsService);
+		const _globalError = this.injector.get(GlobalErrorService);
+
+		// Wait until all cards are created
+		const initCardsService = this.injector.get(CardsInitService);
+		await initCardsService.init();
 	}
 
 	private async initLocalization() {
@@ -44,11 +46,11 @@ export class BootstrapEssentialServicesService {
 		// this.translate.setDefaultLang('enUS');
 		// Load the locales first, otherwise some windows will be displayed with missing text
 		let prefs = await this.prefs.getPreferences();
-		console.debug('[bootstrap] [localization] setting language', prefs.locale);
+		console.log('[bootstrap] [localization] setting language', prefs.locale);
 		let locale = prefs.locale;
 		if (!prefs.hasChangedLocale) {
 			const systemInfo = await this.ow.getSystemInformation();
-			console.debug('[bootstrap] [localization] system info', systemInfo);
+			console.log('[bootstrap] [localization] system info', systemInfo);
 			const systemLocale = systemInfo?.SystemLanguage;
 			if (!!systemLocale?.length) {
 				locale = this.localizationService.getFirestoneLocale(systemLocale);
@@ -60,14 +62,14 @@ export class BootstrapEssentialServicesService {
 
 		return new Promise<void>((resolve) => {
 			this.translate.use(prefs.locale).subscribe(async (info) => {
-				console.debug('[bootstrap] [localization] language set', prefs.locale, info);
-				// await this.translate.use(prefs.locale).toPromise();
-				// console.debug('[bootstrap] starting localization service', this.translate);
+				console.log('[bootstrap] [localization] language set', prefs.locale, info);
 				await this.localizationService.start(this.translate);
 				await this.localizationService.initReady();
-				console.debug('[bootstrap] localization service ready');
-				await this.localizationFacadeService.init();
-				console.debug('[bootstrap] localization facade ready', this.localizationFacadeService);
+				console.log('[bootstrap] localization service ready');
+
+				const localizationFacadeService = this.injector.get(LocalizationFacadeService);
+				await localizationFacadeService.init();
+				console.log('[bootstrap] localization facade ready');
 				resolve();
 			});
 		});

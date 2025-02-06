@@ -39,7 +39,7 @@ export class SecretCreatedInGameParser implements EventParser {
 			DeckCard.create({
 				cardId: cardId,
 				entityId: entityId,
-				cardName: this.i18n.getCardName(cardId, dbCard.name),
+				cardName: dbCard.name,
 				refManaCost: dbCard.cost,
 				rarity: dbCard.rarity,
 			} as DeckCard)

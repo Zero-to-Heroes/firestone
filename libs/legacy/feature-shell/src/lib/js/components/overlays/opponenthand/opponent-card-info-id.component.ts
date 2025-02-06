@@ -123,7 +123,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		this._card = card.update({
 			cardId: this.cardId,
 			// We probably don't need to update the other fields, as they are not displayed
-			cardName: this.cardId === card.cardId ? card.cardName : this.i18n.getCardName(this.cardId),
+			cardName: this.cardId === card.cardId ? card.cardName : this.allCards.getCard(this.cardId).name,
 		} as DeckCard);
 		const enhancedGuessInfo = enhanceGuessedInfo(card.guessedInfo, {
 			card: card,

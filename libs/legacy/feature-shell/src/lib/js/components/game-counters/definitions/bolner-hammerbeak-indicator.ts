@@ -17,7 +17,7 @@ export class BolnerHammerbeakIndicator implements CounterDefinition<GameState, s
 
 	constructor(
 		private readonly side: 'player' | 'opponent',
-		private readonly allCards,
+		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {}
 
@@ -42,7 +42,7 @@ export class BolnerHammerbeakIndicator implements CounterDefinition<GameState, s
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${firstBattlecryCardId}.jpg`,
 			cssClass: 'bolner-counter',
 			tooltip: this.i18n.translateString(`counters.bolner`, {
-				value: this.i18n.getCardName(firstBattlecryCardId),
+				value: this.allCards.getCard(firstBattlecryCardId).name,
 			}),
 			cardTooltips: [firstBattlecryCardId],
 			standardCounter: true,

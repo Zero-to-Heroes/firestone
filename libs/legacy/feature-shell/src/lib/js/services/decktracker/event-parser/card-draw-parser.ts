@@ -158,7 +158,7 @@ export class CardDrawParser implements EventParser {
 			entityId: entityId,
 			creatorCardId: isCreatorPublic ? creatorCardId ?? card.creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
-			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) ?? card?.cardName : undefined,
+			cardName: isCardInfoPublic ? this.allCards.getCard(card?.cardId).name ?? card?.cardName : undefined,
 			lastAffectedByCardId: isCreatorPublic
 				? lastInfluencedByCardId ?? card.lastAffectedByCardId ?? drawnByCardId
 				: isDrawnByCardIdPublic

@@ -237,7 +237,7 @@ export class DeckManipulationHelper {
 				: card.update(newCard).update({
 						entityId: hideEntityId ? null : entityId,
 						cardId: cardId,
-						cardName: this.i18n.getCardName(cardId),
+						cardName: this.allCards.getCard(cardId).name,
 				  } as DeckCard),
 		);
 	}
@@ -319,7 +319,7 @@ export class DeckManipulationHelper {
 						return idByCardId.update({
 							entityId: entityId,
 							cardId: cardId,
-							cardName: card && this.i18n.getCardName(card.id),
+							cardName: card.name,
 						} as DeckCard);
 					} else {
 						// console.warn(
@@ -352,7 +352,7 @@ export class DeckManipulationHelper {
 				const card = this.allCards.getCard(cardId);
 				return found.update({
 					cardId: cardId,
-					cardName: (card && this.i18n.getCardName(card.id)) || found.cardName,
+					cardName: card.name || found.cardName,
 				} as DeckCard);
 			}
 			if (found) {
@@ -390,7 +390,7 @@ export class DeckManipulationHelper {
 				//console.debug('[findCardInZone] not found, creating default card', card, entityId, cardId, zone);
 				return DeckCard.create({
 					cardId: cardId,
-					cardName: card ? this.i18n.getCardName(card.id) : null,
+					cardName: card?.name,
 					entityId: entityId,
 				} as DeckCard);
 			}
@@ -415,7 +415,7 @@ export class DeckManipulationHelper {
 		if (cardInHand && !cardInHand.cardId) {
 			const newCard = cardInHand.update({
 				cardId: cardId,
-				cardName: this.i18n.getCardName(cardId),
+				cardName: this.allCards.getCard(cardId).name,
 			} as DeckCard);
 			const newHand = this.replaceCardInZone(deck.hand, newCard);
 			return Object.assign(new DeckState(), deck, {

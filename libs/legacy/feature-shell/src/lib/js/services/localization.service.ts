@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
+import { ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
@@ -14,13 +14,7 @@ export class LocalizationService {
 
 	private translate: TranslateService;
 
-	// private ready = false;
-
-	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
-	) {}
+	constructor(private readonly prefs: PreferencesService) {}
 
 	// FIXME: should handle all the init logic here (or create a facade?), instead of having it be in app-bootstrap
 	public async initReady() {
@@ -33,10 +27,6 @@ export class LocalizationService {
 		});
 	}
 
-	// public setReady(value: boolean) {
-	// 	this.ready = value;
-	// }
-
 	public async start(translateService: TranslateService) {
 		if (this.translate) {
 			return;
@@ -45,7 +35,7 @@ export class LocalizationService {
 		this.translate = translateService;
 		window['localizationService'] = this;
 
-		console.log('[localization] store is ready, starting localization service pref updates init');
+		console.log('[localization] Starting localization service pref updates init');
 		this.prefs.preferences$$
 			.pipe(
 				map((prefs) => prefs?.locale),
@@ -75,6 +65,10 @@ export class LocalizationService {
 		this._locale = locale;
 	}
 
+	public getCreatedByCardName(cardName: string): string {
+		return `Created by ${cardName ?? 'unknown'}`;
+	}
+
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		if (!cardId) {
 			return null;
@@ -96,19 +90,6 @@ export class LocalizationService {
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;
-	}
-
-	// Because each localization has its own file, we always get the info from the root
-	public getCardName(cardId: string, defaultName: string = null): string {
-		const card = this.allCards.getCard(cardId);
-		// const loc = card.locales?.find((locale) => locale?.locale === this.locale);
-		return card?.name ?? defaultName;
-	}
-
-	public getCreatedByCardName(creatorCardId: string): string {
-		return this.translateString('decktracker.created-by', {
-			value: this.getCardName(creatorCardId) ?? this.getUnknownCardName(null),
-		});
 	}
 
 	public getUnknownCardName(i18n: { translateString: (string) => string }, playerClass: string = null): string {

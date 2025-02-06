@@ -111,7 +111,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			DeckCard.create({
 				cardId: isCardInfoPublic ? cardId : null,
 				entityId: entityId,
-				cardName: isCardInfoPublic && cardData ? this.i18n.getCardName(cardId, cardData.name) : null,
+				cardName: isCardInfoPublic && cardData ? cardData.name : null,
 				refManaCost: isCardInfoPublic && cardData ? cardData.cost : null,
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,

@@ -46,7 +46,7 @@ export class GlobalMinionEffectParser implements EventParser {
 		const card = DeckCard.create({
 			entityId: null,
 			cardId: cardId,
-			cardName: this.i18n.getCardName(cardId, refCard.name),
+			cardName: refCard.name,
 			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: null,

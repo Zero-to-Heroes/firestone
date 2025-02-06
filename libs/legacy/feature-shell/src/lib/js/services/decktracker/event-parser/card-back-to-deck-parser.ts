@@ -138,7 +138,7 @@ export class CardBackToDeckParser implements EventParser {
 			DeckCard.create({
 				cardId: cardId,
 				entityId: entityId,
-				cardName: this.i18n.getCardName(dbCard.id),
+				cardName: dbCard.name,
 				refManaCost: dbCard.cost,
 				rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 				playTiming: null,

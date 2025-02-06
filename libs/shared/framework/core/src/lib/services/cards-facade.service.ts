@@ -16,7 +16,7 @@ export class CardsFacadeService {
 	public async waitForReady(): Promise<void> {
 		// eslint-disable-next-line no-async-promise-executor
 		return new Promise<void>(async (resolve, reject) => {
-			let retriesLeft = 10;
+			let retriesLeft = 100;
 			while (!this.service?.getCards()?.length && retriesLeft >= 0) {
 				await sleep(500);
 				retriesLeft--;

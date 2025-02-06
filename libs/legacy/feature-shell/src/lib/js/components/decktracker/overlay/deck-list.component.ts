@@ -47,7 +47,7 @@ export class DeckListComponent {
 			.map((card) => {
 				return DeckCard.create({
 					cardId: card.id,
-					cardName: this.i18n.getCardName(card.id),
+					cardName: card.name,
 					refManaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
 				} as DeckCard);

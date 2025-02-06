@@ -30,7 +30,7 @@ export class QuestCreatedInGameParser implements EventParser {
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: this.i18n.getCardName(cardId, dbCard.name),
+			cardName: dbCard.name,
 			refManaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
@@ -60,7 +60,7 @@ export class QuestCreatedInGameParser implements EventParser {
 					// want to remove objectives once they are completed
 					entityId: dbCard.mechanics?.includes(GameTag[GameTag.OBJECTIVE]) ? entityId : null,
 					cardId: globalEffectCard.id,
-					cardName: this.i18n.getCardName(globalEffectCard.id, globalEffectCard.name),
+					cardName: globalEffectCard.name,
 					refManaCost: globalEffectCard.cost,
 					rarity: globalEffectCard.rarity,
 					creatorCardId: cardId,

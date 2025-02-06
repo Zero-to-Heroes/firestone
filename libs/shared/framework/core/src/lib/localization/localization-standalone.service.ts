@@ -84,14 +84,8 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		return `${base}/${suffix}`;
 	}
 
-	// Because each localization has its own file, we always get the info from the root
-	public getCardName(cardId: string, defaultName: string | null = null): string {
-		const card = this.allCards.getCard(cardId);
-		return card?.name ?? defaultName;
-	}
-
-	public getCreatedByCardName(creatorCardId: string): string {
-		return `Created by ${this.getCardName(creatorCardId) ?? 'unknown'}`;
+	public getCreatedByCardName(cardName: string): string {
+		return `Created by ${cardName ?? 'unknown'}`;
 	}
 
 	public getUnknownCardName(playerClass: string | null = null): string {

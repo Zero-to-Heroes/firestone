@@ -460,8 +460,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.cardName =
 			(!!card.cardName?.length
 				? card.cardName + this.buildSuffix(card, showStatsChange)
-				: this.i18n.getCardName(this.cardId) ?? this.i18n?.getUnknownCardName()) ??
-			this.i18n.getUnknownCardName();
+				: this._referenceCard.name ?? this.i18n?.getUnknownCardName()) ?? this.i18n.getUnknownCardName();
 		this.isUnknownCard = !card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = card.totalQuantity;
