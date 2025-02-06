@@ -20,6 +20,7 @@ import { CardsFacadeService, ILocalizationService, waitForReady } from '@firesto
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
+const SPECIAL_STATUS_TOKENS = [CardIds.AvatarOfNzoth_FishOfNzothToken];
 @Component({
 	selector: 'bgs-simulator-minion-selection',
 	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-minion-selection.component.scss`],
@@ -247,7 +248,7 @@ export class BgsSimulatorMinionSelectionComponent
 				this.mapData(([searchString, { tribeFilter, tierFilter }, showBuddies]) => {
 					const result = this.allCards
 						.getCards()
-						.filter((card) => card.isBaconPool)
+						.filter((card) => card.isBaconPool || SPECIAL_STATUS_TOKENS.includes(card.id as CardIds))
 						.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
 						// .filter((card) => card.battlegroundsPremiumDbfId || TOKEN_CARD_IDS.includes(card.id as CardIds))
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
