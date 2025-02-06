@@ -8,7 +8,9 @@ import { LocalizationService } from './localization.service';
 export class LocalizationFacadeService implements ILocalizationService {
 	private service: LocalizationService;
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService) {
+		this.init();
+	}
 
 	public getTranslateService(): TranslateService {
 		return this.service.getTranslateService();

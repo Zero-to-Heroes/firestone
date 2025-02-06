@@ -92,7 +92,9 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 					// Use this trick to avoid having the component flicker when appearing
 					this.scale = scale / 100;
 					const element = this.el.nativeElement.querySelector('.scalable');
-					this.renderer.setStyle(element, 'transform', `scale(${this.scale})`);
+					if (!!element) {
+						this.renderer.setStyle(element, 'transform', `scale(${this.scale})`);
+					}
 				} catch (e) {
 					// Do nothing
 				}
@@ -100,10 +102,12 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((pref) => {
 			try {
 				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform-origin', pref ? 'top left' : 'bottom left');
-				this.renderer.removeClass(element, 'bottom');
-				if (!pref) {
-					this.renderer.addClass(element, 'bottom');
+				if (!!element) {
+					this.renderer.setStyle(element, 'transform-origin', pref ? 'top left' : 'bottom left');
+					this.renderer.removeClass(element, 'bottom');
+					if (!pref) {
+						this.renderer.addClass(element, 'bottom');
+					}
 				}
 			} catch (e) {
 				// Do nothing

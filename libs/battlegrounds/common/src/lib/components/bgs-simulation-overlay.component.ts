@@ -68,7 +68,9 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs?.bgsSimulatorScale)).subscribe((scale) => {
 			// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
 			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			if (!!element) {
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			}
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

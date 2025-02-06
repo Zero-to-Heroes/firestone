@@ -69,8 +69,10 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale)).subscribe((value) => {
 			const newScale = value / 100;
 			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
+			if (!!element) {
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
+			}
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

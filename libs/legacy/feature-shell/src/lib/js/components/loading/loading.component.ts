@@ -73,7 +73,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 	encapsulation: ViewEncapsulation.None, // TODO: clean this
 })
 export class LoadingComponent implements AfterViewInit, OnDestroy {
-	title = this.i18n.translateString('loading.getting-ready');
+	title = null;
 	loading = true;
 	thisWindowId: string;
 
@@ -89,6 +89,9 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		// this.cdr.detach();
+		await this.i18n.init();
+		console.debug('[loading] i18n initialized', this.i18n.getTranslateService(), this.i18n);
+		this.title = this.i18n.translateString('loading.getting-ready');
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {

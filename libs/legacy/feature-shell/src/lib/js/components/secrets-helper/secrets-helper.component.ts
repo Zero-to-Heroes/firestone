@@ -85,7 +85,9 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 			this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
 			const newScale = scale / 100;
 			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			if (!!element) {
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			}
 		});
 
 		if (!(this.cdr as ViewRef).destroyed) {

@@ -79,6 +79,8 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 		console.debug('changing scale', newScale, element);
 		console.debug('elToResize', this.elToResize?.());
 		console.debug('nativeElement', this.el.nativeElement);
-		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		if (!!element) {
+			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		}
 	}
 }

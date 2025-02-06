@@ -143,7 +143,9 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
 			const newScale = scale / 100;
 			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			if (!!element) {
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			}
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
