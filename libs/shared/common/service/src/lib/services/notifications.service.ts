@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
@@ -99,7 +100,7 @@ export class OwNotificationsService {
 		});
 	}
 
-	public notifyError(title: string, text: string, code: string) {
+	public notifyError(title: string, text: string, code: string, onClick?: () => void | Promise<void>) {
 		this.emitNewNotification(
 			{
 				content: `
@@ -121,8 +122,16 @@ export class OwNotificationsService {
 						</svg>
 					</button>
 				</div>`,
-				timeout: 60000,
+				timeout: 99999999,
 				notificationId: `${code}`,
+				handlers: onClick
+					? [
+							{ selector: 'general-message-container', action: onClick },
+							{ selector: 'message', action: onClick },
+							{ selector: 'title', action: onClick },
+							{ selector: 'text', action: onClick },
+					  ]
+					: null,
 			},
 			true,
 		);

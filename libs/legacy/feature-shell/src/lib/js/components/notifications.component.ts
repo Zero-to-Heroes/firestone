@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -11,7 +12,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { Notification, NotificationType, NotificationsService } from 'angular2-notifications';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
@@ -37,7 +37,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 // TODO: https://github.com/scttcper/ngx-toastr (19/11/2020)
-export class NotificationsComponent {
+export class NotificationsComponent implements AfterViewInit {
 	timeout = 6000;
 	// timeout = 9999999;
 	toastOptions = {
@@ -56,20 +56,13 @@ export class NotificationsComponent {
 	constructor(
 		private readonly notificationService: NotificationsService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly debugService: DebugService,
 		private readonly ow: OverwolfService,
 		private readonly elRef: ElementRef,
 		private readonly store: AppUiStoreFacadeService,
-	) {
-		this.init();
-	}
+	) {}
 
-	private async init() {
+	ngAfterViewInit() {
 		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
-		// this.windowId = (await this.ow.getCurrentWindow()).id;
-		// await this.ow.restoreWindow(this.windowId);
-		// await this.ow.bringToFront(this.windowId);
-
 		this.notifications$
 			.pipe(
 				filter((message) => !!message),
@@ -87,27 +80,12 @@ export class NotificationsComponent {
 			.subscribe();
 	}
 
-	async ngAfterViewInit() {
-		// this.gameInfoListener = this.ow.addGameInfoUpdatedListener((message) => {
-		// 	if (message.resolutionChanged || message.runningChanged) {
-		// 		this.resize();
-		// 	}
-		// });
-		// this.windowId = (await this.ow.getCurrentWindow()).id;
-		// this.resize();
-	}
-
-	// @HostListener('window:beforeunload')
-	// ngOnDestroy(): void {
-	// 	this.ow.removeGameInfoUpdatedListener(this.gameInfoListener);
-	// }
-
 	created(event) {
-		console.log('notif created', event.id);
+		console.log('[notifications] notif created', event.id);
 	}
 
 	destroyed(event) {
-		console.log('notif destroyed', event.id);
+		console.log('[notifications] notif destroyed', event.id);
 		const deletedNotifications = this.activeNotifications.filter((notif) => notif.toast.id === event.id);
 		deletedNotifications.forEach((notif) => {
 			(notif.toast as any).subscription.unsubscribe();
@@ -116,9 +94,10 @@ export class NotificationsComponent {
 	}
 
 	private buildToastNotification(message: Message): Notification {
-		if (this.activeNotifications.some((n) => n.notificationId === message.notificationId)) {
-			return null;
-		}
+		// if (this.activeNotifications.some((n) => n.notificationId === message.notificationId)) {
+		// 	console.debug('[notifications] notification already active', message);
+		// 	return null;
+		// }
 
 		const override: any = {
 			timeOut: message.timeout || this.timeout,
@@ -133,6 +112,7 @@ export class NotificationsComponent {
 			notificationId: message.notificationId,
 			toast: toast,
 		});
+		console.debug('[notifications] notification added', toast, this.activeNotifications);
 		return toast;
 	}
 
@@ -153,14 +133,17 @@ export class NotificationsComponent {
 	}
 
 	private handleToastClick(event: MouseEvent, messageObject: Message, toastId: string): void {
+		console.debug('[notifications] handling toast click', event, messageObject, toastId);
 		const isClickOnCloseButton = this.isClickOnCloseButton(event);
 		if (isClickOnCloseButton) {
+			console.debug('[notifications] click on close button, removing notification', toastId);
 			this.notificationService.remove(toastId);
 			return;
 		}
 
 		const isUnclickable = this.isUnclickable(event);
 		if (isUnclickable) {
+			console.debug('[notifications] click on unclickable area, ignoring', toastId);
 			event.preventDefault();
 			event.stopPropagation();
 			return;
@@ -168,6 +151,7 @@ export class NotificationsComponent {
 
 		for (const handler of messageObject.handlers ?? []) {
 			if ((<HTMLElement>event.target).className.indexOf(handler.selector) > -1) {
+				console.debug('[notifications] handling click', handler);
 				this.notificationService.remove(toastId);
 				handler.action();
 			}

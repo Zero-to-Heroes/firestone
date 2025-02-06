@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
+import { GlobalErrorService } from '@firestone/app/common';
 import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { distinctUntilChanged, map, skip } from 'rxjs';
 import { CARDS_VERSION } from './hs-utils';
@@ -12,6 +13,7 @@ export class CardsInitService {
 		private readonly cards: AllCardsService,
 		private readonly prefs: PreferencesService,
 		private readonly diskCache: DiskCacheService,
+		private readonly globalErrorService: GlobalErrorService,
 	) {}
 
 	public async init() {
@@ -50,14 +52,26 @@ export class CardsInitService {
 			// Make this non-blocking, so the app can already start with the cached info, while we get the
 			// updated cards in the background
 			setTimeout(async () => {
-				await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
-				console.log('[cards-init] loaded cards from remote', this.cards.getCards().length);
-				await this.saveCardsLocally(fileName, this.cards.getCards());
+				await this.loadCardsFromRemote(fileName);
 			});
 		} else {
+			await this.loadCardsFromRemote(fileName);
+		}
+	}
+
+	private async loadCardsFromRemote(fileName: string) {
+		try {
 			await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
-			console.log('[cards-init] loaded cards from remote', this.cards.getCards().length);
-			await this.saveCardsLocally(fileName, this.cards.getCards());
+			console.log('[cards-init] loaded cards from remote', this.cards.getCards()?.length);
+			if (!this.cards.getCards()?.length) {
+				console.error('[cards-init] could not load cards');
+				this.globalErrorService.notifyCriticalError('no-cards');
+			} else {
+				await this.saveCardsLocally(fileName, this.cards.getCards());
+			}
+		} catch (e) {
+			console.error('[cards-init] could not load cards', e);
+			this.globalErrorService.notifyCriticalError('no-cards');
 		}
 	}
 
