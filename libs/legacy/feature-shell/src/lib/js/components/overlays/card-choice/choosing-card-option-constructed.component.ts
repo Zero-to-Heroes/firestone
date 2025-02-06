@@ -49,6 +49,7 @@ import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-
 				></constructed-card-option-view>
 				<mulligan-info-premium
 					*ngIf="showPremiumBanner$ | async"
+					class="premium"
 					[type]="'constructed'"
 					[dailyFreeUses]="freeUses$ | async"
 				></mulligan-info-premium>

@@ -39,14 +39,14 @@ import { buildBasicCardChoiceValue } from './card-choice-values';
 							[playerClass]="playerClass$ | async"
 						></choosing-card-option-arena>
 					</ng-container>
-					<!-- <ng-container *ngSwitchCase="'constructed'">
+					<ng-container *ngSwitchCase="'constructed'">
 						<choosing-card-option-constructed
 							class="option-container"
 							*ngFor="let option of value.options"
 							[option]="option"
 							[opponentClass]="opponentClass$ | async"
 						></choosing-card-option-constructed>
-					</ng-container> -->
+					</ng-container>
 					<ng-container *ngSwitchDefault>
 						<choosing-card-option
 							class="option-container"

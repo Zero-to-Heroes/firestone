@@ -20,14 +20,14 @@ import { ConstructedCardStat } from '../services/constructed-discover.service';
 	template: `
 		<div class="info-container scalable">
 			<div class="stats impact">
-				<div class="stat winrate draw">
+				<div class="stat winrate draw" *ngIf="drawImpact !== '-'">
 					<span
 						class="label"
 						[fsTranslate]="'app.decktracker.meta.details.cards.drawn-winrate-impact-header'"
 					></span>
 					<span class="value {{ drawWinrateClass }}">{{ drawImpact }}</span>
 				</div>
-				<div class="stat winrate discover">
+				<div class="stat winrate discover" *ngIf="drawImpact === '-'">
 					<span
 						class="label"
 						[fsTranslate]="'app.decktracker.meta.details.cards.discovered-winrate-impact-header'"
