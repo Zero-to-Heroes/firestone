@@ -15,6 +15,7 @@
 		display: flex;
 		justify-content: flex-end;
 		padding-right: 20px;
+		flex-shrink: 0;
 	}
 
 	.simple-notification-wrapper.simple-notification-wrapper {
@@ -28,6 +29,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
+		flex-shrink: 0;
 
 		.simple-notification {
 			padding: 0;
@@ -35,6 +37,7 @@
 			border: none;
 			display: flex;
 			justify-content: flex-end;
+			flex-shrink: 0;
 
 			& > div {
 				pointer-events: auto;
@@ -57,6 +60,7 @@
 		width: 330px;
 		height: 65px;
 		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
+		flex-shrink: 0;
 
 		&.message-new-card {
 			position: relative;
