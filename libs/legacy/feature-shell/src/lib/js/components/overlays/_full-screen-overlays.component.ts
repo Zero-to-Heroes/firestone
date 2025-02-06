@@ -55,15 +55,16 @@ import { DebugService } from '../../services/debug.service';
 					<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
 					<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
 					<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
+					<!-- Will reactivate this when I can test them properly -->
 					<!-- <choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
 					<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper> -->
 
 					<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
 					<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
-					<!-- <player-hero-power-widget-wrapper></player-hero-power-widget-wrapper> -->
 					<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
 
-					<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
+					<!-- Need to implement proper mouse-over support, will add this when I get a report -->
+					<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
 					<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
 					<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
