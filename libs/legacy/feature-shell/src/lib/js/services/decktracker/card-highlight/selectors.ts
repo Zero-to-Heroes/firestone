@@ -282,6 +282,7 @@ export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
+export const infuse = hasMechanic(GameTag.INFUSE);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);

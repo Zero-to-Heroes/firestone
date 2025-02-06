@@ -65,6 +65,7 @@ import {
 	inOther,
 	inPlay,
 	inStartingHand,
+	infuse,
 	isPlague,
 	isSi7,
 	isTreant,
@@ -163,6 +164,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Aeroponics:
 			return and(side(inputSide), or(inHand, inDeck), or(summonsTreant, isTreant));
+		case CardIds.AfterlifeAttendant:
+		case CardIds.AfterlifeAttendant_CORE_MAW_031:
+			return and(side(inputSide), or(inDeck, inHand), infuse);
 		case CardIds.AirGuitarist:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.AkaliTheRhino:
@@ -1353,6 +1357,8 @@ export const cardIdSelector = (
 		case CardIds.ElementalInspiration:
 		case CardIds.InquisitiveCreation:
 		case CardIds.WisdomOfNorgannon:
+		case CardIds.IniStormcoil_TSC_649:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.RazzleDazzler_VAC_301:
 			return and(side(inputSide), or(inDeck, inHand), spell, hasSpellSchool, not(spellSchoolPlayedThisMatch));
 		case CardIds.Insight:
