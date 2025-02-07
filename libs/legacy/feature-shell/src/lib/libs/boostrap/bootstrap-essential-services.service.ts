@@ -61,8 +61,9 @@ export class BootstrapEssentialServicesService {
 		}
 
 		return new Promise<void>((resolve) => {
+			console.log('[bootstrap] [localization] preparing to set language', prefs.locale);
 			this.translate.use(prefs.locale).subscribe(async (info) => {
-				console.log('[bootstrap] [localization] language set', prefs.locale, info);
+				console.log('[bootstrap] [localization] language set', prefs.locale);
 				await this.localizationService.start(this.translate);
 				await this.localizationService.initReady();
 				console.log('[bootstrap] localization service ready');

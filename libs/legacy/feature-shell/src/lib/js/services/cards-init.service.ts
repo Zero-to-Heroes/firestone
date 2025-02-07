@@ -46,7 +46,7 @@ export class CardsInitService {
 		const fileName = this.getFileName(locale);
 		console.log('[cards-init] initializing cards db with', fileName);
 		const localCards: readonly ReferenceCard[] | null = await this.retrieveLocalCards(fileName);
-		if (!!localCards?.length) {
+		if (!!localCards?.length && localCards.length % 8000 !== 0) {
 			this.cards.initializeCardsDbFromCards(localCards);
 			console.log('[cards-init] initialized cards with local cache', localCards?.length);
 			// Make this non-blocking, so the app can already start with the cached info, while we get the
@@ -63,7 +63,8 @@ export class CardsInitService {
 		try {
 			await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
 			console.log('[cards-init] loaded cards from remote', this.cards.getCards()?.length);
-			if (!this.cards.getCards()?.length) {
+			// An exact count means that we are missing the last split
+			if (!this.cards.getCards()?.length || this.cards.getCards().length % 8000 === 0) {
 				console.error('[cards-init] could not load cards');
 				this.globalErrorService.notifyCriticalError('no-cards');
 			} else {
