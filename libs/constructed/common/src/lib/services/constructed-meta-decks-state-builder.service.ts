@@ -263,7 +263,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			.replace('{rank}', rank)
 			.replace('{timePeriod}', time)
 			.replace('{deckId}', deckId);
-		console.log('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
+		console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
 		// Can happen if there is no data for the deck
 		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
