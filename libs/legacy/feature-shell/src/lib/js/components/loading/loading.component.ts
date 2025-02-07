@@ -8,7 +8,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { getNoCardsUrl } from '@firestone/app/common';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -62,8 +63,14 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 					</svg>
 				</i>
 				<div class="sub-title" *ngIf="!loading">
-					<span [owTranslate]="'loading.hotkey'"></span>
-					<hotkey></hotkey>
+					<span
+						class="error-message"
+						*ngIf="errorMessageKey"
+						[owTranslate]="errorMessageKey"
+						(click)="showError()"
+					></span>
+					<span *ngIf="!errorMessageKey" [owTranslate]="'loading.hotkey'"></span>
+					<hotkey *ngIf="!errorMessageKey"></hotkey>
 				</div>
 			</section>
 			<single-ad [adId]="'loading'" class="ads"></single-ad>
@@ -75,6 +82,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 export class LoadingComponent implements AfterViewInit, OnDestroy {
 	title = null;
 	loading = true;
+	errorMessageKey: string | null = null;
 	thisWindowId: string;
 
 	private stateChangedListener: (message: any) => void;
@@ -85,24 +93,32 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async ngAfterViewInit() {
 		// this.cdr.detach();
 		await this.i18n.init();
 		console.debug('[loading] i18n initialized', this.i18n.getTranslateService(), this.i18n);
-		this.title = this.i18n.translateString('loading.getting-ready');
+		if (!this.allCards.getCards()?.length) {
+			this.title = this.i18n.translateString('app.global.errors.no-cards.title');
+			this.errorMessageKey = 'app.global.errors.no-cards.message';
+			this.loading = false;
+		} else {
+			this.title = this.i18n.translateString('loading.getting-ready');
+			this.errorMessageKey = null;
+			this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
+				if (message.id === 'ready') {
+					this.title = this.i18n.translateString('loading.ready');
+					this.loading = false;
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}
+			});
+		}
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
-		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
-			if (message.id === 'ready') {
-				this.title = this.i18n.translateString('loading.ready');
-				this.loading = false;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			}
-		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -125,6 +141,10 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 
 	minimizeWindow() {
 		this.ow.minimizeWindow(this.thisWindowId);
+	}
+
+	showError() {
+		this.ow.openUrlInDefaultBrowser(getNoCardsUrl(this.i18n));
 	}
 
 	private async positionWindow() {

@@ -66,13 +66,16 @@ export class CardsInitService {
 			// An exact count means that we are missing the last split
 			if (!this.cards.getCards()?.length || this.cards.getCards().length % 8000 === 0) {
 				console.error('[cards-init] could not load cards');
-				this.globalErrorService.notifyCriticalError('no-cards');
+				// this.globalErrorService.notifyCriticalError('no-cards');
+				throw new Error(`Could not load cards ${CARDS_VERSION}, ${fileName}`);
 			} else {
 				await this.saveCardsLocally(fileName, this.cards.getCards());
 			}
 		} catch (e) {
 			console.error('[cards-init] could not load cards', e);
 			this.globalErrorService.notifyCriticalError('no-cards');
+			// Don't throw, otherwise we won't be able to display the notification
+			// throw e;
 		}
 	}
 

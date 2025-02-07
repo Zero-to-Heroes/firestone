@@ -88,6 +88,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		worker.onmessage = (ev: MessageEvent) => {
 			if (!ev?.data) {
 				if (!!this.cards.getCards().length) {
+					console.debug('[bgs-simulation] Simulation crashed, cards loaded:', this.cards.getCards().length);
 					this.bugService.submitAutomatedReport({
 						type: 'bg-sim-crash',
 						info: JSON.stringify({

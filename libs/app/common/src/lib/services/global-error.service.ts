@@ -13,17 +13,21 @@ export class GlobalErrorService {
 		(window as any)['showCriticalError'] = () => this.notifyCriticalError('no-cards');
 	}
 
-	public notifyCriticalError(error: GlobalErrorType) {
-		console.error('[global-error] critical error', error);
+	public async notifyCriticalError(error: GlobalErrorType) {
+		const inGame = await this.ow.inGame();
+		console.error('[global-error] critical error', error, inGame);
 		const { title, message, url } = this.getTexts(error);
-		console.debug('[global-error] critical error', title, message, url);
-		const onClick = url
-			? () => {
-					this.ow.openUrlInDefaultBrowser(url);
-			  }
-			: undefined;
-		this.notifications.notifyError(title, message, error, onClick);
-		// this.notifications.notifyError(title, message, error);
+		if (inGame) {
+			console.debug('[global-error] critical error', title, message, url);
+			const onClick = url
+				? () => {
+						this.ow.openUrlInDefaultBrowser(url);
+				  }
+				: undefined;
+			this.notifications.notifyError(title, message, error, onClick);
+		} else if (url) {
+			this.ow.openUrlInDefaultBrowser(url);
+		}
 	}
 
 	private getTexts(error: GlobalErrorType): { title: string; message: string; url?: string | null } {
@@ -32,20 +36,19 @@ export class GlobalErrorService {
 				return {
 					title: this.i18n.translateString('app.global.errors.no-cards.title'),
 					message: this.i18n.translateString('app.global.errors.no-cards.message'),
-					url: this.getNoCardsUrl(),
+					url: getNoCardsUrl(this.i18n),
 				};
-		}
-	}
-
-	private getNoCardsUrl(): string {
-		switch (this.i18n.locale) {
-			case 'zhCN':
-			case 'twCN':
-				return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/no-cards/zhCN.md';
-			default:
-				return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/no-cards/enUS.md';
 		}
 	}
 }
 
 export type GlobalErrorType = 'no-cards';
+export const getNoCardsUrl = (i18n: ILocalizationService): string => {
+	switch (i18n.locale) {
+		case 'zhCN':
+		case 'twCN':
+			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/no-cards/zhCN.md';
+		default:
+			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/no-cards/enUS.md';
+	}
+};

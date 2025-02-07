@@ -77,6 +77,15 @@ button {
 		@extend %hotkey-subtext;
 	}
 
+	.error-message {
+		margin: 0 50px;
+		opacity: 0.8;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
 	hotkey {
 		display: flex;
 		align-items: center;
