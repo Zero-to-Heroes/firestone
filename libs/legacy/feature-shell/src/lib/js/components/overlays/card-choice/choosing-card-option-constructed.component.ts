@@ -68,6 +68,7 @@ export class ChoosingCardOptionConstructedComponent
 	cardStat$: Observable<ConstructedCardStat | null>;
 
 	@Input() set option(value: CardChoiceOption) {
+		console.debug('[debug] [constructed-card-option] setting option', value);
 		this._option = value;
 		this._referenceCard = this.allCards.getCard(value?.cardId);
 		this.shouldHighlight = !NO_HIGHLIGHT_CARD_IDS.includes(value?.cardId as CardIds);
@@ -105,7 +106,6 @@ export class ChoosingCardOptionConstructedComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.statsService, this.guardian, this.prefs);
 
-		console.debug('[debug] [constructed-card-option] init');
 		this.freeUses$ = this.guardian.freeUsesLeft$$.pipe(this.mapData((uses) => uses));
 		this.showPremiumBanner$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			filter(([hasPremium, freeUsesLeft]) => hasPremium != null && freeUsesLeft != null),
@@ -117,7 +117,6 @@ export class ChoosingCardOptionConstructedComponent
 		);
 		this.showDiscoverStat$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.constructedShowCardStatDuringDiscovers),
-			tap((show) => console.debug('[debug] [constructed-card-option] showDiscoverStat', show)),
 			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
@@ -131,6 +130,7 @@ export class ChoosingCardOptionConstructedComponent
 			this.mapData((gameState) => 'standard' /*formatFormat(gameState?.metadata?.formatType)*/ as GameFormat),
 		);
 		this.cardStat$ = combineLatest([this.cardId$$, this.opponentClass$$, deckstring$, format$]).pipe(
+			tap((info) => console.debug('[constructed-card-option] getting stats', info)),
 			filter(([cardId]) => !!cardId),
 			switchMap(([cardId, opponentClass, deckstring, format]) =>
 				from(this.statsService.getStatsFor(deckstring, cardId, opponentClass, format)),

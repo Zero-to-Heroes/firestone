@@ -250,7 +250,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		const cacheKey = `${format}_${time}_${rank}_${deckstring}`;
 		console.debug('[constructed-meta-decks] checking cache', cacheKey, this.cache[cacheKey]);
-		if (this.cache[cacheKey] !== undefined) {
+		if (this.cache[cacheKey]) {
 			console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.cache[cacheKey]);
 			return this.cache[cacheKey];
 		}

@@ -290,7 +290,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					timeFrame,
 					playerRank,
 				);
-				// console.debug('[mulligan-guide] archetype result', result);
 				return result;
 			}),
 			// filter((archetype) => !!archetype),
@@ -372,6 +371,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					opponentClass,
 					deckstring,
 				}) => {
+					console.debug('[mulligan-guide] deck details result', deckDetails, format, playerRank);
 					const archetypeMatchup =
 						opponentClass === 'all'
 							? null
