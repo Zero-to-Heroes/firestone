@@ -99,7 +99,9 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	}
 
 	private async buildCardStatsInternal(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
-		if (this.cachedStats?.context === context && this.cachedStats?.timePeriod === timePeriod) {
+		if (context === 'global' && this.cachedGlobalStats?.timePeriod === timePeriod) {
+			return this.cachedGlobalStats;
+		} else if (this.cachedStats?.context === context && this.cachedStats?.timePeriod === timePeriod) {
 			return this.cachedStats;
 		}
 
@@ -120,7 +122,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			return null;
 		}
 
-		console.log('[arena-card-stats] loaded arena stats');
+		console.log('[arena-card-stats] loaded arena stats', context, timePeriod);
 		console.debug('[arena-card-stats] loaded arena stats', cardPerformanceStats, cardDraftStats);
 
 		const result: ArenaCombinedCardStats = {
@@ -129,6 +131,11 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			lastUpdated: cardPerformanceStats.lastUpdated,
 			stats: this.buildCombinedStats(cardPerformanceStats.stats, cardDraftStats.stats),
 		};
+		if (context === 'global') {
+			this.cachedGlobalStats = result;
+		} else {
+			this.cachedStats = result;
+		}
 		return result;
 	}
 
