@@ -17,7 +17,10 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'opponent-hand-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/background-widget.component.scss'],
+	styleUrls: [
+		'../../../css/component/overlays/background-widget.component.scss',
+		'./opponent-hand-widget-wrapper.component.scss',
+	],
 	template: `
 		<opponent-hand-overlay
 			class="widget"
