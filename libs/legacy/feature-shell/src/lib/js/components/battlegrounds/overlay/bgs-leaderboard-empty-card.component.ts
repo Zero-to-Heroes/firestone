@@ -95,7 +95,6 @@ export class BgsLeaderboardEmptyCardComponent
 	}
 
 	@Input() showLastOpponentIcon: boolean;
-	@Input() opponentBoardMouseOver: boolean;
 	@Input() buddiesEnabled: boolean;
 
 	position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';

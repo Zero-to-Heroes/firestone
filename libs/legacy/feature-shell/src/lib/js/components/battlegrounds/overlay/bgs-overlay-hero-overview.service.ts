@@ -54,7 +54,12 @@ export class BgsOverlayHeroOverviewService {
 			})),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 		);
+		const pref$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
+			distinctUntilChanged(),
+		);
 		combineLatest([
+			pref$,
 			players$,
 			lastOpponentPlayerId$,
 			currentTurn$,
@@ -63,8 +68,8 @@ export class BgsOverlayHeroOverviewService {
 			componentClass$,
 		])
 			.pipe(
-				map(([players, lastOpponentPlayerId, currentTurn, config, card, componentClass]) => {
-					if (!players || !card) {
+				map(([pref, players, lastOpponentPlayerId, currentTurn, config, card, componentClass]) => {
+					if (!players || !card || !pref) {
 						return null;
 					}
 					const player = players.find((player) => player.playerId === card.PlayerId);

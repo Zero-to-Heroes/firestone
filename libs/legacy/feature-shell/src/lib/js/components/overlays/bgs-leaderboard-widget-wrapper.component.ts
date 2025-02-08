@@ -29,7 +29,6 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				currentTurn: currentTurn$ | async,
 				lastOpponentPlayerId: lastOpponentPlayerId$ | async,
 				showLastOpponentIcon: showLastOpponentIcon$ | async,
-				opponentBoardMouseOver: opponentBoardMouseOver$ | async,
 				buddiesEnabled: buddiesEnabled$ | async
 			} as value"
 		>
@@ -41,7 +40,6 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 					[currentTurn]="value.currentTurn"
 					[lastOpponentPlayerId]="value.lastOpponentPlayerId"
 					[showLastOpponentIcon]="value.showLastOpponentIcon"
-					[opponentBoardMouseOver]="value.opponentBoardMouseOver"
 					[buddiesEnabled]="value.buddiesEnabled"
 					[style.left.%]="getLeftOffset(i)"
 				>
@@ -65,7 +63,6 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	lastOpponentPlayerId$: Observable<number>;
 	currentTurn$: Observable<number>;
 	showLastOpponentIcon$: Observable<boolean>;
-	opponentBoardMouseOver$: Observable<boolean>;
 	buddiesEnabled$: Observable<boolean>;
 	windowWidth: number;
 	windowHeight: number;
@@ -123,7 +120,6 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			.listenBattlegrounds$(([state]) => state.currentGame?.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => currentTurn));
 		this.showLastOpponentIcon$ = this.listenForBasicPref$((prefs) => prefs.bgsShowLastOpponentIconInOverlay);
-		this.opponentBoardMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableOpponentBoardMouseOver);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
