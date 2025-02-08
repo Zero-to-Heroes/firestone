@@ -28,9 +28,9 @@ export class PackStatsService implements ICollectionPackService {
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
-		let existingPackStats = (await this.indexedDb
-			.table<PackResult, string>(COLLECTION_PACK_STATS)
-			.toArray()) as readonly PackResult[];
+		let existingPackStats = (await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).toArray()).sort(
+			(a, b) => b.creationDate - a.creationDate,
+		) as readonly PackResult[];
 		console.debug('[pack-stats] existing pack stats in db', existingPackStats);
 		if (!existingPackStats?.length) {
 			const localResult = await this.diskCache.getItem<LocalPackStats>(
@@ -38,7 +38,9 @@ export class PackStatsService implements ICollectionPackService {
 			);
 			console.debug('[pack-stats] existing pack stats in cache', localResult);
 			if (localResult?.packs?.length) {
-				existingPackStats = localResult.packs.filter((p) => !!p.id);
+				existingPackStats = localResult.packs
+					.filter((p) => !!p.id)
+					.sort((a, b) => b.creationDate - a.creationDate);
 				await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).bulkAdd(existingPackStats);
 				console.debug('[pack-stats] added local pack stats to db', existingPackStats);
 			}
@@ -80,7 +82,8 @@ export class PackStatsService implements ICollectionPackService {
 							...pack,
 							boosterId: getDefaultBoosterIdForSetId(pack.setId),
 					  },
-			);
+			)
+			.sort((a, b) => b.creationDate - a.creationDate);
 		if (packs.length) {
 			await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).clear();
 			await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).bulkAdd(packs);
