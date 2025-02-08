@@ -2065,6 +2065,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, not(rush));
 		case CardIds.RollingStone:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(1));
+		case CardIds.RoostingGargoyle:
+		case CardIds.RoostingGargoyle_CORE_REV_351:
+			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.RollTheBones_ICC_201:
 		case CardIds.RollTheBones_CORE_ICC_201:
 			return and(side(inputSide), inDeck, deathrattle);
@@ -2199,6 +2202,7 @@ export const cardIdSelector = (
 		case CardIds.ShroudOfConcealment:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Shudderblock_TOY_501:
+		case CardIds.Shudderblock_ShudderblockToken_TOY_501t:
 			return and(side(inputSide), or(inHand, inDeck), battlecry);
 		case CardIds.Shudderwock_GIL_820:
 			return highlightConditions(
