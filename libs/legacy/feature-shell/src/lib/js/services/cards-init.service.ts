@@ -52,14 +52,14 @@ export class CardsInitService {
 			// Make this non-blocking, so the app can already start with the cached info, while we get the
 			// updated cards in the background
 			setTimeout(async () => {
-				await this.loadCardsFromRemote(fileName);
+				await this.loadCardsFromRemote(fileName, false);
 			});
 		} else {
 			await this.loadCardsFromRemote(fileName);
 		}
 	}
 
-	private async loadCardsFromRemote(fileName: string) {
+	private async loadCardsFromRemote(fileName: string, throwException = true) {
 		try {
 			await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
 			console.log('[cards-init] loaded cards from remote', this.cards.getCards()?.length);
@@ -67,7 +67,9 @@ export class CardsInitService {
 			if (!this.cards.getCards()?.length || this.cards.getCards().length % 8000 === 0) {
 				console.error('[cards-init] could not load cards');
 				// this.globalErrorService.notifyCriticalError('no-cards');
-				throw new Error(`Could not load cards ${CARDS_VERSION}, ${fileName}`);
+				if (throwException) {
+					throw new Error(`Could not load cards ${CARDS_VERSION}, ${fileName}`);
+				}
 			} else {
 				await this.saveCardsLocally(fileName, this.cards.getCards());
 			}
