@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { CardIds, getBuddy } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { from, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -12,9 +13,9 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	],
 	template: `
 		<div class="hero-selection-tooltip {{ _cssClass }}" [ngClass]="{ hidden: !_visible }">
-			<img class="buddy" [src]="buddyImage" *ngIf="buddyImage" />
-			<img class="hero-power" [src]="heroPowerImage" *ngIf="heroPowerImage" />
-			<img class="hero-power" [src]="questImage" *ngIf="questImage" />
+			<img class="buddy" [src]="buddyImage" *ngIf="buddyImage$ | async as buddyImage" />
+			<img class="hero-power" [src]="heroPowerImage" *ngIf="heroPowerImage$ | async as heroPowerImage" />
+			<img class="hero-power" [src]="questImage" *ngIf="questImage$ | async as questImage" />
 			<div class="infos">
 				<div class="name">{{ _hero.name }} ({{ totalMatchesText }})</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
@@ -28,9 +29,9 @@ export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsMetaHeroStatTierItem;
 	_visible = true;
 	_cssClass: string;
-	heroPowerImage: string;
-	questImage: string;
-	buddyImage: string;
+	heroPowerImage$: Observable<string>;
+	questImage$: Observable<string>;
+	buddyImage$: Observable<string>;
 	totalMatches: number;
 	totalMatchesText: string;
 
@@ -44,9 +45,9 @@ export class BgsHeroSelectionTooltipComponent {
 	@Input() set config(value: BgsMetaHeroStatTierItem) {
 		this._hero = value;
 		this.totalMatches = value.dataPoints;
-		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
-		this.questImage = !!this.heroPowerImage ? null : this.i18n.getCardImage(value.id);
-		this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds, this.allCards.getService()), {
+		this.heroPowerImage$ = this.i18n.getCardImage(value.heroPowerCardId);
+		this.questImage$ = !!this.heroPowerImage$ ? from([null]) : this.i18n.getCardImage(value.id);
+		this.buddyImage$ = this.i18n.getCardImage(getBuddy(value.id as CardIds, this.allCards.getService()), {
 			isBgs: true,
 		});
 		this.totalMatchesText = this.i18n.translateString('battlegrounds.hero-selection.total-matches', {

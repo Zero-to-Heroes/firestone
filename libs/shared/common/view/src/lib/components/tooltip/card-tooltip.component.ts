@@ -19,7 +19,7 @@ import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, switchMap } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -141,9 +141,6 @@ export class CardTooltipComponent
 	@Input() set relatedCardIds(value: readonly string[]) {
 		this.relatedCardIds$$.next(value ?? []);
 	}
-	@Input() set localized(value: boolean) {
-		this.localized$$.next(value);
-	}
 	@Input() set cardTooltipBgs(value: boolean) {
 		this.isBgs$$.next(value);
 	}
@@ -190,7 +187,6 @@ export class CardTooltipComponent
 
 	private cardIds$$ = new BehaviorSubject<readonly string[]>([]);
 	private relatedCardIds$$ = new BehaviorSubject<readonly string[]>([]);
-	private localized$$ = new BehaviorSubject<boolean>(true);
 	private isBgs$$ = new BehaviorSubject<boolean>(false);
 	private relativePosition$$ = new BehaviorSubject<'left' | 'right'>('left');
 	private cardType$$ = new BehaviorSubject<CollectionCardType>('NORMAL');
@@ -308,7 +304,6 @@ export class CardTooltipComponent
 			.subscribe((bounds) => this.keepInBounds(bounds.top, bounds.left, bounds.height, bounds.width));
 		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
-			this.localized$$.asObservable(),
 			this.isBgs$$.asObservable(),
 			this.prefs.preferences$$.pipe(
 				this.mapData(
@@ -321,36 +316,33 @@ export class CardTooltipComponent
 			),
 		]).pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			this.mapData(
-				([relatedCardIds, localized, isBgs, { locale, highRes }]) => {
-					return (
-						relatedCardIds
-							// Remove entity ids (eg in Fizzle's Snapshot card)
-							.filter((cardId) => isNaN(parseInt(cardId)))
-							.map((cardId) => {
-								const image = !!cardId
-									? localized
-										? this.i18n.getCardImage(cardId, {
-												isBgs: isBgs,
-												isHighRes: highRes,
-										  })
-										: this.i18n.getNonLocalizedCardImage(cardId)
-									: null;
-								return {
-									cardId: cardId,
-									image: image,
-									cardType: 'NORMAL',
-								};
-							})
-					);
-				},
-				null,
-				0,
-			),
+			switchMap(async ([relatedCardIds, isBgs, { locale, highRes }]) => {
+				const cards = await Promise.all(
+					relatedCardIds
+						// Remove entity ids (eg in Fizzle's Snapshot card)
+						.filter((cardId) => isNaN(parseInt(cardId)))
+						.map(async (cardId) => {
+							const image = !!cardId
+								? await this.i18n
+										.getCardImage(cardId, {
+											isBgs: isBgs,
+											isHighRes: highRes,
+										})
+										.toPromise()
+								: null;
+							return {
+								cardId: cardId,
+								image: image,
+								cardType: 'NORMAL' as CollectionCardType,
+							};
+						}),
+				);
+				return cards;
+			}),
+			this.mapData((info) => info),
 		);
 		this.cards$ = combineLatest([
 			this.cardIds$$.asObservable(),
-			this.localized$$.asObservable(),
 			this.isBgs$$.asObservable(),
 			this.cardType$$.asObservable(),
 			this.additionalClass$$.asObservable(),
@@ -367,44 +359,42 @@ export class CardTooltipComponent
 			),
 		]).pipe(
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			this.mapData(
-				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, { locale, highRes }]) => {
-					return (
-						[...(cardIds ?? [])]
-							// Empty card IDs are necessary when showing buff only
-							// .filter((cardId) => cardId)
-							.reverse()
-							.map((cardId) => {
-								const card = this.allCards.getCard(cardId);
-								const adjustedCardType =
-									cardId?.endsWith('_golden') || !!card.premium ? 'GOLDEN' : cardType;
-								const realCardId = cardId?.split('_golden')[0];
-								const image = !!realCardId
-									? localized
-										? this.i18n.getCardImage(realCardId, {
-												isBgs: isBgs,
-												cardType: adjustedCardType,
-												isHighRes: highRes,
-										  })
-										: this.i18n.getNonLocalizedCardImage(realCardId)
-									: null;
-								const result = {
-									cardId: realCardId,
-									image: image,
-									// For now there are no cases where we have multiple card IDs, and different buffs for
-									// each one. If the case arises, we'll have to handle this differently
-									buffs: buffs,
-									cardType: adjustedCardType,
-									createdBy: createdBy,
-									additionalClass: additionalClass,
-								};
-								return result;
-							})
-					);
-				},
-				null,
-				0,
-			),
+			switchMap(([cardIds, isBgs, cardType, additionalClass, buffs, createdBy, { locale, highRes }]) => {
+				const cards = Promise.all(
+					[...(cardIds ?? [])]
+						// Empty card IDs are necessary when showing buff only
+						// .filter((cardId) => cardId)
+						.reverse()
+						.map(async (cardId) => {
+							const card = this.allCards.getCard(cardId);
+							const adjustedCardType =
+								cardId?.endsWith('_golden') || !!card.premium ? 'GOLDEN' : cardType;
+							const realCardId = cardId?.split('_golden')[0];
+							const image = !!realCardId
+								? await this.i18n
+										.getCardImage(realCardId, {
+											isBgs: isBgs,
+											cardType: adjustedCardType,
+											isHighRes: highRes,
+										})
+										.toPromise()
+								: null;
+							const result = {
+								cardId: realCardId,
+								image: image,
+								// For now there are no cases where we have multiple card IDs, and different buffs for
+								// each one. If the case arises, we'll have to handle this differently
+								buffs: buffs,
+								cardType: adjustedCardType,
+								createdBy: createdBy,
+								additionalClass: additionalClass,
+							};
+							return result;
+						}),
+				);
+				return cards;
+			}),
+			this.mapData((info) => info),
 		);
 		this.additionalInfo$ = this.additionalInfo$$.pipe(
 			filter((info) => !!info),

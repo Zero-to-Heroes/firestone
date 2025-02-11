@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 import { LocalizationService } from './localization.service';
 
 @Injectable()
@@ -40,12 +41,8 @@ export class LocalizationFacadeService implements ILocalizationService {
 		}
 	}
 
-	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): Observable<string> {
 		return this.service.getCardImage(cardId, options);
-	}
-
-	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
-		return this.service.getNonLocalizedCardImage(cardId, options);
 	}
 
 	public getCreatedByCardName(cardName: string): string {

@@ -18,7 +18,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 const SPECIAL_STATUS_TOKENS = [CardIds.AvatarOfNzoth_FishOfNzothToken];
 @Component({
@@ -245,39 +245,42 @@ export class BgsSimulatorMinionSelectionComponent
 		])
 			.pipe(
 				debounceTime(200),
-				this.mapData(([searchString, { tribeFilter, tierFilter }, showBuddies]) => {
-					const result = this.allCards
-						.getCards()
-						.filter((card) => card.isBaconPool || SPECIAL_STATUS_TOKENS.includes(card.id as CardIds))
-						.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
-						// .filter((card) => card.battlegroundsPremiumDbfId || TOKEN_CARD_IDS.includes(card.id as CardIds))
-						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
-						.filter((card) =>
-							showBuddies ? true : !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]),
-						)
-						.filter(
-							(card) =>
-								!tribeFilter ||
-								tribeFilter === 'all' ||
-								getEffectiveTribes(card, true).some((r) => r.toLowerCase() === tribeFilter),
-						)
-						.filter((card) => !tierFilter || tierFilter === 'all' || card.techLevel === +tierFilter)
-						.filter(
-							(card) =>
-								!searchString?.length ||
-								card.name.toLowerCase().includes(searchString.toLowerCase()) ||
-								card.text?.toLowerCase().includes(searchString.toLowerCase()) ||
-								card.mechanics?.some((m) => m.toLowerCase().includes(searchString.toLowerCase())),
-						)
-						.map((card) => ({
-							id: card.id,
-							icon: this.i18n.getCardImage(card.id, { isBgs: true })!,
-							name: card.name,
-							tier: card.techLevel ?? 0,
-						}))
-						.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name]));
+				switchMap(([searchString, { tribeFilter, tierFilter }, showBuddies]) => {
+					const result = Promise.all(
+						this.allCards
+							.getCards()
+							.filter((card) => card.isBaconPool || SPECIAL_STATUS_TOKENS.includes(card.id as CardIds))
+							.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
+							// .filter((card) => card.battlegroundsPremiumDbfId || TOKEN_CARD_IDS.includes(card.id as CardIds))
+							.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
+							.filter((card) =>
+								showBuddies ? true : !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]),
+							)
+							.filter(
+								(card) =>
+									!tribeFilter ||
+									tribeFilter === 'all' ||
+									getEffectiveTribes(card, true).some((r) => r.toLowerCase() === tribeFilter),
+							)
+							.filter((card) => !tierFilter || tierFilter === 'all' || card.techLevel === +tierFilter)
+							.filter(
+								(card) =>
+									!searchString?.length ||
+									card.name.toLowerCase().includes(searchString.toLowerCase()) ||
+									card.text?.toLowerCase().includes(searchString.toLowerCase()) ||
+									card.mechanics?.some((m) => m.toLowerCase().includes(searchString.toLowerCase())),
+							)
+							.sort(sortByProperties((minion: ReferenceCard) => [minion.techLevel ?? 0, minion.name]))
+							.map(async (card) => ({
+								id: card.id,
+								icon: await this.i18n.getCardImage(card.id, { isBgs: true })!.toPromise(),
+								name: card.name,
+								tier: card.techLevel ?? 0,
+							})),
+					);
 					return result;
 				}),
+				this.mapData((minions) => minions),
 			)
 			.subscribe((minions) => {
 				this.allMinions = [];
@@ -554,7 +557,7 @@ export class BgsSimulatorMinionSelectionComponent
 
 interface Minion {
 	id: string;
-	icon: string;
+	icon: string | null | undefined;
 	name: string;
 	tier: number;
 }

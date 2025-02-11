@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
@@ -26,7 +27,7 @@ import { ShowReplayEvent } from '../../../services/mainwindow/store/events/repla
 						'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
 							| owTranslate: { heroName: getCardName(_heroCardId) }
 					"
-					[src]="heroImage"
+					[src]="heroImage | async"
 					class="portrait"
 				/>
 				<img
@@ -70,7 +71,7 @@ export class StatCellComponent implements AfterViewInit {
 	}
 
 	_heroCardId: string;
-	heroImage: string;
+	heroImage: Observable<string>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

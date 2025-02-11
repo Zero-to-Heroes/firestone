@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'bgs-simulator-quest-reward-selection',
@@ -83,26 +83,14 @@ export class BgsSimulatorQuestRewardSelectionComponent
 	@Input() applyHandler: (newHeroCardId: string | null) => void;
 
 	@Input() set currentReward(heroPowerCardId: string | null) {
-		this.currentHeroId = heroPowerCardId;
-		if (!!heroPowerCardId) {
-			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
-			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
-			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
-		} else {
-			this.heroIcon = null;
-			this.heroName = this.i18n.translateString('battlegrounds.sim.select-quest-reward-placeholder');
-			this.heroPowerText = null;
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.setCurrentReward(heroPowerCardId);
 	}
 
 	searchForm = new FormControl();
 
 	allHeroes: readonly QuestReward[];
 	currentHeroId: string | null;
-	heroIcon: string | null;
+	heroIcon: string | null | undefined;
 	heroName: string;
 	heroPowerText: string | null;
 	searchString = new BehaviorSubject<string | null>(null);
@@ -128,22 +116,25 @@ export class BgsSimulatorQuestRewardSelectionComponent
 			.pipe(
 				debounceTime(200),
 				distinctUntilChanged(),
-				this.mapData((searchString) => {
+				switchMap((searchString) => {
 					const allCardIds = allQuestRewards
 						.filter((card) => !searchString?.length || card.name.toLowerCase().includes(searchString))
 						.map((card) => card.id);
 					const uniqueCardIds = Array.from(new Set(allCardIds));
-					const result = uniqueCardIds
-						.map((card) => this.allCards.getCard(card))
-						.map((card) => ({
-							id: card.id,
-							icon: this.i18n.getCardImage(card.id)!,
-							name: card.name,
-							text: this.sanitizeText(card.text),
-						}))
-						.sort(sortByProperties((hero: QuestReward) => [hero.name]));
+					const result = Promise.all(
+						uniqueCardIds
+							.map((card) => this.allCards.getCard(card))
+							.sort(sortByProperties((hero) => [hero.name]))
+							.map(async (card) => ({
+								id: card.id,
+								icon: await this.i18n.getCardImage(card.id)!.toPromise(),
+								name: card.name,
+								text: this.sanitizeText(card.text),
+							})),
+					);
 					return result;
 				}),
+				this.mapData((heroes) => heroes),
 			)
 			.subscribe((heroes) => {
 				this.allHeroes = [];
@@ -225,11 +216,27 @@ export class BgsSimulatorQuestRewardSelectionComponent
 					.replace(/Passive/g, '')
 			: text;
 	}
+
+	private async setCurrentReward(heroPowerCardId: string | null) {
+		this.currentHeroId = heroPowerCardId;
+		if (!!heroPowerCardId) {
+			this.heroIcon = await this.i18n.getCardImage(heroPowerCardId).toPromise();
+			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
+			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
+		} else {
+			this.heroIcon = null;
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-quest-reward-placeholder');
+			this.heroPowerText = null;
+		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 }
 
 interface QuestReward {
 	id: string;
-	icon: string;
+	icon: string | null | undefined;
 	name: string;
 	text: string;
 }

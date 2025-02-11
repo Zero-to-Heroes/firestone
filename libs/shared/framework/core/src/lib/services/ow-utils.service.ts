@@ -63,6 +63,14 @@ export class OwUtilsService {
 		return this.internalService.downloadFileTo(fileUrl, path, targetFileName);
 	}
 
+	public async getBinaryFile(path: string): Promise<Uint8Array | null> {
+		return this.internalService.getBinaryFile(path);
+	}
+
+	public async saveBinaryFile(url: string, path: string): Promise<void> {
+		return this.internalService.saveBinaryFile(url, path);
+	}
+
 	public async get() {
 		return this.internalService.get();
 	}
@@ -222,6 +230,38 @@ class OwUtilsServiceInternal {
 			} catch (e) {
 				console.warn('[ow-utils] could not downloadFileTo', fileUrl, path, e);
 				resolve(false);
+			}
+		});
+	}
+
+	public async getBinaryFile(path: string): Promise<Uint8Array | null> {
+		return new Promise<Uint8Array | null>(async (resolve, reject) => {
+			console.log('[ow-utils] getBinaryFile', path);
+			const plugin = await this.get();
+			try {
+				plugin.getBinaryFile(path, (success, blob) => {
+					console.debug('[ow-utils] getBinaryFiled', path, success, blob);
+					resolve(blob);
+				});
+			} catch (e) {
+				console.warn('[ow-utils] could not getBinaryFile', path, e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async saveBinaryFile(url: string, path: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			const plugin = await this.get();
+			console.debug('[ow-utils] saveBinaryFile', url, path);
+			try {
+				plugin.saveBinaryFile(url, path, (temp1, temp2) => {
+					console.debug('[ow-utils] saveBinaryFiled', path);
+					resolve();
+				});
+			} catch (e) {
+				console.warn('[ow-utils] could not saveBinaryFile', path, e);
+				resolve();
 			}
 		});
 	}

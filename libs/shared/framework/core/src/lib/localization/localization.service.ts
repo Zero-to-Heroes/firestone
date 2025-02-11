@@ -1,12 +1,12 @@
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
 // Because interfaces cannot be used as DI tokens
 export abstract class ILocalizationService {
 	abstract getTranslateService(): TranslateService;
 	abstract setLocale(locale: string): void;
 	abstract get locale(): string;
-	abstract getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
-	abstract getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
+	abstract getCardImage(cardId: string, options?: ImageLocalizationOptions): Observable<string | null>;
 	abstract getCreatedByCardName(creatorCardId: string): string | null;
 	abstract getUnknownCardName(playerClass: string | null): string | null;
 	abstract getUnknownManaSpellName(manaCost: number): string | null;

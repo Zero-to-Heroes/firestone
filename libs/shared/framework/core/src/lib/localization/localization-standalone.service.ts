@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { capitalizeEachWord } from '@firestone/shared/framework/common';
 import { TranslateService } from '@ngx-translate/core';
+import { from, Observable } from 'rxjs';
 import { CardsFacadeStandaloneService } from '../services/cards-facade-standalone.service';
-import { ILocalizationService, ImageLocalizationOptions, formatClass } from './localization.service';
+import { formatClass, ILocalizationService, ImageLocalizationOptions } from './localization.service';
 
 @Injectable()
 export class LocalizationStandaloneService implements ILocalizationService {
@@ -61,9 +62,9 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		}
 	}
 
-	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null {
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): Observable<string | null> {
 		if (!cardId) {
-			return null;
+			return from([null]);
 		}
 		const bgs = options?.isBgs ? 'bgs/' : '';
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
@@ -71,17 +72,7 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this.locale}/${highRes}`;
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
-		return `${base}/${suffix}`;
-	}
-
-	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null {
-		if (!cardId) {
-			return null;
-		}
-		const base = `https://static.firestoneapp.com/cards`;
-		const typeSuffix = this.buildTypeSuffix(options?.cardType);
-		const suffix = `${cardId}${typeSuffix}.png`;
-		return `${base}/${suffix}`;
+		return from(`${base}/${suffix}`);
 	}
 
 	public getCreatedByCardName(cardName: string): string {

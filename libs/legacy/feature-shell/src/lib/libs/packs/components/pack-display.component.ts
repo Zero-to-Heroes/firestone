@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { CollectionCardType } from '@legacy-import/src/lib/js/models/collection/collection-card-type.type';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'pack-display',
@@ -15,7 +16,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				[cardTooltip]="card.cardId"
 				[cardTooltipType]="card.cardType"
 			>
-				<img [src]="getCardImage(card.cardId, card.cardType)" />
+				<img [src]="getCardImage(card.cardId, card.cardType) | async" />
 			</div>
 		</div>
 	`,
@@ -40,7 +41,7 @@ export class PackDisplayComponent {
 		return item.cardId + '' + index;
 	}
 
-	getCardImage(cardId: string, cardType: CollectionCardType): string {
+	getCardImage(cardId: string, cardType: CollectionCardType): Observable<string> {
 		return this.i18n.getCardImage(cardId, { cardType: cardType });
 	}
 }

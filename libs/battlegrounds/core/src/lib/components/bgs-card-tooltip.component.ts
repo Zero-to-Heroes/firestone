@@ -18,7 +18,7 @@ export class BgsCardTooltipComponent {
 	_entity: Entity;
 	_visible: boolean;
 
-	image: string | null;
+	image: string | null | undefined;
 	cardId: string;
 	attack: number;
 	health: number;
@@ -31,10 +31,16 @@ export class BgsCardTooltipComponent {
 		this.cardId = value.cardID;
 		this.attack = this._entity.getTag(GameTag.ATK);
 		this.health = this._entity.getTag(GameTag.HEALTH);
-		this.image = this.i18n.getCardImage(this._entity.cardID, {
-			isBgs: true,
-			cardType: this._entity.getTag(GameTag.PREMIUM) === 1 ? 'GOLDEN' : 'NORMAL',
-		});
+		this.setImage(value);
+	}
+
+	private async setImage(value: Entity) {
+		this.image = await this.i18n
+			.getCardImage(this._entity.cardID, {
+				isBgs: true,
+				cardType: this._entity.getTag(GameTag.PREMIUM) === 1 ? 'GOLDEN' : 'NORMAL',
+			})
+			.toPromise();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

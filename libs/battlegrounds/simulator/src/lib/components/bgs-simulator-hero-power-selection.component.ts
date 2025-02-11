@@ -14,7 +14,7 @@ import { CardIds, getHeroPower } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'bgs-simulator-hero-power-selection',
@@ -105,31 +105,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	@Input() applyHandler: (newHeroCardId: string | null, heroPowerInfo: number) => void;
 
 	@Input() set currentHeroPower(heroPowerCardId: string | null) {
-		this.currentHeroId = heroPowerCardId;
-		if (!!heroPowerCardId) {
-			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
-			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
-			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
-		} else {
-			this.heroIcon = null;
-			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
-			this.heroPowerText = null;
-		}
-		const isTavishHp = [
-			CardIds.AimLeftToken,
-			CardIds.AimRightToken,
-			CardIds.AimLowToken,
-			CardIds.AimHighToken,
-		].includes(heroPowerCardId as CardIds);
-		// this.heroPowerInfo = undefined;
-		this.showHeroPowerInfo = isTavishHp;
-		this.heroPowerInfoLabel = isTavishHp
-			? this.i18n.translateString('battlegrounds.sim.hero-power-info-tavish')
-			: null;
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.setHeroPower(heroPowerCardId);
 	}
 
 	@Input() set heroPowerData(value: number) {
@@ -143,7 +119,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 
 	allHeroes: readonly HeroPower[];
 	currentHeroId: string | null;
-	heroIcon: string | null;
+	heroIcon: string | null | undefined;
 	heroName: string | null;
 	heroPowerText: string | null;
 	searchString = new BehaviorSubject<string | null>(null);
@@ -172,7 +148,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			.pipe(
 				debounceTime(200),
 				distinctUntilChanged(),
-				this.mapData((searchString) => {
+				switchMap((searchString) => {
 					const allCardIds = allHeroesAndHeroPowers
 						.filter(
 							(card) =>
@@ -187,17 +163,20 @@ export class BgsSimulatorHeroPowerSelectionComponent
 						)
 						.map((card) => card.id);
 					const uniqueCardIds = Array.from(new Set(allCardIds));
-					const result = uniqueCardIds
-						.map((card) => this.allCards.getCard(card))
-						.map((card) => ({
-							id: card.id,
-							icon: this.i18n.getCardImage(card.id)!,
-							name: card.name,
-							text: this.sanitizeText(card.text),
-						}))
-						.sort(sortByProperties((hero) => [hero.name]));
+					const result = Promise.all(
+						uniqueCardIds
+							.map((card) => this.allCards.getCard(card))
+							.sort(sortByProperties((hero) => [hero.name]))
+							.map(async (card) => ({
+								id: card.id,
+								icon: await this.i18n.getCardImage(card.id)!.toPromise(),
+								name: card.name,
+								text: this.sanitizeText(card.text),
+							})),
+					);
 					return result;
 				}),
+				this.mapData((heroes) => heroes),
 			)
 			.subscribe((heroes) => {
 				this.allHeroes = [];
@@ -299,6 +278,34 @@ export class BgsSimulatorHeroPowerSelectionComponent
 		event.stopPropagation();
 	}
 
+	private async setHeroPower(heroPowerCardId: string | null) {
+		this.currentHeroId = heroPowerCardId;
+		if (!!heroPowerCardId) {
+			this.heroIcon = await this.i18n.getCardImage(heroPowerCardId).toPromise();
+			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
+			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
+		} else {
+			this.heroIcon = null;
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
+			this.heroPowerText = null;
+		}
+		const isTavishHp = [
+			CardIds.AimLeftToken,
+			CardIds.AimRightToken,
+			CardIds.AimLowToken,
+			CardIds.AimHighToken,
+		].includes(heroPowerCardId as CardIds);
+		// this.heroPowerInfo = undefined;
+		this.showHeroPowerInfo = isTavishHp;
+		this.heroPowerInfoLabel = isTavishHp
+			? this.i18n.translateString('battlegrounds.sim.hero-power-info-tavish')
+			: null;
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private sanitizeText(text: string): string {
 		return text
 			? text
@@ -317,7 +324,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 
 interface HeroPower {
 	id: string;
-	icon: string;
+	icon: string | null | undefined;
 	name: string;
 	text: string;
 }

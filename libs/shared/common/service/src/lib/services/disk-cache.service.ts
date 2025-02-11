@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map } from 'rxjs';
 import { PreferencesService } from './preferences.service';
 
@@ -34,7 +34,11 @@ export class DiskCacheService {
 	private cacheDisabled = false;
 	private savingFiles: { [fileKey: string]: boolean } = {};
 
-	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly owUtils: OwUtilsService,
+	) {
 		this.init();
 	}
 
@@ -113,4 +117,56 @@ export class DiskCacheService {
 			return null;
 		}
 	}
+
+	public async getBinaryFile(key: string): Promise<Blob | null> {
+		const root = await this.ow.getStoragePath();
+		const path = `${root}/${key}`;
+		const byteArray = await this.owUtils.getBinaryFile(path);
+		// console.debug('[disk-cache] read binary file', key, byteArray?.length, byteArray);
+		return byteArray?.length ? byteArrayToBlob(byteArray, 'image/png') : null;
+	}
+
+	public async saveBinaryFile(url: string, key: string): Promise<void> {
+		const root = await this.ow.getStoragePath();
+		const path = `${root}/${key}`;
+		// const byteArray = await blobToByteArray(blob);
+		// const dataUrl = await blobToDataURL(blob);
+		return await this.owUtils.saveBinaryFile(url, path);
+	}
+}
+
+function byteArrayToBlob(byteArray: Uint8Array, mimeType: string): Blob {
+	return new Blob([byteArray], { type: mimeType });
+}
+function blobToByteArray(blob: Blob): Promise<Uint8Array> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => {
+			resolve(new Uint8Array(reader.result as ArrayBuffer));
+		};
+		reader.onerror = reject;
+		reader.readAsArrayBuffer(blob);
+	});
+}
+function blobToDataURL(blob: Blob): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			resolve(reader.result as string);
+		};
+		reader.onerror = reject;
+		reader.readAsDataURL(blob);
+	});
+}
+function dataURLToBlob(dataUrl: string): Blob {
+	const [header, base64] = dataUrl.split(',');
+	const mimeType = header.match(/:(.*?);/)[1];
+	const byteString = atob(base64);
+	const byteArray = new Uint8Array(byteString.length);
+
+	for (let i = 0; i < byteString.length; i++) {
+		byteArray[i] = byteString.charCodeAt(i);
+	}
+
+	return new Blob([byteArray], { type: mimeType });
 }

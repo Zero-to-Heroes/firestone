@@ -14,6 +14,7 @@ import { NumericTurnInfo } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
+import { BehaviorSubject } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -24,7 +25,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	],
 	template: `
 		<div class="legend">
-			<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="item">
+			<div *ngFor="let player of legend$$ | async; trackBy: trackByLegendFn" class="item">
 				<bgs-hero-portrait
 					class="portrait"
 					[heroCardId]="player.cardId"
@@ -42,7 +43,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			</div>
 			<div class="toggles">
 				<div class="subtitle" [owTranslate]="'battlegrounds.post-match-stats.hp-graph.legend-title'"></div>
-				<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="toggle position">
+				<div *ngFor="let player of legend$$ | async; trackBy: trackByLegendFn" class="toggle position">
 					<input
 						type="checkbox"
 						name="player-toggled-{{ player.position }}"
@@ -111,7 +112,7 @@ export class BgsChartHpComponent {
 	@Input() tooltipSuffix: string | number = '';
 
 	playerColors = ['#FFB948', '#FF8A48', '#42D8A2', '#55D6FF', '#4376D8', '#B346E7', '#F44CCF', '#F44C60'];
-	legend: readonly LegendItem[];
+	legend$$ = new BehaviorSubject<readonly LegendItem[]>([]);
 
 	chartWidth: number;
 	chartHeight: number;
@@ -162,7 +163,7 @@ export class BgsChartHpComponent {
 							const cardId = legendItem.cardId;
 							return +items.find((i) => i.dataset.label === cardId).raw;
 						};
-						return [...this.legend]
+						return [...this.legend$$.value]
 							.sort((a, b) => sortWeight(b) - sortWeight(a))
 							.map((legendItem) => {
 								const color = legendItem.color;
@@ -396,16 +397,20 @@ export class BgsChartHpComponent {
 					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
 
-		this.legend = players.map((player) => ({
-			cardId: player.cardId,
-			playerId: player.playerId,
-			name: this.allCards.getCard(player.cardId).name,
-			icon: this.i18n.getCardImage(player.cardId, { isBgs: true }),
-			position: player.position,
-			isPlayer: player.isPlayer,
-			shown: !this.playerHiddenStatus[player.cardId],
-			color: player.color,
-		}));
+		const legend = await Promise.all(
+			players.map(async (player) => ({
+				cardId: player.cardId,
+				playerId: player.playerId,
+				name: this.allCards.getCard(player.cardId).name,
+				icon: await this.i18n.getCardImage(player.cardId, { isBgs: true }).toPromise(),
+				position: player.position,
+				isPlayer: player.isPlayer,
+				shown: !this.playerHiddenStatus[player.cardId],
+				color: player.color,
+			})),
+		);
+		this.legend$$.next(legend);
+
 		const newChartData: ChartData<'line'>['datasets'] = players.map((player) => ({
 			data: player.hpOverTurn,
 			cardId: player.cardId,

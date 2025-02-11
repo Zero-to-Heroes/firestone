@@ -176,7 +176,7 @@ export class BgsPostMatchStatsComponent
 
 	loadingElapsed = 0;
 	boardTitle = this.i18n.translateString('battlegrounds.post-match-stats.current-board');
-	icon: string;
+	icon: Observable<string>;
 	health: number;
 	maxHealth: number;
 	heroPowerCardId: string;

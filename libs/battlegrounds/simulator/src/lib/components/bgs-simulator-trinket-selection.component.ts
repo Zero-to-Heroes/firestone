@@ -15,7 +15,7 @@ import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'bgs-simulator-trinket-selection',
@@ -90,21 +90,7 @@ export class BgsSimulatorTrinketSelectionComponent
 	@Input() applyHandler: (newTrinket: BoardTrinket | null) => void;
 
 	@Input() set currentTrinket(value: BoardTrinket | null | undefined) {
-		this._currentTrinket = value ?? null;
-		const trinketCardId = value?.cardId;
-		if (!!trinketCardId) {
-			this.heroIcon = this.i18n.getCardImage(trinketCardId, { isBgs: true })!;
-			this.heroName = this.allCards.getCard(trinketCardId)?.name;
-			this.heroPowerText = this.sanitizeText(this.allCards.getCard(trinketCardId)?.text);
-		} else {
-			this.heroIcon = null;
-			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
-			this.heroPowerText = null;
-		}
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.setCurrentTrinket(value);
 	}
 
 	@Input() set trinketSlot(value: TrinketSlot) {
@@ -114,7 +100,7 @@ export class BgsSimulatorTrinketSelectionComponent
 	searchForm = new FormControl();
 
 	_currentTrinket: BoardTrinket | null;
-	heroIcon: string | null;
+	heroIcon: string | null | undefined;
 	heroName: string | null;
 	heroPowerText: string | null;
 
@@ -164,28 +150,33 @@ export class BgsSimulatorTrinketSelectionComponent
 		this.allTrinkets$ = combineLatest([relevantTrinkets$, this.searchString$$]).pipe(
 			debounceTime(200),
 			distinctUntilChanged(),
-			this.mapData(([trinkets, searchString]) => {
+			switchMap(([trinkets, searchString]) => {
 				const search = searchString?.toLowerCase();
 				const allCardIds = trinkets.map((card) => card.id);
-				const result = allCardIds
-					.map((card) => this.allCards.getCard(card))
-					.filter(
-						(card) =>
-							!search?.length ||
-							card.name.toLowerCase().includes(search) ||
-							card.text.toLowerCase().includes(search),
-					)
-					.map((card) => ({
-						id: card.id,
-						icon: this.i18n.getCardImage(card.id, {
-							isBgs: true,
-						})!,
-						name: card.name,
-						text: this.sanitizeText(card.text),
-					}))
-					.sort(sortByProperties((hero) => [hero.name]));
+				const result = Promise.all(
+					allCardIds
+						.map((card) => this.allCards.getCard(card))
+						.filter(
+							(card) =>
+								!search?.length ||
+								card.name.toLowerCase().includes(search) ||
+								card.text.toLowerCase().includes(search),
+						)
+						.sort(sortByProperties((hero) => [hero.name]))
+						.map(async (card) => ({
+							id: card.id,
+							icon: await this.i18n
+								.getCardImage(card.id, {
+									isBgs: true,
+								})!
+								.toPromise(),
+							name: card.name,
+							text: this.sanitizeText(card.text),
+						})),
+				);
 				return result;
 			}),
+			this.mapData((heroes) => heroes),
 		);
 		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroyed$))
@@ -256,11 +247,29 @@ export class BgsSimulatorTrinketSelectionComponent
 					.replace(/Passive/g, '')
 			: text;
 	}
+
+	private async setCurrentTrinket(value: BoardTrinket | null | undefined) {
+		this._currentTrinket = value ?? null;
+		const trinketCardId = value?.cardId;
+		if (!!trinketCardId) {
+			this.heroIcon = await this.i18n.getCardImage(trinketCardId, { isBgs: true })!.toPromise();
+			this.heroName = this.allCards.getCard(trinketCardId)?.name;
+			this.heroPowerText = this.sanitizeText(this.allCards.getCard(trinketCardId)?.text);
+		} else {
+			this.heroIcon = null;
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
+			this.heroPowerText = null;
+		}
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 }
 
 interface Trinket {
 	id: string;
-	icon: string;
+	icon: string | null | undefined;
 	name: string;
 	text: string;
 }

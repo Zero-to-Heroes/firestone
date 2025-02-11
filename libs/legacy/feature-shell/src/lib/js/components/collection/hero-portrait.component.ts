@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
@@ -6,9 +7,9 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	selector: 'hero-portrait',
 	styleUrls: [`../../../css/component/collection/hero-portrait.component.scss`],
 	template: `
-		<div class="hero-portrait" [ngClass]="{ 'missing': missing }">
+		<div class="hero-portrait" [ngClass]="{ missing: missing }">
 			<div class="perspective-wrapper" rotateOnMouseOver>
-				<img [src]="image" />
+				<img [src]="image | async" />
 			</div>
 		</div>
 	`,
@@ -21,7 +22,7 @@ export class HeroPortraitComponent {
 	}
 
 	missing: boolean;
-	image: string;
+	image: Observable<string>;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

@@ -11,7 +11,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, tap } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -72,6 +72,7 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 				([state, prefs]) => !!state?.currentGame,
 			),
 		]).pipe(
+			tap((values) => console.debug('[bgs-minion-tiers] values', values)),
 			this.mapData(([currentScene, [displayFromPrefs], [inGame, isCurrentGame]]) => {
 				return inGame && isCurrentGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),

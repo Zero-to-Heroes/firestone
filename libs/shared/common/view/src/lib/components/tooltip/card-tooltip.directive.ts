@@ -32,7 +32,6 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	@Input() cardTooltipClass: string = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;
-	@Input() cardTooltipLocalized = true;
 	@Input() cardTooltipShowRelatedCards: boolean;
 	@Input() cardTooltipAdditionalInfo: CardTooltipAdditionalInfo;
 	@Input() cardTooltipRelatedCardIdsHeader: string;
@@ -190,7 +189,6 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 			this.tooltipRef.instance.displayBuffs = false;
 			this.tooltipRef.instance.cardType = this.cardTooltipType;
 			this.tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
-			this.tooltipRef.instance.localized = this.cardTooltipLocalized;
 		}
 		this.tooltipRef.instance.additionalInfo = this.cardTooltipAdditionalInfo;
 

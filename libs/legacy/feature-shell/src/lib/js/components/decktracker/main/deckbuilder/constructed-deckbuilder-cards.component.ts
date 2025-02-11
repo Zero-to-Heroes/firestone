@@ -19,7 +19,7 @@ import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils'
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
-import { filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
+import { filter, shareReplay, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -314,10 +314,10 @@ export class ConstructedDeckbuilderCardsComponent
 		);
 
 		this.activeCards$ = combineLatest([allowedCardsAfterDeck$, this.searchString$]).pipe(
-			this.mapData(
-				([allowedCards, searchString]) => {
-					const searchFilters = this.extractSearchFilters(searchString);
-					const searchResult = allowedCards
+			switchMap(([allowedCards, searchString]) => {
+				const searchFilters = this.extractSearchFilters(searchString);
+				const searchResult = Promise.all(
+					allowedCards
 						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
@@ -326,21 +326,22 @@ export class ConstructedDeckbuilderCardsComponent
 								card.name,
 							]),
 						)
-						.map((card) => {
+						.map(async (card) => {
 							const result: DeckBuilderCard = {
 								cardId: card.id,
 								name: card.name,
-								imagePath: this.i18n.getCardImage(card.id, {
-									isHighRes: false,
-								}),
+								imagePath: await this.i18n
+									.getCardImage(card.id, {
+										isHighRes: false,
+									})
+									.toPromise(),
 							};
 							return result;
-						});
-					return searchResult;
-				},
-				null,
-				50,
-			),
+						}),
+				);
+				return searchResult;
+			}),
+			this.mapData((cards) => cards),
 		);
 		// TODO: externalize rules?
 		this.maxCardsInDeck$ = combineLatest([

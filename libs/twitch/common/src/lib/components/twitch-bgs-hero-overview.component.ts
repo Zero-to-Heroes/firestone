@@ -63,27 +63,35 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 	_opponent: BgsPlayer;
 	currentTurn: number;
 	showLogo = true;
-	heroPowerImage: string | null;
+	heroPowerImage: string | null | undefined;
 	leaderboardPositionClass: string;
 	rewards: readonly Reward[] | undefined;
 	trinkets: readonly (Trinket | null)[];
 
 	showBuddies: boolean;
-	buddyCardImage: string | null;
-	buddyCardGoldenImage: string | null;
+	buddyCardImage: string | null | undefined;
+	buddyCardGoldenImage: string | null | undefined;
 
 	@Input() set config(value: TwitchOpponentOverviewInput) {
+		this.setConfig(value);
+	}
+
+	private async setConfig(value: TwitchOpponentOverviewInput) {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
 		this.showLogo = value.showLogo ?? true;
 		this.leaderboardPositionClass = `position-${value.player.leaderboardPlace}`;
-		this.rewards = value.player.questRewards?.map((reward) => ({
-			image: this.i18n.getCardImage(reward.cardId, {
-				isBgs: true,
-				isHighRes: true,
-			})!,
-			completed: reward.completed,
-		}));
+		this.rewards = await Promise.all(
+			value.player.questRewards?.map(async (reward) => ({
+				image: await this.i18n
+					.getCardImage(reward.cardId, {
+						isBgs: true,
+						isHighRes: true,
+					})!
+					.toPromise(),
+				completed: reward.completed,
+			})),
+		);
 		this.showBuddies = value.config?.hasBuddies;
 		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards.getService());
 		const buddyCard = !!buddyCardId ? this.cards.getCard(buddyCardId) : null;
@@ -91,41 +99,51 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 			? this.cards.getCard(buddyCard.battlegroundsPremiumDbfId)
 			: null;
 		this.buddyCardImage = !!buddyCardId
-			? this.i18n.getCardImage(buddyCardId, {
-					isBgs: true,
-					isHighRes: true,
-			  })
+			? await this.i18n
+					.getCardImage(buddyCardId, {
+						isBgs: true,
+						isHighRes: true,
+					})
+					.toPromise()
 			: null;
 		this.buddyCardGoldenImage = !!buddyCardGolden
-			? this.i18n.getCardImage(buddyCardGolden.id, {
-					isBgs: true,
-					cardType: 'GOLDEN',
-					isHighRes: true,
-			  })
+			? await this.i18n
+					.getCardImage(buddyCardGolden.id, {
+						isBgs: true,
+						cardType: 'GOLDEN',
+						isHighRes: true,
+					})
+					.toPromise()
 			: null;
 		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards.getService());
-		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
-			isHighRes: true,
-		});
+		this.heroPowerImage = await this.i18n
+			.getCardImage(heroPowerCardId, {
+				isHighRes: true,
+			})
+			.toPromise();
 		if (value.player.lesserTrinket || value.player.greaterTrinket) {
-			this.trinkets = [
+			this.trinkets = await Promise.all([
 				!!value.player.lesserTrinket
 					? {
-							image: this.i18n.getCardImage(value.player.lesserTrinket, {
-								isBgs: true,
-								isHighRes: true,
-							})!,
+							image: await this.i18n
+								.getCardImage(value.player.lesserTrinket, {
+									isBgs: true,
+									isHighRes: true,
+								})!
+								.toPromise(),
 					  }
 					: null,
 				!!value.player.greaterTrinket
 					? {
-							image: this.i18n.getCardImage(value.player.greaterTrinket, {
-								isBgs: true,
-								isHighRes: true,
-							})!,
+							image: await this.i18n
+								.getCardImage(value.player.greaterTrinket, {
+									isBgs: true,
+									isHighRes: true,
+								})!
+								.toPromise(),
 					  }
 					: null,
-			];
+			]);
 		}
 		super.listenForResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -157,10 +175,10 @@ export interface TwitchOpponentOverviewInput {
 }
 
 interface Reward {
-	readonly image: string;
+	readonly image: string | null | undefined;
 	readonly completed: boolean;
 }
 
 interface Trinket {
-	readonly image: string;
+	readonly image: string | null | undefined;
 }

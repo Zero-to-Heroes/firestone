@@ -38,7 +38,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/placeholder.png"
 					class="pale-theme placeholder"
 				/>
-				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
+				<img *ngIf="image$ | async as image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
 				<div class="count" *ngIf="!showPlaceholder && showCounts">
 					<div class="non-premium" *ngIf="showNonPremiumCount">
 						<span>{{ ownedNonPremium }}</span>
@@ -136,7 +136,7 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 	showDiamondCount: boolean;
 
 	secondaryClass: string;
-	image: string;
+	image$: Observable<string>;
 	missing: boolean;
 	_card: SetCard | CollectionReferenceCard;
 	ownedPremium: number;
@@ -186,7 +186,7 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 		if (!this._imageLoaded) {
 			this.showPlaceholder = true;
 		}
-		this.image = this.i18n.getCardImage(this._card.id, {
+		this.image$ = this.i18n.getCardImage(this._card.id, {
 			isBgs: this._bgs,
 			cardType: this._cardType,
 			isHighRes: this._highRes,

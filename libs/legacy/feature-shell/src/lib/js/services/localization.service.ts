@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { Semaphore } from 'async-mutex';
+import { from, Observable, of } from 'rxjs';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { formatClass } from './hs-utils';
 import { sleep } from './utils';
@@ -12,9 +14,11 @@ export class LocalizationService {
 	private _locale = 'enUS';
 	private useHighResImages: boolean;
 
+	private useDiskCache = true;
+
 	private translate: TranslateService;
 
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly diskCache: DiskCacheService) {}
 
 	// FIXME: should handle all the init logic here (or create a facade?), instead of having it be in app-bootstrap
 	public async initReady() {
@@ -50,6 +54,9 @@ export class LocalizationService {
 			.subscribe((pref) => {
 				this.useHighResImages = pref;
 			});
+		// TODO: add pref for disk cache
+		// TODO: automatically enable disk cache if slow connection (or alternatively if
+		// from a locale with known issues)
 	}
 
 	public getTranslateService(): TranslateService {
@@ -69,27 +76,55 @@ export class LocalizationService {
 		return `Created by ${cardName ?? 'unknown'}`;
 	}
 
-	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): Observable<string> {
 		if (!cardId) {
-			return null;
+			return of(null);
 		}
 		const bgs = options?.isBgs ? 'bgs/' : '';
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
-		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this._locale}/${highRes}`;
+		const base = `cards/${bgs}${heroSkin}${this._locale}/${highRes}`;
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
-		return `${base}/${suffix}`;
+		const cardPath = `${base}/${suffix}`;
+		const url = `https://static.firestoneapp.com/${cardPath}`;
+		if (!this.useDiskCache) {
+			return of(url);
+		}
+
+		return from(this.diskCache.getBinaryFile(cardPath)).pipe(
+			switchMap((cached: Blob | null) => {
+				if (cached /*&& !this.isCacheExpired(cardPath)*/) {
+					console.debug('[localization] using cached image', cardPath, cached);
+					return of(URL.createObjectURL(cached));
+				}
+				return from(fetch(url)).pipe(
+					switchMap(async (response) => {
+						if (response.ok) {
+							const clone = response.clone();
+							const blob = await clone.blob();
+							// console.debug('[localization] saving image to disk cache', cardPath, response, blob);
+							this.saveBinaryFile(url, cardPath);
+							return url;
+						}
+						console.error('[localization] could not fetch image', cardPath, response);
+						return null;
+					}),
+					// catchError(() => of(null))
+				);
+			}),
+			// catchError(() => of(url))
+		);
 	}
 
-	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): Observable<string> {
 		if (!cardId) {
 			return null;
 		}
 		const base = `https://static.firestoneapp.com/cards`;
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
-		return `${base}/${suffix}`;
+		return from([`${base}/${suffix}`]);
 	}
 
 	public getUnknownCardName(i18n: { translateString: (string) => string }, playerClass: string = null): string {
@@ -217,6 +252,20 @@ export class LocalizationService {
 				return '_signature';
 			default:
 				return '';
+		}
+	}
+
+	private saveFileSemaphore = new Semaphore(1); // Limit to 3 concurrent calls
+	private async saveBinaryFile(url: string, cardPath: string) {
+		console.debug('[localization] preparing to acquire lock to save image', cardPath);
+		await this.saveFileSemaphore.acquire();
+		try {
+			console.debug('[localization] acquired lock to save image', cardPath);
+			await this.diskCache.saveBinaryFile(url, cardPath);
+			console.debug('[localization] saved image to disk cache', cardPath);
+		} finally {
+			this.saveFileSemaphore.release();
+			console.debug('[localization] released lock to save image', cardPath);
 		}
 	}
 }

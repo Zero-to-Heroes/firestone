@@ -297,7 +297,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly cardMouseOverService: CardMousedOverService,
 		private readonly ads: AdService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
-		@Optional() private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(cdr);
 	}
@@ -497,14 +497,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', card);
-		}
-		// Preload
-		if (this.cardId) {
-			const imageUrl =
-				this.i18n?.getCardImage(this.cardId) ??
-				`https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png`;
-			const image = new Image();
-			image.src = imageUrl;
 		}
 
 		if (this.numberOfCopies > 1) {
