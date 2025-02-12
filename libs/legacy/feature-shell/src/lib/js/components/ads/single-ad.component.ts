@@ -70,7 +70,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 			this.bazaarTrackerAdActive,
 		);
 		if (this.showBazaarTrackerAd) {
-			this.bazaarTrackerAdActive = !this.bazaarTrackerAdActive;
+			// this.bazaarTrackerAdActive = !this.bazaarTrackerAdActive;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
