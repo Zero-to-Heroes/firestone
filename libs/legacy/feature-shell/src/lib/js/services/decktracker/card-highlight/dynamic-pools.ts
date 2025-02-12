@@ -395,7 +395,7 @@ const filterCards = (
 			.filter((c) => filters.every((f) => f(c)))
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.TITAN]))
-			.filter((c) => BAN_LIST.includes(c.id as CardIds))
+			.filter((c) => !BAN_LIST.includes(c.id as CardIds))
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=6&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter(
 				(c) =>
