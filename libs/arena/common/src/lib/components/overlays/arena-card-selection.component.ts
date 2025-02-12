@@ -7,6 +7,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
+import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -19,7 +20,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil, tap } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
@@ -38,8 +39,6 @@ import { ArenaCardOption } from './model';
 				*ngFor="let option of options$ | async; trackBy: trackByFn"
 				[card]="option"
 				[pickNumber]="(pickNumber$ | async)!"
-				(mouseenter)="onMouseEnter(option.cardId)"
-				(mouseleave)="onMouseLeave(option.cardId, $event)"
 			>
 			</arena-card-option>
 		</div>
@@ -63,6 +62,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly ow: OverwolfService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly prefs: PreferencesService,
+		private readonly mouseOverService: CardMousedOverService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		// Provided in the app
 		@Inject(ARENA_DRAFT_MANAGER_SERVICE_TOKEN) private readonly draftManager: IArenaDraftManagerService,
@@ -161,6 +161,29 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 
 		this.cardsHighlightService.initForSingle();
 
+		this.mouseOverService.mousedOverCard$$
+			.pipe(
+				distinctUntilChanged(
+					(a, b) =>
+						a?.CardId == b?.CardId &&
+						a?.EntityId === b?.EntityId &&
+						a?.Zone === b?.Zone &&
+						a?.Side === b?.Side,
+				),
+				pairwise(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([previousMouseOverCard, mousedOverCard]) => {
+				// We use cardId instead of entityId so that it still works when we have multiple cards in hand (since only one entity
+				// id is assigned)
+				if (mousedOverCard?.CardId) {
+					this.onMouseEnter(mousedOverCard?.CardId);
+				} else if (previousMouseOverCard?.CardId) {
+					this.onMouseLeave(previousMouseOverCard.CardId);
+					// this.forceMouseOver$$.next(false);
+				}
+			});
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -171,7 +194,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		this.cardsHighlightService.onMouseEnter(cardId, 'single');
 	}
 
-	onMouseLeave(cardId: string, event: MouseEvent) {
+	onMouseLeave(cardId: string) {
 		this.cardsHighlightService.onMouseLeave(cardId);
 	}
 
