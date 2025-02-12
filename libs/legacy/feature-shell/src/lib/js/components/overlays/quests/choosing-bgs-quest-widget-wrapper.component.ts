@@ -43,11 +43,11 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 						[freeUsesLeft]="freeUsesLeft$ | async"
 					></choosing-card-bgs-quest-option>
 				</ng-container>
-				<ng-container *ngIf="showPremiumBanner$ | async">
+				<!-- <ng-container *ngIf="showPremiumBanner$ | async">
 					<div class="premium-container" *ngFor="let option of value.options">
 						<bgs-quest-stats-info-premium></bgs-quest-stats-info-premium>
 					</div>
-				</ng-container>
+				</ng-container> -->
 			</div>
 		</div>
 	`,

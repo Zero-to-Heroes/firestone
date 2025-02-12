@@ -167,14 +167,14 @@ import { BgsIntermediateResultsSimGuardianService } from '../services/simulation
 				</div>
 			</div>
 		</div>
-		<battle-status-premium
+		<!-- <battle-status-premium
 			class="ongoing premium"
 			*ngIf="
 				!forceHidePremiumBanner &&
 				battle?.battleInfoStatus === 'waiting-for-result' &&
 				(showPremiumBanner$ | async)
 			"
-		></battle-status-premium>
+		></battle-status-premium> -->
 		<div class="ongoing" *ngIf="isOngoing">
 			<svg class="svg-icon-fill loading-icon">
 				<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
