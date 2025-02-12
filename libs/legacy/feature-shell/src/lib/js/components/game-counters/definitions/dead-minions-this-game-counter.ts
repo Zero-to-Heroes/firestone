@@ -32,7 +32,7 @@ export class DeadMinionsThisGameCounterDefinition implements CounterDefinition<G
 	}
 
 	public emit(deadMinions: number): NonFunctionProperties<DeadMinionsThisGameCounterDefinition> {
-		const tooltip = this.i18n.translateString(`counters.dead-minions-this-game.${this.side}`, {
+		const tooltip = this.i18n.translateString(`counters.dead-minions-this-game.player`, {
 			value: deadMinions,
 		});
 		return {
