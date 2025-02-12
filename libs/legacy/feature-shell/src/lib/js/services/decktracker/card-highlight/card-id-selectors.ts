@@ -1350,6 +1350,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.Infestor_SC_002:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
+		case CardIds.IniStormcoil_TSC_649:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.CoralKeeper:
 		case CardIds.Multicaster:
 		case CardIds.Sif:
@@ -1357,8 +1359,6 @@ export const cardIdSelector = (
 		case CardIds.ElementalInspiration:
 		case CardIds.InquisitiveCreation:
 		case CardIds.WisdomOfNorgannon:
-		case CardIds.IniStormcoil_TSC_649:
-			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.RazzleDazzler_VAC_301:
 			return and(side(inputSide), or(inDeck, inHand), spell, hasSpellSchool, not(spellSchoolPlayedThisMatch));
 		case CardIds.Insight:
