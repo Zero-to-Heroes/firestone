@@ -1,8 +1,8 @@
 .container {
 	position: relative;
-	left: 15vh;
+	left: 4vh;
 	top: 22vh;
-	width: 108vh;
+	width: 130vh;
 	height: 5vh;
 	pointer-events: none;
 	display: flex;
@@ -27,9 +27,17 @@
 
 	&.items-2 {
 		grid-template-columns: 1fr 1fr;
+		margin-left: 19vh;
+		margin-right: 19vh;
 	}
 
 	&.items-3 {
 		grid-template-columns: 1fr 1fr 1fr;
+		margin-left: 15vh;
+		margin-right: 15vh;
+	}
+
+	&.items-4 {
+		grid-template-columns: 1fr 1fr 1fr 1fr;
 	}
 }
