@@ -261,10 +261,12 @@ export class CardPlayedFromHandParser implements EventParser {
 			this.i18n,
 		);
 		const finalPlayerDeck = playerDeckAfterSpecialCaseUpdate.update({
-			cardsPlayedThisMatch: [
-				...newPlayerDeck.cardsPlayedThisMatch,
-				newCardPlayedThisMatch,
-			] as readonly ShortCardWithTurn[],
+			cardsPlayedThisMatch: isCardCountered
+				? playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch
+				: ([
+						...playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch,
+						newCardPlayedThisMatch,
+				  ] as readonly ShortCardWithTurn[]),
 			anachronosTurnsPlayed:
 				cardId === CardIds.Anachronos
 					? [...playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed, currentState.gameTagTurnNumber]
