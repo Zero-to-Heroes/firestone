@@ -9,3 +9,4 @@
 ### Other things to try
 
 -   Someone managed to fix the issue by hard killing Overwolf from the task manager, closing Hearthstone, and restarting Overwolf
+-   Launching the app as admin can maybe fix the issue as well
