@@ -465,7 +465,7 @@ export const cardIdSelector = (
 		case CardIds.BumblingBellhop_VAC_521:
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.BunnyStomper_WW_435:
-			return and(side(inputSide), or(inDeck, inHand), beast);
+			return and(side(inputSide), or(inDeck, inHand, inPlay), beast);
 		case CardIds.BusyBot_WORK_002:
 			return and(side(inputSide), or(inDeck, inHand), minion, attackIs(1));
 		case CardIds.BusyPeon_WORK_041:
