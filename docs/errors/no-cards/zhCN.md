@@ -5,3 +5,7 @@
     -   防病毒软件有时会阻止访问，请尝试将其关闭
     -   重要提示：这似乎是最近更普遍的问题原因，因此请检查您的家长控制设置（也包括您的 ISP），并将 https://static.zerotoheroes.com 和 https://static.firestoneapp.com 列入白名单
 -   如果没有任何帮助，请发送电子邮件至 support@firestoneapp.com
+
+### 其他尝试
+
+-   有人设法通过从任务管理器强制关闭 Overwolf、关闭《炉石传说》并重新启动 Overwolf 解决了该问题
