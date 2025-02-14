@@ -20,6 +20,7 @@ export class StarshipLaunchedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = this.helper.findCardInZone(deck.board, cardId, entityId);
+		console.debug('[starship-launched] card in board', card, cardId, entityId, deck.hand?.length);
 		if (!card) {
 			console.warn(
 				'[starship-launched-parser] could not find card in board',
@@ -33,6 +34,7 @@ export class StarshipLaunchedParser implements EventParser {
 		const newCard = card.update({
 			tags: gameEvent.additionalData.tags,
 		});
+
 		const newBoard = deck.board.map((c) => (c.entityId === entityId ? newCard : c));
 		const newDeck = deck.update({
 			board: newBoard,

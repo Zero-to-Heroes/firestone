@@ -1409,24 +1409,23 @@ export const cardIdSelector = (
 		case CardIds.JimRaynor_SC_400:
 		case CardIds.Thor_ThorExplosivePayloadToken_SC_414t:
 			return (input: SelectorInput): SelectorOutput => {
-				const starships = input.deckState
-					.getAllCardsInDeckWithoutOptions()
-					.filter((c) => input.allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-					.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
-				const entityIds = starships.flatMap((c) => [
-					{ cardId: c.cardId, entityId: c.entityId },
-					...(c.storedInformation?.cards
-						.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
-						?.map((c) => ({ cardId: c.cardId, entityId: c.entityId })) ?? []),
-				]);
-
+				// const starships = input.deckState
+				// 	.getAllCardsInDeckWithoutOptions()
+				// 	.filter((c) => input.allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
+				// 	.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
+				// const entityIds = starships.flatMap((c) => [
+				// 	{ cardId: c.cardId, entityId: c.entityId },
+				// 	...(c.storedInformation?.cards
+				// 		.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
+				// 		?.map((c) => ({ cardId: c.cardId, entityId: c.entityId })) ?? []),
+				// ]);
 				return highlightConditions(
-					tooltip(
-						and(
-							side(inputSide),
-							entityIs(...entityIds.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
-						),
-					),
+					// tooltip(
+					// 	and(
+					// 		side(inputSide),
+					// 		entityIs(...entityIds.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
+					// 	),
+					// ),
 					and(side(inputSide), or(inHand, inDeck), starshipPiece),
 				)(input);
 			};

@@ -7,6 +7,7 @@ import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
+import { globalRelatedCards } from './global/_registers';
 import {
 	and,
 	damage,
@@ -103,6 +104,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				handler.highlightCallback(card.highlight);
 			}
 		}
+	}
+
+	getGlobalRelatedCards(entityId: number, cardId: string, side: 'player' | 'opponent' | 'single'): readonly string[] {
+		return globalRelatedCards[cardId]?.getRelatedCards(entityId, side, this.gameState, this.allCards);
 	}
 
 	getHighlightedCards(

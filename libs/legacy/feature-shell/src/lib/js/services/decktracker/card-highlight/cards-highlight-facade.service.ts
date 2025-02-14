@@ -53,6 +53,10 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
 	}
 
+	getGlobalRelatedCards(entityId, cardId: string, side: 'player' | 'opponent' | 'single'): readonly string[] {
+		return this.service.getGlobalRelatedCards(entityId, cardId, side);
+	}
+
 	onMouseLeave(cardId: string) {
 		this.service.onMouseLeave(cardId);
 	}
