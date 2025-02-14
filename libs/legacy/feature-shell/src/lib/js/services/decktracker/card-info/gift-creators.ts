@@ -660,6 +660,7 @@ export const giftCreators = [
 	CardIds.RavenIdol_Awakened,
 	CardIds.RavenIdol_BreakFree,
 	CardIds.RavenIdol,
+	CardIds.RavenIdol_Core_LOE_115,
 	CardIds.RayOfFrost_DAL_577,
 	CardIds.RazorpetalLasher,
 	CardIds.RazorpetalVolley,
