@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
-import { GameStatusService, OwNotificationsService } from '@firestone/shared/common/service';
+import { GameStatusService, GlobalErrorService, OwNotificationsService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
@@ -24,6 +24,7 @@ export const DEACTIVATE_MIND_VISION = false;
 export class MindVisionStateMachineService {
 	private states: Map<CurrentState, MindVisionState> = new Map();
 	private currentState: MindVisionState;
+	private hasNotifiedRootMemoryReadingError = false;
 
 	private memoryUpdateListener = async (changes: string | 'reset') => {
 		const changesToBroadcast: MemoryUpdate | 'reset' = changes === 'reset' ? changes : JSON.parse(changes);
@@ -90,6 +91,7 @@ export class MindVisionStateMachineService {
 		private readonly memoryUpdates: MemoryUpdatesService,
 		private readonly notifs: OwNotificationsService,
 		private readonly i18n: ILocalizationService,
+		private readonly globalError: GlobalErrorService,
 	) {
 		this.setup();
 		window['resetMemory'] = () => this.performAction(Action.RESET);
@@ -207,6 +209,10 @@ export class MindVisionStateMachineService {
 		);
 		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
 			console.warn('[mind-vision] global event has root memory reading error');
+			if (!this.hasNotifiedRootMemoryReadingError) {
+				this.globalError.notifyCriticalError('memory-reading');
+				this.hasNotifiedRootMemoryReadingError = true;
+			}
 			await this.performAction(Action.RESET);
 		} else if (first === 'mindvision-instantiate-error') {
 			this.notifs.notifyInfo(

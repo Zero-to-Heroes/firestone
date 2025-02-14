@@ -7,6 +7,7 @@ export * from './lib/services/bug-report.service';
 export * from './lib/services/disk-cache.service';
 export * from './lib/services/expert-contributors.service';
 export * from './lib/services/game-status.service';
+export * from './lib/services/global-error.service';
 export * from './lib/services/log-utils.service';
 export * from './lib/services/logs-uploader.service';
 export * from './lib/services/notifications.service';

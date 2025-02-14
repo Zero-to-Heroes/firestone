@@ -1,6 +1,10 @@
 import { Injectable, Injector } from '@angular/core';
-import { GlobalErrorService } from '@firestone/app/common';
-import { DiskCacheService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	DiskCacheService,
+	GlobalErrorService,
+	OwNotificationsService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { IndexedDbService, OverwolfService, WindowManagerService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';

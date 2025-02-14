@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { OwNotificationsService } from '@firestone/shared/common/service';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { OwNotificationsService } from './notifications.service';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalErrorService {
@@ -38,11 +38,17 @@ export class GlobalErrorService {
 					message: this.i18n.translateString('app.global.errors.no-cards.message'),
 					url: getNoCardsUrl(this.i18n),
 				};
+			case 'memory-reading':
+				return {
+					title: this.i18n.translateString('app.global.errors.memory-reading.title'),
+					message: this.i18n.translateString('app.global.errors.memory-reading.message'),
+					url: getNoMemoryReadingUrl(this.i18n),
+				};
 		}
 	}
 }
 
-export type GlobalErrorType = 'no-cards';
+export type GlobalErrorType = 'no-cards' | 'memory-reading';
 export const getNoCardsUrl = (i18n: ILocalizationService): string => {
 	switch (i18n.locale) {
 		case 'zhCN':
@@ -50,5 +56,14 @@ export const getNoCardsUrl = (i18n: ILocalizationService): string => {
 			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/no-cards/zhCN.md';
 		default:
 			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/no-cards/enUS.md';
+	}
+};
+export const getNoMemoryReadingUrl = (i18n: ILocalizationService): string => {
+	switch (i18n.locale) {
+		case 'zhCN':
+		case 'twCN':
+			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/memory-reading/zhCN.md';
+		default:
+			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/memory-reading/enUS.md';
 	}
 };

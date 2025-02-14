@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
-import { GlobalErrorService } from '@firestone/app/common';
-import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
+import { DiskCacheService, GlobalErrorService, PreferencesService } from '@firestone/shared/common/service';
 import { distinctUntilChanged, map, skip } from 'rxjs';
 import { CARDS_VERSION } from './hs-utils';
 
