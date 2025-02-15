@@ -23,7 +23,7 @@ export class HeroRevealedParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			maxHealth: health,
-			initialClasses: existingHero.classes ?? [],
+			initialClasses: existingHero.initialClasses ?? existingHero.classes ?? [],
 			classes:
 				this.allCards.getCard(cardId)?.classes?.map((c) => CardClass[c]) ??
 				([CardClass.NEUTRAL] as readonly CardClass[]),

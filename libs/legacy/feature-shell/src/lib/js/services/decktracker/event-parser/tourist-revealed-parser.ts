@@ -40,6 +40,7 @@ export class TouristRevealedParser implements EventParser {
 		const alreadyRevealedTourist = deck.getAllCardsInDeck().find((c) => c.cardId === cardId);
 
 		let newDeck = deck.deck;
+		let newHero = deck.hero;
 		if (!alreadyRevealedTourist) {
 			const cardInDeck = DeckCard.create({
 				entityId: null,
@@ -50,6 +51,13 @@ export class TouristRevealedParser implements EventParser {
 				zone: null,
 			} as DeckCard);
 			newDeck = this.helper.addSingleCardToZone(newDeck, cardInDeck);
+
+			const heroInitialClasses = newHero.initialClasses ?? newHero.classes ?? [];
+			const touristClass: CardClass = CardClass[gameEvent.additionalData.touristFor as string];
+			const initialClassesWithTourist = [...heroInitialClasses, touristClass];
+			newHero = newHero.update({
+				initialClasses: initialClassesWithTourist,
+			});
 		}
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
