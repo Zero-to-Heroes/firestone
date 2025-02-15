@@ -7,7 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { hasOrHadHeroClass } from '@firestone/game-state';
+import { initialHeroClassIs } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -38,7 +38,7 @@ export class OpponentCorpseSpentWidgetWrapperComponent
 		this.activeCounter = 'corpseSpent';
 		this.prefExtractor = (prefs) => prefs.opponentCorpseSpentCounter;
 		this.deckStateExtractor = (state) => {
-			if (!hasOrHadHeroClass(state.opponentDeck.hero, [CardClass.DEATHKNIGHT])) {
+			if (!initialHeroClassIs(state.opponentDeck.hero, [CardClass.DEATHKNIGHT])) {
 				return false;
 			}
 

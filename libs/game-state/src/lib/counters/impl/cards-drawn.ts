@@ -1,7 +1,7 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
-import { hasOrHadHeroClass } from '../../models/hero-card';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -26,7 +26,7 @@ export class CardsDrawnCounterDefinitionV2 extends CounterDefinitionV2<number> {
 
 	readonly opponent = {
 		pref: 'opponentCardsDrawnCounter' as const,
-		display: (state: GameState): boolean => hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.ROGUE]),
+		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck?.hero, [CardClass.ROGUE]),
 		value: (state: GameState): number => state.opponentDeck?.cardDrawnThisGame,
 		setting: {
 			label: (i18n: ILocalizationService): string =>

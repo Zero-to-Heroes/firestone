@@ -1,7 +1,7 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
-import { hasOrHadHeroClass } from '../../models/hero-card';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -33,7 +33,7 @@ export class DiscoversCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		display: (state: GameState): boolean => {
 			return (
 				state.opponentDeck.hasRelevantCard(this.cards) ||
-				(hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.HUNTER]) &&
+				(initialHeroClassIs(state.opponentDeck?.hero, [CardClass.HUNTER]) &&
 					(state.opponentDeck.hasRelevantCard(this.opponentRelevantCards) ||
 						state.opponentDeck?.discoversThisGame > 0))
 			);

@@ -1,7 +1,7 @@
 import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
-import { hasOrHadHeroClass } from '../../models/hero-card';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -29,7 +29,7 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 
 	readonly opponent = {
 		pref: 'opponentProtossSpellsCounter' as const,
-		display: (state: GameState): boolean => hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.MAGE]),
+		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck?.hero, [CardClass.MAGE]),
 		value: (state: GameState): number | null =>
 			state.opponentDeck?.spellsPlayedThisMatch?.filter((s) =>
 				this.allCards.getCard(s.cardId).mechanics?.includes(GameTag[GameTag.PROTOSS]),

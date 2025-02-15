@@ -3,7 +3,7 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { TurnDamage } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
-import { hasOrHadHeroClass } from '../../models/hero-card';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -30,7 +30,7 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 		pref: 'opponentDamageTakenOnYourTurnCounter' as const,
 		display: (state: GameState): boolean => {
 			const result =
-				hasOrHadHeroClass(state.opponentDeck?.hero, opponentClasses) &&
+				initialHeroClassIs(state.opponentDeck?.hero, opponentClasses) &&
 				!!state.opponentDeck?.damageTakenOnYourTurns.length;
 			return result;
 		},

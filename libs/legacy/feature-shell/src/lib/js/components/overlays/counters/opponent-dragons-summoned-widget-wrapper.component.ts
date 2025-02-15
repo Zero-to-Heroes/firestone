@@ -7,7 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { hasOrHadHeroClass } from '@firestone/game-state';
+import { initialHeroClassIs } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -36,7 +36,7 @@ export class OpponentDragonsSummonedWidgetWrapperComponent
 		this.activeCounter = 'dragonsSummoned';
 		this.prefExtractor = (prefs) => prefs.opponentDragonsSummonedCounter;
 		this.deckStateExtractor = (state, prefValue) =>
-			hasOrHadHeroClass(state.opponentDeck.hero, [CardClass.PRIEST, CardClass.DRUID]) &&
+			initialHeroClassIs(state.opponentDeck.hero, [CardClass.PRIEST, CardClass.DRUID]) &&
 			!!state.opponentDeck?.dragonsSummoned;
 	}
 }

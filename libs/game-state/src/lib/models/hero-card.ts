@@ -29,3 +29,8 @@ export const hasOrHadHeroClass = (card: HeroCard | undefined, cardClasses: reado
 		false
 	);
 };
+
+export const initialHeroClassIs = (card: HeroCard | undefined, cardClasses: readonly CardClass[]): boolean => {
+	// TODO: handle Tourists
+	return card?.initialClasses.some((c) => cardClasses.includes(c)) || false;
+};
