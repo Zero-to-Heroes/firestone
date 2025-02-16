@@ -25,6 +25,7 @@ export * from './lib/components/trinkets/battlegrounds-meta-stats-trinkets.compo
 export * from './lib/components/trinkets/bgs-trinket-stats-info-premium.component';
 export * from './lib/compositions/bgs-comps-view-select-dropdown';
 export * from './lib/highlights/bgs-board-highlighter.service';
+export * from './lib/minion-stats/bgs-board-stats.service';
 export * from './lib/models/strategies';
 export * from './lib/services/_bgs-common-bootstrap.service';
 export * from './lib/services/bgs-in-game-compositions.service';

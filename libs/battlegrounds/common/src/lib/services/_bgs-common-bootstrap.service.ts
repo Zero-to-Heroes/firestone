@@ -19,5 +19,6 @@ export class BgsCommonBootstrapService {
 		private readonly init_BgsMetaTrinketStrategiesService: BgsMetaTrinketStrategiesService,
 		private readonly init_BgsMetaCompositionStrategiesService: BgsMetaCompositionStrategiesService,
 		private readonly init_BgsBoardHighlighterService: BgsBoardHighlighterService,
-	) {}
+	) // private readonly init_BgsBoardStatsService: BgsBoardStatsService,
+	{}
 }
