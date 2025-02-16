@@ -1031,6 +1031,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon, notInInitialDeck);
 		case CardIds.FossilFanatic:
 			return and(side(inputSide), inDeck, spell, fel);
+		case CardIds.FreeAdmission:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), minion, demon),
+				and(side(inputSide), or(inDeck, inHand), minion),
+			);
 		case CardIds.FrequencyOscillator:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.PeacefulPiper_FriendlyFace:
