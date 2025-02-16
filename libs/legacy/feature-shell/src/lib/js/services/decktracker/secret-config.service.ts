@@ -23,6 +23,11 @@ export class SecretConfigService {
 		playerClass: string,
 		creatorCardId?: string,
 	): Promise<readonly string[]> {
+		const staticList = this.getStaticSecrets(creatorCardId, metadata, playerClass);
+		if (staticList?.length) {
+			return staticList;
+		}
+
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			await this.init();
 		}
@@ -50,6 +55,15 @@ export class SecretConfigService {
 	private async init() {
 		this.secretConfigs = await this.getSecretsConfig();
 		console.log('[secrets-config] loaded secrets config');
+	}
+
+	private getStaticSecrets(creatorCardId: string, metadata: Metadata, playerClass: string): readonly string[] {
+		switch (creatorCardId) {
+			case CardIds.PuzzlemasterKhadgar_MagicWisdomballToken_TOY_373t:
+				return [CardIds.CounterspellCore, CardIds.IceBarrierCore];
+			default:
+				return null;
+		}
 	}
 
 	private async getSecretsConfig(): Promise<readonly SecretsConfig[]> {
