@@ -21,6 +21,7 @@ import {
 				class="portrait"
 				[heroCardId]="heroCardId"
 				[cardTooltip]="heroPowerCardId"
+				[cardTooltipBgs]="true"
 				[health]="heroStartingHealth"
 			></bgs-hero-portrait>
 			<div class="hero-details">

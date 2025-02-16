@@ -44,7 +44,9 @@ export class BgsHeroSelectionTooltipComponent {
 	@Input() set config(value: BgsMetaHeroStatTierItem) {
 		this._hero = value;
 		this.totalMatches = value.dataPoints;
-		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
+		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId, {
+			isBgs: true,
+		});
 		this.questImage = !!this.heroPowerImage ? null : this.i18n.getCardImage(value.id);
 		this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds, this.allCards.getService()), {
 			isBgs: true,
