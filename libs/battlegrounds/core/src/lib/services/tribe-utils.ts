@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, getEffectiveTribes, getTribeName, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
 
 export const getActualTribes = (
 	card: ReferenceCard,
 	groupMinionsIntoTheirTribeGroup: boolean,
 	trinkets: readonly string[] | undefined,
+	anomalies: readonly string[] | undefined,
 ): readonly Race[] => {
+	if (anomalies?.includes(TempCardIds.IncubationMutation) && !card.races?.length) {
+		return [Race.ALL];
+	}
 	return [
 		...getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).map((t) => Race[t]),
 		...getSpecialTribesForEntity(card, trinkets),

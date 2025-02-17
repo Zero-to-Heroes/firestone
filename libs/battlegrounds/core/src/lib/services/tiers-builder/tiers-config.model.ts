@@ -4,6 +4,7 @@ export interface TierBuilderConfig {
 	readonly spells?: boolean;
 	readonly showSpellsAtBottom?: boolean;
 	readonly trinkets?: boolean;
+	readonly anomalies?: readonly string[];
 	readonly showBuddiesTier?: boolean;
 	readonly showAllBuddyCards?: boolean;
 	readonly playerTrinkets: readonly string[];

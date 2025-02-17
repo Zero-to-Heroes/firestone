@@ -92,6 +92,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 			</fs-numeric-input-with-arrows>
 			<fs-numeric-input-with-arrows
 				class="input"
+				[label]="'battlegrounds.sim.beasts-summoned' | fsTranslate"
+				[helpTooltip]="'battlegrounds.sim.beasts-summoned-tooltip' | fsTranslate"
+				[value]="beastsSummonedThisGame"
+				[minValue]="0"
+				(fsModelUpdate)="onBeastsSummonedThisGameChanged($event)"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
 				[label]="'battlegrounds.sim.ancestral-automaton' | fsTranslate"
 				[helpTooltip]="'battlegrounds.sim.ancestral-automaton-tooltip' | fsTranslate"
 				[value]="astralAutomatonsSummonedThisGame"
@@ -120,6 +129,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.tavernSpellsCastThisGame = value?.TavernSpellsCastThisGame ?? 0;
 		this.piratesPlayedThisGame = value?.PiratesPlayedThisGame ?? 0;
 		this.piratesSummonedThisGame = value?.PiratesSummonedThisGame ?? 0;
+		this.beastsSummonedThisGame = value?.BeastsSummonedThisGame ?? 0;
 		this.astralAutomatonsSummonedThisGame = value?.AstralAutomatonsSummonedThisGame ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -134,6 +144,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
+	beastsSummonedThisGame: number;
 	astralAutomatonsSummonedThisGame: number;
 
 	private inputGlobalInfo: BgsPlayerGlobalInfo | undefined | null;
@@ -178,6 +189,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.piratesSummonedThisGame = value;
 	}
 
+	onBeastsSummonedThisGameChanged(value: number) {
+		this.beastsSummonedThisGame = value;
+	}
+
 	onAstralAutomatonsSummonedThisGameChanged(value: number) {
 		this.astralAutomatonsSummonedThisGame = value;
 	}
@@ -198,6 +213,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			TavernSpellsCastThisGame: this.tavernSpellsCastThisGame,
 			PiratesPlayedThisGame: this.piratesPlayedThisGame,
 			PiratesSummonedThisGame: this.piratesSummonedThisGame,
+			BeastsSummonedThisGame: this.beastsSummonedThisGame,
 			AstralAutomatonsSummonedThisGame: this.astralAutomatonsSummonedThisGame,
 		};
 		// TODO: once hand is implemented, add the hand total stats to the Mrrrgl bonus

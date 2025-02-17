@@ -7,7 +7,6 @@ export class FeatureFlags {
 	public static readonly ENABLE_BGS_QUESTS = true;
 	public static readonly ENABLE_BGS_QUESTS_IN_APP = true;
 	public static readonly USE_NEW_SETTINGS = true;
-
 	public static readonly ENABLE_BGS_COMPS = true;
 
 	// Shelved for now

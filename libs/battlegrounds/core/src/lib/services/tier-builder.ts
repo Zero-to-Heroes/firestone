@@ -69,6 +69,7 @@ export const buildTiers = (
 		spells: hasSpells,
 		trinkets: showTrinkets,
 		playerTrinkets: playerTrinkets,
+		anomalies: anomalies,
 		groupMinionsIntoTheirTribeGroup: groupMinionsIntoTheirTribeGroup,
 		includeTrinketsInTribeGroups: includeTrinketsInTribeGroups,
 		showSpellsAtBottom: showSpellsAtBottom,

@@ -128,6 +128,7 @@ const buildSingleTribeTier = (
 			card,
 			config?.groupMinionsIntoTheirTribeGroup ?? false,
 			config?.playerTrinkets,
+			config?.anomalies ?? [],
 		);
 		// const isTrinket = isBgsTrinket(card);
 		const isSpell = isBgsSpell(card);

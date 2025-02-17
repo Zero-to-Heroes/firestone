@@ -85,6 +85,7 @@ const buildTribeGroup = (
 				card,
 				config?.groupMinionsIntoTheirTribeGroup ?? false,
 				config?.playerTrinkets,
+				config?.anomalies,
 			);
 			if (targetTribe === null) {
 				return cardTribes.length === 0 || cardTribes.includes(Race.BLANK);
