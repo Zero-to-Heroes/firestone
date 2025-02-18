@@ -209,17 +209,17 @@ export class MindVisionStateMachineService {
 		);
 		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
 			console.warn('[mind-vision] global event has root memory reading error');
+			await this.performAction(Action.RESET);
+		} else if (first === 'mindvision-instantiate-error') {
+			// this.notifs.notifyInfo(
+			// 	this.i18n.translateString('app.internal.memory.reading-error-title'),
+			// 	this.i18n.translateString('app.internal.memory.reading-error-text'),
+			// 	first,
+			// );
 			if (!this.hasNotifiedRootMemoryReadingError) {
 				this.globalError.notifyCriticalError('memory-reading');
 				this.hasNotifiedRootMemoryReadingError = true;
 			}
-			await this.performAction(Action.RESET);
-		} else if (first === 'mindvision-instantiate-error') {
-			this.notifs.notifyInfo(
-				this.i18n.translateString('app.internal.memory.reading-error-title'),
-				this.i18n.translateString('app.internal.memory.reading-error-text'),
-				first,
-			);
 		} else if (first === 'reset') {
 			console.warn('[mind-vision] first is reset', first, second);
 			await this.performAction(Action.RESET);
