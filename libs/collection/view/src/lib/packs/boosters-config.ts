@@ -32,6 +32,7 @@ export const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_ISLAND_VACATION,
 	BoosterType.GOLDEN_THE_GREAT_DARK_BEYOND,
 	BoosterType.GOLDEN_ASHES_OF_OUTLAND,
+	BoosterType.GOLDEN_INTO_THE_EMERALD_DREAM,
 ];
 
 export const CLASS_PACKS = [
