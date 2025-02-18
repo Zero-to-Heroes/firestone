@@ -29,7 +29,7 @@ export class PackStatsService implements ICollectionPackService {
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
 		let existingPackStats = (await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).toArray()).sort(
-			(a, b) => b.creationDate - a.creationDate,
+			(a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime(),
 		) as readonly PackResult[];
 		console.debug('[pack-stats] existing pack stats in db', existingPackStats);
 		if (!existingPackStats?.length) {
