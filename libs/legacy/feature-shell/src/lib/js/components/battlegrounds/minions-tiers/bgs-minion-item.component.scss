@@ -56,12 +56,20 @@
 		aspect-ratio: 2.5;
 		object-fit: cover;
 		object-position: top right;
+		width: 60%;
+
+		&.fallback {
+			width: 60%;
+			object-position: center center;
+			position: relative;
+			left: 10%;
+		}
 	}
 
 	.name {
 		font-family: Open Sans;
 		color: var(--default-text-color);
-		background: linear-gradient(90deg, #090a0d 79%, rgba(9, 10, 13, 0) 100%);
+		background: linear-gradient(90deg, #090a0d 65%, rgba(9, 10, 13, 0) 100%);
 		width: 100%;
 		white-space: nowrap;
 		overflow: hidden;

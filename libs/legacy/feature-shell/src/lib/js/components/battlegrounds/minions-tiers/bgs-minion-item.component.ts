@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
@@ -23,7 +23,19 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			[cardTooltipBgs]="true"
 			(contextmenu)="highlightMinion(minion, $event)"
 		>
-			<img class="icon tile-icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
+			<img
+				class="icon tile-icon"
+				*ngIf="hasTile"
+				[src]="minion.image"
+				[cardTooltip]="minion.cardId"
+				(error)="onImageError($event)"
+			/>
+			<img
+				class="icon tile-icon fallback"
+				*ngIf="!hasTile"
+				[src]="minion.fallbackImage"
+				[cardTooltip]="minion.cardId"
+			/>
 			<div class="name" [ngStyle]="leftPadding != null ? { 'padding-left.px': leftPadding } : {}">
 				<div class="tavern-tier" *ngIf="minion.techLevel != null && showTavernTierIcon">
 					<tavern-level-icon [level]="minion.techLevel" class="tavern"></tavern-level-icon>
@@ -98,6 +110,8 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 	@Input() showTavernTierIcon: boolean;
 	@Input() leftPadding = null;
 
+	hasTile = true;
+
 	private minion$$ = new BehaviorSubject<ExtendedReferenceCard | null>(null);
 	private showGoldenCards$$ = new BehaviorSubject<boolean>(true);
 	private showTrinketTips$$ = new BehaviorSubject<boolean>(true);
@@ -171,6 +185,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 						displayedCardIds: this.buildAllCardIds(card.id, showGoldenCards),
 						relatedCardIds: this.buildRelatedCardIds(card.id),
 						image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.id}.jpg`,
+						fallbackImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 						name: card.name, // Already enhanced when building groups
 						highlighted: highlightedMinions.includes(card.id),
 						banned: card.banned,
@@ -213,6 +228,13 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		this.highlighter.toggleMinionsToHighlight([minion.cardId]);
 	}
 
+	onImageError(event: Event) {
+		this.hasTile = false;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private buildAllCardIds(id: string, showGoldenCards: boolean): string {
 		if (!showGoldenCards) {
 			return id;
@@ -242,6 +264,7 @@ export interface Minion {
 	readonly displayedCardIds: string;
 	readonly relatedCardIds: readonly string[];
 	readonly image: string;
+	readonly fallbackImage: string;
 	readonly name: string;
 	readonly banned?: boolean;
 	readonly bannedReason?: string;
