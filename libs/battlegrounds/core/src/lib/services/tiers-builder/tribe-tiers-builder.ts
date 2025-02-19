@@ -3,12 +3,14 @@ import {
 	CardIds,
 	CardRules,
 	CardType,
+	GameTag,
 	getTribeIcon,
 	getTribeName,
 	Race,
 	ReferenceCard,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { isBgsSpell } from '../card-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
 import { getActualTribes } from '../tribe-utils';
@@ -21,20 +23,45 @@ export const buildTribeTiers = (
 	availableTribes: readonly Race[],
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	allCards: CardsFacadeService,
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
 	const allTribes = [...availableTribes, Race.BLANK];
-	const tribeTiers: readonly Tier[] = allTribes
-		.map((targetTribe) =>
-			buildSingleTribeTier(targetTribe, cardsToInclude, tiersToInclude, cardRules, i18n, config),
-		)
-		.sort((a, b) =>
+	const standardTribeTiers: readonly Tier[] = allTribes.map((targetTribe) =>
+		buildSingleTribeTier(targetTribe, cardsToInclude, tiersToInclude, cardRules, i18n, config),
+	);
+
+	const scCards = allCards
+		.getCards()
+		.filter(
+			(c) =>
+				c.set === 'Battlegrounds' &&
+				!c.premium &&
+				([CardType[CardType.MINION], CardType[CardType.BATTLEGROUND_SPELL]].includes(c.type?.toUpperCase()) ||
+					c.spellSchool === SpellSchool[SpellSchool.UPGRADE]),
+		);
+	const scTribes: GameTag[] = [];
+	if (config?.showProtossMinions) {
+		scTribes.push(GameTag.PROTOSS);
+	}
+	if (config?.showZergMinions) {
+		scTribes.push(GameTag.ZERG);
+	}
+	const scTribeTiers: readonly Tier[] = scTribes.map((targetTribe) =>
+		buildSingleScTribeTier(targetTribe, scCards, tiersToInclude, cardRules, i18n, config),
+	);
+	console.debug('scTribeTiers', scTribeTiers, scTribes);
+
+	const tribeTiers = [
+		...[...standardTribeTiers].sort((a, b) =>
 			a.tavernTierData === Race.BLANK
 				? 1
 				: b.tavernTierData === Race.BLANK
 				? -1
 				: a.tooltip.localeCompare(b.tooltip),
-		);
+		),
+		...scTribeTiers,
+	].filter((t) => !!t);
 	const spellTier: Tier | null = config?.spells
 		? buildSpellsTier(cardsToInclude, tiersToInclude, i18n, config)
 		: null;
@@ -114,6 +141,29 @@ const buildSpellsTier = (
 	return result;
 };
 
+const buildSingleScTribeTier = (
+	scTribe: GameTag,
+	cardsToInclude: readonly ExtendedReferenceCard[],
+	tiersToInclude: readonly number[],
+	cardRules: CardRules,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	config?: TierBuilderConfig,
+): Tier => {
+	const cardsForTribe = cardsToInclude.filter((card) => card.mechanics?.includes(GameTag[scTribe]));
+	const tribeGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForTribe, tiersToInclude, i18n, config);
+	const groups: readonly (TierGroup | null)[] = [...tribeGroups];
+	const result: Tier = {
+		type: 'tribe',
+		tavernTier: GameTag[scTribe].toLowerCase(),
+		tavernTierIcon: getTribeIcon(scTribe),
+		tavernTierData: scTribe,
+		tierName: getTribeName(scTribe, i18n),
+		tooltip: getTribeTooltipForTribeName(scTribe, i18n),
+		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
+	};
+	return result;
+};
+
 const buildSingleTribeTier = (
 	targetTribe: Race,
 	cardsToInclude: readonly ExtendedReferenceCard[],
@@ -176,7 +226,7 @@ const buildSingleTribeTier = (
 };
 
 const getTribeTooltipForTribeName = (
-	tribe: Race,
+	tribe: Race | GameTag,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): string => {
 	const tribeName = getTribeName(tribe, i18n);

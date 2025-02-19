@@ -75,6 +75,8 @@ export const buildTiers = (
 		showSpellsAtBottom: showSpellsAtBottom,
 		showAllBuddyCards: showAllBuddyCards,
 		showBuddiesTier: showBuddiesTier,
+		showProtossMinions: true, //playerCardId === CardIds.JimRaynor_BG31_HERO_801,
+		showZergMinions: true, //playerCardId === CardIds.KerriganQueenOfBlades_BG31_HERO_811,
 	};
 	const standardTiers: readonly Tier[] = buildStandardTiers(
 		cardsToInclude,
@@ -96,7 +98,7 @@ export const buildTiers = (
 		  )
 		: [];
 	const tribeTiers: readonly Tier[] = showTribeTiers
-		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, config)
+		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, allCards, config)
 		: [];
 	return [...standardTiers, ...mechanicsTiers, ...tribeTiers];
 };

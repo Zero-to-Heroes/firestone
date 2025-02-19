@@ -8,4 +8,6 @@ export interface TierBuilderConfig {
 	readonly showBuddiesTier?: boolean;
 	readonly showAllBuddyCards?: boolean;
 	readonly playerTrinkets: readonly string[];
+	readonly showProtossMinions: boolean;
+	readonly showZergMinions: boolean;
 }
