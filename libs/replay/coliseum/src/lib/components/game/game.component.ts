@@ -60,6 +60,8 @@ import { GameHelper } from '../../services/game-helper';
 				[entities]="_entities"
 				[playerId]="_playerId"
 			></leaderboard>
+			<anomalies *ngIf="gameMode === 'battlegrounds'" class="anomalies" [entities]="_entities"></anomalies>
+
 			<active-spell
 				class="active-spell"
 				*ngIf="_activeSpell"

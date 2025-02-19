@@ -23,7 +23,13 @@ import { GameConfService } from '../../../services/game-conf.service';
 			<card-name [cardId]="cardId" *ngIf="cardId"></card-name>
 			<card-text *ngIf="cardId" [entity]="_entity" [controller]="_controller" [cardType]="cardType"> </card-text>
 			<card-race *ngIf="race" [race]="race"> </card-race>
-			<card-cost *ngIf="cardId && !tavernTier" [cardType]="cardType" [cardId]="cardId" [cost]="cost"> </card-cost>
+			<card-cost
+				*ngIf="cardId && !tavernTier && !isAnomaly"
+				[cardType]="cardType"
+				[cardId]="cardId"
+				[cost]="cost"
+			>
+			</card-cost>
 			<tavern-level-icon *ngIf="tavernTier ?? 0 > 0" [level]="tavernTier"></tavern-level-icon>
 			<coin-cost *ngIf="(tavernTier ?? 0) > 0 && cardTypeStr === 'battleground_spell'" [cardId]="cardId">
 			</coin-cost>
@@ -70,6 +76,7 @@ export class CardComponent {
 	cost: number | undefined;
 	race: string | undefined;
 	tavernTier: number | undefined;
+	isAnomaly = false;
 
 	_forbiddenTargetSource = false;
 	_hasTooltip = true;
@@ -79,6 +86,7 @@ export class CardComponent {
 	@Input() set entity(entity: Entity) {
 		// console.debug('[card] setting entity', entity);
 		this._entity = entity;
+		this.isAnomaly = entity.getCardType() === CardType.BATTLEGROUND_ANOMALY;
 		this.updateEntityGroups();
 	}
 

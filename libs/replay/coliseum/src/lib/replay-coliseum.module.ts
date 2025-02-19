@@ -6,6 +6,8 @@ import { ReplayParserModule } from '@firestone-hs/replay-parser';
 import { ColiseumComponent } from './components/coliseum.component';
 import { ControlsComponent } from './components/controls.component';
 import { ActiveSpellComponent } from './components/game/active-spell.component';
+import { AnomaliesComponent } from './components/game/anomalies/anomalies.component';
+import { AnomalyEntityComponent } from './components/game/anomalies/anomaly-entity.component';
 import { BoardCardFrameComponent } from './components/game/board/board-card-frame.component';
 import { BoardCardStatsComponent } from './components/game/board/board-card-stats.component';
 import { BoardComponent } from './components/game/board/board.component';
@@ -154,6 +156,8 @@ import { Events } from './services/events.service';
 		VisualBoardStateChangeComponent,
 		LeaderboardComponent,
 		LeaderboardEntityComponent,
+		AnomaliesComponent,
+		AnomalyEntityComponent,
 		TavernButtonComponent,
 		CoinCostComponent,
 

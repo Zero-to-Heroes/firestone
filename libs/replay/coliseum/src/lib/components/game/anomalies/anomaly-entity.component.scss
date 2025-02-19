@@ -1,0 +1,16 @@
+:host {
+	position: relative;
+}
+
+.portrait {
+	width: 100%;
+	clip-path: circle(40% at 50% 50%);
+	transform: scale(1.2);
+}
+
+.frame {
+	position: absolute;
+	top: -26%;
+	left: -15%;
+	width: 130%;
+}

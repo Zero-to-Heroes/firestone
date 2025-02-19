@@ -54,6 +54,7 @@ export class CardFrameComponent {
 		const updatedCardType =
 			cardType === CardType.BATTLEGROUND_SPELL ||
 			cardType === CardType.BATTLEGROUND_QUEST_REWARD ||
+			cardType === CardType.BATTLEGROUND_ANOMALY ||
 			cardType === CardType.BATTLEGROUND_TRINKET
 				? CardType.SPELL
 				: cardType;
