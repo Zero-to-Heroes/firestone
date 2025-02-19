@@ -122,7 +122,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.tribesImpact = tribesImpactValue == null ? '-' : tribesImpactValue.toFixed(2);
 		this.tribesImpactCss = tribesImpactValue == null ? '' : tribesImpactValue < 0 ? 'better' : 'worse';
 		// Build the tooltip that shows the impact of each tribe
-		const allTribes = [...(value?.averagePositionDetails.allTribesAveragePositionModifierDetails ?? [])]
+		const allTribes = [...(value?.averagePositionDetails?.allTribesAveragePositionModifierDetails ?? [])]
 			.sort((a, b) => a.impact - b.impact)
 			.map((tribe) => ({
 				...tribe,
