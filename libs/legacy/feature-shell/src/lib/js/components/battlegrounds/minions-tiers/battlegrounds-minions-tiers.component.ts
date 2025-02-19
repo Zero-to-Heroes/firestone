@@ -198,6 +198,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						hasPrizes,
 						hasTrinkets,
 						gameMode,
+						playerCardId,
 						this.allCards,
 						cardRules,
 					);

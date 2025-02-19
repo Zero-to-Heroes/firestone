@@ -11,6 +11,7 @@ import {
 	isBattlegroundsDuo,
 	Race,
 	ReferenceCard,
+	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -20,6 +21,7 @@ export const getAllCardsInGame = (
 	hasDarkmoonPrizes: boolean,
 	hasTrinkets: boolean,
 	gameMode: GameType,
+	playerCardId: string,
 	allCards: CardsFacadeService,
 	cardRules: CardRules | null,
 ): readonly ReferenceCard[] => {
@@ -33,6 +35,21 @@ export const getAllCardsInGame = (
 				![CardIds.LesserTrinketToken_BG30_Trinket_1st, CardIds.GreaterTrinket_BG30_Trinket_2nd].includes(
 					card.id as CardIds,
 				),
+		)
+		// Starcraft-exclusive cards
+		.filter(
+			(card) =>
+				playerCardId === CardIds.JimRaynor_BG31_HERO_801 ||
+				card.spellSchool !== SpellSchool[SpellSchool.UPGRADE],
+		)
+		.filter(
+			(card) =>
+				playerCardId === CardIds.Artanis_BG31_HERO_802 || !card.mechanics?.includes(GameTag[GameTag.PROTOSS]),
+		)
+		.filter(
+			(card) =>
+				playerCardId === CardIds.KerriganQueenOfBlades_BG31_HERO_811 ||
+				!card.mechanics?.includes(GameTag[GameTag.ZERG]),
 		)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter(
