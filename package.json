@@ -53,7 +53,7 @@
 		"@firestone-hs/replay-metadata": "^0.0.78",
 		"@firestone-hs/replay-parser": "^1.2.35",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.540",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.543",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.30",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.10",
 		"@firestone-hs/twitch-presence": "^1.0.1",
