@@ -318,6 +318,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			gameState: {
 				currentTurn: currentState.currentGame.currentTurn,
 				validTribes: currentState.currentGame.availableRaces,
+				anomalies: currentState.currentGame.anomalies,
 			},
 		};
 		const isSupported = isSupportedScenario(battleInfo);
