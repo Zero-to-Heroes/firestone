@@ -1,4 +1,4 @@
-import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import { BgsHeroPower, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 
 export interface PlayerBoard {
 	readonly playerId: number;
@@ -8,10 +8,11 @@ export interface PlayerBoard {
 	readonly secrets: readonly PlayerBoardEntity[];
 	readonly trinkets: readonly BoardTrinket[]; // The c# parser returns an object compatible with the BoardTrinket interface
 	readonly hero: PlayerBoardHeroEntity;
-	readonly heroPowerCardId: string;
-	readonly heroPowerUsed: boolean;
-	readonly heroPowerInfo: number;
-	readonly heroPowerInfo2: number;
+	readonly heroPowers: readonly BgsHeroPower[];
+	// readonly heroPowerCardId: string;
+	// readonly heroPowerUsed: boolean;
+	// readonly heroPowerInfo: number;
+	// readonly heroPowerInfo2: number;
 	readonly questEntities: readonly {
 		CardId: string;
 		RewardDbfId: number;

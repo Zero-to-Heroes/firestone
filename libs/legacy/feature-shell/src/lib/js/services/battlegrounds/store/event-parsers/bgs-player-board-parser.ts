@@ -409,13 +409,19 @@ export class BgsPlayerBoardParser implements EventParser {
 				teammateBoardFromMemory.Hero?.Tags?.find((tag) => tag.Name === GameTag.PLAYER_ID)?.Value ??
 				players.find((player) => player.cardId === teammateBoardFromMemory.Hero?.CardId)?.playerId,
 			heroCardId: teammateBoardFromMemory.Hero?.CardId,
-			heroPowerCardId: teammateBoardFromMemory.HeroPower?.CardId,
-			heroPowerUsed:
-				teammateBoardFromMemory.HeroPower?.Tags?.find((t) => t.Name === GameTag.BACON_HERO_POWER_ACTIVATED)
-					?.Value === 1,
+			heroPowers: [
+				{
+					cardId: teammateBoardFromMemory.HeroPower?.CardId,
+					entityId: teammateBoardFromMemory.HeroPower?.Tags?.find((t) => t.Name === GameTag.ENTITY_ID)?.Value,
+					used:
+						teammateBoardFromMemory.HeroPower?.Tags?.find(
+							(t) => t.Name === GameTag.BACON_HERO_POWER_ACTIVATED,
+						)?.Value === 1,
+					info: -1, // We don't have this info yet
+					info2: -1, // We don't have this info yet
+				},
+			],
 			globalInfo: null, // We don't have this info yet
-			heroPowerInfo: -1, // We don't have this info yet
-			heroPowerInfo2: -1, // We don't have this info yet
 			board: teammateBoardFromMemory.Board?.map((entity) => this.buildEntityFromMemory(entity)),
 			hand: teammateBoardFromMemory.Hand?.map((entity) => this.buildEntityFromMemory(entity)),
 			hero: this.buildEntityFromMemory(teammateBoardFromMemory.Hero),
@@ -477,10 +483,11 @@ export class BgsPlayerBoardParser implements EventParser {
 			board: teammateEntities,
 			hand: opponentBoard.hand,
 			heroCardId: opponentBoard.heroCardId ?? teammatePlayer?.cardId,
-			heroPowerCardId: opponentBoard.heroPowerCardId ?? teammatePlayer?.heroPowerCardId,
-			heroPowerInfo: opponentBoard.heroPowerInfo,
-			heroPowerInfo2: opponentBoard.heroPowerInfo2,
-			heroPowerUsed: opponentBoard.heroPowerUsed,
+			heroPowers: opponentBoard.heroPowers,
+			// heroPowerCardId: opponentBoard.heroPowerCardId ?? teammatePlayer?.heroPowerCardId,
+			// heroPowerInfo: opponentBoard.heroPowerInfo,
+			// heroPowerInfo2: opponentBoard.heroPowerInfo2,
+			// heroPowerUsed: opponentBoard.heroPowerUsed,
 			playerId:
 				opponentBoard.hero.Tags?.find((t) => t.Name === GameTag.PLAYER_ID)?.Value ?? teammatePlayer?.playerId,
 			secrets: opponentBoard.secrets,
@@ -550,10 +557,11 @@ export class BgsPlayerBoardParser implements EventParser {
 				hpLeft: hpLeft,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				entityId: playerBoard.hero.Entity,
-				heroPowerId: playerBoard.heroPowerCardId,
-				heroPowerUsed: playerBoard.heroPowerUsed,
-				heroPowerInfo: playerBoard.heroPowerInfo,
-				heroPowerInfo2: playerBoard.heroPowerInfo2,
+				heroPowers: playerBoard.heroPowers,
+				// heroPowerId: playerBoard.heroPowerCardId,
+				// heroPowerUsed: playerBoard.heroPowerUsed,
+				// heroPowerInfo: playerBoard.heroPowerInfo,
+				// heroPowerInfo2: playerBoard.heroPowerInfo2,
 				questRewards: playerBoard.questRewards,
 				questRewardEntities: playerBoard.questRewardEntities,
 				questEntities: playerBoard.questEntities,

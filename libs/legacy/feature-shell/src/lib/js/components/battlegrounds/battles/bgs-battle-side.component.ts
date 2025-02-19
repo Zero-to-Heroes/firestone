@@ -270,6 +270,7 @@ export class BgsBattleSideComponent {
 			board: [],
 			player: {
 				cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+				heroPowers: [],
 				heroPowerId: null,
 				hpLeft: 30,
 				tavernTier: this._player?.player?.tavernTier ?? 1,

@@ -1303,25 +1303,6 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD,
-						// additionalData: {
-						// 	playerBoard: {
-						// 		cardId: gameEvent.Value.PlayerBoard.CardId,
-						// 		playerId: gameEvent.Value.PlayerBoard.PlayerId,
-						// 		board: gameEvent.Value.PlayerBoard.Board, // as is
-						// 		secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
-						// 		trinkets: gameEvent.Value.PlayerBoard.Trinkets, // as is
-						// 		hand: gameEvent.Value.PlayerBoard.Hand, // as is
-						// 		hero: gameEvent.Value.PlayerBoard.Hero, // as is
-						// 		heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
-						// 		heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
-						// 		heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
-						// 		heroPowerInfo2: gameEvent.Value.PlayerBoard.HeroPowerInfo2,
-						// 		questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
-						// 		questRewardEntities: gameEvent.Value.PlayerBoard.QuestRewardEntities,
-						// 		questEntities: gameEvent.Value.PlayerBoard.QuestEntities,
-						// 		globalInfo: gameEvent.Value.PlayerBoard.GlobalInfo,
-						// 	},
-						// },
 					} as GameEvent),
 				);
 				break;
@@ -1863,10 +1844,13 @@ export class GameEvents {
 					trinkets: gameEvent.Value.PlayerBoard.Trinkets, // as is
 					hand: gameEvent.Value.PlayerBoard.Hand, // as is
 					hero: gameEvent.Value.PlayerBoard.Hero, // as is
-					heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
-					heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
-					heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
-					heroPowerInfo2: gameEvent.Value.PlayerBoard.HeroPowerInfo2,
+					heroPowers: gameEvent.Value.PlayerBoard.HeroPowers.map((hp) => ({
+						cardId: hp.CardId,
+						entityId: hp.EntityId,
+						used: hp.Used,
+						info: hp.Info,
+						info2: hp.Info2,
+					})),
 					questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
 					questRewardEntities: gameEvent.Value.PlayerBoard.QuestRewardEntities,
 					questEntities: gameEvent.Value.PlayerBoard.QuestEntities,
@@ -1880,10 +1864,13 @@ export class GameEvents {
 					trinkets: gameEvent.Value.OpponentBoard.Trinkets, // as is
 					hand: gameEvent.Value.OpponentBoard.Hand, // as is
 					hero: gameEvent.Value.OpponentBoard.Hero, // as is
-					heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
-					heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
-					heroPowerInfo: gameEvent.Value.OpponentBoard.HeroPowerInfo,
-					heroPowerInfo2: gameEvent.Value.OpponentBoard.HeroPowerInfo2,
+					heroPowers: gameEvent.Value.OpponentBoard.HeroPowers.map((hp) => ({
+						cardId: hp.CardId,
+						entityId: hp.EntityId,
+						used: hp.Used,
+						info: hp.Info,
+						info2: hp.Info2,
+					})),
 					questRewards: gameEvent.Value.OpponentBoard.QuestRewards,
 					questRewardEntities: gameEvent.Value.OpponentBoard.QuestRewardEntities,
 					questEntities: gameEvent.Value.OpponentBoard.QuestEntities,

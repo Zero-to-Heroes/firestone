@@ -33,6 +33,7 @@ export class StateManagerService {
 									this.allCards,
 								),
 							tavernTier: result.playerTavern ?? 6,
+							heroPowers: [],
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
@@ -47,6 +48,7 @@ export class StateManagerService {
 							cardId: result.opponentCardId ?? 'TB_BaconShop_HERO_KelThuzad',
 							hpLeft: result.opponentHpLeft ?? 40,
 							tavernTier: result.opponentTavern ?? 6,
+							heroPowers: [],
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
@@ -360,6 +362,7 @@ export class StateManagerService {
 							board: [],
 							player: {
 								cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+								heroPowers: [],
 								heroPowerId: null,
 								hpLeft: 30,
 								tavernTier: 1,
@@ -380,6 +383,7 @@ export class StateManagerService {
 							board: [],
 							player: {
 								cardId: CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+								heroPowers: [],
 								heroPowerId: null,
 								hpLeft: 30,
 								tavernTier: 1,

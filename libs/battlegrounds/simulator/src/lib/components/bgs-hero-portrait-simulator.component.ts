@@ -82,6 +82,7 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="hero-power">
+				<!-- TODO: support for multiple hero powers -->
 				<div
 					class="item-container"
 					[cardTooltip]="_heroPowerCardId"
