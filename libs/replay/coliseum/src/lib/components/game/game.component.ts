@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import {
 	Action,
 	ActionButtonUsedAction,
+	AllCardsService,
 	Entity,
 	QuestCompletedAction,
 	SecretRevealedAction,
@@ -114,7 +115,15 @@ export class GameComponent implements AfterViewInit {
 	private secretRevealedId: number | null;
 	private questCompletedId: number | null;
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef) {}
+	constructor(private events: Events, private cdr: ChangeDetectorRef, private cards: AllCardsService) {
+		window['getEntity'] = (entityId: number) => {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			const entity = this._entities.get(entityId)!;
+			const refCard = this.cards.getCard(entity.cardID);
+			const tags = entity.tags.toJS();
+			console.debug('entity', entity.cardID, refCard.name, tags, entity, refCard);
+		};
+	}
 
 	ngAfterViewInit() {
 		this.events.on(Events.SHOW_QUEST_TOOLTIP).subscribe((data) => {

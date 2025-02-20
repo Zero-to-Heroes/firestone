@@ -212,7 +212,11 @@ export class HeroComponent {
 		return entities
 			.valueSeq()
 			.toArray()
-			.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.BATTLEGROUND_QUEST_REWARD)
+			.filter(
+				(entity) =>
+					entity.getTag(GameTag.CARDTYPE) === CardType.BATTLEGROUND_QUEST_REWARD ||
+					entity.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) === 1,
+			)
 			.filter((entity) => entity.getTag(GameTag.BACON_IS_HEROPOWER_QUESTREWARD) !== 1)
 			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
 			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
