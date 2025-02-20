@@ -100,7 +100,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
 						? bgState.currentGame.availableRaces
 						: [],
-					anomaliesFilter: bgState.currentGame.anomalies ?? [],
+					anomaliesFilter: [],
 				};
 				return config;
 			}),

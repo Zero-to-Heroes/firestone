@@ -73,7 +73,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 						rankFilter: prefs.bgsActiveRankFilter === 1 ? 10 : prefs.bgsActiveRankFilter,
 						tribesFilter: prefs.bgsActiveTribesFilter,
 						timeFilter: prefs.bgsActiveTimeFilter,
-						anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+						anomaliesFilter: [] as readonly string[], //prefs.bgsActiveAnomaliesFilter,
 						options: {
 							convervativeEstimate: prefs.bgsHeroesUseConservativeEstimate,
 						},

@@ -2,7 +2,6 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ExtendedConfig } from '@components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 import { ALL_BG_RACES, Race, getTribeName, isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
-	BG_USE_ANOMALIES,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
 	BgsStateFacadeService,
@@ -91,7 +90,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
 						? bgState.currentGame?.availableRaces
 						: [],
-					anomaliesFilter: bgState.currentGame?.anomalies ?? [],
+					anomaliesFilter: [] as readonly string[], //bgState.currentGame?.anomalies ?? [],
 				};
 				return config;
 			}),
@@ -121,7 +120,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 					timeFilter: timeFilter,
 					rankFilter: rankFilter,
 					tribesFilter: tribesFilter,
-					anomaliesFilter: BG_USE_ANOMALIES ? anomaliesFilter : [],
+					anomaliesFilter: [] as readonly string[], //BG_USE_ANOMALIES ? anomaliesFilter : [],
 				}),
 			),
 			this.mapData((info) => {
