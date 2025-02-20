@@ -28,6 +28,7 @@ export * from './lib/highlights/bgs-board-highlighter.service';
 export * from './lib/minion-stats/bgs-board-stats.service';
 export * from './lib/models/strategies';
 export * from './lib/services/_bgs-common-bootstrap.service';
+export * from './lib/services/bgs-anomalies.service';
 export * from './lib/services/bgs-in-game-compositions.service';
 export * from './lib/services/bgs-in-game-hero-selection-guardian.service';
 export * from './lib/services/bgs-in-game-quests-guardian.service';

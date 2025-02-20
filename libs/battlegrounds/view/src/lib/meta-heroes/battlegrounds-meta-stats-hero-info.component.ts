@@ -130,9 +130,8 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});
 
-		const showPlayerData =
-			(!value.tribesFilter?.length || value.tribesFilter.length === ALL_BG_RACES.length) &&
-			value.anomaliesFilter?.length === 0;
+		const showPlayerData = !value.tribesFilter?.length || value.tribesFilter.length === ALL_BG_RACES.length;
+		// && value.anomaliesFilter?.length === 0;
 		// console.debug('setting stat', value, showPlayerData);
 		this.playerDataPoints =
 			// Only show the player full data when not filtering by tribes
@@ -143,12 +142,14 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 				: null;
 		this.averagePosition = value.averagePosition.toFixed(2);
 		this.pickrate = value.pickrate == null ? '-' : (100 * value.pickrate).toFixed(1) + '%';
-		this.tribeImpactPosition = showPlayerData ? null : value.positionTribesModifier + value.positionAnomalyModifier;
+		this.tribeImpactPosition = showPlayerData
+			? null
+			: value.positionTribesModifier + 0 /*value.positionAnomalyModifier*/;
 		this.playerAveragePosition = showPlayerData ? value.playerAveragePosition?.toFixed(2) : null;
 		this.averagePositionTooltipInput = {
 			baseValue: value.averagePositionDetails.baseValue,
 			tribeModifiers: value.averagePositionDetails.tribesModifiers,
-			anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
+			// anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
 		};
 
 		const globalPlacementChartData: SimpleBarChartData = {

@@ -1,15 +1,17 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BG_USE_ANOMALIES, BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import {
+	BG_USE_ANOMALIES,
+	BattlegroundsAnomaliesService,
+	BattlegroundsNavigationService,
+} from '@firestone/battlegrounds/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOptionWithImage } from '@firestone/shared/common/view';
-import { sortByProperties } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-anomalies-filter-dropdown',
@@ -36,7 +38,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsAnomaliesFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	// allAnomalies = this.buildAllAnomalies();
@@ -47,28 +49,34 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	validationErrorTooltip = this.i18n.translateString('app.battlegrounds.filters.anomaly.validation-error-tooltip');
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly anomalyService: BattlegroundsAnomaliesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.anomalyService, this.prefs);
 
+		if (!BG_USE_ANOMALIES) {
+			return;
+		}
+
+		const allAnomalies: readonly string[] = await this.anomalyService.loadAllAnomalies();
 		this.options = [
 			{
 				value: null,
 				label: this.i18n.translateString('app.battlegrounds.filters.anomaly.all-anomalies'),
 				image: null,
 			},
-			...this.allCards
-				.getAnomalies()
+			...allAnomalies
+				.filter((a) => !!a)
+				.map((anomaly) => this.allCards.getCard(anomaly))
 				.map((anomaly) => ({
 					value: anomaly.id,
 					label: anomaly.name,
@@ -76,25 +84,10 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 				}))
 				.sort(sortByProperties((o) => [o.label])),
 		];
-		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveAnomaliesFilter[0]);
-		this.visible$ = combineLatest([
-			this.nav.selectedCategoryId$$,
-			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
-		]).pipe(
-			filter(([categoryId, [currentView]]) => !!categoryId && !!currentView),
-			this.mapData(
-				([categoryId, [currentView]]) =>
-					BG_USE_ANOMALIES &&
-					!['categories', 'category'].includes(currentView) &&
-					![
-						'bgs-category-personal-stats',
-						'bgs-category-simulator',
-						'bgs-category-personal-rating',
-						'bgs-category-meta-quests',
-						'bgs-category-meta-trinkets',
-						// 'bgs-category-perfect-games',
-					].includes(categoryId),
-			),
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveAnomaliesFilter[0]));
+		this.visible$ = this.nav.selectedCategoryId$$.pipe(
+			filter((categoryId) => !!categoryId),
+			this.mapData((categoryId) => categoryId === 'bgs-category-meta-heroes'),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

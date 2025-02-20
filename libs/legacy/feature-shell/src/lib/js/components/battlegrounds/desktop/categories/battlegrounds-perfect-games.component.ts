@@ -54,7 +54,7 @@ export class BattlegroundsPerfectGamesComponent
 				(prefs) => ({
 					rankFilter: prefs.bgsActiveRankFilter,
 					heroFilter: prefs.bgsActiveHeroFilter,
-					anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+					anomaliesFilter: [] as readonly string[], //prefs.bgsActiveAnomaliesFilter,
 					tribesFilter: prefs.bgsActiveTribesFilter,
 				}),
 				(a, b) => deepEqual(a, b),

@@ -23,17 +23,17 @@ export interface BgsMetaHeroStatTierItem {
 			tribe: Race;
 			impact: number;
 		}[];
-		readonly anomalyModifiers: readonly {
-			cardId: string;
-			impact: number;
-		}[];
+		// readonly anomalyModifiers: readonly {
+		// 	cardId: string;
+		// 	impact: number;
+		// }[];
 	};
 	readonly pickrate: number;
 	readonly tribesFilter?: readonly Race[];
-	readonly anomaliesFilter: readonly string[];
+	// readonly anomaliesFilter: readonly string[];
 
 	readonly positionTribesModifier: number;
-	readonly positionAnomalyModifier: number;
+	// readonly positionAnomalyModifier: number;
 	readonly placementDistribution: readonly { rank: number; percentage: number }[];
 	// readonly placementDistributionImpact: readonly { rank: number; percentage: number }[];
 	readonly combatWinrate: readonly { turn: number; winrate: number }[];

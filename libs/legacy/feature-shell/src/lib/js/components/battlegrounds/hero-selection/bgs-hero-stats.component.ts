@@ -130,7 +130,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 			: {
 					baseValue: value.averagePositionDetails.baseValue,
 					tribeModifiers: value.averagePositionDetails.tribesModifiers,
-					anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
+					// anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
 			  };
 	}
 

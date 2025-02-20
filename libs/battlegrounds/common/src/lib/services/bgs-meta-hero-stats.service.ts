@@ -18,7 +18,7 @@ import {
 import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { DEFAULT_MMR_PERCENTILE } from './bgs-player-hero-stats.service';
 
-export const BG_USE_ANOMALIES = false;
+export const BG_USE_ANOMALIES = true;
 
 @Injectable()
 export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroStatsService> {
@@ -73,6 +73,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 						rankFilter: prefs.bgsActiveRankFilter === 1 ? 10 : prefs.bgsActiveRankFilter,
 						tribesFilter: prefs.bgsActiveTribesFilter,
 						timeFilter: prefs.bgsActiveTimeFilter,
+						anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
 						options: {
 							convervativeEstimate: prefs.bgsHeroesUseConservativeEstimate,
 						},
@@ -98,6 +99,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 				this.metaHeroStats$$.next(stats);
 
 				const tiers = await this.getTiers(config, stats);
+				console.debug('[bgs-meta-hero] tiers', tiers);
 				this.tiers$$.next(tiers);
 			});
 		});
@@ -109,7 +111,11 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 
 	private async getStatsInternal(config: Config): Promise<BgsHeroStatsV2 | null> {
 		const mmr = config.rankFilter || DEFAULT_MMR_PERCENTILE;
-		const stats = await this.access.loadMetaHeroStats(config.timeFilter, mmr);
+		const stats = await this.access.loadMetaHeroStats(
+			config.timeFilter,
+			BG_USE_ANOMALIES ? config.anomaliesFilter : null,
+			mmr,
+		);
 		return stats;
 	}
 
@@ -139,7 +145,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 			: buildHeroStats(
 					stats?.heroStats,
 					config.tribesFilter ?? [],
-					config.anomaliesFilter ?? [],
+					// config.anomaliesFilter ?? [],
 					!!config.options?.convervativeEstimate,
 					true,
 					this.allCards,

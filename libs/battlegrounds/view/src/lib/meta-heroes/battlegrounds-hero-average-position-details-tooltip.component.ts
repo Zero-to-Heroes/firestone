@@ -65,19 +65,19 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 					impact: tribe.impact,
 				}))
 				.sort((a, b) => a.impact - b.impact) ?? [];
-		this.anomalies =
-			value.anomalyModifiers
-				?.map((anomaly) => ({
-					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly.cardId}.jpg`,
-					name: this.allCards.getCard(anomaly.cardId)?.name,
-					value: Math.abs(anomaly.impact).toLocaleString(this.i18n.formatCurrentLocale(), {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					}),
-					valueClass: anomaly.impact < 0 ? 'positive' : anomaly.impact > 0 ? 'negative' : 'neutral',
-					impact: anomaly.impact,
-				}))
-				.sort((a, b) => a.impact - b.impact) ?? [];
+		// this.anomalies =
+		// 	value.anomalyModifiers
+		// 		?.map((anomaly) => ({
+		// 			icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly.cardId}.jpg`,
+		// 			name: this.allCards.getCard(anomaly.cardId)?.name,
+		// 			value: Math.abs(anomaly.impact).toLocaleString(this.i18n.formatCurrentLocale(), {
+		// 				minimumFractionDigits: 2,
+		// 				maximumFractionDigits: 2,
+		// 			}),
+		// 			valueClass: anomaly.impact < 0 ? 'positive' : anomaly.impact > 0 ? 'negative' : 'neutral',
+		// 			impact: anomaly.impact,
+		// 		}))
+		// 		.sort((a, b) => a.impact - b.impact) ?? [];
 	}
 
 	_visible: boolean;
@@ -106,7 +106,7 @@ export class BattlegroundsHeroAveragePositionDetailsTooltipComponent {
 export interface BgsHeroAveragePositionDetails {
 	readonly baseValue: number;
 	readonly tribeModifiers: readonly BgsHeroAveragePositionDetailsTribe[];
-	readonly anomalyModifiers: readonly BgsHeroAveragePositionDetailsAnomaly[];
+	// readonly anomalyModifiers: readonly BgsHeroAveragePositionDetailsAnomaly[];
 }
 
 export interface BgsHeroAveragePositionDetailsTribe {
@@ -114,7 +114,7 @@ export interface BgsHeroAveragePositionDetailsTribe {
 	readonly impact: number;
 }
 
-export interface BgsHeroAveragePositionDetailsAnomaly {
-	readonly cardId: string;
-	readonly impact: number;
-}
+// export interface BgsHeroAveragePositionDetailsAnomaly {
+// 	readonly cardId: string;
+// 	readonly impact: number;
+// }

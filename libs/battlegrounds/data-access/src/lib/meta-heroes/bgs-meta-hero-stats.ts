@@ -142,14 +142,14 @@ export const buildHeroStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalHeroStat>[],
 	// mmrPercentile: MmrPercentile['percentile'],
 	tribes: readonly Race[],
-	anomalies: readonly string[] | null,
+	// anomalies: readonly string[] | null,
 	useConservativeEstimate: boolean,
 	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
 	useDebug = false,
 ): readonly BgsMetaHeroStatTierItem[] => {
 	// mmrPercentile = useMmrFilter ? mmrPercentile : 100;
-	anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
+	// anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
 	// const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
 	// Files are split by MMR already
 	const statsForMmr = stats ?? [];
@@ -208,28 +208,29 @@ export const buildHeroStats = (
 			shouldDebug &&
 				console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribesAveragePositionModifierDetails);
 
-			const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
+			// const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
 			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
-			const anomalyStatsToUse = useAnomalyModifier
-				? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
-				: stat.anomalyStats ?? [];
-			if (useAnomalyModifier && !anomalyStatsToUse?.length) {
-				return null;
-			}
+			// const anomalyStatsToUse = useAnomalyModifier
+			// 	? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
+			// 	: stat.anomalyStats ?? [];
+			// if (useAnomalyModifier && !anomalyStatsToUse?.length) {
+			// 	return null;
+			// }
 
-			const anomalyModifier = useAnomalyModifier
-				? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
-				: 0;
-			const anomaliesAveragePositionModifierDetails = useAnomalyModifier
-				? anomalyStatsToUse.map((t) => ({
-						cardId: t.anomaly,
-						impact: t.impactAveragePosition,
-				  }))
-				: null;
+			// const anomalyModifier = useAnomalyModifier
+			// 	? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
+			// 	: 0;
+			// const anomaliesAveragePositionModifierDetails = useAnomalyModifier
+			// 	? anomalyStatsToUse.map((t) => ({
+			// 			cardId: t.anomaly,
+			// 			impact: t.impactAveragePosition,
+			// 	  }))
+			// 	: null;
 
-			const placementDistribution: readonly { rank: number; percentage: number }[] = useAnomalyModifier
-				? mergeImpactDistributions(anomalyStatsToUse)
-				: stat.placementDistribution;
+			const placementDistribution: readonly { rank: number; percentage: number }[] =
+				// useAnomalyModifier
+				// 	? mergeImpactDistributions(anomalyStatsToUse) :
+				stat.placementDistribution;
 			const combatWinrate = stat.combatWinrate;
 			const warbandStats = stat.warbandStats;
 
@@ -245,27 +246,27 @@ export const buildHeroStats = (
 				);
 			const dataPoints = Math.min(
 				stat.dataPoints,
-				useAnomalyModifier
-					? anomalyStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
-					: 999_999_999,
+				// useAnomalyModifier
+				// 	? anomalyStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
+				// 	: 999_999_999,
 				useTribesModifier ? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0) : 999_999_999,
 			);
 			const pickrate = stat.totalOffered ? stat.totalPicked / stat.totalOffered : null;
 			const result: BgsMetaHeroStatTierItem = {
 				id: stat.heroCardId,
 				dataPoints: dataPoints,
-				averagePosition: averagePositionBaseValue + tribesModifier + anomalyModifier,
+				averagePosition: averagePositionBaseValue + tribesModifier + 0 /*anomalyModifier*/,
 				averagePositionDetails: {
 					baseValue: averagePositionBaseValue,
 					tribesModifiers: tribesAveragePositionModifierDetails,
 					allTribesAveragePositionModifierDetails: allTribesAveragePositionModifierDetails,
-					anomalyModifiers: anomaliesAveragePositionModifierDetails,
+					// anomalyModifiers: [], // anomaliesAveragePositionModifierDetails,
 				},
 				pickrate: pickrate,
 				tribesFilter: tribes,
-				anomaliesFilter: anomalies,
+				// anomaliesFilter: anomalies,
 				positionTribesModifier: tribesModifier,
-				positionAnomalyModifier: anomalyModifier,
+				// positionAnomalyModifier: anomalyModifier,
 				placementDistribution: placementDistribution,
 				// placementDistributionImpact: placementDistributionImpactTribes,
 				combatWinrate: combatWinrate,

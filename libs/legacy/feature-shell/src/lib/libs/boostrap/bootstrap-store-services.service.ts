@@ -12,6 +12,7 @@ import {
 	ArenaRunsService,
 } from '@firestone/arena/common';
 import {
+	BattlegroundsAnomaliesService,
 	BattlegroundsNavigationService,
 	BattlegroundsOfficialLeaderboardService,
 	BattlegroundsQuestsService,
@@ -97,6 +98,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ProfileUploaderService: ProfileUploaderService,
 		private readonly init_ConstructedMetaDecksStateService: ConstructedMetaDecksStateService,
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
+		private readonly init_BattlegroundsAnomaliesService: BattlegroundsAnomaliesService,
 		private readonly init_BgsInGameQuestsService: BgsInGameQuestsService,
 		private readonly init_BgsInGameQuestsGuardianService: BgsInGameQuestsGuardianService,
 		private readonly init_BgsCommonBootstrapService: BgsCommonBootstrapService,

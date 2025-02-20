@@ -5,7 +5,7 @@ import { BgsActiveTimeFilterType } from './bgs-active-time-filter.type';
 
 // const META_HERO_STATS_URL = 'https://static.zerotoheroes.com/api/bgs/stats-v2/%mmr-folder%/bgs-%timeSuffix%.gz.json';
 const META_HERO_STATS_URL =
-	'https://static.zerotoheroes.com/api/bgs/hero-stats/%mmr-folder%/%timeSuffix%/overview-from-hourly.gz.json';
+	'https://static.zerotoheroes.com/api/bgs/hero-stats/%mmr-folder%/%timeSuffix%/%anomaly%overview-from-hourly.gz.json';
 const META_HERO_STATS_DUO_URL =
 	'https://static.zerotoheroes.com/api/bgs/duo/hero-stats/%mmr-folder%/%timeSuffix%/overview-from-hourly.gz.json';
 const META_HERO_MMR_PERCENTILES_URL =
@@ -19,10 +19,14 @@ export class BgsMetaHeroStatsAccessService {
 
 	public async loadMetaHeroStats(
 		timeFilter: BgsActiveTimeFilterType,
+		anomaliesFilter: readonly string[] | null,
 		mmr: 100 | 50 | 25 | 10 | 1,
 	): Promise<BgsHeroStatsV2> {
 		mmr = (mmr as any) === 'all' ? 100 : mmr;
-		const url = META_HERO_STATS_URL.replace('%mmr-folder%', `mmr-${mmr}`).replace('%timeSuffix%', timeFilter);
+		const anomaly: string | null = anomaliesFilter?.length > 0 ? anomaliesFilter[0] : null;
+		const url = META_HERO_STATS_URL.replace('%mmr-folder%', `mmr-${mmr}`)
+			.replace('%anomaly%', anomaly ? `anomalies/${anomaly}/` : '')
+			.replace('%timeSuffix%', timeFilter);
 		console.debug('[bgs-meta-hero] url', url);
 		const result = await this.api.callGetApi<BgsHeroStatsV2>(url);
 		console.debug('[bgs-meta-hero] result', result);
