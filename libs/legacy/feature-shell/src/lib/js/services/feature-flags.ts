@@ -1,5 +1,7 @@
 // When changing these feature flags, don't forget to update the new-version component
 export class FeatureFlags {
+	// Disable when a new apatch hits, until we can build the new comps list
+	public static readonly ENABLE_BGS_COMPS = false;
 	// To be removed
 	public static readonly ENABLE_DECK_VERSIONS = true;
 	public static readonly ENABLE_MAILBOX_TAB = true;
@@ -7,7 +9,6 @@ export class FeatureFlags {
 	public static readonly ENABLE_BGS_QUESTS = true;
 	public static readonly ENABLE_BGS_QUESTS_IN_APP = true;
 	public static readonly USE_NEW_SETTINGS = true;
-	public static readonly ENABLE_BGS_COMPS = true;
 
 	// Shelved for now
 	public static readonly ENABLE_MULTI_GRAPHS = false;
