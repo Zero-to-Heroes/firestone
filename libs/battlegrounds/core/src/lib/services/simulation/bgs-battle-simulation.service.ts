@@ -62,6 +62,7 @@ export class BgsBattleSimulationService {
 			...battleInfo,
 			options,
 			gameState: {
+				...battleInfo.gameState,
 				validTribes: races,
 				currentTurn: currentTurn,
 			},
