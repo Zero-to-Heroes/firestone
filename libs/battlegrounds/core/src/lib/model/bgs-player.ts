@@ -137,6 +137,15 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		console.warn('missing cardId for', logEntity.Entity, logEntity.Tags);
 	}
 
+	const customTags: { [key: number]: number } = {};
+	const customTagKeys = [GameTag.BACON_YAMATO_CANNON];
+	for (const tag of customTagKeys) {
+		const customTag = logEntity.Tags.find((t) => t.Name === tag);
+		if (customTag) {
+			customTags[tag] = customTag.Value;
+		}
+	}
+
 	return {
 		cardId: logEntity.CardId,
 		attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
@@ -167,6 +176,8 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		friendly: true,
 		definitelyDead: false,
 		immuneWhenAttackCharges: 0,
+		// Custom tags
+		tags: customTags,
 		additionalCards: buildAdditionalCards(logEntity.CardId, logEntity.Tags, allCards),
 	};
 };
