@@ -143,6 +143,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			});
 
 		const formatOverride$ = this.prefs.preferences$$.pipe(
+			debounceTime(500),
 			map((prefs) => prefs.decktrackerMulliganFormatOverride),
 			distinctUntilChanged(),
 		);
@@ -153,6 +154,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				([gameState, formatOverride]) =>
 					formatOverride ?? gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD,
 			),
+			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
@@ -160,14 +162,17 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			filter((showWidget) => showWidget),
 			switchMap(() => this.gameState.gameState$$),
 			map((gameState) => gameState?.metadata.gameType),
+			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
 		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
+			debounceTime(500),
 			map((prefs) => prefs.decktrackerMulliganRankBracket),
 			distinctUntilChanged(),
 		);
 		const opponentActualClass$ = this.gameState.gameState$$.pipe(
+			debounceTime(500),
 			map((gameState) =>
 				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
 			),
@@ -177,6 +182,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			opponentActualClass$,
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.decktrackerMulliganOpponent),
+				debounceTime(500),
 				distinctUntilChanged(),
 			),
 		]).pipe(
@@ -198,6 +204,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 		const timeFrame$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.decktrackerMulliganTime),
+			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
@@ -205,6 +212,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const archetypeId$ = combineLatest([
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.constructedDeckArchetypeOverrides),
+				debounceTime(500),
 				distinctUntilChanged(),
 			),
 			this.gameState.gameState$$.pipe(
@@ -212,7 +220,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					deckstring: state?.playerDeck.deckstring,
 					archetypeId: state?.playerDeck.archetypeId,
 				})),
-				distinctUntilChanged(),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				debounceTime(500),
 			),
 		]).pipe(
 			map(
