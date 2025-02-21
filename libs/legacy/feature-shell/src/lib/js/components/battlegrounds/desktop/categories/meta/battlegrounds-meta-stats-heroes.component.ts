@@ -12,6 +12,7 @@ import {
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/common';
+import { Config } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -78,11 +79,21 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 		this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));
 		this.searchString$ = this.nav.heroSearchString$$;
 		const statsProvider$ = this.prefs.preferences$$.pipe(
-			switchMap((prefs) =>
-				prefs.bgsActiveGameMode === 'battlegrounds'
-					? this.metaHeroStats.metaHeroStats$$
-					: this.metaHeroStatsDuo.metaHeroStats$$,
-			),
+			switchMap((prefs) => {
+				const config: Config = {
+					gameMode: prefs.bgsActiveGameMode,
+					anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+					rankFilter: prefs.bgsActiveRankFilter,
+					tribesFilter: prefs.bgsActiveTribesFilter,
+					timeFilter: prefs.bgsActiveTimeFilter,
+					options: {
+						convervativeEstimate: prefs.bgsHeroesUseConservativeEstimate,
+					},
+				};
+				return prefs.bgsActiveGameMode === 'battlegrounds'
+					? this.metaHeroStats.getStats(config)
+					: this.metaHeroStatsDuo.getStats(config);
+			}),
 			takeUntil(this.destroyed$),
 		);
 		const metaData$ = statsProvider$.pipe(
