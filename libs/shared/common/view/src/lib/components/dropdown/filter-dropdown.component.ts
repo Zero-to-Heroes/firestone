@@ -27,7 +27,12 @@ import { IOption } from 'ng-select';
 			[noFilter]="1"
 		>
 			<ng-template #optionTemplate let-option="option">
-				<img class="image" *ngIf="option.image" [src]="option.image" />
+				<img
+					class="image"
+					*ngIf="option.image"
+					[src]="option.image"
+					[cardTooltip]="showCardTooltip ? option.value : null"
+				/>
 				<span
 					[helpTooltip]="option.tooltip ?? option.label"
 					[ngClass]="{ unselectable: option?.unselectable }"
@@ -73,6 +78,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 			});
 		}
 	}
+	@Input() showCardTooltip: boolean;
 
 	_options: IOptionWithImage[];
 	_visible: boolean;

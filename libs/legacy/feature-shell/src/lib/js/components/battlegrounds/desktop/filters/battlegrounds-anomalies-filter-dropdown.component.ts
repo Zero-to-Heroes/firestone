@@ -23,6 +23,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			[filter]="currentFilter$ | async"
 			[placeholder]="'app.battlegrounds.filters.anomaly.all-anomalies' | owTranslate"
 			[visible]="visible$ | async"
+			[showCardTooltip]="true"
 			(onOptionSelected)="onSelected($event)"
 		></filter-dropdown>
 
