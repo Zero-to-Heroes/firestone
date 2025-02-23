@@ -385,6 +385,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), legendary);
 		case CardIds.BenevolentBanker_WW_384:
 			return and(inDeck, spell);
+		case CardIds.BigDreams:
+			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.Birdwatching_VAC_408:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BitterColdTavernBrawl:
@@ -1909,7 +1911,7 @@ export const cardIdSelector = (
 		case CardIds.Product9_MIS_914:
 			return highlightConditions(
 				tooltip(and(side(inputSide), secretsTriggeredThisMatch)),
-				and(side(inputSide), or(inDeck, inHand), secret),
+				and(side(inputSide), or(inDeck, inHand, inOther), secret),
 			);
 		case CardIds.ProstheticHand_DEEP_015:
 			return highlightConditions(
