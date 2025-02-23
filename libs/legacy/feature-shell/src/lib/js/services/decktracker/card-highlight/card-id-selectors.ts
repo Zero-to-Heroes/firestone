@@ -107,6 +107,7 @@ import {
 	spellSchool,
 	spellSchoolPlayedThisMatch,
 	spendCorpse,
+	starshipExtended,
 	starshipPiece,
 	summonsTreant,
 	taunt,
@@ -653,7 +654,7 @@ export const cardIdSelector = (
 		case CardIds.Commencement:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ConcussiveShells_SC_411:
-			return and(side(inputSide), or(inHand, inDeck), starshipPiece);
+			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.CosmicKeyboard:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Cosmonaut_GDB_443:
@@ -1243,7 +1244,7 @@ export const cardIdSelector = (
 		case CardIds.Hellion_SC_412:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion),
-				and(side(inputSide), or(inDeck, inHand), starshipPiece),
+				and(side(inputSide), or(inDeck, inHand), starshipExtended),
 			);
 		case CardIds.Hellion_HellbatToken_SC_412t:
 			return and(side(inputSide), or(inDeck, inHand), minion);
@@ -1608,6 +1609,8 @@ export const cardIdSelector = (
 		case CardIds.LockAndLoad_CORE_AT_061:
 		case CardIds.LockAndLoad_WON_023:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.LockOn_SC_407:
+			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.PatchesThePirate_LockedAndLoaded_THD_025p:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.LokenJailerOfYoggSaron:
@@ -2113,7 +2116,7 @@ export const cardIdSelector = (
 		case CardIds.Scaleworm:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.Scv_SC_401:
-			return and(side(inputSide), or(inDeck, inHand), starshipPiece);
+			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.SeaShill_VAC_332:
 			return and(side(inputSide), or(inHand, inDeck), not(currentClass), not(neutral));
 		case CardIds.SigilOfReckoning:
@@ -2217,6 +2220,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.SicklyGrimewalker_YOG_512:
 			return and(side(inputSide), or(inDeck, inHand), undead);
+		case CardIds.SiegeTank_SC_413:
+			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.SilvermoonBrochure_WORK_017:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.SilvermoonFarstrider_RLK_826:
@@ -2532,7 +2537,8 @@ export const cardIdSelector = (
 		case CardIds.ThirstyDrifter_WW_387:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(1));
 		case CardIds.Thor_SC_414:
-			return and(side(inputSide), or(inHand, inDeck), starshipPiece);
+		case CardIds.Thor_ThorExplosivePayloadToken_SC_414t:
+			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.Thoribelore:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
 		case CardIds.ThornmantleMusician:

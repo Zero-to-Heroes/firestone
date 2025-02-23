@@ -419,6 +419,28 @@ export const generateCorpse = (input: SelectorInput): boolean => {
 export const starshipPiece = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
+export const buildingStarship = cardIs(
+	CardIds.ExarchOthaar_GDB_856,
+	CardIds.LaserBarrage_GDB_845,
+	CardIds.BadOmen_GDB_124,
+	CardIds.CrystalWelder_GDB_130,
+	CardIds.BarrelRoll_GDB_465,
+	CardIds.WarpDrive_GDB_474,
+	CardIds.Suffocate_GDB_476,
+	CardIds.Ghost_SC_408,
+);
+export const starshipExtended = or(
+	starshipPiece,
+	cardIs(
+		CardIds.Starport_SC_403,
+		CardIds.StarshipSchematic_GDB_102,
+		CardIds.ScroungingShipwright_GDB_876,
+		CardIds.SalvageTheBunker_SC_404,
+		CardIds.LiftOff_SC_410,
+		CardIds.WaywardProbe_SC_500,
+	),
+);
+
 export const templar = (input: SelectorInput): boolean => {
 	return [CardIds.DarkTemplar_SC_752, CardIds.HighTemplar_SC_765].includes(input.cardId as CardIds);
 };
