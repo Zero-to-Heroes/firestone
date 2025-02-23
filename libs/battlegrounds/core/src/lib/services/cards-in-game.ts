@@ -25,6 +25,20 @@ export const getAllCardsInGame = (
 	allCards: CardsFacadeService,
 	cardRules: CardRules | null,
 ): readonly ReferenceCard[] => {
+	const protossFilter = (card: ReferenceCard) => !card.mechanics?.includes(GameTag[GameTag.PROTOSS]);
+	const zergFilter = (card: ReferenceCard) => !card.mechanics?.includes(GameTag[GameTag.ZERG]);
+	const terranFilter = (card: ReferenceCard) => card.spellSchool !== SpellSchool[SpellSchool.UPGRADE];
+	let scFilters = [protossFilter, zergFilter, terranFilter];
+	if (playerCardId === CardIds.JimRaynor_BG31_HERO_801) {
+		scFilters = scFilters.filter((filter) => filter !== terranFilter);
+	}
+	if (playerCardId === CardIds.KerriganQueenOfBlades_BG31_HERO_811) {
+		scFilters = scFilters.filter((filter) => filter !== zergFilter);
+	}
+	if (playerCardId === CardIds.Artanis_BG31_HERO_802) {
+		scFilters = scFilters.filter((filter) => filter !== protossFilter);
+	}
+
 	const result = allCards
 		.getCards()
 		// Keep only minions that are in the bacon pool
@@ -37,20 +51,7 @@ export const getAllCardsInGame = (
 				),
 		)
 		// Starcraft-exclusive cards
-		.filter(
-			(card) =>
-				playerCardId === CardIds.JimRaynor_BG31_HERO_801 ||
-				card.spellSchool !== SpellSchool[SpellSchool.UPGRADE],
-		)
-		.filter(
-			(card) =>
-				playerCardId === CardIds.Artanis_BG31_HERO_802 || !card.mechanics?.includes(GameTag[GameTag.PROTOSS]),
-		)
-		.filter(
-			(card) =>
-				playerCardId === CardIds.KerriganQueenOfBlades_BG31_HERO_811 ||
-				!card.mechanics?.includes(GameTag[GameTag.ZERG]),
-		)
+		.filter((card) => scFilters.every((filter) => filter(card)))
 		.filter((card) => card.set !== 'Vanilla')
 		.filter(
 			(card) =>
