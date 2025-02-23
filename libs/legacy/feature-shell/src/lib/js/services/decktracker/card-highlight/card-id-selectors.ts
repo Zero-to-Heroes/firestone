@@ -1709,6 +1709,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, battlecry);
 		case CardIds.MurmuringElemental:
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
+		case CardIds.MurkwaterScribe:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.MuscleOTron_YOG_525:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.MutatingInjection_NAX11_04:
