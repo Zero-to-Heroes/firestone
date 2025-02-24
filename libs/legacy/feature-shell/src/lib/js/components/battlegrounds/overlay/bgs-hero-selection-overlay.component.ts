@@ -20,8 +20,10 @@ import {
 	debounceTime,
 	distinctUntilChanged,
 	filter,
+	shareReplay,
 	switchMap,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -84,22 +86,37 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => (hasPremiumSub ? 0 : freeUsesLeft)),
 		);
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
+		const availableRaces$ = this.bgsState.gameState$$.pipe(
+			this.mapData((state) => state?.currentGame?.availableRaces),
+			debounceTime(200),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const mmrAtStart$ = this.bgsState.gameState$$.pipe(
+			this.mapData((state) => state?.currentGame?.mmrAtStart),
+			debounceTime(200),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const statsConfigs: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
-			this.bgsState.gameState$$,
+			availableRaces$,
+			mmrAtStart$,
 			this.prefs.preferences$$,
 		]).pipe(
 			debounceTime(500),
-			filter(([gameState, bgState, prefs]) => !!gameState && !!bgState?.currentGame && !!prefs),
-			this.mapData(([gameState, bgState, prefs]) => {
+			filter(
+				([gameState, availableRaces, mmrAtStart, prefs]) => !!gameState && !!availableRaces?.length && !!prefs,
+			),
+			this.mapData(([gameState, availableRaces, mmrAtStart, prefs]) => {
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
-					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame.mmrAtStart ?? 0 : null,
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? mmrAtStart ?? 0 : null,
 					rankFilter: DEFAULT_MMR_PERCENTILE,
-					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
-						? bgState.currentGame.availableRaces
-						: [],
+					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection ? availableRaces : [],
 					anomaliesFilter: [],
 				};
 				return config;
@@ -111,6 +128,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
+			tap((tiers) => console.debug('[debug] tiers', tiers)),
 		);
 
 		const panel$ = this.bgsState.gameState$$.pipe(
@@ -126,9 +144,10 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			tiers$,
 			this.achievements.groupedAchievements$$,
 			panel$,
+			availableRaces$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
-			this.mapData(([tiers, achievements, panel, showAchievements]) => {
+			this.mapData(([tiers, achievements, panel, availableRaces, showAchievements]) => {
 				if (!panel) {
 					console.log('no panel');
 					return [];
@@ -157,6 +176,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					const tooltipPosition: TooltipPositionType = 'fixed-top-center';
 					const result: InternalBgsHeroStat = {
 						...statWithDefault,
+						tribesFilter: availableRaces,
 						id: cardId,
 						name: this.allCards.getCard(cardId)?.name,
 						baseCardId: normalized,
@@ -179,6 +199,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					return heroOverviews;
 				}
 			}),
+			tap((heroes) => console.debug('[debug] heroes', heroes)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
