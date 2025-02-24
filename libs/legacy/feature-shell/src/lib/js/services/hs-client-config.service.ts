@@ -49,7 +49,7 @@ export class HsClientConfigService {
 			console.log('[hs-client-config] wrote client config', targetPath);
 
 			const updatedConfig = await this.ow.readTextFile(targetPath);
-			if (!updatedConfig?.includes(content)) {
+			if (strip(content) !== strip(updatedConfig)) {
 				console.error('[hs-client-config] could not write client config', updatedConfig);
 			}
 
