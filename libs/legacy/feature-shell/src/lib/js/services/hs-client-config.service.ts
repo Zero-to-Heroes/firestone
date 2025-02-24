@@ -47,6 +47,12 @@ export class HsClientConfigService {
 			console.log('[hs-client-config] config is different', strip(content), strip(existingConfig));
 			await this.ow.writeFileContents(targetPath, content);
 			console.log('[hs-client-config] wrote client config', targetPath);
+
+			const updatedConfig = await this.ow.readTextFile(targetPath);
+			if (!updatedConfig?.includes(content)) {
+				console.error('[hs-client-config] could not write client config', updatedConfig);
+			}
+
 			await this.i18n.initReady();
 			while (true) {
 				if (
