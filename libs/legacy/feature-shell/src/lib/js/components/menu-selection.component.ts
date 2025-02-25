@@ -305,6 +305,7 @@ export class MenuSelectionComponent
 
 	goPremium() {
 		this.analytics.trackEvent('subscription-click', { page: 'left-menu' });
+
 		this.ow.openStore();
 	}
 }

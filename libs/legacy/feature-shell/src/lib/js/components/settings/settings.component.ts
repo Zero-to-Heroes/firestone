@@ -2,7 +2,6 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDest
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
-import { FeatureFlags } from '../../services/feature-flags';
 
 @Component({
 	selector: 'settings',
@@ -18,8 +17,6 @@ import { FeatureFlags } from '../../services/feature-flags';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements AfterViewInit, OnDestroy {
-	useNewSettings = FeatureFlags.USE_NEW_SETTINGS;
-
 	initReady = true;
 	thisWindowId: string;
 

@@ -12,7 +12,6 @@ import {
 import { CrossPromotionService } from '@firestone/app/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
-import { FeatureFlags } from '../../services/feature-flags';
 
 @Component({
 	selector: 'ads',
@@ -59,7 +58,6 @@ import { FeatureFlags } from '../../services/feature-flags';
 export class AdsComponent extends AbstractSubscriptionComponent implements OnDestroy, AfterContentInit {
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
-	showBottomTip = FeatureFlags.APP_TIPS;
 	doubleAdSize = { width: 400, height: 600 };
 	showBazaarTrackerAd = false;
 

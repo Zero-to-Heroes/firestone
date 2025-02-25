@@ -15,7 +15,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-new-deck-version-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -47,7 +46,6 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 						[deck]="deck"
 						role="listitem"
 						cdkDrag
-						[cdkDragDisabled]="!enableVersioning"
 						[cdkDragData]="deck"
 						cdkDragPreviewClass="test-tracker-drag-class"
 						(mousedown)="preventAppDrag($event)"
@@ -81,8 +79,6 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	enableVersioning = FeatureFlags.ENABLE_DECK_VERSIONS;
-
 	decks$: Observable<readonly InternalDeckSummary[]>;
 	currentDragText$: Observable<string>;
 

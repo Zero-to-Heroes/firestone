@@ -17,13 +17,13 @@ import {
 	MinionStat,
 	QuestReward,
 } from '@firestone/battlegrounds/core';
+import { ENABLE_MULTI_GRAPHS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { normalizeCardId } from './card-utils';
 
@@ -113,7 +113,7 @@ export class BgsPostMatchStatsComponent
 {
 	showAds$: Observable<boolean>;
 
-	enableMultiGraphs = FeatureFlags.ENABLE_MULTI_GRAPHS;
+	enableMultiGraphs = ENABLE_MULTI_GRAPHS;
 
 	@Input() loadingTitle = "We're building the stats";
 	@Input() loadingSubtitle: string;
@@ -158,7 +158,7 @@ export class BgsPostMatchStatsComponent
 			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
 		}
 		let tabs = value.selectedStats ?? this.selectedTabs ?? ['hp-by-turn'];
-		if (!FeatureFlags.ENABLE_MULTI_GRAPHS) {
+		if (!ENABLE_MULTI_GRAPHS) {
 			// Hard-code first tab to prevent weird bug where multi select is still occurring
 			tabs = [tabs[0]];
 		}

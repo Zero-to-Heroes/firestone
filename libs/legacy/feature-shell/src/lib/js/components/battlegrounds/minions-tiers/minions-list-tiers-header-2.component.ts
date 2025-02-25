@@ -13,10 +13,10 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { Tier } from '@firestone/battlegrounds/core';
+import { ENABLE_BGS_COMPS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { FeatureFlags } from '../../../services/feature-flags';
 
 @Component({
 	selector: 'minions-list-tiers-header-2',
@@ -128,7 +128,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
-	enableComps = FeatureFlags.ENABLE_BGS_COMPS;
+	enableComps = ENABLE_BGS_COMPS;
 	selectedCategory$: Observable<MinionTierCategory>;
 
 	@Output() displayedTierChange = new EventEmitter<Tier>();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TebexService } from '@firestone/shared/common/service';
+import { ENABLE_TEBEX, TebexService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -62,10 +62,12 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
-		const hasPremiumSub = await this.tebex.hasPremiumSubscription();
-		if (hasPremiumSub) {
-			console.log('[ads] user has a Tebex subscription');
-			return false;
+		if (ENABLE_TEBEX) {
+			const hasPremiumSub = await this.tebex.hasPremiumSubscription();
+			if (hasPremiumSub) {
+				console.log('[ads] user has a Tebex subscription');
+				return false;
+			}
 		}
 
 		return new Promise<boolean>(async (resolve) => {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { FeatureFlags } from './feature-flags';
 import { pickRandom } from './utils';
 
 export const TIP_URL = `https://static.firestoneapp.com/features`;
@@ -157,9 +156,6 @@ export class TipService {
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	public getRandomTip(): Tip {
-		if (!FeatureFlags.APP_TIPS) {
-			return null;
-		}
 		return pickRandom(this.tips);
 	}
 }

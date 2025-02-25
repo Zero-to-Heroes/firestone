@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ENABLE_RANKED_ARCHETYPE, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplaysEvent } from '../../../services/mainwindow/store/events/replays/show-replays-event';
@@ -85,7 +84,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerDeckRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
-	enableArchetype: boolean = FeatureFlags.ENABLE_RANKED_ARCHETYPE;
+	enableArchetype: boolean = ENABLE_RANKED_ARCHETYPE;
 
 	info$: Observable<Info>;
 
