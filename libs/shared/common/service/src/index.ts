@@ -16,5 +16,6 @@ export * from './lib/services/plugins/simple-io.service';
 export * from './lib/services/preferences-storage.service';
 export * from './lib/services/preferences.service';
 export * from './lib/services/s3-file-upload.service';
+export * from './lib/services/subscription/tebex.service';
 export * from './lib/services/temp-card-ids';
 export * from './lib/shared-common-service.module';

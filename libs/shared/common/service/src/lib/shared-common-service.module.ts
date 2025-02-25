@@ -15,6 +15,7 @@ import { SimpleIOService } from './services/plugins/simple-io.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
 import { PreferencesService } from './services/preferences.service';
 import { S3FileUploadService } from './services/s3-file-upload.service';
+import { TebexService } from './services/subscription/tebex.service';
 
 const components = [AdvancedSettingDirective];
 
@@ -33,6 +34,7 @@ const components = [AdvancedSettingDirective];
 		BugReportService,
 		ExpertContributorsService,
 		DiskCacheService,
+		TebexService,
 	],
 	declarations: components,
 	exports: components,

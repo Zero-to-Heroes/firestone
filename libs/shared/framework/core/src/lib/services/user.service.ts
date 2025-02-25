@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject, deepEqual, sleep } from '@firestone/shared/framework/common';
 import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { AbstractFacadeService } from './abstract-facade-service';
+import { AbstractFacadeService, waitForReady } from './abstract-facade-service';
 import { ADS_SERVICE_TOKEN, IAdsService } from './ads-service.interface';
 import { ApiRunner } from './api-runner';
 import { AppInjector } from './app-injector';
@@ -32,6 +32,8 @@ export class UserService extends AbstractFacadeService<UserService> {
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
+
+		await waitForReady(this.ads);
 
 		combineLatest([this.ads.enablePremiumFeatures$$, this.user$$])
 			.pipe(

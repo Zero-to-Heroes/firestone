@@ -75,10 +75,19 @@ export class ApiRunner {
 	}
 
 	// For JSON output
-	public async callGetApi<T>(url: string): Promise<T | null> {
+	public async callGetApi<T>(
+		url: string,
+		options?: {
+			bearerToken?: string;
+		},
+	): Promise<T | null> {
 		return new Promise<T | null>((resolve, reject) => {
+			let headers = new HttpHeaders({});
+			if (options?.bearerToken) {
+				headers = headers.set('Authorization', `Bearer ${options.bearerToken}`);
+			}
 			console.debug('[remote] calling GET', url);
-			this.http.get(url).subscribe(
+			this.http.get(url, { headers: headers }).subscribe(
 				(result: any) => {
 					console.debug('retrieved GET call', url);
 					resolve(result);

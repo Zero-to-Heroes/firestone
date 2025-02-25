@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TebexService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -9,47 +10,40 @@ import {
 import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
-const SHOW_ADS_IN_DEV = false;
-
 @Injectable()
 export class AdService extends AbstractFacadeService<AdService> implements IAdsService {
-	public showAds$$: BehaviorSubject<boolean>;
-	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
+	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 
 	private ow: OverwolfService;
 	private store: AppUiStoreFacadeService;
+	private tebex: TebexService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'adsService', () => !!this.showAds$$);
+		super(windowManager, 'adsService', () => !!this.hasPremiumSub$$);
 	}
 
 	protected override assignSubjects() {
-		this.showAds$$ = this.mainInstance.showAds$$;
 		this.enablePremiumFeatures$$ = this.mainInstance.enablePremiumFeatures$$;
 		this.hasPremiumSub$$ = this.mainInstance.hasPremiumSub$$;
 	}
 
 	protected async init() {
-		this.showAds$$ = new BehaviorSubject<boolean>(true);
 		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
 		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
 		this.ow = AppInjector.get(OverwolfService);
 		this.store = AppInjector.get(AppUiStoreFacadeService);
+		this.tebex = AppInjector.get(TebexService);
 		this.addDevMode();
 
 		this.ow.onSubscriptionChanged(async (event) => {
 			console.log('[ads] subscription changed', event);
 			const showAds = await this.shouldDisplayAds();
-			this.showAds$$.next(showAds);
-
-			const isPremium = await this.hasPremiumSub();
-			this.hasPremiumSub$$.next(isPremium);
+			this.hasPremiumSub$$.next(!showAds);
 		});
+
 		const showAds = await this.shouldDisplayAds();
-		const isPremium = await this.hasPremiumSub();
-		this.showAds$$.next(showAds);
-		this.hasPremiumSub$$.next(isPremium);
+		this.hasPremiumSub$$.next(!showAds);
 
 		await this.store.initComplete();
 		combineLatest([this.hasPremiumSub$$, this.store.shouldTrackLottery$()]).subscribe(
@@ -58,9 +52,6 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 				this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
 			},
 		);
-		this.showAds$$.pipe(distinctUntilChanged()).subscribe((showAds) => {
-			console.debug('[ads] show ads?', showAds);
-		});
 		this.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremiumSub) => {
 			console.debug('[ads] hasPremiumSub?', hasPremiumSub);
 		});
@@ -71,10 +62,12 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	console.warn('[ads] not display in dev');
-		// 	return SHOW_ADS_IN_DEV;
-		// }
+		const hasPremiumSub = await this.tebex.hasPremiumSubscription();
+		if (hasPremiumSub) {
+			console.log('[ads] user has a Tebex subscription');
+			return false;
+		}
+
 		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
 			const [showAds, user] = await Promise.all([this.ow.shouldShowAds(), this.ow.getCurrentUser()]);
@@ -98,28 +91,14 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		});
 	}
 
-	public async hasPremiumSub(): Promise<boolean> {
-		return this.mainInstance.hasPremiumSubInternal();
-	}
-
-	private async hasPremiumSubInternal(): Promise<boolean> {
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	console.warn('[ads] not display in dev');
-		// 	return !SHOW_ADS_IN_DEV;
-		// }
-		const shouldDisplayAds = await this.shouldDisplayAds();
-		return !shouldDisplayAds;
-	}
-
 	private addDevMode() {
 		if (process.env.NODE_ENV === 'production') {
 			return;
 		}
 		window['toggleAds'] = () => {
-			this.showAds$$.next(!this.showAds$$.value);
 			this.enablePremiumFeatures$$.next(!this.enablePremiumFeatures$$.value);
 			this.hasPremiumSub$$.next(!this.hasPremiumSub$$.value);
-			console.debug('[ads] toggled ads', this.showAds$$.value);
+			console.debug('[ads] toggled ads', !this.hasPremiumSub$$.value);
 		};
 	}
 }

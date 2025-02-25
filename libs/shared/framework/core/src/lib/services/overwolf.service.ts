@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 
+export const EXTENSION_ID = 'lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob';
 const HEARTHSTONE_GAME_ID = 9898;
 const NO_AD_PLAN = 13;
 
@@ -211,7 +212,7 @@ export class OverwolfService {
 
 	public async getManifest(): Promise<overwolf.extensions.GetManifestResult> {
 		return new Promise<overwolf.extensions.GetManifestResult>((resolve) => {
-			overwolf.extensions.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob', (result) => {
+			overwolf.extensions.getManifest(EXTENSION_ID, (result) => {
 				resolve(result);
 			});
 		});
