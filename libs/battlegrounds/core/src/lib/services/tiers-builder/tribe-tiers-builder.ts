@@ -50,7 +50,7 @@ export const buildTribeTiers = (
 	const scTribeTiers: readonly Tier[] = scTribes.map((targetTribe) =>
 		buildSingleScTribeTier(targetTribe, scCards, tiersToInclude, cardRules, i18n, config),
 	);
-	console.debug('scTribeTiers', scTribeTiers, scTribes);
+	// console.debug('scTribeTiers', scTribeTiers, scTribes, config, scCards);
 
 	const tribeTiers = [
 		...[...standardTribeTiers].sort((a, b) =>
