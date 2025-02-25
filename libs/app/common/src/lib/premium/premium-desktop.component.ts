@@ -33,8 +33,9 @@ import {
 			<div class="header">
 				<div class="title" [fsTranslate]="'app.premium.title'"></div>
 			</div>
+			<!-- <div class="subtitle" [fsTranslate]="'app.premium.subtitle'"></div> -->
 			<div class="plans-container">
-				<div class="annual-toggle" *ngIf="billingPeriodicity$ | async as billing">
+				<!-- <div class="annual-toggle" *ngIf="billingPeriodicity$ | async as billing">
 					<div
 						class="element monthly"
 						[ngClass]="{ selected: billing === 'monthly' }"
@@ -50,7 +51,7 @@ import {
 						<div class="text" [fsTranslate]="'app.premium.billing.yearly'"></div>
 						<div class="sub-text" [fsTranslate]="'app.premium.billing.yearly-subtext'"></div>
 					</div>
-				</div>
+				</div> -->
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
 						class="plan"
@@ -157,25 +158,27 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 						? allPackages!.filter((p) => p.name.includes('annual'))
 						: allPackages!.filter((p) => !p.name.includes('annual'));
 				console.debug('building plans', plans, packages, billingPeriodicity, currentPlanSub);
-				return plans
-					.filter((plan) => currentPlanSub?.id === 'legacy' || plan.id !== 'legacy')
-					.map((plan) => {
-						const packageForPlan = packages?.find((p) => p.name.toLowerCase().includes(plan.id!));
-						const rawPrice = packageForPlan?.total_price ?? plan.price;
-						const price =
-							rawPrice == null
-								? '-'
-								: billingPeriodicity === 'yearly'
-								? (rawPrice / 12).toFixed(2)
-								: rawPrice;
-						const result: PremiumPlan = {
-							...plan,
-							price: price,
-							activePlan: currentPlanSub,
-							periodicity: billingPeriodicity,
-						} as PremiumPlan;
-						return result;
-					});
+				return (
+					plans
+						// .filter((plan) => currentPlanSub?.id === 'legacy' || plan.id !== 'legacy')
+						.map((plan) => {
+							const packageForPlan = packages?.find((p) => p.name.toLowerCase().includes(plan.id!));
+							const rawPrice = packageForPlan?.total_price ?? plan.price;
+							const price =
+								rawPrice == null
+									? '-'
+									: billingPeriodicity === 'yearly'
+									? (rawPrice / 12).toFixed(2)
+									: rawPrice;
+							const result: PremiumPlan = {
+								...plan,
+								price: price,
+								activePlan: currentPlanSub,
+								periodicity: billingPeriodicity,
+							} as PremiumPlan;
+							return result;
+						})
+				);
 			}),
 			tap((plans) => console.debug('built plans', plans)),
 			shareReplay(1),
@@ -231,7 +234,10 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 			title: this.i18n.translateString('app.premium.presubscribe-modal.title', {
 				plan: this.i18n.translateString(`app.premium.plan.${planId}`),
 			}),
-			text: this.i18n.translateString('app.premium.presubscribe-modal.text'),
+			text:
+				planId === 'legacy'
+					? this.i18n.translateString('app.premium.presubscribe-modal.text-legacy')
+					: this.i18n.translateString('app.premium.presubscribe-modal.text'),
 		};
 		this.showPreSubscribeModal$$.next(model);
 	}
@@ -251,13 +257,13 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 }
 
 const ALL_PLANS: readonly Partial<PremiumPlan>[] = [
-	{
-		id: 'friend',
-		features: {
-			supportFirestone: true,
-			discordRole: 'friend',
-		},
-	},
+	// {
+	// 	id: 'friend',
+	// 	features: {
+	// 		supportFirestone: true,
+	// 		discordRole: 'friend',
+	// 	},
+	// },
 	{
 		id: 'premium',
 		features: {
@@ -267,16 +273,16 @@ const ALL_PLANS: readonly Partial<PremiumPlan>[] = [
 			premiumFeatures: true,
 		},
 	},
-	{
-		id: 'epic',
-		features: {
-			supportFirestone: true,
-			discordRole: 'epic',
-			removeAds: true,
-			premiumFeatures: true,
-			prioritySupport: true,
-		},
-	},
+	// {
+	// 	id: 'epic',
+	// 	features: {
+	// 		supportFirestone: true,
+	// 		discordRole: 'epic',
+	// 		removeAds: true,
+	// 		premiumFeatures: true,
+	// 		prioritySupport: true,
+	// 	},
+	// },
 	{
 		id: 'legacy',
 		features: {
@@ -284,20 +290,20 @@ const ALL_PLANS: readonly Partial<PremiumPlan>[] = [
 			removeAds: true,
 			premiumFeatures: true,
 		},
-		isReadonly: true,
+		// isReadonly: true,
 		price: 4.99,
 		text: `app.premium.legacy-plan-text`,
 	},
 ];
 const ALL_PLANS_YEARLY: readonly Partial<PremiumPlan>[] = [
-	{
-		id: 'friend',
-		features: {
-			supportFirestone: true,
-			discordRole: 'friend',
-			yearlyDiscount: true,
-		},
-	},
+	// {
+	// 	id: 'friend',
+	// 	features: {
+	// 		supportFirestone: true,
+	// 		discordRole: 'friend',
+	// 		yearlyDiscount: true,
+	// 	},
+	// },
 	{
 		id: 'premium',
 		features: {
@@ -308,17 +314,17 @@ const ALL_PLANS_YEARLY: readonly Partial<PremiumPlan>[] = [
 			yearlyDiscount: true,
 		},
 	},
-	{
-		id: 'epic',
-		features: {
-			supportFirestone: true,
-			discordRole: 'epic',
-			removeAds: true,
-			premiumFeatures: true,
-			prioritySupport: true,
-			yearlyDiscount: true,
-		},
-	},
+	// {
+	// 	id: 'epic',
+	// 	features: {
+	// 		supportFirestone: true,
+	// 		discordRole: 'epic',
+	// 		removeAds: true,
+	// 		premiumFeatures: true,
+	// 		prioritySupport: true,
+	// 		yearlyDiscount: true,
+	// 	},
+	// },
 ];
 
 export interface PremiumPlan {

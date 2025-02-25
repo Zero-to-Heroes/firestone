@@ -26,8 +26,7 @@
 	}
 
 	.plans-container {
-		min-width: 1100px;
-		max-width: 110vh;
+		max-width: min(110vh, 100%);
 		width: 100%;
 		align-self: center;
 		display: flex;
@@ -65,12 +64,12 @@
 
 	.plans {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(1, 1fr);
 		gap: 15px;
 		width: 100%;
 
 		&.show-legacy {
-			grid-template-columns: repeat(4, 1fr);
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 }

@@ -88,14 +88,20 @@ export class PremiumPackageComponent {
 		this.name = this.i18n.translateString(`app.premium.plan.${value.id}`);
 		this.price = `$${value.price ?? '-'}`;
 		this.periodicity = this.i18n.translateString(`app.premium.periodicity.monthly`);
-		const allFeatures = ['supportFirestone', 'discordRole', 'removeAds', 'premiumFeatures', 'prioritySupport'];
+		const allFeatures = [
+			'supportFirestone',
+			'discordRole',
+			'removeAds',
+			'premiumFeatures',
+			// 'prioritySupport',
+		];
 		this.features = allFeatures.map((feature) => {
 			const key = `app.premium.features.params.${value.features[feature] || ''}`;
 			const translation = this.i18n.translateString(key);
 			const featureValue = key === translation ? '' : translation;
 			return {
 				enabled: value.features[feature],
-				comingSoon: feature === 'discordRole',
+				// comingSoon: feature === 'discordRole',
 				iconPath: !!value.features[feature]
 					? `assets/svg/premium_checkmark_active.svg`
 					: `assets/svg/premium_checkmark_inactive.svg`,

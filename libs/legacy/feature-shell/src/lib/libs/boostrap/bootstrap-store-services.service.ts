@@ -42,9 +42,16 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
 import { ModsConfigService } from '@firestone/mods/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings';
-import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	ExpertContributorsService,
+	OwLegacyPremiumService,
+	PreferencesService,
+	SubscriptionService,
+	TebexService,
+} from '@firestone/shared/common/service';
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
+import { AdService } from '../../js/services/ad.service';
 import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
@@ -73,6 +80,10 @@ export class BootstrapStoreServicesService {
 	constructor(
 		private readonly init_OWUtilsService: OwUtilsService, // WindowManager
 		private readonly init_SettingsControllerService: SettingsControllerService,
+		private readonly init_SubscriptionService: SubscriptionService,
+		private readonly init_TebexService: TebexService,
+		private readonly init_OwLegacyPremiumService: OwLegacyPremiumService,
+		private readonly init_AdsService: AdService,
 		private readonly store: AppUiStoreService,
 		// TODO: this has a lot of dependencies, it should be refactored to limit the impact
 		// and let the store be started up as soon as possible

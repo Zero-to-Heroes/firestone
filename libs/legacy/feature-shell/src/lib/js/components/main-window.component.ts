@@ -12,7 +12,7 @@ import {
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AdService } from '../services/ad.service';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
@@ -164,13 +164,14 @@ export class MainWindowComponent
 				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
 			),
 		);
-		this.showAds$ = combineLatest([
-			this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds)),
-			this.store.listen$(([main, nav, prefs]) => main.showFtue),
-		]).pipe(
-			this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),
-			startWith(true),
-		);
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((sub) => !sub));
+		// combineLatest([
+		// 	this.ads.hasPremiumSub$$.pipe(this.mapData((sub) => !sub)),
+		// 	this.store.listen$(([main, nav, prefs]) => main.showFtue),
+		// ]).pipe(
+		// 	this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),
+		// 	startWith(true),
+		// );
 		this.nav.isVisible$$.pipe(this.mapData((visible) => visible)).subscribe(async (visible) => {
 			console.debug('update visible', visible);
 			const window = await this.ow.getCurrentWindow();

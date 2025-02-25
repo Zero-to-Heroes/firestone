@@ -18,7 +18,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	private tebex: TebexService;
 	private localStorage: LocalStorageService;
 
-	private shouldCheckForUpdates = false;
+	// private shouldCheckForUpdates = false;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'premiumSubscription', () => !!this.currentPlan$$);
@@ -48,9 +48,9 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		});
 
 		setInterval(() => {
-			if (!this.shouldCheckForUpdates) {
-				return;
-			}
+			// if (!this.shouldCheckForUpdates) {
+			// 	return;
+			// }
 			this.fetchCurrentPlan();
 		}, 60 * 1000);
 	}
@@ -68,8 +68,12 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 
 	private async subscribeInternal(planId: string) {
+		if (planId === 'legacy') {
+			await this.legacy.subscribe();
+			// this.currentPlan$$.next({ id: 'legacy', expireAt: null, active: true, autoRenews: false, cancelled: false });
+		}
 		await this.tebex.subscribe(planId);
-		this.startCheckingForUpdates();
+		// this.startCheckingForUpdates();
 	}
 
 	private async unsubscribeInternal(planId: string) {
@@ -78,7 +82,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 			this.currentPlan$$.next(null);
 		}
 		await this.tebex.unsubscribe(planId);
-		this.startCheckingForUpdates();
+		// this.startCheckingForUpdates();
 	}
 
 	private async fetchCurrentPlanInternal(): Promise<CurrentPlan> {
@@ -102,10 +106,10 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		return null;
 	}
 
-	private startCheckingForUpdates() {
-		this.shouldCheckForUpdates = true;
-		setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);
-	}
+	// private startCheckingForUpdates() {
+	// 	this.shouldCheckForUpdates = true;
+	// 	setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);
+	// }
 }
 
 export interface CurrentPlan {

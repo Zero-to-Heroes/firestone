@@ -36,6 +36,14 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		return this.mainInstance.getSubscriptionStatusInternal();
 	}
 
+	public async subscribe() {
+		return this.mainInstance.subscribeInternal();
+	}
+
+	private async subscribeInternal() {
+		this.ow.openStore();
+	}
+
 	public async unsubscribe() {
 		return this.mainInstance.unsubscribeInternal();
 	}

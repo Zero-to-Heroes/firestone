@@ -15,6 +15,7 @@ import { SimpleIOService } from './services/plugins/simple-io.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
 import { PreferencesService } from './services/preferences.service';
 import { S3FileUploadService } from './services/s3-file-upload.service';
+import { OwLegacyPremiumService } from './services/subscription/ow-legacy-premium.service';
 import { SubscriptionService } from './services/subscription/subscription.service';
 import { TebexService } from './services/subscription/tebex.service';
 
@@ -37,6 +38,7 @@ const components = [AdvancedSettingDirective];
 		DiskCacheService,
 		SubscriptionService,
 		TebexService,
+		OwLegacyPremiumService,
 	],
 	declarations: components,
 	exports: components,
