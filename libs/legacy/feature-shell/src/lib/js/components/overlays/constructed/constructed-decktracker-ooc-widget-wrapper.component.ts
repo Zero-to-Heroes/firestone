@@ -164,7 +164,7 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 
 	async toggleMode(hasPremium: boolean) {
 		if (!hasPremium) {
-			this.ow.openStore();
+			this.ads.goToPremium();
 			return;
 		}
 

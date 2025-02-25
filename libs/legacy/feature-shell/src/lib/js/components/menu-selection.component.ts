@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { CurrentAppType, ENABLE_TEBEX, PreferencesService } from '@firestone/shared/common/service';
+import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { AdService } from '../services/ad.service';
@@ -305,10 +305,6 @@ export class MenuSelectionComponent
 
 	goPremium() {
 		this.analytics.trackEvent('subscription-click', { page: 'left-menu' });
-		if (!ENABLE_TEBEX) {
-			this.ow.openStore();
-		} else {
-			this.selectModule('premium');
-		}
+		this.ads.goToPremium();
 	}
 }

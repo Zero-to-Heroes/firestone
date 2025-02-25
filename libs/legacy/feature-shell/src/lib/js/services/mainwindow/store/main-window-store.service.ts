@@ -9,13 +9,13 @@ import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
-import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { AppNavigationService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationService } from '@services/localization.service';
 import { Map } from 'immutable';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, filter } from 'rxjs';
 import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
 import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services/mailbox-mark-message-read-processor';
 import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
@@ -301,15 +301,25 @@ export class MainWindowStoreService {
 		private readonly mainNavigation: MainWindowNavigationService,
 		private readonly achievementsNavigation: AchievementsNavigationService,
 		private readonly simulationController: BgsSimulatorControllerService,
+		private readonly appNavigation: AppNavigationService,
 	) {
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
-		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
+		this.serviceInit();
+	}
 
+	private async serviceInit() {
+		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
 		this.processors = this.buildProcessors();
 
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
 			this.processingQueue.enqueue(event);
+		});
+
+		await waitForReady(this.appNavigation);
+		this.appNavigation.currentTab$$.pipe(filter((tab) => !!tab)).subscribe((tab) => {
+			console.debug('[navigation] changing tab', tab);
+			this.stateUpdater.next(new ChangeVisibleApplicationEvent(tab));
 		});
 	}
 

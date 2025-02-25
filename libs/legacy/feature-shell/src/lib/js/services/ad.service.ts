@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ENABLE_TEBEX, TebexService } from '@firestone/shared/common/service';
+import { AppNavigationService, ENABLE_TEBEX, TebexService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -18,6 +18,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	private ow: OverwolfService;
 	private store: AppUiStoreFacadeService;
 	private tebex: TebexService;
+	private appNavigation: AppNavigationService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'adsService', () => !!this.hasPremiumSub$$);
@@ -34,6 +35,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.ow = AppInjector.get(OverwolfService);
 		this.store = AppInjector.get(AppUiStoreFacadeService);
 		this.tebex = AppInjector.get(TebexService);
+		this.appNavigation = AppInjector.get(AppNavigationService);
 		this.addDevMode();
 
 		this.ow.onSubscriptionChanged(async (event) => {
@@ -55,6 +57,14 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremiumSub) => {
 			console.debug('[ads] hasPremiumSub?', hasPremiumSub);
 		});
+	}
+
+	public async goToPremium() {
+		return this.mainInstance.goToPremiumInternal();
+	}
+
+	private async goToPremiumInternal() {
+		this.appNavigation.goToPremium();
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {

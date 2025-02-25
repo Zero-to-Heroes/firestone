@@ -5,13 +5,14 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
+	Inject,
 	OnDestroy,
 	Output,
 	ViewRef,
 } from '@angular/core';
 import { CrossPromotionService } from '@firestone/app/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'ads',
@@ -66,6 +67,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly crossPromotion: CrossPromotionService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
@@ -87,7 +89,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 
 	showSubscription() {
 		this.analytics.trackEvent('subscription-click', { page: 'banner' });
-		this.ow.openStore();
+		this.ads.goToPremium();
 	}
 
 	showFeatures() {

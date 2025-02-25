@@ -7,4 +7,5 @@ export interface IAdsService {
 	hasPremiumSub$$: BehaviorSubject<boolean>;
 
 	isReady(): Promise<void>;
+	goToPremium(): Promise<void>;
 }

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { AdvancedSettingDirective } from './directives/advanced-setting.directive';
+import { AppNavigationService } from './services/app-navigation.service';
 import { BugReportService } from './services/bug-report.service';
 import { DiskCacheService } from './services/disk-cache.service';
 import { ExpertContributorsService } from './services/expert-contributors.service';
@@ -39,6 +40,7 @@ const components = [AdvancedSettingDirective];
 		SubscriptionService,
 		TebexService,
 		OwLegacyPremiumService,
+		AppNavigationService,
 	],
 	declarations: components,
 	exports: components,

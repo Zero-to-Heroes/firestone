@@ -1,5 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	ILocalizationService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { DAILY_FREE_USES } from '../../services/bgs-in-game-quests-guardian.service';
 
 @Component({
@@ -28,11 +34,12 @@ export class BgsQuestStatsInfoPremiumComponent {
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly i18n: ILocalizationService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
 	showPremium() {
 		console.debug('show premium');
 		this.analytics.trackEvent('subscription-click', { page: 'bgs-quests-overlay' });
-		this.ow.openStore();
+		this.ads.goToPremium();
 	}
 }

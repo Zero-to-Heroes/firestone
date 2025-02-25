@@ -1,8 +1,22 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 
 @Component({
@@ -58,6 +72,7 @@ export class ArenaOptionInfoPremiumComponent extends AbstractSubscriptionCompone
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly prefs: PreferencesService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
@@ -84,6 +99,6 @@ export class ArenaOptionInfoPremiumComponent extends AbstractSubscriptionCompone
 	showPremium() {
 		console.debug('show premium');
 		this.analytics.trackEvent('subscription-click', { page: 'arena-card-pick' });
-		this.ow.openStore();
+		this.ads.goToPremium();
 	}
 }

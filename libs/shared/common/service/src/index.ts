@@ -3,6 +3,7 @@ export * from './lib/models/patches';
 export * from './lib/models/pref-model';
 export * from './lib/models/preferences';
 export * from './lib/models/unfit-pref-model';
+export * from './lib/services/app-navigation.service';
 export * from './lib/services/bug-report.service';
 export * from './lib/services/disk-cache.service';
 export * from './lib/services/expert-contributors.service';

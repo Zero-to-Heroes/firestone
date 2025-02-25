@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'battle-status-premium',
@@ -23,11 +23,15 @@ import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/c
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattleStatusPremiumComponent {
-	constructor(private readonly ow: OverwolfService, private readonly analytics: AnalyticsService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly analytics: AnalyticsService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+	) {}
 
 	showPremium() {
 		console.debug('show premium');
 		this.analytics.trackEvent('subscription-click', { page: 'simulator-intermediate-results' });
-		this.ow.openStore();
+		this.ads.goToPremium();
 	}
 }

@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	ILocalizationService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 
 @Component({
 	selector: 'mulligan-info-premium',
@@ -37,11 +43,12 @@ export class MulliganInfoPremiumComponent {
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly i18n: ILocalizationService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
 	showPremium() {
 		console.debug('show premium');
 		this.analytics.trackEvent('subscription-click', { page: this.page });
-		this.ow.openStore();
+		this.ads.goToPremium();
 	}
 }
