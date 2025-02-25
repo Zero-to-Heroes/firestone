@@ -63,11 +63,11 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
 		if (ENABLE_TEBEX) {
-			const hasPremiumSub = await this.tebex.hasPremiumSubscription();
-			if (hasPremiumSub) {
-				console.log('[ads] user has a Tebex subscription');
-				return false;
-			}
+			// const hasPremiumSub = await this.tebex.hasPremiumSubscription();
+			// if (hasPremiumSub) {
+			// 	console.log('[ads] user has a Tebex subscription');
+			// 	return false;
+			// }
 		}
 
 		return new Promise<boolean>(async (resolve) => {

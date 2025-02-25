@@ -1,5 +1,5 @@
 import { Directive, HostBinding, Input } from '@angular/core';
-import { CurrentAppType } from '../models/mainwindow/current-app.type';
+import { CurrentAppType } from '@firestone/shared/common/service';
 
 @Directive({
 	selector: '[activeTheme]',

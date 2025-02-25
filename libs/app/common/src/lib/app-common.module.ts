@@ -8,9 +8,11 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { MarkdownModule } from 'ngx-markdown';
 import { NewVersionNotificationComponent } from './components/new-version-notification.component';
+import { PremiumDesktopComponent } from './premium/premium-desktop.component';
+import { PremiumPackageComponent } from './premium/premium-package.component';
 import { LocalizationLoaderWithCache } from './services/localization-loader.service';
 
-const components = [NewVersionNotificationComponent];
+const components = [NewVersionNotificationComponent, PremiumDesktopComponent, PremiumPackageComponent];
 @NgModule({
 	imports: [
 		CommonModule,

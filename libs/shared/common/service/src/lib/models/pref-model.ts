@@ -15,6 +15,7 @@ export type CurrentAppType =
 	| 'streams'
 	| 'mailbox'
 	| 'communities'
+	| 'premium'
 	| 'live';
 export type LotteryTabType = 'lottery' | 'achievements';
 export type AchievementsCompletedFilterType = 'ALL_ACHIEVEMENTS' | 'ONLY_MISSING' | 'ONLY_COMPLETED';

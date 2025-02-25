@@ -1,0 +1,207 @@
+:host {
+	display: flex;
+	--coming-soon-text: 'hop';
+}
+
+.package {
+	display: flex;
+	flex-direction: column;
+	background: rgba(255, 255, 255, 0.08);
+	align-items: center;
+	border-radius: 2vh;
+	font-family: 'Roboto', sans-serif;
+	padding-bottom: 3vh;
+	flex-grow: 1;
+	position: relative;
+	border: solid 2px transparent;
+
+	&.read-only {
+		.header,
+		.features {
+			opacity: 0.5;
+		}
+	}
+
+	&.active {
+		border: solid 2px var(--default-title-color);
+	}
+
+	&:hover:not(.active) {
+		border: solid 2px var(--default-title-color);
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	&.friend .name {
+		color: #ae96a8;
+	}
+	&.premium .name {
+		color: var(--default-title-color);
+	}
+	&.premium-plus .name {
+		color: #bdff00;
+	}
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	padding: 3vh;
+	padding-bottom: 1.5vh;
+	border-bottom: 1px solid #434e63;
+	width: 100%;
+	align-items: center;
+	margin-bottom: 2vh;
+
+	.name {
+		margin-bottom: 1.5vh;
+	}
+
+	.price {
+		font-size: 2em;
+		margin-bottom: 1.5vh;
+		font-weight: 600;
+	}
+
+	.periodicity {
+		color: #846c7e;
+	}
+
+	.auto-renew {
+		margin-top: 10px;
+		color: #846c7e;
+		align-self: flex-start;
+		height: 2vh;
+
+		::ng-deep {
+			a {
+				color: var(--color-2);
+
+				&:hover {
+					color: var(--default-title-color);
+				}
+			}
+		}
+	}
+}
+
+.features {
+	display: flex;
+	flex-direction: column;
+	padding: 3vh;
+	padding-top: 0;
+	width: 100%;
+	align-items: flex-start;
+
+	.title {
+		font-weight: 600;
+		margin-bottom: 2vh;
+	}
+
+	.feature {
+		display: flex;
+		align-items: center;
+		margin-bottom: 1.8vh;
+		padding-bottom: 1.8vh;
+		position: relative;
+		width: 100%;
+
+		.icon {
+			margin-right: 1vh;
+		}
+
+		.text {
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		&:not(:last-child) {
+			border-bottom: 1px solid #373c45;
+		}
+
+		&.disabled {
+			.text {
+				color: #51676d;
+			}
+		}
+
+		&.coming-soon {
+			--coming-soon-text: 'hop';
+			.text,
+			.icon {
+				opacity: 0.2;
+			}
+
+			&::after {
+				content: var(--coming-soon-text);
+				color: var(--default-title-color);
+				font-size: 0.8em;
+				font-weight: bold;
+				position: absolute;
+				width: 100%;
+				text-align: end;
+				opacity: 0.9;
+			}
+		}
+	}
+}
+
+.plan-text,
+.activate-discord {
+	display: flex;
+	flex-direction: column;
+	// align-items: center;
+	// justify-content: center;
+	padding: 20px;
+	padding-top: 0;
+	margin-bottom: 10px;
+	color: #ae96a8;
+
+	.main-text {
+		display: inline;
+	}
+
+	.code {
+		display: flex;
+		font-family: monospace;
+		background: rgba(255, 255, 255, 0.08);
+		padding: 6px 6px;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+		align-self: center;
+		justify-self: center;
+		margin-top: 5px;
+
+		.icon {
+			display: inline-block;
+			width: 12px;
+			margin-right: 5px;
+			--icon-color-secondary: var(--color-2);
+			--icon-color: transparent;
+
+			&:hover {
+				--icon-color: var(--color-2);
+			}
+		}
+		.text {
+			display: inline;
+		}
+	}
+}
+
+.button {
+	border-radius: 1.5vh;
+	padding: 1.5vh;
+	border: 1px solid var(--default-title-color);
+	font-size: 1.1em;
+	margin-top: auto;
+
+	&.unsubscribe-button {
+		// display: none;
+	}
+
+	&:hover {
+		background-color: var(--default-title-color);
+		color: #272727;
+	}
+}

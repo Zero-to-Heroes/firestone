@@ -1,4 +1,4 @@
-import { CurrentAppType } from '../../../../models/mainwindow/current-app.type';
+import { CurrentAppType } from '@firestone/shared/common/service';
 import { MainWindowStoreEvent } from './main-window-store-event';
 
 export class ChangeVisibleApplicationEvent implements MainWindowStoreEvent {
