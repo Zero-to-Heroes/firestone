@@ -3,6 +3,7 @@ import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@fire
 import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest } from 'rxjs';
@@ -15,6 +16,7 @@ import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
+import { AdService } from '../../../services/ad.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
 import {
@@ -25,7 +27,6 @@ import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenari
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-personal-hero-stats',
@@ -130,10 +131,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesPersonalHeroStatsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly PersonalHeroStat[]>;
 	sortCriteria$: Observable<MercenariesPersonalHeroesSortCriteria>;
 	showAds$: Observable<boolean>;
@@ -141,7 +139,6 @@ export class MercenariesPersonalHeroStatsComponent
 	private unsortedStats$: Observable<readonly PersonalHeroStat[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
@@ -149,8 +146,9 @@ export class MercenariesPersonalHeroStatsComponent
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: MercenariesNavigationService,
+		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -202,7 +200,7 @@ export class MercenariesPersonalHeroStatsComponent
 			// 	console.debug('[mercenaries-personal-hero-stats] total coins left', totalCoinsLeft, totalCoinsNeeded);
 			// }),
 		);
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {

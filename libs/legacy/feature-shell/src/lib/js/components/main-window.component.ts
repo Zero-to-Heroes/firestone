@@ -13,6 +13,7 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith } from 'rxjs';
+import { AdService } from '../services/ad.service';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
@@ -137,12 +138,13 @@ export class MainWindowComponent
 		private readonly preferencesService: PreferencesService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: MainWindowNavigationService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.ads);
 
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 		this.showFtue$ = this.store
@@ -162,7 +164,7 @@ export class MainWindowComponent
 			),
 		);
 		this.showAds$ = combineLatest([
-			this.store.showAds$().pipe(this.mapData((showAds) => showAds)),
+			this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds)),
 			this.store.listen$(([main, nav, prefs]) => main.showFtue),
 		]).pipe(
 			this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),

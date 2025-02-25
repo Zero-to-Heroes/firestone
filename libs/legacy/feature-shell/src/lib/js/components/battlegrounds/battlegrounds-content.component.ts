@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/core';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, startWith } from 'rxjs/operators';
+import { AdService } from '../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -68,11 +70,14 @@ export class BattlegroundsContentComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.ads);
+
 		this.currentPanelId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
 			.pipe(
@@ -124,10 +129,14 @@ export class BattlegroundsContentComponent
 					0,
 				),
 			);
-		this.showAds$ = this.store.showAds$().pipe(
-			this.mapData((showAds) => showAds),
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(
+			this.mapData((showAds) => !showAds),
 			startWith(true),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

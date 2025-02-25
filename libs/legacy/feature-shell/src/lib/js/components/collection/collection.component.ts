@@ -142,7 +142,7 @@ export class CollectionComponent extends AbstractSubscriptionComponent implement
 				cardBacks?.find((cardBack) => cardBack.id === selectedCardBackId),
 			),
 		);
-		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

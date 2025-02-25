@@ -1,6 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { StatsCategory, StatsCategoryType } from '../../../models/mainwindow/stats/stats-category';
+import { AdService } from '../../../services/ad.service';
 import { ProfileSelectCategoryEvent } from '../../../services/mainwindow/store/processors/stats/profile-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -46,11 +48,17 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	showFilters$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly ads: AdService,
+	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.ads);
+
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.stats.loading)
 			.pipe(this.mapData(([loading]) => loading));
@@ -69,7 +77,11 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.stats.categories)
 			.pipe(this.mapData(([categories]) => categories ?? []));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectCategory(categoryId: StatsCategoryType) {

@@ -3,6 +3,7 @@ import { OwNotificationsService, Preferences, PreferencesService } from '@firest
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs';
+import { AdService } from '../ad.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class LotteryWidgetControllerService {
 		private readonly ow: OverwolfService,
 		private readonly notifications: OwNotificationsService,
 		private readonly prefs: PreferencesService,
+		private readonly ads: AdService,
 	) {
 		this.init();
 		window['lotteryWidgetController'] = this;
@@ -24,14 +26,14 @@ export class LotteryWidgetControllerService {
 
 	private async init() {
 		await this.store.initComplete();
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.ads);
 
 		const displayWidgetFromData$ = combineLatest([
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.showLottery),
 				distinctUntilChanged(),
 			),
-			this.store.hasPremiumSub$(),
+			this.ads.hasPremiumSub$$,
 			this.closedByUser$$,
 		]).pipe(
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),

@@ -107,7 +107,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 		this.showNextOpponentRecapSeparately$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowNextOpponentRecapSeparately),
 		);
-		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 		this.buddiesEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasBuddies));
 		this.questsEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasQuests));
 		this.currentTurn$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.currentTurn));

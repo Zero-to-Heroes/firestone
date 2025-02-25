@@ -3,6 +3,7 @@ import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
+import { AdService } from '../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -82,12 +83,13 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.ads);
 
 		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
 		this.menuDisplayType$ = this.store
@@ -96,7 +98,7 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 		this.loading$ = this.store
 			.listen$(([main, nav, prefs]) => main.decktracker.isLoading)
 			.pipe(this.mapData(([isLoading]) => isLoading));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

@@ -4,6 +4,7 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
+import { AdService } from '../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -57,12 +58,13 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: MainWindowNavigationService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.ads);
 
 		this.showGlobalHeader$ = this.nav.text$$.pipe(this.mapData((text) => !!text));
 		this.currentView$ = this.store
@@ -71,7 +73,7 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 		this.bgsPostMatchStatsPanel$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.bgsPostMatchStatsPanel)
 			.pipe(this.mapData(([bgsPostMatchStatsPanel]) => bgsPostMatchStatsPanel));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

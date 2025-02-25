@@ -2,8 +2,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
+import { AdService } from '../../../services/ad.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
@@ -36,15 +37,15 @@ export class ConstructedMetaArchetypeDetailsComponent
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.constructedMetaStats.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.constructedMetaStats, this.prefs, this.ads);
 
-		this.hasPremiumAccess$ = this.store.hasPremiumSub$().pipe(this.mapData((hasPremium) => hasPremium));
+		this.hasPremiumAccess$ = this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => hasPremium));
 		this.showRelativeInfo$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.constructedMetaDecksShowRelativeInfo2),
 		);

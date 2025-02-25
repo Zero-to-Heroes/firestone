@@ -157,15 +157,6 @@ export class AppUiStoreFacadeService {
 		return this.store.allTimeBoosters$();
 	}
 
-	public showAds$(): Observable<boolean> {
-		return this.store.showAds$();
-	}
-
-	/** @deprecated */
-	public hasPremiumSub$(): Observable<boolean> {
-		return this.store.hasPremiumSub$();
-	}
-
 	public lottery$(): Observable<LotteryState> {
 		return this.store.lottery$();
 	}

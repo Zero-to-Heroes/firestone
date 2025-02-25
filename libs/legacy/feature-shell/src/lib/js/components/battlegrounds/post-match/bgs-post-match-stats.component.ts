@@ -8,7 +8,6 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { Entity } from '@firestone-hs/replay-parser';
 import {
 	BgsFaceOffWithSimulation,
@@ -18,13 +17,14 @@ import {
 	MinionStat,
 	QuestReward,
 } from '@firestone/battlegrounds/core';
-import { CardsFacadeService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
+import { AdService } from '../../../services/ad.service';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { normalizeCardId } from './card-utils';
 
 @Component({
@@ -108,7 +108,7 @@ import { normalizeCardId } from './card-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsPostMatchStatsComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	showAds$: Observable<boolean>;
@@ -191,18 +191,24 @@ export class BgsPostMatchStatsComponent
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((showAds) => showAds));
+	async ngAfterContentInit() {
+		await waitForReady(this.ads);
+
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {

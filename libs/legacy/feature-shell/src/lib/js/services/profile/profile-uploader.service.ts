@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Profile } from '@firestone-hs/api-user-profile';
 import { DiskCacheService, GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
+import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, skip, take } from 'rxjs';
+import { AdService } from '../ad.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';
@@ -26,6 +27,7 @@ export class ProfileUploaderService {
 		private readonly gameStatus: GameStatusService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly diskCache: DiskCacheService,
+		private readonly ads: AdService,
 	) {
 		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
 		window['profileBgHeroStat'] = this.internalBattlegrounds.bgFullTimeStatsByHero$$;
@@ -34,8 +36,9 @@ export class ProfileUploaderService {
 
 	private async init() {
 		await this.store.initComplete();
+		await waitForReady(this.ads);
 
-		const elligible$ = combineLatest([this.gameStatus.inGame$$, this.store.hasPremiumSub$()]).pipe(
+		const elligible$ = combineLatest([this.gameStatus.inGame$$, this.ads.hasPremiumSub$$]).pipe(
 			map(([inGame, hasPremium]) => inGame && hasPremium),
 			filter((elligible) => elligible),
 			distinctUntilChanged(),

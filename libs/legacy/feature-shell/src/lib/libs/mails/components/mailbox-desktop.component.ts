@@ -48,7 +48,7 @@ export class MailboxDesktopComponent extends AbstractSubscriptionStoreComponent 
 		this.menuDisplayType$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.menuDisplayType));
 		this.category$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.selectedCategoryId));
 		this.categories$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.categories));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		// this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
 	}
 
 	selectCategory(categoryId: MailCategoryType) {

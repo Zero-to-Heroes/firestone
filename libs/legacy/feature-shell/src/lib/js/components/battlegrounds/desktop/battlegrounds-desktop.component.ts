@@ -17,6 +17,7 @@ import {
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { AdService } from '../../../services/ad.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -108,12 +109,13 @@ export class BattlegroundsDesktopComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.ads);
 
 		this.categories = [
 			{
@@ -165,7 +167,7 @@ export class BattlegroundsDesktopComponent
 		this.currentView$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

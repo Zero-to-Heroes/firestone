@@ -51,7 +51,7 @@ export class AchievementsComponent extends AbstractSubscriptionComponent impleme
 
 		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
 		this.menuDisplayType$ = this.nav.menuDisplayType$$.pipe(this.mapData((currentView) => currentView));
-		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

@@ -6,9 +6,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { AdService } from '@legacy-import/src/lib/js/services/ad.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { from, Observable } from 'rxjs';
 
 @Component({
@@ -36,28 +37,27 @@ import { from, Observable } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TavernBrawlDesktopComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	menuDisplayType$: Observable<string>;
 	category$: Observable<TavernBrawlCategoryType>;
 	categories$: Observable<readonly TavernBrawlCategoryType[]>;
 	showAds$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.ads);
+
 		this.menuDisplayType$ = from(['menu']);
 		this.category$ = from(['meta' as TavernBrawlCategoryType]);
 		this.categories$ = from([['meta' as TavernBrawlCategoryType]]);
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -92,7 +92,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		await waitForReady(this.ads, this.nav, this.user);
 
 		this.loading$ = from([false]);
-		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 		this.category$ = this.nav.category$$.pipe(this.mapData((info) => info));
 		this.selectedCategoryId$ = this.nav.selectedCommunity$$.pipe(this.mapData((info) => info));
 		this.categories$ = from([

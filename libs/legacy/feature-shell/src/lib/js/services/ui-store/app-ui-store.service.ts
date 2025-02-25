@@ -31,7 +31,6 @@ import {
 	AchievementsProgressTracking,
 } from '../achievement/achievements-live-progress-tracking.service';
 import { AchievementsStateManagerService } from '../achievement/achievements-state-manager.service';
-import { AdService } from '../ad.service';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
@@ -93,7 +92,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly ads: AdService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefsService: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
@@ -278,14 +276,6 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.decks;
-	}
-
-	public showAds$(): Observable<boolean> {
-		return this.ads.showAds$$;
-	}
-
-	public hasPremiumSub$(): Observable<boolean> {
-		return this.ads.hasPremiumSub$$;
 	}
 
 	public lottery$(): Observable<LotteryState> {

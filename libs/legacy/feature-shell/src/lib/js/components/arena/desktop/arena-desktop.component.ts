@@ -77,7 +77,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent impleme
 			tap((selectedCategoryId) => console.debug('selectedCategoryId', selectedCategoryId)),
 			this.mapData((selectedCategoryId) => selectedCategoryId),
 		);
-		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 		this.showSecondary$ = combineLatest([this.category$, this.showAds$]).pipe(
 			this.mapData(([category, showAds]) => category === 'arena-runs' && !showAds),
 		);

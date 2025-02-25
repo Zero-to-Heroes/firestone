@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
+import { AdService } from '../../../services/ad.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -70,11 +72,14 @@ export class MercenariesDesktopComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ads: AdService,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.ads);
+
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.loading)
 			.pipe(this.mapData(([loading]) => loading));
@@ -87,7 +92,11 @@ export class MercenariesDesktopComponent
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)
 			.pipe(this.mapData(([categories]) => categories ?? []));
-		this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngAfterViewInit() {

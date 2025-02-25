@@ -125,7 +125,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 
-		this.showAds$ = this.ads.showAds$$.pipe(this.mapData((showAds) => showAds));
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
