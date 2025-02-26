@@ -73,36 +73,6 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 			return false;
 		}
 		return true;
-
-		// if (ENABLE_TEBEX) {
-		// 	const plan = await this.subscriptions.currentPlan$$.getValueWithInit(undefined);
-		// 	if (premiumPlanIds.includes(plan?.id)) {
-		// 		return false;
-		// 	}
-		// 	return true;
-		// }
-
-		// return new Promise<boolean>(async (resolve) => {
-		// 	// Use OW's subscription mechanism
-		// 	const [showAds, user] = await Promise.all([this.ow.shouldShowAds(), this.ow.getCurrentUser()]);
-		// 	console.log('[ads] should show ads', showAds);
-		// 	if (!showAds) {
-		// 		console.log('[ads] User has a no-ad subscription, not showing ads', showAds);
-		// 		resolve(false);
-		// 		return;
-		// 	}
-		// 	if (!user || !user.username) {
-		// 		resolve(true);
-		// 		return;
-		// 	}
-		// 	const username = user.username;
-		// 	if (!username) {
-		// 		console.log('[ads] user not logged in', user);
-		// 		resolve(true);
-		// 		return;
-		// 	}
-		// 	resolve(true);
-		// });
 	}
 
 	private addDevMode() {

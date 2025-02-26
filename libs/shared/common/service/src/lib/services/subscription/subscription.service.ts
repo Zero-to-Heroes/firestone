@@ -4,6 +4,7 @@ import {
 	AbstractFacadeService,
 	AppInjector,
 	LocalStorageService,
+	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged } from 'rxjs';
@@ -17,6 +18,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	private legacy: OwLegacyPremiumService;
 	private tebex: TebexService;
 	private localStorage: LocalStorageService;
+	private ow: OverwolfService;
 
 	// Do this to avoid spamming the server with subscription status check messages
 	private shouldCheckForUpdates = false;
@@ -34,6 +36,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		this.legacy = AppInjector.get(OwLegacyPremiumService);
 		this.tebex = AppInjector.get(TebexService);
 		this.localStorage = AppInjector.get(LocalStorageService);
+		this.ow = AppInjector.get(OverwolfService);
 
 		this.currentPlan$$.onFirstSubscribe(async () => {
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);
@@ -46,6 +49,11 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 			});
 
 			await this.fetchCurrentPlan();
+		});
+
+		this.ow.onSubscriptionChanged(() => {
+			console.log('[ads] [subscription]ow  subscription changed, fetching new plan');
+			this.startCheckingForUpdates();
 		});
 
 		setInterval(() => {
@@ -109,6 +117,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 
 	private startCheckingForUpdates() {
 		this.shouldCheckForUpdates = true;
+		this.fetchCurrentPlan();
 		setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);
 	}
 }
