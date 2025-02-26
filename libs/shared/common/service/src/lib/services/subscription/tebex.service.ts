@@ -41,10 +41,10 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		this.user = AppInjector.get(UserService);
 
 		this.packages$$.onFirstSubscribe(async () => {
-			console.log('[tebex] will load packages');
+			console.log('[ads] [tebex] will load packages');
 			const result: readonly TebexPackage[] | null = await this.api.callGetApi(TEBEX_PACKAGES_URL);
-			console.log('[tebex] loaded packages');
-			console.debug('[tebex] loaded packages', result);
+			console.log('[ads] [tebex] loaded packages');
+			console.debug('[ads] [tebex] loaded packages', result);
 			this.packages$$.next(result);
 		});
 	}
@@ -58,7 +58,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		const userUuid = currentUser.uuid;
 		const packageForPlan = allPackages?.find((p) => p.name.toLowerCase() === planId);
 		if (!packageForPlan) {
-			console.error('[tebex] could not find package for plan', planId);
+			console.error('[ads] [tebex] could not find package for plan', planId, allPackages);
 			return;
 		}
 		this.ow.openUrlInDefaultBrowser(
@@ -79,13 +79,14 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		const tebexPlans = await this.api.callGetApi<readonly TebexSub[]>(TEBEX_SUBSCRIPTIONS_URL, {
 			bearerToken: owToken,
 		});
-		console.debug('[ads] [tebex] sub status', tebexPlans);
+		console.debug('[ads] [tebex] tebexPlans', tebexPlans);
 		if (!tebexPlans?.length) {
 			return null;
 		}
 
+		const tebexPlan = tebexPlans[0];
 		const packages = await this.packages$$.getValueWithInit();
-		const tebexPackage = packages?.find((p) => p.id === tebexPlans[0].packageId);
+		const tebexPackage = packages?.find((p) => p.id === tebexPlan.packageId);
 		console.debug('[ads] [tebex] tebexPackage', tebexPackage);
 		if (!tebexPackage) {
 			console.warn('[ads] [tebex] could not find package for sub', packages, tebexPlans);
@@ -97,14 +98,16 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		});
 		console.debug('[ads] [tebex] sub details', subDetails);
 		const expiryDate = subDetails?.expiryDate;
-		return {
+		const result = {
 			id: tebexPackage.name.toLowerCase() as PremiumPlanId,
 			expireAt: expiryDate ? new Date(expiryDate) : null,
-			active: true,
-			autoRenews: true,
-			cancelled: false,
+			active: tebexPlan.state !== 'EXPIRED' && tebexPlan.state !== 'CANCELLED',
+			autoRenews: tebexPlan.state === 'ACTIVE',
+			cancelled: tebexPlan.state === 'PENDING_CANCELLATION',
 			discordCode: tebexPlans[0].recurringPaymentId,
 		};
+		console.debug('[ads] [tebex] current plan', result);
+		return result;
 	}
 }
 
@@ -133,7 +136,7 @@ interface TebexSub {
 	userId: string;
 	packageId: number;
 	recurringPaymentId: string;
-	state: 'ACTIVE' | string;
+	state: 'ACTIVE' | 'PENDING_CANCELLATION' | 'EXPIRED' | 'CANCELLED';
 }
 
 interface TebexSubDetails {

@@ -26,7 +26,18 @@
 		border: solid 2px var(--default-title-color);
 	}
 
-	&:hover:not(.active) {
+	&.cant-subscribe {
+		.subscribe-button {
+			opacity: 0.5;
+
+			&:hover {
+				background-color: inherit;
+				color: inherit;
+			}
+		}
+	}
+
+	&:hover:not(.active):not(.cant-subscribe) {
 		border: solid 2px var(--default-title-color);
 		background: rgba(255, 255, 255, 0.12);
 	}

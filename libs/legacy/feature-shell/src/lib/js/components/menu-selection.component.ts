@@ -186,22 +186,20 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 			</button>
 
 			<li class="push-down"></li>
-			<ng-container *ngIf="showGoPremium$ | async">
-				<button
-					[attr.tabindex]="tabIndex$ | async"
-					type="button"
-					class="menu-item go-premium"
-					[attr.aria-label]="'app.menu.go-premium-header' | owTranslate"
-					(click)="goPremium()"
-				>
-					<div class="icon" inlineSVG="assets/svg/whatsnew/go_premium.svg"></div>
-					<div class="text">
-						<div class="text-background"></div>
-						<div class="menu-header" [owTranslate]="'app.menu.go-premium-header'"></div>
-					</div>
-				</button>
-				<li class="main-menu-separator"></li>
-			</ng-container>
+			<button
+				[attr.tabindex]="tabIndex$ | async"
+				type="button"
+				class="menu-item go-premium"
+				[attr.aria-label]="'app.menu.go-premium-header' | owTranslate"
+				(click)="goPremium()"
+			>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/go_premium.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.go-premium-header'"></div>
+				</div>
+			</button>
+			<li class="main-menu-separator"></li>
 
 			<button
 				[attr.tabindex]="tabIndex$ | async"
@@ -238,7 +236,6 @@ export class MenuSelectionComponent
 	tabIndex$: Observable<number>;
 	hasNewMail$: Observable<boolean>;
 	mailboxTextDetails$: Observable<string>;
-	showGoPremium$: Observable<boolean>;
 
 	@Input() selectedModule: string;
 
@@ -271,19 +268,6 @@ export class MenuSelectionComponent
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
-		this.showGoPremium$ = this.ads.hasPremiumSub$$.pipe(this.mapData((premium) => !premium));
-		// this.enableMailboxTab$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.enableMailbox));
-		// const enableMailboxUnread$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.enableMailboxUnread));
-		// this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
-		// 	this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),
-		// );
-		// this.mailboxTextDetails$ = this.store.mails$().pipe(
-		// 	this.mapData((mailState) =>
-		// 		this.i18n.translateString('app.menu.mailbox-text-details', {
-		// 			value: mailState.mails.filter((mail) => !mail.read).length,
-		// 		}),
-		// 	),
-		// );
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

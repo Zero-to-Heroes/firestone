@@ -162,7 +162,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 					plans
 						// .filter((plan) => currentPlanSub?.id === 'legacy' || plan.id !== 'legacy')
 						.map((plan) => {
-							const packageForPlan = packages?.find((p) => p.name.toLowerCase().includes(plan.id!));
+							const packageForPlan = packages?.find((p) => p.name.toLowerCase() === plan.id);
 							const rawPrice = packageForPlan?.total_price ?? plan.price;
 							const price =
 								rawPrice == null

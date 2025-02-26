@@ -22,7 +22,7 @@ import { PremiumPlan } from './premium-desktop.component';
 	template: `
 		<div
 			class="package {{ id }}"
-			[ngClass]="{ 'read-only': isReadonly, active: isActive }"
+			[ngClass]="{ 'read-only': isReadonly, active: isActive, 'cant-subscribe': cantSubscribe }"
 			(click)="onSubscribe($event)"
 		>
 			<div class="header">
@@ -84,15 +84,16 @@ export class PremiumPackageComponent {
 		this.isActive = value.activePlan?.id === value.id;
 		const expireAtDate = value.activePlan?.expireAt ? new Date(value.activePlan.expireAt) : null;
 		this.isAutoRenew = value.activePlan?.autoRenews ?? false;
+		this.cantSubscribe = value.activePlan != null;
 		console.debug('setting plan', value, this.isActive, this.isAutoRenew);
 		this.name = this.i18n.translateString(`app.premium.plan.${value.id}`);
 		this.price = `$${value.price ?? '-'}`;
 		this.periodicity = this.i18n.translateString(`app.premium.periodicity.monthly`);
 		const allFeatures = [
 			'supportFirestone',
-			'discordRole',
 			'removeAds',
 			'premiumFeatures',
+			'discordRole',
 			// 'prioritySupport',
 		];
 		this.features = allFeatures.map((feature) => {
@@ -132,6 +133,9 @@ export class PremiumPackageComponent {
 			// this.discordCode = value.activePlan?.discordCode;
 			this.activateDiscordText = this.i18n.translateString('app.premium.activate-discord-details');
 		}
+		this.helpTooltipSubscribe = this.cantSubscribe
+			? this.i18n.translateString('app.premium.cant-subscribe-tooltip')
+			: null;
 
 		this.setComingSoonText();
 		// this.helpTooltipUnsubscribe =
@@ -143,6 +147,7 @@ export class PremiumPackageComponent {
 	isReadonly: boolean;
 	isActive: boolean;
 	isAutoRenew: boolean;
+	cantSubscribe: boolean;
 	id: string;
 	name: string;
 	autoRenewText: string;
@@ -155,7 +160,7 @@ export class PremiumPackageComponent {
 	activateDiscordText: string;
 
 	subscribeButtonKey = 'app.premium.subscribe-button';
-	helpTooltipSubscribe: string;
+	helpTooltipSubscribe: string | null;
 	helpTooltipUnsubscribe: string;
 
 	constructor(
@@ -169,12 +174,16 @@ export class PremiumPackageComponent {
 	// We need to wait until the CSS class has been set
 	async setComingSoonText() {
 		await sleep(1);
-		this.el.nativeElement
-			.querySelector('.coming-soon')
-			.style.setProperty(
+		const comingSoonElements = this.el.nativeElement.querySelectorAll('.coming-soon');
+		if (!comingSoonElements?.length) {
+			return;
+		}
+		comingSoonElements.forEach((element) => {
+			element.style.setProperty(
 				'--coming-soon-text',
 				`"${this.i18n.translateString('app.collection.sets.coming-soon')}"`,
 			);
+		});
 		console.debug('set style', this.el.nativeElement);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -183,7 +192,7 @@ export class PremiumPackageComponent {
 
 	onSubscribe(event: MouseEvent) {
 		event.stopPropagation();
-		if (this.isActive) {
+		if (this.isActive || this.cantSubscribe) {
 			return;
 		}
 		console.debug('subscribing to plan', this.id);

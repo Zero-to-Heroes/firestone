@@ -190,6 +190,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), battlecry, effectiveCostMore(2));
 		case CardIds.AllYouCanEat_VAC_528:
 			return and(side(inputSide), inDeck, minion, not(tribeless));
+		case CardIds.AlteredChord:
+			return and(side(inputSide), or(inHand, inDeck), overload);
 		case CardIds.AlwaysABiggerJormungar:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.AmalgamOfTheDeep:
