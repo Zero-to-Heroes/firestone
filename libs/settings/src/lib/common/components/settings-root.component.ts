@@ -17,6 +17,7 @@ import {
 	CardsFacadeService,
 	IAdsService,
 	ILocalizationService,
+	IndexedDbService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
@@ -70,6 +71,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly diskCache: DiskCacheService,
 		private readonly gamesLoader: GameStatsLoaderService,
 		private readonly arenaRewards: ArenaRewardsService,
+		private readonly db: IndexedDbService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 		@Inject(COLLECTION_PACK_SERVICE_TOKEN) private readonly packService: ICollectionPackService,
 	) {
@@ -99,6 +101,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			isBeta: isBeta,
 			services: {
 				diskCache: this.diskCache,
+				db: this.db,
 				gamesLoader: this.gamesLoader,
 				packService: this.packService,
 				arenaRewards: this.arenaRewards,

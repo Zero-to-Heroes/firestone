@@ -42,6 +42,7 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 							toggleFunction: (disableCache: boolean) => {
 								if (disableCache) {
 									context.services.diskCache.clearCache();
+									context.services.db.clearDb();
 								}
 							},
 						},
@@ -59,7 +60,7 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 						action: async () => {
 							isClearingLocalCache$$.next(true);
 							// Make sure we don't return too quickly, otherwise the user might think nothing happened
-							await Promise.all([context.services.diskCache.clearCache(), sleep(1000)]);
+							await Promise.all([context.services.diskCache.clearCache(), context.services.db.clearDb(), sleep(1000)]);
 							isClearingLocalCache$$.next(false);
 						},
 					},

@@ -10,12 +10,13 @@ export const COLLECTION_PACK_STATS = 'collectionPacks';
 export const COLLECTION_CARD_HISTORY = 'collectionCardHistory';
 export const MATCH_HISTORY = 'matchHistory';
 
+const dbName = 'FirestoneDB';
 @Injectable({
 	providedIn: 'root',
 })
 export class IndexedDbService extends Dexie {
 	constructor() {
-		super('FirestoneDB');
+		super(dbName);
 	}
 
 	public async init() {
@@ -39,5 +40,29 @@ export class IndexedDbService extends Dexie {
 		});
 
 		await this.open();
+	}
+
+	public async clearDb() {
+		this.close(); // Close the database before deleting it
+		const success = await new Promise<boolean>((resolve) => {
+			const request = indexedDB.deleteDatabase(dbName);
+			request.onsuccess = () => {
+				console.log(`Database ${dbName} deleted successfully`);
+				resolve(true);
+			};
+
+			request.onerror = (event) => {
+				console.error(`Error deleting database ${dbName}`, event);
+				resolve(false);
+			};
+
+			request.onblocked = () => {
+				console.warn(`Deletion of database ${dbName} is blocked`);
+				resolve(false);
+			};
+		});
+		if (success) {
+			this.init();
+		}
 	}
 }

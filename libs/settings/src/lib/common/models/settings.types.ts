@@ -7,6 +7,7 @@ import {
 	CardsFacadeService,
 	IAdsService,
 	ILocalizationService,
+	IndexedDbService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
@@ -22,6 +23,7 @@ export interface SettingContext {
 	readonly isBeta: boolean;
 	readonly services: {
 		readonly diskCache: DiskCacheService;
+		readonly db: IndexedDbService;
 		readonly gamesLoader: GameStatsLoaderService;
 		readonly packService: ICollectionPackService;
 		readonly arenaRewards: ArenaRewardsService;
