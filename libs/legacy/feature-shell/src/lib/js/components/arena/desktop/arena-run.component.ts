@@ -24,7 +24,7 @@ import { GameStat } from '@firestone/stats/data-access';
 					<img
 						class="player-class"
 						[src]="playerClassImage"
-						[cardTooltip]="playerCardId"
+						[helpTooltip]="playerClassTooltip"
 						*ngIf="playerClassImage"
 					/>
 				</div>
