@@ -18,7 +18,8 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	private tebex: TebexService;
 	private localStorage: LocalStorageService;
 
-	// private shouldCheckForUpdates = false;
+	// Do this to avoid spamming the server with subscription status check messages
+	private shouldCheckForUpdates = false;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'premiumSubscription', () => !!this.currentPlan$$);
@@ -48,9 +49,9 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		});
 
 		setInterval(() => {
-			// if (!this.shouldCheckForUpdates) {
-			// 	return;
-			// }
+			if (!this.shouldCheckForUpdates) {
+				return;
+			}
 			this.fetchCurrentPlan();
 		}, 60 * 1000);
 	}
@@ -73,7 +74,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 			// this.currentPlan$$.next({ id: 'legacy', expireAt: null, active: true, autoRenews: false, cancelled: false });
 		}
 		await this.tebex.subscribe(planId);
-		// this.startCheckingForUpdates();
+		this.startCheckingForUpdates();
 	}
 
 	private async unsubscribeInternal(planId: string) {
@@ -82,7 +83,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 			this.currentPlan$$.next(null);
 		}
 		await this.tebex.unsubscribe(planId);
-		// this.startCheckingForUpdates();
+		this.startCheckingForUpdates();
 	}
 
 	private async fetchCurrentPlanInternal(): Promise<CurrentPlan> {
@@ -106,10 +107,10 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		return null;
 	}
 
-	// private startCheckingForUpdates() {
-	// 	this.shouldCheckForUpdates = true;
-	// 	setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);
-	// }
+	private startCheckingForUpdates() {
+		this.shouldCheckForUpdates = true;
+		setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);
+	}
 }
 
 export interface CurrentPlan {
@@ -128,5 +129,5 @@ export interface OwSub {
 	readonly state: number;
 }
 
-export type PremiumPlanId = 'legacy' | 'friend' | 'premium' | 'epic';
-export const premiumPlanIds = ['legacy', 'premium', 'epic'] as PremiumPlanId[];
+export type PremiumPlanId = 'legacy' | 'premium';
+export const premiumPlanIds = ['legacy', 'premium'] as PremiumPlanId[];

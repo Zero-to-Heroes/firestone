@@ -43,6 +43,7 @@ import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
 import { ModsConfigService } from '@firestone/mods/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings';
 import {
+	AppNavigationService,
 	ExpertContributorsService,
 	OwLegacyPremiumService,
 	PreferencesService,
@@ -80,6 +81,7 @@ export class BootstrapStoreServicesService {
 	constructor(
 		private readonly init_OWUtilsService: OwUtilsService, // WindowManager
 		private readonly init_SettingsControllerService: SettingsControllerService,
+		private readonly init_AppNavigationService: AppNavigationService,
 		private readonly init_SubscriptionService: SubscriptionService,
 		private readonly init_TebexService: TebexService,
 		private readonly init_OwLegacyPremiumService: OwLegacyPremiumService,
