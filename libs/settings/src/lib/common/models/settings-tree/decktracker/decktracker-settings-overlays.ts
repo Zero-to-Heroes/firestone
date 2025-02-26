@@ -6,7 +6,7 @@ import { sizeKnobs } from '../common';
 export const decktrackerOverlaysSettings = (context: SettingContext): SettingNode => {
 	return {
 		id: 'decktracker-overlays',
-		name: context.i18n.translateString('settings.decktracker.menu.global'),
+		name: context.i18n.translateString('settings.decktracker.menu.overlay'),
 		keywords: null,
 		children: null,
 		sections: [
