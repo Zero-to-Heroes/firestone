@@ -30,7 +30,6 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 	readonly opponent = {
 		pref: 'opponentProtossSpellsCounter' as const,
 		display: (state: GameState): boolean => {
-			console.debug('[debug] opponent protoss spells', state.opponentDeck?.hero, state.opponentDeck);
 			return initialHeroClassIs(state.opponentDeck?.hero, [CardClass.MAGE]);
 		},
 		value: (state: GameState): number | null =>
