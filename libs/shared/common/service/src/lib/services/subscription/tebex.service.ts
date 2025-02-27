@@ -9,6 +9,7 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { ENABLE_TEBEX } from '../feature-flags';
 import { CurrentPlan, PremiumPlanId } from './subscription.service';
 
 // const STORE_ID = 1564884;
@@ -75,6 +76,10 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	}
 
 	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
+		if (!ENABLE_TEBEX) {
+			return null;
+		}
+
 		const owToken = await this.ow.generateSessionToken();
 		const tebexPlans = await this.api.callGetApi<readonly TebexSub[]>(TEBEX_SUBSCRIPTIONS_URL, {
 			bearerToken: owToken,
