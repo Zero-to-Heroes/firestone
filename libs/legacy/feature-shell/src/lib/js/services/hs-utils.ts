@@ -150,6 +150,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.VampiricBlood_RLK_051,
 	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
+	CardIds.YseraEmeraldAspect_EDR_000,
 ];
 
 export const deathrattleGlobalEffectCards = [
@@ -176,6 +177,7 @@ export const startOfGameGlobalEffectCards = [
 export const globalEffectCardsPlayed = [
 	...battlecryGlobalEffectCards,
 	CardIds.AirlockBreach_GDB_113,
+	CardIds.YseraEmeraldAspect_EDR_000,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.JourneyToTheEast_UberApocalypseTavernBrawl,
 	CardIds.BestialMadness_YOG_505,
