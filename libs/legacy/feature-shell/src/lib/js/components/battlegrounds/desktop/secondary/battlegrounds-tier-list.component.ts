@@ -120,7 +120,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 					timeFilter: timeFilter,
 					rankFilter: rankFilter,
 					tribesFilter: tribesFilter,
-					anomaliesFilter: [] as readonly string[], //BG_USE_ANOMALIES ? anomaliesFilter : [],
+					anomaliesFilter: [] as readonly string[],
 				}),
 			),
 			this.mapData((info) => {

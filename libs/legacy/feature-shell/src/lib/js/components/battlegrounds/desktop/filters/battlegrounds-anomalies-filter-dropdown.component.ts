@@ -1,10 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import {
-	BG_USE_ANOMALIES,
-	BattlegroundsAnomaliesService,
-	BattlegroundsNavigationService,
-} from '@firestone/battlegrounds/common';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { BattlegroundsAnomaliesService, BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BG_USE_ANOMALIES, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOptionWithImage } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -26,15 +22,6 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			[showCardTooltip]="true"
 			(onOptionSelected)="onSelected($event)"
 		></filter-dropdown>
-
-		<!-- <battlegrounds-anomalies-filter-dropdown-view
-			class="battlegrounds-anomalies-filter-dropdown"
-			[allAnomalies]="allAnomalies"
-			[currentFilter]="currentFilter$ | async"
-			[visible]="visible$ | async"
-			[validationErrorTooltip]="validationErrorTooltip"
-			(valueSelected)="onSelected($event)"
-		></battlegrounds-anomalies-filter-dropdown-view> -->
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,7 +29,6 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
-	// allAnomalies = this.buildAllAnomalies();
 	options: IOptionWithImage[];
 	currentFilter$: Observable<string>;
 	visible$: Observable<boolean>;

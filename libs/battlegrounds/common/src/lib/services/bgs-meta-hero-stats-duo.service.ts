@@ -7,7 +7,7 @@ import {
 	BgsMetaHeroStatsAccessService,
 	buildHeroStats,
 } from '@firestone/battlegrounds/data-access';
-import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
+import { BG_USE_ANOMALIES, DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -71,6 +71,7 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 						rankFilter: prefs.bgsActiveRankFilter === 1 ? 10 : prefs.bgsActiveRankFilter,
 						tribesFilter: prefs.bgsActiveTribesFilter,
 						timeFilter: prefs.bgsActiveTimeFilter,
+						anomaliesFilter: [] as readonly string[], //prefs.bgsActiveAnomaliesFilter,
 						options: {
 							convervativeEstimate: prefs.bgsHeroesUseConservativeEstimate,
 						},
@@ -106,7 +107,11 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 
 	private async getStatsInternal(config: Config): Promise<BgsHeroStatsV2 | null> {
 		const mmr = config.rankFilter || DEFAULT_MMR_PERCENTILE;
-		const stats = await this.access.loadMetaHeroStatsDuo(config.timeFilter, mmr);
+		const stats = await this.access.loadMetaHeroStatsDuo(
+			config.timeFilter,
+			BG_USE_ANOMALIES ? config.anomaliesFilter : null,
+			mmr,
+		);
 		return stats;
 	}
 

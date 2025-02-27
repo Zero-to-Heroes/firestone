@@ -1,4 +1,5 @@
 export const ENABLE_BGS_COMPS = true;
+export const BG_USE_ANOMALIES = true;
 export const ENABLE_TEBEX = false;
 
 // Shelved for now

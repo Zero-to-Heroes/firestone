@@ -7,7 +7,7 @@ import {
 	BgsMetaHeroStatsAccessService,
 	buildHeroStats,
 } from '@firestone/battlegrounds/data-access';
-import { DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
+import { BG_USE_ANOMALIES, DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -17,8 +17,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { DEFAULT_MMR_PERCENTILE } from './bgs-player-hero-stats.service';
-
-export const BG_USE_ANOMALIES = true;
 
 @Injectable()
 export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroStatsService> {

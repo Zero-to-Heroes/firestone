@@ -7,8 +7,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
-import { BG_USE_ANOMALIES, BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
+import { BG_USE_ANOMALIES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
