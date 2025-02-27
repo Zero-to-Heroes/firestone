@@ -77,6 +77,7 @@ export const buildTiers = (
 		showBuddiesTier: showBuddiesTier,
 		showProtossMinions: playerCardId === CardIds.Artanis_BG31_HERO_802,
 		showZergMinions: playerCardId === CardIds.KerriganQueenOfBlades_BG31_HERO_811,
+		showBattlecruiserUpgrades: playerCardId === CardIds.JimRaynor_BG31_HERO_801,
 	};
 	const standardTiers: readonly Tier[] = buildStandardTiers(
 		cardsToInclude,

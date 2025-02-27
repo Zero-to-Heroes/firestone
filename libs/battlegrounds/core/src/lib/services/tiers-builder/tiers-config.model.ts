@@ -10,4 +10,5 @@ export interface TierBuilderConfig {
 	readonly playerTrinkets: readonly string[];
 	readonly showProtossMinions: boolean;
 	readonly showZergMinions: boolean;
+	readonly showBattlecruiserUpgrades: boolean;
 }

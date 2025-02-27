@@ -40,15 +40,28 @@ export const buildTribeTiers = (
 				([CardType[CardType.MINION], CardType[CardType.BATTLEGROUND_SPELL]].includes(c.type?.toUpperCase()) ||
 					c.spellSchool === SpellSchool[SpellSchool.UPGRADE]),
 		);
-	const scTribes: GameTag[] = [];
+	const types: { type: 'Zerg' | 'Protoss' | 'Battlecruiser'; inclusion: (card: ExtendedReferenceCard) => boolean }[] =
+		[];
 	if (config?.showProtossMinions) {
-		scTribes.push(GameTag.PROTOSS);
+		types.push({
+			type: 'Protoss',
+			inclusion: (card: ExtendedReferenceCard) => card.mechanics?.includes(GameTag[GameTag.PROTOSS]),
+		});
 	}
 	if (config?.showZergMinions) {
-		scTribes.push(GameTag.ZERG);
+		types.push({
+			type: 'Zerg',
+			inclusion: (card: ExtendedReferenceCard) => card.mechanics?.includes(GameTag[GameTag.ZERG]),
+		});
 	}
-	const scTribeTiers: readonly Tier[] = scTribes.map((targetTribe) =>
-		buildSingleScTribeTier(targetTribe, scCards, tiersToInclude, cardRules, i18n, config),
+	if (config?.showBattlecruiserUpgrades) {
+		types.push({
+			type: 'Battlecruiser',
+			inclusion: (card: ExtendedReferenceCard) => card.spellSchool === SpellSchool[SpellSchool.UPGRADE],
+		});
+	}
+	const scTribeTiers: readonly Tier[] = types.map((type) =>
+		buildSingleScTribeTier(type.type, type.inclusion, scCards, tiersToInclude, cardRules, i18n, config),
 	);
 	// console.debug('scTribeTiers', scTribeTiers, scTribes, config, scCards);
 
@@ -142,26 +155,46 @@ const buildSpellsTier = (
 };
 
 const buildSingleScTribeTier = (
-	scTribe: GameTag,
+	type: 'Protoss' | 'Zerg' | 'Battlecruiser',
+	inclusion: (card: ExtendedReferenceCard) => boolean,
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): Tier => {
-	const cardsForTribe = cardsToInclude.filter((card) => card.mechanics?.includes(GameTag[scTribe]));
+	const cardsForTribe = cardsToInclude.filter((card) => inclusion(card));
 	const tribeGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForTribe, tiersToInclude, i18n, config);
 	const groups: readonly (TierGroup | null)[] = [...tribeGroups];
+	const tribeName = getScTribeName(type, i18n);
 	const result: Tier = {
 		type: 'tribe',
-		tavernTier: GameTag[scTribe].toLowerCase(),
-		tavernTierIcon: getTribeIcon(scTribe),
-		tavernTierData: scTribe,
-		tierName: getTribeName(scTribe, i18n),
-		tooltip: getTribeTooltipForTribeName(scTribe, i18n),
+		tavernTier: type.toLowerCase(),
+		tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${getScTierIcon(type)}.jpg`,
+		tavernTierData: type,
+		tierName: getScTribeName(type, i18n),
+		tooltip: getTribeTooltipForTribeName(tribeName, i18n),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
 	return result;
+};
+
+export const getScTribeName = (
+	type: 'Protoss' | 'Zerg' | 'Battlecruiser',
+	i18n: { translateString: (input: string) => string },
+): string => {
+	return i18n.translateString(`app.battlegrounds.tribes.${type?.toLowerCase()}`);
+};
+
+const getScTierIcon = (type: 'Protoss' | 'Zerg' | 'Battlecruiser'): string => {
+	switch (type) {
+		case 'Protoss':
+			return CardIds.WarpGate_MothershipToken_BG31_HERO_802pt7;
+		case 'Zerg':
+			return CardIds.KerriganQueenOfBlades_LarvaToken_BG31_HERO_811t;
+		case 'Battlecruiser':
+			return CardIds.LiftOff_BattlecruiserToken_BG31_HERO_801pt;
+	}
 };
 
 const buildSingleTribeTier = (
@@ -213,23 +246,23 @@ const buildSingleTribeTier = (
 	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
 		? [...tribeGroups, spellGroup, trinketGroup]
 		: [spellGroup, trinketGroup, ...tribeGroups];
+	const tribeName = getTribeName(targetTribe, i18n);
 	const result: Tier = {
 		type: 'tribe',
 		tavernTier: Race[targetTribe].toLowerCase(),
 		tavernTierIcon: getTribeIcon(targetTribe),
 		tavernTierData: targetTribe,
-		tierName: getTribeName(targetTribe, i18n),
-		tooltip: getTribeTooltipForTribeName(targetTribe, i18n),
+		tierName: tribeName,
+		tooltip: getTribeTooltipForTribeName(tribeName, i18n),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
 	return result;
 };
 
 const getTribeTooltipForTribeName = (
-	tribe: Race | GameTag,
+	tribeName: string,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 ): string => {
-	const tribeName = getTribeName(tribe, i18n);
 	return i18n.translateString('battlegrounds.in-game.minions-list.tribe-category-tooltip', {
 		tribeName: tribeName,
 	});
