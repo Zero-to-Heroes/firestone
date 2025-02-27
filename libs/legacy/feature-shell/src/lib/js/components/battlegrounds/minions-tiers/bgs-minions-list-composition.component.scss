@@ -31,6 +31,41 @@
 			font-size: 15px;
 		}
 
+		.header-power-level {
+			border: 1px solid;
+			border-radius: 50%;
+			width: 22px;
+			height: 22px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-right: 10px;
+
+			&.s {
+				color: #b5bcfb;
+			}
+
+			&.a {
+				color: #ce73b4;
+			}
+
+			&.b {
+				color: #a2ccb0;
+			}
+
+			&.c {
+				color: #ffb948;
+			}
+
+			&.d {
+				color: #ff4747;
+			}
+
+			&.e {
+				color: #b34100;
+			}
+		}
+
 		.caret {
 			margin-left: auto;
 		}

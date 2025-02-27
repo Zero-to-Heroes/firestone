@@ -23,6 +23,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 					<div class="header-images" *ngIf="!!headerImages?.length">
 						<img *ngFor="let img of headerImages" class="header-image" [src]="img" />
 					</div>
+					<div class="header-power-level {{ powerLevel?.toLowerCase() }}">{{ powerLevel }}</div>
 					<div class="header-text">{{ name }}</div>
 					<div
 						class="highlight-comp-button"
@@ -115,6 +116,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
 						[highlightedMechanics]="highlightedMechanics"
+						[fadeHigherTierCards]="fadeHigherTierCards"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
 						[leftPadding]="20"
@@ -132,6 +134,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	isCompHighlighted$: Observable<boolean>;
 
 	name: string;
+	powerLevel: string;
 	headerImages: readonly string[] = [];
 	coreCards: readonly ExtendedReferenceCard[];
 	addonCards: readonly ExtendedReferenceCard[];
@@ -141,6 +144,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
 		this.compId$$.next(value.compId);
 		this.name = value.name;
+		this.powerLevel = value.powerLevel;
 		this.coreCards = value.cards
 			.filter((c) => c.status === 'CORE')
 			.map((c) => {

@@ -16,6 +16,10 @@ export const buildCompositions = (
 			.filter((s) => isAvailable(s, availableTribes, allCards))
 			.map((s) => trimComp(s, availableTribes, allCards))
 			.sort((a, b) => {
+				const powerLevelCompare = comparePowerLevel(a.powerLevel, b.powerLevel);
+				if (powerLevelCompare !== 0) {
+					return powerLevelCompare;
+				}
 				if (!a.tribes?.length) {
 					return 1;
 				}
@@ -32,12 +36,18 @@ export const buildCompositions = (
 	return result;
 };
 
+const comparePowerLevel = (a: 'D' | 'C' | 'B' | 'A' | 'S', b: 'D' | 'C' | 'B' | 'A' | 'S'): number => {
+	const order = ['D', 'C', 'B', 'A', 'S'];
+	return order.indexOf(b) - order.indexOf(a);
+};
+
 const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): ExtendedBgsCompAdvice => {
 	const allTribes: readonly Race[] = comp.cards
 		.filter((c) => c.status === 'CORE')
 		.filter((c) => allCards.getCard(c.cardId).races?.length)
 		.flatMap((c) => allCards.getCard(c.cardId).races!)
 		.map((r) => Race[r]);
+	console.debug('comp', comp);
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
 		minionIcon: comp.cards.filter((c) => c.status === 'CORE')[0]?.cardId,
@@ -76,6 +86,9 @@ const trimComp = (
 };
 
 const isAvailable = (comp: BgsCompAdvice, availableTribes: readonly Race[], allCards: CardsFacadeService): boolean => {
+	if (!!comp.forcedTribes?.length) {
+		return comp.forcedTribes.every((t) => availableTribes.includes(t));
+	}
 	return comp.cards
 		.filter((c) => c.status === 'CORE')
 		.map((c) => allCards.getCard(c.cardId))
