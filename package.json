@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "14.12.1",
+	"version": "14.12.2",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -53,7 +53,7 @@
 		"@firestone-hs/replay-metadata": "^0.0.78",
 		"@firestone-hs/replay-parser": "^1.2.37",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.555",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.556",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.30",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.10",
 		"@firestone-hs/twitch-presence": "^1.0.1",
