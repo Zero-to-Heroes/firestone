@@ -2736,6 +2736,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.WarpGate_SC_751:
 			return and(side(inputSide), or(inHand, inDeck), protoss, minion);
+		case CardIds.Zuljin:
+			return and(side(inputSide), or(inDeck, inHand), spell /*, generateSecret */);
 		case CardIds.Zuljin_WarriorsOfAmani_THD_010p:
 			return and(side(inputSide), or(inDeck, inHand), secret /*, generateSecret */);
 		case CardIds.WarsongCommander_CORE_EX1_084:
