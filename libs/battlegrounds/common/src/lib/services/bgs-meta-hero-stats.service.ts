@@ -145,9 +145,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 			: buildHeroStats(
 					stats?.heroStats,
 					config.tribesFilter ?? [],
-					// config.anomaliesFilter ?? [],
 					!!config.options?.convervativeEstimate,
-					true,
 					this.allCards,
 			  );
 		return result;

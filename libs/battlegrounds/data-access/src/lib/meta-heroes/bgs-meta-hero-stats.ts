@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { BgsGlobalHeroStat, BgsHeroAnomalyStat, WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats';
+import { BgsGlobalHeroStat, WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { getStandardDeviation, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -140,34 +140,24 @@ export const buildTiers = (
 
 export const buildHeroStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalHeroStat>[],
-	// mmrPercentile: MmrPercentile['percentile'],
 	tribes: readonly Race[],
-	// anomalies: readonly string[] | null,
 	useConservativeEstimate: boolean,
-	useAnomalyFilter: boolean,
 	allCards: CardsFacadeService,
 	useDebug = false,
 ): readonly BgsMetaHeroStatTierItem[] => {
-	// mmrPercentile = useMmrFilter ? mmrPercentile : 100;
-	// anomalies = useAnomalyFilter ? anomalies.filter((a) => !!a) : [];
-	// const statsForMmr = stats?.filter((s) => s.mmrPercentile === mmrPercentile) ?? [];
 	// Files are split by MMR already
 	const statsForMmr = stats ?? [];
-	//console.debug('statsForMmr', statsForMmr, mmrPercentile, stats, tribes, anomalies);
 	const result1 = statsForMmr.filter((stat) => {
 		// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
 		// that stat
 		// We can still have some leftover stats in the data, but that it very likely something bogus
 		const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints);
-		// Temporary, because since undeads where omnipresent the stats are skewed
-		// .filter((t) => t.tribe !== Race.UNDEAD);
 		const isIn =
 			!overlyDominentTribes.length ||
 			!tribes?.length ||
 			overlyDominentTribes.every((t) => tribes.includes(t.tribe));
 		return isIn;
 	});
-	// console.debug('[bgs-2] building stats', result1);
 	return result1
 		.map((stat) => {
 			const shouldDebug = useDebug && stat.heroCardId === 'BG24_HERO_100';
@@ -208,29 +198,7 @@ export const buildHeroStats = (
 			shouldDebug &&
 				console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribesAveragePositionModifierDetails);
 
-			// const useAnomalyModifier = !!anomalies?.length && anomalies.length !== allCards.getAnomalies().length;
-			// console.debug('should use anomaly modifier?', useAnomalyModifier, stat.anomalyStats, stat);
-			// const anomalyStatsToUse = useAnomalyModifier
-			// 	? stat.anomalyStats?.filter((t) => anomalies.includes(t.anomaly)) ?? []
-			// 	: stat.anomalyStats ?? [];
-			// if (useAnomalyModifier && !anomalyStatsToUse?.length) {
-			// 	return null;
-			// }
-
-			// const anomalyModifier = useAnomalyModifier
-			// 	? anomalyStatsToUse.find((t) => anomalies.includes(t.anomaly))?.impactAveragePosition ?? 0
-			// 	: 0;
-			// const anomaliesAveragePositionModifierDetails = useAnomalyModifier
-			// 	? anomalyStatsToUse.map((t) => ({
-			// 			cardId: t.anomaly,
-			// 			impact: t.impactAveragePosition,
-			// 	  }))
-			// 	: null;
-
-			const placementDistribution: readonly { rank: number; percentage: number }[] =
-				// useAnomalyModifier
-				// 	? mergeImpactDistributions(anomalyStatsToUse) :
-				stat.placementDistribution;
+			const placementDistribution: readonly { rank: number; percentage: number }[] = stat.placementDistribution;
 			const combatWinrate = stat.combatWinrate;
 			const warbandStats = stat.warbandStats;
 
@@ -246,33 +214,24 @@ export const buildHeroStats = (
 				);
 			const dataPoints = Math.min(
 				stat.dataPoints,
-				// useAnomalyModifier
-				// 	? anomalyStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0)
-				// 	: 999_999_999,
 				useTribesModifier ? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0) : 999_999_999,
 			);
 			const pickrate = stat.totalOffered ? stat.totalPicked / stat.totalOffered : null;
 			const result: BgsMetaHeroStatTierItem = {
 				id: stat.heroCardId,
 				dataPoints: dataPoints,
-				averagePosition: averagePositionBaseValue + tribesModifier + 0 /*anomalyModifier*/,
+				averagePosition: averagePositionBaseValue + tribesModifier,
 				averagePositionDetails: {
 					baseValue: averagePositionBaseValue,
 					tribesModifiers: tribesAveragePositionModifierDetails,
 					allTribesAveragePositionModifierDetails: allTribesAveragePositionModifierDetails,
-					// anomalyModifiers: [], // anomaliesAveragePositionModifierDetails,
 				},
 				pickrate: pickrate,
 				tribesFilter: tribes,
-				// anomaliesFilter: anomalies,
 				positionTribesModifier: tribesModifier,
-				// positionAnomalyModifier: anomalyModifier,
 				placementDistribution: placementDistribution,
-				// placementDistributionImpact: placementDistributionImpactTribes,
 				combatWinrate: combatWinrate,
-				// combatWinrateImpact: combatWinrateImpactTribes,
 				warbandStats: warbandStats,
-				// warbandStatsImpact: warbandStatsImpactTribes,
 
 				tribeStats: tribeStatsToUse,
 
@@ -288,7 +247,6 @@ export const buildHeroStats = (
 					.map((p) => p.percentage)
 					.reduce((a, b) => a + b, 0),
 			};
-			// console.debug('[bgs-2] built hero stat', result, stat);
 			return result;
 		})
 		.filter((s) => !!s)
@@ -304,80 +262,4 @@ export const filterItems = (
 	return stats
 		.filter((stat) => stat.averagePosition)
 		.filter((stat) => stat.averagePosition >= threshold && stat.averagePosition < upper);
-};
-
-const mergeImpactDistributions = (
-	stats: readonly BgsHeroAnomalyStat[],
-): readonly { rank: number; percentage: number }[] => {
-	// create an array of ranks from 1 to 8
-	const uniqueRanks = [1, 2, 3, 4, 5, 6, 7, 8];
-
-	const result = uniqueRanks.map((rank) => {
-		const totalStatsForRank = stats
-			.map((s) => (s.placementDistribution.find((t) => t.rank === rank)?.percentage ?? 0) * s.dataPoints)
-			.reduce((a, b) => a + b, 0);
-		return {
-			rank: rank,
-			percentage: totalStatsForRank / stats.map((s) => s.dataPoints).reduce((a, b) => a + b, 0),
-		};
-	});
-
-	return result;
-};
-
-const addImpactToPlacementDistribution = (
-	placementDistribution: readonly { rank: number; percentage: number }[],
-	placementDistributionImpactTribes: readonly { rank: number; percentage: number }[],
-	placementDistributionImpactAnomaly: readonly { rank: number; percentage: number }[],
-): readonly { rank: number; percentage: number }[] => {
-	if (!placementDistributionImpactTribes && !placementDistributionImpactAnomaly) {
-		return placementDistribution;
-	}
-	const result = placementDistribution.map((p) => {
-		const impactTribes = placementDistributionImpactTribes?.find((t) => t.rank === p.rank)?.percentage ?? 0;
-		const impactAnomaly = placementDistributionImpactAnomaly?.find((t) => t.rank === p.rank)?.percentage ?? 0;
-		return {
-			rank: p.rank,
-			percentage: p.percentage + impactTribes + impactAnomaly,
-		};
-	});
-	return result;
-};
-
-const addImpactToCombatWinrate = (
-	combatWinrate: readonly { turn: number; winrate: number }[],
-	combatWinrateImpactTribes: readonly { turn: number; percentage: number }[],
-	combatWinrateImpactAnomaly: readonly { turn: number; percentage: number }[],
-): readonly { turn: number; winrate: number }[] => {
-	if (!combatWinrateImpactTribes && !combatWinrateImpactAnomaly) {
-		return combatWinrate;
-	}
-	const result = combatWinrate.map((p) => {
-		const impactTribes = combatWinrateImpactTribes?.find((t) => t.turn === p.turn)?.percentage ?? 0;
-		const impactAnomaly = combatWinrateImpactAnomaly?.find((t) => t.turn === p.turn)?.percentage ?? 0;
-		return {
-			turn: p.turn,
-			winrate: p.winrate + impactTribes + impactAnomaly,
-		};
-	});
-	return result;
-};
-
-const addImpactToWarbandStats = (
-	warbandStats: readonly { turn: number; averageStats: number }[],
-	warbandStatsImpactTribes: readonly { turn: number; averageStats: number }[],
-	warbandStatsImpactAnomaly: readonly { turn: number; averageStats: number }[],
-): readonly { turn: number; averageStats: number }[] => {
-	if (!warbandStatsImpactTribes && !warbandStatsImpactAnomaly) {
-		return warbandStats;
-	}
-	const result = warbandStats.map((p) => {
-		const impactTribes = warbandStatsImpactTribes?.find((t) => t.turn === p.turn)?.averageStats ?? 0;
-		const impactAnomaly = warbandStatsImpactAnomaly?.find((t) => t.turn === p.turn)?.averageStats ?? 0;
-		return {
-			turn: p.turn,
-			averageStats: p.averageStats + impactTribes + impactAnomaly,
-		};
-	});
-	return result;
 };
