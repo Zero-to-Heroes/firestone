@@ -8,6 +8,7 @@ import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
+import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
@@ -37,6 +38,7 @@ export const getAllCounters: (
 	new ProtossMinionReductionCounterDefinitionV2(i18n),
 	new ProtossSpellsCounterDefinitionV2(i18n, allCards),
 	new NextStarshipLaunchCounterDefinitionV2(i18n, allCards),
+	new CardsPlayedThisTurnCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -49,6 +51,7 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'cardsPlayedThisTurn'
 	| 'nextStarshipLaunch'
 	| 'protossMinionReduction'
 	| 'protossSpells'
