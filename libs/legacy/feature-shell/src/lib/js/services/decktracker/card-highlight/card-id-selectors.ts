@@ -2786,6 +2786,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellDamage);
 		case CardIds.WorkshopJanitor_TOY_891:
 			return and(side(inputSide), or(inDeck, inHand), location);
+		case CardIds.WreckemAndDeckem_TOY_603:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.WretchedExile:
 			return and(side(inputSide), or(inDeck, inHand), outcast);
 		case CardIds.Xb931Housekeeper_VAC_956:
