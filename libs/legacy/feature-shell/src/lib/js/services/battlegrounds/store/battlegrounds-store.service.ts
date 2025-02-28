@@ -490,7 +490,7 @@ export class BattlegroundsStoreService {
 					this.playerTeams = playerTeams;
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD) {
-				this.duoPendingBoards.push({
+				const newBoard = {
 					playerBoard: {
 						heroCardId: gameEvent.additionalData.playerBoard.cardId,
 						playerId: gameEvent.additionalData.playerBoard.playerId,
@@ -499,15 +499,7 @@ export class BattlegroundsStoreService {
 						trinkets: gameEvent.additionalData.playerBoard.trinkets,
 						hand: gameEvent.additionalData.playerBoard.hand,
 						hero: gameEvent.additionalData.playerBoard.hero,
-						heroPowers: [
-							{
-								cardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
-								entityId: gameEvent.additionalData.playerBoard.heroPowerEntityId,
-								used: gameEvent.additionalData.playerBoard.heroPowerUsed,
-								info: gameEvent.additionalData.playerBoard.heroPowerInfo,
-								info2: gameEvent.additionalData.playerBoard.heroPowerInfo2,
-							},
-						],
+						heroPowers: gameEvent.additionalData.playerBoard.heroPowers,
 						questRewards: gameEvent.additionalData.playerBoard.questRewards,
 						questRewardEntities: gameEvent.additionalData.playerBoard.questRewardEntities,
 						questEntities: gameEvent.additionalData.playerBoard.questEntities,
@@ -521,21 +513,15 @@ export class BattlegroundsStoreService {
 						trinkets: gameEvent.additionalData.opponentBoard.trinkets,
 						hand: gameEvent.additionalData.opponentBoard.hand,
 						hero: gameEvent.additionalData.opponentBoard.hero,
-						heroPowers: [
-							{
-								cardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
-								entityId: gameEvent.additionalData.opponentBoard.heroPowerEntityId,
-								used: gameEvent.additionalData.opponentBoard.heroPowerUsed,
-								info: gameEvent.additionalData.opponentBoard.heroPowerInfo,
-								info2: gameEvent.additionalData.opponentBoard.heroPowerInfo2,
-							},
-						],
+						heroPowers: gameEvent.additionalData.opponentBoard.heroPowers,
 						questRewards: gameEvent.additionalData.opponentBoard.questRewards,
 						questRewardEntities: gameEvent.additionalData.opponentBoard.questRewardEntities,
 						questEntities: gameEvent.additionalData.opponentBoard.questEntities,
 						globalInfo: gameEvent.additionalData.opponentBoard.globalInfo,
 					},
-				});
+				};
+				console.debug('[bgs-simulation] BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD', gameEvent, newBoard);
+				this.duoPendingBoards.push(newBoard);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				const boardEvent = this.buildBgsPlayerBoardEvent(gameEvent);
 				this.handleEventOnlyAfterTrigger(boardEvent, GameEvent.BATTLEGROUNDS_COMBAT_START);
