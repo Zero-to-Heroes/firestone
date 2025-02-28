@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
+import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	LocalStorageService,
 	OverwolfService,
+	UserService,
+	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { OwLegacyPremiumService } from './ow-legacy-premium.service';
 import { TebexService } from './tebex.service';
 
@@ -19,6 +21,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	private tebex: TebexService;
 	private localStorage: LocalStorageService;
 	private ow: OverwolfService;
+	private user: UserService;
 
 	// Do this to avoid spamming the server with subscription status check messages
 	private shouldCheckForUpdates = false;
@@ -37,6 +40,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		this.tebex = AppInjector.get(TebexService);
 		this.localStorage = AppInjector.get(LocalStorageService);
 		this.ow = AppInjector.get(OverwolfService);
+		this.user = AppInjector.get(UserService);
 
 		this.currentPlan$$.onFirstSubscribe(async () => {
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);
@@ -53,6 +57,12 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 
 		this.ow.onSubscriptionChanged(() => {
 			console.log('[ads] [subscription]ow  subscription changed, fetching new plan');
+			this.startCheckingForUpdates();
+		});
+
+		await waitForReady(this.user);
+		this.user.user$$.pipe(debounceTime(500)).subscribe(() => {
+			console.log('[ads] [subscription] user changed, fetching new plan');
 			this.startCheckingForUpdates();
 		});
 
@@ -88,14 +98,15 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	private async unsubscribeInternal(planId: string) {
 		if (planId === 'legacy') {
 			await this.legacy.unsubscribe();
-			this.currentPlan$$.next(null);
+		} else {
+			await this.tebex.unsubscribe(planId);
 		}
-		await this.tebex.unsubscribe(planId);
 		this.startCheckingForUpdates();
 	}
 
 	private async fetchCurrentPlanInternal(): Promise<CurrentPlan> {
 		const currentPlan = await this.getCurrentPlanInternal();
+		console.debug('[ads] [subscription] current plan', currentPlan);
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
 		this.currentPlan$$.next(currentPlan ?? null);
 		this.localStorage.setItem(LocalStorageService.CURRENT_SUB_PLAN, currentPlan);
@@ -104,11 +115,13 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 
 	private async getCurrentPlanInternal(): Promise<CurrentPlan> {
 		const tebexPlan = await this.tebex.getSubscriptionStatus();
+		console.log('[ads] [subscription] tebex plan', tebexPlan);
 		if (tebexPlan != null) {
 			return tebexPlan;
 		}
 
 		const legacyPlan = await this.legacy.getSubscriptionStatus();
+		console.log('[ads] [subscription] legacy plan', legacyPlan);
 		if (legacyPlan != null) {
 			return legacyPlan;
 		}
@@ -116,6 +129,9 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 
 	private startCheckingForUpdates() {
+		if (this.shouldCheckForUpdates) {
+			return;
+		}
 		this.shouldCheckForUpdates = true;
 		this.fetchCurrentPlan();
 		setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);

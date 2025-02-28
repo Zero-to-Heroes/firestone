@@ -7,7 +7,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { ENABLE_TEBEX } from '../feature-flags';
-import { CurrentPlan, OwSub } from './subscription.service';
+import { CurrentPlan, OwSub, PremiumPlanId } from './subscription.service';
 
 const UNSUB_URL = 'https://56ogovbpuj3wqndoj6j3fv3qs40ustlm.lambda-url.us-west-2.on.aws/';
 const STATUS_URL = 'https://kb3ek7w47ofny2lhrnv7xlmxnq0ifkbj.lambda-url.us-west-2.on.aws/';
@@ -75,14 +75,16 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 			owToken: owToken,
 		});
 		console.log('[ads] [ow-legacy-premium] sub status', legacyPlan);
-		if (legacyPlan?.state === 0 || (legacyPlan?.state === 1 && new Date(legacyPlan.expireAt) < new Date())) {
-			return {
-				id: 'legacy',
+		if (legacyPlan?.state === 0 || (legacyPlan?.state === 1 && new Date(legacyPlan.expireAt) >= new Date())) {
+			const result = {
+				id: 'legacy' as PremiumPlanId,
 				expireAt: legacyPlan.expireAt,
 				active: true,
 				autoRenews: legacyPlan.state === 0,
 				cancelled: legacyPlan.state === 1,
 			};
+			console.debug('[ads] [ow-legacy-premium] return legacy plan', result);
+			return result;
 		}
 		return null;
 	}

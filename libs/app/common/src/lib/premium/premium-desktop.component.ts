@@ -35,7 +35,7 @@ import {
 			</div>
 			<!-- <div class="subtitle" [fsTranslate]="'app.premium.subtitle'"></div> -->
 			<div class="plans-container">
-				<!-- <div class="annual-toggle" *ngIf="billingPeriodicity$ | async as billing">
+				<div class="annual-toggle" *ngIf="billingPeriodicity$ | async as billing">
 					<div
 						class="element monthly"
 						[ngClass]="{ selected: billing === 'monthly' }"
@@ -49,9 +49,12 @@ import {
 						(click)="changePeriodicity('yearly')"
 					>
 						<div class="text" [fsTranslate]="'app.premium.billing.yearly'"></div>
-						<div class="sub-text" [fsTranslate]="'app.premium.billing.yearly-subtext'"></div>
+						<div class="sub-text">{{ yearlySubtext }}</div>
 					</div>
-				</div> -->
+				</div>
+				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
+					Limited time offer: 33% off when you subscribe yearly!
+				</div>
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
 						class="plan"
@@ -61,6 +64,15 @@ import {
 						(unsubscribe)="onUnsubscribeRequest($event)"
 					></premium-package>
 				</div>
+				<!-- <div class="redeem-code-container">
+					<fs-text-input
+						[showSearchIcon]="false"
+						[placeholder]="'XXXX-XXXX-XXXX-XXXX'"
+						[debounceTime]="500"
+						(fsModelUpdate)="onCodeUpdated($event)"
+					></fs-text-input>
+					<button class="button redeem-button" [fsTranslate]="'Redeem code'" (click)="redeem()"></button>
+				</div> -->
 			</div>
 		</div>
 		<div class="modal-container confirmation-modal" *ngIf="showConfirmationPopUp$ | async as model">
@@ -70,7 +82,7 @@ import {
 					<div class="text">{{ model.text }}</div>
 					<div class="buttons">
 						<button
-							class="button unsubscribe-button"
+							class="button unsubscribe-button secondary"
 							*ngIf="!model.unsubscribing"
 							[fsTranslate]="'app.premium.unsubscribe-button'"
 							(click)="onUnsubscribe(model.planId)"
@@ -81,7 +93,7 @@ import {
 							[fsTranslate]="'app.premium.unsubscribe-modal.unsubscribe-ongoing-label'"
 						></button>
 						<button
-							class="button cancel-button"
+							class="button cancel-button primary"
 							[fsTranslate]="'app.premium.unsubscribe-modal.cancel-button'"
 							(click)="onCancelUnsubscribe()"
 						></button>
@@ -96,12 +108,12 @@ import {
 					<div class="text">{{ model.text }}</div>
 					<div class="buttons">
 						<button
-							class="button cancel-button"
+							class="button cancel-button secondary"
 							[fsTranslate]="'app.premium.presubscribe-modal.cancel-button'"
 							(click)="onCancelSubscribe()"
 						></button>
 						<button
-							class="button subscribe-button"
+							class="button subscribe-button primary"
 							[fsTranslate]="'app.premium.presubscribe-modal.subscribe-button'"
 							(click)="onSubscribe(model.planId)"
 						></button>
@@ -118,6 +130,10 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	showConfirmationPopUp$: Observable<UnsubscribeModel | null>;
 	showPreSubscribeModal$: Observable<PresubscribeModel | null>;
 	billingPeriodicity$: Observable<'monthly' | 'yearly'>;
+
+	yearlySubtext = this.i18n.translateString('app.premium.billing.yearly-subtext', {
+		value: 33,
+	});
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);
 	private showPreSubscribeModal$$ = new BehaviorSubject<PresubscribeModel | null>(null);
@@ -162,7 +178,8 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 					plans
 						// .filter((plan) => currentPlanSub?.id === 'legacy' || plan.id !== 'legacy')
 						.map((plan) => {
-							const packageForPlan = packages?.find((p) => p.name.toLowerCase() === plan.id);
+							const nameInPackage = billingPeriodicity === 'yearly' ? `${plan.id} annual` : plan.id;
+							const packageForPlan = packages?.find((p) => p.name.toLowerCase() === nameInPackage);
 							const rawPrice = packageForPlan?.total_price ?? plan.price;
 							const price =
 								rawPrice == null
@@ -196,6 +213,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	}
 
 	async onUnsubscribeRequest(planId: string) {
+		console.log('unsubscribe request', planId);
 		this.analytics.trackEvent('premium', { type: 'unsubscribe-request', planId: planId });
 		const model: UnsubscribeModel = {
 			planId: planId,
@@ -254,16 +272,17 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	changePeriodicity(periodicity: 'monthly' | 'yearly') {
 		this.billingPeriodicity$$.next(periodicity);
 	}
+
+	onCodeUpdated(code: string) {
+		console.debug('code updated', code);
+	}
+
+	redeem() {
+		console.debug('redeem');
+	}
 }
 
 const ALL_PLANS: readonly Partial<PremiumPlan>[] = [
-	// {
-	// 	id: 'friend',
-	// 	features: {
-	// 		supportFirestone: true,
-	// 		discordRole: 'friend',
-	// 	},
-	// },
 	{
 		id: 'premium',
 		features: {
@@ -273,16 +292,6 @@ const ALL_PLANS: readonly Partial<PremiumPlan>[] = [
 			premiumFeatures: true,
 		},
 	},
-	// {
-	// 	id: 'epic',
-	// 	features: {
-	// 		supportFirestone: true,
-	// 		discordRole: 'epic',
-	// 		removeAds: true,
-	// 		premiumFeatures: true,
-	// 		prioritySupport: true,
-	// 	},
-	// },
 	{
 		id: 'legacy',
 		features: {

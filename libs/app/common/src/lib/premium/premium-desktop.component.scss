@@ -62,14 +62,53 @@
 		}
 	}
 
+	.discount-banner {
+		margin-bottom: 2.5vh;
+		text-align: center;
+		color: var(--color-1);
+	}
+
 	.plans {
 		display: grid;
-		grid-template-columns: repeat(1, 1fr);
+		// grid-template-columns: repeat(1, 1fr);
+		display: flex;
+		// align-items: center;
+		justify-content: center;
 		gap: 15px;
 		width: 100%;
 
-		&.show-legacy {
-			grid-template-columns: repeat(2, 1fr);
+		// &.show-legacy {
+		// 	grid-template-columns: repeat(2, 1fr);
+		// }
+
+		.plan {
+			flex-basis: 50%;
+			max-width: 510px;
+		}
+	}
+
+	.redeem-code-container {
+		margin-top: 70px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 30px;
+
+		fs-text-input {
+			height: 100%;
+			width: 200px;
+
+			::ng-deep .text-input {
+				height: 100%;
+
+				label {
+					height: 100%;
+
+					input::placeholder {
+						opacity: 0.5;
+					}
+				}
+			}
 		}
 	}
 }
@@ -124,49 +163,27 @@
 		}
 	}
 }
+.button.primary {
+	border-radius: 1.5vh;
+	padding: 1.5vh;
+	border: 1px solid var(--default-title-color);
+	font-size: 1.1em;
 
-.confirmation-modal {
-	.unsubscribe-button {
-		color: #af83a4;
-
-		&:hover:not(.processing) {
-			color: inherit;
-		}
+	&:hover {
+		background-color: var(--default-title-color);
+		color: #272727;
 	}
+}
+.button.secondary {
+	color: #af83a4;
 
-	.cancel-button {
-		border-radius: 1.5vh;
-		padding: 1.5vh;
-		border: 1px solid var(--default-title-color);
-		font-size: 1.1em;
-		margin-top: auto;
-
-		&:hover {
-			background-color: var(--default-title-color);
-			color: #272727;
-		}
+	&:hover:not(.processing) {
+		color: inherit;
 	}
 }
 
+.confirmation-modal {
+}
+
 .pre-subscribe-modal {
-	.cancel-button {
-		color: #af83a4;
-
-		&:hover {
-			color: inherit;
-		}
-	}
-
-	.subscribe-button {
-		border-radius: 1.5vh;
-		padding: 1.5vh;
-		border: 1px solid var(--default-title-color);
-		font-size: 1.1em;
-		margin-top: auto;
-
-		&:hover {
-			background-color: var(--default-title-color);
-			color: #272727;
-		}
-	}
 }

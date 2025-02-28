@@ -18,6 +18,7 @@ import { PreferencesService } from './services/preferences.service';
 import { S3FileUploadService } from './services/s3-file-upload.service';
 import { OwLegacyPremiumService } from './services/subscription/ow-legacy-premium.service';
 import { SubscriptionService } from './services/subscription/subscription.service';
+import { PremiumDeeplinkService } from './services/subscription/tebex-deeplink.service';
 import { TebexService } from './services/subscription/tebex.service';
 
 const components = [AdvancedSettingDirective];
@@ -40,6 +41,7 @@ const components = [AdvancedSettingDirective];
 		SubscriptionService,
 		TebexService,
 		OwLegacyPremiumService,
+		PremiumDeeplinkService,
 		AppNavigationService,
 	],
 	declarations: components,

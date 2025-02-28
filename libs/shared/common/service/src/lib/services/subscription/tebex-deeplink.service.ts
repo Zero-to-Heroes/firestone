@@ -38,7 +38,6 @@ export class PremiumDeeplinkService {
 				return;
 			}
 
-			const tempSessionToken = fragments[0];
 			await this.subscriptions.isReady();
 			await this.subscriptions.fetchCurrentPlan();
 		});

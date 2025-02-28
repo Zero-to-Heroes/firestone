@@ -57,15 +57,22 @@ import { PremiumPlan } from './premium-desktop.component';
 				</span>
 			</div> -->
 			<button
+				class="button cant-subscribe-button"
+				*ngIf="cantSubscribe"
+				[fsTranslate]="cantSubscribeButtonKey"
+				[helpTooltip]="'app.premium.cant-subscribe-tooltip' | fsTranslate"
+				(click)="onSubscribe($event)"
+			></button>
+			<button
 				class="button subscribe-button"
-				*ngIf="!isReadonly && !isActive"
+				*ngIf="!isReadonly && !isActive && !cantSubscribe"
 				[fsTranslate]="subscribeButtonKey"
 				[helpTooltip]="helpTooltipSubscribe"
 				(click)="onSubscribe($event)"
 			></button>
 			<button
 				class="button unsubscribe-button"
-				*ngIf="isActive && isAutoRenew"
+				*ngIf="isActive && isAutoRenew && !cantSubscribe"
 				[fsTranslate]="'app.premium.unsubscribe-button'"
 				[helpTooltip]="helpTooltipUnsubscribe"
 				(click)="onUnsubscribe($event)"
@@ -84,7 +91,7 @@ export class PremiumPackageComponent {
 		this.isActive = value.activePlan?.id === value.id;
 		const expireAtDate = value.activePlan?.expireAt ? new Date(value.activePlan.expireAt) : null;
 		this.isAutoRenew = value.activePlan?.autoRenews ?? false;
-		this.cantSubscribe = value.activePlan != null;
+		this.cantSubscribe = value.activePlan != null && (!this.isActive || !this.isAutoRenew);
 		console.debug('setting plan', value, this.isActive, this.isAutoRenew);
 		this.name = this.i18n.translateString(`app.premium.plan.${value.id}`);
 		this.price = `$${value.price ?? '-'}`;
@@ -159,6 +166,7 @@ export class PremiumPackageComponent {
 	// discordCode: string;
 	activateDiscordText: string;
 
+	cantSubscribeButtonKey = 'app.premium.cant-subscribe-button';
 	subscribeButtonKey = 'app.premium.subscribe-button';
 	helpTooltipSubscribe: string | null;
 	helpTooltipUnsubscribe: string;

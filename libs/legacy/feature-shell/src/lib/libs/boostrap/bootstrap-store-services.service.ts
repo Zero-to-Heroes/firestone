@@ -47,6 +47,7 @@ import {
 	ExpertContributorsService,
 	OwLegacyPremiumService,
 	PreferencesService,
+	PremiumDeeplinkService,
 	SubscriptionService,
 	TebexService,
 } from '@firestone/shared/common/service';
@@ -83,6 +84,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_SettingsControllerService: SettingsControllerService,
 		private readonly init_AppNavigationService: AppNavigationService,
 		private readonly init_SubscriptionService: SubscriptionService,
+		private readonly init_PremiumDeeplinkService: PremiumDeeplinkService,
 		private readonly init_TebexService: TebexService,
 		private readonly init_OwLegacyPremiumService: OwLegacyPremiumService,
 		private readonly init_AdsService: AdService,
