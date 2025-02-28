@@ -47,7 +47,6 @@ const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): Extende
 		.filter((c) => allCards.getCard(c.cardId).races?.length)
 		.flatMap((c) => allCards.getCard(c.cardId).races!)
 		.map((r) => Race[r]);
-	console.debug('comp', comp);
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
 		minionIcon: comp.cards.filter((c) => c.status === 'CORE')[0]?.cardId,
