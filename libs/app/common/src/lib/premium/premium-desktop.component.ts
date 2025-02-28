@@ -35,21 +35,29 @@ import {
 			</div>
 			<!-- <div class="subtitle" [fsTranslate]="'app.premium.subtitle'"></div> -->
 			<div class="plans-container">
-				<div class="annual-toggle" *ngIf="billingPeriodicity$ | async as billing">
-					<div
-						class="element monthly"
-						[ngClass]="{ selected: billing === 'monthly' }"
-						(click)="changePeriodicity('monthly')"
-					>
-						<div class="text" [fsTranslate]="'app.premium.billing.monthly'"></div>
-					</div>
-					<div
-						class="element yearly"
-						[ngClass]="{ selected: billing === 'yearly' }"
-						(click)="changePeriodicity('yearly')"
-					>
-						<div class="text" [fsTranslate]="'app.premium.billing.yearly'"></div>
-						<div class="sub-text">{{ yearlySubtext }}</div>
+				<div class="top-banner">
+					<a
+						class="payment-history-link"
+						href="https://checkout.tebex.io/payment-history"
+						target="_blank"
+						[fsTranslate]="'app.premium.view-payment-history'"
+					></a>
+					<div class="annual-toggle" *ngIf="billingPeriodicity$ | async as billing">
+						<div
+							class="element monthly"
+							[ngClass]="{ selected: billing === 'monthly' }"
+							(click)="changePeriodicity('monthly')"
+						>
+							<div class="text" [fsTranslate]="'app.premium.billing.monthly'"></div>
+						</div>
+						<div
+							class="element yearly"
+							[ngClass]="{ selected: billing === 'yearly' }"
+							(click)="changePeriodicity('yearly')"
+						>
+							<div class="text" [fsTranslate]="'app.premium.billing.yearly'"></div>
+							<div class="sub-text">{{ yearlySubtext }}</div>
+						</div>
 					</div>
 				</div>
 				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">

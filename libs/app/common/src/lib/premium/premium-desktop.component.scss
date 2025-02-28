@@ -33,10 +33,26 @@
 		flex-direction: column;
 	}
 
-	.annual-toggle {
+	.top-banner {
 		display: flex;
 		align-self: flex-end;
+		justify-content: center;
+		align-items: center;
 		margin-bottom: 2.5vh;
+		gap: 10px;
+	}
+
+	.payment-history-link {
+		margin: 0;
+		color: var(--color-2);
+
+		&:hover {
+			color: var(--default-title-color);
+		}
+	}
+
+	.annual-toggle {
+		display: flex;
 		background: #3d3d3d;
 		border-radius: 8px;
 		padding: 5px;

@@ -30,7 +30,7 @@ import { PremiumPlan } from './premium-desktop.component';
 				<div class="price">{{ price }}</div>
 				<div class="periodicity">{{ periodicity }}</div>
 				<div class="auto-renew" *ngIf="isActive && isAutoRenew" [innerHTML]="autoRenewText"></div>
-				<div class="auto-renew" *ngIf="isActive && !isAutoRenew">{{ activeText }}</div>
+				<div class="auto-renew" *ngIf="isActive && !isAutoRenew" [innerHTML]="cancelledText"></div>
 				<div class="auto-renew" *ngIf="!isActive"></div>
 			</div>
 			<div class="features">
@@ -42,6 +42,7 @@ import { PremiumPlan } from './premium-desktop.component';
 				>
 					<div class="icon" [inlineSVG]="feature.iconPath"></div>
 					<div class="text">{{ feature.text }}</div>
+					<div class="link" *ngIf="feature.link">(<a [href]="feature.link" target="_blank">details</a>)</div>
 				</div>
 			</div>
 			<div class="plan-text" *ngIf="planTextKey" [fsTranslate]="planTextKey"></div>
@@ -118,6 +119,10 @@ export class PremiumPackageComponent {
 						value: featureValue,
 					})
 					.trim(),
+				link:
+					feature === 'premiumFeatures'
+						? 'https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features'
+						: undefined,
 			};
 		});
 
@@ -127,6 +132,16 @@ export class PremiumPackageComponent {
 						date: expireAtDate?.toLocaleDateString(this.i18n.formatCurrentLocale()!),
 				  })
 				: this.i18n.translateString('app.premium.check-status-online', {
+						link: `<a href="https://checkout.tebex.io/payment-history/recurring-payments" target="_blank">${this.i18n.translateString(
+							'app.premium.check-status-online-link',
+						)}</a>`,
+				  });
+		this.cancelledText =
+			this.id === 'legacy'
+				? this.i18n.translateString('app.premium.active-until', {
+						date: expireAtDate?.toLocaleDateString(this.i18n.formatCurrentLocale()!),
+				  })
+				: this.i18n.translateString('app.premium.check-status-online-inactive', {
 						link: `<a href="https://checkout.tebex.io/payment-history/recurring-payments" target="_blank">${this.i18n.translateString(
 							'app.premium.check-status-online-link',
 						)}</a>`,
@@ -158,10 +173,11 @@ export class PremiumPackageComponent {
 	id: string;
 	name: string;
 	autoRenewText: string;
+	cancelledText: string;
 	activeText: string;
 	price: string;
 	periodicity: string;
-	features: readonly { enabled: boolean; iconPath: string; text: string; comingSoon?: boolean }[];
+	features: readonly { enabled: boolean; iconPath: string; text: string; comingSoon?: boolean; link?: string }[];
 	planTextKey: string | undefined;
 	// discordCode: string;
 	activateDiscordText: string;

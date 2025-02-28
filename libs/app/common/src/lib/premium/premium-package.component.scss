@@ -125,6 +125,19 @@
 			overflow: hidden;
 		}
 
+		.link {
+			margin-left: 3px;
+
+			a {
+				color: var(--color-2);
+				margin: 0;
+
+				&:hover {
+					color: var(--default-title-color);
+				}
+			}
+		}
+
 		&:not(:last-child) {
 			border-bottom: 1px solid #373c45;
 		}
