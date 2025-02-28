@@ -10,18 +10,24 @@ export class BattlegroundsAnomaliesService extends AbstractFacadeService<Battleg
 	private prefs: PreferencesService;
 	private api: ApiRunner;
 
+	private ready = false;
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'BattlegroundsAnomaliesService', () => true);
+		super(windowManager, 'BattlegroundsAnomaliesService', () => this.ready);
 	}
 
 	protected override assignSubjects() {
 		// this.anomalies$$ = this.mainInstance.anomalies$$;
+		this.ready = this.mainInstance.ready;
 	}
 
 	protected async init() {
+		console.debug('[bgs-anomalies] init');
 		// this.anomalies$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.ready = true;
+		console.debug('[bgs-anomalies] ready');
 
 		await this.prefs.isReady();
 	}

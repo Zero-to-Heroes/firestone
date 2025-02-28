@@ -48,13 +48,17 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 	}
 
 	async ngAfterContentInit() {
+		console.debug('[bgs-anomalies-filter-dropdown] waiting for ready');
 		await waitForReady(this.nav, this.anomalyService, this.prefs);
+		console.debug('[bgs-anomalies-filter-dropdown] ready');
 
 		if (!BG_USE_ANOMALIES) {
 			return;
 		}
 
+		console.debug('[bgs-anomalies-filter-dropdown] loading all anomalies');
 		const allAnomalies: readonly string[] = await this.anomalyService.loadAllAnomalies();
+		console.debug('[bgs-anomalies-filter-dropdown] all anomalies', allAnomalies);
 		this.options = [
 			{
 				value: null,
