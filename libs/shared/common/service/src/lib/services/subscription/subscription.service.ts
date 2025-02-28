@@ -134,7 +134,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		}
 		this.shouldCheckForUpdates = true;
 		this.fetchCurrentPlan();
-		setTimeout(() => (this.shouldCheckForUpdates = false), 10 * 60 * 1000);
+		setTimeout(() => (this.shouldCheckForUpdates = false), 4 * 60 * 1000);
 	}
 }
 
@@ -154,5 +154,5 @@ export interface OwSub {
 	readonly state: number;
 }
 
-export type PremiumPlanId = 'legacy' | 'premium';
+export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual';
 export const premiumPlanIds = ['legacy', 'premium'] as PremiumPlanId[];

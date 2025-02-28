@@ -169,17 +169,17 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 			filter(([allPackages, billingPeriodicity, currentPlanSub]) => !!allPackages?.length),
 			this.mapData(([allPackages, billingPeriodicity, currentPlanSub]) => {
 				const plans = billingPeriodicity === 'monthly' ? ALL_PLANS : ALL_PLANS_YEARLY;
-				const packages =
-					billingPeriodicity === 'yearly'
-						? allPackages!.filter((p) => p.name.includes('annual'))
-						: allPackages!.filter((p) => !p.name.includes('annual'));
-				console.debug('building plans', plans, packages, billingPeriodicity, currentPlanSub);
+				// const packages =
+				// 	billingPeriodicity === 'yearly'
+				// 		? allPackages!.filter((p) => p.name.includes('annual'))
+				// 		: allPackages!.filter((p) => !p.name.includes('annual'));
+				console.debug('building plans', plans, allPackages, billingPeriodicity, currentPlanSub);
 				return (
 					plans
 						// .filter((plan) => currentPlanSub?.id === 'legacy' || plan.id !== 'legacy')
 						.map((plan) => {
-							const nameInPackage = billingPeriodicity === 'yearly' ? `${plan.id} annual` : plan.id;
-							const packageForPlan = packages?.find((p) => p.name.toLowerCase() === nameInPackage);
+							// const nameInPackage = billingPeriodicity === 'yearly' ? `${plan.id} annual` : plan.id;
+							const packageForPlan = allPackages?.find((p) => p.name.toLowerCase() === plan.id);
 							const rawPrice = packageForPlan?.total_price ?? plan.price;
 							const price =
 								rawPrice == null
@@ -314,7 +314,7 @@ const ALL_PLANS_YEARLY: readonly Partial<PremiumPlan>[] = [
 	// 	},
 	// },
 	{
-		id: 'premium',
+		id: 'premium-annual',
 		features: {
 			supportFirestone: true,
 			discordRole: 'premium',

@@ -86,7 +86,7 @@ export class PremiumPackageComponent {
 	@Output() unsubscribe = new EventEmitter<string>();
 
 	@Input() set plan(value: PremiumPlan) {
-		this.id = value.id.replaceAll('+', '-plus');
+		this.id = value.id;
 		this.isReadonly = value.isReadonly ?? false;
 		this.isActive = value.activePlan?.id === value.id;
 		const expireAtDate = value.activePlan?.expireAt ? new Date(value.activePlan.expireAt) : null;
