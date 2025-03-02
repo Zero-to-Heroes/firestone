@@ -9,10 +9,16 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
-import { ALL_CLASSES } from '@firestone-hs/reference-data';
+import { decode } from '@firestone-hs/deckstrings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ConstructedNavigationService } from './constructed-navigation.service';
@@ -38,6 +44,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	private api: ApiRunner;
 	private prefs: PreferencesService;
 	private navigation: ConstructedNavigationService;
+	private cards: CardsFacadeService;
 
 	private cache: { [key: string]: DeckStat | null } = {};
 
@@ -64,6 +71,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.navigation = AppInjector.get(ConstructedNavigationService);
+		this.cards = AppInjector.get(CardsFacadeService);
 
 		await this.navigation.isReady();
 		await this.prefs.isReady();
@@ -240,49 +248,6 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		return this.mainInstance.loadNewDeckDetailsInternal2(deckstring, format, time, rank);
 	}
 
-	// private async loadNewDeckDetailsInternal(
-	// 	deckstring: string | undefined | null,
-	// 	format: GameFormat,
-	// 	time: TimePeriod,
-	// 	rank: RankBracket,
-	// ) {
-	// 	if (!deckstring) {
-	// 		return null;
-	// 	}
-
-	// 	const cacheKey = `${format}_${time}_${rank}_${deckstring}`;
-	// 	console.debug('[constructed-meta-decks] checking cache', cacheKey, this.cache[cacheKey]);
-	// 	if (this.cache[cacheKey]) {
-	// 		console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.cache[cacheKey]);
-	// 		return this.cache[cacheKey];
-	// 	}
-
-	// 	// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
-	// 	time = (time as string) === 'all-time' ? 'past-20' : time;
-	// 	const deckId = encodeURIComponent(deckstring.replace('/', '-'));
-	// 	const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
-	// 		.replace('{format}', format)
-	// 		.replace('{rank}', rank)
-	// 		.replace('{timePeriod}', time)
-	// 		.replace('{deckId}', deckId);
-	// 	console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
-	// 	// Can happen if there is no data for the deck
-	// 	const resultStr = await this.api.get(url, false);
-	// 	if (!resultStr?.length) {
-	// 		this.cache[cacheKey] = null;
-	// 		console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
-	// 		return null;
-	// 	}
-
-	// 	const deck: DeckStat = JSON.parse(resultStr);
-	// 	console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
-	// 	this.cache[cacheKey] = deck;
-	// 	return deck;
-	// }
-
-	private globalDeckIdCache = {};
-	private globalDeckIdLastUpdate = null;
-	private DECK_ID_VALIDITY = 1000 * 60 * 60 * 3; // 3 hours
 	private async loadNewDeckDetailsInternal2(
 		deckstring: string | undefined | null,
 		format: GameFormat,
@@ -300,60 +265,27 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			return this.cache[cacheKey];
 		}
 
-		// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
-		time = (time as string) === 'all-time' ? 'past-20' : time;
-		const deckId = deckstring.replaceAll('/', '-');
-
-		if (
-			!this.globalDeckIdCache ||
-			!Object.keys(this.globalDeckIdCache).length ||
-			!this.globalDeckIdLastUpdate ||
-			Date.now() - this.globalDeckIdLastUpdate > this.DECK_ID_VALIDITY
-		) {
-			const fetchPromises = ALL_CLASSES.map(async (playerClass) => {
-				const filename = `api/constructed/stats/decks/${format}/${rank}/${time}/all-decks-ids-${playerClass}.gz.json`;
-				const url = `https://static.zerotoheroes.com/${filename}`;
-				const allDeckIds = await this.api.callGetApi<readonly string[]>(url);
-				allDeckIds?.forEach((deckId) => {
-					this.globalDeckIdCache[deckId] = playerClass;
-				});
-			});
-			await Promise.all(fetchPromises);
-		}
-
-		const playerClass = this.globalDeckIdCache[deckId];
-		if (!playerClass) {
-			console.debug('globalDeckIdCache', this.globalDeckIdCache);
-			console.error('missing deck id', deckId);
+		const decoded = decode(deckstring);
+		const hero = decoded?.heroes?.[0];
+		const heroClass = this.cards.getCard(hero)?.classes?.[0];
+		if (!heroClass) {
+			console.warn('could not find hero class', hero, decoded, deckstring);
 			return null;
 		}
 
-		const allDecks = await this.api.callGetApi<readonly DeckStat[]>(
+		const playerClass = heroClass.toLowerCase();
+		time = (time as string) === 'all-time' ? 'past-20' : time;
+		const deckId = deckstring.replaceAll('/', '-');
+		const allDecksForClass = await this.api.callGetApi<readonly DeckStat[]>(
 			`https://static.zerotoheroes.com/api/constructed/stats/decks/${format}/${rank}/${time}/all-decks-${playerClass}.gz.json`,
 		);
-		const deck = allDecks?.find((deck: DeckStat) => deck.decklist.replaceAll('/', '-') === deckId);
+		const deck = allDecksForClass?.find((deck: DeckStat) => deck.decklist.replaceAll('/', '-') === deckId);
 		if (!deck) {
 			this.cache[cacheKey] = null;
 			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank);
 			return null;
 		}
 
-		// const deckId = encodeURIComponent(deckstring.replace('/', '-'));
-		// const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
-		// 	.replace('{format}', format)
-		// 	.replace('{rank}', rank)
-		// 	.replace('{timePeriod}', time)
-		// 	.replace('{deckId}', deckId);
-		// console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
-		// // Can happen if there is no data for the deck
-		// const resultStr = await this.api.get(url, false);
-		// if (!resultStr?.length) {
-		// 	this.cache[cacheKey] = null;
-		// 	console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
-		// 	return null;
-		// }
-
-		// const deck: DeckStat = JSON.parse(resultStr);
 		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
 		this.cache[cacheKey] = deck;
 		return deck;
