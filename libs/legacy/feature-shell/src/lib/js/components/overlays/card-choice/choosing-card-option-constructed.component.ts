@@ -129,10 +129,16 @@ export class ChoosingCardOptionConstructedComponent
 		const format$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => 'standard' /*formatFormat(gameState?.metadata?.formatType)*/ as GameFormat),
 		);
-		this.cardStat$ = combineLatest([this.cardId$$, this.opponentClass$$, deckstring$, format$]).pipe(
+		this.cardStat$ = combineLatest([
+			this.showPremiumBanner$,
+			this.cardId$$,
+			this.opponentClass$$,
+			deckstring$,
+			format$,
+		]).pipe(
 			tap((info) => console.debug('[constructed-card-option] getting stats', info)),
-			filter(([cardId]) => !!cardId),
-			switchMap(([cardId, opponentClass, deckstring, format]) =>
+			filter(([hidden, cardId]) => !hidden && !!cardId),
+			switchMap(([hidden, cardId, opponentClass, deckstring, format]) =>
 				from(this.statsService.getStatsFor(deckstring, cardId, opponentClass, format)),
 			),
 			this.mapData((stat) => stat ?? null),
