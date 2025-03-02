@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "14.12.3",
+	"version": "14.12.4",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -11,7 +11,7 @@
 		"dev-coliseum": "nx build coliseum --source-map=true --watch",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
-		"build": "npm i && rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
+		"build": "nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
 		"build-local": "npm i && rm -rf node_modules/.cache/nx && nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
 		"upload-web": "npx ts-node ./build-tools/upload-website.ts",
 		"upload-coliseum": "npx ts-node ./build-tools/upload-coliseum.ts",
