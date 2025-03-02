@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import {
 	ArchetypeStat,
@@ -8,6 +9,7 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
+import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
@@ -17,8 +19,8 @@ import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
 // const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rdwyw.lambda-url.us-west-2.on.aws';
-const CONSTRUCTED_META_DECK_DETAILS_URL =
-	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}';
+// const CONSTRUCTED_META_DECK_DETAILS_URL =
+// 	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}';
 const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/archetypes';
 
 @Injectable()
@@ -235,10 +237,53 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat | null> {
-		return this.mainInstance.loadNewDeckDetailsInternal(deckstring, format, time, rank);
+		return this.mainInstance.loadNewDeckDetailsInternal2(deckstring, format, time, rank);
 	}
 
-	private async loadNewDeckDetailsInternal(
+	// private async loadNewDeckDetailsInternal(
+	// 	deckstring: string | undefined | null,
+	// 	format: GameFormat,
+	// 	time: TimePeriod,
+	// 	rank: RankBracket,
+	// ) {
+	// 	if (!deckstring) {
+	// 		return null;
+	// 	}
+
+	// 	const cacheKey = `${format}_${time}_${rank}_${deckstring}`;
+	// 	console.debug('[constructed-meta-decks] checking cache', cacheKey, this.cache[cacheKey]);
+	// 	if (this.cache[cacheKey]) {
+	// 		console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.cache[cacheKey]);
+	// 		return this.cache[cacheKey];
+	// 	}
+
+	// 	// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
+	// 	time = (time as string) === 'all-time' ? 'past-20' : time;
+	// 	const deckId = encodeURIComponent(deckstring.replace('/', '-'));
+	// 	const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
+	// 		.replace('{format}', format)
+	// 		.replace('{rank}', rank)
+	// 		.replace('{timePeriod}', time)
+	// 		.replace('{deckId}', deckId);
+	// 	console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
+	// 	// Can happen if there is no data for the deck
+	// 	const resultStr = await this.api.get(url, false);
+	// 	if (!resultStr?.length) {
+	// 		this.cache[cacheKey] = null;
+	// 		console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
+	// 		return null;
+	// 	}
+
+	// 	const deck: DeckStat = JSON.parse(resultStr);
+	// 	console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
+	// 	this.cache[cacheKey] = deck;
+	// 	return deck;
+	// }
+
+	private globalDeckIdCache = {};
+	private globalDeckIdLastUpdate = null;
+	private DECK_ID_VALIDITY = 1000 * 60 * 60 * 3; // 3 hours
+	private async loadNewDeckDetailsInternal2(
 		deckstring: string | undefined | null,
 		format: GameFormat,
 		time: TimePeriod,
@@ -257,22 +302,58 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 
 		// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
 		time = (time as string) === 'all-time' ? 'past-20' : time;
-		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
-		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
-			.replace('{format}', format)
-			.replace('{rank}', rank)
-			.replace('{timePeriod}', time)
-			.replace('{deckId}', deckId);
-		console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
-		// Can happen if there is no data for the deck
-		const resultStr = await this.api.get(url, false);
-		if (!resultStr?.length) {
-			this.cache[cacheKey] = null;
-			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
+		const deckId = deckstring.replaceAll('/', '-');
+
+		if (
+			!this.globalDeckIdCache ||
+			!Object.keys(this.globalDeckIdCache).length ||
+			!this.globalDeckIdLastUpdate ||
+			Date.now() - this.globalDeckIdLastUpdate > this.DECK_ID_VALIDITY
+		) {
+			const fetchPromises = ALL_CLASSES.map(async (playerClass) => {
+				const filename = `api/constructed/stats/decks/${format}/${rank}/${time}/all-decks-ids-${playerClass}.gz.json`;
+				const url = `https://static.zerotoheroes.com/${filename}`;
+				const allDeckIds = await this.api.callGetApi<readonly string[]>(url);
+				allDeckIds?.forEach((deckId) => {
+					this.globalDeckIdCache[deckId] = playerClass;
+				});
+			});
+			await Promise.all(fetchPromises);
+		}
+
+		const playerClass = this.globalDeckIdCache[deckId];
+		if (!playerClass) {
+			console.debug('globalDeckIdCache', this.globalDeckIdCache);
+			console.error('missing deck id', deckId);
 			return null;
 		}
 
-		const deck: DeckStat = JSON.parse(resultStr);
+		const allDecks = await this.api.callGetApi<readonly DeckStat[]>(
+			`https://static.zerotoheroes.com/api/constructed/stats/decks/${format}/${rank}/${time}/all-decks-${playerClass}.gz.json`,
+		);
+		const deck = allDecks?.find((deck: DeckStat) => deck.decklist.replaceAll('/', '-') === deckId);
+		if (!deck) {
+			this.cache[cacheKey] = null;
+			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank);
+			return null;
+		}
+
+		// const deckId = encodeURIComponent(deckstring.replace('/', '-'));
+		// const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
+		// 	.replace('{format}', format)
+		// 	.replace('{rank}', rank)
+		// 	.replace('{timePeriod}', time)
+		// 	.replace('{deckId}', deckId);
+		// console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
+		// // Can happen if there is no data for the deck
+		// const resultStr = await this.api.get(url, false);
+		// if (!resultStr?.length) {
+		// 	this.cache[cacheKey] = null;
+		// 	console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
+		// 	return null;
+		// }
+
+		// const deck: DeckStat = JSON.parse(resultStr);
 		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
 		this.cache[cacheKey] = deck;
 		return deck;

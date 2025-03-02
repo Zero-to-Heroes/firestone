@@ -9,7 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 
-export const CONSTRUCTED_DISCOVERS_DAILY_FREE_USES = 0;
+export const CONSTRUCTED_DISCOVERS_DAILY_FREE_USES = 2;
 
 @Injectable()
 export class ConstructedDiscoversGuardianService extends AbstractFacadeService<ConstructedDiscoversGuardianService> {
