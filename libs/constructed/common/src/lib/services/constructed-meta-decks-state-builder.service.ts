@@ -9,7 +9,6 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
-import { decode } from '@firestone-hs/deckstrings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
 import {
@@ -25,8 +24,8 @@ import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
 // const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rdwyw.lambda-url.us-west-2.on.aws';
-// const CONSTRUCTED_META_DECK_DETAILS_URL =
-// 	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}';
+const CONSTRUCTED_META_DECK_DETAILS_URL =
+	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}';
 const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/archetypes';
 
 @Injectable()
@@ -245,10 +244,10 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat | null> {
-		return this.mainInstance.loadNewDeckDetailsInternal2(deckstring, format, time, rank);
+		return this.mainInstance.loadNewDeckDetailsInternal(deckstring, format, time, rank);
 	}
 
-	private async loadNewDeckDetailsInternal2(
+	private async loadNewDeckDetailsInternal(
 		deckstring: string | undefined | null,
 		format: GameFormat,
 		time: TimePeriod,
@@ -265,31 +264,71 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			return this.cache[cacheKey];
 		}
 
-		const decoded = decode(deckstring);
-		const hero = decoded?.heroes?.[0];
-		const heroClass = this.cards.getCard(hero)?.classes?.[0];
-		if (!heroClass) {
-			console.warn('could not find hero class', hero, decoded, deckstring);
-			return null;
-		}
-
-		const playerClass = heroClass.toLowerCase();
+		// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
 		time = (time as string) === 'all-time' ? 'past-20' : time;
-		const deckId = deckstring.replaceAll('/', '-');
-		const allDecksForClass = await this.api.callGetApi<readonly DeckStat[]>(
-			`https://static.zerotoheroes.com/api/constructed/stats/decks/${format}/${rank}/${time}/all-decks-${playerClass}.gz.json`,
-		);
-		const deck = allDecksForClass?.find((deck: DeckStat) => deck.decklist.replaceAll('/', '-') === deckId);
-		if (!deck) {
+		const deckId = encodeURIComponent(deckstring.replace('/', '-'));
+		const url = `${CONSTRUCTED_META_DECK_DETAILS_URL}`
+			.replace('{format}', format)
+			.replace('{rank}', rank)
+			.replace('{timePeriod}', time)
+			.replace('{deckId}', deckId);
+		console.debug('[constructed-meta-decks] will load stat for deck', url, format, time, rank, deckstring);
+		// Can happen if there is no data for the deck
+		const resultStr = await this.api.get(url, false);
+		if (!resultStr?.length) {
 			this.cache[cacheKey] = null;
-			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank);
+			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
 			return null;
 		}
 
+		const deck: DeckStat = JSON.parse(resultStr);
 		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
 		this.cache[cacheKey] = deck;
 		return deck;
 	}
+
+	// private async loadNewDeckDetailsInternal2(
+	// 	deckstring: string | undefined | null,
+	// 	format: GameFormat,
+	// 	time: TimePeriod,
+	// 	rank: RankBracket,
+	// ) {
+	// 	if (!deckstring) {
+	// 		return null;
+	// 	}
+
+	// 	const cacheKey = `${format}_${time}_${rank}_${deckstring}`;
+	// 	console.debug('[constructed-meta-decks] checking cache', cacheKey, this.cache[cacheKey]);
+	// 	if (this.cache[cacheKey]) {
+	// 		console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.cache[cacheKey]);
+	// 		return this.cache[cacheKey];
+	// 	}
+
+	// 	const decoded = decode(deckstring);
+	// 	const hero = decoded?.heroes?.[0];
+	// 	const heroClass = this.cards.getCard(hero)?.classes?.[0];
+	// 	if (!heroClass) {
+	// 		console.warn('could not find hero class', hero, decoded, deckstring);
+	// 		return null;
+	// 	}
+
+	// 	const playerClass = heroClass.toLowerCase();
+	// 	time = (time as string) === 'all-time' ? 'past-20' : time;
+	// 	const deckId = deckstring.replaceAll('/', '-');
+	// 	const allDecksForClass = await this.api.callGetApi<readonly DeckStat[]>(
+	// 		`https://static.zerotoheroes.com/api/constructed/stats/decks/${format}/${rank}/${time}/all-decks-${playerClass}.gz.json`,
+	// 	);
+	// 	const deck = allDecksForClass?.find((deck: DeckStat) => deck.decklist.replaceAll('/', '-') === deckId);
+	// 	if (!deck) {
+	// 		this.cache[cacheKey] = null;
+	// 		console.log('[constructed-meta-decks] could not load meta deck', format, time, rank);
+	// 		return null;
+	// 	}
+
+	// 	console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
+	// 	this.cache[cacheKey] = deck;
+	// 	return deck;
+	// }
 
 	public async loadNewArchetypes(
 		format: GameFormat,

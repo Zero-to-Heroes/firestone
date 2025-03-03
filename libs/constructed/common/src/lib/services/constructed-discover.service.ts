@@ -45,15 +45,14 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 		opponentClass: string,
 		formatFilter: GameFormat,
 	): Promise<ConstructedCardStat | null> {
-		const deckStat = await this.constructedMetaStats.loadNewDeckDetails(
-			deckstring,
-			formatFilter,
-			'last-patch',
-			'competitive',
-		);
-		console.debug('[constructed-discover] deckStat', cardId, deckStat, deckstring, formatFilter);
-		const archetypeId =
-			deckStat?.archetypeId ?? (await this.archetypeCategorizationService.getArchetypeForDeck(deckstring));
+		// const deckStat = await this.constructedMetaStats.loadNewDeckDetails(
+		// 	deckstring,
+		// 	formatFilter,
+		// 	'last-patch',
+		// 	'competitive',
+		// );
+		// console.debug('[constructed-discover] deckStat', cardId, deckStat, deckstring, formatFilter);
+		const archetypeId = await this.archetypeCategorizationService.getArchetypeForDeck(deckstring);
 		console.debug('[constructed-discover] archetypeId', cardId, archetypeId);
 		if (!archetypeId) {
 			return null;
@@ -66,39 +65,15 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 			'competitive',
 		);
 		console.debug('[constructed-discover] archetypeStat', cardId, archetypeStat);
-		if (!archetypeStat && !deckStat) {
+		if (!archetypeStat) {
 			return null;
 		}
 
-		let drawnData = deckStat?.matchupInfo
-			.find((m) => m.opponentClass === opponentClass)
-			?.cardsData.find((c) => c.cardId === cardId);
-		console.debug('[constructed-discover] drawnData', cardId, drawnData);
-		if (drawnData?.drawn == null || drawnData.drawn < 50) {
-			drawnData = deckStat?.cardsData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] drawnData fallback 1', cardId, drawnData);
-		}
-		if (drawnData?.drawn == null || drawnData.drawn < 50) {
-			drawnData = archetypeStat?.cardsData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] drawnData fallback 2', cardId, drawnData);
-		}
-
-		let discoverData = deckStat?.matchupInfo
-			.find((m) => m.opponentClass === opponentClass)
-			?.discoverData.find((c) => c.cardId === cardId);
-		console.debug('[constructed-discover] discoverData', cardId, discoverData);
-		if (discoverData?.discovered == null || discoverData.discovered < 50) {
-			discoverData = deckStat?.discoverData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] discoverData fallback 1', cardId, discoverData);
-		}
-		if (discoverData?.discovered == null || discoverData.discovered < 50) {
-			discoverData = archetypeStat?.discoverData.find((c) => c.cardId === cardId);
-			console.debug('[constructed-discover] discoverData fallback 2', cardId, discoverData);
-		}
-
-		const deckWinrate = deckStat?.winrate ?? archetypeStat?.winrate;
+		const drawnData = archetypeStat?.cardsData.find((c) => c.cardId === cardId);
+		const discoverData = archetypeStat?.discoverData.find((c) => c.cardId === cardId);
+		const deckWinrate = archetypeStat?.winrate;
 		if (deckWinrate == null) {
-			console.warn('[constructed-discover] no deck winrate', cardId, deckStat, archetypeStat);
+			console.warn('[constructed-discover] no deck winrate', cardId, archetypeStat);
 			return null;
 		}
 		const drawWinrate = !drawnData?.drawn ? null : drawnData.drawnThenWin / drawnData.drawn;
