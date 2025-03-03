@@ -82,6 +82,29 @@
 		margin-bottom: 2.5vh;
 		text-align: center;
 		color: var(--color-1);
+		max-width: 600px;
+		align-self: center;
+
+		::ng-deep .code {
+			display: inline-flex;
+			align-items: flex-end;
+			justify-content: center;
+			color: var(--default-title-color);
+			position: relative;
+			top: 2px;
+
+			.copy-icon {
+				height: 15px;
+				width: 15px;
+				--icon-color: var(--default-title-color);
+				--icon-color-secondary: var(--color-7);
+			}
+
+			&:hover {
+				--icon-color-secondary: var(--default-title-color);
+				text-decoration: underline;
+			}
+		}
 	}
 
 	.plans {

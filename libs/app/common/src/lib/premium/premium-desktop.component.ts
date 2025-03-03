@@ -13,6 +13,7 @@ import {
 	AnalyticsService,
 	IAdsService,
 	ILocalizationService,
+	OverwolfService,
 } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -61,7 +62,14 @@ import {
 					</div>
 				</div>
 				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
-					Limited time offer: 33% off when you subscribe yearly!
+					{{ discountBannerText }}
+					<pre
+						class="code"
+						[helpTooltip]="'app.premium.billing.click-to-copy-code' | fsTranslate"
+						(click)="copyCode()"
+					>
+						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
+					</pre>
 				</div>
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
@@ -139,8 +147,11 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	showPreSubscribeModal$: Observable<PresubscribeModel | null>;
 	billingPeriodicity$: Observable<'monthly' | 'yearly'>;
 
-	yearlySubtext = this.i18n.translateString('app.premium.billing.yearly-subtext', {
-		value: 33,
+	yearlySubtext: string;
+	couponCode = '83dafbb3-fbf6-4544-99c7-83667378a406';
+	discountBannerText = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
+		endDate: new Date('2025-04-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
+		reduction: '20%',
 	});
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);
@@ -155,6 +166,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly i18n: ILocalizationService,
 		private readonly analytics: AnalyticsService,
+		private readonly ow: OverwolfService,
 	) {
 		super(cdr);
 	}
@@ -168,6 +180,34 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		this.showConfirmationPopUp$ = this.showConfirmationPopUp$$.asObservable();
 		this.showPreSubscribeModal$ = this.showPreSubscribeModal$$.asObservable();
 		this.billingPeriodicity$ = this.billingPeriodicity$$.asObservable();
+		this.tebex.packages$$
+			.pipe(
+				filter((packages) => !!packages?.length),
+				this.mapData((info) => info),
+			)
+			.subscribe((packages) => {
+				const refPlan = 'premium';
+				const monthlyPackage = packages!.find((p) => p.name === refPlan);
+				const yearlyPackage = packages!.find((p) => p.name === `${refPlan}-annual`);
+				const monthlyCost = monthlyPackage?.total_price;
+				if (!monthlyCost) {
+					console.error('Could not find monthly cost', packages);
+					return;
+				}
+				const monthlyTotalCost = monthlyCost * 12;
+				const yearlyTotalCost = yearlyPackage?.total_price;
+				if (!yearlyTotalCost) {
+					console.error('Could not find yearly cost', packages);
+					return;
+				}
+				const reduction = ((monthlyTotalCost - yearlyTotalCost) / monthlyTotalCost) * 100;
+				this.yearlySubtext = this.i18n.translateString('app.premium.billing.yearly-subtext', {
+					value: Math.floor(reduction),
+				});
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 		this.plans$ = combineLatest([
 			this.tebex.packages$$,
 			this.billingPeriodicity$$,
@@ -285,8 +325,13 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		console.debug('code updated', code);
 	}
 
-	redeem() {
-		console.debug('redeem');
+	copyCode() {
+		if (!this.ow?.isOwEnabled()) {
+			console.log('no OW service present, not copying to clipboard');
+			return;
+		}
+		console.debug('copying', this.couponCode);
+		this.ow.placeOnClipboard(this.couponCode);
 	}
 }
 
