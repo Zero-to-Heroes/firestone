@@ -23,6 +23,20 @@
 		width: 100%;
 	}
 
+	.title-bar {
+		position: relative;
+		left: 10px;
+
+		.winrate ::ng-deep {
+			.recap.text {
+				width: auto;
+				flex-grow: 1;
+				flex-shrink: 1;
+				min-width: 0;
+			}
+		}
+	}
+
 	.decktracker {
 		height: fit-content;
 	}

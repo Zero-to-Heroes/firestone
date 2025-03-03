@@ -288,7 +288,7 @@ export class DeckTrackerOverlayRootComponent
 						desktopDeckHiddenDeckCodes,
 						desktopDeckShowHiddenDecks,
 					},
-				]) => (showDeckWinrate || showDeckWinrate) && !!gameStats?.length && !!decks?.length,
+				]) => (showDeckWinrate || showMatchupWinrate) && !!gameStats?.length && !!decks?.length,
 			),
 			this.mapData(
 				([
