@@ -14,7 +14,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest, interval } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { sumOnArray } from '../../../services/utils';
 
 @Component({
@@ -142,14 +142,13 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 			this.mapData((prefs) => prefs.showTurnTimerMatchLength),
 		);
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => prefs.turnTimerWidgetScale),
-				filter((pref) => !!pref),
-				this.mapData((pref) => pref),
-			)
-			.subscribe((scale) => {
-				const newScale = scale / 100;
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.turnTimerWidgetScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);

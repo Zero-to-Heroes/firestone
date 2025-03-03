@@ -424,20 +424,19 @@ export class DeckTrackerOverlayRootComponent
 			this.showTooltipsFromPrefs = value;
 			this.cdr?.detectChanges();
 		});
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => this.scaleExtractor(prefs)),
-				filter((pref) => !!pref),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((scale) => {
-				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
+
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => this.scaleExtractor(prefs) ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				this.el.nativeElement.style.setProperty('--decktracker-scale', newScale);
 				this.el.nativeElement.style.setProperty(
 					'--decktracker-max-height',
 					this.player === 'player' ? '90vh' : '70vh',
 				);
-				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);

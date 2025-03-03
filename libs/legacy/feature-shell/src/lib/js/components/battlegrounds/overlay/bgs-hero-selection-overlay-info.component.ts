@@ -14,7 +14,7 @@ import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/d
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
 import { BgsHeroSelectionTooltipComponent } from '../hero-selection/bgs-hero-selection-tooltip.component';
@@ -176,9 +176,13 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.showAchievementsOverlay$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements),
 		);
-		this.prefs.preferences$$
-			.pipe(this.mapData((prefs) => prefs.bgsHeroSelectionOverlayScale))
-			.subscribe(async (scale) => {
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsHeroSelectionOverlayScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(async ([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				let element = this.el.nativeElement.querySelector('.scalable');
 				let retriesLeft = 10;
 				while (!element && retriesLeft > 0) {
@@ -189,7 +193,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 				if (!element) {
 					return;
 				}
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 			});
 
 		if (!(this.cdr as ViewRef).destroyed) {

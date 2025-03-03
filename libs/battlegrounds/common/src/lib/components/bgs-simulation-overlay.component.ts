@@ -11,7 +11,7 @@ import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 
 @Component({
@@ -65,13 +65,19 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		this.showSimulationSample$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs?.bgsEnableSimulationSampleInOverlay),
 		);
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs?.bgsSimulatorScale)).subscribe((scale) => {
-			// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (!!element) {
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			}
-		});
+
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsSimulatorScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (!!element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				}
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

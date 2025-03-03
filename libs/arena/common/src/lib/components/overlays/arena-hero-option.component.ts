@@ -12,7 +12,7 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
-import { Observable, tap } from 'rxjs';
+import { combineLatest, Observable, takeUntil, tap } from 'rxjs';
 import { ArenaHeroOption } from './model';
 
 @Component({
@@ -66,14 +66,19 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 			this.mapData((info) => info),
 			tap((info) => console.debug('[arena-hero-option] showWidget', info)),
 		);
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale)).subscribe((value) => {
-			const newScale = value / 100;
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (!!element) {
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
-			}
-		});
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(async ([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (!!element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+					this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
+				}
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

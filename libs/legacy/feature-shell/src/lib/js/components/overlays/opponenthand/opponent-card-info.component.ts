@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
 import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DebugService } from '../../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -48,15 +49,13 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponen
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$
-			.pipe(
-				debounceTime(100),
-				this.mapData((prefs) => prefs.decktrackerOpponentHandScale),
-				filter((scale) => !!scale),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((scale) => {
-				const newScale = scale / 100;
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerOpponentHandScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);

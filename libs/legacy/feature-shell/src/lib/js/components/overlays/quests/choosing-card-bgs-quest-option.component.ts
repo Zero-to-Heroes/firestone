@@ -13,7 +13,7 @@ import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'choosing-card-bgs-quest-option',
@@ -246,15 +246,13 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => prefs.bgsQuestsOverlayScale),
-				filter((pref) => !!pref),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((scale) => {
-				const newScale = scale / 100;
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsQuestsOverlayScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				const elements = this.el.nativeElement.querySelectorAll('.scalable');
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});

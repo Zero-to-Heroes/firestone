@@ -11,6 +11,7 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
+import { combineLatest, takeUntil } from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
 import { ArenaCardOption } from './model';
 
@@ -92,15 +93,17 @@ export class ArenaCardOptionViewComponent extends AbstractSubscriptionComponent 
 	}
 
 	async ngAfterContentInit() {
-		this.prefs.preferences$$
-			.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale))
-			.subscribe(async (value) => {
-				const newScale = value / 100;
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(async ([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				const element = await this.getScalable();
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
-				// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

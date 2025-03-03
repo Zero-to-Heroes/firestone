@@ -234,20 +234,6 @@ export class ConstructedMulliganDeckComponent
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		// this.prefs.preferences$$
-		// 	.pipe(
-		// 		this.mapData((prefs) => prefs.decktrackerMulliganScale),
-		// 		filter((pref) => !!pref),
-		// 		distinctUntilChanged(),
-		// 		takeUntil(this.destroyed$),
-		// 	)
-		// 	.subscribe(async (scale) => {
-		// 		const newScale = scale / 100;
-		// 		const elements = await this.getScalableElements();
-		// 		console.debug('[mulligan] setting scale 2', newScale, elements);
-		// 		elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-		// 	});
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

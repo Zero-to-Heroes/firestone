@@ -68,15 +68,17 @@ export class GenericCountersV2Component extends AbstractSubscriptionComponent im
 			this.side$$,
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
+					globalScale: prefs.globalWidgetScale ?? 100,
 					scalePlayer: prefs.countersScale,
 					scaleOpponent: prefs.countersScaleOpponent,
 				})),
 			),
-		]).subscribe(([side, { scalePlayer, scaleOpponent }]) => {
+		]).subscribe(([side, { globalScale, scalePlayer, scaleOpponent }]) => {
 			const scale = side === 'player' ? scalePlayer : scaleOpponent;
+			const newScale = (globalScale / 100) * (scale / 100);
 			const element = this.el.nativeElement.querySelector('.scalable');
 			if (element) {
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 			}
 		});
 

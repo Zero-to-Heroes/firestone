@@ -56,6 +56,8 @@ export class Preferences implements IPreferences {
 	readonly modsEnabled: boolean;
 	readonly disableLocalCache: boolean;
 
+	readonly globalWidgetScale: number | null = 100;
+
 	readonly showLottery: boolean | null = null;
 	readonly lotteryOverlay: boolean | null = null;
 	readonly lotteryCurrentModule: LotteryTabType = 'lottery';
@@ -215,8 +217,6 @@ export class Preferences implements IPreferences {
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly arenaMulliganScale: number = 100;
 
 	readonly hsShowQuestsWidget: boolean = true;
 	readonly hsShowQuestsWidgetOnHub: boolean = true;

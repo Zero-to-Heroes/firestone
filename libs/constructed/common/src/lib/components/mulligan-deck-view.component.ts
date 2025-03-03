@@ -24,7 +24,7 @@ import {
 	ILocalizationService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, takeUntil } from 'rxjs';
 import { MulliganChartDataCard, MulliganDeckData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
@@ -198,16 +198,14 @@ export class MulliganDeckViewComponent
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => prefs.decktrackerMulliganScale),
-				filter((pref) => !!pref),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async (scale) => {
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(async ([globalScale, scale]) => {
 				if (this.allowResize) {
-					const newScale = scale / 100;
+					const newScale = (globalScale / 100) * (scale / 100);
 					const elements = await this.getScalableElements();
 					elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 				}

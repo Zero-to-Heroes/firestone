@@ -342,12 +342,18 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.buildBgsMatches(games, sessionWidgetNumberOfMatchesToShow);
 			}),
 		);
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetScale)).subscribe((scale) => {
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (element) {
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			}
-		});
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				}
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

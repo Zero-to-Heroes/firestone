@@ -1,4 +1,5 @@
 import { SettingContext, SettingNode } from '../../settings.types';
+import { sizeKnobs } from '../common';
 
 export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -11,6 +12,18 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 				id: 'global-widgets',
 				title: context.i18n.translateString('settings.general.menu.widgets'),
 				settings: [
+					{
+						type: 'slider',
+						field: 'globalWidgetScale',
+						label: context.i18n.translateString('settings.general.widgets.size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 30,
+							max: 200,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
 					{
 						type: 'toggle',
 						field: 'lockWidgetPositions',

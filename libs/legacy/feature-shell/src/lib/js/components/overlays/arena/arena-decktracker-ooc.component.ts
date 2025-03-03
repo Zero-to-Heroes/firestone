@@ -15,7 +15,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { Observable, distinctUntilChanged } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, takeUntil } from 'rxjs';
 import { ArenaDraftManagerService } from '../../../services/arena/arena-draft-manager.service';
 import { explodeDecklist, normalizeWithDbfIds } from '../../../services/decktracker/deck-parser.service';
 
@@ -91,15 +91,20 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			}),
 		);
 
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerScale)).subscribe((scale) => {
-			this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
-			this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
-			const newScale = scale / 100;
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (!!element) {
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			}
-		});
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				this.el.nativeElement.style.setProperty('--decktracker-scale', newScale);
+				this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (!!element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				}
+			});
 		this.cardsHighlight.initForSingle();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

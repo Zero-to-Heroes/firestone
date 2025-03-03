@@ -11,7 +11,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -138,15 +138,20 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			this.handleReposition(),
 		);
 
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedOocTrackerScale)).subscribe((scale) => {
-			this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
-			this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
-			const newScale = scale / 100;
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (!!element) {
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			}
-		});
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedOocTrackerScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				this.el.nativeElement.style.setProperty('--decktracker-scale', newScale);
+				this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (!!element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				}
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

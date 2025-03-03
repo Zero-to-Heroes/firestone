@@ -198,15 +198,13 @@ export class ArenaMulliganDeckComponent
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => prefs.decktrackerMulliganScale),
-				filter((pref) => !!pref),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async (scale) => {
-				const newScale = scale / 100;
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(async ([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				const elements = await this.getScalableElements();
 				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
 			});

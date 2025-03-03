@@ -12,7 +12,8 @@ import { BoardSecret, DeckCard, SecretOption } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -60,15 +61,13 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => prefs.secretsHelperScale),
-				debounceTime(100),
-				distinctUntilChanged(),
-				filter((scale) => !!scale),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((scale) => {
+		combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.secretsHelperScale ?? 100)),
+		])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
 				this.refreshScroll();
 			});
 
