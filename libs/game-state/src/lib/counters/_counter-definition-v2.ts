@@ -68,6 +68,9 @@ export abstract class CounterDefinitionV2<T> {
 					console.debug('[debug] not visible from prefs', this.player?.pref, prefs[this.player?.pref ?? '']);
 				return false;
 			}
+			if (prefs[this.player.pref] === 'always-on') {
+				return true;
+			}
 			if (!!this.cards?.length && !gameState.playerDeck?.hasRelevantCard(this.cards)) {
 				this.debug &&
 					console.debug('[debug] not visible from deck', gameState.playerDeck?.hasRelevantCard(this.cards));
@@ -88,6 +91,9 @@ export abstract class CounterDefinitionV2<T> {
 			// console.debug('checking opponent', this, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
 				return false;
+			}
+			if (prefs[this.opponent.pref] === 'always-on') {
+				return true;
 			}
 			// console.debug('hasRelevantCard?', this, gameState.opponentDeck?.hasRelevantCard(this.cards));
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
