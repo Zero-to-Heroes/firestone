@@ -1058,6 +1058,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.FungalFortunes:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.Funkfin:
+			return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
 		case CardIds.FutureEmissary_WON_140:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.GaiaTheTechtonic_TSC_029:
