@@ -60,7 +60,7 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 
 		return this.i18n.translateString(`counters.bgs-spells-played.${side}`, {
 			buff: currentBuff,
-			target: BUFF_THRESHOLD - progress,
+			target: progress,
 		});
 	}
 }
