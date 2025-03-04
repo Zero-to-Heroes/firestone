@@ -435,6 +435,7 @@ import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/c
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
 import { MaxResourcesWidgetComponent } from '@components/overlays/resources/max-resources-widget.component';
+import { OpponentMaxResourcesWidgetWrapperComponent } from '@components/overlays/resources/opponent-max-resources-widget-wrapper.component';
 import { PlayerMaxResourcesWidgetWrapperComponent } from '@components/overlays/resources/player-max-resources-widget-wrapper.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
@@ -997,6 +998,7 @@ try {
 		OutOfCardsCallbackComponent,
 		SecretsHelperComponent,
 		PlayerMaxResourcesWidgetWrapperComponent,
+		OpponentMaxResourcesWidgetWrapperComponent,
 		MaxResourcesWidgetComponent,
 
 		MercenariesOpponentTeamComponent,

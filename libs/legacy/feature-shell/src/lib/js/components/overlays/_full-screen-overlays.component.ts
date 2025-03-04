@@ -198,6 +198,7 @@ import { DebugService } from '../../services/debug.service';
 				side="opponent"
 				[counter]="counter"
 			></counter-wrapper>
+			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>

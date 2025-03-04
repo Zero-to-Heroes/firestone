@@ -17,8 +17,8 @@ import { combineLatest, debounceTime, distinctUntilChanged, Observable, takeUnti
 import { isDefault, MaxResources } from './model';
 
 @Component({
-	selector: 'player-max-resources-widget-wrapper',
-	styleUrls: ['./player-max-resources-widget-wrapper.component.scss'],
+	selector: 'opponent-max-resources-widget-wrapper',
+	styleUrls: ['./opponent-max-resources-widget-wrapper.component.scss'],
 	template: `
 		<max-resources-widget
 			*ngIf="showWidget$ | async"
@@ -33,18 +33,18 @@ import { isDefault, MaxResources } from './model';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerMaxResourcesWidgetWrapperComponent
+export class OpponentMaxResourcesWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit
 {
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
-		gameWidth / 2 + gameHeight * 0.25;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.83;
+		gameWidth / 2 + gameHeight * 0.22;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.09;
 	protected positionUpdater = (left: number, top: number) =>
-		this.prefs.updatePrefs('playerMaxResourcesWidgetPosition', { left, top });
+		this.prefs.updatePrefs('opponentMaxResourcesWidgetPosition', { left, top });
 	protected positionExtractor = async () => {
 		const prefs = await this.prefs.getPreferences();
-		return prefs.playerMaxResourcesWidgetPosition;
+		return prefs.opponentMaxResourcesWidgetPosition;
 	};
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected bounds = {
@@ -74,19 +74,19 @@ export class PlayerMaxResourcesWidgetWrapperComponent
 
 		this.showWidget$ = combineLatest([this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
 			this.mapData(
-				([currentScene, prefs]) => prefs.showPlayerMaxResourcesWidget && currentScene === SceneMode.GAMEPLAY,
+				([currentScene, prefs]) => prefs.showOpponentMaxResourcesWidget && currentScene === SceneMode.GAMEPLAY,
 			),
 			this.handleReposition(),
 		);
 		const alwaysOn$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.playerMaxResourcesWidgetAlwaysOn),
+			this.mapData((prefs) => prefs.opponentMaxResourcesWidgetAlwaysOn),
 		);
 		const maxResources$ = this.gameState.gameState$$.pipe(
 			debounceTime(500),
 			this.mapData((gameState) => {
 				const result: MaxResources = {
-					health: gameState.playerDeck.hero?.maxHealth ?? 30,
-					mana: gameState.playerDeck.hero?.maxMana ?? 10,
+					health: gameState.opponentDeck.hero?.maxHealth ?? 30,
+					mana: gameState.opponentDeck.hero?.maxMana ?? 10,
 				};
 				return result;
 			}),
