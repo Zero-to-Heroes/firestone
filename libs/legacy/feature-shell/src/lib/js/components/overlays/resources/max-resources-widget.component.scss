@@ -1,0 +1,40 @@
+.max-resources {
+	display: flex;
+	flex-direction: column;
+	color: var(--default-text-color);
+	background: var(--color-6);
+	padding: 10px;
+	gap: 10px;
+	border-radius: 15px;
+}
+
+.title {
+	color: var(--default-title-color);
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+
+.info {
+	display: flex;
+	height: 30px;
+	align-items: center;
+
+	.icon-container {
+		height: 100%;
+		aspect-ratio: 1;
+		margin-right: 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.icon {
+			aspect-ratio: 1;
+			height: 100%;
+		}
+	}
+
+	&.mana .icon-container .icon {
+		height: 80%;
+	}
+}

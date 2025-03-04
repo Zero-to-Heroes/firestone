@@ -11,6 +11,7 @@ export class HeroCard {
 	readonly initialClasses: readonly CardClass[] = [];
 	readonly classes: readonly CardClass[] = [];
 	readonly maxHealth: number;
+	readonly maxMana: number;
 	readonly manaLeft: number;
 
 	public static create(base: Partial<NonFunctionProperties<HeroCard>>): HeroCard {

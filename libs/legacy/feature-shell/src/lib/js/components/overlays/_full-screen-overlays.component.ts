@@ -164,6 +164,7 @@ import { DebugService } from '../../services/debug.service';
 				side="player"
 				[counter]="counter"
 			></counter-wrapper>
+			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>

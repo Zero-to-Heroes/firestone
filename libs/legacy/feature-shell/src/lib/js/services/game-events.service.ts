@@ -968,6 +968,16 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'MAX_RESOURCES_UPDATED':
+				console.debug(gameEvent.Type + ' event', gameEvent.Value);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MAX_RESOURCES_UPDATED, gameEvent, {
+						playerId: gameEvent.Value.AdditionalProps.PlayerId,
+						mana: gameEvent.Value.AdditionalProps.Mana,
+						health: gameEvent.Value.AdditionalProps.Health,
+					}),
+				);
+				break;
 			case 'NUM_CARDS_PLAYED_THIS_TURN':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.NUM_CARDS_PLAYED_THIS_TURN, gameEvent, {

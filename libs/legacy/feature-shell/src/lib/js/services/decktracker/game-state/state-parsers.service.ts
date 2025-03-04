@@ -78,6 +78,7 @@ import { LocationDestroyedParser } from '../event-parser/location-destroyed-pars
 import { LocationUsedParser } from '../event-parser/location-used-parser';
 import { MainStepReadyParser } from '../event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from '../event-parser/match-metadata-parser';
+import { MaxResourcesUpdatedParser } from '../event-parser/max-resources-updated-parser';
 import { MinionBackOnBoardParser } from '../event-parser/minion-back-on-board-parser';
 import { MinionDiedParser } from '../event-parser/minion-died-parser';
 import { MinionGoDormantParser } from '../event-parser/minion-go-dormant-parser';
@@ -234,6 +235,7 @@ export class GameStateParsersService {
 					this.constructedArchetypes,
 				),
 			],
+			[GameEvent.MAX_RESOURCES_UPDATED]: [new MaxResourcesUpdatedParser()],
 			[GameEvent.MINION_BACK_ON_BOARD]: [new MinionBackOnBoardParser(this.helper)],
 			[GameEvent.MINION_GO_DORMANT]: [new MinionGoDormantParser(this.helper)],
 			[GameEvent.MINION_ON_BOARD_ATTACK_UPDATED]: [new MinionOnBoardAttackUpdatedParser(this.helper)],

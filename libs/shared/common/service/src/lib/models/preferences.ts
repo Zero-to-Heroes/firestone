@@ -625,6 +625,11 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerGreySageParrotCounterWidgetPosition: { left: number; top: number };
 
+	readonly showPlayerMaxResourcesWidget: boolean = true;
+	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };
+	readonly playerMaxResourcesWidgetAlwaysOn: boolean = false;
+	readonly maxResourcesWidgetScale = 100;
+
 	readonly playerDiscoversCounter: boolean = true;
 	readonly opponentDiscoversCounter: boolean = true;
 	readonly playerLibramReductionCounter: boolean = true;

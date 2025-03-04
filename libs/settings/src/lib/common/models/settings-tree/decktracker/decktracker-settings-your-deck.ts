@@ -166,6 +166,36 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 				],
 			},
+			{
+				id: 'decktracker-max-resources',
+				title: context.i18n.translateString('settings.decktracker.max-resources-widget.title'),
+				settings: [
+					{
+						type: 'toggle',
+						field: 'showPlayerMaxResourcesWidget',
+						label: context.i18n.translateString('settings.decktracker.max-resources-widget.toggle'),
+						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.toggle-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'playerMaxResourcesWidgetAlwaysOn',
+						label: context.i18n.translateString('settings.decktracker.max-resources-widget.always-on'),
+						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.always-on-tooltip'),
+					},
+					{
+						type: 'slider',
+						field: 'maxResourcesWidgetScale',
+						label: context.i18n.translateString('twitch.scale'),
+						tooltip: null,
+						sliderConfig: {
+							min: 60,
+							max: 140,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
+				],
+			},
 		],
 	};
 };
