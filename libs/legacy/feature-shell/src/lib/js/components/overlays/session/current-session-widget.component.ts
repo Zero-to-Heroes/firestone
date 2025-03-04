@@ -87,17 +87,18 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 									[rankTooltip]="'session.summary.mmr-tooltip' | owTranslate"
 								></rank-image>
 							</div>
-							<ng-container *ngIf="deltaRank$ | async as deltaRank">
+							<ng-container *ngIf="{ deltaRank: deltaRank$ | async } as value">
 								<div
 									class="delta"
-									*ngIf="deltaRank != null"
+									*ngIf="value.deltaRank != null"
 									[ngClass]="{
-										positive: deltaRank > 0,
-										negative: deltaRank < 0
+										positive: value.deltaRank > 0,
+										negative: value.deltaRank < 0,
+										neutral: value.deltaRank == 0
 									}"
 									[helpTooltip]="'session.summary.delta-mmr-tooltip' | owTranslate"
 								>
-									{{ deltaRank }}
+									{{ value.deltaRank }}
 								</div>
 							</ng-container>
 						</div>

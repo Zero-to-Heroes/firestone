@@ -165,6 +165,12 @@
 					}
 				}
 
+				&.neutral {
+					&::before {
+						content: '+';
+					}
+				}
+
 				&.negative {
 					color: #ff4747;
 				}
