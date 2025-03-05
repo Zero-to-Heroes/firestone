@@ -6,7 +6,7 @@ import { MaxResources } from './model';
 	styleUrls: ['./max-resources-widget.component.scss'],
 	template: `
 		<div class="max-resources" *ngIf="maxResources">
-			<div class="info health" [helpTooltip]="'Max health'">
+			<div class="info health" *ngIf="maxResources.health" [helpTooltip]="'Max health'">
 				<div class="icon-container">
 					<img
 						class="icon"
@@ -15,7 +15,7 @@ import { MaxResources } from './model';
 				</div>
 				<div class="value">{{ maxResources.health }}</div>
 			</div>
-			<div class="info mana" [helpTooltip]="'Max mana'">
+			<div class="info mana" *ngIf="maxResources.mana" [helpTooltip]="'Max mana'">
 				<div class="icon-container">
 					<img class="icon" src="https://static.zerotoheroes.com/hearthstone/asset/manastorm/mana.png" />
 				</div>

@@ -14,7 +14,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual, sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, Observable, takeUntil } from 'rxjs';
-import { isDefault, MaxResources } from './model';
+import { isDefault, MaxResources, nullIfDefaultHealth, nullIfDefaultMana } from './model';
 
 @Component({
 	selector: 'opponent-max-resources-widget-wrapper',
@@ -110,7 +110,11 @@ export class OpponentMaxResourcesWidgetWrapperComponent
 				if (isDefault(maxResources)) {
 					return null;
 				}
-				return maxResources;
+				const result: MaxResources = {
+					health: nullIfDefaultHealth(maxResources.health),
+					mana: nullIfDefaultMana(maxResources.mana),
+				};
+				return result;
 			}),
 		);
 		combineLatest([
