@@ -426,6 +426,9 @@ export const cardIdSelector = (
 		case CardIds.BloodreaverGuldan_CORE_ICC_831:
 		case CardIds.BloodreaverGuldan_ICC_831:
 			return and(side(inputSide), inGraveyard, minion, demon);
+		case CardIds.BobTheBartender_BG31_BOB:
+		case CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.Bolster:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.Bonecaller:
