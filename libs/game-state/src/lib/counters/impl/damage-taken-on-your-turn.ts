@@ -59,7 +59,7 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 		}
 		const totalDamageTakenOnYourTurns = value.flatMap((d) => d.damage).reduce((a, b) => a + b, 0);
 		const numberOfTimesDamageTakenOnYourTurns = value.flatMap((d) => d.damage).length;
-		return `${numberOfTimesDamageTakenOnYourTurns}/${totalDamageTakenOnYourTurns}`;
+		return `${numberOfTimesDamageTakenOnYourTurns}|${totalDamageTakenOnYourTurns}`;
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

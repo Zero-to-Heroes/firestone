@@ -49,7 +49,7 @@ export class AbyssalCurseCounterDefinition
 		);
 		return {
 			type: 'abyssalCurse',
-			value: `${lastCurseDamage}/${totalDamageFromCursesInHand}`,
+			value: `${lastCurseDamage}|${totalDamageFromCursesInHand}`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SirakessCultist_AbyssalCurseToken}.jpg`,
 			cssClass: 'abyssal-curse-counter',
 			tooltip: this.i18n.translateString(`counters.abyssal-curse-2.${this.side}`, {
