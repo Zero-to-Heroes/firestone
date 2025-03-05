@@ -98,9 +98,10 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 			return null;
 		}
 
-		const subDetails = await this.api.callGetApi<TebexSubDetails>(`${TEBEX_SUB_DETAILS_URL}/${tebexPackage.id}`, {
-			bearerToken: owToken,
-		});
+		const subDetails = null;
+		// await this.api.callGetApi<TebexSubDetails>(`${TEBEX_SUB_DETAILS_URL}/${tebexPackage.id}`, {
+		// 	bearerToken: owToken,
+		// });
 		console.debug('[ads] [tebex] sub details', subDetails);
 		const expiryDate = subDetails?.expiryDate;
 		const result = {
