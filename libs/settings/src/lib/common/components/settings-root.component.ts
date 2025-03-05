@@ -105,6 +105,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 				gamesLoader: this.gamesLoader,
 				packService: this.packService,
 				arenaRewards: this.arenaRewards,
+				settingsController: this.controller,
 			},
 		};
 		this.controller.setRootNode(settingsDefinition(context));

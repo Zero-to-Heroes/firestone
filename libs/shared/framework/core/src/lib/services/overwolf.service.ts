@@ -868,6 +868,21 @@ export class OverwolfService {
 		});
 	}
 
+	public async openAppFilePicker(): Promise<string | undefined> {
+		const path = await this.getStoragePath();
+		return new Promise<string | undefined>((resolve) => {
+			overwolf.utils.openFilePicker(
+				'',
+				path,
+				(res) => {
+					console.debug('[ow-service] openFilePicker result', res);
+					resolve(res.file);
+				},
+				false,
+			);
+		});
+	}
+
 	public async getStoragePath(): Promise<string> {
 		return new Promise<string>((resolve) => {
 			overwolf.extensions.io.getStoragePath(overwolf.extensions.io.enums.StorageSpace.appData, (res) => {

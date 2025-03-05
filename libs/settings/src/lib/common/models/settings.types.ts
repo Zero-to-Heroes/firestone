@@ -12,6 +12,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { Observable } from 'rxjs';
+import { SettingsControllerService } from '../services/settings-controller.service';
 
 export interface SettingContext {
 	readonly prefs: PreferencesService;
@@ -27,6 +28,7 @@ export interface SettingContext {
 		readonly gamesLoader: GameStatsLoaderService;
 		readonly packService: ICollectionPackService;
 		readonly arenaRewards: ArenaRewardsService;
+		readonly settingsController: SettingsControllerService;
 	};
 }
 

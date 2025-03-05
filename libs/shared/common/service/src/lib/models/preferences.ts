@@ -56,6 +56,7 @@ export class Preferences implements IPreferences {
 	readonly modsEnabled: boolean;
 	readonly disableLocalCache: boolean;
 
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly globalWidgetScale: number | null = 100;
 
 	readonly showLottery: boolean | null = null;
@@ -875,17 +876,23 @@ export class Preferences implements IPreferences {
 	readonly discordRpcCustomInGameText: string;
 	readonly discordRpcCustomInMatchText: string;
 
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly twitchAccessToken: string;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly twitchUserName: string;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly twitchLoginName: string;
 	readonly twitchDelay: number = 0;
 	readonly appearOnLiveStreams: boolean = true;
 
 	// TODO: move somewhere else
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly outOfCardsToken: OutOfCardsToken;
 	readonly outOfCardsShowNotifOnSync: boolean = false;
 	readonly hearthpwnSync: boolean = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly hearthpwnUserId: number;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly hearthpwnAuthToken: string;
 
 	readonly d0nkeySync: boolean = true;

@@ -104,6 +104,32 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 					},
 				],
 			},
+			{
+				id: 'general-data-settings',
+				title: context.i18n.translateString('settings.general.data.settings-title'),
+				settings: [
+					{
+						label: context.i18n.translateString('settings.general.data.export-settings-button-label'),
+						text: context.i18n.translateString('settings.general.data.export-settings-button-label'),
+						tooltip: context.i18n.translateString('settings.general.data.export-settings-button-tooltip'),
+						action: async () => {
+							await context.services.settingsController.exportSettings();
+							context.ow.openLocalCacheFolder();
+						},
+					},
+					{
+						label: context.i18n.translateString('settings.general.data.import-settings-button-label'),
+						text: context.i18n.translateString('settings.general.data.import-settings-button-label'),
+						tooltip: context.i18n.translateString('settings.general.data.import-settings-button-tooltip'),
+						action: async () => {
+							const selectedFilePath = await context.ow.openAppFilePicker();
+							if (selectedFilePath != null) {
+								await context.services.settingsController.importSettings(selectedFilePath);
+							}
+						},
+					},
+				],
+			},
 			// {
 			// 	id: 'general-data-other',
 			// 	title: context.i18n.translateString('settings.general.data.other-title'),
@@ -163,6 +189,10 @@ const clearCacheButtonText$ = (context: SettingContext): Observable<string> => {
 
 // const refreshArenaRewardsButtonText$ = (context: SettingContext): Observable<string> => {
 // 	return isRefreshingArenaRewards$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+// };
+
+// const exportSettingsButtonText$ = (context: SettingContext): Observable<string> => {
+// 	return of(context.i18n.translateString('export-settings-button-label'));
 // };
 
 const clearGamesButtonText$ = (context: SettingContext): Observable<string> => {
