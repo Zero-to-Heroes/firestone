@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -72,9 +72,18 @@ export class OpponentMaxResourcesWidgetWrapperComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs);
 
-		this.showWidget$ = combineLatest([this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
+		const gameMode$ = this.gameState.gameState$$.pipe(
+			this.mapData((gameState) => gameState?.metadata?.gameType),
+			distinctUntilChanged(),
+			takeUntil(this.destroyed$),
+		);
+		this.showWidget$ = combineLatest([this.scene.currentScene$$, this.prefs.preferences$$, gameMode$]).pipe(
 			this.mapData(
-				([currentScene, prefs]) => prefs.showOpponentMaxResourcesWidget && currentScene === SceneMode.GAMEPLAY,
+				([currentScene, prefs, gameMode]) =>
+					prefs.showOpponentMaxResourcesWidget &&
+					currentScene === SceneMode.GAMEPLAY &&
+					!isBattlegrounds(gameMode) &&
+					!isMercenaries(gameMode),
 			),
 			this.handleReposition(),
 		);
