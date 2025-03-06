@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEventsFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { GameStatusService } from '@firestone/shared/common/service';
+import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filter, interval, take } from 'rxjs';
@@ -44,6 +44,7 @@ export class GameEvents {
 		private readonly gameState: GameStateService,
 		private readonly gameUniqueId: GameUniqueIdService,
 		private readonly eventsFacade: GameEventsFacadeService,
+		private readonly globalError: GlobalErrorService,
 	) {
 		this.init();
 		window['buildPlayerBoardGameEvent'] = (rawEvent: string) =>
@@ -1639,6 +1640,10 @@ export class GameEvents {
 			// this.setSpectating(false);
 			this.existingLogLines = [];
 			this.processingQueue.clear();
+			return;
+		}
+		if (data.includes('Truncating log, which has reached the size limit')) {
+			this.globalError.notifyCriticalError('truncated-logs');
 			return;
 		}
 		if (data.includes('Begin Spectating') || data.includes('Start Spectator')) {

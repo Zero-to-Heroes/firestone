@@ -10,7 +10,7 @@ export class GlobalErrorService {
 		private readonly i18n: ILocalizationService,
 		private readonly ow: OverwolfService,
 	) {
-		(window as any)['showCriticalError'] = () => this.notifyCriticalError('no-cards');
+		(window as any)['showCriticalError'] = () => this.notifyCriticalError('truncated-logs');
 	}
 
 	public async notifyCriticalError(error: GlobalErrorType) {
@@ -44,11 +44,17 @@ export class GlobalErrorService {
 					message: this.i18n.translateString('app.global.errors.memory-reading.message'),
 					url: getNoMemoryReadingUrl(this.i18n),
 				};
+			case 'truncated-logs':
+				return {
+					title: this.i18n.translateString('app.global.errors.truncated-logs.title'),
+					message: this.i18n.translateString('app.global.errors.truncated-logs.message'),
+					url: getTruncatedLogsUrl(this.i18n),
+				};
 		}
 	}
 }
 
-export type GlobalErrorType = 'no-cards' | 'memory-reading';
+export type GlobalErrorType = 'no-cards' | 'memory-reading' | 'truncated-logs';
 export const getNoCardsUrl = (i18n: ILocalizationService): string => {
 	switch (i18n.locale) {
 		case 'zhCN':
@@ -65,5 +71,14 @@ export const getNoMemoryReadingUrl = (i18n: ILocalizationService): string => {
 			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/memory-reading/zhCN.md';
 		default:
 			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/memory-reading/enUS.md';
+	}
+};
+export const getTruncatedLogsUrl = (i18n: ILocalizationService): string => {
+	switch (i18n.locale) {
+		case 'zhCN':
+		case 'twCN':
+			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/truncated-logs/zhCN.md';
+		default:
+			return 'https://github.com/Zero-to-Heroes/firestone/blob/master/docs/errors/truncated-logs/enUS.md';
 	}
 };
