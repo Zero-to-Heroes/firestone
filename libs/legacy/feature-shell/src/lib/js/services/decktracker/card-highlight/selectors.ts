@@ -3,6 +3,7 @@ import {
 	CardClass,
 	CardIds,
 	CardType,
+	DkruneTypes,
 	GameTag,
 	Locale,
 	Race,
@@ -134,6 +135,8 @@ export const baseCostEqual =
 	(input: SelectorInput): boolean =>
 		input.card?.cost === cost;
 
+export const inInitialDeck = (input: SelectorInput): boolean =>
+	input.deckCard.creatorCardId == null && !input.deckCard.stolenFromOpponent;
 export const notInInitialDeck = (input: SelectorInput): boolean =>
 	input.deckCard.creatorCardId != null || input.deckCard.stolenFromOpponent;
 
@@ -282,6 +285,7 @@ export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
+export const imbue = (input: SelectorInput) => false; // hasMechanic(GameTag.IMBUE);
 export const infuse = hasMechanic(GameTag.INFUSE);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
@@ -382,6 +386,18 @@ export const hasTribeNotPlayedThisMatch = (input: SelectorInput): boolean => {
 		.filter((r) => r != Race[Race.ALL]);
 	return input.card.races.some((r) => !uniqueRacesPlayedThisMatch.includes(r));
 };
+
+export const hasRune =
+	(rune: DkruneTypes) =>
+	(input: SelectorInput): boolean => {
+		return (
+			Object.keys(input.card?.additionalCosts ?? {}).includes(DkruneTypes[rune]) &&
+			input.card.additionalCosts[DkruneTypes[rune]]
+		);
+	};
+export const unholyRune = hasRune(DkruneTypes.UNHOLYRUNE);
+export const bloodRune = hasRune(DkruneTypes.BLOODRUNE);
+export const frostRune = hasRune(DkruneTypes.FROSTRUNE);
 
 export const cardClass =
 	(cardClass: CardClass) =>

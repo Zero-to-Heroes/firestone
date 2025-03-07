@@ -84,7 +84,7 @@ export class DeckCardService {
 					gameType: metaData.gameType,
 					currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 				});
-				return !!dynamicCards?.length ? dynamicCards : card.relatedCardIds;
+				return [...(dynamicCards ?? []), ...(card.relatedCardIds ?? [])];
 		}
 	}
 }
