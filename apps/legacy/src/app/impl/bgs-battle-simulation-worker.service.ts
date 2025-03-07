@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
-import { OutcomeSamples, SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
 import { BugReportService, Preferences } from '@firestone/shared/common/service';
-import { sumOnArray } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Injectable()
@@ -37,45 +36,46 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 	}
 
 	private mergeSimulationResults(results: SimulationResult[]): SimulationResult {
-		const wonLethal = sumOnArray(results, (result) => result.wonLethal);
-		const won = sumOnArray(results, (result) => result.won);
-		const tied = sumOnArray(results, (result) => result.tied);
-		const lost = sumOnArray(results, (result) => result.lost);
-		const lostLethal = sumOnArray(results, (result) => result.lostLethal);
-		const totalBattles = won + tied + lost;
-		const damageWon = sumOnArray(results, (result) => result.damageWon);
-		const damageLost = sumOnArray(results, (result) => result.damageLost);
-		const outcomeSamples: OutcomeSamples = {
-			won: results
-				.map((result) => result.outcomeSamples.won)
-				.reduce((a, b) => a.concat(b), [])
-				.slice(0, 1),
-			tied: results
-				.map((result) => result.outcomeSamples.tied)
-				.reduce((a, b) => a.concat(b), [])
-				.slice(0, 1),
-			lost: results
-				.map((result) => result.outcomeSamples.lost)
-				.reduce((a, b) => a.concat(b), [])
-				.slice(0, 1),
-		};
-		return {
-			wonLethal: wonLethal,
-			won: won,
-			tied: tied,
-			lost: lost,
-			lostLethal: lostLethal,
-			damageWon: damageWon,
-			damageLost: damageLost,
-			averageDamageWon: won === 0 ? 0 : damageWon / won,
-			averageDamageLost: lost === 0 ? 0 : damageLost / lost,
-			wonLethalPercent: totalBattles === 0 ? undefined : (100 * wonLethal) / totalBattles,
-			wonPercent: totalBattles === 0 ? undefined : (100 * won) / totalBattles,
-			tiedPercent: totalBattles === 0 ? undefined : (100 * tied) / totalBattles,
-			lostPercent: totalBattles === 0 ? undefined : (100 * lost) / totalBattles,
-			lostLethalPercent: totalBattles === 0 ? undefined : (100 * lostLethal) / totalBattles,
-			outcomeSamples: outcomeSamples,
-		};
+		return null;
+		// const wonLethal = sumOnArray(results, (result) => result.wonLethal);
+		// const won = sumOnArray(results, (result) => result.won);
+		// const tied = sumOnArray(results, (result) => result.tied);
+		// const lost = sumOnArray(results, (result) => result.lost);
+		// const lostLethal = sumOnArray(results, (result) => result.lostLethal);
+		// const totalBattles = won + tied + lost;
+		// const damageWon = sumOnArray(results, (result) => result.damageWon);
+		// const damageLost = sumOnArray(results, (result) => result.damageLost);
+		// const outcomeSamples: OutcomeSamples = {
+		// 	won: results
+		// 		.map((result) => result.outcomeSamples.won)
+		// 		.reduce((a, b) => a.concat(b), [])
+		// 		.slice(0, 1),
+		// 	tied: results
+		// 		.map((result) => result.outcomeSamples.tied)
+		// 		.reduce((a, b) => a.concat(b), [])
+		// 		.slice(0, 1),
+		// 	lost: results
+		// 		.map((result) => result.outcomeSamples.lost)
+		// 		.reduce((a, b) => a.concat(b), [])
+		// 		.slice(0, 1),
+		// };
+		// return {
+		// 	wonLethal: wonLethal,
+		// 	won: won,
+		// 	tied: tied,
+		// 	lost: lost,
+		// 	lostLethal: lostLethal,
+		// 	damageWon: damageWon,
+		// 	damageLost: damageLost,
+		// 	averageDamageWon: won === 0 ? 0 : damageWon / won,
+		// 	averageDamageLost: lost === 0 ? 0 : damageLost / lost,
+		// 	wonLethalPercent: totalBattles === 0 ? undefined : (100 * wonLethal) / totalBattles,
+		// 	wonPercent: totalBattles === 0 ? undefined : (100 * won) / totalBattles,
+		// 	tiedPercent: totalBattles === 0 ? undefined : (100 * tied) / totalBattles,
+		// 	lostPercent: totalBattles === 0 ? undefined : (100 * lost) / totalBattles,
+		// 	lostLethalPercent: totalBattles === 0 ? undefined : (100 * lostLethal) / totalBattles,
+		// 	outcomeSamples: outcomeSamples,
+		// };
 	}
 
 	private simulateLocalBattleInstance(

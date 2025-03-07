@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -112,7 +113,7 @@ import { BgsIntermediateResultsSimGuardianService } from '../services/simulation
 			</div>
 			<div class="damage-container">
 				<div class="title" [fsTranslate]="'battlegrounds.battle.damage-title'"></div>
-				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.damage-dealt-tooltip' | fsTranslate">
+				<div class="damage dealt" [helpTooltip]="damageDealtTooltip">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/sprite.svg#sword" />
@@ -222,6 +223,10 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 	isOngoing: boolean;
 
 	battle: BgsFaceOffWithSimulation | null;
+
+	damageDealtTooltip = this.i18n.translateString('battlegrounds.battle.damage-dealt-tooltip', {
+		value: 80,
+	});
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -336,13 +341,14 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
 			this.battleSimulationResultLose = this.battle.battleResult.lostPercent.toFixed(1) + '%';
-			this.damageWon =
-				this.battle.battleResult.averageDamageWon != null
-					? this.battle.battleResult.averageDamageWon.toFixed(1)
-					: '--';
-			this.damageLost = this.battle.battleResult.averageDamageLost
-				? this.battle.battleResult.averageDamageLost.toFixed(1)
-				: '--';
+			this.damageWon = this.visualizeDamageRange(
+				this.battle.battleResult.damageWonRange,
+				this.battle.battleResult.averageDamageWon,
+			);
+			this.damageLost = this.visualizeDamageRange(
+				this.battle.battleResult.damageLostRange,
+				this.battle.battleResult.averageDamageLost,
+			);
 			// If we have no chance of winning / losing the battle, showcasing the lethal chance
 			// makes no sense
 			this.battleSimulationWonLethalChance = this.battle.battleResult.wonLethalPercent;
@@ -399,6 +405,20 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 			case 'loss':
 				return this.loseSimulationSample && this.loseSimulationSample.length > 0;
 		}
+	}
+
+	private visualizeDamageRange(range: { min: number; max: number }, averageDamage: number): string {
+		if (range == null) {
+			return '--';
+		}
+
+		if (range.min === range.max) {
+			return averageDamage.toFixed(1);
+		}
+
+		const format = (value: number) => (value > 10 ? value.toFixed(0) : value.toFixed(0));
+
+		return `${format(range.min)} - ${format(range.max)}`;
 	}
 
 	private pickSimulationResult(category: 'win' | 'tie' | 'loss') {
