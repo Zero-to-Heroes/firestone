@@ -1,5 +1,11 @@
 export declare const enum TempCardIds {
+	SparkOfLife = 'SparkOfLife',
+	StellarBalance = 'StellarBalance',
+	SparkOfLife_GiftOfFire = 'SparkOfLife_GiftOfFire',
+	SparkOfLife_GiftOfNature = 'SparkOfLife_GiftOfNature',
 	TrickySatyr = 'TrickySatyr',
+	ForbiddenShrine = 'ForbiddenShrine',
+	SpiritGatherer = 'SpiritGatherer',
 	RotheartDryad = 'RotheartDryad',
 	ArchdruidOfThorns = 'ArchdruidOfThorns',
 	AvantGardening = 'AvantGardening',

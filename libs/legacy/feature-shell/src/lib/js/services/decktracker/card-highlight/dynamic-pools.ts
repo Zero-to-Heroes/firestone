@@ -16,6 +16,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { DeckState } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 
 const IMBUED_HERO_POWERS = [
@@ -32,6 +33,7 @@ export const getDynamicRelatedCardIds = (
 		format: GameFormat;
 		gameType: GameType;
 		currentClass?: string;
+		deckState: DeckState;
 	},
 ): readonly string[] => {
 	switch (cardId) {
@@ -104,9 +106,30 @@ const getDynamicFilters = (
 		format: GameFormat;
 		gameType: GameType;
 		currentClass?: string;
+		deckState: DeckState;
 	},
 ): ((ref: ReferenceCard) => boolean) | ((ref: ReferenceCard) => boolean)[] => {
 	switch (cardId) {
+		case TempCardIds.SparkOfLife:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				(c.classes?.includes(CardClass[CardClass.MAGE]) || c.classes?.includes(CardClass[CardClass.DRUID])) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.SparkOfLife_GiftOfFire:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				c.classes?.includes(CardClass[CardClass.MAGE]) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.SparkOfLife_GiftOfNature:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				c.classes?.includes(CardClass[CardClass.DRUID]) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.ForbiddenShrine:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				c.cost === Math.min(10, options.deckState.manaLeft ?? 0) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case TempCardIds.Alarashi:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&

@@ -88,6 +88,7 @@ export class CustomEffectsParser implements EventParser {
 					currentClass: currentState.playerDeck.hero?.classes?.[0]
 						? CardClass[currentState.playerDeck.hero.classes[0]]
 						: null,
+					deckState: deck,
 				},
 			),
 		});

@@ -165,6 +165,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				format: metadata.formatType,
 				gameType: metadata.gameType,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
+				deckState: context,
 			});
 			if (!!dynamicPool?.length) {
 				this.possibleCards = dynamicPool;

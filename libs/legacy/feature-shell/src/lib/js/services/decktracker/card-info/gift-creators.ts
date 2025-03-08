@@ -981,4 +981,9 @@ export const giftCreators = [
 	TempCardIds.GroveShaper_TreantOfLife,
 	TempCardIds.NightmareFuel,
 	TempCardIds.TrickySatyr,
+	TempCardIds.SpiritGatherer,
+	TempCardIds.SparkOfLife,
+	TempCardIds.SparkOfLife_GiftOfFire,
+	TempCardIds.SparkOfLife_GiftOfNature,
+	TempCardIds.StellarBalance,
 ];
