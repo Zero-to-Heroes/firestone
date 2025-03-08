@@ -223,6 +223,9 @@ export const cardIdSelector = (
 			);
 		case CardIds.AncientMysteries:
 			return and(side(inputSide), inDeck, secret);
+		case CardIds.AncientOfGrowth:
+		case CardIds.AncientOfGrowth_AncientGrowth:
+			return and(side(inputSide), or(inDeck, inHand), isTreant);
 		case CardIds.AnimateDead:
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(4)));
 		case CardIds.AnimatedAvalanche:
@@ -961,6 +964,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.Ensmallen_TOY_805:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.ErodedSediment_WW_428:
+			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.EternalLayover_WORK_028:
 			return and(side(inputSide), or(inDeck, inHand), generateCorpse);
 		case CardIds.EternalServitude_CORE_ICC_213:
@@ -1630,6 +1635,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.LibramOfClarity_GDB_137:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.LifebindersGift:
+		case CardIds.LifebindersGrowth:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.Lifeguard_VAC_919:
 			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.LiftOff_SC_410:
