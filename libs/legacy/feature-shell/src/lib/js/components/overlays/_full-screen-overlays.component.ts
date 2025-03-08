@@ -122,7 +122,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
-			<player-dead-minions-this-game-widget-wrapper></player-dead-minions-this-game-widget-wrapper>
 			<player-locations-used-widget-wrapper></player-locations-used-widget-wrapper>
 			<player-sea-shanty-widget-wrapper></player-sea-shanty-widget-wrapper>
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
@@ -190,9 +189,7 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
-			<!-- <opponent-dragons-summoned-widget-wrapper></opponent-dragons-summoned-widget-wrapper> -->
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
-			<opponent-dead-minions-this-game-widget-wrapper></opponent-dead-minions-this-game-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
 				side="opponent"

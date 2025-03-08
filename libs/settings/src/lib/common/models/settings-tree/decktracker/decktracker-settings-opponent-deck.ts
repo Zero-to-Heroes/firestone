@@ -425,19 +425,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		}),
 	},
 	{
-		id: 'deadMinionsThisGame',
-		field: 'opponentDeadMinionsThisGameCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.dead-minions-this-game-tooltip'),
-	},
-	// {
-	// 	id: 'dragonsSummoned',
-	// 	field: 'opponentDragonsSummonedCounter',
-	// 	label: context.i18n.translateString('settings.decktracker.your-deck.counters.dragons-summoned-label'),
-	// 	tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-summoned-tooltip'),
-	// 	showLimitedOption: false,
-	// },
-	{
 		id: 'elementalStreak',
 		field: 'opponentElementalStreakCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),

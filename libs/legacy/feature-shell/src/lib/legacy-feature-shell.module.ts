@@ -391,7 +391,6 @@ import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overl
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
-import { OpponentDeadMinionsThisGameWidgetWrapperComponent } from '@components/overlays/counters/opponent-dead-minions-this-game-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
 import { OpponentEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/opponent-earthen-golem-widget-wrapper.component';
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
@@ -412,7 +411,6 @@ import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@compon
 import { PlayerChainedGuardianWidgetWrapperComponent } from '@components/overlays/counters/player-chained-guardian-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
-import { PlayerDeadMinionsThisGameWidgetWrapperComponent } from '@components/overlays/counters/player-dead-minions-this-game-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/player-earthen-golem-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
@@ -1356,7 +1354,6 @@ try {
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
-		PlayerDeadMinionsThisGameWidgetWrapperComponent,
 		PlayerSeaShantyWidgetWrapperComponent,
 		PlayerLocationsUsedWidgetWrapperComponent,
 		PlayerWheelOfDeathWidgetWrapperComponent,
@@ -1418,7 +1415,6 @@ try {
 		OpponentWheelOfDeathWidgetWrapperComponent,
 		OpponentDragonsSummonedWidgetWrapperComponent,
 		OpponentElementalStreakWidgetWrapperComponent,
-		OpponentDeadMinionsThisGameWidgetWrapperComponent,
 
 		FtueComponent,
 

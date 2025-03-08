@@ -347,12 +347,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
 	},
 	{
-		id: 'deadMinionsThisGame',
-		field: 'playerDeadMinionsThisGameCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.dead-minions-this-game-tooltip'),
-	},
-	{
 		id: 'locationsUsed',
 		field: 'playerLocationsUsedCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-label'),
