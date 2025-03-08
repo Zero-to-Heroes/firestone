@@ -190,6 +190,12 @@ const getDynamicFilters = (
 		case CardIds.StickUp_WW_411:
 			return (c) =>
 				c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]) && fromAnotherClass(c, options.currentClass);
+		case CardIds.LifebindersGift:
+		case CardIds.LifebindersBloom:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				c?.spellSchool === SpellSchool[SpellSchool.NATURE] &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
 			return (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION];
