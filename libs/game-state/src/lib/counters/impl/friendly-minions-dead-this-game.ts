@@ -1,0 +1,53 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { CardIds } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import { GameState } from '../../models/game-state';
+import { CounterDefinitionV2 } from '../_counter-definition-v2';
+import { CounterType } from '../_exports';
+
+export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefinitionV2<number> {
+	public override id: CounterType = 'friendlyDeadMinionsThisGame';
+	public override image = TempCardIds.Aesina;
+	public override cards: readonly CardIds[] = [TempCardIds.Aesina, TempCardIds.Starsurge] as any[];
+
+	readonly player = {
+		pref: 'playerFriendlyDeadMinionsThisGameCounter' as const,
+		display: (state: GameState): boolean => true,
+		value: (state: GameState): number => state.playerDeck.minionsDeadThisMatch.length,
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-tooltip'),
+		},
+	};
+
+	readonly opponent = undefined;
+	// {
+	// 	pref: 'opponentFriendlyDeadMinionsThisGameCounter' as const,
+	// 	display: (state: GameState): boolean =>
+	// 		initialHeroClassIs(state.opponentDeck.hero, [CardClass.DEATHKNIGHT]) ||
+	// 		state.opponentDeck?.hasRelevantCard([CardIds.ReskaThePitBoss_WW_373]),
+	// 	value: (state: GameState): number =>
+	// 		state.opponentDeck.minionsDeadThisMatch.length,
+	// 	setting: {
+	// 		label: (i18n: ILocalizationService): string =>
+	// 			i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-label'),
+	// 		tooltip: (i18n: ILocalizationService): string =>
+	// 			i18n.translateString('settings.decktracker.opponent-deck.counters.friendly-dead-minions-this-game-tooltip'),
+	// 	},
+	// };
+
+	constructor(private readonly i18n: ILocalizationService) {
+		super();
+	}
+
+	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
+		const deadMinions = side === 'player' ? this.player.value(gameState) : null; // this.opponent.value(gameState);
+		const tooltip = this.i18n.translateString(`counters.friendly-dead-minions-this-game.player`, {
+			value: deadMinions,
+		});
+		return tooltip;
+	}
+}

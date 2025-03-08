@@ -85,6 +85,7 @@ export type CounterType =
 	| 'brilliantMacaw'
 	| 'monstrousParrot'
 	| 'vanessaVanCleef'
+	| 'friendlyDeadMinionsThisGame'
 	| 'deadMinionsThisGame'
 	| 'damageTakenOnYourTurn'
 	| 'seaShanty'
