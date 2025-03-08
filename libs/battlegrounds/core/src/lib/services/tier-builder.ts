@@ -63,7 +63,9 @@ export const buildTiers = (
 	);
 
 	const showTrinkets =
-		(showTrinketsInput && hasTrinkets) || [CardIds.MarinTheManager_BG30_HERO_304].includes(playerCardId as CardIds);
+		(showTrinketsInput && hasTrinkets) ||
+		[CardIds.MarinTheManager_BG30_HERO_304].includes(playerCardId as CardIds) ||
+		anomalies?.includes(CardIds.MarinsTreasureBox_BG31_Anomaly_106);
 
 	const config: TierBuilderConfig = {
 		spells: hasSpells,
