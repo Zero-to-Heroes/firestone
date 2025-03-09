@@ -27,8 +27,6 @@
 		"Clipboard",
 		"Tray"
 	],
-	"disable_dockbutton": false,
-	"hide_from_store": false,
 	"data": {
 		"start_window": "MainWindow",
 		"windows": {
