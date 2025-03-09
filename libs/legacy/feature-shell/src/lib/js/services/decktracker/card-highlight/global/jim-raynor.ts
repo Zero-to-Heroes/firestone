@@ -12,11 +12,18 @@ export const JimRaynor: GlobalHighlightCard = {
 		allCards: CardsFacadeService,
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const starships = deckState
+		const otherDeckState = side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
+		const starshipsOwn = deckState
 			.getAllCardsInDeckWithoutOptions()
+			.filter((c) => !c.stolenFromOpponent)
 			.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
 			.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
-		const cardIds = starships.flatMap((c) => [
+		const starshipsStolen = otherDeckState
+			.getAllCardsInDeckWithoutOptions()
+			.filter((c) => c.stolenFromOpponent)
+			.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
+			.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
+		const cardIds = [...starshipsOwn, ...starshipsStolen].flatMap((c) => [
 			c.cardId,
 			...(c.storedInformation?.cards
 				.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
