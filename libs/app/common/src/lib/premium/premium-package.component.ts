@@ -23,7 +23,6 @@ import { PremiumPlan } from './premium-desktop.component';
 		<div
 			class="package {{ id }}"
 			[ngClass]="{ 'read-only': isReadonly, active: isActive, 'cant-subscribe': cantSubscribe }"
-			(click)="onSubscribe($event)"
 		>
 			<div class="header">
 				<div class="name">{{ name }}</div>
@@ -62,7 +61,6 @@ import { PremiumPlan } from './premium-desktop.component';
 				*ngIf="cantSubscribe"
 				[fsTranslate]="cantSubscribeButtonKey"
 				[helpTooltip]="'app.premium.cant-subscribe-tooltip' | fsTranslate"
-				(click)="onSubscribe($event)"
 			></button>
 			<button
 				class="button subscribe-button"
