@@ -11,6 +11,7 @@ import {
 	isBattlegroundsDuo,
 	Race,
 	ReferenceCard,
+	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -52,6 +53,7 @@ export const getAllCardsInGame = (
 		// Starcraft-exclusive cards
 		// .filter((card) => scFilters.every((filter) => filter(card)))
 		.filter((card) => card.set !== 'Vanilla')
+		.filter((card) => !card.spellSchool?.includes(SpellSchool[SpellSchool.UPGRADE]))
 		.filter(
 			(card) =>
 				(card.techLevel && card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET]) ||
