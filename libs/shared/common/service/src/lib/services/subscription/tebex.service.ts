@@ -76,7 +76,8 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	}
 
 	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
-		if (!ENABLE_TEBEX) {
+		const enableTebex = await ENABLE_TEBEX(this.ow);
+		if (!enableTebex) {
 			return null;
 		}
 

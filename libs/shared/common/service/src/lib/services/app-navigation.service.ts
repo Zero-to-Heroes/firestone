@@ -28,8 +28,9 @@ export class AppNavigationService extends AbstractFacadeService<AppNavigationSer
 		this.ow = AppInjector.get(OverwolfService);
 	}
 
-	public goToPremium() {
-		if (ENABLE_TEBEX) {
+	public async goToPremium() {
+		const enableTebex = await ENABLE_TEBEX(this.ow);
+		if (enableTebex) {
 			this.selectTab('premium');
 		} else {
 			this.ow.openStore();

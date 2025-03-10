@@ -59,7 +59,8 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		// TODO: remove this when it's better tested
 		// When we don't have the new UI, we don't care about the end date, so we can simply
 		// return a "fake" plan that is always active
-		if (!ENABLE_TEBEX) {
+		const enableTebex = await ENABLE_TEBEX(this.ow);
+		if (!enableTebex) {
 			return {
 				id: 'legacy',
 				expireAt: new Date('2099-01-01'),
