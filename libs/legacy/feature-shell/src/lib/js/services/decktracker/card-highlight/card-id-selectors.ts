@@ -1765,6 +1765,8 @@ export const cardIdSelector = (
 			return tooltip(and(opposingSide(inputSide), cardsPlayedThisMatch));
 		case CardIds.MoatLurker:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case TempCardIds.MonstrousMosquito:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Muckmorpher:
 			return and(side(inputSide), inDeck, minion, not(cardIs(CardIds.Muckmorpher)));
 		case CardIds.MulchMadnessTavernBrawl:
