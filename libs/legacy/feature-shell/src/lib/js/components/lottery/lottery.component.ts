@@ -44,6 +44,14 @@ import { LotteryTabType } from './lottery-navigation.component';
 						[helpTooltip]="'app.lottery.overlay-toggle-tooltip' | owTranslate"
 						[helpTooltipClasses]="'general-theme'"
 					></preference-toggle>
+					<control-close-simple
+						class="control"
+						(requestClose)="close()"
+						[requestConfirmation]="true"
+						[confirmationText]="closeConfirmationText"
+						[confirmationCancel]="closeConfirmationCancelText"
+						[confirmationOk]="closeConfirmationOkText"
+					></control-close-simple>
 					<div
 						class="control opt-out"
 						inlineSVG="assets/svg/delete.svg"
@@ -58,14 +66,6 @@ import { LotteryTabType } from './lottery-navigation.component';
 						[confirmationPosition]="'right'"
 						(onConfirm)="optOut()"
 					></div>
-					<control-close-simple
-						class="control"
-						(requestClose)="close()"
-						[requestConfirmation]="true"
-						[confirmationText]="closeConfirmationText"
-						[confirmationCancel]="closeConfirmationCancelText"
-						[confirmationOk]="closeConfirmationOkText"
-					></control-close-simple>
 				</div>
 			</div>
 
