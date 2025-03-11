@@ -155,4 +155,4 @@ export interface OwSub {
 }
 
 export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual';
-export const premiumPlanIds = ['legacy', 'premium'] as PremiumPlanId[];
+export const premiumPlanIds = ['legacy', 'premium', 'premium-annual'] as PremiumPlanId[];
