@@ -66,10 +66,9 @@ export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFac
 				?.map((c) => allCards.getCard(c?.cardId))
 				.filter((c) => c.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE])) ?? [];
 		const cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
-		console.debug('[card-utils] computed cost for starship', refCard.name, pieces, cost, card);
 		return cost;
 	}
-	return card?.getEffectiveManaCost();
+	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost;
 };
 
 export const storeInformationOnCardPlayed = (

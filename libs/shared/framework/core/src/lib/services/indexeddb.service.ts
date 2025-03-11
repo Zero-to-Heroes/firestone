@@ -4,7 +4,9 @@ import Dexie from 'dexie';
 export const ACHIEVEMENTS_COMPLETED = 'achievementsCompleted';
 export const ACHIEVEMENTS_HISTORY = 'achievementsHistory';
 export const ARENA_REWARDS = 'arenaRewards';
-export const ARENA_DECK_STATS = 'arenaDeckStats';
+export const ARENA_DECK_STATS_OLD = 'arenaDeckStats';
+export const ARENA_DECK_STATS = 'arenaDeckStats2';
+// export const ARENA_CURRENT_DECK_PICKS = 'arenaCurrentDeckPicks';
 export const COLLECTION_CARDS = 'collectionCards';
 export const COLLECTION_PACK_STATS = 'collectionPacks';
 export const COLLECTION_CARD_HISTORY = 'collectionCardHistory';
@@ -28,7 +30,7 @@ export class IndexedDbService extends Dexie {
 			// ArenaRewardInfo
 			[ARENA_REWARDS]: '',
 			// DraftDeckStats
-			[ARENA_DECK_STATS]: '',
+			[ARENA_DECK_STATS_OLD]: '',
 			// memory.Card
 			[COLLECTION_CARDS]: 'id',
 			// PackResult
@@ -37,6 +39,12 @@ export class IndexedDbService extends Dexie {
 			[COLLECTION_CARD_HISTORY]: '',
 			// GameStat
 			[MATCH_HISTORY]: 'reviewId',
+		});
+		this.version(2).stores({
+			// DraftDeckStats
+			[ARENA_DECK_STATS]: 'runId',
+			// DraftPick
+			// [ARENA_CURRENT_DECK_PICKS]: '[runId+pickNumber]',
 		});
 
 		await this.open();

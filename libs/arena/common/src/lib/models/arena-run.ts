@@ -15,6 +15,7 @@ export class ArenaRun {
 	// readonly heroPowerCardId: string;
 	readonly wins: number;
 	readonly losses: number;
+	readonly totalCardsInDeck: number;
 
 	public static create(base: Partial<NonFunctionProperties<ArenaRun>>): ArenaRun {
 		return Object.assign(new ArenaRun(), base);

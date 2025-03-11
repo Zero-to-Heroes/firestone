@@ -11,13 +11,13 @@ import {
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
+import { explodeDecklist, normalizeWithDbfIds } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { Observable, combineLatest, distinctUntilChanged, takeUntil } from 'rxjs';
 import { ArenaDraftManagerService } from '../../../services/arena/arena-draft-manager.service';
-import { explodeDecklist, normalizeWithDbfIds } from '../../../services/decktracker/deck-parser.service';
 
 @Component({
 	selector: 'arena-decktracker-ooc',

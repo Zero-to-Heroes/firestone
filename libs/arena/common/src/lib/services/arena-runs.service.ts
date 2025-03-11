@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
+import { decode } from '@firestone-hs/deckstrings';
 import {
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
@@ -14,12 +15,13 @@ import { SubscriberAwareBehaviorSubject, deepEqual, groupByFunction } from '@fir
 import {
 	AbstractFacadeService,
 	AppInjector,
+	CardsFacadeService,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ArenaRun } from '../models/arena-run';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
 import { ArenaRewardsService } from './arena-rewards.service';
@@ -34,6 +36,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 	private patchesConfig: PatchesConfigService;
 	private arenaRewards: ArenaRewardsService;
 	private arenaDeckStats: ArenaDeckStatsService;
+	private allCards: CardsFacadeService;
 
 	private internalSub$$ = new SubscriberAwareBehaviorSubject<null>(null);
 
@@ -54,6 +57,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
 		this.arenaRewards = AppInjector.get(ArenaRewardsService);
 		this.arenaDeckStats = AppInjector.get(ArenaDeckStatsService);
+		this.allCards = AppInjector.get(CardsFacadeService);
 
 		await waitForReady(this.prefs, this.gameStats, this.patchesConfig, this.arenaRewards, this.arenaDeckStats);
 
@@ -72,6 +76,14 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			])
 				.pipe(
 					filter(([stats, rewards, deckStats]) => !!stats?.length),
+					debounceTime(500),
+					distinctUntilChanged(
+						(a, b) =>
+							a[0]?.length === b[0]?.length &&
+							a[1]?.length === b[1]?.length &&
+							// We update the info in place here while a draft is in progress
+							deepEqual(a[2], b[2]),
+					),
 					map(([stats, rewards, deckStats]) => {
 						const arenaMatches = stats
 							?.filter((stat) => stat.gameMode === 'arena')
@@ -83,7 +95,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe((runs) => {
-					console.debug('[arena-runs] allRuns', runs);
+					console.debug('[debug] [arena-runs] allRuns', runs);
 					this.allRuns$$.next(runs);
 				});
 
@@ -126,7 +138,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		const rewardsGroupedByRun = !!rewards?.length
 			? groupByFunction((reward: ArenaRewardInfo) => reward.runId)(rewards)
 			: {};
-		return Object.keys(matchesGroupedByRun).map((runId: string) => {
+		const runsWithGames = Object.keys(matchesGroupedByRun).map((runId: string) => {
 			const matches: readonly GameStat[] = matchesGroupedByRun[runId];
 			const rewards = rewardsGroupedByRun[runId];
 			const draftStat = deckStats?.find((stat) => stat.runId === runId);
@@ -138,13 +150,43 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 				creationTimestamp: firstMatch.creationTimestamp,
 				heroCardId: firstMatch.playerCardId,
 				initialDeckList: firstMatch.playerDecklist,
-				wins: wins,
-				losses: losses,
+				wins: wins ?? undefined,
+				losses: losses ?? undefined,
 				steps: matches,
 				rewards: rewards,
 				draftStat: draftStat,
-			} as ArenaRun);
+				totalCardsInDeck: 30, // TODO don't hard code this, but don't decode all the decks just for fun
+			});
 		});
+		const runsWithoutGames =
+			deckStats
+				?.filter((s) => !matchesGroupedByRun[s.runId])
+				?.map((stat) => {
+					return ArenaRun.create({
+						id: stat.runId,
+						creationTimestamp: stat.creationTimestamp,
+						heroCardId: stat.heroCardId,
+						initialDeckList: stat.initialDeckList,
+						steps: [],
+						rewards: [],
+						draftStat: stat,
+						totalCardsInDeck: !stat.initialDeckList
+							? 0
+							: decode(stat.initialDeckList)
+									.cards?.map((c) => c[1])
+									.reduce((a, b) => a + b, 0) ?? 0,
+					});
+				})
+				.filter((r) => r.creationTimestamp) ?? [];
+		const result = [...runsWithGames, ...runsWithoutGames].sort(
+			(a, b) => b.creationTimestamp - a.creationTimestamp,
+		);
+		console.debug(
+			'[debug] [arena-runs] result',
+			result,
+			result.sort((a, b) => b.creationTimestamp - a.creationTimestamp),
+		);
+		return result;
 	}
 
 	private extractWins(sortedMatches: readonly GameStat[]): [number | null, number | null] {
@@ -163,7 +205,13 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		return lastMatch.result === 'won' ? [wins + 1, losses] : [wins, losses + 1];
 	}
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
-		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
+		return (
+			!heroFilter ||
+			heroFilter === 'all' ||
+			this.allCards.getCard(run.heroCardId).classes?.includes(heroFilter?.toUpperCase()) ||
+			run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter ||
+			false
+		);
 	}
 }
 

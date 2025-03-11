@@ -57,6 +57,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 
 		this.runs$ = this.arenaRuns.runs$$.pipe(
 			this.mapData((arenaRuns) => {
+				console.debug('[debug] [arena-runs-list] received runs', arenaRuns);
 				const groupedRuns = this.groupRuns(arenaRuns);
 				const flat = groupedRuns
 					.filter((group) => group?.runs?.length)

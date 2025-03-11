@@ -6,6 +6,8 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	ARENA_DECK_STATS,
+	IndexedDbService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -20,6 +22,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	private api: ApiRunner;
 	private user: UserService;
 	private diskCache: DiskCacheService;
+	private db: IndexedDbService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaDeckStatsService', () => !!this.deckStats$$);
@@ -34,6 +37,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		this.api = AppInjector.get(ApiRunner);
 		this.user = AppInjector.get(UserService);
 		this.diskCache = AppInjector.get(DiskCacheService);
+		this.db = AppInjector.get(IndexedDbService);
 
 		this.deckStats$$.onFirstSubscribe(async () => {
 			const currentUser = await this.user.getCurrentUser();
@@ -42,7 +46,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		});
 	}
 
-	public async newDeckStat(stat: DraftDeckStats) {
+	public async newDeckStat(stat: DraftDeckStats, isFinalDeck: boolean) {
 		const user = await this.user.getCurrentUser();
 		const newStat: DraftDeckStats = {
 			...stat,
@@ -51,12 +55,16 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		console.debug('[arena-deck-stats] saving deck stats', stat);
 
 		const existingStats = await this.deckStats$$.getValueWithInit();
-		const newStats = [...(existingStats ?? []), newStat];
+		const newStats = [newStat, ...(existingStats ?? []).filter((s) => s.runId !== newStat.runId)];
 		this.deckStats$$.next(newStats);
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS, newStats);
 
-		const result = await this.api.callPostApi(SAVE_URL, newStat);
-		console.debug('[arena-deck-stats] uploaded deck stats');
+		this.db.table<DraftDeckStats, string>(ARENA_DECK_STATS).put(newStat);
+		if (isFinalDeck) {
+			const result = await this.api.callPostApi(SAVE_URL, newStat);
+			console.debug('[arena-deck-stats] uploaded deck stats');
+			// Delete all from the ARENA_CURRENT_DECK_PICKS table
+			// await this.db.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).clear();
+		}
 	}
 
 	private async loadArenaDeckStats(
@@ -64,10 +72,16 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		skipLocal = false,
 	): Promise<readonly DraftDeckStats[] | null> {
 		if (!skipLocal) {
+			const dbResults = await this.db.table<DraftDeckStats, string>(ARENA_DECK_STATS).toArray();
+			if (dbResults?.length) {
+				return dbResults;
+			}
+
 			const localRewards = await this.diskCache.getItem<readonly DraftDeckStats[]>(
 				DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS,
 			);
 			if (localRewards != null) {
+				this.db.table<DraftDeckStats, string>(ARENA_DECK_STATS).bulkPut(localRewards);
 				return localRewards;
 			}
 		}
@@ -78,7 +92,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		});
 		console.debug('[arena-deck-stats] retrieved deck stats', resultFromRemote);
 		const result = resultFromRemote ?? [];
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS, result);
+		this.db.table<DraftDeckStats, string>(ARENA_DECK_STATS).bulkPut(result);
 		return result;
 	}
 }

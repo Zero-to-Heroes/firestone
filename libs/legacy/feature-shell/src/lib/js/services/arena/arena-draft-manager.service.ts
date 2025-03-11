@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DraftDeckStats, DraftPick } from '@firestone-hs/arena-draft-pick';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
+import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import {
 	ArenaCardStatsService,
@@ -9,17 +10,19 @@ import {
 	ArenaDeckStatsService,
 	IArenaDraftManagerService,
 } from '@firestone/arena/common';
+import { buildDeckDefinition } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
+import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
 	CardsFacadeService,
+	IndexedDbService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, withLatestFrom } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map, pairwise, tap, withLatestFrom } from 'rxjs';
 import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
@@ -45,13 +48,14 @@ export class ArenaDraftManagerService
 	private arenaCardStats: ArenaCardStatsService;
 	private arenaClassStats: ArenaClassStatsService;
 	private arenaDeckStats: ArenaDeckStatsService;
+	private indexedDb: IndexedDbService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
 			windowManager,
-			'arenaDraftManager',
+			'ArenaDraftManagerService',
 			() => !!this.currentStep$$ && !!this.heroOptions$$ && !!this.cardOptions$$ && !!this.currentDeck$$,
 		);
 	}
@@ -78,6 +82,7 @@ export class ArenaDraftManagerService
 		this.arenaCardStats = AppInjector.get(ArenaCardStatsService);
 		this.arenaClassStats = AppInjector.get(ArenaClassStatsService);
 		this.arenaDeckStats = AppInjector.get(ArenaDeckStatsService);
+		this.indexedDb = AppInjector.get(IndexedDbService);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
 		this.currentStep$$.onFirstSubscribe(async () => {
@@ -255,15 +260,15 @@ export class ArenaDraftManagerService
 					distinctUntilChanged(
 						(previousDeck, currentDeck) => this.deckLength(previousDeck) === this.deckLength(currentDeck),
 					),
-					// tap((deck) => console.debug('[arena-draft-manager] [stat] current deck', deck)),
+					tap((deck) => console.debug('[arena-draft-manager] [stat] current deck', deck)),
 					pairwise(),
-					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck', info)),
+					tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck', info)),
 					// So that we only do it once, when we finish the draft
-					filter(
-						([previousDeck, currentDeck]) =>
-							currentDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK &&
-							previousDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK - 1,
-					),
+					// filter(
+					// 	([previousDeck, currentDeck]) =>
+					// 		currentDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK &&
+					// 		previousDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK - 1,
+					// ),
 					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck 2', info)),
 					map(([previousDeck, currentDeck]) => currentDeck),
 					withLatestFrom(this.arenaCardStats.cardStats$$, this.arenaClassStats.classStats$$),
@@ -279,12 +284,15 @@ export class ArenaDraftManagerService
 						cardStats: ArenaCombinedCardStats;
 						classStats: ArenaClassStats;
 					}) => {
-						// console.debug(
-						// 	'[arena-draft-manager] [stat] computing stats for deck',
-						// 	currentDeck,
-						// 	cardStats,
-						// 	classStats,
-						// );
+						const isDeckFullyDrafted = currentDeck.DeckList.length === TOTAL_CARDS_IN_AN_ARENA_DECK;
+						console.debug(
+							'[debug] [arena-draft-manager] [stat] computing stats for deck',
+							isDeckFullyDrafted,
+							currentDeck.DeckList.length,
+							currentDeck,
+							cardStats,
+							classStats,
+						);
 						const deckClass = this.allCards.getCard(currentDeck.HeroCardId)?.playerClass?.toUpperCase();
 						const classStat = classStats.stats.find((s) => s.playerClass?.toUpperCase() === deckClass);
 						const classWinrate = classStat?.totalGames ? classStat.totalsWins / classStat.totalGames : null;
@@ -301,14 +309,19 @@ export class ArenaDraftManagerService
 						const averageCardImpact = cardImpacts.reduce((a, b) => a + b, 0) / cardImpacts.length;
 						const deckImpact = 100 * averageCardImpact;
 						const deckScore = 100 * (classWinrate + averageCardImpact);
+						const partialDeckDefinition: DeckDefinition = buildDeckDefinition(currentDeck, this.allCards);
 						const deckDraftStats: DraftDeckStats = {
 							runId: currentDeck.Id,
 							userId: null,
 							playerClass: deckClass,
 							deckImpact: deckImpact,
 							deckScore: deckScore,
+							// Useful only for partial decks
+							creationTimestamp: new Date().getTime(),
+							heroCardId: currentDeck.HeroCardId,
+							initialDeckList: encode(partialDeckDefinition),
 						};
-						this.arenaDeckStats.newDeckStat(deckDraftStats);
+						this.arenaDeckStats.newDeckStat(deckDraftStats, isDeckFullyDrafted);
 					},
 				);
 		});
@@ -317,6 +330,7 @@ export class ArenaDraftManagerService
 	private async sendDraftPick(pick: DraftPick) {
 		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
 		console.debug('[arena-draft-manager] uploaded draft pick');
+		// await this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick);
 	}
 
 	private deckLength(deck: DeckInfoFromMemory): number {

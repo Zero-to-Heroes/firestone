@@ -11,10 +11,9 @@ import {
 	SceneMode,
 	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
-import { DeckHandlerService, Metadata } from '@firestone/game-state';
+import { DeckHandlerService, explodeDecklist, Metadata, normalizeWithDbfIds } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
-import { groupByFunction } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
@@ -468,22 +467,6 @@ export class DeckParserService {
 		return lines;
 	}
 }
-
-export const explodeDecklist = (initialDecklist: readonly number[]): any[] => {
-	console.log('[deck-parser] decklist with dbfids', initialDecklist);
-	const groupedById = groupByFunction((cardId) => '' + cardId)(initialDecklist);
-
-	const result = Object.keys(groupedById).map((id) => [+id, groupedById[id].length]);
-	console.log('[deck-parser] exploding decklist result', result);
-	return result;
-};
-
-export const normalizeWithDbfIds = (
-	decklist: readonly (number | string)[],
-	allCards: CardsFacadeService,
-): readonly number[] => {
-	return decklist.map((cardId) => allCards.getCard(cardId)?.dbfId);
-};
 
 export interface DeckInfo {
 	scenarioId: number;

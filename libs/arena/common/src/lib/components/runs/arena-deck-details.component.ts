@@ -139,7 +139,11 @@ export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent imp
 			this.mapData((deckDetails) => deckDetails?.deckstring ?? null),
 		);
 		this.picks$ = this.deckDetailsService.deckDetails$$.pipe(
-			this.mapData((deckDetails) => (deckDetails?.picks === undefined ? undefined : deckDetails.picks)),
+			this.mapData((deckDetails) =>
+				deckDetails?.picks === undefined
+					? undefined
+					: [...deckDetails.picks].sort((a, b) => a.pickNumber - b.pickNumber),
+			),
 		);
 		this.overview$ = this.deckDetailsService.deckDetails$$.pipe(
 			this.mapData((deckDetails) => deckDetails?.overview ?? null),
