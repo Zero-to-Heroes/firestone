@@ -62,9 +62,9 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 			console.error('[ads] [tebex] could not find package for plan', planId, allPackages);
 			return;
 		}
-		this.ow.openUrlInDefaultBrowser(
-			`https://subscriptions-api.overwolf.com/checkout/${STORE_PUBLIC_TOKEN}/${packageForPlan.id}?extensionId=${EXTENSION_ID}&userId=${userUuid}`,
-		);
+		const url = `https://subscriptions-api.overwolf.com/checkout/${STORE_PUBLIC_TOKEN}/${packageForPlan.id}?extensionId=${EXTENSION_ID}&userId=${userUuid}`;
+		console.log('[ads] [tebex] opening url', url);
+		this.ow.openUrlInDefaultBrowser(url);
 	}
 
 	public async unsubscribe(planId: string) {

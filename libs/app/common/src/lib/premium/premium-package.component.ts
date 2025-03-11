@@ -56,26 +56,40 @@ import { PremiumPlan } from './premium-desktop.component';
 					<span class="text">/claim {{ discordCode }} </span>
 				</span>
 			</div> -->
-			<button
-				class="button cant-subscribe-button"
-				*ngIf="cantSubscribe"
-				[fsTranslate]="cantSubscribeButtonKey"
-				[helpTooltip]="'app.premium.cant-subscribe-tooltip' | fsTranslate"
-			></button>
-			<button
-				class="button subscribe-button"
-				*ngIf="!isReadonly && !isActive && !cantSubscribe"
-				[fsTranslate]="subscribeButtonKey"
-				[helpTooltip]="helpTooltipSubscribe"
-				(click)="onSubscribe($event)"
-			></button>
-			<button
-				class="button unsubscribe-button"
-				*ngIf="isActive && isAutoRenew && !cantSubscribe"
-				[fsTranslate]="'app.premium.unsubscribe-button'"
-				[helpTooltip]="helpTooltipUnsubscribe"
-				(click)="onUnsubscribe($event)"
-			></button>
+			<div class="button-container">
+				<checkbox
+					*ngIf="allowSubscriptionOverride"
+					class="override-checkbox"
+					[label]="'app.premium.override-checkbox-label' | fsTranslate"
+					[value]="subOverride"
+					(valueChanged)="onSubOverrideChanged($event)"
+				></checkbox>
+				<div
+					class="confirmation-text"
+					*ngIf="cantSubscribe && subOverride"
+					[fsTranslate]="'app.premium.override-confirmation'"
+				></div>
+				<button
+					class="button cant-subscribe-button"
+					*ngIf="cantSubscribe && !subOverride"
+					[fsTranslate]="cantSubscribeButtonKey"
+					[helpTooltip]="'app.premium.cant-subscribe-tooltip' | fsTranslate"
+				></button>
+				<button
+					class="button subscribe-button"
+					*ngIf="!isReadonly && !isActive && (!cantSubscribe || subOverride)"
+					[fsTranslate]="subscribeButtonKey"
+					[helpTooltip]="helpTooltipSubscribe"
+					(click)="onSubscribe($event)"
+				></button>
+				<button
+					class="button unsubscribe-button"
+					*ngIf="isActive && isAutoRenew && !cantSubscribe"
+					[fsTranslate]="'app.premium.unsubscribe-button'"
+					[helpTooltip]="helpTooltipUnsubscribe"
+					(click)="onUnsubscribe($event)"
+				></button>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -91,6 +105,8 @@ export class PremiumPackageComponent {
 		const expireAtDate = value.activePlan?.expireAt ? new Date(value.activePlan.expireAt) : null;
 		this.isAutoRenew = value.activePlan?.autoRenews ?? false;
 		this.cantSubscribe = value.activePlan != null && (!this.isActive || !this.isAutoRenew);
+		this.allowSubscriptionOverride =
+			this.cantSubscribe && value.activePlan?.id === 'legacy' && value.id !== 'legacy';
 		console.debug('setting plan', value, this.isActive, this.isAutoRenew);
 		this.name = this.i18n.translateString(`app.premium.plan.${value.id}`);
 		this.price = `$${value.price ?? '-'}`;
@@ -180,6 +196,9 @@ export class PremiumPackageComponent {
 	// discordCode: string;
 	activateDiscordText: string;
 
+	allowSubscriptionOverride: boolean;
+	subOverride: boolean;
+
 	cantSubscribeButtonKey = 'app.premium.cant-subscribe-button';
 	subscribeButtonKey = 'app.premium.subscribe-button';
 	helpTooltipSubscribe: string | null;
@@ -214,7 +233,7 @@ export class PremiumPackageComponent {
 
 	onSubscribe(event: MouseEvent) {
 		event.stopPropagation();
-		if (this.isActive || this.cantSubscribe) {
+		if (this.isActive || (this.cantSubscribe && !this.subOverride)) {
 			return;
 		}
 		console.debug('subscribing to plan', this.id);
@@ -224,6 +243,13 @@ export class PremiumPackageComponent {
 	onUnsubscribe(event: MouseEvent) {
 		event.stopPropagation();
 		this.unsubscribe.emit(this.id);
+	}
+
+	onSubOverrideChanged(value: boolean) {
+		this.subOverride = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	// copyDiscordCode() {

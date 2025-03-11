@@ -43,7 +43,7 @@
 	}
 
 	&.friend .name {
-		color: #ae96a8;
+		color: var(--color-1);
 	}
 	&.premium .name {
 		color: var(--default-title-color);
@@ -169,6 +169,26 @@
 	}
 }
 
+.button-container {
+	display: flex;
+	flex-direction: column;
+	margin-top: auto;
+	max-width: 60%;
+	color: var(--color-1);
+
+	.override-checkbox {
+		align-self: center;
+	}
+
+	::ng-deep checkbox label p {
+		color: var(--color-1);
+	}
+
+	.confirmation-text {
+		margin-bottom: 10px;
+	}
+}
+
 .plan-text,
 .activate-discord {
 	display: flex;
@@ -178,7 +198,7 @@
 	padding: 20px;
 	padding-top: 0;
 	margin-bottom: 10px;
-	color: #ae96a8;
+	color: var(--color-1);
 
 	.main-text {
 		display: inline;
