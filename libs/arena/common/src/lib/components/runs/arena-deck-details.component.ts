@@ -78,11 +78,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 					<div class="run-details" *ngIf="isExpanded">
 						<ul class="details">
 							<li *ngFor="let step of overview.steps">
-								<replay-info-generic-2
-									[replay]="step"
-									[displayCoin]="false"
-									[displayTime]="false"
-								></replay-info-generic-2>
+								<replay-info-generic-2 [replay]="step"></replay-info-generic-2>
 							</li>
 						</ul>
 					</div>

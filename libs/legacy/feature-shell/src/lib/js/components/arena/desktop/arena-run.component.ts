@@ -69,11 +69,7 @@ import { GameStat } from '@firestone/stats/data-access';
 		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps; trackBy: trackByStepFn">
-					<replay-info-generic
-						[replay]="step"
-						[displayCoin]="false"
-						[displayTime]="false"
-					></replay-info-generic>
+					<replay-info-generic [replay]="step"></replay-info-generic>
 				</li>
 			</ul>
 		</div>
