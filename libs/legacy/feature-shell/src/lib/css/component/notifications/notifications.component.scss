@@ -1,6 +1,10 @@
 @import '../../global/variables';
 @import '../../global/fonts';
 
+:host {
+	pointer-events: none;
+}
+
 .notifications {
 	width: 100%;
 	height: 100%;
@@ -8,6 +12,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
+	pointer-events: none;
 
 	simple-notifications {
 		width: 100%;
@@ -16,6 +21,7 @@
 		justify-content: flex-end;
 		padding-right: 20px;
 		flex-shrink: 0;
+		pointer-events: all;
 	}
 
 	.simple-notification-wrapper.simple-notification-wrapper {
