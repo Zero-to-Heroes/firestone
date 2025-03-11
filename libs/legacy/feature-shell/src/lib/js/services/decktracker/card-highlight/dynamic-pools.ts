@@ -110,6 +110,8 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean) | ((ref: ReferenceCard) => boolean)[] => {
 	switch (cardId) {
+		case TempCardIds.RiteOfAtrocity:
+			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
 		case TempCardIds.SparkOfLife:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&

@@ -986,4 +986,5 @@ export const giftCreators = [
 	TempCardIds.SparkOfLife_GiftOfFire,
 	TempCardIds.SparkOfLife_GiftOfNature,
 	TempCardIds.StellarBalance,
+	TempCardIds.RiteOfAtrocity,
 ];
