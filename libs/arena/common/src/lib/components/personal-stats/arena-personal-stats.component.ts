@@ -258,7 +258,16 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 		]).pipe(
 			this.mapData(
 				([runs, timeFilter, patch, seasonPatch]) =>
-					runs?.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch)) ?? [],
+					runs
+						?.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch))
+						.map(
+							(r) =>
+								({
+									...r,
+									wins: r.wins ?? 0,
+									losses: r.losses ?? 3,
+								} as ArenaRun),
+						) ?? [],
 			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
