@@ -5,6 +5,7 @@ import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
 	ArenaDiscoversGuardianService,
+	ArenaDraftManagerService,
 	ArenaHighWinsRunsService,
 	ArenaMulliganGuideGuardianService,
 	ArenaMulliganGuideService,
@@ -54,7 +55,6 @@ import {
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
-import { ArenaDraftManagerService } from '../../js/services/arena/arena-draft-manager.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { DeckParserFacadeService } from '../../js/services/decktracker/deck-parser-facade.service';

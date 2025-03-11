@@ -1,35 +1,35 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { DraftDeckStats, DraftPick } from '@firestone-hs/arena-draft-pick';
+import { DraftDeckStats, DraftPick, Pick, Picks } from '@firestone-hs/arena-draft-pick';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
-import {
-	ArenaCardStatsService,
-	ArenaClassStatsService,
-	ArenaCombinedCardStats,
-	ArenaDeckStatsService,
-	IArenaDraftManagerService,
-} from '@firestone/arena/common';
 import { buildDeckDefinition } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	ARENA_CURRENT_DECK_PICKS,
 	CardsFacadeService,
 	IndexedDbService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, map, pairwise, tap, withLatestFrom } from 'rxjs';
-import { ArenaClassFilterType } from '../../models/arena/arena-class-filter.type';
+import { ArenaCombinedCardStats } from '../models/arena-combined-card-stat';
+import { ArenaCardStatsService } from './arena-card-stats.service';
+import { ArenaClassStatsService } from './arena-class-stats.service';
+import { ArenaDeckStatsService } from './arena-deck-stats.service';
+import { IArenaDraftManagerService } from './arena-draft-manager.interface';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
+const ARENA_DECK_DETAILS_URL = `https://znumiwhsu7lx2chawhhgzhjol40ygaro.lambda-url.us-west-2.on.aws/%runId%`;
 
 const TOTAL_CARDS_IN_AN_ARENA_DECK = 30;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ArenaDraftManagerService
 	extends AbstractFacadeService<ArenaDraftManagerService>
 	implements IArenaDraftManagerService
@@ -144,7 +144,7 @@ export class ArenaDraftManagerService
 				const scene = changes.CurrentScene || (await this.scene.currentScene$$.getValueWithInit());
 				const currentStep = await this.currentStep$$.getValueWithInit();
 				const isDraftingCards = ![DraftSlotType.DRAFT_SLOT_HERO, DraftSlotType.DRAFT_SLOT_HERO_POWER].includes(
-					currentStep,
+					currentStep!,
 				);
 				// If cards change, or if we are on DRAFT scene + DRAFT_SLOT_CARD, we get the current state of the arena deck
 				if (changes.ArenaCurrentCardsInDeck || (scene === SceneMode.DRAFT && isDraftingCards)) {
@@ -196,7 +196,10 @@ export class ArenaDraftManagerService
 						console.log('[arena-draft-manager] no current deck, not sending pick');
 						return;
 					}
-					if (previousDeck?.Id !== currentDeck.Id || currentDeck.DeckList.length === 0) {
+					if (
+						(previousDeck?.Id != null && previousDeck.Id !== currentDeck.Id) ||
+						currentDeck.DeckList.length === 0
+					) {
 						console.log('[arena-draft-manager] new deck, not sending pick');
 						return;
 					}
@@ -235,9 +238,9 @@ export class ArenaDraftManagerService
 					const heroRefCard = this.allCards.getCard(currentDeck?.HeroCardId);
 					const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
 					const pick: DraftPick = {
-						runId: currentDeck.Id,
+						runId: currentDeck.Id!,
 						pickNumber: pickNumber,
-						options: options,
+						options: options!,
 						pick: addedCards[0],
 						playerClass: playerClass,
 					};
@@ -272,7 +275,11 @@ export class ArenaDraftManagerService
 					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck 2', info)),
 					map(([previousDeck, currentDeck]) => currentDeck),
 					withLatestFrom(this.arenaCardStats.cardStats$$, this.arenaClassStats.classStats$$),
-					map(([currentDeck, cardStats, classStats]) => ({ currentDeck, cardStats, classStats })),
+					map(([currentDeck, cardStats, classStats]) => ({
+						currentDeck: currentDeck!,
+						cardStats: cardStats!,
+						classStats: classStats!,
+					})),
 				)
 				.subscribe(
 					({
@@ -306,13 +313,14 @@ export class ArenaDraftManagerService
 								classWinrate == null || deckWinrate == null ? null : deckWinrate - classWinrate;
 							return deckImpact;
 						});
-						const averageCardImpact = cardImpacts.reduce((a, b) => a + b, 0) / cardImpacts.length;
+						const averageCardImpact =
+							(cardImpacts?.reduce((a, b) => (a ?? 0) + (b ?? 0), 0) ?? 0) / cardImpacts.length;
 						const deckImpact = 100 * averageCardImpact;
-						const deckScore = 100 * (classWinrate + averageCardImpact);
+						const deckScore = 100 * (classWinrate! + averageCardImpact);
 						const partialDeckDefinition: DeckDefinition = buildDeckDefinition(currentDeck, this.allCards);
 						const deckDraftStats: DraftDeckStats = {
-							runId: currentDeck.Id,
-							userId: null,
+							runId: currentDeck.Id!,
+							userId: null as any,
 							playerClass: deckClass,
 							deckImpact: deckImpact,
 							deckScore: deckScore,
@@ -327,13 +335,27 @@ export class ArenaDraftManagerService
 		});
 	}
 
-	private async sendDraftPick(pick: DraftPick) {
-		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
-		console.debug('[arena-draft-manager] uploaded draft pick');
-		// await this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick);
+	public async getPicksForRun(runId: string): Promise<readonly Pick[] | null> {
+		const localPicks = await this.indexedDb
+			.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS)
+			.where('runId')
+			.equals(runId)
+			.toArray();
+		console.debug('[arena-draft-manager] retrieved local picks', localPicks);
+		if (!!localPicks?.length) {
+			return localPicks;
+		}
+		const resultFromRemote = await this.api.callGetApi<Picks>(ARENA_DECK_DETAILS_URL.replace('%runId%', runId));
+		return resultFromRemote?.picks ?? null;
 	}
 
-	private deckLength(deck: DeckInfoFromMemory): number {
+	private async sendDraftPick(pick: DraftPick) {
+		await this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick);
+		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
+		console.debug('[arena-draft-manager] uploaded draft pick');
+	}
+
+	private deckLength(deck: DeckInfoFromMemory | null): number {
 		const heroSize = !!deck?.HeroCardId?.length ? 1 : 0;
 		const deckSize = deck?.DeckList?.length ?? 0;
 		return heroSize + deckSize;

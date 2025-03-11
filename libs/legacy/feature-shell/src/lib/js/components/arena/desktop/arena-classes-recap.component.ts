@@ -1,12 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { ArenaRun } from '@firestone/arena/common';
-import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	ArenaClassFilterType,
+	PatchInfo,
+	PatchesConfigService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
-import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

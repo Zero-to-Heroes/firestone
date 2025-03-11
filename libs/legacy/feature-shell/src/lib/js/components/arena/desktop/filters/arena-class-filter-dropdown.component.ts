@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
 import { classes, formatClass } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

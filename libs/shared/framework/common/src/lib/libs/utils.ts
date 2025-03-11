@@ -12,6 +12,18 @@ export const groupByFunction =
 			return objectsByKeyValue;
 		}, {});
 	};
+export const groupByFunction2 = <T>(
+	array: readonly T[],
+	keyExtractor: (obj: T) => string | number,
+): { [key: string]: readonly T[] } => {
+	return (array ?? []).reduce((objectsByKeyValue, obj) => {
+		const value = keyExtractor(obj);
+		objectsByKeyValue[value] = objectsByKeyValue[value] ?? [];
+		// Using push instead of concat is thousands of times faster on big arrays
+		objectsByKeyValue[value].push(obj);
+		return objectsByKeyValue;
+	}, {});
+};
 
 export const deepEqual = (a, b) =>
 	equal(a, b, {

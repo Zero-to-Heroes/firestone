@@ -2,19 +2,20 @@
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Input } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
-import { IReviewIdService, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
 import { ArenaInfo, MemoryUpdatesService, Reward } from '@firestone/memory';
 import { DiskCacheService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { groupByFunction2, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	ARENA_REWARDS,
+	IndexedDbService,
 	OverwolfService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, filter, withLatestFrom } from 'rxjs';
+import { distinctUntilChanged, filter, tap, withLatestFrom } from 'rxjs';
 import { ArenaInfoService } from './arena-info.service';
 
 const REWARDS_RETRIEVE_URL = 'https://b763ob2h6h3ewimg7ztsl72p240qvfyr.lambda-url.us-west-2.on.aws/';
@@ -28,12 +29,12 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	private userService: UserService;
 	private memoryUpdates: MemoryUpdatesService;
 	private arenaInfoService: ArenaInfoService;
-	private reviewIdService: IReviewIdService;
 	private ow: OverwolfService;
 	private diskCache: DiskCacheService;
+	private indexedDb: IndexedDbService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'arenaRewards', () => !!this.arenaRewards$$);
+		super(windowManager, 'ArenaRewardsService', () => !!this.arenaRewards$$);
 	}
 
 	protected override assignSubjects() {
@@ -46,7 +47,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.userService = AppInjector.get(UserService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.arenaInfoService = AppInjector.get(ArenaInfoService);
-		this.reviewIdService = AppInjector.get(REVIEW_ID_SERVICE_TOKEN);
+		this.indexedDb = AppInjector.get(IndexedDbService);
 		this.ow = AppInjector.get(OverwolfService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 
@@ -66,11 +67,14 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.memoryUpdates.memoryUpdates$$
 			.pipe(
 				filter((changes) => !!changes.ArenaRewards?.length),
-				withLatestFrom(this.arenaInfoService.arenaInfo$$, this.reviewIdService.reviewId$),
-				filter(([changes, arenaInfo, reviewId]) => !!arenaInfo?.runId && !!reviewId?.length),
+				withLatestFrom(this.arenaInfoService.getArenaInfo()),
+				tap(([changes, arenaInfo]) =>
+					console.log('[arena-rewards] received memory update', changes, arenaInfo),
+				),
+				filter(([changes, arenaInfo]) => !!arenaInfo?.runId),
 			)
-			.subscribe(([changes, arenaInfo, reviewId]) => {
-				this.handleRewards(changes.ArenaRewards, arenaInfo!, reviewId!);
+			.subscribe(([changes, arenaInfo]) => {
+				this.handleRewards(changes.ArenaRewards, arenaInfo!);
 			});
 	}
 
@@ -83,17 +87,23 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 
 		const newRewards: readonly ArenaRewardInfo[] = [...(currentRewards ?? []), ...this.buildRewards(rewards)];
 		this.arenaRewards$$.next(newRewards);
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS, newRewards);
+		await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).bulkPut(newRewards);
 	}
 
 	private async loadArenaRewards(
 		currentUser: overwolf.profile.GetCurrentUserResult | null,
 	): Promise<readonly ArenaRewardInfo[] | null> {
-		const localRewards = await this.diskCache.getItem<readonly ArenaRewardInfo[]>(
+		const localRewards = await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).toArray();
+		if (!!localRewards?.length) {
+			return localRewards;
+		}
+
+		const rewardsFromDisk = await this.diskCache.getItem<readonly ArenaRewardInfo[]>(
 			DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS,
 		);
-		if (localRewards != null) {
-			return localRewards;
+		if (!!rewardsFromDisk?.length) {
+			this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).bulkPut(rewardsFromDisk);
+			return rewardsFromDisk;
 		}
 
 		console.log('[arena-rewards] fetching rewards from remote');
@@ -102,19 +112,22 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			userName: currentUser?.username,
 		});
 		const result = remoteRewards ?? [];
-		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.ARENA_REWARDS, result);
+		this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).bulkPut(result);
 		return result;
 	}
 
-	private async handleRewards(rewards: readonly Reward[], arenaInfo: ArenaInfo, reviewId: string) {
+	private async handleRewards(rewards: readonly Reward[], arenaInfo: ArenaInfo) {
 		const user = await this.ow.getCurrentUser();
+		const groupedByType = groupByFunction2(rewards, (r) => r.Type);
+		const groupedRewards: readonly Reward[] = Object.values(groupedByType).map((rewards) =>
+			rewards.reduce((a, b) => ({ ...a, Amount: a.Amount + b.Amount })),
+		);
 		const rewardsInput: Input = {
 			userId: user.userId ?? '',
 			userName: user.username ?? '',
 			type: 'arena',
-			reviewId: reviewId,
 			runId: arenaInfo.runId,
-			rewards: rewards,
+			rewards: groupedRewards,
 			currentWins: arenaInfo.wins,
 			currentLosses: arenaInfo.losses,
 			appVersion: process.env['APP_VERSION'] ?? '0.0.0',
@@ -129,20 +142,20 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			return [];
 		}
 
-		return input.rewards.map(
-			(reward) =>
-				({
-					creationDate: new Date().toDateString(),
-					losses: input.currentLosses,
-					reviewId: input.reviewId,
-					runId: input.runId,
-					userId: input.userId,
-					userName: input.userName,
-					wins: input.currentWins,
-					rewardAmount: reward.Amount,
-					rewardBoosterId: reward.BoosterId,
-					rewardType: reward.Type,
-				} as ArenaRewardInfo),
+		const groupedByType = groupByFunction2(input.rewards, (r) => r.Type);
+		const groupedRewards: readonly Reward[] = Object.values(groupedByType).map((rewards) =>
+			rewards.reduce((a, b) => ({ ...a, Amount: a.Amount + b.Amount })),
 		);
+		return groupedRewards.map((reward) => ({
+			creationDate: new Date().toISOString(),
+			losses: input.currentLosses,
+			runId: input.runId,
+			userId: input.userId,
+			userName: input.userName,
+			wins: input.currentWins,
+			rewardAmount: reward.Amount,
+			rewardBoosterId: reward.BoosterId,
+			rewardType: reward.Type,
+		}));
 	}
 }

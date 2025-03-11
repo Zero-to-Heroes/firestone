@@ -43,6 +43,10 @@ import { GameStat } from '@firestone/stats/data-access';
 					<div class="value">{{ deckScore }}</div>
 				</div>
 
+				<div class="group current-draft" *ngIf="cardsInDeck != null">
+					<div class="value">{{ cardsInDeck }}</div>
+				</div>
+
 				<div class="group rewards" *ngIf="rewards?.length">
 					<arena-reward
 						*ngFor="let reward of rewards; trackBy: trackByRewardFn"
@@ -97,6 +101,7 @@ export class ArenaRunComponent {
 	rewards: readonly ArenaRewardInfo[];
 	_isExpanded: boolean;
 	notableCards: readonly InternalNotableCard[];
+	cardsInDeck: string | null;
 
 	private _run: ArenaRun;
 
@@ -115,7 +120,7 @@ export class ArenaRunComponent {
 	}
 
 	trackByRewardFn(index: number, item: ArenaRewardInfo) {
-		return item.reviewId + '-' + item.rewardType + '-' + item.rewardAmount + '-' + item.rewardBoosterId;
+		return item.runId + '-' + item.rewardType + '-' + item.rewardAmount + '-' + item.rewardBoosterId;
 	}
 
 	trackByStepFn(index: number, item: GameStat) {
@@ -126,7 +131,7 @@ export class ArenaRunComponent {
 		await this.nav.isReady();
 
 		this.nav.selectedCategoryId$$.next('arena-deck-details');
-		this.nav.selectedPersonalRun$$.next(this._run);
+		this.nav.selectedPersonalRunId$$.next(this._run?.id);
 	}
 
 	private updateValues() {
@@ -140,8 +145,11 @@ export class ArenaRunComponent {
 		this.wins = this._run.wins;
 		this.losses = this._run.losses;
 		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins });
-		this.gameModeImage = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${this.wins}wins.png`;
+		this.gameModeImage = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${
+			this.wins ?? 0
+		}wins.png`;
 		this.rewards = this._run.rewards;
+		console.debug('[debug] rewards', this.rewards, this._run);
 
 		this.playerClassImage = this._run.heroCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroCardId}.jpg`
@@ -156,6 +164,12 @@ export class ArenaRunComponent {
 		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
 		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards);
+
+		if (this._run.totalCardsInDeck != 30) {
+			this.cardsInDeck = `Drafted ${this._run.totalCardsInDeck} / 30 cards`;
+		} else {
+			this.cardsInDeck = null;
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

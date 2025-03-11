@@ -32,6 +32,7 @@ export * from './lib/services/arena-deck-details.service';
 export * from './lib/services/arena-deck-stats.service';
 export * from './lib/services/arena-discovers-guardian.service';
 export * from './lib/services/arena-draft-manager.interface';
+export * from './lib/services/arena-draft-manager.service';
 export * from './lib/services/arena-high-wins-runs.service';
 export * from './lib/services/arena-info.service';
 export * from './lib/services/arena-mulligan-guide-guardian.service';

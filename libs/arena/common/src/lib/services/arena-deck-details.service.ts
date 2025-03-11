@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { Picks } from '@firestone-hs/arena-draft-pick';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
-import { distinctUntilChanged, filter } from 'rxjs';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { ArenaDeckDetails, ArenaDeckOverview } from '../models/arena-deck-details';
 import { ArenaRun } from '../models/arena-run';
+import { ArenaDraftManagerService } from './arena-draft-manager.service';
 import { ArenaNavigationService } from './arena-navigation.service';
-
-const ARENA_DECK_DETAILS_URL = `https://znumiwhsu7lx2chawhhgzhjol40ygaro.lambda-url.us-west-2.on.aws/%runId%`;
+import { ArenaRunsService } from './arena-runs.service';
 
 @Injectable()
 export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetailsService> {
@@ -16,8 +20,8 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 	public deckDetails$$: SubscriberAwareBehaviorSubject<ArenaDeckDetails | null | undefined>;
 
 	private nav: ArenaNavigationService;
-	private gameStats: IGameStatsProviderService;
-	private api: ApiRunner;
+	private draftManager: ArenaDraftManagerService;
+	private arenaRuns: ArenaRunsService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenDeckDetailsService', () => !!this.deckDetails$$);
@@ -30,46 +34,48 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 	protected async init() {
 		this.deckDetails$$ = new SubscriberAwareBehaviorSubject<ArenaDeckDetails | null | undefined>(null);
 		this.nav = AppInjector.get(ArenaNavigationService);
-		this.api = AppInjector.get(ApiRunner);
-		this.gameStats = AppInjector.get(GAME_STATS_PROVIDER_SERVICE_TOKEN);
+		this.arenaRuns = AppInjector.get(ArenaRunsService);
+		this.draftManager = AppInjector.get(ArenaDraftManagerService);
+
+		await waitForReady(this.draftManager);
 
 		this.deckDetails$$.onFirstSubscribe(() => {
-			this.nav.selectedPersonalRun$$
-				.pipe(
-					filter((run) => !!run),
-					distinctUntilChanged(),
-				)
-				.subscribe(async (run) => {
-					console.debug('[arena-deck-details] received run', run);
-					if (!run) {
-						this.deckDetails$$.next(null);
-						console.warn('[arena-deck-details] received empty run');
-						return;
-					}
+			const run$ = this.nav.selectedPersonalRunId$$.pipe(
+				filter((runId) => !!runId),
+				distinctUntilChanged(),
+				switchMap((runId) => this.arenaRuns.getArenaRun$(runId!)),
+			);
 
-					const overview = this.buildOverview(run);
-					this.deckDetails$$.next({
-						deckstring: run.initialDeckList,
-						runId: run.id,
-						overview: overview,
-					} as ArenaDeckDetails);
+			run$.subscribe(async (run) => {
+				console.debug('[arena-deck-details] received run', run);
+				if (!run) {
+					this.deckDetails$$.next(null);
+					console.warn('[arena-deck-details] received empty run');
+					return;
+				}
 
-					const picks = await this.api.callGetApi<Picks>(ARENA_DECK_DETAILS_URL.replace('%runId%', run.id));
-					const pickInfo = picks?.picks;
-					if (!pickInfo) {
-						this.deckDetails$$.next(null);
-						console.warn('[arena-deck-details] no valid picks', picks);
-						return;
-					}
-					console.debug('[arena-deck-details] received picks', picks);
-					const deckDetails: ArenaDeckDetails = {
-						deckstring: run.initialDeckList,
-						runId: run.id,
-						picks: picks.picks,
-						overview: overview,
-					};
-					this.deckDetails$$.next(deckDetails);
-				});
+				const overview = this.buildOverview(run);
+				this.deckDetails$$.next({
+					deckstring: run.initialDeckList,
+					runId: run.id,
+					overview: overview,
+				} as ArenaDeckDetails);
+
+				const pickInfo = await this.draftManager.getPicksForRun(run.id);
+				if (!pickInfo) {
+					this.deckDetails$$.next(null);
+					console.warn('[arena-deck-details] no valid picks', pickInfo);
+					return;
+				}
+				console.debug('[arena-deck-details] received picks', pickInfo);
+				const deckDetails: ArenaDeckDetails = {
+					deckstring: run.initialDeckList,
+					runId: run.id,
+					picks: pickInfo,
+					overview: overview,
+				};
+				this.deckDetails$$.next(deckDetails);
+			});
 		});
 	}
 

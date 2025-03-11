@@ -447,7 +447,11 @@ import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@fi
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
-import { ARENA_DRAFT_MANAGER_SERVICE_TOKEN, ArenaCommonModule } from '@firestone/arena/common';
+import {
+	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
+	ArenaCommonModule,
+	ArenaDraftManagerService,
+} from '@firestone/arena/common';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import {
 	BattlegroundsCoreModule,
@@ -609,7 +613,6 @@ import { RawAchievementsLoaderService } from './js/services/achievement/data/raw
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
-import { ArenaDraftManagerService } from './js/services/arena/arena-draft-manager.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
@@ -1573,7 +1576,6 @@ try {
 		GameStateMetaInfoService,
 
 		ArenaLastMatchService,
-		ArenaDraftManagerService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

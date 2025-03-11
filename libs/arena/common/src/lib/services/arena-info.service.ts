@@ -20,6 +20,11 @@ export class ArenaInfoService {
 			.subscribe(() => this.triggerArenaInfoRetrieve(false));
 	}
 
+	public async getArenaInfo() {
+		const arenaInfo = await this.memory.getArenaInfo();
+		return arenaInfo;
+	}
+
 	public async triggerArenaInfoRetrieve(spectating: boolean) {
 		if (spectating) {
 			return;

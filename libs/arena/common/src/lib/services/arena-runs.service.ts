@@ -21,7 +21,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ArenaRun } from '../models/arena-run';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
 import { ArenaRewardsService } from './arena-rewards.service';
@@ -127,6 +127,10 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		});
 	}
 
+	public getArenaRun$(runId: string): Observable<ArenaRun | null | undefined> {
+		return this.allRuns$$.pipe(map((runs) => runs?.find((run) => run.id === runId)));
+	}
+
 	private buildArenaRuns(
 		arenaMatches: readonly GameStat[] | null | undefined,
 		rewards: readonly ArenaRewardInfo[] | null,
@@ -168,7 +172,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 						heroCardId: stat.heroCardId,
 						initialDeckList: stat.initialDeckList,
 						steps: [],
-						rewards: [],
+						rewards: rewardsGroupedByRun[stat.runId],
 						draftStat: stat,
 						totalCardsInDeck: !stat.initialDeckList
 							? 0

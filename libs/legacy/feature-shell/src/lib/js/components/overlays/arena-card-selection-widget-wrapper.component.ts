@@ -8,13 +8,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
+import { ArenaDraftManagerService } from '@firestone/arena/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, mergeMap, of, takeUntil } from 'rxjs';
 import { AdService } from '../../services/ad.service';
-import { ArenaDraftManagerService } from '../../services/arena/arena-draft-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 

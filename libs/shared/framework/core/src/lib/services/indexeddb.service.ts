@@ -3,14 +3,15 @@ import Dexie from 'dexie';
 
 export const ACHIEVEMENTS_COMPLETED = 'achievementsCompleted';
 export const ACHIEVEMENTS_HISTORY = 'achievementsHistory';
-export const ARENA_REWARDS = 'arenaRewards';
+export const ARENA_REWARDS_OLD = 'arenaRewards';
 export const ARENA_DECK_STATS_OLD = 'arenaDeckStats';
 export const ARENA_DECK_STATS = 'arenaDeckStats2';
-// export const ARENA_CURRENT_DECK_PICKS = 'arenaCurrentDeckPicks';
+export const ARENA_CURRENT_DECK_PICKS = 'arenaCurrentDeckPicks';
 export const COLLECTION_CARDS = 'collectionCards';
 export const COLLECTION_PACK_STATS = 'collectionPacks';
 export const COLLECTION_CARD_HISTORY = 'collectionCardHistory';
 export const MATCH_HISTORY = 'matchHistory';
+export const ARENA_REWARDS = 'arenaRewards2';
 
 const dbName = 'FirestoneDB';
 @Injectable({
@@ -28,7 +29,7 @@ export class IndexedDbService extends Dexie {
 			// AchievementHistory
 			[ACHIEVEMENTS_HISTORY]: 'achievementId',
 			// ArenaRewardInfo
-			[ARENA_REWARDS]: '',
+			[ARENA_REWARDS_OLD]: '',
 			// DraftDeckStats
 			[ARENA_DECK_STATS_OLD]: '',
 			// memory.Card
@@ -44,7 +45,9 @@ export class IndexedDbService extends Dexie {
 			// DraftDeckStats
 			[ARENA_DECK_STATS]: 'runId',
 			// DraftPick
-			// [ARENA_CURRENT_DECK_PICKS]: '[runId+pickNumber]',
+			[ARENA_CURRENT_DECK_PICKS]: '[runId+pickNumber], runId',
+			// ArenaRewardInfo
+			[ARENA_REWARDS]: '[runId+rewardType], runId',
 		});
 
 		await this.open();
