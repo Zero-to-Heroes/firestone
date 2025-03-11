@@ -73,10 +73,10 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 	}
 
 	async ngAfterContentInit() {
-		const isBazaarInstalled = await this.crossPromotion.isBazaarInstalled();
-		const isBazaarTrackerInstalled = await this.crossPromotion.isBazaarTrackerInstalled();
-		console.debug('[cross-promotion] bazaar installed', isBazaarInstalled, isBazaarTrackerInstalled);
-		this.showBazaarTrackerAd = isBazaarInstalled && !isBazaarTrackerInstalled;
+		// const isBazaarInstalled = await this.crossPromotion.isBazaarInstalled();
+		// const isBazaarTrackerInstalled = await this.crossPromotion.isBazaarTrackerInstalled();
+		// console.debug('[cross-promotion] bazaar installed', isBazaarInstalled, isBazaarTrackerInstalled);
+		// this.showBazaarTrackerAd = isBazaarInstalled && !isBazaarTrackerInstalled;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
