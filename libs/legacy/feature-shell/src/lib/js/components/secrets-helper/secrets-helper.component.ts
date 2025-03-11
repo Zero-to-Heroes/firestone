@@ -82,7 +82,7 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 
 		combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedOocTrackerScale ?? 100)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.secretsHelperScale ?? 100)),
 		])
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(([globalScale, scale]) => {
