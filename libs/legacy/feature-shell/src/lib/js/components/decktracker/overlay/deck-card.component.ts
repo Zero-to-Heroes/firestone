@@ -471,10 +471,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
 		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
-		this.cardName =
-			(!!card.cardName?.length
-				? card.cardName + this.buildSuffix(card, showStatsChange)
-				: this._referenceCard?.name ?? this.i18n?.getUnknownCardName()) ?? this.i18n.getUnknownCardName();
+		this.cardName = this.buildCardName(card, showStatsChange);
 		this.isUnknownCard = !card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = card.totalQuantity;
@@ -548,6 +545,22 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.mouseOverRight = Math.min(100, this.mouseOverRight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
+		}
+	}
+
+	private buildCardName(card: VisualDeckCard, showStatsChange: boolean): string {
+		if (!!card.cardName?.length) {
+			return card.cardName + this.buildSuffix(card, showStatsChange);
+		}
+		if (this._referenceCard?.name?.length) {
+			return this._referenceCard.name;
+		}
+		if (!card.creatorCardIds?.length) {
+			return this.i18n.getUnknownCardName();
+		} else {
+			return this.i18n.getCreatedByCardName(
+				card.creatorCardIds.map((cardId) => this.cards.getCard(cardId).name).join(', '),
+			);
 		}
 	}
 
