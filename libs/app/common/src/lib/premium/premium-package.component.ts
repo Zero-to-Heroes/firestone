@@ -106,7 +106,10 @@ export class PremiumPackageComponent {
 		this.isAutoRenew = value.activePlan?.autoRenews ?? false;
 		this.cantSubscribe = value.activePlan != null && (!this.isActive || !this.isAutoRenew);
 		this.allowSubscriptionOverride =
-			this.cantSubscribe && value.activePlan?.id === 'legacy' && value.id !== 'legacy';
+			this.cantSubscribe &&
+			value.activePlan?.id === 'legacy' &&
+			value.id !== 'legacy' &&
+			value.activePlan.cancelled;
 		console.debug('setting plan', value, this.isActive, this.isAutoRenew);
 		this.name = this.i18n.translateString(`app.premium.plan.${value.id}`);
 		this.price = `$${value.price ?? '-'}`;
