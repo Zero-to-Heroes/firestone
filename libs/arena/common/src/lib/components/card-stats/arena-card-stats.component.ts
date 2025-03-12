@@ -357,6 +357,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 					.map((token) => token.trim());
 		const result =
 			stats
+				?.filter((stat) => (stat.draftStats?.totalOffered ?? 0) > 0)
 				?.filter((stat) => stat.matchStats.stats.decksWithCard > 50)
 				.filter((stat) => this.hasCorrectCardClass(stat.cardId, cardClass))
 				.filter((stat) => this.hasCorrectCardType(stat.cardId, cardType))
