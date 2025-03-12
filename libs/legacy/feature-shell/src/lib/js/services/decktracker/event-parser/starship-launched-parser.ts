@@ -38,6 +38,7 @@ export class StarshipLaunchedParser implements EventParser {
 		const newBoard = deck.board.map((c) => (c.entityId === entityId ? newCard : c));
 		const newDeck = deck.update({
 			board: newBoard,
+			starshipsLaunched: [...deck.starshipsLaunched, entityId],
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,

@@ -1,6 +1,7 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getSpaceshipsLaunchedCardIds } from 'libs/game-state/src/lib/counters/impl/spaceships-launched';
 import { GlobalHighlightCard } from './_registers';
 
 export const JimRaynor: GlobalHighlightCard = {
@@ -11,24 +12,10 @@ export const JimRaynor: GlobalHighlightCard = {
 		gameState: GameState,
 		allCards: CardsFacadeService,
 	) => {
-		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const otherDeckState = side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
-		const starshipsOwn = deckState
-			.getAllCardsInDeckWithoutOptions()
-			.filter((c) => !c.stolenFromOpponent)
-			.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-			.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
-		const starshipsStolen = otherDeckState
-			.getAllCardsInDeckWithoutOptions()
-			.filter((c) => c.stolenFromOpponent)
-			.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-			.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
-		const cardIds = [...starshipsOwn, ...starshipsStolen].flatMap((c) => [
-			c.cardId,
-			...(c.storedInformation?.cards
-				.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
-				?.map((c) => c.cardId) ?? []),
-		]);
+		if (side === 'single') {
+			return [];
+		}
+		const cardIds = getSpaceshipsLaunchedCardIds(side, gameState, allCards);
 		console.debug('[jim-raynor] related cards', cardIds);
 		return cardIds;
 	},

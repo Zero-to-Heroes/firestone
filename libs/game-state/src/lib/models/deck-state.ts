@@ -150,6 +150,7 @@ export class DeckState {
 	}[] = [];
 	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
 	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];
+	readonly starshipsLaunched: readonly number[] = [];
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);

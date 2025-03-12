@@ -39,8 +39,8 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 
 	// So that the related card ids can be refreshed while the tooltip is displayed
 	// (otherwise it only refreshes on mouseenter)
-	@Input() set cardTooltipRelatedCardIds(value: readonly string[]) {
-		this._cardTooltipRelatedCardIds = value;
+	@Input() set cardTooltipRelatedCardIds(value: readonly string[] | undefined) {
+		this._cardTooltipRelatedCardIds = value ?? [];
 		// console.debug('setting related cards in directive input', value);
 		if (!!this.tooltipRef) {
 			const shouldShowRelatedCards =

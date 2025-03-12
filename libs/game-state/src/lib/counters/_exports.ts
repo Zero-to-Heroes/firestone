@@ -20,6 +20,7 @@ import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
+import { SpaceshipsLaunchedCounterDefinitionV2 } from './impl/spaceships-launched';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 
 export const getAllCounters: (
@@ -41,6 +42,7 @@ export const getAllCounters: (
 	new NextStarshipLaunchCounterDefinitionV2(i18n, allCards),
 	new CardsPlayedThisTurnCounterDefinitionV2(i18n, allCards),
 	new MinionsDeadThisGameCounterDefinitionV2(i18n),
+	new SpaceshipsLaunchedCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -59,6 +61,7 @@ export type CounterType =
 	| 'protossSpells'
 	| 'spellsOnFriendly'
 	| 'pogo'
+	| 'spaceshipsLaunched'
 	| 'giftsPlayed'
 	| 'freeRefresh'
 	| 'ceaselessExpanse'
