@@ -21,6 +21,7 @@ import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-laun
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
+import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 
 export const getAllCounters: (
@@ -43,6 +44,7 @@ export const getAllCounters: (
 	new CardsPlayedThisTurnCounterDefinitionV2(i18n, allCards),
 	new MinionsDeadThisGameCounterDefinitionV2(i18n),
 	new StarshipsLaunchedCounterDefinitionV2(i18n, allCards),
+	new SpellsPlayedConstructedCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

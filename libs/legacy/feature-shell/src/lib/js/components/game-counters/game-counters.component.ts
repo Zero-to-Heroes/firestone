@@ -63,7 +63,6 @@ import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-cou
 import { ShockspitterCounterDefinition } from './definitions/shockspitter-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
-import { SpellCounterDefinition } from './definitions/spell-counter';
 import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
 import { TreantCounterDefinition } from './definitions/treant-counter';
@@ -195,8 +194,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'piratesSummoned':
 				return PiratesSummonedCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'spells':
-				return SpellCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':
 				return ElementalCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'watchpost':

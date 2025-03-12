@@ -321,12 +321,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-tooltip'),
 	},
 	{
-		id: 'number-of-spells',
-		field: 'opponentSpellCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-tooltip'),
-	},
-	{
 		id: 'cthun',
 		field: 'opponentCthunCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-label'),

@@ -107,7 +107,6 @@ import { DebugService } from '../../services/debug.service';
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>
 			<player-watchpost-widget-wrapper></player-watchpost-widget-wrapper>
-			<player-spell-widget-wrapper></player-spell-widget-wrapper>
 			<player-pogo-widget-wrapper></player-pogo-widget-wrapper>
 			<player-astral-automaton-widget-wrapper></player-astral-automaton-widget-wrapper>
 			<player-libram-widget-wrapper></player-libram-widget-wrapper>
@@ -184,7 +183,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-shockspitter-widget-wrapper></opponent-shockspitter-widget-wrapper>
 			<opponent-multicaster-widget-wrapper></opponent-multicaster-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
-			<opponent-spell-widget-wrapper></opponent-spell-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>

@@ -228,7 +228,6 @@ import { PlayerPogoWidgetWrapperComponent } from './js/components/overlays/count
 import { PlayerQueensguardWidgetWrapperComponent } from './js/components/overlays/counters/player-queensguard-widget-wrapper.component';
 import { PlayerRelicWidgetWrapperComponent } from './js/components/overlays/counters/player-relic-widget-wrapper.component';
 import { PlayerSpectralPillagerWidgetWrapperComponent } from './js/components/overlays/counters/player-spectral-pillager-widget-wrapper.component';
-import { PlayerSpellWidgetWrapperComponent } from './js/components/overlays/counters/player-spell-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from './js/components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerVolatileSkeletonWidgetWrapperComponent } from './js/components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-watchpost-widget-wrapper.component';
@@ -397,7 +396,6 @@ import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overl
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentMulticasterWidgetWrapperComponent } from '@components/overlays/counters/opponent-multicaster-widget-wrapper.component';
 import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
-import { OpponentSpellWidgetWrapperComponent } from '@components/overlays/counters/opponent-spell-widget-wrapper.component';
 import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
 import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
 import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
@@ -1334,7 +1332,6 @@ try {
 		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,
 		PlayerWatchpostCounterWidgetWrapperComponent,
-		PlayerSpellWidgetWrapperComponent,
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerChainedGuardianWidgetWrapperComponent,
@@ -1412,7 +1409,6 @@ try {
 		OpponentShockspitterWidgetWrapperComponent,
 		OpponentMulticasterWidgetWrapperComponent,
 		OpponentChaoticTendrilWidgetWrapperComponent,
-		OpponentSpellWidgetWrapperComponent,
 		OpponentExcavateWidgetWrapperComponent,
 		OpponentCorpseSpentWidgetWrapperComponent,
 		OpponentWheelOfDeathWidgetWrapperComponent,

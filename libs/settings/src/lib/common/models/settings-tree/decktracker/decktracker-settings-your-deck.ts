@@ -275,12 +275,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.attack-on-board-tooltip'),
 	},
 	{
-		id: 'number-of-spells',
-		field: 'playerSpellCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-tooltip'),
-	},
-	{
 		id: 'elementals',
 		field: 'playerElementalCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elementals-label'),
