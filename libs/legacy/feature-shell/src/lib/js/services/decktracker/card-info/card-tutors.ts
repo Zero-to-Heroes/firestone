@@ -260,6 +260,7 @@ export const tutors = [
 	CardIds.ChronoBoost_SC_750,
 	CardIds.Blink_SC_761,
 	CardIds.NydusWorm_SC_015,
+	CardIds.TheDarkPortal_BT_302,
 	TempCardIds.FaeTrickster,
 	TempCardIds.TormentedDreadwing,
 	TempCardIds.DaydreamingPixie,

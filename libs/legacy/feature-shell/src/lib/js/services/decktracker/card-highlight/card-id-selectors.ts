@@ -2599,6 +2599,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.TheCurator_KAR_061:
 			return and(side(inputSide), inDeck, minion, or(beast, dragon, murloc));
+		case CardIds.TheDarkPortal_BT_302:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheExodar_GDB_120:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.TheFistOfRaDen:
