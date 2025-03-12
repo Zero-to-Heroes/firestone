@@ -12,7 +12,7 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable, takeUntil, tap } from 'rxjs';
+import { combineLatest, filter, Observable, switchMap, takeUntil, tap } from 'rxjs';
 import { ArenaHeroOption } from './model';
 
 @Component({
@@ -66,11 +66,18 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 			this.mapData((info) => info),
 			tap((info) => console.debug('[arena-hero-option] showWidget', info)),
 		);
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
+		this.showWidget$
+			.pipe(
+				// Recompute the scale whenever the widget is shown
+				filter((show) => show),
+				switchMap((show) =>
+					combineLatest([
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
+					]),
+				),
+				takeUntil(this.destroyed$),
+			)
 			.subscribe(async ([globalScale, scale]) => {
 				const newScale = (globalScale / 100) * (scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');

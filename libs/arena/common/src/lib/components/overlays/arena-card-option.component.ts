@@ -12,7 +12,7 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, switchMap, takeUntil, tap } from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
 import { ArenaCardOption } from './model';
 
@@ -87,11 +87,17 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			tap((info) => console.debug('[arena-card-option] showWidget', info)),
 			this.mapData(([pickNumber, hasPremium]) => pickNumber === 0 || hasPremium),
 		);
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
+		combineLatest([this.showWidget$, this.widgetActive$])
+			.pipe(
+				filter(([showWidget, widgetActive]) => showWidget && widgetActive),
+				switchMap(() =>
+					combineLatest([
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
+					]),
+				),
+				takeUntil(this.destroyed$),
+			)
 			.subscribe(async ([globalScale, scale]) => {
 				const newScale = (globalScale / 100) * (scale / 100);
 				const element = await this.getScalable();

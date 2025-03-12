@@ -13,7 +13,7 @@ import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual, sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, Observable, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, switchMap, takeUntil, tap } from 'rxjs';
 import { isDefault, MaxResources, nullIfDefaultHealth, nullIfDefaultMana } from './model';
 
 @Component({
@@ -117,14 +117,23 @@ export class PlayerMaxResourcesWidgetWrapperComponent
 				return result;
 			}),
 		);
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.maxResourcesWidgetScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
+		this.showWidget$
+			.pipe(
+				// Recompute the scale whenever the widget is shown
+				filter((show) => show),
+				switchMap((show) =>
+					combineLatest([
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.maxResourcesWidgetScale ?? 100)),
+					]),
+				),
+				tap(([globalScale, scale]) => console.debug('[max-resources] new scale params', globalScale, scale)),
+				takeUntil(this.destroyed$),
+			)
 			.subscribe(async ([globalScale, scale]) => {
 				const newScale = (globalScale / 100) * (scale / 100);
 				const element = await this.getScalable();
+				console.debug('[max-resources] setting scale', newScale, element);
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
