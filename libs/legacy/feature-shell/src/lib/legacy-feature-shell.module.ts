@@ -200,7 +200,6 @@ import { OpponentFatigueWidgetWrapperComponent } from './js/components/overlays/
 import { OpponentGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/opponent-galakrond-widget-wrapper.component';
 import { OpponentHeroPowerDamageWidgetWrapperComponent } from './js/components/overlays/counters/opponent-hero-power-damage-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from './js/components/overlays/counters/opponent-jade-widget-wrapper.component';
-import { OpponentLibramWidgetWrapperComponent } from './js/components/overlays/counters/opponent-libram-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from './js/components/overlays/counters/opponent-pogo-widget-wrapper.component';
 import { OpponentRelicWidgetWrapperComponent } from './js/components/overlays/counters/opponent-relic-widget-wrapper.component';
 import { OpponentVolatileSkeletonWidgetWrapperComponent } from './js/components/overlays/counters/opponent-volatile-skeleton-widget-wrapper.component';
@@ -220,7 +219,6 @@ import { PlayerGreySageParrotWidgetWrapperComponent } from './js/components/over
 import { PlayerHeroPowerDamageWidgetWrapperComponent } from './js/components/overlays/counters/player-hero-power-damage-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from './js/components/overlays/counters/player-jade-widget-wrapper.component';
 import { PlayerLadyDarkveinWidgetWrapperComponent } from './js/components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
-import { PlayerLibramWidgetWrapperComponent } from './js/components/overlays/counters/player-libram-widget-wrapper.component';
 import { PlayerMonstrousParrotWidgetWrapperComponent } from './js/components/overlays/counters/player-monstrous-parrot-widget-wrapper.component';
 import { PlayerMulticasterWidgetWrapperComponent } from './js/components/overlays/counters/player-multicaster-widget-wrapper.component';
 import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from './js/components/overlays/counters/player-murozond-widget-wrapper.component';
@@ -1339,7 +1337,6 @@ try {
 		PlayerTreantWidgetWrapperComponent,
 		PlayerDragonsSummonedWidgetWrapperComponent,
 		PlayerPiratesSummonedWidgetWrapperComponent,
-		PlayerLibramWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,
 		PlayerGalakrondWidgetWrapperComponent,
@@ -1403,7 +1400,6 @@ try {
 		OpponentVolatileSkeletonWidgetWrapperComponent,
 		OpponentRelicWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
-		OpponentLibramWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,
 		OpponentShockspitterWidgetWrapperComponent,

@@ -44,7 +44,6 @@ import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damag
 import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
-import { LibramCounterDefinition } from './definitions/libram-counter';
 import { LightrayCounterDefinition } from './definitions/lightray-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
@@ -198,8 +197,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElementalCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'watchpost':
 				return WatchpostCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'libram':
-				return LibramCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elwynnBoar':
 				return ElwynnBoarCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'volatileSkeleton':

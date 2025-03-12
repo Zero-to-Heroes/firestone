@@ -15,6 +15,7 @@ import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
+import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
@@ -45,6 +46,7 @@ export const getAllCounters: (
 	new MinionsDeadThisGameCounterDefinitionV2(i18n),
 	new StarshipsLaunchedCounterDefinitionV2(i18n, allCards),
 	new SpellsPlayedConstructedCounterDefinitionV2(i18n),
+	new LibramPlayedCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

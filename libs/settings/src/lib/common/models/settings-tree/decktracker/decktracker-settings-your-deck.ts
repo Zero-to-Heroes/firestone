@@ -287,12 +287,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.watch-post-tooltip'),
 	},
 	{
-		id: 'libram',
-		field: 'playerLibramCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.libram-tooltip'),
-	},
-	{
 		id: 'elwynn-boar',
 		field: 'playerElwynnBoarCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-label'),

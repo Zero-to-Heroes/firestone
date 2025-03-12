@@ -109,7 +109,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-watchpost-widget-wrapper></player-watchpost-widget-wrapper>
 			<player-pogo-widget-wrapper></player-pogo-widget-wrapper>
 			<player-astral-automaton-widget-wrapper></player-astral-automaton-widget-wrapper>
-			<player-libram-widget-wrapper></player-libram-widget-wrapper>
 			<player-jade-widget-wrapper></player-jade-widget-wrapper>
 			<player-galakrond-widget-wrapper></player-galakrond-widget-wrapper>
 			<player-fatigue-widget-wrapper></player-fatigue-widget-wrapper>
