@@ -42,7 +42,7 @@ export class CardBackToDeckParser implements EventParser {
 				: initialCardId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
-		console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
+		// console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
@@ -52,20 +52,20 @@ export class CardBackToDeckParser implements EventParser {
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
 		const shouldKeepDeckAsIs = deck.deckstring && (card?.inInitialDeck || !card?.creatorCardId) && !card?.cardId;
-		console.debug(
-			'[card-back-to-deck] shouldKeepDeckAsIs',
-			shouldKeepDeckAsIs,
-			card?.inInitialDeck,
-			card?.cardId,
-			deck,
-			card,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[card-back-to-deck] shouldKeepDeckAsIs',
+		// 	shouldKeepDeckAsIs,
+		// 	card?.inInitialDeck,
+		// 	card?.cardId,
+		// 	deck,
+		// 	card,
+		// 	gameEvent,
+		// );
 
 		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
 		// the enchantments, cost reduction, etc.
 		const refCard = getProcessedCard(card.cardId, card.entityId, deck, this.allCards); // this.allCards.getCard(card.cardId);
-		console.debug('[card-back-to-deck] refCard', refCard, card.cardId, deck, card);
+		// console.debug('[card-back-to-deck] refCard', refCard, card.cardId, deck, card);
 		const cardWithInfoReset = card?.update({
 			refManaCost: refCard?.cost ?? card?.refManaCost,
 			actualManaCost: refCard?.cost ?? card?.actualManaCost,
@@ -88,7 +88,7 @@ export class CardBackToDeckParser implements EventParser {
 			temporaryCard: false,
 			zone: undefined,
 		} as DeckCard);
-		console.debug('[card-back-to-deck] cardWithoutInfluence', cardWithoutInfluence, cardWithInfoReset);
+		// console.debug('[card-back-to-deck] cardWithoutInfluence', cardWithoutInfluence, cardWithInfoReset);
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
 		});
