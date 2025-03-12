@@ -46,6 +46,8 @@ export class VersionComponent implements AfterViewInit {
 	version: string;
 	updateStatus: null | 'update-available' | 'restart-needed' | 'update-error' = null;
 
+	private isUpdating = false;
+
 	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
@@ -67,8 +69,14 @@ export class VersionComponent implements AfterViewInit {
 	}
 
 	async updateApp() {
+		if (this.isUpdating) {
+			return;
+		}
+
+		this.isUpdating = true;
 		const updateDone = await this.ow.updateExtension();
 		this.updateStatus = updateDone ? 'restart-needed' : 'update-error';
+		this.isUpdating = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
