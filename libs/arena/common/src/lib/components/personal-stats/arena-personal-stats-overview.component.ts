@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { RewardType } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -36,12 +37,12 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 	}
 
 	private buildStats(runs: readonly ArenaRun[] | undefined | null): readonly InternalStat[] {
-		const replays = runs?.flatMap((r) => r.steps);
+		const replays = runs?.flatMap((r) => r.steps) ?? [];
 
-		const replaysFirst = replays?.filter((replay) => replay.coinPlay === 'play') ?? [];
-		const replaysCoin = replays?.filter((replay) => replay.coinPlay === 'coin') ?? [];
-		const replaysWon = replays?.filter((replay) => replay.result === 'won') ?? [];
-		const replaysLost = replays?.filter((replay) => replay.result === 'lost') ?? [];
+		const replaysFirst = replays.filter((replay) => replay.coinPlay === 'play') ?? [];
+		const replaysCoin = replays.filter((replay) => replay.coinPlay === 'coin') ?? [];
+		const replaysWon = replays.filter((replay) => replay.result === 'won') ?? [];
+		const replaysLost = replays.filter((replay) => replay.result === 'lost') ?? [];
 
 		// const turnsToWin =
 		// 	replaysWon
@@ -53,7 +54,7 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 		// 		.filter((replay) => replay.gameDurationTurns)
 		// 		.map((replay) => replay.gameDurationTurns)
 		// 		.reduce((a, b) => a + b, 0) / replaysLost.filter((replay) => replay.gameDurationTurns).length;
-		const winrate = !!replays?.length ? (100 * replaysWon.length) / replays.length : null;
+		const winrate = !!replays.length ? (100 * replaysWon.length) / replays.length : null;
 		const winrateFirst = !!replaysFirst.length
 			? (100 * replaysFirst.filter((replay) => replay.result === 'won').length) / replaysFirst.length
 			: null;
@@ -62,6 +63,26 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 			: null;
 
 		const { average: leaderboardAverage, runsPlayed } = this.buildLeaderboardAverage(runs ?? []);
+		const allRewards = runs?.flatMap((r) => r.rewards).filter((r) => !!r) ?? [];
+		const totalRunsWithRewards = runs?.filter((r) => !!r.rewards?.length).length ?? 0;
+
+		const rewardTotalGold = allRewards
+			.filter((r) => r.rewardType === RewardType.GOLD)
+			.map((r) => r.rewardAmount)
+			.reduce((a, b) => a + b, 0);
+		const rewardAverageGold = totalRunsWithRewards > 0 ? rewardTotalGold / totalRunsWithRewards : null;
+
+		const rewardTotalDust = allRewards
+			.filter((r) => r.rewardType === RewardType.ARCANE_DUST)
+			.map((r) => r.rewardAmount)
+			.reduce((a, b) => a + b, 0);
+		const rewardAverageDust = totalRunsWithRewards > 0 ? rewardTotalDust / totalRunsWithRewards : null;
+
+		const rewardTotalPacks = allRewards
+			.filter((r) => r.rewardType === RewardType.BOOSTER_PACK)
+			.map((r) => r.rewardAmount)
+			.reduce((a, b) => a + b, 0);
+		const rewardAveragePacks = totalRunsWithRewards > 0 ? rewardTotalPacks / totalRunsWithRewards : null;
 
 		return [
 			{
@@ -69,6 +90,21 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 				tooltip: this.i18n.translateString('app.arena.personal-stats.leaderboard-average-tooltip')!,
 				value: `${leaderboardAverage?.toLocaleString() ?? '-'}`,
 				class: runsPlayed < 30 ? 'leaderboard-average-temp' : 'leaderboard-average',
+			},
+			{
+				label: this.i18n.translateString('app.arena.personal-stats.reward-gold')!,
+				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-gold-tooltip')!,
+				value: `${rewardTotalGold?.toLocaleString() ?? '-'} / ${rewardAverageGold?.toFixed(0) ?? '-'}`,
+			},
+			{
+				label: this.i18n.translateString('app.arena.personal-stats.reward-dust')!,
+				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-dust-tooltip')!,
+				value: `${rewardTotalDust?.toLocaleString() ?? '-'} / ${rewardAverageDust?.toFixed(0) ?? '-'}`,
+			},
+			{
+				label: this.i18n.translateString('app.arena.personal-stats.reward-packs')!,
+				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-packs-tooltip')!,
+				value: `${rewardTotalPacks?.toLocaleString() ?? '-'} / ${rewardAveragePacks?.toFixed(0) ?? '-'}`,
 			},
 			// {
 			// 	label: this.i18n.translateString('app.arena.stats.total-runs')!,
