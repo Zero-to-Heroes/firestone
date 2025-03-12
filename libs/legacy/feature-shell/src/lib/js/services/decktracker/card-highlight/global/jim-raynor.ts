@@ -1,7 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getStarshipsLaunchedCardIds } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { getSpaceshipsLaunchedCardIds } from 'libs/game-state/src/lib/counters/impl/spaceships-launched';
 import { GlobalHighlightCard } from './_registers';
 
 export const JimRaynor: GlobalHighlightCard = {
@@ -15,7 +14,7 @@ export const JimRaynor: GlobalHighlightCard = {
 		if (side === 'single') {
 			return [];
 		}
-		const cardIds = getSpaceshipsLaunchedCardIds(side, gameState, allCards);
+		const cardIds = getStarshipsLaunchedCardIds(side, gameState, allCards);
 		console.debug('[jim-raynor] related cards', cardIds);
 		return cardIds;
 	},

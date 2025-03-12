@@ -6,15 +6,15 @@ import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
-export class SpaceshipsLaunchedCounterDefinitionV2 extends CounterDefinitionV2<number> {
-	public override id: CounterType = 'spaceshipsLaunched';
+export class StarshipsLaunchedCounterDefinitionV2 extends CounterDefinitionV2<number> {
+	public override id: CounterType = 'starshipsLaunched';
 	public override image = CardIds.JimRaynor_SC_400;
 	public override cards: readonly CardIds[] = [CardIds.JimRaynor_SC_400];
 
 	readonly player = undefined;
 
 	readonly opponent = {
-		pref: 'opponentSpaceshipsLaunchedCounter' as const,
+		pref: 'opponentStarshipsLaunchedCounter' as const,
 		display: (state: GameState): boolean => {
 			const result =
 				initialHeroClassIs(
@@ -43,13 +43,13 @@ export class SpaceshipsLaunchedCounterDefinitionV2 extends CounterDefinitionV2<n
 	}
 
 	protected override cardTooltip(side: 'player' | 'opponent', gameState: GameState): readonly string[] | undefined {
-		const cardIds = getSpaceshipsLaunchedCardIds(side, gameState, this.allCards);
+		const cardIds = getStarshipsLaunchedCardIds(side, gameState, this.allCards);
 		console.debug('[spaceships-launched] related cards', cardIds);
 		return cardIds;
 	}
 }
 
-export const getSpaceshipsLaunchedCardIds = (
+export const getStarshipsLaunchedCardIds = (
 	side: 'player' | 'opponent',
 	gameState: GameState,
 	allCards: CardsFacadeService,
