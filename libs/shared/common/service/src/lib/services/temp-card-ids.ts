@@ -1,5 +1,9 @@
 export declare const enum TempCardIds {
 	Starsurge = 'Starsurge',
+	RitualOfTheNewMoon = 'RitualOfTheNewMoon',
+	WishOfTheNewMoon = 'WishOfTheNewMoon',
+	WeaverOfTheCycle = 'WeaverOfTheCycle',
+	Tyrande_ERD = 'Tyrande_ERD',
 	RiteOfAtrocity = 'RiteOfAtrocity',
 	MonstrousMosquito = 'MonstrousMosquito',
 	Aesina = 'Aesina',

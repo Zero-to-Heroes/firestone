@@ -2129,6 +2129,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 		case CardIds.RingOfRefreshmentTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case TempCardIds.RitualOfTheNewMoon:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RivendareWarrider:
 			return and(
 				side(inputSide),
@@ -2714,6 +2716,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), currentClass, minion),
 				tooltip(and(side(inputSide), inGraveyard, currentClass, minion)),
 			);
+		case TempCardIds.Tyrande_ERD:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Tuskpiercer:
 			return and(side(inputSide), inDeck, deathrattle, minion);
 		case CardIds.TwilightDeceptor:
@@ -2843,6 +2847,8 @@ export const cardIdSelector = (
 			return highlightConditions(and(side(inputSide), inDeck, weapon), and(side(inputSide), inDeck, pirate));
 		case CardIds.WeaponsExpert:
 			return and(side(inputSide), inDeck, weapon);
+		case TempCardIds.WeaverOfTheCycle:
+			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.WickedWitchdoctor:
 		case CardIds.WickedWitchdoctor_WON_083:
 			return and(side(inputSide), or(inDeck, inHand), spell);
@@ -2867,6 +2873,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 		case CardIds.WingCommanderIchman_AV_336:
 			return and(side(inputSide), inDeck, minion, beast);
+		case TempCardIds.WishOfTheNewMoon:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.WitchingHour:
 			return and(side(inputSide), inGraveyard, minion, beast);
 		case CardIds.WitherTheWeakTavernBrawl:
