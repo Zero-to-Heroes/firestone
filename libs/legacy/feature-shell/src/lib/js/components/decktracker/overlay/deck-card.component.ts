@@ -559,9 +559,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!card.creatorCardIds?.length) {
 			return this.i18n.getUnknownCardName();
 		} else {
-			return this.i18n.getCreatedByCardName(
-				card.creatorCardIds.map((cardId) => this.cards.getCard(cardId).name).join(', '),
-			);
+			const creatorCardId = card.creatorCardIds[0];
+			const creatorName = this.cards.getCard(creatorCardId)?.name;
+			return creatorName?.length ? this.i18n.getCreatedByCardName(creatorName) : this.i18n.getUnknownCardName();
 		}
 	}
 
