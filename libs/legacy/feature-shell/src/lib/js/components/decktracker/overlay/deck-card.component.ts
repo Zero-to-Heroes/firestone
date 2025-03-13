@@ -321,7 +321,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 		combineLatest([this.ads.enablePremiumFeatures$$, this.cardMouseOverService.mousedOverCard$$])
 			.pipe(
-				filter(([enablePremiumFeatures]) => enablePremiumFeatures),
+				// HDT offers this for free
+				// filter(([enablePremiumFeatures]) => enablePremiumFeatures),
 				map(([enablePremiumFeatures, mousedOverCard]) => mousedOverCard),
 				distinctUntilChanged(
 					(a, b) => a?.EntityId === b?.EntityId && a?.Zone === b?.Zone && a?.Side === b?.Side,
