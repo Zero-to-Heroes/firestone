@@ -31,8 +31,8 @@ export class CustomColorPickerComponent extends AbstractSubscriptionComponent im
 	@Input() label: string;
 	@Input() key: CustomStyleKey = '--bgs-widget-background-color';
 
-	defaultColor = defaultStyleKeys[this.key];
-	color = this.defaultColor;
+	defaultColor: string;
+	color: string;
 	showColorPicker = false;
 
 	constructor(
@@ -45,6 +45,10 @@ export class CustomColorPickerComponent extends AbstractSubscriptionComponent im
 
 	async ngAfterContentInit() {
 		await waitForReady(this.appearance);
+
+		const defaultStyles = await defaultStyleKeys();
+		this.defaultColor = defaultStyles[this.key];
+		this.color = defaultStyles[this.key];
 
 		this.appearance.colors$$
 			.pipe(this.mapData((colors) => colors?.[this.key] ?? this.defaultColor))

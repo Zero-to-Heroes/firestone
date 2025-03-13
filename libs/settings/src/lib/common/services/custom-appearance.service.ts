@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -6,6 +7,7 @@ import {
 	LocalStorageService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { filter } from 'rxjs';
 import { CustomAppearance, CustomStyleKey, FinalStyles, defaultStyleKeys } from '../models/custom-appearance';
 
 @Injectable()
@@ -39,6 +41,8 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 			this.internalSubject$$.subscribe();
 		});
 
+		const defaultStyles = await defaultStyleKeys();
+
 		this.internalSubject$$.onFirstSubscribe(() => {
 			const localColors =
 				this.localStorage.getItem<CustomAppearance>(LocalStorageService.LOCAL_STORAGE_CUSTOM_APPEARANCE) ??
@@ -49,9 +53,10 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_CUSTOM_APPEARANCE, colors);
 			});
 
-			this.colors$$.subscribe((colors) => {
-				const bgsBackgroundColor = getStyle(colors, '--bgs-widget-background-color');
+			this.colors$$.pipe(filter((colors) => !!colors)).subscribe((colors) => {
+				const bgsBackgroundColor = getStyle(colors, defaultStyles, '--bgs-widget-background-color');
 				const finalStyles: FinalStyles = {
+					...colors!,
 					'--bgs-simulation-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg')`,
 					'--bgs-session-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
@@ -83,8 +88,9 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 		this.mainInstance.resetAllInternal();
 	}
 
-	private resetAllInternal() {
-		this.colors$$.next(null);
+	private async resetAllInternal() {
+		const defaultStyles = await defaultStyleKeys();
+		this.colors$$.next(defaultStyles);
 	}
 
 	public setColor(key: CustomStyleKey, value: string) {
@@ -92,7 +98,7 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 	}
 
 	public setColorInternal(key: CustomStyleKey, value: string) {
-		const currentColors = this.colors$$.value || {};
+		const currentColors = this.colors$$.value!;
 		this.colors$$.next({
 			...currentColors,
 			[key]: value,
@@ -100,6 +106,6 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 	}
 }
 
-const getStyle = (colors: CustomAppearance | null, key: CustomStyleKey) => {
-	return colors?.[key] ?? defaultStyleKeys[key];
+const getStyle = (colors: CustomAppearance | null, defaultStyles: CustomAppearance, key: CustomStyleKey) => {
+	return colors?.[key] ?? defaultStyles[key];
 };

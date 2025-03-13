@@ -19,7 +19,7 @@ import { MainWindowStateFacadeService } from '../../../services/mainwindow/store
 	selector: 'quests-widget-view',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/overlays/quests/quests-widget-view.component.scss',
 	],
 	template: `
@@ -177,7 +177,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 	selector: 'hs-quests-list',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/overlays/quests/quests-widget-view.component.scss',
 	],
 	template: `

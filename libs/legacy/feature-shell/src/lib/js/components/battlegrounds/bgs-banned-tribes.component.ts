@@ -20,7 +20,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 @Component({
 	selector: 'bgs-banned-tribes',
 	styleUrls: [
-		`../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../css/themes/battlegrounds-theme.scss`,
 		`../../../css/global/cdk-overlay.scss`,
 		'../../../css/component/battlegrounds/bgs-banned-tribes.component.scss',
 	],

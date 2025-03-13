@@ -35,7 +35,7 @@ import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..com
 	selector: 'mercs-quests-widget',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/overlays/quests/quests-widget-view.component.scss',
 		'../../../../css/component/overlays/quests/mercs-quests-widget.component.scss',
 	],

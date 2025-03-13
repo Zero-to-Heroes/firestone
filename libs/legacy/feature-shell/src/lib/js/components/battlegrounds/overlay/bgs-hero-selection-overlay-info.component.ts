@@ -25,7 +25,10 @@ import {
 
 @Component({
 	selector: 'bgs-hero-selection-overlay-info',
-	styleUrls: ['../../../../css/themes/battlegrounds-theme.scss', './bgs-hero-selection-overlay-info.component.scss'],
+	styleUrls: [
+		// '../../../../css/themes/battlegrounds-theme.scss',
+		'./bgs-hero-selection-overlay-info.component.scss',
+	],
 	template: `
 		<div class="info-container" *ngIf="_hero">
 			<div class="element tiers-info scalable" *ngIf="showTierOverlay$ | async">

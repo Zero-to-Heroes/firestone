@@ -3,15 +3,15 @@
 	--window-background-image-backup: rgba(30, 1, 22, 1);
 	--window-background-image: radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
-	--color-1: #dfb3d3;
-	--color-2: #ce73b4;
-	--color-3: #841063; // rgba(132, 16, 99, 1)
-	--color-4: #5f0b47;
-	--color-5: #40032e;
-	--color-6: #a89782;
-	--color-7: #1e0116; // rgba(30, 1, 22, 1)
-	--color-8: #cb9fd7;
-	--color-9: #39122e;
+	--color-1: var(--bgs-color-1, #dfb3d3);
+	--color-2: var(--bgs-color-2, #ce73b4);
+	--color-3: var(--bgs-color-3, #841063); // rgba(132, 16, 99, 1)
+	--color-4: var(--bgs-color-4, #5f0b47);
+	--color-5: var(--bgs-color-5, #40032e);
+	--color-6: var(--bgs-color-6, #a89782);
+	--color-7: var(--bgs-color-7, #1e0116); // rgba(30, 1, 22, 1)
+	--color-8: var(--bgs-color-8, #cb9fd7);
+	--color-9: var(--bgs-color-9, #39122e);
 	--color-common-1: #d9c3ab;
 	--color-common-2: #ffb948;
 

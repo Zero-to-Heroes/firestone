@@ -38,7 +38,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 @Component({
 	selector: 'current-session-widget',
 	styleUrls: [
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/overlays/session/current-session-widget.component.scss',
 	],
 	template: `

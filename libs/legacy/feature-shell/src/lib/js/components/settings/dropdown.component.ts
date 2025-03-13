@@ -4,7 +4,7 @@ import { IOption } from 'ng-select';
 @Component({
 	selector: 'dropdown',
 	styleUrls: [
-		`../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../css/themes/battlegrounds-theme.scss`,
 		'../../../css/component/settings/dropdown.component.scss',
 	],
 	template: `

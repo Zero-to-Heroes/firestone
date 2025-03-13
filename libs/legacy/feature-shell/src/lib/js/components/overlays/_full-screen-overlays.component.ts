@@ -35,7 +35,7 @@ import { DebugService } from '../../services/debug.service';
 		`../../../css/global/cdk-overlay.scss`,
 		`../../../css/themes/collection-theme.scss`,
 		`../../../css/themes/achievements-theme.scss`,
-		`../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../css/themes/battlegrounds-theme.scss`,
 		`../../../css/themes/decktracker-theme.scss`,
 		`../../../css/themes/decktracker-desktop-theme.scss`,
 		`../../../css/themes/replays-theme.scss`,

@@ -17,7 +17,7 @@ import { combineLatest, takeUntil } from 'rxjs';
 @Component({
 	selector: 'bgs-overlay-hero-overview',
 	styleUrls: [
-		'../../../../css/themes/battlegrounds-theme.scss',
+		// '../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
 	],
 	template: `

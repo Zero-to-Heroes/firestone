@@ -19,7 +19,7 @@ import { DropdownOption } from '../../../settings/dropdown.component';
 @Component({
 	selector: 'twitch-config-widget',
 	styleUrls: [
-		`../../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../../css/themes/battlegrounds-theme.scss`,
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'./twitch-config-widget.component.scss',
 	],

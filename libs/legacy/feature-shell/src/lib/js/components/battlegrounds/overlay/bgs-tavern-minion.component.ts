@@ -4,7 +4,7 @@ import { ShopMinion } from '@firestone/battlegrounds/common';
 @Component({
 	selector: 'bgs-tavern-minion',
 	styleUrls: [
-		'../../../../css/themes/battlegrounds-theme.scss',
+		// '../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../css/component/battlegrounds/overlay/bgs-tavern-minion.component.scss',
 	],
 	template: `

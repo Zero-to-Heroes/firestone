@@ -47,7 +47,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	selector: 'battlegrounds-minions-tiers',
 	styleUrls: [
 		`../../../../css/global/cdk-overlay.scss`,
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		'./battlegrounds-minions-tiers.component.scss',
 	],
 	template: `

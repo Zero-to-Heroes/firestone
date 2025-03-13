@@ -34,7 +34,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 	selector: 'decktracker-overlay-container',
 	styleUrls: [
 		`../../../../../css/themes/decktracker-theme.scss`,
-		`../../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../../css/themes/battlegrounds-theme.scss`,
 		'./decktracker-overlay-container.component.scss',
 	],
 	template: `

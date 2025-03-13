@@ -9,7 +9,7 @@ import { DebugService } from '../../../services/debug.service';
 	selector: 'battlegrounds-overlay-button',
 	styleUrls: [
 		`../../../../css/global/cdk-overlay.scss`,
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/battlegrounds/overlay/battlegrounds-overlay-button.component.scss',
 	],
 	template: `

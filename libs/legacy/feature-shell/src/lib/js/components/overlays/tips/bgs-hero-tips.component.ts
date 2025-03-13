@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 @Component({
 	selector: 'bgs-hero-tips',
 	styleUrls: [
-		`../../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../../css/themes/battlegrounds-theme.scss`,
 		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/overlays/tips/bgs-hero-tips.component.scss',
 	],

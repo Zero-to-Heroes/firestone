@@ -5,7 +5,7 @@ import { getTribeIcon, Race } from '@firestone-hs/reference-data';
 	selector: 'bgs-banned-tribe',
 	styleUrls: [
 		`../../../css/global/cdk-overlay.scss`,
-		`../../../css/themes/battlegrounds-theme.scss`,
+		// `../../../css/themes/battlegrounds-theme.scss`,
 		'../../../css/component/battlegrounds/bgs-banned-tribe.component.scss',
 	],
 	template: `

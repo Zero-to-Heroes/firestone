@@ -10,9 +10,18 @@ import { CustomAppearanceService } from '../../services/custom-appearance.servic
 		<div class="title" [fsTranslate]="'settings.general.appearance.battlegrounds.title'"></div>
 		<div class="settings-group battlegrounds">
 			<custom-color-picker
-				[label]="'settings.general.appearance.battlegrounds.widget-background-color' | fsTranslate"
+				[label]="'--bgs-widget-background-color'"
 				key="--bgs-widget-background-color"
 			></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-1'" key="--bgs-color-1"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-2'" key="--bgs-color-2"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-3'" key="--bgs-color-3"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-4'" key="--bgs-color-4"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-5'" key="--bgs-color-5"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-6'" key="--bgs-color-6"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-7'" key="--bgs-color-7"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-8'" key="--bgs-color-8"></custom-color-picker>
+			<custom-color-picker [label]="'--bgs-color-9'" key="--bgs-color-9"></custom-color-picker>
 		</div>
 		<div class="buttons">
 			<button
