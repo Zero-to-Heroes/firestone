@@ -1,11 +1,10 @@
-import { GameTag, hasMechanic } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const ArchdruidOfThorns: GlobalHighlightCard = {
-	cardIds: [TempCardIds.ArchdruidOfThorns],
+	cardIds: [CardIds.ArchdruidOfThorns_EDR_491],
 	getRelatedCards: (
 		entityId: number,
 		side: 'player' | 'opponent' | 'single',

@@ -17,13 +17,12 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { DeckState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 const IMBUED_HERO_POWERS = [
-	TempCardIds.BlessingOfTheDragon,
-	TempCardIds.BlessingOfTheWolf,
-	TempCardIds.BlessingOfTheWind,
-	TempCardIds.BlessingOfTheGolem,
+	CardIds.BlessingOfTheDragon_EDR_445p,
+	CardIds.BlessingOfTheWolf_EDR_850p,
+	CardIds.BlessingOfTheWind_EDR_448p,
+	CardIds.DreamboundDisciple_BlessingOfTheGolem_EDR_847p,
 ];
 
 export const getDynamicRelatedCardIds = (
@@ -37,8 +36,8 @@ export const getDynamicRelatedCardIds = (
 	},
 ): readonly string[] => {
 	switch (cardId) {
-		case TempCardIds.FlutterwingGuardian:
-		case TempCardIds.BitterbloomKnight:
+		case CardIds.FlutterwingGuardian_EDR_800:
+		case CardIds.BitterbloomKnight_EDR_852:
 			return IMBUED_HERO_POWERS.filter((hp) => allCards.getCard(hp).classes?.includes(options.currentClass));
 		case CardIds.FinalFrontier_GDB_857:
 			return filterCards(
@@ -110,79 +109,79 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean) | ((ref: ReferenceCard) => boolean)[] => {
 	switch (cardId) {
-		case TempCardIds.RiteOfAtrocity:
+		case CardIds.RiteOfAtrocity_EDR_811:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.SparkOfLife:
+		case CardIds.SparkOfLife_EDR_872:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				(c.classes?.includes(CardClass[CardClass.MAGE]) || c.classes?.includes(CardClass[CardClass.DRUID])) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.SparkOfLife_GiftOfFire:
+		case CardIds.GiftOfFire_EDR_872A:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				c.classes?.includes(CardClass[CardClass.MAGE]) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.SparkOfLife_GiftOfNature:
+		case CardIds.GiftOfNature_EDR_872B:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				c.classes?.includes(CardClass[CardClass.DRUID]) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.ForbiddenShrine:
+		case CardIds.ForbiddenShrine_EDR_520:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				c.cost === Math.min(10, options.deckState.manaLeft ?? 0) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.Alarashi:
+		case CardIds.Alarashi_EDR_493:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.DEMON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.AvantGardening:
+		case CardIds.AvantGardening_EDR_488:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.Jumpscare:
+		case CardIds.Jumpscare_EDR_882:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.DEMON) &&
 				c.cost >= 5 &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.Ysondre:
+		case CardIds.Ysondre_EDR_465:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.DRAGON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.Photosynthesis:
+		case CardIds.Photosynthesis_EDR_848:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c.classes?.includes(CardClass[CardClass.DRUID]);
-		case TempCardIds.WardOfEarth:
+		case CardIds.WardOfEarth_EDR_060:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				canBeDiscoveredByClass(c, options.currentClass) &&
 				c.cost === 5;
-		case TempCardIds.Symbiosis:
+		case CardIds.Symbiosis_EDR_273:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasMechanic(c, GameTag.CHOOSE_ONE) &&
 				fromAnotherClass(c, options.currentClass);
-		case TempCardIds.DaydreamingPixie:
-		case TempCardIds.HornOfPlenty:
+		case CardIds.DaydreamingPixie_EDR_530:
+		case CardIds.HornOfPlenty_EDR_270:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				c?.spellSchool === SpellSchool[SpellSchool.NATURE] &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.SelenicDrake:
+		case CardIds.SelenicDrake_EDR_462:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.DRAGON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.GnawingGreenfin:
+		case CardIds.GnawingGreenfin_EDR_999:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.MURLOC) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.TreacherousTormentor:
+		case CardIds.TreacherousTormentor_EDR_102:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				c?.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY] &&
@@ -316,7 +315,7 @@ const getDynamicFilters = (
 				hasCorrectTribe(c, Race.DEMON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DraconicStudies:
-		case TempCardIds.Darkrider:
+		case CardIds.Darkrider_EDR_456:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.DRAGON) &&

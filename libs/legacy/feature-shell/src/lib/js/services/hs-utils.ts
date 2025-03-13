@@ -1,6 +1,5 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -173,7 +172,7 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.PrinceRenathal,
 	CardIds.PrinceRenathal_CORE_REV_018,
 	CardIds.ChogallTwilightChieftain_YOG_530,
-	TempCardIds.HamuulRunetotem,
+	CardIds.HamuulRunetotem_EDR_845,
 ];
 
 export const globalEffectCardsPlayed = [

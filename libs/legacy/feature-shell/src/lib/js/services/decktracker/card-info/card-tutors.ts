@@ -1,5 +1,4 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 export const tutors = [
 	CardIds.AbyssalDepths,
@@ -261,16 +260,16 @@ export const tutors = [
 	CardIds.Blink_SC_761,
 	CardIds.NydusWorm_SC_015,
 	CardIds.TheDarkPortal_BT_302,
-	TempCardIds.FaeTrickster,
-	TempCardIds.TormentedDreadwing,
-	TempCardIds.DaydreamingPixie,
-	TempCardIds.Reforestation,
-	TempCardIds.Reforestation_AidOfTheForest,
-	TempCardIds.Reforestation_Fertilize,
-	TempCardIds.Reforestation_Reforestation,
-	TempCardIds.EmeraldBounty,
-	TempCardIds.DragonscaleArmaments,
-	TempCardIds.Dreamwarden,
-	TempCardIds.UrsineMaul,
-	TempCardIds.RotheartDryad,
+	CardIds.FaeTrickster_EDR_571,
+	CardIds.TormentedDreadwing_EDR_572,
+	CardIds.DaydreamingPixie_EDR_530,
+	CardIds.Reforestation_EDR_843,
+	CardIds.Reforestation_AidOfTheForest_EDR_843a,
+	CardIds.Reforestation_Fertilize_EDR_843b,
+	CardIds.Reforestation_ReforestationToken_EDR_843t1,
+	CardIds.EmeraldBounty_EDR_234,
+	CardIds.DragonscaleArmaments_EDR_251,
+	CardIds.Dreamwarden_EDR_256,
+	CardIds.UrsineMaul_EDR_253,
+	CardIds.RotheartDryad_EDR_485,
 ];

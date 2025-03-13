@@ -162,7 +162,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							pack.packType === BoosterType.STANDARD_PACK,
 					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
-					.sort(sortByProperties((pack) => [!pack.set, -pack.set?.launchDate?.getTime() ?? 0]));
+					.sort(sortByProperties((pack) => [!pack.set, -(pack.set?.launchDate?.getTime() ?? 0)]));
 				const mainSetsGroup: InternalPackGroup = {
 					name: this.i18n.translateString('app.collection.pack-stats.main-sets-group-name', {
 						totalPacks: sumOnArray(mainGroupPacks, (pack) => pack.totalObtained),
@@ -182,7 +182,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 					)
 					.sort(
 						sortByProperties((pack) => [
-							-pack.set?.launchDate?.getTime() ?? 0,
+							-(pack.set?.launchDate?.getTime() ?? 0),
 							!CLASS_PACKS.includes(pack.packType),
 							!YEAR_PACKS.includes(pack.packType),
 							!pack.set,
@@ -261,6 +261,7 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 	BoosterType.WHIZBANG_CATCH_UP,
 	BoosterType.ISLAND_VACATION_CATCH_UP,
 	BoosterType.THE_GREAT_DARK_BEYOND_CATCH_UP,
+	BoosterType.INTO_THE_EMERALD_DREAM_CATCH_UP,
 ];
 
 const buildPityTimer = (

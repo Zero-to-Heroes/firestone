@@ -1,11 +1,10 @@
-import { hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const SuccombToMadness: GlobalHighlightCard = {
-	cardIds: [TempCardIds.SuccombToMadness],
+	cardIds: [CardIds.SuccumbToMadness_EDR_455],
 	getRelatedCards: (
 		entityId: number,
 		side: 'player' | 'opponent' | 'single',

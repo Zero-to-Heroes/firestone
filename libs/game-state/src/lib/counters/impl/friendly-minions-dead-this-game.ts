@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -8,8 +7,8 @@ import { CounterType } from '../_exports';
 
 export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'friendlyDeadMinionsThisGame';
-	public override image = TempCardIds.Aesina;
-	public override cards: readonly CardIds[] = [TempCardIds.Aesina, TempCardIds.Starsurge] as any[];
+	public override image = CardIds.Aessina_EDR_430;
+	public override cards: readonly CardIds[] = [CardIds.Aessina_EDR_430, CardIds.Starsurge_EDR_941] as any[];
 
 	readonly player = {
 		pref: 'playerFriendlyDeadMinionsThisGameCounter' as const,

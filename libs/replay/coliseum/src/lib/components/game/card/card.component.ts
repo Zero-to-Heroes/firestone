@@ -160,7 +160,7 @@ export class CardComponent {
 			this.attack = this._entity.getTag(GameTag.ATK);
 			this.health = this._entity.getTag(GameTag.HEALTH);
 			this.damage = this._entity.getTag(GameTag.DAMAGE);
-			this.durability = this._entity.getTag(GameTag.DURABILITY) || this._entity.getTag(GameTag.HEALTH);
+			this.durability = this._entity.getTag(GameTag.DURABILITY_DEPRECATED) || this._entity.getTag(GameTag.HEALTH);
 			this.armor = this._entity.getTag(GameTag.ARMOR);
 			this.cost = this._entity.getTag(GameTag.COST);
 			this.originalCard = this.cards.getCard(this.cardId);

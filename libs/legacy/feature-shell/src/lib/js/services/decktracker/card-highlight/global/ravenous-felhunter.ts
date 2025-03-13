@@ -1,11 +1,10 @@
-import { GameTag, hasMechanic } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const RavenousFelhunter: GlobalHighlightCard = {
-	cardIds: [TempCardIds.RavenousFelhunter],
+	cardIds: [CardIds.RavenousFelhunter_EDR_891],
 	getRelatedCards: (
 		entityId: number,
 		side: 'player' | 'opponent' | 'single',
