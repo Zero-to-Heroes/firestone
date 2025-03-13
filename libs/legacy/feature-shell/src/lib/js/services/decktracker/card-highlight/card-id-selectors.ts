@@ -2168,6 +2168,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.RottingNecromancer:
 			return and(side(inputSide), inDeck, minion, undead);
+		case CardIds.RowdyPartner_WW_906:
+			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(4));
 		case CardIds.RoyalGreatswordTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, legendary);
 		case CardIds.RuneforgingCore:
