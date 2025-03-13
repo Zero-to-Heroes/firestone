@@ -40,10 +40,12 @@ const filterSection = (section: Section | SectionReference, searchString: string
 		return null;
 	}
 
-	// const titleMatches = section .name?.toLocaleLowerCase().includes(searchString.toLocaleLowerCase());
+	const titleMatches = section.title?.toLocaleLowerCase().includes(searchString.toLocaleLowerCase());
 	const result: Section = {
 		...section,
-		settings: section.settings!.filter((setting) => settingMatches(setting, searchString)),
+		settings: titleMatches
+			? section.settings
+			: section.settings!.filter((setting) => settingMatches(setting, searchString)),
 	};
 	return result;
 };
