@@ -169,6 +169,7 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 			{
 				id: 'decktracker-max-resources',
 				title: context.i18n.translateString('settings.decktracker.max-resources-widget.title'),
+				keywords: [context.i18n.translateString('global.hs-terms.health'), context.i18n.translateString('global.hs-terms.mana')],
 				settings: [
 					{
 						type: 'toggle',

@@ -36,7 +36,7 @@ export interface SettingNode {
 	readonly id: string;
 	readonly name: string;
 	readonly cssClass?: string;
-	readonly keywords: readonly string[] | null;
+	readonly keywords?: readonly string[] | null;
 	readonly children: readonly SettingNode[] | null;
 	readonly sections?: readonly (Section | SectionReference)[];
 }
@@ -57,6 +57,7 @@ export type SettingsSectionReferenceType =
 export interface Section {
 	readonly id: string;
 	readonly title: string | null;
+	readonly keywords?: readonly string[] | null;
 	readonly texts?: readonly (string | Observable<string>)[]; // Raw HTML
 	readonly settings?: readonly (Setting | SettingButton)[];
 	readonly disabled$?: () => Observable<boolean>;
