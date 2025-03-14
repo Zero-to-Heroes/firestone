@@ -986,4 +986,6 @@ export const giftCreators = [
 	CardIds.GiftOfNature_EDR_872B,
 	CardIds.StellarBalance_EDR_874,
 	CardIds.RiteOfAtrocity_EDR_811,
+	CardIds.Falric_CORE_EDR_003,
+	CardIds.BabblingBookcase_CORE_EDR_001,
 ];

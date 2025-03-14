@@ -3,12 +3,22 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { FerociousFelbat } from './ferocious-felbat';
 import { JimRaynor } from './jim-raynor';
+import { KragwaTheFrog } from './kragwa-the-frog';
 import { Merithra } from './merithra';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { SuccombToMadness } from './succomb-to-madness';
 import { Zuljin } from './zul-jin';
 
-const cards = [JimRaynor, Zuljin, Merithra, SuccombToMadness, RavenousFelhunter, FerociousFelbat, ArchdruidOfThorns];
+const cards = [
+	JimRaynor,
+	Zuljin,
+	Merithra,
+	SuccombToMadness,
+	RavenousFelhunter,
+	FerociousFelbat,
+	ArchdruidOfThorns,
+	KragwaTheFrog,
+];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
 for (const card of cards) {

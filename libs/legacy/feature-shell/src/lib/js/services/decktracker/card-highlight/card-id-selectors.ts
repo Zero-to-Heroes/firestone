@@ -994,6 +994,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, costMore(4));
 		case CardIds.FairyTaleForest_TOY_507:
 			return and(side(inputSide), inDeck, minion, battlecry);
+		case CardIds.Falric_CORE_EDR_003:
+			return and(side(inputSide), inDeck, spendCorpse);
 		case CardIds.FaithfulCompanions:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.FancyPackaging_TOY_881:
@@ -1941,6 +1943,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, rush);
 		case CardIds.Plunder:
 			return and(side(inputSide), inDeck, weapon);
+		case CardIds.PoisonBreath_CORE_EDR_002:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.PopgarThePutrid_WW_091:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.PortalmancerSkyla_WORK_063:

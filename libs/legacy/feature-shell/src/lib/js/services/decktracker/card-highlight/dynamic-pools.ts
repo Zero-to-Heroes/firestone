@@ -116,6 +116,9 @@ const getDynamicFilters = (
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				(c.classes?.includes(CardClass[CardClass.MAGE]) || c.classes?.includes(CardClass[CardClass.DRUID])) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.BabblingBookcase_CORE_EDR_001:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.GiftOfFire_EDR_872A:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
