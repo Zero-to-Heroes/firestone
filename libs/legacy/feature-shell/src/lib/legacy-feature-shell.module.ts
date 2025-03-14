@@ -201,7 +201,6 @@ import { OpponentGalakrondWidgetWrapperComponent } from './js/components/overlay
 import { OpponentHeroPowerDamageWidgetWrapperComponent } from './js/components/overlays/counters/opponent-hero-power-damage-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from './js/components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from './js/components/overlays/counters/opponent-pogo-widget-wrapper.component';
-import { OpponentRelicWidgetWrapperComponent } from './js/components/overlays/counters/opponent-relic-widget-wrapper.component';
 import { OpponentVolatileSkeletonWidgetWrapperComponent } from './js/components/overlays/counters/opponent-volatile-skeleton-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-watchpost-widget-wrapper.component';
 import { PlayerAbyssalCurseWidgetWrapperComponent } from './js/components/overlays/counters/player-abyssal-curse-widget-wrapper.component';
@@ -224,7 +223,6 @@ import { PlayerMulticasterWidgetWrapperComponent } from './js/components/overlay
 import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from './js/components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from './js/components/overlays/counters/player-pogo-widget-wrapper.component';
 import { PlayerQueensguardWidgetWrapperComponent } from './js/components/overlays/counters/player-queensguard-widget-wrapper.component';
-import { PlayerRelicWidgetWrapperComponent } from './js/components/overlays/counters/player-relic-widget-wrapper.component';
 import { PlayerSpectralPillagerWidgetWrapperComponent } from './js/components/overlays/counters/player-spectral-pillager-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from './js/components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerVolatileSkeletonWidgetWrapperComponent } from './js/components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
@@ -1335,7 +1333,6 @@ try {
 		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerElwynnBoarWidgetWrapperComponent,
 		PlayerVolatileSkeletonWidgetWrapperComponent,
-		PlayerRelicWidgetWrapperComponent,
 		PlayerElementalWidgetWrapperComponent,
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
@@ -1388,7 +1385,6 @@ try {
 		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentVolatileSkeletonWidgetWrapperComponent,
-		OpponentRelicWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,

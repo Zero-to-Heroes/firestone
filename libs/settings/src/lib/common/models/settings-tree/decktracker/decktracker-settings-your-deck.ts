@@ -276,12 +276,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.volatile-skeleton-tooltip'),
 	},
 	{
-		id: 'relic',
-		field: 'playerRelicCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.relic-tooltip'),
-	},
-	{
 		id: 'hero-power-damage',
 		field: 'playerHeroPowerDamageCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-label'),

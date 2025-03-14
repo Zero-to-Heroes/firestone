@@ -53,7 +53,6 @@ import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
-import { RelicCounterDefinition } from './definitions/relic-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
 import { ShockspitterCounterDefinition } from './definitions/shockspitter-counter';
@@ -189,8 +188,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElwynnBoarCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'volatileSkeleton':
 				return VolatileSkeletonCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'relic':
-				return RelicCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
