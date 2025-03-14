@@ -15,7 +15,10 @@ export type CommonStyleKey =
 	| '--bgs-color-7'
 	| '--bgs-color-8'
 	| '--bgs-color-9';
-export type CustomStyleKey = '--bgs-widget-background-color' | CommonStyleKey;
+export type CustomStyleKey =
+	| '--bgs-widget-background-color-start'
+	| '--bgs-widget-background-color-end'
+	| CommonStyleKey;
 export type FinalStyleKey =
 	| '--bgs-simulation-widget-background-image'
 	| '--bgs-session-widget-background-image'
@@ -47,7 +50,8 @@ export const defaultStyleKeys = async (): Promise<CustomAppearance> => {
 	document.body.removeChild(tempElement);
 
 	defaultStyleKeysValue = {
-		'--bgs-widget-background-color': 'rgba(94, 11, 70, 0.7)',
+		'--bgs-widget-background-color-start': 'rgba(94, 11, 70, 0.7)',
+		'--bgs-widget-background-color-end': 'rgba(30, 1, 22, 1)',
 		'--bgs-color-1': bgsColor1,
 		'--bgs-color-2': bgsColor2,
 		'--bgs-color-3': bgsColor3,

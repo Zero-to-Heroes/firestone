@@ -29,7 +29,7 @@ import { CustomAppearanceService } from '../common/services/custom-appearance.se
 })
 export class CustomColorPickerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() label: string;
-	@Input() key: CustomStyleKey = '--bgs-widget-background-color';
+	@Input() key: CustomStyleKey = '--bgs-widget-background-color-start';
 
 	defaultColor: string;
 	color: string;

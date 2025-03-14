@@ -9,9 +9,14 @@ import { CustomAppearanceService } from '../../services/custom-appearance.servic
 	template: `
 		<div class="title" [fsTranslate]="'settings.general.appearance.battlegrounds.title'"></div>
 		<div class="settings-group battlegrounds">
+			<div class="subtitle" [fsTranslate]="'settings.general.appearance.battlegrounds.global'"></div>
 			<custom-color-picker
-				[label]="'--bgs-widget-background-color'"
-				key="--bgs-widget-background-color"
+				[label]="'--bgs-widget-background-color-start'"
+				key="--bgs-widget-background-color-start"
+			></custom-color-picker>
+			<custom-color-picker
+				[label]="'--bgs-widget-background-color-end'"
+				key="--bgs-widget-background-color-end"
 			></custom-color-picker>
 			<custom-color-picker [label]="'--bgs-color-1'" key="--bgs-color-1"></custom-color-picker>
 			<custom-color-picker [label]="'--bgs-color-2'" key="--bgs-color-2"></custom-color-picker>
@@ -23,9 +28,13 @@ import { CustomAppearanceService } from '../../services/custom-appearance.servic
 			<custom-color-picker [label]="'--bgs-color-8'" key="--bgs-color-8"></custom-color-picker>
 			<custom-color-picker [label]="'--bgs-color-9'" key="--bgs-color-9"></custom-color-picker>
 		</div>
+		<!-- <div class="settings-group battlegrounds">
+			<div class="subtitle" [fsTranslate]="'settings.general.appearance.battlegrounds.widgets'"></div>
+			<custom-color-picker [label]="'--bgs-color-1'" key="--bgs-color-1"></custom-color-picker>
+		</div> -->
 		<div class="buttons">
 			<button
-				class="reset-button"
+				class="button reset-button"
 				[fsTranslate]="'settings.general.appearance.reset-button'"
 				(click)="resetAll()"
 			></button>

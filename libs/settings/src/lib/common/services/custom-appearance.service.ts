@@ -54,14 +54,20 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 			});
 
 			this.colors$$.pipe(filter((colors) => !!colors)).subscribe((colors) => {
-				const bgsBackgroundColor = getStyle(colors, defaultStyles, '--bgs-widget-background-color');
+				const bgsBackgroundColorStart = getStyle(colors, defaultStyles, '--bgs-widget-background-color-start');
+				const bgsBackgroundColorEnd = getStyle(colors, defaultStyles, '--bgs-widget-background-color-end');
+				console.debug(
+					'[custom-appearance] setting bgsBackgroundColorStart',
+					bgsBackgroundColorStart,
+					bgsBackgroundColorEnd,
+				);
 				const finalStyles: FinalStyles = {
 					...colors!,
-					'--bgs-simulation-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
+					'--bgs-simulation-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColorStart} 0%, ${bgsBackgroundColorEnd} 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg')`,
-					'--bgs-session-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColor} 0%, rgba(30, 1, 22, 1) 100%),
+					'--bgs-session-widget-background-image': `radial-gradient(30vw at 50% 50%, ${bgsBackgroundColorStart} 0%,${bgsBackgroundColorEnd} 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg')`,
-					'--bgs-minions-list-widget-background-image': `radial-gradient(50% 50% at 50% 50%, ${bgsBackgroundColor} 0%, rgba(43, 24, 39, 0.7) 100%),
+					'--bgs-minions-list-widget-background-image': `radial-gradient(50% 50% at 50% 50%, ${bgsBackgroundColorStart} 0%, ${bgsBackgroundColorEnd} 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png')`,
 				};
 				// console.debug('[custom-appearance] setting final styles', finalStyles);

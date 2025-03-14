@@ -3,6 +3,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { CustomAppearanceService } from '../common/services/custom-appearance.service';
 
+// Deprecated?
 @Component({
 	selector: 'settings-general-appearance',
 	styleUrls: [`../settings-common.component.scss`, `./settings-general-appearance.component.scss`],
@@ -11,7 +12,7 @@ import { CustomAppearanceService } from '../common/services/custom-appearance.se
 		<div class="settings-group battlegrounds">
 			<custom-color-picker
 				[label]="'settings.general.appearance.battlegrounds.widget-background-color' | fsTranslate"
-				key="--bgs-widget-background-color"
+				key="--bgs-widget-background-color-start"
 			></custom-color-picker>
 		</div>
 		<div class="buttons">
