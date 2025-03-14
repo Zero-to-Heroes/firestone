@@ -298,12 +298,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-tooltip'),
 	},
 	{
-		id: 'multicaster',
-		field: 'opponentMulticasterCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.multicaster-tooltip'),
-	},
-	{
 		id: 'chaoticTendril',
 		field: 'opponentChaoticTendrilCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-label'),

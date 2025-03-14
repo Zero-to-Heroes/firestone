@@ -46,7 +46,6 @@ import { LightrayCounterDefinition } from './definitions/lightray-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
-import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
 import { NagaGiantCounterDefinition } from './definitions/naga-giant-counter';
 import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
@@ -245,8 +244,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return LadyDarkveinCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'greySageParrot':
 				return GreySageParrotCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'multicaster':
-				return MulticasterCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'heroPowerDamage':
 				return HeroPowerDamageCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':

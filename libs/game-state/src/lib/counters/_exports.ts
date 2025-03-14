@@ -20,6 +20,7 @@ import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
+import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
 import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
@@ -59,6 +60,7 @@ export const getAllCounters: (
 	new ChainedGuardianCounterDefinitionV2(i18n, allCards),
 	new RelicCounterDefinitionV2(i18n, allCards),
 	new VolatileSkeletonCounterDefinitionV2(i18n, allCards),
+	new MulticasterCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

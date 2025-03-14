@@ -462,12 +462,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		}),
 	},
 	{
-		id: 'multicaster',
-		field: 'playerMulticasterCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-tooltip'),
-	},
-	{
 		id: 'bonelord-frostwhisper',
 		field: 'playerBonelordFrostwhisperCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
