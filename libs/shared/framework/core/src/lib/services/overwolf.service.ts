@@ -432,7 +432,8 @@ export class OverwolfService {
 
 	public exitGame(gameInfoResult: any): boolean {
 		return (
-			!gameInfoResult?.gameInfo?.isRunning || Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID
+			!gameInfoResult?.gameInfo?.isRunning &&
+			Math.floor((gameInfoResult?.gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID
 		);
 	}
 
