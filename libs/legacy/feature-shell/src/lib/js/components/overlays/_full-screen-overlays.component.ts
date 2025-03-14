@@ -155,7 +155,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-treant-widget-wrapper></player-treant-widget-wrapper>
 			<!-- <player-dragons-summoned-widget-wrapper></player-dragons-summoned-widget-wrapper> -->
 			<player-pirates-summoned-widget-wrapper></player-pirates-summoned-widget-wrapper>
-			<player-earthen-golem-widget-wrapper></player-earthen-golem-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -183,7 +182,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-multicaster-widget-wrapper></opponent-multicaster-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
-			<opponent-earthen-golem-widget-wrapper></opponent-earthen-golem-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>

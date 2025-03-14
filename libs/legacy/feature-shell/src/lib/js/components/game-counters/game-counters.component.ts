@@ -31,7 +31,6 @@ import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-c
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
-import { EarthenGolemCounterDefinition } from './definitions/earthen-golem-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElementalStreakCounterDefinition } from './definitions/elemental-streak-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
@@ -185,8 +184,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'chainedGuardian':
 				return ChainedGuardianCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'earthenGolem':
-				return EarthenGolemCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'treant':
 				return TreantCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'dragonsSummoned':

@@ -389,7 +389,6 @@ import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
-import { OpponentEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/opponent-earthen-golem-widget-wrapper.component';
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentMulticasterWidgetWrapperComponent } from '@components/overlays/counters/opponent-multicaster-widget-wrapper.component';
@@ -408,7 +407,6 @@ import { PlayerChainedGuardianWidgetWrapperComponent } from '@components/overlay
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
-import { PlayerEarthenGolemWidgetWrapperComponent } from '@components/overlays/counters/player-earthen-golem-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
@@ -1333,7 +1331,6 @@ try {
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerChainedGuardianWidgetWrapperComponent,
-		PlayerEarthenGolemWidgetWrapperComponent,
 		PlayerTreantWidgetWrapperComponent,
 		PlayerDragonsSummonedWidgetWrapperComponent,
 		PlayerPiratesSummonedWidgetWrapperComponent,
@@ -1390,7 +1387,6 @@ try {
 		OpponentWatchpostCounterWidgetWrapperComponent,
 		OpponentPogoWidgetWrapperComponent,
 		OpponentAstralAutomatonWidgetWrapperComponent,
-		OpponentEarthenGolemWidgetWrapperComponent,
 		OpponentJadeWidgetWrapperComponent,
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,
