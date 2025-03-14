@@ -29,6 +29,7 @@ import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-ca
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 import { TreantCounterDefinitionV2 } from './impl/treant';
+import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -57,6 +58,7 @@ export const getAllCounters: (
 	new TreantCounterDefinitionV2(i18n, allCards),
 	new ChainedGuardianCounterDefinitionV2(i18n, allCards),
 	new RelicCounterDefinitionV2(i18n, allCards),
+	new VolatileSkeletonCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

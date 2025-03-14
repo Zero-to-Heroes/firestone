@@ -201,7 +201,6 @@ import { OpponentGalakrondWidgetWrapperComponent } from './js/components/overlay
 import { OpponentHeroPowerDamageWidgetWrapperComponent } from './js/components/overlays/counters/opponent-hero-power-damage-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from './js/components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from './js/components/overlays/counters/opponent-pogo-widget-wrapper.component';
-import { OpponentVolatileSkeletonWidgetWrapperComponent } from './js/components/overlays/counters/opponent-volatile-skeleton-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-watchpost-widget-wrapper.component';
 import { PlayerAbyssalCurseWidgetWrapperComponent } from './js/components/overlays/counters/player-abyssal-curse-widget-wrapper.component';
 import { PlayerCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-attack-widget-wrapper.component';
@@ -225,7 +224,6 @@ import { PlayerPogoWidgetWrapperComponent } from './js/components/overlays/count
 import { PlayerQueensguardWidgetWrapperComponent } from './js/components/overlays/counters/player-queensguard-widget-wrapper.component';
 import { PlayerSpectralPillagerWidgetWrapperComponent } from './js/components/overlays/counters/player-spectral-pillager-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from './js/components/overlays/counters/player-vanessa-widget-wrapper.component';
-import { PlayerVolatileSkeletonWidgetWrapperComponent } from './js/components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { CurrentSessionWidgetWrapperComponent } from './js/components/overlays/current-session-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from './js/components/overlays/decktracker-opponent-widget-wrapper.component';
@@ -1332,7 +1330,6 @@ try {
 		PlayerFatigueWidgetWrapperComponent,
 		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerElwynnBoarWidgetWrapperComponent,
-		PlayerVolatileSkeletonWidgetWrapperComponent,
 		PlayerElementalWidgetWrapperComponent,
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
@@ -1384,7 +1381,6 @@ try {
 		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
-		OpponentVolatileSkeletonWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,

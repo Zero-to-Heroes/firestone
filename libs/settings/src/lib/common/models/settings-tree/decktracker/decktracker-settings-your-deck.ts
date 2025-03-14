@@ -270,12 +270,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.elwynn-boar-tooltip'),
 	},
 	{
-		id: 'volatile-skeleton',
-		field: 'playerVolatileSkeletonCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.volatile-skeleton-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.volatile-skeleton-tooltip'),
-	},
-	{
 		id: 'hero-power-damage',
 		field: 'playerHeroPowerDamageCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-label'),

@@ -61,7 +61,6 @@ import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillag
 import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
-import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { WheelOfDeathCounterDefinition } from './definitions/wheel-of-death-counter';
 
@@ -186,8 +185,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return WatchpostCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elwynnBoar':
 				return ElwynnBoarCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'volatileSkeleton':
-				return VolatileSkeletonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
