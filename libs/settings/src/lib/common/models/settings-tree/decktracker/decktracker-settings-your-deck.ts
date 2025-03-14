@@ -234,12 +234,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.treant-tooltip'),
 	},
 	{
-		id: 'piratesSummoned',
-		field: 'playerPiratesSummonedCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-tooltip'),
-	},
-	{
 		id: 'jade',
 		field: 'playerJadeGolemCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),

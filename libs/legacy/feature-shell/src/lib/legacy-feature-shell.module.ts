@@ -416,7 +416,6 @@ import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/
 import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overlays/counters/player-menagerie-widget-wrapper.component';
 import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
-import { PlayerPiratesSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-pirates-summoned-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
@@ -1333,7 +1332,6 @@ try {
 		PlayerChainedGuardianWidgetWrapperComponent,
 		PlayerTreantWidgetWrapperComponent,
 		PlayerDragonsSummonedWidgetWrapperComponent,
-		PlayerPiratesSummonedWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,
 		PlayerGalakrondWidgetWrapperComponent,

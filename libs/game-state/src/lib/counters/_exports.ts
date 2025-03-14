@@ -20,6 +20,7 @@ import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
+import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
@@ -49,6 +50,7 @@ export const getAllCounters: (
 	new SpellsPlayedConstructedCounterDefinitionV2(i18n),
 	new LibramPlayedCounterDefinitionV2(i18n),
 	new EarthenGolemCounterDefinitionV2(i18n, allCards),
+	new PiratesSummonedCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
