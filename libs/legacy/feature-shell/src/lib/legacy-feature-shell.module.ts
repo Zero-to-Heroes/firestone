@@ -403,7 +403,6 @@ import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/co
 import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-tuskarr-raider-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@components/overlays/counters/player-cards-played-from-another-class-widget-wrapper.component';
-import { PlayerChainedGuardianWidgetWrapperComponent } from '@components/overlays/counters/player-chained-guardian-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
@@ -1328,7 +1327,6 @@ try {
 		PlayerWatchpostCounterWidgetWrapperComponent,
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
-		PlayerChainedGuardianWidgetWrapperComponent,
 		PlayerDragonsSummonedWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,

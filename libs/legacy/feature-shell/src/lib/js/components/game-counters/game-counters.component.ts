@@ -26,7 +26,6 @@ import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indic
 import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
-import { ChainedGuardianCounterDefinition } from './definitions/chained-guardian-counter';
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
@@ -180,8 +179,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return PogoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'astralAutomaton':
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'chainedGuardian':
-				return ChainedGuardianCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'dragonsSummoned':
 				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':

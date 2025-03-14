@@ -151,7 +151,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-multicaster-widget-wrapper></player-multicaster-widget-wrapper>
 			<player-volatile-skeleton-widget-wrapper></player-volatile-skeleton-widget-wrapper>
 			<player-relic-widget-wrapper></player-relic-widget-wrapper>
-			<player-chained-guardian-widget-wrapper></player-chained-guardian-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

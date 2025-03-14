@@ -10,6 +10,7 @@ import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
+import { ChainedGuardianCounterDefinitionV2 } from './impl/chained-guardian';
 import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
@@ -53,6 +54,7 @@ export const getAllCounters: (
 	new EarthenGolemCounterDefinitionV2(i18n, allCards),
 	new PiratesSummonedCounterDefinitionV2(i18n, allCards),
 	new TreantCounterDefinitionV2(i18n, allCards),
+	new ChainedGuardianCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
