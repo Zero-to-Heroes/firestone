@@ -26,6 +26,7 @@ import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
+import { TreantCounterDefinitionV2 } from './impl/treant';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -51,6 +52,7 @@ export const getAllCounters: (
 	new LibramPlayedCounterDefinitionV2(i18n),
 	new EarthenGolemCounterDefinitionV2(i18n, allCards),
 	new PiratesSummonedCounterDefinitionV2(i18n, allCards),
+	new TreantCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

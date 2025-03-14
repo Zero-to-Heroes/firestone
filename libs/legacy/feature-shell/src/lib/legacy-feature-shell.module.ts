@@ -421,7 +421,6 @@ import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
-import { PlayerTreantWidgetWrapperComponent } from '@components/overlays/counters/player-treant-widget-wrapper.component';
 import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
@@ -1330,7 +1329,6 @@ try {
 		PlayerPogoWidgetWrapperComponent,
 		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerChainedGuardianWidgetWrapperComponent,
-		PlayerTreantWidgetWrapperComponent,
 		PlayerDragonsSummonedWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
 		PlayerHeroPowerDamageWidgetWrapperComponent,

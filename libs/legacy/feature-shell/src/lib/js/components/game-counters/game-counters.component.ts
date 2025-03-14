@@ -62,7 +62,6 @@ import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
 import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
-import { TreantCounterDefinition } from './definitions/treant-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
@@ -183,8 +182,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'chainedGuardian':
 				return ChainedGuardianCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'treant':
-				return TreantCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'dragonsSummoned':
 				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elemental':

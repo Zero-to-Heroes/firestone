@@ -228,12 +228,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.chained-guardian-tooltip'),
 	},
 	{
-		id: 'treant',
-		field: 'playerTreantCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.treant-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.treant-tooltip'),
-	},
-	{
 		id: 'jade',
 		field: 'playerJadeGolemCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
