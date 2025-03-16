@@ -600,13 +600,7 @@ export class Preferences implements IPreferences {
 	readonly opponentBonelordFrostwhisperCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerShockspitterCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerShockspitterCounterWidgetPosition: { left: number; top: number };
-
 	readonly opponentShockspitterCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentShockspitterCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerQueensguardCounter: BooleanWithLimited = true;
 
 	readonly showPlayerMaxResourcesWidget: boolean = true;

@@ -28,6 +28,7 @@ import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
 import { RelicCounterDefinitionV2 } from './impl/relic';
+import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
@@ -65,6 +66,7 @@ export const getAllCounters: (
 	new MulticasterCounterDefinitionV2(i18n, allCards),
 	new HeroPowerDamageCounterDefinitionV2(i18n, allCards),
 	new QueensguardCounterDefinitionV2(i18n, allCards),
+	new ShockspitterCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

@@ -49,7 +49,6 @@ import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
-import { ShockspitterCounterDefinition } from './definitions/shockspitter-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
@@ -228,8 +227,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AnachronosCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bonelordFrostwhisper':
 				return BonelordFrostwhisperCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'shockspitter':
-				return ShockspitterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

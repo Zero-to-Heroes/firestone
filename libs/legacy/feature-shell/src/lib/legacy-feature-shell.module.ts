@@ -380,7 +380,6 @@ import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
-import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
 import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
 import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
 import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
@@ -405,7 +404,6 @@ import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/coun
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
-import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
 import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
@@ -1347,7 +1345,6 @@ try {
 		PlayerGardensGraceWidgetWrapperComponent,
 		PlayerAnachronosWidgetWrapperComponent,
 		PlayerBonelordFrostwhisperWidgetWrapperComponent,
-		PlayerShockspitterWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1367,7 +1364,6 @@ try {
 		OpponentCthunWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,
-		OpponentShockspitterWidgetWrapperComponent,
 		OpponentChaoticTendrilWidgetWrapperComponent,
 		OpponentExcavateWidgetWrapperComponent,
 		OpponentCorpseSpentWidgetWrapperComponent,

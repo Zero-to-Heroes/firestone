@@ -358,12 +358,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
 	},
 	{
-		id: 'shockspitter',
-		field: 'opponentShockspitterCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.shockspitter-tooltip'),
-	},
-	{
 		id: 'corpse-spent',
 		field: 'opponentCorpseSpentCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),

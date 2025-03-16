@@ -141,7 +141,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-gardens-grace-widget-wrapper></player-gardens-grace-widget-wrapper>
 			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
 			<player-bonelord-frostwhisper-widget-wrapper></player-bonelord-frostwhisper-widget-wrapper>
-			<player-shockspitter-widget-wrapper></player-shockspitter-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -162,7 +161,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-anachronos-widget-wrapper></opponent-anachronos-widget-wrapper>
 			<opponent-bonelord-frostwhisper-widget-wrapper></opponent-bonelord-frostwhisper-widget-wrapper>
-			<opponent-shockspitter-widget-wrapper></opponent-shockspitter-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
