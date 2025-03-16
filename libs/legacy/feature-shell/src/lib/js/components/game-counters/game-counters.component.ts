@@ -53,7 +53,6 @@ import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
 import { ShockspitterCounterDefinition } from './definitions/shockspitter-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
-import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
 import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
@@ -235,8 +234,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ParrotMascotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'queensguard':
 				return QueensguardCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'spectralPillager':
-				return SpectralPillagerCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':
 				return ShockspitterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':

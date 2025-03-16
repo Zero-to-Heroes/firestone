@@ -217,7 +217,6 @@ import { PlayerMonstrousParrotWidgetWrapperComponent } from './js/components/ove
 import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from './js/components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from './js/components/overlays/counters/player-pogo-widget-wrapper.component';
 import { PlayerQueensguardWidgetWrapperComponent } from './js/components/overlays/counters/player-queensguard-widget-wrapper.component';
-import { PlayerSpectralPillagerWidgetWrapperComponent } from './js/components/overlays/counters/player-spectral-pillager-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from './js/components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { CurrentSessionWidgetWrapperComponent } from './js/components/overlays/current-session-widget-wrapper.component';
@@ -1353,7 +1352,6 @@ try {
 		PlayerShockspitterWidgetWrapperComponent,
 		PlayerParrotMascotWidgetWrapperComponent,
 		PlayerQueensguardWidgetWrapperComponent,
-		PlayerSpectralPillagerWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
