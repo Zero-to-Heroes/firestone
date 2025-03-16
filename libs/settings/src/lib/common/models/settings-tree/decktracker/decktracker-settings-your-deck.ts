@@ -442,12 +442,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.spectral-pillager-tooltip'),
 	},
 	{
-		id: 'lady-darkvein',
-		field: 'playerLadyDarkveinCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-tooltip'),
-	},
-	{
 		id: 'bonelord-frostwhisper',
 		field: 'playerBonelordFrostwhisperCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),

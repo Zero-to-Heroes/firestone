@@ -2,8 +2,10 @@ import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { FerociousFelbat } from './ferocious-felbat';
+import { GreySageParrot } from './grey-sage-parrot';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
+import { LadyDarkvein } from './lady-darkvein';
 import { Merithra } from './merithra';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { SuccombToMadness } from './succomb-to-madness';
@@ -18,6 +20,8 @@ const cards = [
 	FerociousFelbat,
 	ArchdruidOfThorns,
 	KragwaTheFrog,
+	GreySageParrot,
+	LadyDarkvein,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};

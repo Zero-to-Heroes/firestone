@@ -136,8 +136,6 @@ export type CounterType =
 	| 'parrotMascot'
 	| 'queensguard'
 	| 'spectralPillager'
-	| 'ladyDarkvein'
-	| 'greySageParrot'
 	| 'heroPowerDamage'
 	| 'shockspitter'
 	| 'multicaster'

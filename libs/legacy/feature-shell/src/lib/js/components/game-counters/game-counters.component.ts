@@ -39,7 +39,6 @@ import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { GardensGraceCounterDefinition } from './definitions/gardens-grace-counter';
 import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
-import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LightrayCounterDefinition } from './definitions/lightray-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
@@ -238,8 +237,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return QueensguardCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'spectralPillager':
 				return SpectralPillagerCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'ladyDarkvein':
-				return LadyDarkveinCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':
 				return ShockspitterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
