@@ -147,7 +147,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-spectral-pillager-widget-wrapper></player-spectral-pillager-widget-wrapper>
 			<player-lady-darkvein-widget-wrapper></player-lady-darkvein-widget-wrapper>
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
-			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -166,7 +165,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-abyssal-curse-widget-wrapper></opponent-abyssal-curse-widget-wrapper>
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
-			<opponent-hero-power-damage-widget-wrapper></opponent-hero-power-damage-widget-wrapper>
 			<opponent-anachronos-widget-wrapper></opponent-anachronos-widget-wrapper>
 			<opponent-bonelord-frostwhisper-widget-wrapper></opponent-bonelord-frostwhisper-widget-wrapper>
 			<opponent-shockspitter-widget-wrapper></opponent-shockspitter-widget-wrapper>

@@ -17,6 +17,7 @@ import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
+import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
@@ -61,6 +62,7 @@ export const getAllCounters: (
 	new RelicCounterDefinitionV2(i18n, allCards),
 	new VolatileSkeletonCounterDefinitionV2(i18n, allCards),
 	new MulticasterCounterDefinitionV2(i18n, allCards),
+	new HeroPowerDamageCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

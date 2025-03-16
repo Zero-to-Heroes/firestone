@@ -198,7 +198,6 @@ import { OpponentCthunWidgetWrapperComponent } from './js/components/overlays/co
 import { OpponentElwynnBoarWidgetWrapperComponent } from './js/components/overlays/counters/opponent-elwynn-boar-widget-wrapper.component';
 import { OpponentFatigueWidgetWrapperComponent } from './js/components/overlays/counters/opponent-fatigue-widget-wrapper.component';
 import { OpponentGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/opponent-galakrond-widget-wrapper.component';
-import { OpponentHeroPowerDamageWidgetWrapperComponent } from './js/components/overlays/counters/opponent-hero-power-damage-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from './js/components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from './js/components/overlays/counters/opponent-pogo-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-watchpost-widget-wrapper.component';
@@ -214,7 +213,6 @@ import { PlayerElwynnBoarWidgetWrapperComponent } from './js/components/overlays
 import { PlayerFatigueWidgetWrapperComponent } from './js/components/overlays/counters/player-fatigue-widget-wrapper.component';
 import { PlayerGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/player-galakrond-widget-wrapper.component';
 import { PlayerGreySageParrotWidgetWrapperComponent } from './js/components/overlays/counters/player-grey-sage-parrot-widget-wrapper.component';
-import { PlayerHeroPowerDamageWidgetWrapperComponent } from './js/components/overlays/counters/player-hero-power-damage-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from './js/components/overlays/counters/player-jade-widget-wrapper.component';
 import { PlayerLadyDarkveinWidgetWrapperComponent } from './js/components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
 import { PlayerMonstrousParrotWidgetWrapperComponent } from './js/components/overlays/counters/player-monstrous-parrot-widget-wrapper.component';
@@ -1323,7 +1321,6 @@ try {
 		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerDragonsSummonedWidgetWrapperComponent,
 		PlayerJadeWidgetWrapperComponent,
-		PlayerHeroPowerDamageWidgetWrapperComponent,
 		PlayerGalakrondWidgetWrapperComponent,
 		PlayerFatigueWidgetWrapperComponent,
 		PlayerAbyssalCurseWidgetWrapperComponent,
@@ -1376,7 +1373,6 @@ try {
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,
 		OpponentAbyssalCurseWidgetWrapperComponent,
-		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
