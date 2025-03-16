@@ -1,6 +1,7 @@
 export * from './lib/counters/_counter-definition-v2';
 export * from './lib/counters/_exports';
 export * from './lib/counters/counter-wrapper.component';
+export * from './lib/counters/counters-positioner.component';
 export * from './lib/counters/generic-counter-v2.component';
 export * from './lib/counters/impl/cthun';
 export * from './lib/counters/impl/starships-launched';
