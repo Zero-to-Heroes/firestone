@@ -46,7 +46,6 @@ import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
 import { NagaGiantCounterDefinition } from './definitions/naga-giant-counter';
 import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
-import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
@@ -229,8 +228,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AnachronosCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bonelordFrostwhisper':
 				return BonelordFrostwhisperCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'parrotMascot':
-				return ParrotMascotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':
 				return ShockspitterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':

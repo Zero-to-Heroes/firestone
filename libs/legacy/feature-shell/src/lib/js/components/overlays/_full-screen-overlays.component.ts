@@ -142,7 +142,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
 			<player-bonelord-frostwhisper-widget-wrapper></player-bonelord-frostwhisper-widget-wrapper>
 			<player-shockspitter-widget-wrapper></player-shockspitter-widget-wrapper>
-			<player-parrot-mascot-widget-wrapper></player-parrot-mascot-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

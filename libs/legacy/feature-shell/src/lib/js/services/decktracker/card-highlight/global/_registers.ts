@@ -7,6 +7,7 @@ import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
 import { Merithra } from './merithra';
+import { ParrotMascot } from './parrot-mascot';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { SuccombToMadness } from './succomb-to-madness';
 import { Zuljin } from './zul-jin';
@@ -22,6 +23,7 @@ const cards = [
 	KragwaTheFrog,
 	GreySageParrot,
 	LadyDarkvein,
+	ParrotMascot,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};

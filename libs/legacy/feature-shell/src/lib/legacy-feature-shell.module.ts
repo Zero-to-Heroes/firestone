@@ -551,7 +551,6 @@ import { FilterComponent } from './js/components/filter.component';
 import { FsFilterDropdownComponent } from './js/components/fs-filter-dropdown.component';
 import { HotkeyComponent } from './js/components/hotkey.component';
 import { SecondaryDefaultComponent } from './js/components/main-window/secondary-default.component';
-import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
 import { DropdownComponent } from './js/components/settings/dropdown.component';
 import { ClipboardShareButtonComponent } from './js/components/sharing/clipboard/clipboard-share-button.component';
@@ -1349,7 +1348,6 @@ try {
 		PlayerAnachronosWidgetWrapperComponent,
 		PlayerBonelordFrostwhisperWidgetWrapperComponent,
 		PlayerShockspitterWidgetWrapperComponent,
-		PlayerParrotMascotWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

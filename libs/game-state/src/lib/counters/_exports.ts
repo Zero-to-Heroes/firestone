@@ -135,7 +135,6 @@ export type CounterType =
 	| 'gardensGrace'
 	| 'anachronos'
 	| 'bonelordFrostwhisper'
-	| 'parrotMascot'
 	| 'queensguard'
 	| 'heroPowerDamage'
 	| 'shockspitter'
