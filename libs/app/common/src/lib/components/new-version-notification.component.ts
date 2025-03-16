@@ -19,7 +19,7 @@ import { AppVersion } from '../model/app-version';
 import { isVersionBefore } from '../services/notifications-utils';
 
 const versions: readonly AppVersion[] = [
-	{ version: '15.0.4', date: '2025-03-12' },
+	{ version: '15.0.5', date: '2025-03-16', force: true },
 	{ version: '14.13.8', date: '2025-03-10' },
 	{ version: '14.12.4', date: '2025-03-02' },
 	{ version: '14.12.2', date: '2025-02-27' },
@@ -134,7 +134,7 @@ const versions: readonly AppVersion[] = [
 						<div class="update-text">
 							<div
 								class="parsed-text"
-								[innerHTML]="selectedVersion.textHtml | highlighter : (searchString$ | async)"
+								[innerHTML]="selectedVersion.textHtml | highlighter: (searchString$ | async)"
 							></div>
 						</div>
 					</section>
