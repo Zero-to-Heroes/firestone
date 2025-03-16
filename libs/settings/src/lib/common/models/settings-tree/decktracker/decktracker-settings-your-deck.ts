@@ -411,12 +411,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.gardens-grace-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.gardens-grace-tooltip'),
 	},
-	{
-		id: 'anachronos',
-		field: 'playerAnachronosCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

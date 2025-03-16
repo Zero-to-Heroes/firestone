@@ -11,7 +11,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
 import { AbyssalCurseCounterDefinition } from './definitions/abyssal-curse-counter';
-import { AnachronosCounterDefinition } from './definitions/anachronos-counter';
 import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
 import { AsvedonCounterDefinition } from './definitions/asvedon-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
@@ -222,8 +221,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return NagaGiantCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'gardensGrace':
 				return GardensGraceCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'anachronos':
-				return AnachronosCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

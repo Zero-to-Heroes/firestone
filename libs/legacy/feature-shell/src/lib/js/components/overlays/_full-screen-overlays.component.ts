@@ -139,7 +139,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
 			<player-naga-giant-widget-wrapper></player-naga-giant-widget-wrapper>
 			<player-gardens-grace-widget-wrapper></player-gardens-grace-widget-wrapper>
-			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -158,7 +157,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-abyssal-curse-widget-wrapper></opponent-abyssal-curse-widget-wrapper>
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
-			<opponent-anachronos-widget-wrapper></opponent-anachronos-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
@@ -256,6 +254,7 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				const result = allCounters
 					.filter((c) => c.isActive('player', gameState, bgState, prefs))
+					.sort((a, b) => a.id.localeCompare(b.id))
 					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 				return result;
 			}),
@@ -272,6 +271,7 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				return allCounters
 					.filter((c) => c.isActive('opponent', gameState, bgState, prefs))
+					.sort((a, b) => a.id.localeCompare(b.id))
 					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),

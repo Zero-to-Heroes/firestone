@@ -372,7 +372,6 @@ import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overl
 import { ConstructedDecktrackerExtendedOocComponent } from '@components/overlays/constructed/constructed-decktracker-extended-ooc.component';
 import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
-import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
@@ -380,7 +379,6 @@ import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overl
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
 import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
-import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
 import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
@@ -1341,7 +1339,6 @@ try {
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
 		PlayerNagaGiantWidgetWrapperComponent,
 		PlayerGardensGraceWidgetWrapperComponent,
-		PlayerAnachronosWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1359,7 +1356,6 @@ try {
 		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
-		OpponentAnachronosWidgetWrapperComponent,
 		OpponentChaoticTendrilWidgetWrapperComponent,
 		OpponentExcavateWidgetWrapperComponent,
 		OpponentCorpseSpentWidgetWrapperComponent,

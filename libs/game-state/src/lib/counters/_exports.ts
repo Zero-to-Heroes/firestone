@@ -1,5 +1,6 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
+import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
@@ -69,6 +70,7 @@ export const getAllCounters: (
 	new QueensguardCounterDefinitionV2(i18n, allCards),
 	new ShockspitterCounterDefinitionV2(i18n, allCards),
 	new BonelordFrostwhisperCounterDefinitionV2(i18n, allCards),
+	new AnachronosCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
