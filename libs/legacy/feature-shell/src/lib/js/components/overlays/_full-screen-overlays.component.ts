@@ -148,11 +148,13 @@ import { DebugService } from '../../services/debug.service';
 			<player-lady-darkvein-widget-wrapper></player-lady-darkvein-widget-wrapper>
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
-			<counter-wrapper
-				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
-				side="player"
-				[counter]="counter"
-			></counter-wrapper>
+			<counters-positioner class="widget-positioner player-counters" [positionerId]="'player-counters'">
+				<counter-wrapper
+					*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
+					side="player"
+					[counter]="counter"
+				></counter-wrapper
+			></counters-positioner>
 			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
 
 			<!-- Opponent counters -->
@@ -175,11 +177,13 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
-			<counter-wrapper
-				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
-				side="opponent"
-				[counter]="counter"
-			></counter-wrapper>
+			<counters-positioner class="widget-positioner opponent-counters" [positionerId]="'opponent-counters'">
+				<counter-wrapper
+					*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
+					side="opponent"
+					[counter]="counter"
+				></counter-wrapper>
+			</counters-positioner>
 			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
 			<!-- BG Counters -->
