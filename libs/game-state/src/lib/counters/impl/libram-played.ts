@@ -14,7 +14,6 @@ export class LibramPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 		pref: 'playerLibramCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			console.debug('getting player libram counter', state.playerDeck.libramsPlayedThisMatch);
 			return state.playerDeck.libramsPlayedThisMatch ?? 0;
 		},
 		setting: {

@@ -63,7 +63,6 @@ export class DecktrackerPlayerWidgetWrapperComponent
 		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
-		this.debug = true;
 	}
 
 	async ngAfterContentInit() {
