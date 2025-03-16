@@ -352,12 +352,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
 	},
 	{
-		id: 'bonelord-frostwhisper',
-		field: 'opponentBonelordFrostwhisperCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
-	},
-	{
 		id: 'corpse-spent',
 		field: 'opponentCorpseSpentCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),

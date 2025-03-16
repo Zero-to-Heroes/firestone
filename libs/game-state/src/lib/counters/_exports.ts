@@ -6,6 +6,7 @@ import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refres
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
+import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
@@ -67,6 +68,7 @@ export const getAllCounters: (
 	new HeroPowerDamageCounterDefinitionV2(i18n, allCards),
 	new QueensguardCounterDefinitionV2(i18n, allCards),
 	new ShockspitterCounterDefinitionV2(i18n, allCards),
+	new BonelordFrostwhisperCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

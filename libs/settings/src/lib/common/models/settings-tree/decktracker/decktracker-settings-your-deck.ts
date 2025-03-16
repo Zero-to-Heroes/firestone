@@ -417,12 +417,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
 	},
-	{
-		id: 'bonelord-frostwhisper',
-		field: 'playerBonelordFrostwhisperCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

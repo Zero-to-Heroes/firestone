@@ -140,7 +140,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-naga-giant-widget-wrapper></player-naga-giant-widget-wrapper>
 			<player-gardens-grace-widget-wrapper></player-gardens-grace-widget-wrapper>
 			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
-			<player-bonelord-frostwhisper-widget-wrapper></player-bonelord-frostwhisper-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -160,7 +159,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-anachronos-widget-wrapper></opponent-anachronos-widget-wrapper>
-			<opponent-bonelord-frostwhisper-widget-wrapper></opponent-bonelord-frostwhisper-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>

@@ -374,7 +374,6 @@ import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/ove
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
-import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
 import { OpponentChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/opponent-chaotic-tendril-widget-wrapper.component ==';
 import { OpponentCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/opponent-corpse-spent-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
@@ -388,7 +387,6 @@ import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/co
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-tuskarr-raider-widget-wrapper.component';
-import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@components/overlays/counters/player-cards-played-from-another-class-widget-wrapper.component';
 import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays/counters/player-chaotic-tendril-widget-wrapper.component';
 import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/counters/player-corpse-spent-widget-wrapper.component';
@@ -1344,7 +1342,6 @@ try {
 		PlayerNagaGiantWidgetWrapperComponent,
 		PlayerGardensGraceWidgetWrapperComponent,
 		PlayerAnachronosWidgetWrapperComponent,
-		PlayerBonelordFrostwhisperWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1363,7 +1360,6 @@ try {
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
-		OpponentBonelordFrostwhisperWidgetWrapperComponent,
 		OpponentChaoticTendrilWidgetWrapperComponent,
 		OpponentExcavateWidgetWrapperComponent,
 		OpponentCorpseSpentWidgetWrapperComponent,

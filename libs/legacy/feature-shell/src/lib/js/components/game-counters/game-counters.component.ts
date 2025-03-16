@@ -23,7 +23,6 @@ import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
-import { BonelordFrostwhisperCounterDefinition } from './definitions/bonelord-frostwhisper-counter';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
@@ -225,8 +224,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return GardensGraceCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'anachronos':
 				return AnachronosCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'bonelordFrostwhisper':
-				return BonelordFrostwhisperCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:
