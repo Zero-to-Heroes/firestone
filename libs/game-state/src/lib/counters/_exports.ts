@@ -40,7 +40,7 @@ import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 export const getAllCounters: (
 	i18n: ILocalizationService,
 	allCards: CardsFacadeService,
-) => readonly CounterDefinitionV2<any>[] = (i18n: ILocalizationService, allCards: CardsFacadeService) => [
+) => CounterDefinitionV2<any>[] = (i18n: ILocalizationService, allCards: CardsFacadeService) => [
 	new DragonsSummonedCounterDefinitionV2(i18n),
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),

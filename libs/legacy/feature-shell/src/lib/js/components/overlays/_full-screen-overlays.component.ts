@@ -243,7 +243,7 @@ export class FullScreenOverlaysComponent
 				}
 			}),
 		);
-		const allCounters = getAllCounters(this.i18n, this.allCards);
+		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		this.playerCounters$ = combineLatest([
 			this.gameState.gameState$$,
 			this.bgState.gameState$$,
@@ -254,7 +254,6 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				const result = allCounters
 					.filter((c) => c.isActive('player', gameState, bgState, prefs))
-					.sort((a, b) => a.id.localeCompare(b.id))
 					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 				return result;
 			}),
@@ -271,7 +270,6 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				return allCounters
 					.filter((c) => c.isActive('opponent', gameState, bgState, prefs))
-					.sort((a, b) => a.id.localeCompare(b.id))
 					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
