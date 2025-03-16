@@ -26,6 +26,7 @@ import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-laun
 import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
+import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
 import { RelicCounterDefinitionV2 } from './impl/relic';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
@@ -63,6 +64,7 @@ export const getAllCounters: (
 	new VolatileSkeletonCounterDefinitionV2(i18n, allCards),
 	new MulticasterCounterDefinitionV2(i18n, allCards),
 	new HeroPowerDamageCounterDefinitionV2(i18n, allCards),
+	new QueensguardCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

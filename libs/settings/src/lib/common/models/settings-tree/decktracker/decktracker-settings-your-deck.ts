@@ -430,12 +430,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.parrot-mascot-tooltip'),
 	},
 	{
-		id: 'queensguard',
-		field: 'playerQueensguardCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.queensguard-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.queensguard-tooltip'),
-	},
-	{
 		id: 'bonelord-frostwhisper',
 		field: 'playerBonelordFrostwhisperCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
