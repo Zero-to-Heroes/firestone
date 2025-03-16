@@ -448,14 +448,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-tooltip'),
 	},
 	{
-		id: 'grey-sage-parrot',
-		field: 'playerGreySageParrotCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip', {
-			cost: 6,
-		}),
-	},
-	{
 		id: 'bonelord-frostwhisper',
 		field: 'playerBonelordFrostwhisperCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),

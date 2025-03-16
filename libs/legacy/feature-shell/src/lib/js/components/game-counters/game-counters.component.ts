@@ -37,7 +37,6 @@ import { ExcavateCounterDefinition } from './definitions/excavate-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { GardensGraceCounterDefinition } from './definitions/gardens-grace-counter';
-import { GreySageParrotCounterDefinition } from './definitions/grey-sage-parrot-counter';
 import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
@@ -241,8 +240,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return SpectralPillagerCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'ladyDarkvein':
 				return LadyDarkveinCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'greySageParrot':
-				return GreySageParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'shockspitter':
 				return ShockspitterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':

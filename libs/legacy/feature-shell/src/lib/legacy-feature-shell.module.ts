@@ -212,7 +212,6 @@ import { PlayerElementalWidgetWrapperComponent } from './js/components/overlays/
 import { PlayerElwynnBoarWidgetWrapperComponent } from './js/components/overlays/counters/player-elwynn-boar-widget-wrapper.component';
 import { PlayerFatigueWidgetWrapperComponent } from './js/components/overlays/counters/player-fatigue-widget-wrapper.component';
 import { PlayerGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/player-galakrond-widget-wrapper.component';
-import { PlayerGreySageParrotWidgetWrapperComponent } from './js/components/overlays/counters/player-grey-sage-parrot-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from './js/components/overlays/counters/player-jade-widget-wrapper.component';
 import { PlayerLadyDarkveinWidgetWrapperComponent } from './js/components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
 import { PlayerMonstrousParrotWidgetWrapperComponent } from './js/components/overlays/counters/player-monstrous-parrot-widget-wrapper.component';
@@ -1357,7 +1356,6 @@ try {
 		PlayerQueensguardWidgetWrapperComponent,
 		PlayerSpectralPillagerWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,
-		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

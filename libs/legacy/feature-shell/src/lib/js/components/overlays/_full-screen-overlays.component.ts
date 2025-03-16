@@ -146,7 +146,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-queensguard-widget-wrapper></player-queensguard-widget-wrapper>
 			<player-spectral-pillager-widget-wrapper></player-spectral-pillager-widget-wrapper>
 			<player-lady-darkvein-widget-wrapper></player-lady-darkvein-widget-wrapper>
-			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
