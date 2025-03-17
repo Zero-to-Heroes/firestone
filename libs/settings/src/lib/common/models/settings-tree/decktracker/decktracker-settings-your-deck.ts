@@ -375,12 +375,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.menagerie-tooltip'),
 	},
-	{
-		id: 'corpse-spent',
-		field: 'playerCorpseSpentCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

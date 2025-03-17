@@ -24,7 +24,6 @@ import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indic
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
 import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
-import { CorpseSpentCounterDefinition } from './definitions/corpse-spent-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
@@ -204,8 +203,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return HolySpellsCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'menagerie':
 				return MenagerieCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
-			case 'corpseSpent':
-				return CorpseSpentCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

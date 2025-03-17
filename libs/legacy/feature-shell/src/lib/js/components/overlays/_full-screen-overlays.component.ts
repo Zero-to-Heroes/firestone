@@ -133,7 +133,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-lightray-widget-wrapper></player-lightray-widget-wrapper>
 			<player-holy-spells-widget-wrapper></player-holy-spells-widget-wrapper>
 			<player-menagerie-widget-wrapper></player-menagerie-widget-wrapper>
-			<player-corpse-spent-widget-wrapper></player-corpse-spent-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -154,7 +153,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
-			<opponent-corpse-spent-widget-wrapper></opponent-corpse-spent-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
 			<counter-wrapper

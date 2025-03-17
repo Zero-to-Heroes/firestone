@@ -346,12 +346,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip'),
 	},
 	{
-		id: 'corpse-spent',
-		field: 'opponentCorpseSpentCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.corpse-spent-tooltip'),
-	},
-	{
 		id: 'excavate',
 		field: 'opponentExcavateCounter',
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.excavate-label'),

@@ -557,12 +557,7 @@ export class Preferences implements IPreferences {
 	readonly playerMenagerieCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerCorpseSpentCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerCorpseSpentCounterWidgetPosition: { left: number; top: number };
 	readonly opponentCorpseSpentCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentCorpseSpentCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerOverdraftCounter: BooleanWithLimited = true;
 	readonly playerNagaGiantCounter: BooleanWithLimited = true;
 	readonly playerGardensGraceCounter: BooleanWithLimited = true;
