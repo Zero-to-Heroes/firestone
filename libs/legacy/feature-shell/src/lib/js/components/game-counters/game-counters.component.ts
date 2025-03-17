@@ -37,7 +37,6 @@ import { LocationsUsedCounterDefinition } from './definitions/locations-used-cou
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
-import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { TramHeistCounterDefinition } from './definitions/tram-heist-counter';
@@ -192,8 +191,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ExcavateCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'chaoticTendril':
 				return ChaoticTendrilCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'secretsPlayed':
-				return SecretsPlayedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

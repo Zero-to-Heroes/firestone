@@ -351,12 +351,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.chaotic-tendril-tooltip'),
 	},
-	{
-		id: 'secretsPlayed',
-		field: 'playerSecretsPlayedCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.secrets-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.secrets-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

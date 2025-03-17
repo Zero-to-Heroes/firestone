@@ -389,7 +389,6 @@ import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlay
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
-import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
 import { PlayerTramHeistWidgetWrapperComponent } from '@components/overlays/counters/player-tram-heist-widget-wrapper.component';
 import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
@@ -1319,7 +1318,6 @@ try {
 		PlayerTramHeistWidgetWrapperComponent,
 		PlayerExcavateWidgetWrapperComponent,
 		PlayerChaoticTendrilWidgetWrapperComponent,
-		PlayerSecretsPlayedWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

@@ -37,6 +37,7 @@ import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
 import { RelicCounterDefinitionV2 } from './impl/relic';
+import { SecretsPlayedCounterDefinitionV2 } from './impl/secrets-played';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
@@ -85,6 +86,7 @@ export const getAllCounters: (
 	new MenagerieCounterDefinitionV2(i18n, allCards),
 	new HolySpellsCounterDefinitionV2(i18n, allCards),
 	new LightrayCounterDefinitionV2(i18n, allCards),
+	new SecretsPlayedCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
