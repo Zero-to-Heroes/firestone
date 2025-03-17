@@ -140,7 +140,6 @@ export type CounterType =
 	| 'corpseSpent'
 	| 'overdraft'
 	| 'asvedon'
-	| 'murozondTheInfinite'
 	| 'nagaGiant'
 	| 'gardensGrace'
 	| 'anachronos'

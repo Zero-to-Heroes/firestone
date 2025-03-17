@@ -571,14 +571,7 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAsvedonCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerMurozondTheInfiniteCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerMurozondTheInfiniteCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerNagaGiantCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerNagaGiantCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerGardensGraceCounter: BooleanWithLimited = true;
 	readonly playerAnachronosCounter: BooleanWithLimited = true;
 	readonly opponentAnachronosCounter: BooleanWithLimited = true;

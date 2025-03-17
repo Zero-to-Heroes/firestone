@@ -401,16 +401,6 @@ export class DeckState {
 			.some((card) => card.mechanics?.some((mec) => mechanics.includes(GameTag[mec])));
 	}
 
-	public hasMurozondTheInfinite() {
-		return [...this.hand, ...this.currentOptions]
-			.filter((card) => card.cardId)
-			.some(
-				(card) =>
-					card.cardId === CardIds.MurozondTheInfinite_DRG_090 ||
-					card.cardId === CardIds.MurozondTheInfinite_CORE_DRG_090,
-			);
-	}
-
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard | null {
 		if (!this.cardsPlayedThisTurn?.length) {
 			return null;
