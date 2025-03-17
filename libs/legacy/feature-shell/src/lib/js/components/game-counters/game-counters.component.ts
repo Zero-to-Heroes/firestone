@@ -39,7 +39,6 @@ import { LightrayCounterDefinition } from './definitions/lightray-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
-import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { SecretsPlayedCounterDefinition } from './definitions/secrets-played-counter';
@@ -207,8 +206,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MenagerieCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'corpseSpent':
 				return CorpseSpentCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'overdraft':
-				return OverdraftCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

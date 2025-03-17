@@ -381,12 +381,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.corpse-spent-tooltip'),
 	},
-	{
-		id: 'overdraft',
-		field: 'playerOverdraftCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.overdraft-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.overdraft-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

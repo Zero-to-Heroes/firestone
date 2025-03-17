@@ -134,7 +134,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-holy-spells-widget-wrapper></player-holy-spells-widget-wrapper>
 			<player-menagerie-widget-wrapper></player-menagerie-widget-wrapper>
 			<player-corpse-spent-widget-wrapper></player-corpse-spent-widget-wrapper>
-			<player-overdraft-widget-wrapper></player-overdraft-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
