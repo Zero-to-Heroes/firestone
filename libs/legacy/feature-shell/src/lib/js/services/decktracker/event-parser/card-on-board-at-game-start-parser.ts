@@ -20,7 +20,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
-		console.debug('[card-on-board-at-game-start] cardId', cardId, entityId, creatorCardId, gameEvent);
+		// console.debug('[card-on-board-at-game-start] cardId', cardId, entityId, creatorCardId, gameEvent);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -37,7 +37,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 
 		if (card == null) {
 			const cardInDeck = this.helper.trueFindCardInZone(deck.deck, cardId, entityId);
-			console.debug('[card-on-board-at-game-start] card in deck', cardInDeck, deck);
+			// console.debug('[card-on-board-at-game-start] card in deck', cardInDeck, deck);
 			if (cardInDeck != null && cardInDeck.entityId === entityId) {
 				newDeck = this.helper.removeSingleCardFromZone(
 					deck.deck,
@@ -50,7 +50,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 		}
 		if (card == null) {
 			const cardIdHand = this.helper.trueFindCardInZone(deck.hand, cardId, entityId);
-			console.debug('[card-on-board-at-game-start] card in hand', cardIdHand, deck);
+			// console.debug('[card-on-board-at-game-start] card in hand', cardIdHand, deck);
 			if (cardIdHand != null && cardIdHand.entityId === entityId) {
 				newHand = this.helper.removeSingleCardFromZone(
 					deck.hand,
@@ -65,7 +65,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 			card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 			newDeck = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId, deck.deckList.length === 0)[0];
 		}
-		console.debug('[card-on-board-at-game-start] updated deck and hand', newDeck, newHand);
+		// console.debug('[card-on-board-at-game-start] updated deck and hand', newDeck, newHand);
 
 		// When reconnecting, we can also have the card info in hand
 		const cardWithZone = card?.update({
