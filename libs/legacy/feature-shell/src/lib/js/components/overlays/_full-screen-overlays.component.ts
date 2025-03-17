@@ -131,7 +131,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-chaotic-tendril-widget-wrapper></player-chaotic-tendril-widget-wrapper>
 			<player-secrets-played-widget-wrapper></player-secrets-played-widget-wrapper>
 			<player-lightray-widget-wrapper></player-lightray-widget-wrapper>
-			<player-holy-spells-widget-wrapper></player-holy-spells-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

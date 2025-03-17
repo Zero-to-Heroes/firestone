@@ -32,7 +32,6 @@ import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { ExcavateCounterDefinition } from './definitions/excavate-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
-import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LightrayCounterDefinition } from './definitions/lightray-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
@@ -198,8 +197,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return SecretsPlayedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'lightray':
 				return LightrayCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'holySpells':
-				return HolySpellsCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:
