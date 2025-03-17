@@ -53,7 +53,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	public async subscribe(planId: string) {
 		const allPackages = await this.packages$$.getValueWithInit();
 		const currentUser = await this.user.getCurrentUser();
-		if (!currentUser) {
+		if (!currentUser?.username) {
 			return null;
 		}
 		const userUuid = currentUser.uuid;
@@ -78,6 +78,11 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
 		const enableTebex = await ENABLE_TEBEX(this.ow);
 		if (!enableTebex) {
+			return null;
+		}
+
+		const currentUser = await this.user.getCurrentUser();
+		if (!currentUser?.username) {
 			return null;
 		}
 
