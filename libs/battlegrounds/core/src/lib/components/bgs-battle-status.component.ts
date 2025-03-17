@@ -412,13 +412,9 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 			return '--';
 		}
 
-		if (range.min === range.max) {
-			return averageDamage.toFixed(1);
-		}
-
 		const format = (value: number) => (value > 10 ? value.toFixed(0) : value.toFixed(0));
 
-		return `${format(range.min)} - ${format(range.max)}`;
+		return `${averageDamage.toFixed(1)} (${format(range.min)} - ${format(range.max)})`;
 	}
 
 	private pickSimulationResult(category: 'win' | 'tie' | 'loss') {
