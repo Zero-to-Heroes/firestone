@@ -139,7 +139,6 @@ export type CounterType =
 	| 'menagerie'
 	| 'corpseSpent'
 	| 'overdraft'
-	| 'asvedon'
 	| 'nagaGiant'
 	| 'gardensGrace'
 	| 'anachronos'

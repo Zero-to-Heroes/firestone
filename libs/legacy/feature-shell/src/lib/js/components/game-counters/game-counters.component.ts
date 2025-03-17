@@ -12,7 +12,6 @@ import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
 import { AbyssalCurseCounterDefinition } from './definitions/abyssal-curse-counter';
 import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
-import { AsvedonCounterDefinition } from './definitions/asvedon-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsBloodGemCounterDefinition } from './definitions/bgs-blood-gem-counter';
 import { BgsLordOfGainsCounterDefinition } from './definitions/bgs-lord-of-gains-counter';
@@ -210,8 +209,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return CorpseSpentCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'overdraft':
 				return OverdraftCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'asvedon':
-				return AsvedonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

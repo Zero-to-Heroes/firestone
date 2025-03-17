@@ -1,6 +1,7 @@
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
+import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
 import { JimRaynor } from './jim-raynor';
@@ -26,6 +27,7 @@ const cards = [
 	LadyDarkvein,
 	ParrotMascot,
 	MurozondTheInfinite,
+	AsvedonTheGrandshield,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
