@@ -374,7 +374,6 @@ import { ConstructedDecktrackerOocComponent } from '@components/overlays/constru
 import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
 import { OpponentElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/opponent-elemental-streak-widget-wrapper.component';
-import { OpponentExcavateWidgetWrapperComponent } from '@components/overlays/counters/opponent-excavate-widget-wrapper.component';
 import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
 import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
@@ -384,7 +383,6 @@ import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overla
 import { PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent } from '@components/overlays/counters/player-cards-played-from-another-class-widget-wrapper.component';
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
-import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerThirstyDrifterWidgetWrapperComponent } from '@components/overlays/counters/player-thirsty-drifter-widget-wrapper.component';
@@ -1314,7 +1312,6 @@ try {
 		PlayerCardsPlayedFromAnotherClassWidgetWrapperComponent,
 		PlayerElementalStreakWidgetWrapperComponent,
 		PlayerTramHeistWidgetWrapperComponent,
-		PlayerExcavateWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1332,7 +1329,6 @@ try {
 		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
-		OpponentExcavateWidgetWrapperComponent,
 		OpponentWheelOfDeathWidgetWrapperComponent,
 		OpponentDragonsSummonedWidgetWrapperComponent,
 		OpponentElementalStreakWidgetWrapperComponent,

@@ -28,7 +28,6 @@ import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElementalStreakCounterDefinition } from './definitions/elemental-streak-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
-import { ExcavateCounterDefinition } from './definitions/excavate-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
@@ -186,8 +185,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElementalStreakCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'tramHeist':
 				return TramHeistCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'excavate':
-				return ExcavateCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

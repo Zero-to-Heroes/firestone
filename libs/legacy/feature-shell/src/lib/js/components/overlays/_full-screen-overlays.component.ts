@@ -127,7 +127,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-cards-played-from-another-class-widget-wrapper></player-cards-played-from-another-class-widget-wrapper>
 			<player-elemental-streak-widget-wrapper></player-elemental-streak-widget-wrapper>
 			<player-tram-heist-widget-wrapper></player-tram-heist-widget-wrapper>
-			<player-excavate-widget-wrapper></player-excavate-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -146,7 +145,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-abyssal-curse-widget-wrapper></opponent-abyssal-curse-widget-wrapper>
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
-			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
 			<counter-wrapper

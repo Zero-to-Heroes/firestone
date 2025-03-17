@@ -527,12 +527,7 @@ export class Preferences implements IPreferences {
 	readonly playerTramHeistCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerExcavateCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerExcavateCounterWidgetPosition: { left: number; top: number };
 	readonly opponentExcavateCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentExcavateCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerChaoticTendrilCounter: BooleanWithLimited = true;
 	readonly opponentChaoticTendrilCounter: BooleanWithLimited = true;
 	readonly playerSecretsPlayedCounter: BooleanWithLimited = true;

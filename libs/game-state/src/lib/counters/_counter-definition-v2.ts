@@ -46,6 +46,7 @@ export abstract class CounterDefinitionV2<T> {
 		side: 'player' | 'opponent',
 		gameState: GameState,
 		bgState: BattlegroundsState,
+		value: T | null | undefined,
 	): readonly string[] | undefined {
 		return undefined;
 	}
@@ -139,7 +140,7 @@ export abstract class CounterDefinitionV2<T> {
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${image}.jpg`,
 			tooltip: this.tooltip(side, gameState, allCards, bgState, countersUseExpandedView),
 			value: formattedValue,
-			cardTooltip: this.cardTooltip(side, gameState, bgState),
+			cardTooltip: this.cardTooltip(side, gameState, bgState, rawValue),
 		};
 		this.debug && console.debug('[debug] emitting counter', this.id, result);
 		return result;
