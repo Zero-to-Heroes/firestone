@@ -137,7 +137,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-overdraft-widget-wrapper></player-overdraft-widget-wrapper>
 			<player-asvedon-widget-wrapper></player-asvedon-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
-			<player-naga-giant-widget-wrapper></player-naga-giant-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

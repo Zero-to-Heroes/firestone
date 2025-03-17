@@ -41,7 +41,6 @@ import { LocationsUsedCounterDefinition } from './definitions/locations-used-cou
 import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
-import { NagaGiantCounterDefinition } from './definitions/naga-giant-counter';
 import { OverdraftCounterDefinition } from './definitions/overdraft-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
@@ -216,8 +215,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AsvedonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':
 				return MurozondTheInfiniteCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'nagaGiant':
-				return NagaGiantCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

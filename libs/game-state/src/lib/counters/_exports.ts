@@ -25,6 +25,7 @@ import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
+import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
 import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
@@ -73,6 +74,7 @@ export const getAllCounters: (
 	new BonelordFrostwhisperCounterDefinitionV2(i18n, allCards),
 	new AnachronosCounterDefinitionV2(i18n, allCards),
 	new GardensGraceCounterDefinitionV2(i18n, allCards),
+	new NagaGiantCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

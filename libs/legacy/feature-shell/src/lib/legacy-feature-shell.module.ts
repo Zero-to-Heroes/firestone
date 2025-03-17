@@ -395,7 +395,6 @@ import { PlayerHolySpellsWidgetWrapperComponent } from '@components/overlays/cou
 import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
 import { PlayerMenagerieCounterWidgetWrapperComponent } from '@components/overlays/counters/player-menagerie-widget-wrapper.component';
-import { PlayerNagaGiantWidgetWrapperComponent } from '@components/overlays/counters/player-naga-giant-widget-wrapper.component';
 import { PlayerOverdraftWidgetWrapperComponent } from '@components/overlays/counters/player-overdraft-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
@@ -1336,7 +1335,6 @@ try {
 		PlayerOverdraftWidgetWrapperComponent,
 		PlayerAsvedonWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
-		PlayerNagaGiantWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
