@@ -19,6 +19,7 @@ import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
+import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
@@ -71,6 +72,7 @@ export const getAllCounters: (
 	new ShockspitterCounterDefinitionV2(i18n, allCards),
 	new BonelordFrostwhisperCounterDefinitionV2(i18n, allCards),
 	new AnachronosCounterDefinitionV2(i18n, allCards),
+	new GardensGraceCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

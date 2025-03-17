@@ -391,7 +391,6 @@ import { PlayerCorpseSpentWidgetWrapperComponent } from '@components/overlays/co
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
-import { PlayerGardensGraceWidgetWrapperComponent } from '@components/overlays/counters/player-gardens-grace-widget-wrapper.component';
 import { PlayerHolySpellsWidgetWrapperComponent } from '@components/overlays/counters/player-holy-spells-widget-wrapper.component';
 import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
@@ -1338,7 +1337,6 @@ try {
 		PlayerAsvedonWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
 		PlayerNagaGiantWidgetWrapperComponent,
-		PlayerGardensGraceWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

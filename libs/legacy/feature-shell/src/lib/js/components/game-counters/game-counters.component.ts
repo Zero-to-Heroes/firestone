@@ -34,7 +34,6 @@ import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { ExcavateCounterDefinition } from './definitions/excavate-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
-import { GardensGraceCounterDefinition } from './definitions/gardens-grace-counter';
 import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LightrayCounterDefinition } from './definitions/lightray-counter';
@@ -219,8 +218,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MurozondTheInfiniteCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'nagaGiant':
 				return NagaGiantCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'gardensGrace':
-				return GardensGraceCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:
