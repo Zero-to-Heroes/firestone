@@ -515,6 +515,8 @@ export const cardIdSelector = (
 					and(side(inputSide), inDeck, minion),
 				)(input);
 			};
+		case CardIds.CallToArms:
+			return and(side(inputSide), inDeck, minion, effectiveCostLess(3));
 		case CardIds.CagematchCustodian:
 			return and(side(inputSide), inDeck, cardType(CardType.WEAPON));
 		case CardIds.CannonBarrage:
