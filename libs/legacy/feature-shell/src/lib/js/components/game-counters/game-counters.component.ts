@@ -23,7 +23,6 @@ import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-rai
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
-import { ChaoticTendrilCounterDefinition } from './definitions/chaotic-tendril-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
@@ -189,8 +188,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return TramHeistCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'excavate':
 				return ExcavateCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'chaoticTendril':
-				return ChaoticTendrilCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

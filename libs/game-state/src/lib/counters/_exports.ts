@@ -13,6 +13,7 @@ import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-start
 import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { ChainedGuardianCounterDefinitionV2 } from './impl/chained-guardian';
+import { ChaoticTendrilCounterDefinitionV2 } from './impl/chaotic-tendril';
 import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
 import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
@@ -87,6 +88,7 @@ export const getAllCounters: (
 	new HolySpellsCounterDefinitionV2(i18n, allCards),
 	new LightrayCounterDefinitionV2(i18n, allCards),
 	new SecretsPlayedCounterDefinitionV2(i18n, allCards),
+	new ChaoticTendrilCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

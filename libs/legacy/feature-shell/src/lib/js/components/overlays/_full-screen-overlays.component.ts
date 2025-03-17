@@ -128,7 +128,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-elemental-streak-widget-wrapper></player-elemental-streak-widget-wrapper>
 			<player-tram-heist-widget-wrapper></player-tram-heist-widget-wrapper>
 			<player-excavate-widget-wrapper></player-excavate-widget-wrapper>
-			<player-chaotic-tendril-widget-wrapper></player-chaotic-tendril-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -147,7 +146,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-abyssal-curse-widget-wrapper></opponent-abyssal-curse-widget-wrapper>
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
-			<opponent-chaotic-tendril-widget-wrapper></opponent-chaotic-tendril-widget-wrapper>
 			<opponent-excavate-widget-wrapper></opponent-excavate-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
 			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
