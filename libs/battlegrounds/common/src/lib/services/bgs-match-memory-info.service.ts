@@ -11,7 +11,6 @@ import {
 	interval,
 	map,
 	switchMap,
-	tap,
 	withLatestFrom,
 } from 'rxjs';
 import { BgsStateFacadeService } from './bgs-state-facade.service';
@@ -76,7 +75,7 @@ export class BgsMatchMemoryInfoService {
 						} as BattlegroundsInfo),
 				),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				tap((info) => console.debug('[bgs-match-memory-info] will emit new memory info', info)),
+				// tap((info) => console.debug('[bgs-match-memory-info] will emit new memory info', info)),
 			)
 			.subscribe((info) => this.battlegroundsMemoryInfo$$.next(info as BattlegroundsInfo));
 	}
