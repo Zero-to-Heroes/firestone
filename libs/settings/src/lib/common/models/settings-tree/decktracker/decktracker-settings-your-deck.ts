@@ -357,12 +357,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.secrets-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.secrets-tooltip'),
 	},
-	{
-		id: 'lightray',
-		field: 'playerLightrayCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.lightray-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.lightray-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

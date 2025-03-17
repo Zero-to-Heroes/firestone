@@ -387,7 +387,6 @@ import { PlayerChaoticTendrilWidgetWrapperComponent } from '@components/overlays
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerElementalStreakWidgetWrapperComponent } from '@components/overlays/counters/player-elemental-streak-widget-wrapper.component';
 import { PlayerExcavateWidgetWrapperComponent } from '@components/overlays/counters/player-excavate-widget-wrapper.component';
-import { PlayerLightrayWidgetWrapperComponent } from '@components/overlays/counters/player-lightray-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
 import { PlayerSecretsPlayedWidgetWrapperComponent } from '@components/overlays/counters/player-secrets-played-widget-wrapper.component';
@@ -1321,7 +1320,6 @@ try {
 		PlayerExcavateWidgetWrapperComponent,
 		PlayerChaoticTendrilWidgetWrapperComponent,
 		PlayerSecretsPlayedWidgetWrapperComponent,
-		PlayerLightrayWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

@@ -545,9 +545,6 @@ export class Preferences implements IPreferences {
 	readonly playerSecretsPlayedCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerLightrayCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerLightrayCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerHolySpellsCounter: BooleanWithLimited = true;
 	readonly playerMenagerieCounter: BooleanWithLimited = true;
 	readonly playerCorpseSpentCounter: BooleanWithLimited = true;
