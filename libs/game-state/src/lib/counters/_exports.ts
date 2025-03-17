@@ -24,6 +24,7 @@ import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
+import { MenagerieCounterDefinitionV2 } from './impl/menagerie';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
@@ -79,6 +80,7 @@ export const getAllCounters: (
 	new NagaGiantCounterDefinitionV2(i18n, allCards),
 	new OverdraftCounterDefinitionV2(i18n, allCards),
 	new CorpseSpentCounterDefinitionV2(i18n, allCards),
+	new MenagerieCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

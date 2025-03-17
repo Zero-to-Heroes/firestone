@@ -36,7 +36,6 @@ import { HolySpellsCounterDefinition } from './definitions/holy-spells-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LightrayCounterDefinition } from './definitions/lightray-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
-import { MenagerieCounterDefinition } from './definitions/menagerie-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
@@ -201,8 +200,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return LightrayCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'holySpells':
 				return HolySpellsCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'menagerie':
-				return MenagerieCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:
