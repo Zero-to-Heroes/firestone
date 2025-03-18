@@ -99,7 +99,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// Because of Tome Tampering
 		// eslint-disable-next-line prefer-const
 		let { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
-		// console.debug('[create-card-in-deck]', 'card added', card, zone);
+		// console.debug('[create-card-in-deck]', 'card added', card, zone, gameEvent, deck);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		const newCardId = cardId ?? card?.cardId;
 		card = (card ?? DeckCard.create())
@@ -128,7 +128,12 @@ export class CreateCardInDeckParser implements EventParser {
 				zone: undefined,
 			} as DeckCard)
 			.update({
-				relatedCardIds: this.buildRelatedCardIds(newCardId, deck, card?.relatedCardIds),
+				relatedCardIds: this.buildRelatedCardIds(
+					newCardId,
+					deck,
+					card?.relatedCardIds,
+					gameEvent.additionalData.creatorCardId,
+				),
 			});
 
 		// console.debug('[create-card-in-deck]', 'adding card', card);
@@ -169,14 +174,17 @@ export class CreateCardInDeckParser implements EventParser {
 		cardId: string,
 		deck: DeckState,
 		existingCardIds: readonly string[],
+		creatorCardId: string,
 	): readonly string[] {
+		// console.debug('creating card in deck', cardId, creatorCardId, existingCardIds);
 		switch (cardId) {
 			case CardIds.PhotographerFizzle_FizzlesSnapshotToken:
-				// console.debug(
-				// 	'setting related card ids',
-				// 	deck.hand.map((c) => c.cardId),
-				// );
-				return deck.hand.map((c) => c.cardId ?? `${c.entityId}`);
+				if (creatorCardId === CardIds.PhotographerFizzle) {
+					return deck.hand.map((c) => c.cardId ?? `${c.entityId}`);
+				} else {
+					// Snapshot is "once per game" now, so this case shouldn't really matter anymore
+					return existingCardIds ?? [];
+				}
 			default:
 				return existingCardIds ?? [];
 		}
