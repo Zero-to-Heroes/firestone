@@ -85,7 +85,7 @@ export class ExcavateCounterDefinitionV2 extends CounterDefinitionV2<{
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const value = this[side]?.value(gameState) ?? 0;
+		const value = this[side]?.value(gameState);
 		const maxTier = value.maxTier;
 		const nextTier = (value.currentTier % maxTier) + 1;
 		return this.i18n.translateString(`counters.excavate.${side}`, {

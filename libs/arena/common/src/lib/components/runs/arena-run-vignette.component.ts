@@ -88,7 +88,7 @@ export class ArenaRunVignetteComponent {
 		await this.nav.isReady();
 
 		this.nav.selectedCategoryId$$.next('arena-deck-details');
-		this.nav.selectedPersonalRunId$$.next(this._run?.id);
+		this.nav.setHighWinsRunId(+this._run?.id);
 	}
 
 	private setStat(value: ExtendedArenaRunInfo) {

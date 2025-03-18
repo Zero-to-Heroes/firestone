@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Pick } from '@firestone-hs/arena-draft-pick';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ArenaDeckOverview } from '../../models/arena-deck-details';
 import { ArenDeckDetailsService } from '../../services/arena-deck-details.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
@@ -135,6 +135,7 @@ export class ArenaDeckDetailsComponent extends AbstractSubscriptionComponent imp
 			this.mapData((deckDetails) => deckDetails?.deckstring ?? null),
 		);
 		this.picks$ = this.deckDetailsService.deckDetails$$.pipe(
+			tap((deckDetails) => console.debug('deckDetails in deck-details', deckDetails)),
 			this.mapData((deckDetails) =>
 				deckDetails?.picks === undefined
 					? undefined

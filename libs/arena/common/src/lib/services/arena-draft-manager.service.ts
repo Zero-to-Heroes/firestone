@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { DraftDeckStats, DraftPick, Pick, Picks } from '@firestone-hs/arena-draft-pick';
@@ -335,7 +336,7 @@ export class ArenaDraftManagerService
 		});
 	}
 
-	public async getPicksForRun(runId: string): Promise<readonly Pick[] | null> {
+	public async getPicksForRun(runId: string | number): Promise<readonly Pick[] | null> {
 		const localPicks = await this.indexedDb
 			.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS)
 			.where('runId')
@@ -345,7 +346,9 @@ export class ArenaDraftManagerService
 		if (!!localPicks?.length) {
 			return localPicks;
 		}
-		const resultFromRemote = await this.api.callGetApi<Picks>(ARENA_DECK_DETAILS_URL.replace('%runId%', runId));
+		const resultFromRemote = await this.api.callGetApi<Picks>(
+			ARENA_DECK_DETAILS_URL.replace('%runId%', '' + runId),
+		);
 		return resultFromRemote?.picks ?? null;
 	}
 

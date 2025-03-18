@@ -127,7 +127,7 @@ export class ArenaRunComponent {
 		await this.nav.isReady();
 
 		this.nav.selectedCategoryId$$.next('arena-deck-details');
-		this.nav.selectedPersonalRunId$$.next(this._run?.id);
+		this.nav.setPersonalRunId(this._run?.id);
 	}
 
 	private updateValues() {

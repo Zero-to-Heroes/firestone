@@ -12,7 +12,7 @@ import {
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { ExtendedArenaRunInfo, ExtendedHighWinRunsInfo, InternalNotableCard } from '../models/arena-high-wins-runs';
 
 const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
@@ -96,6 +96,10 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 			console.debug('[arena-high-wins-runs] loaded arena stats', runs);
 			this.runs$$.next(extendedRuns);
 		});
+	}
+
+	public getRun$(runId: number): Observable<ExtendedArenaRunInfo | null | undefined> {
+		return this.runs$$.pipe(map((runs) => runs?.runs?.find((run) => run.id === runId)));
 	}
 
 	public newCardSearch(selected: readonly string[]): void {
