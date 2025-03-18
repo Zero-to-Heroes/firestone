@@ -251,6 +251,10 @@
 					&.battlegrounds {
 						bgs-hero-portrait {
 							width: 30px;
+
+							::ng-deep .hero-portrait-frame .icon {
+								width: 100%;
+							}
 						}
 					}
 

@@ -59,7 +59,7 @@ export const battlegroundsSessionWidgetSettings = (context: SettingContext): Set
 						disabledIf: (prefs: Preferences) => !prefs.showCurrentSessionWidgetBgs,
 						sliderConfig: {
 							min: 60,
-							max: 140,
+							max: 200,
 							snapSensitivity: 3,
 							knobs: sizeKnobs(context),
 						},
