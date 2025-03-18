@@ -1,6 +1,7 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
+import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
@@ -50,6 +51,7 @@ import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefini
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TreantCounterDefinitionV2 } from './impl/treant';
+import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
 
@@ -103,6 +105,8 @@ export const getAllCounters: (
 	new WheelOfDeathCounterDefinitionV2(i18n, allCards),
 	new SeaShantyCounterDefinitionV2(i18n, allCards),
 	new LocationsUsedCounterDefinitionV2(i18n, allCards),
+	new TyrandeCounterDefinitionV2(i18n),
+	new AvianaElunesChoseCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -115,6 +119,8 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'tyrande'
+	| 'avianaElunesChosen'
 	| 'cardsPlayedThisTurn'
 	| 'nextStarshipLaunch'
 	| 'protossMinionReduction'
