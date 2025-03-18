@@ -29,7 +29,6 @@ import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
-import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
@@ -165,8 +164,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'locationsUsed':
-				return LocationsUsedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

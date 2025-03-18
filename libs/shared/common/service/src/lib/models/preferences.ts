@@ -483,22 +483,10 @@ export class Preferences implements IPreferences {
 
 	readonly playerDamageTakenOnYourTurnCounter: boolean = true;
 	readonly opponentDamageTakenOnYourTurnCounter: boolean = false;
-
 	readonly playerLocationsUsedCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerLocationsUsedCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerSeaShantyCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerSeaShantyCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerWheelOfDeathCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerWheelOfDeathCounterWidgetPosition: { left: number; top: number };
 	readonly opponentWheelOfDeathCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentWheelOfDeathCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerThirstyDrifterCounter: BooleanWithLimited = true;
 	readonly playerCardsPlayedFromAnotherClassCounter: BooleanWithLimited = true;
 

@@ -120,7 +120,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
-			<player-locations-used-widget-wrapper></player-locations-used-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

@@ -30,6 +30,7 @@ import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { LightrayCounterDefinitionV2 } from './impl/lightray';
+import { LocationsUsedCounterDefinitionV2 } from './impl/locations-used';
 import { MenagerieCounterDefinitionV2 } from './impl/menagerie';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
@@ -101,6 +102,7 @@ export const getAllCounters: (
 	new ThirstyDrifterCounterDefinitionV2(i18n, allCards),
 	new WheelOfDeathCounterDefinitionV2(i18n, allCards),
 	new SeaShantyCounterDefinitionV2(i18n, allCards),
+	new LocationsUsedCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
