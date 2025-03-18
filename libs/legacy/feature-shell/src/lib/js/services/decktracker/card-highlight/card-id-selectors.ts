@@ -1443,8 +1443,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.InventorBoom_TOY_607:
 			return highlightConditions(
-				and(side(inputSide), or(inDeck, inHand), mech, costMore(4)),
-				tooltip(and(side(inputSide), inGraveyard, mech, costMore(4))),
+				and(side(inputSide), or(inDeck, inHand), mech, effectiveCostMore(4)),
+				tooltip(and(side(inputSide), inGraveyard, mech, effectiveCostMore(4))),
 			);
 		case CardIds.InventorsAura:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
