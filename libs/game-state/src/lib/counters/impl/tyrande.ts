@@ -8,16 +8,21 @@ import { CounterType } from '../_exports';
 export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'tyrande';
 	public override image = CardIds.Tyrande_EDR_464;
-	public override cards: readonly CardIds[] = [CardIds.Tyrande_EDR_464] as any[];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerTyrandeCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
-			state.playerDeck.enchantments
-				.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
-				.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
-				.reduce((a, b) => a + b, 0) ?? 0,
+		value: (state: GameState): number | null => {
+			console.debug('[debug] will compute value 2');
+			const value =
+				state.playerDeck.enchantments
+					.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
+					.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+					.reduce((a, b) => a + b, 0) || null;
+			console.debug('[debug] value 2', value, state.playerDeck.enchantments);
+			return value;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.tyrande-label'),
@@ -29,11 +34,11 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	readonly opponent = {
 		pref: 'opponentTyrandeCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
+		value: (state: GameState): number | null =>
 			state.opponentDeck.enchantments
 				.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
 				.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
-				.reduce((a, b) => a + b, 0) ?? 0,
+				.reduce((a, b) => a + b, 0) || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.tyrande-label'),

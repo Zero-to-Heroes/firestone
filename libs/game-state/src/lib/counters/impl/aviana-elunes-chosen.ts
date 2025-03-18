@@ -8,16 +8,21 @@ import { CounterType } from '../_exports';
 export class AvianaElunesChoseCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'avianaElunesChosen';
 	public override image = CardIds.AvianaElunesChosen_EDR_895;
-	public override cards: readonly CardIds[] = [CardIds.AvianaElunesChosen_EDR_895] as any[];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerAvianaElunesChosenCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
-			state.playerDeck.enchantments
-				.filter((e) => e.cardId === CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t)
-				.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
-				.reduce((a, b) => a + b, 0) ?? 0,
+		value: (state: GameState): number | null => {
+			console.debug('[debug] will compute value ', state.playerDeck.enchantments);
+			const value =
+				state.playerDeck.enchantments
+					.filter((e) => e.cardId === CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t)
+					.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+					.reduce((a, b) => a + b, 0) || null;
+			console.debug('[debug] value', value, state.playerDeck.enchantments);
+			return value || null;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.aviana-elunes-chosen-label'),
@@ -29,11 +34,11 @@ export class AvianaElunesChoseCounterDefinitionV2 extends CounterDefinitionV2<nu
 	readonly opponent = {
 		pref: 'opponentAvianaElunesChosenCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
+		value: (state: GameState): number | null =>
 			state.opponentDeck.enchantments
 				.filter((e) => e.cardId === CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t)
 				.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
-				.reduce((a, b) => a + b, 0) ?? 0,
+				.reduce((a, b) => a + b, 0) || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.aviana-elunes-chosen-label'),
