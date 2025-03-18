@@ -32,7 +32,6 @@ import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LocationsUsedCounterDefinition } from './definitions/locations-used-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
-import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
@@ -168,8 +167,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'locationsUsed':
 				return LocationsUsedCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'seaShanty':
-				return SeaShantyCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

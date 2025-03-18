@@ -298,12 +298,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.locations-used-tooltip'),
 	},
-	{
-		id: 'seaShanty',
-		field: 'playerSeaShantyCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

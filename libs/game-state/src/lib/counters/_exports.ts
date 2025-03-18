@@ -41,6 +41,7 @@ import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
 import { RelicCounterDefinitionV2 } from './impl/relic';
+import { SeaShantyCounterDefinitionV2 } from './impl/sea-shanty';
 import { SecretsPlayedCounterDefinitionV2 } from './impl/secrets-played';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
@@ -99,6 +100,7 @@ export const getAllCounters: (
 	new CardsPlayedFromAnotherClassCounterDefinitionV2(i18n, allCards),
 	new ThirstyDrifterCounterDefinitionV2(i18n, allCards),
 	new WheelOfDeathCounterDefinitionV2(i18n, allCards),
+	new SeaShantyCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
