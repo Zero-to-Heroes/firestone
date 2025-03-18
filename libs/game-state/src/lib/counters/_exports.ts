@@ -147,7 +147,6 @@ export type CounterType =
 	| 'bolner'
 	| 'brilliantMacaw'
 	| 'monstrousParrot'
-	| 'vanessaVanCleef'
 	| 'friendlyDeadMinionsThisGame'
 	| 'deadMinionsThisGame'
 	| 'damageTakenOnYourTurn'

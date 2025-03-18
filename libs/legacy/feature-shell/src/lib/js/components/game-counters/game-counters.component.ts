@@ -32,7 +32,6 @@ import { JadeCounterDefinition } from './definitions/jade-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
-import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 
 @Component({
@@ -162,8 +161,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BrilliantMacawCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'monstrousParrot':
 				return MonstrousParrotCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'vanessaVanCleef':
-				return VanessaVanCleefCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:
