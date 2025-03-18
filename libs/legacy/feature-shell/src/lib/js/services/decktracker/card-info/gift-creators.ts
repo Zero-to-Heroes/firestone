@@ -131,6 +131,7 @@ export const giftCreators = [
 	CardIds.BloodrockCoShovel_WW_412,
 	CardIds.BloodsailFlybooter,
 	CardIds.BloodsailRecruiter_VAC_430,
+	CardIds.BobTheBartender_BG31_BOB,
 	CardIds.BobTheBartender_RecruitAMinionToken_BG31_BOBt2,
 	CardIds.BolnerHammerbeak, // In case a repeated battlecry draws / creates something
 	CardIds.BookOfWonders,
