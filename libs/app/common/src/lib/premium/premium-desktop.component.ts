@@ -150,7 +150,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	yearlySubtext: string;
 	couponCode = '83dafbb3-fbf6-4544-99c7-83667378a406';
 	discountBannerText = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
-		endDate: new Date('2025-05-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
+		endDate: new Date('2025-04-08').toLocaleDateString(this.i18n.formatCurrentLocale()!),
 		reduction: '30%',
 	});
 
