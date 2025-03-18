@@ -2,12 +2,14 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BoosterType, boosterIdToBoosterName, boosterIdToSetId, sets } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import {
+	CATCH_UP_PACK_IDS,
 	CLASS_PACKS,
 	EXCLUDED_BOOSTER_IDS,
+	GOLDEN_FORMAT_PACKS,
 	GOLDEN_SET_PACKS,
+	GOLDEN_YEAR_PACKS,
 	InternalPackInfo,
 	NON_BUYABLE_BOOSTER_IDS,
-	SPECIAL_BOOSTER_IDS,
 	YEAR_PACKS,
 } from '@firestone/collection/view';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -178,13 +180,17 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 					.filter(
 						(pack) =>
 							NON_BUYABLE_BOOSTER_IDS.includes(pack.packType) ||
-							SPECIAL_BOOSTER_IDS.includes(pack.packType),
+							CATCH_UP_PACK_IDS.includes(pack.packType),
 					)
 					.sort(
 						sortByProperties((pack) => [
-							-(pack.set?.launchDate?.getTime() ?? 0),
 							!CLASS_PACKS.includes(pack.packType),
 							!YEAR_PACKS.includes(pack.packType),
+							!GOLDEN_SET_PACKS.includes(pack.packType),
+							!GOLDEN_YEAR_PACKS.includes(pack.packType),
+							!GOLDEN_FORMAT_PACKS.includes(pack.packType),
+							!CATCH_UP_PACK_IDS.includes(pack.packType),
+							-(pack.set?.launchDate?.getTime() ?? 0),
 							!pack.set,
 							pack.name,
 						]),
