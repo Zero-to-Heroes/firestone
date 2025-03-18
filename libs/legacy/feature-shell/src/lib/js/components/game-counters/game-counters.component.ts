@@ -22,7 +22,6 @@ import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southse
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
-import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/cards-played-from-another-class-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
@@ -177,8 +176,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return WheelOfDeathCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'thirstyDrifter':
 				return ThirstyDrifterCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'cardsPlayedFromAnotherClass':
-				return CardsPlayedFromAnotherClassCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

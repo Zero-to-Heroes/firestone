@@ -9,6 +9,7 @@ import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
+import { CardsPlayedFromAnotherClassCounterDefinitionV2 } from './impl/cards-played-from-another-class';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
@@ -93,6 +94,7 @@ export const getAllCounters: (
 	new ChaoticTendrilCounterDefinitionV2(i18n, allCards),
 	new ExcavateCounterDefinitionV2(i18n, allCards),
 	new ElementalStreakCounterDefinitionV2(i18n, allCards),
+	new CardsPlayedFromAnotherClassCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

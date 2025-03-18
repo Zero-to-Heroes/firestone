@@ -124,7 +124,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-sea-shanty-widget-wrapper></player-sea-shanty-widget-wrapper>
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
 			<player-thirsty-drifter-widget-wrapper></player-thirsty-drifter-widget-wrapper>
-			<player-cards-played-from-another-class-widget-wrapper></player-cards-played-from-another-class-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
