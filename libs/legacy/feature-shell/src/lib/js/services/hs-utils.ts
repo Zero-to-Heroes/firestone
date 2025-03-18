@@ -127,7 +127,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.PrinceKeleseth_ICC_851,
 	CardIds.RadiantLightspawn,
 	CardIds.RazaTheChained,
-	CardIds.RazaTheResealed_TOY_383,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.RottenRodent,
 	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
