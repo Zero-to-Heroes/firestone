@@ -11,6 +11,7 @@ import { Merithra } from './merithra';
 import { MurozondTheInfinite } from './murozond-the-infinite';
 import { ParrotMascot } from './parrot-mascot';
 import { RavenousFelhunter } from './ravenous-felhunter';
+import { RazaTheResealed } from './raza-the-resealed';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TramHeist } from './tram-heist';
 import { VanessaVanCleef } from './vanessa-van-cleef';
@@ -32,6 +33,7 @@ const cards = [
 	AsvedonTheGrandshield,
 	TramHeist,
 	VanessaVanCleef,
+	RazaTheResealed,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
