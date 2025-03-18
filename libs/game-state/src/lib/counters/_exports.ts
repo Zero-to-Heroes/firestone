@@ -146,7 +146,6 @@ export type CounterType =
 	| 'cardsPlayedFromAnotherClass'
 	| 'cardsDrawn'
 	| 'elementalStreak'
-	| 'tramHeist'
 	| 'excavate'
 	| 'chaoticTendril'
 	| 'secretsPlayed'

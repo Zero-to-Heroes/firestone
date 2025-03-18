@@ -331,20 +331,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-tooltip'),
 	},
-	{
-		id: 'tramHeist',
-		field: 'playerTramHeistCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.tram-heist-tooltip', {
-			cardName: context.allCards.getCard(CardIds.TramHeist_WW_053)?.name,
-		}),
-	},
-	{
-		id: 'excavate',
-		field: 'playerExcavateCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.excavate-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.excavate-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)
