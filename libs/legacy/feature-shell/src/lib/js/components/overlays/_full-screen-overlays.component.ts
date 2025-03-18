@@ -125,7 +125,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
 			<player-thirsty-drifter-widget-wrapper></player-thirsty-drifter-widget-wrapper>
 			<player-cards-played-from-another-class-widget-wrapper></player-cards-played-from-another-class-widget-wrapper>
-			<player-elemental-streak-widget-wrapper></player-elemental-streak-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -145,7 +144,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-wheel-of-death-widget-wrapper></opponent-wheel-of-death-widget-wrapper>
-			<opponent-elemental-streak-widget-wrapper></opponent-elemental-streak-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
 				side="opponent"
@@ -236,6 +234,8 @@ export class FullScreenOverlaysComponent
 			debounceTime(500),
 			filter(([gameState, bgState, prefs]) => !!gameState && !!prefs),
 			this.mapData(([gameState, bgState, prefs]) => {
+				// TODO: find a way to not recompute the data everytime. For instance, have each counter register which properties it listens to,
+				// and make a diff on these properties and only recompute the new value if one of these properties changed
 				const result = allCounters
 					.filter((c) => c.isActive('player', gameState, bgState, prefs))
 					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView));

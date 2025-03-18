@@ -514,14 +514,8 @@ export class Preferences implements IPreferences {
 	readonly playerComboCardsPlayedCounter: boolean = true;
 
 	readonly playerSpellsOnFriendlyCharactersCounter: boolean = true;
-
 	readonly playerElementalStreakCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerElementalStreakCounterWidgetPosition: { left: number; top: number };
 	readonly opponentElementalStreakCounter: BooleanWithLimited = false;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly oponentElementalStreakCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerExcavateCounter: BooleanWithLimited = true;
 	readonly opponentExcavateCounter: BooleanWithLimited = true;
 	readonly playerChaoticTendrilCounter: BooleanWithLimited = true;

@@ -26,7 +26,6 @@ import { CardsPlayedFromAnotherClassCounterDefinition } from './definitions/card
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
-import { ElementalStreakCounterDefinition } from './definitions/elemental-streak-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
@@ -180,8 +179,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ThirstyDrifterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'cardsPlayedFromAnotherClass':
 				return CardsPlayedFromAnotherClassCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'elementalStreak':
-				return ElementalStreakCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

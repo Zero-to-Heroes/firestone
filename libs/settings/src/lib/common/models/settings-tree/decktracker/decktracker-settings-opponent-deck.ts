@@ -347,13 +347,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 			cardName: context.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
 		}),
 	},
-	{
-		id: 'elementalStreak',
-		field: 'opponentElementalStreakCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elemental-streak-tooltip'),
-		showLimitedOption: false,
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.opponent?.pref)

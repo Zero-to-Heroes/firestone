@@ -21,6 +21,7 @@ import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
+import { ElementalStreakCounterDefinitionV2 } from './impl/elemental-streak';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
@@ -91,6 +92,7 @@ export const getAllCounters: (
 	new SecretsPlayedCounterDefinitionV2(i18n, allCards),
 	new ChaoticTendrilCounterDefinitionV2(i18n, allCards),
 	new ExcavateCounterDefinitionV2(i18n, allCards),
+	new ElementalStreakCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

@@ -325,12 +325,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip'),
 	},
-	{
-		id: 'elementalStreak',
-		field: 'playerElementalStreakCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.elemental-streak-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)
