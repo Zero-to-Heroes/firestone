@@ -55,6 +55,7 @@ import { TreantCounterDefinitionV2 } from './impl/treant';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
+import { YsondreCounterDefinitionV2 } from './impl/ysondre';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -109,6 +110,7 @@ export const getAllCounters: (
 	new TyrandeCounterDefinitionV2(i18n),
 	new AvianaElunesChoseCounterDefinitionV2(i18n),
 	new HeroPowerUseCounterDefinitionV2(i18n, allCards),
+	new YsondreCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -121,6 +123,7 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'ysondre'
 	| 'heroPowerUse'
 	| 'tyrande'
 	| 'avianaElunesChosen'
