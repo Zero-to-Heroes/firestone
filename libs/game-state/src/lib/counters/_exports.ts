@@ -27,6 +27,7 @@ import { ElementalStreakCounterDefinitionV2 } from './impl/elemental-streak';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
+import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
@@ -107,6 +108,7 @@ export const getAllCounters: (
 	new LocationsUsedCounterDefinitionV2(i18n, allCards),
 	new TyrandeCounterDefinitionV2(i18n),
 	new AvianaElunesChoseCounterDefinitionV2(i18n),
+	new HeroPowerUseCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -119,6 +121,7 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'heroPowerUse'
 	| 'tyrande'
 	| 'avianaElunesChosen'
 	| 'cardsPlayedThisTurn'

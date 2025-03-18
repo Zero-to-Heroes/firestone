@@ -71,6 +71,7 @@ import { GlobalMinionEffectParser } from '../event-parser/global-minion-effect-p
 import { HeroChangedParser } from '../event-parser/hero-changed-parser';
 import { HeroPowerChangedParser } from '../event-parser/hero-power-changed-parser';
 import { HeroPowerDamageParser } from '../event-parser/hero-power-damage-parser';
+import { HeroPowerUsedParser } from '../event-parser/hero-power-used-parser';
 import { HeroRevealedParser } from '../event-parser/hero-revealed-parser';
 import { LinkedEntityParser } from '../event-parser/linked-entity-parser';
 import { LocalPlayerParser } from '../event-parser/local-player-parser';
@@ -217,6 +218,7 @@ export class GameStateParsersService {
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
 			[GameEvent.HERO_CHANGED]: [new HeroChangedParser(this.allCards)],
 			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
+			[GameEvent.HERO_POWER_USED]: [new HeroPowerUsedParser(this.allCards)],
 			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n, this.allCards)],

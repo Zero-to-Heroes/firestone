@@ -98,6 +98,7 @@ export class DeckState {
 	readonly volatileSkeletonsDeadThisMatch: number = 0;
 	readonly relicsPlayedThisMatch: number = 0;
 	readonly heroPowerDamageThisMatch: number = 0;
+	readonly heroPowerUsed: number = 0;
 	readonly heroAttacksThisMatch: number = 0;
 	readonly minionsDeadSinceLastTurn: readonly ShortCard[] = [];
 	readonly minionsDeadThisTurn: readonly ShortCard[] = [];
