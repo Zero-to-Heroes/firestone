@@ -6,7 +6,7 @@ import { ConstructedMetaDecksStateService } from '@firestone/constructed/common'
 import { Card } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, deepEqual, groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
@@ -304,8 +304,12 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 			quantity: pair[1],
 			card: this.allCards.getCardFromDbfId(pair[0]),
 		}));
-		const dustCost = deckCards
-			.map((c) => ({ quantity: c.quantity, cardId: c.card.id }))
+		const groupedByCardId = groupByFunction2(deckCards, (c) => c.card.id);
+		const dustCost = Object.values(groupedByCardId)
+			.map((cards) => ({
+				quantity: cards.map((c) => c.quantity).reduce((a, b) => a + b, 0),
+				cardId: cards[0].card.id,
+			}))
 			.map((card) => {
 				let owned = ownedByCardId[card.cardId];
 				// owned = 0;
