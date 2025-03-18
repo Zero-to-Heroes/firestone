@@ -94,7 +94,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
 	CardIds.DemonslayerKurtrusToken,
 	CardIds.DrBoomMadGenius,
-	CardIds.EliteTaurenChampion,
 	CardIds.ForebodingFlame_GDB_121,
 	CardIds.FrizzKindleroost,
 	CardIds.FrostLichJaina_CORE_ICC_833,
@@ -147,10 +146,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.TheStonewright,
 	CardIds.Turbulus_WORK_013,
 	CardIds.ValdrisFelgorge,
-	CardIds.VampiricBlood_RLK_051,
-	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
-	CardIds.YseraEmeraldAspect_EDR_000,
 ];
 
 export const deathrattleGlobalEffectCards = [
@@ -178,7 +174,6 @@ export const startOfGameGlobalEffectCards = [
 export const globalEffectCardsPlayed = [
 	...battlecryGlobalEffectCards,
 	CardIds.AirlockBreach_GDB_113,
-	CardIds.YseraEmeraldAspect_EDR_000,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.JourneyToTheEast_UberApocalypseTavernBrawl,
 	CardIds.BestialMadness_YOG_505,
@@ -198,7 +193,6 @@ export const globalEffectCardsPlayed = [
 	CardIds.InvigoratingSermon,
 	CardIds.LunasPocketGalaxy,
 	CardIds.MenAtArmsTavernBrawlToken,
-	CardIds.NewHeights_VAC_949,
 	CardIds.PursuitOfJustice,
 	CardIds.Quasar_GDB_467,
 	CardIds.ReductomaraToken,
@@ -242,14 +236,6 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'ReuseFX_Holy_BuffImpact_Heal_Small_Super',
 		cardId: CardIds.HopeOfQuelthalas,
-	},
-	{
-		effectPrefab: 'ReuseFX_Blood_DeathKnight_BuffImpact_GainHealth_Medium_ConsumeCorpse_Super_SourceHero',
-		cardId: CardIds.VampiricBlood_RLK_051,
-	},
-	{
-		effectPrefab: 'ReuseFX_Blood_DeathKnight_BuffImpact_GainHealth_Small_Super_SourceHero',
-		cardId: CardIds.VampiricBlood_RLK_051,
 	},
 	// The logs here attribute the source and target to the current hero, not the card being played
 	{
