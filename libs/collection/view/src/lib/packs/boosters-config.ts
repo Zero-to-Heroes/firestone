@@ -67,6 +67,7 @@ export const NON_BUYABLE_BOOSTER_IDS = [
 	...GOLDEN_YEAR_PACKS,
 ];
 export const CATCH_UP_PACK_IDS = [
+	BoosterType.WILD_WEST2,
 	BoosterType.WHIZBANG_CATCH_UP,
 	BoosterType.ISLAND_VACATION_CATCH_UP,
 	BoosterType.THE_GREAT_DARK_BEYOND_CATCH_UP,
