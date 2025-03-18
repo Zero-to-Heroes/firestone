@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 // prettier-ignore
-import { CardIds } from '@firestone-hs/reference-data';
 import { getAllCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
@@ -338,14 +337,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		field: 'opponentElwynnBoarCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip'),
-	},
-	{
-		id: 'wheelOfDeath',
-		field: 'opponentWheelOfDeathCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.wheel-of-death-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.wheel-of-death-tooltip', {
-			cardName: context.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
-		}),
 	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')

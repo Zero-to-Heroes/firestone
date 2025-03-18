@@ -36,7 +36,6 @@ import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
-import { WheelOfDeathCounterDefinition } from './definitions/wheel-of-death-counter';
 
 @Component({
 	selector: 'game-counters',
@@ -171,8 +170,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return LocationsUsedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'seaShanty':
 				return SeaShantyCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'wheelOfDeath':
-				return WheelOfDeathCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

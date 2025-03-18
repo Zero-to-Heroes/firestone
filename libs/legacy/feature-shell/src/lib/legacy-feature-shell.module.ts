@@ -373,7 +373,6 @@ import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/ove
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
 import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
 import { OpponentDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/opponent-dragons-summoned-widget-wrapper.component';
-import { OpponentWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/opponent-wheel-of-death-widget-wrapper.component';
 import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
@@ -382,7 +381,6 @@ import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overla
 import { PlayerDragonsSummonedWidgetWrapperComponent } from '@components/overlays/counters/player-dragons-summoned-widget-wrapper.component';
 import { PlayerLocationsUsedWidgetWrapperComponent } from '@components/overlays/counters/player-locations-used-widget-wrapper.component';
 import { PlayerSeaShantyWidgetWrapperComponent } from '@components/overlays/counters/player-sea-shanty-widget-wrapper.component';
-import { PlayerWheelOfDeathWidgetWrapperComponent } from '@components/overlays/counters/player-wheel-of-death-widget-wrapper.component';
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
 import { MaxResourcesWidgetComponent } from '@components/overlays/resources/max-resources-widget.component';
@@ -1302,7 +1300,6 @@ try {
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerSeaShantyWidgetWrapperComponent,
 		PlayerLocationsUsedWidgetWrapperComponent,
-		PlayerWheelOfDeathWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1320,7 +1317,6 @@ try {
 		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
-		OpponentWheelOfDeathWidgetWrapperComponent,
 		OpponentDragonsSummonedWidgetWrapperComponent,
 
 		FtueComponent,
