@@ -313,12 +313,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 			cardName: context.allCards.getCard(CardIds.WheelOfDeath_TOY_529).name,
 		}),
 	},
-	{
-		id: 'thirstyDrifter',
-		field: 'playerThirstyDrifterCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.thirsty-drifter-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.thirsty-drifter-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)

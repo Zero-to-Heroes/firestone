@@ -34,7 +34,6 @@ import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SeaShantyCounterDefinition } from './definitions/sea-shanty-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
-import { ThirstyDrifterCounterDefinition } from './definitions/thirsty-drifter-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { WheelOfDeathCounterDefinition } from './definitions/wheel-of-death-counter';
@@ -174,8 +173,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return SeaShantyCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'wheelOfDeath':
 				return WheelOfDeathCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'thirstyDrifter':
-				return ThirstyDrifterCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

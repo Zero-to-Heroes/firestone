@@ -123,7 +123,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-locations-used-widget-wrapper></player-locations-used-widget-wrapper>
 			<player-sea-shanty-widget-wrapper></player-sea-shanty-widget-wrapper>
 			<player-wheel-of-death-widget-wrapper></player-wheel-of-death-widget-wrapper>
-			<player-thirsty-drifter-widget-wrapper></player-thirsty-drifter-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

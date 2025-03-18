@@ -46,6 +46,7 @@ import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
+import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TreantCounterDefinitionV2 } from './impl/treant';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 
@@ -95,6 +96,7 @@ export const getAllCounters: (
 	new ExcavateCounterDefinitionV2(i18n, allCards),
 	new ElementalStreakCounterDefinitionV2(i18n, allCards),
 	new CardsPlayedFromAnotherClassCounterDefinitionV2(i18n, allCards),
+	new ThirstyDrifterCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
