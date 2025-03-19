@@ -72,6 +72,19 @@ export class ExcavateCounterDefinitionV2 extends CounterDefinitionV2<{
 		super();
 	}
 
+	protected override formatValue(
+		value:
+			| { currentTier: number; maxTier: number; totalExcavates: number; playerClasses: readonly CardClass[] }
+			| null
+			| undefined,
+	): null | undefined | number | string {
+		if (!value) {
+			return null;
+		}
+		const maxTier = value.maxTier;
+		return `${value.currentTier}/${maxTier}`;
+	}
+
 	protected override cardTooltip(
 		side: 'player' | 'opponent',
 		gameState: GameState,
