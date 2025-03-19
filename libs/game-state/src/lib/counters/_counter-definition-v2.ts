@@ -77,6 +77,10 @@ export abstract class CounterDefinitionV2<T> {
 					console.debug('[debug] not visible from deck', gameState.playerDeck?.hasRelevantCard(this.cards));
 				return false;
 			}
+			if (this.player.value(gameState, bgState) == null) {
+				this.debug && console.debug('[debug] no value', this.player.value(gameState, bgState));
+				return false;
+			}
 			this.debug && console.debug('[debug] show');
 			return true;
 		} else if (side === 'opponent') {
@@ -95,6 +99,10 @@ export abstract class CounterDefinitionV2<T> {
 			if (!this.opponent.display(gameState, bgState)) {
 				return false;
 			}
+			// console.debug('value', this, this.opponent.value(gameState));
+			if (!this.opponent.value(gameState, bgState)) {
+				return false;
+			}
 			// console.debug('returning true', this);
 			return true;
 		}
@@ -110,10 +118,6 @@ export abstract class CounterDefinitionV2<T> {
 	): CounterInstance<T> | undefined {
 		const sideObj = this[side];
 		const rawValue = sideObj?.value(gameState, bgState);
-		if ((side === 'player' && rawValue == null) || (side === 'opponent' && !rawValue)) {
-			return undefined;
-		}
-
 		const savedValue = sideObj?.savedValue;
 		if (deepEqual(rawValue, savedValue)) {
 			return sideObj?.savedInstance;
