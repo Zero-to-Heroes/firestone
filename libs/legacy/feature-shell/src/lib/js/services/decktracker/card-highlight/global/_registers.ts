@@ -8,6 +8,7 @@ import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
 import { Merithra } from './merithra';
+import { MonstrousParrot } from './monstrous-parrot';
 import { MurozondTheInfinite } from './murozond-the-infinite';
 import { ParrotMascot } from './parrot-mascot';
 import { RavenousFelhunter } from './ravenous-felhunter';
@@ -36,6 +37,7 @@ const cards = [
 	VanessaVanCleef,
 	RazaTheResealed,
 	UrsolsAura,
+	MonstrousParrot,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};

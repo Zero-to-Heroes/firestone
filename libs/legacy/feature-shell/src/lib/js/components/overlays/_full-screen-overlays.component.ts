@@ -118,7 +118,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-cthun-widget-wrapper></player-cthun-widget-wrapper>
 			<player-bolner-widget-wrapper></player-bolner-widget-wrapper>
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
-			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -231,7 +230,8 @@ export class FullScreenOverlaysComponent
 				// and make a diff on these properties and only recompute the new value if one of these properties changed
 				const result = allCounters
 					.filter((c) => c.isActive('player', gameState, bgState, prefs))
-					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
+					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView))
+					.filter((c) => c);
 				return result;
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
@@ -247,7 +247,8 @@ export class FullScreenOverlaysComponent
 			this.mapData(([gameState, bgState, prefs]) => {
 				return allCounters
 					.filter((c) => c.isActive('opponent', gameState, bgState, prefs))
-					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView));
+					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView))
+					.filter((c) => c);
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),

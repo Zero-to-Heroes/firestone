@@ -213,7 +213,6 @@ import { PlayerElwynnBoarWidgetWrapperComponent } from './js/components/overlays
 import { PlayerFatigueWidgetWrapperComponent } from './js/components/overlays/counters/player-fatigue-widget-wrapper.component';
 import { PlayerGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/player-galakrond-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from './js/components/overlays/counters/player-jade-widget-wrapper.component';
-import { PlayerMonstrousParrotWidgetWrapperComponent } from './js/components/overlays/counters/player-monstrous-parrot-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from './js/components/overlays/counters/player-pogo-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { CurrentSessionWidgetWrapperComponent } from './js/components/overlays/current-session-widget-wrapper.component';
@@ -1293,7 +1292,6 @@ try {
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
-		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

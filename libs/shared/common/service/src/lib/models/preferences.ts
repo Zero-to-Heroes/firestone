@@ -467,10 +467,6 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBrilliantMacawCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerMonstrousParrotCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerMonstrousParrotCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
 	readonly opponentDeadMinionsThisGameCounter: boolean = false;
 	readonly playerFriendlyDeadMinionsThisGameCounter: boolean = false;
