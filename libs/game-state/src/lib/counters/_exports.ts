@@ -36,6 +36,7 @@ import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
+import { JadeGolemCounterDefinitionV2 } from './impl/jade-golem';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { LightrayCounterDefinitionV2 } from './impl/lightray';
@@ -125,6 +126,7 @@ export const getAllCounters: (
 	new AbyssalCurseCounterDefinitionV2(i18n, allCards),
 	new FatigueCounterDefinitionV2(i18n, allCards),
 	new GalakrondCounterDefinitionV2(i18n, allCards),
+	new JadeGolemCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

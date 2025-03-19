@@ -109,7 +109,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-watchpost-widget-wrapper></player-watchpost-widget-wrapper>
 			<player-pogo-widget-wrapper></player-pogo-widget-wrapper>
 			<player-astral-automaton-widget-wrapper></player-astral-automaton-widget-wrapper>
-			<player-jade-widget-wrapper></player-jade-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -122,7 +121,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-watchpost-widget-wrapper></opponent-watchpost-widget-wrapper>
 			<opponent-pogo-widget-wrapper></opponent-pogo-widget-wrapper>
 			<opponent-astral-automaton-widget-wrapper></opponent-astral-automaton-widget-wrapper>
-			<opponent-jade-widget-wrapper></opponent-jade-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
 				side="opponent"
