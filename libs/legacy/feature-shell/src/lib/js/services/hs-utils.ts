@@ -164,8 +164,6 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.BakuTheMooneater,
 	CardIds.DarkbishopBenedictus,
 	CardIds.DarkbishopBenedictusCore,
-	CardIds.PrinceRenathal,
-	CardIds.PrinceRenathal_CORE_REV_018,
 	CardIds.ChogallTwilightChieftain_YOG_530,
 	CardIds.HamuulRunetotem_EDR_845,
 ];
