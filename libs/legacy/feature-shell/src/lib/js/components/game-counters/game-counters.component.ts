@@ -10,7 +10,6 @@ import { filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
-import { AbyssalCurseCounterDefinition } from './definitions/abyssal-curse-counter';
 import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsBloodGemCounterDefinition } from './definitions/bgs-blood-gem-counter';
@@ -131,8 +130,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return JadeCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'fatigue':
 				return FatigueCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'abyssalCurse':
-				return AbyssalCurseCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'attack':
 				return AttackCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'pogo':

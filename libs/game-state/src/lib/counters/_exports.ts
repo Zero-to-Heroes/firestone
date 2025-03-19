@@ -1,5 +1,6 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
+import { AbyssalCurseCounterDefinitionV2 } from './impl/abyssal-curse';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
@@ -119,6 +120,7 @@ export const getAllCounters: (
 	new CthunCounterDefinitionV2(i18n, allCards),
 	new ElementalCounterDefinitionV2(i18n, allCards),
 	new ElwynnBoarCounterDefinitionV2(i18n, allCards),
+	new AbyssalCurseCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

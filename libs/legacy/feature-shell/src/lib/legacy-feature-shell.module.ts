@@ -192,14 +192,12 @@ import { MinionOnBoardOverlayComponent } from './js/components/overlays/board/mi
 import { ChoosingCardWidgetWrapperComponent } from './js/components/overlays/card-choice/choosing-card-widget-wrapper.component';
 import { ConstructedBoardWidgetWrapperComponent } from './js/components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from './js/components/overlays/counters/abstract-counter-widget-wrapper.component';
-import { OpponentAbyssalCurseWidgetWrapperComponent } from './js/components/overlays/counters/opponent-abyssal-curse-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-attack-widget-wrapper.component';
 import { OpponentFatigueWidgetWrapperComponent } from './js/components/overlays/counters/opponent-fatigue-widget-wrapper.component';
 import { OpponentGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/opponent-galakrond-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from './js/components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from './js/components/overlays/counters/opponent-pogo-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-watchpost-widget-wrapper.component';
-import { PlayerAbyssalCurseWidgetWrapperComponent } from './js/components/overlays/counters/player-abyssal-curse-widget-wrapper.component';
 import { PlayerCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-attack-widget-wrapper.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
 import { PlayerBgsSouthseaWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
@@ -1279,7 +1277,6 @@ try {
 		PlayerJadeWidgetWrapperComponent,
 		PlayerGalakrondWidgetWrapperComponent,
 		PlayerFatigueWidgetWrapperComponent,
-		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1294,7 +1291,6 @@ try {
 		OpponentJadeWidgetWrapperComponent,
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,
-		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentDragonsSummonedWidgetWrapperComponent,
 
 		FtueComponent,
