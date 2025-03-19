@@ -204,7 +204,6 @@ import { PlayerAbyssalCurseWidgetWrapperComponent } from './js/components/overla
 import { PlayerCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-attack-widget-wrapper.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
 import { PlayerBgsSouthseaWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
-import { PlayerElementalWidgetWrapperComponent } from './js/components/overlays/counters/player-elemental-widget-wrapper.component';
 import { PlayerElwynnBoarWidgetWrapperComponent } from './js/components/overlays/counters/player-elwynn-boar-widget-wrapper.component';
 import { PlayerFatigueWidgetWrapperComponent } from './js/components/overlays/counters/player-fatigue-widget-wrapper.component';
 import { PlayerGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/player-galakrond-widget-wrapper.component';
@@ -1284,7 +1283,6 @@ try {
 		PlayerFatigueWidgetWrapperComponent,
 		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerElwynnBoarWidgetWrapperComponent,
-		PlayerElementalWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,

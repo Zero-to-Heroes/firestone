@@ -114,7 +114,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-fatigue-widget-wrapper></player-fatigue-widget-wrapper>
 			<player-abyssal-curse-widget-wrapper></player-abyssal-curse-widget-wrapper>
 			<player-elwynn-boar-widget-wrapper></player-elwynn-boar-widget-wrapper>
-			<player-elemental-widget-wrapper></player-elemental-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"

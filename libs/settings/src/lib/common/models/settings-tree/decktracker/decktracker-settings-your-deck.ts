@@ -245,12 +245,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.attack-on-board-tooltip'),
 	},
 	{
-		id: 'elementals',
-		field: 'playerElementalCounter',
-		label: context.i18n.translateString('settings.decktracker.your-deck.counters.elementals-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.elementals-tooltip'),
-	},
-	{
 		id: 'watch-post',
 		field: 'playerWatchpostCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-label'),

@@ -25,6 +25,7 @@ import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
+import { ElementalCounterDefinitionV2 } from './impl/elemental';
 import { ElementalStreakCounterDefinitionV2 } from './impl/elemental-streak';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
@@ -115,6 +116,7 @@ export const getAllCounters: (
 	new YsondreCounterDefinitionV2(i18n, allCards),
 	new BolnerHammerbeakCounterDefinitionV2(i18n, allCards),
 	new CthunCounterDefinitionV2(i18n, allCards),
+	new ElementalCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

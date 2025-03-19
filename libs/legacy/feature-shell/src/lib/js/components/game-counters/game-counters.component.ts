@@ -21,7 +21,6 @@ import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
-import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
@@ -143,8 +142,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'dragonsSummoned':
 				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'elemental':
-				return ElementalCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'watchpost':
 				return WatchpostCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'elwynnBoar':
