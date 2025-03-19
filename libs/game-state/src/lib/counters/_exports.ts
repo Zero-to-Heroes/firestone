@@ -64,6 +64,7 @@ import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TreantCounterDefinitionV2 } from './impl/treant';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
+import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
 import { YsondreCounterDefinitionV2 } from './impl/ysondre';
 
@@ -131,6 +132,7 @@ export const getAllCounters: (
 	new JadeGolemCounterDefinitionV2(i18n, allCards),
 	new AstralAutomatonCounterDefinitionV2(i18n, allCards),
 	new PogoCounterDefinitionV2(i18n, allCards),
+	new WatchpostCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

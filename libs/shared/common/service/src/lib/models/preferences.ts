@@ -312,24 +312,20 @@ export class Preferences implements IPreferences {
 	readonly countersScaleOpponentOther: number = 100;
 	readonly countersUseExpandedView: boolean = true;
 
+	readonly playerAttackCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerAttackCounterWidgetPosition: { left: number; top: number };
+	readonly opponentAttackCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerGalakrondCounter: BooleanWithLimited = true;
 	readonly opponentGalakrondCounter: BooleanWithLimited = true;
-
 	readonly playerWatchpostCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerWatchpostCounterWidgetPosition: { left: number; top: number };
 	readonly opponentWatchpostCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentWatchpostCounterWidgetPosition: { left: number; top: number };
-
 	// These are turned off by default because you can quite easily see the info from the tracker
 	readonly playerLibramCounter: BooleanWithLimited = false;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerLibramCounterWidgetPosition: { left: number; top: number };
 	readonly opponentLibramCounter: BooleanWithLimited = false;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentLibramCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerPogoCounter: BooleanWithLimited = true;
 	readonly opponentPogoCounter: BooleanWithLimited = true;
 	readonly playerAstralAutomatonCounter: BooleanWithLimited = true;
@@ -342,50 +338,23 @@ export class Preferences implements IPreferences {
 	readonly opponentDragonsSummonedCounter: BooleanWithLimited = true;
 	readonly playerCeaselessExpanseCounter: boolean = true;
 	readonly opponentCeaselessExpanseCounter: boolean = true;
-
 	readonly playerPiratesSummonedCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerPiratesSummonedCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerChainedGuardianCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerChainedGuardianCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerJadeGolemCounter: BooleanWithLimited = true;
 	readonly opponentJadeGolemCounter: BooleanWithLimited = true;
-
-	readonly playerAttackCounter: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerAttackCounterWidgetPosition: { left: number; top: number };
-	readonly opponentAttackCounter: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerCthunCounter: BooleanWithLimited = true;
 	readonly opponentCthunCounter: BooleanWithLimited = true;
 	readonly playerFatigueCounter: boolean = true;
 	readonly opponentFatigueCounter: boolean = true;
 	readonly playerAbyssalCurseCounter: BooleanWithLimited = true;
 	readonly opponentAbyssalCurseCounter: BooleanWithLimited = true;
-
 	readonly playerSpellCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
 	readonly opponentSpellCounter: BooleanWithLimited = false;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentSpellCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerElementalCounter: BooleanWithLimited = true;
 	readonly playerMulticasterCounter: BooleanWithLimited = true;
 	readonly opponentMulticasterCounter: BooleanWithLimited = false;
-
 	readonly playerHeroPowerDamageCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
 	readonly opponentHeroPowerDamageCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerElwynnBoarCounter: BooleanWithLimited = true;
 	readonly opponentElwynnBoarCounter: BooleanWithLimited = true;
 	readonly playerVolatileSkeletonCounter: BooleanWithLimited = true;
@@ -396,9 +365,6 @@ export class Preferences implements IPreferences {
 	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
 	readonly opponentDeadMinionsThisGameCounter: boolean = false;
 	readonly playerFriendlyDeadMinionsThisGameCounter: boolean = false;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerDeadMinionsThisGameCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerDamageTakenOnYourTurnCounter: boolean = true;
 	readonly opponentDamageTakenOnYourTurnCounter: boolean = false;
 	readonly playerLocationsUsedCounter: BooleanWithLimited = true;
@@ -407,13 +373,9 @@ export class Preferences implements IPreferences {
 	readonly opponentWheelOfDeathCounter: BooleanWithLimited = true;
 	readonly playerThirstyDrifterCounter: BooleanWithLimited = true;
 	readonly playerCardsPlayedFromAnotherClassCounter: BooleanWithLimited = true;
-
 	readonly playerCardsDrawnCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerCardsDrawnCounterWidgetPosition: { left: number; top: number };
 	readonly opponentCardsDrawnCounter: boolean = false;
 	readonly playerComboCardsPlayedCounter: boolean = true;
-
 	readonly playerYsondreCounter: boolean = true;
 	readonly playerHeroPowerUsedCounter: boolean = true;
 	readonly playerTyrandeCounter: boolean = true;
