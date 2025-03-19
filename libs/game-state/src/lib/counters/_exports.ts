@@ -2,6 +2,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { AbyssalCurseCounterDefinitionV2 } from './impl/abyssal-curse';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
+import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
@@ -127,6 +128,7 @@ export const getAllCounters: (
 	new FatigueCounterDefinitionV2(i18n, allCards),
 	new GalakrondCounterDefinitionV2(i18n, allCards),
 	new JadeGolemCounterDefinitionV2(i18n, allCards),
+	new AstralAutomatonCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

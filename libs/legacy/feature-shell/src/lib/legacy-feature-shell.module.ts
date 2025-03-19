@@ -354,8 +354,6 @@ import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overl
 import { ConstructedDecktrackerExtendedOocComponent } from '@components/overlays/constructed/constructed-decktracker-extended-ooc.component';
 import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
-import { OpponentAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/opponent-astral-automaton-widget-wrapper.component';
-import { PlayerAstralAutomatonWidgetWrapperComponent } from '@components/overlays/counters/player-astral-automaton-widget-wrapper.component';
 import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
@@ -1264,7 +1262,6 @@ try {
 		PlayerCounterWidgetWrapperComponent,
 		PlayerWatchpostCounterWidgetWrapperComponent,
 		PlayerPogoWidgetWrapperComponent,
-		PlayerAstralAutomatonWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1275,7 +1272,6 @@ try {
 		OpponentCounterWidgetWrapperComponent,
 		OpponentWatchpostCounterWidgetWrapperComponent,
 		OpponentPogoWidgetWrapperComponent,
-		OpponentAstralAutomatonWidgetWrapperComponent,
 
 		FtueComponent,
 

@@ -10,7 +10,6 @@ import { filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
-import { AstralAutomatonCounterDefinition } from './definitions/astral-automaton-counter';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsBloodGemCounterDefinition } from './definitions/bgs-blood-gem-counter';
 import { BgsLordOfGainsCounterDefinition } from './definitions/bgs-lord-of-gains-counter';
@@ -124,8 +123,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return AttackCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'pogo':
 				return PogoCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'astralAutomaton':
-				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'watchpost':
 				return WatchpostCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':

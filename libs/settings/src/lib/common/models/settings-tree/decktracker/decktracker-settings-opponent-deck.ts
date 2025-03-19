@@ -285,12 +285,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-tooltip'),
 	},
 	{
-		id: 'astralAutomaton',
-		field: 'opponentAstralAutomatonCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-tooltip'),
-	},
-	{
 		id: 'attack-on-board',
 		field: 'opponentAttackCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-label'),
