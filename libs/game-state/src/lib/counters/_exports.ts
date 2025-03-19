@@ -30,6 +30,7 @@ import { ElementalCounterDefinitionV2 } from './impl/elemental';
 import { ElementalStreakCounterDefinitionV2 } from './impl/elemental-streak';
 import { ElwynnBoarCounterDefinitionV2 } from './impl/elwynn-boar';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
+import { FatigueCounterDefinitionV2 } from './impl/fatigue';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
@@ -121,6 +122,7 @@ export const getAllCounters: (
 	new ElementalCounterDefinitionV2(i18n, allCards),
 	new ElwynnBoarCounterDefinitionV2(i18n, allCards),
 	new AbyssalCurseCounterDefinitionV2(i18n, allCards),
+	new FatigueCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

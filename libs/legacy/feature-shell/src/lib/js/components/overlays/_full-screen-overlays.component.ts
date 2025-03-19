@@ -111,7 +111,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-astral-automaton-widget-wrapper></player-astral-automaton-widget-wrapper>
 			<player-jade-widget-wrapper></player-jade-widget-wrapper>
 			<player-galakrond-widget-wrapper></player-galakrond-widget-wrapper>
-			<player-fatigue-widget-wrapper></player-fatigue-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -126,7 +125,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-astral-automaton-widget-wrapper></opponent-astral-automaton-widget-wrapper>
 			<opponent-jade-widget-wrapper></opponent-jade-widget-wrapper>
 			<opponent-galakrond-widget-wrapper></opponent-galakrond-widget-wrapper>
-			<opponent-fatigue-widget-wrapper></opponent-fatigue-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
 				side="opponent"

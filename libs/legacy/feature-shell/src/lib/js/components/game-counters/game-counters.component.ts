@@ -20,7 +20,6 @@ import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
-import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
@@ -128,8 +127,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return GalakrondCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'jadeGolem':
 				return JadeCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'fatigue':
-				return FatigueCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'attack':
 				return AttackCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'pogo':

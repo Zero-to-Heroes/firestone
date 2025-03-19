@@ -395,12 +395,7 @@ export class Preferences implements IPreferences {
 	readonly playerCthunCounter: BooleanWithLimited = true;
 	readonly opponentCthunCounter: BooleanWithLimited = true;
 	readonly playerFatigueCounter: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerFatigueCounterWidgetPosition: { left: number; top: number };
 	readonly opponentFatigueCounter: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerAbyssalCurseCounter: BooleanWithLimited = true;
 	readonly opponentAbyssalCurseCounter: BooleanWithLimited = true;
 
