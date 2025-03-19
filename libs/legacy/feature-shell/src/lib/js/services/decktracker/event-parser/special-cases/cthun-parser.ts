@@ -1,9 +1,7 @@
-import { GameState } from '@firestone/game-state';
+import { DEFAULT_CTHUN_ATK, DEFAULT_CTHUN_HEALTH, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { EventParser } from '../event-parser';
 
-export const DEFAULT_CTHUN_ATK = 6;
-export const DEFAULT_CTHUN_HEALTH = 6;
 export class CthunParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;

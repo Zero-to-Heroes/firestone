@@ -19,6 +19,7 @@ import { ChainedGuardianCounterDefinitionV2 } from './impl/chained-guardian';
 import { ChaoticTendrilCounterDefinitionV2 } from './impl/chaotic-tendril';
 import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
 import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
+import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
@@ -113,6 +114,7 @@ export const getAllCounters: (
 	new HeroPowerUseCounterDefinitionV2(i18n, allCards),
 	new YsondreCounterDefinitionV2(i18n, allCards),
 	new BolnerHammerbeakCounterDefinitionV2(i18n, allCards),
+	new CthunCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),

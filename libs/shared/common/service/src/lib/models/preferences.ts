@@ -393,12 +393,7 @@ export class Preferences implements IPreferences {
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerCthunCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerCthunCounterWidgetPosition: { left: number; top: number };
 	readonly opponentCthunCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentCthunCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerFatigueCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerFatigueCounterWidgetPosition: { left: number; top: number };

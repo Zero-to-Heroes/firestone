@@ -20,7 +20,6 @@ import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-count
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
-import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
@@ -132,8 +131,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return GalakrondCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'jadeGolem':
 				return JadeCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'cthun':
-				return CthunCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'fatigue':
 				return FatigueCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'abyssalCurse':
