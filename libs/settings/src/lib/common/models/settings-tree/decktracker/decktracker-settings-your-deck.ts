@@ -203,12 +203,6 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
 const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
-		id: 'pogo',
-		field: 'playerPogoCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.your-deck.counters.pogo-tooltip'),
-	},
-	{
 		id: 'attack-on-board',
 		field: 'playerAttackCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-label'),

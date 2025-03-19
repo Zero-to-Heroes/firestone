@@ -18,7 +18,6 @@ import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-count
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
-import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 
@@ -121,8 +120,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		switch (activeCounter) {
 			case 'attack':
 				return AttackCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'pogo':
-				return PogoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'watchpost':
 				return WatchpostCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':

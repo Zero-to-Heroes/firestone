@@ -20,7 +20,6 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 		'../../../css/component/game-counters/counters-common.scss',
 		'../../../css/component/game-counters/generic-counter.component.scss',
 		'../../../css/component/game-counters/attack-counter.component.scss',
-		'../../../css/component/game-counters/pogo-counter.component.scss',
 	],
 	template: `
 		<div

@@ -49,6 +49,7 @@ import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
 import { OverdraftCounterDefinitionV2 } from './impl/overdraft';
 import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
+import { PogoCounterDefinitionV2 } from './impl/pogo';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
@@ -129,6 +130,7 @@ export const getAllCounters: (
 	new GalakrondCounterDefinitionV2(i18n, allCards),
 	new JadeGolemCounterDefinitionV2(i18n, allCards),
 	new AstralAutomatonCounterDefinitionV2(i18n, allCards),
+	new PogoCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
