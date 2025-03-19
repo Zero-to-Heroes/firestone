@@ -21,7 +21,6 @@ import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
-import { BrilliantMacawCounterDefinition } from './definitions/brilliant-macaw-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
@@ -156,8 +155,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElwynnBoarCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(side, this.allCards, this.i18n);
-			case 'brilliantMacaw':
-				return BrilliantMacawCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:

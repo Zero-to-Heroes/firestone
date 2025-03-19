@@ -157,7 +157,6 @@ export type CounterType =
 	| 'libram'
 	| 'libramReduction'
 	| 'bolner'
-	| 'brilliantMacaw'
 	| 'monstrousParrot'
 	| 'friendlyDeadMinionsThisGame'
 	| 'deadMinionsThisGame'
