@@ -279,12 +279,6 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
 const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
-		id: 'galakrond',
-		field: 'opponentGalakrondCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-tooltip'),
-	},
-	{
 		id: 'pogo',
 		field: 'opponentPogoCounter',
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-label'),

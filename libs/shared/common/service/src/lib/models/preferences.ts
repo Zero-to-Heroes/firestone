@@ -313,11 +313,7 @@ export class Preferences implements IPreferences {
 	readonly countersUseExpandedView: boolean = true;
 
 	readonly playerGalakrondCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
 	readonly opponentGalakrondCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentGalakrondCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerWatchpostCounter: BooleanWithLimited = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

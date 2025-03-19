@@ -9,7 +9,9 @@ import { CounterType } from './_exports';
 
 export abstract class CounterDefinitionV2<T> {
 	public abstract readonly id: CounterType;
-	public abstract readonly image: string | ((gameState: GameState) => string | undefined);
+	public abstract readonly image:
+		| string
+		| ((gameState: GameState, side: 'player' | 'opponent') => string | undefined);
 	public readonly valueImg: string | undefined = undefined;
 	public readonly imageIcon: string | undefined = undefined;
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
@@ -125,7 +127,7 @@ export abstract class CounterDefinitionV2<T> {
 		}
 
 		// Get the image value
-		const image = typeof this.image === 'string' ? this.image : this.image(gameState);
+		const image = typeof this.image === 'string' ? this.image : this.image(gameState, side);
 		const imageUrl = this.imageIcon ?? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${image}.jpg`;
 		const result: CounterInstance<T> = {
 			id: this.id,

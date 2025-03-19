@@ -434,47 +434,6 @@ export const supportedAdditionalData = [
 	...CARDS_THAT_IMPROVE_WHEN_TRADED,
 ];
 
-export const getGalakrondCardFor = (cardClass: CardClass, invokeCount: number): string => {
-	switch (cardClass) {
-		case CardClass.PRIEST:
-			if (invokeCount >= 4) {
-				return CardIds.GalakrondTheUnspeakable_GalakrondAzerothsEndToken;
-			} else if (invokeCount >= 2) {
-				return CardIds.GalakrondTheUnspeakable_GalakrondTheApocalypseToken;
-			}
-			return CardIds.GalakrondTheUnspeakable;
-		case CardClass.ROGUE:
-			if (invokeCount >= 4) {
-				return CardIds.GalakrondTheNightmare_GalakrondAzerothsEndToken;
-			} else if (invokeCount >= 2) {
-				return CardIds.GalakrondTheNightmare_GalakrondTheApocalypseToken;
-			}
-			return CardIds.GalakrondTheNightmare;
-		case CardClass.SHAMAN:
-			if (invokeCount >= 4) {
-				return CardIds.GalakrondTheTempest_GalakrondAzerothsEndToken;
-			} else if (invokeCount >= 2) {
-				return CardIds.GalakrondTheTempest_GalakrondTheApocalypseToken;
-			}
-			return CardIds.GalakrondTheTempest;
-		case CardClass.WARLOCK:
-			if (invokeCount >= 4) {
-				return CardIds.GalakrondTheWretched_GalakrondAzerothsEndToken;
-			} else if (invokeCount >= 2) {
-				return CardIds.GalakrondTheWretched_GalakrondTheApocalypseToken;
-			}
-			return CardIds.GalakrondTheWretched;
-		case CardClass.WARRIOR:
-			if (invokeCount >= 4) {
-				return CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken;
-			} else if (invokeCount >= 2) {
-				return CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken;
-			}
-			return CardIds.GalakrondTheUnbreakable;
-	}
-	return null;
-};
-
 /** @deprecated */
 export const dustFor = (rarity: string, cardType: CollectionCardType): number => {
 	return cardType === 'NORMAL' ? dustForNormal(rarity) : dustForPremium(rarity);

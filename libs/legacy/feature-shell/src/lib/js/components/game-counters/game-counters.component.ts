@@ -19,7 +19,6 @@ import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-count
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
-import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
@@ -122,8 +121,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		side: 'player' | 'opponent',
 	): Promise<CounterDefinition<GameState, any>> {
 		switch (activeCounter) {
-			case 'galakrond':
-				return GalakrondCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'jadeGolem':
 				return JadeCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'attack':
