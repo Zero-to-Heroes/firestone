@@ -9,7 +9,8 @@ import { CounterType } from './_exports';
 
 export abstract class CounterDefinitionV2<T> {
 	public abstract readonly id: CounterType;
-	public abstract readonly image: string | ((gameState: GameState) => string);
+	public abstract readonly image: string | ((gameState: GameState) => string | undefined);
+	public readonly valueImg: string | undefined = undefined;
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public abstract readonly cards: readonly CardIds[];
 	protected debug = false;
@@ -118,16 +119,18 @@ export abstract class CounterDefinitionV2<T> {
 			return sideObj?.savedInstance;
 		}
 
-		const formattedValue = this.formatValue(rawValue);
 		// Get the image value
 		const image = typeof this.image === 'string' ? this.image : this.image(gameState);
 		const result: CounterInstance<T> = {
 			id: this.id,
 			side: side,
 			type: this.type,
+			valueImg: this.valueImg
+				? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.valueImg}.jpg`
+				: undefined,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${image}.jpg`,
 			tooltip: this.tooltip(side, gameState, allCards, bgState, countersUseExpandedView),
-			value: formattedValue,
+			value: this.valueImg ? null : this.formatValue(rawValue),
 			cardTooltip: this.cardTooltip(side, gameState, bgState, rawValue),
 		};
 		this.debug && console.debug('[debug] emitting counter', this.id, result);
