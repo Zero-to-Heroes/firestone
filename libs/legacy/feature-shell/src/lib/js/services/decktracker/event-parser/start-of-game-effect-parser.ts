@@ -16,7 +16,7 @@ export class StartOfGameEffectParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state && globalEffectCards.includes(gameEvent.cardId as CardIds);
+		return !!state;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -34,7 +34,9 @@ export class StartOfGameEffectParser implements EventParser {
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: null,
 		} as DeckCard);
-		const newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
+		const newGlobalEffects = globalEffectCards.includes(gameEvent.cardId as CardIds)
+			? this.helper.addSingleCardToZone(deck.globalEffects, card)
+			: deck.globalEffects;
 		let newDeckContents = deck.deck;
 		if (!deck.getAllCardsInDeckWithoutOptions().some((card) => card.cardId === cardId)) {
 			newDeckContents = this.helper.addSingleCardToZone(deck.deck, card);
