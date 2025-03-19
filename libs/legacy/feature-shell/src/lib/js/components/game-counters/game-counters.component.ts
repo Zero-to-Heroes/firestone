@@ -19,7 +19,6 @@ import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-count
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
-import { DragonsSummonedCounterDefinition } from './definitions/dragons-summoned-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
@@ -133,8 +132,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return PogoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'astralAutomaton':
 				return AstralAutomatonCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'dragonsSummoned':
-				return DragonsSummonedCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'watchpost':
 				return WatchpostCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'si7Counter':

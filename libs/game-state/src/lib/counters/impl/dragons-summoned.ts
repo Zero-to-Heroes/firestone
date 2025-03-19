@@ -7,8 +7,8 @@ import { CounterType } from '../_exports';
 
 export class DragonsSummonedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'dragonsSummoned';
-	public override image = CardIds.TimewinderZarimi_TOY_385;
-	public override cards: readonly CardIds[] = [CardIds.FyeTheSettingSun_WW_825, CardIds.TimewinderZarimi_TOY_385];
+	public override image = CardIds.FyeTheSettingSun_WW_825;
+	public override cards: readonly CardIds[] = [CardIds.FyeTheSettingSun_WW_825];
 
 	readonly player = {
 		pref: 'playerDragonsSummonedCounter' as const,

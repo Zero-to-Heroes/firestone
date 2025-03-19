@@ -6,8 +6,8 @@ import { CounterType } from '../_exports';
 
 export class DragonsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'dragonsPlayed';
-	public override image = CardIds.Kazakusan_ONY_005;
-	public override cards: readonly CardIds[] = [CardIds.Kazakusan_ONY_005];
+	public override image = CardIds.TimewinderZarimi_TOY_385;
+	public override cards: readonly CardIds[] = [CardIds.Kazakusan_ONY_005, CardIds.TimewinderZarimi_TOY_385];
 
 	readonly opponent = undefined;
 	readonly player = {
