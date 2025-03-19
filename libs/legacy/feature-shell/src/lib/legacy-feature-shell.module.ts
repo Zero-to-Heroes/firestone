@@ -194,7 +194,6 @@ import { ConstructedBoardWidgetWrapperComponent } from './js/components/overlays
 import { AbstractCounterWidgetWrapperComponent } from './js/components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentAbyssalCurseWidgetWrapperComponent } from './js/components/overlays/counters/opponent-abyssal-curse-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-attack-widget-wrapper.component';
-import { OpponentElwynnBoarWidgetWrapperComponent } from './js/components/overlays/counters/opponent-elwynn-boar-widget-wrapper.component';
 import { OpponentFatigueWidgetWrapperComponent } from './js/components/overlays/counters/opponent-fatigue-widget-wrapper.component';
 import { OpponentGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/opponent-galakrond-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from './js/components/overlays/counters/opponent-jade-widget-wrapper.component';
@@ -204,7 +203,6 @@ import { PlayerAbyssalCurseWidgetWrapperComponent } from './js/components/overla
 import { PlayerCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-attack-widget-wrapper.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
 import { PlayerBgsSouthseaWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
-import { PlayerElwynnBoarWidgetWrapperComponent } from './js/components/overlays/counters/player-elwynn-boar-widget-wrapper.component';
 import { PlayerFatigueWidgetWrapperComponent } from './js/components/overlays/counters/player-fatigue-widget-wrapper.component';
 import { PlayerGalakrondWidgetWrapperComponent } from './js/components/overlays/counters/player-galakrond-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from './js/components/overlays/counters/player-jade-widget-wrapper.component';
@@ -1282,7 +1280,6 @@ try {
 		PlayerGalakrondWidgetWrapperComponent,
 		PlayerFatigueWidgetWrapperComponent,
 		PlayerAbyssalCurseWidgetWrapperComponent,
-		PlayerElwynnBoarWidgetWrapperComponent,
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
@@ -1298,7 +1295,6 @@ try {
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,
 		OpponentAbyssalCurseWidgetWrapperComponent,
-		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentDragonsSummonedWidgetWrapperComponent,
 
 		FtueComponent,

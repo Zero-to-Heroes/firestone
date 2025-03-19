@@ -326,12 +326,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-label'),
 		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-tooltip'),
 	},
-	{
-		id: 'elwynn-boar',
-		field: 'opponentElwynnBoarCounter',
-		label: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-label'),
-		tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.opponent?.pref)

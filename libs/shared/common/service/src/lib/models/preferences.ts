@@ -427,34 +427,12 @@ export class Preferences implements IPreferences {
 	readonly opponentHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerElwynnBoarCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerElwynnBoarCounterWidgetPosition: { left: number; top: number };
 	readonly opponentElwynnBoarCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentElwynnBoarCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerVolatileSkeletonCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
 	readonly opponentVolatileSkeletonCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerRelicCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerRelicCounterWidgetPosition: { left: number; top: number };
 	readonly opponentRelicCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentRelicCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerBolnerCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerBolnerCounterWidgetPosition: { left: number; top: number };
-
-	readonly playerBrilliantMacawCounter: BooleanWithLimited = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerBrilliantMacawCounterWidgetPosition: { left: number; top: number };
-
 	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
 	readonly opponentDeadMinionsThisGameCounter: boolean = false;
 	readonly playerFriendlyDeadMinionsThisGameCounter: boolean = false;

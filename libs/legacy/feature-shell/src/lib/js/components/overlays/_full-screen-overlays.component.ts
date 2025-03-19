@@ -113,7 +113,6 @@ import { DebugService } from '../../services/debug.service';
 			<player-galakrond-widget-wrapper></player-galakrond-widget-wrapper>
 			<player-fatigue-widget-wrapper></player-fatigue-widget-wrapper>
 			<player-abyssal-curse-widget-wrapper></player-abyssal-curse-widget-wrapper>
-			<player-elwynn-boar-widget-wrapper></player-elwynn-boar-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
 				side="player"
@@ -130,7 +129,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-galakrond-widget-wrapper></opponent-galakrond-widget-wrapper>
 			<opponent-fatigue-widget-wrapper></opponent-fatigue-widget-wrapper>
 			<opponent-abyssal-curse-widget-wrapper></opponent-abyssal-curse-widget-wrapper>
-			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<counter-wrapper
 				*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
 				side="opponent"
