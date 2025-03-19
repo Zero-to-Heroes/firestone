@@ -66,6 +66,7 @@ export const modifyDecksForSpecialCards = (
 			case CardIds.SkulkingGeist_ICC_701:
 				return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.Steamcleaner:
+			case CardIds.Steamcleaner_CORE_REV_946:
 				return [
 					handleSteamcleaner(deckState, allCards, i18n),
 					handleSteamcleaner(opponentDeckState, allCards, i18n),

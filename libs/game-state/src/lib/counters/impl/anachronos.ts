@@ -10,7 +10,7 @@ export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'anachronos';
 	public override image = CardIds.Anachronos;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.Anachronos];
+	public override cards: readonly CardIds[] = [CardIds.Anachronos, CardIds.Anachronos_CORE_RLK_919];
 
 	readonly player = {
 		pref: 'playerAnachronosCounter' as const,

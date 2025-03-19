@@ -263,6 +263,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, secret);
 		case CardIds.ArchdruidOfThorns_EDR_491:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle, minion);
+		case CardIds.ArchmageAntonidas:
+		case CardIds.ArchmageAntonidasLegacy:
+		case CardIds.ArchmageAntonidas_CORE_EX1_559:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ArchmageVargoth:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ArcticArmorTavernBrawl:
@@ -580,6 +584,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.ChiaDrake_Cultivate_TOY_801a:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.Chillmaw:
+		case CardIds.Chillmaw_CORE_AT_123:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.Chogall_WON_105:
 		case CardIds.Chogall_OG_121:
 			return tooltip(and(side(inputSide), discarded));
@@ -790,10 +797,16 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.DeathBlossomWhomper:
 			return and(side(inputSide), inDeck, minion, deathrattle);
+		case CardIds.Deathchiller_RLK_083:
+		case CardIds.Deathchiller_CORE_RLK_083:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.DeathGrowl:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.DeathlyDeathTavernBrawl:
 			return and(side(inputSide), minion, deathrattle);
+		case CardIds.DeathMetalKnight:
+		case CardIds.DeathMetalKnight_CORE_ETC_523:
+			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.DeathSpeakerBlackthorn_BAR_329:
 			return and(side(inputSide), inDeck, minion, deathrattle, effectiveCostLess(6));
 		case CardIds.DeathstriderTavernBrawl:
@@ -1038,6 +1051,9 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, minion),
 				and(side(inputSide), inDeck, spell),
 			);
+		case CardIds.FinjaTheFlyingStar:
+		case CardIds.FinjaTheFlyingStar_CORE_CFM_344:
+			return and(side(inputSide), inDeck, murloc);
 		case CardIds.FirekeepersIdolTavernBrawl:
 			return and(side(inputSide), spell, fire);
 		case CardIds.FirePlumeHarbinger:
@@ -1078,6 +1094,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon, notInInitialDeck);
 		case CardIds.FossilFanatic:
 			return and(side(inputSide), inDeck, spell, fel);
+		case CardIds.FoxyFraud:
+		case CardIds.FoxyFraud_CORE_DMF_511:
+			return and(side(inputSide), or(inHand, inDeck), combo);
 		case CardIds.FreeAdmission:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion, demon),
@@ -1724,6 +1743,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, not(minion));
 		case CardIds.MaroonedArchmage_VAC_435:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.Marshspawn_BT_115:
+		case CardIds.Marshspawn_CORE_BT_115:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.MaskedReveler:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.MassResurrection_DAL_724:
@@ -2050,6 +2072,7 @@ export const cardIdSelector = (
 		case CardIds.RecordScratcher:
 			return and(side(inputSide), or(inHand, inDeck), combo);
 		case CardIds.RedscaleDragontamer:
+		case CardIds.RedscaleDragontamer_CORE_DMF_194:
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.Reforestation_AidOfTheForest_EDR_843a:
 			return and(side(inputSide), inDeck, spell);
@@ -2392,6 +2415,7 @@ export const cardIdSelector = (
 		case CardIds.SpiritPeddler_WORK_015:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SpiritGuide:
+		case CardIds.SpiritGuide_CORE_AV_328:
 			return highlightConditions(
 				and(side(inputSide), inDeck, spell, shadow),
 				and(side(inputSide), inDeck, spell, holy),
@@ -2471,6 +2495,7 @@ export const cardIdSelector = (
 		case CardIds.StarvingTavernBrawl:
 			return and(side(inputSide), minion, beast);
 		case CardIds.Steamcleaner:
+		case CardIds.Steamcleaner_CORE_REV_946:
 			return and(notInInitialDeck, inDeck);
 		case CardIds.SteamGuardian:
 			return highlightConditions(and(side(inputSide), inDeck, spell, fire), and(side(inputSide), inDeck, spell));
@@ -2580,6 +2605,7 @@ export const cardIdSelector = (
 		case CardIds.TopiorTheShrubbagazzor:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature);
 		case CardIds.TerrorscaleStalker:
+		case CardIds.TerrorscaleStalker_CORE_UNG_800:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.TessGreymane_GIL_598:
 		case CardIds.TessGreymaneCore:
@@ -2604,6 +2630,7 @@ export const cardIdSelector = (
 		case CardIds.TheCountess:
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.TheCurator_KAR_061:
+		case CardIds.TheCurator_CORE_KAR_061:
 			return and(side(inputSide), inDeck, minion, or(beast, dragon, murloc));
 		case CardIds.TheDarkPortal_BT_302:
 			return and(side(inputSide), inDeck, minion);
@@ -2723,6 +2750,7 @@ export const cardIdSelector = (
 		case CardIds.Tyrande_EDR_464:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Tuskpiercer:
+		case CardIds.Tuskpiercer_CORE_BAR_330:
 			return and(side(inputSide), inDeck, deathrattle, minion);
 		case CardIds.TwilightDeceptor:
 			return and(side(inputSide), inDeck, spell, shadow);
@@ -2819,6 +2847,7 @@ export const cardIdSelector = (
 		case CardIds.VolumeUp:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.WailingVapor:
+		case CardIds.WailingVapor_CORE_WC_042:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.WakenerOfSouls_GDB_468:
 			return highlightConditions(
@@ -2940,6 +2969,7 @@ export const cardIdSelector = (
 		case CardIds.CorrosiveBreath:
 		case CardIds.FiretreeWitchdoctor:
 		case CardIds.NetherspiteHistorian:
+		case CardIds.NetherspiteHistorian_CORE_KAR_062:
 		case CardIds.WyrmrestAgent:
 		case CardIds.BreathOfTheInfinite:
 		case CardIds.Duskbreaker_LOOT_410:

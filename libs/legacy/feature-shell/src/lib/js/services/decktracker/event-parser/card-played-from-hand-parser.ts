@@ -266,7 +266,7 @@ export class CardPlayedFromHandParser implements EventParser {
 						newCardPlayedThisMatch,
 				  ] as readonly ShortCardWithTurn[]),
 			anachronosTurnsPlayed:
-				cardId === CardIds.Anachronos
+				cardId === CardIds.Anachronos || cardId === CardIds.Anachronos_CORE_RLK_919
 					? [...playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed, currentState.gameTagTurnNumber]
 					: playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed,
 		});
