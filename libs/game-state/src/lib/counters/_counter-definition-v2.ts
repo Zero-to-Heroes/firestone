@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { Preferences } from '@firestone/shared/common/service';
+import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../models/game-state';
 import { CounterType } from './_exports';
@@ -15,24 +17,8 @@ export abstract class CounterDefinitionV2<T> {
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
 
-	public abstract readonly player?: {
-		pref: keyof Preferences;
-		display: (state: GameState, bgState: BattlegroundsState | null | undefined) => boolean;
-		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => T | null | undefined;
-		setting: {
-			label: (i18n: ILocalizationService) => string;
-			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
-		};
-	};
-	public abstract readonly opponent?: {
-		pref: keyof Preferences;
-		display: (state: GameState, bgState: BattlegroundsState | null | undefined) => boolean;
-		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => T | null | undefined;
-		setting: {
-			label: (i18n: ILocalizationService) => string;
-			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
-		};
-	};
+	public abstract readonly player?: PlayerImplementation<T>;
+	public abstract readonly opponent?: PlayerImplementation<T>;
 
 	protected abstract tooltip(
 		side: 'player' | 'opponent',
@@ -90,10 +76,6 @@ export abstract class CounterDefinitionV2<T> {
 					console.debug('[debug] not visible from deck', gameState.playerDeck?.hasRelevantCard(this.cards));
 				return false;
 			}
-			if (this.player.value(gameState, bgState) == null) {
-				this.debug && console.debug('[debug] no value', this.player.value(gameState, bgState));
-				return false;
-			}
 			this.debug && console.debug('[debug] show');
 			return true;
 		} else if (side === 'opponent') {
@@ -112,10 +94,6 @@ export abstract class CounterDefinitionV2<T> {
 			if (!this.opponent.display(gameState, bgState)) {
 				return false;
 			}
-			// console.debug('value', this, this.opponent.value(gameState));
-			if (!this.opponent.value(gameState, bgState)) {
-				return false;
-			}
 			// console.debug('returning true', this);
 			return true;
 		}
@@ -128,14 +106,24 @@ export abstract class CounterDefinitionV2<T> {
 		bgState: BattlegroundsState,
 		allCards: CardsFacadeService,
 		countersUseExpandedView: boolean,
-	): CounterInstance<T> {
-		const rawValue =
-			side === 'player' ? this.player?.value(gameState, bgState) : this.opponent?.value(gameState, bgState);
+	): CounterInstance<T> | undefined {
+		const sideObj = this[side];
+		const rawValue = sideObj?.value(gameState, bgState);
+		if ((side === 'player' && rawValue == null) || (side === 'opponent' && !rawValue)) {
+			return undefined;
+		}
+
+		const savedValue = sideObj?.savedValue;
+		if (deepEqual(rawValue, savedValue)) {
+			return sideObj?.savedInstance;
+		}
+
 		const formattedValue = this.formatValue(rawValue);
 		// Get the image value
 		const image = typeof this.image === 'string' ? this.image : this.image(gameState);
 		const result: CounterInstance<T> = {
 			id: this.id,
+			side: side,
 			type: this.type,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${image}.jpg`,
 			tooltip: this.tooltip(side, gameState, allCards, bgState, countersUseExpandedView),
@@ -143,16 +131,33 @@ export abstract class CounterDefinitionV2<T> {
 			cardTooltip: this.cardTooltip(side, gameState, bgState, rawValue),
 		};
 		this.debug && console.debug('[debug] emitting counter', this.id, result);
+		if (sideObj) {
+			sideObj.savedValue = rawValue;
+			sideObj.savedInstance = result;
+		}
 		return result;
 	}
 }
 
 export interface CounterInstance<T> {
 	readonly id: CounterType;
+	readonly side: 'player' | 'opponent';
 	readonly type: 'hearthstone' | 'battlegrounds';
 	readonly image: string;
 	readonly tooltip: string | null;
 	readonly value: string | number | undefined | null;
 	readonly valueImg?: string;
 	readonly cardTooltip?: readonly string[];
+}
+
+export interface PlayerImplementation<T> {
+	pref: keyof Preferences;
+	display: (state: GameState, bgState: BattlegroundsState | null | undefined) => boolean;
+	value: (state: GameState, bgState: BattlegroundsState | null | undefined) => T | null | undefined;
+	savedValue?: T | null | undefined;
+	savedInstance?: CounterInstance<T>;
+	setting: {
+		label: (i18n: ILocalizationService) => string;
+		tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
+	};
 }

@@ -279,7 +279,7 @@ export class FullScreenOverlaysComponent
 	}
 
 	trackForCounter(index: number, counter: CounterInstance<any>) {
-		return counter.id;
+		return counter.side + counter.id;
 	}
 
 	// Just make it full screen, always
