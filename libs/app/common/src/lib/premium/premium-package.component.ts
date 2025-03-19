@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -8,12 +9,12 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { PremiumPlanId } from '@firestone/shared/common/service';
-import { sleep } from '@firestone/shared/framework/common';
-import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { ILocalizationService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
 import { PremiumPlan } from './premium-desktop.component';
 
 @Component({
@@ -57,44 +58,55 @@ import { PremiumPlan } from './premium-desktop.component';
 				</span>
 			</div> -->
 			<div class="button-container">
-				<checkbox
-					*ngIf="allowSubscriptionOverride"
-					class="override-checkbox"
-					[label]="'app.premium.override-checkbox-label' | fsTranslate"
-					[value]="subOverride"
-					(valueChanged)="onSubOverrideChanged($event)"
-				></checkbox>
-				<div
-					class="confirmation-text"
-					*ngIf="cantSubscribe && subOverride"
-					[fsTranslate]="'app.premium.override-confirmation'"
-				></div>
-				<button
-					class="button cant-subscribe-button"
-					*ngIf="cantSubscribe && !subOverride"
-					[fsTranslate]="cantSubscribeButtonKey"
-					[helpTooltip]="'app.premium.cant-subscribe-tooltip' | fsTranslate"
-				></button>
-				<button
-					class="button subscribe-button"
-					*ngIf="!isReadonly && !isActive && (!cantSubscribe || subOverride)"
-					[fsTranslate]="subscribeButtonKey"
-					[helpTooltip]="helpTooltipSubscribe"
-					(click)="onSubscribe($event)"
-				></button>
-				<button
-					class="button unsubscribe-button"
-					*ngIf="isActive && isAutoRenew && !cantSubscribe"
-					[fsTranslate]="'app.premium.unsubscribe-button'"
-					[helpTooltip]="helpTooltipUnsubscribe"
-					(click)="onUnsubscribe($event)"
-				></button>
+				<ng-container *ngIf="loggedIn$ | async">
+					<checkbox
+						*ngIf="allowSubscriptionOverride"
+						class="override-checkbox"
+						[label]="'app.premium.override-checkbox-label' | fsTranslate"
+						[value]="subOverride"
+						(valueChanged)="onSubOverrideChanged($event)"
+					></checkbox>
+					<div
+						class="confirmation-text"
+						*ngIf="cantSubscribe && subOverride"
+						[fsTranslate]="'app.premium.override-confirmation'"
+					></div>
+					<button
+						class="button cant-subscribe-button"
+						*ngIf="cantSubscribe && !subOverride"
+						[fsTranslate]="cantSubscribeButtonKey"
+						[helpTooltip]="'app.premium.cant-subscribe-tooltip' | fsTranslate"
+					></button>
+					<button
+						class="button subscribe-button"
+						*ngIf="!isReadonly && !isActive && (!cantSubscribe || subOverride)"
+						[fsTranslate]="subscribeButtonKey"
+						[helpTooltip]="helpTooltipSubscribe"
+						(click)="onSubscribe($event)"
+					></button>
+					<button
+						class="button unsubscribe-button"
+						*ngIf="isActive && isAutoRenew && !cantSubscribe"
+						[fsTranslate]="'app.premium.unsubscribe-button'"
+						[helpTooltip]="helpTooltipUnsubscribe"
+						(click)="onUnsubscribe($event)"
+					></button>
+				</ng-container>
+				<ng-container *ngIf="(loggedIn$ | async) === false">
+					<button
+						class="button subscribe-button"
+						[fsTranslate]="'app.premium.login-to-subscribe'"
+						(click)="login()"
+					></button>
+				</ng-container>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PremiumPackageComponent {
+export class PremiumPackageComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	loggedIn$: Observable<boolean>;
+
 	@Output() subscribe = new EventEmitter<string>();
 	@Output() unsubscribe = new EventEmitter<string>();
 
@@ -208,12 +220,24 @@ export class PremiumPackageComponent {
 	helpTooltipUnsubscribe: string;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
+		private readonly user: UserService,
 		private readonly ow: OverwolfService,
-		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.user);
+
+		this.loggedIn$ = this.user.user$$.pipe(this.mapData((user) => !!user?.username));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	// We need to wait until the CSS class has been set
 	async setComingSoonText() {
@@ -253,6 +277,10 @@ export class PremiumPackageComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	login() {
+		this.ow.openLoginDialog();
 	}
 
 	// copyDiscordCode() {
