@@ -13,6 +13,7 @@ import { MurozondTheInfinite } from './murozond-the-infinite';
 import { ParrotMascot } from './parrot-mascot';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
+import { ReturnPolicy } from './return-policy';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TramHeist } from './tram-heist';
 import { UrsolsAura } from './ursols-aura';
@@ -38,6 +39,7 @@ const cards = [
 	RazaTheResealed,
 	UrsolsAura,
 	MonstrousParrot,
+	ReturnPolicy,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
