@@ -2583,7 +2583,16 @@ export const cardIdSelector = (
 		case CardIds.SwordOfTheFallen:
 			return and(side(inputSide), inDeck, spell, secret);
 		case CardIds.SymphonyOfSins_MovementOfPrideToken:
-			return and(side(inputSide), or(inDeck, inHand), minion);
+			return (input: SelectorInput): SelectorOutput => {
+				const highestCostMinion = input.deckState.deck
+					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
+					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
+				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
+				return highlightConditions(
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
+					and(side(inputSide), inDeck, minion),
+				)(input);
+			};
 		case CardIds.TaelanFordringCore:
 			return (input: SelectorInput): SelectorOutput => {
 				const highestCostMinion = input.deckState.deck
