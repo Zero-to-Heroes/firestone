@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BoosterType, boosterIdToSetId } from '@firestone-hs/reference-data';
+import { CATCH_UP_PACK_IDS } from '@firestone/collection/view';
 import { CardPackInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, PackInfo } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
@@ -336,5 +337,5 @@ export const cardTypeToPremium = (cardType: CollectionCardType, info?: any): num
 };
 
 export const isCatchupPack = (boosterId: BoosterType): boolean => {
-	return [BoosterType.WILD_WEST2].includes(boosterId);
+	return CATCH_UP_PACK_IDS.includes(boosterId);
 };

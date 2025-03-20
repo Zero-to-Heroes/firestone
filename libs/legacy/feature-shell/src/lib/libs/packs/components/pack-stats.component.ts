@@ -43,6 +43,7 @@ import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 						<pack-stat
 							class="pack-stat"
 							*ngFor="let pack of group.packs; trackBy: trackByPackFn"
+							[attr.data-id]="pack.packType"
 							[pack]="pack"
 							[style.width.px]="cardWidth"
 							[style.height.px]="cardHeight"
@@ -160,7 +161,6 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							!!pack.set ||
 							pack.packType === BoosterType.CLASSIC ||
 							pack.packType === BoosterType.WILD_PACK ||
-							pack.packType === BoosterType.WILD_WEST2 ||
 							pack.packType === BoosterType.STANDARD_PACK,
 					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
@@ -192,7 +192,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							!CATCH_UP_PACK_IDS.includes(pack.packType),
 							-(pack.set?.launchDate?.getTime() ?? 0),
 							!pack.set,
-							pack.name,
+							// pack.name,
 						]),
 					);
 				const nonBuyableGroup: InternalPackGroup = {
