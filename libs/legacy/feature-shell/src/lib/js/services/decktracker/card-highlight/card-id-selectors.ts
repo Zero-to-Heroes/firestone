@@ -1197,7 +1197,13 @@ export const cardIdSelector = (
 			);
 		case CardIds.GorillabotA3:
 		case CardIds.GorillabotA3Core:
-			return and(side(inputSide), or(inDeck, inHand), minion, mech);
+			return and(
+				side(inputSide),
+				or(inDeck, inHand),
+				minion,
+				mech,
+				not(entityIs({ entityId: card.entityId, cardId: card.cardId })),
+			);
 		case CardIds.GorlocRavager:
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.GraniteForgeborn:
@@ -1275,7 +1281,10 @@ export const cardIdSelector = (
 		case CardIds.GuffRunetotem_BAR_720:
 			return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 		case CardIds.GuidingFigure_GDB_106:
-			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
+				and(side(inputSide), or(inHand, inDeck), spell),
+			);
 		case CardIds.GuitarSoloist:
 			return highlightConditions(
 				and(side(inputSide), inDeck, spell),
