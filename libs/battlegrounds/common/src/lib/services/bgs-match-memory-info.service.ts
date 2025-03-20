@@ -7,6 +7,7 @@ import {
 	BehaviorSubject,
 	Subscription,
 	distinctUntilChanged,
+	filter,
 	from,
 	interval,
 	map,
@@ -58,7 +59,7 @@ export class BgsMatchMemoryInfoService {
 						map((memoryInfo) => ({ gameInfo, memoryInfo })),
 					),
 				),
-				// filter(({ gameInfo, memoryInfo }) => memoryInfo?.Game?.Players?.length === 8),
+				filter(({ gameInfo, memoryInfo }) => !!memoryInfo),
 				map(
 					({ gameInfo, memoryInfo }) =>
 						({
