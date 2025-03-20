@@ -129,7 +129,6 @@ import { DebugService } from '../../services/debug.service';
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
 			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
-			<player-bgs-blood-gem-widget-wrapper></player-bgs-blood-gem-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 			<player-bgs-lord-of-gains-widget-wrapper></player-bgs-lord-of-gains-widget-wrapper>
 			<player-bgs-tuskarr-raider-widget-wrapper></player-bgs-tuskarr-raider-widget-wrapper>

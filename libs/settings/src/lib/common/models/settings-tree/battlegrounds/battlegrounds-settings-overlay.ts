@@ -174,12 +174,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-tuskarr-raider-tooltip'),
 	},
 	{
-		id: 'bloodGem',
-		field: 'playerBgsBloodGemCounter',
-		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-blood-gem-label'),
-		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-blood-gem-tooltip'),
-	},
-	{
 		id: 'lordOfGains',
 		field: 'playerBgsLordOfGainsCounter',
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-lord-of-gains-label'),

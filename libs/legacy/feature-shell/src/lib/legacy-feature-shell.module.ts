@@ -350,7 +350,6 @@ import { ConstructedMulliganHandWidgetWrapperComponent } from '@components/overl
 import { ConstructedDecktrackerExtendedOocComponent } from '@components/overlays/constructed/constructed-decktracker-extended-ooc.component';
 import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
-import { PlayerBgsBloodGemWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-blood-gem-widget-wrapper.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
 import { PlayerBgsMagmalocWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-magmaloc-widget-wrapper.component';
 import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-tuskarr-raider-widget-wrapper.component';
@@ -1259,7 +1258,6 @@ try {
 		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
-		PlayerBgsBloodGemWidgetWrapperComponent,
 		PlayerBgsLordOfGainsWidgetWrapperComponent,
 		PlayerBgsTuskarrRaiderWidgetWrapperComponent,
 

@@ -11,7 +11,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
 import { AttackCounterDefinition } from './definitions/attack-counter';
-import { BgsBloodGemCounterDefinition } from './definitions/bgs-blood-gem-counter';
 import { BgsLordOfGainsCounterDefinition } from './definitions/bgs-lord-of-gains-counter';
 import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-counter';
@@ -137,8 +136,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BgsSouthseaStrongarmCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMagmaloc':
 				return BgsMagmalocCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'bgsBloodGem':
-				return BgsBloodGemCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMajordomo':
 				return BgsMajordomoCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsLordOfGains':
