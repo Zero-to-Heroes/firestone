@@ -15,7 +15,6 @@ import { BgsLordOfGainsCounterDefinition } from './definitions/bgs-lord-of-gains
 import { BgsMagmalocCounterDefinition } from './definitions/bgs-magmaloc-counter';
 import { BgsMajordomoCounterDefinition } from './definitions/bgs-majordomo-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
-import { BgsSouthseaStrongarmCounterDefinition } from './definitions/bgs-southsea-strongarm-counter';
 import { BgsTuskarrRaiderCounterDefinition } from './definitions/bgs-tuskarr-raider-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 
@@ -132,8 +131,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		switch (activeCounter) {
 			case 'bgsPogo':
 				return BgsPogoCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'bgsSouthsea':
-				return BgsSouthseaStrongarmCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMagmaloc':
 				return BgsMagmalocCounterDefinition.create(side, this.allCards, this.i18n);
 			case 'bgsMajordomo':

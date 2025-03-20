@@ -127,7 +127,6 @@ import { DebugService } from '../../services/debug.service';
 			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
 			<!-- BG Counters -->
-			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
 			<player-bgs-magmaloc-widget-wrapper></player-bgs-magmaloc-widget-wrapper>
 			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 			<player-bgs-lord-of-gains-widget-wrapper></player-bgs-lord-of-gains-widget-wrapper>

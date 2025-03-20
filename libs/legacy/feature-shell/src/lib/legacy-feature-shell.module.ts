@@ -195,7 +195,6 @@ import { AbstractCounterWidgetWrapperComponent } from './js/components/overlays/
 import { OpponentCounterWidgetWrapperComponent } from './js/components/overlays/counters/opponent-attack-widget-wrapper.component';
 import { PlayerCounterWidgetWrapperComponent } from './js/components/overlays/counters/player-attack-widget-wrapper.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
-import { PlayerBgsSouthseaWidgetWrapperComponent } from './js/components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
 import { CurrentSessionWidgetWrapperComponent } from './js/components/overlays/current-session-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from './js/components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from './js/components/overlays/decktracker-player-widget-wrapper.component';
@@ -1255,7 +1254,6 @@ try {
 
 		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,
-		PlayerBgsSouthseaWidgetWrapperComponent,
 		PlayerBgsMagmalocWidgetWrapperComponent,
 		PlayerBgsMajordomoWidgetWrapperComponent,
 		PlayerBgsLordOfGainsWidgetWrapperComponent,

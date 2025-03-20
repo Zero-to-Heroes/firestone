@@ -191,12 +191,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-magmaloc-label'),
 		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-magmaloc-tooltip'),
 	},
-	{
-		id: 'southsea',
-		field: 'playerBgsSouthseaCounter',
-		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-soutshsea-label'),
-		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-soutshsea-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'battlegrounds')
 		.filter((counter) => counter.player?.pref)
