@@ -74,7 +74,7 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 		this.activeFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionSelectedFormat));
 		this.allSets$ = this.setsManager.sets$$.pipe(
 			debounceTime(1000),
-			this.mapData((sets) => sets.filter((s) => s.id?.toLowerCase() !== 'gift')),
+			this.mapData((sets) => sets),
 		);
 		this.sets$ = combineLatest([this.activeFilter$, this.allSets$]).pipe(
 			this.mapData(([activeFilter, allSets]) => {

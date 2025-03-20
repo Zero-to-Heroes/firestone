@@ -207,6 +207,8 @@ export class SetsService {
 	// Used for pity timers mostly
 	public normalizeSetId(setId: string): string {
 		switch (setId) {
+			case 'heroes_of_starcraft':
+				return 'great_dark_beyond';
 			case 'traveling_travel_agency':
 				return 'perils_in_paradise';
 			case 'boom_inventions':
