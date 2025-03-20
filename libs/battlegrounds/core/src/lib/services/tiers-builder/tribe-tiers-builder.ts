@@ -238,7 +238,11 @@ const buildSingleTribeTier = (
 	});
 	const tribeGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForTribe, tiersToInclude, i18n, config);
 	const spellGroup: TierGroup | null =
-		config?.spells && targetTribe !== Race.BLANK ? buildSpellGroup(cardsForTribe, i18n) : null;
+		config?.spells &&
+		targetTribe !== Race.BLANK &&
+		!config.anomalies?.includes(CardIds.IncubationMutation_BG31_Anomaly_112)
+			? buildSpellGroup(cardsForTribe, i18n)
+			: null;
 	const trinketGroup =
 		config?.trinkets && config?.includeTrinketsInTribeGroups && targetTribe !== Race.BLANK
 			? buildTrinketGroup(cardsForTribe, i18n)

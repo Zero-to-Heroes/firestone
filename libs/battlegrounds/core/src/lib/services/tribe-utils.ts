@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, getEffectiveTribes, getTribeName, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardType, getEffectiveTribes, getTribeName, Race, ReferenceCard } from '@firestone-hs/reference-data';
 
 export const getActualTribes = (
 	card: ReferenceCard,
@@ -7,7 +7,11 @@ export const getActualTribes = (
 	trinkets: readonly string[] | undefined,
 	anomalies: readonly string[] | undefined,
 ): readonly Race[] => {
-	if (anomalies?.includes(CardIds.IncubationMutation_BG31_Anomaly_112) && !card.races?.length) {
+	if (
+		anomalies?.includes(CardIds.IncubationMutation_BG31_Anomaly_112) &&
+		card.type?.toUpperCase() === CardType[CardType.MINION] &&
+		!card.races?.length
+	) {
 		return [Race.ALL];
 	}
 	return [
