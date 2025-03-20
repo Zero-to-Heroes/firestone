@@ -450,8 +450,6 @@ export class Preferences implements IPreferences {
 	readonly playerBgsSouthseaCounter: boolean = true;
 	readonly playerBgsMagmalocCounter: boolean = true;
 	readonly playerBgsMajordomoCounter: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerBgsMajordomoCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysLoadPeriod: 'all-time' | 'past-100' | 'last-patch' | 'season-start' | 'past-7' = 'past-100';
 	readonly replaysShowNotification: boolean = false;

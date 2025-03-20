@@ -179,12 +179,6 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-lord-of-gains-label'),
 		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-lord-of-gains-tooltip'),
 	},
-	{
-		id: 'majordomo',
-		field: 'playerBgsMajordomoCounter',
-		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-majordomo-label'),
-		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-majordomo-tooltip'),
-	},
 	...getAllCounters(context.i18n, context.allCards)
 		.filter((counter) => counter.type === 'battlegrounds')
 		.filter((counter) => counter.player?.pref)
