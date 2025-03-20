@@ -310,6 +310,8 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 1045;
 		case CardIds.JimRaynor_BG31_HERO_801:
 			return 1189;
+		case CardIds.KerriganQueenOfBlades_BG31_HERO_811:
+			return 1190;
 		case CardIds.Artanis_BG31_HERO_802:
 			return 1191;
 		// case CardIds.Diablo:

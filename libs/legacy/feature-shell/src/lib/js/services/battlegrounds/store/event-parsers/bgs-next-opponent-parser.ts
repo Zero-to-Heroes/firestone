@@ -22,6 +22,19 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
+		const currentNextOpponent = currentState.currentGame.lastFaceOff()?.opponentPlayerId;
+		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
+		if (currentState.currentGame.lastFaceOff()?.turn === turn && currentNextOpponent === event.playerId) {
+			console.debug(
+				'[bgs-next-opponent] ignoring duplicate next opponent event',
+				turn,
+				currentNextOpponent,
+				event,
+				currentState,
+			);
+			return currentState;
+		}
+
 		const opponentCardId = event.isSameOpponent ? currentState.currentGame.lastOpponentCardId : event.cardId;
 		const opponentPlayerId = event.isSameOpponent ? currentState.currentGame.lastOpponentPlayerId : event.playerId;
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(

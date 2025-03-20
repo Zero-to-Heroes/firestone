@@ -114,23 +114,31 @@ export class GameEvents {
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
-		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
+		if (eventQueue.some((data) => data.includes('CREATE_GAME'))) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
 		await this.initPlugin();
-		await this.processLogs(eventQueue);
-		return [];
+		const hasProcessed = await this.processLogs(eventQueue);
+		return hasProcessed ? [] : eventQueue;
 	}
 
-	private async processLogs(eventQueue: readonly string[]): Promise<void> {
+	private async processLogs(eventQueue: readonly string[]): Promise<boolean> {
+		// Because this will mess up the reconnect detection
+		if (
+			eventQueue.some((data) => data.includes('CREATE_GAME')) &&
+			!eventQueue.some((data) => data.includes('GAME_SEED'))
+		) {
+			console.warn("[game-events] can't process logs without a game seed", eventQueue[eventQueue.length - 1]);
+			return false;
+		}
 		// if (!!eventQueue.length) {
 		// 	this.lastProcessedTimestamp = new Date().getTime();
 		// }
 		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
 		await this.waitForPluginReady();
-		return new Promise<void>((resolve) => {
+		return new Promise<boolean>((resolve) => {
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
-				resolve();
+				resolve(true);
 			});
 		});
 	}
