@@ -9,7 +9,6 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { ENABLE_TEBEX } from '../feature-flags';
 import { CurrentPlan, PremiumPlanId } from './subscription.service';
 
 // const STORE_ID = 1564884;
@@ -76,11 +75,6 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	}
 
 	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
-		const enableTebex = await ENABLE_TEBEX(this.ow);
-		if (!enableTebex) {
-			return null;
-		}
-
 		const currentUser = await this.user.getCurrentUser();
 		if (!currentUser?.username) {
 			return null;

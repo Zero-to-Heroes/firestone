@@ -7,7 +7,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { CurrentAppType } from '../models/pref-model';
-import { ENABLE_TEBEX } from './feature-flags';
 
 @Injectable()
 export class AppNavigationService extends AbstractFacadeService<AppNavigationService> {
@@ -29,12 +28,7 @@ export class AppNavigationService extends AbstractFacadeService<AppNavigationSer
 	}
 
 	public async goToPremium() {
-		const enableTebex = await ENABLE_TEBEX(this.ow);
-		if (enableTebex) {
-			this.selectTab('premium');
-		} else {
-			this.ow.openStore();
-		}
+		this.selectTab('premium');
 	}
 
 	public selectTab(tab: CurrentAppType) {

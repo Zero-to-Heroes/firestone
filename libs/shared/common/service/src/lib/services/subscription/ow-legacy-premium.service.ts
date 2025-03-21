@@ -6,7 +6,6 @@ import {
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { ENABLE_TEBEX } from '../feature-flags';
 import { CurrentPlan, OwSub, PremiumPlanId } from './subscription.service';
 
 const UNSUB_URL = 'https://56ogovbpuj3wqndoj6j3fv3qs40ustlm.lambda-url.us-west-2.on.aws/';
@@ -55,21 +54,6 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		if (!legacyPlans?.plans?.length) {
 			return null;
 		}
-
-		// TODO: remove this when it's better tested
-		// When we don't have the new UI, we don't care about the end date, so we can simply
-		// return a "fake" plan that is always active
-		const enableTebex = await ENABLE_TEBEX(this.ow);
-		if (!enableTebex) {
-			return {
-				id: 'legacy',
-				expireAt: new Date('2099-01-01'),
-				active: true,
-				autoRenews: true,
-				cancelled: false,
-			};
-		}
-
 		// User has a plan, and we use this endpoint to get the expiry date
 		const owToken = await this.ow.generateSessionToken();
 		const legacyPlan = await this.api.callPostApi<OwSub>(STATUS_URL, {
