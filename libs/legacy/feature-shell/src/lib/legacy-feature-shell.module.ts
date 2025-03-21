@@ -349,7 +349,6 @@ import { ConstructedDecktrackerExtendedOocComponent } from '@components/overlays
 import { ConstructedDecktrackerOocWidgetWrapperComponent } from '@components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 import { ConstructedDecktrackerOocComponent } from '@components/overlays/constructed/constructed-decktracker-ooc.component';
 import { PlayerBgsLordOfGainsWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-lord-of-gains-widget-wrapper.component';
-import { PlayerBgsTuskarrRaiderWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-tuskarr-raider-widget-wrapper.component';
 import { ChoosingBgsQuestWidgetWrapperComponent } from '@components/overlays/quests/choosing-bgs-quest-widget-wrapper.component';
 import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests/choosing-card-bgs-quest-option.component';
 import { MaxResourcesWidgetComponent } from '@components/overlays/resources/max-resources-widget.component';
@@ -1253,7 +1252,6 @@ try {
 		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,
 		PlayerBgsLordOfGainsWidgetWrapperComponent,
-		PlayerBgsTuskarrRaiderWidgetWrapperComponent,
 
 		OpponentCounterWidgetWrapperComponent,
 

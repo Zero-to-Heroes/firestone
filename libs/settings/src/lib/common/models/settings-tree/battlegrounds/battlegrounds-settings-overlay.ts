@@ -168,12 +168,6 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
 const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
-		id: 'tuskarrRaider',
-		field: 'playerBgsTuskarrRaiderCounter',
-		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-tuskarr-raider-label'),
-		tooltip: context.i18n.translateString('settings.battlegrounds.overlay.counter-tuskarr-raider-tooltip'),
-	},
-	{
 		id: 'lordOfGains',
 		field: 'playerBgsLordOfGainsCounter',
 		label: context.i18n.translateString('settings.battlegrounds.overlay.counter-lord-of-gains-label'),
