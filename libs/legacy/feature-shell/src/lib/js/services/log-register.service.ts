@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HsLogsWatcherService } from '@firestone/app/common';
 import { GameStatusService, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Events } from '../services/events.service';
@@ -22,6 +23,7 @@ export class LogRegisterService {
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly logUtils: LogUtilsService,
+		private readonly hsLogsWatcher: HsLogsWatcherService,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
 		// the app from starting to parse the game logs while in an uninitialized state, which in
@@ -57,7 +59,16 @@ export class LogRegisterService {
 			)
 			.subscribe((status) => {
 				console.log('[log-register] status for Power.log', status);
-				// this.events.broadcast(status, "Power.log");
+			})
+			.start();
+		new LogListenerService(this.ow, this.gameStatus, this.prefs, this.logUtils)
+			.configure(
+				'Hearthstone.log',
+				(data) => this.hsLogsWatcher.receiveLogLine(data),
+				(existingLine) => this.hsLogsWatcher.receiveExistingLogLine(existingLine),
+			)
+			.subscribe((status) => {
+				console.log('[log-register] status for Hearthstone.log', status);
 			})
 			.start();
 	}

@@ -10,6 +10,7 @@ import { CountersPositionerComponent } from './counters/counters-positioner.comp
 import { GenericCountersV2Component } from './counters/generic-counter-v2.component';
 import { BootstrapGameStateService } from './services/_bootstrap-game-state.service';
 import { DeckHandlerService } from './services/deck-handler.service';
+import { GameConnectionService } from './services/game-connection.service';
 import { GameEventsFacadeService } from './services/game-events-facade.service';
 import { GameStateFacadeService } from './services/game-state-facade.service';
 import { GameStateUpdatesService } from './services/game-state-updates.service';
@@ -32,6 +33,7 @@ const components = [GenericCountersV2Component, CounterWrapperComponent, Counter
 		GameStateUpdatesService,
 		GameStateFacadeService,
 		GameUniqueIdService,
+		GameConnectionService,
 		GameEventsFacadeService,
 		DeckHandlerService,
 	],
