@@ -48,7 +48,7 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

@@ -14,7 +14,6 @@ import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/
 import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
@@ -87,14 +86,13 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly deck: DeckParserFacadeService,
 		private readonly ads: AdService,
 		private readonly i18n: ILocalizationService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

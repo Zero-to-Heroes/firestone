@@ -51,7 +51,7 @@ export class BgsHeroTipsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 		private readonly scene: SceneService,
 		private readonly ads: AdService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

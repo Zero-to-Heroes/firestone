@@ -11,7 +11,6 @@ import { ArenaMulliganGuideService } from '@firestone/arena/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -38,11 +37,10 @@ export class ArenaMulliganWidgetWrapperComponent extends AbstractWidgetWrapperCo
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly mulliganGuide: ArenaMulliganGuideService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

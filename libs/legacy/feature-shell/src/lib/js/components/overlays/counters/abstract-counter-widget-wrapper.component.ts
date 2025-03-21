@@ -74,7 +74,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 		this.scene = AppInjector.get(SceneService);
 	}
 

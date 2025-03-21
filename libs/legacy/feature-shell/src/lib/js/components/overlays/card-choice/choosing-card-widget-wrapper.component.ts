@@ -89,7 +89,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		private readonly quests: BattlegroundsQuestsService,
 		private readonly gameState: GameStateFacadeService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

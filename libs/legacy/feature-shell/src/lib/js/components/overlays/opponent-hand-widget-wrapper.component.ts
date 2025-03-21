@@ -51,7 +51,7 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

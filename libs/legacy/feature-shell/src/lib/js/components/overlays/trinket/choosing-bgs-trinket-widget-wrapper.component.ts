@@ -84,7 +84,7 @@ export class ChoosingBgsTrinketWidgetWrapperComponent
 		private readonly guardian: BgsInGameTrinketsGuardianService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

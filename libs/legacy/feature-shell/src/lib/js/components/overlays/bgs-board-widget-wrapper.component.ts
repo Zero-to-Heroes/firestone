@@ -53,7 +53,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		private readonly scene: SceneService,
 		private readonly highlighter: BgsBoardHighlighterService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {

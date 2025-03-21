@@ -1,16 +1,15 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { Observable, UnaryFunction, pipe } from 'rxjs';
 import { distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
-export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionStoreComponent {
+export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent {
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
@@ -35,10 +34,9 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.init();
 	}
 

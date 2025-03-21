@@ -77,7 +77,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		private readonly scene: SceneService,
 		private readonly state: BgsStateFacadeService,
 	) {
-		super(ow, el, prefs, renderer, store, cdr);
+		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -119,7 +119,9 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => currentTurn));
-		this.showLastOpponentIcon$ = this.listenForBasicPref$((prefs) => prefs.bgsShowLastOpponentIconInOverlay);
+		this.showLastOpponentIcon$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.bgsShowLastOpponentIconInOverlay),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
