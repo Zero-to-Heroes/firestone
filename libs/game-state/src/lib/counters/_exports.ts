@@ -7,6 +7,7 @@ import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chose
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { BgsBloodGemCounterDefinitionV2 } from './impl/battlegrounds/bgs-blood-gem';
+import { BgsLordOfGainsCounterDefinitionV2 } from './impl/battlegrounds/bgs-lord-of-gains';
 import { BgsMagmalocCounterDefinitionV2 } from './impl/battlegrounds/bgs-magmaloc';
 import { BgsMajordomoCounterDefinitionV2 } from './impl/battlegrounds/bgs-majordomo';
 import { BgsSouthseaStrongarmCounterDefinitionV2 } from './impl/battlegrounds/bgs-southsea-strongarm';
@@ -150,6 +151,7 @@ export const getAllCounters: (
 	new BgsMagmalocCounterDefinitionV2(i18n, allCards),
 	new BgsMajordomoCounterDefinitionV2(i18n, allCards),
 	new BgsTuskarrRaiderCounterDefinitionV2(i18n, allCards),
+	new BgsLordOfGainsCounterDefinitionV2(i18n, allCards),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names

@@ -11,7 +11,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
 import { AttackCounterDefinition } from './definitions/attack-counter';
-import { BgsLordOfGainsCounterDefinition } from './definitions/bgs-lord-of-gains-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 
@@ -128,8 +127,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		switch (activeCounter) {
 			case 'bgsPogo':
 				return BgsPogoCounterDefinition.create(side, this.allCards, this.i18n);
-			case 'bgsLordOfGains':
-				return BgsLordOfGainsCounterDefinition.create(side, this.allCards, this.i18n, this.prefs);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 				return null;
