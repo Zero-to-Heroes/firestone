@@ -11,6 +11,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { getCost, getProcessedCard } from '@firestone/game-state';
+import { EXTENDED_STARSHIP_CARDS } from 'libs/game-state/src/lib/counters/impl/next-starship-launch';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
@@ -441,17 +442,7 @@ export const buildingStarship = cardIs(
 	CardIds.Suffocate_GDB_476,
 	CardIds.Ghost_SC_408,
 );
-export const starshipExtended = or(
-	starshipPiece,
-	cardIs(
-		CardIds.Starport_SC_403,
-		CardIds.StarshipSchematic_GDB_102,
-		CardIds.ScroungingShipwright_GDB_876,
-		CardIds.SalvageTheBunker_SC_404,
-		CardIds.LiftOff_SC_410,
-		CardIds.WaywardProbe_SC_500,
-	),
-);
+export const starshipExtended = or(starshipPiece, cardIs(...EXTENDED_STARSHIP_CARDS));
 
 export const templar = (input: SelectorInput): boolean => {
 	return [CardIds.DarkTemplar_SC_752, CardIds.HighTemplar_SC_765].includes(input.cardId as CardIds);

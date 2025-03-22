@@ -6,6 +6,15 @@ import { HeroCard } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
+export const EXTENDED_STARSHIP_CARDS = [
+	CardIds.Starport_SC_403,
+	CardIds.StarshipSchematic_GDB_102,
+	CardIds.ScroungingShipwright_GDB_876,
+	CardIds.SalvageTheBunker_SC_404,
+	CardIds.LiftOff_SC_410,
+	CardIds.WaywardProbe_SC_500,
+];
+
 export class NextStarshipLaunchCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'nextStarshipLaunch';
 	public override image = (gameState: GameState) => getStarshipForHero(gameState.playerDeck?.hero);
@@ -19,9 +28,14 @@ export class NextStarshipLaunchCounterDefinitionV2 extends CounterDefinitionV2<n
 	readonly player = {
 		pref: 'playerProtossSpellsCounter' as const,
 		display: (state: GameState): boolean =>
-			state.playerDeck
-				?.getAllPotentialFutureCards()
-				.some((c) => this.allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE])),
+			state.playerDeck?.getAllPotentialFutureCards().some((c) => {
+				const mechanics = this.allCards.getCard(c.cardId)?.mechanics ?? [];
+				return (
+					EXTENDED_STARSHIP_CARDS.includes(c.cardId as CardIds) ||
+					mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+					mechanics?.includes(GameTag[GameTag.STARSHIP])
+				);
+			}),
 		value: (state: GameState): number | null =>
 			state.fullGameState?.Player?.PlayerEntity?.tags?.find(
 				(t) => t.Name === GameTag.STARSHIP_LAUNCH_COST_DISCOUNT,
