@@ -715,7 +715,7 @@ export const cardIdSelector = (
 		case CardIds.CreepTumor_SC_011:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
 		case CardIds.CrimsonCommander_GDB_722:
-			return and(side(inputSide), inDeck, draenei);
+			return and(side(inputSide), or(inHand, inDeck), draenei);
 		case CardIds.CrystallineGreatmace_GDB_231:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.CrystalStag:
