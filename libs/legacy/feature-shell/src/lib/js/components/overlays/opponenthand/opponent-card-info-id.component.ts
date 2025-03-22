@@ -6,7 +6,7 @@ import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
-import { getDynamicRelatedCardIds } from '../../../services/decktracker/card-highlight/dynamic-pools';
+import { getDynamicRelatedCardIds, hasOverride } from '../../../services/decktracker/card-highlight/dynamic-pools';
 import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -167,8 +167,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
 				deckState: context,
 			});
-			if (!!dynamicPool?.length) {
-				this.possibleCards = dynamicPool;
+			const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
+			if (!!pool?.length) {
+				this.possibleCards = pool;
 			}
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {

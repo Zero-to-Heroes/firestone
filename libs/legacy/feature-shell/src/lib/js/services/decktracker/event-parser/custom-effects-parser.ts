@@ -3,7 +3,7 @@ import { addGuessInfoToCardInHand, DeckCard, GameState } from '@firestone/game-s
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
-import { getDynamicRelatedCardIds } from '../card-highlight/dynamic-pools';
+import { getDynamicRelatedCardIds, hasOverride } from '../card-highlight/dynamic-pools';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -76,21 +76,23 @@ export class CustomEffectsParser implements EventParser {
 		}
 
 		const deck = currentState.opponentDeck;
+		const dynamicPool = getDynamicRelatedCardIds(
+			CardIds.BroodQueen_LarvaToken_SC_003t,
+			this.allCards.getService(),
+			{
+				format: currentState.metadata.formatType,
+				gameType: currentState.metadata.gameType,
+				currentClass: currentState.playerDeck.hero?.classes?.[0]
+					? CardClass[currentState.playerDeck.hero.classes[0]]
+					: null,
+				deckState: deck,
+			},
+		);
+		const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
 		const transformedCardInHand = DeckCard.create({
 			entityId: entityId,
 			creatorCardId: CardIds.BroodQueen_LarvaToken_SC_003t,
-			relatedCardIds: getDynamicRelatedCardIds(
-				CardIds.BroodQueen_LarvaToken_SC_003t,
-				this.allCards.getService(),
-				{
-					format: currentState.metadata.formatType,
-					gameType: currentState.metadata.gameType,
-					currentClass: currentState.playerDeck.hero?.classes?.[0]
-						? CardClass[currentState.playerDeck.hero.classes[0]]
-						: null,
-					deckState: deck,
-				},
-			),
+			relatedCardIds: pool,
 		});
 		const newHand = deck.hand.map((card) => (card.entityId === entityId ? transformedCardInHand : card));
 		return currentState.update({

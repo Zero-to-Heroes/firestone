@@ -4,7 +4,7 @@ import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
 import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../localization-facade.service';
-import { getDynamicRelatedCardIds } from './card-highlight/dynamic-pools';
+import { getDynamicRelatedCardIds, hasOverride } from './card-highlight/dynamic-pools';
 
 @Injectable()
 export class DeckCardService {
@@ -85,6 +85,9 @@ export class DeckCardService {
 					currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 					deckState: deckState,
 				});
+				if (hasOverride(dynamicCards)) {
+					return (dynamicCards as { cards: readonly string[] }).cards;
+				}
 				return [...(dynamicCards ?? []), ...(card.relatedCardIds ?? [])];
 		}
 	}

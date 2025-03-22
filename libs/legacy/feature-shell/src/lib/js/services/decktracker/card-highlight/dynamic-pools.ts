@@ -23,6 +23,7 @@ const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheWolf_EDR_850p,
 	CardIds.BlessingOfTheWind_EDR_448p,
 	CardIds.DreamboundDisciple_BlessingOfTheGolem_EDR_847p,
+	CardIds.LunarwingMessenger_BlessingOfTheMoon_EDR_449p,
 ];
 
 export const getDynamicRelatedCardIds = (
@@ -34,11 +35,14 @@ export const getDynamicRelatedCardIds = (
 		currentClass?: string;
 		deckState: DeckState;
 	},
-): readonly string[] => {
+): readonly string[] | { override: true; cards: readonly string[] } => {
 	switch (cardId) {
 		case CardIds.FlutterwingGuardian_EDR_800:
 		case CardIds.BitterbloomKnight_EDR_852:
-			return IMBUED_HERO_POWERS.filter((hp) => allCards.getCard(hp).classes?.includes(options.currentClass));
+			return {
+				override: true,
+				cards: IMBUED_HERO_POWERS.filter((hp) => allCards.getCard(hp).classes?.includes(options.currentClass)),
+			};
 		case CardIds.FinalFrontier_GDB_857:
 			return filterCards(
 				allCards,
@@ -417,4 +421,13 @@ const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean =>
 	return (
 		!card?.classes?.includes(CardClass[CardClass.NEUTRAL]) && !card?.classes?.includes(currentClass?.toUpperCase())
 	);
+};
+
+export const hasOverride = (
+	result: readonly string[] | { override: true; cards: readonly string[] },
+): result is {
+	override: true;
+	cards: readonly string[];
+} => {
+	return (result as { override: true; cards: readonly string[] })?.override;
 };
