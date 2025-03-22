@@ -340,6 +340,7 @@ import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/a
 import { ArenaMulliganDeckWidgetWrapperComponent } from '@components/overlays/arena-mulligan-deck-widget-wrapper.component';
 import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-mulligan-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
+import { BgsReconnectorWidgetWrapperComponent } from '@components/overlays/bgs/bgs-reconnector-widget-wrapper.component';
 import { ChoosingCardOptionArenaComponent } from '@components/overlays/card-choice/choosing-card-option-arena.component';
 import { ChoosingCardOptionConstructedComponent } from '@components/overlays/card-choice/choosing-card-option-constructed.component';
 import { ChoosingCardOptionComponent } from '@components/overlays/card-choice/choosing-card-option.component';
@@ -1241,6 +1242,7 @@ try {
 		BgsLeaderboardWidgetWrapperComponent,
 		BgsHeroOverviewWidgetWrapperComponent,
 		BgsBoardWidgetWrapperComponent,
+		BgsReconnectorWidgetWrapperComponent,
 
 		MercsPlayerTeamWidgetWrapperComponent,
 		MercsOpponentTeamWidgetWrapperComponent,

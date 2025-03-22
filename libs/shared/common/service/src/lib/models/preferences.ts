@@ -534,6 +534,8 @@ export class Preferences implements IPreferences {
 	readonly bgsUseLeaderboardDataInOverlay: boolean = false;
 	readonly bgsShowMmrInLeaderboardOverlay: boolean = false;
 	readonly bgsShowMmrInOpponentRecap: boolean = true;
+	readonly bgsReconnectorEnabled: boolean = true;
+	readonly bgsReconnectorWidgetPosition: { left: number; top: number };
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 100;

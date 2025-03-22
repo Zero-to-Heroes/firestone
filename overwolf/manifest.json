@@ -322,9 +322,9 @@
 				"file": "Files/plugins/OwUtils.dll",
 				"class": "OwUtils.OwUtilsPlugin"
 			},
-			"hearthpwn-cipher": {
-				"file": "Files/plugins/HpCipher.dll",
-				"class": "HpCipher.HpCipherPlugin"
+			"bgs-reconnector": {
+				"file": "Files/plugins/OwBgReconnector.dll",
+				"class": "OwBgReconnector.OwBgReconnectorPlugin"
 			},
 			"DiscordRPCPlugin": {
 				"file": "Files/plugins/DiscordRPCPlugin.dll",

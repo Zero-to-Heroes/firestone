@@ -1,0 +1,26 @@
+.reconnector {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 5px;
+}
+
+.reconnect-button {
+	background: var(--color-5);
+	color: var(--default-text-color);
+	padding: 5px 15px;
+	opacity: 0.8;
+
+	&:hover {
+		opacity: 1;
+		color: var(--default-title-color);
+	}
+}
+
+.error-message {
+	background: var(--color-5);
+	color: var(--default-text-color);
+	color: var(--color-1);
+	padding: 5px;
+	max-width: 400px;
+}

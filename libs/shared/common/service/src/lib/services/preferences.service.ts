@@ -233,6 +233,12 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateWidgetPosition(prefName: keyof Preferences, left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, [prefName]: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateCurrentSessionWidgetPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, currentSessionWidgetPosition: { left, top } };

@@ -93,6 +93,7 @@ import { DebugService } from '../../services/debug.service';
 			<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
 			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
 			<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
+			<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
