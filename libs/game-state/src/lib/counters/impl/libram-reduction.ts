@@ -8,8 +8,13 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 	public override id: CounterType = 'libramReduction';
 	public override image = CardIds.InterstellarWayfarer_GDB_721;
 	public override cards: readonly CardIds[] = [
-		CardIds.InterstellarWayfarer_GDB_721,
-		CardIds.InterstellarStarslicer_GDB_726,
+		CardIds.LibramOfWisdom_BT_025,
+		CardIds.LibramOfClarity_GDB_137,
+		CardIds.LibramOfDivinity_GDB_138,
+		CardIds.LibramOfJustice_BT_011,
+		CardIds.LibramOfFaith_GDB_139,
+		CardIds.LibramOfJudgment,
+		CardIds.LibramOfHope,
 	];
 
 	readonly player = {
