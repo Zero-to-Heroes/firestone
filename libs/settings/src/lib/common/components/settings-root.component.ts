@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { COLLECTION_PACK_SERVICE_TOKEN, ICollectionPackService } from '@firestone/collection/common';
+import { AccountService } from '@firestone/profile/common';
 import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -72,6 +73,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly gamesLoader: GameStatsLoaderService,
 		private readonly arenaRewards: ArenaRewardsService,
 		private readonly db: IndexedDbService,
+		private readonly account: AccountService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 		@Inject(COLLECTION_PACK_SERVICE_TOKEN) private readonly packService: ICollectionPackService,
 	) {
@@ -79,7 +81,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.adService, this.controller, this.gamesLoader);
+		await waitForReady(this.prefs, this.adService, this.controller, this.gamesLoader, this.account);
 
 		this.buttonText$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) =>
@@ -100,6 +102,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			adService: this.adService,
 			isBeta: isBeta,
 			services: {
+				account: this.account,
 				diskCache: this.diskCache,
 				db: this.db,
 				gamesLoader: this.gamesLoader,
@@ -110,9 +113,11 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		};
 		this.controller.setRootNode(settingsDefinition(context));
 
-		const localeSettings$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.locale),
-			this.mapData((prefs) => {
+		const localeSettings$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)),
+			this.account.region$$.pipe(this.mapData((info) => info)),
+		]).pipe(
+			this.mapData(([pref, region]) => {
 				return settingsDefinition(context);
 			}),
 		);

@@ -1,5 +1,6 @@
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { ICollectionPackService } from '@firestone/collection/common';
+import { AccountService } from '@firestone/profile/common';
 import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
 import {
@@ -29,6 +30,7 @@ export interface SettingContext {
 		readonly packService: ICollectionPackService;
 		readonly arenaRewards: ArenaRewardsService;
 		readonly settingsController: SettingsControllerService;
+		readonly account: AccountService;
 	};
 }
 

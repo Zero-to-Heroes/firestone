@@ -8,7 +8,7 @@ import { BgsReconnectorService } from './bgs-reconnector.service';
 	selector: 'bgs-reconnector',
 	styleUrls: ['./bgs-reconnector.component.scss'],
 	template: ` <div class="reconnector battlegrounds-theme" (click)="reconnect()">
-		<div class="reconnect-button">Click to reconnect</div>
+		<div class="reconnect-button">单击重新连接</div>
 		<div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 	</div>`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +35,7 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 	async reconnect() {
 		const status = await this.reconnectService.reconnect();
 		if (status === 'Not elevated') {
-			this.showErrorMessage('You need to run Overwolf as administrator to enable the reconnection feature');
+			this.showErrorMessage('您需要以管理员身份运行 Overwolf 以启用重新连接功能');
 		}
 	}
 

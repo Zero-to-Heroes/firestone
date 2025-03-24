@@ -7,12 +7,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { BnetRegion, SceneMode } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
+import { AccountService } from '@firestone/profile/common';
 import { ENABLE_RECONNECTOR, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, filter } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
@@ -49,21 +50,32 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 		protected readonly renderer: Renderer2,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly account: AccountService,
 		private readonly bgState: BgsStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.bgState);
+		await waitForReady(this.scene, this.account, this.bgState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
+			this.account.region$$.pipe(
+				filter((region) => !!region),
+				this.mapData((info) => info),
+			),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsReconnectorEnabled)),
 			this.bgState.gameState$$.pipe(this.mapData((state) => state?.inGame && !!state.currentGame)),
 		]).pipe(
-			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
-				return ENABLE_RECONNECTOR && inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
+			this.mapData(([currentScene, region, displayFromPrefs, inGame]) => {
+				return (
+					ENABLE_RECONNECTOR &&
+					region === BnetRegion.REGION_CN &&
+					inGame &&
+					displayFromPrefs &&
+					currentScene === SceneMode.GAMEPLAY
+				);
 			}),
 			this.handleReposition(),
 		);

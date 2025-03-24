@@ -266,6 +266,7 @@ export class MemoryInspectionService {
 	}
 
 	public async getRegion(): Promise<BnetRegion | null> {
+		// return BnetRegion.REGION_CN;
 		return this.mindVision.callMindVision(() => this.getRegionOperation.call());
 	}
 }
