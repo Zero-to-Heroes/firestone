@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PieChartComponent } from '@components/common/chart/pie-chart.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
+import { ProfileCommonModule } from '@firestone/profile/common';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -681,6 +682,7 @@ try {
 		SettingsModule,
 		TwitchCommonModule,
 		ModsCommonModule,
+		ProfileCommonModule,
 
 		ColiseumComponentsModule,
 		NgxChartsModule,

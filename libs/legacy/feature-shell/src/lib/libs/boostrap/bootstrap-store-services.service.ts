@@ -42,6 +42,7 @@ import { BootstrapGameStateService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
 import { ModsConfigService } from '@firestone/mods/common';
+import { AccountService } from '@firestone/profile/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings';
 import {
 	AppNavigationService,
@@ -152,6 +153,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ExpertContributorsService: ExpertContributorsService,
 		private readonly init_TavernBrawlService: TavernBrawlService,
 		private readonly init_DeckParserFacadeService: DeckParserFacadeService,
+		private readonly init_AccountService: AccountService,
 		// Other dependencies
 		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}

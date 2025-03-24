@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
-import { Board } from '@firestone-hs/reference-data';
+import { BnetRegion, Board } from '@firestone-hs/reference-data';
 import { ArenaInfo } from '../../external-models/arena-info';
 import { MemoryBgsPlayerInfo } from '../../models/battlegrounds-player-state';
 import { BoostersInfo } from '../../models/boosters-info';
@@ -488,6 +488,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.warn('[mind-vision] could not parse getGameUniqueId', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getRegion(): Promise<BnetRegion | null> {
+		return new Promise<BnetRegion | null>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getRegion((info) => {
+					resolve(info);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getRegion', e);
 				resolve(null);
 			}
 		});

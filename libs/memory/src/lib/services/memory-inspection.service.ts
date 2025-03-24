@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Board, SceneMode } from '@firestone-hs/reference-data';
+import { BnetRegion, Board, SceneMode } from '@firestone-hs/reference-data';
 import { PackInfo } from '@firestone/collection/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { HsAchievementCategory, HsAchievementsInfo } from '../external-models/achievements-info';
@@ -46,6 +46,7 @@ import { GetMemoryChangesOperation } from './mind-vision/operations/get-memory-c
 import { GetMercenariesCollectionInfoOperation } from './mind-vision/operations/get-mercenaries-collection-info-operation';
 import { GetMercenariesInfoOperation } from './mind-vision/operations/get-mercenaries-info-operation';
 import { GetPlayerProfileInfoOperation } from './mind-vision/operations/get-profile-info-operation';
+import { GetRegionOperation } from './mind-vision/operations/get-region-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/operations/get-rewards-track-info-operation';
 import { GetSelectedDeckIdOperation } from './mind-vision/operations/get-selected-deck-id-operation';
 import { GetWhizbangDeckOperation } from './mind-vision/operations/get-whizbang-deck-operation';
@@ -103,6 +104,7 @@ export class MemoryInspectionService {
 	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.ow);
 	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.ow);
 	private getGameUniqueIdOperation = new GetGameUniqueIdOperation(this.mindVisionFacade, this.ow);
+	private getRegionOperation = new GetRegionOperation(this.mindVisionFacade, this.ow);
 
 	private listenersRegistered: boolean;
 
@@ -261,5 +263,9 @@ export class MemoryInspectionService {
 
 	public async getGameUniqueId(): Promise<string | null> {
 		return this.mindVision.callMindVision(() => this.getGameUniqueIdOperation.call());
+	}
+
+	public async getRegion(): Promise<BnetRegion | null> {
+		return this.mindVision.callMindVision(() => this.getRegionOperation.call());
 	}
 }
