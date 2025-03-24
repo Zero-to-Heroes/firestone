@@ -10,8 +10,7 @@ import {
 	RarityTYpe,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { getCost, getProcessedCard } from '@firestone/game-state';
-import { EXTENDED_STARSHIP_CARDS } from 'libs/game-state/src/lib/counters/impl/next-starship-launch';
+import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard } from '@firestone/game-state';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 

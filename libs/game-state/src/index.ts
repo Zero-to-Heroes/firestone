@@ -4,6 +4,7 @@ export * from './lib/counters/counter-wrapper.component';
 export * from './lib/counters/counters-positioner.component';
 export * from './lib/counters/generic-counter-v2.component';
 export * from './lib/counters/impl/cthun';
+export * from './lib/counters/impl/next-starship-launch';
 export * from './lib/counters/impl/starships-launched';
 export * from './lib/counters/widget-wrapper.component';
 export * from './lib/game-state.module';
