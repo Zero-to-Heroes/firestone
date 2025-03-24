@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { ENABLE_RECONNECTOR } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
@@ -26,6 +27,8 @@ export const battlegroundsSettings = (context: SettingContext): SettingNode => {
 			context.services.account.region$$.value === BnetRegion.REGION_CN && ENABLE_RECONNECTOR
 				? battlegroundsReconnectorSettings(context)
 				: null,
-		].filter((s) => s != null),
+		]
+			.filter((s) => s != null)
+			.map((s) => s!),
 	};
 };

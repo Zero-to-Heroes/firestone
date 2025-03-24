@@ -22,4 +22,4 @@ export interface GameEventPlayer {
 	wild: Rank;
 }
 
-export type GameEventType = 'SCENE_CHANGED_MINDVISION';
+export type GameEventType = 'SCENE_CHANGED_MINDVISION' | 'BATTLEGROUNDS_PLAYER_BOARD';

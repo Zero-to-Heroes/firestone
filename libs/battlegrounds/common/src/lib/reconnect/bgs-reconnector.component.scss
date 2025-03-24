@@ -2,7 +2,12 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 5px;
+
+	&:hover {
+		.reconnect-options {
+			display: flex;
+		}
+	}
 }
 
 .reconnect-button {
@@ -14,6 +19,21 @@
 	&:hover {
 		opacity: 1;
 		color: var(--default-title-color);
+	}
+}
+
+.reconnect-options {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+	display: none;
+	background: var(--color-5);
+	color: var(--default-text-color);
+	padding: 10px;
+
+	::ng-deep checkbox label {
+		margin: 0;
 	}
 }
 

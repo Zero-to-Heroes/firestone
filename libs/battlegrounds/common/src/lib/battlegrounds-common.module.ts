@@ -6,6 +6,7 @@ import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-acc
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { MemoryModule } from '@firestone/memory';
+import { ProfileCommonModule } from '@firestone/profile/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
@@ -38,7 +39,7 @@ import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/b
 import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
 import { BattlegroundsCompositionsViewSelectDropdownComponent } from './compositions/bgs-comps-view-select-dropdown';
 import { BgsBoardHighlighterService } from './highlights/bgs-board-highlighter.service';
-import { BgsReconnectorComponent } from './overlay/reconnect/bgs-reconnector.component';
+import { BgsReconnectorComponent } from './reconnect/bgs-reconnector.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsInGameCompositionsService } from './services/bgs-in-game-compositions.service';
 import { BgsInGameHeroSelectionGuardianService } from './services/bgs-in-game-hero-selection-guardian.service';
@@ -106,6 +107,7 @@ const components = [
 		ConstructedCommonModule,
 		MemoryModule,
 		StatsCommonModule,
+		ProfileCommonModule,
 	],
 	providers: [
 		BgsCommonBootstrapService,
