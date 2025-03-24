@@ -95,6 +95,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	): Promise<readonly ArenaRewardInfo[] | null> {
 		const localRewards = await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).toArray();
 		if (!!localRewards?.length) {
+			console.log('[arena-rewards] returning rewards from indexedDb', localRewards.length);
 			return localRewards;
 		}
 
