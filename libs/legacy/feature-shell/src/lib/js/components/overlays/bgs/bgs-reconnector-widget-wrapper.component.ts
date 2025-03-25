@@ -40,6 +40,7 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionExtractor = async (prefs: Preferences) => prefs.bgsReconnectorWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected draggable = false;
+	protected debug = true;
 
 	showWidget$: Observable<boolean>;
 
@@ -57,7 +58,7 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.account, this.bgState);
+		await waitForReady(this.scene, this.account, this.prefs, this.bgState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -69,6 +70,15 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.bgState.gameState$$.pipe(this.mapData((state) => state?.inGame && !!state.currentGame)),
 		]).pipe(
 			this.mapData(([currentScene, region, displayFromPrefs, inGame]) => {
+				console.log(
+					'[bgs-reconnector] should show widget?',
+					ENABLE_RECONNECTOR,
+					region,
+					region === BnetRegion.REGION_CN,
+					inGame,
+					displayFromPrefs,
+					currentScene,
+				);
 				return (
 					ENABLE_RECONNECTOR &&
 					region === BnetRegion.REGION_CN &&

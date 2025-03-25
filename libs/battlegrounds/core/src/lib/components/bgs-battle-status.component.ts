@@ -340,7 +340,11 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 		this.isOngoing = this.battle?.battleInfoStatus === 'ongoing';
 		// this.isOngoing = true;
 		if (this.battle?.battleResult?.wonPercent != null && this.battle?.battleInfoStatus !== 'empty') {
-			console.log('[bgs-battle-status] received battle status', this.battle.battleResult);
+			console.log('[bgs-battle-status] received battle status', {
+				...(this.battle.battleResult ?? {}),
+				damageLosts: undefined,
+				damageWons: undefined,
+			});
 			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
 			this.battleSimulationResultLose = this.battle.battleResult.lostPercent.toFixed(1) + '%';
