@@ -55,6 +55,16 @@ export const getDynamicRelatedCardIds = (
 					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 					c?.cost === 10,
 			);
+		case CardIds.WhackAGnoll_MIS_700:
+			return filterCards(
+				allCards,
+				{ ...options, format: GameFormat.FT_WILD },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					c?.type?.toUpperCase() === CardType[CardType.WEAPON] &&
+					fromClass(c, CardClass.PALADIN),
+			);
 		case CardIds.EmergencyMeeting_GDB_119:
 			return [
 				...CREWMATES,
@@ -426,6 +436,10 @@ const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): bool
 		return true;
 	}
 	return card.classes.includes(currentClass.toUpperCase()) || card.classes.includes(CardClass[CardClass.NEUTRAL]);
+};
+
+const fromClass = (card: ReferenceCard, playerClass: CardClass): boolean => {
+	return card?.classes?.includes(CardClass[playerClass]) ?? false;
 };
 
 const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean => {
