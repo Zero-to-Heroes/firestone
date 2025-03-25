@@ -12,6 +12,7 @@ export interface PlayerGameState {
 	readonly Board: readonly EntityGameState[];
 	readonly Secrets: readonly EntityGameState[];
 	readonly Deck: readonly EntityGameState[];
+	readonly AllEntities: readonly EntityGameState[];
 	readonly LettuceAbilities: readonly EntityGameState[];
 }
 

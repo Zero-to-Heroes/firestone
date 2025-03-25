@@ -17,6 +17,7 @@ import { RazaTheResealed } from './raza-the-resealed';
 import { ReturnPolicy } from './return-policy';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TramHeist } from './tram-heist';
+import { Ursoc } from './ursoc';
 import { UrsolsAura } from './ursols-aura';
 import { VanessaVanCleef } from './vanessa-van-cleef';
 import { Zuljin } from './zul-jin';
@@ -25,6 +26,7 @@ const cards = [
 	JimRaynor,
 	Zuljin,
 	Merithra,
+	Ursoc,
 	SuccombToMadness,
 	RavenousFelhunter,
 	FerociousFelbat,
