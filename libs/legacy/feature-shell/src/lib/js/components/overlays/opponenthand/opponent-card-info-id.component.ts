@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, getPossibleForgedCards, GuessedInfo, Metadata } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckState,
+	getDynamicRelatedCardIds,
+	getPossibleForgedCards,
+	GuessedInfo,
+	hasOverride,
+	Metadata,
+} from '@firestone/game-state';
 import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
-import { getDynamicRelatedCardIds, hasOverride } from '../../../services/decktracker/card-highlight/dynamic-pools';
 import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 

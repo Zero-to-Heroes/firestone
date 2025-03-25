@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
-import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../localization-facade.service';
-import { getDynamicRelatedCardIds, hasOverride } from './card-highlight/dynamic-pools';
 
 @Injectable()
 export class DeckCardService {
@@ -33,62 +30,38 @@ export class DeckCardService {
 	}
 
 	private fillZone(zone: readonly DeckCard[], deckState: DeckState, metaData: Metadata): readonly DeckCard[] {
-		if (!zone) {
-			return zone;
-		}
+		return zone;
+		// if (!zone) {
+		// 	return zone;
+		// }
 
-		const newZone = zone.map((card) => (card.cardId ? this.doFillCard(card, deckState, metaData) : card));
-		if (deepEqual(newZone, zone)) {
-			return zone;
-		}
+		// const newZone = zone.map((card) => (card.cardId ? this.doFillCard(card, deckState, metaData) : card));
+		// if (deepEqual(newZone, zone)) {
+		// 	return zone;
+		// }
 
-		// console.debug('[deck-card] fillZone', zone, newZone);
-		return newZone;
+		// // console.debug('[deck-card] fillZone', zone, newZone);
+		// return newZone;
 	}
 
-	private doFillCard(card: DeckCard, deckState: DeckState, metaData: Metadata): DeckCard {
-		if (!!card.relatedCardIds?.length) {
-			return card;
-		}
+	// private doFillCard(card: DeckCard, deckState: DeckState, metaData: Metadata): DeckCard {
+	// 	// if (!!card.relatedCardIds?.length) {
+	// 	// 	return card;
+	// 	// }
 
-		const relatedCardIds = this.buildContextRelatedCardIds(card, deckState, metaData);
-		if (card.cardId === CardIds.BroodQueen_LarvaToken_SC_003t) {
-			console.debug('[deck-card] doFillCard', card.cardId, card.relatedCardIds, relatedCardIds);
-		}
-		if (arraysEqual(relatedCardIds, card.relatedCardIds)) {
-			return card;
-		}
+	// 	const relatedCardIds = this.buildContextRelatedCardIds(card.cardId, card.relatedCardIds, deckState, metaData);
+	// 	if (arraysEqual(relatedCardIds, card.relatedCardIds)) {
+	// 		return card;
+	// 	}
 
-		// console.debug('[deck-card] doFillCard before', card.cardId, card.relatedCardIds, card);
-		const result = card.update({
-			// cardName: card.cardName ?? this.i18n.getCardName(card.cardId) ?? this.i18n.getCardName(dbCard.id),
-			// manaCost: card.manaCost ?? dbCard.cost,
-			// rarity: card.rarity ?? dbCard.rarity ? (card.rarity ?? dbCard.rarity).toLowerCase() : undefined,
-			relatedCardIds: relatedCardIds,
-		} as DeckCard);
-		// console.debug('[deck-card] doFillCard after', card.cardId, card.relatedCardIds, card);
-		return result;
-	}
-
-	private buildContextRelatedCardIds(card: DeckCard, deckState: DeckState, metaData: Metadata): readonly string[] {
-		switch (card.cardId) {
-			case CardIds.ETCBandManager_ETC_080:
-			case CardIds.ZilliaxDeluxe3000_TOY_330:
-				return deckState.sideboards?.find((s) => s.keyCardId === card.cardId)?.cards ?? [];
-			case CardIds.StarlightWhelp:
-			case CardIds.HexLordMalacrass:
-				return deckState.cardsInStartingHand?.map((c) => c.cardId) ?? [];
-			default:
-				const dynamicCards = getDynamicRelatedCardIds(card.cardId, this.allCards.getService(), {
-					format: metaData.formatType,
-					gameType: metaData.gameType,
-					currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
-					deckState: deckState,
-				});
-				if (hasOverride(dynamicCards)) {
-					return (dynamicCards as { cards: readonly string[] }).cards;
-				}
-				return [...(dynamicCards ?? []), ...(card.relatedCardIds ?? [])];
-		}
-	}
+	// 	// console.debug('[deck-card] doFillCard before', card.cardId, card.relatedCardIds, card);
+	// 	const result = card.update({
+	// 		// cardName: card.cardName ?? this.i18n.getCardName(card.cardId) ?? this.i18n.getCardName(dbCard.id),
+	// 		// manaCost: card.manaCost ?? dbCard.cost,
+	// 		// rarity: card.rarity ?? dbCard.rarity ? (card.rarity ?? dbCard.rarity).toLowerCase() : undefined,
+	// 		relatedCardIds: relatedCardIds,
+	// 	} as DeckCard);
+	// 	// console.debug('[deck-card] doFillCard after', card.cardId, card.relatedCardIds, card);
+	// 	return result;
+	// }
 }

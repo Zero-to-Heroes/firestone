@@ -1,5 +1,5 @@
 import { GameTag, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { buildContextRelatedCardIds, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -111,6 +111,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		if (hasGetRelatedCards(cardImpl)) {
 			return cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
 		}
+
+		const deck = side === 'opponent' ? this.gameState.opponentDeck : this.gameState.playerDeck;
+		const metaData = this.gameState.metadata;
+		const card =
+			deck.getAllCardsInDeckWithoutOptions().find((c) => c.entityId === entityId) ??
+			deck.getAllCardsInDeckWithoutOptions().find((c) => c.cardId === cardId);
+		const relatedCardIds = buildContextRelatedCardIds(cardId, card?.relatedCardIds, deck, metaData, this.allCards);
+		return relatedCardIds?.length ? relatedCardIds : [];
 	}
 
 	getHighlightedCards(

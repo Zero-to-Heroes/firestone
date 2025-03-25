@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AllCardsService,
 	CardClass,
@@ -16,7 +18,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { DeckState } from '@firestone/game-state';
+import { DeckState } from '../models/deck-state';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -32,7 +34,7 @@ export const getDynamicRelatedCardIds = (
 	options: {
 		format: GameFormat;
 		gameType: GameType;
-		currentClass?: string;
+		currentClass: string;
 		deckState: DeckState;
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
@@ -62,7 +64,7 @@ export const getDynamicRelatedCardIds = (
 					cardId,
 					(c) =>
 						c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-						c?.cost <= 3 &&
+						(c?.cost ?? 0) <= 3 &&
 						hasCorrectTribe(c, Race.DEMON),
 				),
 			];
@@ -83,8 +85,8 @@ export const getDynamicRelatedCardIds = (
 					)
 					.sort(
 						(a, b) =>
-							a.cost - b.cost ||
-							a.classes?.[0]?.localeCompare(b.classes?.[0]) ||
+							(a.cost ?? 0) - (b.cost ?? 0) ||
+							a.classes?.[0]?.localeCompare(b.classes?.[0] ?? '') ||
 							a.name.localeCompare(b.name),
 					)
 					.map((c) => c.id)
@@ -108,10 +110,10 @@ const getDynamicFilters = (
 	options: {
 		format: GameFormat;
 		gameType: GameType;
-		currentClass?: string;
+		currentClass: string;
 		deckState: DeckState;
 	},
-): ((ref: ReferenceCard) => boolean) | ((ref: ReferenceCard) => boolean)[] => {
+): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
 		case CardIds.RiteOfAtrocity_EDR_811:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
@@ -134,6 +136,8 @@ const getDynamicFilters = (
 				c.classes?.includes(CardClass[CardClass.DRUID]) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.ForbiddenShrine_EDR_520:
+		case CardIds.WarpGate_SC_751:
+			console.debug('[debug] returning filter for', cardId, options.deckState.manaLeft);
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
 				c.cost === Math.min(10, options.deckState.manaLeft ?? 0) &&
@@ -152,7 +156,7 @@ const getDynamicFilters = (
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.DEMON) &&
-				c.cost >= 5 &&
+				(c.cost ?? 0) >= 5 &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Ysondre_EDR_465:
 			return (c) =>
@@ -216,7 +220,9 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DemonicDeal_WORK_014:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost >= 5 && hasCorrectTribe(c, Race.DEMON);
+				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				(c.cost ?? 0) >= 5 &&
+				hasCorrectTribe(c, Race.DEMON);
 		case CardIds.FirstContact_GDB_864:
 			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 1;
 		case CardIds.AssimilatingBlight_GDB_478:
@@ -252,7 +258,7 @@ const getDynamicFilters = (
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				hasCorrectTribe(c, Race.BEAST) &&
 				canBeDiscoveredByClass(c, options.currentClass) &&
-				c?.cost >= 5;
+				(c.cost ?? 0) >= 5;
 		case CardIds.DistressSignal_GDB_883:
 		case CardIds.DwarfPlanet_GDB_233:
 			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 2;
@@ -341,6 +347,8 @@ const getDynamicFilters = (
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				c?.mechanics?.includes(GameTag[GameTag.COMBO]) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		default:
+			return undefined;
 	}
 };
 
@@ -355,6 +363,8 @@ const BAN_LIST = [
 	CardIds.TheDarkness_LOOT_526,
 ];
 
+let baseCards: readonly ReferenceCard[] = [];
+
 const filterCards = (
 	allCards: AllCardsService,
 	options: {
@@ -362,16 +372,12 @@ const filterCards = (
 		gameType: GameType;
 	},
 	sourceCardId: string,
-	...filters: ((ref: ReferenceCard) => boolean)[]
+	...filters: ((ref: ReferenceCard) => boolean | undefined)[]
 ) => {
-	return (
-		allCards
+	if (baseCards.length === 0) {
+		baseCards = allCards
 			.getCards()
 			.filter((c) => c.collectible)
-			.filter((c) =>
-				!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false,
-			)
-			.filter((c) => filters.every((f) => f(c)))
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.TITAN]))
 			.filter((c) => !BAN_LIST.includes(c.id as CardIds))
@@ -384,13 +390,18 @@ const filterCards = (
 			)
 			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.COLOSSAL]))
 			.filter((c) => !hasThreeRunes(c))
-			.filter((c) => !sourceCardId || c.id !== sourceCardId)
 			.sort(
 				(a, b) =>
-					a.cost - b.cost || a.classes?.[0]?.localeCompare(b.classes?.[0]) || a.name.localeCompare(b.name),
-			)
-			.map((c) => c.id)
-	);
+					(a.cost ?? 0) - (b.cost ?? 0) ||
+					a.classes?.[0]?.localeCompare(b.classes?.[0] ?? '') ||
+					a.name.localeCompare(b.name),
+			);
+	}
+	return baseCards
+		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false))
+		.filter((c) => filters.every((f) => f(c)))
+		.filter((c) => !sourceCardId || c.id !== sourceCardId)
+		.map((c) => c.id);
 };
 
 // https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=10&WikiBanPool_form_only%5BgameMode%5D=1
@@ -401,7 +412,7 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 	return (
 		Object.keys(card.additionalCosts)
 			.filter((key) => key.includes('RUNE'))
-			.map((key) => card.additionalCosts[key])
+			.map((key) => card.additionalCosts![key])
 			.reduce((a, b) => a + b, 0) >= 3
 	);
 };
