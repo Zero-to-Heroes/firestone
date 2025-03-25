@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BnetRegion, SceneMode } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { ENABLE_RECONNECTOR, Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -52,13 +52,13 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly account: AccountService,
-		private readonly bgState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.account, this.prefs, this.bgState);
+		await waitForReady(this.scene, this.account, this.prefs, this.gameState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -67,7 +67,7 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 				this.mapData((info) => info),
 			),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsReconnectorEnabled)),
-			this.bgState.gameState$$.pipe(this.mapData((state) => state?.inGame && !!state.currentGame)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => !!state?.gameStarted && !state?.gameEnded)),
 		]).pipe(
 			this.mapData(([currentScene, region, displayFromPrefs, inGame]) => {
 				console.log(
