@@ -4,6 +4,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { distinctUntilChanged } from 'rxjs';
+import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 import { BgsReconnectorService } from './bgs-reconnector.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { BgsReconnectorService } from './bgs-reconnector.service';
 	template: ` <div class="reconnector battlegrounds-theme">
 		<div class="reconnect-button" (click)="reconnect()" *ngIf="!reconnecting">单击重新连接</div>
 		<div class="reconnect-button" *ngIf="reconnecting">重新连接</div>
-		<div class="reconnect-options">
+		<div class="reconnect-options" *ngIf="inBattlegrounds">
 			<checkbox
 				class="auto-reconnect"
 				[label]="'战斗开始时自动重连'"
@@ -36,12 +37,14 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 	autoReconnect: boolean;
 	waitAfterBoards: boolean;
 	reconnecting: boolean;
+	inBattlegrounds: boolean;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly reconnectService: BgsReconnectorService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly bgState: BgsStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -70,6 +73,14 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 				this.cdr.detectChanges();
 			}
 		});
+		this.bgState.gameState$$
+			.pipe(this.mapData((state) => !!state?.inGame && !!state.currentGame))
+			.subscribe((inBattlegrounds) => {
+				this.inBattlegrounds = inBattlegrounds;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
