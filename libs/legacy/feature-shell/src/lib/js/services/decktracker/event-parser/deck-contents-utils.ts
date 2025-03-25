@@ -54,6 +54,8 @@ export const modifyDecksForSpecialCards = (
 				return [handleHemet(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.LadyPrestor_SW_078:
 				return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.EnvoyOfTheGlade_EDR_873:
+				return [handleEnvoyOfTheGlade(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.ArchVillainRafaam_CORE_DAL_422:
 			case CardIds.ArchVillainRafaam_DAL_422:
 			case CardIds.UnearthedRaptor_GoldenMonkeyToken:
@@ -420,6 +422,27 @@ const handleLadyPrestor = (
 							: other.cost === card.getEffectiveManaCost();
 					return result;
 				},
+			} as DeckCard),
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleEnvoyOfTheGlade = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => refCard?.classes?.[0] === CardClass[CardClass.NEUTRAL],
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: i18n.getUnknownRaceName(i18n.translateString('global.class.druid')),
+				creatorCardId: CardIds.EnvoyOfTheGlade_EDR_873,
+				rarity: 'unknown',
+				relatedCardIds: undefined,
 			} as DeckCard),
 		deckState,
 		allCards,
