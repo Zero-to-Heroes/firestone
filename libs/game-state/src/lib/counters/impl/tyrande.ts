@@ -14,13 +14,11 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'playerTyrandeCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState): number | null => {
-			console.debug('[debug] will compute value 2');
 			const value =
 				state.playerDeck.enchantments
 					.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
 					.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
 					.reduce((a, b) => a + b, 0) || null;
-			console.debug('[debug] value 2', value, state.playerDeck.enchantments);
 			return value;
 		},
 		setting: {
