@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { CardClass, CardIds, GameType } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckState } from '../models/deck-state';
 import { Metadata } from '../models/metadata';
@@ -22,7 +22,7 @@ export const buildContextRelatedCardIds = (
 		default:
 			const dynamicCards = getDynamicRelatedCardIds(cardId, allCards.getService(), {
 				format: metaData.formatType,
-				gameType: GameType.GT_ARENA, // metaData.gameType,
+				gameType: metaData.gameType,
 				currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 				deckState: deckState,
 			});
