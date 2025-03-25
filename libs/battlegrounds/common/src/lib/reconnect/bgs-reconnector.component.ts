@@ -50,7 +50,7 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.gameState, this.bgState);
 
 		this.prefs.preferences$$
 			.pipe(
