@@ -32,7 +32,7 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 				.reduce((a, b) => a + b, 0);
 			const showInfo =
 				nextReductionCost > 0 || gameReductionCost > 0 || state.playerDeck.hasRelevantCard(reductionCards);
-			return showInfo ? `${gameReductionCost}/${nextReductionCost}` : null;
+			return showInfo ? `${gameReductionCost} | ${nextReductionCost}` : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -49,10 +49,10 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
-		const [game, next] = this[side]?.value(gameState)?.split('/') ?? [];
+		const [game, next] = this[side]?.value(gameState)?.split('|') ?? [];
 		return this.i18n.translateString(`counters.protoss-minion-reduction.${side}`, {
-			game: game,
-			next: next,
+			game: game.trim(),
+			next: next.trim(),
 		});
 	}
 }
