@@ -1,4 +1,4 @@
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ConstructedDeckVersions, PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { RestoreDeckSummaryEvent } from '../../events/decktracker/restore-deck-summary-event';
@@ -17,8 +17,16 @@ export class RestoreDeckSummaryProcessor implements Processor {
 			event.deckstring,
 			currentPrefs.desktopDeckHiddenDeckCodes,
 		);
+		const versionLinks: readonly ConstructedDeckVersions[] = currentPrefs.constructedDeckVersions;
+		const linkedDecks = versionLinks.filter((link) =>
+			link.versions.map((v) => v.deckstring).includes(event.deckstring),
+		);
+		const allDecksToRestore = [
+			...(linkedDecks?.flatMap((link) => link.versions.map((v) => v.deckstring)) ?? []),
+			event.deckstring,
+		];
 		const newHiddenDecks = (currentPrefs.desktopDeckHiddenDeckCodes ?? []).filter(
-			(deckCode) => deckCode !== event.deckstring,
+			(deckCode) => !allDecksToRestore?.includes(deckCode),
 		);
 		console.log('[restore-deck-summary-processor] new hidden decks', newHiddenDecks);
 		await this.prefs.setDesktopDeckHiddenDeckCodes(newHiddenDecks);
