@@ -67,7 +67,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.memoryUpdates.memoryUpdates$$
 			.pipe(
 				filter((changes) => !!changes.ArenaRewards?.length),
-				withLatestFrom(this.arenaInfoService.getArenaInfo()),
+				withLatestFrom(this.arenaInfoService.forceRetrieveArenaInfo()),
 				tap(([changes, arenaInfo]) =>
 					console.log('[arena-rewards] received memory update', changes, arenaInfo),
 				),

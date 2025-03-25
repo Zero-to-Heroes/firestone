@@ -20,9 +20,11 @@ export class ArenaInfoService {
 			.subscribe(() => this.triggerArenaInfoRetrieve(false));
 	}
 
-	public async getArenaInfo() {
-		const arenaInfo = await this.memory.getArenaInfo();
-		return arenaInfo;
+	public async forceRetrieveArenaInfo(): Promise<ArenaInfo | null> {
+		if (this.arenaInfo$$.value) {
+			return this.arenaInfo$$.value;
+		}
+		return await this.memory.getArenaInfo();
 	}
 
 	public async triggerArenaInfoRetrieve(spectating: boolean) {
@@ -32,7 +34,7 @@ export class ArenaInfoService {
 		await runLoop(async () => {
 			const arenaInfo = await this.memory.getArenaInfo();
 			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
-				console.debug('[arena-info] retrieved arena info', arenaInfo);
+				console.log('[arena-info] retrieved arena info', arenaInfo);
 				this.arenaInfo$$.next(arenaInfo);
 				return true;
 			}
