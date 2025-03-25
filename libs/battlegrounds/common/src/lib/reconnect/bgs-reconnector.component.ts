@@ -11,7 +11,7 @@ import { BgsReconnectorService } from './bgs-reconnector.service';
 	styleUrls: ['./bgs-reconnector.component.scss'],
 	template: ` <div class="reconnector battlegrounds-theme">
 		<div class="reconnect-button" (click)="reconnect()" *ngIf="!reconnecting">单击重新连接</div>
-		<div class="reconnect-button" *ngIf="reconnecting">Reconnecting</div>
+		<div class="reconnect-button" *ngIf="reconnecting">重新连接</div>
 		<div class="reconnect-options">
 			<checkbox
 				class="auto-reconnect"

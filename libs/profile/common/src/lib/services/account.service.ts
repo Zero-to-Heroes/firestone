@@ -41,7 +41,7 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 				region = await this.memory.getRegion();
 			}
 			console.log('[account-service] region', region);
-			this.region$$.next(region);
+			this.region$$.next(+region);
 		});
 		this.gameStatus.inGame$$.pipe(filter((inGame) => !inGame)).subscribe(() => {
 			this.region$$.next(null);
