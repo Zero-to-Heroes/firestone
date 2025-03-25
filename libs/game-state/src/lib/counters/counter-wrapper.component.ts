@@ -31,6 +31,7 @@ import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 			[attr.data-id]="counter.id + '-' + side"
 			[side]="side"
 			[counter]="counter"
+			[ngClass]="{ hidden: hidden }"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
@@ -47,6 +48,7 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 
 	@Input() side: 'player' | 'opponent';
 	@Input() counter: CounterInstance<any>;
+	@Input() hidden = true;
 
 	protected deckStateExtractor: (
 		deckState: GameState,

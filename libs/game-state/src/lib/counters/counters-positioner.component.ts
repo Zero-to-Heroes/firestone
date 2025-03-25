@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { BehaviorSubject, debounceTime, takeUntil } from 'rxjs';
+import { BehaviorSubject, takeUntil } from 'rxjs';
 import { CounterWrapperComponent } from './counter-wrapper.component';
 
 @Component({
@@ -43,12 +43,13 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 	}
 
 	ngAfterContentInit(): void {
-		this.refreshPositions$$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((event) => {
+		this.refreshPositions$$.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
 			this.updateChildrenPositions();
 		});
 	}
 
 	public registerChild(child: CounterWrapperComponent) {
+		child.hidden = true;
 		this.children.push(child);
 		this.refreshPositions$$.next(true);
 	}
@@ -74,6 +75,7 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 				this.renderer.setStyle(child.el.nativeElement, 'top', savedPosition.top + 'px');
 				console.debug('[debug] moving widget', i, savedPosition, child);
 			}
+			child.hidden = false;
 		}
 
 		if (this.children.length > 0) {
