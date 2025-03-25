@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -95,7 +102,10 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DecktrackerDeckDetailsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	replays$: Observable<readonly GameStat[]>;
 	deck$: Observable<DeckSummary>;
 	selectedVersion$: Observable<string>;
@@ -144,6 +154,11 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreCo
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	ngOnDestroy(): void {
+		// So that the version is not persisted between different decks
+		this.store.send(new ConstructedToggleDeckVersionStatsEvent(null));
 	}
 
 	ejectVersion(version: DeckSummary, deck: DeckSummary) {
