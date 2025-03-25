@@ -294,7 +294,7 @@ export class ArenaDraftManagerService
 					}) => {
 						const isDeckFullyDrafted = currentDeck.DeckList.length === TOTAL_CARDS_IN_AN_ARENA_DECK;
 						console.debug(
-							'[debug] [arena-draft-manager] [stat] computing stats for deck',
+							'[arena-draft-manager] [stat] computing stats for deck',
 							isDeckFullyDrafted,
 							currentDeck.DeckList.length,
 							currentDeck,

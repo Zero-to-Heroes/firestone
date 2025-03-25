@@ -95,7 +95,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe((runs) => {
-					console.debug('[debug] [arena-runs] allRuns', runs);
+					console.debug('[arena-runs] allRuns', runs);
 					this.allRuns$$.next(runs);
 				});
 
@@ -186,7 +186,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			(a, b) => b.creationTimestamp - a.creationTimestamp,
 		);
 		console.debug(
-			'[debug] [arena-runs] result',
+			'[arena-runs] result',
 			result,
 			result.sort((a, b) => b.creationTimestamp - a.creationTimestamp),
 		);

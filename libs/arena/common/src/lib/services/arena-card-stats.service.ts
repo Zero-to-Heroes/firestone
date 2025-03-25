@@ -83,12 +83,10 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			this.cachedStats = cardStats;
 		}
 		const cardStat = cardStats?.stats?.find((s) => s.cardId === cardId) ?? null;
-		console.debug('[debug] cardStat', playerClass, cardStat);
 		if (
 			playerClass !== 'global' &&
 			(!cardStat?.matchStats?.stats?.drawn || cardStat.matchStats.stats.drawn < 200)
 		) {
-			console.debug('[debug] fetching again with global context', cardStat);
 			return this.getStatsFor(cardId, 'global');
 		}
 		return cardStat;

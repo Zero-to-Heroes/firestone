@@ -145,7 +145,7 @@ export class ArenaRunComponent {
 			this.wins ?? 0
 		}wins.png`;
 		this.rewards = this._run.rewards;
-		console.debug('[debug] rewards', this.rewards, this._run);
+		console.debug('rewards', this.rewards, this._run);
 
 		this.playerClassImage = this._run.heroCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroCardId}.jpg`

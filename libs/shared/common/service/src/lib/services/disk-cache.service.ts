@@ -39,7 +39,6 @@ export class DiskCacheService {
 	}
 
 	private async init() {
-		console.debug('[debug] init disk cache service');
 		await waitForReady(this.prefs);
 
 		this.prefs.preferences$$
@@ -50,7 +49,6 @@ export class DiskCacheService {
 			.subscribe((disableLocalCache) => {
 				this.cacheDisabled = disableLocalCache;
 			});
-		console.debug('[debug] init complete');
 	}
 
 	public async clearCache() {

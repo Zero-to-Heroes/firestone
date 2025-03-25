@@ -68,7 +68,6 @@ export class ChoosingCardOptionConstructedComponent
 	cardStat$: Observable<ConstructedCardStat | null>;
 
 	@Input() set option(value: CardChoiceOption) {
-		console.debug('[debug] [constructed-card-option] setting option', value);
 		this._option = value;
 		this._referenceCard = this.allCards.getCard(value?.cardId);
 		this.shouldHighlight = !NO_HIGHLIGHT_CARD_IDS.includes(value?.cardId as CardIds);

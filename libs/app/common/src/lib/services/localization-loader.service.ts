@@ -11,7 +11,7 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 
 	public getTranslation(lang: string): Observable<any> {
 		const url = `https://static.firestoneapp.com/data/i18n/${lang}.json?v=${translationFileVersion}`;
-		console.debug('[bootstrap] [localization-loader] [debug] fetching translation', lang, url);
+		console.debug('[bootstrap] [localization-loader] fetching translation', lang, url);
 
 		// This won't update the translations with the latest value right away, meaning we'll always
 		// use the cached value, then update the cache, and get that cached value on next startup

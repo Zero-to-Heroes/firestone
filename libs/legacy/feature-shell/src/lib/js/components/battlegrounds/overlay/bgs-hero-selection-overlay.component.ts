@@ -23,7 +23,6 @@ import {
 	shareReplay,
 	switchMap,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
@@ -131,7 +130,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
-			tap((tiers) => console.debug('[debug] tiers', tiers)),
 		);
 
 		const panel$ = this.bgsState.gameState$$.pipe(
@@ -202,7 +200,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					return heroOverviews;
 				}
 			}),
-			tap((heroes) => console.debug('[debug] heroes', heroes)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
