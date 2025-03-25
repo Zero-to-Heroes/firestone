@@ -19,7 +19,7 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 	private gameStatus: GameStatusService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'patchesConfig', () => !!this.region$$);
+		super(windowManager, 'AccountService', () => !!this.region$$);
 	}
 
 	protected override assignSubjects() {

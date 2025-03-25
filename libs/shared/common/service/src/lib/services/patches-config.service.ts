@@ -25,7 +25,7 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 	private internalSubject$$ = new SubscriberAwareBehaviorSubject<void>(null);
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'patchesConfig', () => !!this.config$$);
+		super(windowManager, 'PatchesConfigService', () => !!this.config$$);
 	}
 
 	protected override assignSubjects() {
