@@ -280,4 +280,5 @@ export const tutors = [
 	CardIds.Tuskpiercer_CORE_BAR_330,
 	CardIds.RedscaleDragontamer,
 	CardIds.RedscaleDragontamer_CORE_DMF_194,
+	CardIds.Mimicry_EDR_522,
 ];

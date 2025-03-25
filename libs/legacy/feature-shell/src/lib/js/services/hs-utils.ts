@@ -398,6 +398,7 @@ export const publicTutors = [
 	CardIds.RavenFamiliar_LOOT_170,
 	CardIds.SouthseaScoundrel_BAR_081, // the copy for the opponent is the original card, the copy for the player is created
 	CardIds.SouthseaScoundrel_Story_11_SouthseaPuzzle, // the copy for the opponent is the original card, the copy for the player is created
+	CardIds.Mimicry_EDR_522,
 ];
 
 export const publicCardInfos = [...cardsConsideredPublic, ...publicCardGiftCreators, ...publicTutors];
