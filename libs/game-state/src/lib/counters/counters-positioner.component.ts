@@ -7,6 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -17,7 +18,7 @@ import { CounterWrapperComponent } from './counter-wrapper.component';
 	selector: 'counters-positioner',
 	styleUrls: [`./counters-positioner.component.scss`],
 	template: `
-		<div class="positioner">
+		<div class="positioner" [ngClass]="{ ready: ready }">
 			<ng-content></ng-content>
 		</div>
 	`,
@@ -25,6 +26,8 @@ import { CounterWrapperComponent } from './counter-wrapper.component';
 })
 export class CountersPositionerComponent extends AbstractSubscriptionComponent implements OnDestroy, AfterContentInit {
 	@Input() positionerId: string;
+
+	ready: boolean;
 
 	private children: CounterWrapperComponent[] = [];
 
@@ -59,17 +62,24 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 	}
 
 	private async updateChildrenPositions() {
-		console.debug('updating children', this.children);
+		console.debug('[debug] updating children', this.children);
 
 		// Update positions and subscribe to new children
 		for (let i = 0; i < this.children.length; i++) {
 			const child = this.children[i];
 			const savedPosition = await this.retrieveWidgetPosition(child);
-			console.debug('savedPosition', i, savedPosition, child);
 			if (savedPosition) {
 				// Modify the style of the child element
 				this.renderer.setStyle(child.el.nativeElement, 'left', savedPosition.left + 'px');
 				this.renderer.setStyle(child.el.nativeElement, 'top', savedPosition.top + 'px');
+				console.debug('[debug] moving widget', i, savedPosition, child);
+			}
+		}
+
+		if (this.children.length > 0) {
+			this.ready = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
 			}
 		}
 	}
