@@ -668,7 +668,7 @@ export const cardIdSelector = (
 							entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId }),
 						),
 					),
-					and(side(inputSide), or(inDeck, inHand), not(currentClass), not(neutral)),
+					and(side(inputSide), or(inDeck, inHand), fromAnotherClass),
 				)(input);
 			};
 		case CardIds.ConservatorNymph:
@@ -680,7 +680,7 @@ export const cardIdSelector = (
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ContrabandStash:
-			return tooltip(and(side(inputSide), cardsPlayedThisMatch, not(currentClass), not(neutral)));
+			return tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClass));
 		case CardIds.CookiesLadleTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.Commencement:
@@ -2238,7 +2238,7 @@ export const cardIdSelector = (
 		case CardIds.Scv_SC_401:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.SeaShill_VAC_332:
-			return and(side(inputSide), or(inHand, inDeck), not(currentClass), not(neutral));
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.SigilOfReckoning:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.SirFinleyMrrgglton_ScalesOfJustice_THD_044p:
@@ -2627,7 +2627,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.TessGreymane_GIL_598:
 		case CardIds.TessGreymaneCore:
-			return tooltip(and(side(inputSide), cardsPlayedThisMatch, and(not(currentClass), not(neutral))));
+			return tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClass));
 		case CardIds.The8HandsFromBeyond_GDB_477:
 			return (input: SelectorInput): SelectorOutput => {
 				const orderedByCost = [...input.deckState.deck].sort(
