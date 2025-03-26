@@ -20,7 +20,7 @@ import { CardsFacadeService, ILocalizationService, waitForReady } from '@firesto
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-const SPECIAL_STATUS_TOKENS = [CardIds.AvatarOfNzoth_FishOfNzothToken];
+const SPECIAL_STATUS_TOKENS = [CardIds.AvatarOfNzoth_FishOfNzothToken, CardIds.Menagerist_AmalgamToken];
 @Component({
 	selector: 'bgs-simulator-minion-selection',
 	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-minion-selection.component.scss`],
