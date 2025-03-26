@@ -59,9 +59,17 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 			distinctUntilChanged(),
 			takeUntil(this.destroyed$),
 		);
-		this.showWidget$ = combineLatest([this.scene.currentScene$$, this.prefs.preferences$$, gameMode$]).pipe(
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.gameState.gameState$$.pipe(
+				this.mapData((gameState) => !!gameState?.gameStarted && !gameState?.gameEnded),
+			),
+			this.prefs.preferences$$,
+			gameMode$,
+		]).pipe(
 			this.mapData(
-				([currentScene, prefs, gameMode]) =>
+				([currentScene, inGame, prefs, gameMode]) =>
+					inGame &&
 					prefs[this.prefName] &&
 					currentScene === SceneMode.GAMEPLAY &&
 					!isBattlegrounds(gameMode) &&
