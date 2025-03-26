@@ -18,6 +18,9 @@ const CARD_SENDING_TO_TOP = [
 	CardIds.EnvoyOfProsperity_WORK_031,
 	CardIds.Doommaiden_DoomInterrogationEnchantment_GDB_129e,
 	CardIds.Qonzu_EDR_517,
+	// Technically it's an effect that causes the card to go to the top, but since there's only one of them we can
+	// take the lazy approach and use the base card
+	CardIds.DarkGiftToken_EDR_102t,
 ];
 
 export class CardBackToDeckParser implements EventParser {
