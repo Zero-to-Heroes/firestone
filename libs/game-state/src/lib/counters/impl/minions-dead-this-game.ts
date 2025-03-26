@@ -9,7 +9,11 @@ import { CounterType } from '../_exports';
 export class MinionsDeadThisGameCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'deadMinionsThisGame';
 	public override image = CardIds.ReskaThePitBoss_WW_373;
-	public override cards: readonly CardIds[] = [CardIds.ReskaThePitBoss_WW_373];
+	public override cards: readonly CardIds[] = [
+		CardIds.ReskaThePitBoss_WW_373,
+		CardIds.BookOfTheDead_ULDA_006,
+		CardIds.BookOfTheDead_ONY_005tc2,
+	];
 
 	readonly player = {
 		pref: 'playerDeadMinionsThisGameCounter' as const,
