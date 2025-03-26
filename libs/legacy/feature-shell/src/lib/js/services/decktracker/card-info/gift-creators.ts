@@ -1002,4 +1002,5 @@ export const giftCreators = [
 	CardIds.UnderlightAnglingRod_CORE_BT_018,
 	CardIds.KragwaTheFrog_TRL_345,
 	CardIds.KragwaTheFrog_CORE_TRL_345,
+	CardIds.DarkGiftToken_EDR_102t,
 ];
