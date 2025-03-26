@@ -7,6 +7,8 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const CREATE_ON_TOP = [CardIds.MerchSeller, CardIds.DemonicDeal_WORK_014];
+
 export class CreateCardInDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -232,9 +234,8 @@ export const buildPositionFromTop = (
 	creatorCardId: string,
 	lastInfluencedByCardId: string,
 ): number => {
-	switch (creatorCardId) {
-		case CardIds.MerchSeller:
-			return 0;
+	if (CREATE_ON_TOP.includes(creatorCardId as CardIds)) {
+		return 0;
 	}
 	switch (lastInfluencedByCardId) {
 		case CardIds.Overplanner_VAC_444:
