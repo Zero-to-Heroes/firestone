@@ -2391,7 +2391,6 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), spell, fire),
 				and(side(inputSide), or(inDeck, inHand), spell, frost),
 				and(side(inputSide), or(inDeck, inHand), spell, arcane),
-				and(side(inputSide), or(inDeck, inHand), spell),
 			);
 		case CardIds.SoulburnerVaria_YOG_520:
 			return and(side(inputSide), or(inDeck, inHand), undead);
