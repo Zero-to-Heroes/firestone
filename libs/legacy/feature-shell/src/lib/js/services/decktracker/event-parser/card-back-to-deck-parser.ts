@@ -17,6 +17,7 @@ const CARD_SENDING_TO_BOTTOM = [
 const CARD_SENDING_TO_TOP = [
 	CardIds.EnvoyOfProsperity_WORK_031,
 	CardIds.Doommaiden_DoomInterrogationEnchantment_GDB_129e,
+	CardIds.Qonzu_EDR_517,
 ];
 
 export class CardBackToDeckParser implements EventParser {
