@@ -3,6 +3,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { BrilliantMacaw } from './brilliant-macaw';
+import { CarryOnSuitcase } from './carry-on-suitcase';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
 import { HungeringAncient } from './hungering-ancient';
@@ -26,6 +27,7 @@ import { Zuljin } from './zul-jin';
 
 const cards = [
 	JimRaynor,
+	CarryOnSuitcase,
 	WallowTheWretched,
 	HungeringAncient,
 	Zuljin,
