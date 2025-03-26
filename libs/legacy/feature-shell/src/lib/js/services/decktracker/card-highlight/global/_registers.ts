@@ -5,6 +5,7 @@ import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
+import { HungeringAncient } from './hungering-ancient';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
@@ -20,10 +21,13 @@ import { TramHeist } from './tram-heist';
 import { Ursoc } from './ursoc';
 import { UrsolsAura } from './ursols-aura';
 import { VanessaVanCleef } from './vanessa-van-cleef';
+import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
 
 const cards = [
 	JimRaynor,
+	WallowTheWretched,
+	HungeringAncient,
 	Zuljin,
 	Merithra,
 	Ursoc,
