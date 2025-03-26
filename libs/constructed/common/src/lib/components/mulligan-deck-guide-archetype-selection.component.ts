@@ -6,7 +6,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, from, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, from, switchMap, tap } from 'rxjs';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { ConstructedNavigationService } from '../services/constructed-navigation.service';
@@ -67,6 +67,9 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 		);
 
 		this.options$ = combineLatest([this.deckstring$$, effectiveFormat$, effectiveRank$]).pipe(
+			tap(([deckstring, effectiveFormat, effectiveRank]) =>
+				console.log('building archetype options', deckstring, effectiveFormat, effectiveRank),
+			),
 			filter(
 				([deckstring, effectiveFormat, effectiveRank]) =>
 					!!deckstring?.length && !!effectiveFormat?.length && !!effectiveRank?.length,
