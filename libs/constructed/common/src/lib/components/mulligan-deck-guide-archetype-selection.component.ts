@@ -2,13 +2,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
+import { GameFormatString } from '@firestone-hs/reference-data';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, from, switchMap, tap } from 'rxjs';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
-import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { ConstructedNavigationService } from '../services/constructed-navigation.service';
 
 @Component({
@@ -42,9 +42,13 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 	@Input() set archetypeId(value: number | null) {
 		this.archetypeId$$.next(value);
 	}
+	@Input() set format(value: GameFormatString | null) {
+		this.format$$.next(value);
+	}
 
 	private deckstring$$ = new BehaviorSubject<string | null>(null);
 	private archetypeId$$ = new BehaviorSubject<number | null>(null);
+	private format$$ = new BehaviorSubject<GameFormatString | null>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -53,20 +57,19 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly nav: ConstructedNavigationService,
 		private readonly allCards: CardsFacadeService,
-		private readonly mulligan: ConstructedMulliganGuideService,
-	) {
+	) // private readonly mulligan: ConstructedMulliganGuideService,
+	{
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.constructedMetaStats, this.prefs, this.nav, this.mulligan);
+		await waitForReady(this.constructedMetaStats, this.prefs, this.nav);
 
-		const effectiveFormat$ = this.mulligan.mulliganAdvice$$.pipe(this.mapData((info) => info?.format));
 		const effectiveRank$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.decktrackerMulliganRankBracket),
 		);
 
-		this.options$ = combineLatest([this.deckstring$$, effectiveFormat$, effectiveRank$]).pipe(
+		this.options$ = combineLatest([this.deckstring$$, this.format$$, effectiveRank$]).pipe(
 			tap(([deckstring, effectiveFormat, effectiveRank]) =>
 				console.log('building archetype options', deckstring, effectiveFormat, effectiveRank),
 			),

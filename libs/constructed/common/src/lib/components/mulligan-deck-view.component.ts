@@ -13,6 +13,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { GameFormatString } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
@@ -41,6 +42,7 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 					class="archetype-info"
 					[archetypeId]="archetypeId$ | async"
 					[deckstring]="deckstring$ | async"
+					[format]="format$ | async"
 				>
 				</mulligan-deck-view-archetype>
 				<div class="filters">
@@ -130,6 +132,7 @@ export class MulliganDeckViewComponent
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	deckstring$: Observable<string | null>;
 	archetypeId$: Observable<number | null>;
+	format$: Observable<GameFormatString | null>;
 
 	@Input() showMulliganOverview: boolean | null;
 	@Input() showArchetypeSelection: boolean | null;
@@ -153,6 +156,7 @@ export class MulliganDeckViewComponent
 		this.deckMulliganInfo$$.next(value);
 		this.deckstring$$.next(value?.deckstring ?? null);
 		this.archetypeId$$.next(value?.archetypeId ?? null);
+		this.fomat$$.next(value?.format ?? null);
 	}
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
@@ -162,6 +166,7 @@ export class MulliganDeckViewComponent
 	private deckMulliganInfo$$ = new BehaviorSubject<MulliganDeckData | null>(null);
 	private deckstring$$ = new BehaviorSubject<string | null>(null);
 	private archetypeId$$ = new BehaviorSubject<number | null>(null);
+	private fomat$$ = new BehaviorSubject<GameFormatString | null>(null);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -184,6 +189,7 @@ export class MulliganDeckViewComponent
 		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((info) => info));
 		this.deckstring$ = this.deckstring$$.pipe(this.mapData((info) => info));
 		this.archetypeId$ = this.archetypeId$$.pipe(this.mapData((info) => info));
+		this.format$ = this.fomat$$.pipe(this.mapData((info) => info));
 		this.sortedDeckMulliganInfo$ = combineLatest([this.deckMulliganInfo$$, this.sortCriteria$$]).pipe(
 			this.mapData(([mulliganInfo, sortCriteria]) =>
 				[...(mulliganInfo?.mulliganData ?? [])].sort((a, b) => this.sortCards(a, b, sortCriteria)),

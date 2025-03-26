@@ -2,6 +2,7 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { GameFormatString } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
@@ -20,6 +21,7 @@ import { ConstructedMetaDecksStateService } from '../services/constructed-meta-d
 					<mulligan-deck-guide-archetype-selection
 						[deckstring]="deckstring$ | async"
 						[archetypeId]="value.archetypeId"
+						[format]="format"
 					></mulligan-deck-guide-archetype-selection>
 				</ng-container>
 				<ng-container *ngIf="value.archetypeId && !value.archetypeOverride">
@@ -42,6 +44,7 @@ export class MulliganDeckViewArchetypeComponent extends AbstractSubscriptionComp
 	@Input() set deckstring(value: string | null) {
 		this.deckstring$$.next(value);
 	}
+	@Input() format: GameFormatString | null;
 
 	private deckstring$$ = new BehaviorSubject<string | null>(null);
 	private archetypeId$$ = new BehaviorSubject<number | null>(null);

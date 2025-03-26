@@ -45,7 +45,7 @@ export interface MulliganDeckData {
 	deckstring: string | null;
 	archetypeId: number | null;
 	mulliganData: readonly MulliganChartDataCard[];
-	format: string;
+	format: GameFormatString;
 	sampleSize: number;
 	rankBracket: string;
 	opponentClass: string;
