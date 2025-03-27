@@ -21,13 +21,40 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		return state && gameEvent.type === GameEvent.NUM_CARDS_PLAYED_THIS_TURN;
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [, cardPlayedControllerId, localPlayer] = gameEvent.parse();
+	async parse(
+		currentState: GameState,
+		gameEvent: GameEvent,
+		additionalInfo: {
+			secretWillTrigger: {
+				cardId: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
+			};
+			minionsWillDie: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
+		},
+	): Promise<GameState> {
+		const [, cardPlayedControllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayerWhoPlayedCard = cardPlayedControllerId === localPlayer.PlayerId;
+		const deckFromPlayedCard = isPlayerWhoPlayedCard ? currentState.playerDeck : currentState.opponentDeck;
 		const deckWithSecretToCheck = isPlayerWhoPlayedCard ? currentState.opponentDeck : currentState.playerDeck;
 
 		const toExclude = [];
-		if (gameEvent.additionalData.cardsPlayed < 3) {
+		const cardsCounteredThisTurn = deckFromPlayedCard.cardsCounteredThisTurn ?? 0;
+		const isCurrentCardCountered = additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId ? 1 : 0;
+		const actualCardsPlayedThisTurn =
+			gameEvent.additionalData.cardsPlayed - cardsCounteredThisTurn - isCurrentCardCountered;
+		console.debug(
+			'[debug] card played this turn',
+			actualCardsPlayedThisTurn,
+			gameEvent.additionalData.cardsPlayed,
+			cardsCounteredThisTurn,
+			isCurrentCardCountered,
+			currentState.playerDeck.cardsPlayedThisTurn,
+		);
+		if (actualCardsPlayedThisTurn < 3) {
 			toExclude.push(CardIds.RatTrap);
 			toExclude.push(CardIds.RatTrap_CORE_GIL_577);
 			toExclude.push(CardIds.HiddenWisdom);

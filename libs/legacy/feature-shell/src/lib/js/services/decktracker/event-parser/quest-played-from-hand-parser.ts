@@ -74,6 +74,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 				cardsPlayedThisTurn: isCardCountered
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
+				cardsCounteredThisTurn: isCardCountered ? deck.cardsCounteredThisTurn + 1 : deck.cardsCounteredThisTurn,
 			})
 			.updateSpellsPlayedThisMatch(
 				isCardCountered ? null : cardWithZone,

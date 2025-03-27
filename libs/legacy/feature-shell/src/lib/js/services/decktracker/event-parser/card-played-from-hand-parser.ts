@@ -219,6 +219,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				cardsPlayedThisTurn: isCardCountered
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardToAdd] as readonly DeckCard[]),
+				cardsCounteredThisTurn: isCardCountered ? deck.cardsCounteredThisTurn + 1 : deck.cardsCounteredThisTurn,
 				globalEffects: newGlobalEffects,
 				watchpostsPlayedThisMatch:
 					deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
