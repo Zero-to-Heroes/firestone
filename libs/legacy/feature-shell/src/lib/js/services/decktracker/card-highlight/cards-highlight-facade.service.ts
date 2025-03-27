@@ -24,6 +24,9 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 			uniqueZone: true,
 		});
 	}
+	public forceHeroCardId(cardId: string) {
+		this.service.forceHeroCardId(cardId);
+	}
 
 	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'single') {
 		this.service.register(_uniqueId, handler, side);

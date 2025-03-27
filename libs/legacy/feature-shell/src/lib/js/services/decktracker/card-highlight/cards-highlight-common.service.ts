@@ -1,5 +1,5 @@
-import { GameTag, ReferenceCard } from '@firestone-hs/reference-data';
-import { buildContextRelatedCardIds, DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardClass, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
+import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -45,6 +45,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	public async init(options?: SelectorOptions) {
 		this.options = options;
 	}
+	public forceHeroCardId(cardId: string) {
+		this.options = { ...this.options, heroCardId: cardId };
+	}
 
 	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'single') {
 		this.handlers[_uniqueId] = handler;
@@ -70,7 +73,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 
 		const playerDeckProvider = () =>
-			this.options?.skipGameState ? this.buildFakeDeckStateFromRegisteredHandlers() : this.gameState.playerDeck;
+			this.options?.skipGameState
+				? this.buildFakeDeckStateFromRegisteredHandlers(this.options.heroCardId)
+				: this.gameState.playerDeck;
 		const opponentDeckProvider = () => (this.options?.skipGameState ? null : this.gameState.opponentDeck);
 
 		const cardsToHighlight = this.buildCardsToHighlight(
@@ -150,7 +155,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}));
 	}
 
-	private buildFakeDeckStateFromRegisteredHandlers(): DeckState {
+	private buildFakeDeckStateFromRegisteredHandlers(heroCardId?: string): DeckState {
 		const result = DeckState.create({
 			deck: Object.values(this.handlers).map((h) => {
 				return !!h.deckCardProvider()
@@ -159,8 +164,13 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 							cardId: h.referenceCardProvider()?.id,
 					  });
 			}),
+			hero: {
+				cardId: heroCardId,
+				classes: this.allCards.getCard(heroCardId)?.classes?.map((c) => CardClass[c]) as readonly CardClass[],
+			} as HeroCard,
 		});
-		// console.debug('built fake deck state', result, this.handlers);
+
+		console.debug('built fake deck state', result, heroCardId, this.handlers);
 		return result;
 	}
 
@@ -332,6 +342,7 @@ export interface SelectorOptions {
 	readonly uniqueZone?: boolean;
 	readonly skipGameState?: boolean;
 	readonly skipPrefs?: boolean;
+	readonly heroCardId?: string;
 }
 
 export interface SelectorInput {

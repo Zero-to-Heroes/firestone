@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { GameState } from '@firestone/game-state';
+import { GameState, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
+import { filter, takeUntil } from 'rxjs/operators';
 import { CardsHighlightCommonService } from './cards-highlight-common.service';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class CardsHighlightService extends CardsHighlightCommonService {
 	constructor(
 		protected readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly gameStateService: GameStateFacadeService,
 	) {
 		super(allCards);
 		this.setup();
@@ -20,14 +19,12 @@ export class CardsHighlightService extends CardsHighlightCommonService {
 	}
 
 	protected async setup() {
-		await this.store.initComplete();
-		const obs: Observable<GameState> = this.store
-			.listenDeckState$((gameState) => gameState)
-			.pipe(
-				filter((gameState) => !!gameState),
-				map(([gameState]) => gameState),
-				takeUntil(this.destroyed$),
-			);
+		await waitForReady(this.gameStateService);
+
+		const obs: Observable<GameState> = this.gameStateService.gameState$$.pipe(
+			filter((gameState) => !!gameState),
+			takeUntil(this.destroyed$),
+		);
 		super.setup(obs, async () => {
 			const prefs = await this.prefs.getPreferences();
 			return prefs.overlayHighlightRelatedCards;

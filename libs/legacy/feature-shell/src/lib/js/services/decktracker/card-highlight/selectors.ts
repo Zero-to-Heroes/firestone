@@ -405,7 +405,8 @@ export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);
 
 export const currentClass = (input: SelectorInput): boolean =>
-	input.card?.classes.some((cardClass) => input.deckState?.hero?.classes?.includes(CardClass[cardClass]));
+	!!input.deckState?.hero?.classes?.length &&
+	input.card?.classes.some((cardClass) => input.deckState.hero.classes.includes(CardClass[cardClass]));
 export const fromAnotherClass = and(not(currentClass), not(neutral), not(dream));
 
 export const rarity =

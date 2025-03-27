@@ -20,7 +20,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, map, take, takeUntil } from 'rxjs';
 import { SetCard } from '../../../models/set';
 import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -135,6 +135,19 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 				this.mapData((deckstring) => this.buildCardsFromDeckstring(deckstring)),
 			)
 			.subscribe(this.cards$$);
+		this.deckstring$$
+			.pipe(
+				filter((deckstring) => !!deckstring?.length),
+				distinctUntilChanged(),
+				map((deckstring) => decode(deckstring)),
+				map((deck) => deck.heroes?.[0]),
+				filter((heroDbfId) => !!heroDbfId),
+				take(1),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((heroDbfId) => {
+				this.highglight.forceHeroCardId(this.allCards.getCard(heroDbfId).id);
+			});
 		this.cards$ = combineLatest([this.cards$$, this.normalizedCollection$$]).pipe(
 			filter(([deckCards, collection]) => !!deckCards?.length),
 			this.mapData(([deckCards, collection]) => this.buildCards(deckCards, collection)),
