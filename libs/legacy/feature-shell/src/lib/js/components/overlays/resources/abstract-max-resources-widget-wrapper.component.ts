@@ -17,6 +17,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 	protected abstract prefName: keyof Preferences;
 	protected abstract alwaysOnPrefName: keyof Preferences;
 	protected abstract positionPrefName: keyof Preferences;
+	protected abstract scalePrefName: keyof Preferences;
 	protected abstract deckExtractor: (gameState: GameState) => DeckState;
 
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number) => number;
@@ -112,7 +113,9 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 				switchMap((show) =>
 					combineLatest([
 						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.maxResourcesWidgetScale ?? 100)),
+						this.prefs.preferences$$.pipe(
+							this.mapData((prefs) => (prefs[this.scalePrefName] ?? 100) as number),
+						),
 					]),
 				),
 				// tap(([globalScale, scale]) => console.debug('[max-resources] new scale params', globalScale, scale)),

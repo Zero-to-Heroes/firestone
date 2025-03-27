@@ -36,6 +36,7 @@ export class OpponentMaxResourcesWidgetWrapperComponent
 	protected override prefName: keyof Preferences = 'showOpponentMaxResourcesWidget';
 	protected override positionPrefName: keyof Preferences = 'opponentMaxResourcesWidgetPosition';
 	protected override alwaysOnPrefName: keyof Preferences = 'opponentMaxResourcesWidgetAlwaysOn';
+	protected override scalePrefName: keyof Preferences = 'opponentMaxResourcesWidgetScale';
 
 	protected override deckExtractor: (gameState: GameState) => DeckState = (gameState) => gameState.opponentDeck;
 	protected override defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>

@@ -260,7 +260,7 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					},
 					{
 						type: 'slider',
-						field: 'maxResourcesWidgetScale',
+						field: 'opponentMaxResourcesWidgetScale',
 						label: context.i18n.translateString('twitch.scale'),
 						tooltip: null,
 						sliderConfig: {

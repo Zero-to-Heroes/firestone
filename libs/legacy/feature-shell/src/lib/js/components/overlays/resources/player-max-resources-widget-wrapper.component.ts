@@ -36,6 +36,7 @@ export class PlayerMaxResourcesWidgetWrapperComponent
 	protected override prefName: keyof Preferences = 'showPlayerMaxResourcesWidget';
 	protected override positionPrefName: keyof Preferences = 'playerMaxResourcesWidgetPosition';
 	protected override alwaysOnPrefName: keyof Preferences = 'playerMaxResourcesWidgetAlwaysOn';
+	protected override scalePrefName: keyof Preferences = 'maxResourcesWidgetScale';
 
 	protected override deckExtractor: (gameState: GameState) => DeckState = (gameState) => gameState.playerDeck;
 	protected override defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
