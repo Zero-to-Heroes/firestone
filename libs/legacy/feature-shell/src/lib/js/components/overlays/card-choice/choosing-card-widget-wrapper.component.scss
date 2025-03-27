@@ -6,6 +6,10 @@
 	height: 5vh;
 	pointer-events: none;
 	display: flex;
+
+	&.tall {
+		top: 16vh;
+	}
 }
 
 // :host {
@@ -33,8 +37,8 @@
 
 	&.items-3 {
 		grid-template-columns: 1fr 1fr 1fr;
-		margin-left: 15vh;
-		margin-right: 15vh;
+		margin-left: 10vh;
+		margin-right: 7vh;
 	}
 
 	&.items-4 {

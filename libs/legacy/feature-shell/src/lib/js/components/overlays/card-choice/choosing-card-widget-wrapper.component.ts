@@ -8,7 +8,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, GameType, SceneMode } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -25,7 +25,7 @@ import { buildBasicCardChoiceValue } from './card-choice-values';
 	selector: 'choosing-card-widget-wrapper',
 	styleUrls: ['./choosing-card-widget-wrapper.component.scss'],
 	template: `
-		<div class="container" *ngIf="showWidget$ | async">
+		<div class="container" *ngIf="showWidget$ | async" [ngClass]="{ tall: hasTallCard$ | async }">
 			<div
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
@@ -68,6 +68,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	protected getRect = null;
 
 	showWidget$: Observable<boolean>;
+	hasTallCard$: Observable<boolean>;
 	gameMode$: Observable<'arena' | 'battlegrounds' | 'constructed' | null>;
 	playerClass$: Observable<string | null>;
 	opponentClass$: Observable<string | null>;
@@ -172,10 +173,16 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
 			this.mapData(([[state]]) => {
 				const options = state.playerDeck?.currentOptions;
+				console.debug('[choosing-card-widget] options', options);
 				return options?.map((o) => {
+					const refEntity = state.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === o.entityId);
+					const isTallCard = refEntity.tags.some(
+						(t) => t.Name === GameTag.IS_NIGHTMARE_BONUS && t.Value === 1,
+					);
 					const result: CardChoiceOption = {
 						cardId: o.cardId,
 						entityId: o.entityId,
+						isTallCard: isTallCard,
 						flag: this.buildFlag(o, state),
 						value: buildBasicCardChoiceValue(o, state, this.allCards, this.i18n),
 					};
@@ -184,6 +191,9 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			}),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
+		);
+		this.hasTallCard$ = this.options$.pipe(
+			this.mapData((options) => options.some((o) => o.isTallCard)),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -232,6 +242,7 @@ export const NO_HIGHLIGHT_CARD_IDS = [CardIds.MurlocHolmes_REV_022, CardIds.Murl
 export interface CardChoiceOption {
 	readonly cardId: string;
 	readonly entityId: number;
+	readonly isTallCard: boolean;
 	readonly flag?: CardOptionFlag;
 	readonly value?: string;
 }
