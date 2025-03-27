@@ -58,7 +58,7 @@ export const getProcessedCard = (
 };
 
 export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFacadeService): number | null => {
-	const refCard = allCards.getCard(card.cardId);
+	const refCard = getProcessedCard(card.cardId, card.entityId, deckState, allCards);
 	const isStarship = refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]);
 	if (isStarship) {
 		const pieces =
