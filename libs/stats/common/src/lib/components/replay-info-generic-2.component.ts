@@ -194,10 +194,20 @@ export class ReplayInfoGeneric2Component extends AbstractSubscriptionComponent {
 }
 
 export const extractTime = (durationInSeconds: number): { min: string; sec: string } => {
+	const minutes = `${Math.floor(durationInSeconds / 60)}`;
 	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
-	const minutes = `${Math.floor((durationInSeconds - (durationInSeconds % 60)) / 60)}`;
 	return {
 		min: minutes,
 		sec: seconds,
+	};
+};
+export const extractTimeWithHours = (durationInSeconds: number): { min: string; sec: string; hrs: string } => {
+	const hours = `${Math.floor(durationInSeconds / 3600)}`;
+	const minutes = `${Math.floor((durationInSeconds % 3600) / 60)}`;
+	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
+	return {
+		min: minutes,
+		sec: seconds,
+		hrs: hours,
 	};
 };

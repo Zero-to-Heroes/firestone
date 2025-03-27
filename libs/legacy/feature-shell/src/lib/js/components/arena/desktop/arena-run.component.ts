@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { ArenaNavigationService, ArenaRun, InternalNotableCard, buildNotableCards } from '@firestone/arena/common';
 import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
+import { extractTime, extractTimeWithHours } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
 
 @Component({
@@ -36,6 +37,10 @@ import { GameStat } from '@firestone/stats/data-access';
 						[src]="card.image"
 						[cardTooltip]="card.cardId"
 					/>
+				</div>
+
+				<div class="group time" *ngIf="totalRunTime">
+					<div class="value" [helpTooltip]="averageMatchTimeTooltip">{{ totalRunTime }}</div>
 				</div>
 
 				<div class="group score" *ngIf="!!deckScore" [helpTooltip]="deckScoreTooltip">
@@ -98,6 +103,8 @@ export class ArenaRunComponent {
 	_isExpanded: boolean;
 	notableCards: readonly InternalNotableCard[];
 	cardsInDeck: string | null;
+	totalRunTime: string | null;
+	averageMatchTimeTooltip: string | null;
 
 	private _run: ArenaRun;
 
@@ -160,6 +167,22 @@ export class ArenaRunComponent {
 		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
 		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards);
+
+		const totalRunTime = this._run.steps.map((step) => step.gameDurationSeconds).reduce((a, b) => a + b, 0);
+		this.totalRunTime =
+			totalRunTime > 3600
+				? this.i18n.translateString('global.duration.hrs-min-short', {
+						...extractTimeWithHours(totalRunTime),
+				  })
+				: this.i18n.translateString('global.duration.min-sec', {
+						...extractTime(totalRunTime),
+				  });
+		const averageMatchTime = Math.round(totalRunTime / this._run.steps.length);
+		this.averageMatchTimeTooltip = this.i18n.translateString('app.arena.runs.average-match-time', {
+			value: this.i18n.translateString('global.duration.min-sec', {
+				...extractTime(averageMatchTime),
+			}),
+		});
 
 		if (this._run.totalCardsInDeck != 30) {
 			this.cardsInDeck = `Drafted ${this._run.totalCardsInDeck} / 30 cards`;

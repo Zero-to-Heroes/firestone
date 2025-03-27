@@ -37,6 +37,14 @@
 		padding-left: 0px;
 		padding-right: 10px;
 	}
+
+	&.time {
+		font-size: 13px;
+		width: 80px;
+		padding: 0;
+		justify-content: flex-end;
+		padding-right: 10px;
+	}
 }
 
 .left-info,
