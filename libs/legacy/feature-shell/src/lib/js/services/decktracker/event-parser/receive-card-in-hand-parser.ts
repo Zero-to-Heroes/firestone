@@ -25,12 +25,13 @@ export class ReceiveCardInHandParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardIdOrDbfId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		if (!localPlayer) {
 			console.warn('[ReceiveCardInHandParser] missing local player from event', gameEvent);
 			return currentState;
 		}
 
+		const cardId = this.allCards.getCard(cardIdOrDbfId)?.id;
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
 
 		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);

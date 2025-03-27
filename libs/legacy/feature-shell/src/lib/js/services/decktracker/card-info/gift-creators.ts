@@ -237,6 +237,7 @@ export const giftCreators = [
 	CardIds.DefenseAttorneyNathanos,
 	CardIds.DelayedProduct_MIS_305,
 	CardIds.DemonicDynamics,
+	CardIds.DemonicProject,
 	CardIds.DemonicStudies,
 	CardIds.DemonizerTavernBrawlToken,
 	CardIds.Dendrologist,
