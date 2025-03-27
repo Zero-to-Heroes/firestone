@@ -3,6 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { RewardType } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
+import { extractTime } from '@firestone/stats/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
 
@@ -84,6 +85,14 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 			.reduce((a, b) => a + b, 0);
 		const rewardAveragePacks = totalRunsWithRewards > 0 ? rewardTotalPacks / totalRunsWithRewards : null;
 
+		const totalMatchTime = replays.map((replay) => replay.gameDurationSeconds).reduce((a, b) => a + b, 0);
+		const averageMatchTimeInSeconds = replays.length ? Math.round(totalMatchTime / replays.length) : null;
+		const averageMatchTime: string | null = averageMatchTimeInSeconds
+			? this.i18n.translateString('global.duration.min-sec', {
+					...extractTime(averageMatchTimeInSeconds),
+			  })
+			: null;
+
 		return [
 			{
 				label: this.i18n.translateString('app.arena.personal-stats.leaderboard-average')!,
@@ -105,6 +114,11 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 				label: this.i18n.translateString('app.arena.personal-stats.reward-packs')!,
 				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-packs-tooltip')!,
 				value: `${rewardTotalPacks?.toLocaleString() ?? '-'} / ${rewardAveragePacks?.toFixed(0) ?? '-'}`,
+			},
+			{
+				label: this.i18n.translateString('app.arena.personal-stats.average-match-time')!,
+				tooltip: this.i18n.translateString('app.arena.personal-stats.average-match-time-tooltip')!,
+				value: `${averageMatchTime ?? '-'}`,
 			},
 			// {
 			// 	label: this.i18n.translateString('app.arena.stats.total-runs')!,
