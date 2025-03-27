@@ -38,6 +38,7 @@ import { ElementalStreakCounterDefinitionV2 } from './impl/elemental-streak';
 import { ElwynnBoarCounterDefinitionV2 } from './impl/elwynn-boar';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { FatigueCounterDefinitionV2 } from './impl/fatigue';
+import { FriendlyMinionsDeadThisGameCounterDefinitionV2 } from './impl/friendly-minions-dead-this-game';
 import { GalakrondCounterDefinitionV2 } from './impl/galakrond';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
@@ -139,6 +140,7 @@ export const getAllCounters: (
 	new AstralAutomatonCounterDefinitionV2(i18n, allCards),
 	new PogoCounterDefinitionV2(i18n, allCards),
 	new WatchpostCounterDefinitionV2(i18n, allCards),
+	new FriendlyMinionsDeadThisGameCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
