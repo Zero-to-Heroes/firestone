@@ -16,9 +16,7 @@ export class BeetlesBuffCounterDefinitionV2 extends CounterDefinitionV2<string> 
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) =>
 			!!bgState?.currentGame.beetlesAttackBuff || !!bgState?.currentGame.beetlesHealthBuff
-				? `${2 + (bgState.currentGame.beetlesAttackBuff ?? 0)}/${
-						2 + (bgState.currentGame.beetlesHealthBuff ?? 0)
-				  }`
+				? `+${bgState.currentGame.beetlesAttackBuff ?? 0}/+${bgState.currentGame.beetlesHealthBuff ?? 0}`
 				: null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -42,8 +40,8 @@ export class BeetlesBuffCounterDefinitionV2 extends CounterDefinitionV2<string> 
 		const [atk, health] = this.player.value(gameState, bgState)?.split('/') ?? [];
 		return this.i18n.translateString(`counters.bgs-beetles.${side}`, {
 			cardName: allCards.getCard(CardIds.BoonOfBeetles_BeetleToken_BG28_603t)?.name,
-			atk: atk,
-			health: health,
+			atk: atk.replace('+', ''),
+			health: health.replace('+', ''),
 		});
 	}
 }
