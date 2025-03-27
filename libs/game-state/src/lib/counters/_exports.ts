@@ -44,6 +44,7 @@ import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
+import { ImbueCounterDefinitionV2 } from './impl/imbue';
 import { JadeGolemCounterDefinitionV2 } from './impl/jade-golem';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
@@ -141,6 +142,7 @@ export const getAllCounters: (
 	new PogoCounterDefinitionV2(i18n, allCards),
 	new WatchpostCounterDefinitionV2(i18n, allCards),
 	new FriendlyMinionsDeadThisGameCounterDefinitionV2(i18n),
+	new ImbueCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -160,6 +162,7 @@ export const getAllCounters: (
 export type CounterType =
 	| 'galakrond'
 	| 'ysondre'
+	| 'imbue'
 	| 'heroPowerUse'
 	| 'tyrande'
 	| 'avianaElunesChosen'

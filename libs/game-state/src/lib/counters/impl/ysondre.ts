@@ -25,7 +25,7 @@ export class YsondreCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.ysondrelabel'),
+				i18n.translateString('settings.decktracker.your-deck.counters.ysondre-label'),
 			tooltip: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.ysondre-tooltip'),
 		},

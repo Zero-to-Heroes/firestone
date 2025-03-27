@@ -377,6 +377,7 @@ export class Preferences implements IPreferences {
 	readonly opponentCardsDrawnCounter: boolean = false;
 	readonly playerComboCardsPlayedCounter: boolean = true;
 	readonly playerYsondreCounter: boolean = true;
+	readonly playerImbueCounter: boolean = true;
 	readonly playerHeroPowerUsedCounter: boolean = true;
 	readonly playerTyrandeCounter: boolean = true;
 	readonly opponentTyrandeCounter: boolean = true;
