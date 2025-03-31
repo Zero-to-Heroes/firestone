@@ -11,7 +11,7 @@ export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefin
 	public override cards: readonly CardIds[] = [CardIds.Aessina_EDR_430, CardIds.Starsurge_EDR_941];
 
 	readonly player = {
-		pref: 'playerFriendlyDeadMinionsThisGameCounter' as const,
+		pref: 'playerFriendlyDeadMinionsThisGameCounter2' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState): number => state.playerDeck.minionsDeadThisMatch.length,
 		setting: {
@@ -25,16 +25,20 @@ export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefin
 	readonly opponent = undefined;
 	// {
 	// 	pref: 'opponentFriendlyDeadMinionsThisGameCounter' as const,
-	// 	display: (state: GameState): boolean =>
-	// 		initialHeroClassIs(state.opponentDeck.hero, [CardClass.DEATHKNIGHT]) ||
-	// 		state.opponentDeck?.hasRelevantCard([CardIds.ReskaThePitBoss_WW_373]),
-	// 	value: (state: GameState): number =>
-	// 		state.opponentDeck.minionsDeadThisMatch.length,
+	// 	display: (state: GameState): boolean => {
+	// 		if (!initialHeroClassIs(state.opponentDeck.hero, [CardClass.MAGE])) {
+	// 			return false;
+	// 		}
+
+	// 		return !!state.fullGameState?.Opponent?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.IMBUES_THIS_GAME)
+	// 			?.Value || state.opponentDeck.plaed
+	// 	},
+	// 	value: (state: GameState): number => state.opponentDeck.minionsDeadThisMatch.length,
 	// 	setting: {
 	// 		label: (i18n: ILocalizationService): string =>
 	// 			i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-label'),
 	// 		tooltip: (i18n: ILocalizationService): string =>
-	// 			i18n.translateString('settings.decktracker.opponent-deck.counters.friendly-dead-minions-this-game-tooltip'),
+	// 			i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-tooltip'),
 	// 	},
 	// };
 
