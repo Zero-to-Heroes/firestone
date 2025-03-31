@@ -281,4 +281,5 @@ export const tutors = [
 	CardIds.RedscaleDragontamer,
 	CardIds.RedscaleDragontamer_CORE_DMF_194,
 	CardIds.Mimicry_EDR_522,
+	CardIds.ExoticHoundmaster_EDR_226,
 ];
