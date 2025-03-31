@@ -79,6 +79,9 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	}
 
 	public async addRewards(rewards: Input) {
+		return this.mainInstance.addRewardsInternal(rewards);
+	}
+	private async addRewardsInternal(rewards: Input) {
 		const currentRewards = await this.arenaRewards$$.getValueWithInit();
 		if (currentRewards?.some((reward) => reward.runId === rewards.runId)) {
 			console.log('[arena-rewards] rewards have already been added', rewards.runId);

@@ -101,7 +101,7 @@ export class EndGameListenerService {
 						shareReplay(1),
 					);
 
-				const arenaInfo$ = this.arenaInfo.arenaInfo$$;
+				const arenaInfo$ = this.arenaInfo.arenaInfo$$.asObservable();
 
 				// TODO: only if in mercs game
 				const mercsInfo$ = metadata$.pipe(

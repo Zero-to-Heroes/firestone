@@ -21,6 +21,7 @@ export class ArenaInfoService {
 	}
 
 	public async forceRetrieveArenaInfo(): Promise<ArenaInfo | null> {
+		console.log('[arena-info] force retrieving arena info', this.arenaInfo$$.value);
 		if (this.arenaInfo$$.value) {
 			return this.arenaInfo$$.value;
 		}
@@ -33,8 +34,8 @@ export class ArenaInfoService {
 		}
 		await runLoop(async () => {
 			const arenaInfo = await this.memory.getArenaInfo();
+			console.log('[arena-info] retrieved arena info', arenaInfo);
 			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
-				console.log('[arena-info] retrieved arena info', arenaInfo);
 				this.arenaInfo$$.next(arenaInfo);
 				return true;
 			}

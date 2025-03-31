@@ -42,7 +42,7 @@ export class TwitchPresenceService {
 			map((event) => event.additionalData.matchInfo as MatchInfo),
 			startWith(null),
 		);
-		const arenaInfo$ = this.arenaInfo.arenaInfo$$;
+		const arenaInfo$ = this.arenaInfo.arenaInfo$$.asObservable();
 		const mercsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MERCENARIES_INFO),
 			map((event) => event.additionalData.mercsInfo as MemoryMercenariesInfo),
