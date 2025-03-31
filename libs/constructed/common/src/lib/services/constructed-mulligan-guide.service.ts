@@ -190,7 +190,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
-		opponentClass$.subscribe(async (opponentClass) => {
+		opponentClass$.pipe(debounceTime(500)).subscribe(async (opponentClass) => {
 			const prefs = await this.prefs.getPreferences();
 			const currentOpponentClassPref = prefs.decktrackerMulliganOpponent;
 			if (currentOpponentClassPref !== opponentClass) {

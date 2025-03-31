@@ -45,7 +45,8 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	private navigation: ConstructedNavigationService;
 	private cards: CardsFacadeService;
 
-	private cache: { [key: string]: DeckStat | null } = {};
+	private deckDetailsCache: { [key: string]: DeckStat | null } = {};
+	private archetypesCache: { [key: string]: ArchetypeStats | null } = {};
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'constructedMetaDecks', () => !!this.constructedMetaDecks$$);
@@ -244,6 +245,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<DeckStat | null> {
+		// if (12 % 2 === 60) {
+		// 	return null;
+		// }
 		return this.mainInstance.loadNewDeckDetailsInternal(deckstring, format, time, rank);
 	}
 
@@ -258,10 +262,10 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		}
 
 		const cacheKey = `${format}_${time}_${rank}_${deckstring}`;
-		console.debug('[constructed-meta-decks] checking cache', cacheKey, this.cache[cacheKey]);
-		if (this.cache[cacheKey]) {
-			console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.cache[cacheKey]);
-			return this.cache[cacheKey];
+		console.debug('[constructed-meta-decks] checking cache', cacheKey, this.deckDetailsCache[cacheKey]);
+		if (this.deckDetailsCache[cacheKey] !== undefined) {
+			console.debug('[constructed-meta-decks] returning cached value', cacheKey, this.deckDetailsCache[cacheKey]);
+			return this.deckDetailsCache[cacheKey];
 		}
 
 		// console.debug('loading new deck details', new Error().stack, deckstring, format, time, rank);
@@ -276,14 +280,14 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		// Can happen if there is no data for the deck
 		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
-			this.cache[cacheKey] = null;
+			this.deckDetailsCache[cacheKey] = null;
 			console.log('[constructed-meta-decks] could not load meta deck', format, time, rank, url);
 			return null;
 		}
 
 		const deck: DeckStat = JSON.parse(resultStr);
 		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
-		this.cache[cacheKey] = deck;
+		this.deckDetailsCache[cacheKey] = deck;
 		return deck;
 	}
 
@@ -345,16 +349,28 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	): Promise<ArchetypeStats | null> {
 		time = (time as string) === 'all-time' ? 'past-20' : time;
 		const fileName = `${format}/${rank}/${time}/overview-from-hourly.gz.json`;
+
+		if (this.archetypesCache[fileName] !== undefined) {
+			console.debug(
+				'[constructed-meta-decks] returning archetype cached value',
+				fileName,
+				this.archetypesCache[fileName],
+			);
+			return this.archetypesCache[fileName];
+		}
+
 		const url = `${CONSTRUCTED_META_ARCHETYPES_BASE_URL}/${fileName}`;
 		console.log('[constructed-meta-decks] will load archetype stats', url, format, time, rank);
 		const resultStr = await this.api.get(url, false);
 		if (!resultStr?.length) {
 			console.log('could not load meta decks', format, time, rank, url);
+			this.archetypesCache[fileName] = null;
 			return null;
 		}
 
 		const stats: ArchetypeStats = JSON.parse(resultStr);
 		console.log('[constructed-meta-decks] loaded meta archetypes', format, time, rank, stats?.dataPoints);
+		this.archetypesCache[fileName] = stats;
 		return stats;
 	}
 
@@ -364,6 +380,9 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<ArchetypeStat | null> {
+		// if (12 % 2 === 60) {
+		// 	return null;
+		// }
 		if (!archetypeId) {
 			return null;
 		}
