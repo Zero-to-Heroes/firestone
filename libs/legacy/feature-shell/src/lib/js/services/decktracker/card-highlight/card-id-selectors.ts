@@ -1224,9 +1224,9 @@ export const cardIdSelector = (
 					return null;
 				}
 
-				const highestCost = Math.max(...input.deckState.deck.map((c) => c.getEffectiveManaCost() ?? 0));
+				const highestCost = Math.max(...input.deckState.deck.map((c) => c?.getEffectiveManaCost() ?? 0));
 				const lowestCost = Math.min(
-					...input.deckState.deck.map((c) => c.getEffectiveManaCost()).filter((cost) => cost != null),
+					...input.deckState.deck.map((c) => c?.getEffectiveManaCost()).filter((cost) => cost != null),
 				);
 
 				return highlightConditions(
@@ -2293,7 +2293,7 @@ export const cardIdSelector = (
 		case CardIds.ShadyDealer:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.Shaladrassil_EDR_846:
-			return and(side(inputSide), or(inHand, inDeck), costMore(card.getEffectiveManaCost()));
+			return and(side(inputSide), or(inHand, inDeck), costMore(card?.getEffectiveManaCost()));
 		case CardIds.ShaleSpider_DEEP_034:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.ShallowGrave:
@@ -2477,7 +2477,7 @@ export const cardIdSelector = (
 					side(inputSide)(input) &&
 					minion(input) &&
 					inGraveyard(input) &&
-					input.deckCard?.getEffectiveManaCost() >= lastMinion.getEffectiveManaCost()
+					input.deckCard?.getEffectiveManaCost() >= lastMinion?.getEffectiveManaCost()
 				);
 			};
 		case CardIds.StageDive:

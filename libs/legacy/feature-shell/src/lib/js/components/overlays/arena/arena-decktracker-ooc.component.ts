@@ -17,7 +17,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { Observable, combineLatest, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'arena-decktracker-ooc',
@@ -63,6 +63,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		await this.prefs.isReady();
 
 		this.deckstring$ = this.draftManager.currentDeck$$.pipe(
+			filter((deck) => !!deck),
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
 				if (!deck?.HeroCardId?.length) {

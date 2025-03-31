@@ -18,7 +18,7 @@ import {
 	IndexedDbService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, map, pairwise, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, tap, withLatestFrom } from 'rxjs';
 import { ArenaCombinedCardStats } from '../models/arena-combined-card-stat';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
@@ -275,6 +275,7 @@ export class ArenaDraftManagerService
 					// ),
 					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck 2', info)),
 					map(([previousDeck, currentDeck]) => currentDeck),
+					filter((deck) => !!deck),
 					withLatestFrom(this.arenaCardStats.cardStats$$, this.arenaClassStats.classStats$$),
 					map(([currentDeck, cardStats, classStats]) => ({
 						currentDeck: currentDeck!,
