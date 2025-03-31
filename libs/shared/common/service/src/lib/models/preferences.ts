@@ -411,7 +411,7 @@ export class Preferences implements IPreferences {
 	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };
 	readonly playerMaxResourcesWidgetAlwaysOn: boolean = false;
 	readonly maxResourcesWidgetScale = 100;
-	readonly opponentMaxResourcesWidgetScale = 80;
+	readonly opponentMaxResourcesWidgetScale = 100;
 	readonly showOpponentMaxResourcesWidget: boolean = true;
 	readonly opponentMaxResourcesWidgetPosition: { left: number; top: number };
 	readonly opponentMaxResourcesWidgetAlwaysOn: boolean = false;
