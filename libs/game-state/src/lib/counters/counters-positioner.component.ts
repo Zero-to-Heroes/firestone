@@ -63,8 +63,6 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 	}
 
 	private async updateChildrenPositions() {
-		console.debug('[debug] updating children', this.children);
-
 		// Update positions and subscribe to new children
 		for (let i = 0; i < this.children.length; i++) {
 			const child = this.children[i];
@@ -73,7 +71,6 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 				// Modify the style of the child element
 				this.renderer.setStyle(child.el.nativeElement, 'left', savedPosition.left + 'px');
 				this.renderer.setStyle(child.el.nativeElement, 'top', savedPosition.top + 'px');
-				console.debug('[debug] moving widget', i, savedPosition, child);
 			}
 			child.hidden = false;
 		}
@@ -88,12 +85,10 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 
 	public async saveWidgetPosition(child: CounterWrapperComponent, event: { left: number; top: number }) {
 		const index = this.children.indexOf(child);
-		console.debug('saving position', index, child, event);
 		const prefs = await this.prefs.getPreferences();
 		const positions = prefs[this.positionerId] || [];
 		positions[index] = { left: event.left, top: event.top };
 		prefs[this.positionerId] = positions;
-		console.debug('saving position', prefs);
 		await this.prefs.savePreferences(prefs);
 	}
 
@@ -101,9 +96,7 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 		const index = this.children.indexOf(child);
 		const prefs = await this.prefs.getPreferences();
 		const positions = prefs[this.positionerId] || [];
-		console.debug('retrieving position', index, child, positions);
 		if (positions[index]) {
-			console.debug('retrieving position', index, positions[index]);
 			return positions[index];
 		}
 
@@ -111,7 +104,6 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 		const gameHeight = this.element.nativeElement.offsetHeight;
 		const defaultLeft = gameWidth * (0.5 + index / 20) + gameHeight * 0.3;
 		const defaultTop = this.positionerId.includes('player') ? gameHeight * 0.75 : gameHeight * 0.1;
-		console.debug('retrieving default position', index, defaultLeft, defaultTop);
 		return { left: defaultLeft, top: defaultTop };
 	}
 }

@@ -60,6 +60,12 @@ export abstract class CounterDefinitionV2<T> {
 			return false;
 		}
 
+		if (!gameState?.gameStarted || gameState.gameEnded) {
+			this.debug &&
+				console.debug('[debug] game not started or ended', gameState.gameStarted, gameState.gameEnded);
+			return false;
+		}
+
 		if (side === 'player') {
 			this.debug && console.debug('[debug] considering', gameState, bgState);
 			if (!this.player?.pref || !prefs[this.player.pref]) {
@@ -84,7 +90,7 @@ export abstract class CounterDefinitionV2<T> {
 				this.debug && console.debug('[debug] no value', this.player.value(gameState, bgState));
 				return false;
 			}
-			this.debug && console.debug('[debug] show');
+			this.debug && console.debug('[debug] show', gameState, bgState);
 			return true;
 		} else if (side === 'opponent') {
 			// console.debug('checking opponent', this, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
