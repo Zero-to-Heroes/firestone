@@ -17,6 +17,10 @@
 	position: relative;
 }
 
+.scalable {
+	transform-origin: top center;
+}
+
 .values {
 	display: flex;
 	width: 100%;
