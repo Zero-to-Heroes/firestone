@@ -2850,6 +2850,7 @@ export const cardIdSelector = (
 		case CardIds.ViciousBloodworm_RLK_711:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.ViciousSlitherspear_TSC_827:
+		case CardIds.ViciousSlitherspear_CORE_TSC_827:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Viper_SC_018:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
