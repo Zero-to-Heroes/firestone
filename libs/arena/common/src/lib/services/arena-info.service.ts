@@ -25,7 +25,13 @@ export class ArenaInfoService {
 		if (this.arenaInfo$$.value) {
 			return this.arenaInfo$$.value;
 		}
-		return await this.memory.getArenaInfo();
+
+		const arenaInfo = await this.memory.getArenaInfo();
+		console.log('[arena-info] retrieved arena info 2', arenaInfo);
+		if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
+			this.arenaInfo$$.next(arenaInfo);
+		}
+		return arenaInfo;
 	}
 
 	public async triggerArenaInfoRetrieve(spectating: boolean) {
