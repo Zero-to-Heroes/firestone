@@ -37,12 +37,9 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 
 @Component({
 	selector: 'current-session-widget',
-	styleUrls: [
-		// `../../../../css/themes/battlegrounds-theme.scss`,
-		'../../../../css/component/overlays/session/current-session-widget.component.scss',
-	],
+	styleUrls: ['./current-session-widget.component.scss'],
 	template: `
-		<div class="current-session-widget battlegrounds-theme scalable">
+		<div class="current-session-widget battlegrounds-theme">
 			<ng-container *ngIf="showWidget$ | async">
 				<ng-container *ngIf="{ opacity: opacity$ | async } as value">
 					<div class="background" [style.opacity]="value.opacity"></div>
@@ -343,18 +340,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.buildBgsMatches(games, sessionWidgetNumberOfMatchesToShow);
 			}),
 		);
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -507,7 +492,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				// boardEntities: bgsBoard?.board,
 				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),
 			} as BgsDetail;
-			console.debug('built detail', result, game.playerCardId, game, bgsBoard?.board);
 			return result;
 		});
 	}

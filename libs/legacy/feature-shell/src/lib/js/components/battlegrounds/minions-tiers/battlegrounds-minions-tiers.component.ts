@@ -6,7 +6,6 @@ import {
 	ElementRef,
 	OnDestroy,
 	Renderer2,
-	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
@@ -73,7 +72,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersOverlayComponent
 	extends AbstractSubscriptionComponent

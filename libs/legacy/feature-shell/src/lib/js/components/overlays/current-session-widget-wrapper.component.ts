@@ -11,18 +11,25 @@ import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
 import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
+const refBounds = {
+	left: -50,
+	right: -50,
+	top: -50,
+	bottom: -50,
+};
+
 @Component({
 	selector: 'current-session-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
+	styleUrls: ['./current-session-widget-wrapper.component.scss'],
 	template: `
 		<current-session-widget
 			*ngIf="showWidget$ | async"
-			class="widget"
+			class="widget scalable"
 			[ngClass]="{ hidden: hidden$ | async }"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
@@ -39,12 +46,7 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateCurrentSessionWidgetPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.currentSessionWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected bounds = {
-		left: -50,
-		right: -50,
-		top: -50,
-		bottom: -50,
-	};
+	protected bounds = refBounds;
 
 	showWidget$: Observable<boolean>;
 	hidden$: Observable<boolean>;
@@ -84,6 +86,40 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);
+
+		this.showWidget$
+			.pipe(
+				filter((show) => show),
+				switchMap(() =>
+					combineLatest([
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetScale ?? 100)),
+					]),
+				),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([globalScale, scale]) => {
+				const newScale = (globalScale / 100) * (scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (element) {
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				}
+
+				const boundsScale = 1 / newScale;
+				this.bounds = {
+					left: refBounds.left * boundsScale,
+					right: refBounds.right * boundsScale,
+					top: refBounds.top * boundsScale,
+					bottom: refBounds.bottom * boundsScale,
+				};
+				console.debug(
+					'CurrentSessionWidgetWrapperComponent scaling to',
+					newScale,
+					this.bounds,
+					globalScale,
+					scale,
+				);
+			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
