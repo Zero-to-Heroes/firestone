@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameFormat } from '@firestone-hs/reference-data';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
@@ -31,6 +31,9 @@ export class CorpseSpentCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		pref: 'opponentCorpseSpentCounter' as const,
 		display: (state: GameState): boolean => {
 			if (!initialHeroClassIs(state.opponentDeck.hero, [CardClass.DEATHKNIGHT])) {
+				return false;
+			}
+			if (state.metadata.formatType === GameFormat.FT_STANDARD) {
 				return false;
 			}
 
