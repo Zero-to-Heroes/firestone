@@ -176,7 +176,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				console.debug('[choosing-card-widget] options', options);
 				return options?.map((o) => {
 					const refEntity = state.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === o.entityId);
-					const isTallCard = refEntity.tags.some(
+					const isTallCard = refEntity?.tags.some(
 						(t) => t.Name === GameTag.IS_NIGHTMARE_BONUS && t.Value === 1,
 					);
 					const result: CardChoiceOption = {
@@ -192,9 +192,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
 		);
-		this.hasTallCard$ = this.options$.pipe(
-			this.mapData((options) => options.some((o) => o.isTallCard)),
-		);
+		this.hasTallCard$ = this.options$.pipe(this.mapData((options) => options.some((o) => o.isTallCard)));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
