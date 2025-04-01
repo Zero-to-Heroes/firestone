@@ -137,6 +137,7 @@ export class CreateCardInDeckParser implements EventParser {
 					gameEvent.additionalData.creatorCardId,
 				),
 			});
+		// .update(updateSpecificFields(card, gameEvent.additionalData.creatorCardId));
 
 		// console.debug('[create-card-in-deck]', 'adding card', card);
 
@@ -164,6 +165,8 @@ export class CreateCardInDeckParser implements EventParser {
 	private buildKnownUpdatedManaCost(creatorCardId: string): number {
 		switch (creatorCardId) {
 			case CardIds.ElixirOfVigor:
+			case CardIds.TomeTampering:
+			case CardIds.TomeTampering_CORE_REV_240:
 				return 1;
 			case CardIds.ElixirOfVigorTavernBrawl:
 				return 2;
@@ -276,3 +279,13 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds): boolean => {
 	return creatorCard?.cardId === target || newCardId === target;
 };
+
+// const updateSpecificFields = (card: DeckCard, creatorCardId: string): Partial<DeckCard> => {
+// 	switch (creatorCardId) {
+// 		case CardIds.TomeTampering:
+// 		case CardIds.TomeTampering_CORE_REV_240:
+// 			return { refManaCost: 1 };
+// 		default:
+// 			return {};
+// 	}
+// };
