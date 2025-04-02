@@ -221,10 +221,11 @@ const buildSingleTribeTier = (
 		]
 			.filter((type) => type)
 			.map((tribe) => Race[tribe]);
-		if (targetTribe === null || targetTribe === Race.BLANK) {
+		if (targetTribe === Race.BLANK) {
 			return (
-				(!isSpell && cardTribes.filter((t) => t !== Race.BLANK).length === 0) ||
-				requiredCardTribes.filter((t) => t !== Race.BLANK).length === 0
+				!isSpell &&
+				(cardTribes.filter((t) => t !== Race.BLANK).length === 0 ||
+					requiredCardTribes.filter((t) => t !== Race.BLANK).length === 0)
 			);
 		}
 		if (cardTribes.length === 0 && requiredCardTribes.length === 0) {
