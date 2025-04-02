@@ -6,6 +6,7 @@ import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
+import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { HungeringAncient } from './hungering-ancient';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
@@ -33,6 +34,7 @@ const cards = [
 	Zuljin,
 	Merithra,
 	Ursoc,
+	GrotesqueRuneblade,
 	SuccombToMadness,
 	RavenousFelhunter,
 	FerociousFelbat,
