@@ -14,7 +14,7 @@ export const Merithra: GlobalHighlightCard = {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
 			deckState.minionsDeadThisMatch
-				.filter((e) => allCards.getCard(e.cardId).cost >= 8)
+				.filter((e) => (e.effectiveCost ?? allCards.getCard(e.cardId).cost) >= 8)
 				.map((e) => e.cardId)
 				// distinct
 				.filter((value, index, self) => self.indexOf(value) === index)
