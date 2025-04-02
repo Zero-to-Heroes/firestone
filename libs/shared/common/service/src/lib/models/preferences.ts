@@ -365,6 +365,7 @@ export class Preferences implements IPreferences {
 	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
 	readonly opponentDeadMinionsThisGameCounter: boolean = false;
 	readonly playerFriendlyDeadMinionsThisGameCounter2: boolean = true;
+	readonly opponentFriendlyDeadMinionsThisGameCounter: boolean = false;
 	readonly playerDamageTakenOnYourTurnCounter: boolean = true;
 	readonly opponentDamageTakenOnYourTurnCounter: boolean = false;
 	readonly playerLocationsUsedCounter: BooleanWithLimited = true;
