@@ -312,27 +312,6 @@ export class DeckState {
 			);
 	}
 
-	private hasRelevantCardLimited(cardIds: readonly CardIds[] | ((cardId: string) => boolean), includesDeck = true) {
-		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
-		if (includesDeck) {
-			pool = pool.concat(this.deck.map((card) => card.cardId));
-		}
-		// console.debug(
-		// 	'checking for relevant card 2',
-		// 	cardIds instanceof Array ? cardIds.join('') : cardIds,
-		// 	// pool.join(', '),
-		// 	excludesDeck,
-		// 	cardIds instanceof Array,
-		// 	pool.concat(!excludesDeck ? this.getCardsInSideboards() : []).join(', '),
-		// );
-		return pool
-			.concat(includesDeck ? this.getCardsInSideboards() : [])
-			.filter((cardId: string) => !!cardId)
-			.some((cardId) =>
-				Array.isArray(cardIds) ? cardIds.includes(cardId as CardIds) : (cardIds as any)(cardId),
-			);
-	}
-
 	public hasRelevantCard(
 		cardIds: readonly CardIds[] | ((cardId: string) => boolean),
 		options?: {
@@ -341,7 +320,16 @@ export class DeckState {
 			includesOtherZone?: boolean;
 		},
 	) {
-		return this.hasRelevantCardLimited(cardIds, true);
+		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
+		pool = pool.concat(this.deck.map((card) => card.cardId));
+		return pool
+			.concat(this.getCardsInSideboards())
+			.filter((cardId: string) => !!cardId)
+			.some((cardId) =>
+				Array.isArray(cardIds)
+					? cardIds.includes(cardId as CardIds)
+					: (cardIds as (cardId: string) => boolean)(cardId),
+			);
 	}
 
 	public hasRelevantMechanics(
