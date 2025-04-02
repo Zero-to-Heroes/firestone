@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState, ShortCard, TurnTiming } from '@firestone/game-state';
+import { DeckCard, GameState, ShortCard, TurnTiming } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -69,7 +69,8 @@ export class NewTurnParser implements EventParser {
 			minionsDeadSinceLastTurn: !isPlayerActive ? [] : currentState.playerDeck.minionsDeadSinceLastTurn,
 			minionsDeadThisTurn: [] as readonly ShortCard[],
 			turnTimings: playerTurnTimings,
-		} as DeckState);
+			currentOptions: [],
+		});
 		const opponentDeck = currentState.opponentDeck.update({
 			isActivePlayer: !isPlayerActive,
 			cardsPlayedLastTurn: isPlayerActive
@@ -86,7 +87,8 @@ export class NewTurnParser implements EventParser {
 			minionsDeadSinceLastTurn: isPlayerActive ? [] : currentState.opponentDeck.minionsDeadSinceLastTurn,
 			minionsDeadThisTurn: [] as readonly ShortCard[],
 			turnTimings: opponentTurnTimings,
-		} as DeckState);
+			currentOptions: [],
+		});
 		// console.debug(
 		// 	'[turn-start] playerDeck',
 		// 	isPlayerActive,
