@@ -47,6 +47,7 @@ export class SecretCreatedInGameParser implements EventParser {
 			zone: 'SECRET',
 			putIntoPlay: true,
 			creatorCardId: creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			temporaryCard: false,
 		});
 		// console.debug('[secret-created] card to add', card);

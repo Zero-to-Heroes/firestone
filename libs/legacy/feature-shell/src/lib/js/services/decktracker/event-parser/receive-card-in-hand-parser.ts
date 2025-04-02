@@ -31,18 +31,27 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
-		const cardId = this.allCards.getCard(cardIdOrDbfId)?.id;
-		const creatorCardId = gameEvent.additionalData.creatorCardId;
-
-		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// const cardId = guessCardId(initialCardId, deck, creatorCardId);
+
+		const cardId = this.allCards.getCard(cardIdOrDbfId)?.id;
+		const { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
+			gameEvent.additionalData.creatorCardId,
+			gameEvent.additionalData.creatorEntityId,
+			deck,
+		);
+		console.debug(
+			'[debug] creatorCardId',
+			creatorCardId,
+			creatorEntityId,
+			gameEvent,
+			deck,
+			deck.findCard(gameEvent.additionalData.creatorEntityId),
+		);
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
-		const lastInfluencedByCardId: CardIds =
-			gameEvent.additionalData?.creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId;
+		const lastInfluencedByCardId: CardIds = creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isSpecialCasePublicWhenOpponentDraws =
@@ -89,9 +98,11 @@ export class ReceiveCardInHandParser implements EventParser {
 			isCardInfoPublic || !otherCard
 				? otherCard?.update({
 						creatorCardId: creatorCardId,
+						creatorEntityId: creatorEntityId,
 				  })
 				: otherCard.update({
 						creatorCardId: undefined,
+						creatorEntityId: undefined,
 						cardId: undefined,
 						cardName: undefined,
 						lastAffectedByCardId: undefined,
@@ -116,6 +127,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				refManaCost: isCardInfoPublic && cardData ? cardData.cost : null,
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
+				creatorEntityId: creatorEntityId,
 			} as DeckCard);
 		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
 		// moved to hand (e.g. Suspicious Pirate)
@@ -127,7 +139,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		// 	otherCardWithObfuscation,
 		// );
 		const newCardId =
-			(isCardInfoPublic ? guessCardId(cardId, deck, gameEvent, this.allCards) : null) ?? cardWithDefault.cardId;
+			(isCardInfoPublic ? guessCardId(cardId, deck, creatorCardId, creatorEntityId, this.allCards) : null) ??
+			cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
 				? cardWithDefault
@@ -161,7 +174,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				: cardWithZone;
 		const cardWithGuessedInfo = addGuessInfoToDrawnCard(
 			otherCardWithBuffs,
-			gameEvent.additionalData.creatorCardId,
+			creatorCardId,
 			null,
 			deck,
 			this.allCards,
@@ -309,18 +322,17 @@ export const addAdditionalAttribuesInHand = (
 const guessCardId = (
 	cardId: string,
 	deckState: DeckState,
-	gameEvent: GameEvent,
+	creatorCardId: string,
+	creatorEntityId: number,
 	allCards: CardsFacadeService,
 ): string => {
 	// console.debug('[receive-card-in-hand] guessing cardId', cardId, deckState, gameEvent);
 	if (!!cardId?.length) {
 		return cardId;
 	}
-	switch (gameEvent.additionalData.creatorCardId) {
+	switch (creatorCardId) {
 		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
-			const existingBox: DeckCard = deckState.otherZone.find(
-				(c) => Math.abs(c.entityId) === gameEvent.additionalData.creatorEntityId,
-			);
+			const existingBox: DeckCard = deckState.otherZone.find((c) => Math.abs(c.entityId) === creatorEntityId);
 			const guessedCardId = existingBox?.relatedCardIds?.[0];
 			if (guessedCardId) {
 				// FIXME: didn't want to have to handle a full DeckState return for this
@@ -340,4 +352,20 @@ const guessCardId = (
 				.pop()?.id;
 	}
 	return cardId;
+};
+
+export const denormalizeCreatorCardId = (
+	creatorCardId: string,
+	creatorEntityId: number,
+	deck: DeckState,
+): { creatorCardId: string; creatorEntityId: number } => {
+	switch (creatorCardId) {
+		case CardIds.DarkGiftToken_EDR_102t:
+			const card = deck.findCard(creatorEntityId)?.card;
+			return card
+				? { creatorCardId: card.creatorCardId, creatorEntityId: card.creatorEntityId }
+				: { creatorCardId, creatorEntityId };
+		default:
+			return { creatorCardId, creatorEntityId };
+	}
 };

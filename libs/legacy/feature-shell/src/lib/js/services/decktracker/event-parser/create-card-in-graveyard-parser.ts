@@ -51,6 +51,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 			refManaCost: cardData?.cost,
 			rarity: cardData?.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			lastAffectedByEntityId: gameEvent.additionalData.lastAffectedByEntityId,
 		} as DeckCard);
 		const newOther = this.helper.addSingleCardToZone(deck.otherZone, cardWithDefault);

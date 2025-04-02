@@ -33,6 +33,7 @@ export class WeaponEquippedParser implements EventParser {
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 		} as DeckCard);
 
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);

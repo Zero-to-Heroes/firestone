@@ -46,6 +46,7 @@ export class CardDredgedParser implements EventParser {
 				refManaCost: cardData ? cardData.cost : undefined,
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 				creatorCardId: gameEvent.additionalData.creatorCardId,
+				creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			} as DeckCard)
 		).update({
 			positionFromTop: 0,

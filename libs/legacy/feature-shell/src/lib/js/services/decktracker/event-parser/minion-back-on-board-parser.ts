@@ -31,6 +31,7 @@ export class MinionBackOnBoardParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'PLAY',
 			creatorCardId: creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 			putIntoPlay: true,

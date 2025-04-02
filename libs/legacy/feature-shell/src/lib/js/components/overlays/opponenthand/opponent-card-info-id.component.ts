@@ -108,7 +108,8 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 
 	private buildInfo(context: DeckState, metadata: Metadata, currentTurn: number, card: DeckCard): void {
 		// Keep the || to handle empty card id
-		const realCardId = this.normalizeEnchantment(card.cardId, card.lastAffectedByCardId || card.creatorCardId);
+		// CreatorCardId first because this feels like the most relevant?
+		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
 		this.createdBy = !card.cardId && !!card.creatorCardId;
 		this.drawnBy =
 			!card.cardId &&

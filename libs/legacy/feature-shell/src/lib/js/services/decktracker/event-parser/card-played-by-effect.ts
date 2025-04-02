@@ -89,6 +89,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			playTiming: isOnBoard ? GameState.playTiming++ : null,
 			countered: isCardCountered,
 			creatorCardId: creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			putIntoPlay: true,
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);

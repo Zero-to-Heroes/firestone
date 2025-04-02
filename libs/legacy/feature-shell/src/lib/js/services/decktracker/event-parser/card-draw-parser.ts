@@ -157,6 +157,7 @@ export class CardDrawParser implements EventParser {
 		const cardWithCreator = card.update({
 			entityId: entityId,
 			creatorCardId: isCreatorPublic ? creatorCardId ?? card.creatorCardId : undefined,
+			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? this.allCards.getCard(card?.cardId).name ?? card?.cardName : undefined,
 			lastAffectedByCardId: isCreatorPublic

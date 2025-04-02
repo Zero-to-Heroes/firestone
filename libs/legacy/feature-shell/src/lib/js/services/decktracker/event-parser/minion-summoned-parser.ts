@@ -33,6 +33,7 @@ export class MinionSummonedParser implements EventParser {
 			actualManaCost: costFromTags ?? dbCard.cost,
 			rarity: dbCard.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			zone: 'PLAY',
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,

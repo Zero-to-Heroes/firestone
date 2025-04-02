@@ -53,6 +53,7 @@ export class CreateCardInDeckParser implements EventParser {
 				refManaCost: cost,
 				metaInfo: undefined,
 				creatorCardId: gameEvent.additionalData.creatorCardId,
+				creatorEntityId: gameEvent.additionalData.creatorEntityId,
 				zone: undefined,
 				milled: false,
 				relatedCardIds: modules,
@@ -122,6 +123,10 @@ export class CreateCardInDeckParser implements EventParser {
 						: creatorEntity?.cardId ??
 						  gameEvent.additionalData.creatorCardId ??
 						  gameEvent.additionalData.influencedByEntityId,
+				creatorEntityId:
+					gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444
+						? null
+						: gameEvent.additionalData.creatorEntityId,
 				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
