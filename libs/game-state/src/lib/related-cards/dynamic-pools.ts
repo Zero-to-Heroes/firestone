@@ -39,6 +39,10 @@ export const getDynamicRelatedCardIds = (
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
 	switch (cardId) {
+		case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
+		case CardIds.DreamplannerZephrys_HecticTourToken_WORK_027t3:
+		case CardIds.DreamplannerZephrys_ModestTourToken_WORK_027t1:
+			return allCards.getCard(cardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId).id) ?? [];
 		case CardIds.FlutterwingGuardian_EDR_800:
 		case CardIds.BitterbloomKnight_EDR_852:
 			return {
