@@ -174,10 +174,7 @@ const getDynamicFilters = (
 		case CardIds.WardOfEarth_EDR_060:
 			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c.cost === 5;
 		case CardIds.Symbiosis_EDR_273:
-			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				hasMechanic(c, GameTag.CHOOSE_ONE) &&
-				fromAnotherClass(c, options.currentClass);
+			return (c) => hasMechanic(c, GameTag.CHOOSE_ONE) && fromAnotherClass(c, options.currentClass);
 		case CardIds.DaydreamingPixie_EDR_530:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
