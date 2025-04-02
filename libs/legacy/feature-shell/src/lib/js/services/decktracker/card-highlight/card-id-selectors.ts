@@ -2909,6 +2909,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.WidowbloomSeedsman:
 			return and(side(inputSide), inDeck, spell, nature);
+		case CardIds.WildPyromancerCore:
+		case CardIds.WildPyromancerLegacy:
+		case CardIds.WildPyromancerVanilla:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.WildSpirits:
 			return and(
 				side(inputSide),
