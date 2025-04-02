@@ -271,7 +271,7 @@ export class MulliganDeckViewComponent
 	private async getScalableElements(): Promise<HTMLElement[]> {
 		let elements = this.el.nativeElement.querySelectorAll('.scalable');
 		let retriesLeft = 10;
-		while (retriesLeft >= 0 && elements?.length < 3) {
+		while (retriesLeft >= 0 && elements?.length === 0) {
 			await sleep(100);
 			elements = this.el.nativeElement.querySelectorAll('.scalable');
 			retriesLeft--;

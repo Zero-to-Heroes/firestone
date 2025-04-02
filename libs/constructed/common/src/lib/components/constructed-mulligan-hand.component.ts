@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -31,6 +30,7 @@ import {
 	distinctUntilChanged,
 	filter,
 	shareReplay,
+	switchMap,
 	takeUntil,
 } from 'rxjs';
 import { MulliganChartData } from '../models/mulligan-advice';
@@ -62,7 +62,7 @@ import { InternalMulliganAdvice } from './mulligan-hand-view.component';
 })
 export class ConstructedMulliganHandComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
+	implements AfterContentInit, OnDestroy
 {
 	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
 	allDeckMulliganInfo$: Observable<MulliganChartData | null>;
@@ -160,21 +160,21 @@ export class ConstructedMulliganHandComponent
 						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice?.score ?? 0, 4, -4),
 					}));
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	async ngAfterViewInit() {
-		await this.prefs.isReady();
-
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
+		this.cardsInHandInfo$
+			.pipe(
+				filter((info) => !!info?.length),
+				switchMap(() =>
+					combineLatest([
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
+						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
+					]),
+				),
+				takeUntil(this.destroyed$),
+			)
 			.subscribe(async ([globalScale, scale]) => {
 				const newScale = (globalScale / 100) * (scale / 100);
 				const elements = await this.getScalableElements();
