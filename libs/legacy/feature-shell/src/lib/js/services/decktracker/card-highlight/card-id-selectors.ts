@@ -2269,6 +2269,8 @@ export const cardIdSelector = (
 		case CardIds.SenseDemonsLegacy_EX1_317:
 		case CardIds.SenseDemonsVanilla_VAN_EX1_317:
 			return and(side(inputSide), inDeck, minion, demon);
+		case CardIds.Sentry_SC_764:
+			return and(side(inputSide), or(inDeck, inHand), minion, protoss);
 		case CardIds.SesselieOfTheFaeCourt_REV_319:
 		case CardIds.SesselieOfTheFaeCourt_REV_782:
 			return and(side(inputSide), inDeck, minion);
