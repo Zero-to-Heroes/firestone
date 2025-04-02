@@ -395,6 +395,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.BattleTotem_LOOTA_846:
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
+		case CardIds.BeanstalkBrute_EDR_230:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.BeckoningBicornTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p:
