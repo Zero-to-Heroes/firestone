@@ -12,6 +12,7 @@ import {
 	and,
 	damage,
 	highlightConditions,
+	imbue,
 	inDeck,
 	inHand,
 	isStarshipPieceFor,
@@ -322,6 +323,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
+		}
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE])) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
 		}
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));
