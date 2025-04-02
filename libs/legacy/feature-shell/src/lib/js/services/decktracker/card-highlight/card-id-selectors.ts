@@ -2815,6 +2815,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, taunt),
 				and(side(inputSide), inDeck, divineShield),
 			);
+		case CardIds.VarianWrynn_AT_072:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.Vectus:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
