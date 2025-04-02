@@ -129,7 +129,7 @@ import {
 
 export const cardIdSelector = (
 	cardId: string,
-	card: DeckCard,
+	card: DeckCard | undefined,
 	inputSide: 'player' | 'opponent' | 'single',
 	allCards: CardsFacadeService,
 ): Selector => {
@@ -951,8 +951,8 @@ export const cardIdSelector = (
 				const deadDemons =
 					input.deckState.minionsDeadThisMatch?.filter(
 						(card) =>
-							allCards.getCard(card.cardId).races?.includes(Race[Race.DEMON]) ||
-							allCards.getCard(card.cardId).races?.includes(Race[Race.ALL]),
+							allCards.getCard(card?.cardId).races?.includes(Race[Race.DEMON]) ||
+							allCards.getCard(card?.cardId).races?.includes(Race[Race.ALL]),
 					) ?? [];
 				if (!deadDemons.length) {
 					return and(side(inputSide), inGraveyard, minion, demon)(input);
@@ -1202,7 +1202,7 @@ export const cardIdSelector = (
 				or(inDeck, inHand),
 				minion,
 				mech,
-				not(entityIs({ entityId: card.entityId, cardId: card.cardId })),
+				not(entityIs({ entityId: card?.entityId, cardId: card?.cardId })),
 			);
 		case CardIds.GorlocRavager:
 			return and(side(inputSide), inDeck, murloc);
