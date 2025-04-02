@@ -20,9 +20,9 @@ export class HeroPowerUseCounterDefinitionV2 extends CounterDefinitionV2<number>
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.hero-power-use-label'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-use-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.hero-power-use-tooltip'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-use-tooltip'),
 		},
 	};
 	readonly opponent = undefined;

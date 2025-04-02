@@ -49,9 +49,9 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.imbue-label'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.imbue-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.imbue-tooltip'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.imbue-tooltip'),
 		},
 	};
 	readonly opponent = undefined;

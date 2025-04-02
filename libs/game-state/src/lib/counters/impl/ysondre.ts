@@ -25,9 +25,9 @@ export class YsondreCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.ysondre-label'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.ysondre-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.ysondre-tooltip'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.ysondre-tooltip'),
 		},
 	};
 	readonly opponent = undefined;
