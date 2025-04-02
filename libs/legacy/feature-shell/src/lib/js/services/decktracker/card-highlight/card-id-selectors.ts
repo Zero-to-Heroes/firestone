@@ -2050,6 +2050,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, mech);
 		case CardIds.RaDen:
 			return tooltip(and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen))));
+		case CardIds.RagingFelscreamerCore:
+		case CardIds.RagingFelscreamer_BT_416:
+			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.RaidBossOnyxia_ONY_004:
 			return and(side(inputSide), or(inDeck, inHand, inPlay, inGraveyard), minion, whelp);
 		case CardIds.RaidingParty:
