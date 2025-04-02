@@ -228,30 +228,20 @@ export const isCorrectTime = (
 	if (timeFilter === 'all-time') {
 		return true;
 	}
-	const firstMatch = run.getFirstMatch();
-	if (!firstMatch) {
-		return false;
-	}
 
-	const firstMatchTimestamp = firstMatch.creationTimestamp;
+	const timestamp = run.creationTimestamp ?? run.getFirstMatch()?.creationTimestamp;
+	// Don't use the build number so we can more easily fit in ongoing drafts
+	// const buildNumber = run.getFirstMatch()?.buildNumber ?? 0;
+
 	switch (timeFilter) {
 		case 'last-patch':
-			return (
-				!!patch &&
-				((patch.hasNewBuildNumber && (firstMatch.buildNumber ?? 0) >= patch.number) ||
-					(!patch.hasNewBuildNumber && firstMatch.creationTimestamp > new Date(patch.date).getTime()))
-			);
+			return !!patch && timestamp > new Date(patch.date).getTime();
 		case 'current-season':
-			return (
-				!!seasonPatch &&
-				((seasonPatch.hasNewBuildNumber && (firstMatch.buildNumber ?? 0) >= seasonPatch.number) ||
-					(!seasonPatch.hasNewBuildNumber &&
-						firstMatch.creationTimestamp > new Date(seasonPatch.date).getTime()))
-			);
+			return !!seasonPatch && timestamp > new Date(seasonPatch.date).getTime();
 		case 'past-three':
-			return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
+			return Date.now() - timestamp < 3 * 24 * 60 * 60 * 1000;
 		case 'past-seven':
-			return Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000;
+			return Date.now() - timestamp < 7 * 24 * 60 * 60 * 1000;
 		default:
 			return true;
 	}
