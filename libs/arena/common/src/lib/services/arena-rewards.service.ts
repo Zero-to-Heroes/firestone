@@ -15,7 +15,7 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, filter, tap, withLatestFrom } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs';
 import { ArenaInfoService } from './arena-info.service';
 
 const REWARDS_RETRIEVE_URL = 'https://b763ob2h6h3ewimg7ztsl72p240qvfyr.lambda-url.us-west-2.on.aws/';
@@ -65,16 +65,14 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		});
 
 		this.memoryUpdates.memoryUpdates$$
-			.pipe(
-				filter((changes) => !!changes.ArenaRewards?.length),
-				withLatestFrom(this.arenaInfoService.forceRetrieveArenaInfo()),
-				tap(([changes, arenaInfo]) =>
-					console.log('[arena-rewards] received memory update', changes, arenaInfo),
-				),
-				filter(([changes, arenaInfo]) => !!arenaInfo?.runId),
-			)
-			.subscribe(([changes, arenaInfo]) => {
-				this.handleRewards(changes.ArenaRewards, arenaInfo!);
+			.pipe(filter((changes) => !!changes?.ArenaRewards?.length))
+			.subscribe(async (changes) => {
+				const arenaInfo = await this.arenaInfoService.forceRetrieveArenaInfo();
+				console.log('[arena-rewards] received memory update', changes, arenaInfo);
+				if (!arenaInfo?.runId) {
+					return;
+				}
+				this.handleRewards(changes.ArenaRewards, arenaInfo);
 			});
 	}
 
