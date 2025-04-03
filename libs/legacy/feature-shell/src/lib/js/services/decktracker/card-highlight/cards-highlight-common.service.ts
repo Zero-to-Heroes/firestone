@@ -23,6 +23,7 @@ import {
 	restoreHealth,
 	side,
 	spell,
+	starshipExtended,
 	tooltip,
 } from './selectors';
 
@@ -302,6 +303,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	}
 
 	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'single'): Selector {
+		console.debug('[cards-highlight] building cardId selector', cardId, card, inputSide);
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
 		if (!!selector) {
 			return selector;
@@ -324,8 +326,24 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
 		}
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE])) {
-			selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
+		// Specific highlights for draft
+		if (inputSide === 'single') {
+			console.debug('[cards-highlight] building cardId selector for draft', cardId, card, inputSide);
+			if (
+				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE]) ||
+				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
+			) {
+				selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
+			}
+			if (
+				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP]) ||
+				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP])
+			) {
+				console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
+				selectors.push(and(side(inputSide), or(inDeck, inHand), starshipExtended));
+			}
 		}
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));

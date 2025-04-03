@@ -47,7 +47,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 					[card]="card"
 					[colorManaCost]="value.colorManaCost"
 					[showRelatedCards]="true"
-					[side]="'player'"
+					[side]="'single'"
 					(cardClicked)="onCardClicked($event)"
 				></deck-card>
 				<div class="sideboard" *ngIf="card.sideboard">
@@ -57,7 +57,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 						[card]="sideboard"
 						[colorManaCost]="value.colorManaCost"
 						[showRelatedCards]="true"
-						[side]="'player'"
+						[side]="'single'"
 						(cardClicked)="onCardClicked($event)"
 					></deck-card>
 				</div>
