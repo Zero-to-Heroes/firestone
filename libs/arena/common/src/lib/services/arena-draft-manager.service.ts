@@ -266,7 +266,7 @@ export class ArenaDraftManagerService
 					),
 					tap((deck) => console.debug('[arena-draft-manager] [stat] current deck', deck)),
 					pairwise(),
-					tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck', info)),
+					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck', info)),
 					// So that we only do it once, when we finish the draft
 					// filter(
 					// 	([previousDeck, currentDeck]) =>
@@ -277,6 +277,10 @@ export class ArenaDraftManagerService
 					map(([previousDeck, currentDeck]) => currentDeck),
 					filter((deck) => !!deck),
 					withLatestFrom(this.arenaCardStats.cardStats$$, this.arenaClassStats.classStats$$),
+					filter(
+						([currentDeck, cardStats, classStats]) =>
+							!!currentDeck && !!cardStats?.stats?.length && !!classStats?.stats,
+					),
 					map(([currentDeck, cardStats, classStats]) => ({
 						currentDeck: currentDeck!,
 						cardStats: cardStats!,
