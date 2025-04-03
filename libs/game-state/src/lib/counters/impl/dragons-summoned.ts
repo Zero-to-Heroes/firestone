@@ -24,8 +24,7 @@ export class DragonsSummonedCounterDefinitionV2 extends CounterDefinitionV2<numb
 
 	readonly opponent = {
 		pref: 'opponentDragonsSummonedCounter' as const,
-		display: (state: GameState): boolean =>
-			initialHeroClassIs(state.opponentDeck?.hero, [CardClass.PRIEST, CardClass.DRUID]),
+		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck?.hero, [CardClass.DRUID]),
 		value: (state: GameState): number => state.opponentDeck?.dragonsSummoned,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
