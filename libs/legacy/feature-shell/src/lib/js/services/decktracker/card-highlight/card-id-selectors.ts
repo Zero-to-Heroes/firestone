@@ -2258,8 +2258,6 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.ScrollSavvy:
 			return and(side(inputSide), inDeck, spell);
-		case CardIds.ScroungingShipwright_GDB_876:
-			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.SeafloorGateway_TSC_055:
 			return and(side(inputSide), inDeck, minion, mech);
 		case CardIds.SeascoutOperator_TSC_646:
