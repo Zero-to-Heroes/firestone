@@ -120,9 +120,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		const deck = side === 'opponent' ? this.gameState.opponentDeck : this.gameState.playerDeck;
 		const metaData = this.gameState.metadata;
+		const deckCards = deck.getAllCardsInDeckWithoutOptions();
 		const card =
-			deck.getAllCardsInDeckWithoutOptions().find((c) => c.entityId === entityId) ??
-			deck.getAllCardsInDeckWithoutOptions().find((c) => c.cardId === cardId);
+			deckCards.find((c) => !!entityId && c.entityId === entityId) ?? deckCards.find((c) => c.cardId === cardId);
 		const relatedCardIds = buildContextRelatedCardIds(cardId, card?.relatedCardIds, deck, metaData, this.allCards);
 		return relatedCardIds?.length ? relatedCardIds : [];
 	}
