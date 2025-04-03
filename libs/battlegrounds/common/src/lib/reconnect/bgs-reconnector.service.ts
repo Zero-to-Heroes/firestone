@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { GameConnectionService, GameEventsFacadeService, GameStateFacadeService } from '@firestone/game-state';
 import { AccountService } from '@firestone/profile/common';
-import { ENABLE_RECONNECTOR, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -68,7 +68,6 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 			const prefs = await this.prefs.getPreferences();
 			const region = this.account.region$$.value;
 			const shouldReconnect =
-				ENABLE_RECONNECTOR &&
 				prefs.bgsReconnectorEnabled &&
 				region === BnetRegion.REGION_CN &&
 				prefs.bgsReconnectorAutoReconnect &&
@@ -101,7 +100,6 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 			const region = this.account.region$$.value;
 			const shouldReconnect =
 				inCombat &&
-				ENABLE_RECONNECTOR &&
 				prefs.bgsReconnectorEnabled &&
 				region === BnetRegion.REGION_CN &&
 				prefs.bgsReconnectorAutoReconnect &&

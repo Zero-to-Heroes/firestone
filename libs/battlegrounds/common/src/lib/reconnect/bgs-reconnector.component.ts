@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
@@ -33,6 +33,8 @@ import { BgsReconnectorService } from './bgs-reconnector.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsReconnectorComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	@Input() isDragging: boolean;
+
 	errorMessage: string | undefined;
 	autoReconnect: boolean;
 	waitAfterBoards: boolean;
@@ -88,6 +90,10 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 	}
 
 	async reconnect() {
+		console.debug('reconnecting...', this.isDragging);
+		if (this.isDragging) {
+			return;
+		}
 		const status = await this.reconnectService.reconnect();
 		if (status === 'Not elevated') {
 			this.showErrorMessage('您需要以管理员身份运行 Overwolf 以启用重新连接功能');

@@ -27,6 +27,8 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected forceKeepInBounds = true;
 	protected draggable = true;
 
+	protected isDragging = false;
+
 	protected debug = false;
 
 	constructor(
@@ -142,11 +144,13 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	startDragging() {
-		// Do nothing for now
+		this.isDragging = true;
 	}
 
 	async stopDragging() {
-		// Do nothing for now
+		// So that "click" listeners will still see the dragging = true
+		await sleep(50);
+		this.isDragging = false;
 	}
 
 	async dragEnded(event: CdkDragEnd) {

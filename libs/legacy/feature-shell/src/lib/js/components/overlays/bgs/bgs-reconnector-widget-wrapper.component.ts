@@ -11,9 +11,9 @@ import { BnetRegion, SceneMode } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
-import { ENABLE_RECONNECTOR, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, filter } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
@@ -28,6 +28,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
+			[isDragging]="isDragging"
 		></bgs-reconnector>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,17 +63,13 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.account.region$$.pipe(
-				filter((region) => !!region),
-				this.mapData((info) => info),
-			),
+			this.account.region$$.pipe(this.mapData((info) => info)),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsReconnectorEnabled)),
 			this.gameState.gameState$$.pipe(this.mapData((state) => !!state?.gameStarted && !state?.gameEnded)),
 		]).pipe(
 			this.mapData(([currentScene, region, displayFromPrefs, inGame]) => {
 				console.log(
 					'[bgs-reconnector] should show widget?',
-					ENABLE_RECONNECTOR,
 					region,
 					region === BnetRegion.REGION_CN,
 					inGame,
@@ -80,11 +77,7 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 					currentScene,
 				);
 				return (
-					ENABLE_RECONNECTOR &&
-					region === BnetRegion.REGION_CN &&
-					inGame &&
-					displayFromPrefs &&
-					currentScene === SceneMode.GAMEPLAY
+					region === BnetRegion.REGION_CN && inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY
 				);
 			}),
 			this.handleReposition(),
