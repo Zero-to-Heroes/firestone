@@ -1,6 +1,8 @@
 :host {
 	max-height: 80vh;
 	z-index: 999999999;
+	align-items: flex-start;
+	height: 100%;
 }
 
 .widget.hidden {
@@ -8,6 +10,7 @@
 }
 
 battlegrounds-minions-tiers {
-	// width: 250px;
+	// height: 100%;
 	width: auto;
+	max-height: 80vh;
 }
