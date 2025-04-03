@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { BnetRegion } from '@firestone-hs/reference-data';
+import { ENABLE_RECONNECTOR } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
+import { battlegroundsReconnectorSettings } from '../battlegrounds/battlegrounds-settings-reconnector';
 import { generalLotterySettings } from './general-settings-lottery';
 import { generalQuestsSettings } from './general-settings-quests';
 import { globalWidgetSettings } from './global-settings-widgets';
@@ -8,6 +12,15 @@ export const globalSettings = (context: SettingContext): SettingNode => {
 		id: 'global-root',
 		name: context.i18n.translateString('settings.menu.global'),
 		keywords: null,
-		children: [generalQuestsSettings(context), generalLotterySettings(context), globalWidgetSettings(context)],
+		children: [
+			generalQuestsSettings(context),
+			generalLotterySettings(context),
+			globalWidgetSettings(context),
+			context.services.account.region$$.value === BnetRegion.REGION_CN && ENABLE_RECONNECTOR
+				? battlegroundsReconnectorSettings(context)
+				: null,
+		]
+			.filter((s) => s != null)
+			.map((s) => s!),
 	};
 };
