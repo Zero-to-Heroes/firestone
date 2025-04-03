@@ -27,16 +27,21 @@ const refBounds = {
 	selector: 'current-session-widget-wrapper',
 	styleUrls: ['./current-session-widget-wrapper.component.scss'],
 	template: `
-		<current-session-widget
-			*ngIf="showWidget$ | async"
-			class="widget scalable"
+		<div
+			class="wrapper"
 			[ngClass]="{ hidden: hidden$ | async }"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
-		></current-session-widget>
+		>
+			<current-session-widget
+				*ngIf="showWidget$ | async"
+				class="widget scalable"
+				[ngClass]="{ hidden: hidden$ | async }"
+			></current-session-widget>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
