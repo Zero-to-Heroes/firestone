@@ -101,8 +101,8 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 			</fs-numeric-input-with-arrows>
 			<fs-numeric-input-with-arrows
 				class="input"
-				[label]="'battlegrounds.sim.magnetized-summoned' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.magnetized-summoned-tooltip' | fsTranslate"
+				[label]="'battlegrounds.sim.magnetized' | fsTranslate"
+				[helpTooltip]="'battlegrounds.sim.magnetized-tooltip' | fsTranslate"
 				[value]="magnetizedThisGame"
 				[minValue]="0"
 				(fsModelUpdate)="onMagnetizedThisGameChanged($event)"
@@ -115,6 +115,40 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				[value]="astralAutomatonsSummonedThisGame"
 				[minValue]="0"
 				(fsModelUpdate)="onAstralAutomatonsSummonedThisGameChanged($event)"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
+				[label]="'battlegrounds.sim.beetle-attack-buff' | fsTranslate"
+				[value]="beetleAttackBuff"
+				[minValue]="0"
+				(fsModelUpdate)="beetleAttackBuff = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
+				[label]="'battlegrounds.sim.beetle-health-buff' | fsTranslate"
+				[value]="beetleHealthBuff"
+				[minValue]="0"
+				(fsModelUpdate)="beetleHealthBuff = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
+				[label]="'battlegrounds.sim.battlecries-triggered' | fsTranslate"
+				[helpTooltip]="'battlegrounds.sim.battlecries-triggered-tooltip' | fsTranslate"
+				[value]="battlecriesTriggeredThisGame"
+				[minValue]="0"
+				(fsModelUpdate)="battlecriesTriggeredThisGame = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
+				[label]="'battlegrounds.sim.friendly-minions-dead-last-combat' | fsTranslate"
+				[helpTooltip]="'battlegrounds.sim.friendly-minions-dead-last-combat-tooltip' | fsTranslate"
+				[value]="friendlyMinionsDeadLastCombat"
+				[minValue]="0"
+				(fsModelUpdate)="friendlyMinionsDeadLastCombat = $event"
 			>
 			</fs-numeric-input-with-arrows>
 			<div class="controls">
@@ -141,6 +175,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.beastsSummonedThisGame = value?.BeastsSummonedThisGame ?? 0;
 		this.magnetizedThisGame = value?.MagnetizedThisGame ?? 0;
 		this.astralAutomatonsSummonedThisGame = value?.AstralAutomatonsSummonedThisGame ?? 0;
+		this.beetleAttackBuff = value?.BeetleAttackBuff ?? 0;
+		this.beetleHealthBuff = value?.BeetleHealthBuff ?? 0;
+		this.battlecriesTriggeredThisGame = value?.BattlecriesTriggeredThisGame ?? 0;
+		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -157,6 +195,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	beastsSummonedThisGame: number;
 	magnetizedThisGame: number;
 	astralAutomatonsSummonedThisGame: number;
+	beetleAttackBuff: number;
+	beetleHealthBuff: number;
+	battlecriesTriggeredThisGame: number;
+	friendlyMinionsDeadLastCombat: number;
 
 	private inputGlobalInfo: BgsPlayerGlobalInfo | undefined | null;
 
@@ -231,6 +273,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			BeastsSummonedThisGame: this.beastsSummonedThisGame,
 			MagnetizedThisGame: this.magnetizedThisGame,
 			AstralAutomatonsSummonedThisGame: this.astralAutomatonsSummonedThisGame,
+			BeetleAttackBuff: this.beetleAttackBuff,
+			BeetleHealthBuff: this.beetleHealthBuff,
+			BattlecriesTriggeredThisGame: this.battlecriesTriggeredThisGame,
+			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
 		};
 		// TODO: once hand is implemented, add the hand total stats to the Mrrrgl bonus
 		this.applyHandler(newGlobalInfo);
