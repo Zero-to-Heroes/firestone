@@ -340,6 +340,7 @@ import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { ArenaMulliganDeckWidgetWrapperComponent } from '@components/overlays/arena-mulligan-deck-widget-wrapper.component';
 import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-mulligan-widget-wrapper.component';
+import { ArenaCurrentSessionWidgetWrapperComponent } from '@components/overlays/arena/arena-current-session-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { BgsReconnectorWidgetWrapperComponent } from '@components/overlays/bgs/bgs-reconnector-widget-wrapper.component';
 import { ChoosingCardOptionArenaComponent } from '@components/overlays/card-choice/choosing-card-option-arena.component';
@@ -1195,6 +1196,7 @@ try {
 		ConstructedBoardWidgetWrapperComponent,
 		PlayerHeroPowerWidgetWrapperComponent,
 		CurrentSessionWidgetWrapperComponent,
+		ArenaCurrentSessionWidgetWrapperComponent,
 		TurnTimerWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 		HeroPowerOverlayComponent,

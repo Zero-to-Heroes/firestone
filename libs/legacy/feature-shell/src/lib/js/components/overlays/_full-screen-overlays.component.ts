@@ -72,7 +72,6 @@ import { DebugService } from '../../services/debug.service';
 				</div>
 			</div>
 			<!-- Global -->
-			<current-session-widget-wrapper></current-session-widget-wrapper>
 			<!-- Use different wrappers to make it easier to position each one differently -->
 			<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
 			<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
@@ -94,6 +93,7 @@ import { DebugService } from '../../services/debug.service';
 			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
 			<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
 			<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
+			<current-session-widget-wrapper></current-session-widget-wrapper>
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
@@ -104,6 +104,7 @@ import { DebugService } from '../../services/debug.service';
 			<!-- Arena -->
 			<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
 			<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
+			<arena-current-session-widget-wrapper></arena-current-session-widget-wrapper>
 
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>

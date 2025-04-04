@@ -218,6 +218,12 @@ export class Preferences implements IPreferences {
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;
+	readonly arenaShowCurrentSessionWidget: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly arenaCurrentSessionWidgetPosition: { left: number; top: number };
+	readonly arenaSessionWidgetScale: number = 100;
+	readonly arenaSessionWidgetOpacity: number = 100;
+	readonly arenaCurrentSessionStartDate: Date | null = null;
 
 	readonly hsShowQuestsWidget: boolean = true;
 	readonly hsShowQuestsWidgetOnHub: boolean = true;
@@ -679,6 +685,9 @@ export class Preferences implements IPreferences {
 			...input,
 			lastUpdateDate: input.lastUpdateDate ? new Date(input.lastUpdateDate) : null,
 			currentSessionStartDate: input.currentSessionStartDate ? new Date(input.currentSessionStartDate) : null,
+			arenaCurrentSessionStartDate: input.arenaCurrentSessionStartDate
+				? new Date(input.arenaCurrentSessionStartDate)
+				: null,
 		};
 	}
 }

@@ -31,6 +31,7 @@ import { ArenaPersonalStatsOverviewComponent } from './components/personal-stats
 import { ArenaPersonalStatsComponent } from './components/personal-stats/arena-personal-stats.component';
 import { ArenaDeckDetailsComponent } from './components/runs/arena-deck-details.component';
 import { ArenaRunVignetteComponent } from './components/runs/arena-run-vignette.component';
+import { ArenaCurrentSessionWidgetComponent } from './components/session/arena-current-session-widget.component';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 import { ArenDeckDetailsService } from './services/arena-deck-details.service';
@@ -66,6 +67,7 @@ const components = [
 	ArenaPersonalStatsOverviewComponent,
 	ArenaHighWinsCardSearchComponent,
 	ArenaRewardComponent,
+	ArenaCurrentSessionWidgetComponent,
 ];
 @NgModule({
 	imports: [

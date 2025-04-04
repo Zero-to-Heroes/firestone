@@ -1,0 +1,16 @@
+:host {
+	max-height: 80vh;
+	z-index: 999999999;
+}
+
+.wrapper {
+	display: flex;
+}
+
+.widget.hidden {
+	display: none;
+}
+
+.scalable {
+	transform-origin: left top;
+}
