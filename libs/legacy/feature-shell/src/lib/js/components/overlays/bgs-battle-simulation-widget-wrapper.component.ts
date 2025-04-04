@@ -17,7 +17,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'bgs-battle-simulation-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
+	styleUrls: ['./bgs-battle-simulation-widget-wrapper.component.scss'],
 	template: `
 		<bgs-simulation-overlay
 			class="widget"

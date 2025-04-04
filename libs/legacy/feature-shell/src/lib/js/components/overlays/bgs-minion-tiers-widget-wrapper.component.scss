@@ -3,8 +3,15 @@
 	z-index: 999999999;
 	align-items: flex-start;
 	height: 100%;
+	pointer-events: none;
 }
 
 .widget.hidden {
 	display: none;
+}
+
+battlegrounds-minions-tiers {
+	// height: 100%;
+	width: auto;
+	pointer-events: all;
 }

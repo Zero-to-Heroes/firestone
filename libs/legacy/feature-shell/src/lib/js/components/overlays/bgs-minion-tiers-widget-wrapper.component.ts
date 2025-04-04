@@ -17,7 +17,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'bgs-minion-tiers-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
+	styleUrls: ['./bgs-minion-tiers-widget-wrapper.component.scss'],
 	template: `
 		<battlegrounds-minions-tiers
 			class="widget"

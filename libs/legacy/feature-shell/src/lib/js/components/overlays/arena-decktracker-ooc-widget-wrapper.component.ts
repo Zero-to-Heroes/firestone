@@ -21,6 +21,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 		'../../../css/component/overlays/foreground-widget.component.scss',
 		'../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss',
+		'./arena-decktracker-ooc-widget-wrapper.component.scss',
 	],
 	template: `
 		<arena-decktracker-ooc

@@ -3,8 +3,13 @@
 	z-index: 999999999;
 	align-items: flex-start;
 	height: 100%;
+	pointer-events: none;
 }
 
 .widget.hidden {
 	display: none;
+}
+
+bgs-simulation-overlay {
+	pointer-events: all;
 }
