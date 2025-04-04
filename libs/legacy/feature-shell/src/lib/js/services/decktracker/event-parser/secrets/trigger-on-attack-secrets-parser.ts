@@ -33,6 +33,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.IceBarrierCore,
 		CardIds.IceBarrierVanilla,
 		CardIds.OasisAlly,
+		CardIds.OasisAlly_CORE_BAR_812,
 		CardIds.SplittingImage_TRL_400,
 		CardIds.VaporizeLegacy,
 		CardIds.VaporizeVanilla,
@@ -132,6 +133,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.SplittingImage_TRL_400);
 			secretsWeCantRuleOut.push(CardIds.OasisAlly);
+			secretsWeCantRuleOut.push(CardIds.OasisAlly_CORE_BAR_812);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeLegacy);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrifice);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeVanilla);
@@ -162,6 +164,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.VenomstrikeTrap_ICC_200);
 			secretsWeCantRuleOut.push(CardIds.SplittingImage_TRL_400);
 			secretsWeCantRuleOut.push(CardIds.OasisAlly);
+			secretsWeCantRuleOut.push(CardIds.OasisAlly_CORE_BAR_812);
 			secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix_BOT_908);
 			secretsWeCantRuleOut.push(CardIds.Bamboozle);
 			if (enemyBoard.length === 1) {
