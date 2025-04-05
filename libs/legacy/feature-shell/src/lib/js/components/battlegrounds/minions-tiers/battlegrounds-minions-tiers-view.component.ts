@@ -8,8 +8,8 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 	selector: 'battlegrounds-minions-tiers-view',
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './battlegrounds-minions-tiers-view.component.scss'],
 	template: `
-		<div class="battlegrounds-minions-tiers-view" *ngIf="tierLevels?.length" (mouseleave)="onTavernMouseLeave()">
-			<div class="tiers-container">
+		<div class="battlegrounds-minions-tiers-view" *ngIf="tierLevels?.length">
+			<div class="tiers-container" (mouseleave)="onTavernMouseLeave()">
 				<ng-container>
 					<div class="logo-container" *ngIf="currentTurn && showTurnNumber">
 						<div class="background-main-part"></div>
