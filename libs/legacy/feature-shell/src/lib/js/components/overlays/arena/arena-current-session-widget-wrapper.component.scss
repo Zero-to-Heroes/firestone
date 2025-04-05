@@ -1,10 +1,15 @@
 :host {
 	max-height: 80vh;
 	z-index: 999999999;
+	pointer-events: none;
 }
 
 .wrapper {
 	display: flex;
+}
+
+.widget {
+	pointer-events: all;
 }
 
 .widget.hidden {
