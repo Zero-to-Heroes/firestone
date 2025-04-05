@@ -73,9 +73,8 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				const cardIds = deck.DeckList as readonly string[];
 				const deckDefinition: DeckDefinition = {
 					format: GameFormat.FT_WILD,
-					cards: Object.values(groupByFunction((cardId: string) => cardId)(cardIds)).map((cardIds) => [
-						this.allCards.getCard(cardIds[0]).dbfId,
-						cardIds.length,
+					cards: Object.values(groupByFunction((cardId: string) => cardId)(cardIds)).flatMap((cardIds) => [
+						[this.allCards.getCard(cardIds[0]).dbfId, cardIds.length],
 					]),
 					heroes: [this.allCards.getCard(deck.HeroCardId).dbfId],
 					sideboards: !deck.Sideboards?.length
