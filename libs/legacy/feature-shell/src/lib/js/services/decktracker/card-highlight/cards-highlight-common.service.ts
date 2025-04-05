@@ -303,7 +303,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	}
 
 	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'single'): Selector {
-		console.debug('[cards-highlight] building cardId selector', cardId, card, inputSide);
+		// console.debug('[cards-highlight] building cardId selector', cardId, card, inputSide);
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
 		if (!!selector) {
 			return selector;
@@ -328,7 +328,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		// Specific highlights for draft
 		if (inputSide === 'single') {
-			console.debug('[cards-highlight] building cardId selector for draft', cardId, card, inputSide);
+			// console.debug('[cards-highlight] building cardId selector for draft', cardId, card, inputSide);
 			if (
 				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE]) ||
 				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
@@ -341,7 +341,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP]) ||
 				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP])
 			) {
-				console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
+				// console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
 				selectors.push(and(side(inputSide), or(inDeck, inHand), starshipExtended));
 			}
 		}
