@@ -10,7 +10,6 @@ import {
 } from '@firestone/battlegrounds/core';
 import { MemoryBgGame, MemoryBgPlayer } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { normalizeHeroCardId } from '../../bgs-utils';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
 import { EventParser } from './_event-parser';
@@ -36,11 +35,8 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
 			.filter((player) => player.cardId !== 'TB_BaconShop_HERO_PH')
 			.map((player) => {
-				const playerFromMemory = playersFromMemory.find(
-					(mem) =>
-						normalizeHeroCardId(mem.CardId, this.allCards) ===
-						normalizeHeroCardId(player.cardId, this.allCards),
-				);
+				const playerFromMemory = playersFromMemory.find((mem) => mem.Id === player.playerId);
+				// console.debug('[debug] found player from memory', playerFromMemory, playersFromMemory, player);
 				if (!playerFromMemory) {
 					return player;
 				}
