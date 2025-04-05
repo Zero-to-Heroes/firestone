@@ -1,6 +1,7 @@
-import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -9,7 +10,20 @@ export class DragonsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number
 	public override image = CardIds.TimewinderZarimi_TOY_385;
 	public override cards: readonly CardIds[] = [CardIds.Kazakusan_ONY_005, CardIds.TimewinderZarimi_TOY_385];
 
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentDragonsPlayedCounter' as const,
+		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck?.hero, [CardClass.PRIEST]),
+		value: (state: GameState): number =>
+			state.opponentDeck?.cardsPlayedThisMatch
+				.map((c) => this.allCards.getCard(c.cardId))
+				.filter((c) => hasCorrectTribe(c, Race.DRAGON)).length,
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.dragons-played-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.opponent-deck.counters.dragons-played-tooltip'),
+		},
+	};
 	readonly player = {
 		pref: 'playerDragonsPlayedCounter' as const,
 		display: (state: GameState): boolean => true,
