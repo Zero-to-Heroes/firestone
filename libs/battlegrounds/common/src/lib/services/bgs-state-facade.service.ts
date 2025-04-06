@@ -9,7 +9,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { auditTime, BehaviorSubject, combineLatest } from 'rxjs';
+import { auditTime, BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
 @Injectable()
@@ -34,14 +34,15 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 
 		await waitForReady(this.matchPlayers);
 
-		while (!this.ow.getMainWindow().battlegroundsStore) {
-			await sleep(50);
-		}
-
-		this.gameState$$.onFirstSubscribe(() => {
+		this.gameState$$.onFirstSubscribe(async () => {
+			while (!this.ow.getMainWindow().battlegroundsStore) {
+				await sleep(50);
+			}
 			const bgState: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 			combineLatest([bgState, this.matchPlayers.playersMatchMmr$$])
-				.pipe(auditTime(200))
+				.pipe(
+					auditTime(200),
+				)
 				.subscribe(([state, playersMmr]) => {
 					if (!state?.currentGame) {
 						return;

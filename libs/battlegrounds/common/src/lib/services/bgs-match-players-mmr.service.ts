@@ -4,8 +4,13 @@ import { BnetRegion, GameType, isBattlegrounds, isBattlegroundsDuo } from '@fire
 import { PlayerMatchMmr } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { BgsMatchMemoryInfoService } from './bgs-match-memory-info.service';
 import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderboards.service';
@@ -36,8 +41,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 		this.gameState = AppInjector.get(GameStateFacadeService);
 		this.prefs = AppInjector.get(PreferencesService);
 
-		await this.leaderboards.isReady();
-		await this.gameState.isReady();
+		await waitForReady(this.leaderboards, this.gameState);
 
 		this.playersMatchMmr$$.onFirstSubscribe(async () => {
 			const gameMode$ = this.gameState.gameState$$.pipe(
@@ -106,7 +110,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 						return players;
 					}),
 					distinctUntilChanged((a, b) => deepEqual(a, b)),
-					tap((players) => console.debug('[bgs-match-players-mmr] players', players)),
+					// tap((players) => console.debug('[bgs-match-players-mmr] players', players)),
 				)
 				.subscribe((players) => {
 					this.playersMatchMmr$$.next(players);
