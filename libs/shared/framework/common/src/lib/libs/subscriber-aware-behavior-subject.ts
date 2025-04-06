@@ -36,6 +36,9 @@ export class SubscriberAwareBehaviorSubject<T> extends BehaviorSubject<T> {
 
 	onFirstSubscribe(listener) {
 		this.listeners.push(listener);
+		if (!!this.observers?.length) {
+			this.triggerListeners();
+		}
 	}
 
 	private triggerListeners() {
