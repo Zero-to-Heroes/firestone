@@ -547,7 +547,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			?.cards?.map((card) => card[0])
 			.map((dbfId) => this.allCards.getCard(dbfId).id);
 		const playerDeckMatches$ = this.gameStats.gameStats$$.pipe(
-			map((gameStats) => gameStats?.stats.filter((s) => s.playerDecklist === deckstring)),
+			map((gameStats) =>
+				gameStats?.stats.filter((s) => s.gameMode === 'ranked').filter((s) => s.playerDecklist === deckstring),
+			),
 			distinctUntilChanged((a, b) => a.length === b.length),
 		);
 		const patchInfo$ = this.patches.currentConstructedMetaPatch$$;
@@ -660,6 +662,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const relevantPlayerDeckMatches =
 			playerDeckMatches
 				?.filter((m) => opponentClass === 'all' || m.opponentClass === opponentClass)
+				.filter((m) => isCorrectFormat(m, format))
 				?.filter((m) => isCorrectTime(m, timeFrame, patchInfo)) ?? [];
 		const playerWins = relevantPlayerDeckMatches.filter((m) => m.result === 'won').length;
 		const result: MulliganGuideWithDeckStats = {
@@ -685,6 +688,19 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		return result;
 	}
 }
+
+const isCorrectFormat = (match: GameStat, format: GameFormatEnum): boolean => {
+	switch (format) {
+		case GameFormatEnum.FT_WILD:
+			return match.gameFormat === 'wild';
+		case GameFormatEnum.FT_STANDARD:
+			return match.gameFormat === 'standard';
+		case GameFormatEnum.FT_CLASSIC:
+			return match.gameFormat === 'classic';
+		default:
+			return false;
+	}
+};
 
 const isCorrectTime = (
 	match: GameStat,
