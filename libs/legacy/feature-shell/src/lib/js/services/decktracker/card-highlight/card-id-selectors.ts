@@ -1781,6 +1781,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, neutral);
 		case CardIds.MeltedMaker:
 			return and(side(inputSide), or(inDeck, inHand), forge);
+		case CardIds.MenagerieJug_WON_142:
+		case CardIds.MenagerieJug_CORE_WON_142:
+			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 		case CardIds.MenagerieWarden_CORE_KAR_065:
 		case CardIds.MenagerieWarden_KAR_065:
 		case CardIds.MenagerieWarden_WON_305:
