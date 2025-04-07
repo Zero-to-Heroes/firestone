@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -19,6 +20,12 @@ export class CostChangedParser implements EventParser {
 
 		const { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
 		if (!card) {
+			return currentState;
+		}
+
+		// Not sure why, but discovering a card with a Dark Gift changes the cost in the deck to 0.
+		// It also sets some other tags to 0, like Battlecry, but I don't deal with these yet
+		if (card.lastAffectedByCardId === CardIds.DarkGiftToken_EDR_102t && zone === 'deck') {
 			return currentState;
 		}
 
