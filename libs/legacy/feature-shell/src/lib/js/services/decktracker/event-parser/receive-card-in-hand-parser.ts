@@ -40,14 +40,14 @@ export class ReceiveCardInHandParser implements EventParser {
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 		);
-		console.debug(
-			'[debug] creatorCardId',
-			creatorCardId,
-			creatorEntityId,
-			gameEvent,
-			deck,
-			deck.findCard(gameEvent.additionalData.creatorEntityId),
-		);
+		// console.debug(
+		// 	'creatorCardId',
+		// 	creatorCardId,
+		// 	creatorEntityId,
+		// 	gameEvent,
+		// 	deck,
+		// 	deck.findCard(gameEvent.additionalData.creatorEntityId),
+		// );
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game

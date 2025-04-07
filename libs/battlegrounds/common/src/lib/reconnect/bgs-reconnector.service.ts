@@ -9,7 +9,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
 import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 import { BgsReconnectorPluginService } from './bgs-reconnector-plugin.service';
 
@@ -50,7 +50,6 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 		const phase$ = this.bgState.gameState$$.pipe(
 			filter((state) => !!state?.inGame && !!state.currentGame),
 			map((state) => state?.currentGame.phase),
-			tap((phase) => console.debug('[bgs-reconnector] phase', phase)),
 			distinctUntilChanged(),
 		);
 		phase$.subscribe(async (phase) => {
