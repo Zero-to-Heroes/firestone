@@ -61,7 +61,7 @@ import {
 						</div>
 					</div>
 				</div>
-				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
+				<!-- <div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
 					{{ discountBannerText }}
 					<pre
 						class="code"
@@ -70,7 +70,7 @@ import {
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div>
+				</div> -->
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
 						class="plan"
