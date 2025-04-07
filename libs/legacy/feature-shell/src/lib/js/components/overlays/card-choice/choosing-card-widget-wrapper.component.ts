@@ -173,7 +173,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
 			this.mapData(([[state]]) => {
 				const options = state.playerDeck?.currentOptions;
-				console.debug('[choosing-card-widget] options', options);
+				// console.debug('[choosing-card-widget] options', options);
 				return options?.map((o) => {
 					const refEntity = state.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === o.entityId);
 					const isTallCard = refEntity?.tags.some(

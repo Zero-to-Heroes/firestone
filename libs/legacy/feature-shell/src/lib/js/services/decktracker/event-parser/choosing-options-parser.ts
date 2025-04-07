@@ -26,7 +26,7 @@ export class ChoosingOptionsParser implements EventParser {
 				return result;
 			}),
 		});
-		console.debug('[choosing-options] updating options', newDeck.currentOptions, gameEvent);
+		// console.debug('[choosing-options] updating options', newDeck.currentOptions, gameEvent);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
