@@ -529,6 +529,20 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.CaptainsLog_GDB_228:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
+		case CardIds.CaptureColdtoothMine:
+			return (input: SelectorInput): SelectorOutput => {
+				const allMinionsOrderedByCost = input.deckState.deck
+					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
+					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost());
+				const highestCostMinion = allMinionsOrderedByCost[0];
+				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
+				const lowestCostMinion = allMinionsOrderedByCost[allMinionsOrderedByCost.length - 1];
+				const lowestMinionCost = lowestCostMinion?.getEffectiveManaCost() ?? 0;
+				return highlightConditions(
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(lowestMinionCost)),
+				)(input);
+			};
 		case CardIds.CapturedFlag:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.CardGrader_TOY_054:
