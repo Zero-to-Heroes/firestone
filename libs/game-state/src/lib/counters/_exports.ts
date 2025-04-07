@@ -30,6 +30,7 @@ import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
+import { DragonsInHandCounterDefinitionV2 } from './impl/dragons-in-hand';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
@@ -80,6 +81,7 @@ export const getAllCounters: (
 	i18n: ILocalizationService,
 	allCards: CardsFacadeService,
 ) => CounterDefinitionV2<any>[] = (i18n: ILocalizationService, allCards: CardsFacadeService) => [
+	new DragonsInHandCounterDefinitionV2(i18n, allCards),
 	new DragonsSummonedCounterDefinitionV2(i18n),
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),
@@ -162,6 +164,7 @@ export const getAllCounters: (
 export type CounterType =
 	| 'galakrond'
 	| 'ysondre'
+	| 'dragonsInHand'
 	| 'imbue'
 	| 'heroPowerUse'
 	| 'tyrande'
