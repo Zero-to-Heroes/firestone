@@ -66,7 +66,9 @@ export class LocalizationService {
 	}
 
 	public getCreatedByCardName(cardName: string): string {
-		return `Created by ${cardName ?? 'unknown'}`;
+		return this.translateString('decktracker.created-by', {
+			value: cardName ?? 'unknown',
+		});
 	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
