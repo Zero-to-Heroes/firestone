@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CardIds, formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
+import { CardIds, formatFormat, GameFormat, GameType, ScenarioId, SpellSchool } from '@firestone-hs/reference-data';
 import { Metadata } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
 
@@ -16,7 +17,7 @@ const createsSecretsFromThePast = [
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
 
-	constructor(private readonly http: HttpClient) {}
+	constructor(private readonly http: HttpClient, private readonly allCards: CardsFacadeService) {}
 
 	public async getValidSecrets(
 		metadata: Metadata,
@@ -48,7 +49,8 @@ export class SecretConfigService {
 				}
 				return true;
 			})
-			.map((secret) => secret.cardId);
+			.map((secret) => secret.cardId)
+			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId));
 		return result;
 	}
 
@@ -78,6 +80,18 @@ export class SecretConfigService {
 				},
 			);
 		});
+	}
+
+	private canBeCreatedBy(secretCardId: string, creatorCardId: string): boolean {
+		switch (creatorCardId) {
+			case CardIds.SweetenedSnowflurry_TOY_307:
+			case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
+				return (
+					this.allCards.getCard(creatorCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
+				);
+			default:
+				return true;
+		}
 	}
 
 	private getMode(metadata: Metadata, creatorCardId: string): string {
