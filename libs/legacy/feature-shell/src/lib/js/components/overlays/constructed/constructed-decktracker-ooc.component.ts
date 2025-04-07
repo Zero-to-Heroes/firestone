@@ -135,7 +135,6 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 			),
 		);
 		this.deckStatsRecap$ = gamesForDeck$.pipe(
-			filter((games) => !!games?.length),
 			this.mapData((gameStats) => StatsRecap.from(gameStats)),
 			tap((stats) => console.debug('[constructed-decktracker-ooc] new stats', stats)),
 		);
