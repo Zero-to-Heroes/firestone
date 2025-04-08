@@ -1,0 +1,35 @@
+.arena-info {
+	background: var(--color-9);
+	padding: 20px;
+	width: 250px;
+	pointer-events: all;
+	display: flex;
+	flex-direction: column;
+}
+
+.title {
+	color: var(--default-title-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+	margin-bottom: 5px;
+}
+
+.score {
+	color: var(--default-title-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	margin-bottom: 10px;
+
+	.image {
+		height: 25px;
+	}
+}
+
+.deck-list {
+	width: calc(100% - 20px);
+	left: 5px;
+}

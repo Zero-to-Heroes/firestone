@@ -12,7 +12,7 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
 import { ArenaCardOption } from './model';
 
@@ -84,7 +84,7 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay),
 		);
 		this.showWidget$ = combineLatest([this.pickNumber$$, this.ads.hasPremiumSub$$]).pipe(
-			tap((info) => console.debug('[arena-card-option] showWidget', info)),
+			// tap((info) => console.debug('[arena-card-option] showWidget', info)),
 			this.mapData(([pickNumber, hasPremium]) => pickNumber === 0 || hasPremium),
 		);
 		combineLatest([this.showWidget$, this.widgetActive$])

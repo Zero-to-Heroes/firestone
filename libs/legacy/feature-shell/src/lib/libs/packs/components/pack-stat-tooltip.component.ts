@@ -19,7 +19,7 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 	selector: 'pack-stat-tooltip',
 	styleUrls: [`./pack-stat-tooltip.component.scss`],
 	template: `
-		<div class="pack-stat-tooltip">
+		<div class="pack-stat-tooltip tooltip-mouse-over-target">
 			<div class="packs-recap">{{ packsRecapText }}</div>
 			<div class="pity-timers-container" *ngIf="hasPityTimers">
 				<div class="title">

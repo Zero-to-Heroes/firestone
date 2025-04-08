@@ -219,11 +219,15 @@ export class Preferences implements IPreferences {
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;
 	readonly arenaShowCurrentSessionWidget: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly arenaCurrentSessionWidgetPosition: { left: number; top: number };
+	readonly arenaSessionWidgetShowGroup: boolean = true;
+	readonly arenaSessionWidgetShowMatches: boolean = true;
 	readonly arenaSessionWidgetScale: number = 100;
 	readonly arenaSessionWidgetOpacity: number = 100;
+	readonly arenaSessionWidgetNumberOfMatchesToShow: number = 5;
 	readonly arenaCurrentSessionStartDate: Date | null = null;
+	readonly arenaCurrentSessionTimeFrame: ArenaSessionWidgetTimeFrame = 'current-season';
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly arenaCurrentSessionWidgetPosition: { left: number; top: number };
 
 	readonly hsShowQuestsWidget: boolean = true;
 	readonly hsShowQuestsWidgetOnHub: boolean = true;
@@ -699,3 +703,4 @@ export type BooleanWithLimited = boolean | 'limited';
 export type BgsCompositionsListMode = 'exploring' | 'browsing';
 export type BgsCardTypeFilterType = 'minion' | 'spell';
 export type BgsCardTierFilterType = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type ArenaSessionWidgetTimeFrame = 'current-season' | 'all-time';
