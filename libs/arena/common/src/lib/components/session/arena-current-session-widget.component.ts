@@ -24,7 +24,7 @@ import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-too
 				<div class="controls">
 					<div
 						class="title"
-						[fsTranslate]="'session.title'"
+						[fsTranslate]="'session.arena-title'"
 						[helpTooltip]="'session.arena-title-tooltip' | fsTranslate"
 					></div>
 					<div class="buttons">
@@ -65,20 +65,20 @@ import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-too
 									[componentTooltipAllowMouseOver]="true"
 									[componentType]="componentType"
 									[componentInput]="detail"
-									componentTooltipPosition="left"
+									componentTooltipPosition="right"
 								>
 									<img class="portrait" [src]="detail.cardId" />
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- <ng-container *ngIf="{ showMatches: showMatches$ | async, runs: runs$ | async } as value">
+					<ng-container *ngIf="{ showMatches: showMatches$ | async, runs: runs$ | async } as value">
 						<div class="details" *ngIf="value.showMatches && value.runs?.length">
-							<div class="detail" *ngFor="let match of value.runs">
+							<div class="detail" *ngFor="let run of value.runs">
 								<arena-run [run]="run"></arena-run>
 							</div>
 						</div>
-					</ng-container> -->
+					</ng-container>
 				</div>
 			</ng-container>
 		</div>

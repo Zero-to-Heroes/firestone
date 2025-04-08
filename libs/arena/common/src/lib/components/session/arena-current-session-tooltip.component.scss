@@ -2,9 +2,10 @@
 	background: var(--color-9);
 	padding: 20px;
 	width: 250px;
-	pointer-events: all;
+	pointer-events: none;
 	display: flex;
 	flex-direction: column;
+	margin-left: 50px;
 }
 
 .title {

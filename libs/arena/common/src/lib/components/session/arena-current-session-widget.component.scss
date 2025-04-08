@@ -204,138 +204,40 @@
 			}
 		}
 
-		// .details {
-		// 	.detail {
-		// 		display: flex;
-		// 		padding-left: 5px;
-		// 		height: 45px;
+		.details {
+			display: flex;
+			flex-direction: column;
+			border-top: 1px solid var(--color-1);
+			padding-top: 15px;
+			margin-top: 10px;
+			margin-left: 10px;
+			margin-right: 10px;
 
-		// 		.hero-portrait {
-		// 			margin-right: 10px;
-		// 			width: 30px;
-		// 			flex-shrink: 0;
-		// 			display: flex;
-		// 			align-items: center;
+			.detail {
+				display: flex;
+				height: 45px;
 
-		// 			.player-class {
-		// 				width: 30px;
-		// 				height: 30px;
-		// 				clip-path: circle(10px at 50% 50%);
-		// 				transform: scale(1.5);
-		// 			}
-		// 		}
+				::ng-deep arena-run {
+					.arena-run {
+						background: transparent;
 
-		// 		.hero-name {
-		// 			width: 100px;
-		// 			flex-shrink: 0;
-		// 			color: var(--default-text-color);
-		// 			margin-right: 10px;
-		// 			flex-shrink: 0;
-		// 			white-space: nowrap;
-		// 			overflow: hidden;
-		// 			text-overflow: ellipsis;
-		// 			margin-top: auto;
-		// 			margin-bottom: auto;
-		// 		}
+						.group {
+							border: none;
+							padding: 0;
+							margin: 0;
+						}
 
-		// 		.position {
-		// 			width: 22px;
-		// 			flex-shrink: 0;
-		// 			margin-right: 5px;
-		// 			display: flex;
-		// 			align-items: center;
-		// 		}
+						.time,
+						.rewards {
+							display: none;
+						}
 
-		// 		.delta-mmr {
-		// 			width: 50px;
-		// 			flex-shrink: 0;
-		// 			color: var(--default-text-color);
-		// 			display: flex;
-		// 			align-items: center;
-		// 			justify-content: center;
-
-		// 			&.positive {
-		// 				color: #61ff47;
-
-		// 				&::before {
-		// 					content: '+';
-		// 				}
-		// 			}
-
-		// 			&.negative {
-		// 				color: #ff4747;
-		// 			}
-		// 		}
-
-		// 		.tribes,
-		// 		.anomalies {
-		// 			display: none;
-		// 			flex-shrink: 0;
-		// 			background: var(--color-5);
-		// 			padding-left: 5px;
-		// 			padding-right: 20px;
-		// 			border-right: 1px solid var(--color-3);
-
-		// 			.tribe {
-		// 				width: 30px;
-		// 				height: 30px;
-		// 				margin-right: -6px;
-
-		// 				.icon {
-		// 					clip-path: ellipse(35% 35% at 50% 50%);
-		// 					width: 120%;
-		// 					height: 120%;
-		// 					margin-top: 5px;
-		// 				}
-		// 			}
-		// 		}
-
-		// 		.board {
-		// 			display: none;
-		// 			flex-shrink: 0;
-		// 			background: var(--color-5);
-		// 			padding-left: 15px;
-		// 			padding-right: 5px;
-
-		// 			::ng-deep bgs-board {
-		// 				height: 100%;
-
-		// 				.board-turn {
-		// 					display: none;
-		// 				}
-		// 				board-card-stats .stat .value.value.value.value.value {
-		// 					font-size: 14px;
-		// 				}
-		// 				.minion-container {
-		// 					margin-right: 7px;
-		// 					li {
-		// 						height: 45px;
-		// 						width: 30.5px;
-
-		// 						.card-on-board-overlays {
-		// 							.overlay {
-		// 								width: 170%;
-		// 								left: -35%;
-		// 								top: -9%;
-
-		// 								&.minion_windfury {
-		// 									opacity: 0.8;
-		// 								}
-		// 							}
-		// 						}
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-
-		// 		&:hover {
-		// 			.tribes,
-		// 			.anomalies,
-		// 			.board {
-		// 				display: flex;
-		// 			}
-		// 		}
-		// 	}
-		// }
+						.right-info {
+							display: none;
+						}
+					}
+				}
+			}
+		}
 	}
 }
