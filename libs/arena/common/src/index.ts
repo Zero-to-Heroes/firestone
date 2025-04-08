@@ -21,6 +21,8 @@ export * from './lib/components/personal-stats/arena-personal-stats-overview.com
 export * from './lib/components/personal-stats/arena-personal-stats.component';
 export * from './lib/components/runs/arena-deck-details.component';
 export * from './lib/components/runs/arena-run-vignette.component';
+export * from './lib/components/runs/arena-run.component';
+export * from './lib/components/session/arena-current-session-tooltip.component';
 export * from './lib/components/session/arena-current-session-widget.component';
 export * from './lib/models/arena-category';
 export * from './lib/models/arena-combined-card-stat';

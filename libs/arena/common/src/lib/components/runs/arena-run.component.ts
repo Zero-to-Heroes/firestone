@@ -1,9 +1,13 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { ArenaNavigationService, ArenaRun, InternalNotableCard, buildNotableCards } from '@firestone/arena/common';
 import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
 import { extractTime, extractTimeWithHours } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
+import { InternalNotableCard } from '../../models/arena-high-wins-runs';
+import { ArenaRun } from '../../models/arena-run';
+import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
+import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
 @Component({
 	selector: 'arena-run',
@@ -48,7 +52,7 @@ import { GameStat } from '@firestone/stats/data-access';
 					<div class="value">{{ deckScore }}</div>
 				</div>
 
-				<div class="group current-draft" *ngIf="cardsInDeck != null">
+				<div class="group current-draft" *ngIf="cardsInDeck !== null">
 					<div class="value">{{ cardsInDeck }}</div>
 				</div>
 
@@ -61,12 +65,12 @@ import { GameStat } from '@firestone/stats/data-access';
 			</div>
 			<div class="right-info">
 				<div class="group view-deck" (click)="showDeck()" *ngIf="deckstring">
-					<div class="text" [owTranslate]="'app.duels.run.view-deck-button'"></div>
+					<div class="text" [fsTranslate]="'app.duels.run.view-deck-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/view_deck.svg"></div>
 				</div>
 				<div class="group show-more" [ngClass]="{ expanded: _isExpanded }" (click)="toggleShowMore()">
-					<div class="text" *ngIf="_isExpanded" [owTranslate]="'app.arena.runs.minimize-run-button'"></div>
-					<div class="text" *ngIf="!_isExpanded" [owTranslate]="'app.arena.runs.view-run-button'"></div>
+					<div class="text" *ngIf="_isExpanded" [fsTranslate]="'app.arena.runs.minimize-run-button'"></div>
+					<div class="text" *ngIf="!_isExpanded" [fsTranslate]="'app.arena.runs.view-run-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 				</div>
 			</div>
@@ -74,7 +78,7 @@ import { GameStat } from '@firestone/stats/data-access';
 		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps; trackBy: trackByStepFn">
-					<replay-info-generic [replay]="step"></replay-info-generic>
+					<replay-info-generic-2 [replay]="step"></replay-info-generic-2>
 				</li>
 			</ul>
 		</div>

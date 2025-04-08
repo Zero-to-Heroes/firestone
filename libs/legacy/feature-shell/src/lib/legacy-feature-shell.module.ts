@@ -269,7 +269,6 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
-import { ArenaRunComponent } from '@components/arena/desktop/arena-run.component';
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
@@ -1143,7 +1142,6 @@ try {
 		ArenaHighWinRunsWinsFilterDropdownComponent,
 		ArenaCardClassFilterDropdownComponent,
 		ArenaCardTypeFilterDropdownComponent,
-		ArenaRunComponent,
 
 		MercenariesOpponentTeamComponent,
 		MercenariesTeamRootComponent,
