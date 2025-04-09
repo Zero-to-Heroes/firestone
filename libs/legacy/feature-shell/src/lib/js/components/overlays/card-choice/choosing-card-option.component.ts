@@ -90,7 +90,7 @@ export class ChoosingCardOptionComponent implements OnDestroy {
 		if (!this.shouldHighlight) {
 			return;
 		}
-		this.cardsHighlightService?.onMouseEnter(this._option?.cardId, this.side, null);
+		this.cardsHighlightService?.onMouseEnter(this._option?.cardId, this.side, null, 'discover');
 	}
 
 	onMouseLeave(event: MouseEvent) {

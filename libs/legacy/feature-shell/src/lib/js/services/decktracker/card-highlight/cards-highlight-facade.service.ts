@@ -36,8 +36,8 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		this.service.unregister(_uniqueId, side);
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard) {
-		this.service.onMouseEnter(cardId, side, card);
+	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard, context?: 'discover') {
+		this.service.onMouseEnter(cardId, side, card, context);
 	}
 
 	getHighlightedCards(

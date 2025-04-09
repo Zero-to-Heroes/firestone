@@ -59,7 +59,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		delete this.handlers[_uniqueId];
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard) {
+	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard, context?: 'discover') {
 		// Happens when using the deck-list component outside of a game
 		// console.debug('[cards-highlight] mouse enter', cardId, side, card, this.options);
 		if (!this.options?.skipGameState && !this.gameState) {
@@ -86,6 +86,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			card,
 			playerDeckProvider,
 			opponentDeckProvider,
+			context,
 		);
 		// console.debug('[cards-highlight] cards to highlight', cardsToHighlight);
 		for (const card of cardsToHighlight) {
@@ -182,9 +183,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		card: DeckCard,
 		playerDeckProvider: () => DeckState,
 		opponentDeckProvider: () => DeckState,
+		context?: 'discover',
 	): readonly SelectorInput[] {
 		let result: SelectorInput[] = [];
-		const selector: Selector = this.buildSelector(cardId, card, side);
+		const selector: Selector = this.buildSelector(cardId, card, side, context);
 		const selectorSort: SelectorSort = cardIdSelectorSort(cardId);
 
 		const allPlayerCards = this.getAllCards(
@@ -290,8 +292,13 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		return result;
 	}
 
-	private buildSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'single'): Selector {
-		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide);
+	private buildSelector(
+		cardId: string,
+		card: DeckCard,
+		inputSide: 'player' | 'opponent' | 'single',
+		context?: 'discover',
+	): Selector {
+		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide, context);
 		const cardContextSelector = this.buildCardContextSelector(card);
 		return orWithHighlight(cardIdSelector, cardContextSelector);
 	}
@@ -302,7 +309,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 	}
 
-	private buildCardIdSelector(cardId: string, card: DeckCard, inputSide: 'player' | 'opponent' | 'single'): Selector {
+	private buildCardIdSelector(
+		cardId: string,
+		card: DeckCard,
+		inputSide: 'player' | 'opponent' | 'single',
+		context?: 'discover',
+	): Selector {
 		// console.debug('[cards-highlight] building cardId selector', cardId, card, inputSide);
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
 		if (!!selector) {
@@ -327,7 +339,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
 		}
 		// Specific highlights for draft
-		if (inputSide === 'single') {
+		if (inputSide === 'single' || context === 'discover') {
 			// console.debug('[cards-highlight] building cardId selector for draft', cardId, card, inputSide);
 			if (
 				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE]) ||
