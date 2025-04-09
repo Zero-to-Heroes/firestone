@@ -327,6 +327,7 @@ export class ArenaDraftManagerService
 						const deckDraftStats: DraftDeckStats = {
 							runId: currentDeck.Id!,
 							userId: null as any,
+							region: null,
 							playerClass: deckClass,
 							deckImpact: deckImpact,
 							deckScore: deckScore,

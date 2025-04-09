@@ -2,6 +2,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BnetRegion } from '@firestone-hs/reference-data';
+import { AccountService } from '@firestone/profile/common';
 import {
 	ArenaSessionWidgetTimeFrame,
 	PatchesConfigService,
@@ -103,12 +105,13 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		private readonly prefs: PreferencesService,
 		private readonly runs: ArenaRunsService,
 		private readonly patches: PatchesConfigService,
+		private readonly region: AccountService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.runs, this.patches);
+		await waitForReady(this.prefs, this.runs, this.patches, this.region);
 
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => Math.max(0.01, prefs.arenaSessionWidgetOpacity / 100)),
@@ -136,13 +139,15 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		const lastRuns$ = combineLatest([
 			this.runs.allRuns$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaCurrentSessionStartDate)),
+			this.region.region$$.pipe(this.mapData((region) => region)),
 			timeFrame$,
 			seasonStart$,
 		]).pipe(
-			this.mapData(([runs, sessionStartDate, timeFrame, seasonStart]) =>
+			this.mapData(([runs, sessionStartDate, region, timeFrame, seasonStart]) =>
 				runs
-					?.filter((r) => r.totalCardsInDeck === 30 || r.steps?.length > 0)
-					.filter((run) => isRunValid(run, timeFrame, new Date(seasonStart!))),
+					?.filter((r) => !!r?.getFirstMatch())
+					.filter((run) => isCorrectRegion(run, region))
+					.filter((run) => isCorrectTime(run, timeFrame, new Date(seasonStart!))),
 			),
 		);
 		this.totalGamesLabel$ = lastRuns$.pipe(
@@ -225,6 +230,10 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 	}
 }
 
+const isCorrectRegion = (run: ArenaRun, region: BnetRegion | null): boolean => {
+	return !region || run?.getFirstMatch()?.region === region;
+};
+
 const isRunInGroup = (run: ArenaRun, group: WinRange): boolean => {
 	if (group.includes('-')) {
 		const [min, max] = group.split('-').map((s) => parseInt(s, 10));
@@ -234,7 +243,7 @@ const isRunInGroup = (run: ArenaRun, group: WinRange): boolean => {
 	}
 };
 
-const isRunValid = (run: ArenaRun, timeFrame: ArenaSessionWidgetTimeFrame, seasonStart: Date): boolean => {
+const isCorrectTime = (run: ArenaRun, timeFrame: ArenaSessionWidgetTimeFrame, seasonStart: Date): boolean => {
 	switch (timeFrame) {
 		case 'current-season':
 			return run.creationTimestamp >= seasonStart.getTime();

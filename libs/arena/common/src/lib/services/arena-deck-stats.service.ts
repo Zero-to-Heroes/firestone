@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
+import { AccountService } from '@firestone/profile/common';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -23,6 +24,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	private user: UserService;
 	private diskCache: DiskCacheService;
 	private db: IndexedDbService;
+	private account: AccountService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaDeckStatsService', () => !!this.deckStats$$);
@@ -38,6 +40,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		this.user = AppInjector.get(UserService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 		this.db = AppInjector.get(IndexedDbService);
+		this.account = AppInjector.get(AccountService);
 
 		this.deckStats$$.onFirstSubscribe(async () => {
 			const currentUser = await this.user.getCurrentUser();
@@ -48,8 +51,10 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 
 	public async newDeckStat(stat: DraftDeckStats, isFinalDeck: boolean) {
 		const user = await this.user.getCurrentUser();
+		const region = this.account.region$$.getValue();
 		const newStat: DraftDeckStats = {
 			...stat,
+			region: region,
 			userId: user?.userId ?? '',
 		};
 		console.debug('[arena-deck-stats] saving deck stats', stat);

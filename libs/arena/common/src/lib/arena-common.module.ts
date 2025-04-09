@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
+import { ProfileCommonModule } from '@firestone/profile/common';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
@@ -89,6 +90,7 @@ const components = [
 		SharedCommonServiceModule,
 		MemoryModule,
 		GameStateModule,
+		ProfileCommonModule,
 	],
 	providers: [
 		ArenaClassStatsService,

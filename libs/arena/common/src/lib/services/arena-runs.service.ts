@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { decode } from '@firestone-hs/deckstrings';
+import { BnetRegion } from '@firestone-hs/reference-data';
 import {
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
@@ -105,16 +106,21 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 					map((prefs) => ({
 						timeFilter: prefs.arenaActiveTimeFilter,
 						heroFilter: prefs.arenaActiveClassFilter,
+						region: prefs.regionFilter,
 					})),
-					distinctUntilChanged((a, b) => a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter),
+					distinctUntilChanged(
+						(a, b) =>
+							a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter && a.region === b.region,
+					),
 				),
 				this.patchesConfig.currentArenaMetaPatch$$,
 				this.patchesConfig.currentArenaSeasonPatch$$,
 			])
 				.pipe(
 					filter(([runs, { timeFilter, heroFilter }]) => !!runs?.length),
-					map(([runs, { timeFilter, heroFilter }, patch, seasonPatch]) => {
+					map(([runs, { timeFilter, heroFilter, region }, patch, seasonPatch]) => {
 						const filteredRuns = runs!
+							.filter((match) => isCorrectRegion(match, region))
 							.filter((match) => this.isCorrectHero(match, heroFilter))
 							.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch));
 						return filteredRuns;
@@ -218,6 +224,19 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		);
 	}
 }
+
+export const isCorrectRegion = (run: ArenaRun, region: BnetRegion | 'all'): boolean => {
+	console.debug(
+		'isCorrectRegion',
+		region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region,
+		region === 'all',
+		run.draftStat?.region === region,
+		run.getFirstMatch()?.region === region,
+		run,
+		region,
+	);
+	return region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region;
+};
 
 export const isCorrectTime = (
 	run: ArenaRun,
