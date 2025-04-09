@@ -137,7 +137,12 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		);
 
 		const lastRuns$ = combineLatest([
-			this.runs.allRuns$$,
+			this.runs.allRuns$$.pipe(
+				this.mapData((runs) => runs),
+				distinctUntilChanged(
+					(a, b) => (a?.length ?? 0) === (b?.length ?? 0) && a?.[0]?.steps?.length === b?.[0]?.steps?.length,
+				),
+			),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaCurrentSessionStartDate)),
 			this.region.region$$.pipe(this.mapData((region) => region)),
 			timeFrame$,
@@ -157,7 +162,6 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		);
 		this.currentAverage$ = lastRuns$.pipe(
 			this.mapData((runs) => {
-				console.debug('[debug] runs', runs, runs?.length);
 				const totalWins = runs?.reduce((acc, run) => acc + (run.wins ?? 0), 0) ?? 0;
 				const totalRuns = runs?.length ?? 0;
 				const average = totalRuns > 0 ? (totalWins / totalRuns).toFixed(2) : '-';

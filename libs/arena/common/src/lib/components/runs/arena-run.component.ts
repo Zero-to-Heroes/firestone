@@ -194,7 +194,6 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 			this.wins ?? 0
 		}wins.png`;
 		this.rewards = this._run.rewards;
-		console.debug('rewards', this.rewards, this._run);
 
 		const heroCard = this._run.heroCardId ? this.allCards.getCard(this._run.heroCardId) : null;
 		if (this.replaysShowClassIcon && heroCard) {
