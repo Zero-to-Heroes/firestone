@@ -226,15 +226,15 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 }
 
 export const isCorrectRegion = (run: ArenaRun, region: BnetRegion | 'all'): boolean => {
-	console.debug(
-		'isCorrectRegion',
-		region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region,
-		region === 'all',
-		run.draftStat?.region === region,
-		run.getFirstMatch()?.region === region,
-		run,
-		region,
-	);
+	// console.debug(
+	// 	'isCorrectRegion',
+	// 	region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region,
+	// 	region === 'all',
+	// 	run.draftStat?.region === region,
+	// 	run.getFirstMatch()?.region === region,
+	// 	run,
+	// 	region,
+	// );
 	return region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region;
 };
 
