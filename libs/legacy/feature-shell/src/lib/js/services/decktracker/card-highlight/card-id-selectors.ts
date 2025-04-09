@@ -1862,7 +1862,7 @@ export const cardIdSelector = (
 		case CardIds.NetherBreath_DRG_205:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NightmareLordXavius_EDR_856:
-			return and(side(inputSide), or(inDeck, inHand), minion);
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.NineLives:
 			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 		case CardIds.NorthernNavigation:
