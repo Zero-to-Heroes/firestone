@@ -62,15 +62,20 @@ export abstract class CounterDefinitionV2<T> {
 
 		if (!gameState?.gameStarted || gameState.gameEnded) {
 			this.debug &&
-				console.debug('[debug] game not started or ended', gameState.gameStarted, gameState.gameEnded);
+				console.debug('[debug] game not started or ended', side, gameState.gameStarted, gameState.gameEnded);
 			return false;
 		}
 
 		if (side === 'player') {
-			this.debug && console.debug('[debug] considering', gameState, bgState);
+			this.debug && console.debug('[debug] considering', side, gameState, bgState);
 			if (!this.player?.pref || !prefs[this.player.pref]) {
 				this.debug &&
-					console.debug('[debug] not visible from prefs', this.player?.pref, prefs[this.player?.pref ?? '']);
+					console.debug(
+						'[debug] not visible from prefs',
+						side,
+						this.player?.pref,
+						prefs[this.player?.pref ?? ''],
+					);
 				return false;
 			}
 			if (prefs[this.player.pref] === 'always-on') {
@@ -78,41 +83,49 @@ export abstract class CounterDefinitionV2<T> {
 			}
 			if (!!this.cards?.length && !gameState.playerDeck?.hasRelevantCard(this.cards)) {
 				this.debug &&
-					console.debug('[debug] not visible from deck', gameState.playerDeck?.hasRelevantCard(this.cards));
+					console.debug(
+						'[debug] not visible from deck',
+						side,
+						gameState.playerDeck?.hasRelevantCard(this.cards),
+					);
 				return false;
 			}
 			if (!this.player.display(gameState, bgState)) {
 				this.debug &&
-					console.debug('[debug] not visible from deck', gameState.playerDeck?.hasRelevantCard(this.cards));
+					console.debug(
+						'[debug] not visible from deck',
+						side,
+						gameState.playerDeck?.hasRelevantCard(this.cards),
+					);
 				return false;
 			}
 			if (this.player.value(gameState, bgState) == null) {
-				this.debug && console.debug('[debug] no value', this.player.value(gameState, bgState));
+				this.debug && console.debug('[debug] no value', side, this.player.value(gameState, bgState));
 				return false;
 			}
-			this.debug && console.debug('[debug] show', gameState, bgState);
+			this.debug && console.debug('[debug] show', side, gameState, bgState);
 			return true;
 		} else if (side === 'opponent') {
-			// console.debug('checking opponent', this, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
+			console.debug('checking opponent', side, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
 				return false;
 			}
 			if (prefs[this.opponent.pref] === 'always-on') {
 				return true;
 			}
-			// console.debug('hasRelevantCard?', this, gameState.opponentDeck?.hasRelevantCard(this.cards));
+			console.debug('hasRelevantCard?', side, gameState.opponentDeck?.hasRelevantCard(this.cards));
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
 				return true;
 			}
-			// console.debug('display', this, this.opponent.display(gameState));
+			console.debug('display', side, this.opponent.display(gameState, bgState));
 			if (!this.opponent.display(gameState, bgState)) {
 				return false;
 			}
-			// console.debug('value', this, this.opponent.value(gameState));
+			console.debug('value', side, this.opponent.value(gameState, bgState));
 			if (!this.opponent.value(gameState, bgState)) {
 				return false;
 			}
-			// console.debug('returning true', this);
+			console.debug('returning true', this);
 			return true;
 		}
 		return false;
