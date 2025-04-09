@@ -89,6 +89,10 @@ export class SecretConfigService {
 				return (
 					this.allCards.getCard(creatorCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
 				);
+			case CardIds.Supernova_GDB_301:
+				return (
+					this.allCards.getCard(creatorCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
+				);
 			default:
 				return true;
 		}
