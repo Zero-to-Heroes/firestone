@@ -1752,6 +1752,8 @@ export const cardIdSelector = (
 		case CardIds.Malorne:
 		case CardIds.Malorne_WON_011:
 			return and(side(inputSide), or(inDeck, inHand), beast);
+		case CardIds.MalorneTheWaywatcher_EDR_888:
+			return and(side(inputSide), or(inDeck, inHand), imbue);
 		case CardIds.MalygosAspectOfMagic:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.MalygosTheSpellweaverCore:
