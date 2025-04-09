@@ -20,7 +20,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
@@ -73,7 +73,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 
 	async ngAfterContentInit() {
 		await waitForReady(this.draftManager, this.arenaCardStats, this.arenaClassStats, this.ads, this.prefs);
-		console.debug('[arena-card-selection] ready');
 
 		const isHearthArenaRunning = await this.ow.getExtensionRunningState(`eldaohcjmecjpkpdhhoiolhhaeapcldppbdgbnbc`);
 		console.log('[arena-card-selection] isHearthArenaRunning', isHearthArenaRunning);
@@ -87,9 +86,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			this.pickNumber$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay)),
 		]).pipe(
-			tap((info) =>
-				console.debug('[arena-card-selection] showingSideBanner', info, isHearthArenaRunning.isRunning),
-			),
 			this.mapData(
 				([hasPremium, pickNumber, arenaShowCardSelectionOverlay]) =>
 					arenaShowCardSelectionOverlay && pickNumber >= 1 && !hasPremium && isHearthArenaRunning?.isRunning,
@@ -98,10 +94,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		// TODO: load the context of the current class
 		// So this means storing somewhere the current draft info (including the decklist)
 		// this.updateClassContext();
-		const currentHero$ = this.draftManager.currentDeck$$.pipe(
-			tap((deck) => console.debug('current deck', deck)),
-			this.mapData((deck) => deck?.HeroCardId),
-		);
+		const currentHero$ = this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId));
 		const currentHeroWinrate$ = combineLatest([currentHero$, this.arenaClassStats.classStats$$]).pipe(
 			this.mapData(([currentHero, stats]) => {
 				const heroStats = stats?.stats.find(
@@ -140,7 +133,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 							: stat.matchStats.stats.decksWithCardThenWin / stat.matchStats.stats.decksWithCard;
 						const deckImpact =
 							currentHeroWinrate == null || deckWinrate == null ? null : deckWinrate - currentHeroWinrate;
-						console.debug('drawnImpact', drawnImpact, currentHeroWinrate, drawnWinrate);
 						const result: ArenaCardOption = {
 							cardId: option,
 							drawnWinrate: drawnWinrate,
@@ -176,11 +168,12 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			.subscribe(([previousMouseOverCard, mousedOverCard]) => {
 				// We use cardId instead of entityId so that it still works when we have multiple cards in hand (since only one entity
 				// id is assigned)
-				if (mousedOverCard?.CardId) {
-					this.onMouseEnter(mousedOverCard?.CardId);
-				} else if (previousMouseOverCard?.CardId) {
+				if (previousMouseOverCard?.CardId) {
 					this.onMouseLeave(previousMouseOverCard.CardId);
 					// this.forceMouseOver$$.next(false);
+				}
+				if (mousedOverCard?.CardId) {
+					this.onMouseEnter(mousedOverCard?.CardId);
 				}
 			});
 
@@ -190,7 +183,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 	}
 
 	onMouseEnter(cardId: string) {
-		console.debug('mouseenter', cardId);
 		this.cardsHighlightService.onMouseEnter(cardId, 'single');
 	}
 
