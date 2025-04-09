@@ -1,14 +1,25 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
 	capitalizeEachWord,
 	capitalizeFirstLetter,
 } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'replay-info-generic-2',
@@ -68,7 +79,7 @@ import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoGeneric2Component extends AbstractSubscriptionComponent {
+export class ReplayInfoGeneric2Component extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
@@ -96,13 +107,37 @@ export class ReplayInfoGeneric2Component extends AbstractSubscriptionComponent {
 	reviewId: string;
 	gameTime: string | null;
 
+	private sub$$: Subscription;
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.sub$$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon))
+			.subscribe((replaysShowClassIcon) => {
+				this.replaysShowClassIcon = replaysShowClassIcon;
+				this.updateInfo();
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@HostListener('window:beforeunload')
+	override ngOnDestroy() {
+		super.ngOnDestroy();
+		this.sub$$.unsubscribe();
 	}
 
 	capitalize(input: string): string | null {

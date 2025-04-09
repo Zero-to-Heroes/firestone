@@ -1,9 +1,21 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
 import { extractTime, extractTimeWithHours } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
+import { Subscription } from 'rxjs';
 import { InternalNotableCard } from '../../models/arena-high-wins-runs';
 import { ArenaRun } from '../../models/arena-run';
 import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
@@ -85,7 +97,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunComponent {
+export class ArenaRunComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() set run(value: ArenaRun) {
 		this._run = value;
 		this.updateValues();
@@ -111,13 +123,39 @@ export class ArenaRunComponent {
 	averageMatchTimeTooltip: string | null;
 
 	private _run: ArenaRun;
+	private replaysShowClassIcon: boolean;
+	private sub$$: Subscription;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly nav: ArenaNavigationService,
-	) {}
+		private readonly prefs: PreferencesService,
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.sub$$ = this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon))
+			.subscribe((replaysShowClassIcon) => {
+				this.replaysShowClassIcon = replaysShowClassIcon;
+				this.updateValues();
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@HostListener('window:beforeunload')
+	override ngOnDestroy() {
+		super.ngOnDestroy();
+		this.sub$$.unsubscribe();
+	}
 
 	toggleShowMore() {
 		this._isExpanded = !this._isExpanded;
@@ -158,15 +196,21 @@ export class ArenaRunComponent {
 		this.rewards = this._run.rewards;
 		console.debug('rewards', this.rewards, this._run);
 
-		this.playerClassImage = this._run.heroCardId
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroCardId}.jpg`
-			: null;
-		this.playerCardId = this._run.heroCardId;
 		const heroCard = this._run.heroCardId ? this.allCards.getCard(this._run.heroCardId) : null;
+		if (this.replaysShowClassIcon && heroCard) {
+			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
+			this.playerClassImage = image;
+		} else {
+			this.playerClassImage = this._run.heroCardId
+				? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroCardId}.jpg`
+				: null;
+		}
+		this.playerCardId = this._run.heroCardId;
 		this.playerClassTooltip =
 			heroCard && !!heroCard?.classes?.length
 				? `${heroCard.name} (${formatClass(heroCard.classes[0], this.i18n)})`
 				: null;
+
 		this.deckScore = this._run.draftStat?.deckScore != null ? this._run.draftStat.deckScore.toFixed(1) : null;
 		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
