@@ -2926,6 +2926,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.WeaverOfTheCycle_EDR_472:
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
+		case CardIds.WebOfDeception_EDR_523:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.WickedWitchdoctor:
 		case CardIds.WickedWitchdoctor_WON_083:
 			return and(side(inputSide), or(inDeck, inHand), spell);
@@ -2976,8 +2978,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
 		case CardIds.YellingYodeler:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
-		// case CardIds.YoggSaronUnleashed_YOG_516:
-		// 	return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.YouthfulBrewmaster:
+		case CardIds.YouthfulBrewmasterCore:
+		case CardIds.YouthfulBrewmasterLegacy:
+		case CardIds.YouthfulBrewmasterVanilla:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.YoggInTheBox_TOY_372:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.YshaarjTheDefiler:
