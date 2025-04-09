@@ -55,7 +55,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 					/>
 				</div>
 
-				<div class="group time" *ngIf="totalRunTime">
+				<div class="group time" *ngIf="totalRunTime" [ngClass]="{ empty: totalRunTime === '-' }">
 					<div class="value" [helpTooltip]="averageMatchTimeTooltip">{{ totalRunTime }}</div>
 				</div>
 
@@ -217,14 +217,15 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards);
 
 		const totalRunTime = this._run.steps.map((step) => step.gameDurationSeconds).reduce((a, b) => a + b, 0);
-		this.totalRunTime =
-			totalRunTime > 3600
-				? this.i18n.translateString('global.duration.hrs-min-short', {
-						...extractTimeWithHours(totalRunTime),
-				  })
-				: this.i18n.translateString('global.duration.min-sec', {
-						...extractTime(totalRunTime),
-				  });
+		this.totalRunTime = !totalRunTime
+			? '-'
+			: totalRunTime > 3600
+			? this.i18n.translateString('global.duration.hrs-min-short', {
+					...extractTimeWithHours(totalRunTime),
+			  })
+			: this.i18n.translateString('global.duration.min-sec', {
+					...extractTime(totalRunTime),
+			  });
 		const averageMatchTime = Math.round(totalRunTime / this._run.steps.length);
 		this.averageMatchTimeTooltip = this.i18n.translateString('app.arena.runs.average-match-time', {
 			value: this.i18n.translateString('global.duration.min-sec', {
