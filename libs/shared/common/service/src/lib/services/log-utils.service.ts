@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, interval, startWith, Subscription, take } from 'rxjs';
 import { Preferences } from '../models/preferences';
 import { GameStatusService } from './game-status.service';
@@ -20,6 +20,8 @@ export class LogUtilsService {
 	}
 
 	private async init() {
+		await waitForReady(this.prefs, this.gameStatus);
+
 		this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
 			if (inGame) {
 				this.watcherSub = interval(1000)
