@@ -7,6 +7,7 @@ import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import { AccountService } from '@firestone/profile/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -50,6 +51,7 @@ export class ArenaDraftManagerService
 	private arenaClassStats: ArenaClassStatsService;
 	private arenaDeckStats: ArenaDeckStatsService;
 	private indexedDb: IndexedDbService;
+	private account: AccountService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
 
@@ -84,6 +86,7 @@ export class ArenaDraftManagerService
 		this.arenaClassStats = AppInjector.get(ArenaClassStatsService);
 		this.arenaDeckStats = AppInjector.get(ArenaDeckStatsService);
 		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.account = AppInjector.get(AccountService);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
 		this.currentStep$$.onFirstSubscribe(async () => {
@@ -97,6 +100,13 @@ export class ArenaDraftManagerService
 		});
 		this.currentDeck$$.onFirstSubscribe(async () => {
 			this.internalSubscriber$$.subscribe();
+		});
+
+		this.account.region$$.pipe(distinctUntilChanged()).subscribe(async (region) => {
+			this.currentDeck$$.next(null);
+			this.currentStep$$.next(null);
+			this.heroOptions$$.next(null);
+			this.cardOptions$$.next(null);
 		});
 
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
