@@ -91,7 +91,7 @@ export const battlegroundsBattleOddsSettings = (context: SettingContext): Settin
 						field: 'bgsShowSimResultsOnlyOnRecruit',
 						label: context.i18n.translateString('settings.battlegrounds.general.show-sim-only-in-tavern-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.show-sim-only-in-tavern-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || !prefs.bgsHideSimResultsOnRecruit,
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || prefs.bgsHideSimResultsOnRecruit,
 					},
 					{
 						type: 'toggle',
