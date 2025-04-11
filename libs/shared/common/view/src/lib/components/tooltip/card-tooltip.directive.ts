@@ -107,7 +107,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	ngAfterContentInit(): void {
 		this.mouseOverSub = this.forceMouseOver$$.subscribe((value) => {
 			if (value) {
-				this.onMouseEnter(true);
+				this.onMouseEnter(null, true);
 			} else {
 				this.onMouseLeave(null);
 			}
@@ -145,8 +145,12 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		this.mouseOverSub?.unsubscribe();
 	}
 
-	@HostListener('mouseenter')
-	async onMouseEnter(forced?: boolean) {
+	@HostListener('mouseenter', ['$event'])
+	async onMouseEnter(event: MouseEvent, forced?: boolean) {
+		if (event?.shiftKey) {
+			return;
+		}
+
 		if (!this.cardId && !this.cardTooltipCard && !this._cardTooltipRelatedCardIds?.length) {
 			return;
 		}
