@@ -305,10 +305,7 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.IllidariStudiesCore:
 		case CardIds.IllidariStudies_YOP_001:
-			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				hasMechanic(c, GameTag.OUTCAST) &&
-				canBeDiscoveredByClass(c, options.currentClass);
+			return (c) => hasMechanic(c, GameTag.OUTCAST) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.NatureStudies_SCH_333:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] && canBeDiscoveredByClass(c, options.currentClass);
