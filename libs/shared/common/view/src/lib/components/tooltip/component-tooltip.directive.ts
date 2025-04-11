@@ -141,8 +141,12 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		this.tooltipLeaveSub?.unsubscribe();
 	}
 
-	@HostListener('mouseenter')
-	onMouseEnter() {
+	@HostListener('mouseenter', ['$event'])
+	onMouseEnter(event: MouseEvent) {
+		if (event?.shiftKey) {
+			return;
+		}
+
 		if (!this._componentInput) {
 			return;
 		}
@@ -192,6 +196,10 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	@HostListener('mouseleave', ['$event'])
 	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
 		// return;
+		if (event?.shiftKey) {
+			return;
+		}
+
 		if (
 			this.componentTooltipAllowMouseOver &&
 			(event?.relatedTarget as HTMLDivElement)?.classList?.contains('tooltip-mouse-over-target')
