@@ -106,26 +106,27 @@ export abstract class CounterDefinitionV2<T> {
 			this.debug && console.debug('[debug] show', side, gameState, bgState);
 			return true;
 		} else if (side === 'opponent') {
-			console.debug('checking opponent', side, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
+			this.debug &&
+				console.debug('checking opponent', side, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
 				return false;
 			}
 			if (prefs[this.opponent.pref] === 'always-on') {
 				return true;
 			}
-			console.debug('hasRelevantCard?', side, gameState.opponentDeck?.hasRelevantCard(this.cards));
+			this.debug && console.debug('hasRelevantCard?', side, gameState.opponentDeck?.hasRelevantCard(this.cards));
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
 				return true;
 			}
-			console.debug('display', side, this.opponent.display(gameState, bgState));
+			this.debug && console.debug('display', side, this.opponent.display(gameState, bgState));
 			if (!this.opponent.display(gameState, bgState)) {
 				return false;
 			}
-			console.debug('value', side, this.opponent.value(gameState, bgState));
+			this.debug && console.debug('value', side, this.opponent.value(gameState, bgState));
 			if (!this.opponent.value(gameState, bgState)) {
 				return false;
 			}
-			console.debug('returning true', this);
+			this.debug && console.debug('returning true', this);
 			return true;
 		}
 		return false;
