@@ -95,15 +95,31 @@
 	.summary {
 		display: flex;
 		align-items: center;
-		height: 40px;
 		padding: 0 10px;
 		margin-top: 10px;
+		margin-bottom: 10px;
+
+		.data {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			.value {
+				color: var(--color-1);
+				font-weight: bold;
+				font-size: 1.8em;
+			}
+
+			.text {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
 
 		.games {
-			flex-grow: 1;
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
+			flex-basis: 50%;
 			font-size: 14px;
 
 			.time-frame {
@@ -117,8 +133,8 @@
 		}
 
 		.average {
-			color: var(--color-1);
-			font-weight: bold;
+			flex-basis: 50%;
+			flex-shrink: 0;
 		}
 	}
 

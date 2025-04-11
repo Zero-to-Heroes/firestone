@@ -39,18 +39,24 @@ import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-too
 					</div>
 				</div>
 				<div class="summary">
-					<div class="games">
-						<div class="label">{{ totalGamesLabel$ | async }}</div>
-						<div
-							class="time-frame"
-							(click)="cycleTimeFrame()"
-							[helpTooltip]="'session.time-frame.tooltip' | fsTranslate"
-						>
-							{{ timeFrameLabel$ | async }}
+					<div class="games data">
+						<div class="value">{{ totalGames$ | async }}</div>
+						<div class="text">
+							<div class="runs-text" [fsTranslate]="'session.summary.runs-text'"></div>
+							<div
+								class="time-frame"
+								(click)="cycleTimeFrame()"
+								[helpTooltip]="'session.time-frame.tooltip' | fsTranslate"
+							>
+								{{ timeFrameLabel$ | async }}
+							</div>
 						</div>
 					</div>
-					<div class="average">
-						<div class="current">{{ currentAverage$ | async }}</div>
+					<div class="average data">
+						<div class="value" [helpTooltip]="'session.summary.average-tooltip' | fsTranslate">
+							{{ currentAverage$ | async }}
+						</div>
+						<div class="text" [fsTranslate]="'session.summary.average-text'"></div>
 					</div>
 				</div>
 				<div class="content">
@@ -92,6 +98,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 
 	opacity$: Observable<number>;
 	timeFrameLabel$: Observable<string>;
+	totalGames$: Observable<number>;
 	totalGamesLabel$: Observable<string>;
 	currentAverage$: Observable<string>;
 	showGroups$: Observable<boolean>;
@@ -155,6 +162,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 					.filter((run) => isCorrectTime(run, timeFrame, new Date(seasonStart!))),
 			),
 		);
+		this.totalGames$ = lastRuns$.pipe(this.mapData((games) => games?.length ?? 0));
 		this.totalGamesLabel$ = lastRuns$.pipe(
 			this.mapData((games) => {
 				return this.i18n.translateString('session.summary.total-runs', { value: games?.length ?? 0 });
@@ -165,7 +173,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 				const totalWins = runs?.reduce((acc, run) => acc + (run.wins ?? 0), 0) ?? 0;
 				const totalRuns = runs?.length ?? 0;
 				const average = totalRuns > 0 ? (totalWins / totalRuns).toFixed(2) : '-';
-				return this.i18n.translateString('session.summary.average', { value: average });
+				return average; //this.i18n.translateString('session.summary.average', { value: average });
 			}),
 		);
 		this.groups$ = lastRuns$.pipe(
