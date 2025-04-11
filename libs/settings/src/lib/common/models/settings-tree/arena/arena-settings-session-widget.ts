@@ -21,6 +21,13 @@ export const arenaSessionWidgetSettings = (context: SettingContext): SettingNode
 					},
 					{
 						type: 'toggle',
+						field: 'arenaShowCurrentSessionWidgetInGame',
+						label: context.i18n.translateString('settings.arena.session-widget.show-in-game'),
+						tooltip: context.i18n.translateString('settings.arena.session-widget.show-in-game-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowCurrentSessionWidget,
+					},
+					{
+						type: 'toggle',
 						field: 'arenaSessionWidgetShowGroup',
 						label: context.i18n.translateString('settings.battlegrounds.session-widget.show-groups'),
 						tooltip: context.i18n.translateString('settings.arena.session-widget.show-groups-tooltip'),
@@ -28,10 +35,24 @@ export const arenaSessionWidgetSettings = (context: SettingContext): SettingNode
 					},
 					{
 						type: 'toggle',
+						field: 'arenaSessionWidgetShowGroupInGame',
+						label: context.i18n.translateString('settings.arena.session-widget.show-groups-in-game'),
+						tooltip: context.i18n.translateString('settings.arena.session-widget.show-groups-in-game-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowCurrentSessionWidget || !prefs.arenaSessionWidgetShowGroup,
+					},
+					{
+						type: 'toggle',
 						field: 'arenaSessionWidgetShowMatches',
 						label: context.i18n.translateString('settings.arena.session-widget.show-runs'),
 						tooltip: context.i18n.translateString('settings.arena.session-widget.show-runs-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.arenaShowCurrentSessionWidget,
+					},
+					{
+						type: 'toggle',
+						field: 'arenaSessionWidgetShowMatchesInGame',
+						label: context.i18n.translateString('settings.arena.session-widget.show-runs-in-game'),
+						tooltip: context.i18n.translateString('settings.arena.session-widget.show-runs-in-game-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowCurrentSessionWidget || !prefs.arenaSessionWidgetShowMatches,
 					},
 					{
 						type: 'numeric-input',

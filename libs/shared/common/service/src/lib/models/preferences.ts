@@ -219,8 +219,11 @@ export class Preferences implements IPreferences {
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;
 	readonly arenaShowCurrentSessionWidget: boolean = true;
+	readonly arenaShowCurrentSessionWidgetInGame: boolean = true;
 	readonly arenaSessionWidgetShowGroup: boolean = true;
+	readonly arenaSessionWidgetShowGroupInGame: boolean = true;
 	readonly arenaSessionWidgetShowMatches: boolean = true;
+	readonly arenaSessionWidgetShowMatchesInGame: boolean = true;
 	readonly arenaSessionWidgetScale: number = 100;
 	readonly arenaSessionWidgetOpacity: number = 100;
 	readonly arenaSessionWidgetNumberOfMatchesToShow: number = 5;

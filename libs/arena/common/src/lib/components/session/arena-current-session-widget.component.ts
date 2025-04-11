@@ -3,6 +3,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { AccountService } from '@firestone/profile/common';
 import {
 	ArenaSessionWidgetTimeFrame,
@@ -11,7 +12,7 @@ import {
 } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs';
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
 import { ArenaRunsService } from '../../services/arena-runs.service';
 import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-tooltip.component';
@@ -113,18 +114,35 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		private readonly runs: ArenaRunsService,
 		private readonly patches: PatchesConfigService,
 		private readonly region: AccountService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.runs, this.patches, this.region);
+		await waitForReady(this.prefs, this.runs, this.patches, this.region, this.gameState);
 
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => Math.max(0.01, prefs.arenaSessionWidgetOpacity / 100)),
 		);
-		this.showGroups$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaSessionWidgetShowGroup));
-		this.showMatches$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaSessionWidgetShowMatches));
+		const inGame$ = this.gameState.gameState$$.pipe(
+			debounceTime(1000),
+			this.mapData((state) => state?.gameStarted && !state?.gameEnded),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.showGroups$ = combineLatest([inGame$, this.prefs.preferences$$]).pipe(
+			this.mapData(
+				([inGame, prefs]) =>
+					prefs.arenaSessionWidgetShowGroup && (!inGame || prefs.arenaSessionWidgetShowGroupInGame),
+			),
+		);
+		this.showMatches$ = combineLatest([inGame$, this.prefs.preferences$$]).pipe(
+			this.mapData(
+				([inGame, prefs]) =>
+					prefs.arenaSessionWidgetShowMatches && (!inGame || prefs.arenaSessionWidgetShowMatchesInGame),
+			),
+		);
 
 		const timeFrame$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.arenaCurrentSessionTimeFrame),

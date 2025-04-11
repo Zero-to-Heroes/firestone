@@ -10,7 +10,7 @@ import {
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { ENABLE_ARENA_SESSION_WIDGET, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, filter, Observable, switchMap, takeUntil } from 'rxjs';
 
@@ -77,9 +77,9 @@ export class ArenaCurrentSessionWidgetWrapperComponent
 		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
 			this.mapData(
 				([gameType, currentScene, prefs]) =>
-					ENABLE_ARENA_SESSION_WIDGET &&
 					prefs.arenaShowCurrentSessionWidget &&
-					(isArenaScene(currentScene) || gameType === GameType.GT_ARENA),
+					(isArenaScene(currentScene) ||
+						(prefs.arenaShowCurrentSessionWidgetInGame && gameType === GameType.GT_ARENA)),
 			),
 			this.handleReposition(),
 		);
