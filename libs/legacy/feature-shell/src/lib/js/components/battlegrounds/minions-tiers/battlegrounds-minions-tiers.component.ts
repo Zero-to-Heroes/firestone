@@ -124,7 +124,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 
 		const playerTrinkets$ = this.bgGameState.gameState$$.pipe(
-			debounceTime(200),
+			debounceTime(1000),
 			this.mapData((main) => ({
 				lesser: main?.currentGame?.getMainPlayer()?.lesserTrinket,
 				greater: main?.currentGame?.getMainPlayer()?.greaterTrinket,
@@ -133,34 +133,61 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		const staticTiers$ = combineLatest([
-			this.prefs.preferences$$,
-			this.bgGameState.gameState$$,
-			this.gameState.gameState$$,
-			playerTrinkets$,
-		]).pipe(
-			map(([prefs, bgGameState, gameState, playerTrinkets]) => ({
+		const prefs$ = this.prefs.preferences$$.pipe(
+			debounceTime(200),
+			this.mapData((prefs) => ({
 				showMechanicsTiers: prefs.bgsShowMechanicsTiers,
 				showTribeTiers: prefs.bgsShowTribeTiers,
 				showTierSeven: prefs.bgsShowTierSeven,
 				showBuddies: prefs.bgsShowBuddies,
+				showTrinkets: prefs.bgsShowTrinkets,
+				showSpellsAtBottom: prefs.bgsMinionListShowSpellsAtBottom,
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
 				bgsIncludeTrinketsInTribeGroups: prefs.bgsIncludeTrinketsInTribeGroups,
-				gameMode: gameState?.metadata?.gameType,
-				races: bgGameState?.currentGame?.availableRaces,
-				hasBuddies: bgGameState?.currentGame?.hasBuddies,
-				hasSpells: bgGameState?.currentGame?.hasSpells,
-				showSpellsAtBottom: prefs.bgsMinionListShowSpellsAtBottom,
-				anomalies: bgGameState?.currentGame?.anomalies,
-				hasPrizes: bgGameState?.currentGame?.hasPrizes,
-				hasTrinkets: bgGameState?.currentGame?.hasTrinkets,
-				showTrinkets: prefs.bgsShowTrinkets,
-				playerCardId: bgGameState?.currentGame?.getMainPlayer()?.cardId,
-				allPlayersCardIds: bgGameState?.currentGame?.players?.map((p) => p.cardId),
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const gameMode$ = this.gameState.gameState$$.pipe(
+			debounceTime(1000),
+			this.mapData((state) => state?.metadata?.gameType),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const currentGameInfo$ = this.bgGameState.gameState$$.pipe(
+			debounceTime(1000),
+			this.mapData((state) => ({
+				races: state?.currentGame?.availableRaces,
+				hasBuddies: state?.currentGame?.hasBuddies,
+				hasSpells: state?.currentGame?.hasSpells,
+				anomalies: state?.currentGame?.anomalies,
+				hasPrizes: state?.currentGame?.hasPrizes,
+				hasTrinkets: state?.currentGame?.hasTrinkets,
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const playerCardIds$ = this.bgGameState.gameState$$.pipe(
+			debounceTime(1000),
+			this.mapData((state) => ({
+				playerCardId: state?.currentGame?.getMainPlayer()?.cardId,
+				allPlayersCardIds: state?.currentGame?.players?.map((p) => p.cardId),
+			})),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const staticTiers$ = combineLatest([prefs$, currentGameInfo$, playerCardIds$, gameMode$, playerTrinkets$]).pipe(
+			map(([prefs, currentGameInfo, playerCardIds, gameMode, playerTrinkets]) => ({
+				...prefs,
+				...currentGameInfo,
+				...playerCardIds,
+				gameMode: gameMode,
 				playerTrinkets: [playerTrinkets?.lesser, playerTrinkets?.greater].filter((trinket) => !!trinket),
 			})),
-			debounceTime(200),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				({
 					showMechanicsTiers,
@@ -227,20 +254,35 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 		);
 
+		const phase$ = this.bgGameState.gameState$$.pipe(
+			debounceTime(500),
+			this.mapData((state) => state?.currentGame?.phase),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const ownedCards$ = this.gameState.gameState$$.pipe(
+			debounceTime(500),
+			this.mapData((gameState) =>
+				[...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])].map((e) => e.cardId),
+			),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const boardComposition$: Observable<readonly MinionInfo[]> = combineLatest([
-			this.bgGameState.gameState$$,
-			this.gameState.gameState$$,
+			phase$,
+			ownedCards$,
 			playerTrinkets$,
 		]).pipe(
-			filter(([bgGameState, gameState, trinkets]) => bgGameState?.currentGame?.phase !== 'combat'),
-			this.mapData(([bgGameState, gameState, trinkets]) => {
+			filter(([phase, ownedCards, trinkets]) => phase !== 'combat'),
+			this.mapData(([bgGameState, ownedCards, trinkets]) => {
 				const trinketsArray = [trinkets.lesser, trinkets.greater].filter((trinket) => !!trinket);
-				const allEntities = [...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])];
-				const composition = allEntities.map((e) => {
+				const composition = ownedCards.map((cardId) => {
 					const result: MinionInfo = {
-						cardId: e.cardId,
-						tavernTier: this.allCards.getCard(e.cardId).techLevel,
-						tribes: getActualTribes(this.allCards.getCard(e.cardId), true, trinketsArray, []),
+						cardId: cardId,
+						tavernTier: this.allCards.getCard(cardId).techLevel,
+						tribes: getActualTribes(this.allCards.getCard(cardId), true, trinketsArray, []),
 					};
 					return result;
 				});

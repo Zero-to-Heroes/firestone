@@ -137,6 +137,7 @@ export class GameEvents {
 		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
 		await this.waitForPluginReady();
 		return new Promise<boolean>((resolve) => {
+			// console.debug('[debug] [game-events] dispatching game events', eventQueue.length, eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve(true);
 			});
@@ -1779,7 +1780,8 @@ export class GameEvents {
 		// console.debug('[game-events] [existing] all events to enqueue', this.existingLogLines);
 
 		if (this.existingLogLines.length > 0) {
-			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
+			// this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
+			this.processingQueue.enqueueAll(this.existingLogLines);
 			// console.debug('[game-events] [existing] REMOVE!!! all events enqueued', this.processingQueue);
 		}
 		this.existingLogLines = [];
