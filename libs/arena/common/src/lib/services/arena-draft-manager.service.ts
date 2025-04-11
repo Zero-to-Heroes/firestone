@@ -17,6 +17,7 @@ import {
 	ARENA_CURRENT_DECK_PICKS,
 	CardsFacadeService,
 	IndexedDbService,
+	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, tap, withLatestFrom } from 'rxjs';
@@ -102,6 +103,7 @@ export class ArenaDraftManagerService
 			this.internalSubscriber$$.subscribe();
 		});
 
+		await waitForReady(this.account);
 		this.account.region$$.pipe(distinctUntilChanged()).subscribe(async (region) => {
 			this.currentDeck$$.next(null);
 			this.currentStep$$.next(null);
