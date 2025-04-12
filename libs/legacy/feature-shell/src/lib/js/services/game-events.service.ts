@@ -137,7 +137,7 @@ export class GameEvents {
 		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
 		await this.waitForPluginReady();
 		return new Promise<boolean>((resolve) => {
-			// console.debug('[debug] [game-events] dispatching game events', eventQueue.length, eventQueue);
+			console.debug('[debug] [game-events] dispatching game events', eventQueue.length, eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve(true);
 			});

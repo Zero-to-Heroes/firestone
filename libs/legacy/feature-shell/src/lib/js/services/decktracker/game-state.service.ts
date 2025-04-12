@@ -284,11 +284,15 @@ export class GameStateService {
 		for (const parser of parsersForEvent) {
 			try {
 				if (parser.applies(gameEvent, this.state, prefs)) {
-					const stateBeforeParser = this.state;
+					const start = Date.now();
 					this.state = await parser.parse(this.state, gameEvent, {
 						secretWillTrigger: this.secretWillTrigger,
 						minionsWillDie: this.minionsWillDie,
 					});
+					const elapsed = Date.now() - start;
+					if (elapsed > 1000) {
+						console.warn('[debug] [game-state] parser took too long', elapsed, gameEvent.type);
+					}
 					// console.debug(
 					// 	'[game-state] parsed event',
 					// 	gameEvent.type,
@@ -303,7 +307,8 @@ export class GameStateService {
 		}
 		try {
 			if (this.state && (gameEvent.gameState != null || this.state !== previousState)) {
-				const previousState = this.state;
+				const start = Date.now();
+				// const previousState = this.state;
 				// console.debug('[game-state] state post-processing');
 				const postProcessedState = this.statePostProcessService.postProcess(this.state);
 				// Add information that is not linked to events, like the number of turns the
@@ -342,6 +347,10 @@ export class GameStateService {
 							opponentDeck: udpatedOpponentDeck,
 					  })
 					: postProcessedState;
+				const elapsed = Date.now() - start;
+				if (elapsed > 1000) {
+					console.warn('[debug] [game-state] post-processing took too long', elapsed, gameEvent.type);
+				}
 				// console.debug('[game-state] updated state', this.state === previousState, this.state);
 			}
 		} catch (e) {
