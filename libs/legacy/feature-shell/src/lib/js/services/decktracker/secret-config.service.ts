@@ -87,11 +87,11 @@ export class SecretConfigService {
 			case CardIds.SweetenedSnowflurry_TOY_307:
 			case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
 				return (
-					this.allCards.getCard(creatorCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
+					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
 				);
 			case CardIds.Supernova_GDB_301:
 				return (
-					this.allCards.getCard(creatorCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
+					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
 				);
 			default:
 				return true;
