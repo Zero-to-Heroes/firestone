@@ -10,6 +10,7 @@ import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map
 
 @Injectable({ providedIn: 'root' })
 export class BgsOverlayHeroOverviewService {
+	// TODO: check usage, and whether having a full BgsPLayer is necessary
 	public info$$ = new BehaviorSubject<PlayerInfo | null>(null);
 
 	constructor(
@@ -24,16 +25,22 @@ export class BgsOverlayHeroOverviewService {
 	private async init() {
 		await waitForReady(this.gameState, this.prefs, this.bgState);
 
-		this.gameState.gameState$$.pipe(map((state) => state?.gameEnded)).subscribe((gameEnded) => {
-			if (gameEnded) {
-				this.hideInfo(null);
-			}
-		});
+		this.gameState.gameState$$
+			.pipe(
+				map((state) => state?.gameEnded),
+				distinctUntilChanged(),
+			)
+			.subscribe((gameEnded) => {
+				if (gameEnded) {
+					this.hideInfo(null);
+				}
+			});
 
 		const players$ = this.bgState.gameState$$.pipe(
 			debounceTime(100),
 			map((state) => state?.currentGame?.players),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			// Immutable Map + a lot of info, maybe not use deepEqual
+			// distinctUntilChanged((a, b) => deepEqual(a, b)),
 		);
 		const componentClass$ = this.prefs.preferences$$.pipe(
 			map((prefs) => (prefs.bgsOpponentOverlayAtTop ? null : 'bottom')),

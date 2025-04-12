@@ -1,13 +1,13 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { GameFormat, GameType, formatGameType } from '@firestone-hs/reference-data';
+import { formatGameType, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { GameStateUpdatesService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap } from 'rxjs';
+import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap } from 'rxjs';
 import { IN_GAME_TEXT_PLACEHOLDER } from './discord-presence-manager.service';
 
 @Injectable()
@@ -49,18 +49,21 @@ export class PresenceManagerService {
 	// TODO: support Arena (W-L), Battlegrounds (MMR), Mercs
 	private buildPresence() {
 		const metaData$ = this.gameStateUpdates.gameState$$.pipe(
+			auditTime(500),
 			map((gameState) => gameState?.metadata),
 			distinctUntilChanged(),
 			// tap((metadata) => console.debug('[presence] new metadata', metadata)),
 			shareReplay(1),
 		);
 		const matchInfo$ = this.gameStateUpdates.gameState$$.pipe(
+			auditTime(500),
 			map((gameState) => gameState?.matchInfo),
 			distinctUntilChanged(),
 			// tap((matchInfo) => console.debug('[presence] new matchInfo', matchInfo)),
 			shareReplay(1),
 		);
 		const playerHero$ = this.gameStateUpdates.gameState$$.pipe(
+			auditTime(500),
 			map((gameState) => gameState?.playerDeck?.hero?.cardId),
 			distinctUntilChanged(),
 			// tap((hero) => console.debug('[presence] new hero', hero)),

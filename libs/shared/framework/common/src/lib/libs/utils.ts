@@ -25,6 +25,10 @@ export const groupByFunction2 = <T>(
 	}, {});
 };
 
+/**
+ * @deprecated it looks like this is more resource-consuming than I thought
+ * We should do manually crafting comparisons, and refactor the code to use the smallest possible objects
+ * */
 export const deepEqual = (a, b) =>
 	equal(a, b, {
 		strict: false,

@@ -83,7 +83,8 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 							a[0]?.length === b[0]?.length &&
 							a[1]?.length === b[1]?.length &&
 							// We update the info in place here while a draft is in progress
-							deepEqual(a[2], b[2]),
+							a[2]?.length === b[2]?.length &&
+							deepEqual(a[2]?.[0], b[2]?.[0]),
 					),
 					map(([stats, rewards, deckStats]) => {
 						const arenaMatches = stats
@@ -93,7 +94,6 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 						const filteredRuns = arenaRuns;
 						return filteredRuns;
 					}),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe((runs) => {
 					console.debug('[arena-runs] allRuns', runs);
@@ -125,7 +125,6 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 							.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch));
 						return filteredRuns;
 					}),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				)
 				.subscribe((runs) => {
 					this.runs$$.next(runs);

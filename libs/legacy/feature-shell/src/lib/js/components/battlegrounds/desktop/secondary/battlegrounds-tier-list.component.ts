@@ -99,7 +99,6 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 		);
 
 		const stats$ = statsConfig$.pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 		);
 

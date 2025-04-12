@@ -28,6 +28,7 @@ import { GameStat, GameStatsLoaderService, toFormatType } from '@firestone/stats
 import {
 	BehaviorSubject,
 	Observable,
+	auditTime,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -150,19 +151,19 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const format$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
 			switchMap(() => combineLatest([this.gameState.gameState$$, formatOverride$])),
+			debounceTime(500),
 			map(
 				([gameState, formatOverride]) =>
 					formatOverride ?? gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD,
 			),
-			debounceTime(500),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
 		const gameType$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
 			switchMap(() => this.gameState.gameState$$),
-			map((gameState) => gameState?.metadata.gameType),
 			debounceTime(500),
+			map((gameState) => gameState?.metadata.gameType),
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
@@ -181,8 +182,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const opponentClass$: Observable<'all' | string> = combineLatest([
 			opponentActualClass$,
 			this.prefs.preferences$$.pipe(
-				map((prefs) => prefs.decktrackerMulliganOpponent),
 				debounceTime(500),
+				map((prefs) => prefs.decktrackerMulliganOpponent),
 				distinctUntilChanged(),
 			),
 		]).pipe(
@@ -216,12 +217,12 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				distinctUntilChanged(),
 			),
 			this.gameState.gameState$$.pipe(
+				debounceTime(500),
 				map((state) => ({
 					deckstring: state?.playerDeck.deckstring,
 					archetypeId: state?.playerDeck.archetypeId,
 				})),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				debounceTime(500),
 			),
 		]).pipe(
 			map(
@@ -272,10 +273,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const deckDetails$: Observable<DeckStat | null> = combineLatest([showWidget$, format$, timeFrame$]).pipe(
 			filter(([showWidget, format, timeFrame]) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
-			debounceTime(200),
 			switchMap(([showWidget, format, timeFrame]) =>
 				combineLatest([this.gameState.gameState$$, playerRank$, opponentClass$, of(format), of(timeFrame)]),
 			),
+			auditTime(500),
 			map(([gameState, playerRank, opponentClass, format, timeFrame]) => ({
 				deckString: this.allCards.normalizeDeckList(gameState?.playerDeck?.deckstring),
 				format: format,
@@ -309,8 +310,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 		const cardsInHand$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
-			debounceTime(200),
 			switchMap(() => this.gameState.gameState$$),
+			auditTime(500),
 			map((gameState) => {
 				// There should never be a "basic" coin in the mulligan AFAIK
 				const cardsInHand =
@@ -322,8 +323,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 		const deckCards$ = showWidget$.pipe(
 			filter((showWidget) => showWidget),
-			debounceTime(200),
 			switchMap(() => this.gameState.gameState$$),
+			auditTime(500),
 			map((gameState) => {
 				const deckstring = gameState?.playerDeck?.deckstring;
 				if (!deckstring?.length) {
@@ -352,7 +353,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					gameType$,
 					playerRank$,
 					opponentClass$,
-					this.gameState.gameState$$.pipe(map((state) => state?.playerDeck.deckstring)),
+					this.gameState.gameState$$.pipe(
+						map((state) => state?.playerDeck.deckstring),
+						distinctUntilChanged(),
+					),
 				]).pipe(
 					map(([archetype, deckDetails, format, gameType, playerRank, opponentClass, deckstring]) => ({
 						cardsInHand: cardsInHand,
@@ -367,7 +371,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					})),
 				),
 			),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			map(
 				({
 					cardsInHand,

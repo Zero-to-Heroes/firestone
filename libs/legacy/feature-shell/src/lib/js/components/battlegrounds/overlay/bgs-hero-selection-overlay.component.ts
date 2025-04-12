@@ -89,16 +89,14 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		);
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
 		const availableRaces$ = this.bgsState.gameState$$.pipe(
-			this.mapData((state) => state?.currentGame?.availableRaces),
 			debounceTime(200),
+			this.mapData((state) => state?.currentGame?.availableRaces),
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
 		const mmrAtStart$ = this.bgsState.gameState$$.pipe(
 			this.mapData((state) => state?.currentGame?.mmrAtStart),
-			debounceTime(200),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -127,7 +125,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfigs.pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
@@ -139,6 +136,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						(panel) => panel.id === 'bgs-hero-selection-overview',
 					) as BgsHeroSelectionOverviewPanel,
 			),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 		);
 
 		this.heroOverviews$ = combineLatest([

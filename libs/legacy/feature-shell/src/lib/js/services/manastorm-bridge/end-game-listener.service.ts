@@ -132,7 +132,7 @@ export class EndGameListenerService {
 					filter((changes) => !!changes.BattlegroundsNewRating),
 					map((changes) => changes.BattlegroundsNewRating),
 					startWith(null),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged(),
 					shareReplay(1),
 					tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
 				);

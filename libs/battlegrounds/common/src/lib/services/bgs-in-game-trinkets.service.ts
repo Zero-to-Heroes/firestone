@@ -2,11 +2,11 @@
 import { Injectable } from '@angular/core';
 import { BgsTrinketStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, CardType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
-import { BgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
-import { CardOption, GameStateFacadeService } from '@firestone/game-state';
+import { BgsTrinketCardChoiceOption, equalBgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
+import { CardOption, GameStateFacadeService, equalCardOption } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -17,6 +17,7 @@ import {
 import {
 	BehaviorSubject,
 	Observable,
+	auditTime,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -64,9 +65,18 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTrinketStatsOverlay)),
-			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
-			this.gameState.gameState$$.pipe(map((state) => state?.metadata?.gameType)),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsShowTrinketStatsOverlay),
+				distinctUntilChanged(),
+			),
+			this.gameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.playerDeck?.currentOptions),
+			),
+			this.gameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.metadata?.gameType),
+			),
 		]).pipe(
 			debounceTime(500),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -98,7 +108,12 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 		const trinkets$: Observable<BgsTrinketStats | null> = showWidget$.pipe(
 			filter((show) => show),
 			distinctUntilChanged(),
-			switchMap(() => this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.hasTrinkets))),
+			switchMap(() =>
+				this.bgsGameState.gameState$$.pipe(
+					auditTime(500),
+					map((state) => state?.currentGame?.hasTrinkets),
+				),
+			),
 			filter((hasTrinkets) => !!hasTrinkets),
 			distinctUntilChanged(),
 			switchMap(() => {
@@ -111,23 +126,30 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 
 		const options$ = combineLatest([
 			this.gameState.gameState$$.pipe(
+				auditTime(500),
 				map((state) => state?.playerDeck?.currentOptions),
-				// map((state) =>
-				// 	!!state?.playerDeck?.currentOptions?.length ? state.playerDeck.currentOptions : buildFakeOptions(),
-				// ),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length && !!a?.every((option, index) => equalCardOption(option, b?.[index])),
+				),
 			),
-			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTrinketStatsOverlay)),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsShowTrinketStatsOverlay),
+				distinctUntilChanged(),
+			),
 			trinkets$,
-			this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.getMainPlayer()?.cardId)),
+			this.bgsGameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.currentGame?.getMainPlayer()?.cardId),
+			),
 		]).pipe(
 			debounceTime(500),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			filter(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
 				return !!trinkets && !!options?.every((o) => isBgTrinketDiscover(o, this.allCards));
 			}),
 			map(([options, showFromPrefs, trinkets, mainPlayerCardId]) => {
 				if (!showFromPrefs) {
-					return null;
+					return [];
 				}
 				return (
 					options?.map((o) =>
@@ -135,6 +157,11 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 					) ?? []
 				);
 			}),
+			distinctUntilChanged(
+				(a, b) =>
+					a?.length === b?.length &&
+					!!a?.every((option, index) => equalBgsTrinketCardChoiceOption(option, b?.[index])),
+			),
 			shareReplay(1),
 		);
 		options$.subscribe((options) => {

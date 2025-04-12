@@ -7,7 +7,7 @@ import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AbstractFacadeService,
@@ -222,7 +222,6 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					})),
 				),
 			),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			map(({ cardsInHand, deckCards, cardStats, classStats, opponentClass }) => {
 				const matchup = classStats?.matchups?.find((matchup) => matchup.opponentClass === opponentClass);
 				const classWinrate = !!matchup

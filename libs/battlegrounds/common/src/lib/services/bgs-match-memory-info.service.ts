@@ -2,18 +2,7 @@
 import { Injectable } from '@angular/core';
 import { BattlegroundsInfo, MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
-import {
-	BehaviorSubject,
-	Subscription,
-	distinctUntilChanged,
-	filter,
-	from,
-	interval,
-	map,
-	switchMap,
-	withLatestFrom,
-} from 'rxjs';
+import { BehaviorSubject, Subscription, filter, from, interval, map, switchMap, withLatestFrom } from 'rxjs';
 import { BgsStateFacadeService } from './bgs-state-facade.service';
 
 const INTERVAL = 3000;
@@ -75,8 +64,6 @@ export class BgsMatchMemoryInfoService {
 							},
 						} as BattlegroundsInfo),
 				),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				// tap((info) => console.debug('[bgs-match-memory-info] will emit new memory info', info)),
 			)
 			.subscribe((info) => this.battlegroundsMemoryInfo$$.next(info as BattlegroundsInfo));
 	}

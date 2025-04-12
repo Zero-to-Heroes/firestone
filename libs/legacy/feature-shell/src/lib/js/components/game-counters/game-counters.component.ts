@@ -1,6 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, NonFunctionProperties } from '@firestone/shared/framework/common';
@@ -11,7 +10,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
 import { AttackCounterDefinition } from './definitions/attack-counter';
-import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 
 @Component({
@@ -60,47 +58,23 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	async ngAfterContentInit() {
 		await Promise.all([this.prefs.isReady(), this.gameState.isReady(), this.bgsState.isReady()]);
 
-		if (!this.activeCounter?.includes('bgs')) {
-			const definition = await this.buildDefinition(this.activeCounter, this.side);
-			this.definition$ = combineLatest([this.gameState.gameState$$, definition.prefValue$ ?? of(null)]).pipe(
-				filter(([state, prefValue]) => !!state),
-				map(([state, prefValue]) => ({
-					counterInfo: definition.select(state),
-					prefValue: prefValue,
-				})),
-				filter((info) => info?.counterInfo != null),
-				this.mapData(
-					(info) => definition.emit(info.counterInfo, info.prefValue),
-					// Because counters often return an object
-					(a, b) => deepEqual(a, b),
-				),
-			);
-		} else {
-			const definition = await this.buildBgsDefinition(this.activeCounter, this.side);
-			// TODO: have each definition define what it listens to, instead of recomputing
-			// everything each time
-			this.definition$ = combineLatest([
-				this.bgsState.gameState$$,
-				this.gameState.gameState$$,
-				definition.prefValue$ ?? of(null),
-			]).pipe(
-				filter(([bgState, deckState, prefValue]) => !!bgState && !!deckState),
-				filter(
-					([bgState, deckState, prefValue]) =>
-						!definition.filter || definition.filter({ bgState, deckState }),
-				),
-				map(([bgState, deckState, prefValue]) => ({
-					counterInfo: definition.select({ deckState, bgState }),
-					prefValue: prefValue,
-				})),
-				filter((info) => info?.counterInfo != null),
-				this.mapData(
-					(info) => definition.emit(info.counterInfo, info.prefValue),
-					// Because counters often return an object
-					(a, b) => deepEqual(a, b),
-				),
-			);
-		}
+		const definition = await this.buildDefinition(this.activeCounter, this.side);
+		this.definition$ = combineLatest([this.gameState.gameState$$, definition.prefValue$ ?? of(null)]).pipe(
+			filter(([state, prefValue]) => !!state),
+			map(([state, prefValue]) => ({
+				counterInfo: definition.select(state),
+				prefValue: prefValue,
+			})),
+			filter((info) => info?.counterInfo != null),
+			this.mapData(
+				(info) => definition.emit(info.counterInfo, info.prefValue),
+				// Because counters often return an object
+				(a, b) => {
+					console.debug('checking counter deepEqual', a?.type, b?.type);
+					return deepEqual(a, b);
+				},
+			),
+		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -117,19 +91,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return Si7CounterDefinition.create(side, this.allCards, this.i18n);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
-		}
-	}
-
-	private async buildBgsDefinition(
-		activeCounter: CounterType,
-		side: 'player' | 'opponent',
-	): Promise<CounterDefinition<{ deckState: GameState; bgState: BattlegroundsState }, any>> {
-		switch (activeCounter) {
-			case 'bgsPogo':
-				return BgsPogoCounterDefinition.create(side, this.allCards, this.i18n);
-			default:
-				console.warn('unexpected activeCounter for bgs', activeCounter);
-				return null;
 		}
 	}
 }

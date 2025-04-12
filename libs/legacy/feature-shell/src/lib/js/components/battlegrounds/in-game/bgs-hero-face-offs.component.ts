@@ -2,11 +2,12 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/battlegrounds/core';
+import { BgsNextOpponentOverviewPanel } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { FaceOffHero, faceOfHeroesArrayEqual } from './bgs-hero-face-off.component';
 
 @Component({
 	selector: 'bgs-hero-face-offs',
@@ -39,7 +40,7 @@ import { filter, tap } from 'rxjs/operators';
 })
 export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	nextOpponentCardId$: Observable<string>;
-	opponents$: Observable<readonly BgsPlayer[]>;
+	opponents$: Observable<readonly FaceOffHero[]>;
 	faceOffsByOpponent$: Observable<{ [opponentHeroCardId: string]: readonly BgsFaceOff[] }>;
 
 	constructor(
@@ -80,32 +81,37 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 		this.opponents$ = this.state.gameState$$.pipe(
 			this.mapData((state) => state.currentGame?.players),
 			filter((players) => !!players?.length),
-			this.mapData(
-				(players) =>
-					players
-						.filter((player) => !player.isMainPlayer)
-						.sort((a, b) => {
-							if (a.leaderboardPlace < b.leaderboardPlace) {
-								return -1;
-							}
-							if (b.leaderboardPlace < a.leaderboardPlace) {
-								return 1;
-							}
-							if (a.damageTaken < b.damageTaken) {
-								return -1;
-							}
-							if (b.damageTaken < a.damageTaken) {
-								return 1;
-							}
-							return 0;
-						}),
-				(a, b) => deepEqual(a, b),
-			),
-			tap((info) =>
-				console.debug(
-					'opponents',
-					info.map((o) => o.cardId),
-				),
+			distinctUntilChanged((a, b) => faceOfHeroesArrayEqual(a, b)),
+			this.mapData((players) =>
+				players
+					.filter((player) => !player.isMainPlayer)
+					// .map((player) => {
+					// 	const result: FaceOffHero = {
+					// 		cardId: player.cardId,
+					// 		displayedCardId: player.displayedCardId,
+					// 		name: player.name,
+					// 		currentArmor: player.currentArmor,
+					// 		damageTaken: player.damageTaken,
+					// 		initialHealth: player.initialHealth,
+					// 		leaderboardPlace: player.leaderboardPlace,
+					// 	};
+					// 	return result;
+					// })
+					.sort((a, b) => {
+						if (a.leaderboardPlace < b.leaderboardPlace) {
+							return -1;
+						}
+						if (b.leaderboardPlace < a.leaderboardPlace) {
+							return 1;
+						}
+						if (a.damageTaken < b.damageTaken) {
+							return -1;
+						}
+						if (b.damageTaken < a.damageTaken) {
+							return 1;
+						}
+						return 0;
+					}),
 			),
 		);
 
@@ -114,7 +120,7 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 		}
 	}
 
-	trackByFn(index, item: BgsPlayer) {
+	trackByFn(index, item: FaceOffHero) {
 		return item.cardId;
 	}
 }

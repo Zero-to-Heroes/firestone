@@ -3,7 +3,6 @@
 import { Injectable } from '@angular/core';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../collection-manager.interface';
@@ -46,10 +45,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 			.subscribe((activeSub) => {
 				console.debug('[hearthpwn] activating hearthpwn sync');
 				this.collectionManager.collection$$
-					.pipe(
-						debounceTime(10000),
-						distinctUntilChanged((a, b) => deepEqual(a, b)),
-					)
+					.pipe(debounceTime(10000), distinctUntilChanged())
 					.subscribe(async (collection) => {
 						console.debug('[hearthpwn] will sync collection', collection);
 						const uploadData: UploadData = await this.transformCollection(collection);

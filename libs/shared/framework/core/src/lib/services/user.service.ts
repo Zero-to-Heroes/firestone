@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SubscriberAwareBehaviorSubject, deepEqual, sleep } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
 import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AbstractFacadeService, waitForReady } from './abstract-facade-service';
 import { ADS_SERVICE_TOKEN, IAdsService } from './ads-service.interface';
@@ -39,7 +39,9 @@ export class UserService extends AbstractFacadeService<UserService> {
 			.pipe(
 				debounceTime(500),
 				filter(([premium, user]) => !!user),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) => a[0] === b[0] && a[1]?.userId === b[1]?.userId && a[1]?.username === b[1]?.username,
+				),
 			)
 			.subscribe(([premium, user]) => {
 				console.log('[user-service] info', premium, user);

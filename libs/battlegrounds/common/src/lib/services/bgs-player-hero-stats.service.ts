@@ -2,10 +2,10 @@
 import { Injectable } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { Config } from '@firestone/battlegrounds/core';
+import { Config, equalConfig } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -55,7 +55,10 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		await waitForReady(this.patchesConfig, this.metaStats, this.prefs);
 
 		this.tiersWithPlayerData$$.onFirstSubscribe(() => {
-			const gameMode$ = this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsActiveGameMode));
+			const gameMode$ = this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsActiveGameMode),
+				distinctUntilChanged(),
+			);
 
 			const gameStats$ = this.gameStats.gameStats$$.pipe(
 				map((stats) => stats?.filter((s) => isBattlegrounds(toGameTypeEnum(s.gameMode)))),
@@ -74,25 +77,22 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 						} as Config;
 						return config;
 					}),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged((a, b) => equalConfig(a, b)),
 				),
 			]).pipe(
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				map(([gameMode, config]) => ({
 					...config,
 					gameMode: gameMode,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			);
 
 			// Make sure we refresh when game stats are updated
 			combineLatest([config$, gameStats$])
-				.pipe(
-					distinctUntilChanged((a, b) => {
-						console.debug('are equal', a, b, deepEqual(a, b));
-						return deepEqual(a, b);
-					}),
-				)
+				// .pipe(
+				// 	distinctUntilChanged((a, b) => {
+				// 		return deepEqual(a, b);
+				// 	}),
+				// )
 				.subscribe(async ([config]) => {
 					console.debug('[bgs-2] refreshing meta hero stats', config);
 					this.tiersWithPlayerData$$.next(null);

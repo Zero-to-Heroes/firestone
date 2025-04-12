@@ -4,14 +4,14 @@ import { BnetRegion, GameType, isBattlegrounds, isBattlegroundsDuo } from '@fire
 import { PlayerMatchMmr } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
+import { auditTime, combineLatest, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs';
 import { BgsMatchMemoryInfoService } from './bgs-match-memory-info.service';
 import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderboards.service';
 
@@ -45,6 +45,7 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 
 		this.playersMatchMmr$$.onFirstSubscribe(async () => {
 			const gameMode$ = this.gameState.gameState$$.pipe(
+				auditTime(500),
 				map((gameState) => gameState?.metadata.gameType),
 				filter((gameType) => !!gameType && isBattlegrounds(gameType)),
 				distinctUntilChanged(),
@@ -83,7 +84,15 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 						})),
 					};
 				}),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.region === b?.region &&
+						a?.players.length === b?.players.length &&
+						!!a?.players.every(
+							(player, index) =>
+								player.id === b?.players[index].id && player.name === b?.players[index].name,
+						),
+				),
 			);
 
 			combineLatest([gameInfo$, leaderboards$])
@@ -109,7 +118,16 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 							}) ?? [];
 						return players;
 					}),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged(
+						(a, b) =>
+							a?.length === b?.length &&
+							!!a?.every(
+								(player, index) =>
+									b?.[index]?.playerId === player.playerId &&
+									b?.[index]?.mmr === player.mmr &&
+									b?.[index]?.playerName === player.playerName,
+							),
+					),
 					// tap((players) => console.debug('[bgs-match-players-mmr] players', players)),
 				)
 				.subscribe((players) => {

@@ -7,13 +7,14 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
 	Observable,
 	combineLatest,
 	debounceTime,
+	distinctUntilChanged,
 	filter,
 	shareReplay,
 	startWith,
@@ -232,13 +233,11 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			this.arenaCardStats.searchString$$,
 			this.sortCriteria$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						cardType: prefs.arenaActiveCardTypeFilter,
-						cardClass: prefs.arenaActiveCardClassFilter,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					cardType: prefs.arenaActiveCardTypeFilter,
+					cardClass: prefs.arenaActiveCardClassFilter,
+				})),
+				distinctUntilChanged((a, b) => a?.cardType === b?.cardType && a?.cardClass === b?.cardClass),
 			),
 		]).pipe(
 			debounceTime(100),

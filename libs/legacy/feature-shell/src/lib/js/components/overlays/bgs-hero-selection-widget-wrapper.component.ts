@@ -11,7 +11,6 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { BgsInGameHeroSelectionGuardianService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, pairwise, shareReplay, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -57,13 +56,11 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 		await waitForReady(this.scene, this.prefs, this.bgState);
 
 		const prefs$ = this.prefs.preferences$$.pipe(
-			this.mapData(
-				(prefs) => ({
-					showAchievement: prefs.bgsShowHeroSelectionAchievements,
-					showStats: prefs.bgsShowHeroSelectionTiers,
-				}),
-				(a, b) => deepEqual(a, b),
-			),
+			this.mapData((prefs) => ({
+				showAchievement: prefs.bgsShowHeroSelectionAchievements,
+				showStats: prefs.bgsShowHeroSelectionTiers,
+			})),
+			distinctUntilChanged((a, b) => a?.showAchievement === b?.showAchievement && a?.showStats === b?.showStats),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -71,14 +68,18 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 			this.scene.currentScene$$,
 			prefs$,
 			this.bgState.gameState$$.pipe(
-				this.mapData(
-					(state) => ({
-						inGame: state?.inGame,
-						isCurrentGame: !!state?.currentGame,
-						gameEnded: state?.currentGame?.gameEnded,
-						heroSelectionDone: state?.heroSelectionDone,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((state) => ({
+					inGame: state?.inGame,
+					isCurrentGame: !!state?.currentGame,
+					gameEnded: state?.currentGame?.gameEnded,
+					heroSelectionDone: state?.heroSelectionDone,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.inGame === b?.inGame &&
+						a?.isCurrentGame === b?.isCurrentGame &&
+						a?.gameEnded === b?.gameEnded &&
+						a?.heroSelectionDone === b?.heroSelectionDone,
 				),
 			),
 		]).pipe(

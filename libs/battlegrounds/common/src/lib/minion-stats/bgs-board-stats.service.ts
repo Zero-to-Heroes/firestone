@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BgsCardStats } from '@firestone-hs/bgs-global-stats';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -66,7 +66,7 @@ export class BgsBoardStatsService extends AbstractFacadeService<BgsBoardStatsSer
 			filter((state) => state != null),
 			auditTime(500),
 			map((state) => state!.opponentDeck.board.map((entity) => entity.cardId)),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 		const shopMinionsWithStats$ = combineLatest([shopCards$, currentTurn$]).pipe(
 			map(([shopCards, turn]) => this.buildShopMinionsWithStats(shopCards, turn!, this.cardStats!)),

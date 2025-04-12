@@ -24,6 +24,7 @@ import {
 import {
 	BehaviorSubject,
 	Observable,
+	auditTime,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -220,6 +221,7 @@ export class ConstructedMulliganDeckComponent
 		);
 		this.gameState.gameState$$
 			.pipe(
+				auditTime(500),
 				this.mapData((gameState) =>
 					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
 				),

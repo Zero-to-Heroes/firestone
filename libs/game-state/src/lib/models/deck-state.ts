@@ -431,6 +431,36 @@ export interface CardOption {
 		readonly CardId: string;
 	};
 }
+export const equalCardOption = (a: CardOption | null | undefined, b: CardOption | null | undefined): boolean => {
+	if (!a && !b) {
+		return true;
+	}
+	if (!a || !b) {
+		return false;
+	}
+	if (a.entityId !== b.entityId) {
+		return false;
+	}
+	if (a.cardId !== b.cardId) {
+		return false;
+	}
+	if (a.source !== b.source) {
+		return false;
+	}
+	if (a.context.DataNum1 !== b.context.DataNum1) {
+		return false;
+	}
+	if (a.questDifficulty !== b.questDifficulty) {
+		return false;
+	}
+	if (a.questReward?.EntityId !== b.questReward?.EntityId) {
+		return false;
+	}
+	if (a.questReward?.CardId !== b.questReward?.CardId) {
+		return false;
+	}
+	return true;
+};
 
 export interface DeckSideboard {
 	readonly keyCardId: string;

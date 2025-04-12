@@ -3,7 +3,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { distinctUntilChanged } from 'rxjs';
+import { auditTime, distinctUntilChanged } from 'rxjs';
 import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 import { BgsReconnectorService } from './bgs-reconnector.service';
 
@@ -69,14 +69,22 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 					this.cdr.detectChanges();
 				}
 			});
-		this.gameState.gameState$$.pipe(this.mapData((state) => state?.reconnectOngoing)).subscribe((reconnecting) => {
-			this.reconnecting = reconnecting ?? false;
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		this.gameState.gameState$$
+			.pipe(
+				auditTime(500),
+				this.mapData((state) => state?.reconnectOngoing),
+			)
+			.subscribe((reconnecting) => {
+				this.reconnecting = reconnecting ?? false;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 		this.bgState.gameState$$
-			.pipe(this.mapData((state) => !!state?.inGame && !!state.currentGame))
+			.pipe(
+				auditTime(500),
+				this.mapData((state) => !!state?.inGame && !!state.currentGame),
+			)
 			.subscribe((inBattlegrounds) => {
 				this.inBattlegrounds = inBattlegrounds;
 				if (!(this.cdr as ViewRef).destroyed) {

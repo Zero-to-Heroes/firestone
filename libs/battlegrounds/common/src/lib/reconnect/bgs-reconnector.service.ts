@@ -118,13 +118,18 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 			}
 		});
 
-		this.gameState.gameState$$.pipe(map((state) => state?.reconnectOngoing)).subscribe(async (reconnectOngoing) => {
-			if (reconnectOngoing) {
-				this.status$$.next('RECONNECTING');
-			} else {
-				this.status$$.next('CONNECTED');
-			}
-		});
+		this.gameState.gameState$$
+			.pipe(
+				map((state) => state?.reconnectOngoing),
+				distinctUntilChanged(),
+			)
+			.subscribe(async (reconnectOngoing) => {
+				if (reconnectOngoing) {
+					this.status$$.next('RECONNECTING');
+				} else {
+					this.status$$.next('CONNECTED');
+				}
+			});
 	}
 
 	public async reconnect() {

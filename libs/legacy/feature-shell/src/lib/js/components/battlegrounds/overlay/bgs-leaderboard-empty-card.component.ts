@@ -12,7 +12,7 @@ import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsPlayer, QuestReward } from '@firestone/battlegrounds/core';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
 	ILocalizationService,
@@ -87,9 +87,6 @@ export class BgsLeaderboardEmptyCardComponent
 	}
 
 	@Input() set bgsPlayer(value: BgsPlayer) {
-		if (deepEqual(this._previousPlayer, value)) {
-			return;
-		}
 		this._previousPlayer = value;
 		this.updateInfo();
 	}

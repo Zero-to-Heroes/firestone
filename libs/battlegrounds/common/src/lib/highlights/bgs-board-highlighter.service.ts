@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
-import { DeckCard, GameStateFacadeService } from '@firestone/game-state';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ADS_SERVICE_TOKEN,
@@ -13,7 +13,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { auditTime, BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 
 @Injectable()
@@ -121,22 +121,30 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		const minionsToHighlight$ = combineLatest([
 			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTribesHighlight, distinctUntilChanged())),
 			this.bgState.gameState$$.pipe(
+				auditTime(500),
 				map((state) => ({
 					phase: state?.currentGame?.phase,
 					anomalies: state?.currentGame?.anomalies,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged((a, b) => a?.phase === b?.phase && arraysEqual(a?.anomalies, b?.anomalies)),
 			),
 			this.highlightedTribes$$,
 			this.highlightedMinions$$,
 			this.highlightedMechanics$$,
 			this.deckState.gameState$$.pipe(
-				map((state) => state?.opponentDeck?.board),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				auditTime(500),
+				map((state) => state?.opponentDeck?.board?.map((e) => ({ cardId: e.cardId, entityId: e.entityId }))),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length &&
+						!!a?.every(
+							(card, index) => card.entityId === b?.[index].entityId && card.cardId === b[index].cardId,
+						),
+				),
 			),
 			enableAutoHighlight$,
 		]).pipe(
-			debounceTime(50),
+			auditTime(200),
 			filter(
 				([
 					showTribesHighlight,
@@ -148,7 +156,6 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 					enableAutoHighlight,
 				]) => !!phase && !!opponentBoard,
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
 					showTribesHighlight,
@@ -180,14 +187,14 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				},
 			),
 		);
-		minionsToHighlight$.pipe(distinctUntilChanged((a, b) => deepEqual(a, b))).subscribe((minions) => {
+		minionsToHighlight$.subscribe((minions) => {
 			// console.debug('[bgs-board-highlighter] new minions', minions);
 			this.shopMinions$$.next(minions);
 		});
 	}
 
 	private isHighlighted(
-		minion: DeckCard,
+		minion: { cardId: string; entityId: number },
 		highlightedTribes: readonly Race[],
 		highlightedMinions: readonly string[],
 		highlightedMechanics: readonly GameTag[],
@@ -229,8 +236,9 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	private initPremiumHighlights() {
 		// console.debug('[bgs-board-highlighter] init premium highlights');
 		const board$ = this.deckState.gameState$$.pipe(
+			auditTime(500),
 			map((state) => state?.playerDeck.board?.map((entity) => entity.cardId)),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		);
 
 		combineLatest([
@@ -244,13 +252,19 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				distinctUntilChanged(),
 			),
 			this.bgState.gameState$$.pipe(
+				auditTime(500),
 				map((bgState) => ({
 					hasCurrentGame: !!bgState?.currentGame,
 					gameEnded: bgState?.currentGame?.gameEnded,
 					heroCardId: bgState?.currentGame?.getMainPlayer()?.cardId,
 				})),
 				filter((info) => !!info.heroCardId),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a.heroCardId === b.heroCardId &&
+						a.gameEnded === b.gameEnded &&
+						a.hasCurrentGame === b.hasCurrentGame,
+				),
 			),
 			board$,
 		])

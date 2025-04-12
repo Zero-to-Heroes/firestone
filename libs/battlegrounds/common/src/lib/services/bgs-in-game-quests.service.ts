@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, SceneMode, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
-import { CardOption, GameStateFacadeService } from '@firestone/game-state';
+import { BgsQuestCardChoiceOption, equalBgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
+import { CardOption, GameStateFacadeService, equalCardOption } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -15,6 +15,7 @@ import {
 import {
 	BehaviorSubject,
 	Observable,
+	auditTime,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -74,9 +75,23 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowQuestStatsOverlay)),
-			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
-			this.gameState.gameState$$.pipe(map((state) => state?.metadata?.gameType)),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsShowQuestStatsOverlay),
+				distinctUntilChanged(),
+			),
+			this.gameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.playerDeck?.currentOptions),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length && !!a?.every((option, index) => equalCardOption(option, b?.[index])),
+				),
+			),
+			this.gameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.metadata?.gameType),
+				distinctUntilChanged(),
+			),
 		]).pipe(
 			debounceTime(500),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -121,7 +136,9 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 				),
 			),
 			debounceTime(500),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(
+				(a, b) => a?.playerRank === b?.playerRank && arraysEqual(a?.availableRaces, b?.availableRaces),
+			),
 			switchMap(({ playerRank, availableRaces }) => {
 				return this.quests.loadQuests('last-patch', IN_GAME_RANK_FILTER);
 			}),
@@ -132,20 +149,28 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 		) as Observable<BgsQuestStats>;
 
 		const options$ = combineLatest([
-			this.gameState.gameState$$.pipe(map((state) => state?.playerDeck?.currentOptions)),
-			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowQuestStatsOverlay)),
+			this.gameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.playerDeck?.currentOptions),
+			),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.bgsShowQuestStatsOverlay),
+				distinctUntilChanged(),
+			),
 			quests$,
-			this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.getMainPlayer()?.cardId)),
+			this.bgsGameState.gameState$$.pipe(
+				auditTime(500),
+				map((state) => state?.currentGame?.getMainPlayer()?.cardId),
+			),
 		]).pipe(
 			debounceTime(500),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			filter(([options, bgsShowQuestStatsOverlay, quests, mainPlayerCardId]) => {
 				return options?.every((o) => isBgQuestDiscover(o.source)) ?? false;
 			}),
 			map(([options, bgsShowQuestStatsOverlay, quests, mainPlayerCardId]) => {
 				console.debug('[bgs-quest] building options', options);
 				if (!bgsShowQuestStatsOverlay) {
-					return null;
+					return [];
 				}
 				return (
 					options?.map((o) =>
@@ -153,6 +178,11 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 					) ?? []
 				);
 			}),
+			distinctUntilChanged(
+				(a, b) =>
+					a?.length === b?.length &&
+					!!a?.every((option, index) => equalBgsQuestCardChoiceOption(option, b?.[index])),
+			),
 			shareReplay(1),
 		);
 		options$.subscribe((options) => {

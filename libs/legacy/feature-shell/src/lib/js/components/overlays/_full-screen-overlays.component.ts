@@ -211,6 +211,7 @@ export class FullScreenOverlaysComponent
 					.filter((c) => c);
 				return result;
 			}),
+			// These are simple objects, so deepEqual should not be costly here
 			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			takeUntil(this.destroyed$),
 		);

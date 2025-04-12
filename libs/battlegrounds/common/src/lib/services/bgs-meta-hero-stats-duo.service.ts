@@ -1,14 +1,14 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { BgsHeroStatsV2, MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { Config } from '@firestone/battlegrounds/core';
+import { Config, equalConfig } from '@firestone/battlegrounds/core';
 import {
 	BgsMetaHeroStatTierItem,
 	BgsMetaHeroStatsAccessService,
 	buildHeroStats,
 } from '@firestone/battlegrounds/data-access';
 import { BG_USE_ANOMALIES, DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -78,7 +78,7 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 					} as Config;
 					return config;
 				}),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged((a, b) => equalConfig(a, b)),
 				map((config) => ({
 					...config,
 					gameMode: 'battlegrounds-duo' as const,

@@ -113,7 +113,7 @@ export class TwitchAuthService {
 						map(([currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
 							this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 						),
-						distinctUntilChanged((a, b) => deepEqual(a, b)),
+						// distinctUntilChanged((a, b) => deepEqual(a, b)),
 						delay(this.twitchDelay),
 					)
 					.subscribe((event) => this.sendEvent(event));

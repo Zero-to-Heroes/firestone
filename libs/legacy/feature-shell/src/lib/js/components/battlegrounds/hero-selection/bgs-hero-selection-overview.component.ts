@@ -117,9 +117,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfig$.pipe(
-			distinctUntilChanged((a, b) => {
-				return deepEqual(a, b);
-			}),
 			tap((config) => console.debug('[bgs-hero-selection-overview] received config', config)),
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),

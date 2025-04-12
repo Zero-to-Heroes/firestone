@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { DraftCardCombinedStat, DraftStatsByContext } from '@firestone-hs/arena-draft-pick';
 import { ArenaCardStat, ArenaCardStats, PlayerClass } from '@firestone-hs/arena-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
@@ -48,7 +48,9 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 						timeFilter: prefs.arenaActiveTimeFilter,
 						classFilter: prefs.arenaActiveClassFilter,
 					})),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged(
+						(a, b) => a?.timeFilter === b?.timeFilter && a?.classFilter === b?.classFilter,
+					),
 				)
 				.subscribe(async ({ timeFilter, classFilter }) => {
 					// console.debug('building arena card stats', new Error().stack);

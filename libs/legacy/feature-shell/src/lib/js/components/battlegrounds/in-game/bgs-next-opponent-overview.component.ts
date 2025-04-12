@@ -4,7 +4,7 @@ import { BgsFaceOffWithSimulation, BgsNextOpponentOverviewPanel, BgsPlayer } fro
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
@@ -127,7 +127,8 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			debounceTime(1000),
 			map((state) => state.currentGame?.players),
 			filter((players) => !!players?.length),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			// A lot of nested objects, including Immutable Map. For now, not using deepEqual on this
+			// distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData((players) =>
 				[...players].sort((a, b) => {
 					if (a.leaderboardPlace < b.leaderboardPlace) {
