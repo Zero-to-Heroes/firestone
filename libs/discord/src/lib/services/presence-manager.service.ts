@@ -5,7 +5,6 @@ import { formatGameType, GameFormat, GameType } from '@firestone-hs/reference-da
 import { GameStateUpdatesService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap } from 'rxjs';
 import { IN_GAME_TEXT_PLACEHOLDER } from './discord-presence-manager.service';
@@ -79,7 +78,13 @@ export class PresenceManagerService {
 					gameText: prefs.discordRpcCustomInGameText,
 					matchText: prefs.discordRpcCustomInMatchText,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.enableCustomInGameText === b?.enableCustomInGameText &&
+						a?.gameText === b?.gameText &&
+						a?.enableCustomInMatchText === b?.enableCustomInMatchText &&
+						a?.matchText === b?.matchText,
+				),
 			),
 			metaData$,
 			matchInfo$,

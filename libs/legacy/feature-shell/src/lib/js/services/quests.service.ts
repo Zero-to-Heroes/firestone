@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QuestsInfo } from '@firestone-hs/reference-data';
-import { MemoryInspectionService, SceneService } from '@firestone/memory';
+import { equalMemoryQuestsLog, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { ApiRunner, LocalStorageService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
@@ -66,7 +65,7 @@ export class QuestsService {
 					// TODO: doesn't account for rerolls
 					.pipe(
 						switchMap((scene) => this.memory.getActiveQuests()),
-						distinctUntilChanged((a, b) => deepEqual(a, b)),
+						distinctUntilChanged((a, b) => equalMemoryQuestsLog(a, b)),
 					)
 					.subscribe(async (activeQuests) => {
 						this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));

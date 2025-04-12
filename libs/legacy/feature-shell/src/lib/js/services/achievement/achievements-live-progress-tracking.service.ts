@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
-import { HsAchievementInfo, HsAchievementsInfo, MemoryInspectionService } from '@firestone/memory';
+import {
+	equalHsAchievementInfo,
+	HsAchievementInfo,
+	HsAchievementsInfo,
+	MemoryInspectionService,
+} from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -8,7 +13,7 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skip
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
-import { arraysEqual, deepEqual } from '../utils';
+import { arraysEqual } from '../utils';
 import { buildAchievementHierarchy } from './achievement-utils';
 import { AchievementsStateManagerService } from './achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
@@ -63,10 +68,18 @@ export class AchievementsLiveProgressTrackingService {
 					await this.initQuotas();
 					await this.initAchievementsOnGameStart();
 					const achievementsOnGameStart$ = this.achievementsOnGameStart$$.pipe(
-						distinctUntilChanged((a, b) => deepEqual(a, b)),
+						distinctUntilChanged(
+							(a, b) =>
+								a?.length === b?.length &&
+								!!a?.every((info, index) => equalHsAchievementInfo(info, b[index])),
+						),
 					);
 					const currentAchievementProgress$ = this.currentAchievementsProgress$$.pipe(
-						distinctUntilChanged((a, b) => deepEqual(a, b)),
+						distinctUntilChanged(
+							(a, b) =>
+								a?.length === b?.length &&
+								!!a?.every((info, index) => equalHsAchievementInfo(info, b[index])),
+						),
 					);
 					// TODO: refresh this when an achievement gets completed
 					combineLatest([
@@ -126,23 +139,21 @@ export class AchievementsLiveProgressTrackingService {
 							map((prefs) => prefs.locale),
 							distinctUntilChanged(),
 						),
-					])
-						// .pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
-						.subscribe(async ([progress, achievementsOnGameStart, achievementIdsToTrack, locale]) => {
-							const finalAchievements = await this.buildAchievementsProgressTracking(
-								achievementsOnGameStart,
-								progress,
-								achievementIdsToTrack,
-								locale,
-							);
-							// console.debug(
-							// 	'[achievements-live-progress-tracking] emitting achievements progress',
-							// 	finalAchievements,
-							// 	achievementsOnGameStart,
-							// 	progress,
-							// );
-							this.achievementsProgressTracking$$.next(finalAchievements);
-						});
+					]).subscribe(async ([progress, achievementsOnGameStart, achievementIdsToTrack, locale]) => {
+						const finalAchievements = await this.buildAchievementsProgressTracking(
+							achievementsOnGameStart,
+							progress,
+							achievementIdsToTrack,
+							locale,
+						);
+						// console.debug(
+						// 	'[achievements-live-progress-tracking] emitting achievements progress',
+						// 	finalAchievements,
+						// 	achievementsOnGameStart,
+						// 	progress,
+						// );
+						this.achievementsProgressTracking$$.next(finalAchievements);
+					});
 
 					setInterval(() => this.detectAchievementsProgress(), 1500);
 				});

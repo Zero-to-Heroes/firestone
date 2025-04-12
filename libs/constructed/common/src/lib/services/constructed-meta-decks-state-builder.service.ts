@@ -10,7 +10,7 @@ import {
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -95,7 +95,12 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 					timeFilter: prefs.constructedMetaDecksTimeFilter,
 					formatFilter: prefs.constructedMetaDecksFormatFilter,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.rankFilter === b?.rankFilter &&
+						a?.timeFilter === b?.timeFilter &&
+						a?.formatFilter === b?.formatFilter,
+				),
 			),
 		])
 			.pipe(
@@ -117,7 +122,12 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 					timeFilter: prefs.constructedMetaDecksTimeFilter,
 					formatFilter: prefs.constructedMetaDecksFormatFilter,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.formatFilter === b?.formatFilter &&
+						a?.rankFilter === b?.rankFilter &&
+						a?.timeFilter === b?.timeFilter,
+				),
 			),
 		])
 			.pipe(
@@ -142,7 +152,12 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 					timeFilter: prefs.constructedMetaDecksTimeFilter,
 					formatFilter: prefs.constructedMetaDecksFormatFilter,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.formatFilter === b?.formatFilter &&
+						a?.rankFilter === b?.rankFilter &&
+						a?.timeFilter === b?.timeFilter,
+				),
 			),
 		])
 			.pipe(
@@ -164,7 +179,12 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 					timeFilter: prefs.constructedMetaDecksTimeFilter,
 					formatFilter: prefs.constructedMetaDecksFormatFilter,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.formatFilter === b?.formatFilter &&
+						a?.rankFilter === b?.rankFilter &&
+						a?.timeFilter === b?.timeFilter,
+				),
 			),
 		])
 			.pipe(

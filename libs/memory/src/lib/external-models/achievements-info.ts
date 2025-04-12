@@ -8,6 +8,15 @@ export interface HsAchievementInfo {
 	readonly index?: number;
 	readonly completed?: boolean;
 }
+export const equalHsAchievementInfo = (
+	a: HsAchievementInfo | null | undefined,
+	b: HsAchievementInfo | null | undefined,
+): boolean => {
+	if (a === b) return true;
+	if (!a || !b) return false;
+
+	return a.id === b.id && a.progress === b.progress && a.completed === b.completed && a.index === b.index;
+};
 
 export interface HsAchievementCategory {
 	readonly id: number;

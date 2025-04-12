@@ -14,7 +14,7 @@ import {
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PatchInfo, PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AbstractFacadeService,
@@ -222,7 +222,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					deckstring: state?.playerDeck.deckstring,
 					archetypeId: state?.playerDeck.archetypeId,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.archetypeId === b?.archetypeId),
 			),
 		]).pipe(
 			map(

@@ -4,7 +4,6 @@ import { BgsPlayer } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
 
@@ -59,7 +58,7 @@ export class BgsOverlayHeroOverviewService {
 				hasBuddies: state?.currentGame?.hasBuddies,
 				hasQuests: state?.currentGame?.hasQuests,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a?.hasBuddies === b?.hasBuddies && a?.hasQuests === b?.hasQuests),
 		);
 		const pref$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
