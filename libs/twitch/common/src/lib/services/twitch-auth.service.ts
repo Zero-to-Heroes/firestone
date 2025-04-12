@@ -14,7 +14,7 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { deepEqual, Mutable, NonFunctionProperties } from '@firestone/shared/framework/common';
+import { Mutable, NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -90,7 +90,11 @@ export class TwitchAuthService {
 				bgsHideSimResultsOnRecruit: prefs.bgsHideSimResultsOnRecruit,
 				bgsShowSimResultsOnlyOnRecruit: prefs.bgsShowSimResultsOnlyOnRecruit,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(
+				(a, b) =>
+					a?.bgsHideSimResultsOnRecruit === b?.bgsHideSimResultsOnRecruit &&
+					a?.bgsShowSimResultsOnlyOnRecruit === b?.bgsShowSimResultsOnlyOnRecruit,
+			),
 		);
 
 		this.gameStatus.inGame$$
@@ -113,7 +117,6 @@ export class TwitchAuthService {
 						map(([currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
 							this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 						),
-						// distinctUntilChanged((a, b) => deepEqual(a, b)),
 						delay(this.twitchDelay),
 					)
 					.subscribe((event) => this.sendEvent(event));

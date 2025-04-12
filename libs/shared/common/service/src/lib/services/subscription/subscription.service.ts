@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -48,9 +48,21 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 				this.currentPlan$$.next(localPlan);
 			}
 
-			this.currentPlan$$.pipe(distinctUntilChanged((a, b) => deepEqual(a, b))).subscribe((plan) => {
-				console.log('[ads] [subscription] new plan', plan);
-			});
+			this.currentPlan$$
+				.pipe(
+					distinctUntilChanged(
+						(a, b) =>
+							a?.active === b?.active &&
+							a?.id === b?.id &&
+							a?.autoRenews === b?.autoRenews &&
+							a?.cancelled === b?.cancelled &&
+							a?.discordCode === b?.discordCode &&
+							a?.expireAt?.getTime() === b?.expireAt?.getTime(),
+					),
+				)
+				.subscribe((plan) => {
+					console.log('[ads] [subscription] new plan', plan);
+				});
 
 			await this.fetchCurrentPlan();
 		});

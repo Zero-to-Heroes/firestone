@@ -9,7 +9,7 @@ import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map, t
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { getAchievementSectionIdFromHeroCardId } from '../../battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../utils';
+import { equalProfileBgHeroStat } from '../profile-uploader.service';
 
 @Injectable()
 export class InternalProfileBattlegroundsService {
@@ -126,7 +126,12 @@ export class InternalProfileBattlegroundsService {
 			}),
 		);
 		bgFullTimeStatsByHero$
-			.pipe(distinctUntilChanged((a, b) => deepEqual(a, b)))
+			.pipe(
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length && !!a?.every((info, index) => equalProfileBgHeroStat(info, b[index])),
+				),
+			)
 			.subscribe(async (bgFullTimeStatsByHero) => {
 				console.debug('[profile] bgFullTimeStatsByHero', bgFullTimeStatsByHero);
 				this.bgFullTimeStatsByHero$$.next(bgFullTimeStatsByHero);

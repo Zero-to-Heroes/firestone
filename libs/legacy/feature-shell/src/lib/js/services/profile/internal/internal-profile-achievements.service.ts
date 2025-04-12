@@ -7,7 +7,7 @@ import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, 
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { AdService } from '../../ad.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../utils';
+import { equalProfileAchievementCategory } from '../profile-uploader.service';
 
 @Injectable()
 export class InternalProfileAchievementsService {
@@ -62,7 +62,11 @@ export class InternalProfileAchievementsService {
 		achievementsToUpload$
 			.pipe(
 				filter((achievementCategories) => !!achievementCategories?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length &&
+						!!a?.every((info, index) => equalProfileAchievementCategory(info, b[index])),
+				),
 			)
 			.subscribe(async (achievementCategories) => {
 				console.debug('[profile] achievementCategories', achievementCategories);

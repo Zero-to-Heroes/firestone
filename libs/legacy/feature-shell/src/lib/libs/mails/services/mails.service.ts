@@ -4,7 +4,6 @@ import { MailboxMessagesInfo } from '@firestone-hs/mailbox';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
-import { deepEqual } from '@services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Mail, MailState } from '../mail-state';
@@ -69,10 +68,6 @@ export class MailsService {
 	}
 
 	private async checkMails() {
-		const infoStr = await this.api.get(MAILS_URL);
-		const mailboxInfo: MailboxMessagesInfo = !!infoStr?.length ? JSON.parse(infoStr) : null;
-		if (!deepEqual(mailboxInfo, this.mailsInfo$$.value)) {
-			this.mailsInfo$$.next(mailboxInfo);
-		}
+		return;
 	}
 }

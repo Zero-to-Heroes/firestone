@@ -4,7 +4,7 @@ import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, deepEqual } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -18,7 +18,7 @@ import {
 	StatGameModeType,
 } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay, take } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -64,11 +64,26 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		await this.gameStats.isReady();
 
 		this.decks$$.onFirstSubscribe(() => {
+			const stats$ = this.gameStats.gameStats$$.pipe(
+				distinctUntilChanged((a, b) => a?.length === b?.length),
+				shareReplay(1),
+			);
+			const filters$ = this.mainWindowState.mainWindowState$$.pipe(
+				map((state) => state.decktracker.filters),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.gameFormat === b?.gameFormat &&
+						a?.gameMode === b?.gameMode &&
+						a?.rank === b?.rank &&
+						a?.time === b?.time,
+				),
+			);
+			const decks$ = this.constructedPersonalDecks.decks$$.pipe(distinctUntilChanged());
 			combineLatest([
-				this.gameStats.gameStats$$,
-				this.mainWindowState.mainWindowState$$.pipe(map((state) => state.decktracker.filters)),
+				stats$,
+				filters$,
 				this.patchesConfig.currentConstructedMetaPatch$$,
-				this.constructedPersonalDecks.decks$$,
+				decks$,
 				this.prefs.preferences$$.pipe(
 					map((prefs) => ({
 						desktopDeckDeletes: prefs.desktopDeckDeletes,
@@ -77,12 +92,18 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 						desktopDeckStatsReset: prefs.desktopDeckStatsReset,
 						desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
 					})),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged(
+						(a, b) =>
+							a?.desktopDeckDeletes === b?.desktopDeckDeletes &&
+							a?.desktopDeckHiddenDeckCodes === b?.desktopDeckHiddenDeckCodes &&
+							a?.constructedDeckVersions === b?.constructedDeckVersions &&
+							a?.desktopDeckStatsReset === b?.desktopDeckStatsReset &&
+							a?.desktopDeckShowHiddenDecks === b?.desktopDeckShowHiddenDecks,
+					),
 				),
 			])
 				.pipe(
 					filter(([stats, filters, patch]) => !!stats?.length),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
 					map(
 						([
 							stats,
@@ -121,7 +142,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				// Only do it once, at startup
 				take(1),
 				map((stats) => stats?.map((stat) => stat.playerDecklist).filter((deckstring) => !!deckstring) ?? []),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map((deckstrings) => [...new Set(deckstrings)]),
 			)
 			.subscribe(async (deckstrings) => {

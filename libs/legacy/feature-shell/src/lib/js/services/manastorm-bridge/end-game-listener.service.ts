@@ -197,7 +197,15 @@ export class EndGameListenerService {
 						ScenarioID: null,
 						replayXml: null,
 					}),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged(
+						(a, b) =>
+							a?.ended === b?.ended &&
+							a?.spectating === b?.spectating &&
+							a?.FormatType === b?.FormatType &&
+							a?.GameType === b?.GameType &&
+							a?.ScenarioID === b?.ScenarioID &&
+							a?.replayXml === b?.replayXml,
+					),
 					tap((info) => console.debug('[manastorm-bridge] gameEnded', info)),
 				);
 
@@ -209,7 +217,10 @@ export class EndGameListenerService {
 						return await this.getBattlegroundsEndGame();
 					}),
 					startWith(null),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged((a, b) => {
+						console.debug('[debug] looking for BG end game info', a, b);
+						return deepEqual(a, b);
+					}),
 					tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
 				);
 
@@ -265,6 +276,8 @@ export class EndGameListenerService {
 						// tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
 						// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
 						// the current game) or the reviewId changed (to mark the start)
+						filter((info) => !!info.reviewId && info.gameEnded.ended),
+						filter((info) => !info.gameEnded.spectating),
 						distinctUntilChanged((a, b) => {
 							// console.debug('[manastorm-bridge] comparing', a, b);
 							return (
@@ -273,15 +286,13 @@ export class EndGameListenerService {
 								a?.uniqueId === b?.uniqueId
 							);
 						}),
-						filter((info) => !!info.reviewId && info.gameEnded.ended),
 						// tap((info) =>
 						// 	console.debug(
 						// 		'[manastorm-bridge] end game, uploading? spectating=',
 						// 		info.gameEnded.spectating,
 						// 	),
 						// ),
-						filter((info) => !info.gameEnded.spectating),
-						distinctUntilChanged((a, b) => deepEqual(a, b)),
+						// distinctUntilChanged((a, b) => deepEqual(a, b)),
 						tap((info) =>
 							console.debug(
 								'[manastorm-bridge] not a spectate game, continuing',

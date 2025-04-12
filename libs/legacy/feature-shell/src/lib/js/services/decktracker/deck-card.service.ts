@@ -31,17 +31,6 @@ export class DeckCardService {
 
 	private fillZone(zone: readonly DeckCard[], deckState: DeckState, metaData: Metadata): readonly DeckCard[] {
 		return zone;
-		// if (!zone) {
-		// 	return zone;
-		// }
-
-		// const newZone = zone.map((card) => (card.cardId ? this.doFillCard(card, deckState, metaData) : card));
-		// if (deepEqual(newZone, zone)) {
-		// 	return zone;
-		// }
-
-		// // console.debug('[deck-card] fillZone', zone, newZone);
-		// return newZone;
 	}
 
 	// private doFillCard(card: DeckCard, deckState: DeckState, metaData: Metadata): DeckCard {

@@ -9,7 +9,7 @@ import {
 	PlayerGameState,
 } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, deepEqual } from '@firestone/shared/framework/common';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
@@ -467,7 +467,6 @@ export class GameStateService {
 		const totalAttackOnBoard = this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker);
 		// console.debug(
 		// 	'[game-state] updated totalAttackOnBoard',
-		// 	deepEqual(totalAttackOnBoard, playerDeckWithZonesOrdered.totalAttackOnBoard),
 		// 	totalAttackOnBoard,
 		// 	playerDeckWithZonesOrdered.totalAttackOnBoard,
 		// );
@@ -477,7 +476,10 @@ export class GameStateService {
 			!arraysEqual(newBoard, playerDeckWithZonesOrdered.board) ||
 			newHero !== playerDeckWithZonesOrdered.hero ||
 			cardsLeftInDeck !== playerDeckWithZonesOrdered.cardsLeftInDeck ||
-			!deepEqual(totalAttackOnBoard, playerDeckWithZonesOrdered.totalAttackOnBoard);
+			!(
+				totalAttackOnBoard.board === playerDeckWithZonesOrdered.totalAttackOnBoard.board &&
+				totalAttackOnBoard.hero === playerDeckWithZonesOrdered.totalAttackOnBoard.hero
+			);
 
 		return hasChanged
 			? playerDeckWithZonesOrdered.update({

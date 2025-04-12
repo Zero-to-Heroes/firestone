@@ -8,7 +8,7 @@ import { CollectionCardType } from '../../../models/collection/collection-card-t
 import { Set as CollectionSet } from '../../../models/set';
 import { AdService } from '../../ad.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../utils';
+import { equalProfilePackStat, equalProfileSet } from '../profile-uploader.service';
 
 @Injectable()
 export class InternalProfileCollectionService {
@@ -73,7 +73,9 @@ export class InternalProfileCollectionService {
 		setsToUpload$
 			.pipe(
 				filter((sets) => !!sets?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) => a?.length === b?.length && !!a?.every((info, index) => equalProfileSet(info, b[index])),
+				),
 			)
 			.subscribe(async (sets) => {
 				console.debug('[profile] sets', sets);
@@ -108,7 +110,10 @@ export class InternalProfileCollectionService {
 		boostersToUpload$
 			.pipe(
 				filter((boosters) => !!boosters?.length),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length && !!a?.every((info, index) => equalProfilePackStat(info, b[index])),
+				),
 			)
 			.subscribe(async (boosters) => {
 				console.debug('[profile] packsAllTime', boosters);

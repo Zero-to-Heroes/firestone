@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HsAchievementInfo } from '@firestone/memory';
+import { equalHsAchievementInfo, HsAchievementInfo } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
@@ -9,7 +9,6 @@ import { CompletedAchievement } from '../../models/completed-achievement';
 import { IndexedVisualAchievement } from '../../models/indexed-visual-achievement';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
-import { deepEqual } from '../utils';
 import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
 import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
 import { RawAchievementsLoaderService } from './data/raw-achievements-loader.service';
@@ -64,7 +63,33 @@ export class AchievementsStateManagerService extends AbstractFacadeService<Achie
 							rawAchievements?.length > 0,
 					),
 					debounceTime(1000),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
+					distinctUntilChanged((a, b) => {
+						if (!a || !b) {
+							return false;
+						}
+						if (a[0]?.length !== b[0]?.length) {
+							return false;
+						}
+						if (a[1]?.length !== b[1]?.length) {
+							return false;
+						}
+						if (a[2]?.length !== b[2]?.length) {
+							return false;
+						}
+						if (!a[1]?.every((aInGame, index) => equalHsAchievementInfo(aInGame, b[1]?.[index]))) {
+							return false;
+						}
+						if (
+							!a[2]?.every(
+								(aCompleted, index) =>
+									aCompleted.id === b[2]?.[index].id &&
+									aCompleted.numberOfCompletions === b[2]?.[index].numberOfCompletions,
+							)
+						) {
+							return false;
+						}
+						return true;
+					}),
 				)
 				.subscribe(([rawAchievements, achievementsFromMemory, completedAchievements]) => {
 					this.groupedAchievements$$.next(
