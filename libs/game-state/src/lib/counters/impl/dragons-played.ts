@@ -45,7 +45,7 @@ export class DragonsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		return this.i18n.translateString(`counters.specific-plays.${side}`, {
-			value: side === 'player' ? this.player.value(gameState) : null,
+			value: this[side].value(gameState),
 			cardName: this.i18n.translateString('global.tribe.dragon'),
 		});
 	}
