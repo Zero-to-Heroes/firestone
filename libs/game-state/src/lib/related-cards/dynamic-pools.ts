@@ -131,6 +131,10 @@ const getDynamicFilters = (
 	switch (cardId) {
 		case CardIds.RiteOfAtrocity_EDR_811:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.SweetenedSnowflurry_TOY_307:
+		case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c.spellSchool === SpellSchool[SpellSchool.FROST];
 		case CardIds.SparkOfLife_EDR_872:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
