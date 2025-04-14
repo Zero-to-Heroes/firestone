@@ -1,4 +1,4 @@
-import { CardClass, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -23,6 +23,7 @@ import {
 	restoreHealth,
 	side,
 	spell,
+	spellDamage,
 	starshipExtended,
 	tooltip,
 } from './selectors';
@@ -337,6 +338,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
+		}
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]) &&
+			this.allCards.getCard(cardId).type === CardType[CardType.SPELL]
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), spellDamage));
 		}
 		// Specific highlights for draft
 		if (inputSide === 'single' || context === 'discover') {
