@@ -1,8 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -34,7 +35,25 @@ export class HolySpellsCounterDefinitionV2 extends CounterDefinitionV2<number> {
 				i18n.translateString('settings.decktracker.your-deck.counters.holy-spells-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentHolySpellsCounter' as const,
+		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck.hero, [CardClass.PALADIN]),
+		value: (state: GameState) => {
+			return (
+				state.opponentDeck.cardsPlayedThisMatch
+					.map((c) => this.allCards.getCard(c.cardId))
+					.filter((c: ReferenceCard) => c?.type?.toUpperCase() === CardType[CardType.SPELL])
+					.filter((c: ReferenceCard) => c?.spellSchool?.toUpperCase() === SpellSchool[SpellSchool.HOLY])
+					.length ?? 0
+			);
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.holy-spells-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.opponent-deck.counters.holy-spells-tooltip'),
+		},
+	};
 
 	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
 		super();
