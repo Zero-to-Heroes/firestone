@@ -2273,6 +2273,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, effectiveCostMore(5));
 		case CardIds.ScourgeIllusionist:
 			return and(side(inputSide), inDeck, minion, deathrattle, not(cardIs(CardIds.ScourgeIllusionist)));
+		case CardIds.ScrapbookingStudent_VAC_529:
+			return and(side(inputSide), or(inHand, inDeck), location);
 		case CardIds.ScrapShot:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.ScrollSavvy:
