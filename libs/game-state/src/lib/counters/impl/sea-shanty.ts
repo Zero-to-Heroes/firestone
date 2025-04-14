@@ -1,8 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -28,7 +29,24 @@ export class SeaShantyCounterDefinitionV2 extends CounterDefinitionV2<number> {
 				i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentSeaShantyCounter' as const,
+		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck.hero, [CardClass.PALADIN]),
+		value: (state: GameState) => {
+			return (
+				[
+					...state.opponentDeck.spellsPlayedOnFriendlyEntities,
+					...state.opponentDeck.spellsPlayedOnEnemyEntities,
+				].length ?? 0
+			);
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.sea-shanty-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.opponent-deck.counters.sea-shanty-tooltip'),
+		},
+	};
 
 	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
 		super();
