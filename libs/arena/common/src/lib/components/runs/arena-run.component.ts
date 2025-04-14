@@ -189,7 +189,7 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 
 		this.wins = this._run.wins;
 		this.losses = this._run.losses;
-		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins });
+		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins ?? 0 });
 		this.gameModeImage = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${
 			this.wins ?? 0
 		}wins.png`;
