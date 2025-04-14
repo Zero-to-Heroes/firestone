@@ -713,6 +713,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.CorruptTheWaters:
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
+		case CardIds.CorsairCache:
+			return and(side(inputSide), inDeck, weapon);
 		case CardIds.CountessAshmore:
 			return highlightConditions(
 				and(side(inputSide), inDeck, rush),
