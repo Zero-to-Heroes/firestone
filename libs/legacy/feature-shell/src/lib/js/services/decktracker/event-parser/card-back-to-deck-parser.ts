@@ -21,6 +21,7 @@ const CARD_SENDING_TO_TOP = [
 	// Technically it's an effect that causes the card to go to the top, but since there's only one of them we can
 	// take the lazy approach and use the base card
 	CardIds.DarkGiftToken_EDR_102t,
+	CardIds.SweetDreamsToken_EDR_100t8,
 ];
 
 export class CardBackToDeckParser implements EventParser {

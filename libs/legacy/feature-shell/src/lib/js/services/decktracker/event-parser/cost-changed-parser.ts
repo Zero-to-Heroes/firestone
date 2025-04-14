@@ -25,7 +25,12 @@ export class CostChangedParser implements EventParser {
 
 		// Not sure why, but discovering a card with a Dark Gift changes the cost in the deck to 0.
 		// It also sets some other tags to 0, like Battlecry, but I don't deal with these yet
-		if (card.lastAffectedByCardId === CardIds.DarkGiftToken_EDR_102t && zone === 'deck') {
+		if (
+			[CardIds.DarkGiftToken_EDR_102t, CardIds.SweetDreamsToken_EDR_100t8].includes(
+				card.lastAffectedByCardId as CardIds,
+			) &&
+			zone === 'deck'
+		) {
 			return currentState;
 		}
 

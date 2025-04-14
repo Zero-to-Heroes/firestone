@@ -7,7 +7,7 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-const CREATE_ON_TOP = [CardIds.MerchSeller, CardIds.DemonicDeal_WORK_014];
+const CREATE_ON_TOP = [CardIds.MerchSeller, CardIds.DemonicDeal_WORK_014, CardIds.SweetDreamsToken_EDR_100t8];
 
 export class CreateCardInDeckParser implements EventParser {
 	constructor(

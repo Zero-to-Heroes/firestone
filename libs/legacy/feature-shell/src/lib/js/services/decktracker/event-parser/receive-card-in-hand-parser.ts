@@ -361,6 +361,16 @@ export const denormalizeCreatorCardId = (
 ): { creatorCardId: string; creatorEntityId: number } => {
 	switch (creatorCardId) {
 		case CardIds.DarkGiftToken_EDR_102t:
+		case CardIds.SweetDreamsToken_EDR_100t8:
+		case CardIds.WakingTerrorToken_EDR_100t:
+		case CardIds.WellRestedToken_EDR_100t1:
+		case CardIds.ShortClawsToken_EDR_100t2:
+		case CardIds.BundledUpToken_EDR_100t3:
+		case CardIds.LivingNightmareToken_EDR_100t5:
+		case CardIds.SleepwalkerToken_EDR_100t6:
+		case CardIds.RudeAwakeningToken_EDR_100t7:
+		case CardIds.PersistingHorrorToken_EDR_100t9:
+		case CardIds.HarpysTalonsToken_EDR_100t13:
 			const card = deck.findCard(creatorEntityId)?.card;
 			return card
 				? { creatorCardId: card.creatorCardId, creatorEntityId: card.creatorEntityId }
