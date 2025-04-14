@@ -12,13 +12,14 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { ExtendedDraftDeckStats } from '../models/arena-draft';
 
 const SAVE_URL = `https://kfudiyqjqqra5cvjbt543ippfe0xzbjv.lambda-url.us-west-2.on.aws/`;
 const RETRIEVE_URL = 'https://oqskvzs6pjzhrcsg54z7tvnxoe0fmuyw.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsService> {
-	public deckStats$$: SubscriberAwareBehaviorSubject<readonly DraftDeckStats[] | null>;
+	public deckStats$$: SubscriberAwareBehaviorSubject<readonly ExtendedDraftDeckStats[] | null>;
 
 	private api: ApiRunner;
 	private user: UserService;
@@ -35,7 +36,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	}
 
 	protected async init() {
-		this.deckStats$$ = new SubscriberAwareBehaviorSubject<readonly DraftDeckStats[] | null>(null);
+		this.deckStats$$ = new SubscriberAwareBehaviorSubject<readonly ExtendedDraftDeckStats[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.user = AppInjector.get(UserService);
 		this.diskCache = AppInjector.get(DiskCacheService);
@@ -44,7 +45,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 
 		this.deckStats$$.onFirstSubscribe(async () => {
 			const currentUser = await this.user.getCurrentUser();
-			const existingStats: readonly DraftDeckStats[] | null = await this.loadArenaDeckStats(currentUser);
+			const existingStats: readonly ExtendedDraftDeckStats[] | null = await this.loadArenaDeckStats(currentUser);
 			this.deckStats$$.next(existingStats);
 		});
 	}
@@ -52,7 +53,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	public async newDeckStat(stat: DraftDeckStats, isFinalDeck: boolean) {
 		const user = await this.user.getCurrentUser();
 		const region = this.account.region$$.getValue();
-		const newStat: DraftDeckStats = {
+		const newStat: ExtendedDraftDeckStats = {
 			...stat,
 			region: region,
 			userId: user?.userId ?? '',
@@ -75,23 +76,23 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	private async loadArenaDeckStats(
 		currentUser: overwolf.profile.GetCurrentUserResult | null,
 		skipLocal = false,
-	): Promise<readonly DraftDeckStats[] | null> {
+	): Promise<readonly ExtendedDraftDeckStats[] | null> {
 		if (!skipLocal) {
-			const dbResults = await this.db.table<DraftDeckStats, string>(ARENA_DECK_STATS).toArray();
+			const dbResults = await this.db.table<ExtendedDraftDeckStats, string>(ARENA_DECK_STATS).toArray();
 			if (dbResults?.length) {
 				return dbResults;
 			}
 
-			const localRewards = await this.diskCache.getItem<readonly DraftDeckStats[]>(
+			const localRewards = await this.diskCache.getItem<readonly ExtendedDraftDeckStats[]>(
 				DiskCacheService.DISK_CACHE_KEYS.ARENA_DECK_STATS,
 			);
 			if (localRewards != null) {
-				this.db.table<DraftDeckStats, string>(ARENA_DECK_STATS).bulkPut(localRewards);
+				this.db.table<ExtendedDraftDeckStats, string>(ARENA_DECK_STATS).bulkPut(localRewards);
 				return localRewards;
 			}
 		}
 
-		const resultFromRemote = await this.api.callPostApi<readonly DraftDeckStats[] | null>(RETRIEVE_URL, {
+		const resultFromRemote = await this.api.callPostApi<readonly ExtendedDraftDeckStats[] | null>(RETRIEVE_URL, {
 			userId: currentUser?.userId,
 			userName: currentUser?.username,
 		});

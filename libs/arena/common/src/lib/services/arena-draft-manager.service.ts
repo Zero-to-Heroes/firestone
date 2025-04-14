@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { DraftDeckStats, DraftPick, Pick, Picks } from '@firestone-hs/arena-draft-pick';
+import { DraftPick, Pick, Picks } from '@firestone-hs/arena-draft-pick';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
@@ -22,6 +22,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, tap, withLatestFrom } from 'rxjs';
 import { ArenaCombinedCardStats } from '../models/arena-combined-card-stat';
+import { ExtendedDraftDeckStats } from '../models/arena-draft';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
@@ -336,7 +337,7 @@ export class ArenaDraftManagerService
 						const deckImpact = 100 * averageCardImpact;
 						const deckScore = 100 * (classWinrate! + averageCardImpact);
 						const partialDeckDefinition: DeckDefinition = buildDeckDefinition(currentDeck, this.allCards);
-						const deckDraftStats: DraftDeckStats = {
+						const deckDraftStats: ExtendedDraftDeckStats = {
 							runId: currentDeck.Id!,
 							userId: null as any,
 							region: null,

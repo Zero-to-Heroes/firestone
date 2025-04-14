@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService, formatClass } from '@firestone/shared/framework/core';
+import { ExtendedDraftDeckStats } from '../../models/arena-draft';
 import { ExtendedArenaRunInfo, InternalNotableCard } from '../../models/arena-high-wins-runs';
 import { ArenaRun } from '../../models/arena-run';
 import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
@@ -116,7 +116,7 @@ export class ArenaRunVignetteComponent {
 			rewards: [],
 			draftStat: {
 				deckScore: value.deckScore,
-			} as DraftDeckStats,
+			} as ExtendedDraftDeckStats,
 			creationTimestamp: new Date(value.creationDate).getTime(),
 			heroCardId: heroCard.id,
 			wins: value.wins,

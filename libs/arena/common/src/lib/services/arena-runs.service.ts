@@ -2,7 +2,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
 import { decode } from '@firestone-hs/deckstrings';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import {
@@ -23,6 +22,7 @@ import {
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { ExtendedDraftDeckStats } from '../models/arena-draft';
 import { ArenaRun } from '../models/arena-run';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
 import { ArenaRewardsService } from './arena-rewards.service';
@@ -139,7 +139,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 	private buildArenaRuns(
 		arenaMatches: readonly GameStat[] | null | undefined,
 		rewards: readonly ArenaRewardInfo[] | null,
-		deckStats: readonly DraftDeckStats[] | null,
+		deckStats: readonly ExtendedDraftDeckStats[] | null,
 	): readonly ArenaRun[] {
 		const matchesGroupedByRun = !!arenaMatches?.length
 			? groupByFunction((match: GameStat) => match.runId)(arenaMatches)
