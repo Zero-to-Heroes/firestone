@@ -45,9 +45,24 @@ export class CardBackToDeckParser implements EventParser {
 			!isPlayer && forcedHiddenCardCreators.includes(gameEvent.additionalData.influencedByCardId)
 				? null
 				: initialCardId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
 		// console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
+
+		// Hard-code for Wallow the Wretched
+		if (
+			gameEvent.additionalData.influencedByCardId === CardIds.SweetDreamsToken_EDR_100t8 ||
+			gameEvent.additionalData.influencedByCardId === CardIds.DarkGiftToken_EDR_102t
+		) {
+			if (deck.deck.some((e) => e.cardId === CardIds.WallowTheWretched_EDR_487)) {
+				const newDeckZone = deck.deck.map((e) =>
+					e.cardId === CardIds.WallowTheWretched_EDR_487 ? e.update({ positionFromTop: 1 }) : e,
+				);
+				deck = deck.update({
+					deck: newDeckZone,
+				});
+			}
+		}
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
