@@ -19,6 +19,8 @@ export const WallowTheWretched: GlobalHighlightCard = {
 				const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
 				return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
 			})
+			// So that gifts created before the Wallow card (if it's generated for instance) are not included
+			.filter((e) => !entityId || e.entityId > entityId)
 			.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL)
 			.map((e) => e.cardId);
 		return darkGifts;
