@@ -345,24 +345,25 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spellDamage));
 		}
+		// Looks like this can still be useful in-game
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
+		}
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP])
+		) {
+			// console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
+			selectors.push(and(side(inputSide), or(inDeck, inHand), starshipExtended));
+		}
 		// Specific highlights for draft
 		if (inputSide === 'single' || context === 'discover') {
 			// console.debug('[cards-highlight] building cardId selector for draft', cardId, card, inputSide);
-			if (
-				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE]) ||
-				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
-			) {
-				selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
-			}
-			if (
-				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
-				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
-				this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP]) ||
-				this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP])
-			) {
-				// console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
-				selectors.push(and(side(inputSide), or(inDeck, inHand), starshipExtended));
-			}
 		}
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));
