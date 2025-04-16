@@ -35,7 +35,7 @@ export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefin
 		value: (state: GameState): number => state.opponentDeck.minionsDeadThisMatch.length,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.enemy-dead-minions-this-game-label'),
 			tooltip: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.friendly-dead-minions-this-game-tooltip'),
 		},
