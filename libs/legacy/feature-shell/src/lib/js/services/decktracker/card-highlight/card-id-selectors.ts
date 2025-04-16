@@ -2853,6 +2853,7 @@ export const cardIdSelector = (
 		case CardIds.VelenLeaderOfTheExiled_GDB_131:
 			return (input: SelectorInput): SelectorOutput => {
 				const candidates = input.deckState.cardsPlayedThisMatch
+					.filter((c) => c.cardId !== CardIds.VelenLeaderOfTheExiled_GDB_131)
 					.filter(
 						(c) =>
 							allCards.getCard(c.cardId).races?.includes(Race[Race.DRAENEI]) ||
