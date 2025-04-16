@@ -1355,6 +1355,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.HemetFoamMarksman_TOY_355:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		case CardIds.HemetJungleHunter:
+			return and(side(inputSide), inDeck, effectiveCostMore(3));
 		case CardIds.HeraldOfChaos:
 			return and(side(inputSide), or(inHand, inDeck), spell, fel);
 		case CardIds.HeraldOfFlame_TRLA_176:
