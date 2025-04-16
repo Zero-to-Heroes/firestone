@@ -1,4 +1,4 @@
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameFormat } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { initialHeroClassIs } from '../../models/hero-card';
@@ -25,7 +25,8 @@ export class DragonsSummonedCounterDefinitionV2 extends CounterDefinitionV2<numb
 	readonly opponent = {
 		pref: 'opponentDragonsSummonedCounter' as const,
 		display: (state: GameState): boolean =>
-			initialHeroClassIs(state.opponentDeck?.hero, [CardClass.PRIEST, CardClass.DRUID]),
+			state.metadata?.formatType !== GameFormat.FT_STANDARD &&
+			initialHeroClassIs(state.opponentDeck?.hero, [CardClass.DRUID]),
 		value: (state: GameState): number => state.opponentDeck?.dragonsSummoned,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
