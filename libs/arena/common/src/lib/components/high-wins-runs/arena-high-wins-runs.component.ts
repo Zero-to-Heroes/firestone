@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { ArenaRunInfo } from '@firestone-hs/arena-high-win-runs';
 import { ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { ArenaGroupedRuns, ExtendedHighWinRunsInfo } from '../../models/arena-high-wins-runs';
 import { ArenaHighWinsRunsService } from '../../services/arena-high-wins-runs.service';
 
@@ -65,13 +65,11 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 			this.runsService.runs$$,
 			this.runsService.cardSearch$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						playerClass: prefs.arenaActiveClassFilter,
-						wins: prefs.arenaActiveWinsFilter,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					playerClass: prefs.arenaActiveClassFilter,
+					wins: prefs.arenaActiveWinsFilter,
+				})),
+				distinctUntilChanged((a, b) => a.playerClass === b.playerClass && a.wins === b.wins),
 			),
 		]).pipe(
 			this.mapData(([runs, cardSearch, { playerClass, wins }]) =>

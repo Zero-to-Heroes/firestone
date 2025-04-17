@@ -10,9 +10,8 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -75,12 +74,14 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						displayFromPrefs: prefs.opponentTracker,
-						decktrackerCloseOnGameEnd: prefs.decktrackerCloseOnGameEnd,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					displayFromPrefs: prefs.opponentTracker,
+					decktrackerCloseOnGameEnd: prefs.decktrackerCloseOnGameEnd,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.displayFromPrefs === b.displayFromPrefs &&
+						a.decktrackerCloseOnGameEnd === b.decktrackerCloseOnGameEnd,
 				),
 			),
 			this.store.listenDeckState$(

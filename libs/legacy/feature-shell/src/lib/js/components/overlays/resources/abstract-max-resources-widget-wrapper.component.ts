@@ -3,7 +3,7 @@ import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/referen
 import { AbstractWidgetWrapperComponent, DeckState, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual, sleep } from '@firestone/shared/framework/common';
+import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, switchMap, takeUntil } from 'rxjs';
 import { isDefault, MaxResources, nullIfDefaultHealth, nullIfDefaultMana } from './model';
@@ -88,7 +88,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 				};
 				return result;
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a.health === b.health && a.mana === b.mana),
 			takeUntil(this.destroyed$),
 		);
 		this.maxResources$ = combineLatest([maxResources$, alwaysOn$]).pipe(

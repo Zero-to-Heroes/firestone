@@ -19,7 +19,7 @@ import {
 } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -148,7 +148,7 @@ export class ChoosingCardOptionConstructedComponent
 		combineLatest([this.showDiscoverStat$, this.showPremiumBanner$, this.cardStat$])
 			.pipe(
 				filter(([show, hidden, cardStat]) => show && !hidden && cardStat?.drawnImpact != null),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(),
 			)
 			.subscribe(([show, canSee]) => {
 				this.guardian.acknowledgeDiscoverStatsSeen();

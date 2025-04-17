@@ -2,14 +2,13 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardClass } from '@firestone-hs/reference-data';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import {
 	CollectionCardClassFilterType,
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 } from '@models/collection/filter-types';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../services/utils';
@@ -92,13 +91,16 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 		this.cards$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.cardList),
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						classFilter: prefs.collectionCardClassFilter,
-						rarityFilter: prefs.collectionCardRarityFilter,
-						ownedFilter: prefs.collectionCardOwnedFilter,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					classFilter: prefs.collectionCardClassFilter,
+					rarityFilter: prefs.collectionCardRarityFilter,
+					ownedFilter: prefs.collectionCardOwnedFilter,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.classFilter === b.classFilter &&
+						a.rarityFilter === b.rarityFilter &&
+						a.ownedFilter === b.ownedFilter,
 				),
 			),
 		).pipe(

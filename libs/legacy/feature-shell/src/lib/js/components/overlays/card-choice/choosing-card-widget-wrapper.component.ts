@@ -13,9 +13,8 @@ import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
@@ -189,7 +188,9 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 					return result;
 				});
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(
+				(a, b) => a?.length === b?.length && !!a?.every((o, i) => equalCardChoiceOption(o, b[i])),
+			),
 			takeUntil(this.destroyed$),
 		);
 		this.hasTallCard$ = this.options$.pipe(this.mapData((options) => options.some((o) => o.isTallCard)));
@@ -244,5 +245,32 @@ export interface CardChoiceOption {
 	readonly flag?: CardOptionFlag;
 	readonly value?: string;
 }
+export const equalCardChoiceOption = (
+	a: CardChoiceOption | null | undefined,
+	b: CardChoiceOption | null | undefined,
+): boolean => {
+	if (a == null && b == null) {
+		return true;
+	}
+	if (a == null || b == null) {
+		return false;
+	}
+	if (a.cardId !== b.cardId) {
+		return false;
+	}
+	if (a.entityId !== b.entityId) {
+		return false;
+	}
+	if (a.isTallCard !== b.isTallCard) {
+		return false;
+	}
+	if (a.flag !== b.flag) {
+		return false;
+	}
+	if (a.value !== b.value) {
+		return false;
+	}
+	return true;
+};
 
 export type CardOptionFlag = 'flag' | 'value' | null;

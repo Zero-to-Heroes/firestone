@@ -261,15 +261,13 @@ export class DeckTrackerOverlayRootComponent
 			this.gameStats.gameStats$$,
 			this.decksProvider.decks$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						desktopDeckDeletes: prefs.desktopDeckDeletes,
-						desktopDeckStatsReset: prefs.desktopDeckStatsReset,
-						desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
-						desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					desktopDeckDeletes: prefs.desktopDeckDeletes,
+					desktopDeckStatsReset: prefs.desktopDeckStatsReset,
+					desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
+					desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
+				})),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 			),
 		]).pipe(
 			debounceTime(1000),

@@ -9,10 +9,9 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { MemoryVisitor, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter, startWith } from 'rxjs/operators';
+import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 import {
 	BattleAbility,
 	BattleEquipment,
@@ -197,13 +196,11 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 		);
 		this.showQuests$ = combineLatest([
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						showQuests: prefs.mercsShowQuestsWidget,
-						showWhenEmpty: prefs.showQuestsWidgetWhenEmpty,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					showQuests: prefs.mercsShowQuestsWidget,
+					showWhenEmpty: prefs.showQuestsWidgetWhenEmpty,
+				})),
+				distinctUntilChanged((a, b) => a.showQuests === b.showQuests && a.showWhenEmpty === b.showWhenEmpty),
 			),
 			this.tasks$,
 		]).pipe(

@@ -5,7 +5,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CommunityInfo, LeaderboardEntry, LeaderboardEntryArena } from '@firestone-hs/communities';
 import { StatGameFormatType, StatGameModeType } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import {
@@ -109,14 +109,10 @@ export class CommunityLeaderboardsComponent extends AbstractSubscriptionComponen
 		);
 		this.leaderboard$ = combineLatest([selectedTab$, this.personalCommunities.selectedCommunity$$]).pipe(
 			debounceTime(100),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
-			tap(([selectedTab, community]) => console.debug('selectedTab', selectedTab, 'community', community)),
 			filter(([selectedTab, community]) => !!community),
 			map(([selectedTab, community]) => {
 				const sourceLeaderboard = this.getSourceLeaderboard(selectedTab, community!);
-				console.debug('sourceLeaderboard', sourceLeaderboard);
 				const displayedLeaderboard = this.buildLeaderboard(sourceLeaderboard, selectedTab);
-				console.debug('displayedLeaderboard', displayedLeaderboard);
 				return !!displayedLeaderboard?.length ? displayedLeaderboard : null;
 			}),
 			shareReplay(1),

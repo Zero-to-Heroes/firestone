@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService, Side } from '@firestone/memory';
-import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
@@ -308,11 +308,15 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 		this.forceMouseOver$ = this.forceMouseOver$$.pipe(this.mapData((value) => value));
 
-		combineLatest([this.card$$, this.showUpdatedCost$$, this.showStatsChange$$, this.groupSameCardsTogether$$])
+		combineLatest([
+			this.card$$.pipe(this.mapData((c) => c)),
+			this.showUpdatedCost$$,
+			this.showStatsChange$$,
+			this.groupSameCardsTogether$$,
+		])
 			.pipe(
 				filter(([card]) => !!card),
 				auditTime(50),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {

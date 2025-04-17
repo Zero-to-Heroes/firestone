@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { DeckCard, DeckState, GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { auditTime, distinctUntilChanged, Observable } from 'rxjs';
+import { auditTime, Observable } from 'rxjs';
 
 @Component({
 	selector: 'opponent-hand-overlay',
@@ -51,15 +51,15 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 			auditTime(500),
 			this.mapData((gameState) => gameState?.opponentDeck?.hand),
 			// Might be too expensive to use deepEqual here, as it will compare the whole hand
-			// distinctUntilChanged((a, b) => deepEqual(a, b)),
+			// distinctUntilChanged((a, b) => deepEq(a, b)),
 		);
 		this.context$ = this.gameState.gameState$$.pipe(
+			auditTime(500),
 			this.mapData((gameState) => ({
 				deck: gameState?.opponentDeck,
 				metadata: gameState?.metadata,
 				currentTurn: gameState?.currentTurn,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 		);
 		this.displayTurnNumber$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.dectrackerShowOpponentTurnDraw),

@@ -87,18 +87,12 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 			);
 
 			// Make sure we refresh when game stats are updated
-			combineLatest([config$, gameStats$])
-				// .pipe(
-				// 	distinctUntilChanged((a, b) => {
-				// 		return deepEqual(a, b);
-				// 	}),
-				// )
-				.subscribe(async ([config]) => {
-					console.debug('[bgs-2] refreshing meta hero stats', config);
-					this.tiersWithPlayerData$$.next(null);
-					const finalStats = await this.buildFinalStats(config, undefined, true);
-					this.tiersWithPlayerData$$.next(finalStats?.stats);
-				});
+			combineLatest([config$, gameStats$]).subscribe(async ([config]) => {
+				console.debug('[bgs-2] refreshing meta hero stats', config);
+				this.tiersWithPlayerData$$.next(null);
+				const finalStats = await this.buildFinalStats(config, undefined, true);
+				this.tiersWithPlayerData$$.next(finalStats?.stats);
+			});
 		});
 	}
 

@@ -189,7 +189,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				([stats, referenceData, { sortCriteria, fullyUpgraded, owned }, heroSearchString]) =>
 					!!stats?.length && !!referenceData,
 			),
-			// distinctUntilChanged((a, b) => deepEqual(a, b)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([stats, referenceData, { sortCriteria, fullyUpgraded, owned }, heroSearchString]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, owned, sortCriteria, referenceData),

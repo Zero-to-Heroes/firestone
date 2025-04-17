@@ -9,7 +9,7 @@ import {
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { BG_USE_ANOMALIES, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-perfect-games.service';
@@ -57,7 +57,11 @@ export class BattlegroundsPerfectGamesComponent
 					anomaliesFilter: [] as readonly string[], //prefs.bgsActiveAnomaliesFilter,
 					tribesFilter: prefs.bgsActiveTribesFilter,
 				}),
-				(a, b) => deepEqual(a, b),
+				(a, b) =>
+					a.rankFilter === b.rankFilter &&
+					a.heroFilter === b.heroFilter &&
+					arraysEqual(a.anomaliesFilter, b.anomaliesFilter) &&
+					arraysEqual(a.tribesFilter, b.tribesFilter),
 			),
 		);
 		this.replays$ = combineLatest([

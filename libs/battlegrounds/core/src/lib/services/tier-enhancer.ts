@@ -161,3 +161,21 @@ export interface MinionInfo {
 	readonly tribes: readonly Race[];
 	readonly tavernTier: number;
 }
+export const equalMinionInfo = (a: MinionInfo | undefined | null, b: MinionInfo | undefined | null): boolean => {
+	if (!a && !b) {
+		return true;
+	}
+	if (!a || !b) {
+		return false;
+	}
+	if (a.cardId !== b.cardId) {
+		return false;
+	}
+	if (a.tavernTier !== b.tavernTier) {
+		return false;
+	}
+	if (!arraysEqual(a.tribes, b.tribes)) {
+		return false;
+	}
+	return true;
+};

@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { distinctUntilChanged, Observable } from 'rxjs';
 
 @Component({
 	selector: 'replays-bg-hero-filter-dropdown',
@@ -56,13 +56,11 @@ export class ReplaysBgHeroFilterDropdownComponent extends AbstractSubscriptionCo
 		await waitForReady(this.prefs);
 
 		this.filter$ = this.prefs.preferences$$.pipe(
-			this.mapData(
-				(prefs) => ({
-					filter: prefs.replaysActiveBgHeroFilter,
-					gameModeFilter: prefs.replaysActiveGameModeFilter,
-				}),
-				(a, b) => deepEqual(a, b),
-			),
+			this.mapData((prefs) => ({
+				filter: prefs.replaysActiveBgHeroFilter,
+				gameModeFilter: prefs.replaysActiveGameModeFilter,
+			})),
+			distinctUntilChanged((a, b) => a.filter === b.filter && a.gameModeFilter === b.gameModeFilter),
 			this.mapData(({ filter, gameModeFilter }) => ({
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,

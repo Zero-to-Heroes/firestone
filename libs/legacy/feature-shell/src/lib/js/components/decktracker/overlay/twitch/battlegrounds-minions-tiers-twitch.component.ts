@@ -16,11 +16,11 @@ import {
 	Tier,
 	buildTiers,
 	enhanceTiers,
+	equalMinionInfo,
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
 import { GameState } from '@firestone/game-state';
-import { deepEqual } from '@firestone/shared/framework/common';
 import {
 	CardRulesService,
 	CardsFacadeService,
@@ -262,7 +262,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 				});
 				return composition;
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a?.length === b?.length && !!a?.every((e, i) => equalMinionInfo(e, b[i]))),
 			takeUntil(this.destroyed$),
 		);
 

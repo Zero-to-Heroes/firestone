@@ -417,6 +417,24 @@ export interface TurnTiming {
 	readonly startTimestamp: number;
 	readonly endTimestamp: number;
 }
+export const equalTurnTiming = (a: TurnTiming | null | undefined, b: TurnTiming | null | undefined): boolean => {
+	if (!a && !b) {
+		return true;
+	}
+	if (!a || !b) {
+		return false;
+	}
+	if (a.turn !== b.turn) {
+		return false;
+	}
+	if (a.startTimestamp !== b.startTimestamp) {
+		return false;
+	}
+	if (a.endTimestamp !== b.endTimestamp) {
+		return false;
+	}
+	return true;
+};
 
 export interface CardOption {
 	readonly entityId: number;

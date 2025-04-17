@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { auditTime, distinctUntilChanged } from 'rxjs';
 import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
@@ -60,7 +60,9 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 					autoReconnect: prefs.bgsReconnectorAutoReconnect,
 					waitAfterBoards: prefs.bgsReconnectorAutoReconnectWaitAfterBoards,
 				})),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(
+					(a, b) => a.autoReconnect === b.autoReconnect && a.waitAfterBoards === b.waitAfterBoards,
+				),
 			)
 			.subscribe((prefs) => {
 				this.autoReconnect = prefs.autoReconnect;

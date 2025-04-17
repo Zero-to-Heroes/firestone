@@ -3,10 +3,10 @@ import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { formatGamesCount } from './constructed-meta-decks.component';
 
@@ -131,14 +131,18 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComp
 			this.sortCriteria$$,
 			this.constructedMetaStats.constructedMetaArchetypes$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						useConservativeEstimate: prefs.constructedMetaDecksUseConservativeWinrate,
-						sampleSize: prefs.constructedMetaArchetypesSampleSizeFilter,
-						playerClasses: prefs.constructedMetaDecksPlayerClassFilter,
-						archetypes: prefs.constructedMetaDecksArchetypeFilter,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					useConservativeEstimate: prefs.constructedMetaDecksUseConservativeWinrate,
+					sampleSize: prefs.constructedMetaArchetypesSampleSizeFilter,
+					playerClasses: prefs.constructedMetaDecksPlayerClassFilter,
+					archetypes: prefs.constructedMetaDecksArchetypeFilter,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.useConservativeEstimate === b.useConservativeEstimate &&
+						a.sampleSize === b.sampleSize &&
+						arraysEqual(a.playerClasses, b.playerClasses) &&
+						arraysEqual(a.archetypes, b.archetypes),
 				),
 			),
 		]).pipe(

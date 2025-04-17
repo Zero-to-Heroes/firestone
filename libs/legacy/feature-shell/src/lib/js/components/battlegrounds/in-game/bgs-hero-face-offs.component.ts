@@ -3,7 +3,7 @@ import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bg
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { BgsNextOpponentOverviewPanel } from '@firestone/battlegrounds/core';
-import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
@@ -68,15 +68,13 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
 		this.faceOffsByOpponent$ = this.state.gameState$$.pipe(
 			this.mapData((state) => state.currentGame?.faceOffs),
-			this.mapData(
-				(faceOffs) => {
-					const result = groupByFunction((faceOff: BgsFaceOff) =>
-						normalizeHeroCardId(faceOff.opponentCardId, this.allCards),
-					)(faceOffs ?? []);
-					return result;
-				},
-				(a, b) => deepEqual(a, b),
-			),
+			distinctUntilChanged(),
+			this.mapData((faceOffs) => {
+				const result = groupByFunction((faceOff: BgsFaceOff) =>
+					normalizeHeroCardId(faceOff.opponentCardId, this.allCards),
+				)(faceOffs ?? []);
+				return result;
+			}),
 		);
 		this.opponents$ = this.state.gameState$$.pipe(
 			this.mapData((state) => state.currentGame?.players),

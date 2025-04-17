@@ -10,10 +10,9 @@ import {
 import { BgsFaceOffWithSimulation, BgsPanel } from '@firestone/battlegrounds/core';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, startWith } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 import { AdService } from '../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
@@ -123,11 +122,8 @@ export class BattlegroundsContentComponent
 			.pipe(
 				debounceTime(1000),
 				filter(([faceOffs]) => !!faceOffs?.length),
-				this.mapData(
-					([faceOffs]) => faceOffs,
-					(a, b) => deepEqual(a, b),
-					0,
-				),
+				distinctUntilChanged(),
+				this.mapData(([faceOffs]) => faceOffs),
 			);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(
 			this.mapData((showAds) => !showAds),

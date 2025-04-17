@@ -5,11 +5,11 @@ import {
 	BgsStateFacadeService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
-import { BgsHeroSelectionOverviewPanel, Config } from '@firestone/battlegrounds/core';
+import { BgsHeroSelectionOverviewPanel, Config, equalConfig } from '@firestone/battlegrounds/core';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -113,7 +113,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 				};
 				return config;
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => equalConfig(a, b)),
 			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfig$.pipe(

@@ -38,8 +38,7 @@ export class BgsOverlayHeroOverviewService {
 		const players$ = this.bgState.gameState$$.pipe(
 			debounceTime(100),
 			map((state) => state?.currentGame?.players),
-			// Immutable Map + a lot of info, maybe not use deepEqual
-			// distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(),
 		);
 		const componentClass$ = this.prefs.preferences$$.pipe(
 			map((prefs) => (prefs.bgsOpponentOverlayAtTop ? null : 'bottom')),

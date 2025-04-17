@@ -9,12 +9,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { GameStateFacadeService, TurnTiming } from '@firestone/game-state';
+import { equalTurnTiming, GameStateFacadeService, TurnTiming } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable, combineLatest, interval } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { combineLatest, interval, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { sumOnArray } from '../../../services/utils';
 
 @Component({
@@ -92,13 +92,17 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 		this.player$ = combineLatest([
 			interval(1000),
 			this.gameState.gameState$$.pipe(
-				this.mapData(
-					(state) => ({
-						playerName: state?.playerDeck?.hero?.playerName,
-						turnDuration: state?.playerDeck?.turnDuration,
-						turnTimings: state?.playerDeck?.turnTimings,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((state) => ({
+					playerName: state?.playerDeck?.hero?.playerName,
+					turnDuration: state?.playerDeck?.turnDuration,
+					turnTimings: state?.playerDeck?.turnTimings,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.playerName === b.playerName &&
+						a.turnDuration === b.turnDuration &&
+						a.turnTimings?.length === b.turnTimings?.length &&
+						!!a.turnTimings?.every((timing, index) => equalTurnTiming(timing, b.turnTimings[index])),
 				),
 			),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useStreamerMode)),
@@ -114,13 +118,17 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 		this.opponent$ = combineLatest([
 			interval(1000),
 			this.gameState.gameState$$.pipe(
-				this.mapData(
-					(state) => ({
-						playerName: state?.opponentDeck?.hero?.playerName,
-						turnDuration: state?.opponentDeck?.turnDuration,
-						turnTimings: state?.opponentDeck?.turnTimings,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((state) => ({
+					playerName: state?.opponentDeck?.hero?.playerName,
+					turnDuration: state?.opponentDeck?.turnDuration,
+					turnTimings: state?.opponentDeck?.turnTimings,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.playerName === b.playerName &&
+						a.turnDuration === b.turnDuration &&
+						a.turnTimings?.length === b.turnTimings?.length &&
+						!!a.turnTimings?.every((timing, index) => equalTurnTiming(timing, b.turnTimings[index])),
 				),
 			),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useStreamerMode)),

@@ -6,10 +6,10 @@ import { ConstructedMetaDecksStateService } from '@firestone/constructed/common'
 import { Card } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual, groupByFunction2 } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual, groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
 import { CollectionManager } from '../../../services/collection/collection-manager.service';
 import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -172,15 +172,20 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 			this.sortCriteria$$,
 			collectionCache$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						conservativeEstimate: prefs.constructedMetaDecksUseConservativeWinrate,
-						sampleSize: prefs.constructedMetaDecksSampleSizeFilter,
-						dust: prefs.constructedMetaDecksDustFilter,
-						playerClasses: prefs.constructedMetaDecksPlayerClassFilter,
-						archetypes: prefs.constructedMetaDecksArchetypeFilter,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					conservativeEstimate: prefs.constructedMetaDecksUseConservativeWinrate,
+					sampleSize: prefs.constructedMetaDecksSampleSizeFilter,
+					dust: prefs.constructedMetaDecksDustFilter,
+					playerClasses: prefs.constructedMetaDecksPlayerClassFilter,
+					archetypes: prefs.constructedMetaDecksArchetypeFilter,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.conservativeEstimate === b.conservativeEstimate &&
+						a.sampleSize === b.sampleSize &&
+						a.dust === b.dust &&
+						arraysEqual(a.playerClasses, b.playerClasses) &&
+						arraysEqual(a.archetypes, b.archetypes),
 				),
 			),
 		]).pipe(

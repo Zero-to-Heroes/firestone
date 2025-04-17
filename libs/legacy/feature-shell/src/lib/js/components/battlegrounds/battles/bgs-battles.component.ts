@@ -18,7 +18,6 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 import { AdService } from '../../../services/ad.service';
 import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
@@ -72,11 +71,8 @@ export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent impl
 			.pipe(
 				debounceTime(1000),
 				filter(([faceOffs]) => !!faceOffs?.length),
-				this.mapData(
-					([faceOffs]) => faceOffs.slice().reverse(),
-					(a, b) => deepEqual(a, b),
-					0,
-				),
+				distinctUntilChanged(),
+				this.mapData(([faceOffs]) => faceOffs.slice().reverse()),
 			);
 		this.selectedFaceOff$ = combineLatest(
 			this.faceOffs$,

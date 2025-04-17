@@ -8,9 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -63,12 +62,14 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 
 		this.showWidget$ = combineLatest([
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						displayFromPrefsPvE: prefs.mercenariesEnableActionsQueueWidgetPvE,
-						displayFromPrefsPvP: prefs.mercenariesEnableActionsQueueWidgetPvP,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					displayFromPrefsPvE: prefs.mercenariesEnableActionsQueueWidgetPvE,
+					displayFromPrefsPvP: prefs.mercenariesEnableActionsQueueWidgetPvP,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.displayFromPrefsPvE === b.displayFromPrefsPvE &&
+						a.displayFromPrefsPvP === b.displayFromPrefsPvP,
 				),
 			),
 			this.store.listenMercenaries$(([state, prefs]) => state?.gameMode),

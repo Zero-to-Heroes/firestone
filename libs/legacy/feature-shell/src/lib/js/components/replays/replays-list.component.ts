@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegrounds, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 
@@ -120,15 +120,20 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		this.replays$ = combineLatest([
 			this.gameStats.gameStats$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						gameModeFilter: prefs.replaysActiveGameModeFilter,
-						bgHeroFilter: prefs.replaysActiveBgHeroFilter,
-						deckstringsFilter: prefs.replaysActiveDeckstringsFilter,
-						playerClassFilter: prefs.replaysActivePlayerClassFilter,
-						opponentClassFilter: prefs.replaysActiveOpponentClassFilter,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					gameModeFilter: prefs.replaysActiveGameModeFilter,
+					bgHeroFilter: prefs.replaysActiveBgHeroFilter,
+					deckstringsFilter: prefs.replaysActiveDeckstringsFilter,
+					playerClassFilter: prefs.replaysActivePlayerClassFilter,
+					opponentClassFilter: prefs.replaysActiveOpponentClassFilter,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.gameModeFilter === b.gameModeFilter &&
+						a.bgHeroFilter === b.bgHeroFilter &&
+						arraysEqual(a.deckstringsFilter, b.deckstringsFilter) &&
+						a.playerClassFilter === b.playerClassFilter &&
+						a.opponentClassFilter === b.opponentClassFilter,
 				),
 			),
 			this.heroSearchString$$,

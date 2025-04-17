@@ -9,9 +9,8 @@ import {
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
 import { Card, CardBack, MemoryMercenary } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { formatClass } from '../../services/hs-utils';
@@ -146,25 +145,21 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		const filteredHeroPortraits$ = combineLatest([
 			relevantHeroes$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						category: prefs.collectionActivePortraitCategoryFilter,
-						owned: prefs.collectionActivePortraitOwnedFilter,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					category: prefs.collectionActivePortraitCategoryFilter,
+					owned: prefs.collectionActivePortraitOwnedFilter,
+				})),
+				distinctUntilChanged((a, b) => a.category === b.category && a.owned === b.owned),
 			),
 		]).pipe(this.mapData(([heroes, { category, owned }]) => heroes.filter(this.filterCardsOwned(owned))));
 		this.shownHeroPortraits$ = combineLatest([
 			filteredHeroPortraits$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						category: prefs.collectionActivePortraitCategoryFilter,
-						owned: prefs.collectionActivePortraitOwnedFilter,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					category: prefs.collectionActivePortraitCategoryFilter,
+					owned: prefs.collectionActivePortraitOwnedFilter,
+				})),
+				distinctUntilChanged((a, b) => a.category === b.category && a.owned === b.owned),
 			),
 		]).pipe(this.mapData(([portraitCards, { category, owned }]) => this.groupPortraits(portraitCards, category)));
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {

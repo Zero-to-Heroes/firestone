@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 
@@ -311,18 +311,16 @@ export class CardTooltipComponent
 			this.localized$$.asObservable(),
 			this.isBgs$$.asObservable(),
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
-						highRes: prefs.collectionUseHighResImages,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
+					highRes: prefs.collectionUseHighResImages,
+				})),
+				distinctUntilChanged((a, b) => a.locale === b.locale && a.highRes === b.highRes),
 			),
 		]).pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				([relatedCardIds, localized, isBgs, { locale, highRes }]) => {
+					console.debug('[debug] relatedCardIds', relatedCardIds);
 					return (
 						relatedCardIds
 							// Remove entity ids (eg in Fizzle's Snapshot card)
@@ -357,18 +355,16 @@ export class CardTooltipComponent
 			this.buffs$$.asObservable(),
 			this.createdBy$$.asObservable(),
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
-						highRes: prefs.collectionUseHighResImages,
-					}),
-					(a, b) => deepEqual(a, b),
-				),
+				this.mapData((prefs) => ({
+					locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
+					highRes: prefs.collectionUseHighResImages,
+				})),
+				distinctUntilChanged((a, b) => a.locale === b.locale && a.highRes === b.highRes),
 			),
 		]).pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, { locale, highRes }]) => {
+					console.debug('[debug] cardIds', cardIds);
 					return (
 						[...(cardIds ?? [])]
 							// Empty card IDs are necessary when showing buff only

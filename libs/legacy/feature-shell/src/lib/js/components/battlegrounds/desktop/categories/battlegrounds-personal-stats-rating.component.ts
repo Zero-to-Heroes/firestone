@@ -1,13 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from '@legacy-import/src/lib/js/services/stats/game/game-stats-provider.service';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
@@ -74,14 +74,18 @@ export class BattlegroundsPersonalStatsRatingComponent
 		this.value$ = combineLatest([
 			this.gameStats.gameStats$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						timeFilter: prefs.bgsActiveTimeFilter,
-						mmrFilter: prefs.bgsActiveRankFilter,
-						mmrGroupFilter: prefs.bgsActiveMmrGroupFilter,
-						mode: prefs.bgsActiveGameMode,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					timeFilter: prefs.bgsActiveTimeFilter,
+					mmrFilter: prefs.bgsActiveRankFilter,
+					mmrGroupFilter: prefs.bgsActiveMmrGroupFilter,
+					mode: prefs.bgsActiveGameMode,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.timeFilter === b.timeFilter &&
+						a.mmrFilter === b.mmrFilter &&
+						a.mmrGroupFilter === b.mmrGroupFilter &&
+						a.mode === b.mode,
 				),
 			),
 			this.patchesConfig.currentBattlegroundsMetaPatch$$,

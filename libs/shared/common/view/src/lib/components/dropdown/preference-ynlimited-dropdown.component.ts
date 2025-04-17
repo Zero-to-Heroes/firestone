@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -69,10 +69,7 @@ export class PreferenceYNLimitedComponent extends AbstractSubscriptionComponent 
 		await waitForReady(this.prefs);
 
 		this.filter$ = this.prefs.preferences$$.pipe(
-			this.mapData(
-				(prefs) => prefs[this.field],
-				(a, b) => deepEqual(a, b),
-			),
+			this.mapData((prefs) => prefs[this.field]),
 			this.mapData((pref) => ({
 				filter: '' + pref,
 				placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label,

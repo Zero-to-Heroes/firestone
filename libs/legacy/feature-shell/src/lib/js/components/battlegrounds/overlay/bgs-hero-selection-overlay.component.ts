@@ -6,12 +6,12 @@ import {
 	BgsStateFacadeService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
-import { BgsHeroSelectionOverviewPanel, Config } from '@firestone/battlegrounds/core';
+import { BgsHeroSelectionOverviewPanel, Config, equalConfig } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -91,7 +91,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		const availableRaces$ = this.bgsState.gameState$$.pipe(
 			debounceTime(200),
 			this.mapData((state) => state?.currentGame?.availableRaces),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -121,7 +121,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				};
 				return config;
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => equalConfig(a, b)),
 			takeUntil(this.destroyed$),
 		);
 		const tiers$ = statsConfigs.pipe(
@@ -136,7 +136,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						(panel) => panel.id === 'bgs-hero-selection-overview',
 					) as BgsHeroSelectionOverviewPanel,
 			),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(),
 		);
 
 		this.heroOverviews$ = combineLatest([

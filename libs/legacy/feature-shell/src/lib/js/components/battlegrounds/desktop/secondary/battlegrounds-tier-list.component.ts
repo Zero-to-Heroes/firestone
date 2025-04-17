@@ -7,11 +7,12 @@ import {
 	BgsStateFacadeService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
+import { equalConfig } from '@firestone/battlegrounds/core';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStateFacadeService } from '@legacy-import/src/lib/js/services/mainwindow/store/main-window-state-facade.service';
 import { Observable, combineLatest } from 'rxjs';
@@ -94,7 +95,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 				};
 				return config;
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => equalConfig(a, b)),
 			takeUntil(this.destroyed$),
 		);
 

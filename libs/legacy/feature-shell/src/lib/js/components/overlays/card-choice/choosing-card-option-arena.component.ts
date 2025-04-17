@@ -18,7 +18,7 @@ import {
 	ArenaDiscoversGuardianService,
 } from '@firestone/arena/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual, uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -119,17 +119,17 @@ export class ChoosingCardOptionArenaComponent
 		combineLatest([this.showArenaCardStatDuringDiscovers$, this.canSeeWidget$])
 			.pipe(
 				filter(([show, canSee]) => show && canSee),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged(),
 			)
 			.subscribe(([show, canSee]) => {
 				this.guardian.acknowledgeDiscoverStatsSeen();
 			});
 		this.arenaCardStats$ = combineLatest([this.cardId$$, this.playerClass$$]).pipe(
 			filter(([cardId]) => !!cardId),
+			distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1]),
 			switchMap(([cardId, playerClass]) =>
 				from(this.arenaCardStats.getStatsFor(cardId, playerClass)).pipe(
 					this.mapData((stat) => ({ stat, playerClass })),
-					distinctUntilChanged((a, b) => deepEqual(a, b)),
 				),
 			),
 			switchMap(async ({ stat, playerClass }) => {

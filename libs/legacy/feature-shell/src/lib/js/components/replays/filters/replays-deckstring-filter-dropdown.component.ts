@@ -3,10 +3,10 @@ import { ConstructedNavigationService, DeckSummary } from '@firestone/constructe
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { formatClass } from '../../../services/hs-utils';
 import { sortByProperties } from '../../../services/utils';
@@ -56,13 +56,16 @@ export class ReplaysDeckstringFilterDropdownComponent
 			this.nav.currentView$$,
 			this.mainNav.currentApp$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						gameModeFilter: prefs.replaysActiveGameModeFilter,
-						deckstringFilter: prefs.replaysActiveDeckstringsFilter,
-						archivedDecks: prefs.desktopDeckHiddenDeckCodes,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					gameModeFilter: prefs.replaysActiveGameModeFilter,
+					deckstringFilter: prefs.replaysActiveDeckstringsFilter,
+					archivedDecks: prefs.desktopDeckHiddenDeckCodes,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.gameModeFilter === b.gameModeFilter &&
+						arraysEqual(a.deckstringFilter, b.deckstringFilter) &&
+						arraysEqual(a.archivedDecks, b.archivedDecks),
 				),
 			),
 		]).pipe(

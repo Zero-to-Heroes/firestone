@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { NumericTurnInfo } from '@firestone/battlegrounds/core';
+import { equalNumericTurnInfo, NumericTurnInfo } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { deepEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-chart-warband-stats',
@@ -44,7 +43,11 @@ export class BgsChartWarbandStatsComponent {
 			})
 			.filter((stat) => stat)
 			.slice(0, 15);
-		if (deepEqual(this.communityValues, communityValues)) {
+		if (
+			this.communityValues?.length &&
+			communityValues?.length &&
+			!!this.communityValues?.every((e, ix) => equalNumericTurnInfo(e, communityValues[ix]))
+		) {
 			return;
 		}
 		this.communityValues = communityValues;

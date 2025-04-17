@@ -184,7 +184,11 @@ export class AchievementsLiveProgressTrackingService {
 			currentCompletion = !!nextStepId
 				? achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0
 				: 0;
-			//console.debug('[achievements-live-progress-tracking] currentAchievement', currentAchievement, currentCompletion);
+			console.debug(
+				'[achievements-live-progress-tracking] currentAchievement',
+				currentAchievement,
+				currentCompletion,
+			);
 		}
 		return currentAchievement;
 	}

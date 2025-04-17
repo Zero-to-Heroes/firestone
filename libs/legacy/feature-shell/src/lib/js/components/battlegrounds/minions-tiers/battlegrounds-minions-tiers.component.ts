@@ -21,12 +21,13 @@ import {
 	buildCompositions,
 	buildTiers,
 	enhanceTiers,
+	equalMinionInfo,
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	Observable,
@@ -129,7 +130,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				lesser: main?.currentGame?.getMainPlayer()?.lesserTrinket,
 				greater: main?.currentGame?.getMainPlayer()?.greaterTrinket,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a.lesser === b.lesser && a.greater === b.greater),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -145,7 +146,17 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
 				bgsIncludeTrinketsInTribeGroups: prefs.bgsIncludeTrinketsInTribeGroups,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(
+				(a, b) =>
+					a.bgsGroupMinionsIntoTheirTribeGroup === b.bgsGroupMinionsIntoTheirTribeGroup &&
+					a.bgsIncludeTrinketsInTribeGroups === b.bgsIncludeTrinketsInTribeGroups &&
+					a.showMechanicsTiers === b.showMechanicsTiers &&
+					a.showTribeTiers === b.showTribeTiers &&
+					a.showTierSeven === b.showTierSeven &&
+					a.showBuddies === b.showBuddies &&
+					a.showTrinkets === b.showTrinkets &&
+					a.showSpellsAtBottom === b.showSpellsAtBottom,
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -166,7 +177,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				hasPrizes: state?.currentGame?.hasPrizes,
 				hasTrinkets: state?.currentGame?.hasTrinkets,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(
+				(a, b) =>
+					a.hasBuddies === b.hasBuddies &&
+					a.hasSpells === b.hasSpells &&
+					a.hasPrizes === b.hasPrizes &&
+					a.hasTrinkets === b.hasTrinkets &&
+					arraysEqual(a.races, b.races) &&
+					arraysEqual(a.anomalies, b.anomalies),
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -176,7 +195,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				playerCardId: state?.currentGame?.getMainPlayer()?.cardId,
 				allPlayersCardIds: state?.currentGame?.players?.map((p) => p.cardId),
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(
+				(a, b) => a.playerCardId === b.playerCardId && arraysEqual(a.allPlayersCardIds, b.allPlayersCardIds),
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -266,7 +287,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.mapData((gameState) =>
 				[...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])].map((e) => e.cardId),
 			),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -288,7 +309,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				});
 				return composition;
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a.length === b.length && a.every((e, i) => equalMinionInfo(e, b[i]))),
 			takeUntil(this.destroyed$),
 		);
 		this.minionsOnBoardAndHand$ = boardComposition$.pipe(this.mapData((board) => board.map((b) => b.cardId)));

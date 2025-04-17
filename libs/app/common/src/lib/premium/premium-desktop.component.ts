@@ -7,7 +7,7 @@ import {
 	SubscriptionService,
 	TebexService,
 } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -15,16 +15,7 @@ import {
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
-import {
-	BehaviorSubject,
-	Observable,
-	combineLatest,
-	distinctUntilChanged,
-	filter,
-	shareReplay,
-	takeUntil,
-	tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUntil, tap } from 'rxjs';
 
 @Component({
 	selector: 'premium-desktop',
@@ -213,7 +204,6 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 			this.billingPeriodicity$$,
 			this.subscriptionService.currentPlan$$,
 		]).pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			filter(([allPackages, billingPeriodicity, currentPlanSub]) => !!allPackages?.length),
 			this.mapData(([allPackages, billingPeriodicity, currentPlanSub]) => {
 				const plans = billingPeriodicity === 'monthly' ? ALL_PLANS : ALL_PLANS_YEARLY;
@@ -318,6 +308,10 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	}
 
 	changePeriodicity(periodicity: 'monthly' | 'yearly') {
+		if (this.billingPeriodicity$$.getValue() === periodicity) {
+			return;
+		}
+
 		this.billingPeriodicity$$.next(periodicity);
 	}
 

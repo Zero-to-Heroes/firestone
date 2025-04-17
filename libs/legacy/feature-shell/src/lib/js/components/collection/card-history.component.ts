@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 import { CardHistory } from '../../models/card-history';
 import { Set } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
@@ -83,7 +82,7 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 	ngAfterContentInit() {
 		this.showOnlyNewCards$ = this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards);
 		const sets$ = this.sets$$.asObservable().pipe(
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(),
 			this.mapData((sets) => sets),
 		);
 		this.cardHistory$ = combineLatest([sets$, this.store.cardHistory$()]).pipe(

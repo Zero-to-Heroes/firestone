@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { CardRarity } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { deepEqual } from '../../../services/utils';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
@@ -135,9 +134,6 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 })
 export class MercenariesPersonalHeroStatComponent {
 	@Input() set stat(value: PersonalHeroStat) {
-		if (deepEqual(this._stat, value)) {
-			return;
-		}
 		this._stat = value;
 		this.cardId = value.cardId;
 		this.mercenaryId = value.mercenaryId;

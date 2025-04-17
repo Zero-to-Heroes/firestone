@@ -8,7 +8,7 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { invertDirection, SimpleBarChartData, SortCriteria, SortDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';
@@ -139,7 +139,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 				time: prefs.bgsActiveTimeFilter,
 				rank: prefs.bgsActiveRankFilter,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a.mode === b.mode && a.time === b.time && a.rank === b.rank),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -159,7 +159,6 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 						.filter((stat) => Math.abs(+stat.playerRank - +stat.newPlayerRank) < 500) ?? [],
 			),
 			distinctUntilChanged((a, b) => a.length === b.length),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -172,7 +171,6 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 					.filter((game) => this.filterRank(game, prefs.rank)),
 			),
 			distinctUntilChanged((a, b) => a.length === b.length),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

@@ -120,6 +120,11 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		const currentPlan = await this.getCurrentPlanInternal();
 		console.debug('[ads] [subscription] current plan', currentPlan);
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
+		const existingPlan = await this.currentPlan$$.getValueWithInit();
+		if (equalCurrentPlan(existingPlan, currentPlan)) {
+			return existingPlan;
+		}
+
 		this.currentPlan$$.next(currentPlan ?? null);
 		this.localStorage.setItem(LocalStorageService.CURRENT_SUB_PLAN, currentPlan);
 		return currentPlan;
@@ -158,6 +163,16 @@ export interface CurrentPlan {
 	readonly autoRenews: boolean;
 	readonly discordCode?: string;
 }
+export const equalCurrentPlan = (a: CurrentPlan | null | undefined, b: CurrentPlan | null | undefined): boolean => {
+	return (
+		a?.active === b?.active &&
+		a?.id === b?.id &&
+		a?.autoRenews === b?.autoRenews &&
+		a?.cancelled === b?.cancelled &&
+		a?.discordCode === b?.discordCode &&
+		a?.expireAt?.getTime() === b?.expireAt?.getTime()
+	);
+};
 
 export interface OwSub {
 	readonly id: number;

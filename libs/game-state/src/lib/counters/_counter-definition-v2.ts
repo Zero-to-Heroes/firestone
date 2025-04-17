@@ -2,7 +2,6 @@
 import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { Preferences } from '@firestone/shared/common/service';
-import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../models/game-state';
 import { CounterType } from './_exports';
@@ -142,7 +141,7 @@ export abstract class CounterDefinitionV2<T> {
 		const sideObj = this[side];
 		const rawValue = sideObj?.value(gameState, bgState);
 		const savedValue = sideObj?.savedValue;
-		if (deepEqual(rawValue, savedValue)) {
+		if (rawValue === savedValue) {
 			return sideObj?.savedInstance;
 		}
 
@@ -180,6 +179,36 @@ export interface CounterInstance<T> {
 	readonly valueImg?: string;
 	readonly cardTooltip?: readonly string[];
 }
+export const equalCounterInstance = (
+	a: CounterInstance<any> | null | undefined,
+	b: CounterInstance<any> | null | undefined,
+): boolean => {
+	if (a == null && b == null) {
+		return true;
+	}
+	if (a == null || b == null) {
+		return false;
+	}
+	if (a.id !== b.id) {
+		return false;
+	}
+	if (a.side !== b.side) {
+		return false;
+	}
+	if (a.type !== b.type) {
+		return false;
+	}
+	if (a.value !== b.value) {
+		return false;
+	}
+	if (a.image !== b.image) {
+		return false;
+	}
+	if (a.tooltip !== b.tooltip) {
+		return false;
+	}
+	return true;
+};
 
 export interface PlayerImplementation<T> {
 	pref: keyof Preferences;

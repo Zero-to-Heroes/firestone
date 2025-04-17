@@ -11,7 +11,7 @@ import {
 } from '@firestone/battlegrounds/data-access';
 import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -169,7 +169,7 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 				timeFilter: prefs.bgsActiveTimeFilter,
 				rankFilter: prefs.bgsActiveRankFilter,
 			})),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a?.timeFilter === b?.timeFilter && a?.rankFilter === b?.rankFilter),
 			tap(() => this.loading$$.next(true)),
 			switchMap(({ timeFilter, rankFilter }) => this.bgCards.loadCardStats(timeFilter, rankFilter)),
 			shareReplay(1),

@@ -13,11 +13,11 @@ import {
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { CounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
+import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
 	ILocalizationService,
@@ -211,8 +211,7 @@ export class FullScreenOverlaysComponent
 					.filter((c) => c);
 				return result;
 			}),
-			// These are simple objects, so deepEqual should not be costly here
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),
 			takeUntil(this.destroyed$),
 		);
 		this.opponentCounters$ = combineLatest([
@@ -228,7 +227,7 @@ export class FullScreenOverlaysComponent
 					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView))
 					.filter((c) => c);
 			}),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),
 			takeUntil(this.destroyed$),
 		);
 		this.customStyles.register();

@@ -2,9 +2,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { BgsFaceOffWithSimulation, BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
@@ -115,7 +115,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			this.mapData(
 				(state) =>
 					state.panels?.find((panel) => panel.id === state.currentPanelId) as BgsNextOpponentOverviewPanel,
-				(a, b) => deepEqual(a, b),
 			),
 		);
 		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
@@ -127,8 +126,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			debounceTime(1000),
 			map((state) => state.currentGame?.players),
 			filter((players) => !!players?.length),
-			// A lot of nested objects, including Immutable Map. For now, not using deepEqual on this
-			// distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged(),
 			this.mapData((players) =>
 				[...players].sort((a, b) => {
 					if (a.leaderboardPlace < b.leaderboardPlace) {

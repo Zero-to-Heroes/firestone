@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
@@ -76,14 +76,18 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 		this.value$ = combineLatest([
 			this.gameStats.gameStats$$,
 			this.mainWindowState.mainWindowState$$.pipe(
-				this.mapData(
-					(state) => ({
-						gameFormat: state.decktracker.filters.gameFormat,
-						time: state.decktracker.filters.time,
-						rankingGroup: state.decktracker.filters.rankingGroup,
-						rankingCategory: state.decktracker.filters.rankingCategory,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((state) => ({
+					gameFormat: state.decktracker.filters.gameFormat,
+					time: state.decktracker.filters.time,
+					rankingGroup: state.decktracker.filters.rankingGroup,
+					rankingCategory: state.decktracker.filters.rankingCategory,
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.gameFormat === b.gameFormat &&
+						a.time === b.time &&
+						a.rankingGroup === b.rankingGroup &&
+						a.rankingCategory === b.rankingCategory,
 				),
 			),
 			this.patchesConfig.currentConstructedMetaPatch$$,

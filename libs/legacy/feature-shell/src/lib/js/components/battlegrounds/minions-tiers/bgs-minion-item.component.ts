@@ -3,9 +3,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
@@ -144,7 +144,6 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 			filter(
 				([minion, showGoldenCards, highlightedMinions, highlightedTribes, highlightedMechanics]) => !!minion,
 			),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(
 				([
 					card,
@@ -155,6 +154,13 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					fadeHigherTierCards,
 					tavernTier,
 				]) => {
+					console.debug(
+						'[bgs-minion-item] building minion',
+						card,
+						highlightedMinions,
+						highlightedTribes,
+						highlightedMechanics,
+					);
 					const mechanicsHighlights: readonly MinionHighlight[] = MECHANICS_IN_GAME.filter(
 						(m) => m.canBeHighlighted !== false,
 					).map((m) => {

@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -105,13 +105,13 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 		const deckSource$: Observable<readonly DeckSummary[]> = combineLatest([
 			this.deckService.decks$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData(
-					(prefs) => ({
-						sort: prefs.desktopDeckFilters?.sort,
-						search: prefs.constructedDecksSearchString,
-						playerClass: prefs.desktopPlayerClassFilter,
-					}),
-					(a, b) => deepEqual(a, b),
+				this.mapData((prefs) => ({
+					sort: prefs.desktopDeckFilters?.sort,
+					search: prefs.constructedDecksSearchString,
+					playerClass: prefs.desktopPlayerClassFilter,
+				})),
+				distinctUntilChanged(
+					(a, b) => a.sort === b.sort && a.search === b.search && arraysEqual(a.playerClass, b.playerClass),
 				),
 			),
 		]).pipe(
