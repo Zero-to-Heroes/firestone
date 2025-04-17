@@ -20,6 +20,10 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'AccountService', () => !!this.region$$);
+		window['getRegion'] = async () => {
+			const result = await this.memory.getRegion();
+			console.log(result);
+		};
 	}
 
 	protected override assignSubjects() {
