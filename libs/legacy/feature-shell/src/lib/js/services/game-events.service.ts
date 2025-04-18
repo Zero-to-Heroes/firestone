@@ -5,6 +5,7 @@ import { SceneService } from '@firestone/memory';
 import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { ChoosingOptionsGameEvent } from '../models/mainwindow/game-events/choosing-options-game-event';
@@ -19,7 +20,7 @@ import { HsGameMetaData } from './game-mode-data.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { ProcessingQueue } from './processing-queue.service';
-import { freeRegexp } from './utils';
+import { chunk, freeRegexp } from './utils';
 
 @Injectable()
 export class GameEvents {
@@ -29,9 +30,13 @@ export class GameEvents {
 		(eventQueue) => this.processQueue(eventQueue),
 		500,
 		'game-events',
+		100_000,
 	);
 
 	private lastProcessedTimestamp: number;
+	private lastGameStateUpdateTimestamp: number;
+	private gameStateUpdateInProgress: boolean;
+	// private receivedLastGameStateUpdate = true;
 
 	constructor(
 		private readonly gameEventsPlugin: GameEventsPluginService,
@@ -68,7 +73,7 @@ export class GameEvents {
 				this.initPlugin();
 				this.scene.currentScene$$.subscribe((scene) => {
 					console.log('emitting new scene event', scene);
-					this.gameEventsEmitter.allEvents.next(
+					this.doEventDispatch(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.SCENE_CHANGED_MINDVISION,
 							additionalData: { scene: scene },
@@ -77,7 +82,7 @@ export class GameEvents {
 				});
 				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
 					// console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
-					this.gameEventsEmitter.allEvents.next(
+					this.doEventDispatch(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.GLOBAL_STATS_UPDATED,
 							additionalData: { stats: event.data[0] },
@@ -99,16 +104,35 @@ export class GameEvents {
 				});
 			});
 
-		interval(1000).subscribe(() => {
+		const gameStateUpdateInterval = 2000;
+		interval(gameStateUpdateInterval).subscribe(() => {
+			// console.debug(
+			// 	'will ask for game state updat?',
+			// 	this.lastProcessedTimestamp,
+			// 	// this.receivedLastGameStateUpdate,
+			// );
 			if (!this.lastProcessedTimestamp) {
 				return;
 			}
+			// if (!this.receivedLastGameStateUpdate) {
+			// 	return;
+			// }
 
-			const timeSinceLastLog = new Date().getTime() - this.lastProcessedTimestamp;
+			const timeSinceLastLog = Date.now() - this.lastProcessedTimestamp;
 			// Only ask for a game state update if we have received an event in the last 2 seconds
-			if (timeSinceLastLog < 1500) {
-				// console.debug('[game-events] asking for game state update', timeSinceLastLog);
-				this.plugin.askForGameStateUpdate();
+			if (timeSinceLastLog < 2000) {
+				const timeSinceLastGameStateUpdate = Date.now() - this.lastGameStateUpdateTimestamp;
+				// this.receivedLastGameStateUpdate = false;
+				// Only ask for a game state update if we haven't received one in the last 2 seconds
+				// TODO: also don't ask if a request is sent but not received yet
+				if (this.gameStateUpdateInProgress) {
+					return;
+				}
+				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
+					console.debug('[game-events] asking for game state update', timeSinceLastLog);
+					this.gameStateUpdateInProgress = true;
+					this.plugin.askForGameStateUpdate();
+				}
 			}
 		});
 	}
@@ -131,30 +155,52 @@ export class GameEvents {
 			console.warn("[game-events] can't process logs without a game seed", eventQueue[eventQueue.length - 1]);
 			return false;
 		}
-		// if (!!eventQueue.length) {
-		// 	this.lastProcessedTimestamp = new Date().getTime();
-		// }
-		// console.debug('[game-events] REMOVE!!!!!!! processing logs', eventQueue);
 		await this.waitForPluginReady();
-		return new Promise<boolean>((resolve) => {
-			console.debug('[debug] [game-events] dispatching game events', eventQueue.length, eventQueue);
-			this.plugin.realtimeLogProcessing(eventQueue, () => {
-				console.debug('[debug] [game-events] finished dispatching game events', eventQueue.length);
-				resolve(true);
+
+		const chunkSize = 1000; // Maximum number of lines per chunk
+		const chunks = chunk(eventQueue, chunkSize);
+
+		for (const chunk of chunks) {
+			const start = Date.now();
+			console.debug('[debug] [game-events] dispatching game events chunk', chunk.length);
+			await new Promise<void>((resolve) => {
+				this.plugin.realtimeLogProcessing(chunk, () => {
+					console.debug(
+						'[debug] [game-events] finished dispatching chunk',
+						chunk.length,
+						'game events after',
+						Date.now() - start,
+						'ms',
+					);
+					resolve();
+				});
 			});
-		});
+		}
+
+		return true;
 	}
 
+	private doEventDispatch(event: GameEvent) {
+		this.gameEventsEmitter.allEvents.next(event);
+	}
+
+	public totalTime = 0;
 	public async dispatchGameEvent(gameEvent) {
-		return;
 		if (!gameEvent) {
 			return;
 		}
+
+		// console.debug('[game-events] dispatching game event', gameEvent.Type);
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-			this.lastProcessedTimestamp = new Date().getTime();
+			this.lastProcessedTimestamp = Date.now();
 		} else {
-			// console.debug('game event', gameEvent.Type, gameEvent);
+			console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
+			this.lastGameStateUpdateTimestamp = Date.now();
+			this.gameStateUpdateInProgress = false;
+			// this.receivedLastGameStateUpdate = true;
 		}
+
+		const start = Date.now();
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event', gameEvent);
@@ -167,7 +213,7 @@ export class GameEvents {
 					},
 				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
-				this.gameEventsEmitter.allEvents.next(event);
+				this.doEventDispatch(event);
 				break;
 			case 'GAME_SETTINGS':
 				console.log(gameEvent.Type + ' event', gameEvent);
@@ -187,11 +233,11 @@ export class GameEvents {
 				// Not a big fan of this: I'd rather have the gameUniqueId service listen to the event, but
 				// there are too many dependencies to refactor
 				this.gameUniqueId.onNewGame();
-				this.gameEventsEmitter.allEvents.next(gameSettingsEvent);
+				this.doEventDispatch(gameSettingsEvent);
 				break;
 			case 'MATCH_METADATA':
 				console.log(gameEvent.Type + ' event', gameEvent.Value);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
@@ -207,7 +253,7 @@ export class GameEvents {
 				console.log(gameEvent.Type + ' event');
 				const localPlayer: GameEventPlayer = gameEvent.Value;
 				console.log('sending LOCAL_PLAYER info', localPlayer);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER,
 						localPlayer: localPlayer,
@@ -222,7 +268,7 @@ export class GameEvents {
 					{} as GameEventPlayer,
 				);
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.OPPONENT,
 						opponentPlayer: opponentPlayer,
@@ -233,40 +279,40 @@ export class GameEvents {
 				);
 				break;
 			case 'ANOMALY_REVEALED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.ANOMALY_REVEALED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.ANOMALY_REVEALED, gameEvent));
 				break;
 			case 'INITIAL_CARD_IN_DECK':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.INITIAL_CARD_IN_DECK, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.INITIAL_CARD_IN_DECK, gameEvent));
 				break;
 			case 'HERO_POWER_USED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.HERO_POWER_USED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.HERO_POWER_USED, gameEvent));
 				break;
 			case 'START_OF_GAME':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.START_OF_GAME, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.START_OF_GAME, gameEvent));
 				break;
 			case 'MULLIGAN_INPUT':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MULLIGAN_INPUT,
 					} as GameEvent),
 				);
 				break;
 			case 'MULLIGAN_DEALING':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MULLIGAN_DEALING,
 					} as GameEvent),
 				);
 				break;
 			case 'MULLIGAN_DONE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MULLIGAN_DONE,
 					} as GameEvent),
 				);
 				break;
 			case 'MAIN_STEP_READY':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MAIN_STEP_READY,
 						additionalData: {
@@ -276,14 +322,14 @@ export class GameEvents {
 				);
 				break;
 			case 'DECKLIST_UPDATE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.DECKLIST_UPDATE, gameEvent, {
 						deckId: gameEvent.Value.AdditionalProps.DeckId,
 					}),
 				);
 				break;
 			case 'SUB_SPELL_START':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SUB_SPELL_START, gameEvent, {
 						prefabId: gameEvent.Value.PrefabId,
 						parentEntityId: gameEvent.Value.ParentEntityId,
@@ -292,7 +338,7 @@ export class GameEvents {
 				);
 				break;
 			case 'SUB_SPELL_END':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SUB_SPELL_END, gameEvent, {
 						prefabId: gameEvent.Value.PrefabId,
 						sourceEntityId: gameEvent.Value.SourceEntityId,
@@ -302,7 +348,7 @@ export class GameEvents {
 				);
 				break;
 			case 'SHUFFLE_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SHUFFLE_DECK, gameEvent, {
 						playerId: gameEvent.Value.PlayerId,
 					}),
@@ -310,7 +356,7 @@ export class GameEvents {
 				break;
 			case 'RUMBLE_RUN_STEP':
 				// console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.RUMBLE_RUN_STEP,
 						additionalData: {
@@ -321,7 +367,7 @@ export class GameEvents {
 				break;
 			case 'DUNGEON_RUN_STEP':
 				console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
 						additionalData: {
@@ -332,7 +378,7 @@ export class GameEvents {
 				break;
 			case 'MONSTER_HUNT_STEP':
 				console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
 						additionalData: {
@@ -342,7 +388,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_PLAYED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(
 						GameEvent.CARD_PLAYED,
 						gameEvent,
@@ -363,7 +409,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_PLAYED_BY_EFFECT':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_PLAYED_BY_EFFECT, gameEvent, {
 						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
 						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
@@ -380,72 +426,47 @@ export class GameEvents {
 							tags: gameEvent.Value.AdditionalProps.Tags,
 					  }
 					: null;
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_SUMMONED_FROM_HAND, gameEvent, summonFromHandAdditionProps),
 				);
 				break;
 			case 'DISCARD_CARD':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.DISCARD_CARD, gameEvent, {
 						originEntityId: gameEvent.Value.AdditionalProps?.OriginEntityId,
 					}),
 				);
 				break;
 			case 'TOURIST_REVEALED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.TOURIST_REVEALED, gameEvent, {
 						touristFor: gameEvent.Value.AdditionalProps?.TouristFor,
 					}),
 				);
 				break;
-			case 'MINIONS_DIED':
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new MinionsDiedEvent(), {
-						type: GameEvent.MINIONS_DIED,
-						localPlayer: gameEvent.Value.LocalPlayer,
-						opponentPlayer: gameEvent.Value.OpponentPlayer,
-						additionalData: {
-							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
-							activePlayerId: gameEvent.Value.AdditionalProps.ActivePlayerId,
-						},
-					} as MinionsDiedEvent),
-				);
-				break;
-			case 'MINIONS_WILL_DIE':
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new MinionsDiedEvent(), {
-						type: GameEvent.MINIONS_WILL_DIE,
-						localPlayer: gameEvent.Value.LocalPlayer,
-						opponentPlayer: gameEvent.Value.OpponentPlayer,
-						additionalData: {
-							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
-						},
-					} as MinionsDiedEvent),
-				);
-				break;
 			case 'RECRUIT_CARD':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent, {
 						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;
 			case 'MINION_BACK_ON_BOARD':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 					}),
 				);
 				break;
 			case 'TURN_DURATION_UPDATED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.TURN_DURATION_UPDATED, gameEvent, {
 						newDuration: gameEvent.Value.AdditionalProps?.NewDuration,
 					}),
 				);
 				break;
 			case 'SECRET_PLAYED_FROM_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent, {
 						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
@@ -455,7 +476,7 @@ export class GameEvents {
 				);
 				break;
 			case 'SECRET_CREATED_IN_GAME':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SECRET_CREATED_IN_GAME, gameEvent, {
 						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
@@ -465,7 +486,7 @@ export class GameEvents {
 				);
 				break;
 			case 'QUEST_PLAYED_FROM_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.QUEST_PLAYED_FROM_DECK, gameEvent, {
 						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
@@ -475,7 +496,7 @@ export class GameEvents {
 				);
 				break;
 			case 'QUEST_CREATED_IN_GAME':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.QUEST_CREATED_IN_GAME, gameEvent, {
 						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
@@ -485,36 +506,25 @@ export class GameEvents {
 					}),
 				);
 				break;
-			case 'MINION_SUMMONED':
-				const summonAdditionProps = gameEvent.Value.AdditionalProps
-					? {
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							tags: gameEvent.Value.AdditionalProps.Tags,
-					  }
-					: null;
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps),
-				);
-				break;
 			case 'CARD_FORGED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_FORGED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.CARD_FORGED, gameEvent));
 				break;
 			case 'STARSHIP_LAUNCHED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.STARSHIP_LAUNCHED, gameEvent, {
 						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;
 			case 'JADE_GOLEM':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.JADE_GOLEM, gameEvent, {
 						golemSize: gameEvent.Value.AdditionalProps.GolemSize,
 					}),
 				);
 				break;
 			case 'CTHUN':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CTHUN, gameEvent, {
 						cthunAtk: gameEvent.Value.AdditionalProps.CthuAtk,
 						cthunHealth: gameEvent.Value.AdditionalProps.CthuHealth,
@@ -522,30 +532,30 @@ export class GameEvents {
 				);
 				break;
 			case 'MINDRENDER_ILLUCIA_START':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINDRENDER_ILLUCIA_START, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.MINDRENDER_ILLUCIA_START, gameEvent));
 				break;
 			case 'MINDRENDER_ILLUCIA_END':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINDRENDER_ILLUCIA_END, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.MINDRENDER_ILLUCIA_END, gameEvent));
 				break;
 			case 'HERO_POWER_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.HERO_POWER_CHANGED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					}),
 				);
 				break;
 			case 'HERO_CHANGED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.HERO_CHANGED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.HERO_CHANGED, gameEvent));
 				break;
 			case 'WEAPON_EQUIPPED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.WEAPON_EQUIPPED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					}),
 				);
 				break;
 			case 'CARD_REVEALED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_REVEALED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						originEntityCardId: gameEvent.Value.AdditionalProps.OriginEntityCardId,
@@ -556,14 +566,14 @@ export class GameEvents {
 				);
 				break;
 			case 'HERO_REVEALED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.HERO_REVEALED, gameEvent, {
 						health: gameEvent.Value.AdditionalProps.Health,
 					}),
 				);
 				break;
 			case 'LINKED_ENTITY':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.LINKED_ENTITY, gameEvent, {
 						linkedEntityId: gameEvent.Value.AdditionalProps.LinkedEntityId,
 						linkedEntityControllerId: gameEvent.Value.AdditionalProps.LinkedEntityControllerId,
@@ -578,12 +588,10 @@ export class GameEvents {
 							lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
 					  }
 					: null;
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2),
-				);
+				this.doEventDispatch(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2));
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
@@ -604,7 +612,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CREATE_CARD_IN_GRAVEYARD':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_GRAVEYARD, gameEvent, {
 						// Not always present?
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
@@ -615,7 +623,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_BUFFED_IN_HAND':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_BUFFED_IN_HAND, gameEvent, {
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
 						buffCardIds: gameEvent.Value.AdditionalProps.BuffCardIds,
@@ -623,17 +631,17 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_CREATOR_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_CREATOR_CHANGED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					}),
 				);
 				break;
 			case 'END_OF_ECHO_IN_HAND':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
 				break;
 			case 'CREATE_CARD_IN_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
@@ -644,7 +652,7 @@ export class GameEvents {
 				);
 				break;
 			case 'ENCHANTMENT_ATTACHED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ENCHANTMENT_ATTACHED, gameEvent, {
 						attachedTo: gameEvent.Value.AdditionalProps?.AttachedTo,
 						tags: gameEvent.Value.AdditionalProps?.Tags ?? [],
@@ -654,14 +662,14 @@ export class GameEvents {
 				);
 				break;
 			case 'ENCHANTMENT_DETACHED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ENCHANTMENT_DETACHED, gameEvent, {
 						attachedTo: gameEvent.Value.AdditionalProps?.AttachedTo,
 					}),
 				);
 				break;
 			case 'SECRET_PLAYED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent, {
 						playerClass:
 							// Should always be the case, except in some older tests
@@ -673,7 +681,7 @@ export class GameEvents {
 				);
 				break;
 			case 'SECRET_PUT_IN_PLAY':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SECRET_PUT_IN_PLAY, gameEvent, {
 						playerClass:
 							// Should always be the case, except in some older tests
@@ -684,7 +692,7 @@ export class GameEvents {
 				);
 				break;
 			case 'SECRET_WILL_TRIGGER':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(
 						GameEvent.SECRET_WILL_TRIGGER,
 						gameEvent,
@@ -698,7 +706,7 @@ export class GameEvents {
 				);
 				break;
 			case 'COUNTER_WILL_TRIGGER':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(
 						GameEvent.COUNTER_WILL_TRIGGER,
 						gameEvent,
@@ -712,10 +720,10 @@ export class GameEvents {
 				);
 				break;
 			case 'COUNTER_TRIGGERED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.COUNTER_TRIGGERED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.COUNTER_TRIGGERED, gameEvent));
 				break;
 			case 'SECRET_TRIGGERED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(
 						GameEvent.SECRET_TRIGGERED,
 						gameEvent,
@@ -734,20 +742,20 @@ export class GameEvents {
 				);
 				break;
 			case 'SECRET_DESTROYED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
 				break;
 			case 'QUEST_COMPLETED':
 			case 'BATTLEGROUNDS_QUEST_COMPLETED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.QUEST_COMPLETED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.QUEST_COMPLETED, gameEvent));
 				break;
 			case 'WEAPON_DESTROYED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.WEAPON_DESTROYED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.WEAPON_DESTROYED, gameEvent));
 				break;
 			case 'MINION_GO_DORMANT':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_GO_DORMANT, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.MINION_GO_DORMANT, gameEvent));
 				break;
 			case 'QUEST_PLAYED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.QUEST_PLAYED, gameEvent, {
 						playerClass:
 							// Should always be the case, except in some older tests
@@ -759,16 +767,13 @@ export class GameEvents {
 				);
 				break;
 			case 'QUEST_DESTROYED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.QUEST_DESTROYED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.QUEST_DESTROYED, gameEvent));
 				break;
 			case 'REMOVE_FROM_HISTORY':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.REMOVE_FROM_HISTORY, gameEvent));
-				break;
-			case 'DEATHRATTLE_TRIGGERED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DEATHRATTLE_TRIGGERED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.REMOVE_FROM_HISTORY, gameEvent));
 				break;
 			case 'CARD_DRAW_FROM_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent, {
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
@@ -783,7 +788,7 @@ export class GameEvents {
 				break;
 			case 'GAME_RUNNING':
 				console.log(gameEvent.Type + ' event', gameEvent.Value);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.GAME_RUNNING, gameEvent, {
 						playerDeckCount: gameEvent.Value.AdditionalProps.PlayerDeckCount,
 						opponentDeckCount: gameEvent.Value.AdditionalProps.OpponentDeckCount,
@@ -791,7 +796,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_BACK_TO_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_BACK_TO_DECK, gameEvent, {
 						initialZone: gameEvent.Value.AdditionalProps.InitialZone,
 						influencedByEntityId: gameEvent.Value.AdditionalProps.InfluencedByEntityId,
@@ -800,14 +805,14 @@ export class GameEvents {
 				);
 				break;
 			case 'TRADE_CARD':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.TRADE_CARD, gameEvent, {
 						initialZone: gameEvent.Value.AdditionalProps.InitialZone,
 					}),
 				);
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent, {
 						cost: gameEvent.Value.AdditionalProps?.Cost,
 						removedByCardId: gameEvent.Value.AdditionalProps?.RemovedByCardId,
@@ -815,10 +820,10 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
 				break;
 			case 'CARD_REMOVED_FROM_BOARD':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_REMOVED_FROM_BOARD, gameEvent, {
 						removedByCardId: gameEvent.Value.AdditionalProps?.RemovedByCardId,
 						removedByEntityId: gameEvent.Value.AdditionalProps?.RemovedByEntityId,
@@ -826,10 +831,10 @@ export class GameEvents {
 				);
 				break;
 			case 'BURNED_CARD':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
 				break;
 			case 'MULLIGAN_INITIAL_OPTION':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
 				const additionalProps = gameEvent.Value.AdditionalProps
@@ -838,12 +843,12 @@ export class GameEvents {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					  }
 					: null;
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps),
 				);
 				break;
 			case 'CARD_STOLEN':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_STOLEN, gameEvent, {
 						newControllerId: gameEvent.Value.AdditionalProps.newControllerId,
 						zone: gameEvent.Value.AdditionalProps.zone,
@@ -853,14 +858,14 @@ export class GameEvents {
 				);
 				break;
 			case 'FIRST_PLAYER':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
 				console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, gameEvent, {
 						initialAttack: gameEvent.Value.AdditionalProps
 							? gameEvent.Value.AdditionalProps.InitialAttack
@@ -872,7 +877,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_CHANGED_IN_HAND':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_CHANGED_IN_HAND, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
@@ -880,7 +885,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_CHANGED_IN_DECK':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_CHANGED_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						subSpell: gameEvent.Value.AdditionalProps.SubSpell,
@@ -889,7 +894,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_DREDGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_DREDGED, gameEvent, {
 						dredgedByEntityId: gameEvent.Value.AdditionalProps.DredgedByEntityId,
 						dredgedByCardId: gameEvent.Value.AdditionalProps.DredgedByCardId,
@@ -898,7 +903,7 @@ export class GameEvents {
 				);
 				break;
 			case 'ARMOR_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
 						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
 						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
@@ -907,13 +912,13 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCATION_USED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.LOCATION_USED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.LOCATION_USED, gameEvent));
 				break;
 			case 'LOCATION_DESTROYED':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.LOCATION_DESTROYED, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.LOCATION_DESTROYED, gameEvent));
 				break;
 			case 'BLOOD_GEM_BUFF_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BLOOD_GEM_BUFF_CHANGED, gameEvent, {
 						attack: gameEvent.Value.AdditionalProps.Attack,
 						health: gameEvent.Value.AdditionalProps.Health,
@@ -921,7 +926,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BEETLE_ARMY_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BEETLE_ARMY_CHANGED, gameEvent, {
 						attack: gameEvent.Value.AdditionalProps.Attack,
 						health: gameEvent.Value.AdditionalProps.Health,
@@ -929,21 +934,21 @@ export class GameEvents {
 				);
 				break;
 			case 'TOTAL_MAGNETIZE_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.TOTAL_MAGNETIZE_CHANGED, gameEvent, {
 						newValue: gameEvent.Value.AdditionalProps.NewValue,
 					}),
 				);
 				break;
 			case 'BALLER_BUFF_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BALLER_BUFF_CHANGED, gameEvent, {
 						buff: gameEvent.Value.AdditionalProps.Buff,
 					}),
 				);
 				break;
 			case 'EXCAVATE_TIER_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.EXCAVATE_TIER_CHANGED, gameEvent, {
 						currentTier: gameEvent.Value.AdditionalProps.CurrentTier,
 						maxTier: gameEvent.Value.AdditionalProps.MaxTier,
@@ -951,31 +956,21 @@ export class GameEvents {
 				);
 				break;
 			case 'CORPSES_SPENT_THIS_GAME_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED, gameEvent, {
 						value: gameEvent.Value.AdditionalProps.Value,
 					}),
 				);
 				break;
 			case 'OVERLOADED_CRYSTALS_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.OVERLOADED_CRYSTALS_CHANGED, gameEvent, {
 						overload: gameEvent.Value.AdditionalProps.Overload,
 					}),
 				);
 				break;
-			case 'DATA_SCRIPT_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
-						initialData1: gameEvent.Value.AdditionalProps.InitialData1,
-						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
-						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
-						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
-					}),
-				);
-				break;
 			case 'HEALTH_DEF_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.HEALTH_DEF_CHANGED, gameEvent, {
 						newHealth: gameEvent.Value.AdditionalProps.NewHealth,
 					}),
@@ -983,7 +978,7 @@ export class GameEvents {
 				break;
 			case 'MAX_RESOURCES_UPDATED':
 				console.debug(gameEvent.Type + ' event', gameEvent.Value);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MAX_RESOURCES_UPDATED, gameEvent, {
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 						mana: gameEvent.Value.AdditionalProps.Mana,
@@ -992,28 +987,28 @@ export class GameEvents {
 				);
 				break;
 			case 'NUM_CARDS_PLAYED_THIS_TURN':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.NUM_CARDS_PLAYED_THIS_TURN, gameEvent, {
 						cardsPlayed: gameEvent.Value.AdditionalProps.NumCardsPlayed,
 					}),
 				);
 				break;
 			case 'NUM_CARDS_DRAWN_THIS_TURN':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.NUM_CARDS_DRAW_THIS_TURN, gameEvent, {
 						cardsDrawn: gameEvent.Value.AdditionalProps.NumCardsDrawn,
 					}),
 				);
 				break;
 			case 'RESOURCES_THIS_TURN':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.RESOURCES_THIS_TURN, gameEvent, {
 						resources: gameEvent.Value.AdditionalProps.Resources,
 					}),
 				);
 				break;
 			case 'RESOURCES_UPDATED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.RESOURCES_UPDATED, gameEvent, {
 						resourcesTotal: gameEvent.Value.AdditionalProps.ResourcesTotal,
 						resourcesUsed: gameEvent.Value.AdditionalProps.ResourcesUsed,
@@ -1022,7 +1017,7 @@ export class GameEvents {
 				);
 				break;
 			case 'ATTACKING_HERO':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ATTACKING_HERO, gameEvent, {
 						attackerCardId: gameEvent.Value.AdditionalProps.AttackerCardId,
 						attackerEntityId: gameEvent.Value.AdditionalProps.AttackerEntityId,
@@ -1033,22 +1028,8 @@ export class GameEvents {
 					}),
 				);
 				break;
-			case 'ATTACKING_MINION':
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.ATTACKING_MINION, gameEvent, {
-						attackerCardId: gameEvent.Value.AdditionalProps.AttackerCardId,
-						attackerEntityId: gameEvent.Value.AdditionalProps.AttackerEntityId,
-						attackerControllerId: gameEvent.Value.AdditionalProps.AttackerControllerId,
-						attackerTags: gameEvent.Value.AdditionalProps.AttackerTags,
-						defenderCardId: gameEvent.Value.AdditionalProps.DefenderCardId,
-						defenderEntityId: gameEvent.Value.AdditionalProps.DefenderEntityId,
-						defenderControllerId: gameEvent.Value.AdditionalProps.DefenderControllerId,
-						defenderTags: gameEvent.Value.AdditionalProps.DefenderTags,
-					}),
-				);
-				break;
 			case 'FATIGUE_DAMAGE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.FATIGUE_DAMAGE,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -1060,24 +1041,8 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
-			case 'DAMAGE':
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new DamageGameEvent(), {
-						type: GameEvent.DAMAGE,
-						localPlayer: gameEvent.Value.LocalPlayer,
-						opponentPlayer: gameEvent.Value.OpponentPlayer,
-						additionalData: {
-							sourceCardId: gameEvent.Value.SourceCardId,
-							sourceEntityId: gameEvent.Value.SourceEntityId,
-							sourceControllerId: gameEvent.Value.SourceControllerId,
-							targets: gameEvent.Value.Targets,
-							activePlayerId: gameEvent.Value.ActivePlayerId,
-						},
-					} as DamageGameEvent),
-				);
-				break;
 			case 'COPIED_FROM_ENTITY_ID':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					CopiedFromEntityIdGameEvent.build(GameEvent.COPIED_FROM_ENTITY_ID, gameEvent, {
 						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
@@ -1086,7 +1051,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CHOOSING_OPTIONS':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					ChoosingOptionsGameEvent.build(GameEvent.CHOOSING_OPTIONS, gameEvent, {
 						options: gameEvent.Value.AdditionalProps.Options,
 						context: gameEvent.Value.AdditionalProps.Context,
@@ -1094,7 +1059,7 @@ export class GameEvents {
 				);
 				break;
 			case 'HEALING':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.HEALING,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -1109,7 +1074,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -1124,7 +1089,7 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED,
 						additionalData: {
@@ -1134,14 +1099,14 @@ export class GameEvents {
 				);
 				break;
 			case 'GALAKROND_INVOKED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.GALAKROND_INVOKED, gameEvent, {
 						totalInvoke: gameEvent.Value.AdditionalProps.TotalInvoke,
 					}),
 				);
 				break;
 			case 'PARENT_CARD_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.PARENT_CARD_CHANGED, gameEvent, {
 						newParentEntityId: gameEvent.Value.AdditionalProps.NewParentEntityId,
 					}),
@@ -1149,7 +1114,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTION':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_HERO_SELECTION,
 						additionalData: {
@@ -1160,11 +1125,11 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_HERO_REROLL':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_REROLL, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_REROLL, gameEvent));
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTED':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_SELECTED, gameEvent, {
 						// These are set after a reconnect, and usually not present when the match starts
 						leaderboardPlace: gameEvent.Value.LeaderboardPlace,
@@ -1179,7 +1144,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_TRINKET_SELECTION':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TRINKET_SELECTION,
 						additionalData: {
@@ -1190,7 +1155,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_TRINKET_SELECTED':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_TRINKET_SELECTED, gameEvent, {
 						heroCardId: gameEvent.Value.AdditionalProps.HeroCardId,
 						trinketDbfId: gameEvent.Value.AdditionalProps.TrinketDbfId,
@@ -1200,7 +1165,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TRIPLE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TRIPLE,
 						cardId: gameEvent.Value.CardId,
@@ -1211,14 +1176,14 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_REROLL':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_REROLL,
 					} as GameEvent),
 				);
 				break;
 			case 'BATTLEGROUNDS_FREEZE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_FREEZE,
 					} as GameEvent),
@@ -1226,7 +1191,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_COMBAT_START':
 				// console.log(gameEvent.Type + ' event');
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
 						additionalData: {
@@ -1238,7 +1203,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_RECRUIT_PHASE':
 				// console.log(gameEvent.Type + ' event');
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,
 						additionalData: {
@@ -1250,7 +1215,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
 				console.log(gameEvent.Type + ' event', gameEvent.Value.Opponent, gameEvent.Value.Result);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 						additionalData: {
@@ -1264,7 +1229,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
 				console.log(gameEvent.Type + ' event', gameEvent.Value);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
 						additionalData: {
@@ -1277,7 +1242,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_OPPONENT_REVEALED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED,
 						additionalData: {
@@ -1291,16 +1256,14 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_MINION_BOUGHT':
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_BOUGHT, gameEvent),
-				);
+				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_BOUGHT, gameEvent));
 				break;
 			case 'BATTLEGROUNDS_MINION_SOLD':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_SOLD, gameEvent));
+				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_SOLD, gameEvent));
 				break;
 			// case 'BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN':
 			// 	console.debug('[game-events] emitting BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN', gameEvent);
-			// 	this.gameEventsEmitter.allEvents.next(
+			// 	this.doEventDispatch(
 			// 		GameEvent.build(GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN, gameEvent, {
 			// 			extraGold: gameEvent.Value.AdditionalProps.ExtraGoldNextTurn,
 			// 			overconfidences: gameEvent.Value.AdditionalProps.Overconfidences,
@@ -1309,13 +1272,11 @@ export class GameEvents {
 			// 	);
 			// 	break;
 			case 'BATTLEGROUNDS_ENEMY_HERO_KILLED':
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent),
-				);
+				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent));
 				break;
 			case 'BATTLEGROUNDS_BATTLE_STARTING':
 				console.debug('[game-events] emitting BATTLEGROUNDS_BATTLE_STARTING', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_STARTING,
 					} as GameEvent),
@@ -1323,7 +1284,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_ACTIVE_PLAYER_BOARD':
 				console.debug('[game-events] receiving BATTLEGROUNDS_ACTIVE_PLAYER_BOARD' + gameEvent.Type, gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD,
 					} as GameEvent),
@@ -1337,10 +1298,10 @@ export class GameEvents {
 						: GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD;
 				console.debug('[game-events] receiving ' + gameEvent.Type, gameEvent, eventName);
 				const playerBoardEvent = this.buildBattlegroundsPlayerBoardEvent(eventName, gameEvent);
-				this.gameEventsEmitter.allEvents.next(playerBoardEvent);
+				this.doEventDispatch(playerBoardEvent);
 				break;
 			case 'BATTLEGROUNDS_LEADERBOARD_PLACE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE,
 						additionalData: {
@@ -1353,7 +1314,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_TAVERN_UPGRADE':
 				// console.log('BATTLEGROUNDS_TAVERN_UPGRADE', gameEvent.Value.CardId, gameEvent.Value.TavernLevel);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,
 						additionalData: {
@@ -1365,7 +1326,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_BUDDY_GAINED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BUDDY_GAINED,
 						additionalData: {
@@ -1378,7 +1339,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_REWARD_REVEALED':
 				console.debug(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_REVEALED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
@@ -1388,7 +1349,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_REWARD_GAINED':
 				console.debug(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_GAINED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
@@ -1398,7 +1359,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_QUEST_REWARD_EQUIPPED':
 				// console.debug(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
@@ -1407,7 +1368,7 @@ export class GameEvents {
 				break;
 			case 'BATTLEGROUNDS_QUEST_REWARD_DESTROYED':
 				// console.debug(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED, gameEvent, {
 						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
@@ -1416,7 +1377,7 @@ export class GameEvents {
 				break;
 			case 'WINNER':
 				console.log(gameEvent.Type + ' event', { ...gameEvent.Value.Winner, Tags: null });
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.WINNER,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -1429,7 +1390,7 @@ export class GameEvents {
 				break;
 			case 'TIE':
 				console.log(gameEvent.Type + ' event');
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TIE,
 					} as GameEvent),
@@ -1437,7 +1398,7 @@ export class GameEvents {
 				break;
 			case 'GAME_END':
 				console.log(gameEvent.Type + ' event');
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.GAME_END,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -1456,10 +1417,11 @@ export class GameEvents {
 				break;
 			// TODO: at some point we might want to debounce these events
 			case 'GAME_STATE_UPDATE':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
+				// this.receivedLastGameStateUpdate = true;
+				this.doEventDispatch(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
 				break;
 			case 'ENTITY_UPDATE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent, {
 						mercenariesExperience: gameEvent.Value.AdditionalProps?.MercenariesExperience,
 						mercenariesEquipmentId: gameEvent.Value.AdditionalProps?.MercenariesEquipmentId,
@@ -1476,7 +1438,7 @@ export class GameEvents {
 				);
 				break;
 			case 'ENTITY_CHOSEN':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ENTITY_CHOSEN, gameEvent, {
 						originalEntityId: gameEvent.Value.AdditionalProps?.OriginalEntityId,
 						context: {
@@ -1487,29 +1449,22 @@ export class GameEvents {
 				);
 				break;
 			case 'ZONE_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.ZONE_CHANGED, gameEvent, {
 						zone: gameEvent.Value.AdditionalProps.Zone,
 					}),
 				);
 				break;
 			case 'COST_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.COST_CHANGED, gameEvent, {
 						cost: gameEvent.Value.AdditionalProps.NewCost,
 						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 					}),
 				);
 				break;
-			case 'ZONE_POSITION_CHANGED':
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {
-						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
-					}),
-				);
-				break;
 			case 'WHIZBANG_DECK_ID':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.WHIZBANG_DECK_ID, gameEvent, {
 						deckId: gameEvent.Value.AdditionalProps.DeckId,
 					}),
@@ -1517,19 +1472,15 @@ export class GameEvents {
 				break;
 			case 'RECONNECT_START':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_START }),
-				);
+				this.doEventDispatch(Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_START }));
 				break;
 			case 'RECONNECT_OVER':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_OVER }),
-				);
+				this.doEventDispatch(Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_OVER }));
 				break;
 			case 'SPECTATING':
 				console.log(gameEvent.Type + ' event', gameEvent);
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.SPECTATING,
 						additionalData: { spectating: gameEvent.Value?.Spectating },
@@ -1537,8 +1488,93 @@ export class GameEvents {
 				);
 				break;
 
+			case 'ZONE_POSITION_CHANGED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {
+						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
+					}),
+				);
+				break;
+			case 'DAMAGE':
+				this.doEventDispatch(
+					Object.assign(new DamageGameEvent(), {
+						type: GameEvent.DAMAGE,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						additionalData: {
+							sourceCardId: gameEvent.Value.SourceCardId,
+							sourceEntityId: gameEvent.Value.SourceEntityId,
+							sourceControllerId: gameEvent.Value.SourceControllerId,
+							targets: gameEvent.Value.Targets,
+							activePlayerId: gameEvent.Value.ActivePlayerId,
+						},
+					} as DamageGameEvent),
+				);
+				break;
+			case 'ATTACKING_MINION':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.ATTACKING_MINION, gameEvent, {
+						attackerCardId: gameEvent.Value.AdditionalProps.AttackerCardId,
+						attackerEntityId: gameEvent.Value.AdditionalProps.AttackerEntityId,
+						attackerControllerId: gameEvent.Value.AdditionalProps.AttackerControllerId,
+						attackerTags: gameEvent.Value.AdditionalProps.AttackerTags,
+						defenderCardId: gameEvent.Value.AdditionalProps.DefenderCardId,
+						defenderEntityId: gameEvent.Value.AdditionalProps.DefenderEntityId,
+						defenderControllerId: gameEvent.Value.AdditionalProps.DefenderControllerId,
+						defenderTags: gameEvent.Value.AdditionalProps.DefenderTags,
+					}),
+				);
+				break;
+			case 'DATA_SCRIPT_CHANGED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
+						initialData1: gameEvent.Value.AdditionalProps.InitialData1,
+						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
+						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
+					}),
+				);
+				break;
+			case 'DEATHRATTLE_TRIGGERED':
+				this.doEventDispatch(GameEvent.build(GameEvent.DEATHRATTLE_TRIGGERED, gameEvent));
+				break;
+			case 'MINION_SUMMONED':
+				const summonAdditionProps = gameEvent.Value.AdditionalProps
+					? {
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
+					  }
+					: null;
+				this.doEventDispatch(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
+				break;
+			case 'MINIONS_DIED':
+				this.doEventDispatch(
+					Object.assign(new MinionsDiedEvent(), {
+						type: GameEvent.MINIONS_DIED,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						additionalData: {
+							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
+							activePlayerId: gameEvent.Value.AdditionalProps.ActivePlayerId,
+						},
+					} as MinionsDiedEvent),
+				);
+				break;
+			case 'MINIONS_WILL_DIE':
+				this.doEventDispatch(
+					Object.assign(new MinionsDiedEvent(), {
+						type: GameEvent.MINIONS_WILL_DIE,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						additionalData: {
+							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
+						},
+					} as MinionsDiedEvent),
+				);
+				break;
+
 			case 'MERCENARIES_HERO_REVEALED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_HERO_REVEALED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
@@ -1550,7 +1586,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_ABILITY_REVEALED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_ABILITY_REVEALED, gameEvent, {
 						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
@@ -1562,7 +1598,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_EQUIPMENT_REVEALED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_EQUIPMENT_REVEALED, gameEvent, {
 						equipmentOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 						abilityNameData1: gameEvent.Value.AdditionalProps.AbilityNameData1,
@@ -1570,7 +1606,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_ABILITY_UPDATE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_ABILITY_UPDATE, gameEvent, {
 						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
@@ -1581,14 +1617,14 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_ABILITY_ACTIVATED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_ABILITY_ACTIVATED, gameEvent, {
 						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 					}),
 				);
 				break;
 			case 'MERCENARIES_EQUIPMENT_UPDATE':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_EQUIPMENT_UPDATE, gameEvent, {
 						equipmentOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 						equipmentCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
@@ -1598,7 +1634,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_COOLDOWN_UPDATED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_COOLDOWN_UPDATED, gameEvent, {
 						newCooldown: gameEvent.Value.AdditionalProps.NewCooldown,
 						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
@@ -1606,7 +1642,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_ABILITY_QUEUED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.MERCENARIES_ABILITY_QUEUED, gameEvent, {
 						abillityEntityId: gameEvent.Value.AdditionalProps.AbillityEntityId,
 						abilityCardId: gameEvent.Value.AdditionalProps.AbilityCardId,
@@ -1615,19 +1651,17 @@ export class GameEvents {
 				);
 				break;
 			case 'MERCENARIES_ABILITY_UNQUEUED':
-				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.MERCENARIES_ABILITY_UNQUEUED, gameEvent),
-				);
+				this.doEventDispatch(GameEvent.build(GameEvent.MERCENARIES_ABILITY_UNQUEUED, gameEvent));
 				break;
 			case 'SPECIAL_CARD_POWER_TRIGGERED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.SPECIAL_CARD_POWER_TRIGGERED, gameEvent, {
 						relatedCards: gameEvent.Value.AdditionalProps.RelatedCards,
 					}),
 				);
 				break;
 			case 'WHEEL_OF_DEATH_COUNTER_UPDATED':
-				this.gameEventsEmitter.allEvents.next(
+				this.doEventDispatch(
 					GameEvent.build(GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED, gameEvent, {
 						turnsBeforeControllerDies: gameEvent.Value.AdditionalProps.TurnsBeforeControllerDies,
 					}),
@@ -1639,6 +1673,8 @@ export class GameEvents {
 			default:
 				console.warn('unsupported game event', gameEvent);
 		}
+		const timeSpent = Date.now() - start;
+		this.totalTime += timeSpent;
 	}
 
 	public receiveLogLine(data: string, postponed = false) {
@@ -1650,7 +1686,7 @@ export class GameEvents {
 				this.processingQueue.eventsPendingCount(),
 			);
 			// this.setSpectating(false);
-			this.existingLogLines = [];
+			this.existingLogLines.clear();
 			this.processingQueue.clear();
 			return;
 		}
@@ -1691,15 +1727,15 @@ export class GameEvents {
 		} else {
 			if (this.pendingLogLines.length > 0) {
 				console.log('[game-events] processing pending log lines');
-				this.processingQueue.enqueueAll(this.pendingLogLines);
-				this.pendingLogLines = [];
+				this.processingQueue.enqueueAll(this.pendingLogLines.toArray());
+				this.pendingLogLines.clear();
 			}
 			this.processingQueue.enqueue(data);
 		}
 	}
 
-	private pendingLogLines: string[] = [];
-	private existingLogLines: string[] = [];
+	private pendingLogLines: Deque<string> = new Deque<string>();
+	private existingLogLines: Deque<string> = new Deque<string>();
 	private catchingUp: boolean;
 	private pluginBeingInitialized: boolean;
 
@@ -1744,17 +1780,17 @@ export class GameEvents {
 		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1 || existingLine.includes('End Spectator Mode')) {
 			// Complete game, we don't handle it
 			console.log('[game-events] [existing] complete game, trashing all logs');
-			this.existingLogLines = [];
+			this.existingLogLines.clear();
 		}
 	}
 
 	private async triggerCatchUp() {
 		this.catchingUp = true;
 		if (this.spectateLineToEnqueue) {
-			this.existingLogLines = [this.spectateLineToEnqueue, ...(this.existingLogLines ?? [])];
+			this.existingLogLines.insertFront(this.spectateLineToEnqueue);
 			this.spectateLineToEnqueue = null;
 		}
-		const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
+		const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines.toArray());
 		console.log(
 			'[game-events] [existing] last line timestamp',
 			lastLineTimestamp,
@@ -1775,7 +1811,7 @@ export class GameEvents {
 				scene,
 			);
 			this.catchingUp = false;
-			this.existingLogLines = [];
+			this.existingLogLines.clear();
 			return;
 		}
 		console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
@@ -1783,10 +1819,10 @@ export class GameEvents {
 
 		if (this.existingLogLines.length > 0) {
 			// this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
-			this.processingQueue.enqueueAll(this.existingLogLines);
+			this.processingQueue.enqueueAll(this.existingLogLines.toArray());
 			// console.debug('[game-events] [existing] REMOVE!!! all events enqueued', this.processingQueue);
 		}
-		this.existingLogLines = [];
+		this.existingLogLines.clear();
 		this.catchingUp = false;
 	}
 
