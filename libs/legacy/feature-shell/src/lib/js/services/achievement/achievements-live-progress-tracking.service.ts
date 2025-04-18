@@ -311,6 +311,7 @@ export class AchievementsLiveProgressTrackingService {
 	}
 
 	private async initAchievementsOnGameStart() {
+		return;
 		if (await this.ow.inGame()) {
 			await this.assignAchievementsOnGameStart();
 		}

@@ -302,6 +302,8 @@ export class BattlegroundsStoreService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			const start = Date.now();
+			// console.debug('[bgs-store] received game event', gameEvent.type, gameEvent);
 			const prefs = await this.prefs.getPreferences();
 			this.eventsThisTurn.push(gameEvent.type);
 			if (gameEvent.type === GameEvent.RECONNECT_START) {
@@ -380,9 +382,11 @@ export class BattlegroundsStoreService {
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
 				if (this.state.currentGame && !this.state.currentGame.gameEnded) {
-					const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
-					// We already only send the event at the beginning of the turn
-					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
+					setTimeout(async () => {
+						const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
+						// We already only send the event at the beginning of the turn
+						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
+					});
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
@@ -572,6 +576,15 @@ export class BattlegroundsStoreService {
 					),
 				);
 			}
+			console.debug('[bgs-store] processed game event', gameEvent.type, Date.now() - start, 'ms');
+			if (Date.now() - start > 1000) {
+				console.warn(
+					'[bgs-store] processing game event took too long',
+					gameEvent.type,
+					Date.now() - start,
+					'ms',
+				);
+			}
 			this.processPendingEvents(gameEvent);
 		});
 	}
@@ -581,22 +594,27 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
-		const gameEvent = eventQueue[0];
-
-		try {
-			await this.processEvent(gameEvent);
-		} catch (e) {
-			console.error('[bgs-store] Exception while processing event', e);
+		let processedQueue = eventQueue;
+		while (processedQueue.length > 0) {
+			const gameEvent = processedQueue[0];
+			try {
+				await this.processEvent(gameEvent);
+			} catch (e) {
+				console.error('[bgs-store] Exception while processing event', e);
+			}
+			processedQueue = processedQueue.slice(1);
 		}
-		return eventQueue.slice(1);
+		return processedQueue;
 	}
 
 	private processPendingEvents(gameEvent: BattlegroundsStoreEvent) {
+		const start = Date.now();
 		const eventsToProcess = this.queuedEvents.filter((event) => event.trigger === gameEvent.type);
 		this.queuedEvents = this.queuedEvents.filter((event) => event.trigger !== gameEvent.type);
 		for (const event of eventsToProcess) {
 			this.battlegroundsUpdater.next(event.event);
 		}
+		console.debug('[bgs-store] processed pending events', gameEvent.type, Date.now() - start, 'ms');
 	}
 
 	private processAllPendingEvents(turnNumber: number) {
@@ -618,6 +636,8 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
+		const start = Date.now();
+		// console.debug('[bgs-store] processing event', gameEvent.type, gameEvent);
 		await Promise.all(this.overlayHandlers.map((handler) => handler.processEvent(gameEvent)));
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.state = this.state.update({
@@ -668,6 +688,10 @@ export class BattlegroundsStoreService {
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay$$.next();
 		}
+		console.debug('[bgs-store] processed event', gameEvent.type, Date.now() - start, 'ms');
+		if (Date.now() - start > 1000) {
+			console.warn('[bgs-store] processing event took too long', gameEvent.type, Date.now() - start, 'ms');
+		}
 	}
 
 	private async buildEventEmitters() {
@@ -684,7 +708,7 @@ export class BattlegroundsStoreService {
 				result.push((state) => this.twitch.emitBattlegroundsEvent(state));
 			}
 		}
-		this.eventEmitters = result;
+		this.eventEmitters = []; //result;
 	}
 
 	private async updateOverlay() {

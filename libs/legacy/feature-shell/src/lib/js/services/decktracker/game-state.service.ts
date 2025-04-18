@@ -243,6 +243,8 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent) {
+		const start = Date.now();
+		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
 		const previousState = this.state;
 		if (gameEvent.type === GameEvent.GAME_START) {
 			this.state = this.state?.update({
@@ -364,15 +366,15 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
+			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
+			console.debug('[game-state] emitting event', emittedEvent.event.name, Date.now() - start);
+		} else {
 			console.debug(
-				'[game-state] emitting event',
-				emittedEvent.event.name,
+				'[game-state] state is null, not emitting event',
+				gameEvent.type,
 				gameEvent.cardId,
 				gameEvent.entityId,
-				gameEvent,
-				emittedEvent.state,
 			);
-			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
 		// We have processed the event for which the secret would trigger
@@ -508,6 +510,6 @@ export class GameStateService {
 				result.push((event) => this.twitch.emitDeckEvent(event));
 			}
 		}
-		this.eventEmitters = result;
+		this.eventEmitters = []; // result;
 	}
 }

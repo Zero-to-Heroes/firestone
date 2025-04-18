@@ -221,6 +221,7 @@ export class DeckParserService {
 		await this.scene.isReady();
 
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
+			return;
 			if (event.type === GameEvent.SPECTATING) {
 				this.spectating = event.additionalData.spectating;
 				if (this.spectating) {

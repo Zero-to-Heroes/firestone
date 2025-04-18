@@ -139,6 +139,7 @@ export class GameEvents {
 		return new Promise<boolean>((resolve) => {
 			console.debug('[debug] [game-events] dispatching game events', eventQueue.length, eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
+				console.debug('[debug] [game-events] finished dispatching game events', eventQueue.length);
 				resolve(true);
 			});
 		});

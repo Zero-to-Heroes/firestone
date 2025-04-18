@@ -83,6 +83,7 @@ export class RealTimeStatsService {
 		console.log('[real-time-stats] init');
 		this.eventParsers = this.buildEventParsers();
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			return;
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe((data) => {

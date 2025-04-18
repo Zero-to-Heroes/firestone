@@ -20,6 +20,7 @@ export class GameModeDataService {
 	}
 
 	async init() {
+		return;
 		this.gameEventsEmitter.allEvents
 			.asObservable()
 			.pipe(

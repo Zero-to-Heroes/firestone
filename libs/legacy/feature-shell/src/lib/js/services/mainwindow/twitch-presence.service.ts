@@ -34,6 +34,7 @@ export class TwitchPresenceService {
 	}
 
 	private async init() {
+		return;
 		await this.store.initComplete();
 		await waitForReady(this.prefs);
 

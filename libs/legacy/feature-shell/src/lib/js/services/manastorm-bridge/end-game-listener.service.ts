@@ -56,6 +56,7 @@ export class EndGameListenerService {
 	}
 
 	private async init() {
+		return;
 		await waitForReady(this.gameState, this.mercsMemoryCache);
 
 		this.gameStatus.inGame$$
