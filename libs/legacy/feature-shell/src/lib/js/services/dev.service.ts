@@ -77,10 +77,12 @@ export class DevService {
 			for (const line of logLines) {
 				this.gameEvents.receiveLogLine(line);
 				currentIndex++;
-				if (currentIndex % 2000 === 0) {
+				if (currentIndex % 4000 === 0) {
+					console.log('[game-events] processed', currentIndex, 'lines out of', logLines.length);
 					await sleep(500);
 				}
 			}
+			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);
 		};
 
 		window['loadEvents'] = async (
