@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import Deque from 'double-ended-queue';
+
 /** @deprecated */
 export class ProcessingQueue<T> {
-	private eventQueue: T[] = [];
-	private pendingQueue: T[] = [];
+	private eventQueue: Deque<T> = new Deque<T>();
+	private pendingQueue: Deque<T> = new Deque<T>();
 	private isProcessing = false;
 	private processingTimer: NodeJS.Timeout | null = null;
 
@@ -9,11 +12,17 @@ export class ProcessingQueue<T> {
 		private readonly processingFunction: (eventQueue: readonly T[]) => Promise<readonly T[]>,
 		private readonly processFrequency: number, // Frequency in milliseconds
 		private readonly queueName?: string,
-	) {}
+		queueSize?: number,
+	) {
+		if (queueSize) {
+			this.eventQueue = new Deque<T>(2000);
+			this.pendingQueue = new Deque<T>(queueSize);
+		}
+	}
 
 	public clear() {
-		this.eventQueue = [];
-		this.pendingQueue = [];
+		this.eventQueue.clear();
+		this.pendingQueue.clear();
 		this.isProcessing = false;
 
 		// Clear the timer if it exists
@@ -30,7 +39,9 @@ export class ProcessingQueue<T> {
 	}
 
 	public enqueueAll(events: T[]) {
-		this.pendingQueue.push(...events);
+		for (const event of events) {
+			this.pendingQueue.push(event);
+		}
 		this.startProcessingInterval();
 	}
 
@@ -67,15 +78,26 @@ export class ProcessingQueue<T> {
 		try {
 			while (this.pendingQueue.length > 0 || this.eventQueue.length > 0) {
 				// Move pending events to the event queue
-				if (this.pendingQueue.length > 0) {
-					this.eventQueue.push(...this.pendingQueue);
-					this.pendingQueue = [];
+				if (this.eventQueue.length < 50 && this.pendingQueue.length > 0) {
+					const batchSize = Math.min(1000, this.pendingQueue.length);
+					const batch: T[] = [];
+					for (let i = 0; i < batchSize; i++) {
+						const item = this.pendingQueue.shift(); // Efficient dequeue
+						if (item !== undefined) {
+							batch.push(item);
+						}
+					}
+					this.eventQueue.push(...batch);
 				}
 
-				console.debug('[ProcessingQueue] Processing queue', this.eventQueue.length);
+				console.debug(
+					'[ProcessingQueue] Processing queue',
+					this.eventQueue.length + this.pendingQueue.length,
+					this.queueName,
+				);
 
 				// Process the current queue
-				const queueAfterProcess = await this.processingFunction(this.eventQueue);
+				const queueAfterProcess = await this.processingFunction(this.eventQueue.toArray());
 
 				// If no events were processed, break the loop to avoid infinite processing
 				if (queueAfterProcess.length === this.eventQueue.length) {
@@ -84,7 +106,7 @@ export class ProcessingQueue<T> {
 				}
 
 				// Update the event queue with the remaining events
-				this.eventQueue = queueAfterProcess as T[];
+				this.eventQueue = new Deque(queueAfterProcess as T[]);
 			}
 		} catch (error) {
 			console.error('[ProcessingQueue] Error during queue processing', error);
