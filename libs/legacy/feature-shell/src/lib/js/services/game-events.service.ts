@@ -146,6 +146,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
+		return;
 		if (!gameEvent) {
 			return;
 		}

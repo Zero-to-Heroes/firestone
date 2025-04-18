@@ -157,6 +157,7 @@ export class GameStateService {
 			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
 		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+			return;
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.events

@@ -302,6 +302,7 @@ export class BattlegroundsStoreService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			return;
 			const start = Date.now();
 			// console.debug('[bgs-store] received game event', gameEvent.type, gameEvent);
 			const prefs = await this.prefs.getPreferences();
