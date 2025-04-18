@@ -227,13 +227,13 @@ export const getStandardDeviation = (array: readonly number[]): { mean: number; 
 	};
 };
 
-export const chunk = <T>(array: T[], size: number): T[][] =>
-	array.reduce((acc, _, i) => {
-		if (i % size === 0) {
-			acc.push(array.slice(i, i + size));
-		}
-		return acc;
-	}, []);
+export const chunk = <T>(array: readonly T[], chunkSize: number): T[][] => {
+	const chunks: T[][] = [];
+	for (let i = 0; i < array.length; i += chunkSize) {
+		chunks.push(array.slice(i, i + chunkSize));
+	}
+	return chunks;
+};
 
 /** @deprecated */
 export type NonFunctionPropertyNames<T> = {
