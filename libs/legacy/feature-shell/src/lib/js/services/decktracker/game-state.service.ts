@@ -157,7 +157,6 @@ export class GameStateService {
 			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
 		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			return;
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.events
@@ -180,6 +179,7 @@ export class GameStateService {
 			if (stateUpdateEvents.length > 0) {
 				// console.debug('[game-state] processing state update events', stateUpdateEvents, eventsToProcess);
 			}
+			const start = Date.now();
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				if (eventsToProcess[i] instanceof GameEvent) {
 					await this.processEvent(eventsToProcess[i] as GameEvent);
@@ -187,6 +187,7 @@ export class GameStateService {
 					await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
 				}
 			}
+			console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
 		} catch (e) {
 			console.error('Exception while processing event', e);
 		}
@@ -368,7 +369,7 @@ export class GameStateService {
 				state: this.state,
 			};
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
-			console.debug('[game-state] emitting event', emittedEvent.event.name, Date.now() - start);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, Date.now() - start);
 		} else {
 			console.debug(
 				'[game-state] state is null, not emitting event',
@@ -511,6 +512,6 @@ export class GameStateService {
 				result.push((event) => this.twitch.emitDeckEvent(event));
 			}
 		}
-		this.eventEmitters = []; // result;
+		this.eventEmitters = result;
 	}
 }

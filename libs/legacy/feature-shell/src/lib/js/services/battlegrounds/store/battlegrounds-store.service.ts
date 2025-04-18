@@ -140,7 +140,7 @@ export class BattlegroundsStoreService {
 
 	private processingQueue = new ProcessingQueue<BattlegroundsStoreEvent>(
 		(eventQueue) => this.processQueue(eventQueue),
-		50,
+		200,
 		'battlegrounds-queue',
 	);
 
@@ -302,7 +302,6 @@ export class BattlegroundsStoreService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
-			return;
 			const start = Date.now();
 			// console.debug('[bgs-store] received game event', gameEvent.type, gameEvent);
 			const prefs = await this.prefs.getPreferences();
@@ -577,7 +576,7 @@ export class BattlegroundsStoreService {
 					),
 				);
 			}
-			console.debug('[bgs-store] processed game event', gameEvent.type, Date.now() - start, 'ms');
+			// console.debug('[bgs-store] processed game event', gameEvent.type, Date.now() - start, 'ms');
 			if (Date.now() - start > 1000) {
 				console.warn(
 					'[bgs-store] processing game event took too long',
@@ -595,17 +594,16 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
-		let processedQueue = eventQueue;
-		while (processedQueue.length > 0) {
-			const gameEvent = processedQueue[0];
+		const start = Date.now();
+		for (let i = 0; i < eventQueue.length; i++) {
 			try {
-				await this.processEvent(gameEvent);
+				await this.processEvent(eventQueue[i]);
 			} catch (e) {
 				console.error('[bgs-store] Exception while processing event', e);
 			}
-			processedQueue = processedQueue.slice(1);
 		}
-		return processedQueue;
+		console.debug('[bgs-store] processed event queue', eventQueue.length, 'in', Date.now() - start, 'ms');
+		return [];
 	}
 
 	private processPendingEvents(gameEvent: BattlegroundsStoreEvent) {
@@ -615,7 +613,7 @@ export class BattlegroundsStoreService {
 		for (const event of eventsToProcess) {
 			this.battlegroundsUpdater.next(event.event);
 		}
-		console.debug('[bgs-store] processed pending events', gameEvent.type, Date.now() - start, 'ms');
+		// console.debug('[bgs-store] processed pending events', gameEvent.type, Date.now() - start, 'ms');
 	}
 
 	private processAllPendingEvents(turnNumber: number) {
@@ -689,7 +687,7 @@ export class BattlegroundsStoreService {
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay$$.next();
 		}
-		console.debug('[bgs-store] processed event', gameEvent.type, Date.now() - start, 'ms');
+		// console.debug('[bgs-store] processed event', gameEvent.type, Date.now() - start, 'ms');
 		if (Date.now() - start > 1000) {
 			console.warn('[bgs-store] processing event took too long', gameEvent.type, Date.now() - start, 'ms');
 		}
@@ -709,7 +707,7 @@ export class BattlegroundsStoreService {
 				result.push((state) => this.twitch.emitBattlegroundsEvent(state));
 			}
 		}
-		this.eventEmitters = []; //result;
+		this.eventEmitters = result;
 	}
 
 	private async updateOverlay() {
