@@ -17,10 +17,7 @@ export class ProcessingQueue<T> {
 		this.isProcessing = false;
 
 		// Clear the timer if it exists
-		if (this.processingTimer) {
-			clearTimeout(this.processingTimer);
-			this.processingTimer = null;
-		}
+		this.stopProcessingInterval();
 	}
 
 	public eventsPendingCount(): number {
@@ -29,24 +26,34 @@ export class ProcessingQueue<T> {
 
 	public enqueue(event: T) {
 		this.pendingQueue.push(event);
-		this.scheduleProcessing();
+		this.startProcessingInterval();
 	}
 
 	public enqueueAll(events: T[]) {
 		this.pendingQueue.push(...events);
-		this.scheduleProcessing();
+		this.startProcessingInterval();
 	}
 
-	private scheduleProcessing() {
-		// If a timer is already set, do nothing
+	private startProcessingInterval() {
+		// If an interval is already running, do nothing
 		if (this.processingTimer) {
 			return;
 		}
 
-		// Schedule the processing to occur after the specified frequency
-		this.processingTimer = setTimeout(async () => {
-			await this.processQueue();
+		// Start an interval to process the queue at the specified frequency
+		this.processingTimer = setInterval(async () => {
+			if (!this.isProcessing) {
+				await this.processQueue();
+			}
 		}, this.processFrequency);
+	}
+
+	private stopProcessingInterval() {
+		// Clear the interval if it exists
+		if (this.processingTimer) {
+			clearInterval(this.processingTimer);
+			this.processingTimer = null;
+		}
 	}
 
 	private async processQueue() {
@@ -58,11 +65,13 @@ export class ProcessingQueue<T> {
 		this.isProcessing = true;
 
 		try {
-			// Move pending events to the event queue
-			this.eventQueue.push(...this.pendingQueue);
-			this.pendingQueue = [];
+			while (this.pendingQueue.length > 0 || this.eventQueue.length > 0) {
+				// Move pending events to the event queue
+				if (this.pendingQueue.length > 0) {
+					this.eventQueue.push(...this.pendingQueue);
+					this.pendingQueue = [];
+				}
 
-			while (this.eventQueue.length > 0) {
 				console.debug('[ProcessingQueue] Processing queue', this.eventQueue.length);
 
 				// Process the current queue
@@ -82,15 +91,9 @@ export class ProcessingQueue<T> {
 		} finally {
 			this.isProcessing = false;
 
-			// Clear the timer after processing
-			if (this.processingTimer) {
-				clearTimeout(this.processingTimer);
-				this.processingTimer = null;
-			}
-
-			// If there are new pending events, schedule the next batch
-			if (this.pendingQueue.length > 0) {
-				this.scheduleProcessing();
+			// Stop the interval if there are no pending or event queue items
+			if (this.pendingQueue.length === 0 && this.eventQueue.length === 0) {
+				this.stopProcessingInterval();
 			}
 		}
 	}
