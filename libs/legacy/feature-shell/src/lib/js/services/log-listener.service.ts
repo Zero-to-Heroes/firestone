@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService, getLogsDir, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
-import { ListenObject, OverwolfService } from '@firestone/shared/framework/core';
+import { ListenObject, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { Events } from './events.service';
 
@@ -51,6 +51,8 @@ export class LogListenerService {
 	}
 
 	async configureLogListeners() {
+		await waitForReady(this.gameStatus);
+
 		// Issue: these are two different events, and we can have races between them
 		combineLatest([this.gameStatus.inGame$$, this.logUtils.logsDirRoot$$])
 			.pipe(
