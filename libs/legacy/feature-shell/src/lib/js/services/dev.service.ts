@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { decode, encode } from '@firestone-hs/deckstrings';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
-import { MemoryInspectionService } from '@firestone/memory';
+import { MemoryInspectionService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { sortByProperties } from '@services/utils';
-import { Achievement } from '../models/achievement';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { AchievementsLiveProgressTrackingService } from './achievement/achievements-live-progress-tracking.service';
-import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
 import { RawAchievementsLoaderService } from './achievement/data/raw-achievements-loader.service';
 import { CardNotificationsService } from './collection/card-notifications.service';
@@ -43,6 +41,7 @@ export class DevService {
 		private allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly cardNotification: CardNotificationsService,
+		private readonly scene: SceneService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -59,34 +58,6 @@ export class DevService {
 	}
 
 	private addAchievementCommands() {
-		const achievement: Achievement = {
-			id: 'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
-			name: 'Fake Wee Whelp',
-			text: 'Temp text',
-			type: 'dungeon_run_boss_encounter',
-			displayCardId: 'LOOTA_BOSS_44h',
-			displayCardType: 'minion',
-			displayName: 'Boss met: Fake Wee Whelp',
-			difficulty: 'common',
-			icon: 'boss_encounter',
-			maxNumberOfRecords: 1,
-			points: 1,
-			numberOfCompletions: 0,
-			canBeCompletedOnlyOnce: false,
-			replayInfo: [],
-			root: null,
-			priority: 0,
-			emptyText: null,
-			completedText: null,
-		} as any;
-		window['showAchievementNotification'] = () => {
-			this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, {
-				notificationTimeout: () => 0,
-				getRecordingDuration: () => 0,
-			} as Challenge);
-			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
-			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
-		};
 		window['showCardNotification'] = (
 			cardId = 'GVG_118',
 			isSecondCopy = false,
@@ -94,20 +65,24 @@ export class DevService {
 		) => {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
-		// window['showMatchStatsNotification'] = () => {
-		// 	this.events.broadcast(
-		// 		Events.GAME_STATS_UPDATED,
-		// 		Object.assign(new GameStats(), {
-		// 			stats: [
-		// 				Object.assign(new GameStat(), {
-		// 					reviewId: '5ddd7f7f3c4a7900013e16de',
-		// 					gameMode: 'battlegrounds',
-		// 					playerRank: '5123',
-		// 				} as GameStat),
-		// 			] as readonly GameStat[],
-		// 		} as GameStats),
-		// 	);
-		// };
+
+		window['fakeGame'] = async () => {
+			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
+			const logsLocation = `G:\\Source\\firestone\\firestone\\test-tools\\game.log`;
+			const logContents = await this.ow.readTextFile(logsLocation);
+			const logLines = logContents.split('\n');
+			console.log('logLines', logLines?.length);
+			await sleep(2000);
+			let currentIndex = 0;
+			for (const line of logLines) {
+				this.gameEvents.receiveLogLine(line);
+				currentIndex++;
+				if (currentIndex % 2000 === 0) {
+					await sleep(500);
+				}
+			}
+		};
+
 		window['loadEvents'] = async (
 			fileName,
 			awaitEvents = false,
@@ -144,9 +119,6 @@ export class DevService {
 		window['decodeDeck'] = (deckstring) => {
 			console.debug(decode(deckstring));
 		};
-		window['decodeMercs'] = (deckstring) => {
-			console.debug(decodeMercs(deckstring));
-		};
 		window['decodeDeckFull'] = (deckstring) => {
 			const decoded = decode(deckstring);
 			const result = decoded.cards
@@ -161,46 +133,6 @@ export class DevService {
 		};
 		window['normalizeDeck'] = (deckstring: string) => {
 			console.debug(this.allCards.normalizeDeckList(deckstring));
-		};
-		window['buildDeck'] = async (decklist, hero) => {
-			const cards = decklist.split('\n');
-			console.debug(cards);
-			const allCards = this.allCards.getCards();
-			const cardArray = cards
-				.map((card) => {
-					const [name, count] = card.split('#');
-					const result: [readonly ReferenceCard[], number] = [
-						allCards.filter((card) => card.id === name).length > 0
-							? allCards.filter((card) => card.id === name)
-							: allCards
-									.filter((card) => card.name === name)
-									.filter((card) => ['Battlegrounds', 'Wild_event'].indexOf(card.set) === -1)
-									.filter((card) => !card.id.startsWith('FB_Champs'))
-									.filter((card) => !card.id.startsWith('TB_'))
-									.filter((card) => card.type !== 'Hero')
-									.filter((card) => card.id.indexOf('o') === -1) // Don't include ???
-									.filter((card) => card.id.indexOf('t') === -1) // Don't include tokens
-									.filter((card) => card.id.indexOf('e') === -1), // Don't include enchantments
-						count,
-					];
-					if (result[0].length !== 1) {
-						console.warn('issue mapping card', card, result);
-						throw new Error('done');
-					}
-					return result;
-				})
-				.map((cards) => {
-					return [cards[0][0].dbfId, parseInt(cards[1] || 1)];
-				});
-			console.debug(cardArray);
-			const deck = {
-				cards: cardArray,
-				heroes: [hero],
-				format: 1,
-			};
-			const deckstring = encode(deck as any);
-			console.debug(deckstring);
-			console.debug(decode(deckstring));
 		};
 	}
 
