@@ -120,6 +120,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		if (hasGetRelatedCards(cardImpl)) {
 			return cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
 		}
+		if (!this.gameState) {
+			return [];
+		}
 
 		const deck = side === 'opponent' ? this.gameState.opponentDeck : this.gameState.playerDeck;
 		const metaData = this.gameState.metadata;
