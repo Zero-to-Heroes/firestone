@@ -58,6 +58,8 @@ export class Preferences implements IPreferences {
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly globalWidgetScale: number | null = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly cardTooltipScale: number | null = 100;
 
 	readonly showLottery: boolean | null = null;
 	readonly lotteryOverlay: boolean | null = null;

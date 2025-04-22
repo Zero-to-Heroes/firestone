@@ -10,6 +10,11 @@
 	display: flex;
 }
 
+.scalable {
+	transform-origin: top right;
+	position: relative;
+}
+
 // Because automatic tooltip positioning doesn't always work very well and sometimes
 // results in the tooltip container being squeeze very thin
 .related-cards-wrapper {

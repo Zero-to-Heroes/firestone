@@ -25,6 +25,18 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 						},
 					},
 					{
+						type: 'slider',
+						field: 'cardTooltipScale',
+						label: context.i18n.translateString('settings.general.widgets.card-tooltip-size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 30,
+							max: 200,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
+					{
 						type: 'toggle',
 						field: 'lockWidgetPositions',
 						label: context.i18n.translateString('settings.general.widgets.lock-widgets-label'),

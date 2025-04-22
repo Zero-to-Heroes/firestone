@@ -17,16 +17,16 @@ import {
 } from '@angular/core';
 import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
 	styleUrls: [`./card-tooltip.component.scss`],
 	template: `
 		<div
-			class="container"
+			class="container scalable"
 			*ngIf="{
 				cards: cards$ | async,
 				relatedCards: relatedCards$ | async,
@@ -37,7 +37,7 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 		>
 			<div
 				*ngFor="let card of value.cards; trackBy: trackByFn"
-				class="card-tooltip {{ card.additionalClass }}"
+				class="card-tooltip   {{ card.additionalClass }}"
 				[ngClass]="{ hidden: !value.relativePosition }"
 				[ngStyle]="{ opacity: value.opacity }"
 			>
@@ -74,7 +74,7 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 							class="scrollbar-text"
 							[fsTranslate]="'decktracker.card-tooltip-scroll-text'"
 						></div>
-						<div class="related-card" *ngFor="let card of value.relatedCards">
+						<div class="related-card " *ngFor="let card of value.relatedCards">
 							<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
 						</div>
 					</div>
@@ -248,17 +248,31 @@ export class CardTooltipComponent
 		}
 	}
 
-	ngAfterViewInit(): void {
-		if (this.resizeObserver) {
-			return;
+	async ngAfterViewInit() {
+		await this.prefs.isReady();
+
+		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.cardTooltipScale)).subscribe(async (scale) => {
+			const newScale = scale / 100;
+			const elements = await this.getScalableElements();
+			console.debug('[card-tooltip] scaling', newScale, elements);
+			elements.forEach((element) => {
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				this.renderer.setStyle(element, 'opacity', `1`);
+			});
+		});
+
+		if (!this.resizeObserver) {
+			let i = 0;
+			this.resizeObserver = new ResizeObserver((entries) => {
+				this.keepInBound$$.next(++i);
+			});
+			this.resizeObserver.observe(this.el.nativeElement);
+			setTimeout(() => (this.isShowing = true), 500);
 		}
 
-		let i = 0;
-		this.resizeObserver = new ResizeObserver((entries) => {
-			this.keepInBound$$.next(++i);
-		});
-		this.resizeObserver.observe(this.el.nativeElement);
-		setTimeout(() => (this.isShowing = true), 500);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	override ngOnDestroy(): void {
@@ -306,21 +320,27 @@ export class CardTooltipComponent
 				}),
 			)
 			.subscribe((bounds) => this.keepInBounds(bounds.top, bounds.left, bounds.height, bounds.width));
+		const highRes$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => {
+				console.debug('[debug] highRes', prefs.collectionUseHighResImages, prefs.cardTooltipScale);
+				return prefs.collectionUseHighResImages || prefs.cardTooltipScale > 100;
+			}),
+			tap((info) => console.debug('[debug] highRes', info)),
+		);
 		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
 			this.localized$$.asObservable(),
 			this.isBgs$$.asObservable(),
+			highRes$,
 			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
-					highRes: prefs.collectionUseHighResImages,
-				})),
-				distinctUntilChanged((a, b) => a.locale === b.locale && a.highRes === b.highRes),
+				this.mapData(
+					(prefs) => prefs.locale, // We don't use it, but we want to rebuild images when it changes
+				),
 			),
 		]).pipe(
 			this.mapData(
-				([relatedCardIds, localized, isBgs, { locale, highRes }]) => {
-					console.debug('[debug] relatedCardIds', relatedCardIds);
+				([relatedCardIds, localized, isBgs, highRes, locale]) => {
+					console.debug('[debug] relatedCardIds', relatedCardIds, highRes);
 					return (
 						relatedCardIds
 							// Remove entity ids (eg in Fizzle's Snapshot card)
@@ -354,16 +374,15 @@ export class CardTooltipComponent
 			this.additionalClass$$.asObservable(),
 			this.buffs$$.asObservable(),
 			this.createdBy$$.asObservable(),
+			highRes$,
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
-					highRes: prefs.collectionUseHighResImages,
 				})),
-				distinctUntilChanged((a, b) => a.locale === b.locale && a.highRes === b.highRes),
 			),
 		]).pipe(
 			this.mapData(
-				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, { locale, highRes }]) => {
+				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, highRes, { locale }]) => {
 					console.debug('[debug] cardIds', cardIds);
 					return (
 						[...(cardIds ?? [])]
@@ -476,6 +495,17 @@ export class CardTooltipComponent
 			this.ngAfterContentInit();
 			setTimeout(() => this.ngAfterViewInit(), 50);
 		}, 50);
+	}
+
+	private async getScalableElements(): Promise<HTMLElement[]> {
+		let elements = this.el.nativeElement.querySelectorAll('.scalable');
+		let retriesLeft = 10;
+		while (retriesLeft >= 0 && !elements?.length) {
+			await sleep(100);
+			elements = this.el.nativeElement.querySelectorAll('.scalable');
+			retriesLeft--;
+		}
+		return elements ?? [];
 	}
 }
 
