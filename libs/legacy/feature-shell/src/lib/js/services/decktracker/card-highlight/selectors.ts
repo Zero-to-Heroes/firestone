@@ -341,6 +341,13 @@ export const minion = cardType(CardType.MINION);
 export const spell = and(cardType(CardType.SPELL), not(passive));
 export const weapon = cardType(CardType.WEAPON);
 
+export const createLocation = cardIs(
+	CardIds.Sancazel_VAC_923,
+	CardIds.TravelAgent_VAC_438,
+	CardIds.ScrapbookingStudent_VAC_529,
+	CardIds.CruiseCaptainLora_VAC_506,
+);
+export const locationExtended = or(location, createLocation);
 export const givesHeroAttack = or(weapon);
 
 export const race =

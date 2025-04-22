@@ -76,7 +76,7 @@ import {
 	lastAffectedByCardId,
 	legendary,
 	lifesteal,
-	location,
+	locationExtended,
 	magnetic,
 	mech,
 	minion,
@@ -498,7 +498,7 @@ export const cardIdSelector = (
 		case CardIds.BusyBot_WORK_002:
 			return and(side(inputSide), or(inDeck, inHand), minion, attackIs(1));
 		case CardIds.BusyPeon_WORK_041:
-			return and(side(inputSide), or(inDeck, inHand), location);
+			return and(side(inputSide), or(inDeck, inHand), locationExtended);
 		case CardIds.ButchTavernBrawl:
 			return and(side(inputSide), inGraveyard, beast);
 		case CardIds.Buttons_VAC_437:
@@ -693,7 +693,7 @@ export const cardIdSelector = (
 		case CardIds.ConstructPylons_SC_755:
 			return and(side(inputSide), or(inDeck, inHand), protoss);
 		case CardIds.Consume_SC_020:
-			return and(side(inputSide), or(inHand, inDeck), location);
+			return and(side(inputSide), or(inHand, inDeck), locationExtended);
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ContrabandStash:
@@ -2268,6 +2268,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.SeaShill_VAC_332:
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
+		case CardIds.SeasideGiant_VAC_439:
+			return and(side(inputSide), or(inHand, inDeck), locationExtended);
 		case CardIds.SigilOfReckoning:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.SirFinleyMrrgglton_ScalesOfJustice_THD_044p:
@@ -2279,7 +2281,7 @@ export const cardIdSelector = (
 		case CardIds.ScourgeIllusionist:
 			return and(side(inputSide), inDeck, minion, deathrattle, not(cardIs(CardIds.ScourgeIllusionist)));
 		case CardIds.ScrapbookingStudent_VAC_529:
-			return and(side(inputSide), or(inHand, inDeck), location);
+			return and(side(inputSide), or(inHand, inDeck), locationExtended);
 		case CardIds.ScrapShot:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.ScrollSavvy:
@@ -2450,7 +2452,7 @@ export const cardIdSelector = (
 		case CardIds.SpawningPool_SC_000:
 			return and(side(inputSide), or(inDeck, inHand), minion, zerg);
 		case CardIds.SpineCrawler_SC_023:
-			return and(side(inputSide), or(inHand, inDeck), location);
+			return and(side(inputSide), or(inHand, inDeck), locationExtended);
 		case CardIds.SpinetailDrake_WW_820:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SpiritPeddler_WORK_015:
@@ -2975,13 +2977,13 @@ export const cardIdSelector = (
 		case CardIds.WoodlandWonders_TOY_804:
 			return and(side(inputSide), or(inDeck, inHand), spellDamage);
 		case CardIds.WorkshopJanitor_TOY_891:
-			return and(side(inputSide), or(inDeck, inHand), location);
+			return and(side(inputSide), or(inDeck, inHand), locationExtended);
 		case CardIds.WreckemAndDeckem_TOY_603:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.WretchedExile:
 			return and(side(inputSide), or(inDeck, inHand), outcast);
 		case CardIds.Xb931Housekeeper_VAC_956:
-			return and(side(inputSide), or(inDeck, inHand), location);
+			return and(side(inputSide), or(inDeck, inHand), locationExtended);
 		case CardIds.WyrmrestPurifier:
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.XyrellaTheDevout:
