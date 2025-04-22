@@ -62,7 +62,6 @@ export class FirestoneAchievementsChallengeService {
 			.subscribe(async () => {
 				console.log('[firestone-achievements] init');
 				this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-					return;
 					this.handleEvent(gameEvent);
 					if (gameEvent.type === GameEvent.SPECTATING) {
 						this.spectating = gameEvent.additionalData.spectating;

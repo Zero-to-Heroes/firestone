@@ -17,7 +17,6 @@ export class HearthArenaAnalyticsService {
 
 	private init() {
 		this.gameEvents.allEvents.subscribe(async (event) => {
-			return;
 			if (event.type === GameEvent.MATCH_METADATA) {
 				const meta: HsGameMetaData = event.additionalData.metaData;
 				if (meta?.GameType === GameType.GT_ARENA) {

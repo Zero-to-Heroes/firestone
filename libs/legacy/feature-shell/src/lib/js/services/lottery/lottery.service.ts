@@ -67,7 +67,6 @@ export class LotteryService {
 
 	private async listenToGameEvents() {
 		this.gameEvents.allEvents.subscribe((event) => {
-			return;
 			this.eventsQueue$$.next(event);
 		});
 

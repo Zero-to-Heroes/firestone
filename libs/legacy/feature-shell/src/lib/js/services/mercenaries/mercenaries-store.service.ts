@@ -110,7 +110,6 @@ export class MercenariesStoreService {
 	}
 
 	private init() {
-		return;
 		this.events.allEvents.subscribe((event) => this.internalEventSubject$.next(event));
 		this.registerParser();
 		this.buildEventEmitters();

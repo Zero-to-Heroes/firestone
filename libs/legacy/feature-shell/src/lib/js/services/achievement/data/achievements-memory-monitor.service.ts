@@ -59,7 +59,6 @@ export class AchievementsMemoryMonitor {
 			.subscribe(() => forceRetrigger$.next(null));
 		// Also update the achievements (their progress) once a game ends
 		this.gameEvents.allEvents.pipe(filter((event) => event.type === GameEvent.GAME_END)).subscribe((event) => {
-			return;
 			forceRetrigger$.next(null);
 		});
 
