@@ -51,6 +51,7 @@ import {
 	frost,
 	generateCorpse,
 	generatesPlague,
+	givesHeroAttack,
 	hasMultipleCopies,
 	hasSpellSchool,
 	hasTribeNotPlayedThisMatch,
@@ -2409,6 +2410,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, battlecry);
 		case CardIds.SnatchAndGrab_VAC_700:
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
+		case CardIds.SockPuppetSlitherspear_MIS_710:
+			return and(side(inputSide), or(inHand, inDeck), givesHeroAttack);
 		case CardIds.SonyaWaterdancer_TOY_515:
 			return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1), minion);
 		case CardIds.SootSpewer:

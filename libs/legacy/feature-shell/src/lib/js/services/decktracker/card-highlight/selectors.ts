@@ -341,6 +341,8 @@ export const minion = cardType(CardType.MINION);
 export const spell = and(cardType(CardType.SPELL), not(passive));
 export const weapon = cardType(CardType.WEAPON);
 
+export const givesHeroAttack = or(weapon);
+
 export const race =
 	(race: Race) =>
 	(input: SelectorInput): boolean =>
