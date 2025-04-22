@@ -71,8 +71,8 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 	}
 
 	private async init() {
-		this.ow.getTwitterUserInfo();
-		this.ow.getRedditUserInfo();
+		// this.ow.getTwitterUserInfo();
+		// this.ow.getRedditUserInfo();
 	}
 
 	async ngAfterViewInit() {
@@ -85,14 +85,10 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 
 	@HostListener('window:keydown', ['$event'])
 	async onKeyDown(e: KeyboardEvent) {
-		const currentWindow = await this.ow.getCurrentWindow();
-
-		if (currentWindow.id.includes('Overlay')) {
-			return;
-		}
 		if (!this.hotkey || this.hotkey.IsUnassigned) {
 			return;
 		}
+
 		const isAltKey = [1, 3, 5, 7].indexOf(this.hotkey.modifierKeys) !== -1;
 		const isCtrlKey = [2, 3, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
 		const isShiftKey = [4, 5, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
@@ -103,6 +99,11 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 			e.ctrlKey === isCtrlKey &&
 			e.keyCode == this.hotkey.virtualKeycode
 		) {
+			const currentWindow = await this.ow.getCurrentWindow();
+			if (currentWindow.id.includes('Overlay')) {
+				return;
+			}
+
 			this.hotkeyPressedHandler.next(true);
 		}
 	}
