@@ -46,6 +46,7 @@ export class CardChangedOnBoardParser implements EventParser {
 			cardId: cardId,
 			cardName: dbCard.name,
 			refManaCost: dbCard.cost,
+			actualManaCost: null,
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 			creatorCardId: creatorCardId,
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
