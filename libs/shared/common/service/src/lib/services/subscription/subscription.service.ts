@@ -45,7 +45,10 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		this.currentPlan$$.onFirstSubscribe(async () => {
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);
 			if (localPlan) {
-				this.currentPlan$$.next(localPlan);
+				this.currentPlan$$.next({
+					...localPlan,
+					expireAt: localPlan.expireAt ? new Date(localPlan.expireAt) : null,
+				});
 			}
 
 			this.currentPlan$$
@@ -125,7 +128,14 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 			return existingPlan;
 		}
 
-		this.currentPlan$$.next(currentPlan ?? null);
+		this.currentPlan$$.next(
+			currentPlan
+				? {
+						...currentPlan,
+						expireAt: currentPlan.expireAt ? new Date(currentPlan.expireAt) : null,
+				  }
+				: null,
+		);
 		this.localStorage.setItem(LocalStorageService.CURRENT_SUB_PLAN, currentPlan);
 		return currentPlan;
 	}
