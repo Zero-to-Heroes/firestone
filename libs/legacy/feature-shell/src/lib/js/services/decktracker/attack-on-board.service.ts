@@ -5,7 +5,15 @@ import { AttackOnBoard, DeckCard, DeckState, EntityGameState, PlayerGameState } 
 @Injectable()
 export class AttackOnBoardService {
 	public computeAttackOnBoard(deck: DeckState, playerFromTracker: PlayerGameState): AttackOnBoard {
-		// console.debug('[attack-on-board] computing attack on board', deck, playerFromTracker);
+		console.log(
+			'[attack-on-board] computing attack on board',
+			deck.board?.map((e) => ({ cardId: e.cardId, entityId: e.entityId })),
+			playerFromTracker?.Board?.map((e) => ({
+				cardId: e.cardId,
+				entityId: e.entityId,
+				attack: e.tags?.find((t) => t.Name === GameTag.ATK),
+			})),
+		);
 		// Remove voidtouched attendants, as their effect only triggers when attacking the enemy hero
 		const numberOfVoidtouchedAttendants = 0;
 		// deck.board
@@ -16,6 +24,10 @@ export class AttackOnBoardService {
 			.filter((entity) => entity)
 			.filter((entity) => this.canAttack(entity, deck.isActivePlayer, false))
 			.filter((entity) => entity.attack > 0);
+		console.log(
+			'[attack-on-board] entitiesOnBoardThatCanAttack',
+			entitiesOnBoardThatCanAttack.map((e) => e.cardId),
+		);
 		// console.debug(
 		// 	'[attack-on-board] entitiesOnBoardThatCanAttack',
 		// 	entitiesOnBoardThatCanAttack,
@@ -68,13 +80,7 @@ export class AttackOnBoardService {
 			board: totalAttackOnBoard,
 			hero: heroAttack,
 		} as AttackOnBoard;
-		// console.debug(
-		// 	'[attack-on-board] computed attack on board',
-		// 	result,
-		// 	totalAttackOnBoard,
-		// 	heroAttack,
-		// 	entitiesOnBoardThatCanAttack,
-		// );
+		console.log('[attack-on-board] computed attack on board', result);
 		return result;
 	}
 
