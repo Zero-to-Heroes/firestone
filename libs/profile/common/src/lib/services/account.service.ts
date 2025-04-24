@@ -31,6 +31,8 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 	}
 
 	protected async init() {
+		// Try a hack to prevent region being null when starting Firestone alongide the game
+		await sleep(1000);
 		this.region$$ = new BehaviorSubject<BnetRegion | null>(null);
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.gameStatus = AppInjector.get(GameStatusService);
