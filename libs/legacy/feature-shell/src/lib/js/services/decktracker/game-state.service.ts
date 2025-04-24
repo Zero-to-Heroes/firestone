@@ -187,7 +187,7 @@ export class GameStateService {
 					await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
 				}
 			}
-			console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
+			// console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
 		} catch (e) {
 			console.error('Exception while processing event', e);
 		}
@@ -369,7 +369,13 @@ export class GameStateService {
 				state: this.state,
 			};
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, Date.now() - start);
+			console.debug(
+				'[game-state] emitting event',
+				emittedEvent.event.name,
+				Date.now() - start,
+				this.state,
+				gameEvent,
+			);
 		} else {
 			console.debug(
 				'[game-state] state is null, not emitting event',
