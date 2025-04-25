@@ -104,7 +104,7 @@ export class GameEvents {
 				});
 			});
 
-		const gameStateUpdateInterval = 1000;
+		const gameStateUpdateInterval = 2000;
 		interval(gameStateUpdateInterval).subscribe(() => {
 			// console.debug(
 			// 	'will ask for game state updat?',
@@ -212,7 +212,7 @@ export class GameEvents {
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
 			this.lastProcessedTimestamp = Date.now();
 		} else {
-			console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
+			console.debug('[game-events] received GAME_STATE_UPDATE');
 			this.lastGameStateUpdateTimestamp = Date.now();
 			this.gameStateUpdateInProgress = false;
 			// this.receivedLastGameStateUpdate = true;
@@ -1433,10 +1433,10 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
-			// TODO: at some point we might want to debounce these events
 			case 'GAME_STATE_UPDATE':
-				// this.receivedLastGameStateUpdate = true;
-				this.doEventDispatch(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
+				if (gameEvent.Value.GameState != null) {
+					this.doEventDispatch(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
+				}
 				break;
 			case 'ENTITY_UPDATE':
 				this.doEventDispatch(

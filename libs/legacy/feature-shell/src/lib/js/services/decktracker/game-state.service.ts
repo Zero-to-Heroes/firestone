@@ -426,6 +426,7 @@ export class GameStateService {
 		// console.debug('[game-state] updated deck with missing card info', newState === stateWithMetaInfos, newState);
 		// const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
 		if (!playerFromTracker) {
+			// console.debug('[game-state] no player from tracker');
 			return newState;
 		}
 
