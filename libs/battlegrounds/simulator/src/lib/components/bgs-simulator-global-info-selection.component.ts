@@ -135,6 +135,22 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 			</fs-numeric-input-with-arrows>
 			<fs-numeric-input-with-arrows
 				class="input"
+				[label]="'battlegrounds.sim.elemental-health-buff' | fsTranslate"
+				[value]="elementalHealthBuff"
+				[minValue]="0"
+				(fsModelUpdate)="elementalHealthBuff = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
+				[label]="'battlegrounds.sim.elemental-attack-buff' | fsTranslate"
+				[value]="elementalAttackBuff"
+				[minValue]="0"
+				(fsModelUpdate)="elementalAttackBuff = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
 				[label]="'battlegrounds.sim.battlecries-triggered' | fsTranslate"
 				[helpTooltip]="'battlegrounds.sim.battlecries-triggered-tooltip' | fsTranslate"
 				[value]="battlecriesTriggeredThisGame"
@@ -177,6 +193,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.astralAutomatonsSummonedThisGame = value?.AstralAutomatonsSummonedThisGame ?? 0;
 		this.beetleAttackBuff = value?.BeetleAttackBuff ?? 0;
 		this.beetleHealthBuff = value?.BeetleHealthBuff ?? 0;
+		this.elementalHealthBuff = value?.ElementalHealthBuff ?? 0;
+		this.elementalAttackBuff = value?.ElementalAttackBuff ?? 0;
 		this.battlecriesTriggeredThisGame = value?.BattlecriesTriggeredThisGame ?? 0;
 		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -197,6 +215,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	astralAutomatonsSummonedThisGame: number;
 	beetleAttackBuff: number;
 	beetleHealthBuff: number;
+	elementalHealthBuff: number;
+	elementalAttackBuff: number;
 	battlecriesTriggeredThisGame: number;
 	friendlyMinionsDeadLastCombat: number;
 
@@ -275,6 +295,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			AstralAutomatonsSummonedThisGame: this.astralAutomatonsSummonedThisGame,
 			BeetleAttackBuff: this.beetleAttackBuff,
 			BeetleHealthBuff: this.beetleHealthBuff,
+			ElementalHealthBuff: this.elementalHealthBuff,
+			ElementalAttackBuff: this.elementalAttackBuff,
 			BattlecriesTriggeredThisGame: this.battlecriesTriggeredThisGame,
 			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
 		};
