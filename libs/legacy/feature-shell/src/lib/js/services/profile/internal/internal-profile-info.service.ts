@@ -97,7 +97,6 @@ export class InternalProfileInfoService {
 	}
 
 	private initProfileInfo() {
-		return;
 		this.gameEvents.allEvents
 			.pipe(filter((e) => e.type === GameEvent.GAME_END))
 			.subscribe(() => this.shouldTrigger$$.next(true));
