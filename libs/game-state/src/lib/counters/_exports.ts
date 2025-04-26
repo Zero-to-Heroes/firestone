@@ -12,10 +12,12 @@ import { BgsMagmalocCounterDefinitionV2 } from './impl/battlegrounds/bgs-magmalo
 import { BgsMajordomoCounterDefinitionV2 } from './impl/battlegrounds/bgs-majordomo';
 import { BgsSouthseaStrongarmCounterDefinitionV2 } from './impl/battlegrounds/bgs-southsea-strongarm';
 import { BgsTuskarrRaiderCounterDefinitionV2 } from './impl/battlegrounds/bgs-tuskarr-raider';
+import { ElementalPowersBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-powers-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
+import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
@@ -158,6 +160,8 @@ export const getAllCounters: (
 	new BgsMajordomoCounterDefinitionV2(i18n, allCards),
 	new BgsTuskarrRaiderCounterDefinitionV2(i18n, allCards),
 	new BgsLordOfGainsCounterDefinitionV2(i18n, allCards),
+	new ElementalPowersBuffCounterDefinitionV2(i18n),
+	new TavernSpellsBuffCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -241,4 +245,6 @@ export type CounterType =
 	| 'bgsMagnetized'
 	| 'bgsSpellsPlayed'
 	| 'ballerBuff'
+	| 'elementalPowersBuff'
+	| 'tavernSpellsBuff'
 	| 'bgsMajordomo';
