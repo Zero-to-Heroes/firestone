@@ -968,18 +968,18 @@ export const cardIdSelector = (
 		case CardIds.Endgame_TOY_886:
 			return (input: SelectorInput): SelectorOutput => {
 				const deadDemons =
-					input.deckState.minionsDeadThisMatch?.filter(
+					input.deckState?.minionsDeadThisMatch?.filter(
 						(card) =>
 							allCards.getCard(card?.cardId).races?.includes(Race[Race.DEMON]) ||
 							allCards.getCard(card?.cardId).races?.includes(Race[Race.ALL]),
 					) ?? [];
-				if (!deadDemons.length) {
-					return and(side(inputSide), inGraveyard, minion, demon)(input);
-				}
 
 				const last = deadDemons[deadDemons.length - 1];
+				if (!last) {
+					return and(side(inputSide), or(inHand, inDeck), demon)(input);
+				}
 				return highlightConditions(
-					and(side(inputSide), or(inHand, inDeck), minion, demon),
+					and(side(inputSide), or(inHand, inDeck), demon),
 					tooltip(
 						and(
 							side(inputSide),
