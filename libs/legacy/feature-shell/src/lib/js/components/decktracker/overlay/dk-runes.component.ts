@@ -77,9 +77,13 @@ export class DkRunesComponent extends AbstractSubscriptionStoreComponent impleme
 
 				const result =
 					showRunes &&
-					deckDefinition.heroes.some((h) =>
+					(deckDefinition.heroes.some((h) =>
 						this.allCards.getCard(h).classes?.includes(CardClass[CardClass.DEATHKNIGHT]),
-					);
+					) ||
+						deckDefinition.cards.some((pair) => {
+							const refCard = this.allCards.getCard(pair[0]);
+							refCard.touristFor?.includes(CardClass[CardClass.DEATHKNIGHT]);
+						}));
 				return result;
 			}),
 		);
