@@ -129,6 +129,9 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
+		case CardIds.ToysnatchingGeist_MIS_006:
+		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
+			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.RiteOfAtrocity_EDR_811:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SweetenedSnowflurry_TOY_307:
