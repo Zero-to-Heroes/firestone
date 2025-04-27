@@ -65,6 +65,7 @@ import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
 import { RelicCounterDefinitionV2 } from './impl/relic';
+import { RenferalTheMalignantCounterDefinitionV2 } from './impl/renferal-the-malignant';
 import { SeaShantyCounterDefinitionV2 } from './impl/sea-shanty';
 import { SecretsPlayedCounterDefinitionV2 } from './impl/secrets-played';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
@@ -147,6 +148,7 @@ export const getAllCounters: (
 	new WatchpostCounterDefinitionV2(i18n, allCards),
 	new FriendlyMinionsDeadThisGameCounterDefinitionV2(i18n),
 	new ImbueCounterDefinitionV2(i18n, allCards),
+	new RenferalTheMalignantCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -167,6 +169,7 @@ export const getAllCounters: (
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
+	| 'renferalTheMalignant'
 	| 'ysondre'
 	| 'dragonsInHand'
 	| 'imbue'
