@@ -172,11 +172,18 @@ export class GameStateService {
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
 		try {
 			const stateUpdateEvents = eventQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
+			// const zonePositionChangedEvent = mergeZonePositionChangedEvents(
+			// 	eventQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
+			// );
 			// Processing these should be super quick, as in most cases they won't lead to a state update
 			// const attackOnBoardEvents = eventQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
 			const eventsToProcess = [
-				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
+				...eventQueue.filter(
+					(event) => event.type !== GameEvent.GAME_STATE_UPDATE,
+					// && event.type !== GameEvent.ZONE_POSITION_CHANGED,
+				),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
+				// zonePositionChangedEvent,
 				// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 			].filter((event) => event);
 			if (stateUpdateEvents.length > 0) {
@@ -375,15 +382,14 @@ export class GameStateService {
 			console.debug(
 				'[game-state] emitting event',
 				emittedEvent.event.name,
-				// Date.now() - start,
-				this.state.playerDeck.damageTakenOnYourTurns,
-				this.state.playerDeck.damageTakenThisTurn,
+				this.state.playerDeck.hand.map((c) => c.cardName || c.cardId || c.entityId),
+				this.state.opponentDeck.hand.map((c) => c.cardName || c.cardId || c.entityId),
 				this.state,
 				gameEvent,
 			);
 		} else {
 			console.debug(
-				'[game-state] state is null, not emitting event',
+				'[game-state] state is unchanged, not emitting event',
 				gameEvent.type,
 				gameEvent.cardId,
 				gameEvent.entityId,
@@ -424,7 +430,7 @@ export class GameStateService {
 		}
 
 		// This could be completely removed by support the "POSITION_IN_ZONE" tag and tag changes
-		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(stateWithMetaInfos, playerFromTracker);
+		const playerDeckWithZonesOrdered = stateWithMetaInfos; // this.zoneOrdering.orderZones(stateWithMetaInfos, playerFromTracker);
 
 		// Could also just support the DORMANT tag event
 		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
@@ -492,3 +498,24 @@ export class GameStateService {
 		this.eventEmitters = result;
 	}
 }
+
+// const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent => {
+// 	if (events.length === 0) {
+// 		return null;
+// 	}
+// 	const ref = events[0];
+// 	const allZoneUpdates = events.flatMap((event) => event.additionalData.zoneUpdates);
+// 	const allEntities = allZoneUpdates.map((update) => update.EntityId);
+// 	const finalZoneUpdates = allEntities.map((entityId) => {
+// 		const updatesForEntity = allZoneUpdates.filter((update) => update.EntityId === entityId);
+// 		const lastUpdate = updatesForEntity[updatesForEntity.length - 1];
+// 		return lastUpdate;
+// 	});
+// 	const merged: GameEvent = Object.assign(new GameEvent(), ref, {
+// 		additionalData: {
+// 			zoneUpdates: finalZoneUpdates,
+// 		},
+// 	});
+// 	console.debug('[game-state] merging zone position changed events', merged, events);
+// 	return merged;
+// };

@@ -1517,6 +1517,7 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {
 						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
+						zoneUpdates: gameEvent.Value.AdditionalProps.ZoneUpdates,
 					}),
 				);
 				break;

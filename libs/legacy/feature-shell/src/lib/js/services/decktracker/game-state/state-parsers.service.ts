@@ -127,6 +127,7 @@ import { TurnDurationUpdatedParser } from '../event-parser/turn-duration-updated
 import { WeaponDestroyedParser } from '../event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from '../event-parser/weapon-equipped-parser';
 import { WhizbangDeckParser } from '../event-parser/whizbang-deck-id-parser';
+import { ZonePositionChangedParser } from '../event-parser/zone-position-changed-parser';
 import { SecretConfigService } from '../secret-config.service';
 
 @Injectable()
@@ -324,6 +325,7 @@ export class GameStateParsersService {
 			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper, this.i18n)],
 			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],
 			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
+			[GameEvent.ZONE_POSITION_CHANGED]: [new ZonePositionChangedParser(this.helper)],
 			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],
 			// [GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],
 		};
