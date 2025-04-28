@@ -12,7 +12,8 @@ const cards = [CardIds.MalorneTheWaywatcher_EDR_888];
 export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'imbue';
 	public override image = (gameState: GameState, side: 'player' | 'opponent'): string => {
-		const playerClass = gameState?.playerDeck?.hero?.classes?.[0];
+		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		const playerClass = deck?.hero?.classes?.[0];
 		switch (playerClass) {
 			case CardClass.DRUID:
 				return CardIds.DreamboundDisciple_BlessingOfTheGolem_EDR_847p;
@@ -51,10 +52,32 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.opponent-deck.counters.imbue-label'),
 			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.imbue-tooltip'),
+		},
+	};
+	readonly opponent = {
+		pref: 'opponentImbueCounter' as const,
+		display: (state: GameState): boolean => {
+			if (state.opponentDeck.hasRelevantCard(cards)) {
+				return true;
+			}
+			const value = this.opponent.value(state);
+			if (!!value) {
+				return true;
+			}
+			return false;
+		},
+		value: (state: GameState) => {
+			return state.fullGameState?.Opponent?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.IMBUES_THIS_GAME)
+				?.Value;
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.opponent-deck.counters.imbue-label'),
+			tooltip: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.opponent-deck.counters.imbue-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
 
 	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
 		super();
