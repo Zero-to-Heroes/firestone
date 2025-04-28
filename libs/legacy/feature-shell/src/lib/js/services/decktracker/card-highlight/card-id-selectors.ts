@@ -1050,6 +1050,8 @@ export const cardIdSelector = (
 			};
 		case CardIds.FeldoreiWarband:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.FelfireBonfire_VAC_952:
+			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
 		case CardIds.FelfireInTheHole:
 			return highlightConditions(and(side(inputSide), inDeck, spell, fel), and(side(inputSide), inDeck, spell));
 		case CardIds.FerociousFelbat_EDR_892:
