@@ -37,8 +37,9 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 		this.stats$ = this.runs$$.pipe(this.mapData((runs) => this.buildStats(runs)));
 	}
 
-	private buildStats(runs: readonly ArenaRun[] | undefined | null): readonly InternalStat[] {
-		const replays = runs?.flatMap((r) => r.steps) ?? [];
+	private buildStats(allRuns: readonly ArenaRun[] | undefined | null): readonly InternalStat[] {
+		const runs = allRuns?.filter((r) => !!r?.getFirstMatch()) ?? [];
+		const replays = runs.flatMap((r) => r.steps) ?? [];
 
 		const replaysFirst = replays.filter((replay) => replay.coinPlay === 'play') ?? [];
 		const replaysCoin = replays.filter((replay) => replay.coinPlay === 'coin') ?? [];
