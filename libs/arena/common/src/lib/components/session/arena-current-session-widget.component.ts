@@ -84,7 +84,16 @@ import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-too
 					<ng-container *ngIf="{ showMatches: showMatches$ | async, runs: runs$ | async } as value">
 						<div class="details" *ngIf="value.showMatches && value.runs?.length">
 							<div class="detail" *ngFor="let run of value.runs">
-								<arena-run [run]="run"></arena-run>
+								<arena-run class="run" [run]="run"></arena-run>
+								<div
+									class="view-deck-icon"
+									inlineSVG="assets/svg/show.svg"
+									componentTooltip
+									[componentTooltipAllowMouseOver]="true"
+									[componentType]="componentType"
+									[componentInput]="run.detail"
+									componentTooltipPosition="right"
+								></div>
 							</div>
 						</div>
 					</ng-container>
@@ -105,7 +114,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 	showGroups$: Observable<boolean>;
 	groups$: Observable<readonly Group[]>;
 	showMatches$: Observable<boolean>;
-	runs$: Observable<readonly ArenaRun[]>;
+	runs$: Observable<readonly ExtendedArenaRun[]>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -232,7 +241,21 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		]).pipe(
 			this.mapData(
 				([runs, sessionWidgetNumberOfMatchesToShow]) =>
-					runs?.slice(0, sessionWidgetNumberOfMatchesToShow) ?? [],
+					(runs?.slice(0, sessionWidgetNumberOfMatchesToShow) ?? []).map((run) => {
+						const detail: GroupDetail = {
+							cardId: `https://static.firestoneapp.com/cards/heroSkins/enUS/256/${run.heroCardId}.png`,
+							deckstring: run.initialDeckList,
+							wins: run.wins,
+							losses: run.losses,
+							deckScore: run.draftStat?.deckScore,
+							date: new Date(run.creationTimestamp),
+						};
+						const result: ExtendedArenaRun = ExtendedArenaRun.create({
+							...run,
+							detail: detail,
+						});
+						return result;
+					}) ?? [],
 			),
 		);
 
@@ -298,6 +321,14 @@ export interface GroupDetail {
 	readonly losses: number;
 	readonly deckScore: number;
 	readonly date: Date;
+}
+
+class ExtendedArenaRun extends ArenaRun {
+	readonly detail: GroupDetail;
+
+	public static override create(data: Partial<ArenaRun> & { detail: GroupDetail }): ExtendedArenaRun {
+		return Object.assign(new ExtendedArenaRun(), data);
+	}
 }
 
 export type WinRange = '12' | '11' | '10' | '9' | '6-8' | '3-5' | '0-2';
