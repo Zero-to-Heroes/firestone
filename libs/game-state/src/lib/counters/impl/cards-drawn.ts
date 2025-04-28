@@ -34,7 +34,7 @@ export class CardsDrawnCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
 				i18n.translateString('settings.decktracker.opponent-deck.counters.cards-drawn-tooltip', {
 					cardName: allCards.getCard(CardIds.PlayhouseGiant_TOY_530)?.name,
-					cardClass: i18n.translateString(`global.card-class.${CardClass[CardClass.ROGUE].toLowerCase()}`),
+					cardClass: i18n.translateString(`global.class.${CardClass[CardClass.ROGUE].toLowerCase()}`),
 				}),
 		},
 	};
