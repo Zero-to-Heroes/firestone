@@ -63,11 +63,11 @@
 	}
 
 	notifications {
-		height: 100%;
-		width: 500px;
 		position: absolute;
-		top: 0;
+		top: 15px;
+		bottom: 0;
 		right: 0;
+		width: 500px;
 		pointer-events: none;
 	}
 

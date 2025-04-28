@@ -7,11 +7,18 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { Message } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Notification, NotificationType, NotificationsService } from 'angular2-notifications';
+import { Message, PreferencesService } from '@firestone/shared/common/service';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	HorizontalPosition,
+	Notification,
+	NotificationType,
+	NotificationsService,
+	Options,
+	VerticalPosition,
+} from 'angular2-notifications';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
@@ -40,11 +47,12 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 export class NotificationsComponent implements AfterViewInit {
 	timeout = 6000;
 	// timeout = 9999999;
-	toastOptions = {
+	toastOptions: Options = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
 		showProgressBar: false,
 		maxStack: 5,
+		position: ['bottom', 'right'],
 	};
 
 	private activeNotifications: ActiveNotification[] = [];
@@ -56,9 +64,12 @@ export class NotificationsComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly elRef: ElementRef,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly prefs: PreferencesService,
 	) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
+		await waitForReady(this.prefs);
+
 		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
 		this.notifications$
 			.pipe(
@@ -75,6 +86,57 @@ export class NotificationsComponent implements AfterViewInit {
 				}),
 			)
 			.subscribe();
+		this.prefs.preferences$$
+			.pipe(
+				debounceTime(200),
+				map((prefs) => prefs.notificationsPosition),
+				distinctUntilChanged(),
+			)
+			.subscribe((position) => {
+				position = position ?? 'bottom-right';
+				let sidePosition: HorizontalPosition = 'right';
+				let topPosition: VerticalPosition = 'bottom';
+				if (position.includes('right')) {
+					// Change the left/right absolute positioning of the host
+					this.elRef.nativeElement.style.right = '0px';
+					this.elRef.nativeElement.style.left = 'auto';
+					this.elRef.nativeElement.querySelector('simple-notifications').style.justifyContent = 'flex-end';
+					this.elRef.nativeElement.querySelector('.simple-notification-wrapper').style.justifyContent =
+						'flex-end';
+					this.elRef.nativeElement.querySelector('.simple-notification').style.justifyContent = 'flex-end';
+					sidePosition = 'right';
+				} else {
+					this.elRef.nativeElement.style.left = '10px';
+					this.elRef.nativeElement.style.right = 'auto';
+					this.elRef.nativeElement.querySelector('simple-notifications').style.justifyContent = 'flex-start';
+					this.elRef.nativeElement.querySelector('.simple-notification-wrapper').style.justifyContent =
+						'flex-start';
+					this.elRef.nativeElement.querySelector('.simple-notification').style.justifyContent = 'flex-start';
+					sidePosition = 'left';
+				}
+				if (position.includes('top')) {
+					this.elRef.nativeElement.querySelector('.notifications').style.justifyContent = 'flex-start';
+					topPosition = 'top';
+				} else {
+					this.elRef.nativeElement.querySelector('.notifications').style.justifyContent = 'flex-end';
+					topPosition = 'bottom';
+				}
+				// Doesn't work?
+				this.toastOptions.position = [topPosition, sidePosition];
+
+				console.debug(
+					'[notifications] changing position',
+					this.toastOptions,
+					// this.notificationService.globalOptions,
+				);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	created(event) {

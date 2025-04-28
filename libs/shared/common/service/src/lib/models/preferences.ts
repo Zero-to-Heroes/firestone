@@ -73,6 +73,7 @@ export class Preferences implements IPreferences {
 	readonly showSessionRecapOnExit: boolean = true;
 	readonly shareGamesWithVS: boolean = true;
 	readonly setAllNotifications: boolean = true;
+	readonly notificationsPosition: CornerPosition = 'bottom-right';
 	readonly contactEmail: string;
 	readonly lastSeenReleaseNotes: string;
 	readonly dontShowNewVersionNotif: boolean = false;
@@ -715,3 +716,4 @@ export type BgsCompositionsListMode = 'exploring' | 'browsing';
 export type BgsCardTypeFilterType = 'minion' | 'spell';
 export type BgsCardTierFilterType = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type ArenaSessionWidgetTimeFrame = 'current-season' | 'all-time';
+export type CornerPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
