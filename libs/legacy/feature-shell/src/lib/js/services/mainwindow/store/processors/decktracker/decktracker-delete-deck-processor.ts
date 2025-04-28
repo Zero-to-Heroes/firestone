@@ -21,22 +21,6 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[deck-delete] will delete deck', event.deckstring);
 		await this.constructedPersonalDecks.deleteDeck(event.deckstring);
-
-		// If no games were played with the deck, no need to change anything
-		const gameStats = await this.gamesLoader.gameStats$$.getValueWithInit();
-		const gamesWithDeck = gameStats?.stats?.filter((s) => s.playerDecklist === event.deckstring);
-		console.log('[deck-delete] gamesWithDeck', gamesWithDeck?.length);
-		if (!gamesWithDeck?.length) {
-			this.nav.currentView$$.next('decks');
-			return [null, null];
-		}
-
-		const currentPrefs = await this.prefs.getPreferences();
-		const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[event.deckstring] ?? [];
-		console.log('[deck-delete] deletedDeckDates', event.deckstring, deletedDeckDates);
-		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
-		console.log('[deck-delete] newDeleteDates', newDeleteDates);
-		await this.prefs.setDeckDeleteDates(event.deckstring, newDeleteDates);
 		this.nav.currentView$$.next('decks');
 		return [null, null];
 	}
