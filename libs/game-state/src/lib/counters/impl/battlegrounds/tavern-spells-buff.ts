@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -14,16 +15,22 @@ export class TavernSpellsBuffCounterDefinitionV2 extends CounterDefinitionV2<{ a
 	readonly player = {
 		pref: 'playerBgsTavernSpellsBuffCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
-		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => ({
-			atk:
-				state.fullGameState?.Player.PlayerEntity.tags.find(
-					(t) => t.Name === GameTag.TAVERN_SPELL_ATTACK_INCREASE,
-				)?.Value ?? 0,
-			health:
-				state.fullGameState?.Player.PlayerEntity.tags.find(
-					(t) => t.Name === GameTag.TAVERN_SPELL_HEALTH_INCREASE,
-				)?.Value ?? 0,
-		}),
+		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
+			const value = {
+				atk:
+					state.fullGameState?.Player.PlayerEntity.tags.find(
+						(t) => t.Name === GameTag.TAVERN_SPELL_ATTACK_INCREASE,
+					)?.Value ?? 0,
+				health:
+					state.fullGameState?.Player.PlayerEntity.tags.find(
+						(t) => t.Name === GameTag.TAVERN_SPELL_HEALTH_INCREASE,
+					)?.Value ?? 0,
+			};
+			if (value.atk === 0 && value.health === 0) {
+				return null;
+			}
+			return value;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.battlegrounds.overlay.counter-tavern-spells-buff-label'),
@@ -37,13 +44,19 @@ export class TavernSpellsBuffCounterDefinitionV2 extends CounterDefinitionV2<{ a
 		super();
 	}
 
+	protected override formatValue(
+		value: { atk: number; health: number } | null | undefined,
+	): null | undefined | number | string {
+		return value ? `+${value.atk} / +${value.health}` : null;
+	}
+
 	protected override tooltip(
 		side: 'player' | 'opponent',
 		gameState: GameState,
 		allCards: CardsFacadeService,
 		bgState: BattlegroundsState,
 	): string {
-		const { atk, health } = this.player.value(gameState, bgState);
+		const { atk, health } = this.player.value(gameState, bgState)!;
 		return this.i18n.translateString(`counters.tavern-spells-buff.${side}`, {
 			atk: atk,
 			health: health,
