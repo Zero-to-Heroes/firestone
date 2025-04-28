@@ -469,3 +469,14 @@ export const isStarshipPieceFor =
 		const starship = input.deckState.findCard(entityId)?.card;
 		return !!starship?.storedInformation?.cards?.map((c) => c.entityId).includes(input.entityId);
 	};
+
+export const darkGift = (input: SelectorInput): boolean => {
+	return discover(input) && input.card?.referencedTags?.includes(GameTag[GameTag.DARK_GIFT]);
+};
+// export const createsDarkGift = cardIs(
+// 	CardIds.TreacherousTormentor_EDR_102,
+// 	CardIds.CreatureOfMadness_EDR_105,
+// 	CardIds.Darkride,
+// 	TempCardIds.Cremate,
+
+// )

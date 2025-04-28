@@ -18,6 +18,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { DeckState } from '../models/deck-state';
 
 const IMBUED_HERO_POWERS = [
@@ -129,6 +130,26 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
+		case TempCardIds.SmokeBomb:
+			return (c) =>
+				canBeDiscoveredByClass(c, options.currentClass) &&
+				c.type?.toUpperCase() === CardType[CardType.MINION] &&
+				(c.mechanics?.includes(GameTag[GameTag.COMBO]) ||
+					c.mechanics?.includes(GameTag[GameTag.BATTLECRY]) ||
+					c.mechanics?.includes(GameTag[GameTag.STEALTH]));
+		case TempCardIds.ShadowflameSuffusion:
+			return (c) =>
+				c.type?.toUpperCase() === CardType[CardType.MINION] &&
+				c.classes?.includes(CardClass[CardClass.WARRIOR]);
+		case TempCardIds.Scorchreaver:
+			return (c) =>
+				c.spellSchool === SpellSchool[SpellSchool.FEL] && c.type?.toUpperCase() === CardType[CardType.SPELL];
+		case TempCardIds.ShadowflameStalker:
+			return (c) => hasCorrectTribe(c, Race.DEMON) && canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.EmberscarredWhelp:
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && c.cost === 5;
+		case TempCardIds.InfernoHerald:
+			return (c) => hasCorrectTribe(c, Race.ELEMENTAL);
 		case CardIds.ToysnatchingGeist_MIS_006:
 		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
@@ -249,6 +270,7 @@ const getDynamicFilters = (
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				c?.mechanics?.includes(GameTag[GameTag.PROTOSS]);
 		case CardIds.BroodQueen_LarvaToken_SC_003t:
+		case CardIds.BroodQueen_SC_003:
 			return (c) =>
 				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
 				c?.mechanics?.includes(GameTag[GameTag.ZERG]) &&
@@ -356,6 +378,7 @@ const BAN_LIST = [
 	// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=12&WikiBanPool_form_only%5BgameMode%5D=1
 	CardIds.Magtheridon_BT_850,
 	CardIds.TheDarkness_LOOT_526,
+	CardIds.ZilliaxDeluxe3000_TOY_330,
 ];
 
 let baseCards: readonly ReferenceCard[] = [];
