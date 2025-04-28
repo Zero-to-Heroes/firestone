@@ -295,7 +295,7 @@ export class GameStateService {
 					});
 					const elapsed = Date.now() - start;
 					if (elapsed > 1000) {
-						console.warn('[debug] [game-state] parser took too long', elapsed, gameEvent.type);
+						console.warn('[game-state] parser took too long', elapsed, gameEvent.type);
 					}
 					// console.debug(
 					// 	'[game-state] parsed event',
@@ -353,7 +353,7 @@ export class GameStateService {
 					: postProcessedState;
 				const elapsed = Date.now() - start;
 				if (elapsed > 1000) {
-					console.warn('[debug] [game-state] post-processing took too long', elapsed, gameEvent.type);
+					console.warn('[game-state] post-processing took too long', elapsed, gameEvent.type);
 				}
 				// console.debug('[game-state] updated state', this.state === previousState, this.state);
 			}
@@ -372,7 +372,9 @@ export class GameStateService {
 			console.debug(
 				'[game-state] emitting event',
 				emittedEvent.event.name,
-				Date.now() - start,
+				// Date.now() - start,
+				this.state.playerDeck.damageTakenOnYourTurns,
+				this.state.playerDeck.damageTakenThisTurn,
 				this.state,
 				gameEvent,
 			);

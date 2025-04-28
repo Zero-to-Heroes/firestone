@@ -46,14 +46,6 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		const isCurrentCardCountered = additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId ? 1 : 0;
 		const actualCardsPlayedThisTurn =
 			gameEvent.additionalData.cardsPlayed - cardsCounteredThisTurn - isCurrentCardCountered;
-		console.debug(
-			'[debug] card played this turn',
-			actualCardsPlayedThisTurn,
-			gameEvent.additionalData.cardsPlayed,
-			cardsCounteredThisTurn,
-			isCurrentCardCountered,
-			currentState.playerDeck.cardsPlayedThisTurn,
-		);
 		if (actualCardsPlayedThisTurn < 3) {
 			toExclude.push(CardIds.RatTrap);
 			toExclude.push(CardIds.RatTrap_CORE_GIL_577);

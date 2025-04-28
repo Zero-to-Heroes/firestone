@@ -25,7 +25,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		// When the opponent plays Hooktusk, the logs reveal everything, but not the UI
 		// So we override the information here
 		// console.debug(
-		// 	'[debug] [card-removed] card removed',
+		// 	'[card-removed] card removed',
 		// 	isPlayer,
 		// 	DONT_REVEAL_REMOVED_CARDS.includes(removedByCardId as CardIds),
 		// 	cardId,

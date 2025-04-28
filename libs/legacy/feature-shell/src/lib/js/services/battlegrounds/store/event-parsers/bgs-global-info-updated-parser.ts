@@ -36,7 +36,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			.filter((player) => player.cardId !== 'TB_BaconShop_HERO_PH')
 			.map((player) => {
 				const playerFromMemory = playersFromMemory.find((mem) => mem.Id === player.playerId);
-				// console.debug('[debug] found player from memory', playerFromMemory, playersFromMemory, player);
+				// console.debug('found player from memory', playerFromMemory, playersFromMemory, player);
 				if (!playerFromMemory) {
 					return player;
 				}

@@ -14,13 +14,6 @@ export const UrsolsAura: GlobalHighlightCard = {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const fullDeckState = side === 'player' ? gameState.fullGameState.Player : gameState.fullGameState.Opponent;
 		const ursolAuraCard = fullDeckState.Secrets.find((e) => e.entityId === entityId);
-		console.debug(
-			'[debug] [ursols-aura] ursolAuraCard',
-			ursolAuraCard,
-			fullDeckState.Secrets,
-			entityId,
-			fullDeckState,
-		);
 		if (!ursolAuraCard) {
 			return [];
 		}

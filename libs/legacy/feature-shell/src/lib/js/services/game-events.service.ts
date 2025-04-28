@@ -180,16 +180,16 @@ export class GameEvents {
 
 		for (const chunk of chunks) {
 			const start = Date.now();
-			console.debug('[debug] [game-events] dispatching game events chunk', chunk.length);
+			// console.debug('[game-events] dispatching game events chunk', chunk.length);
 			await new Promise<void>((resolve) => {
 				this.plugin.realtimeLogProcessing(chunk, () => {
-					console.debug(
-						'[debug] [game-events] finished dispatching chunk',
-						chunk.length,
-						'game events after',
-						Date.now() - start,
-						'ms',
-					);
+					// console.debug(
+					// 	'[game-events] finished dispatching chunk',
+					// 	chunk.length,
+					// 	'game events after',
+					// 	Date.now() - start,
+					// 	'ms',
+					// );
 					resolve();
 				});
 			});

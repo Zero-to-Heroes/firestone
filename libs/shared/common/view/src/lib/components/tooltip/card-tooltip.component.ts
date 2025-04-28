@@ -19,7 +19,7 @@ import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
 	selector: 'card-tooltip',
@@ -322,10 +322,8 @@ export class CardTooltipComponent
 			.subscribe((bounds) => this.keepInBounds(bounds.top, bounds.left, bounds.height, bounds.width));
 		const highRes$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => {
-				console.debug('[debug] highRes', prefs.collectionUseHighResImages, prefs.cardTooltipScale);
 				return prefs.collectionUseHighResImages || prefs.cardTooltipScale > 100;
 			}),
-			tap((info) => console.debug('[debug] highRes', info)),
 		);
 		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
@@ -340,7 +338,6 @@ export class CardTooltipComponent
 		]).pipe(
 			this.mapData(
 				([relatedCardIds, localized, isBgs, highRes, locale]) => {
-					console.debug('[debug] relatedCardIds', relatedCardIds, highRes);
 					return (
 						relatedCardIds
 							// Remove entity ids (eg in Fizzle's Snapshot card)
@@ -383,7 +380,6 @@ export class CardTooltipComponent
 		]).pipe(
 			this.mapData(
 				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, highRes, { locale }]) => {
-					console.debug('[debug] cardIds', cardIds);
 					return (
 						[...(cardIds ?? [])]
 							// Empty card IDs are necessary when showing buff only

@@ -218,7 +218,7 @@ export class EndGameListenerService {
 					}),
 					startWith(null),
 					distinctUntilChanged((a, b) => {
-						console.debug('[debug] looking for BG end game info', a, b);
+						// console.debug('[manastorm-bridge] looking for BG end game info', a, b);
 						return deepEqual(a, b);
 					}),
 					tap((info) => console.debug('[manastorm-bridge] bgMemoryInfo', info)),
