@@ -150,7 +150,10 @@ const handleEmbiggen = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
-		(card) => Math.min(10, card.getEffectiveManaCost() + 1),
+		(card) =>
+			card.getEffectiveManaCost() <= 10
+				? Math.min(10, card.getEffectiveManaCost() + 1)
+				: card.getEffectiveManaCost() + 1,
 		deckState,
 		allCards,
 	);
