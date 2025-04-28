@@ -112,10 +112,10 @@ export class GameEvents {
 			// 	// this.receivedLastGameStateUpdate,
 			// );
 			if (!this.lastProcessedTimestamp) {
-				console.debug(
-					'[game-events] [game-state] not asking for game state update yet, lastProcessedTimestamp',
-					this.lastProcessedTimestamp,
-				);
+				// console.debug(
+				// 	'[game-events] [game-state] not asking for game state update yet, lastProcessedTimestamp',
+				// 	this.lastProcessedTimestamp,
+				// );
 				return;
 			}
 			// if (!this.receivedLastGameStateUpdate) {
@@ -130,27 +130,27 @@ export class GameEvents {
 				// Only ask for a game state update if we haven't received one in the last 2 seconds
 				// TODO: also don't ask if a request is sent but not received yet
 				if (this.gameStateUpdateInProgress) {
-					console.debug(
-						'[game-events] [game-state] not asking for game state update, already in progress',
-						timeSinceLastLog,
-					);
+					// console.debug(
+					// 	'[game-events] [game-state] not asking for game state update, already in progress',
+					// 	timeSinceLastLog,
+					// );
 					return;
 				}
 				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
-					console.debug('[game-events] [game-state] asking for game state update', timeSinceLastLog);
+					// console.debug('[game-events] [game-state] asking for game state update', timeSinceLastLog);
 					this.gameStateUpdateInProgress = true;
 					this.plugin.askForGameStateUpdate();
 				} else {
-					console.debug(
-						'[game-events] [game-state] not asking for game state update, timeSinceLastGameStateUpdate',
-						timeSinceLastGameStateUpdate,
-					);
+					// console.debug(
+					// 	'[game-events] [game-state] not asking for game state update, timeSinceLastGameStateUpdate',
+					// 	timeSinceLastGameStateUpdate,
+					// );
 				}
 			} else {
-				console.debug(
-					'[game-events] [game-state] not asking for game state update, timeSinceLastLog',
-					timeSinceLastLog,
-				);
+				// console.debug(
+				// 	'[game-events] [game-state] not asking for game state update, timeSinceLastLog',
+				// 	timeSinceLastLog,
+				// );
 			}
 		});
 	}
