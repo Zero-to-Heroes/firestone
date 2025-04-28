@@ -4,6 +4,7 @@ import { AttackOnBoard, DeckCard, DeckState, EntityGameState, PlayerGameState } 
 
 @Injectable()
 export class AttackOnBoardService {
+	/** @deprecated */
 	public computeAttackOnBoard(deck: DeckState, playerFromTracker: PlayerGameState): AttackOnBoard {
 		// console.debug(
 		// 	'[attack-on-board] computing attack on board',

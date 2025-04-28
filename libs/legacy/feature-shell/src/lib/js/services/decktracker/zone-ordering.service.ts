@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { DeckCard, DeckState, EntityGameState, PlayerGameState } from '@firestone/game-state';
 import { arraysEqual } from '@firestone/shared/framework/common';
 
 @Injectable()
 export class ZoneOrderingService {
-	public orderZones(deckState: DeckState, stateFromTracker): DeckState {
-		// return deckState;
+	// This could be completely removed by support the "POSITION_IN_ZONE" tag and tag changes
+	public orderZones(deckState: DeckState, stateFromTracker: PlayerGameState): DeckState {
 		if (!stateFromTracker) {
 			return deckState;
 		}
@@ -25,7 +25,7 @@ export class ZoneOrderingService {
 			: deckState;
 	}
 
-	private orderZone(zone: readonly DeckCard[], stateFromTracker: any[]): readonly DeckCard[] {
+	private orderZone(zone: readonly DeckCard[], stateFromTracker: readonly EntityGameState[]): readonly DeckCard[] {
 		if (zone.length !== stateFromTracker.length) {
 			return zone;
 		}

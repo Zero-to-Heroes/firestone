@@ -14,6 +14,7 @@ import {
 	ArchetypeCategorizationParser,
 } from '../event-parser/archetype-categorization-parser';
 import { AssignCardIdParser } from '../event-parser/assign-card-ids-parser';
+import { AttackOnBoardParser } from '../event-parser/attack-on-board-parser';
 import { AttackParser } from '../event-parser/attack-parser';
 import { BgsHeroSelectedCardParser } from '../event-parser/bgs-hero-selected-card-parser';
 import { BgsRewardDestroyedParser } from '../event-parser/bgs-reward-destroyed-parser';
@@ -314,6 +315,7 @@ export class GameStateParsersService {
 				new CthunRevealedParser(this.helper, this.allCards, this.i18n),
 				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			],
+			[GameEvent.TOTAL_ATTACK_ON_BOARD]: [new AttackOnBoardParser()],
 			[GameEvent.TOURIST_REVEALED]: [new TouristRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs)],
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],

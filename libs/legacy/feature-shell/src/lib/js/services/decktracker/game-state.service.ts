@@ -172,9 +172,12 @@ export class GameStateService {
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
 		try {
 			const stateUpdateEvents = eventQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
+			// Processing these should be super quick, as in most cases they won't lead to a state update
+			// const attackOnBoardEvents = eventQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
 			const eventsToProcess = [
 				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
+				// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 			].filter((event) => event);
 			if (stateUpdateEvents.length > 0) {
 				// console.debug('[game-state] processing state update events', stateUpdateEvents, eventsToProcess);
@@ -361,7 +364,7 @@ export class GameStateService {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
 
-		if (this.state) {
+		if (this.state && this.state !== previousState) {
 			const emittedEvent = {
 				event: {
 					name: gameEvent.type,
@@ -414,46 +417,23 @@ export class GameStateService {
 	// TODO: not a big fan of this. These methods should probably be called only once, on the appropriate action
 	// this feels lazy, and probably perf-hungry
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker: PlayerGameState): DeckState {
+		// Maybe only update this when we have NEW_TURN events?
 		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
-		// console.debug(
-		// 	'[game-state] updated deck with meta infos',
-		// 	stateWithMetaInfos === deck,
-		// 	stateWithMetaInfos,
-		// 	deck,
-		// 	gameState.currentTurn,
-		// );
-		// Add missing info like card names, if the card added doesn't come from a deck state
-		// (like with the Chess brawl)
-		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos, gameState.metadata);
-		// console.debug('[game-state] updated deck with missing card info', newState === stateWithMetaInfos, newState);
-		// const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
 		if (!playerFromTracker) {
-			// console.debug('[game-state] no player from tracker');
-			return newState;
+			return stateWithMetaInfos;
 		}
 
-		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState, playerFromTracker);
-		// console.debug(
-		// 	'[game-state] playerDeckWithZonesOrdered',
-		// 	newState === playerDeckWithZonesOrdered,
-		// 	newState.board,
-		// 	playerDeckWithZonesOrdered.board,
-		// 	newState.hand,
-		// 	playerDeckWithZonesOrdered.hand,
-		// );
+		// This could be completely removed by support the "POSITION_IN_ZONE" tag and tag changes
+		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(stateWithMetaInfos, playerFromTracker);
 
+		// Could also just support the DORMANT tag event
 		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
 			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
 			const dormantTag = hasTag(entity, GameTag.DORMANT);
 			return dormantTag === card.dormant ? card : card.update({ dormant: dormantTag });
 		});
-		// console.debug(
-		// 	'[game-state] updated board',
-		// 	arraysEqual(newBoard, playerDeckWithZonesOrdered.board),
-		// 	newBoard,
-		// 	playerDeckWithZonesOrdered.board,
-		// );
 
+		// Same here, just supporting the events should be enough?
 		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES)?.Value ?? 0;
 		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED)?.Value ?? 0;
 		const manaLeft = maxMana == null || manaSpent == null ? null : maxMana - manaSpent;
@@ -463,45 +443,33 @@ export class GameStateService {
 						manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
 				  })
 				: playerDeckWithZonesOrdered.hero;
-		// console.debug(
-		// 	'[game-state] updated hero',
-		// 	newHero === playerDeckWithZonesOrdered.hero,
-		// 	newHero,
-		// 	playerDeckWithZonesOrdered.hero,
-		// );
 
-		const cardsLeftInDeck = playerFromTracker.Deck ? playerFromTracker.Deck.length : null;
-		// console.debug(
-		// 	'[game-state] updated cardsLeftInDeck',
-		// 	cardsLeftInDeck === playerDeckWithZonesOrdered.cardsLeftInDeck,
-		// 	cardsLeftInDeck,
-		// 	playerDeckWithZonesOrdered.cardsLeftInDeck,
-		// );
-		const totalAttackOnBoard = this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker);
-		// console.debug(
-		// 	'[game-state] updated totalAttackOnBoard',
-		// 	totalAttackOnBoard,
-		// 	playerDeckWithZonesOrdered.totalAttackOnBoard,
-		// );
+		// Not sure this is needed, we can just use the info from the game state
+		const cardsLeftInDeck = playerFromTracker.Deck?.length;
 
+		// This could probably be moved on the C# side, updated at the end of each BLOCK and sent via a new event
+		// const totalAttackOnBoard = this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker);
+
+		// Overall this whole process could likely be completely removed
 		const hasChanged =
-			playerDeckWithZonesOrdered !== newState ||
+			playerDeckWithZonesOrdered !== stateWithMetaInfos ||
 			!arraysEqual(newBoard, playerDeckWithZonesOrdered.board) ||
 			newHero !== playerDeckWithZonesOrdered.hero ||
-			cardsLeftInDeck !== playerDeckWithZonesOrdered.cardsLeftInDeck ||
-			!(
-				totalAttackOnBoard.board === playerDeckWithZonesOrdered.totalAttackOnBoard.board &&
-				totalAttackOnBoard.hero === playerDeckWithZonesOrdered.totalAttackOnBoard.hero
-			);
+			cardsLeftInDeck !== playerDeckWithZonesOrdered.cardsLeftInDeck;
+		// ||
+		// !(
+		// 	totalAttackOnBoard.board === playerDeckWithZonesOrdered.totalAttackOnBoard.board &&
+		// 	totalAttackOnBoard.hero === playerDeckWithZonesOrdered.totalAttackOnBoard.hero
+		// );
 
 		return hasChanged
 			? playerDeckWithZonesOrdered.update({
 					board: newBoard,
 					hero: newHero,
 					cardsLeftInDeck: cardsLeftInDeck,
-					totalAttackOnBoard: totalAttackOnBoard,
+					// totalAttackOnBoard: totalAttackOnBoard,
 			  })
-			: newState;
+			: stateWithMetaInfos;
 	}
 
 	private async buildEventEmitters() {

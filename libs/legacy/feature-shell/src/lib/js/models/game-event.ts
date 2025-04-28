@@ -131,6 +131,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MINDRENDER_ILLUCIA_END = 'MINDRENDER_ILLUCIA_END';
 
 	public static readonly GAME_STATE_UPDATE = 'GAME_STATE_UPDATE';
+	public static readonly TOTAL_ATTACK_ON_BOARD = 'TOTAL_ATTACK_ON_BOARD';
 	public static readonly ENTITY_UPDATE = 'ENTITY_UPDATE';
 	public static readonly ENTITY_CHOSEN = 'ENTITY_CHOSEN';
 	public static readonly COPIED_FROM_ENTITY_ID = 'COPIED_FROM_ENTITY_ID';

@@ -1438,6 +1438,13 @@ export class GameEvents {
 					this.doEventDispatch(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
 				}
 				break;
+			case 'TOTAL_ATTACK_ON_BOARD':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.TOTAL_ATTACK_ON_BOARD, gameEvent, {
+						attackOnBoard: gameEvent.Value.AdditionalProps.AttackOnBoard,
+					}),
+				);
+				break;
 			case 'ENTITY_UPDATE':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent, {
