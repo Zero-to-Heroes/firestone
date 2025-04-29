@@ -139,14 +139,13 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			distinctUntilChanged(),
 		);
 
-		this.heroOverviews$ = combineLatest([
+		const heroOverwiewsWithoutAchievements$ = combineLatest([
 			tiers$,
-			this.achievements.groupedAchievements$$,
 			panel$,
 			availableRaces$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
-			this.mapData(([tiers, achievements, panel, availableRaces, showAchievements]) => {
+			this.mapData(([tiers, panel, availableRaces, showAchievements]) => {
 				if (!panel) {
 					console.log('no panel');
 					return [];
@@ -161,17 +160,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					return [];
 				}
 
-				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
-				const heroAchievements: readonly VisualAchievement[] =
-					heroesAchievementCategory?.retrieveAllAchievements() ?? [];
 				const heroOverviews: readonly InternalBgsHeroStat[] = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
 					const tier = tiers.find((t) => t.items.map((i) => i.baseCardId).includes(normalized));
 					const existingStat = tier?.items?.find((overview) => overview.id === normalized);
 					const statWithDefault = existingStat ?? ({ id: normalized } as BgsMetaHeroStatTierItem);
-					const achievementsForHero: readonly VisualAchievement[] = showAchievements
-						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
-						: [];
 					const tooltipPosition: TooltipPositionType = 'fixed-top-center';
 					const result: InternalBgsHeroStat = {
 						...statWithDefault,
@@ -180,7 +173,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						name: this.allCards.getCard(cardId)?.name,
 						baseCardId: normalized,
 						tier: tier?.id,
-						achievements: achievementsForHero,
+						achievements: [],
 						combatWinrate: statWithDefault.combatWinrate?.slice(0, 15) ?? [],
 						tooltipPosition: tooltipPosition,
 						tooltipClass: `hero-selection-overlay ${tooltipPosition}`,
@@ -197,6 +190,34 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				} else {
 					return heroOverviews;
 				}
+			}),
+		);
+		this.heroOverviews$ = combineLatest([
+			heroOverwiewsWithoutAchievements$,
+			this.achievements.groupedAchievements$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
+		]).pipe(
+			filter(([heroOverviews, achievements, showAchievements]) => !!heroOverviews?.length),
+			this.mapData(([heroOverviews, achievements, showAchievements]) => {
+				if (!achievements || !showAchievements) {
+					console.debug('[debug] no achievements yet', heroOverviews, achievements, showAchievements);
+					return heroOverviews;
+				}
+
+				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
+				const heroAchievements: readonly VisualAchievement[] =
+					heroesAchievementCategory?.retrieveAllAchievements() ?? [];
+				const result: readonly InternalBgsHeroStat[] = heroOverviews.map((hero) => {
+					const achievementsForHero: readonly VisualAchievement[] = showAchievements
+						? getAchievementsForHero(hero.baseCardId, heroAchievements, this.allCards)
+						: [];
+					const withAchievements: InternalBgsHeroStat = {
+						...hero,
+						achievements: achievementsForHero,
+					};
+					return withAchievements;
+				});
+				return result;
 			}),
 		);
 
