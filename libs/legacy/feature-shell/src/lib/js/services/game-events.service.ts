@@ -842,7 +842,12 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
-				this.doEventDispatch(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent, {
+						removedByCardId: gameEvent.Value.AdditionalProps?.RemovedByCardId,
+						removedByEntityId: gameEvent.Value.AdditionalProps?.RemovedByEntityId,
+					}),
+				);
 				break;
 			case 'CARD_REMOVED_FROM_BOARD':
 				this.doEventDispatch(
