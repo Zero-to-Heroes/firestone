@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -58,8 +58,8 @@ export class MinionSummonedFromHandParser implements EventParser {
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				putIntoPlay: isOnBoard ? true : null,
-				tags: gameEvent.additionalData.tags,
-			} as DeckCard) ||
+				tags: toTagsObject(gameEvent.additionalData.tags),
+			}) ||
 			DeckCard.create({
 				entityId: entityId,
 				cardId: cardId,
@@ -70,8 +70,8 @@ export class MinionSummonedFromHandParser implements EventParser {
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				putIntoPlay: isOnBoard ? true : null,
-				tags: gameEvent.additionalData.tags,
-			} as DeckCard);
+				tags: toTagsObject(gameEvent.additionalData.tags),
+			});
 		const newBoard: readonly DeckCard[] = isOnBoard
 			? this.helper.addSingleCardToZone(deck.board, cardWithZone)
 			: deck.board;

@@ -7,6 +7,7 @@ import {
 	ShortCard,
 	ShortCardWithTurn,
 	storeInformationOnCardPlayed,
+	toTagsObject,
 } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -161,7 +162,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
 			creatorEntityId: cardWithZone?.creatorEntityId ?? gameEvent.additionalData.creatorEntityId,
 			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags),
-			tags: gameEvent.additionalData.tags,
+			tags: toTagsObject(gameEvent.additionalData.tags),
 		});
 		// console.debug('cardWithInfo', cardWithInfo, gameEvent);
 		const cardToAdd =

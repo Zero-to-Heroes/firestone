@@ -1,4 +1,4 @@
-import { GameState } from '@firestone/game-state';
+import { GameState, toTagsObject } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -32,7 +32,7 @@ export class StarshipLaunchedParser implements EventParser {
 		}
 
 		const newCard = card.update({
-			tags: gameEvent.additionalData.tags,
+			tags: toTagsObject(gameEvent.additionalData.tags),
 		});
 
 		const newBoard = deck.board.map((c) => (c.entityId === entityId ? newCard : c));

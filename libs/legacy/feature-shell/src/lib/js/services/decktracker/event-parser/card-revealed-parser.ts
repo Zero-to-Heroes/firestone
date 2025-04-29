@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -72,6 +72,7 @@ export class CardRevealedParser implements EventParser {
 			temporaryCard: true,
 			lastAffectedByCardId: gameEvent.additionalData.creatorCardId || gameEvent.additionalData.originEntityCardId,
 			positionFromBottom: positionFromBottom,
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : {},
 		} as DeckCard);
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the

@@ -434,6 +434,7 @@ export class GameEvents {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
 						castWhenDrawn: gameEvent.Value.AdditionalProps.CastWhenDrawn,
+						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;
@@ -452,6 +453,7 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.DISCARD_CARD, gameEvent, {
 						originEntityId: gameEvent.Value.AdditionalProps?.OriginEntityId,
+						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;
@@ -580,6 +582,7 @@ export class GameEvents {
 						revealedFromBlock: gameEvent.Value.AdditionalProps.RevealedFromBlock,
 						indexInBlock: gameEvent.Value.AdditionalProps.IndexInBlock,
 						cost: gameEvent.Value.AdditionalProps.Cost,
+						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;
@@ -801,6 +804,7 @@ export class GameEvents {
 						cost: gameEvent.Value.AdditionalProps?.Cost,
 						drawnByCardId: gameEvent.Value.AdditionalProps?.DrawnByCardId,
 						drawnByEntityId: gameEvent.Value.AdditionalProps?.DrawnByEntityId,
+						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;
@@ -859,6 +863,7 @@ export class GameEvents {
 					? {
 							health: gameEvent.Value.AdditionalProps.Health,
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
 					  }
 					: null;
 				this.doEventDispatch(
@@ -899,6 +904,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.CARD_CHANGED_IN_HAND, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
+						tags: gameEvent.Value.AdditionalProps.Tags,
 					}),
 				);
 				break;

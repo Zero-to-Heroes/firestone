@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { publicCardCreators } from '../../hs-utils';
@@ -43,7 +43,8 @@ export class CardChangedInHandParser implements EventParser {
 							? cardData.rarity.toLowerCase()
 							: cardInHand.rarity,
 					lastAffectedByCardId: lastAffectedByCardId,
-			  } as DeckCard)
+					tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardInHand.tags,
+			  })
 			: null;
 		console.debug('[card-changed-in-hand] newCardInHand', newCardInHand);
 

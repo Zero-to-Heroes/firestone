@@ -20,7 +20,7 @@ import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-di
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { ProcessingQueue } from '../processing-queue.service';
-import { uuid } from '../utils';
+import { chunk, uuid } from '../utils';
 import { DeckCardService } from './deck-card.service';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
@@ -170,36 +170,44 @@ export class GameStateService {
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
-		try {
-			const stateUpdateEvents = eventQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
-			// const zonePositionChangedEvent = mergeZonePositionChangedEvents(
-			// 	eventQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
-			// );
-			// Processing these should be super quick, as in most cases they won't lead to a state update
-			// const attackOnBoardEvents = eventQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
-			const eventsToProcess = [
-				...eventQueue.filter(
-					(event) => event.type !== GameEvent.GAME_STATE_UPDATE,
-					// && event.type !== GameEvent.ZONE_POSITION_CHANGED,
-				),
-				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
-				// zonePositionChangedEvent,
-				// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
-			].filter((event) => event);
-			if (stateUpdateEvents.length > 0) {
-				// console.debug('[game-state] processing state update events', stateUpdateEvents, eventsToProcess);
-			}
-			const start = Date.now();
-			for (let i = 0; i < eventsToProcess.length; i++) {
-				if (eventsToProcess[i] instanceof GameEvent) {
-					await this.processEvent(eventsToProcess[i] as GameEvent);
-				} else {
-					await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
+		// So that ZONE_POSITION_CHANGED events are processed a bit more often
+		const chunks = chunk(eventQueue, 20);
+		for (const subQueue of chunks) {
+			try {
+				const stateUpdateEvents = subQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
+				// TODO: doesn't work right now:
+				// - The Coin is not correctly placed
+				// - Things move weirdly on the opponent's hand
+				const zonePositionChangedEvent = mergeZonePositionChangedEvents(
+					subQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
+				);
+				// Processing these should be super quick, as in most cases they won't lead to a state update
+				// const attackOnBoardEvents = subQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
+				const eventsToProcess = [
+					...subQueue.filter(
+						(event) =>
+							event.type !== GameEvent.GAME_STATE_UPDATE &&
+							event.type !== GameEvent.ZONE_POSITION_CHANGED,
+					),
+					stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
+					zonePositionChangedEvent,
+					// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
+				].filter((event) => event);
+				if (stateUpdateEvents.length > 0) {
+					// console.debug('[game-state] processing state update events', stateUpdateEvents, eventsToProcess);
 				}
+				const start = Date.now();
+				for (let i = 0; i < eventsToProcess.length; i++) {
+					if (eventsToProcess[i] instanceof GameEvent) {
+						await this.processEvent(eventsToProcess[i] as GameEvent);
+					} else {
+						await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
+					}
+				}
+				// console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
+			} catch (e) {
+				console.error('Exception while processing event', e);
 			}
-			// console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
-		} catch (e) {
-			console.error('Exception while processing event', e);
 		}
 		return [];
 	}
@@ -382,8 +390,12 @@ export class GameStateService {
 			console.debug(
 				'[game-state] emitting event',
 				emittedEvent.event.name,
-				this.state.playerDeck.hand.map((c) => c.cardName || c.cardId || c.entityId),
-				this.state.opponentDeck.hand.map((c) => c.cardName || c.cardId || c.entityId),
+				[...this.state.playerDeck.hand]
+					.sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION])
+					.map((c) => c.cardName || c.cardId || c.entityId),
+				[...this.state.opponentDeck.hand]
+					.sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION])
+					.map((c) => c.cardName || c.cardId || c.entityId),
 				this.state,
 				gameEvent,
 			);
@@ -499,23 +511,25 @@ export class GameStateService {
 	}
 }
 
-// const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent => {
-// 	if (events.length === 0) {
-// 		return null;
-// 	}
-// 	const ref = events[0];
-// 	const allZoneUpdates = events.flatMap((event) => event.additionalData.zoneUpdates);
-// 	const allEntities = allZoneUpdates.map((update) => update.EntityId);
-// 	const finalZoneUpdates = allEntities.map((entityId) => {
-// 		const updatesForEntity = allZoneUpdates.filter((update) => update.EntityId === entityId);
-// 		const lastUpdate = updatesForEntity[updatesForEntity.length - 1];
-// 		return lastUpdate;
-// 	});
-// 	const merged: GameEvent = Object.assign(new GameEvent(), ref, {
-// 		additionalData: {
-// 			zoneUpdates: finalZoneUpdates,
-// 		},
-// 	});
-// 	console.debug('[game-state] merging zone position changed events', merged, events);
-// 	return merged;
-// };
+const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent => {
+	if (events.length === 0) {
+		return null;
+	}
+	const ref = events[events.length - 1];
+	const allZoneUpdates = events.flatMap((event) => event.additionalData.zoneUpdates);
+	const uniqueEntities = allZoneUpdates
+		.map((update) => update.EntityId)
+		.filter((entityId, index, self) => self.indexOf(entityId) === index);
+	const finalZoneUpdates = uniqueEntities.map((entityId) => {
+		const updatesForEntity = allZoneUpdates.filter((update) => update.EntityId === entityId);
+		const lastUpdate = updatesForEntity[updatesForEntity.length - 1];
+		return lastUpdate;
+	});
+	const merged: GameEvent = Object.assign(new GameEvent(), ref, {
+		additionalData: {
+			zoneUpdates: finalZoneUpdates,
+		},
+	});
+	console.debug('[game-state] merging zone position changed events', merged, events);
+	return merged;
+};

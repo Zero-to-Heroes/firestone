@@ -60,12 +60,12 @@ export const getStarshipsLaunchedCardIds = (
 		.getAllCardsInDeckWithoutOptions()
 		.filter((c) => !c.stolenFromOpponent)
 		.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-		.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
+		.filter((c) => c.tags[GameTag.LAUNCHPAD] !== 1);
 	const starshipsStolen = otherDeckState
 		.getAllCardsInDeckWithoutOptions()
 		.filter((c) => c.stolenFromOpponent)
 		.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-		.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
+		.filter((c) => c.tags[GameTag.LAUNCHPAD] !== 1);
 	const cardIds = [...starshipsOwn, ...starshipsStolen].flatMap((c) => [
 		c.cardId,
 		...(c.storedInformation?.cards

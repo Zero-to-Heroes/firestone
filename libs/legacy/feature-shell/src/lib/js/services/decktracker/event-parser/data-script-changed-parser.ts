@@ -96,13 +96,11 @@ const updateDataScriptInfo = (
 
 	const { zone: zoneId, card } = found;
 	const newCard = card.update({
-		tags: [
-			...card.tags.filter(
-				(t) => t.Name !== GameTag.TAG_SCRIPT_DATA_NUM_1 && t.Name !== GameTag.TAG_SCRIPT_DATA_NUM_1,
-			),
-			{ Name: GameTag.TAG_SCRIPT_DATA_NUM_1, Value: dataNum1 },
-			{ Name: GameTag.TAG_SCRIPT_DATA_NUM_2, Value: dataNum2 },
-		],
+		tags: {
+			...card.tags,
+			[GameTag.TAG_SCRIPT_DATA_NUM_1]: dataNum1,
+			[GameTag.TAG_SCRIPT_DATA_NUM_2]: dataNum2,
+		},
 	});
 	switch (zoneId) {
 		case 'board':

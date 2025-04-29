@@ -1,5 +1,5 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -91,6 +91,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			creatorCardId: creatorCardId,
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			putIntoPlay: true,
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : {},
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
 		// In the case of cards played by effect, the card is first revealed, then played. So we need to replace the

@@ -6,6 +6,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -50,6 +51,9 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 		this.hand$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
 			this.mapData((gameState) => gameState?.opponentDeck?.hand),
+			this.mapData((hand) =>
+				[...hand].sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION]),
+			),
 			// Might be too expensive to use deepEqual here, as it will compare the whole hand
 			// distinctUntilChanged((a, b) => deepEq(a, b)),
 		);

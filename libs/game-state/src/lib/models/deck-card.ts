@@ -1,4 +1,4 @@
-import { ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import { GameTag, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardMetaInfo } from './card-meta-info';
 
@@ -66,7 +66,8 @@ export class DeckCard {
 	readonly cardCopyLink?: number;
 	readonly storedInformation?: StoredInformation | null;
 	readonly guessedInfo: GuessedInfo = {};
-	readonly tags: readonly { Name: number; Value: number }[] = [];
+	// readonly tags: readonly { Name: number; Value: number }[] = [];
+	readonly tags: { [Name in GameTag]?: number } = {};
 	readonly cardMatchCondition?: (card: ReferenceCard, cardInfos?: { cost?: number }) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {
@@ -113,3 +114,10 @@ export interface GuessedInfo {
 	readonly possibleCards?: readonly string[] | null;
 	readonly spellSchools?: readonly SpellSchool[] | null;
 }
+
+export const toTagsObject = (inputTags: readonly { Name: number; Value: number }[]): { [Name in GameTag]?: number } => {
+	return (inputTags ?? []).reduce((acc, tag) => {
+		acc[tag.Name] = tag.Value;
+		return acc;
+	}, {} as { [Name in GameTag]?: number });
+};

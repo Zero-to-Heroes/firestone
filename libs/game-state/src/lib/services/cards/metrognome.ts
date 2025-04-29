@@ -1,6 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { GameTag } from '@firestone-hs/reference-data';
-import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
@@ -14,7 +13,7 @@ export const Metrognome: Card & GeneratingCard = {
 		}
 
 		const { card } = found;
-		const cost = pickLast(card.tags.filter((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_2))?.Value;
+		const cost = card.tags[GameTag.TAG_SCRIPT_DATA_NUM_2];
 		return cost != null
 			? {
 					cost: cost,

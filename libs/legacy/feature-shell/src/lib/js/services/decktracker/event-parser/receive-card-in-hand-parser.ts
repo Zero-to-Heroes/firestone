@@ -1,5 +1,12 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { addGuessInfoToDrawnCard, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import {
+	addGuessInfoToDrawnCard,
+	DeckCard,
+	DeckState,
+	GameState,
+	getProcessedCard,
+	toTagsObject,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -152,6 +159,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				  });
 		const cardWithZone = cardWithKnownInfo.update({
 			zone: 'HAND',
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardWithKnownInfo.tags,
 		});
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithDefault',

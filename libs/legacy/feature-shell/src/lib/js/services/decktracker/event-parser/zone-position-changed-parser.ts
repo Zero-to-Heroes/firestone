@@ -1,4 +1,4 @@
-import { Zone } from '@firestone-hs/reference-data';
+import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { DeckCard, GameState } from '@firestone/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -14,36 +14,54 @@ export class ZonePositionChangedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const isPlayer = controllerId === localPlayer.PlayerId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const [, , localPlayer] = gameEvent.parse();
 
-		const zoneUpdate = gameEvent.additionalData.zoneUpdates[0];
-		const newHand =
-			zoneUpdate.Zone === Zone.HAND ? updateZone(deck.hand, entityId, zoneUpdate.NewPosition) : deck.hand;
-		const newBoard =
-			zoneUpdate.Zone === Zone.PLAY ? updateZone(deck.board, entityId, zoneUpdate.NewPosition) : deck.board;
-		console.debug(
-			'[debug] ZonePositionChangedParser.parse',
-			Zone[zoneUpdate.Zone],
-			entityId,
-			zoneUpdate.NewPosition,
-			newHand,
-			deck.hand,
-			newBoard,
-			deck.board,
-		);
-		if (newHand === deck.hand && newBoard === deck.board) {
+		const zoneUpdates = gameEvent.additionalData.zoneUpdates;
+		let playerDeck = currentState.playerDeck;
+		let opponentDeck = currentState.opponentDeck;
+		for (const zoneUpdate of zoneUpdates) {
+			const controllerId = zoneUpdate.ControllerId;
+			const entityId = zoneUpdate.EntityId;
+			const isPlayer = controllerId === localPlayer.PlayerId;
+			const deck = isPlayer ? playerDeck : opponentDeck;
+			const newHand =
+				zoneUpdate.Zone === Zone.HAND ? updateZone(deck.hand, entityId, zoneUpdate.NewPosition) : deck.hand;
+			const newBoard =
+				zoneUpdate.Zone === Zone.PLAY ? updateZone(deck.board, entityId, zoneUpdate.NewPosition) : deck.board;
+			console.debug(
+				'[debug] ZonePositionChangedParser.parse',
+				Zone[zoneUpdate.Zone],
+				entityId,
+				zoneUpdate.NewPosition,
+				newHand,
+				deck.hand,
+				newBoard,
+				deck.board,
+			);
+			if (newHand === deck.hand && newBoard === deck.board) {
+				continue;
+			}
+			playerDeck = isPlayer
+				? playerDeck.update({
+						hand: newHand,
+						board: newBoard,
+				  })
+				: playerDeck;
+			opponentDeck = isPlayer
+				? opponentDeck
+				: opponentDeck.update({
+						hand: newHand,
+						board: newBoard,
+				  });
+		}
+
+		if (playerDeck === currentState.playerDeck && opponentDeck === currentState.opponentDeck) {
 			return currentState;
 		}
 
-		const newPlayerDeck = deck.update({
-			hand: newHand,
-			board: newBoard,
-		});
-
-		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+		return currentState.update({
+			playerDeck: playerDeck,
+			opponentDeck: opponentDeck,
 		});
 	}
 
@@ -58,7 +76,8 @@ const updateZone = (zone: readonly DeckCard[], entityId: number, newPosition: nu
 		return zone;
 	}
 
-	const newZone = zone.filter((card) => card.entityId !== entityId);
-	newZone.splice(newPosition, 0, card);
+	const newZone = zone.map((c) =>
+		c.entityId === entityId ? c.update({ tags: { ...c.tags, [GameTag.ZONE_POSITION]: newPosition } }) : c,
+	);
 	return newZone;
 };

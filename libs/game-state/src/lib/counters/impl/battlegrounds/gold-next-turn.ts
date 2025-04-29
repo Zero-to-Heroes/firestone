@@ -162,7 +162,7 @@ const getGoldForPlayerEnchant = (enchantment: { cardId: string; tags?: readonly 
 };
 
 const getGoldForMinion = (
-	enchantment: { cardId: string; tags?: readonly TagGameState[] },
+	enchantment: { cardId: string },
 	playerDeck: DeckState,
 	allCards: CardsFacadeService,
 ): number => {

@@ -1,5 +1,5 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -75,6 +75,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 			putIntoPlay: true,
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card.tags,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
