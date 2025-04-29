@@ -1,9 +1,11 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const CARD_IS_NOT_DESTROYED = [CardIds.Ursol_EDR_259];
 export class CardRemovedFromHandParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
@@ -38,11 +40,14 @@ export class CardRemovedFromHandParser implements EventParser {
 			// for now let's give it a try and document it when that happens
 			true,
 		);
+		const isDestroyed = !CARD_IS_NOT_DESTROYED.includes(gameEvent.additionalData.removedByCardId as CardIds);
 		const newPlayerDeck = deck.update({
 			hand: newHand,
 			otherZone: newOtherZone,
 			deck: newDeck,
-			destroyedCardsInDeck: [...deck.destroyedCardsInDeck, { cardId, entityId }],
+			destroyedCardsInDeck: isDestroyed
+				? [...deck.destroyedCardsInDeck, { cardId, entityId }]
+				: deck.destroyedCardsInDeck,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
