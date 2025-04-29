@@ -90,11 +90,11 @@ export class ProcessingQueue<T> {
 					this.eventQueue.push(...batch);
 				}
 
-				console.debug(
-					'[ProcessingQueue] Processing queue',
-					this.eventQueue.length + this.pendingQueue.length,
-					this.queueName,
-				);
+				// console.debug(
+				// 	'[ProcessingQueue] Processing queue',
+				// 	this.eventQueue.length + this.pendingQueue.length,
+				// 	this.queueName,
+				// );
 
 				// Process the current queue
 				const queueAfterProcess = await this.processingFunction(this.eventQueue.toArray());
