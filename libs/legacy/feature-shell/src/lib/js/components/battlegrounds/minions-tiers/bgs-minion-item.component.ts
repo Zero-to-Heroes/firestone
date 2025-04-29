@@ -154,13 +154,13 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					fadeHigherTierCards,
 					tavernTier,
 				]) => {
-					console.debug(
-						'[bgs-minion-item] building minion',
-						card,
-						highlightedMinions,
-						highlightedTribes,
-						highlightedMechanics,
-					);
+					// console.debug(
+					// 	'[bgs-minion-item] building minion',
+					// 	card,
+					// 	highlightedMinions,
+					// 	highlightedTribes,
+					// 	highlightedMechanics,
+					// );
 					const mechanicsHighlights: readonly MinionHighlight[] = MECHANICS_IN_GAME.filter(
 						(m) => m.canBeHighlighted !== false,
 					).map((m) => {

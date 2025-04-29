@@ -68,7 +68,7 @@ export class DevService {
 
 		window['fakeGame'] = async () => {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
-			const logsLocation = `G:\\Source\\firestone\\firestone\\test-tools\\game.log`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\game.log`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			const logLines = logContents.split('\n');
 			console.log('logLines', logLines?.length);
@@ -83,21 +83,6 @@ export class DevService {
 				}
 			}
 			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);
-		};
-
-		window['loadEvents'] = async (
-			fileName,
-			awaitEvents = false,
-			deckstring?: string,
-			timeBetweenEvents?: number,
-		) => {
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${fileName}.json`;
-			let logContents = await this.ow.readTextFile(logsLocation);
-			let events = JSON.parse(logContents);
-			await this.loadEvents(events, awaitEvents, deckstring, timeBetweenEvents);
-			logContents = null;
-			events = null;
-			console.debug('processing done');
 		};
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
 			console.debug('starting new deck cycle', logName, repeats, deckString);
