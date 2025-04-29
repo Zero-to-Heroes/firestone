@@ -477,6 +477,6 @@ export const darkGift = (input: SelectorInput): boolean => {
 // 	CardIds.TreacherousTormentor_EDR_102,
 // 	CardIds.CreatureOfMadness_EDR_105,
 // 	CardIds.Darkride,
-// 	TempCardIds.Cremate,
+// 	CardIds.Cremate,
 
 // )

@@ -18,7 +18,6 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { DeckState } from '../models/deck-state';
 
 const IMBUED_HERO_POWERS = [
@@ -130,25 +129,25 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
-		case TempCardIds.SmokeBomb:
+		case CardIds.SmokeBomb_FIR_920:
 			return (c) =>
 				canBeDiscoveredByClass(c, options.currentClass) &&
 				c.type?.toUpperCase() === CardType[CardType.MINION] &&
 				(c.mechanics?.includes(GameTag[GameTag.COMBO]) ||
 					c.mechanics?.includes(GameTag[GameTag.BATTLECRY]) ||
 					c.mechanics?.includes(GameTag[GameTag.STEALTH]));
-		case TempCardIds.ShadowflameSuffusion:
+		case CardIds.ShadowflameSuffusion_FIR_939:
 			return (c) =>
 				c.type?.toUpperCase() === CardType[CardType.MINION] &&
 				c.classes?.includes(CardClass[CardClass.WARRIOR]);
-		case TempCardIds.Scorchreaver:
+		case CardIds.Scorchreaver_FIR_952:
 			return (c) =>
 				c.spellSchool === SpellSchool[SpellSchool.FEL] && c.type?.toUpperCase() === CardType[CardType.SPELL];
-		case TempCardIds.ShadowflameStalker:
+		case CardIds.ShadowflameStalker_FIR_924:
 			return (c) => hasCorrectTribe(c, Race.DEMON) && canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.EmberscarredWhelp:
+		case CardIds.EmberscarredWhelp_FIR_927:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && c.cost === 5;
-		case TempCardIds.InfernoHerald:
+		case CardIds.InfernoHerald_FIR_913:
 			return (c) => hasCorrectTribe(c, Race.ELEMENTAL);
 		case CardIds.ToysnatchingGeist_MIS_006:
 		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
