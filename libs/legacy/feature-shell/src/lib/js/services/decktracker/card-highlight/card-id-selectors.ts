@@ -409,6 +409,8 @@ export const cardIdSelector = (
 			return and(inDeck, spell);
 		case CardIds.BigDreams:
 			return and(side(inputSide), or(inDeck, inHand), beast);
+		case CardIds.Bioluminescence:
+			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.Birdwatching_VAC_408:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BitterColdTavernBrawl:
@@ -2277,6 +2279,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(4));
 		case CardIds.RoyalGreatswordTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, legendary);
+		case CardIds.RuneDagger:
+			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.RuneforgingCore:
 		case CardIds.Runeforging_LEG_RLK_715:
 			return and(side(inputSide), inDeck, weapon);
@@ -2350,6 +2354,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.SelectiveBreederCore:
 			return and(side(inputSide), inDeck, beast);
+		case CardIds.SelflessSidekick:
+			return and(side(inputSide), inDeck, weapon);
 		case CardIds.ServiceBell:
 			return and(side(inputSide), inDeck, not(neutral));
 		case CardIds.Shadehound:
