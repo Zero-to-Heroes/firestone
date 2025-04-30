@@ -55,7 +55,7 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const value = this.player.value(gameState)!;
+		const value = this[side].value(gameState)!;
 		return this.i18n.translateString(`counters.spell.${side}`, { value: value });
 	}
 }
