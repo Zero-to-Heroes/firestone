@@ -93,6 +93,8 @@ export class SecretConfigService {
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
 				);
+			case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
+				return [CardIds.IceBlock, CardIds.IceBlockLegacy].includes(secretCardId as CardIds);
 			default:
 				return true;
 		}
