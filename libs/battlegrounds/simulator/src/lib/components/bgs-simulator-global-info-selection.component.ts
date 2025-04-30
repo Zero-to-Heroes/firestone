@@ -160,6 +160,22 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 			</fs-numeric-input-with-arrows>
 			<fs-numeric-input-with-arrows
 				class="input"
+				[label]="'battlegrounds.sim.tavern-spell-health-buff' | fsTranslate"
+				[value]="tavernSpellHealthBuff"
+				[minValue]="0"
+				(fsModelUpdate)="tavernSpellHealthBuff = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
+				[label]="'battlegrounds.sim.tavern-spell-attack-buff' | fsTranslate"
+				[value]="tavernSpellAttackBuff"
+				[minValue]="0"
+				(fsModelUpdate)="tavernSpellAttackBuff = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
 				[label]="'battlegrounds.sim.battlecries-triggered' | fsTranslate"
 				[helpTooltip]="'battlegrounds.sim.battlecries-triggered-tooltip' | fsTranslate"
 				[value]="battlecriesTriggeredThisGame"
@@ -205,6 +221,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.beetleHealthBuff = value?.BeetleHealthBuff ?? 0;
 		this.elementalHealthBuff = value?.ElementalHealthBuff ?? 0;
 		this.elementalAttackBuff = value?.ElementalAttackBuff ?? 0;
+		this.tavernSpellHealthBuff = value?.TavernSpellHealthBuff ?? 0;
+		this.tavernSpellAttackBuff = value?.TavernSpellAttackBuff ?? 0;
 		this.battlecriesTriggeredThisGame = value?.BattlecriesTriggeredThisGame ?? 0;
 		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -228,6 +246,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	beetleHealthBuff: number;
 	elementalHealthBuff: number;
 	elementalAttackBuff: number;
+	tavernSpellHealthBuff: number;
+	tavernSpellAttackBuff: number;
 	battlecriesTriggeredThisGame: number;
 	friendlyMinionsDeadLastCombat: number;
 
@@ -309,6 +329,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			BeetleHealthBuff: this.beetleHealthBuff,
 			ElementalHealthBuff: this.elementalHealthBuff,
 			ElementalAttackBuff: this.elementalAttackBuff,
+			TavernSpellHealthBuff: this.tavernSpellHealthBuff,
+			TavernSpellAttackBuff: this.tavernSpellAttackBuff,
 			BattlecriesTriggeredThisGame: this.battlecriesTriggeredThisGame,
 			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
 		};

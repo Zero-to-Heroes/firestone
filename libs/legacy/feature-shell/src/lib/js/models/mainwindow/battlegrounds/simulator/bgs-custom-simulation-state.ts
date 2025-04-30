@@ -57,6 +57,8 @@ export class BgsCustomSimulationState {
 							BeetleHealthBuff: 0,
 							ElementalAttackBuff: 0,
 							ElementalHealthBuff: 0,
+							TavernSpellHealthBuff: 0,
+							TavernSpellAttackBuff: 0,
 							BattlecriesTriggeredThisGame: 0,
 							SanlaynScribesDeadThisGame: 0,
 							FriendlyMinionsDeadLastCombat: 0,
