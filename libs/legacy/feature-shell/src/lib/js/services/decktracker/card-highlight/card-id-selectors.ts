@@ -423,6 +423,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.BlackrockNRoll:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.BlackscaleBrute:
+			return and(side(inputSide), or(inHand, inDeck), weapon);
 		case CardIds.BlackwingCorruptor:
 		case CardIds.BlackwingCorruptor_WON_329:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
@@ -673,6 +675,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, or(dragon, pirate, mech));
 		case CardIds.Colossus_SC_758:
 			return and(side(inputSide), or(inHand, inDeck), protoss, spell);
+		case CardIds.CommanderSivara_TSC_087:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ConchsCall:
 			return and(side(inputSide), inDeck, or(naga, spell));
 		case CardIds.Concierge_VAC_463:
@@ -1714,6 +1718,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), spell, frost),
 				and(side(inputSide), or(inHand, inDeck), spell, arcane),
 			);
+		case CardIds.LadyStheno_TSC_218:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.LadyVashj_VashjPrimeToken:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Lamplighter_VAC_442:
@@ -2085,6 +2091,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.PressurePoints_GDB_881:
 			return and(side(inputSide), or(inHand, inDeck), combo);
+		case CardIds.PriestessValishj:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.PrimalDungeoneer:
 			return and(side(inputSide), inDeck, or(spell, elemental));
 		case CardIds.PrimordialProtector_BAR_042:
@@ -2136,6 +2144,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, mech);
 		case CardIds.RaDen:
 			return tooltip(and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen))));
+		case CardIds.RadianceOfAzshara_TSC_635:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spell, fire),
+				and(side(inputSide), or(inHand, inDeck), spell, nature),
+				and(side(inputSide), or(inHand, inDeck), spell, frost),
+			);
 		case CardIds.RagingFelscreamerCore:
 		case CardIds.RagingFelscreamer_BT_416:
 			return and(side(inputSide), or(inDeck, inHand), demon);
@@ -2543,6 +2557,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SpitefulSummoner:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.SpitelashSiren:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spell),
+				and(side(inputSide), or(inHand, inDeck), naga),
+			);
 		case CardIds.SplittingAxe:
 			return and(side(inputSide), or(inDeck, inHand), totem);
 		case CardIds.SpontaneousCombustion_GDB_456:
@@ -3060,6 +3079,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellDamage);
 		case CardIds.WorkshopJanitor_TOY_891:
 			return and(side(inputSide), or(inDeck, inHand), locationExtended);
+		case CardIds.WrathspineEnchanter:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), spell, fire),
+				and(side(inputSide), or(inDeck, inHand), spell, nature),
+				and(side(inputSide), or(inDeck, inHand), spell, frost),
+			);
 		case CardIds.WreckemAndDeckem_TOY_603:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.WretchedExile:
