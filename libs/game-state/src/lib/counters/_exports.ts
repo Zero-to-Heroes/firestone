@@ -13,6 +13,7 @@ import { BgsMajordomoCounterDefinitionV2 } from './impl/battlegrounds/bgs-majord
 import { BgsSouthseaStrongarmCounterDefinitionV2 } from './impl/battlegrounds/bgs-southsea-strongarm';
 import { BgsTuskarrRaiderCounterDefinitionV2 } from './impl/battlegrounds/bgs-tuskarr-raider';
 import { ElementalPowersBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-powers-buff';
+import { ElementalTavernBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-tavern-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
@@ -164,6 +165,7 @@ export const getAllCounters: (
 	new BgsLordOfGainsCounterDefinitionV2(i18n, allCards),
 	new ElementalPowersBuffCounterDefinitionV2(i18n),
 	new TavernSpellsBuffCounterDefinitionV2(i18n),
+	new ElementalTavernBuffCounterDefinitionV2(i18n),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -250,4 +252,5 @@ export type CounterType =
 	| 'ballerBuff'
 	| 'elementalPowersBuff'
 	| 'tavernSpellsBuff'
+	| 'elementalTavernBuff'
 	| 'bgsMajordomo';
