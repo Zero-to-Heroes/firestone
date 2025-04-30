@@ -55,31 +55,31 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 	public async deleteDeck(deckstring: string) {
 		const existingDecks = (await this.decks$$.getValueWithInit()) || [];
 		const existingPersonalDeck = existingDecks.filter((d) => d.deckstring).find((d) => d.deckstring === deckstring);
+		console.debug('[deck-delete] existingPersonalDeck', existingPersonalDeck);
 
 		// If the deck has only been created via the deckbuilder and has not been played yet,
 		// we simply remove it
 		// That way, we can easily add it again
-		if (existingPersonalDeck) {
-			const currentPrefs = await this.prefs.getPreferences();
-			const versionLinks: readonly ConstructedDeckVersions[] = currentPrefs.constructedDeckVersions;
-			const linkedDecks = versionLinks.filter((link) =>
-				link.versions.map((v) => v.deckstring).includes(deckstring),
-			);
-			const allDecksToDelete = [
-				...(linkedDecks?.flatMap((link) => link.versions.map((v) => v.deckstring)) ?? []),
-				deckstring,
-			];
-			const newDecks = existingDecks.filter((d) => !allDecksToDelete.includes(d.deckstring));
-			this.decks$$.next(newDecks);
+		// if (existingPersonalDeck) {
+		const currentPrefs = await this.prefs.getPreferences();
+		const versionLinks: readonly ConstructedDeckVersions[] = currentPrefs.constructedDeckVersions;
+		const linkedDecks = versionLinks.filter((link) => link.versions.map((v) => v.deckstring).includes(deckstring));
+		const allDecksToDelete = [
+			...(linkedDecks?.flatMap((link) => link.versions.map((v) => v.deckstring)) ?? []),
+			deckstring,
+		];
+		console.debug('[deck-delete] allDecksToDelete', allDecksToDelete, linkedDecks);
+		const newDecks = existingDecks.filter((d) => !allDecksToDelete.includes(d.deckstring));
+		this.decks$$.next(newDecks);
 
-			for (const deck of allDecksToDelete) {
-				const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[deck] ?? [];
-				console.log('[deck-delete] deletedDeckDates', deck, deletedDeckDates);
-				const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
-				console.log('[deck-delete] newDeleteDates', newDeleteDates);
-				await this.prefs.setDeckDeleteDates(deck, newDeleteDates);
-			}
+		for (const deck of allDecksToDelete) {
+			const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[deck] ?? [];
+			console.log('[deck-delete] deletedDeckDates', deck, deletedDeckDates);
+			const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
+			console.log('[deck-delete] newDeleteDates', newDeleteDates);
+			await this.prefs.setDeckDeleteDates(deck, newDeleteDates);
 		}
+		// }
 
 		// const newDecks = existingDecks.filter((deck) => deck.deckstring !== deckstring);
 	}
