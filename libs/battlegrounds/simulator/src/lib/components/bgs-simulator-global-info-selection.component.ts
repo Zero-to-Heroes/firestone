@@ -65,6 +65,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 			</fs-numeric-input-with-arrows>
 			<fs-numeric-input-with-arrows
 				class="input"
+				[label]="'battlegrounds.sim.spells-cast' | fsTranslate"
+				[helpTooltip]="'battlegrounds.sim.spells-cast-tooltip' | fsTranslate"
+				[value]="spellsCastThisGame"
+				[minValue]="0"
+				(fsModelUpdate)="spellsCastThisGame = $event"
+			>
+			</fs-numeric-input-with-arrows>
+			<fs-numeric-input-with-arrows
+				class="input"
 				[label]="'battlegrounds.sim.tavern-spells-cast' | fsTranslate"
 				[helpTooltip]="'battlegrounds.sim.tavern-spells-cast-tooltip' | fsTranslate"
 				[value]="tavernSpellsCastThisGame"
@@ -186,6 +195,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.bloodGemAttackBonus = value?.BloodGemAttackBonus ?? 0;
 		this.bloodGemHealthBonus = value?.BloodGemHealthBonus ?? 0;
 		this.tavernSpellsCastThisGame = value?.TavernSpellsCastThisGame ?? 0;
+		this.spellsCastThisGame = value?.SpellsCastThisGame ?? 0;
 		this.piratesPlayedThisGame = value?.PiratesPlayedThisGame ?? 0;
 		this.piratesSummonedThisGame = value?.PiratesSummonedThisGame ?? 0;
 		this.beastsSummonedThisGame = value?.BeastsSummonedThisGame ?? 0;
@@ -208,6 +218,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	bloodGemAttackBonus: number;
 	bloodGemHealthBonus: number;
 	tavernSpellsCastThisGame: number;
+	spellsCastThisGame: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
 	beastsSummonedThisGame: number;
@@ -288,6 +299,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			BloodGemAttackBonus: this.bloodGemAttackBonus,
 			BloodGemHealthBonus: this.bloodGemHealthBonus,
 			TavernSpellsCastThisGame: this.tavernSpellsCastThisGame,
+			SpellsCastThisGame: this.spellsCastThisGame,
 			PiratesPlayedThisGame: this.piratesPlayedThisGame,
 			PiratesSummonedThisGame: this.piratesSummonedThisGame,
 			BeastsSummonedThisGame: this.beastsSummonedThisGame,

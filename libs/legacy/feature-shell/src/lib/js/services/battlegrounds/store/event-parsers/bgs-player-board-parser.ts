@@ -507,6 +507,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			globalInfo: {
 				EternalKnightsDeadThisGame: opponentBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 				TavernSpellsCastThisGame: opponentBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
+				SpellsCastThisGame: opponentBoard.globalInfo?.SpellsCastThisGame ?? 0,
 				PiratesPlayedThisGame: opponentBoard.globalInfo?.PiratesPlayedThisGame ?? 0,
 				PiratesSummonedThisGame: opponentBoard.globalInfo?.PiratesSummonedThisGame ?? 0,
 				BeastsSummonedThisGame: opponentBoard.globalInfo?.BeastsSummonedThisGame ?? 0,
@@ -575,6 +576,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 					TavernSpellsCastThisGame: playerBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
+					SpellsCastThisGame: playerBoard.globalInfo?.SpellsCastThisGame ?? 0,
 					PiratesPlayedThisGame: playerBoard.globalInfo?.PiratesPlayedThisGame ?? 0,
 					PiratesSummonedThisGame: playerBoard.globalInfo?.PiratesSummonedThisGame ?? 0,
 					BeastsSummonedThisGame: playerBoard.globalInfo?.BeastsSummonedThisGame ?? 0,
