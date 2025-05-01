@@ -14,3 +14,7 @@ FileSizeLimit.Int=-1
 ```
 
 -   重新启动 Hearthstone
+
+### 如果这不起作用
+
+您还有其他可以与《炉石传说》互动的程序吗？

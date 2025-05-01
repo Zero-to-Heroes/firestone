@@ -14,3 +14,7 @@ FileSizeLimit.Int=-1
 ```
 
 -   Restart Hearthstone
+
+### If this doesn't work
+
+Do you have another program that interacts with Hearthstone?
