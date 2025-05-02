@@ -1,5 +1,6 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
-import { DeckCard, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { Mutable } from '@firestone/shared/framework/common';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -17,17 +18,21 @@ export class ZonePositionChangedParser implements EventParser {
 		const [, , localPlayer] = gameEvent.parse();
 
 		const zoneUpdates = gameEvent.additionalData.zoneUpdates;
-		let playerDeck = currentState.playerDeck;
-		let opponentDeck = currentState.opponentDeck;
+		const playerDeck = currentState.playerDeck;
+		const opponentDeck = currentState.opponentDeck;
 		for (const zoneUpdate of zoneUpdates) {
 			const controllerId = zoneUpdate.ControllerId;
 			const entityId = zoneUpdate.EntityId;
 			const isPlayer = controllerId === localPlayer.PlayerId;
 			const deck = isPlayer ? playerDeck : opponentDeck;
 			const newHand =
-				zoneUpdate.Zone === Zone.HAND ? updateZone(deck.hand, entityId, zoneUpdate.NewPosition) : deck.hand;
+				zoneUpdate.Zone === Zone.HAND
+					? updateZoneUnsafe(deck.hand, entityId, zoneUpdate.NewPosition)
+					: deck.hand;
 			const newBoard =
-				zoneUpdate.Zone === Zone.PLAY ? updateZone(deck.board, entityId, zoneUpdate.NewPosition) : deck.board;
+				zoneUpdate.Zone === Zone.PLAY
+					? updateZoneUnsafe(deck.board, entityId, zoneUpdate.NewPosition)
+					: deck.board;
 			console.debug(
 				'[debug] ZonePositionChangedParser.parse',
 				Zone[zoneUpdate.Zone],
@@ -38,30 +43,26 @@ export class ZonePositionChangedParser implements EventParser {
 				newBoard,
 				deck.board,
 			);
-			if (newHand === deck.hand && newBoard === deck.board) {
-				continue;
+			// Modify in place
+			if (isPlayer) {
+				(playerDeck as Mutable<DeckState>).hand = newHand;
+				(playerDeck as Mutable<DeckState>).board = newBoard;
 			}
-			playerDeck = isPlayer
-				? playerDeck.update({
-						hand: newHand,
-						board: newBoard,
-				  })
-				: playerDeck;
-			opponentDeck = isPlayer
-				? opponentDeck
-				: opponentDeck.update({
-						hand: newHand,
-						board: newBoard,
-				  });
-		}
-
-		if (playerDeck === currentState.playerDeck && opponentDeck === currentState.opponentDeck) {
-			return currentState;
+			if (!isPlayer) {
+				(opponentDeck as Mutable<DeckState>).hand = newHand;
+				(opponentDeck as Mutable<DeckState>).board = newBoard;
+			}
 		}
 
 		return currentState.update({
-			playerDeck: playerDeck,
-			opponentDeck: opponentDeck,
+			playerDeck: playerDeck.update({
+				hand: playerDeck.hand,
+				board: playerDeck.board,
+			}),
+			opponentDeck: opponentDeck.update({
+				hand: opponentDeck.hand,
+				board: opponentDeck.board,
+			}),
 		});
 	}
 
@@ -70,14 +71,13 @@ export class ZonePositionChangedParser implements EventParser {
 	}
 }
 
-const updateZone = (zone: readonly DeckCard[], entityId: number, newPosition: number): readonly DeckCard[] => {
+const updateZoneUnsafe = (zone: readonly DeckCard[], entityId: number, newPosition: number): readonly DeckCard[] => {
 	const card = zone.find((card) => card.entityId === entityId);
 	if (!card) {
 		return zone;
 	}
 
-	const newZone = zone.map((c) =>
-		c.entityId === entityId ? c.update({ tags: { ...c.tags, [GameTag.ZONE_POSITION]: newPosition } }) : c,
-	);
-	return newZone;
+	// Modify in place
+	card.tags[GameTag.ZONE_POSITION] = newPosition;
+	return zone;
 };
