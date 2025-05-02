@@ -453,7 +453,7 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.DISCARD_CARD, gameEvent, {
 						originEntityId: gameEvent.Value.AdditionalProps?.OriginEntityId,
-						tags: gameEvent.Value.AdditionalProps.Tags,
+						tags: gameEvent.Value.AdditionalProps?.Tags,
 					}),
 				);
 				break;
