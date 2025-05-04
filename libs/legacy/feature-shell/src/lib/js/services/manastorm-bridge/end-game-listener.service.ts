@@ -80,26 +80,23 @@ export class EndGameListenerService {
 				const uniqueId$ = this.gameUniqueId.uniqueId$$.asObservable().pipe(startWith(null), shareReplay(1));
 				// Why use this instead of the deckstring from the game state?
 				// How to make sure the "new" version doesn't override the old one once the game is over?
-				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.fullGameState$$
-					.asObservable()
-					.pipe(
-						// Using GAME_END here means there is a race, and can cause the deck to not be properly assigned
-						filter(
-							(info) =>
-								info?.event?.name === GameEvent.GAME_SETTINGS ||
-								info?.event?.name === GameEvent.WHIZBANG_DECK_ID,
-						),
-						tap((info) => console.debug('[manastorm-bridge] playerDeck debug', info.event.name, info)),
-						filter((info) => !!info.state?.playerDeck?.deckstring),
-						map(({ state }) => ({
-							name: state.playerDeck.name,
-							deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
-						})),
-						startWith(null),
-						distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
-						tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
-						shareReplay(1),
-					);
+				const playerDeck$: Observable<{ deckstring: string; name: string }> = this.gameState.gameState$$.pipe(
+					// Using GAME_END here means there is a race, and can cause the deck to not be properly assigned
+					// filter(
+					// 	(info) =>
+					// 		info?.event?.name === GameEvent.GAME_SETTINGS ||
+					// 		info?.event?.name === GameEvent.WHIZBANG_DECK_ID,
+					// ),
+					filter((state) => !!state?.playerDeck?.deckstring),
+					map((state) => ({
+						name: state.playerDeck.name,
+						deckstring: sanitizeDeckstring(state.playerDeck.deckstring, this.allCards),
+					})),
+					startWith(null),
+					distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.name === b?.name),
+					tap((info) => console.log('[manastorm-bridge] playerDeck', info?.deckstring, info?.name)),
+					shareReplay(1),
+				);
 
 				const arenaInfo$ = this.arenaInfo.arenaInfo$$.asObservable();
 

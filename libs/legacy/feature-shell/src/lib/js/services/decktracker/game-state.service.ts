@@ -8,7 +8,7 @@ import {
 	HeroCard,
 	PlayerGameState,
 } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
@@ -47,7 +47,7 @@ export class GameStateService {
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
 	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
-	private deckEventBus = new BehaviorSubject<any>(null);
+	private deckEventBus = new BehaviorSubject<GameState | null>(null);
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
 	private eventEmitters = [];
 
@@ -175,9 +175,8 @@ export class GameStateService {
 		for (const subQueue of chunks) {
 			try {
 				const stateUpdateEvents = subQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
-				// TODO: doesn't work right now:
-				// - The Coin is not correctly placed
-				// - Things move weirdly on the opponent's hand
+				const stateUpdateEvent =
+					stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null;
 				const zonePositionChangedEvent = mergeZonePositionChangedEvents(
 					subQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
 				);
@@ -189,20 +188,84 @@ export class GameStateService {
 							event.type !== GameEvent.GAME_STATE_UPDATE &&
 							event.type !== GameEvent.ZONE_POSITION_CHANGED,
 					),
-					stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
+					// stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 					zonePositionChangedEvent,
 					// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 				].filter((event) => event);
-				if (stateUpdateEvents.length > 0) {
-					// console.debug('[game-state] processing state update events', stateUpdateEvents, eventsToProcess);
-				}
 				const start = Date.now();
+				let currentState = this.state;
+				const prefs = await this.prefs.getPreferences();
 				for (let i = 0; i < eventsToProcess.length; i++) {
 					if (eventsToProcess[i] instanceof GameEvent) {
-						await this.processEvent(eventsToProcess[i] as GameEvent);
+						currentState = await this.processEvent(currentState, eventsToProcess[i] as GameEvent, prefs);
 					} else {
-						await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
+						currentState = await this.processNonMatchEvent(
+							currentState,
+							eventsToProcess[i] as GameStateEvent,
+						);
 					}
+				}
+
+				// TODO: completely remove this step
+				if (currentState && (stateUpdateEvent != null || currentState !== this.state)) {
+					const start = Date.now();
+					// const previousState = initialState;
+					// console.debug('[game-state] state post-processing');
+					const postProcessedState = this.statePostProcessService.postProcess(currentState);
+					// Add information that is not linked to events, like the number of turns the
+					// card has been present in the zone
+					const updatedPlayerDeck = this.updateDeck(
+						postProcessedState.playerDeck,
+						postProcessedState,
+						(stateUpdateEvent || ({} as any)).Player,
+					);
+					// console.debug(
+					// 	'[game-state] updated player deck',
+					// 	postProcessedState.playerDeck === updatedPlayerDeck,
+					// 	updatedPlayerDeck,
+					// 	postProcessedState.playerDeck,
+					// );
+
+					const udpatedOpponentDeck = this.updateDeck(
+						postProcessedState.opponentDeck,
+						postProcessedState,
+						(stateUpdateEvent || ({} as any)).Opponent,
+					);
+					// console.debug(
+					// 	'[game-state] updated opponent deck',
+					// 	postProcessedState.opponentDeck === udpatedOpponentDeck,
+					// 	udpatedOpponentDeck,
+					// 	postProcessedState.opponentDeck,
+					// );
+
+					const hasChanged =
+						postProcessedState !== currentState ||
+						updatedPlayerDeck !== postProcessedState.playerDeck ||
+						udpatedOpponentDeck !== postProcessedState.opponentDeck;
+					currentState = hasChanged
+						? postProcessedState.update({
+								playerDeck: updatedPlayerDeck,
+								opponentDeck: udpatedOpponentDeck,
+						  })
+						: postProcessedState;
+					const elapsed = Date.now() - start;
+					if (elapsed > 1000) {
+						console.warn('[game-state] post-processing took too long', elapsed);
+					}
+					// console.debug('[game-state] updated state', initialState === previousState, initialState);
+				}
+
+				if (currentState && currentState !== this.state) {
+					console.debug('[game-state] state has changed', currentState);
+					this.state = currentState;
+					this.eventEmitters.forEach((emitter) => emitter(currentState));
+				} else {
+					console.debug(
+						'[game-state] state is unchanged, not emitting event',
+						// gameEvent.type,
+						// gameEvent.cardId,
+						// gameEvent.entityId,
+					);
 				}
 				// console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
 			} catch (e) {
@@ -212,19 +275,19 @@ export class GameStateService {
 		return [];
 	}
 
-	private async processNonMatchEvent(event: GameStateEvent) {
+	private async processNonMatchEvent(currentState: GameState, event: GameStateEvent): Promise<GameState> {
 		if (event.type === 'TOGGLE_SECRET_HELPER') {
-			this.state = this.state.update({
-				opponentDeck: this.state.opponentDeck.update({
-					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
+			currentState = currentState.update({
+				opponentDeck: currentState.opponentDeck.update({
+					secretHelperActive: !currentState.opponentDeck.secretHelperActive,
 				} as DeckState),
 			} as GameState);
 		} else if (event.type === 'CLOSE_TRACKER') {
-			this.state = this.state.update({
+			currentState = currentState.update({
 				playerTrackerClosedByUser: true,
 			});
 		} else if (event.type === 'CLOSE_OPPONENT_TRACKER') {
-			this.state = this.state.update({
+			currentState = currentState.update({
 				opponentTrackerClosedByUser: true,
 			});
 		}
@@ -232,8 +295,8 @@ export class GameStateService {
 		const parsersForEvent = this.eventParsers[event.type] ?? [];
 		for (const parser of parsersForEvent) {
 			try {
-				if (parser.applies(event, this.state)) {
-					this.state = await parser.parse(this.state, event);
+				if (parser.applies(event, currentState)) {
+					currentState = await parser.parse(currentState, event);
 				}
 				// if (!this.state) {
 				// 	console.error('[game-state] parser returned null state for non-match event', parser.event());
@@ -249,32 +312,21 @@ export class GameStateService {
 				);
 			}
 		}
-
-		const emittedEvent = {
-			event: {
-				name: event.type,
-			},
-			state: this.state,
-		};
-		this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
-		if (this.state) {
-			// console.debug('[game-state] emitting non-game event', emittedEvent.event.name, emittedEvent.state);
-		}
+		return currentState;
 	}
 
-	private async processEvent(gameEvent: GameEvent) {
+	private async processEvent(currentState: GameState, gameEvent: GameEvent, prefs: Preferences): Promise<GameState> {
 		const start = Date.now();
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
-		const previousState = this.state;
 		if (gameEvent.type === GameEvent.GAME_START) {
-			this.state = this.state?.update({
+			currentState = currentState?.update({
 				playerTrackerClosedByUser: false,
 				opponentTrackerClosedByUser: false,
 			});
 		} else if (gameEvent.type === GameEvent.SPECTATING) {
-			this.state = this.state?.update({
+			currentState = currentState?.update({
 				// We can't "unspectate" a game
-				spectating: this.state.spectating || gameEvent.additionalData.spectating,
+				spectating: currentState.spectating || gameEvent.additionalData.spectating,
 			} as GameState);
 		} else if (
 			gameEvent.type === GameEvent.SECRET_WILL_TRIGGER ||
@@ -297,17 +349,16 @@ export class GameStateService {
 			];
 		}
 
-		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, {
+		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
 			secretWillTrigger: this.secretWillTrigger,
 			minionsWillDie: this.minionsWillDie,
 		});
-		const prefs = await this.prefs.getPreferences();
 		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
 		for (const parser of parsersForEvent) {
 			try {
-				if (parser.applies(gameEvent, this.state, prefs)) {
+				if (parser.applies(gameEvent, currentState, prefs)) {
 					const start = Date.now();
-					this.state = await parser.parse(this.state, gameEvent, {
+					currentState = await parser.parse(currentState, gameEvent, {
 						secretWillTrigger: this.secretWillTrigger,
 						minionsWillDie: this.minionsWillDie,
 					});
@@ -318,94 +369,14 @@ export class GameStateService {
 					// console.debug(
 					// 	'[game-state] parsed event',
 					// 	gameEvent.type,
-					// 	this.state === stateBeforeParser,
-					// 	this.state,
+					// 	initialState === stateBeforeParser,
+					// 	initialState,
 					// 	parser,
 					// );
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
-		}
-		try {
-			if (this.state && (gameEvent.gameState != null || this.state !== previousState)) {
-				const start = Date.now();
-				// const previousState = this.state;
-				// console.debug('[game-state] state post-processing');
-				const postProcessedState = this.statePostProcessService.postProcess(this.state);
-				// Add information that is not linked to events, like the number of turns the
-				// card has been present in the zone
-				const updatedPlayerDeck = this.updateDeck(
-					postProcessedState.playerDeck,
-					postProcessedState,
-					(gameEvent.gameState || ({} as any)).Player,
-				);
-				// console.debug(
-				// 	'[game-state] updated player deck',
-				// 	postProcessedState.playerDeck === updatedPlayerDeck,
-				// 	updatedPlayerDeck,
-				// 	postProcessedState.playerDeck,
-				// );
-
-				const udpatedOpponentDeck = this.updateDeck(
-					postProcessedState.opponentDeck,
-					postProcessedState,
-					(gameEvent.gameState || ({} as any)).Opponent,
-				);
-				// console.debug(
-				// 	'[game-state] updated opponent deck',
-				// 	postProcessedState.opponentDeck === udpatedOpponentDeck,
-				// 	udpatedOpponentDeck,
-				// 	postProcessedState.opponentDeck,
-				// );
-
-				const hasChanged =
-					postProcessedState !== this.state ||
-					updatedPlayerDeck !== postProcessedState.playerDeck ||
-					udpatedOpponentDeck !== postProcessedState.opponentDeck;
-				this.state = hasChanged
-					? postProcessedState.update({
-							playerDeck: updatedPlayerDeck,
-							opponentDeck: udpatedOpponentDeck,
-					  })
-					: postProcessedState;
-				const elapsed = Date.now() - start;
-				if (elapsed > 1000) {
-					console.warn('[game-state] post-processing took too long', elapsed, gameEvent.type);
-				}
-				// console.debug('[game-state] updated state', this.state === previousState, this.state);
-			}
-		} catch (e) {
-			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
-		}
-
-		if (this.state && this.state !== previousState) {
-			const emittedEvent = {
-				event: {
-					name: gameEvent.type,
-				},
-				state: this.state,
-			};
-			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
-			console.debug(
-				'[game-state] emitting event',
-				emittedEvent.event.name,
-				[...this.state.playerDeck.hand]
-					.sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION])
-					.map((c) => c.cardName || c.cardId || c.entityId),
-				[...this.state.opponentDeck.hand]
-					.sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION])
-					.map((c) => c.cardName || c.cardId || c.entityId),
-				this.state,
-				gameEvent,
-			);
-		} else {
-			console.debug(
-				'[game-state] state is unchanged, not emitting event',
-				gameEvent.type,
-				gameEvent.cardId,
-				gameEvent.entityId,
-			);
 		}
 
 		// We have processed the event for which the secret would trigger
@@ -429,6 +400,9 @@ export class GameStateService {
 				(minion) => !gEvent.additionalData.deadMinions.map((m) => m.EntityId).includes(minion.entityId),
 			);
 		}
+
+		console.debug('[game-state] processed event', gameEvent.type, currentState, gameEvent);
+		return currentState;
 	}
 
 	// TODO: this should move elsewhere

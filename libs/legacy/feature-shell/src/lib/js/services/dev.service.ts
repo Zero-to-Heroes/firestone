@@ -2,22 +2,16 @@ import { Injectable } from '@angular/core';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
-import { MemoryInspectionService, SceneService } from '@firestone/memory';
+import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { sortByProperties } from '@services/utils';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
-import { AchievementsLiveProgressTrackingService } from './achievement/achievements-live-progress-tracking.service';
-import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
-import { RawAchievementsLoaderService } from './achievement/data/raw-achievements-loader.service';
 import { CardNotificationsService } from './collection/card-notifications.service';
-import { SetsService } from './collection/sets-service.service';
-import { DeckParserService } from './decktracker/deck-parser.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
-import { Events } from './events.service';
+import { GameEventsEmitterService } from './game-events-emitter.service';
 import { GameEvents } from './game-events.service';
-import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 // const HEARTHSTONE_GAME_ID = 9898;
 
 // declare var overwolf: any;
@@ -25,18 +19,11 @@ import { MainWindowStoreService } from './mainwindow/store/main-window-store.ser
 @Injectable()
 export class DevService {
 	constructor(
-		private events: Events,
+		private events: GameEventsEmitterService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
-		private deckParser: DeckParserService,
-		private cards: SetsService,
 		private gameState: GameStateService,
 		private helper: DeckManipulationHelper,
-		private store: MainWindowStoreService,
-		private challengeBuilder: ChallengeBuilderService,
-		private achievementLoader: RawAchievementsLoaderService,
-		private achievementsMonitor: AchievementsLiveProgressTrackingService,
-		private memoryService: MemoryInspectionService,
 		private handler: DeckHandlerService,
 		private allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
@@ -67,8 +54,10 @@ export class DevService {
 		};
 
 		window['fakeGame'] = async () => {
+			const events = [];
+			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\game.log`;
+			const logsLocation = `G:\\Source\\firestone\\firestone\\test-tools\\game.log`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			const logLines = logContents.split('\n');
 			console.log('logLines', logLines?.length);
@@ -82,6 +71,8 @@ export class DevService {
 					await sleep(500);
 				}
 			}
+			sub.unsubscribe();
+			console.log('game-events', events.join(','));
 			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);
 		};
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {

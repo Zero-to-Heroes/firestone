@@ -60,7 +60,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private gameNativeState: BehaviorSubject<GameNativeState>;
 	private prefs: BehaviorSubject<Preferences>;
-	private deckStore: BehaviorSubject<{ state: GameState }>;
+	private deckStore: BehaviorSubject<GameState>;
 	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
 	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
 	private mercenariesOutOfCombatStore: BehaviorSubject<MercenariesOutOfCombatState>;
@@ -183,7 +183,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
 		return this.deckStore.pipe(
 			filter((gameState) => !!gameState),
-			map((gameState) => selectors.map((selector) => selector(gameState.state))),
+			map((gameState) => selectors.map((selector) => selector(gameState))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }>;

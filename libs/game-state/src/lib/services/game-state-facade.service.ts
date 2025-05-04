@@ -11,22 +11,19 @@ import { GameState } from '../models/game-state';
 
 @Injectable()
 export class GameStateFacadeService extends AbstractFacadeService<GameStateFacadeService> {
-	public fullGameState$$: BehaviorSubject<{ event: { name: string }; state: GameState } | null>;
 	public gameState$$: BehaviorSubject<GameState | null>;
 
 	private ow: OverwolfService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'GameStateFacadeService', () => !!this.fullGameState$$);
+		super(windowManager, 'GameStateFacadeService', () => !!this.gameState$$);
 	}
 
 	protected override assignSubjects() {
-		this.fullGameState$$ = this.mainInstance.fullGameState$$;
 		this.gameState$$ = this.mainInstance.gameState$$;
 	}
 
 	protected async init() {
-		this.fullGameState$$ = new BehaviorSubject<{ event: { name: string }; state: GameState } | null>(null);
 		this.gameState$$ = new BehaviorSubject<GameState | null>(null);
 		this.ow = AppInjector.get(OverwolfService);
 
@@ -35,8 +32,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		}
 
 		this.ow.getMainWindow().deckEventBus.subscribe(async (event) => {
-			this.fullGameState$$.next(event);
-			this.gameState$$.next(event?.state);
+			this.gameState$$.next(event);
 		});
 	}
 }
