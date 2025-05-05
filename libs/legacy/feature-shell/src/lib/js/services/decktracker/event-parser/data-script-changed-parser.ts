@@ -1,5 +1,5 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameState } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -38,16 +38,20 @@ export class DataScriptChangedParser implements EventParser {
 			);
 
 			const cardInHand = updatedDeck.hand.find((c) => c.entityId === entityId);
-			const cardWithAdditionalAttributes = !cardInHand
-				? null
-				: addAdditionalAttribuesInHand(cardInHand, updatedDeck, gameEvent, this.allCards);
-			const previousHand = updatedDeck.hand;
-			const newHand: readonly DeckCard[] = !cardInHand
-				? previousHand
-				: this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
+			if (!cardInHand) {
+				continue;
+			}
+
+			const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
+				cardInHand,
+				updatedDeck,
+				gameEvent,
+				this.allCards,
+			);
+			const newHand = updatedDeck.hand;
 
 			const newAbyssalCurseHighestValue =
-				cardWithAdditionalAttributes?.cardId === CardIds.SirakessCultist_AbyssalCurseToken
+				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
 					? Math.max(
 							updatedDeck.abyssalCurseHighestValue ?? 0,
 							// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
@@ -71,11 +75,9 @@ export class DataScriptChangedParser implements EventParser {
 		return currentState.update({
 			playerDeck: playerDeck.update({
 				hand: playerDeck.hand,
-				board: playerDeck.board,
 			}),
 			opponentDeck: opponentDeck.update({
 				hand: opponentDeck.hand,
-				board: opponentDeck.board,
 			}),
 		});
 	}

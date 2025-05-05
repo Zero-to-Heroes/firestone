@@ -1524,6 +1524,15 @@ export class GameEvents {
 				);
 				break;
 
+			case 'DATA_SCRIPT_CHANGED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
+						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
+						updates: gameEvent.Value.AdditionalProps.Updates,
+					}),
+				);
+				break;
 			case 'ZONE_POSITION_CHANGED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {
@@ -1559,27 +1568,6 @@ export class GameEvents {
 						defenderEntityId: gameEvent.Value.AdditionalProps.DefenderEntityId,
 						defenderControllerId: gameEvent.Value.AdditionalProps.DefenderControllerId,
 						defenderTags: gameEvent.Value.AdditionalProps.DefenderTags,
-					}),
-				);
-				break;
-			case 'DATA_SCRIPT_CHANGED':
-				this.doEventDispatch(
-					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
-						initialData1: gameEvent.Value.AdditionalProps.InitialData1,
-						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
-						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
-						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
-						updates: [
-							{
-								controllerId: gameEvent.Value.ControllerId,
-								entityId: gameEvent.Value.EntityId,
-								cardId: gameEvent.Value.CardId,
-								initialData1: gameEvent.Value.AdditionalProps.InitialData1,
-								initialData2: gameEvent.Value.AdditionalProps.InitialData2,
-								dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
-								dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
-							},
-						],
 					}),
 				);
 				break;
