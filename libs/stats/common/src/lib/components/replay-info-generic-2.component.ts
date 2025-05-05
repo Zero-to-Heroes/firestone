@@ -238,7 +238,10 @@ export const extractTime = (durationInSeconds: number): { min: string; sec: stri
 };
 export const extractTimeWithHours = (durationInSeconds: number): { min: string; sec: string; hrs: string } => {
 	const hours = `${Math.floor(durationInSeconds / 3600)}`;
-	const minutes = `${Math.floor((durationInSeconds % 3600) / 60)}`;
+
+	const minutes = hours === '0' 
+		? `${Math.floor((durationInSeconds % 3600) / 60)}` 
+		: `${Math.floor((durationInSeconds % 3600) / 60)}`.padStart(2, '0');
 	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
 	return {
 		min: minutes,
