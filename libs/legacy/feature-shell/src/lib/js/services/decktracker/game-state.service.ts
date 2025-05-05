@@ -501,7 +501,6 @@ const mergeDataScriptChangedEvents = (events: readonly GameEvent[]): GameEvent =
 			updates: allDataScriptUpdates,
 		},
 	});
-	console.debug('[game-state] merging data script changed events', merged, events);
 	return merged;
 };
 
@@ -524,6 +523,5 @@ const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent
 			zoneUpdates: finalZoneUpdates,
 		},
 	});
-	console.debug('[game-state] merging zone position changed events', merged, events);
 	return merged;
 };

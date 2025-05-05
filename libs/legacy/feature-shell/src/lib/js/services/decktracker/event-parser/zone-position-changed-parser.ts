@@ -38,16 +38,6 @@ export class ZonePositionChangedParser implements EventParser {
 				zoneUpdate.Zone === Zone.PLAY
 					? updateZoneUnsafe(deck.board, entityId, zoneUpdate.NewPosition)
 					: deck.board;
-			console.debug(
-				'[debug] ZonePositionChangedParser.parse',
-				Zone[zoneUpdate.Zone],
-				entityId,
-				zoneUpdate.NewPosition,
-				newHand,
-				deck.hand,
-				newBoard,
-				deck.board,
-			);
 			if (zoneUpdate.Zone === Zone.HAND && isPlayer) {
 				playerHandDirty = true;
 			}
