@@ -52,6 +52,7 @@ import {
 	frost,
 	generateCorpse,
 	generatesPlague,
+	givesArmor,
 	givesHeroAttack,
 	hasMultipleCopies,
 	hasSpellSchool,
@@ -1422,6 +1423,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.HolyGlowsticks_MIS_709:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
+		case CardIds.Hookfist3000:
+		case CardIds.Hookfist3000_CORE_NX2_028:
+			return and(side(inputSide), or(inDeck, inHand), givesHeroAttack);
 		case CardIds.HopeOfQuelthalas:
 			return and(side(inputSide), or(inDeck, inHand, inPlay), minion);
 		case CardIds.HornOfWrathion:
@@ -1824,6 +1828,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ManaGiant:
 			return and(side(inputSide), or(inDeck, inHand, inOther), notInInitialDeck);
+		case CardIds.ManAtArms:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.MantleShaper_DEEP_004:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ManufacturingError_TOY_371:
@@ -2117,6 +2123,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.ProvingGrounds:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.Pufferfist:
+			return and(side(inputSide), or(inHand, inDeck), givesHeroAttack);
 		case CardIds.PuppetmasterDorian_MIS_026:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Psychopomp:
@@ -2445,6 +2453,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ShieldBattery_SC_759:
 			return and(side(inputSide), or(inHand, inDeck), protoss, spell);
+		case CardIds.ShieldSlamCore:
+		case CardIds.ShieldSlamLegacy:
+		case CardIds.ShieldSlamVanilla:
+			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.ShirvallahTheTiger:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ShoplifterGoldbeard_TOY_511:
