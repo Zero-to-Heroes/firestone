@@ -171,7 +171,7 @@ export class GameStateService {
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
 		// So that ZONE_POSITION_CHANGED events are processed a bit more often
-		const chunks = chunk(eventQueue, 20);
+		const chunks = chunk(eventQueue, 50);
 		for (const subQueue of chunks) {
 			try {
 				const stateUpdateEvents = subQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
