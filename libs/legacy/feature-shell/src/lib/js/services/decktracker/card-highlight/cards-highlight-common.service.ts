@@ -11,6 +11,7 @@ import { cardsMapping, hasGetRelatedCards } from './global/_registers';
 import {
 	and,
 	damage,
+	excavate,
 	highlightConditions,
 	imbue,
 	inDeck,
@@ -319,14 +320,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		inputSide: 'player' | 'opponent' | 'single',
 		context?: 'discover',
 	): Selector {
-		// console.debug('[cards-highlight] building cardId selector', cardId, card, inputSide);
-		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
-		if (!!selector) {
-			return selector;
-		}
-
 		// Mechanic-specific highlights
 		const selectors = [];
+		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
+		if (!!selector) {
+			selectors.push(selector);
+			// return selector;
+		}
+
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.MODULAR])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), minion, mech));
 		}
@@ -354,6 +355,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
+		}
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.EXCAVATE]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.EXCAVATE])
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), excavate));
 		}
 		if (
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
