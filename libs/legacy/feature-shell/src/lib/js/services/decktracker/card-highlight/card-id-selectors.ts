@@ -1753,6 +1753,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion),
 				and(side(inputSide), or(inHand, inDeck), spell),
 			);
+		case CardIds.Lightray:
+			return and(side(inputSide), or(inHand, inDeck), paladin);
 		case CardIds.Lightspeed_GDB_457:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.LilypadLurker:
@@ -2994,6 +2996,8 @@ export const cardIdSelector = (
 					and(side(inputSide), or(inDeck, inHand), draenei, or(battlecry, deathrattle)),
 				)(input);
 			};
+		case CardIds.VeteranWarmedic:
+			return and(side(inputSide), or(inHand, inDeck), holy, spell);
 		case CardIds.VengefulSpirit_BAR_328:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.Vexallus:
