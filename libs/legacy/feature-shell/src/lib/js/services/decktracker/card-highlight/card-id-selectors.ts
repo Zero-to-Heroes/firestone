@@ -866,6 +866,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inHand, minion, taunt);
 		case CardIds.DevoutBlessingsTavernBrawlToken:
 			return and(side(inputSide), inGraveyard, minion, deathrattle, minionsDeadSinceLastTurn);
+		case CardIds.DevoutDungeoneer:
+			return highlightConditions(and(side(inputSide), inDeck, holy, spell), and(side(inputSide), inDeck, spell));
 		case CardIds.LesserDiamondSpellstone:
 		case CardIds.LesserDiamondSpellstone_DiamondSpellstoneToken:
 		case CardIds.LesserDiamondSpellstone_GreaterDiamondSpellstoneToken:
@@ -3017,6 +3019,8 @@ export const cardIdSelector = (
 		case CardIds.Voidcaller:
 		case CardIds.VoidcallerCore:
 			return and(side(inputSide), or(inDeck, inHand), demon);
+		case CardIds.VoidFlayer:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.VolumeUp:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.WailingVapor:
