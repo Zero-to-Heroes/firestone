@@ -1,4 +1,4 @@
-import { Zone } from '@firestone-hs/reference-data';
+import { CardIds, Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -20,6 +20,9 @@ export class LinkedEntityParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		if (cardId === CardIds.DarkGiftToken_EDR_102t) {
+			return currentState;
+		}
 
 		const linkedEntityControllerId = gameEvent.additionalData.linkedEntityControllerId;
 
