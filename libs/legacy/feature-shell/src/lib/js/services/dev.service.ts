@@ -57,7 +57,7 @@ export class DevService {
 			const events = [];
 			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
-			const logsLocation = `G:\\Source\\firestone\\firestone\\test-tools\\game.log`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\game.log`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			const logLines = logContents.split('\n');
 			console.log('logLines', logLines?.length);

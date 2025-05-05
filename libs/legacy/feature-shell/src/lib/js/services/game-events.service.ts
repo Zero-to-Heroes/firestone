@@ -1569,6 +1569,17 @@ export class GameEvents {
 						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
 						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
 						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
+						updates: [
+							{
+								controllerId: gameEvent.Value.ControllerId,
+								entityId: gameEvent.Value.EntityId,
+								cardId: gameEvent.Value.CardId,
+								initialData1: gameEvent.Value.AdditionalProps.InitialData1,
+								initialData2: gameEvent.Value.AdditionalProps.InitialData2,
+								dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
+								dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
+							},
+						],
 					}),
 				);
 				break;

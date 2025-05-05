@@ -20,6 +20,11 @@ export class ZonePositionChangedParser implements EventParser {
 		const zoneUpdates = gameEvent.additionalData.zoneUpdates;
 		const playerDeck = currentState.playerDeck;
 		const opponentDeck = currentState.opponentDeck;
+		let playerHandDirty = false;
+		let opponentHandDirty = false;
+		let playerBoardDirty = false;
+		let opponentBoardDirty = false;
+
 		for (const zoneUpdate of zoneUpdates) {
 			const controllerId = zoneUpdate.ControllerId;
 			const entityId = zoneUpdate.EntityId;
@@ -43,6 +48,18 @@ export class ZonePositionChangedParser implements EventParser {
 				newBoard,
 				deck.board,
 			);
+			if (zoneUpdate.Zone === Zone.HAND && isPlayer) {
+				playerHandDirty = true;
+			}
+			if (zoneUpdate.Zone === Zone.HAND && !isPlayer) {
+				opponentHandDirty = true;
+			}
+			if (zoneUpdate.Zone === Zone.PLAY && isPlayer) {
+				playerBoardDirty = true;
+			}
+			if (zoneUpdate.Zone === Zone.PLAY && !isPlayer) {
+				opponentBoardDirty = true;
+			}
 			// Modify in place
 			if (isPlayer) {
 				(playerDeck as Mutable<DeckState>).hand = newHand;
@@ -55,14 +72,20 @@ export class ZonePositionChangedParser implements EventParser {
 		}
 
 		return currentState.update({
-			playerDeck: playerDeck.update({
-				hand: playerDeck.hand,
-				board: playerDeck.board,
-			}),
-			opponentDeck: opponentDeck.update({
-				hand: opponentDeck.hand,
-				board: opponentDeck.board,
-			}),
+			playerDeck:
+				playerHandDirty || playerBoardDirty
+					? playerDeck.update({
+							hand: playerDeck.hand,
+							board: playerDeck.board,
+					  })
+					: playerDeck,
+			opponentDeck:
+				opponentBoardDirty || opponentHandDirty
+					? opponentDeck.update({
+							hand: opponentDeck.hand,
+							board: opponentDeck.board,
+					  })
+					: opponentDeck,
 		});
 	}
 

@@ -1,5 +1,6 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -14,36 +15,38 @@ export class DataScriptChangedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, , localPlayer] = gameEvent.parse();
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const updatedDeck = updateDataScriptInfo(
-			deck,
-			cardId,
-			entityId,
-			gameEvent.additionalData.dataNum1,
-			gameEvent.additionalData.dataNum2,
-			this.helper,
-		);
+		const updates = gameEvent.additionalData.updates;
+		const playerDeck = currentState.playerDeck;
+		const opponentDeck = currentState.opponentDeck;
 
-		const cardInHand = updatedDeck.hand.find((c) => c.entityId === entityId);
-		// if (!cardInHand) {
-		// 	// console.warn('[data-script-changed] no card', gameEvent, deck.hand);
-		// 	return currentState;
-		// }
+		for (const update of updates) {
+			const controllerId = update.ControllerId;
+			const entityId = update.EntityId;
+			const cardId = update.CardId;
 
-		const cardWithAdditionalAttributes = !cardInHand
-			? null
-			: addAdditionalAttribuesInHand(cardInHand, updatedDeck, gameEvent, this.allCards);
-		const previousHand = updatedDeck.hand;
-		const newHand: readonly DeckCard[] = !cardInHand
-			? previousHand
-			: this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
+			const isPlayer = controllerId === localPlayer.PlayerId;
+			const deck = isPlayer ? playerDeck : opponentDeck;
+			const updatedDeck = updateDataScriptInfoUnsafe(
+				deck,
+				cardId,
+				entityId,
+				gameEvent.additionalData.dataNum1,
+				gameEvent.additionalData.dataNum2,
+				this.helper,
+			);
 
-		const newPlayerDeck = Object.assign(new DeckState(), updatedDeck, {
-			hand: newHand,
-			abyssalCurseHighestValue:
+			const cardInHand = updatedDeck.hand.find((c) => c.entityId === entityId);
+			const cardWithAdditionalAttributes = !cardInHand
+				? null
+				: addAdditionalAttribuesInHand(cardInHand, updatedDeck, gameEvent, this.allCards);
+			const previousHand = updatedDeck.hand;
+			const newHand: readonly DeckCard[] = !cardInHand
+				? previousHand
+				: this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
+
+			const newAbyssalCurseHighestValue =
 				cardWithAdditionalAttributes?.cardId === CardIds.SirakessCultist_AbyssalCurseToken
 					? Math.max(
 							updatedDeck.abyssalCurseHighestValue ?? 0,
@@ -53,10 +56,27 @@ export class DataScriptChangedParser implements EventParser {
 								? gameEvent.additionalData.dataNum1
 								: cardWithAdditionalAttributes.mainAttributeChange + 1,
 					  )
-					: updatedDeck.abyssalCurseHighestValue,
-		} as DeckState);
-		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+					: updatedDeck.abyssalCurseHighestValue;
+			// Modify in place
+			if (isPlayer) {
+				(playerDeck as Mutable<DeckState>).hand = newHand;
+				(playerDeck as Mutable<DeckState>).abyssalCurseHighestValue = newAbyssalCurseHighestValue;
+			}
+			if (!isPlayer) {
+				(opponentDeck as Mutable<DeckState>).hand = newHand;
+				(opponentDeck as Mutable<DeckState>).abyssalCurseHighestValue = newAbyssalCurseHighestValue;
+			}
+		}
+
+		return currentState.update({
+			playerDeck: playerDeck.update({
+				hand: playerDeck.hand,
+				board: playerDeck.board,
+			}),
+			opponentDeck: opponentDeck.update({
+				hand: opponentDeck.hand,
+				board: opponentDeck.board,
+			}),
 		});
 	}
 
@@ -65,7 +85,7 @@ export class DataScriptChangedParser implements EventParser {
 	}
 }
 
-const updateDataScriptInfo = (
+const updateDataScriptInfoUnsafe = (
 	deck: DeckState,
 	cardId: string,
 	entityId: number,
@@ -87,6 +107,7 @@ const updateDataScriptInfo = (
 					{ Name: GameTag.TAG_SCRIPT_DATA_NUM_2, Value: dataNum2 },
 				],
 			};
+			console.debug('updating deck enchantment', newEnchantment);
 			return deck.update({
 				enchantments: [...deck.enchantments.filter((e) => e.entityId !== entityId), newEnchantment],
 			});
@@ -95,27 +116,30 @@ const updateDataScriptInfo = (
 	}
 
 	const { zone: zoneId, card } = found;
-	const newCard = card.update({
-		tags: {
-			...card.tags,
-			[GameTag.TAG_SCRIPT_DATA_NUM_1]: dataNum1,
-			[GameTag.TAG_SCRIPT_DATA_NUM_2]: dataNum2,
-		},
-	});
-	switch (zoneId) {
-		case 'board':
-			const newBoard = helper.replaceCardInZone(deck.board, newCard);
-			return deck.update({ board: newBoard });
-		case 'hand':
-			const newHand = helper.replaceCardInZone(deck.hand, newCard);
-			return deck.update({ hand: newHand });
-		case 'deck':
-			const newDeck = helper.replaceCardInZone(deck.deck, newCard);
-			return deck.update({ deck: newDeck });
-		case 'other':
-			const newOther = helper.replaceCardInZone(deck.otherZone, newCard);
-			return deck.update({ otherZone: newOther });
-		default:
-			return deck;
-	}
+	card.tags[GameTag.TAG_SCRIPT_DATA_NUM_1] = dataNum1;
+	card.tags[GameTag.TAG_SCRIPT_DATA_NUM_2] = dataNum2;
+	// const newCard =  card.update({
+	// 	tags: {
+	// 		...card.tags,
+	// 		[GameTag.TAG_SCRIPT_DATA_NUM_1]: dataNum1,
+	// 		[GameTag.TAG_SCRIPT_DATA_NUM_2]: dataNum2,
+	// 	},
+	// });
+	// switch (zoneId) {
+	// 	case 'board':
+	// 		const newBoard = helper.replaceCardInZone(deck.board, newCard);
+	// 		return deck.update({ board: newBoard });
+	// 	case 'hand':
+	// 		const newHand = helper.replaceCardInZone(deck.hand, newCard);
+	// 		return deck.update({ hand: newHand });
+	// 	case 'deck':
+	// 		const newDeck = helper.replaceCardInZone(deck.deck, newCard);
+	// 		return deck.update({ deck: newDeck });
+	// 	case 'other':
+	// 		const newOther = helper.replaceCardInZone(deck.otherZone, newCard);
+	// 		return deck.update({ otherZone: newOther });
+	// 	default:
+	// 		return deck;
+	// }
+	return deck;
 };

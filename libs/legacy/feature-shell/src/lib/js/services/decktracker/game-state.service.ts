@@ -180,16 +180,21 @@ export class GameStateService {
 				const zonePositionChangedEvent = mergeZonePositionChangedEvents(
 					subQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
 				);
+				const dataScriptChangedEvent = mergeDataScriptChangedEvents(
+					subQueue.filter((event) => event.type === GameEvent.DATA_SCRIPT_CHANGED) as GameEvent[],
+				);
 				// Processing these should be super quick, as in most cases they won't lead to a state update
 				// const attackOnBoardEvents = subQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
 				const eventsToProcess = [
 					...subQueue.filter(
 						(event) =>
 							event.type !== GameEvent.GAME_STATE_UPDATE &&
-							event.type !== GameEvent.ZONE_POSITION_CHANGED,
+							event.type !== GameEvent.ZONE_POSITION_CHANGED &&
+							event.type !== GameEvent.DATA_SCRIPT_CHANGED,
 					),
 					// stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 					zonePositionChangedEvent,
+					dataScriptChangedEvent,
 					// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 				].filter((event) => event);
 				const start = Date.now();
@@ -484,6 +489,21 @@ export class GameStateService {
 		this.eventEmitters = result;
 	}
 }
+
+const mergeDataScriptChangedEvents = (events: readonly GameEvent[]): GameEvent => {
+	if (events.length === 0) {
+		return null;
+	}
+	const ref = events[events.length - 1];
+	const allDataScriptUpdates = events.flatMap((event) => event.additionalData.updates);
+	const merged: GameEvent = Object.assign(new GameEvent(), ref, {
+		additionalData: {
+			updates: allDataScriptUpdates,
+		},
+	});
+	console.debug('[game-state] merging data script changed events', merged, events);
+	return merged;
+};
 
 const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent => {
 	if (events.length === 0) {
