@@ -53,11 +53,11 @@ export class DevService {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
 
-		window['fakeGame'] = async () => {
+		window['fakeGame'] = async (fileName: string) => {
 			const events = [];
 			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\game.log`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			const logLines = logContents.split('\n');
 			console.log('logLines', logLines?.length);

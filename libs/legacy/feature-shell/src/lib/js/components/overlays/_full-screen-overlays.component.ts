@@ -56,8 +56,8 @@ import { DebugService } from '../../services/debug.service';
 					<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
 					<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
 					<!-- Will reactivate this when I can test them properly -->
-					<!-- <choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
-					<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper> -->
+					<!-- <choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper> -->
+					<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
 
 					<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
 					<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
