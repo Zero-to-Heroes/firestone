@@ -55,7 +55,7 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 
 	public initBattleWithSideEffects(battle: BgsFaceOffWithSimulation) {
-		console.debug('[simulator] initBattleWithSideEffects', battle, new Error().stack);
+		console.debug('[simulator] initBattleWithSideEffects', battle);
 		const faceOff = this.stateManager.buildInitialBattle(battle);
 		this.faceOff$$.next(faceOff);
 		this.mainInstance.initialBattle = faceOff;
