@@ -2453,6 +2453,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.SheldrasMoontree:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.ShimmeringSunfish:
+			return and(side(inputSide), or(inDeck, inHand), holy, spell);
 		case CardIds.ShipsCannon:
 			return and(side(inputSide), or(inDeck, inHand), minion, pirate);
 		case CardIds.Si7Assassin:
