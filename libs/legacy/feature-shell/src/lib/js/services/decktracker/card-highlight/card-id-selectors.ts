@@ -2095,6 +2095,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, hasTribeNotPlayedThisMatch, not(tribeless)),
 				and(side(inputSide), or(inHand, inDeck), minion, not(tribeless)),
 			);
+		case CardIds.PowerWordFortitude:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.PredatoryInstincts:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.PreparationCore:
