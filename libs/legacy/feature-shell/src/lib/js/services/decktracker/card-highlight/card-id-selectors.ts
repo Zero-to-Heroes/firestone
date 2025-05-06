@@ -2231,7 +2231,6 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		// case CardIds.DeepminerBrann_DEEP_020:
 		// case CardIds.RenoLoneRanger_WW_0700:
-		// case CardIds.SpiritOfTheBadlands_WW_337:
 		// case CardIds.TheldurinTheLost_WW_815:
 		case CardIds.DinotamerBrann_ULD_156:
 		case CardIds.EliseTheEnlightened:
@@ -2583,6 +2582,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), locationExtended);
 		case CardIds.SpinetailDrake_WW_820:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.SpiritOfTheBadlands_WW_337:
+		case CardIds.SpiritOfTheBadlands_MirageToken_WW_337t:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SpiritPeddler_WORK_015:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SpiritGuide:
