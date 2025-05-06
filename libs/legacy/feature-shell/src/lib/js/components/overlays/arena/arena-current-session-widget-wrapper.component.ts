@@ -83,15 +83,6 @@ export class ArenaCurrentSessionWidgetWrapperComponent
 			),
 			this.handleReposition(),
 		);
-		// this.hidden$ = combineLatest([
-		// 	this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideCurrentSessionWidgetWhenFriendsListIsOpen)),
-		// 	this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
-		// ]).pipe(
-		// 	this.mapData(
-		// 		([hideCurrentSessionWidgetWhenFriendsListIsOpen, [isFriendsListOpen]]) =>
-		// 			hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
-		// 	),
-		// );
 
 		this.showWidget$
 			.pipe(

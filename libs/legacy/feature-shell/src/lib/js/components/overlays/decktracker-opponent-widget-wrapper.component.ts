@@ -12,6 +12,7 @@ import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -62,12 +63,13 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameNativeStore: GameNativeStateStoreService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs);
+		await waitForReady(this.scene, this.prefs, this.gameNativeStore);
 
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
@@ -122,10 +124,10 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		);
 		this.hidden$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideOpponentDecktrackerWhenFriendsListIsOpen)),
-			this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
+			this.gameNativeStore.isFriendsListOpen$$,
 		]).pipe(
 			this.mapData(
-				([hideOpponentDecktrackerWhenFriendsListIsOpen, [isFriendsListOpen]]) =>
+				([hideOpponentDecktrackerWhenFriendsListIsOpen, isFriendsListOpen]) =>
 					hideOpponentDecktrackerWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);

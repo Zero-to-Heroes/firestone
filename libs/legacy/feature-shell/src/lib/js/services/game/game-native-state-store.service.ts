@@ -1,39 +1,34 @@
 import { Injectable } from '@angular/core';
-import { MemoryUpdate, MemoryUpdatesService } from '@firestone/memory';
+import { MemoryUpdatesService } from '@firestone/memory';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
-import { GameNativeState } from './game-native-state';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 @Injectable()
-export class GameNativeStateStoreService {
-	public store$ = new BehaviorSubject<GameNativeState>(GameNativeState.create({}));
+export class GameNativeStateStoreService extends AbstractFacadeService<GameNativeStateStoreService> {
+	public isFriendsListOpen$$: BehaviorSubject<boolean>;
 
-	constructor(private readonly memoryUpdates: MemoryUpdatesService) {
-		this.init();
-		window['gameNativeStateStore'] = this.store$;
+	private memoryUpdates: MemoryUpdatesService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'GameNativeStateStoreService', () => !!this.isFriendsListOpen$$);
 	}
 
-	private async processChanges(changes: MemoryUpdate): Promise<void> {
-		try {
-			if (changes.isFriendsListOpen != null) {
-				this.store$.next(
-					this.store$.value.update({
-						isFriendsListOpen: changes.isFriendsListOpen,
-					}),
-				);
-			}
-		} catch (e) {
-			console.error('[game-native-state] could not process event', e);
-		}
+	protected override assignSubjects() {
+		this.isFriendsListOpen$$ = this.mainInstance.isFriendsListOpen$$;
 	}
 
-	private async init() {
+	protected async init() {
+		this.isFriendsListOpen$$ = new BehaviorSubject<boolean>(false);
+		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
+
 		this.memoryUpdates.memoryUpdates$$
 			.pipe(
+				map((changes) => !!changes?.isFriendsListOpen),
 				distinctUntilChanged(),
-				filter((changes) => !!changes),
-				concatMap(async (changes) => await this.processChanges(changes)),
 			)
-			.subscribe();
+			.subscribe((isFriendsListOpen) => {
+				this.isFriendsListOpen$$.next(isFriendsListOpen);
+			});
 	}
 }

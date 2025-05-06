@@ -34,7 +34,6 @@ import { AchievementsStateManagerService } from '../achievement/achievements-sta
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
-import { GameNativeState } from '../game/game-native-state';
 import { LotteryWidgetControllerService } from '../lottery/lottery-widget-controller.service';
 import { LotteryState } from '../lottery/lottery.model';
 import { LotteryService } from '../lottery/lottery.service';
@@ -47,7 +46,6 @@ import { arraysEqual } from '../utils';
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
 export type GameStateSelector<T> = (gameState: GameState) => T;
-export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
 export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
 export type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
 export type MercenariesOutOfCombatStateSelector<T> = (state: [MercenariesOutOfCombatState, Preferences?]) => T;
@@ -58,7 +56,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	public eventBus$$ = new BehaviorSubject<StoreEvent>(null);
 
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
-	private gameNativeState: BehaviorSubject<GameNativeState>;
 	private prefs: BehaviorSubject<Preferences>;
 	private deckStore: BehaviorSubject<GameState>;
 	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
@@ -118,7 +115,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
-		this.gameNativeState = this.ow.getMainWindow().gameNativeStateStore;
 		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
 		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
@@ -165,17 +161,6 @@ export class AppUiStoreService extends Store<Preferences> {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<Preferences, infer T> ? T : never }>;
-	}
-
-	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }> {
-		return this.gameNativeState.pipe(
-			filter((state) => !!state),
-			map((state) => selectors.map((selector) => selector(state))),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
-		) as Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }>;
 	}
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(
