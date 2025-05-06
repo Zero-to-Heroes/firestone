@@ -254,7 +254,6 @@ export class CardTooltipComponent
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.cardTooltipScale)).subscribe(async (scale) => {
 			const newScale = scale / 100;
 			const elements = await this.getScalableElements();
-			console.debug('[card-tooltip] scaling', newScale, elements);
 			elements.forEach((element) => {
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				this.renderer.setStyle(element, 'opacity', `1`);
