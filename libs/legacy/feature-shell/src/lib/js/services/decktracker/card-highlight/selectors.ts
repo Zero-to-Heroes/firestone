@@ -265,6 +265,12 @@ const hasMechanicStr =
 		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
 		return refCard?.mechanics?.includes(mechanic);
 	};
+const hasReference =
+	(mechanic: GameTag) =>
+	(input: SelectorInput): boolean => {
+		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return refCard?.referencedTags?.includes(GameTag[mechanic]);
+	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const charge = hasMechanic(GameTag.CHARGE);
@@ -280,12 +286,16 @@ export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
 export const discover = hasMechanic(GameTag.DISCOVER);
 export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
 export const dredge = hasMechanic(GameTag.DREDGE);
-export const excavate = hasMechanic(GameTag.EXCAVATE);
+export const excavate = or(
+	hasMechanic(GameTag.EXCAVATE),
+	cardIs(CardIds.Arfus_DigUpUnholy_THD_100p, CardIds.Arfus_DigUpFrost_THD_100p2, CardIds.Arfus_DigUpBlood_THD_100p3),
+);
 export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
-export const imbue = hasMechanic(GameTag.IMBUE);
+// Almost all the "imbue" tags are ref tags
+export const imbue = or(hasMechanic(GameTag.IMBUE), hasReference(GameTag.IMBUE));
 export const infuse = hasMechanic(GameTag.INFUSE);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
