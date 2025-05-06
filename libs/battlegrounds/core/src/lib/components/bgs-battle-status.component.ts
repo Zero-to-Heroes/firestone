@@ -318,7 +318,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 			this.damageLost = null;
 			this.wonLethalChance = null;
 			this.lostLethalChance = null;
-			console.log('[bgs-battle-status] no battle info status');
+			// console.log('[bgs-battle-status] no battle info status');
 		} else if (
 			this.battle?.battleInfoStatus === 'waiting-for-result' ||
 			this.battle?.battleInfoStatus === 'ongoing'
@@ -331,7 +331,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 			this.damageLost = '__';
 			this.battleSimulationWonLethalChance = null;
 			this.battleSimulationLostLethalChance = null;
-			console.log('[bgs-battle-status] computing battle status');
+			// console.log('[bgs-battle-status] computing battle status');
 		} else {
 			this.temporaryBattleTooltip =
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
@@ -340,11 +340,11 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 		this.isOngoing = this.battle?.battleInfoStatus === 'ongoing';
 		// this.isOngoing = true;
 		if (this.battle?.battleResult?.wonPercent != null && this.battle?.battleInfoStatus !== 'empty') {
-			console.log('[bgs-battle-status] received battle status', {
-				...(this.battle.battleResult ?? {}),
-				damageLosts: undefined,
-				damageWons: undefined,
-			});
+			// console.log('[bgs-battle-status] received battle status', {
+			// 	...(this.battle.battleResult ?? {}),
+			// 	damageLosts: undefined,
+			// 	damageWons: undefined,
+			// });
 			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
 			this.battleSimulationResultLose = this.battle.battleResult.lostPercent.toFixed(1) + '%';
