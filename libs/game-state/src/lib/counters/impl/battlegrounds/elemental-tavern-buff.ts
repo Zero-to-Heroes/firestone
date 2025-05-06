@@ -30,10 +30,10 @@ export class ElementalTavernBuffCounterDefinitionV2 extends CounterDefinitionV2<
 			);
 			const value = {
 				atk: relevantEnchants
-					.map((e) => e.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 					.reduce((a, b) => a + b, 0),
 				health: relevantEnchants
-					.map((e) => e.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value ?? 0)
+					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 					.reduce((a, b) => a + b, 0),
 			};
 			if (value.atk === 0 && value.health === 0) {
@@ -57,7 +57,7 @@ export class ElementalTavernBuffCounterDefinitionV2 extends CounterDefinitionV2<
 	protected override formatValue(
 		value: { atk: number; health: number } | null | undefined,
 	): null | undefined | number | string {
-		return value ? `+${value.atk} / +${value.health}` : null;
+		return value ? `+${value.atk}/+${value.health}` : null;
 	}
 
 	protected override tooltip(

@@ -194,6 +194,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
 			cardWithGuessedInfo,
 			deck,
+			gameEvent.additionalData.dataNum1,
+			gameEvent.additionalData.dataNum2,
 			gameEvent,
 			this.allCards,
 		);
@@ -286,6 +288,8 @@ export class ReceiveCardInHandParser implements EventParser {
 export const addAdditionalAttribuesInHand = (
 	card: DeckCard,
 	deck: DeckState,
+	dataNum1: number,
+	dataNum2: number,
 	gameEvent: GameEvent,
 	allCards: CardsFacadeService,
 ): DeckCard => {
@@ -301,9 +305,9 @@ export const addAdditionalAttribuesInHand = (
 			// console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
 			return card.update({
 				mainAttributeChange:
-					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+					!!dataNum1 && dataNum1 !== -1
 						? // dataNum1 is the base value, while we start our count at 0
-						  gameEvent.additionalData.dataNum1 - 1
+						  dataNum1 - 1
 						: highestAttribute + 1,
 			});
 		case CardIds.SchoolTeacher_NagalingToken:

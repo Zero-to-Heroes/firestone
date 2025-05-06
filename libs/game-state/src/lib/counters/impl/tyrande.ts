@@ -17,7 +17,7 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			const value =
 				state.playerDeck.enchantments
 					.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
-					.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+					.flatMap((e) => e?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 					.reduce((a, b) => a + b, 0) || null;
 			return value;
 		},
@@ -35,7 +35,7 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		value: (state: GameState): number | null =>
 			state.opponentDeck.enchantments
 				.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
-				.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+				.flatMap((e) => e?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 				.reduce((a, b) => a + b, 0) || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>

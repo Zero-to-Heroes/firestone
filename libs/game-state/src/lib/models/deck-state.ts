@@ -5,7 +5,6 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
-import { TagGameState } from './full-game-state';
 import { ShortCard, ShortCardWithTurn } from './game-state';
 import { HeroCard } from './hero-card';
 
@@ -148,7 +147,7 @@ export class DeckState {
 		cardId: string;
 		creatorEntityId?: number;
 		creatorCardId?: string;
-		tags?: readonly TagGameState[];
+		tags?: { [Name in GameTag]?: number };
 	}[] = [];
 	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
 	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];

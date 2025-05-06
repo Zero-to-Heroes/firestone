@@ -17,7 +17,7 @@ export class AvianaElunesChoseCounterDefinitionV2 extends CounterDefinitionV2<nu
 			const value =
 				state.playerDeck.enchantments
 					.filter((e) => e.cardId === CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t)
-					.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+					.flatMap((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 					.reduce((a, b) => a + b, 0) || null;
 			return value || null;
 		},
@@ -35,7 +35,7 @@ export class AvianaElunesChoseCounterDefinitionV2 extends CounterDefinitionV2<nu
 		value: (state: GameState): number | null =>
 			state.opponentDeck.enchantments
 				.filter((e) => e.cardId === CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t)
-				.flatMap((e) => e?.tags?.find((e) => e.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
+				.flatMap((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 				.reduce((a, b) => a + b, 0) || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>

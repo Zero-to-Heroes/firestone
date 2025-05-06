@@ -63,6 +63,8 @@ export class EntityUpdateParser implements EventParser {
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
 					} as DeckCard),
 					deck,
+					gameEvent.additionalData.dataNum1,
+					gameEvent.additionalData.dataNum2,
 					gameEvent,
 					this.allCards,
 			  )

@@ -18,7 +18,7 @@ export class FreeRefreshCounterDefinitionV2 extends CounterDefinitionV2<number> 
 			return (
 				state.playerDeck.enchantments
 					?.filter((e) => e.cardId === CardIds.RefreshingAnomaly_RefreshCosts0Enchantment)
-					?.map((e) => e.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value ?? 0)
+					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
 					.reduce((a, b) => a + b, 0) || null
 			);
 		},

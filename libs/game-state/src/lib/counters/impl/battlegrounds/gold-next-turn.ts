@@ -6,7 +6,6 @@ import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckState } from '../../../models/deck-state';
-import { TagGameState } from '../../../models/full-game-state';
 import { GameState } from '../../../models/game-state';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../_exports';
@@ -148,13 +147,13 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 	}
 }
 
-const getGoldForPlayerEnchant = (enchantment: { cardId: string; tags?: readonly TagGameState[] }): number => {
+const getGoldForPlayerEnchant = (enchantment: { cardId: string; tags?: { [Name in GameTag]?: number } }): number => {
 	switch (enchantment.cardId) {
 		case CardIds.SouthseaBusker_ExtraGoldNextTurnDntEnchantment:
-			return enchantment.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0;
+			return enchantment.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0;
 		case CardIds.GraceFarsail_ExtraGoldIn2TurnsDntEnchantment_BG31_825e2:
-			return enchantment.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value === 1
-				? enchantment.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0
+			return enchantment.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] === 1
+				? enchantment.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0
 				: 0; // Not next turn
 		default:
 			return 0;

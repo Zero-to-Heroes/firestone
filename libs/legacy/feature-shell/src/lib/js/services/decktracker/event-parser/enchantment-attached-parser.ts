@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameState } from '@firestone/game-state';
+import { DeckCard, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { getCardForGlobalEffect, globalEffectCards } from '../../hs-utils';
@@ -53,7 +53,7 @@ export class EnchantmentAttachedParser implements EventParser {
 				{
 					cardId,
 					entityId,
-					tags: gameEvent.additionalData.tags,
+					tags: toTagsObject(gameEvent.additionalData.tags),
 					creatorEntityId: gameEvent.additionalData.creatorEntityId,
 					creatorCardId: gameEvent.additionalData.creatorCardId,
 				},

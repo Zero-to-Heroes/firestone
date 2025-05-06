@@ -28,39 +28,36 @@ export class DataScriptChangedParser implements EventParser {
 
 			const isPlayer = controllerId === localPlayer.PlayerId;
 			const deck = isPlayer ? playerDeck : opponentDeck;
-			const updatedDeck = updateDataScriptInfoUnsafe(
-				deck,
-				cardId,
-				entityId,
-				gameEvent.additionalData.dataNum1,
-				gameEvent.additionalData.dataNum2,
-				this.helper,
-			);
+			console.debug('considering update', cardId, update, gameEvent);
+			updateDataScriptInfoUnsafe(deck, cardId, entityId, update.DataNum1, update.DataNum2, this.helper);
 
-			const cardInHand = updatedDeck.hand.find((c) => c.entityId === entityId);
-			if (!cardInHand) {
+			const cardInHand = deck.hand.find((c) => c.entityId === entityId);
+			let newAbyssalCurseHighestValue = deck.abyssalCurseHighestValue;
+			let newHand = deck.hand;
+			if (cardInHand) {
+				const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
+					cardInHand,
+					deck,
+					update.DataNum1,
+					update.DataNum2,
+					update,
+					this.allCards,
+				);
+				newHand = deck.hand;
+
+				newAbyssalCurseHighestValue =
+					cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
+						? Math.max(
+								deck.abyssalCurseHighestValue ?? 0,
+								// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
+								// while it is in the ENTITY_UPDATE event for the opponent
+								!!update.DataNum1 && update.DataNum1 !== -1
+									? update.DataNum1
+									: cardWithAdditionalAttributes.mainAttributeChange + 1,
+						  )
+						: deck.abyssalCurseHighestValue;
 				continue;
 			}
-
-			const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
-				cardInHand,
-				updatedDeck,
-				gameEvent,
-				this.allCards,
-			);
-			const newHand = updatedDeck.hand;
-
-			const newAbyssalCurseHighestValue =
-				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
-					? Math.max(
-							updatedDeck.abyssalCurseHighestValue ?? 0,
-							// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
-							// while it is in the ENTITY_UPDATE event for the opponent
-							!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
-								? gameEvent.additionalData.dataNum1
-								: cardWithAdditionalAttributes.mainAttributeChange + 1,
-					  )
-					: updatedDeck.abyssalCurseHighestValue;
 			// Modify in place
 			if (isPlayer) {
 				(playerDeck as Mutable<DeckState>).hand = newHand;
@@ -94,54 +91,22 @@ const updateDataScriptInfoUnsafe = (
 	dataNum1: number,
 	dataNum2: number,
 	helper: DeckManipulationHelper,
-): DeckState => {
+): void => {
 	const found = deck.findCard(entityId);
 	if (!found?.card || !found?.zone) {
-		if (deck.enchantments.find((e) => e.entityId === entityId)) {
-			const enchantment = deck.enchantments.find((e) => e.entityId === entityId);
-			const newEnchantment = {
-				...enchantment,
-				tags: [
-					...(enchantment.tags ?? []).filter(
-						(t) => t.Name !== GameTag.TAG_SCRIPT_DATA_NUM_1 && t.Name !== GameTag.TAG_SCRIPT_DATA_NUM_2,
-					),
-					{ Name: GameTag.TAG_SCRIPT_DATA_NUM_1, Value: dataNum1 },
-					{ Name: GameTag.TAG_SCRIPT_DATA_NUM_2, Value: dataNum2 },
-				],
-			};
-			console.debug('updating deck enchantment', newEnchantment);
-			return deck.update({
-				enchantments: [...deck.enchantments.filter((e) => e.entityId !== entityId), newEnchantment],
-			});
+		const enchant = deck.enchantments.find((e) => e.entityId === entityId);
+		if (enchant) {
+			if (!enchant.tags) {
+				enchant.tags = {};
+			}
+			enchant.tags[GameTag.TAG_SCRIPT_DATA_NUM_1] = dataNum1;
+			enchant.tags[GameTag.TAG_SCRIPT_DATA_NUM_2] = dataNum2;
+			console.debug('updating deck enchantment', enchant, deck);
 		}
-		return deck;
+		return;
 	}
 
 	const { zone: zoneId, card } = found;
 	card.tags[GameTag.TAG_SCRIPT_DATA_NUM_1] = dataNum1;
 	card.tags[GameTag.TAG_SCRIPT_DATA_NUM_2] = dataNum2;
-	// const newCard =  card.update({
-	// 	tags: {
-	// 		...card.tags,
-	// 		[GameTag.TAG_SCRIPT_DATA_NUM_1]: dataNum1,
-	// 		[GameTag.TAG_SCRIPT_DATA_NUM_2]: dataNum2,
-	// 	},
-	// });
-	// switch (zoneId) {
-	// 	case 'board':
-	// 		const newBoard = helper.replaceCardInZone(deck.board, newCard);
-	// 		return deck.update({ board: newBoard });
-	// 	case 'hand':
-	// 		const newHand = helper.replaceCardInZone(deck.hand, newCard);
-	// 		return deck.update({ hand: newHand });
-	// 	case 'deck':
-	// 		const newDeck = helper.replaceCardInZone(deck.deck, newCard);
-	// 		return deck.update({ deck: newDeck });
-	// 	case 'other':
-	// 		const newOther = helper.replaceCardInZone(deck.otherZone, newCard);
-	// 		return deck.update({ otherZone: newOther });
-	// 	default:
-	// 		return deck;
-	// }
-	return deck;
 };

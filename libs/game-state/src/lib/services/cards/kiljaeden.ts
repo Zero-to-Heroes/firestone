@@ -18,7 +18,7 @@ export const Kiljaeden: Card & GeneratingCard = {
 		const portal = deckState.enchantments.find(
 			(e) => e.cardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 		);
-		const statsBuff = portal?.tags?.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value;
+		const statsBuff = portal?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2];
 		return statsBuff != null
 			? {
 					attackBuff: statsBuff,
