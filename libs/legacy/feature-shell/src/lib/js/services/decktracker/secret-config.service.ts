@@ -95,6 +95,10 @@ export class SecretConfigService {
 				);
 			case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
 				return [CardIds.IceBlock, CardIds.IceBlockLegacy].includes(secretCardId as CardIds);
+			case CardIds.SubmergedSpacerock:
+				return (
+					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]) ?? false
+				);
 			default:
 				return true;
 		}
