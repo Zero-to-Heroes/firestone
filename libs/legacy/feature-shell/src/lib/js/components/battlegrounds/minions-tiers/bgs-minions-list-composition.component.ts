@@ -142,6 +142,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	enablerCards: readonly ExtendedReferenceCard[];
 
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
+		console.debug('[bgs-minions-list-composition] setting composition', value);
 		this.compId$$.next(value.compId);
 		this.name = value.name;
 		this.powerLevel = value.powerLevel;

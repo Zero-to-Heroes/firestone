@@ -33,6 +33,7 @@ export const buildCompositions = (
 					(a.name ?? '').localeCompare(b.name ?? '')
 				);
 			}) ?? [];
+	console.debug('[compositions-builder] compositions built', result, compositions);
 	return result;
 };
 

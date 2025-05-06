@@ -25,6 +25,7 @@ export const MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.REBORN, tierId: 'R' },
 	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'C' },
 	{ mechanic: GameTag.MODULAR, tierId: 'M' },
+	{ mechanic: GameTag.BACON_BUFFS_TAVERN_SPELL, tierId: 'TS' },
 	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
 	{
 		mechanic: GameTag.BACON_BUDDY,
