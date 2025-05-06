@@ -7,6 +7,9 @@
 	display: flex;
 }
 
+.widget {
+	height: fit-content;
+}
 .widget.hidden {
 	display: none;
 }

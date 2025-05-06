@@ -12,7 +12,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, filter, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
 import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
 import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -75,7 +75,6 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 
 		const currentGameType$ = this.gameState.gameState$$.pipe(this.mapData((state) => state?.metadata?.gameType));
 		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
-			tap((info) => console.debug('CurrentSessionWidgetWrapperComponent.showWidget$', info)),
 			this.mapData(
 				([gameType, currentScene, prefs]) =>
 					prefs.showCurrentSessionWidgetBgs &&
