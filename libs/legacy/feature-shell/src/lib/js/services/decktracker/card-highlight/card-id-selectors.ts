@@ -2446,6 +2446,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.ShallowGrave:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
+		case CardIds.ShandoWildclaw:
+		case CardIds.ShandoWildclaw_RileTheHerd:
+		case CardIds.ShandoWildclaw_Transfiguration:
+			return and(side(inputSide), inDeck, beast);
 		case CardIds.SharkPuncher_WON_138:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.SharpEyedSeeker:
@@ -2861,6 +2865,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Thunderbringer_WW_440:
 			return and(side(inputSide), inDeck, or(elemental, beast));
+		case CardIds.TidelostBurrower:
+			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.TidepoolPupil_VAC_304:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.TidePools_VAC_522:
@@ -2873,6 +2879,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 		case CardIds.TimewinderZarimi_TOY_385:
 			return and(side(inputSide), or(inDeck, inHand), minion, dragon);
+		case CardIds.TinyfinsCaravan:
+			return and(side(inputSide), inDeck, murloc);
 		case CardIds.TinyWorldbreaker_YOG_527:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.TogwagglesScheme:
