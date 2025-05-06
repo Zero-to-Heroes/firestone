@@ -195,6 +195,7 @@ export class GameStateService {
 					// stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 					zonePositionChangedEvent,
 					dataScriptChangedEvent,
+					stateUpdateEvent,
 					// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 				].filter((event) => event);
 				const start = Date.now();
