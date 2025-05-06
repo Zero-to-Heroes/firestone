@@ -1926,6 +1926,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.NagaGiant:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.NaralexHeraldOfTheFlights_EDR_844:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NaturalForceTavernBrawl:
 			return and(side(inputSide), spell, nature, dealsDamage);
 		case CardIds.NerubianVizier:
