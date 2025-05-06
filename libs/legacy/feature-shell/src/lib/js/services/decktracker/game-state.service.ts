@@ -49,7 +49,7 @@ export class GameStateService {
 	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
 	private deckEventBus = new BehaviorSubject<GameState | null>(null);
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
-	private eventEmitters = [];
+	private eventEmitters: ((state: GameState) => void)[] = [];
 
 	private currentReviewId: string;
 	private secretWillTrigger: {
@@ -407,7 +407,15 @@ export class GameStateService {
 			);
 		}
 
-		console.debug('[game-state] processed event', gameEvent.type, gameEvent.cardId, currentState, gameEvent);
+		console.debug(
+			'[game-state] processed event',
+			gameEvent.type,
+			gameEvent.cardId,
+			currentState.playerDeck.board.map((e) => e.cardName),
+			currentState.opponentDeck.board.map((e) => e.cardName),
+			currentState,
+			gameEvent,
+		);
 		return currentState;
 	}
 
@@ -472,8 +480,8 @@ export class GameStateService {
 
 	private async buildEventEmitters() {
 		const result = [
-			(event) => this.deckEventBus.next(event),
-			(event) => this.gameStateUpdates.updateGameState(event.state),
+			(event: GameState) => this.deckEventBus.next(event),
+			(event: GameState) => this.gameStateUpdates.updateGameState(event),
 		];
 		const prefs = await this.prefs.getPreferences();
 		console.log('is logged in to Twitch?', !!prefs.twitchAccessToken);

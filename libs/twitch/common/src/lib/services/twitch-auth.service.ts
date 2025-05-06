@@ -4,7 +4,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsState, BgsBoard, BgsPlayer } from '@firestone/battlegrounds/core';
-import { DeckCard, DeckState, GameEventType, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
 	BugReportService,
@@ -38,7 +38,7 @@ const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
-	private deckEvents = new BehaviorSubject<{ event: string; state: GameState } | null>(null);
+	private deckEvents = new BehaviorSubject<GameState | null>(null);
 	private bgEvents = new BehaviorSubject<BattlegroundsState | null>(null);
 	private twitchAccessToken$: Observable<string>;
 	private streamerPrefs$: Observable<Partial<Preferences>>;
@@ -123,12 +123,8 @@ export class TwitchAuthService {
 			});
 	}
 
-	public async emitDeckEvent(event: any) {
-		// console.debug('[twitch-auth] enqueueing deck event', event);
-		if (['SCENE_CHANGED_MINDVISION' as GameEventType].includes(event.event.name)) {
-			return;
-		}
-		this.deckEvents.next({ event: event.event.name, state: event.state });
+	public async emitDeckEvent(event: GameState) {
+		this.deckEvents.next(event);
 	}
 
 	public async emitBattlegroundsEvent(event: any) {
@@ -138,7 +134,7 @@ export class TwitchAuthService {
 
 	private buildEvent(
 		currentScene: SceneMode | null,
-		deckEvent: { event: string; state: GameState } | null,
+		state: GameState | null,
 		bgsState: BattlegroundsState | null,
 		twitchAccessToken: string,
 		streamerPrefs: Partial<Preferences>,
@@ -147,15 +143,11 @@ export class TwitchAuthService {
 			return null;
 		}
 
-		if (!deckEvent) {
+		if (!state) {
 			return null;
 		}
 
-		let playerDeck = this.cleanDeck(
-			deckEvent.state.playerDeck,
-			deckEvent.state.isBattlegrounds(),
-			deckEvent.state.isMercenaries(),
-		);
+		let playerDeck = this.cleanDeck(state.playerDeck, state.isBattlegrounds(), state.isMercenaries());
 		const bgsPlayer = bgsState?.currentGame?.getMainPlayer();
 		playerDeck = {
 			...playerDeck,
@@ -166,13 +158,9 @@ export class TwitchAuthService {
 		} as DeckState;
 
 		const bgsOpponent = bgsState?.currentGame?.players?.find(
-			(player) => player.cardId === deckEvent.state.opponentDeck?.hero?.cardId,
+			(player) => player.cardId === state.opponentDeck?.hero?.cardId,
 		);
-		let opponentDeck = this.cleanDeck(
-			deckEvent.state.opponentDeck,
-			deckEvent.state.isBattlegrounds(),
-			deckEvent.state.isMercenaries(),
-		);
+		let opponentDeck = this.cleanDeck(state.opponentDeck, state.isBattlegrounds(), state.isMercenaries());
 		opponentDeck = {
 			...opponentDeck,
 			weapon: {
@@ -183,13 +171,13 @@ export class TwitchAuthService {
 		const newDeckState = GameState.create({
 			playerDeck: playerDeck,
 			opponentDeck: opponentDeck,
-			mulliganOver: deckEvent.state.mulliganOver,
-			metadata: deckEvent.state.metadata,
-			currentTurn: deckEvent.state.currentTurn,
-			gameStarted: deckEvent.state.gameStarted,
-			gameEnded: deckEvent.state.gameEnded,
+			mulliganOver: state.mulliganOver,
+			metadata: state.metadata,
+			currentTurn: state.currentTurn,
+			gameStarted: state.gameStarted,
+			gameEnded: state.gameEnded,
 			cardsPlayedThisMatch: undefined,
-			matchInfo: { anomalies: deckEvent.state.matchInfo?.anomalies } as MatchInfo,
+			matchInfo: { anomalies: state.matchInfo?.anomalies } as MatchInfo,
 		});
 
 		// We need to show the last non-empty face off to let the extension decide whether to show the result
@@ -269,7 +257,8 @@ export class TwitchAuthService {
 	}
 
 	private cleanZone(zone: readonly DeckCard[], isBattlegrounds: boolean): readonly DeckCard[] {
-		return zone
+		return [...zone]
+			.sort((a, b) => (a.tags[GameTag.ZONE_POSITION] ?? 0) - (b.tags[GameTag.ZONE_POSITION] ?? 0))
 			.map((card) => this.cleanCard(card, isBattlegrounds))
 			.filter((card) => !!card) as readonly DeckCard[];
 	}
