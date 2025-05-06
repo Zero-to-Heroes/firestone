@@ -7,7 +7,6 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { deepEqual } from '../../services/utils';
 import { CounterDefinition } from './definitions/_counter-definition';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
@@ -70,8 +69,7 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				(info) => definition.emit(info.counterInfo, info.prefValue),
 				// Because counters often return an object
 				(a, b) => {
-					console.debug('checking counter deepEqual', a?.type, b?.type);
-					return deepEqual(a, b);
+					return a?.value === b?.value && a?.type === b?.type && a?.tooltip === b?.tooltip;
 				},
 			),
 		);
