@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass } from '@firestone-hs/reference-data';
 import {
 	ArenaCardClassFilterType,
 	ArenaCardTypeFilterType,
@@ -8,7 +8,7 @@ import {
 } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
 	Observable,
@@ -19,7 +19,6 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { ArenaCombinedCardStat } from '../../models/arena-combined-card-stat';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD, ArenaCardStatsService } from '../../services/arena-card-stats.service';
@@ -222,11 +221,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	}
 
 	async ngAfterContentInit() {
-		await this.arenaCardStats.isReady();
-		await this.arenaClassStats.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.arenaCardStats, this.arenaClassStats, this.prefs);
 
-		console.debug('[arena-card-stats] after content init');
+		// console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
 		this.cards$ = combineLatest([
 			this.arenaCardStats.cardStats$$,
@@ -241,29 +238,29 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			),
 		]).pipe(
 			debounceTime(100),
-			tap((info) => console.debug('[arena-card-stats] received info', info)),
-			tap(([stats, info]) =>
-				console.debug(
-					'[arena-card-stats] Sylvanas',
-					stats?.stats?.find((c) => c.cardId === CardIds.SylvanasTheAccused),
-				),
-			),
+			// tap((info) => console.debug('[arena-card-stats] received info', info)),
+			// tap(([stats, info]) =>
+			// 	console.debug(
+			// 		'[arena-card-stats] Sylvanas',
+			// 		stats?.stats?.find((c) => c.cardId === CardIds.SylvanasTheAccused),
+			// 	),
+			// ),
 			this.mapData(([stats, searchString, sortCriteria, { cardType, cardClass }]) =>
 				this.buildCardStats(stats?.stats, cardType, cardClass, searchString, sortCriteria),
 			),
-			tap((info) => console.debug('[arena-card-stats] built card stats', info)),
-			tap((stats) =>
-				console.debug(
-					'[arena-card-stats] Sylvanas 2',
-					stats?.find((c) => c.cardId === CardIds.SylvanasTheAccused),
-				),
-			),
+			// tap((info) => console.debug('[arena-card-stats] built card stats', info)),
+			// tap((stats) =>
+			// 	console.debug(
+			// 		'[arena-card-stats] Sylvanas 2',
+			// 		stats?.find((c) => c.cardId === CardIds.SylvanasTheAccused),
+			// 	),
+			// ),
 			shareReplay(1),
 			this.mapData((stats) => stats),
 		);
 		this.loading$ = this.cards$.pipe(
 			startWith(true),
-			tap((info) => console.debug('[arena-card-stats]] received info 2', info)),
+			// tap((info) => console.debug('[arena-card-stats]] received info 2', info)),
 			this.mapData((tiers) => tiers === null),
 		);
 		this.totalGames$ = combineLatest([
@@ -342,12 +339,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		searchString: string | undefined,
 		sortCriteria: SortCriteria<ColumnSortType>,
 	): ArenaCardStatInfo[] {
-		console.debug(
-			'[arena-card-stats] building card stats',
-			stats?.filter((s) => s.cardId === 'WW_406'),
-			searchString,
-			sortCriteria,
-		);
+		// console.debug(
+		// 	'[arena-card-stats] building card stats',
+		// 	stats?.filter((s) => s.cardId === 'WW_406'),
+		// 	searchString,
+		// 	sortCriteria,
+		// );
 		const searchTokens = !searchString?.length
 			? []
 			: searchString
@@ -369,10 +366,10 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				)
 				.map((stat) => this.buildCardStat(stat))
 				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? [];
-		console.debug(
-			'[arena-card-stats] built card stats',
-			result?.filter((s) => s.cardId === 'WW_406'),
-		);
+		// console.debug(
+		// 	'[arena-card-stats] built card stats',
+		// 	result?.filter((s) => s.cardId === 'WW_406'),
+		// );
 		return result;
 		// .sort(sortByProperties((a: ArenaCardStatInfo) => [-(a.drawWinrate ?? 0)])) ?? []
 	}
