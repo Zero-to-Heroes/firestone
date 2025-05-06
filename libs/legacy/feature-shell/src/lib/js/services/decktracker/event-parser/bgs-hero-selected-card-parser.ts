@@ -1,10 +1,11 @@
 import { DeckCard, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class BgsHeroSelectedCardParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -25,7 +26,7 @@ export class BgsHeroSelectedCardParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
 		} as DeckCard);
-		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
+		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(deck, cardWithZone, this.allCards);
 		const newHero = deck.hero?.update({
 			cardId: cardId,
 		});

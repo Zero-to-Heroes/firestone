@@ -86,7 +86,7 @@ export class CardRevealedParser implements EventParser {
 			// So for now, let's keep this hack and only replace in case of Dredge
 			gameEvent.additionalData.revealedFromBlock === 'DREDGE'
 				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false)
-				: this.helper.addSingleCardToZone(deck.otherZone, card);
+				: this.helper.addSingleCardToOtherZone(deck, card, this.cards);
 		let globalEffects = deck.globalEffects;
 		if (
 			WHIZBANG_DECK_CARD_IDS.includes(card.cardId as CardIds) &&

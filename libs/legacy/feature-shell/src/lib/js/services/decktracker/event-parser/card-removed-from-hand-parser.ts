@@ -32,10 +32,10 @@ export class CardRemovedFromHandParser implements EventParser {
 			zone: 'SETASIDE',
 		} as DeckCard);
 
-		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
-			previousOtherZone,
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
+			deck,
 			cardWithZone,
+			this.allCards,
 			// So that the buffs from Secret Passage are kept. Maybe this will cause other info leaks, but
 			// for now let's give it a try and document it when that happens
 			true,

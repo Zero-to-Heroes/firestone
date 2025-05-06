@@ -57,15 +57,15 @@ export class QuestPlayedFromHandParser implements EventParser {
 			this.allCards,
 		);
 
-		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
-			previousOtherZone,
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
+			deck,
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
 				  cardWithZone.update({
 						entityId: undefined,
 				  } as DeckCard)
 				: cardWithZone,
+			this.allCards,
 		);
 		const newPlayerDeck = deck
 			.update({

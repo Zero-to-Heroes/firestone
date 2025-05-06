@@ -33,8 +33,11 @@ export class BurnedCardParser implements EventParser {
 			zone: 'BURNED',
 			refManaCost: card.refManaCost ?? refCard.cost,
 		} as DeckCard);
-		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
+			deck,
+			cardWithZone,
+			this.allCards,
+		);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			otherZone: newOtherZone,

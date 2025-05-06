@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getBaseCardId } from '@firestone-hs/reference-data';
+import { CardType, getBaseCardId } from '@firestone-hs/reference-data';
 import {
 	BoardSecret,
 	DeckCard,
@@ -10,6 +10,7 @@ import {
 	PlayerGameState,
 	SecretOption,
 } from '@firestone/game-state';
+import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -160,6 +161,25 @@ export class DeckManipulationHelper {
 		return [result, removedCard];
 	}
 
+	public addSingleCardToOtherZone(
+		deckState: DeckState,
+		card: DeckCard,
+		allCards: CardsFacadeService,
+		keepBuffs = false,
+	): readonly DeckCard[] {
+		if (allCards.getCard(card.cardId).type?.toUpperCase() === CardType[CardType.ENCHANTMENT]) {
+			return deckState.otherZone;
+		}
+
+		(card as Mutable<DeckCard>).metaInfo = {
+			turnAtWhichCardEnteredCurrentZone: undefined,
+			turnAtWhichCardEnteredHand: undefined,
+		};
+		(card as Mutable<DeckCard>).positionFromBottom = undefined;
+		(card as Mutable<DeckCard>).positionFromTop = undefined;
+
+		return this.addSingleCardToZone(deckState.otherZone, card, keepBuffs);
+	}
 	// When the buffs are sent alongside teh receive_card_in_hand event, we keep them
 	public addSingleCardToZone(
 		zone: readonly DeckCard[],

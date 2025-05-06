@@ -217,7 +217,7 @@ export class GameStateService {
 					const start = Date.now();
 					// const previousState = initialState;
 					// console.debug('[game-state] state post-processing');
-					const postProcessedState = this.statePostProcessService.postProcess(currentState);
+					const postProcessedState = currentState;
 					// Add information that is not linked to events, like the number of turns the
 					// card has been present in the zone
 					const updatedPlayerDeck = this.updateDeck(

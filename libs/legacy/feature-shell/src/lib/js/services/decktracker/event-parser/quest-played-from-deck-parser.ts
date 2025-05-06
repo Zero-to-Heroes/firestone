@@ -1,10 +1,11 @@
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class QuestPlayedFromDeckParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -28,8 +29,11 @@ export class QuestPlayedFromDeckParser implements EventParser {
 			zone: 'SECRET',
 			putIntoPlay: true,
 		} as DeckCard);
-		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
+			deck,
+			cardWithZone,
+			this.allCards,
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			otherZone: newOtherZone,

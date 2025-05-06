@@ -77,7 +77,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 			: deck.board;
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
-			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
+			: this.helper.addSingleCardToOtherZone(deck, cardWithZone, this.allCards);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			board: newBoard,

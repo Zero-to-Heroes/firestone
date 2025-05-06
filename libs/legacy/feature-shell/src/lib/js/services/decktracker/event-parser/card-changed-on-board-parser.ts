@@ -52,7 +52,7 @@ export class CardChangedOnBoardParser implements EventParser {
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 		} as DeckCard);
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(boardWithRemovedCard, updatedCard);
-		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, oldCard);
+		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(deck, oldCard, this.allCards);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
 			otherZone: newOther,
