@@ -140,6 +140,9 @@ const getDynamicFilters = (
 			return (c) =>
 				c.type?.toUpperCase() === CardType[CardType.MINION] &&
 				c.classes?.includes(CardClass[CardClass.WARRIOR]);
+		case CardIds.AmbassadorFaelin_TSC_067:
+			return (c) =>
+				c.type?.toUpperCase() === CardType[CardType.MINION] && c.mechanics?.includes(GameTag[GameTag.COLOSSAL]);
 		case CardIds.FyrakkTheBlazing_FIR_959:
 			return (c) =>
 				c.spellSchool?.toUpperCase() === SpellSchool[SpellSchool.FIRE] &&
