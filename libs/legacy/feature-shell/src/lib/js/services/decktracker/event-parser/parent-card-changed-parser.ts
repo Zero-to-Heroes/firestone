@@ -44,7 +44,7 @@ export class ParentCardChangedParser implements EventParser {
 				newDeck = deck.update({ deck: newDeckZone });
 				break;
 			case 'other':
-				const newOther = this.helper.replaceCardInZone(deck.otherZone, updatedCard);
+				const newOther = this.helper.replaceCardInOtherZone(deck.otherZone, updatedCard, this.allCards);
 				newDeck = deck.update({ otherZone: newOther });
 				break;
 		}

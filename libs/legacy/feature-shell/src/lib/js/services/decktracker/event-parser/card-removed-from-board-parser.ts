@@ -31,7 +31,7 @@ export class CardRemovedFromBoardParser implements EventParser {
 			zone: 'REMOVEDFROMGAME',
 		} as DeckCard);
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
-			deck,
+			deck.otherZone,
 			cardWithZone,
 			this.allCards,
 		);

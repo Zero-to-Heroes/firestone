@@ -1,10 +1,11 @@
 import { DeckCard, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class QuestDestroyedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -23,7 +24,7 @@ export class QuestDestroyedParser implements EventParser {
 		const newQuest = existingQuest.update({
 			zone: 'REMOVEDFROMGAME',
 		});
-		const newOtherZone = this.helper.replaceCardInZone(deck.otherZone, newQuest);
+		const newOtherZone = this.helper.replaceCardInOtherZone(deck.otherZone, newQuest, this.allCards);
 
 		const newGlobalEffects: readonly DeckCard[] = deck.globalEffects.filter((c) => c.entityId !== entityId);
 

@@ -1,11 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CostChangedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -53,7 +54,7 @@ export class CostChangedParser implements EventParser {
 				newDeck = deck.update({ deck: newDeckZone });
 				break;
 			case 'other':
-				const newOther = this.helper.replaceCardInZone(deck.otherZone, updatedCard);
+				const newOther = this.helper.replaceCardInOtherZone(deck.otherZone, updatedCard, this.allCards);
 				newDeck = deck.update({ otherZone: newOther });
 				break;
 		}

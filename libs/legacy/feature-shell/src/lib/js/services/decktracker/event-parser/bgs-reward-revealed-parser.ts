@@ -32,7 +32,7 @@ export class BgsRewardRevealedParser implements EventParser {
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 		} as DeckCard);
-		const newOtherZone = this.helper.addSingleCardToOtherZone(deck, card, this.cards);
+		const newOtherZone = this.helper.addSingleCardToOtherZone(deck.otherZone, card, this.cards);
 		const newPlayerDeck = deck.update({
 			otherZone: newOtherZone,
 		} as DeckState);

@@ -51,7 +51,11 @@ export class DiscardedCardParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'DISCARD',
 		} as DeckCard);
-		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(deck, cardWithZone, this.allCards);
+		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
+			deck.otherZone,
+			cardWithZone,
+			this.allCards,
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			otherZone: newOther,

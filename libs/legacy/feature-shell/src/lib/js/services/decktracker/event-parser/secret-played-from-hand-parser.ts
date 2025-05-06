@@ -68,7 +68,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		);
 
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
-			deck,
+			deck.otherZone,
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
 				  cardWithZone.update({

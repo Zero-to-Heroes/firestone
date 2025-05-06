@@ -118,7 +118,7 @@ export class EntityUpdateParser implements EventParser {
 				? this.helper.replaceCardInZone(deck.deck, newCardInDeck)
 				: deck.deck;
 		const newOther = newCardInOther
-			? this.helper.replaceCardInZone(deck.otherZone, newCardInOther)
+			? this.helper.replaceCardInOtherZone(deck.otherZone, newCardInOther, this.allCards)
 			: deck.otherZone;
 		// console.debug('[entity-update] newOther', newOther, deck.otherZone, newCardInOther);
 

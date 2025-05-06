@@ -101,7 +101,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			: deck.board;
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
-			: this.helper.empiricReplaceCardInZone(deck.otherZone, cardWithZone, false);
+			: this.helper.empiricReplaceCardInOtherZone(deck.otherZone, cardWithZone, false, this.allCards);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (

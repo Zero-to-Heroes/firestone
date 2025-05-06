@@ -34,7 +34,7 @@ export class MinionDiedParser implements EventParser {
 
 			const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];
 			const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
-				deck,
+				deck.otherZone,
 				cardWithZone,
 				this.allCards,
 			);

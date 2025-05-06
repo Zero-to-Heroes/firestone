@@ -184,7 +184,7 @@ export class GameStateParsersService {
 			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser()],
 			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.i18n, this.allCards)],
 			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],
-			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper)],
+			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper, this.allCards)],
 			[GameEvent.CREATE_CARD_IN_DECK]: [
 				new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
 				new PlaguesParser(),
@@ -268,9 +268,9 @@ export class GameStateParsersService {
 			[GameEvent.OVERLOADED_CRYSTALS_CHANGED]: [new OverloadParser()],
 			[GameEvent.PARENT_CARD_CHANGED]: [new ParentCardChangedParser(this.helper, this.allCards)],
 			[GameEvent.PASSIVE_BUFF]: [new PassiveTriggeredParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper)],
+			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.QUEST_DESTROYED]: [new QuestDestroyedParser(this.helper)],
+			[GameEvent.QUEST_DESTROYED]: [new QuestDestroyedParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_PLAYED_FROM_DECK]: [
 				new QuestPlayedFromDeckParser(this.helper, this.allCards),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),

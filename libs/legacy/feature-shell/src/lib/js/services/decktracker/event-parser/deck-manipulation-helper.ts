@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardType, getBaseCardId } from '@firestone-hs/reference-data';
+import { CardIds, CardType, getBaseCardId } from '@firestone-hs/reference-data';
 import {
 	BoardSecret,
 	DeckCard,
@@ -161,14 +161,57 @@ export class DeckManipulationHelper {
 		return [result, removedCard];
 	}
 
+	public empiricReplaceCardInOtherZone(
+		otherZone: readonly DeckCard[],
+		newCard: DeckCard,
+		removeFillerCard: boolean,
+		allCards: CardsFacadeService,
+		cardInfos: { cost?: number } = null,
+	): readonly DeckCard[] {
+		// removeFillerCard here doesn't always work - we need to consider the UnknownXXX as filler cards
+		const [newZone, removedCard] = this.removeSingleCardFromZone(
+			otherZone,
+			newCard.cardId,
+			newCard.entityId,
+			removeFillerCard,
+			false,
+			cardInfos,
+		);
+		const updatedZone = this.addSingleCardToOtherZone(newZone, newCard, allCards);
+		return updatedZone;
+	}
+
+	public replaceCardInOtherZone(
+		otherZone: readonly DeckCard[],
+		card: DeckCard,
+		allCards: CardsFacadeService,
+	): readonly DeckCard[] {
+		if (
+			allCards.getCard(card.cardId).type?.toUpperCase() === CardType[CardType.ENCHANTMENT] ||
+			isInvalidForOther(card.cardId)
+		) {
+			return otherZone.some((c) => c.entityId === card.entityId)
+				? otherZone.filter((c) => c.entityId !== card.entityId)
+				: otherZone;
+		}
+
+		const cardIndex = otherZone.map((card) => card.entityId).indexOf(card.entityId);
+		const newZone = [...otherZone];
+		newZone[cardIndex] = card;
+		return newZone;
+	}
+
 	public addSingleCardToOtherZone(
-		deckState: DeckState,
+		otherZone: readonly DeckCard[],
 		card: DeckCard,
 		allCards: CardsFacadeService,
 		keepBuffs = false,
 	): readonly DeckCard[] {
 		if (allCards.getCard(card.cardId).type?.toUpperCase() === CardType[CardType.ENCHANTMENT]) {
-			return deckState.otherZone;
+			return otherZone;
+		}
+		if (isInvalidForOther(card.cardId)) {
+			return otherZone;
 		}
 
 		(card as Mutable<DeckCard>).metaInfo = {
@@ -178,8 +221,9 @@ export class DeckManipulationHelper {
 		(card as Mutable<DeckCard>).positionFromBottom = undefined;
 		(card as Mutable<DeckCard>).positionFromTop = undefined;
 
-		return this.addSingleCardToZone(deckState.otherZone, card, keepBuffs);
+		return this.addSingleCardToZone(otherZone, card, keepBuffs);
 	}
+
 	// When the buffs are sent alongside teh receive_card_in_hand event, we keep them
 	public addSingleCardToZone(
 		zone: readonly DeckCard[],
@@ -542,3 +586,7 @@ export class DeckManipulationHelper {
 		return getBaseCardId(cardId);
 	}
 }
+
+const isInvalidForOther = (cardId: string): boolean => {
+	return cardId?.startsWith(CardIds.DarkGiftToken_EDR_102t) || cardId?.startsWith(CardIds.WakingTerrorToken_EDR_100t);
+};

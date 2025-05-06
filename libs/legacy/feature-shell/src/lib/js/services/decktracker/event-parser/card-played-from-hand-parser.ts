@@ -185,7 +185,7 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
-			: this.helper.addSingleCardToOtherZone(deck, cardToAdd, this.allCards);
+			: this.helper.addSingleCardToOtherZone(deck.otherZone, cardToAdd, this.allCards);
 
 		const { newGlobalEffects, battlecriesMultiplier } = updateGlobalEffects(
 			deck,

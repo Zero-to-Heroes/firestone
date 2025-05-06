@@ -22,7 +22,11 @@ export class LocationDestroyedParser implements EventParser {
 			entityId: -card.entityId,
 		} as DeckCard);
 		const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];
-		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(deck, cardWithZone, this.allCards);
+		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
+			deck.otherZone,
+			cardWithZone,
+			this.allCards,
+		);
 		const newPlayerDeck = deck.update({
 			board: newBoard,
 			otherZone: newOther,

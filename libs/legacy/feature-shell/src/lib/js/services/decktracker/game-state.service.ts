@@ -407,7 +407,7 @@ export class GameStateService {
 			);
 		}
 
-		console.debug('[game-state] processed event', gameEvent.type, currentState, gameEvent);
+		console.debug('[game-state] processed event', gameEvent.type, gameEvent.cardId, currentState, gameEvent);
 		return currentState;
 	}
 

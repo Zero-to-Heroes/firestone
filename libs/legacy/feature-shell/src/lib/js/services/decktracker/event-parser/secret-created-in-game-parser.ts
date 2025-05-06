@@ -53,7 +53,7 @@ export class SecretCreatedInGameParser implements EventParser {
 		// console.debug('[secret-created] card to add', card);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = !existingCard
-			? this.helper.addSingleCardToOtherZone(deck, card, this.cards)
+			? this.helper.addSingleCardToOtherZone(deck.otherZone, card, this.cards)
 			: this.helper.replaceCardInZone(previousOtherZone, card);
 		// console.debug('[secret-created] newOtherZone', newOtherZone);
 		const secretsConfig = await this.secretConfig.getValidSecrets(

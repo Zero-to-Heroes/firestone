@@ -54,7 +54,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			lastAffectedByEntityId: gameEvent.additionalData.lastAffectedByEntityId,
 		} as DeckCard);
-		const newOther = this.helper.addSingleCardToOtherZone(deck, cardWithDefault, this.allCards);
+		const newOther = this.helper.addSingleCardToOtherZone(deck.otherZone, cardWithDefault, this.allCards);
 
 		let newDeck = deck.deck;
 		// The Scythe words in a weird way, and creates the cards directly in the graveyard, instead of

@@ -38,7 +38,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 			putIntoPlay: true,
 		} as DeckCard);
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
-			deck,
+			deck.otherZone,
 			cardWithZone,
 			this.allCards,
 		);
