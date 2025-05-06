@@ -1810,6 +1810,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), minion, zerg),
 				and(side(inputSide), or(inDeck, inHand), minion),
 			);
+		case CardIds.LushwaterScout:
+			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.MadScientist:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.MagathaBaneOfMusic:
@@ -2549,6 +2551,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), spell, frost),
 				and(side(inputSide), or(inDeck, inHand), spell, arcane),
 			);
+		case CardIds.SorcerousSubstitute:
+			return and(side(inputSide), or(inDeck, inHand), spellDamage);
 		case CardIds.SoulburnerVaria_YOG_520:
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.SouleatersScythe_BoundSoulToken:
