@@ -43,9 +43,9 @@ export class ElementalTavernBuffCounterDefinitionV2 extends CounterDefinitionV2<
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.battlegrounds.overlay.counter-elemental-tavern-buff-label'),
+				i18n.translateString('settings.battlegrounds.overlay.counter-elemental-tavern-stats-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.battlegrounds.overlay.counter-elemental-tavern-buff-tooltip'),
+				i18n.translateString('settings.battlegrounds.overlay.counter-elemental-tavern-stats-tooltip'),
 		},
 	};
 	readonly opponent = undefined;

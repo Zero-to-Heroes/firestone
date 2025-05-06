@@ -33,9 +33,9 @@ export class ElementalPowersBuffCounterDefinitionV2 extends CounterDefinitionV2<
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.battlegrounds.overlay.counter-elemetal-buff-label'),
+				i18n.translateString('settings.battlegrounds.overlay.counter-elemental-buff-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.battlegrounds.overlay.counter-elemetal-buff-tooltip'),
+				i18n.translateString('settings.battlegrounds.overlay.counter-elemental-buff-tooltip'),
 		},
 	};
 	readonly opponent = undefined;
