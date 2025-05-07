@@ -53,10 +53,8 @@ export class GalakrondCounterDefinitionV2 extends CounterDefinitionV2<number> {
 }
 
 const getGalakrondCard = (deck: DeckState): string => {
-	const galakrondCard = deck.hero?.classes
-		?.map((cardClass) => getGalakrondCardFor(cardClass, 0))
-		.filter((c) => !!c)?.[0];
-	return galakrondCard ?? '';
+	const heroClass = deck.hero?.classes?.[0] ?? CardClass.PRIEST;
+	return getGalakrondCardFor(heroClass, 0)!;
 };
 
 export const getGalakrondCardFor = (cardClass: CardClass, invokeCount: number): string | null => {
