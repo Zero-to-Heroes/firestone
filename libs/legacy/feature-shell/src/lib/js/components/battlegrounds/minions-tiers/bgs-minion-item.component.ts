@@ -201,7 +201,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 
 						trinketLocked: card.trinketLocked,
 						trinketLockedReason: card.trinketLockedReason?.join('<br />'),
-						faded: fadeHigherTierCards && card.techLevel > tavernTier,
+						faded: fadeHigherTierCards && (!card.techLevel || card.techLevel > tavernTier),
 
 						hidePins: isBgsTrinket(card),
 						hightMinionTooltip: this.i18n.translateString(

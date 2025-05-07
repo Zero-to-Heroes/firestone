@@ -122,6 +122,34 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[leftPadding]="20"
 					></bgs-minion-item>
 				</div>
+				<div
+					class="cards trinket"
+					*ngIf="(!value.collapsed || value.displayMode === 'exploring') && trinkets?.length"
+				>
+					<div class="header" *ngIf="!value.collapsed || value.displayMode !== 'exploring'">
+						<div
+							class="header-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.trinkets-header'"
+							[helpTooltip]="
+								'battlegrounds.in-game.minions-list.compositions.trinkets-header-tooltip' | fsTranslate
+							"
+						></div>
+					</div>
+					<bgs-minion-item
+						class="minion"
+						*ngFor="let minion of trinkets; trackBy: trackByFn"
+						[minion]="minion"
+						[showGoldenCards]="showGoldenCards"
+						[showTrinketTips]="showTrinketTips"
+						[highlightedMinions]="value.highlightedMinions"
+						[highlightedTribes]="highlightedTribes"
+						[highlightedMechanics]="highlightedMechanics"
+						[fadeHigherTierCards]="fadeHigherTierCards"
+						[showTribesHighlight]="showTribesHighlight"
+						[showTavernTierIcon]="true"
+						[leftPadding]="20"
+					></bgs-minion-item>
+				</div>
 			</div>
 		</ng-container>
 	`,
@@ -139,6 +167,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	coreCards: readonly ExtendedReferenceCard[];
 	addonCards: readonly ExtendedReferenceCard[];
 	cycleCards: readonly ExtendedReferenceCard[];
+	trinkets: readonly ExtendedReferenceCard[];
 	enablerCards: readonly ExtendedReferenceCard[];
 
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
@@ -166,6 +195,15 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			});
 		this.cycleCards = value.cards
 			.filter((c) => c.status === 'CYCLE')
+			.map((c) => {
+				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
+				const result: ExtendedReferenceCard = {
+					...ref,
+				};
+				return result;
+			});
+		this.trinkets = value.cards
+			.filter((c) => c.status === 'TRINKET')
 			.map((c) => {
 				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
 				const result: ExtendedReferenceCard = {

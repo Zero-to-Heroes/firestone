@@ -336,11 +336,17 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		);
 		this.compositions$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListShowCompositions)),
-			this.bgGameState.gameState$$.pipe(this.mapData((state) => state?.currentGame?.availableRaces)),
+			this.bgGameState.gameState$$.pipe(
+				this.mapData((state) => state?.currentGame?.availableRaces),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			),
+			this.bgGameState.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasTrinkets)),
 			this.strategies.strategies$$,
 		]).pipe(
-			this.mapData(([showFromPrefs, availableTribes, strategies]) =>
-				showFromPrefs ? buildCompositions(availableTribes, strategies, this.allCards, this.i18n) : [],
+			this.mapData(([showFromPrefs, availableTribes, hasTrinkets, strategies]) =>
+				showFromPrefs
+					? buildCompositions(availableTribes, strategies, hasTrinkets, this.allCards, this.i18n)
+					: [],
 			),
 		);
 

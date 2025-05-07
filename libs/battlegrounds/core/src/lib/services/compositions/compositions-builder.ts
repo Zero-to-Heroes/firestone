@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardType, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { ExtendedBgsCompAdvice } from './model';
 
 export const buildCompositions = (
 	availableTribes: readonly Race[],
 	compositions: readonly BgsCompAdvice[],
+	useTrinkets: boolean,
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly ExtendedBgsCompAdvice[] => {
 	const result =
 		compositions
 			?.map((s) => enhanceComp(s, allCards))
-			.filter((s) => isAvailable(s, availableTribes, allCards))
-			.map((s) => trimComp(s, availableTribes, allCards))
+			.filter((s) => isAvailable(s, availableTribes, useTrinkets, allCards))
+			.map((s) => trimComp(s, availableTribes, useTrinkets, allCards))
 			.sort((a, b) => {
 				const powerLevelCompare = comparePowerLevel(a.powerLevel, b.powerLevel);
 				if (powerLevelCompare !== 0) {
@@ -76,26 +77,40 @@ const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): Extende
 const trimComp = (
 	comp: ExtendedBgsCompAdvice,
 	availableTribes: readonly Race[],
+	useTrinkets: boolean,
 	allCards: CardsFacadeService,
 ): ExtendedBgsCompAdvice => {
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
-		cards: comp.cards.filter((c) => isCardAvailable(allCards.getCard(c.cardId), availableTribes)),
+		cards: comp.cards.filter((c) => isCardAvailable(allCards.getCard(c.cardId), availableTribes, useTrinkets)),
 	};
 	return result;
 };
 
-const isAvailable = (comp: BgsCompAdvice, availableTribes: readonly Race[], allCards: CardsFacadeService): boolean => {
+const isAvailable = (
+	comp: BgsCompAdvice,
+	availableTribes: readonly Race[],
+	useTrinkets: boolean,
+	allCards: CardsFacadeService,
+): boolean => {
 	if (!!comp.forcedTribes?.length) {
 		return comp.forcedTribes.every((t) => availableTribes.includes(t));
 	}
 	return comp.cards
 		.filter((c) => c.status === 'CORE')
 		.map((c) => allCards.getCard(c.cardId))
-		.every((c) => isCardAvailable(c, availableTribes));
+		.every((c) => isCardAvailable(c, availableTribes, useTrinkets));
 };
 
-const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[]): boolean => {
+const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[], useTrinets: boolean): boolean => {
+	if (
+		card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
+		useTrinets &&
+		!card.otherTags?.includes('REMOVED_FROM_BACON_POOL')
+	) {
+		return true;
+	}
+
 	if (!card.techLevel) {
 		return false;
 	}
