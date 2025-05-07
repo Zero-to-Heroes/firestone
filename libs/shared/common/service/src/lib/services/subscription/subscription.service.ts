@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -51,21 +52,9 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 				});
 			}
 
-			this.currentPlan$$
-				.pipe(
-					distinctUntilChanged(
-						(a, b) =>
-							a?.active === b?.active &&
-							a?.id === b?.id &&
-							a?.autoRenews === b?.autoRenews &&
-							a?.cancelled === b?.cancelled &&
-							a?.discordCode === b?.discordCode &&
-							a?.expireAt?.getTime() === b?.expireAt?.getTime(),
-					),
-				)
-				.subscribe((plan) => {
-					console.log('[ads] [subscription] new plan', plan);
-				});
+			this.currentPlan$$.pipe(distinctUntilChanged((a, b) => equalCurrentPlan(a, b))).subscribe((plan) => {
+				console.log('[ads] [subscription] new plan', plan);
+			});
 
 			await this.fetchCurrentPlan();
 		});
@@ -174,13 +163,15 @@ export interface CurrentPlan {
 	readonly discordCode?: string;
 }
 export const equalCurrentPlan = (a: CurrentPlan | null | undefined, b: CurrentPlan | null | undefined): boolean => {
+	const expireA = a?.expireAt ? new Date(a.expireAt) : null;
+	const expireB = b?.expireAt ? new Date(b.expireAt) : null;
 	return (
 		a?.active === b?.active &&
 		a?.id === b?.id &&
 		a?.autoRenews === b?.autoRenews &&
 		a?.cancelled === b?.cancelled &&
 		a?.discordCode === b?.discordCode &&
-		a?.expireAt?.getTime() === b?.expireAt?.getTime()
+		(!!expireA && !!expireB ? expireA.getTime() === expireB.getTime() : expireA == expireB)
 	);
 };
 

@@ -181,7 +181,6 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 		this.planTextKey = value.text;
 		this.subscribeButtonKey = this.buildSubscribeButtonKey(value.id, value.activePlan?.id);
 		if (this.isActive && this.id !== 'legacy') {
-			// this.discordCode = value.activePlan?.discordCode;
 			this.activateDiscordText = this.i18n.translateString('app.premium.activate-discord-details');
 		}
 		this.helpTooltipSubscribe = this.cantSubscribe
