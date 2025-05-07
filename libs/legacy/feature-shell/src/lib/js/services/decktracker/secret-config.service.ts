@@ -90,15 +90,16 @@ export class SecretConfigService {
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
 				);
 			case CardIds.Supernova_GDB_301:
+			case CardIds.FyrakkTheBlazing_FIR_959:
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
 				);
-			case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
-				return [CardIds.IceBlock, CardIds.IceBlockLegacy].includes(secretCardId as CardIds);
 			case CardIds.SubmergedSpacerock:
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]) ?? false
 				);
+			case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
+				return [CardIds.IceBlock, CardIds.IceBlockLegacy].includes(secretCardId as CardIds);
 			default:
 				return true;
 		}
