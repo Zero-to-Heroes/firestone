@@ -50,6 +50,7 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 			this.region$$.next(+region);
 		});
 		this.gameStatus.inGame$$.pipe(filter((inGame) => !inGame)).subscribe(() => {
+			console.log('[account-service] clearing region');
 			this.region$$.next(null);
 		});
 	}
