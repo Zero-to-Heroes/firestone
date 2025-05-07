@@ -175,8 +175,10 @@ export class GameStateService {
 		for (const subQueue of chunks) {
 			try {
 				const stateUpdateEvents = subQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
-				const stateUpdateEvent =
-					stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null;
+				const stateUpdateEvent: GameEvent =
+					stateUpdateEvents.length > 0
+						? (stateUpdateEvents[stateUpdateEvents.length - 1] as GameEvent)
+						: null;
 				const zonePositionChangedEvent = mergeZonePositionChangedEvents(
 					subQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
 				);
@@ -213,52 +215,50 @@ export class GameStateService {
 				}
 
 				// TODO: completely remove this step
-				if (currentState && (stateUpdateEvent != null || currentState !== this.state)) {
-					const start = Date.now();
-					// const previousState = initialState;
-					// console.debug('[game-state] state post-processing');
-					const postProcessedState = currentState;
-					// Add information that is not linked to events, like the number of turns the
-					// card has been present in the zone
-					const updatedPlayerDeck = this.updateDeck(
-						postProcessedState.playerDeck,
-						postProcessedState,
-						(stateUpdateEvent || ({} as any)).Player,
+				// Maybe only update this when we have NEW_TURN events?
+				if (currentState && currentState !== this.state) {
+					const updatedPlayerDeck = this.gameStateMetaInfos.updateDeck(
+						currentState.playerDeck,
+						currentState.currentTurn,
 					);
-					// console.debug(
-					// 	'[game-state] updated player deck',
-					// 	postProcessedState.playerDeck === updatedPlayerDeck,
-					// 	updatedPlayerDeck,
-					// 	postProcessedState.playerDeck,
-					// );
-
-					const udpatedOpponentDeck = this.updateDeck(
-						postProcessedState.opponentDeck,
-						postProcessedState,
-						(stateUpdateEvent || ({} as any)).Opponent,
+					const udpatedOpponentDeck = this.gameStateMetaInfos.updateDeck(
+						currentState.opponentDeck,
+						currentState.currentTurn,
 					);
-					// console.debug(
-					// 	'[game-state] updated opponent deck',
-					// 	postProcessedState.opponentDeck === udpatedOpponentDeck,
-					// 	udpatedOpponentDeck,
-					// 	postProcessedState.opponentDeck,
-					// );
-
 					const hasChanged =
-						postProcessedState !== currentState ||
-						updatedPlayerDeck !== postProcessedState.playerDeck ||
-						udpatedOpponentDeck !== postProcessedState.opponentDeck;
+						updatedPlayerDeck !== currentState.playerDeck ||
+						udpatedOpponentDeck !== currentState.opponentDeck;
 					currentState = hasChanged
-						? postProcessedState.update({
+						? currentState.update({
 								playerDeck: updatedPlayerDeck,
 								opponentDeck: udpatedOpponentDeck,
 						  })
-						: postProcessedState;
-					const elapsed = Date.now() - start;
-					if (elapsed > 1000) {
-						console.warn('[game-state] post-processing took too long', elapsed);
-					}
-					// console.debug('[game-state] updated state', initialState === previousState, initialState);
+						: currentState;
+				}
+
+				// TODO: completely remove this step
+				if (currentState && stateUpdateEvent != null) {
+					// Add information that is not linked to events, like the number of turns the
+					// card has been present in the zone
+					const updatedPlayerDeck = this.updateDeck(
+						currentState.playerDeck,
+						currentState,
+						stateUpdateEvent.gameState.Player,
+					);
+					const udpatedOpponentDeck = this.updateDeck(
+						currentState.opponentDeck,
+						currentState,
+						stateUpdateEvent.gameState.Opponent,
+					);
+					const hasChanged =
+						updatedPlayerDeck !== currentState.playerDeck ||
+						udpatedOpponentDeck !== currentState.opponentDeck;
+					currentState = hasChanged
+						? currentState.update({
+								playerDeck: updatedPlayerDeck,
+								opponentDeck: udpatedOpponentDeck,
+						  })
+						: currentState;
 				}
 
 				if (currentState && currentState !== this.state) {
@@ -422,17 +422,8 @@ export class GameStateService {
 	// TODO: not a big fan of this. These methods should probably be called only once, on the appropriate action
 	// this feels lazy, and probably perf-hungry
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker: PlayerGameState): DeckState {
-		// Maybe only update this when we have NEW_TURN events?
-		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
-		if (!playerFromTracker) {
-			return stateWithMetaInfos;
-		}
-
-		// This could be completely removed by support the "POSITION_IN_ZONE" tag and tag changes
-		const playerDeckWithZonesOrdered = stateWithMetaInfos; // this.zoneOrdering.orderZones(stateWithMetaInfos, playerFromTracker);
-
 		// Could also just support the DORMANT tag event
-		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
+		const newBoard: readonly DeckCard[] = deck.board.map((card) => {
 			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
 			const dormantTag = hasTag(entity, GameTag.DORMANT);
 			return dormantTag === card.dormant ? card : card.update({ dormant: dormantTag });
@@ -443,38 +434,29 @@ export class GameStateService {
 		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED)?.Value ?? 0;
 		const manaLeft = maxMana == null || manaSpent == null ? null : maxMana - manaSpent;
 		const newHero: HeroCard =
-			manaLeft != playerDeckWithZonesOrdered.hero?.manaLeft
-				? playerDeckWithZonesOrdered.hero?.update({
+			manaLeft != deck.hero?.manaLeft
+				? deck.hero?.update({
 						manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
 				  })
-				: playerDeckWithZonesOrdered.hero;
+				: deck.hero;
 
-		// Not sure this is needed, we can just use the info from the game state
+		// We need this because we don't know the exact content of cards in the opponent's deck
+		// simply fomr looking at the deck state (eg we have imported a list, and we don't know which ones
+		// are to be removed)
 		const cardsLeftInDeck = playerFromTracker.Deck?.length;
-
-		// This could probably be moved on the C# side, updated at the end of each BLOCK and sent via a new event
-		// const totalAttackOnBoard = this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker);
 
 		// Overall this whole process could likely be completely removed
 		const hasChanged =
-			playerDeckWithZonesOrdered !== stateWithMetaInfos ||
-			!arraysEqual(newBoard, playerDeckWithZonesOrdered.board) ||
-			newHero !== playerDeckWithZonesOrdered.hero ||
-			cardsLeftInDeck !== playerDeckWithZonesOrdered.cardsLeftInDeck;
-		// ||
-		// !(
-		// 	totalAttackOnBoard.board === playerDeckWithZonesOrdered.totalAttackOnBoard.board &&
-		// 	totalAttackOnBoard.hero === playerDeckWithZonesOrdered.totalAttackOnBoard.hero
-		// );
+			!arraysEqual(newBoard, deck.board) || newHero !== deck.hero || cardsLeftInDeck !== deck.cardsLeftInDeck;
 
 		return hasChanged
-			? playerDeckWithZonesOrdered.update({
+			? deck.update({
 					board: newBoard,
 					hero: newHero,
 					cardsLeftInDeck: cardsLeftInDeck,
 					// totalAttackOnBoard: totalAttackOnBoard,
 			  })
-			: stateWithMetaInfos;
+			: deck;
 	}
 
 	private async buildEventEmitters() {

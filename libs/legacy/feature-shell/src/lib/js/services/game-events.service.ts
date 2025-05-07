@@ -212,7 +212,7 @@ export class GameEvents {
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
 			this.lastProcessedTimestamp = Date.now();
 		} else {
-			console.debug('[game-events] received GAME_STATE_UPDATE');
+			console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
 			this.lastGameStateUpdateTimestamp = Date.now();
 			this.gameStateUpdateInProgress = false;
 			// this.receivedLastGameStateUpdate = true;
