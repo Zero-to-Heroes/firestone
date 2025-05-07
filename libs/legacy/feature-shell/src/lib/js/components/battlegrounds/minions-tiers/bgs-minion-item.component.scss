@@ -8,6 +8,8 @@
 	display: flex;
 	position: relative;
 	margin-bottom: 2px;
+	// Needed to prevent the tile from showing outside of the list, thus showing the white background
+	overflow: hidden;
 	// overflow: hidden;
 
 	&.locked {
