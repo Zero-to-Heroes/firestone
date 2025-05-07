@@ -2515,6 +2515,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead, minion);
 		case CardIds.SkarrTheCatastrophe_WW_026:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
+		case CardIds.SkeletalSidekickCore_RLK_958:
+			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.SketchyInformation:
 			return and(side(inputSide), inDeck, deathrattle, effectiveCostLess(5));
 		case CardIds.SketchArtist_TOY_916:
