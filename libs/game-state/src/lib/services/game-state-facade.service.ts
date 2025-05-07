@@ -31,7 +31,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 			await sleep(50);
 		}
 
-		this.ow.getMainWindow().deckEventBus.subscribe(async (event) => {
+		this.ow.getMainWindow().deckEventBus.subscribe(async (event: GameState) => {
 			this.gameState$$.next(event);
 		});
 	}

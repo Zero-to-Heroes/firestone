@@ -257,9 +257,9 @@ export class BattlegroundsStoreService {
 			this.mainWindowState = newState[0];
 		});
 		this.stateUpdater = window['mainWindowStoreUpdater'];
-		const deckEventBus: BehaviorSubject<any> = window['deckEventBus'];
+		const deckEventBus: BehaviorSubject<GameState> = window['deckEventBus'];
 		deckEventBus.subscribe((event) => {
-			this.deckState = event?.state as GameState;
+			this.deckState = event;
 		});
 
 		await this.prefs.isReady();

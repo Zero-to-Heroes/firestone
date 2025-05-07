@@ -411,8 +411,7 @@ export class GameStateService {
 			'[game-state] processed event',
 			gameEvent.type,
 			gameEvent.cardId,
-			currentState.playerDeck.board.map((e) => e.cardName),
-			currentState.opponentDeck.board.map((e) => e.cardName),
+			currentState.metadata?.gameType,
 			currentState,
 			gameEvent,
 		);
