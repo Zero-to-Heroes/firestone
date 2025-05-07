@@ -148,10 +148,9 @@
 	.details {
 		padding-left: 10px;
 		list-style: none;
-
-		li {
-			// margin-top: 5px;
-		}
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
 
 		::ng-deep replay-info {
 			.player-name.opponent {

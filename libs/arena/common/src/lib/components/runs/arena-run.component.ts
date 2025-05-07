@@ -89,7 +89,7 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 		</div>
 		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
-				<li *ngFor="let step of steps; trackBy: trackByStepFn">
+				<li class="step" *ngFor="let step of steps; trackBy: trackByStepFn">
 					<replay-info-generic-2 [replay]="step"></replay-info-generic-2>
 				</li>
 			</ul>
