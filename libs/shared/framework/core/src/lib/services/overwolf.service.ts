@@ -271,7 +271,7 @@ export class OverwolfService {
 	public async generateSessionToken(): Promise<string> {
 		return new Promise<string>((resolve) => {
 			overwolf.profile.generateUserSessionToken((result) => {
-				console.debug('generated user session token', result);
+				console.log('generated user session token', result);
 				if (!result.success) {
 					console.error('could not generate user session token', result.error);
 				}
