@@ -422,6 +422,9 @@ export class GameStateService {
 	// TODO: not a big fan of this. These methods should probably be called only once, on the appropriate action
 	// this feels lazy, and probably perf-hungry
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker: PlayerGameState): DeckState {
+		if (!playerFromTracker) {
+			return deck;
+		}
 		// Could also just support the DORMANT tag event
 		const newBoard: readonly DeckCard[] = deck.board.map((card) => {
 			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);

@@ -488,7 +488,7 @@ export class BattlegroundsStoreService {
 				);
 				if (
 					playerTeams?.Teammate?.Hero?.CardId &&
-					playerTeams.Teammate.Hero.CardId !== playerTeams.Player.Hero.CardId
+					playerTeams.Teammate.Hero.CardId !== playerTeams.Player?.Hero.CardId
 				) {
 					console.debug('player teams from memory', playerTeams);
 					this.playerTeams = playerTeams;
