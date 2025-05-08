@@ -11,7 +11,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, filter } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AccountService extends AbstractFacadeService<AccountService> {
 	public region$$: BehaviorSubject<BnetRegion | null>;
 
@@ -32,12 +32,12 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 
 	protected async init() {
 		// Try a hack to prevent region being null when starting Firestone alongide the game
-		await sleep(1000);
 		this.region$$ = new BehaviorSubject<BnetRegion | null>(null);
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.gameStatus = AppInjector.get(GameStatusService);
 		console.log('[account-service] ready');
 
+		await sleep(1000);
 		await waitForReady(this.gameStatus);
 
 		this.gameStatus.inGame$$.pipe(filter((inGame) => !!inGame)).subscribe(async () => {
