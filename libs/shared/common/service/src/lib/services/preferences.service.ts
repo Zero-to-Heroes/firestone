@@ -49,7 +49,9 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 
 	protected async init() {
 		this.storage = AppInjector.get(PreferencesStorageService);
-		this.preferences$$ = new BehaviorSubject<Preferences>(this.storage.getUserPreferences());
+		this.preferences$$ = new BehaviorSubject<Preferences>(null);
+
+		console.log('[preferences] ready');
 
 		this.preferences$$
 			.pipe(
@@ -60,6 +62,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		window['prefsObservers'] = () => {
 			console.log(this.preferences$$.observers);
 		};
+		this.preferences$$.next(this.storage.getUserPreferences());
 	}
 
 	public async getPreferences(): Promise<Preferences> {

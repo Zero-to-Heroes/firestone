@@ -26,6 +26,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	protected async init() {
 		this.gameState$$ = new BehaviorSubject<GameState | null>(null);
 		this.ow = AppInjector.get(OverwolfService);
+		console.log('[game-state-facade] ready');
 
 		while (!this.ow.getMainWindow()?.deckEventBus) {
 			await sleep(50);

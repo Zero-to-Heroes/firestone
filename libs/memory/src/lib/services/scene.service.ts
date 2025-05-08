@@ -29,6 +29,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		this.lastNonGamePlayScene$$ = new SubscriberAwareBehaviorSubject<SceneMode | null | undefined>(null);
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
+		console.log('[scene-service] ready');
 
 		this.currentScene$$.onFirstSubscribe(async () => {
 			this.internalSubscriber$$.subscribe();

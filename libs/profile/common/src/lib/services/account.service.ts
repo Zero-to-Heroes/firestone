@@ -36,6 +36,7 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 		this.region$$ = new BehaviorSubject<BnetRegion | null>(null);
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.gameStatus = AppInjector.get(GameStatusService);
+		console.log('[account-service] ready');
 
 		await waitForReady(this.gameStatus);
 
