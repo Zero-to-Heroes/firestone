@@ -218,6 +218,9 @@ export class DeckManipulationHelper {
 			turnAtWhichCardEnteredCurrentZone: undefined,
 			turnAtWhichCardEnteredHand: undefined,
 		};
+		// This doesn't work because of dredge - aftr CARD_REVEALED, the card is in the other zone,
+		// and we give it a posiotion from bottom from there
+		// Keeping it for now, and checking if re-assigning the position afterwards works
 		(card as Mutable<DeckCard>).positionFromBottom = undefined;
 		(card as Mutable<DeckCard>).positionFromTop = undefined;
 
@@ -243,18 +246,30 @@ export class DeckManipulationHelper {
 		) {
 			return zone;
 		}
-		const newCard = DeckCard.create({
-			...cardTemplate,
-			buffingEntityCardIds: keepBuffs ? cardTemplate.buffingEntityCardIds : undefined,
-			buffCardIds: keepBuffs ? cardTemplate.buffCardIds : undefined,
-			metaInfo: {
-				// Keep the turn at which it entered hand, if present
-				...cardTemplate.metaInfo,
-				turnAtWhichCardEnteredCurrentZone: undefined,
-			},
-		} as DeckCard);
+		(cardTemplate as Mutable<DeckCard>).metaInfo = {
+			// Keep the turn at which it entered hand, if present
+			...cardTemplate.metaInfo,
+			turnAtWhichCardEnteredCurrentZone: undefined,
+		};
+		(cardTemplate as Mutable<DeckCard>).buffingEntityCardIds = keepBuffs
+			? cardTemplate.buffingEntityCardIds
+			: undefined;
+		(cardTemplate as Mutable<DeckCard>).buffCardIds = keepBuffs ? cardTemplate.buffCardIds : undefined;
 
-		return [...zone, newCard];
+		return [...zone, cardTemplate];
+
+		// const newCard = DeckCard.create({
+		// 	...cardTemplate,
+		// 	buffingEntityCardIds: keepBuffs ? cardTemplate.buffingEntityCardIds : undefined,
+		// 	buffCardIds: keepBuffs ? cardTemplate.buffCardIds : undefined,
+		// 	metaInfo: {
+		// 		// Keep the turn at which it entered hand, if present
+		// 		...cardTemplate.metaInfo,
+		// 		turnAtWhichCardEnteredCurrentZone: undefined,
+		// 	},
+		// } as DeckCard);
+
+		// return [...zone, newCard];
 	}
 
 	public updateCardInDeck(

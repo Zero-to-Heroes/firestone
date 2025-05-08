@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -74,6 +75,7 @@ export class CardRevealedParser implements EventParser {
 			positionFromBottom: positionFromBottom,
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : {},
 		} as DeckCard);
+		console.debug('[card-revealed] card', card.cardId, card, gameEvent);
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
 		// bottom of the deck with another card previously)
@@ -87,6 +89,16 @@ export class CardRevealedParser implements EventParser {
 			gameEvent.additionalData.revealedFromBlock === 'DREDGE'
 				? this.helper.empiricReplaceCardInOtherZone(deck.otherZone, card, false, this.cards)
 				: this.helper.addSingleCardToOtherZone(deck.otherZone, card, this.cards);
+		(card as Mutable<DeckCard>).positionFromBottom = positionFromBottom;
+		console.debug(
+			'[card-revealed] newOther',
+			card.cardId,
+			gameEvent.additionalData.revealedFromBlock,
+			newOther,
+			deck.otherZone,
+			card,
+			gameEvent,
+		);
 		let globalEffects = deck.globalEffects;
 		if (
 			WHIZBANG_DECK_CARD_IDS.includes(card.cardId as CardIds) &&
