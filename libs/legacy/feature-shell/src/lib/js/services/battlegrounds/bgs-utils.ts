@@ -314,6 +314,10 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 1190;
 		case CardIds.Artanis_BG31_HERO_802:
 			return 1191;
+		case CardIds.ForestLordCenarius_BG32_HERO_001:
+			return 1323;
+		case CardIds.Buttons_BG32_HERO_002:
+			return 1322;
 		// case CardIds.Diablo:
 		// 	return;
 		default:
