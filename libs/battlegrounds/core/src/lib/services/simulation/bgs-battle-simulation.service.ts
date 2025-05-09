@@ -92,7 +92,7 @@ export class BgsBattleSimulationService {
 				prefs,
 				includeOutcomeSamples,
 				async (result: SimulationResult | null) => {
-					console.debug('[bgs-simulation] partial battle simulation result', result);
+					// console.debug('[bgs-simulation] partial battle simulation result', result);
 					await sleep(0);
 					const resultForLog = !!result ? { ...result } : null;
 					if (!!resultForLog) {

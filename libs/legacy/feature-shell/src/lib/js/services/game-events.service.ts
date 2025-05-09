@@ -212,7 +212,7 @@ export class GameEvents {
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
 			this.lastProcessedTimestamp = Date.now();
 		} else {
-			console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
+			// console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
 			this.lastGameStateUpdateTimestamp = Date.now();
 			this.gameStateUpdateInProgress = false;
 			// this.receivedLastGameStateUpdate = true;
@@ -1103,6 +1103,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
+				console.debug('[game-events] Received event' + gameEvent.Type, gameEvent.Value);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
@@ -1304,7 +1305,7 @@ export class GameEvents {
 				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent));
 				break;
 			case 'BATTLEGROUNDS_BATTLE_STARTING':
-				console.debug('[game-events] emitting BATTLEGROUNDS_BATTLE_STARTING', gameEvent);
+				console.debug('[game-events] receiving BATTLEGROUNDS_BATTLE_STARTING', gameEvent);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_STARTING,

@@ -594,7 +594,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
-		const start = Date.now();
+		// const start = Date.now();
 		for (let i = 0; i < eventQueue.length; i++) {
 			try {
 				await this.processEvent(eventQueue[i]);
@@ -602,7 +602,7 @@ export class BattlegroundsStoreService {
 				console.error('[bgs-store] Exception while processing event', e);
 			}
 		}
-		console.debug('[bgs-store] processed event queue', eventQueue.length, 'in', Date.now() - start, 'ms');
+		// console.debug('[bgs-store] processed event queue', eventQueue.length, 'in', Date.now() - start, 'ms');
 		return [];
 	}
 

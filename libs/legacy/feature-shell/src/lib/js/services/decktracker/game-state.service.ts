@@ -262,16 +262,16 @@ export class GameStateService {
 				}
 
 				if (currentState && currentState !== this.state) {
-					console.debug('[game-state] state has changed', currentState);
+					// console.debug('[game-state] state has changed', currentState);
 					this.state = currentState;
 					this.eventEmitters.forEach((emitter) => emitter(currentState));
 				} else {
-					console.debug(
-						'[game-state] state is unchanged, not emitting event',
-						// gameEvent.type,
-						// gameEvent.cardId,
-						// gameEvent.entityId,
-					);
+					// console.debug(
+					// 	'[game-state] state is unchanged, not emitting event',
+					// 	// gameEvent.type,
+					// 	// gameEvent.cardId,
+					// 	// gameEvent.entityId,
+					// );
 				}
 				// console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
 			} catch (e) {
@@ -407,14 +407,14 @@ export class GameStateService {
 			);
 		}
 
-		console.debug(
-			'[game-state] processed event',
-			gameEvent.type,
-			gameEvent.cardId,
-			currentState.metadata?.gameType,
-			currentState,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[game-state] processed event',
+		// 	gameEvent.type,
+		// 	gameEvent.cardId,
+		// 	currentState.metadata?.gameType,
+		// 	currentState,
+		// 	gameEvent,
+		// );
 		return currentState;
 	}
 
