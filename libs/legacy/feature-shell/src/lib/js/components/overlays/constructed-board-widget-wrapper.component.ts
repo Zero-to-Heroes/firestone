@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, ShortCard } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -123,12 +123,14 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 	}
 
 	private buildBoard(playerBoard: readonly DeckCard[], side: 'player' | 'opponent'): readonly BoardCardOverlay[] {
-		return playerBoard.map((playerCard) => ({
-			cardId: playerCard.cardId,
-			entityId: playerCard.entityId,
-			side: side,
-			playOrder: playerCard.playTiming,
-		}));
+		return [...playerBoard]
+			.sort((a, b) => (a.tags[GameTag.ZONE_POSITION] ?? 0) - (b.tags[GameTag.ZONE_POSITION] ?? 0))
+			.map((playerCard) => ({
+				cardId: playerCard.cardId,
+				entityId: playerCard.entityId,
+				side: side,
+				playOrder: playerCard.playTiming,
+			}));
 	}
 }
 
