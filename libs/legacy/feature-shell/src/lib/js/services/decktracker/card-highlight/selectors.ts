@@ -295,7 +295,16 @@ export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
 // Almost all the "imbue" tags are ref tags
-export const imbue = or(hasMechanic(GameTag.IMBUE), hasReference(GameTag.IMBUE));
+export const imbue = and(
+	or(hasMechanic(GameTag.IMBUE), hasReference(GameTag.IMBUE)),
+	not(
+		cardIs(
+			CardIds.PetalPicker_FIR_921,
+			CardIds.ResplendentDreamweaver_EDR_860,
+			CardIds.MalorneTheWaywatcher_EDR_888,
+		),
+	),
+);
 export const infuse = hasMechanic(GameTag.INFUSE);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
