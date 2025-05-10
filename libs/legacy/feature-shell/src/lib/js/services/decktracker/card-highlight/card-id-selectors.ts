@@ -2201,6 +2201,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
 		case CardIds.RangariScout_GDB_841:
 			return and(side(inputSide), or(inDeck, inHand), discover);
+		case CardIds.RatchetPrivateer:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.ForestWardenOmu_RapidGrowth_THD_007p:
 			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
 		case CardIds.Ravage_SC_004hp:
@@ -2423,6 +2425,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, not(neutral));
 		case CardIds.Shadehound:
 			return and(side(inputSide), or(inDeck, inHand), beast);
+		case CardIds.ShadestoneSkulker_DEEP_012:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.Shadowborn:
 			return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 		case CardIds.Shadowcaster:
@@ -2991,6 +2995,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.Ursatron:
 			return and(side(inputSide), inDeck, mech);
+		case CardIds.Ursol_EDR_259:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ValstannStaghelm_WON_345:
 			return and(side(inputSide), inDeck, minion, taunt);
 		case CardIds.VanndarStormpike_AV_223:
