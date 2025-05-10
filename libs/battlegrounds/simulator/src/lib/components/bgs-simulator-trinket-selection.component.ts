@@ -218,6 +218,7 @@ export class BgsSimulatorTrinketSelectionComponent
 			cardId: trinket.id,
 			entityId: 0,
 			scriptDataNum1: 0,
+			scriptDataNum2: 0,
 			scriptDataNum6: this.trinketSlot$$.value,
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
