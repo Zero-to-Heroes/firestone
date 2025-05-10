@@ -150,7 +150,9 @@ const getDynamicFilters = (
 				c.type?.toUpperCase() === CardType[CardType.SPELL];
 		case CardIds.Scorchreaver_FIR_952:
 			return (c) =>
-				c.spellSchool === SpellSchool[SpellSchool.FEL] && c.type?.toUpperCase() === CardType[CardType.SPELL];
+				canBeDiscoveredByClass(c, options.currentClass) &&
+				c.spellSchool === SpellSchool[SpellSchool.FEL] &&
+				c.type?.toUpperCase() === CardType[CardType.SPELL];
 		case CardIds.ShadowflameStalker_FIR_924:
 			return (c) => hasCorrectTribe(c, Race.DEMON) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.EmberscarredWhelp_FIR_927:
