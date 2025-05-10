@@ -4,6 +4,7 @@ import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
 	public static deckIndexFromBottom = 0;
+	public static deckIndexFromTop = 0;
 
 	readonly cardId: string;
 	readonly internalEntityId: string;

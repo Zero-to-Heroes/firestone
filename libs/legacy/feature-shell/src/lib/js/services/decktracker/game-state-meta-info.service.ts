@@ -6,7 +6,7 @@ import { arraysEqual } from '@firestone/shared/framework/common';
 export class GameStateMetaInfoService {
 	public updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
 		const newBoard = this.cleanZone(deckState.board, true);
-		const newDeck = this.cleanBottomPositions(this.cleanZone(deckState.deck, false));
+		const newDeck = this.cleanZone(deckState.deck, false);
 		const newHand = this.updateHand(deckState.hand, currentTurn, true);
 		const newOtherZone = this.cleanZone(deckState.otherZone, true);
 
@@ -24,20 +24,6 @@ export class GameStateMetaInfoService {
 					otherZone: newOtherZone,
 			  })
 			: deckState;
-	}
-
-	private cleanBottomPositions(deck: readonly DeckCard[]): readonly DeckCard[] {
-		const result = [...deck]
-			.sort((a, b) => (a.positionFromBottom ?? 0) - (b.positionFromBottom ?? 0))
-			.sort((a, b) => (a.positionFromTop ?? 0) - (b.positionFromTop ?? 0))
-			.map((card, index) =>
-				card.positionFromTop == null
-					? card
-					: card.update({
-							positionFromTop: index + 1,
-					  }),
-			);
-		return arraysEqual(result, deck) ? deck : result;
 	}
 
 	// If the card goes back to deck / board, we want to reset the counter, as it doesn't

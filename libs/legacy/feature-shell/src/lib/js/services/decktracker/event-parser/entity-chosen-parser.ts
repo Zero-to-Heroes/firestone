@@ -143,7 +143,8 @@ export class EntityChosenParser implements EventParser {
 		}
 
 		const newCard = cardInDeck.update({
-			positionFromTop: 0,
+			positionFromTop: DeckCard.deckIndexFromTop--,
+			positionFromBottom: undefined,
 		});
 
 		const newDeck: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(

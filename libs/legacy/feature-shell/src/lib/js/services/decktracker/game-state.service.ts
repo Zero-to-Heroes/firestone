@@ -372,13 +372,6 @@ export class GameStateService {
 					if (elapsed > 1000) {
 						console.warn('[game-state] parser took too long', elapsed, gameEvent.type);
 					}
-					// console.debug(
-					// 	'[game-state] parsed event',
-					// 	gameEvent.type,
-					// 	initialState === stateBeforeParser,
-					// 	initialState,
-					// 	parser,
-					// );
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
@@ -407,14 +400,14 @@ export class GameStateService {
 			);
 		}
 
-		// console.debug(
-		// 	'[game-state] processed event',
-		// 	gameEvent.type,
-		// 	gameEvent.cardId,
-		// 	currentState.metadata?.gameType,
-		// 	currentState,
-		// 	gameEvent,
-		// );
+		console.debug(
+			'[game-state] processed event',
+			gameEvent.type,
+			gameEvent.cardId,
+			currentState.playerDeck.deck.filter((d) => d.positionFromTop),
+			currentState,
+			gameEvent,
+		);
 		return currentState;
 	}
 

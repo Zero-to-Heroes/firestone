@@ -244,11 +244,11 @@ export const buildPositionFromTop = (
 	lastInfluencedByCardId: string,
 ): number => {
 	if (CREATE_ON_TOP.includes(creatorCardId as CardIds)) {
-		return 0;
+		return DeckCard.deckIndexFromTop--;
 	}
 	switch (lastInfluencedByCardId) {
 		case CardIds.Overplanner_VAC_444:
-			return 0;
+			return DeckCard.deckIndexFromTop--;
 	}
 	return undefined;
 };

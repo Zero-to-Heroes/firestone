@@ -118,7 +118,7 @@ export class CardBackToDeckParser implements EventParser {
 			  })
 			: CARD_SENDING_TO_TOP.includes(gameEvent.additionalData.influencedByCardId)
 			? cardWithInfluenceBack.update({
-					positionFromTop: 0,
+					positionFromTop: DeckCard.deckIndexFromTop--,
 			  })
 			: cardWithInfluenceBack;
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs

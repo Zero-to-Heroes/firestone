@@ -49,7 +49,7 @@ export class CardDredgedParser implements EventParser {
 				creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			} as DeckCard)
 		).update({
-			positionFromTop: 0,
+			positionFromTop: DeckCard.deckIndexFromTop--,
 			positionFromBottom: undefined,
 			dredged: true,
 			linkedEntityIds: deck.deck
