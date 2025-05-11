@@ -499,6 +499,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.BrittleboneBuccaneer_VAC_436:
 			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
+		case CardIds.BrittleboneDestroyer:
+			// Self-damage, like weapons, might be useful to highlight?
+			return and(side(inputSide), or(inDeck, inHand), or(restoreHealth));
 		case CardIds.BrollBearmantle_EDR_853:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.BronzeSignetTavernBrawl:
