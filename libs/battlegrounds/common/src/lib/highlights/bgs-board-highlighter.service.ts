@@ -221,7 +221,12 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			return true;
 		}
 
-		const highlightedFromMinion = highlightedMinions.includes(card.id);
+		let normalCard = card;
+		if (card.battlegroundsNormalDbfId) {
+			normalCard = this.allCards.getCard(card.battlegroundsNormalDbfId);
+		}
+		const highlightedFromMinion =
+			highlightedMinions.includes(card.id) || highlightedMinions.includes(normalCard.id);
 		if (highlightedFromMinion) {
 			return true;
 		}
