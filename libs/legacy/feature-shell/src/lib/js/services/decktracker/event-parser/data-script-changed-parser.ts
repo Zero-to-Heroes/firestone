@@ -28,7 +28,7 @@ export class DataScriptChangedParser implements EventParser {
 
 			const isPlayer = controllerId === localPlayer.PlayerId;
 			const deck = isPlayer ? playerDeck : opponentDeck;
-			console.debug('considering update', cardId, update, gameEvent);
+			// console.debug('considering update', cardId, update, gameEvent);
 			updateDataScriptInfoUnsafe(deck, cardId, entityId, update.DataNum1, update.DataNum2, this.helper);
 
 			const cardInHand = deck.hand.find((c) => c.entityId === entityId);

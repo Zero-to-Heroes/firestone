@@ -1232,7 +1232,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_RECRUIT_PHASE':
-				// console.log(gameEvent.Type + ' event');
+				console.debug('[game-events] receiving BATTLEGROUNDS_RECRUIT_PHASE', gameEvent);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,

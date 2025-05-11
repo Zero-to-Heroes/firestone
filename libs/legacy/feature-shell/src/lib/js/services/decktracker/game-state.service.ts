@@ -400,14 +400,14 @@ export class GameStateService {
 			);
 		}
 
-		console.debug(
-			'[game-state] processed event',
-			gameEvent.type,
-			gameEvent.cardId,
-			currentState.playerDeck.deck.filter((d) => d.positionFromTop),
-			currentState,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[game-state] processed event',
+		// 	gameEvent.type,
+		// 	gameEvent.cardId,
+		// 	currentState.playerDeck.deck.filter((d) => d.positionFromTop),
+		// 	currentState,
+		// 	gameEvent,
+		// );
 		return currentState;
 	}
 
