@@ -3,14 +3,14 @@ import { CardIds } from '@firestone-hs/reference-data';
 export const buildTiersToInclude = (
 	showTierSeven: boolean,
 	anomalies: readonly string[],
-	playerCardId: string,
+	heroPowerCardId: string,
 	playerTrinkets: readonly string[],
 ): readonly number[] => {
 	let tiersToInclude = [1, 2, 3, 4, 5, 6];
 	if (
 		showTierSeven ||
 		anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
-		playerCardId === CardIds.ThorimStormlord_BG27_HERO_801 ||
+		heroPowerCardId === CardIds.ThorimStormlord_ChooseYourChampion_BG27_HERO_801p2 ||
 		playerTrinkets?.includes(CardIds.PaglesFishingRod_BG30_MagicItem_993)
 	) {
 		tiersToInclude.push(7);

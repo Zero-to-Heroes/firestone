@@ -10,7 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameType, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameType, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
 	MinionInfo,
 	Tier,
@@ -202,6 +202,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 				]) => {
 					const willShowBuddies = showBuddies || hasBuddies;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const heroPowerCardId = getHeroPower(normalizedPlayerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = willShowBuddies
 						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
@@ -230,6 +231,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						races,
 						anomalies,
 						normalizedPlayerCardId,
+						heroPowerCardId,
 						allPlayerCardIds,
 						willShowBuddies,
 						hasSpells,

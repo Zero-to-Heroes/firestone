@@ -8,7 +8,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, GameTag, Race, getBuddy, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
 	BgsBoardHighlighterService,
 	BgsMetaCompositionStrategiesService,
@@ -233,6 +233,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					// hasSpells = true;
 					const willShowBuddies = hasBuddies || showBuddies;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
+					const heroPowerCardId = getHeroPower(normalizedPlayerCardId, this.allCards);
 					const allPlayerCardIds = allPlayersCardIds?.map((p) => normalizeHeroCardId(p, this.allCards)) ?? [];
 					const ownBuddyId = willShowBuddies
 						? getBuddy(normalizedPlayerCardId as CardIds, this.allCards.getService())
@@ -260,6 +261,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						races,
 						anomalies,
 						normalizedPlayerCardId,
+						heroPowerCardId,
 						allPlayerCardIds,
 						willShowBuddies,
 						hasSpells,

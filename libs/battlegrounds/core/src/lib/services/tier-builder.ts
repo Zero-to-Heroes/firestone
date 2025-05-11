@@ -20,6 +20,7 @@ export const buildTiers = (
 	availableTribes: readonly Race[],
 	anomalies: readonly string[],
 	playerCardId: string,
+	heroPowerCardId: string,
 	allPlayerCardIds: readonly string[],
 	hasBuddies: boolean,
 	hasSpells: boolean,
@@ -43,15 +44,12 @@ export const buildTiers = (
 	const showAllBuddyCards =
 		hasBuddies ||
 		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
-		playerCardId === CardIds.ETCBandManager_BG25_HERO_105;
+		heroPowerCardId === CardIds.ETCBandManager_SignANewArtist;
 	const showBuddiesTier =
 		showAllBuddyCards ||
-		(hasBuddies &&
-			[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
-				playerCardId as CardIds,
-			));
+		(hasBuddies && [CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(heroPowerCardId as CardIds));
 
-	const tiersToInclude = buildTiersToInclude(showTierSeven, anomalies, playerCardId, playerTrinkets);
+	const tiersToInclude = buildTiersToInclude(showTierSeven, anomalies, heroPowerCardId, playerTrinkets);
 	const cardsToInclude: readonly ExtendedReferenceCard[] = filterCardsToInclude(
 		cardsInGame,
 		tiersToInclude,
@@ -64,7 +62,7 @@ export const buildTiers = (
 
 	const showTrinkets =
 		(showTrinketsInput && hasTrinkets) ||
-		[CardIds.MarinTheManager_BG30_HERO_304].includes(playerCardId as CardIds) ||
+		[CardIds.MarinTheManager_FantasticTreasure_BG30_HERO_304p].includes(heroPowerCardId as CardIds) ||
 		anomalies?.includes(CardIds.MarinsTreasureBox_BG31_Anomaly_106);
 
 	const config: TierBuilderConfig = {
@@ -77,11 +75,11 @@ export const buildTiers = (
 		showSpellsAtBottom: showSpellsAtBottom,
 		showAllBuddyCards: showAllBuddyCards,
 		showBuddiesTier: showBuddiesTier,
-		showProtossMinions: playerCardId === CardIds.Artanis_BG31_HERO_802,
-		showZergMinions: playerCardId === CardIds.KerriganQueenOfBlades_BG31_HERO_811,
+		showProtossMinions: heroPowerCardId === CardIds.Artanis_WarpGate_BG31_HERO_802p,
+		showZergMinions: heroPowerCardId === CardIds.KerriganQueenOfBlades_SpawningPool_BG31_HERO_811p,
 		showBattlecruiserUpgrades:
-			playerCardId === CardIds.JimRaynor_BG31_HERO_801 ||
-			playerTrinkets?.includes(CardIds.BattlecruiserPortrait_BG32_MagicItem_806),
+			heroPowerCardId === CardIds.JimRaynor_BG31_HERO_801 ||
+			playerTrinkets?.includes(CardIds.JimRaynor_LiftOff_BG31_HERO_801p),
 	};
 	const standardTiers: readonly Tier[] = buildStandardTiers(
 		cardsToInclude,
@@ -95,7 +93,7 @@ export const buildTiers = (
 				cardsToInclude,
 				tiersToInclude,
 				availableTribes,
-				playerCardId,
+				heroPowerCardId,
 				allPlayerCardIds,
 				allCards,
 				i18n,

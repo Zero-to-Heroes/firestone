@@ -39,13 +39,13 @@ export const buildMechanicsTiers = (
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
 	availableTribes: readonly Race[],
-	playerCardId: string,
+	heroPowerCardId: string,
 	allPlayerCardIds: readonly string[],
 	allCards: CardsFacadeService,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
-	const allBuddies = buildBuddies(availableTribes, playerCardId, allPlayerCardIds, allCards, config);
+	const allBuddies = buildBuddies(availableTribes, heroPowerCardId, allPlayerCardIds, allCards, config);
 	let mechanicsInGame = [...MECHANICS_IN_GAME];
 	if (!config?.spells) {
 		mechanicsInGame = mechanicsInGame.filter((mechanic) => mechanic.mechanic !== GameTag.BG_SPELL);
@@ -160,7 +160,7 @@ const buildTierGroup = (
 
 const buildBuddies = (
 	availableTribes: readonly Race[],
-	playerCardId: string,
+	heroPowerCardId: string,
 	allPlayerCardIds: readonly string[],
 	allCards: CardsFacadeService,
 	config?: TierBuilderConfig,
@@ -191,9 +191,7 @@ const buildBuddies = (
 						),
 				)
 		: // For tess, only show the buddies of the opponents
-		[CardIds.TessGreymane_TB_BaconShop_HERO_50, CardIds.ScabbsCutterbutter_BG21_HERO_010].includes(
-				playerCardId as CardIds,
-		  )
+		[CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(heroPowerCardId as CardIds)
 		? allPlayerBuddies
 		: [];
 	return buddies;
