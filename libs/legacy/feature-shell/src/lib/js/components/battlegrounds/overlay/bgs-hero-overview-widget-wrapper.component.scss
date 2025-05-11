@@ -1,5 +1,18 @@
 :host {
 	display: flex;
+	z-index: 999;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	// left: calc(50% - 70vh);
+	// top: 10px;
+}
+
+.container {
+	display: flex;
+	// To align with the "game rectangle", which contains the leaderboard
+	width: 140vh;
 }
 
 .overview {

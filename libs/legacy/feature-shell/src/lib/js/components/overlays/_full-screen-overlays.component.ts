@@ -51,7 +51,6 @@ import { DebugService } from '../../services/debug.service';
 		>
 			<div class="game-area-container">
 				<div class="game-area">
-					<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
 					<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
 					<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
 					<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
@@ -94,6 +93,7 @@ import { DebugService } from '../../services/debug.service';
 			<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
 			<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
 			<current-session-widget-wrapper></current-session-widget-wrapper>
+			<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>

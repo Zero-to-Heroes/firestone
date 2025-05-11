@@ -7,8 +7,9 @@ import { BgsOverlayHeroOverviewService, PlayerInfo } from './bgs-overlay-hero-ov
 	selector: 'bgs-hero-overview-widget-wrapper',
 	styleUrls: ['./bgs-hero-overview-widget-wrapper.component.scss'],
 	template: `
-		<bgs-overlay-hero-overview class="overview" *ngIf="hero$ | async as hero" [config]="hero">
-		</bgs-overlay-hero-overview>
+		<div class="container" *ngIf="hero$ | async as hero">
+			<bgs-overlay-hero-overview class="overview" [config]="hero"> </bgs-overlay-hero-overview>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
