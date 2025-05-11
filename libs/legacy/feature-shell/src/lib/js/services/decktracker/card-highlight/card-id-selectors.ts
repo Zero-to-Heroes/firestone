@@ -1848,6 +1848,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.MarkOfScorn:
 			return and(side(inputSide), inDeck, not(minion));
+		case CardIds.MarkOfTheSpikeshell:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), taunt, minion),
+				and(side(inputSide), or(inHand, inDeck), minion),
+			);
 		case CardIds.MaroonedArchmage_VAC_435:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Marshspawn_BT_115:
@@ -2214,7 +2219,7 @@ export const cardIdSelector = (
 		case CardIds.Razorboar:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle, effectiveCostLess(4));
 		case CardIds.RazormaneBattleguard:
-			return and(side(inputSide), minion, taunt);
+			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.RecordScratcher:
 			return and(side(inputSide), or(inHand, inDeck), combo);
 		case CardIds.RedscaleDragontamer:
