@@ -22,6 +22,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 				[placeholder]="value.placeholder"
 				[visible]="true"
 				[allowSearch]="true"
+				[resetIsClear]="true"
 				(optionSelected)="onSelected($event)"
 			></filter-dropdown-multiselect>
 		</ng-container>
