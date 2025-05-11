@@ -4,7 +4,6 @@ import {
 	CardRule,
 	CardRules,
 	CardType,
-	CustomTags,
 	GameTag,
 	GameType,
 	getTribesForInclusion,
@@ -41,27 +40,10 @@ export const getAllCardsInGame = (
 
 	const result = allCards
 		.getCards()
-		// Keep only minions that are in the bacon pool
-		.filter((card) => card.type?.toUpperCase() !== CardType[CardType.MINION] || card.isBaconPool)
-		// Exclude the placeholder trinket cards
-		.filter(
-			(card) =>
-				![CardIds.LesserTrinketToken_BG30_Trinket_1st, CardIds.GreaterTrinket_BG30_Trinket_2nd].includes(
-					card.id as CardIds,
-				),
-		)
-		// Starcraft-exclusive cards
-		// .filter((card) => scFilters.every((filter) => filter(card)))
+		.filter((card) => card.isBaconPool)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.spellSchool?.includes(SpellSchool[SpellSchool.UPGRADE]))
-		.filter(
-			(card) =>
-				(card.techLevel && card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET]) ||
-				(hasTrinkets &&
-					card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
-					// Manual exclusions
-					!allCards.getCard(card.id).otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL])),
-		)
+		.filter((card) => card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET] || hasTrinkets)
 		.filter((card) =>
 			isBattlegroundsDuo(gameMode)
 				? !card.mechanics?.includes(GameTag[GameTag.BG_SOLO_EXCLUSIVE])

@@ -102,16 +102,11 @@ const isAvailable = (
 		.every((c) => isCardAvailable(c, availableTribes, useTrinkets));
 };
 
-const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[], useTrinets: boolean): boolean => {
-	if (
-		card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] &&
-		useTrinets &&
-		!card.otherTags?.includes('REMOVED_FROM_BACON_POOL')
-	) {
-		return true;
+const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[], useTrinkets: boolean): boolean => {
+	if (!card.isBaconPool) {
+		return false;
 	}
-
-	if (!card.techLevel) {
+	if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] && !useTrinkets) {
 		return false;
 	}
 

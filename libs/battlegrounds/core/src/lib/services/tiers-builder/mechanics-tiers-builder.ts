@@ -4,6 +4,7 @@ import {
 	BUDDIES_TRIBE_REQUIREMENTS,
 	CardIds,
 	CardType,
+	CustomTags,
 	GameTag,
 	getBuddy,
 	NON_DISCOVERABLE_BUDDIES,
@@ -166,10 +167,10 @@ const buildBuddies = (
 ) => {
 	const allBuddies = allCards
 		.getCards()
-		.filter((c) => !!c.techLevel)
+		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
+		.filter((card) => !card.otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL]))
 		.filter((c) => !!c.battlegroundsPremiumDbfId)
-		.filter((card) => card.set !== 'Vanilla')
-		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]));
+		.filter((card) => card.set !== 'Vanilla');
 	const allPlayerBuddies = allPlayerCardIds
 		.map((p) => getBuddy(p as CardIds, allCards.getService()))
 		.map((b) => allCards.getCard(b!));
