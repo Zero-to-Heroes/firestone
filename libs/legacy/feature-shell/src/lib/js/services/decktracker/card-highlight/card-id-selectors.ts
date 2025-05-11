@@ -2774,6 +2774,8 @@ export const cardIdSelector = (
 					and(side(inputSide), inDeck, minion),
 				)(input);
 			};
+		case CardIds.TabletopRoleplayer_TOY_915:
+			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.TaelanFordringCore:
 			return (input: SelectorInput): SelectorOutput => {
 				const highestCostMinion = input.deckState.deck
