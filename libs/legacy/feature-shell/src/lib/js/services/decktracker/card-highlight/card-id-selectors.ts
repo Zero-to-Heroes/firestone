@@ -2801,6 +2801,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.TakeToTheSkies_WW_816:
 			return and(side(inputSide), inDeck, dragon);
+		case CardIds.TalentedArcanist:
+			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.TamsinsPhylactery:
 			return and(side(inputSide), minion, inGraveyard, deathrattle);
 		case CardIds.TangledWrath:
