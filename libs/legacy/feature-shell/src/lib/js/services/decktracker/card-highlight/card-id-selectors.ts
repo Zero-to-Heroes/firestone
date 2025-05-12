@@ -501,7 +501,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.BrittleboneDestroyer:
 			// Self-damage, like weapons, might be useful to highlight?
-			return and(side(inputSide), or(inDeck, inHand), or(restoreHealth));
+			return and(side(inputSide), or(inDeck, inHand), or(restoreHealth, lifesteal));
 		case CardIds.BrollBearmantle_EDR_853:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.BronzeSignetTavernBrawl:
@@ -947,6 +947,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DrBoomMadGenius:
 			return and(side(inputSide), or(inHand, inDeck), mech);
+		case CardIds.DreamboundDisciple_EDR_847:
+			return and(side(inputSide), or(inHand, inDeck), imbue);
 		case CardIds.Dreamwarden_EDR_256:
 			return and(side(inputSide), inDeck, notInInitialDeck);
 		case CardIds.Drekthar_AV_100:
@@ -1274,6 +1276,8 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck));
 		case CardIds.GraveDefiler:
 			return and(side(inputSide), inDeck, spell, fel);
+		case CardIds.GreedyPartner_WW_901:
+			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(2));
 		case CardIds.GreedyGainsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.GreenThumbGardener:
@@ -2281,7 +2285,7 @@ export const cardIdSelector = (
 				and(side(inputSide), inGraveyard, minion),
 			);
 		case CardIds.ReturnPolicy_MIS_102:
-			return and(side(inputSide), or(inHand, inDeck), deathrattle);
+			return and(side(inputSide), or(inHand, inDeck, inGraveyard), deathrattle);
 		case CardIds.RevivePet:
 			return tooltip(and(side(inputSide), inGraveyard, minion, beast));
 		case CardIds.Rewind_ETC_532:
