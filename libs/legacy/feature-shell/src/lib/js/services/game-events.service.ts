@@ -1220,7 +1220,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_COMBAT_START':
-				// console.log(gameEvent.Type + ' event');
+				console.debug('[game-events] receiving BATTLEGROUNDS_COMBAT_START', gameEvent);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
@@ -1303,14 +1303,6 @@ export class GameEvents {
 			// 	break;
 			case 'BATTLEGROUNDS_ENEMY_HERO_KILLED':
 				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent));
-				break;
-			case 'BATTLEGROUNDS_BATTLE_STARTING':
-				console.debug('[game-events] receiving BATTLEGROUNDS_BATTLE_STARTING', gameEvent);
-				this.doEventDispatch(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.BATTLEGROUNDS_BATTLE_STARTING,
-					} as GameEvent),
-				);
 				break;
 			case 'BATTLEGROUNDS_ACTIVE_PLAYER_BOARD':
 				console.debug('[game-events] receiving BATTLEGROUNDS_ACTIVE_PLAYER_BOARD' + gameEvent.Type, gameEvent);
