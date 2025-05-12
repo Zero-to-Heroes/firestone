@@ -1,4 +1,4 @@
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
+import { BattlegroundsState } from '@firestone/game-state';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsReconnectStatusEvent } from '../events/bgs-reconnect-status-event';
 import { EventParser } from './_event-parser';

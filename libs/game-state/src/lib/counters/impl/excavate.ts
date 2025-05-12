@@ -8,7 +8,6 @@ import {
 	EXCAVATE_TREASURE_3_IDS,
 	GameTag,
 } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -85,11 +84,7 @@ export class ExcavateCounterDefinitionV2 extends CounterDefinitionV2<{
 		return `${value.currentTier}/${maxTier}`;
 	}
 
-	protected override cardTooltip(
-		side: 'player' | 'opponent',
-		gameState: GameState,
-		bgState: BattlegroundsState,
-	): readonly string[] | undefined {
+	protected override cardTooltip(side: 'player' | 'opponent', gameState: GameState): readonly string[] | undefined {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const maxTier = deck.maxExcavateTier + 1;
 		const nextTier = (deck.currentExcavateTier % maxTier) + 1;

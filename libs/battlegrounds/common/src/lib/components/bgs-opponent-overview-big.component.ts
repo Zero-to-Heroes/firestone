@@ -1,12 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import {
-	BgsFaceOffWithSimulation,
-	BgsPlayer,
-	BgsTavernUpgrade,
-	BgsTriple,
-	QuestReward,
-} from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation, BgsPlayer, BgsTavernUpgrade, BgsTriple, QuestReward } from '@firestone/game-state';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({

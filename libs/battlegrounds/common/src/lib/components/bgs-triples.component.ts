@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsTriple } from '@firestone/battlegrounds/core';
+import { BgsTriple } from '@firestone/game-state';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 

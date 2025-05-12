@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/battlegrounds/core';
+import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({

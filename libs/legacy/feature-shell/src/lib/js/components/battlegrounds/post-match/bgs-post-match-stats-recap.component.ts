@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardIds, isBaconGhost } from '@firestone-hs/reference-data';
 import { StatName } from '@firestone-hs/user-bgs-post-match-stats';
-import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel } from '@firestone/game-state';
 
 @Component({
 	selector: 'bgs-post-match-stats-recap',

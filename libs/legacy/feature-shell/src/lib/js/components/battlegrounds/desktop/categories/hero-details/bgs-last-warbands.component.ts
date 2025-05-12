@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
-import { BgsPostMatchStatsForReview, MinionStat } from '@firestone/battlegrounds/core';
+import { BgsPostMatchStatsForReview, MinionStat } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Map } from 'immutable';

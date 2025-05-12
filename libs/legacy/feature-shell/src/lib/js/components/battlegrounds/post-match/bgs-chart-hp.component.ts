@@ -10,7 +10,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { NumericTurnInfo } from '@firestone/battlegrounds/core';
+import { NumericTurnInfo } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';

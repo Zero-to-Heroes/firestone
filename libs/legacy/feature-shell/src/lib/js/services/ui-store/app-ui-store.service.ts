@@ -10,10 +10,9 @@ import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
-import { GameState } from '@firestone/game-state';
+import { BattlegroundsState, GameState } from '@firestone/game-state';
 import { Card, CardBack } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';

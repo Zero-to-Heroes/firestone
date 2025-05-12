@@ -5,18 +5,18 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BgsPlayerEntity, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
+import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
 	BattlegroundsState,
-	BgsBattleSimulationService,
 	BgsBoard,
 	BgsGame,
-	BgsIntermediateResultsSimGuardianService,
 	BgsPlayer,
 	buildBgsEntities,
+	GameState,
+	GameUniqueIdService,
 	PlayerBoard,
 	PlayerBoardEntity,
-} from '@firestone/battlegrounds/core';
-import { GameState, GameUniqueIdService } from '@firestone/game-state';
+} from '@firestone/game-state';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

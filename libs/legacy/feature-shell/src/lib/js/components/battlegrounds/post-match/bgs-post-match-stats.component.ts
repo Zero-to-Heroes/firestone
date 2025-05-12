@@ -16,7 +16,7 @@ import {
 	BgsStatsFilterId,
 	MinionStat,
 	QuestReward,
-} from '@firestone/battlegrounds/core';
+} from '@firestone/game-state';
 import { ENABLE_MULTI_GRAPHS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';

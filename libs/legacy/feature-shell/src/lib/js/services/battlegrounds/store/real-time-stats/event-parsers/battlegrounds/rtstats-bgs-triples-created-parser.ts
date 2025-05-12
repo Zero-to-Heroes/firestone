@@ -1,4 +1,4 @@
-import { RealTimeStatsState } from '@firestone/battlegrounds/core';
+import { RealTimeStatsState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds } from '../../../../bgs-utils';

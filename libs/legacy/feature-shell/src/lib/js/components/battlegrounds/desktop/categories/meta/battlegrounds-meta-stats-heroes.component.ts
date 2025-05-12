@@ -12,9 +12,9 @@ import {
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/common';
-import { Config } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
+import { Config } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';

@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
+import { BattlegroundsState } from '@firestone/game-state';
 import { sleep, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -9,7 +9,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { auditTime, BehaviorSubject, combineLatest, tap } from 'rxjs';
+import { auditTime, BehaviorSubject, combineLatest } from 'rxjs';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
 @Injectable()
@@ -40,9 +40,7 @@ export class BgsStateFacadeService extends AbstractFacadeService<BgsStateFacadeS
 			}
 			const bgState: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 			combineLatest([bgState, this.matchPlayers.playersMatchMmr$$])
-				.pipe(
-					auditTime(200),
-				)
+				.pipe(auditTime(200))
 				.subscribe(([state, playersMmr]) => {
 					if (!state?.currentGame) {
 						return;

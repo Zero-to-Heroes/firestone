@@ -5,7 +5,7 @@ import { CardIds, defaultStartingHp, GameTag, GameType, getHeroPower, TrinketSlo
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Side } from './bgs-simulator-controller.service';
 

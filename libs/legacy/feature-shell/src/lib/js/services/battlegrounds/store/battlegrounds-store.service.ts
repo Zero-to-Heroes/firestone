@@ -5,14 +5,14 @@ import {
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 } from '@firestone/battlegrounds/common';
+import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
 	BattlegroundsState,
-	BgsBattleSimulationService,
-	BgsIntermediateResultsSimGuardianService,
+	GameState,
+	GameUniqueIdService,
 	PlayerBoard,
 	RealTimeStatsState,
-} from '@firestone/battlegrounds/core';
-import { GameState, GameUniqueIdService } from '@firestone/game-state';
+} from '@firestone/game-state';
 import { MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
 import {
 	BugReportService,

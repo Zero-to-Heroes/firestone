@@ -2,7 +2,6 @@ export * from './lib/battlegrounds-core.module';
 export * from './lib/components/battle-status-premium.component';
 export * from './lib/components/bgs-battle-status.component';
 export * from './lib/components/bgs-card-tooltip.component';
-export * from './lib/model/_barrel';
 export * from './lib/services/card-rules/board-types';
 export * from './lib/services/card-rules/mechanics';
 export * from './lib/services/card-rules/menagerie';

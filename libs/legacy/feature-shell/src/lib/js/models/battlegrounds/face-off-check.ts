@@ -1,5 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsFaceOffWithSimulation, BgsGame } from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation, BgsGame } from '@firestone/game-state';
 import { BugReportService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';

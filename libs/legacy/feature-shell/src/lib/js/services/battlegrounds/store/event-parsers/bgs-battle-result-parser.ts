@@ -1,5 +1,4 @@
-import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { BattlegroundsState, BgsGame, GameState } from '@firestone/game-state';
 import { BugReportService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { checkIntegrity } from '@legacy-import/src/lib/js/models/battlegrounds/face-off-check';

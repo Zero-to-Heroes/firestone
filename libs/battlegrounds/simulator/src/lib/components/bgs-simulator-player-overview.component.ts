@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsPlayer, BgsTavernUpgrade } from '@firestone/battlegrounds/core';
+import { BgsPlayer, BgsTavernUpgrade } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({

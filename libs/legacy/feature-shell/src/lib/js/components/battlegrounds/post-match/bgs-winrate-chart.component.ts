@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsQuestStat, equalNumericTurnInfo, NumericTurnInfo } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsQuestStat, equalNumericTurnInfo, NumericTurnInfo } from '@firestone/game-state';
 
 @Component({
 	selector: 'bgs-winrate-chart',

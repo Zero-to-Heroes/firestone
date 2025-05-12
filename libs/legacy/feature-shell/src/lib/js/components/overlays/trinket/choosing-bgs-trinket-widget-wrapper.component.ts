@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsInGameTrinketsGuardianService, BgsInGameTrinketsService } from '@firestone/battlegrounds/common';
-import { BgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
+import { BgsTrinketCardChoiceOption } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import {

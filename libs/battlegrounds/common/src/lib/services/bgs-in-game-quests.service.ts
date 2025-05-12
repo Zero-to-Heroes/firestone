@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BgsQuestStats } from '@firestone-hs/bgs-global-stats';
 import { CardIds, SceneMode, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsQuestCardChoiceOption, equalBgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
-import { CardOption, GameStateFacadeService, equalCardOption } from '@firestone/game-state';
+import {
+	BgsQuestCardChoiceOption,
+	CardOption,
+	GameStateFacadeService,
+	equalBgsQuestCardChoiceOption,
+	equalCardOption,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';

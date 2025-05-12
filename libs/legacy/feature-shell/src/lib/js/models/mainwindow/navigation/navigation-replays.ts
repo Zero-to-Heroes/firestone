@@ -1,4 +1,4 @@
-import { BgsStatsFilterId } from '@firestone/battlegrounds/core';
+import { BgsStatsFilterId } from '@firestone/game-state';
 import { CurrentViewType } from '../replays/current-view.type';
 import { MatchDetail } from '../replays/match-detail';
 

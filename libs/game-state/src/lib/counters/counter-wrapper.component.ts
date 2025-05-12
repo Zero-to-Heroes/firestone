@@ -11,12 +11,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
+import { BattlegroundsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
 import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { CounterInstance } from './_counter-definition-v2';

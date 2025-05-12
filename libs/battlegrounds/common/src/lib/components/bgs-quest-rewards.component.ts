@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { QuestReward } from '@firestone/battlegrounds/core';
+import { QuestReward } from '@firestone/game-state';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({

@@ -2,7 +2,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { getTribeIcon } from '@firestone-hs/reference-data';
-import { BgsBoard, BgsPlayer, QuestReward } from '@firestone/battlegrounds/core';
+import { BgsBoard, BgsPlayer, QuestReward } from '@firestone/game-state';
 import {
 	TwitchBgsBoard,
 	TwitchBgsHeroOverviewComponent,

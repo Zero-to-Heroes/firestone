@@ -1,4 +1,4 @@
-import { RealTimeStatsState } from '@firestone/battlegrounds/core';
+import { RealTimeStatsState } from '@firestone/game-state';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsRealTimeStatsUpdatedEvent extends BattlegroundsStoreEvent {

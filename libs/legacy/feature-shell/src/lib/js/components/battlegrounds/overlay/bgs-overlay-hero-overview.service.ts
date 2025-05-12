@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BgsPlayer } from '@firestone/battlegrounds/core';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { BgsPlayer, GameStateFacadeService } from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';

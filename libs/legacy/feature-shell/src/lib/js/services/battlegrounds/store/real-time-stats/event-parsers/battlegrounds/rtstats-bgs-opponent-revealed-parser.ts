@@ -1,5 +1,5 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { NumericTurnInfo, RealTimeStatsState } from '@firestone/battlegrounds/core';
+import { NumericTurnInfo, RealTimeStatsState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../../models/game-event';
 import { EventParser } from '../_event-parser';

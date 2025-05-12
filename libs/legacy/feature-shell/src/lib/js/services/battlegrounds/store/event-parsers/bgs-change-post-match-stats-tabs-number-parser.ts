@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsPanel, BgsPostMatchStatsPanel } from '@firestone/battlegrounds/core';
+import { BattlegroundsState, BgsPanel, BgsPostMatchStatsPanel } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../events/bgs-change-post-match-stats-tabs-number-event';

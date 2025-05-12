@@ -1,5 +1,5 @@
-import { BgsPostMatchStatsForReview } from '@firestone/battlegrounds/core';
-import { NonFunctionProperties } from '../../../services/utils';
+import { BgsPostMatchStatsForReview } from '@firestone/game-state';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BattlegroundsCategory } from './battlegrounds-category';
 
 export class BattlegroundsAppState {

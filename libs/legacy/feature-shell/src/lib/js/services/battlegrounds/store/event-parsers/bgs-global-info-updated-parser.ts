@@ -7,7 +7,7 @@ import {
 	BgsPanel,
 	BgsPlayer,
 	BgsPostMatchStatsPanel,
-} from '@firestone/battlegrounds/core';
+} from '@firestone/game-state';
 import { MemoryBgGame, MemoryBgPlayer } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

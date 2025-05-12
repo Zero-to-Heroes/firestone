@@ -7,7 +7,7 @@ import {
 	BgsNextOpponentOverviewPanel,
 	BgsOpponentOverview,
 	BgsPanel,
-} from '@firestone/battlegrounds/core';
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

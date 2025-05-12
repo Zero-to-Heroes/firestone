@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
-import { BgsGame } from '@firestone/battlegrounds/core';
+import { BgsGame } from '@firestone/game-state';
 import {
 	ArenaInfo,
 	BattlegroundsInfo,

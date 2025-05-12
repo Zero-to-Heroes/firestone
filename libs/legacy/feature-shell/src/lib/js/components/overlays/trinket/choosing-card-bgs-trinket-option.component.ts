@@ -10,8 +10,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
-import { BgsTrinketCardChoiceOption } from '@firestone/battlegrounds/core';
 import { buildColor } from '@firestone/constructed/common';
+import { BgsTrinketCardChoiceOption } from '@firestone/game-state';
 import { BGS_TRINKETS_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
