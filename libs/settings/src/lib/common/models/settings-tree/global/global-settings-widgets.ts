@@ -16,12 +16,23 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 						type: 'slider',
 						field: 'globalWidgetScale',
 						label: context.i18n.translateString('settings.general.widgets.size'),
-						tooltip: null,
+						tooltip: context.i18n.translateString('settings.general.widgets.size-tooltip'),
 						sliderConfig: {
 							min: 30,
 							max: 200,
 							snapSensitivity: 5,
 							knobs: sizeKnobs(context),
+						},
+					},
+					{
+						type: 'slider',
+						field: 'globalWidgetOpacity',
+						label: context.i18n.translateString('settings.general.widgets.counters-opacity'),
+						tooltip: context.i18n.translateString('settings.general.widgets.counters-opacity-tooltip'),
+						sliderConfig: {
+							min: 40,
+							max: 100,
+							snapSensitivity: 3,
 						},
 					},
 					{

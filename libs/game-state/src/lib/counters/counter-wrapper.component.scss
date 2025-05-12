@@ -6,3 +6,9 @@
 .widget.hidden {
 	display: none;
 }
+
+.widget {
+	&:hover {
+		opacity: 1 !important;
+	}
+}

@@ -58,6 +58,7 @@ export class Preferences implements IPreferences {
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly globalWidgetScale: number | null = 100;
+	readonly globalWidgetOpacity: number | null = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly cardTooltipScale: number | null = 100;
 

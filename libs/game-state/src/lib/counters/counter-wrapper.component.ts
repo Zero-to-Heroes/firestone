@@ -16,6 +16,7 @@ import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
+import { Observable } from 'rxjs';
 import { GameState } from '../models/game-state';
 import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { CounterInstance } from './_counter-definition-v2';
@@ -32,6 +33,7 @@ import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 			[side]="side"
 			[counter]="counter"
 			[ngClass]="{ hidden: hidden }"
+			[style.opacity]="(opacity$ | async) ?? 1"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
@@ -49,6 +51,8 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 	@Input() side: 'player' | 'opponent';
 	@Input() counter: CounterInstance<any>;
 	@Input() hidden = true;
+
+	opacity$: Observable<number | null>;
 
 	protected deckStateExtractor: (
 		deckState: GameState,
@@ -86,6 +90,10 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 
 	async ngAfterContentInit() {
 		this.parent.registerChild(this);
+
+		this.opacity$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => (prefs.globalWidgetOpacity ?? 100) / 100),
+		);
 		// this.el.nativeElement.setAttribute('data-id', this.id);
 		// await waitForReady(this.scene);
 
@@ -123,7 +131,7 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 		// });
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			// this.cdr.detectChanges();
+			this.cdr.detectChanges();
 		}
 	}
 
