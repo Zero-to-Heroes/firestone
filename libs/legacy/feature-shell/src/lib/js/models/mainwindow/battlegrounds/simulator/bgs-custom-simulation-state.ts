@@ -1,6 +1,6 @@
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
-import { NonFunctionProperties } from '../../../../services/utils';
+import { BgsFaceOffWithSimulation } from '@firestone/game-state';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 
 export class BgsCustomSimulationState {
 	public readonly faceOff: BgsFaceOffWithSimulation;

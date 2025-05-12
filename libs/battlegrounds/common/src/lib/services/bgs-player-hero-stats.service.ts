@@ -2,8 +2,8 @@
 import { Injectable } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { Config, equalConfig } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem, enhanceHeroStat } from '@firestone/battlegrounds/data-access';
+import { Config, equalConfig } from '@firestone/game-state';
 import { BgsRankFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {

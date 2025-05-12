@@ -1,7 +1,7 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../../../models/_barrel';
 import { DeckCard } from '../../../models/deck-card';
 import { GameState } from '../../../models/game-state';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';

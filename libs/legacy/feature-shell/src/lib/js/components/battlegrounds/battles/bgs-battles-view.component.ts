@@ -8,7 +8,7 @@ import {
 	Input,
 } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { sleep } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';

@@ -2,6 +2,7 @@ import { BnetRegion, CardIds, GameType, SpellSchool, isBattlegrounds } from '@fi
 import { MatchInfo } from '@firestone/memory';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from './_barrel';
 import { DeckState } from './deck-state';
 import { FullGameState } from './full-game-state';
 import { Metadata } from './metadata';
@@ -31,6 +32,8 @@ export class GameState {
 	/** @deprecated */
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly miscCardsDestroyed: readonly string[] = [];
+
+	readonly bgState: BattlegroundsState = new BattlegroundsState();
 
 	// Can use this for non time-sensitive info, as it's only send back every now and then
 	// (e.g. for counters)

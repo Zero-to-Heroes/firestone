@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsPlayer } from '@firestone/battlegrounds/core';
+import { BattlegroundsState, BgsPlayer } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsArmorChangedEvent } from '../events/bgs-armor-changed-event';

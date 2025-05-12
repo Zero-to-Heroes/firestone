@@ -8,8 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
-import { CounterType, GameState } from '@firestone/game-state';
+import { BattlegroundsState, CounterType, GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';

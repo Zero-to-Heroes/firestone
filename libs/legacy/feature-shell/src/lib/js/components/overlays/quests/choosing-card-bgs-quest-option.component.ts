@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
-import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
+import { BgsQuestCardChoiceOption } from '@firestone/game-state';
 import { BGS_QUESTS_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';

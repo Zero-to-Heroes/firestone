@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BG_USE_QUESTS, BgsInGameQuestsGuardianService, BgsInGameQuestsService } from '@firestone/battlegrounds/common';
-import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
+import { BgsQuestCardChoiceOption } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
 import {

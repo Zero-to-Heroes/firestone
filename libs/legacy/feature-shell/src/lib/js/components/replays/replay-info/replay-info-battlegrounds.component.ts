@@ -9,7 +9,7 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
-import { MinionStat } from '@firestone/battlegrounds/core';
+import { MinionStat } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';

@@ -18,7 +18,8 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsBattleSimulationService, BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {

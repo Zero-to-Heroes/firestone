@@ -9,7 +9,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsPlayer } from '@firestone/battlegrounds/core';
+import { BgsPlayer } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { combineLatest, takeUntil } from 'rxjs';

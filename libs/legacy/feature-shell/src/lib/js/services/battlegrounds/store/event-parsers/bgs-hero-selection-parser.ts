@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsGame, BgsHeroSelectionOverviewPanel, BgsPanel } from '@firestone/battlegrounds/core';
+import { BattlegroundsState, BgsGame, BgsHeroSelectionOverviewPanel, BgsPanel } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';

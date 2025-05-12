@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
 import { CounterType } from './_exports';
 

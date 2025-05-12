@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
-import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/game-state';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';

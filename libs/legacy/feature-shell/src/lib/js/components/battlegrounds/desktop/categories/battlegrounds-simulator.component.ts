@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
 import {
 	BgsSimulatorControllerService,
 	BgsSimulatorKeyboardControl,
 	BgsSimulatorKeyboardControls,
 } from '@firestone/battlegrounds/simulator';
+import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';

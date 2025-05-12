@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { RealTimeStatsState } from '@firestone/battlegrounds/core';
+import { RealTimeStatsState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { filter, take } from 'rxjs';
 import { GameEvent } from '../../../../models/game-event';

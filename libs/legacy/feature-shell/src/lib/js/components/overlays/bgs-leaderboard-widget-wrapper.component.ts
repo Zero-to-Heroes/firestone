@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { GameType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
 import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BgsPlayer } from '@firestone/battlegrounds/core';
+import { BgsPlayer } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';

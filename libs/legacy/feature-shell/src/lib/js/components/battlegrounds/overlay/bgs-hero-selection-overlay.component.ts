@@ -6,9 +6,8 @@ import {
 	BgsStateFacadeService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
-import { BgsHeroSelectionOverviewPanel, Config, equalConfig } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';

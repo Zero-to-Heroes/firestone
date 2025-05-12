@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, getBuddy, getHeroPower } from '@firestone-hs/reference-data';
-import { BgsPlayer } from '@firestone/battlegrounds/core';
+import { BgsPlayer } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, from } from 'rxjs';
 import { TwitchPreferencesService } from '../services/twitch-preferences.service';

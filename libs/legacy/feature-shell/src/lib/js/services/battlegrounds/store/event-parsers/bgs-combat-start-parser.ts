@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/core';
+import { BattlegroundsState, BgsGame } from '@firestone/game-state';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsCombatStartEvent } from '../events/bgs-combat-start-event';
 import { EventParser } from './_event-parser';

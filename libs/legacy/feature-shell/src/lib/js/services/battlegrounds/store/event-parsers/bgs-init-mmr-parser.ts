@@ -1,6 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { BattlegroundsState, BgsGame, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';

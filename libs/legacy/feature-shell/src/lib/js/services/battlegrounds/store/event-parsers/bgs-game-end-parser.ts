@@ -7,7 +7,7 @@ import {
 	BgsPlayer,
 	BgsPostMatchStats,
 	BgsPostMatchStatsPanel,
-} from '@firestone/battlegrounds/core';
+} from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

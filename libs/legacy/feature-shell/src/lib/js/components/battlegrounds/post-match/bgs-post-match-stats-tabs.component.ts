@@ -9,8 +9,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
-import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/game-state';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';

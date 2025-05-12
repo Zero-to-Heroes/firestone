@@ -1,12 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { BgsHeroStatsV2, MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { Config, equalConfig } from '@firestone/battlegrounds/core';
 import {
 	BgsMetaHeroStatTierItem,
 	BgsMetaHeroStatsAccessService,
 	buildHeroStats,
 } from '@firestone/battlegrounds/data-access';
+import { Config, equalConfig } from '@firestone/game-state';
 import { BG_USE_ANOMALIES, DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {

@@ -3,8 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState, BgsBoard, BgsPlayer } from '@firestone/battlegrounds/core';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { BattlegroundsState, BgsBoard, BgsPlayer, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
 	BugReportService,

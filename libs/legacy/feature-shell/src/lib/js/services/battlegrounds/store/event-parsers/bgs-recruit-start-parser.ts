@@ -1,4 +1,4 @@
-import { BattlegroundsState, BgsGame } from '@firestone/battlegrounds/core';
+import { BattlegroundsState, BgsGame } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';

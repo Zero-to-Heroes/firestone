@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation } from '@firestone/battlegrounds/core';
+import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';

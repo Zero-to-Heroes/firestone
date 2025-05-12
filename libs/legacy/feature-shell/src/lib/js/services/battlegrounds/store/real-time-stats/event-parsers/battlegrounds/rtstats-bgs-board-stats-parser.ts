@@ -1,7 +1,7 @@
 import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
-import { BgsBoard, RealTimeStatsState } from '@firestone/battlegrounds/core';
+import { BgsBoard, RealTimeStatsState } from '@firestone/game-state';
 import { GameEvent } from '../../../../../../models/game-event';
 import { isBattlegrounds } from '../../../../bgs-utils';
 import { BgsPlayerBoardParser } from '../../../event-parsers/bgs-player-board-parser';

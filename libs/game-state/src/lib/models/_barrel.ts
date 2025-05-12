@@ -1,4 +1,5 @@
 export * from './attack-on-board';
+export * from './battlegrounds/_barrel';
 export * from './board-secret';
 export * from './card-meta-info';
 export * from './deck-card';

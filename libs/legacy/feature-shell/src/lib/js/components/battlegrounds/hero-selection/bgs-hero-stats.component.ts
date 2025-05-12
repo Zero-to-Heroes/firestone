@@ -1,12 +1,12 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
-import { BgsQuestStat } from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
 	BgsHeroAveragePositionDetails,
 } from '@firestone/battlegrounds/view';
+import { BgsQuestStat } from '@firestone/game-state';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';

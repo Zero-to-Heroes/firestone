@@ -2,12 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
-import {
-	BgsGame,
-	BgsPostMatchStats,
-	BgsPostMatchStatsForReview,
-	RealTimeStatsState,
-} from '@firestone/battlegrounds/core';
+import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
 import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
 import { Events } from '../events.service';

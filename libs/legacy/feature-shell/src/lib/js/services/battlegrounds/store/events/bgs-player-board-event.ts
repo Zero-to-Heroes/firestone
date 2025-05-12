@@ -1,4 +1,4 @@
-import { PlayerBoard } from '@firestone/battlegrounds/core';
+import { PlayerBoard } from '@firestone/game-state';
 import { MemoryBgsTeamInfo } from '@firestone/memory';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
