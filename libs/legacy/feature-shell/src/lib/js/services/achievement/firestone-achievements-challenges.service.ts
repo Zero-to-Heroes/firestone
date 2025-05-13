@@ -43,6 +43,7 @@ export class FirestoneAchievementsChallengeService {
 
 	private async init() {
 		await waitForReady(this.prefs);
+		return;
 
 		combineLatest([
 			this.gameStatus.inGame$$,
