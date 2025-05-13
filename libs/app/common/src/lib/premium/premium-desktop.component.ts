@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, ViewRef } from '@angular/core';
+import { BnetRegion } from '@firestone-hs/reference-data';
+import { AccountService } from '@firestone/profile/common';
 import {
 	CurrentPlan,
 	OwLegacyPremiumService,
@@ -14,6 +16,7 @@ import {
 	IAdsService,
 	ILocalizationService,
 	OverwolfService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUntil, tap } from 'rxjs';
 
@@ -51,6 +54,10 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 							<div class="sub-text">{{ yearlySubtext }}</div>
 						</div>
 					</div>
+				</div>
+				<div class="alipay-in-china" *ngIf="possibleChineseUser$ | async">
+					中国大陆用户：如果您打算使用支付宝付款，请使用“旧版”订阅，因为此付款方式与新的 Tebex
+					系统兼容不佳。我们预计问题需要几个月才能解决。感谢您的理解。
 				</div>
 				<!-- <div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
 					{{ discountBannerText }}
@@ -137,6 +144,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	showConfirmationPopUp$: Observable<UnsubscribeModel | null>;
 	showPreSubscribeModal$: Observable<PresubscribeModel | null>;
 	billingPeriodicity$: Observable<'monthly' | 'yearly'>;
+	possibleChineseUser$: Observable<boolean>;
 
 	yearlySubtext: string;
 	couponCode = '83dafbb3-fbf6-4544-99c7-83667378a406';
@@ -158,19 +166,20 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		private readonly i18n: ILocalizationService,
 		private readonly analytics: AnalyticsService,
 		private readonly ow: OverwolfService,
+		private readonly account: AccountService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterViewInit() {
-		await this.tebex.isReady();
-		await this.owLegacyPremium.isReady();
-		await this.ads.isReady();
-		await this.subscriptionService.isReady();
+		await waitForReady(this.tebex, this.owLegacyPremium, this.ads, this.subscriptionService, this.account);
 
 		this.showConfirmationPopUp$ = this.showConfirmationPopUp$$.asObservable();
 		this.showPreSubscribeModal$ = this.showPreSubscribeModal$$.asObservable();
 		this.billingPeriodicity$ = this.billingPeriodicity$$.asObservable();
+		this.possibleChineseUser$ = this.account.region$$.pipe(
+			this.mapData((region) => region === BnetRegion.REGION_CN || this.i18n.locale?.includes('zh')),
+		);
 		this.tebex.packages$$
 			.pipe(
 				filter((packages) => !!packages?.length),

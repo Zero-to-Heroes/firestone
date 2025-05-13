@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GameStateModule } from '@firestone/game-state';
+import { ProfileCommonModule } from '@firestone/profile/common';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
@@ -28,6 +29,7 @@ const components = [NewVersionNotificationComponent, PremiumDesktopComponent, Pr
 		SharedFrameworkCommonModule,
 		SharedCommonViewModule,
 		GameStateModule,
+		ProfileCommonModule,
 	],
 	declarations: components,
 	exports: components,
