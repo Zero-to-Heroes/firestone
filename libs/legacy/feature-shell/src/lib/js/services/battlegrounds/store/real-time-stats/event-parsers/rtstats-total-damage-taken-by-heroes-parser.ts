@@ -4,6 +4,7 @@ import { GameEvent } from '../../../../../models/game-event';
 import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { EventParser } from './_event-parser';
 
+/** @deprecated */
 export class RTStatsTotalDamageTakenByHeroesParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
