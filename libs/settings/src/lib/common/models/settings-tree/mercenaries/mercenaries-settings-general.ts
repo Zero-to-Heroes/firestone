@@ -14,6 +14,12 @@ export const mercenariesGeneralSettings = (context: SettingContext): SettingNode
 				settings: [
 					{
 						type: 'toggle',
+						field: 'mercenariesEnabled',
+						label: context.i18n.translateString('settings.mercenaries.general.enabled'),
+						tooltip: context.i18n.translateString('settings.mercenaries.general.enabled-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'mercenariesEnablePlayerTeamWidget',
 						label: context.i18n.translateString('settings.mercenaries.general.player-team-widget-label'),
 						tooltip: context.i18n.translateString('settings.mercenaries.general.player-team-widget-tooltip'),

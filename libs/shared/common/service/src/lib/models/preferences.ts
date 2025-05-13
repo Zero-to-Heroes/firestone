@@ -624,6 +624,7 @@ export class Preferences implements IPreferences {
 	readonly mercenariesShowMercNamesInTeams: boolean = true;
 	readonly mercenariesBackupTeam: readonly number[] = [];
 
+	readonly mercenariesEnabled: boolean = false;
 	readonly mercenariesEnablePlayerTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesPlayerTeamOverlayScale: number = 100;

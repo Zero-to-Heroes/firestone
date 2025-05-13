@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
@@ -50,34 +51,13 @@ export class MercenariesStoreService {
 		private readonly ow: OverwolfService,
 		private readonly memoryCache: MercenariesMemoryCacheService,
 		private readonly referenceData: MercenariesReferenceDataService,
+		private readonly prefs: PreferencesService,
 	) {
 		window['battleStateUpdater'] = this.internalEventSubject$;
 		window['mercenariesStore'] = this.store$;
 
 		// TODO: add a general option to disable Mercs stuff?
 		this.init();
-
-		// So that we're sure that all services have been initialized
-		setTimeout(() => {
-			this.mainWindowState$ = this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
-				[MainWindowState, NavigationState]
-			>;
-
-			combineLatest([this.internalEventSubject$, this.mainWindowState$])
-				.pipe(
-					distinctUntilChanged(),
-					filter(([event, mainWindowState]) => !!event),
-					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState[0])),
-				)
-				.subscribe();
-			this.internalStore$
-				.pipe(
-					skipWhile((state) => !state),
-					debounceTime(200),
-					distinctUntilChanged(),
-				)
-				.subscribe(async (newState) => await this.emitState(newState));
-		});
 	}
 
 	private async processEvent(event: GameEvent, mainWindowState: MainWindowState): Promise<void> {
@@ -109,10 +89,38 @@ export class MercenariesStoreService {
 		this.eventEmitters.forEach((emitter) => emitter(newState));
 	}
 
-	private init() {
+	private async init() {
+		await waitForReady(this.prefs);
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.mercenariesEnabled) {
+			return;
+		}
+
 		this.events.allEvents.subscribe((event) => this.internalEventSubject$.next(event));
 		this.registerParser();
 		this.buildEventEmitters();
+
+		// So that we're sure that all services have been initialized
+		setTimeout(() => {
+			this.mainWindowState$ = this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
+				[MainWindowState, NavigationState]
+			>;
+
+			combineLatest([this.internalEventSubject$, this.mainWindowState$])
+				.pipe(
+					distinctUntilChanged(),
+					filter(([event, mainWindowState]) => !!event),
+					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState[0])),
+				)
+				.subscribe();
+			this.internalStore$
+				.pipe(
+					skipWhile((state) => !state),
+					debounceTime(200),
+					distinctUntilChanged(),
+				)
+				.subscribe(async (newState) => await this.emitState(newState));
+		});
 	}
 
 	private getParsersFor(type: string, battleState: MercenariesBattleState): readonly MercenariesParser[] {
