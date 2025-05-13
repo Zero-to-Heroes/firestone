@@ -52,6 +52,9 @@ export const highlightConditions = (...filters: Selector[]): Selector => {
 		}
 		for (let i = 0; i < validFilters.length; i++) {
 			const output = validFilters[i](input);
+			if (!(typeof output === 'boolean') && !isNaN(+output)) {
+				return output;
+			}
 			if (output === 'tooltip') {
 				return 'tooltip';
 			} else if (output) {

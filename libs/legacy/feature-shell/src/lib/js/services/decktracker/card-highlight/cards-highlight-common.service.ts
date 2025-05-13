@@ -178,7 +178,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			} as HeroCard,
 		});
 
-		console.debug('built fake deck state', result, heroCardId, this.handlers);
+		// console.debug('built fake deck state', result, heroCardId, this.handlers);
 		return result;
 	}
 
