@@ -7,6 +7,7 @@ import {
 	GameFormat as GameFormatEnum,
 	GameFormatString,
 	GameType,
+	PRACTICE_ALL,
 	SceneMode,
 	getBaseCardId,
 	isCoin,
@@ -110,6 +111,13 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					![GameType.GT_RANKED, GameType.GT_CASUAL, GameType.GT_VS_FRIEND, GameType.GT_VS_AI].includes(
 						gameState.metadata.gameType,
 					)
+				) {
+					return false;
+				}
+
+				if (
+					gameState.metadata.gameType === GameType.GT_VS_AI &&
+					!PRACTICE_ALL.includes(gameState.metadata.scenarioId)
 				) {
 					return false;
 				}
