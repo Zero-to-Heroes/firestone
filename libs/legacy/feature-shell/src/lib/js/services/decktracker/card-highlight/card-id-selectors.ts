@@ -1111,6 +1111,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, minion),
 				and(side(inputSide), inDeck, spell),
 			);
+		case CardIds.FieldContact:
+			return and(side(inputSide), or(inHand, inDeck), or(battlecry, combo));
 		case CardIds.FinjaTheFlyingStar:
 		case CardIds.FinjaTheFlyingStar_CORE_CFM_344:
 			return and(side(inputSide), inDeck, murloc);
