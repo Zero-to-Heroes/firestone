@@ -2726,7 +2726,7 @@ export const cardIdSelector = (
 		case CardIds.StrengthInNumbers:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SuccumbToMadness_EDR_455:
-			return and(not(side(inputSide)), or(inDeck, inHand), dragon);
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.Suffocate_GDB_476:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.SummerFlowerchild:
