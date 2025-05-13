@@ -1012,6 +1012,7 @@ export class GameEvents {
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 						mana: gameEvent.Value.AdditionalProps.Mana,
 						health: gameEvent.Value.AdditionalProps.Health,
+						coins: gameEvent.Value.AdditionalProps.Coins,
 					}),
 				);
 				break;

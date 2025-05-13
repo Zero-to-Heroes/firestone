@@ -6,7 +6,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, switchMap, takeUntil } from 'rxjs';
-import { isDefault, MaxResources, nullIfDefaultHealth, nullIfDefaultMana } from './model';
+import { isDefault, MaxResources, nullIfDefaultCoins, nullIfDefaultHealth, nullIfDefaultMana } from './model';
 
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
@@ -73,7 +73,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 					inGame &&
 					prefs[this.prefName] &&
 					currentScene === SceneMode.GAMEPLAY &&
-					!isBattlegrounds(gameMode) &&
+					// !isBattlegrounds(gameMode) &&
 					!isMercenaries(gameMode),
 			),
 			this.handleReposition(),
@@ -82,13 +82,15 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 		const maxResources$ = this.gameState.gameState$$.pipe(
 			debounceTime(500),
 			this.mapData((gameState) => {
+				const isBg = isBattlegrounds(gameState?.metadata?.gameType);
 				const result: MaxResources = {
-					health: this.deckExtractor(gameState).hero?.maxHealth ?? 30,
-					mana: this.deckExtractor(gameState).hero?.maxMana ?? 10,
+					health: isBg ? null : this.deckExtractor(gameState).hero?.maxHealth ?? 30,
+					mana: isBg ? null : this.deckExtractor(gameState).hero?.maxMana ?? 10,
+					coins: isBg ? this.deckExtractor(gameState).hero?.maxCoins ?? 10 : null,
 				};
 				return result;
 			}),
-			distinctUntilChanged((a, b) => a.health === b.health && a.mana === b.mana),
+			distinctUntilChanged((a, b) => a.health === b.health && a.mana === b.mana && a.coins === b.coins),
 			takeUntil(this.destroyed$),
 		);
 		this.maxResources$ = combineLatest([maxResources$, alwaysOn$]).pipe(
@@ -102,6 +104,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 				const result: MaxResources = {
 					health: nullIfDefaultHealth(maxResources.health),
 					mana: nullIfDefaultMana(maxResources.mana),
+					coins: nullIfDefaultCoins(maxResources.coins),
 				};
 				return result;
 			}),

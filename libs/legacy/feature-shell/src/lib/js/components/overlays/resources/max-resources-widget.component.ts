@@ -29,6 +29,19 @@ import { MaxResources } from './model';
 				</div>
 				<div class="value">{{ maxResources.mana }}</div>
 			</div>
+			<div
+				class="info coins"
+				*ngIf="maxResources.coins"
+				[helpTooltip]="'widgets.max-resources.max-coins-tooltip' | fsTranslate"
+			>
+				<div class="icon-container">
+					<img
+						class="icon"
+						src="https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/coin_mana.png"
+					/>
+				</div>
+				<div class="value">{{ maxResources.coins }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -15,9 +15,11 @@ export class MaxResourcesUpdatedParser implements EventParser {
 		const playerId = gameEvent.additionalData.playerId;
 		const newMaxMana = gameEvent.additionalData.mana;
 		const newMaxHealth = gameEvent.additionalData.health;
+		const newMaxCoins = gameEvent.additionalData.coins;
 		const newHero = deck.hero.update({
 			maxMana: newMaxMana ? newMaxMana : deck.hero.maxMana,
 			maxHealth: newMaxHealth ? newMaxHealth : deck.hero.maxHealth,
+			maxCoins: newMaxCoins ? newMaxCoins : deck.hero.maxCoins,
 		});
 		const newDeck = deck.update({
 			hero: newHero,
