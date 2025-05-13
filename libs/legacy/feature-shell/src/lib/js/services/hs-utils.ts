@@ -68,6 +68,30 @@ export const colorForClass = (playerClass: string): string => {
 			return '#662A75';
 	}
 };
+export const classForTribe = (tribe: Race): CardClass => {
+	switch (tribe) {
+		case Race.ELEMENTAL:
+			return CardClass.MAGE;
+		case Race.BEAST:
+			return CardClass.HUNTER;
+		case Race.PIRATE:
+			return CardClass.ROGUE;
+		case Race.MURLOC:
+			return CardClass.SHAMAN;
+		case Race.QUILBOAR:
+			return CardClass.DRUID;
+		case Race.UNDEAD:
+			return CardClass.DEATHKNIGHT;
+		case Race.DRAGON:
+			return CardClass.WARRIOR;
+		case Race.DEMON:
+			return CardClass.WARLOCK;
+		case Race.MECH:
+			return CardClass.PALADIN;
+		case Race.NAGA:
+			return CardClass.DEMONHUNTER;
+	}
+};
 
 export const battlecryGlobalEffectCards = [
 	CardIds.AldorAttendant,

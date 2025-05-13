@@ -37,6 +37,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 					*ngFor="let tribe of tribes; trackBy: trackByFn"
 					[tribe]="tribe"
 					[available]="showAvailable$ | async"
+					[useTribeColors]="useTribeColors$ | async"
 					>{{ tribe }}</bgs-banned-tribe
 				>
 			</div>
@@ -46,7 +47,9 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 })
 export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tribes$: Observable<readonly Race[]>;
+	useTribeColors$: Observable<boolean>;
 	tooltip$: Observable<string>;
+
 	orientation$: Observable<'row' | 'column'>;
 	showAvailable$: Observable<boolean>;
 	singleRow$: Observable<boolean>;
@@ -69,6 +72,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowAvailableTribesOverlay)),
 			this.bgsState.gameState$$,
 		]).pipe(this.mapData(([pref, state]) => pref || state?.currentGame?.availableRaces?.length == 1));
+		this.useTribeColors$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsUseBannedTribeColors));
 		this.singleRow$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsTribesOverlaySingleRow));
 		this.tribes$ = combineLatest([this.bgsState.gameState$$, this.showAvailable$]).pipe(
 			this.mapData(([state, showAvailable]) => {

@@ -497,6 +497,7 @@ export class Preferences implements IPreferences {
 	readonly bgsShowHeroTipsOverlay = true;
 	readonly bgsShowTrinketTipsOverlay = true;
 	readonly bgsShowAvailableTribesOverlay = true;
+	readonly bgsUseBannedTribeColors = false;
 	readonly bgsShowQuestStatsOverlay = true;
 	readonly bgsShowTrinketStatsOverlay = true;
 	readonly bgsTribesOverlaySingleRow = false;

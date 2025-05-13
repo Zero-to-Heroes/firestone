@@ -1,13 +1,13 @@
 .bgs-banned-tribe {
 	position: relative;
-}
 
-.background {
-	position: relative;
-	width: 75px;
-	height: 85px;
-	background: #dfb3d3;
-	clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+	.background {
+		position: relative;
+		width: 75px;
+		height: 85px;
+		background: #dfb3d3;
+		clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+	}
 }
 
 .icon {

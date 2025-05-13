@@ -29,6 +29,13 @@ export const battlegroundsBannedTribesSettings = (context: SettingContext): Sett
 					},
 					{
 						type: 'toggle',
+						field: 'bgsUseBannedTribeColors',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.show-tribe-colors-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.show-tribe-colors-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsShowBannedTribesOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsShowAvailableTribesOverlay',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.show-available-tribes-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.show-available-tribes-tooltip'),
