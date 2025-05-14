@@ -2303,6 +2303,8 @@ export const cardIdSelector = (
 		case CardIds.RimefangSwordCore:
 		case CardIds.RimefangSword_LEG_RLK_710:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.Rimetongue:
+			return and(side(inputSide), or(inDeck, inHand), frost, spell);
 		case CardIds.RingmasterWhatley:
 			return highlightConditions(
 				and(side(inputSide), inDeck, minion, dragon),
