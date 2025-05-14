@@ -28,7 +28,7 @@ import { ConstructedCardStat } from '../services/constructed-discover.service';
 					></span>
 					<span class="value {{ drawWinrateClass }}">{{ drawImpact }}</span>
 				</div>
-				<div class="stat winrate discover" *ngIf="drawImpact === '-'">
+				<div class="stat winrate discover" *ngIf="drawImpact === '-' && discoverImpact !== '-'">
 					<span
 						class="label"
 						[fsTranslate]="'app.decktracker.meta.details.cards.discovered-winrate-impact-header'"
@@ -38,6 +38,11 @@ import { ConstructedCardStat } from '../services/constructed-discover.service';
 						[ngClass]="{ 'low-data': lowData }"
 						[helpTooltip]="discoverTooltip"
 						>{{ discoverImpact }}</span
+					>
+				</div>
+				<div class="stat winrate discover" *ngIf="drawImpact === '-' && discoverImpact === '-'">
+					<span class="value" [helpTooltip]="'decktracker.overlay.mulligan.no-mulligan-data' | fsTranslate"
+						>-</span
 					>
 				</div>
 			</div>

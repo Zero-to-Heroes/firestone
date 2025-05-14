@@ -35,11 +35,11 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 							<div class="stat mulligan-winrate no-data scalable" *ngIf="info.impact === null">
 								<span
 									class="label"
-									[fsTranslate]="'decktracker.overlay.mulligan.no-mulligan-data'"
 									[helpTooltip]="
 										'decktracker.overlay.mulligan.no-mulligan-data-tooltip' | fsTranslate
 									"
-								></span>
+									>-</span
+								>
 							</div>
 						</div>
 					</ng-container>
