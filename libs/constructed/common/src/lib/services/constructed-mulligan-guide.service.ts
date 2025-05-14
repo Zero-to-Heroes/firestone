@@ -462,14 +462,25 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 	}
 
-	public getMulliganAdvice$(deckstring: string): Observable<MulliganGuideWithDeckStats | null> {
-		return this.mainInstance.getMulliganAdviceInternal$(deckstring);
+	public getMulliganAdvice$(
+		deckstring: string,
+		options?: MulliganGuideOptions,
+	): Observable<MulliganGuideWithDeckStats | null> {
+		return this.mainInstance.getMulliganAdviceInternal$(deckstring, options);
 	}
 
-	private getMulliganAdviceInternal$(deckstring: string): Observable<MulliganGuideWithDeckStats | null> {
+	private getMulliganAdviceInternal$(
+		deckstring: string,
+		options?: MulliganGuideOptions,
+	): Observable<MulliganGuideWithDeckStats | null> {
+		const deckDefinition = decode(deckstring);
 		// TODO: use current format of the lobby screen
 		const formatOverride$ = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
+			map((prefs) =>
+				options?.useDeckFormat
+					? (deckDefinition.format as GameFormatEnum)
+					: prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD,
+			),
 			distinctUntilChanged(),
 		);
 		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
@@ -554,9 +565,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				return result;
 			}),
 		);
-		const deckCards = decode(deckstring)
-			?.cards?.map((card) => card[0])
-			.map((dbfId) => this.allCards.getCard(dbfId).id);
+		const deckCards = deckDefinition?.cards?.map((card) => card[0]).map((dbfId) => this.allCards.getCard(dbfId).id);
 		const playerDeckMatches$ = this.gameStats.gameStats$$.pipe(
 			map((gameStats) =>
 				gameStats?.stats.filter((s) => s.gameMode === 'ranked').filter((s) => s.playerDecklist === deckstring),
@@ -735,4 +744,7 @@ export interface MulliganGuideWithDeckStats extends MulliganGuide {
 export interface MulliganDeckStats {
 	totalGames: number;
 	winrate: number | null;
+}
+export interface MulliganGuideOptions {
+	useDeckFormat?: boolean;
 }
