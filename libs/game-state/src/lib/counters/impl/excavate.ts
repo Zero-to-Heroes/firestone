@@ -91,9 +91,17 @@ export class ExcavateCounterDefinitionV2 extends CounterDefinitionV2<{
 		bgState: BattlegroundsState,
 	): readonly string[] | undefined {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const maxTier = deck.maxExcavateTier;
+		const maxTier = deck.maxExcavateTier + 1;
 		const nextTier = (deck.currentExcavateTier % maxTier) + 1;
 		const nextTierExcavateTreasures = buildExcavateTreasures(nextTier, deck.hero?.classes ?? []);
+		console.debug(
+			'[excavate] next tier excavate treasures',
+			nextTierExcavateTreasures,
+			maxTier,
+			nextTier,
+			deck,
+			gameState,
+		);
 		return nextTierExcavateTreasures;
 	}
 
@@ -102,8 +110,6 @@ export class ExcavateCounterDefinitionV2 extends CounterDefinitionV2<{
 		const maxTier = value.maxTier;
 		const nextTier = (value.currentTier % maxTier) + 1;
 		return this.i18n.translateString(`counters.excavate.${side}`, {
-			value: value.currentTier,
-			maxTier: maxTier,
 			nextTier: nextTier,
 			totalExcavates: value.totalExcavates,
 		});
