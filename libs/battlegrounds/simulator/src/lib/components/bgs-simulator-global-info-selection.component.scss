@@ -10,6 +10,13 @@
 		}
 	}
 
+	.inputs-list {
+		display: flex;
+		flex-direction: column;
+		overflow: scroll;
+		min-height: 0;
+	}
+
 	.controls {
 		margin-top: auto;
 	}

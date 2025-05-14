@@ -18,180 +18,182 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 			</button>
 
 			<div class="title" [fsTranslate]="'battlegrounds.sim.global-info-title'"></div>
-			<fs-numeric-input-with-arrows
-				class="input eternal-knights-dead-this-game"
-				[label]="'battlegrounds.sim.eternal-legion' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.eternal-legion-tooltip' | fsTranslate"
-				[value]="eternalKnightsDeadThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onEternalKnightsDeadThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input undead-army"
-				[label]="'battlegrounds.sim.undead-army' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.undead-army-tooltip' | fsTranslate"
-				[value]="undeadAttackBonus"
-				[minValue]="0"
-				(fsModelUpdate)="onUndeadAttackBonusChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.frostling-bonus' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.frostling-bonus-tooltip' | fsTranslate"
-				[value]="frostlingBonus"
-				[minValue]="0"
-				(fsModelUpdate)="onFrostlingBonusChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.bloodgem-attack' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.bloodgem-attack-tooltip' | fsTranslate"
-				[value]="bloodGemAttackBonus"
-				[minValue]="0"
-				(fsModelUpdate)="onBloodGemAttackBonusChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.bloodgem-health' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.bloodgem-health-tooltip' | fsTranslate"
-				[value]="bloodGemHealthBonus"
-				[minValue]="0"
-				(fsModelUpdate)="onBloodGemHealthBonusChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.spells-cast' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.spells-cast-tooltip' | fsTranslate"
-				[value]="spellsCastThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="spellsCastThisGame = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.tavern-spells-cast' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.tavern-spells-cast-tooltip' | fsTranslate"
-				[value]="tavernSpellsCastThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onTavernSpellsCastThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.pirates-played' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.pirates-played-tooltip' | fsTranslate"
-				[value]="piratesPlayedThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onPiratesPlayedThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.pirates-summoned' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.pirates-summoned-tooltip' | fsTranslate"
-				[value]="piratesSummonedThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onPiratesSummonedThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.beasts-summoned' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.beasts-summoned-tooltip' | fsTranslate"
-				[value]="beastsSummonedThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onBeastsSummonedThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.magnetized' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.magnetized-tooltip' | fsTranslate"
-				[value]="magnetizedThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onMagnetizedThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.ancestral-automaton' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.ancestral-automaton-tooltip' | fsTranslate"
-				[value]="astralAutomatonsSummonedThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="onAstralAutomatonsSummonedThisGameChanged($event)"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.beetle-attack-buff' | fsTranslate"
-				[value]="beetleAttackBuff"
-				[minValue]="0"
-				(fsModelUpdate)="beetleAttackBuff = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.beetle-health-buff' | fsTranslate"
-				[value]="beetleHealthBuff"
-				[minValue]="0"
-				(fsModelUpdate)="beetleHealthBuff = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.elemental-health-buff' | fsTranslate"
-				[value]="elementalHealthBuff"
-				[minValue]="0"
-				(fsModelUpdate)="elementalHealthBuff = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.elemental-attack-buff' | fsTranslate"
-				[value]="elementalAttackBuff"
-				[minValue]="0"
-				(fsModelUpdate)="elementalAttackBuff = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.tavern-spell-health-buff' | fsTranslate"
-				[value]="tavernSpellHealthBuff"
-				[minValue]="0"
-				(fsModelUpdate)="tavernSpellHealthBuff = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.tavern-spell-attack-buff' | fsTranslate"
-				[value]="tavernSpellAttackBuff"
-				[minValue]="0"
-				(fsModelUpdate)="tavernSpellAttackBuff = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.battlecries-triggered' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.battlecries-triggered-tooltip' | fsTranslate"
-				[value]="battlecriesTriggeredThisGame"
-				[minValue]="0"
-				(fsModelUpdate)="battlecriesTriggeredThisGame = $event"
-			>
-			</fs-numeric-input-with-arrows>
-			<fs-numeric-input-with-arrows
-				class="input"
-				[label]="'battlegrounds.sim.friendly-minions-dead-last-combat' | fsTranslate"
-				[helpTooltip]="'battlegrounds.sim.friendly-minions-dead-last-combat-tooltip' | fsTranslate"
-				[value]="friendlyMinionsDeadLastCombat"
-				[minValue]="0"
-				(fsModelUpdate)="friendlyMinionsDeadLastCombat = $event"
-			>
-			</fs-numeric-input-with-arrows>
+			<div class="inputs-list">
+				<fs-numeric-input-with-arrows
+					class="input eternal-knights-dead-this-game"
+					[label]="'battlegrounds.sim.eternal-legion' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.eternal-legion-tooltip' | fsTranslate"
+					[value]="eternalKnightsDeadThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onEternalKnightsDeadThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input undead-army"
+					[label]="'battlegrounds.sim.undead-army' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.undead-army-tooltip' | fsTranslate"
+					[value]="undeadAttackBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onUndeadAttackBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.frostling-bonus' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.frostling-bonus-tooltip' | fsTranslate"
+					[value]="frostlingBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onFrostlingBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.bloodgem-attack' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.bloodgem-attack-tooltip' | fsTranslate"
+					[value]="bloodGemAttackBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onBloodGemAttackBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.bloodgem-health' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.bloodgem-health-tooltip' | fsTranslate"
+					[value]="bloodGemHealthBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onBloodGemHealthBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.spells-cast' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.spells-cast-tooltip' | fsTranslate"
+					[value]="spellsCastThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="spellsCastThisGame = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.tavern-spells-cast' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.tavern-spells-cast-tooltip' | fsTranslate"
+					[value]="tavernSpellsCastThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onTavernSpellsCastThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.pirates-played' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.pirates-played-tooltip' | fsTranslate"
+					[value]="piratesPlayedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onPiratesPlayedThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.pirates-summoned' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.pirates-summoned-tooltip' | fsTranslate"
+					[value]="piratesSummonedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onPiratesSummonedThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.beasts-summoned' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.beasts-summoned-tooltip' | fsTranslate"
+					[value]="beastsSummonedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onBeastsSummonedThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.magnetized' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.magnetized-tooltip' | fsTranslate"
+					[value]="magnetizedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onMagnetizedThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.ancestral-automaton' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.ancestral-automaton-tooltip' | fsTranslate"
+					[value]="astralAutomatonsSummonedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="onAstralAutomatonsSummonedThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.beetle-attack-buff' | fsTranslate"
+					[value]="beetleAttackBuff"
+					[minValue]="0"
+					(fsModelUpdate)="beetleAttackBuff = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.beetle-health-buff' | fsTranslate"
+					[value]="beetleHealthBuff"
+					[minValue]="0"
+					(fsModelUpdate)="beetleHealthBuff = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.elemental-health-buff' | fsTranslate"
+					[value]="elementalHealthBuff"
+					[minValue]="0"
+					(fsModelUpdate)="elementalHealthBuff = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.elemental-attack-buff' | fsTranslate"
+					[value]="elementalAttackBuff"
+					[minValue]="0"
+					(fsModelUpdate)="elementalAttackBuff = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.tavern-spell-health-buff' | fsTranslate"
+					[value]="tavernSpellHealthBuff"
+					[minValue]="0"
+					(fsModelUpdate)="tavernSpellHealthBuff = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.tavern-spell-attack-buff' | fsTranslate"
+					[value]="tavernSpellAttackBuff"
+					[minValue]="0"
+					(fsModelUpdate)="tavernSpellAttackBuff = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.battlecries-triggered' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.battlecries-triggered-tooltip' | fsTranslate"
+					[value]="battlecriesTriggeredThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="battlecriesTriggeredThisGame = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.friendly-minions-dead-last-combat' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.friendly-minions-dead-last-combat-tooltip' | fsTranslate"
+					[value]="friendlyMinionsDeadLastCombat"
+					[minValue]="0"
+					(fsModelUpdate)="friendlyMinionsDeadLastCombat = $event"
+				>
+				</fs-numeric-input-with-arrows>
+			</div>
 			<div class="controls">
 				<div class="button" (click)="validate()" [fsTranslate]="'battlegrounds.sim.select-button'"></div>
 			</div>
