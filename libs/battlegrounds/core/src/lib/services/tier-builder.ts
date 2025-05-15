@@ -78,8 +78,8 @@ export const buildTiers = (
 		showProtossMinions: heroPowerCardId === CardIds.Artanis_WarpGate_BG31_HERO_802p,
 		showZergMinions: heroPowerCardId === CardIds.KerriganQueenOfBlades_SpawningPool_BG31_HERO_811p,
 		showBattlecruiserUpgrades:
-			heroPowerCardId === CardIds.JimRaynor_BG31_HERO_801 ||
-			playerTrinkets?.includes(CardIds.JimRaynor_LiftOff_BG31_HERO_801p),
+			heroPowerCardId === CardIds.JimRaynor_LiftOff_BG31_HERO_801p ||
+			playerTrinkets?.includes(CardIds.BattlecruiserPortrait_BG32_MagicItem_806),
 	};
 	const standardTiers: readonly Tier[] = buildStandardTiers(
 		cardsToInclude,
