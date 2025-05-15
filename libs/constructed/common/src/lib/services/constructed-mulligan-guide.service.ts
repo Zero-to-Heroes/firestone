@@ -157,22 +157,32 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			distinctUntilChanged(),
 		);
 		const format$ = showWidget$.pipe(
-			filter((showWidget) => showWidget),
-			switchMap(() => combineLatest([this.gameState.gameState$$, formatOverride$])),
-			debounceTime(500),
-			map(
-				([gameState, formatOverride]) =>
-					formatOverride ?? gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD,
+			switchMap(
+				(showWidget) =>
+					showWidget
+						? combineLatest([this.gameState.gameState$$, formatOverride$]).pipe(
+								debounceTime(500),
+								map(
+									([gameState, formatOverride]) =>
+										formatOverride ?? gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD,
+								),
+								distinctUntilChanged(),
+						  )
+						: of(null), // Emit null or a default value when showWidget is false
 			),
-			distinctUntilChanged(),
 			shareReplay(1),
 		);
 		const gameType$ = showWidget$.pipe(
-			filter((showWidget) => showWidget),
-			switchMap(() => this.gameState.gameState$$),
-			debounceTime(500),
-			map((gameState) => gameState?.metadata.gameType),
-			distinctUntilChanged(),
+			switchMap(
+				(showWidget) =>
+					showWidget
+						? this.gameState.gameState$$.pipe(
+								debounceTime(500),
+								map((gameState) => gameState?.metadata.gameType),
+								distinctUntilChanged(),
+						  )
+						: of(null), // Emit null or a default value when showWidget is false
+			),
 			shareReplay(1),
 		);
 		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
@@ -270,7 +280,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					timeFrame,
 					playerRank,
 				);
-				// console.debug('[mulligan-guide] archetype result', result);
+				console.debug('[mulligan-guide] archetype result', result);
 				return result;
 			}),
 			// filter((archetype) => !!archetype),
@@ -312,41 +322,55 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			}),
 			// filter((archetype) => !!archetype),
 			// map(archetype => archetype as ArchetypeStat),
-			// tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
+			tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
 			// shareReplay(1),
 		);
 
 		const cardsInHand$ = showWidget$.pipe(
-			filter((showWidget) => showWidget),
-			switchMap(() => this.gameState.gameState$$),
-			auditTime(500),
-			map((gameState) => {
-				// There should never be a "basic" coin in the mulligan AFAIK
-				const cardsInHand =
-					gameState?.playerDeck.hand?.map((c) => c.cardId).filter((c) => !isCoin(c, this.allCards)) ?? [];
-				return cardsInHand.length > 0 ? cardsInHand : null;
-			}),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			switchMap(
+				(showWidget) =>
+					showWidget
+						? this.gameState.gameState$$.pipe(
+								auditTime(500),
+								map((gameState) => {
+									// There should never be a "basic" coin in the mulligan AFAIK
+									const cardsInHand =
+										gameState?.playerDeck.hand
+											?.map((c) => c.cardId)
+											.filter((c) => !isCoin(c, this.allCards)) ?? [];
+									console.debug('[mulligan-guide] cardsInHand', cardsInHand, gameState);
+									return cardsInHand.length > 0 ? cardsInHand : null;
+								}),
+								distinctUntilChanged((a, b) => arraysEqual(a, b)),
+						  )
+						: of(null), // Emit null or a default value when showWidget is false
+			),
 			shareReplay(1),
 		);
-		const deckCards$ = showWidget$.pipe(
-			filter((showWidget) => showWidget),
-			switchMap(() => this.gameState.gameState$$),
-			auditTime(500),
-			map((gameState) => {
-				const deckstring = gameState?.playerDeck?.deckstring;
-				if (!deckstring?.length) {
-					return null;
-				}
 
-				const deckDefinition = decode(deckstring);
-				const cards = deckDefinition?.cards
-					?.map((card) => card[0])
-					.map((dbfId) => this.allCards.getCard(dbfId));
-				return cards;
-			}),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			tap((cardsInHand) => console.debug('[mulligan-guide] deckCards', cardsInHand)),
+		const deckCards$ = showWidget$.pipe(
+			switchMap(
+				(showWidget) =>
+					showWidget
+						? this.gameState.gameState$$.pipe(
+								auditTime(500),
+								map((gameState) => {
+									const deckstring = gameState?.playerDeck?.deckstring;
+									if (!deckstring?.length) {
+										return null;
+									}
+
+									const deckDefinition = decode(deckstring);
+									const cards = deckDefinition?.cards
+										?.map((card) => card[0])
+										.map((dbfId) => this.allCards.getCard(dbfId));
+									return cards;
+								}),
+								distinctUntilChanged((a, b) => arraysEqual(a, b)),
+								tap((deckCards) => console.debug('[mulligan-guide] deckCards', deckCards)),
+						  )
+						: of(null), // Emit null or a default value when showWidget is false
+			),
 			shareReplay(1),
 		);
 
@@ -447,7 +471,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						sampleSize: sampleSize,
 						rankBracket: playerRank,
 						opponentClass: opponentClass,
-						format: toFormatType(format) as GameFormatString,
+						format: toFormatType(format!) as GameFormatString,
 						archetypeId: archetype?.id ?? null,
 						deckstring: deckstring ?? null,
 					};
