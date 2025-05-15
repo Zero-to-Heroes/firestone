@@ -517,7 +517,7 @@ const combo = (second: ReferenceCard): HighlightSelector => {
 
 const hasMechanic = (card: ReferenceCard, mechanic: GameTag) => (card?.mechanics ?? []).includes(GameTag[mechanic]);
 const hasReferencedTag = (card: ReferenceCard, tag: GameTag) => (card?.referencedTags ?? []).includes(GameTag[tag]);
-const hasTag = (card: ReferenceCard, tag: GameTag) => (card?.tags ?? []).includes(GameTag[tag]);
+const hasTag = (card: ReferenceCard, tag: GameTag) => Object.keys(card?.tags ?? {}).includes(GameTag[tag]);
 
 const merc = (card: ReferenceCard) => card.mercenary;
 const minion = (card: ReferenceCard) => !!card.races?.length && !card.mercenary;
