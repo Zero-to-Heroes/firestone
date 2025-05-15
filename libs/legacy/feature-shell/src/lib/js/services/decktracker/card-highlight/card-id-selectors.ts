@@ -508,6 +508,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BroodKeeper_EDR_457:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		case CardIds.BulkUp:
+			return and(side(inputSide), or(inDeck, inHand), taunt, minion);
 		case CardIds.BumblingBellhop_VAC_521:
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.BunnyStomper_WW_435:
