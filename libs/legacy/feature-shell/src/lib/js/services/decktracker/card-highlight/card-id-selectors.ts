@@ -1318,6 +1318,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), unholyRune),
 				and(side(inputSide), or(inHand, inDeck), bloodRune),
 			);
+		case CardIds.Groundskeeper:
+			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(4));
 		case CardIds.GroveShaper_EDR_271:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature);
 		case CardIds.GuardianAnimals:
