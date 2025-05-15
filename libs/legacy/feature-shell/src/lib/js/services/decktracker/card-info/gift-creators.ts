@@ -1012,4 +1012,5 @@ export const giftCreators = [
 	CardIds.Scorchreaver_FIR_952,
 	CardIds.EmberscarredWhelp_FIR_927,
 	CardIds.ShadowflameStalker_FIR_924,
+	CardIds.Talgath_GDB_472,
 ];
