@@ -10,16 +10,17 @@ export const checkIntegrity = (
 	bugService: BugReportService,
 	hasReconnected: boolean,
 	gameType: GameType,
+	currentTurn: number,
 	allCards: CardsFacadeService,
 ) => {
 	if (faceOff.battleResult?.won === 0 && faceOff.result === 'won') {
-		report('victory', faceOff, gameState, bugService, hasReconnected, gameType, allCards);
+		report('victory', faceOff, gameState, bugService, hasReconnected, gameType, currentTurn, allCards);
 	}
 	if (faceOff.battleResult?.lost === 0 && faceOff.result === 'lost') {
-		report('loss', faceOff, gameState, bugService, hasReconnected, gameType, allCards);
+		report('loss', faceOff, gameState, bugService, hasReconnected, gameType, currentTurn, allCards);
 	}
 	if (faceOff.battleResult?.tied === 0 && faceOff.result === 'tied') {
-		report('tie', faceOff, gameState, bugService, hasReconnected, gameType, allCards);
+		report('tie', faceOff, gameState, bugService, hasReconnected, gameType, currentTurn, allCards);
 	}
 
 	if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH' || faceOff.opponentCardId === 'TB_BaconShop_HERO_PH') {
@@ -34,11 +35,12 @@ const report = async (
 	bugService: BugReportService,
 	hasReconnected: boolean,
 	gameType: GameType,
+	currentTurn: number,
 	allCards: CardsFacadeService,
 ) => {
 	// const user = await this.ow.getCurrentUser();
 	if (hasReconnected) {
-		console.log('[bgs-simulation] Reconnected, not reporting', status, game.currentTurn);
+		console.log('[bgs-simulation] Reconnected, not reporting', status, currentTurn);
 		return;
 	}
 	const isSupported = isSupportedScenario(faceOff.battleInfo).isSupported;
@@ -47,7 +49,7 @@ const report = async (
 			'no-format',
 			'[bgs-simulation] Impossible battle ' + status,
 			game.reviewId,
-			game.currentTurn,
+			currentTurn,
 			isSupported,
 			faceOff.battleInfo,
 			faceOff.battleResult,
@@ -58,7 +60,7 @@ const report = async (
 				info: JSON.stringify({
 					message: '[bgs-simulation] Impossible battle ' + status,
 					reviewId: game.reviewId,
-					currentTurn: game.currentTurn,
+					currentTurn: currentTurn,
 					gameType: gameType,
 					battleInfo: faceOff.battleInfo,
 				}),

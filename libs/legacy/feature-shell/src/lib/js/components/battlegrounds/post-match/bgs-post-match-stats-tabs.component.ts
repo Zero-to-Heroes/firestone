@@ -1,25 +1,14 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/game-state';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isSupportedScenario } from '../../../services/battlegrounds/bgs-utils';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
@@ -43,7 +32,6 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[stats]="_panel?.stats"
 					[mainPlayerId]="mainPlayerId"
 					[visible]="selectedTab === 'hp-by-turn'"
-					[tooltipSuffix]="tabIndex"
 				>
 				</bgs-chart-hp>
 				<bgs-winrate-chart
@@ -80,10 +68,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsPostMatchStatsTabsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	_panel: BgsPostMatchStatsPanel;
 	tabs: readonly BgsStatsFilterId[];
 	faceOffs: readonly BgsFaceOffWithSimulation[];
@@ -95,7 +80,6 @@ export class BgsPostMatchStatsTabsComponent
 	@Input() selectedTab: BgsStatsFilterId;
 	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
 	@Input() mainPlayerId: number;
-	@Input() tabIndex = 0;
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
 		if (!value?.player || value === this._panel) {
@@ -129,16 +113,13 @@ export class BgsPostMatchStatsTabsComponent
 		}
 	}
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -157,17 +138,12 @@ export class BgsPostMatchStatsTabsComponent
 		}
 	}
 
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+	async selectTab(tab: BgsStatsFilterId) {
+		console.debug('[bgs-post-match-stats-tabs] selectTab', tab, this.selectedTab, this.selectTabHandler);
+		if (this.selectedTab === tab) {
+			return;
 		}
-	}
-
-	selectTab(tab: BgsStatsFilterId) {
-		this.selectTabHandler
-			? this.selectTabHandler(tab, this.tabIndex)
-			: this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab, this.tabIndex));
+		await this.prefs.updatePrefs('bgsSelectedTab3', tab);
 	}
 
 	getLabel(tab: BgsStatsFilterId): string {

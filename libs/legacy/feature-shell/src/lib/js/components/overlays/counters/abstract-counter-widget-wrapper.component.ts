@@ -8,12 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState, CounterType, GameState } from '@firestone/game-state';
+import { BattlegroundsState, CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
+import { AppInjector, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 export const templateBase = `
@@ -64,43 +63,46 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	protected onBgs: boolean;
 
 	private scene: SceneService;
+	private gameState: GameStateFacadeService;
 
 	constructor(
 		protected readonly ow: OverwolfService,
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 		this.scene = AppInjector.get(SceneService);
+		this.gameState = AppInjector.get(GameStateFacadeService);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.gameState);
 
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(([main, nav, prefs]) => (this.prefExtractor ? this.prefExtractor(prefs) : true)),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
-				(deckState) => deckState,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => (this.prefExtractor ? this.prefExtractor(prefs) : true)),
 			),
-			this.store.listenBattlegrounds$(([gameState]) => gameState),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameStarted)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameEnded)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.isBattlegrounds())),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.isMercenaries())),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state)),
 			displayFromGameMode$,
 		]).pipe(
 			this.mapData(
 				([
 					currentScene,
-					[displayFromPrefs],
-					[gameStarted, gameEnded, isBgs, isMercs, deckState],
-					[bgState],
+					displayFromPrefs,
+					gameStarted,
+					gameEnded,
+					isBgs,
+					isMercs,
+					deckState,
 					displayFromGameMode,
 				]) => {
 					if (
@@ -115,7 +117,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					}
 
 					const displayFromState = this.deckStateExtractor
-						? this.deckStateExtractor(deckState, displayFromPrefs, bgState)
+						? this.deckStateExtractor(deckState, displayFromPrefs, deckState.bgState)
 						: true;
 					if (!displayFromState) {
 						return false;

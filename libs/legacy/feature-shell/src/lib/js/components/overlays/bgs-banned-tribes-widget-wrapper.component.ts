@@ -7,12 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, SceneMode } from '@firestone-hs/reference-data';
+import { CardIds, isBattlegrounds, SceneMode } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -45,29 +45,31 @@ export class BgsBannedTribesWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.gameState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.bgsShowBannedTribesOverlay && prefs.bgsFullToggle),
-			this.store.listenBattlegrounds$(
-				([state, prefs]) => state?.inGame,
-				([state, prefs]) => !!state?.currentGame,
-				([state, prefs]) => state?.currentGame?.anomalies,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => prefs.bgsShowBannedTribesOverlay && prefs.bgsFullToggle),
 			),
+			this.gameState.gameState$$.pipe(
+				this.mapData(
+					(state) => state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
+				),
+			),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.bgState.currentGame?.anomalies)),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [inGame, isCurrentGame, anomalies]]) => {
+			this.mapData(([currentScene, displayFromPrefs, inGame, anomalies]) => {
 				return (
 					inGame &&
-					isCurrentGame &&
 					displayFromPrefs &&
 					currentScene === SceneMode.GAMEPLAY &&
 					!anomalies?.includes(CardIds.TavernSpecial_BG27_Anomaly_103)

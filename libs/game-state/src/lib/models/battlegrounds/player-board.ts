@@ -21,6 +21,7 @@ export interface PlayerBoard {
 	}[];
 	readonly questRewards: readonly string[];
 	readonly questRewardEntities: readonly {
+		entityId: number;
 		cardId: string;
 		avengeDefault?: number;
 		avengeCurrent?: number;

@@ -1,13 +1,27 @@
-import { DeckCard, GameState, ShortCard, TurnTiming } from '@firestone/game-state';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import {
+	BattlegroundsState,
+	BgsNextOpponentOverviewPanel,
+	BgsPanel,
+	DeckCard,
+	GameState,
+	ShortCard,
+	TurnTiming,
+} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OwUtilsService } from '@firestone/shared/framework/core';
+import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { EventParser } from './event-parser';
 
 export class NewTurnParser implements EventParser {
-	constructor(private readonly owUtils: OwUtilsService, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly owUtils: OwUtilsService,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: ILocalizationService,
+		private readonly nav: BgsInGameWindowNavigationService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -105,11 +119,44 @@ export class NewTurnParser implements EventParser {
 			opponentDeck: opponentDeck,
 			mulliganOver: currentState.mulliganOver || numericTurn >= 2,
 		});
+
+		if (isBattlegrounds(currentState.metadata.gameType)) {
+			const newPanelId = gameTurnNumber === 1 ? 'bgs-next-opponent-overview' : this.nav.currentPanelId$$.value;
+			this.nav.currentPanelId$$.next(newPanelId);
+			const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.rebuildNextOpponentPanel(
+				currentState.bgState,
+				numericTurn,
+			);
+			const panels: readonly BgsPanel[] = currentState.bgState.panels.map((stage) =>
+				stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
+			);
+			return startOfTurnState.update({
+				bgState: currentState.bgState.update({
+					panels: panels,
+				}),
+			});
+		}
+
 		return startOfTurnState;
 	}
 
 	event(): string {
 		return GameEvent.TURN_START;
+	}
+
+	private rebuildNextOpponentPanel(
+		currentState: BattlegroundsState,
+		newCurrentTurn: number,
+	): BgsNextOpponentOverviewPanel {
+		return (
+			currentState.panels.find(
+				(panel) => panel.id === 'bgs-next-opponent-overview',
+			) as BgsNextOpponentOverviewPanel
+		).update({
+			name: this.i18n.translateString('battlegrounds.in-game.opponents.next-opponent-title', {
+				turn: newCurrentTurn,
+			}),
+		} as BgsNextOpponentOverviewPanel);
 	}
 }
 

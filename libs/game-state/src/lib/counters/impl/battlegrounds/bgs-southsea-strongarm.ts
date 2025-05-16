@@ -23,8 +23,8 @@ export class BgsSouthseaStrongarmCounterDefinitionV2 extends CounterDefinitionV2
 			}
 
 			return (
-				bgState.currentGame.liveStats.minionsBoughtOverTurn
-					.find((info) => info.turn === bgState.currentGame.currentTurn)
+				bgState.currentGame?.liveStats.minionsBoughtOverTurn
+					.find((info) => info.turn === state.currentTurnNumeric)
 					?.cardIds.filter((cardId) => hasCorrectTribe(this.allCards.getCard(cardId), Race.PIRATE)).length ??
 				0
 			);

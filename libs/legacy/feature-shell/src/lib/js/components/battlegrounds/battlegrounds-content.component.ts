@@ -7,13 +7,14 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation, BgsPanel } from '@firestone/game-state';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsFaceOffWithSimulation, BgsPanel, GameStateFacadeService } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, startWith } from 'rxjs/operators';
+import { auditTime, filter, startWith } from 'rxjs/operators';
 import { AdService } from '../../services/ad.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-content',
@@ -49,7 +50,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsContentComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	showTitle$: Observable<boolean>;
@@ -65,39 +66,33 @@ export class BattlegroundsContentComponent
 	windowId: string;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly ads: AdService,
+		private readonly nav: BgsInGameWindowNavigationService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.ads);
+		await waitForReady(this.ads, this.gameState, this.nav, this.prefs);
 
-		this.currentPanelId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentPanelId)
-			.pipe(
-				filter(([currentPanelId]) => !!currentPanelId),
-				this.mapData(([currentPanelId]) => currentPanelId),
-			);
+		this.currentPanelId$ = this.nav.currentPanelId$$.pipe(this.mapData((currentPanelId) => currentPanelId));
 		this.currentPanelId$.subscribe((currentApp) => {
 			this.analytics.trackPageView(currentApp);
 		});
-		this.currentPanel$ = this.store
-			.listenBattlegrounds$(
-				([state]) => state.panels,
-				([state]) => state.currentPanelId,
-			)
-			.pipe(
-				debounceTime(200),
-				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
-				this.mapData(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
-			);
+		this.currentPanel$ = combineLatest([this.gameState.gameState$$, this.nav.currentPanelId$$]).pipe(
+			auditTime(1000),
+			filter(([gameState, currentPanelId]) => !!gameState.bgState?.panels?.length && !!currentPanelId),
+			this.mapData(([gameState, currentPanelId]) =>
+				gameState.bgState.panels.find((panel) => panel.id === currentPanelId),
+			),
+		);
 		this.showTitle$ = combineLatest(
-			this.listenForBasicPref$((prefs) => prefs.bgsShowNextOpponentRecapSeparately),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowNextOpponentRecapSeparately)),
 			this.currentPanelId$,
 		).pipe(
 			this.mapData(
@@ -105,26 +100,23 @@ export class BattlegroundsContentComponent
 					showNextOpponentRecapSeparately || currentPanelId !== 'bgs-next-opponent-overview',
 			),
 		);
-		this.reviewId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.reviewId)
-			.pipe(this.mapData(([reviewId]) => reviewId));
-		this.mainPlayerId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.playerId));
-		this.mmr$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.mmrAtStart)
-			.pipe(this.mapData(([mmrAtStart]) => mmrAtStart));
-		this.gameEnded$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.gameEnded)
-			.pipe(this.mapData(([gameEnded]) => gameEnded));
-		this.faceOffs$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
-			.pipe(
-				debounceTime(1000),
-				filter(([faceOffs]) => !!faceOffs?.length),
-				distinctUntilChanged(),
-				this.mapData(([faceOffs]) => faceOffs),
-			);
+		this.reviewId$ = this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState.reviewId));
+		this.mainPlayerId$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((gameState) => gameState?.bgState?.currentGame?.getMainPlayer()?.playerId),
+		);
+		this.mmr$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((gameState) => gameState?.bgState?.currentGame?.mmrAtStart),
+		);
+		this.gameEnded$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((gameState) => gameState?.gameEnded),
+		);
+		this.faceOffs$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((gameState) => gameState?.bgState?.currentGame?.faceOffs),
+		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(
 			this.mapData((showAds) => !showAds),
 			startWith(true),

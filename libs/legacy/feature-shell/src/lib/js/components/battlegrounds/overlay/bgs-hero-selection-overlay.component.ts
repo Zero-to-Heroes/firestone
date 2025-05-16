@@ -3,7 +3,6 @@ import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
 	BgsInGameHeroSelectionGuardianService,
 	BgsPlayerHeroStatsService,
-	BgsStateFacadeService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
@@ -64,7 +63,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly bgsState: BgsStateFacadeService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly ads: AdService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
@@ -75,7 +73,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.bgsState, this.ads, this.playerHeroStats, this.achievements, this.guardian);
+		await waitForReady(this.prefs, this.ads, this.playerHeroStats, this.achievements, this.guardian);
 
 		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -87,15 +85,15 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => (hasPremiumSub ? 0 : freeUsesLeft)),
 		);
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
-		const availableRaces$ = this.bgsState.gameState$$.pipe(
+		const availableRaces$ = this.gameState.gameState$$.pipe(
 			debounceTime(200),
-			this.mapData((state) => state?.currentGame?.availableRaces),
+			this.mapData((state) => state.bgState.currentGame?.availableRaces),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		const mmrAtStart$ = this.bgsState.gameState$$.pipe(
-			this.mapData((state) => state?.currentGame?.mmrAtStart),
+		const mmrAtStart$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => state.bgState.currentGame?.mmrAtStart),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -128,10 +126,10 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
 
-		const panel$ = this.bgsState.gameState$$.pipe(
+		const panel$ = this.gameState.gameState$$.pipe(
 			this.mapData(
 				(main) =>
-					main?.panels?.find(
+					main.bgState.panels?.find(
 						(panel) => panel.id === 'bgs-hero-selection-overview',
 					) as BgsHeroSelectionOverviewPanel,
 			),

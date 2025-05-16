@@ -1,9 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BgsStatsFilterId } from '@firestone/game-state';
-import { Observable, startWith } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
-import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';
-import { SelectMatchStatsTabEvent } from '../../services/mainwindow/store/events/replays/select-match-stats-tab-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -25,9 +22,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				[panel]="value.selectedReplay?.bgsPostMatchStatsPanel"
 				[mainPlayerId]="value.selectedReplay?.bgsPostMatchStatsPanel?.player?.playerId"
 				[mmr]="parseInt(value.selectedReplay?.replayInfo?.playerRank)"
-				[selectedTabs]="selectedTabs$ | async"
-				[selectTabHandler]="selectTabHandler"
-				[changeTabsNumberHandler]="changeTabsNumberHandler"
 				[showSocialShares]="false"
 				[emptyTitle]="'app.replays.bg-stats.empty-state-title' | owTranslate"
 				[emptySubtitle]="'app.replays.bg-stats.empty-state-subtitle' | owTranslate"
@@ -44,7 +38,6 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 export class MatchDetailsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	selectedView$: Observable<string>;
 	selectedReplay$: Observable<MatchDetail>;
-	selectedTabs$: Observable<readonly BgsStatsFilterId[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -57,26 +50,7 @@ export class MatchDetailsComponent extends AbstractSubscriptionStoreComponent im
 		this.selectedReplay$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay)
 			.pipe(this.mapData(([selectedReplay]) => selectedReplay));
-		this.selectedTabs$ = this.store
-			.listen$(
-				([main, nav, prefs]) => nav.navigationReplays.selectedStatsTabs,
-				([main, nav, prefs]) => nav.navigationReplays.numberOfDisplayedTabs,
-			)
-			.pipe(
-				startWith([]),
-				this.mapData(([selectedStatsTabs, numberOfDisplayedTabs]) =>
-					selectedStatsTabs.slice(0, numberOfDisplayedTabs),
-				),
-			);
 	}
-
-	selectTabHandler: (tab: string, tabIndex: number) => void = (tab: BgsStatsFilterId, tabIndex: number) => {
-		this.store.send(new SelectMatchStatsTabEvent(tab, tabIndex));
-	};
-
-	changeTabsNumberHandler = (numbersOfTabs: number) => {
-		this.store.send(new ChangeMatchStatsNumberOfTabsEvent(numbersOfTabs));
-	};
 
 	parseInt(value: string | number): number {
 		return parseInt('' + value);

@@ -8,7 +8,6 @@ import { RealTimeStatsState } from './real-time-stats';
 export class BgsGame {
 	readonly reviewId: string;
 	readonly players: readonly BgsPlayer[] = [];
-	readonly currentTurn: number = 1;
 	readonly phase: 'recruit' | 'combat';
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];
 	// readonly battleResultHistory: readonly BattleResultHistory[] = [];
@@ -34,7 +33,7 @@ export class BgsGame {
 	readonly lastOpponentCardId: string;
 	readonly lastOpponentPlayerId: number;
 	readonly liveStats: RealTimeStatsState = new RealTimeStatsState();
-	readonly gameEnded: boolean;
+	// readonly gameEnded: boolean;
 	readonly extraGoldNextTurn: number = 0;
 	readonly overconfidences: number = 0;
 	readonly boardAndEnchantments: readonly (string | number)[] = [];
@@ -199,15 +198,6 @@ export class BgsGame {
 	// 	return result.reverse();
 	// }
 
-	// Not all players finish their battles at the same time. So you might still be in battle, but
-	// another player might have already gone back to the tavern and levelled up for instance
-	public getCurrentTurnAdjustedForAsyncPlay(): number {
-		if (this.phase === 'combat') {
-			return this.currentTurn + 1;
-		}
-		return this.currentTurn;
-	}
-
 	// For backward-compatibility
 	public buildBattleResultHistory(): readonly BattleResultHistory[] {
 		return this.faceOffs.map((faceOff) => ({
@@ -223,8 +213,8 @@ export class BgsGame {
 		bgsHideSimResultsOnRecruit: boolean,
 	): BgsFaceOffWithSimulation | null | undefined {
 		if (this.phase === 'combat') {
-			// When the game has ended, we return immediately
-			if (bgsShowSimResultsOnlyOnRecruit && !this.gameEnded) {
+			// TODO: When the game has ended, we return immediately
+			if (bgsShowSimResultsOnlyOnRecruit) {
 				return null;
 			}
 			return this.lastFaceOff();

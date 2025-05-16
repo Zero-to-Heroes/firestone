@@ -1,6 +1,6 @@
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
-import { isBaconGhost } from '@firestone-hs/reference-data';
+import { CardType, isBaconGhost } from '@firestone-hs/reference-data';
 import { RealTimeStatsState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../../../models/game-event';
@@ -31,12 +31,12 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 			return currentState;
 		}
 
-		if (sourceCard.type !== 'Hero') {
+		if (sourceCard.type?.toUpperCase() !== CardType[CardType.HERO]) {
 			return currentState;
 		}
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
-			.filter((target) => isBaconGhost(target.TargetCardId))
+			.filter((target) => !isBaconGhost(target.TargetCardId))
 			.map((target) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
 		if (damageDealt === 0) {

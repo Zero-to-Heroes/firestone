@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
-import { DeckHandlerService } from '@firestone/game-state';
+import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
+import { DeckHandlerService, GameUniqueIdService } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OwUtilsService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
+import { AdService } from '../../ad.service';
+import { GameEventsEmitterService } from '../../game-events-emitter.service';
+import { GameEvents } from '../../game-events.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { ReviewIdService } from '../../review-id.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
 import { DeckParserService } from '../deck-parser.service';
@@ -16,9 +22,37 @@ import {
 import { AssignCardIdParser } from '../event-parser/assign-card-ids-parser';
 import { AttackOnBoardParser } from '../event-parser/attack-on-board-parser';
 import { AttackParser } from '../event-parser/attack-parser';
-import { BgsHeroSelectedCardParser } from '../event-parser/bgs-hero-selected-card-parser';
-import { BgsRewardDestroyedParser } from '../event-parser/bgs-reward-destroyed-parser';
-import { BgsRewardEquippedParser } from '../event-parser/bgs-reward-equipped-parser';
+import { BgsActivePlayerBoardProcessParser } from '../event-parser/battlegrounds/bgs-active-player-board-process-parser';
+import { BgsActivePlayerBoardTriggerParser } from '../event-parser/battlegrounds/bgs-active-player-board-trigger-parser';
+import { BgsArmorChangedParser } from '../event-parser/battlegrounds/bgs-armor-changed-parser';
+import { BgsBallerBuffChangedParser } from '../event-parser/battlegrounds/bgs-baller-buff-changed-parser';
+import { BgsBattleResultParser } from '../event-parser/battlegrounds/bgs-battle-result-parser';
+import { BgsBattleSimulationParser } from '../event-parser/battlegrounds/bgs-battle-simulation-parser';
+import { BgsBeetleArmyChangedParser } from '../event-parser/battlegrounds/bgs-beetle-army-changed-parser';
+import { BgsBloodGemBuffChangedParser } from '../event-parser/battlegrounds/bgs-blood-gem-changed-parser';
+import { BgsBuddyGainedParser } from '../event-parser/battlegrounds/bgs-buddy-gained-parser';
+import { BgsCombatStartParser } from '../event-parser/battlegrounds/bgs-combat-start-parser';
+import { BgsDamageDealtParser } from '../event-parser/battlegrounds/bgs-damage-dealt-parser';
+import { BgsDuoFutureTeammateBoardParser } from '../event-parser/battlegrounds/bgs-duo-future-teammate-board-parser';
+import { BgsGlobalInfoUpdateParser } from '../event-parser/battlegrounds/bgs-global-info-update-parser';
+import { BgsHeroRerollParser } from '../event-parser/battlegrounds/bgs-hero-reroll-parser';
+import { BgsHeroSelectedCardParser } from '../event-parser/battlegrounds/bgs-hero-selected-card-parser';
+import { BgsHeroSelectionParser } from '../event-parser/battlegrounds/bgs-hero-selection-parser';
+import { BgsLeaderboardPlaceParser } from '../event-parser/battlegrounds/bgs-leaderboard-place-parser';
+import { BgsMmrAtStartParser } from '../event-parser/battlegrounds/bgs-mmr-at-start-parser';
+import { BgsNextOpponentParser } from '../event-parser/battlegrounds/bgs-next-opponent-parser';
+import { BgsOpponentRevealedParser } from '../event-parser/battlegrounds/bgs-opponent-revealed-parser';
+import { BgsPlayerBoardParser } from '../event-parser/battlegrounds/bgs-player-board-parser';
+import { BgsRealTimeStatsUpdateParser } from '../event-parser/battlegrounds/bgs-real-time-stats-update-parser';
+import { BgsRecruitPhaseParser } from '../event-parser/battlegrounds/bgs-recruit-phase-parser';
+import { BgsRewardDestroyedParser } from '../event-parser/battlegrounds/bgs-reward-destroyed-parser';
+import { BgsRewardEquippedParser } from '../event-parser/battlegrounds/bgs-reward-equipped-parser';
+import { BgsRewardGainedParser } from '../event-parser/battlegrounds/bgs-reward-gained-parser';
+import { BgsRewardRevealedParser } from '../event-parser/battlegrounds/bgs-reward-revealed-parser';
+import { BgsTavernUpdateParser } from '../event-parser/battlegrounds/bgs-tavern-update-parser';
+import { BgsTotalMagnetizedChangedParser } from '../event-parser/battlegrounds/bgs-total-magnetized-changed-parser';
+import { BgsTrinketSelectedParser } from '../event-parser/battlegrounds/bgs-trinket-selected-parser';
+import { BgsTripleParser } from '../event-parser/battlegrounds/bgs-triple-parser';
 import { BurnedCardParser } from '../event-parser/burned-card-parser';
 import { CardBackToDeckParser } from '../event-parser/card-back-to-deck-parser';
 import { CardBuffedInHandParser } from '../event-parser/card-buffed-in-hand-parser';
@@ -66,6 +100,7 @@ import { FatigueParser } from '../event-parser/fatigue-parser';
 import { FirstPlayerParser } from '../event-parser/first-player-parser';
 import { GameEndParser } from '../event-parser/game-end-parser';
 import { GameRunningParser } from '../event-parser/game-running-parser';
+import { GameSettingsParser } from '../event-parser/game-settings-parser';
 import { GameStartParser } from '../event-parser/game-start-parser';
 import { GameStateUpdateParser } from '../event-parser/game-state-update-parser';
 import { GlobalMinionEffectParser } from '../event-parser/global-minion-effect-parser';
@@ -103,6 +138,7 @@ import { ReceiveCardInHandParser } from '../event-parser/receive-card-in-hand-pa
 import { ReconnectOverParser } from '../event-parser/reconnect-over-parser';
 import { ReconnectStartParser } from '../event-parser/reconnect-start-parser';
 import { ResourcesParser } from '../event-parser/resources-parser';
+import { ReviewIdParser } from '../event-parser/review-id-parser';
 import { SecretCreatedInGameParser } from '../event-parser/secret-created-in-game-parser';
 import { SecretDestroyedParser } from '../event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from '../event-parser/secret-played-from-deck-parser';
@@ -144,17 +180,80 @@ export class GameStateParsersService {
 		private readonly deckParser: DeckParserService,
 		private readonly secretsConfig: SecretConfigService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
+		private readonly gameEventsService: GameEvents,
+		private readonly eventsEmitter: GameEventsEmitterService,
+		private readonly bugService: BugReportService,
+		private readonly logsUploader: LogsUploaderService,
+		private readonly simulation: BgsBattleSimulationService,
+		private readonly adService: AdService,
+		private readonly gameIdService: GameUniqueIdService,
+		private readonly guardian: BgsIntermediateResultsSimGuardianService,
+		private readonly reviewIdService: ReviewIdService,
+		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly nav: BgsInGameWindowNavigationService,
 	) {}
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
 		return {
-			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
 			[ArchetypeCategorizationEvent.EVENT_NAME]: [new ArchetypeCategorizationParser()],
+			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.ARMOR_CHANGED]: [new BgsArmorChangedParser()],
 			[GameEvent.ATTACKING_HERO]: [new AttackParser(this.allCards)],
 			[GameEvent.ATTACKING_MINION]: [new AttackParser(this.allCards)],
-			[GameEvent.BATTLEGROUNDS_HERO_SELECTED]: [new BgsHeroSelectedCardParser(this.helper, this.allCards)],
+			[GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD]: [new BgsActivePlayerBoardTriggerParser(this.memory)],
+			[GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD_PROCESS]: [new BgsActivePlayerBoardProcessParser()],
+			[GameEvent.BATTLEGROUNDS_BATTLE_RESULT]: [
+				new BgsBattleResultParser(
+					this.gameEventsService,
+					this.prefs,
+					this.eventsEmitter,
+					this.bugService,
+					this.allCards,
+				),
+			],
+			[GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION]: [new BgsBattleSimulationParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_BUDDY_GAINED]: [new BgsBuddyGainedParser(this.gameEventsService, this.allCards)],
+			[GameEvent.BATTLEGROUNDS_COMBAT_START]: [new BgsCombatStartParser()],
+			[GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD]: [new BgsDuoFutureTeammateBoardParser()],
+			[GameEvent.BATTLEGROUNDS_GLOBAL_INFO_UPDATE]: [new BgsGlobalInfoUpdateParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_HERO_REROLL]: [new BgsHeroRerollParser()],
+			[GameEvent.BATTLEGROUNDS_HERO_SELECTION]: [
+				new BgsHeroSelectionParser(this.prefs, this.owUtils, this.i18n, this.memory),
+			],
+			[GameEvent.BATTLEGROUNDS_HERO_SELECTED]: [
+				new BgsHeroSelectedCardParser(this.helper, this.allCards, this.i18n),
+			],
+			[GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE]: [new BgsLeaderboardPlaceParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_MMR_AT_START]: [new BgsMmrAtStartParser()],
+			[GameEvent.BATTLEGROUNDS_NEXT_OPPONENT]: [new BgsNextOpponentParser(this.allCards, this.i18n)],
+			[GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED]: [new BgsOpponentRevealedParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_PLAYER_BOARD]: [
+				new BgsPlayerBoardParser(
+					this.logsUploader,
+					this.memory,
+					this.simulation,
+					this.allCards,
+					this.prefs,
+					this.adService,
+					this.gameIdService,
+					this.guardian,
+					this.gameEventsService,
+				),
+			],
 			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED]: [new BgsRewardDestroyedParser(this.allCards, this.i18n)],
-			[GameEvent.BATTLEGROUNDS_REWARD_REVEALED]: [new BgsRewardEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED]: [new BgsRewardEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.BATTLEGROUNDS_REAL_TIME_STATS_UPDATE]: [new BgsRealTimeStatsUpdateParser(this.i18n)],
+			[GameEvent.BATTLEGROUNDS_RECRUIT_PHASE]: [new BgsRecruitPhaseParser(this.owUtils, this.prefs)],
+			[GameEvent.BATTLEGROUNDS_REWARD_GAINED]: [new BgsRewardGainedParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_REWARD_REVEALED]: [new BgsRewardRevealedParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE]: [
+				new BgsTavernUpdateParser(this.gameEventsService, this.allCards),
+			],
+			[GameEvent.BATTLEGROUNDS_TRINKET_SELECTED]: [new BgsTrinketSelectedParser(this.allCards)],
+			[GameEvent.BATTLEGROUNDS_TRIPLE]: [new BgsTripleParser(this.allCards)],
+			[GameEvent.BALLER_BUFF_CHANGED]: [new BgsBallerBuffChangedParser()],
+			[GameEvent.BEETLE_ARMY_CHANGED]: [new BgsBeetleArmyChangedParser()],
+			[GameEvent.BLOOD_GEM_BUFF_CHANGED]: [new BgsBloodGemBuffChangedParser()],
 			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
@@ -193,7 +292,11 @@ export class GameStateParsersService {
 				new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			],
 			[GameEvent.CTHUN]: [new CthunParser()],
-			[GameEvent.DAMAGE]: [new DamageTakenParser(), new HeroPowerDamageParser(this.allCards)],
+			[GameEvent.DAMAGE]: [
+				new DamageTakenParser(),
+				new HeroPowerDamageParser(this.allCards),
+				new BgsDamageDealtParser(this.allCards),
+			],
 			[GameEvent.DATA_SCRIPT_CHANGED]: [new DataScriptChangedParser(this.helper, this.allCards)],
 			[GameEvent.DEATHRATTLE_TRIGGERED]: [new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper)],
 			[GameEvent.DECKLIST_UPDATE]: [
@@ -216,7 +319,10 @@ export class GameStateParsersService {
 			[GameEvent.GAME_END]: [new GameEndParser(this.prefs, this.owUtils)],
 			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
 			[GameEvent.GAME_STATE_UPDATE]: [new GameStateUpdateParser()],
-			[GameEvent.GAME_START]: [new GameStartParser()],
+			[GameEvent.GAME_START]: [
+				new GameStartParser(this.prefs, this.reviewIdService, this.highlighter, this.i18n, this.nav),
+			],
+			[GameEvent.GAME_SETTINGS]: [new GameSettingsParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
 			[GameEvent.HERO_CHANGED]: [new HeroChangedParser(this.allCards)],
 			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
@@ -237,6 +343,7 @@ export class GameStateParsersService {
 					this.allCards,
 					this.memory,
 					this.constructedArchetypes,
+					this.nav,
 				),
 			],
 			[GameEvent.MAX_RESOURCES_UPDATED]: [new MaxResourcesUpdatedParser()],
@@ -284,6 +391,7 @@ export class GameStateParsersService {
 			[GameEvent.RECONNECT_START]: [new ReconnectStartParser()],
 			[GameEvent.RECRUIT_CARD]: [new CardRecruitedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.RESOURCES_UPDATED]: [new ResourcesParser()],
+			[GameEvent.REVIEW_ID]: [new ReviewIdParser()],
 			[GameEvent.SECRET_CREATED_IN_GAME]: [
 				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 			],
@@ -317,10 +425,11 @@ export class GameStateParsersService {
 				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			],
 			[GameEvent.TOTAL_ATTACK_ON_BOARD]: [new AttackOnBoardParser()],
+			[GameEvent.TOTAL_MAGNETIZE_CHANGED]: [new BgsTotalMagnetizedChangedParser()],
 			[GameEvent.TOURIST_REVEALED]: [new TouristRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs)],
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
-			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs)],
+			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs, this.i18n, this.nav)],
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
 			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper, this.i18n)],
 			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],

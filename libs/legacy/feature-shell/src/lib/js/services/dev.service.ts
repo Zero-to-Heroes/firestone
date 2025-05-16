@@ -53,12 +53,16 @@ export class DevService {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
 
-		window['fakeGame'] = async (fileName: string) => {
+		window['fakeGame'] = async (fileName: string = 'game.log') => {
 			const events = [];
+			this.gameState.processedEvents = [];
 			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
+			// To trigger real-time stats
+			this.scene.currentScene$$.next(SceneMode.BACON);
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
+			console.log('logContents', logContents, fileName);
 			const logLines = logContents.split('\n');
 			console.log('logLines', logLines?.length);
 			await sleep(2000);
@@ -74,6 +78,9 @@ export class DevService {
 			sub.unsubscribe();
 			console.log('game-events', events.join(','));
 			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);
+		};
+		window['processedEvents'] = () => {
+			console.log('processedEvents', this.gameState.processedEvents.join(','));
 		};
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
 			console.debug('starting new deck cycle', logName, repeats, deckString);

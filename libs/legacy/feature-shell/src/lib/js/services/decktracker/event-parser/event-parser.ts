@@ -2,6 +2,7 @@ import { GameState } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
+import { GameEventsEmitterService } from '../../game-events-emitter.service';
 
 export interface EventParser {
 	applies(gameEvent: GameEvent | GameStateEvent, state?: GameState, prefs?: Preferences): boolean;
@@ -20,5 +21,6 @@ export interface EventParser {
 			}[];
 		},
 	): Promise<GameState>;
+	sideEffects?(gameEvent: GameEvent | GameStateEvent, eventsEmtter: GameEventsEmitterService): void;
 	event(): string;
 }

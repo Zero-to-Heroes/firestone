@@ -538,7 +538,6 @@ import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-cust
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
-import { BattlegroundsStoreService } from './js/services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
@@ -1379,7 +1378,6 @@ try {
 		DeckManipulationHelper,
 		AttackOnBoardService,
 
-		BattlegroundsStoreService,
 		BgsPerfectGamesService,
 		BgsGlobalStatsService,
 		BgsRunStatsService,

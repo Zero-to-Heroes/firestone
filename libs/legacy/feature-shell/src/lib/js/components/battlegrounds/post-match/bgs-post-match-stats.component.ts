@@ -1,13 +1,4 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 import {
 	BgsFaceOffWithSimulation,
@@ -17,13 +8,11 @@ import {
 	MinionStat,
 	QuestReward,
 } from '@firestone/game-state';
-import { ENABLE_MULTI_GRAPHS } from '@firestone/shared/common/service';
+import { ENABLE_MULTI_GRAPHS, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { normalizeCardId } from './card-utils';
 
@@ -63,15 +52,12 @@ import { normalizeCardId } from './card-utils';
 						<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
 					</div>
 				</bgs-player-capsule>
-				<div class="tabs-container multi-{{ selectedTabs?.length }}">
+				<div class="tabs-container">
 					<bgs-post-match-stats-tabs
-						*ngFor="let selectedTab of selectedTabs; let i = index"
-						class="tab tab-{{ i + 1 }}"
+						class="tab"
 						[panel]="_panel"
 						[mainPlayerId]="mainPlayerId"
-						[selectedTab]="selectedTab"
-						[selectTabHandler]="selectTabHandler"
-						[tabIndex]="i"
+						[selectedTab]="selectedTab$ | async"
 					></bgs-post-match-stats-tabs>
 					<!-- <div class="tabs-layout-selection" *ngIf="enableMultiGraphs || selectedTabs?.length > 1">
 						<div class="layout one" (click)="changeTabsNumberHandler(1)" helpTooltip="Show a single graph">
@@ -107,11 +93,9 @@ import { normalizeCardId } from './card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsPostMatchStatsComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showAds$: Observable<boolean>;
+	selectedTab$: Observable<BgsStatsFilterId>;
 
 	enableMultiGraphs = ENABLE_MULTI_GRAPHS;
 
@@ -127,12 +111,6 @@ export class BgsPostMatchStatsComponent
 	@Input() parentWindow = `Firestone - Battlegrounds`;
 	@Input() mainPlayerId: number;
 
-	@Input() selectedTabs: readonly BgsStatsFilterId[] = [];
-	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
-	@Input() changeTabsNumberHandler: (numberOfTabs: number) => void = (numberOfTabs: number) => {
-		this.battlegroundsUpdater.next(new BgsChangePostMatchStatsTabsNumberEvent(numberOfTabs));
-	};
-
 	@Input() reviewId?: string;
 	@Input() faceOffs: readonly BgsFaceOffWithSimulation[];
 	@Input() mmr: number;
@@ -143,6 +121,7 @@ export class BgsPostMatchStatsComponent
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
+		console.debug('[bgs-post-match-stats] setting panel', value);
 		if (!value?.player || value === this._panel) {
 			return;
 		}
@@ -157,15 +136,9 @@ export class BgsPostMatchStatsComponent
 		if (!this.boardMinions || this.boardMinions.length === 0) {
 			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
 		}
-		let tabs = value.selectedStats ?? this.selectedTabs ?? ['hp-by-turn'];
-		if (!ENABLE_MULTI_GRAPHS) {
-			// Hard-code first tab to prevent weird bug where multi select is still occurring
-			tabs = [tabs[0]];
-		}
-		const numberOfTabsToShow = value.numberOfDisplayedTabs ?? 1;
-		this.selectedTabs = tabs.slice(0, numberOfTabsToShow);
 		this.addMinionStats();
 		this.questRewards = value.player.questRewards;
+		this.allTabs$$.next(value.tabs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -188,7 +161,7 @@ export class BgsPostMatchStatsComponent
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
+	private allTabs$$ = new BehaviorSubject<BgsStatsFilterId[]>([]);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -197,6 +170,7 @@ export class BgsPostMatchStatsComponent
 		private readonly owUtils: OwUtilsService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ads: AdService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
@@ -205,14 +179,11 @@ export class BgsPostMatchStatsComponent
 		await waitForReady(this.ads);
 
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
+		this.selectedTab$ = combineLatest([this.allTabs$$, this.prefs.preferences$$]).pipe(
+			filter(([tabs, prefs]) => !!tabs?.length && !!prefs),
+			this.mapData(([tabs, prefs]) => (tabs.includes(prefs.bgsSelectedTab3) ? prefs.bgsSelectedTab3 : tabs[0])),
+		);
 
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

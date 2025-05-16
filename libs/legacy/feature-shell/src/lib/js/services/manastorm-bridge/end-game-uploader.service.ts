@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
-import { BgsGame } from '@firestone/game-state';
+import { BgsGame, GameStateFacadeService } from '@firestone/game-state';
 import {
 	ArenaInfo,
 	BattlegroundsInfo,
@@ -11,16 +11,14 @@ import {
 	MemoryMercenariesInfo,
 	MemoryTeam,
 } from '@firestone/memory';
-import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameForUpload, XpForGameInfo } from '@firestone/stats/common';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
-import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
+import { BgsGlobalInfoUpdateParser } from '../decktracker/event-parser/battlegrounds/bgs-global-info-update-parser';
 import { Events } from '../events.service';
 import { HsGameMetaData } from '../game-mode-data.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import {
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
@@ -43,13 +41,11 @@ export class EndGameUploaderService {
 	constructor(
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
-		private logService: LogsUploaderService,
-		private mainWindowStore: MainWindowStoreService,
-		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly events: Events,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly gameState: GameStateFacadeService,
 	) {}
 
 	public async upload2(info: UploadInfo): Promise<void> {
@@ -139,8 +135,8 @@ export class EndGameUploaderService {
 					: info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces?.filter((r) => !!r).length ===
 					  TOTAL_RACES_IN_GAME
 					? info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces
-					: this.bgsStore?.state?.currentGame?.availableRaces;
-			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(racesFromGame);
+					: this.gameState.gameState$$.value?.bgState?.currentGame?.availableRaces;
+			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdateParser.buildRaces(racesFromGame);
 			console.log('[manastorm-bridge]', currentReviewId, 'available races', availableRaces);
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;

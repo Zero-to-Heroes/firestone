@@ -38,7 +38,6 @@ export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
 	private deckEvents = new BehaviorSubject<GameState | null>(null);
-	private bgEvents = new BehaviorSubject<BattlegroundsState | null>(null);
 	private twitchAccessToken$: Observable<string>;
 	private streamerPrefs$: Observable<Partial<Preferences>>;
 
@@ -106,15 +105,20 @@ export class TwitchAuthService {
 				combineLatest([
 					this.scene.currentScene$$,
 					this.deckEvents,
-					this.bgEvents,
 					this.twitchAccessToken$,
 					this.streamerPrefs$,
 				])
 					.pipe(
 						sampleTime(2000),
 						distinctUntilChanged(),
-						map(([currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
-							this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
+						map(([currentScene, deckEvent, twitchAccessToken, streamerPrefs]) =>
+							this.buildEvent(
+								currentScene,
+								deckEvent,
+								deckEvent?.bgState ?? null,
+								twitchAccessToken,
+								streamerPrefs,
+							),
 						),
 						delay(this.twitchDelay),
 					)
@@ -124,11 +128,6 @@ export class TwitchAuthService {
 
 	public async emitDeckEvent(event: GameState) {
 		this.deckEvents.next(event);
-	}
-
-	public async emitBattlegroundsEvent(event: any) {
-		// console.debug('[twitch-auth] enqueueing bg event', event);
-		this.bgEvents.next(event);
 	}
 
 	private buildEvent(
@@ -195,9 +194,9 @@ export class TwitchAuthService {
 								? 'waiting-for-result'
 								: latestBattle?.battleInfoStatus,
 					},
-					currentTurn: bgsState.currentGame?.currentTurn,
-					inGame: bgsState.inGame,
-					gameEnded: bgsState.currentGame?.gameEnded,
+					currentTurn: state.currentTurnNumeric,
+					inGame: state.gameStarted && !state.gameEnded && !!state.bgState.currentGame,
+					gameEnded: state.gameEnded,
 					availableRaces: bgsState.currentGame?.availableRaces,
 					phase: bgsState.currentGame?.phase,
 					config: {
@@ -378,7 +377,7 @@ export class TwitchAuthService {
 
 	private buildLeaderboard(state: BattlegroundsState): readonly TwitchBgsPlayer[] {
 		// Prevent info leak
-		if (state.currentGame?.players?.length < 8) {
+		if (!state.currentGame?.players?.length || state.currentGame.players.length < 8) {
 			return [];
 		}
 		return [...(state.currentGame?.players || [])]

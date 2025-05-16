@@ -1,18 +1,9 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-} from '@angular/core';
-import { BgsPanelId } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsPanelId, GameStateFacadeService } from '@firestone/game-state';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'menu-selection-bgs',
@@ -51,37 +42,30 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionBgsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class MenuSelectionBgsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	selectedPanel$: Observable<BgsPanelId>;
 	matchOver$: Observable<boolean>;
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
 	constructor(
-		private ow: OverwolfService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BgsInGameWindowNavigationService,
+		private readonly gameState: GameStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.selectedPanel$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentPanelId)
-			.pipe(this.mapData(([panelId]) => panelId as BgsPanelId));
-		this.matchOver$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.gameEnded)
-			.pipe(this.mapData(([gameEnded]) => gameEnded));
-	}
+	async ngAfterContentInit() {
+		await waitForReady(this.nav, this.gameState);
 
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
+		this.selectedPanel$ = this.nav.currentPanelId$$.pipe(this.mapData((panelId) => panelId));
+		this.matchOver$ = this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState.gameEnded));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectStage(panelId: BgsPanelId) {
-		this.battlegroundsUpdater.next(new BgsStageChangeEvent(panelId));
+		this.nav.currentPanelId$$.next(panelId);
 	}
 }

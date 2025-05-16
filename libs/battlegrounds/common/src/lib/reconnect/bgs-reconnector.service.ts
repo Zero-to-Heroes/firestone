@@ -10,7 +10,6 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
-import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 import { BgsReconnectorPluginService } from './bgs-reconnector-plugin.service';
 
 @Injectable({ providedIn: 'root' })
@@ -21,7 +20,6 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 	private gameConnection: GameConnectionService;
 	private prefs: PreferencesService;
 	private account: AccountService;
-	private bgState: BgsStateFacadeService;
 	private gameState: GameStateFacadeService;
 	private gameEvents: GameEventsFacadeService;
 	private notifs: OwNotificationsService;
@@ -41,15 +39,14 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 		this.prefs = AppInjector.get(PreferencesService);
 		this.account = AppInjector.get(AccountService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
-		this.bgState = AppInjector.get(BgsStateFacadeService);
 		this.gameEvents = AppInjector.get(GameEventsFacadeService);
 		this.notifs = AppInjector.get(OwNotificationsService);
 
-		await waitForReady(this.prefs, this.account, this.bgState, this.gameState);
+		await waitForReady(this.prefs, this.account, this.gameState);
 
-		const phase$ = this.bgState.gameState$$.pipe(
-			filter((state) => !!state?.inGame && !!state.currentGame),
-			map((state) => state?.currentGame.phase),
+		const phase$ = this.gameState.gameState$$.pipe(
+			filter((state) => !!state?.gameStarted && !!state.bgState.currentGame),
+			map((state) => state?.bgState.currentGame?.phase),
 			distinctUntilChanged(),
 		);
 		phase$.subscribe(async (phase) => {

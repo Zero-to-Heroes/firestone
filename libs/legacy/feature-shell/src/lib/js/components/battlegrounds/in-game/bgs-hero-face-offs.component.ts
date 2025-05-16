@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BgsNextOpponentOverviewPanel } from '@firestone/game-state';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsNextOpponentOverviewPanel, GameStateFacadeService } from '@firestone/game-state';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { auditTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs/operators';
 import { FaceOffHero, faceOfHeroesArrayEqual } from './bgs-hero-face-off.component';
 
 @Component({
@@ -45,29 +45,29 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly state: BgsStateFacadeService,
+		private readonly state: GameStateFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly nav: BgsInGameWindowNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.state);
+		await waitForReady(this.state, this.nav);
 
-		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.state.gameState$$.pipe(
-			this.mapData((state) => ({
-				panels: state.panels,
-				currentPanelId: state.currentPanelId,
-			})),
-			filter(({ panels, currentPanelId }) => !!panels?.length && !!currentPanelId),
+		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = combineLatest([
+			this.state.gameState$$,
+			this.nav.currentPanelId$$,
+		]).pipe(
+			auditTime(1000),
 			this.mapData(
-				({ panels, currentPanelId }) =>
-					panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
+				([state, panelId]) =>
+					state.bgState.panels?.find((panel) => panel.id === panelId) as BgsNextOpponentOverviewPanel,
 			),
 		);
-		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
 		this.faceOffsByOpponent$ = this.state.gameState$$.pipe(
-			this.mapData((state) => state.currentGame?.faceOffs),
+			auditTime(1000),
+			this.mapData((state) => state.bgState.currentGame?.faceOffs),
 			distinctUntilChanged(),
 			this.mapData((faceOffs) => {
 				const result = groupByFunction((faceOff: BgsFaceOff) =>
@@ -76,25 +76,18 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 				return result;
 			}),
 		);
-		this.opponents$ = this.state.gameState$$.pipe(
-			this.mapData((state) => state.currentGame?.players),
+		const players$ = this.state.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => state.bgState.currentGame?.players),
 			filter((players) => !!players?.length),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.opponents$ = players$.pipe(
 			distinctUntilChanged((a, b) => faceOfHeroesArrayEqual(a, b)),
 			this.mapData((players) =>
 				players
 					.filter((player) => !player.isMainPlayer)
-					// .map((player) => {
-					// 	const result: FaceOffHero = {
-					// 		cardId: player.cardId,
-					// 		displayedCardId: player.displayedCardId,
-					// 		name: player.name,
-					// 		currentArmor: player.currentArmor,
-					// 		damageTaken: player.damageTaken,
-					// 		initialHealth: player.initialHealth,
-					// 		leaderboardPlace: player.leaderboardPlace,
-					// 	};
-					// 	return result;
-					// })
 					.sort((a, b) => {
 						if (a.leaderboardPlace < b.leaderboardPlace) {
 							return -1;
@@ -111,6 +104,13 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 						return 0;
 					}),
 			),
+		);
+		this.nextOpponentCardId$ = combineLatest([currentPanel$, players$]).pipe(
+			this.mapData(([panel, players]) => {
+				const playerId = panel?.opponentOverview?.playerId;
+				const opponent = players?.find((opponent) => opponent.playerId === playerId);
+				return opponent?.cardId;
+			}),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

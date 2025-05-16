@@ -4,21 +4,15 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	ViewRef,
 } from '@angular/core';
 import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsBattlesPanel, BgsFaceOffWithSimulation, BgsPanel } from '@firestone/game-state';
-import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
-import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
-import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { BgsFaceOffWithSimulation, GameStateFacadeService } from '@firestone/game-state';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { Observable, of } from 'rxjs';
+import { auditTime, filter } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
-import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-battles',
@@ -41,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, AfterViewInit {
+export class BgsBattlesComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 
@@ -51,92 +45,42 @@ export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent impl
 	battleResultHistory$: Observable<readonly BattleResultHistory[]>;
 	showAds$: Observable<boolean>;
 
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
-		private readonly analytics: AnalyticsService,
 		private readonly ads: AdService,
+		private readonly gameState: GameStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.ads);
+		await waitForReady(this.ads, this.gameState);
 
-		this.faceOffs$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
-			.pipe(
-				debounceTime(1000),
-				filter(([faceOffs]) => !!faceOffs?.length),
-				distinctUntilChanged(),
-				this.mapData(([faceOffs]) => faceOffs.slice().reverse()),
-			);
-		this.selectedFaceOff$ = combineLatest(
-			this.faceOffs$,
-			this.store.listenBattlegrounds$(([state]) => state.panels),
-		).pipe(
-			map(
-				([faceOffs, [panels]]) =>
-					[faceOffs, panels?.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel] as readonly [
-						readonly BgsFaceOffWithSimulation[],
-						BgsBattlesPanel,
-					],
-			),
-			filter(([faceOffs, panel]) => !!panel),
-			this.mapData(([faceOffs, panel]) => {
-				// If the user closed it at least once, we don't force-show it anymore
-				if (!panel.selectedFaceOffId) {
-					return null;
-				}
-				const currentSimulations = panel.currentSimulations ?? [];
-				const currentSimulationIndex = currentSimulations.map((s) => s.id).indexOf(panel.selectedFaceOffId);
-				if (currentSimulationIndex === -1) {
-					const faceOff = faceOffs.find((f) => f.id === panel.selectedFaceOffId);
-					return faceOff;
-				}
-
-				const currentSimulation = currentSimulations[currentSimulationIndex];
-				return currentSimulation;
-			}),
+		this.faceOffs$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			filter((state) => !!state.bgState.currentGame?.faceOffs?.length),
+			this.mapData((state) => state.bgState.currentGame.faceOffs),
+			this.mapData((faceOffs) => faceOffs.slice().reverse()),
 		);
-		this.actualBattle$ = this.store
-			.listenBattlegrounds$(
-				([state]) => state.currentGame?.faceOffs,
-				([state]) => state.panels,
-			)
-			.pipe(
-				map(
-					([faceOffs, panels]) =>
-						[
-							faceOffs,
-							panels.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel,
-						] as readonly [readonly BgsFaceOffWithSimulation[], BgsBattlesPanel],
+		this.selectedFaceOff$ = of(null);
+		this.actualBattle$ = of(null);
+		this.battleResultHistory$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			filter((state) => !!state.bgState.currentGame?.faceOffs?.length),
+			this.mapData((state) => state.bgState.currentGame.faceOffs),
+			this.mapData((faceOffs) =>
+				faceOffs.map(
+					(faceOff) =>
+						({
+							turn: faceOff.turn,
+							simulationResult: {
+								wonPercent: faceOff.battleResult?.wonPercent,
+							} as BgsBattleSimulationResult,
+							actualResult: null,
+						} as BattleResultHistory),
 				),
-				filter(([faceOffs, panel]) => !!panel),
-				this.mapData(([faceOffs, panel]) => faceOffs.find((f) => f.id === panel.selectedFaceOffId)),
-			);
-		this.battleResultHistory$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
-			.pipe(
-				map(([faceOffs]) => faceOffs),
-				filter((faceOffs) => !!faceOffs?.length),
-				distinctUntilChanged(),
-				this.mapData((faceOffs) =>
-					faceOffs.map(
-						(faceOff) =>
-							({
-								turn: faceOff.turn,
-								simulationResult: {
-									wonPercent: faceOff.battleResult?.wonPercent,
-								} as BgsBattleSimulationResult,
-								actualResult: null,
-							} as BattleResultHistory),
-					),
-				),
-			);
+			),
+		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -144,22 +88,15 @@ export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent impl
 	}
 
 	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
-			this.battlegroundsUpdater.next(new BgsBattleSimulationUpdateEvent(currentFaceOff, partialUpdate));
-		};
-		this.simulationReset = (faceOffId: string) => {
-			this.battlegroundsUpdater.next(new BgsBattleSimulationResetEvent(faceOffId));
-		};
+		// Not doing anything from the BG window
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
-		this.analytics.trackEvent('select-battle', { origin: 'bgs-battles' });
-		// this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
+		// Not doing anything from the BG window
 	}
 
 	closeBattle(faceOff: BgsFaceOffWithSimulation) {
-		this.battlegroundsUpdater.next(new BgsSelectBattleEvent(null));
+		// Not doing anything from the BG window
 	}
 
 	trackByFn(index: number, item: BgsFaceOffWithSimulation) {

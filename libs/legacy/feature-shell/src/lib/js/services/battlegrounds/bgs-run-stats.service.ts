@@ -12,12 +12,9 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { sleep } from '../utils';
-import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
-import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 
 @Injectable()
 export class BgsRunStatsService {
-	private bgsStateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -42,7 +39,6 @@ export class BgsRunStatsService {
 			this.computeHeroDetailsForBg(event.data[0]);
 		});
 		setTimeout(() => {
-			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
 	}
@@ -146,10 +142,6 @@ export class BgsRunStatsService {
 			currentGame.getMainPlayer(true)?.playerId,
 		);
 		console.debug('[bgs-run-stats] newBestVaues');
-
-		// Even if stats are computed locally, we still do it on the server so that we can
-		// archive the data. However, this is non-blocking
-		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		// Wait a bit, to be sure that the stats have been created
 		await sleep(1000);
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));

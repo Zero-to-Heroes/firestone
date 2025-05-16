@@ -1,9 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, ViewRef } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsToggleOverlayWindowEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-overlay-window-event';
-import { DebugService } from '../../../services/debug.service';
 
 @Component({
 	selector: 'battlegrounds-overlay-button',
@@ -31,19 +28,11 @@ import { DebugService } from '../../../services/debug.service';
 export class BattlegroundsOverlayButtonComponent {
 	big: boolean;
 
-	// private isDragging = false;
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-
 	constructor(
-		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
-		private init_DebugService: DebugService,
+		private readonly nav: BgsInGameWindowNavigationService,
 	) {}
-
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-	}
 
 	private mouseDownStart: number;
 
@@ -53,7 +42,7 @@ export class BattlegroundsOverlayButtonComponent {
 			return;
 		}
 		this.big = true;
-		this.battlegroundsUpdater.next(new BgsToggleOverlayWindowEvent());
+		this.nav.toggleWindow();
 		setTimeout(() => {
 			this.big = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {

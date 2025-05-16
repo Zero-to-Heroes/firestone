@@ -27,7 +27,6 @@ import {
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
-	BgsStateFacadeService,
 } from '@firestone/battlegrounds/common';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { HearthpwnService } from '@firestone/collection/common';
@@ -59,7 +58,6 @@ import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/co
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { BattlegroundsStoreService } from '../../js/services/battlegrounds/store/battlegrounds-store.service';
 import { DeckParserFacadeService } from '../../js/services/decktracker/deck-parser-facade.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
@@ -100,7 +98,6 @@ export class BootstrapStoreServicesService {
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateService,
 		private readonly gameNativeState: GameNativeStateStoreService,
-		private readonly battlegroundsStore: BattlegroundsStoreService,
 		private readonly mercenariesStore: MercenariesStoreService,
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
 		private readonly mercenariesSynergiesStore: MercenariesSynergiesHighlightService,
@@ -120,7 +117,6 @@ export class BootstrapStoreServicesService {
 		private readonly init_BgsInGameQuestsGuardianService: BgsInGameQuestsGuardianService,
 		private readonly init_BgsCommonBootstrapService: BgsCommonBootstrapService,
 		private readonly init_BgsInGameHeroSelectionGuardianService: BgsInGameHeroSelectionGuardianService,
-		private readonly init_BgsStateFacadeService: BgsStateFacadeService,
 		private readonly init_BgsPerfectGamesService: BgsPerfectGamesService,
 		private readonly init_BgsMatchPlayersMmrService: BgsMatchPlayersMmrService,
 		private readonly init_BgsPlayerHeroStatsService: BgsPlayerHeroStatsService,

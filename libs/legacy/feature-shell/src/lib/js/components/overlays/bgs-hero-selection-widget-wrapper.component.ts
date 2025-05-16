@@ -8,7 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BgsInGameHeroSelectionGuardianService, BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { BgsInGameHeroSelectionGuardianService } from '@firestone/battlegrounds/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -46,14 +47,14 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly renderer: Renderer2,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
-		private readonly bgState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 		private readonly guardian: BgsInGameHeroSelectionGuardianService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs, this.bgState);
+		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		const prefs$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => ({
@@ -67,39 +68,25 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			prefs$,
-			this.bgState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				this.mapData((state) => ({
-					inGame: state?.inGame,
-					isCurrentGame: !!state?.currentGame,
-					gameEnded: state?.currentGame?.gameEnded,
-					heroSelectionDone: state?.heroSelectionDone,
+					inGame: state.gameStarted && !state.gameEnded && !!state.bgState.currentGame,
+					heroSelectionDone: state.bgState.heroSelectionDone,
 				})),
 				distinctUntilChanged(
-					(a, b) =>
-						a?.inGame === b?.inGame &&
-						a?.isCurrentGame === b?.isCurrentGame &&
-						a?.gameEnded === b?.gameEnded &&
-						a?.heroSelectionDone === b?.heroSelectionDone,
+					(a, b) => a?.inGame === b?.inGame && a?.heroSelectionDone === b?.heroSelectionDone,
 				),
 			),
 		]).pipe(
-			this.mapData(
-				([
-					currentScene,
-					{ showAchievement, showStats },
-					{ inGame, isCurrentGame, gameEnded, heroSelectionDone },
-				]) => {
-					return (
-						// (inGame && isCurrentGame && currentScene === SceneMode.GAMEPLAY) ||
-						inGame &&
-						isCurrentGame &&
-						!gameEnded &&
-						!heroSelectionDone &&
-						(showAchievement || showStats) &&
-						currentScene === SceneMode.GAMEPLAY
-					);
-				},
-			),
+			this.mapData(([currentScene, { showAchievement, showStats }, { inGame, heroSelectionDone }]) => {
+				return (
+					// (inGame && isCurrentGame && currentScene === SceneMode.GAMEPLAY) ||
+					inGame &&
+					!heroSelectionDone &&
+					(showAchievement || showStats) &&
+					currentScene === SceneMode.GAMEPLAY
+				);
+			}),
 			this.handleReposition(),
 		);
 

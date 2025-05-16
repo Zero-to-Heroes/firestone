@@ -15,7 +15,7 @@ export class BeetlesBuffCounterDefinitionV2 extends CounterDefinitionV2<string> 
 		pref: 'playerBgsBeetleCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) =>
-			!!bgState?.currentGame.beetlesAttackBuff || !!bgState?.currentGame.beetlesHealthBuff
+			!!bgState?.currentGame?.beetlesAttackBuff || !!bgState?.currentGame?.beetlesHealthBuff
 				? `+${bgState.currentGame.beetlesAttackBuff ?? 0}/+${bgState.currentGame.beetlesHealthBuff ?? 0}`
 				: null,
 		setting: {

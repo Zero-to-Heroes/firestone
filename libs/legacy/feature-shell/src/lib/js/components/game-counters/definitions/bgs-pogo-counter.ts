@@ -1,6 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { BattlegroundsState, GameState } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -31,7 +30,7 @@ export class BgsPogoCounterDefinition
 	}
 
 	public select(input: { deckState: GameState; bgState: BattlegroundsState }): number {
-		return input.bgState.currentGame.pogoHoppersCount;
+		return input.bgState.currentGame?.pogoHoppersCount;
 	}
 
 	public emit(pogoHopperSize: number): NonFunctionProperties<BgsPogoCounterDefinition> {

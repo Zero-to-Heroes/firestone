@@ -8,7 +8,6 @@ import {
 	ArenaTimeFilterType,
 	BgsActiveTimeFilterType,
 	BgsHeroSortFilterType,
-	BgsStatsFilterId,
 	CurrentAppType,
 	DeckFilters,
 	Ftue,
@@ -348,12 +347,6 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 	public async updateBgsOverlayButtonPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsOverlayButtonPosition: { left, top } };
-		await this.savePreferences(newPrefs);
-	}
-
-	public async updateBgsSelectedTabs(selectedStats: readonly BgsStatsFilterId[]) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, bgsSelectedTabs2: selectedStats };
 		await this.savePreferences(newPrefs);
 	}
 

@@ -12,7 +12,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 import { BattlegroundsCardsService } from '../cards/bgs-cards.service';
-import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 
 @Injectable({ providedIn: 'root' })
 export class BgsBoardStatsService extends AbstractFacadeService<BgsBoardStatsService> {
@@ -20,8 +19,7 @@ export class BgsBoardStatsService extends AbstractFacadeService<BgsBoardStatsSer
 
 	// private allCards: CardsFacadeService;
 	private prefs: PreferencesService;
-	private bgState: BgsStateFacadeService;
-	private deckState: GameStateFacadeService;
+	private gameState: GameStateFacadeService;
 	private statsService: BattlegroundsCardsService;
 
 	private cardStats: BgsCardStats | null;
@@ -39,8 +37,7 @@ export class BgsBoardStatsService extends AbstractFacadeService<BgsBoardStatsSer
 
 		// this.allCards = AppInjector.get(CardsFacadeService);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.bgState = AppInjector.get(BgsStateFacadeService);
-		this.deckState = AppInjector.get(GameStateFacadeService);
+		this.gameState = AppInjector.get(GameStateFacadeService);
 		this.statsService = AppInjector.get(BattlegroundsCardsService);
 
 		await waitForReady(this.prefs);
@@ -56,13 +53,13 @@ export class BgsBoardStatsService extends AbstractFacadeService<BgsBoardStatsSer
 			console.error('[bgs-board-stats] could not load card stats');
 			return;
 		}
-		const currentTurn$ = this.bgState.gameState$$.pipe(
+		const currentTurn$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
-			map((state) => state?.currentGame?.currentTurn),
+			map((state) => (state?.currentTurn === 'mulligan' ? 0 : state?.currentTurn)),
 			filter((turn) => turn != null),
 			distinctUntilChanged(),
 		);
-		const shopCards$ = this.deckState.gameState$$.pipe(
+		const shopCards$ = this.gameState.gameState$$.pipe(
 			filter((state) => state != null),
 			auditTime(500),
 			map((state) => state!.opponentDeck.board.map((entity) => entity.cardId)),

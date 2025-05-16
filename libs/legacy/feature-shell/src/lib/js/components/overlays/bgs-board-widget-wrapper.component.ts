@@ -7,14 +7,14 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, SceneMode } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, ShopMinion } from '@firestone/battlegrounds/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import {} from 'jszip';
-import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { auditTime, combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -48,27 +48,27 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.highlighter);
+		await waitForReady(this.scene, this.highlighter, this.gameState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listenBattlegrounds$(
-				([state]) => state?.inGame,
-				([state]) => state?.currentGame?.gameEnded,
+			this.gameState.gameState$$.pipe(
+				auditTime(1000),
+				this.mapData(
+					(state) => state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
+				),
 			),
 		]).pipe(
-			this.mapData(
-				([currentScene, [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
-			),
+			this.mapData(([currentScene, inGame]) => currentScene === SceneMode.GAMEPLAY && inGame),
 			this.handleReposition(),
 		);
 		this.highlightedMinions$ = this.highlighter.shopMinions$$.pipe(

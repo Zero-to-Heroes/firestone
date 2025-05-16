@@ -21,14 +21,22 @@ export class GameEndParser implements EventParser {
 		if (prefs.flashWindowOnYourTurn) {
 			this.owUtils.flashWindow();
 		}
-		if (prefs && prefs.decktrackerCloseOnGameEnd) {
-			return GameState.create({
-				gameEnded: true,
-			});
-		}
+		// if (prefs && prefs.decktrackerCloseOnGameEnd) {
+		// 	return GameState.create({
+		// 		gameEnded: true,
+		// 	});
+		// }
 		return currentState.update({
 			gameEnded: true,
-		} as GameState);
+			bgState: currentState.bgState.update({
+				currentGame: currentState.bgState.currentGame?.update({
+					// Not sure exactly why that is needed, maybe we can remove it once all the bugs are fixed
+					phase: 'recruit',
+				}),
+				duoPendingBoards: [],
+				playerTeams: null,
+			}),
+		});
 	}
 
 	event(): string {

@@ -11,7 +11,7 @@ import { GameState } from '../models/game-state';
 
 @Injectable()
 export class GameStateFacadeService extends AbstractFacadeService<GameStateFacadeService> {
-	public gameState$$: BehaviorSubject<GameState | null>;
+	public gameState$$: BehaviorSubject<GameState>;
 
 	private ow: OverwolfService;
 
@@ -24,7 +24,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	}
 
 	protected async init() {
-		this.gameState$$ = new BehaviorSubject<GameState | null>(null);
+		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
 		this.ow = AppInjector.get(OverwolfService);
 		console.log('[game-state-facade] ready');
 
@@ -33,7 +33,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		}
 
 		this.ow.getMainWindow().deckEventBus.subscribe(async (event: GameState) => {
-			this.gameState$$.next(event);
+			this.gameState$$.next(event ?? new GameState());
 		});
 	}
 }

@@ -57,7 +57,7 @@ export class ArenaDiscoversGuardianService extends AbstractFacadeService<ArenaDi
 		);
 		const today = new Date().toISOString().substring(0, 10);
 		const gamesUsedToday = freeUseCount?.day === today ? freeUseCount.gameIds : [];
-		const currentGameId: string | null = this.reviewIdService.reviewId$.value;
+		const currentGameId: string | null = this.reviewIdService.reviewId$$.value;
 		if (!currentGameId) {
 			return;
 		}

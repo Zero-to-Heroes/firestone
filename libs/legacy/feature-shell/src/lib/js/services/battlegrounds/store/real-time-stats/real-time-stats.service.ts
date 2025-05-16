@@ -58,16 +58,6 @@ export class RealTimeStatsService {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe((data) => {
-			this.processingQueue.enqueue(
-				Object.assign(new GameEvent(), {
-					type: Events.BATTLE_SIMULATION_HISTORY_UPDATED,
-					additionalData: {
-						game: data.data[0],
-					},
-				}),
-			);
-		});
 	}
 
 	private async processQueue(eventQueue: readonly GameEvent[]) {

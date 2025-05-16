@@ -59,10 +59,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
 				name: this.i18n.translateString('battlegrounds.menu.live-stats'),
 				stats: null,
-				// globalStats: currentState.battlegrounds.globalStats,
 				player: null,
-				// isComputing: true,
-				selectedStats: null, // We use the navigation-level info, to avoid
 				tabs: [
 					'hp-by-turn',
 					'winrate-per-turn',
@@ -70,15 +67,14 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 					'warband-composition-by-turn',
 					'battles',
 				],
-				numberOfDisplayedTabs: prefs.bgsNumberOfDisplayedTabs,
 				availableTribes: selectedInfo.bgsAvailableTribes,
 				anomalies: selectedInfo.bgsAnomalies,
-			} as BgsPostMatchStatsPanel),
+			}),
 		} as MatchDetail);
+
 		const newReplays = navigationState.navigationReplays.update({
 			currentView: 'match-details',
 			selectedTab: 'match-stats',
-			selectedStatsTabs: prefs.bgsSelectedTabs2,
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
 		this.mainNav.text$$.next(

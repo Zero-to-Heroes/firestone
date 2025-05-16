@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
-import { Metadata } from '@firestone/game-state';
+import { GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { ArenaInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -29,13 +29,14 @@ export class TwitchPresenceService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly arenaInfo: ArenaInfoService,
 		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.gameState);
 
 		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_INFO),
@@ -136,30 +137,30 @@ export class TwitchPresenceService {
 			});
 
 		combineLatest([
-			this.store.listenDeckState$((state) => state?.metadata),
-			this.store.listenBattlegrounds$(
-				([state]) => state.currentGame?.mmrAtStart,
-				([state]) => state.currentGame?.gameEnded,
-				([state]) => state.currentGame?.getMainPlayer()?.cardId,
+			this.gameState.gameState$$.pipe(map((state) => state.metadata)),
+			this.gameState.gameState$$.pipe(map((state) => state.bgState.currentGame?.mmrAtStart)),
+			this.gameState.gameState$$.pipe(
+				map((state) => !state.gameEnded && isBattlegrounds(state.metadata?.gameType)),
 			),
+			this.gameState.gameState$$.pipe(map((state) => state.bgState.currentGame?.getMainPlayer()?.cardId)),
 		])
 			.pipe(
 				debounceTime(1000),
 				filter(
-					([[metadata], [mmrAtStart, gameEnded, playerCardId]]) =>
+					([metadata, mmrAtStart, inGame, playerCardId]) =>
 						!!metadata?.gameType &&
 						!!metadata?.formatType &&
 						mmrAtStart != null &&
 						!!playerCardId &&
-						!gameEnded,
+						inGame,
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				debounceTime(200),
-				map(([[metadata], [mmrAtStart, gameEnded, playerCardId]]) => {
+				map(([metadata, mmrAtStart, inGame, playerCardId]) => {
 					return {
 						metadata: metadata,
 						mmrAtStart: mmrAtStart,
-						gameEnded: gameEnded,
+						gameEnded: !inGame,
 						playerCardId: playerCardId,
 					};
 				}),

@@ -19,7 +19,7 @@ export interface MemoryBgPlayer {
 	readonly Name: string;
 	readonly MaxHealth: number;
 	readonly Armor: number;
-	readonly Damage: number;
+	readonly Damage: number | null;
 	readonly LeaderboardPosition: number;
 	readonly TriplesCount: number;
 	readonly TechLevel: number;
@@ -27,6 +27,7 @@ export interface MemoryBgPlayer {
 	readonly BoardCompositionRace: Race;
 	readonly BoardCompositionCount: number;
 	readonly Battles: readonly MemoryBgBattle[];
+	readonly Mmr?: number | null;
 }
 
 export interface MemoryBgBattle {
