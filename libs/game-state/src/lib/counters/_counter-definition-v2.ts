@@ -98,8 +98,8 @@ export abstract class CounterDefinitionV2<T> {
 					);
 				return false;
 			}
-			if (this.player.value(gameState, bgState) == null) {
-				this.debug && console.debug('[debug] no value', side, this.player.value(gameState, bgState));
+			if ((this.player.cachedValue = this.player.value(gameState, bgState)) == null) {
+				this.debug && console.debug('[debug] no value', side, this.player.cachedValue);
 				return false;
 			}
 			this.debug && console.debug('[debug] show', side, gameState, bgState);
@@ -121,8 +121,8 @@ export abstract class CounterDefinitionV2<T> {
 			if (!this.opponent.display(gameState, bgState)) {
 				return false;
 			}
-			this.debug && console.debug('value', side, this.opponent.value(gameState, bgState));
-			if (!this.opponent.value(gameState, bgState)) {
+			if (!(this.opponent.cachedValue = this.opponent.value(gameState, bgState))) {
+				this.debug && console.debug('value', side, this.opponent.cachedValue);
 				return false;
 			}
 			this.debug && console.debug('returning true', this);
@@ -139,7 +139,7 @@ export abstract class CounterDefinitionV2<T> {
 		countersUseExpandedView: boolean,
 	): CounterInstance<T> | undefined {
 		const sideObj = this[side];
-		const rawValue = sideObj?.value(gameState, bgState);
+		const rawValue = sideObj?.cachedValue;
 		const savedValue = sideObj?.savedValue;
 		if (rawValue === savedValue) {
 			return sideObj?.savedInstance;
@@ -220,4 +220,5 @@ export interface PlayerImplementation<T> {
 		label: (i18n: ILocalizationService) => string;
 		tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
 	};
+	cachedValue?: T | null | undefined;
 }
