@@ -91,8 +91,9 @@ export class RealTimeStatsService {
 		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
 		for (const parser of parsersForEvent) {
 			try {
-				if (parser.applies(gameEvent, newState ?? this.state)) {
-					newState = await parser.parse(gameEvent, newState ?? this.state);
+				if (parser.applies(gameEvent, newState)) {
+					newState = await parser.parse(gameEvent, newState);
+					newState = newState ?? currentState;
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.name(), e.message, e.stack, e);
