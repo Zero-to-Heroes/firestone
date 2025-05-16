@@ -47,7 +47,7 @@ export class ElementalPowersBuffCounterDefinitionV2 extends CounterDefinitionV2<
 	protected override formatValue(
 		value: { atk: number; health: number } | null | undefined,
 	): null | undefined | number | string {
-		return value ? `+${value.atk} / +${value.health}` : null;
+		return value ? `+${value.atk}/+${value.health}` : null;
 	}
 
 	protected override tooltip(
