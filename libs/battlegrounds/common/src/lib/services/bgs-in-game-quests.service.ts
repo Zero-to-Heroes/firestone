@@ -32,7 +32,6 @@ import {
 } from 'rxjs';
 import { BG_USE_QUESTS } from './bgs-in-game-quests-guardian.service';
 import { BattlegroundsQuestsService } from './bgs-quests.service';
-import { BgsStateFacadeService } from './bgs-state-facade.service';
 
 export const IN_GAME_RANK_FILTER = 50;
 
@@ -44,7 +43,6 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 	private scene: SceneService;
 	private prefs: PreferencesService;
 	private gameState: GameStateFacadeService;
-	private bgsGameState: BgsStateFacadeService;
 	private quests: BattlegroundsQuestsService;
 	private allCards: CardsFacadeService;
 
@@ -63,16 +61,10 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 		this.scene = AppInjector.get(SceneService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
-		this.bgsGameState = AppInjector.get(BgsStateFacadeService);
 		this.quests = AppInjector.get(BattlegroundsQuestsService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 
-		await Promise.all([
-			this.scene.isReady(),
-			this.prefs.isReady(),
-			this.gameState.isReady(),
-			this.bgsGameState.isReady(),
-		]);
+		await Promise.all([this.scene.isReady(), this.prefs.isReady(), this.gameState.isReady()]);
 
 		if (!BG_USE_QUESTS) {
 			return;
@@ -129,14 +121,14 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 		const quests$: Observable<BgsQuestStats> = showWidget$.pipe(
 			filter((show) => show),
 			distinctUntilChanged(),
-			switchMap(() => this.bgsGameState.gameState$$.pipe(map((state) => state?.currentGame?.hasQuests))),
+			switchMap(() => this.gameState.gameState$$.pipe(map((state) => state?.bgState.currentGame?.hasQuests))),
 			filter((hasQuests) => !!hasQuests),
 			distinctUntilChanged(),
 			switchMap(() =>
-				this.bgsGameState.gameState$$.pipe(
+				this.gameState.gameState$$.pipe(
 					map((state) => ({
-						playerRank: state?.currentGame?.mmrAtStart,
-						availableRaces: state?.currentGame?.availableRaces,
+						playerRank: state?.bgState.currentGame?.mmrAtStart,
+						availableRaces: state?.bgState.currentGame?.availableRaces,
 					})),
 				),
 			),
@@ -163,9 +155,9 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 				distinctUntilChanged(),
 			),
 			quests$,
-			this.bgsGameState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				auditTime(500),
-				map((state) => state?.currentGame?.getMainPlayer()?.cardId),
+				map((state) => state?.bgState.currentGame?.getMainPlayer()?.cardId),
 			),
 		]).pipe(
 			debounceTime(500),

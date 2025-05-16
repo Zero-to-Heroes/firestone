@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, NonFunctionProperties } from '@firestone/shared/framework/common';
@@ -49,13 +48,12 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateFacadeService,
-		private readonly bgsState: BgsStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.prefs.isReady(), this.gameState.isReady(), this.bgsState.isReady()]);
+		await Promise.all([this.prefs.isReady(), this.gameState.isReady()]);
 
 		const definition = await this.buildDefinition(this.activeCounter, this.side);
 		this.definition$ = combineLatest([this.gameState.gameState$$, definition.prefValue$ ?? of(null)]).pipe(

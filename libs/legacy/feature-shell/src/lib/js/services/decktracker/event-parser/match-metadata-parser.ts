@@ -1,4 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import {
 	DeckCard,
 	DeckHandlerService,
@@ -25,6 +26,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly allCards: CardsFacadeService,
 		private readonly memory: MemoryInspectionService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
+		private readonly nav: BgsInGameWindowNavigationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -53,13 +55,23 @@ export class MatchMetadataParser implements EventParser {
 		const stateWithMetaData = currentState.update({
 			metadata: metaData,
 		} as GameState);
+
+		const prefs = await this.prefs.getPreferences();
+
 		if (stateWithMetaData.isBattlegrounds()) {
-			return stateWithMetaData;
+			this.nav.currentPanelId$$.next('bgs-hero-selection-overview');
+			this.nav.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
+			return stateWithMetaData.update({
+				bgState: stateWithMetaData.bgState.update({
+					heroSelectionDone: false,
+					postMatchStats: undefined,
+				}),
+			});
 		} else if (stateWithMetaData.isMercenaries()) {
 			return stateWithMetaData;
 		}
 
-		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
+		const noDeckMode = prefs.decktrackerNoDeckMode;
 		if (noDeckMode) {
 			console.log('[match-metadata-parser] no deck mode is active, not loading current deck');
 		}

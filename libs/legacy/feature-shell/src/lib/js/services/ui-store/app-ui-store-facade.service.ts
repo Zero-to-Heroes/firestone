@@ -21,7 +21,6 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { sleep } from '../utils';
 import {
 	AppUiStoreService,
-	BattlegroundsStateSelector,
 	GameStateSelector,
 	MercenariesHighlightsSelector,
 	MercenariesOutOfCombatStateSelector,
@@ -77,13 +76,6 @@ export class AppUiStoreFacadeService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
 		return this.store.listenDeckState$(...selectors);
-	}
-
-	/** @deprecated */
-	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
-		return this.store.listenBattlegrounds$(...selectors);
 	}
 
 	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(

@@ -32,7 +32,6 @@ import {
 	switchMap,
 	tap,
 } from 'rxjs';
-import { BgsStateFacadeService } from './bgs-state-facade.service';
 import { BattlegroundsTrinketsService } from './bgs-trinkets.service';
 
 @Injectable()
@@ -43,7 +42,6 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 	private scene: SceneService;
 	private prefs: PreferencesService;
 	private gameState: GameStateFacadeService;
-	private bgsGameState: BgsStateFacadeService;
 	private trinkets: BattlegroundsTrinketsService;
 	private allCards: CardsFacadeService;
 
@@ -62,11 +60,10 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 		this.scene = AppInjector.get(SceneService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
-		this.bgsGameState = AppInjector.get(BgsStateFacadeService);
 		this.trinkets = AppInjector.get(BattlegroundsTrinketsService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 
-		await waitForReady(this.scene, this.prefs, this.gameState, this.bgsGameState);
+		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -114,9 +111,9 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			filter((show) => show),
 			distinctUntilChanged(),
 			switchMap(() =>
-				this.bgsGameState.gameState$$.pipe(
+				this.gameState.gameState$$.pipe(
 					auditTime(500),
-					map((state) => state?.currentGame?.hasTrinkets),
+					map((state) => state?.bgState.currentGame?.hasTrinkets),
 				),
 			),
 			filter((hasTrinkets) => !!hasTrinkets),
@@ -143,9 +140,9 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 				distinctUntilChanged(),
 			),
 			trinkets$,
-			this.bgsGameState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				auditTime(500),
-				map((state) => state?.currentGame?.getMainPlayer()?.cardId),
+				map((state) => state?.bgState.currentGame?.getMainPlayer()?.cardId),
 			),
 		]).pipe(
 			debounceTime(500),

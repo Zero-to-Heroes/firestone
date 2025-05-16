@@ -4,7 +4,6 @@ import { ALL_BG_RACES, Race, getTribeName, isBattlegroundsDuo } from '@firestone
 import {
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
-	BgsStateFacadeService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
@@ -58,37 +57,30 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
 		private readonly prefs: PreferencesService,
-		private readonly bgsState: BgsStateFacadeService,
 		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(
-			this.metaHeroStats,
-			this.playerHeroStats,
-			this.mainWindowState,
-			this.prefs,
-			this.bgsState,
-			this.gameState,
-		);
+		await waitForReady(this.metaHeroStats, this.playerHeroStats, this.mainWindowState, this.prefs, this.gameState);
 
 		// FIXME: looks like the rankFilter changes every time???
 		const statsConfig$: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
-			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
-			filter(([gameState, bgState, prefs]) => !!gameState && !!bgState && !!prefs),
-			this.mapData(([gameState, bgState, prefs]) => {
+			filter(([gameState, prefs]) => !!gameState && !!prefs),
+			this.mapData(([gameState, prefs]) => {
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
-					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame?.mmrAtStart ?? 0 : null,
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
+						? gameState.bgState.currentGame?.mmrAtStart ?? 0
+						: null,
 					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
-						? bgState.currentGame?.availableRaces
+						? gameState.bgState.currentGame?.availableRaces
 						: [],
 					anomaliesFilter: [] as readonly string[], //bgState.currentGame?.anomalies ?? [],
 				};

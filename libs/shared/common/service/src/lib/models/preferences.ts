@@ -588,12 +588,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveCardsSearch: string = null;
 	readonly bgsActiveCardsTiers: readonly BgsCardTierFilterType[] = [1];
 	readonly bgsActiveCardsTurn: number | null = 1;
-	readonly bgsSelectedTabs2: readonly BgsStatsFilterId[] = [
-		'hp-by-turn',
-		'winrate-per-turn',
-		'warband-total-stats-by-turn',
-		'warband-composition-by-turn',
-	];
+	readonly bgsSelectedTab3: BgsStatsFilterId = 'hp-by-turn';
 	readonly bgsNumberOfDisplayedTabs: number = 1;
 	readonly bgsActiveSimulatorMinionTribeFilter: 'all' | 'blank' | string = 'all';
 	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' | '7' = 'all';

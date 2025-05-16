@@ -57,7 +57,7 @@ export class ConstructedDiscoversGuardianService extends AbstractFacadeService<C
 		);
 		const today = new Date().toISOString().substring(0, 10);
 		const gamesUsedToday = freeUseCount?.day === today ? freeUseCount.gameIds : [];
-		const currentGameId: string | null = this.reviewIdService.reviewId$.value;
+		const currentGameId: string | null = this.reviewIdService.reviewId$$.value;
 		if (!currentGameId) {
 			return;
 		}

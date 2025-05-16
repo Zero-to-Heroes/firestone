@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
 import { IReviewIdService } from '@firestone/game-state';
+import { uuid } from '@firestone/shared/framework/common';
 import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { Events } from './events.service';
-import { ManastormInfo } from './manastorm-bridge/manastorm-info';
+import { GameEventsEmitterService } from './game-events-emitter.service';
 
 @Injectable()
 export class ReviewIdService implements IReviewIdService {
-	public reviewId$ = new BehaviorSubject<string>(null);
+	public reviewId$$ = new BehaviorSubject<string>(null);
 
-	constructor(private readonly events: Events) {
-		this.events
-			.on(Events.REVIEW_INITIALIZED)
-			.pipe(
-				map((event) => event.data[0] as ManastormInfo),
-				filter((info) => !!info.reviewId),
-				map((info) => info.reviewId),
-				startWith(null),
-				distinctUntilChanged(),
-			)
-			.subscribe(this.reviewId$);
+	constructor(private readonly events: Events, private readonly gameEvents: GameEventsEmitterService) {
+		this.init();
+	}
+
+	private init() {
+		// TODO: merge both subscriptions into one
+		this.gameEvents.onGameStart.subscribe((event) => {
+			console.log('[game-state] game start event received, resetting currentReviewId');
+			this.reviewId$$.next(uuid());
+		});
 	}
 }

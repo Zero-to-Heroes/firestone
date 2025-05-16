@@ -4,7 +4,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { auditTime, distinctUntilChanged } from 'rxjs';
-import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 import { BgsReconnectorService } from './bgs-reconnector.service';
 
 @Component({
@@ -46,13 +45,12 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 		private readonly prefs: PreferencesService,
 		private readonly reconnectService: BgsReconnectorService,
 		private readonly gameState: GameStateFacadeService,
-		private readonly bgState: BgsStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.gameState, this.bgState);
+		await waitForReady(this.prefs, this.gameState);
 
 		this.prefs.preferences$$
 			.pipe(
@@ -82,10 +80,10 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 					this.cdr.detectChanges();
 				}
 			});
-		this.bgState.gameState$$
+		this.gameState.gameState$$
 			.pipe(
 				auditTime(500),
-				this.mapData((state) => !!state?.inGame && !!state.currentGame),
+				this.mapData((state) => !!state?.gameStarted && !!state?.bgState.currentGame),
 			)
 			.subscribe((inBattlegrounds) => {
 				this.inBattlegrounds = inBattlegrounds;

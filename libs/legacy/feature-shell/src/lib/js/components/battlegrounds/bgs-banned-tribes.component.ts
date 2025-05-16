@@ -8,8 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race, getTribeName } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { compareTribes } from '@firestone/battlegrounds/core';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -60,23 +60,25 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
-		private readonly bgsState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.bgsState);
+		await waitForReady(this.prefs, this.gameState);
 
 		this.showAvailable$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowAvailableTribesOverlay)),
-			this.bgsState.gameState$$,
-		]).pipe(this.mapData(([pref, state]) => pref || state?.currentGame?.availableRaces?.length == 1));
+			this.gameState.gameState$$,
+		]).pipe(this.mapData(([pref, state]) => pref || state?.bgState.currentGame?.availableRaces?.length == 1));
 		this.useTribeColors$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsUseBannedTribeColors));
 		this.singleRow$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsTribesOverlaySingleRow));
-		this.tribes$ = combineLatest([this.bgsState.gameState$$, this.showAvailable$]).pipe(
+		this.tribes$ = combineLatest([this.gameState.gameState$$, this.showAvailable$]).pipe(
 			this.mapData(([state, showAvailable]) => {
-				const tribes = showAvailable ? state?.currentGame?.availableRaces : state?.currentGame?.bannedRaces;
+				const tribes = showAvailable
+					? state?.bgState.currentGame?.availableRaces
+					: state?.bgState.currentGame?.bannedRaces;
 				return [...(tribes ?? [])].sort((a, b) => compareTribes(a, b, this.i18n));
 			}),
 		);

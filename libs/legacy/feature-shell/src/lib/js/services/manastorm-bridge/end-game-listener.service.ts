@@ -23,7 +23,6 @@ import {
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
@@ -44,7 +43,6 @@ export class EndGameListenerService {
 		private readonly memoryInspection: MemoryInspectionService,
 		private readonly rewards: RewardMonitorService,
 		private readonly reviewIdService: ReviewIdService,
-		private readonly bgStore: BattlegroundsStoreService,
 		private readonly lottery: LotteryService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameStatus: GameStatusService,
@@ -133,7 +131,7 @@ export class EndGameListenerService {
 					shareReplay(1),
 					tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
 				);
-				const reviewId$ = this.reviewIdService.reviewId$;
+				const reviewId$ = this.reviewIdService.reviewId$$;
 				// Doesn't work, reviewId arrives earlier
 				const gameEnded$: Observable<{
 					ended: boolean;
@@ -336,7 +334,7 @@ export class EndGameListenerService {
 		const xpForGame = await this.rewards.getXpForGameInfo();
 		console.log('[manastorm-bridge] read memory info');
 
-		const battleOdds = this.bgStore?.state?.currentGame?.faceOffs?.map((f) => ({
+		const battleOdds = this.gameState.gameState$$.value?.bgState?.currentGame?.faceOffs?.map((f) => ({
 			turn: f.turn,
 			wonPercent: f.battleResult?.wonPercent,
 		}));
@@ -347,7 +345,7 @@ export class EndGameListenerService {
 			bgBattleOdds: battleOdds,
 			// Here we purposefully don't want to init the lottery if it hasn't been initialized yet
 			lotteryPoints: this.lottery.lottery$$.getValue()?.currentPoints(),
-			bgGame: this.bgStore.state.currentGame,
+			bgGame: this.gameState.gameState$$.value?.bgState?.currentGame,
 		};
 		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 		await this.endGameUploader.upload2(augmentedInfo);

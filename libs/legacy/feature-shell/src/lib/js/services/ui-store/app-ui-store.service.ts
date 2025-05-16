@@ -57,7 +57,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private prefs: BehaviorSubject<Preferences>;
 	private deckStore: BehaviorSubject<GameState>;
-	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
 	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
 	private mercenariesOutOfCombatStore: BehaviorSubject<MercenariesOutOfCombatState>;
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
@@ -114,7 +113,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
-		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
 		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
 		this.mercenariesSynergiesStore = this.ow.getMainWindow().mercenariesSynergiesStore;
@@ -171,18 +169,6 @@ export class AppUiStoreService extends Store<Preferences> {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		) as Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }>;
-	}
-
-	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
-		const result = combineLatest([this.battlegroundsStore, this.prefs]).pipe(
-			filter(([state, prefs]) => !!state && !!prefs),
-			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs]))),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			shareReplay(1),
-		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
-		return result;
 	}
 
 	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { GameEventsFacadeService, GameUniqueIdService } from '@firestone/game-state';
+import { GameEventsFacadeService, GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
@@ -13,11 +13,9 @@ import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/co
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
-import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { HsGameMetaData } from './game-mode-data.service';
-import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { chunk, freeRegexp } from './utils';
@@ -43,10 +41,9 @@ export class GameEvents {
 		private readonly events: Events,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly scene: SceneService,
-		private readonly store: MainWindowStoreService,
 		private readonly gameStatus: GameStatusService,
 		private readonly allCards: CardsFacadeService,
-		private readonly gameState: GameStateService,
+		private readonly gameState: GameStateFacadeService,
 		private readonly gameUniqueId: GameUniqueIdService,
 		private readonly eventsFacade: GameEventsFacadeService,
 		private readonly globalError: GlobalErrorService,
@@ -97,7 +94,7 @@ export class GameEvents {
 				// Use game start, so we have a chance to spot reconnects
 				this.gameStatus.onGameStart(() => {
 					// If we're current spectating, stop it
-					if (this.gameState.state?.spectating) {
+					if (this.gameState.gameState$$.value?.spectating) {
 						console.log('[game-events] leaving game while spectating, emitting End Spectator Mode event');
 						this.processingQueue.enqueue('End Spectator Mode');
 					}
@@ -261,8 +258,6 @@ export class GameEvents {
 						additionalData: {
 							metaData: (gameEvent.Value?.MetaData ?? {}) as HsGameMetaData,
 							spectating: gameEvent.Value?.Spectating,
-							stats: this.store.state?.stats,
-							state: this.store.state,
 						},
 					} as GameEvent),
 				);
@@ -1292,16 +1287,6 @@ export class GameEvents {
 			case 'BATTLEGROUNDS_MINION_SOLD':
 				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_SOLD, gameEvent));
 				break;
-			// case 'BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN':
-			// 	console.debug('[game-events] emitting BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN', gameEvent);
-			// 	this.doEventDispatch(
-			// 		GameEvent.build(GameEvent.BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN, gameEvent, {
-			// 			extraGold: gameEvent.Value.AdditionalProps.ExtraGoldNextTurn,
-			// 			overconfidences: gameEvent.Value.AdditionalProps.Overconfidences,
-			// 			boardAndEnchantments: gameEvent.Value.AdditionalProps.BoardAndEnchantments,
-			// 		}),
-			// 	);
-			// 	break;
 			case 'BATTLEGROUNDS_ENEMY_HERO_KILLED':
 				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent));
 				break;

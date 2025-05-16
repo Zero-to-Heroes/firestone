@@ -16,6 +16,7 @@ export class GameState {
 	// - doing this :)
 	public static playTiming = 0;
 
+	readonly reviewId: string;
 	readonly matchInfo: MatchInfo;
 	readonly region: BnetRegion;
 	readonly playerDeck: DeckState = new DeckState();
@@ -23,6 +24,9 @@ export class GameState {
 	readonly mulliganOver: boolean = false;
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
+	get currentTurnNumeric(): number {
+		return this.currentTurn === 'mulligan' ? 0 : this.currentTurn;
+	}
 	readonly gameTagTurnNumber: number = 0;
 	readonly gameStarted: boolean;
 	readonly matchStartTimestamp: number;
@@ -91,6 +95,16 @@ export class GameState {
 				return ref.spellSchool === SpellSchool[SpellSchool.SHADOW];
 			})
 			.pop()?.cardId;
+	}
+
+	// Not all players finish their battles at the same time. So you might still be in battle, but
+	// another player might have already gone back to the tavern and levelled up for instance
+	public getCurrentTurnAdjustedForAsyncPlay(): number {
+		const currentTurn = this.currentTurn === 'mulligan' ? 0 : this.currentTurn;
+		if (this.bgState.currentGame?.phase === 'combat') {
+			return currentTurn + 1;
+		}
+		return currentTurn;
 	}
 }
 

@@ -13,8 +13,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { auditTime, BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
-import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
+import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
 @Injectable()
 export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHighlighterService> {
@@ -26,8 +25,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	private allCards: CardsFacadeService;
 	private ads: IAdsService;
 	private prefs: PreferencesService;
-	private bgState: BgsStateFacadeService;
-	private deckState: GameStateFacadeService;
+	private gameState: GameStateFacadeService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsBoardHighlighterService', () => !!this.shopMinions$$);
@@ -49,8 +47,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.bgState = AppInjector.get(BgsStateFacadeService);
-		this.deckState = AppInjector.get(GameStateFacadeService);
+		this.gameState = AppInjector.get(GameStateFacadeService);
 
 		await waitForReady(this.ads, this.prefs);
 
@@ -120,18 +117,18 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 
 		const minionsToHighlight$ = combineLatest([
 			this.prefs.preferences$$.pipe(map((prefs) => prefs.bgsShowTribesHighlight, distinctUntilChanged())),
-			this.bgState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				auditTime(500),
 				map((state) => ({
-					phase: state?.currentGame?.phase,
-					anomalies: state?.currentGame?.anomalies,
+					phase: state?.bgState.currentGame?.phase,
+					anomalies: state?.bgState.currentGame?.anomalies,
 				})),
 				distinctUntilChanged((a, b) => a?.phase === b?.phase && arraysEqual(a?.anomalies, b?.anomalies)),
 			),
 			this.highlightedTribes$$,
 			this.highlightedMinions$$,
 			this.highlightedMechanics$$,
-			this.deckState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				auditTime(500),
 				map((state) => state?.opponentDeck?.board?.map((e) => ({ cardId: e.cardId, entityId: e.entityId }))),
 				distinctUntilChanged(
@@ -240,7 +237,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 
 	private initPremiumHighlights() {
 		// console.debug('[bgs-board-highlighter] init premium highlights');
-		const board$ = this.deckState.gameState$$.pipe(
+		const board$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
 			map((state) => state?.playerDeck.board?.map((entity) => entity.cardId)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -256,12 +253,12 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				map((prefs) => prefs.bgsEnableTribeAutoHighlight),
 				distinctUntilChanged(),
 			),
-			this.bgState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				auditTime(500),
-				map((bgState) => ({
-					hasCurrentGame: !!bgState?.currentGame,
-					gameEnded: bgState?.currentGame?.gameEnded,
-					heroCardId: bgState?.currentGame?.getMainPlayer()?.cardId,
+				map((gameState) => ({
+					hasCurrentGame: !!gameState?.bgState?.currentGame,
+					gameEnded: gameState?.gameEnded,
+					heroCardId: gameState?.bgState?.currentGame?.getMainPlayer()?.cardId,
 				})),
 				filter((info) => !!info.heroCardId),
 				distinctUntilChanged(
@@ -274,7 +271,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			board$,
 		])
 			.pipe(
-				debounceTime(1000),
+				auditTime(1000),
 				filter(
 					([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId }]) =>
 						hasCurrentGame && premium,

@@ -1,10 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BgsFaceOffWithSimulation, BgsNextOpponentOverviewPanel, BgsPlayer } from '@firestone/game-state';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import {
+	BgsFaceOffWithSimulation,
+	BgsNextOpponentOverviewPanel,
+	BgsPlayer,
+	GameStateFacadeService,
+} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
+import { auditTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
@@ -93,38 +99,62 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly state: BgsStateFacadeService,
+		private readonly state: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly ads: AdService,
+		private readonly nav: BgsInGameWindowNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.state.isReady(), this.prefs.isReady(), this.ads.isReady()]);
+		await waitForReady(this.state, this.prefs, this.ads, this.nav);
 
 		this.enableSimulation$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableSimulation));
 		this.showNextOpponentRecapSeparately$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowNextOpponentRecapSeparately),
 		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
-		this.buddiesEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasBuddies));
-		this.questsEnabled$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.hasQuests));
-		this.currentTurn$ = this.state.gameState$$.pipe(this.mapData((state) => state?.currentGame?.currentTurn));
-		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.state.gameState$$.pipe(
+		this.buddiesEnabled$ = this.state.gameState$$.pipe(
+			this.mapData((state) => state.bgState.currentGame?.hasBuddies),
+		);
+		this.questsEnabled$ = this.state.gameState$$.pipe(
+			this.mapData((state) => state.bgState.currentGame?.hasQuests),
+		);
+		this.currentTurn$ = this.state.gameState$$.pipe(this.mapData((state) => state.currentTurnNumeric));
+		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = combineLatest([
+			this.state.gameState$$,
+			this.nav.currentPanelId$$,
+		]).pipe(
 			this.mapData(
-				(state) =>
-					state.panels?.find((panel) => panel.id === state.currentPanelId) as BgsNextOpponentOverviewPanel,
+				([state, panelId]) =>
+					state.bgState.panels?.find((panel) => panel.id === panelId) as BgsNextOpponentOverviewPanel,
 			),
+			tap((info) => console.debug('[bgs-next-opponent-overview] currentPanel', info)),
 		);
-		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
 		this.lastOpponentPlayerId$ = this.state.gameState$$.pipe(
-			this.mapData((state) => state.currentGame?.lastOpponentPlayerId),
+			this.mapData((state) => state.bgState.currentGame?.lastOpponentPlayerId),
 		);
-		this.nextBattle$ = this.state.gameState$$.pipe(this.mapData((state) => state.currentGame?.lastFaceOff()));
+		this.nextBattle$ = this.state.gameState$$.pipe(
+			this.mapData((state) => state.bgState.currentGame?.lastFaceOff()),
+		);
+		const players$ = this.state.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => state.bgState.currentGame?.players),
+			filter((players) => !!players?.length),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.nextOpponentCardId$ = combineLatest([currentPanel$, players$]).pipe(
+			this.mapData(([panel, players]) => {
+				const playerId = panel?.opponentOverview?.playerId;
+				const opponent = players?.find((opponent) => opponent.playerId === playerId);
+				return opponent?.cardId;
+			}),
+		);
 		const opponents$ = this.state.gameState$$.pipe(
-			debounceTime(1000),
-			map((state) => state.currentGame?.players),
+			auditTime(1000),
+			map((state) => state.bgState.currentGame?.players),
 			filter((players) => !!players?.length),
 			distinctUntilChanged(),
 			this.mapData((players) =>
@@ -155,6 +185,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			this.mapData(([nextOpponentCardId, opponents]) =>
 				opponents.find((opp) => opp.cardId === nextOpponentCardId),
 			),
+			tap((info) => console.debug('[bgs-next-opponent-overview] nextOpponent', info)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

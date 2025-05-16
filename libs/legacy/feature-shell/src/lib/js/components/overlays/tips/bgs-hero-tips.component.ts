@@ -2,7 +2,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsHeroStrategyTipsTooltipComponent } from '@components/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component';
 import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -36,15 +36,16 @@ export class BgsHeroTipsComponent extends AbstractSubscriptionComponent implemen
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly bgsState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.bgsState);
-		this.currentHeroCardId$ = this.bgsState.gameState$$.pipe(
-			this.mapData((state) => normalizeCardId(state.currentGame?.getMainPlayer()?.cardId, this.allCards)),
+		await waitForReady(this.gameState);
+
+		this.currentHeroCardId$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => normalizeCardId(state.bgState.currentGame?.getMainPlayer()?.cardId, this.allCards)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

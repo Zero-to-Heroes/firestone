@@ -12,7 +12,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
@@ -168,7 +167,6 @@ export class FullScreenOverlaysComponent
 		private readonly ow: OverwolfService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
-		private readonly bgState: BgsStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly customStyles: CustomAppearanceService,
 		private readonly allCards: CardsFacadeService,
@@ -178,7 +176,7 @@ export class FullScreenOverlaysComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs, this.bgState);
+		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs);
 
 		this.useGroupedCounters$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useGroupedCounters));
 		this.activeTheme$ = combineLatest([
@@ -208,36 +206,32 @@ export class FullScreenOverlaysComponent
 			}),
 		);
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
-		this.playerCounters$ = combineLatest([
-			this.gameState.gameState$$,
-			this.bgState.gameState$$,
-			this.prefs.preferences$$,
-		]).pipe(
+		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
 			debounceTime(500),
-			filter(([gameState, bgState, prefs]) => !!gameState && !!prefs),
-			this.mapData(([gameState, bgState, prefs]) => {
+			filter(([gameState, prefs]) => !!gameState && !!prefs),
+			this.mapData(([gameState, prefs]) => {
 				// TODO: find a way to not recompute the data everytime. For instance, have each counter register which properties it listens to,
 				// and make a diff on these properties and only recompute the new value if one of these properties changed
 				const result = allCounters
-					.filter((c) => c.isActive('player', gameState, bgState, prefs))
-					.map((c) => c.emit('player', gameState, bgState, this.allCards, prefs.countersUseExpandedView))
+					.filter((c) => c.isActive('player', gameState, gameState.bgState, prefs))
+					.map((c) =>
+						c.emit('player', gameState, gameState.bgState, this.allCards, prefs.countersUseExpandedView),
+					)
 					.filter((c) => c);
 				return result;
 			}),
 			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),
 			takeUntil(this.destroyed$),
 		);
-		this.opponentCounters$ = combineLatest([
-			this.gameState.gameState$$,
-			this.bgState.gameState$$,
-			this.prefs.preferences$$,
-		]).pipe(
+		this.opponentCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
 			debounceTime(500),
-			filter(([gameState, bgState, prefs]) => !!gameState && !!prefs),
-			this.mapData(([gameState, bgState, prefs]) => {
+			filter(([gameState, prefs]) => !!gameState && !!prefs),
+			this.mapData(([gameState, prefs]) => {
 				return allCounters
-					.filter((c) => c.isActive('opponent', gameState, bgState, prefs))
-					.map((c) => c.emit('opponent', gameState, bgState, this.allCards, prefs.countersUseExpandedView))
+					.filter((c) => c.isActive('opponent', gameState, gameState.bgState, prefs))
+					.map((c) =>
+						c.emit('opponent', gameState, gameState.bgState, this.allCards, prefs.countersUseExpandedView),
+					)
 					.filter((c) => c);
 			}),
 			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),

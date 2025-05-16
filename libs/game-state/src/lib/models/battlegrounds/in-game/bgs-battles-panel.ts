@@ -7,9 +7,9 @@ export class BgsBattlesPanel implements BgsPanel {
 	readonly name: string;
 	readonly icon: string;
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];
-	readonly selectedFaceOffId: string;
-	readonly closedManually: boolean;
-	readonly currentSimulations: readonly BgsFaceOffWithSimulation[] = [];
+	// readonly selectedFaceOffId: string;
+	// readonly closedManually: boolean;
+	// readonly currentSimulations: readonly BgsFaceOffWithSimulation[] = [];
 
 	public static create(base: BgsBattlesPanel): BgsBattlesPanel {
 		return Object.assign(new BgsBattlesPanel(), base);

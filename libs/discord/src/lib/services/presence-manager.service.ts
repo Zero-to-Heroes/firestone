@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { formatGameType, GameFormat, GameType } from '@firestone-hs/reference-data';
-import { GameStateUpdatesService, Metadata } from '@firestone/game-state';
+import { GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -16,7 +16,7 @@ export class PresenceManagerService {
 	constructor(
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
-		private readonly gameStateUpdates: GameStateUpdatesService,
+		private readonly gameState: GameStateFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 	) {
@@ -26,7 +26,7 @@ export class PresenceManagerService {
 	private async init() {
 		await this.prefs.isReady();
 		await this.gameStatus.isReady();
-		await this.gameStateUpdates.isReady();
+		await this.gameState.isReady();
 		await this.allCards.waitForReady();
 
 		this.prefs.preferences$$
@@ -47,23 +47,23 @@ export class PresenceManagerService {
 
 	// TODO: support Arena (W-L), Battlegrounds (MMR), Mercs
 	private buildPresence() {
-		const metaData$ = this.gameStateUpdates.gameState$$.pipe(
+		const metaData$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
-			map((gameState) => gameState?.metadata),
+			map((gameState) => gameState.metadata),
 			distinctUntilChanged(),
 			// tap((metadata) => console.debug('[presence] new metadata', metadata)),
 			shareReplay(1),
 		);
-		const matchInfo$ = this.gameStateUpdates.gameState$$.pipe(
+		const matchInfo$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
-			map((gameState) => gameState?.matchInfo),
+			map((gameState) => gameState.matchInfo),
 			distinctUntilChanged(),
 			// tap((matchInfo) => console.debug('[presence] new matchInfo', matchInfo)),
 			shareReplay(1),
 		);
-		const playerHero$ = this.gameStateUpdates.gameState$$.pipe(
+		const playerHero$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
-			map((gameState) => gameState?.playerDeck?.hero?.cardId),
+			map((gameState) => gameState.playerDeck?.hero?.cardId),
 			distinctUntilChanged(),
 			// tap((hero) => console.debug('[presence] new hero', hero)),
 			shareReplay(1),

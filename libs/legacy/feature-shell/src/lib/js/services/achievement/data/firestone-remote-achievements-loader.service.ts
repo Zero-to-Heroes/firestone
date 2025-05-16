@@ -5,7 +5,7 @@ import { ApiRunner, UserService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../../models/achievement';
 import { CompletedAchievement } from '../../../models/completed-achievement';
-import { GameStateService } from '../../decktracker/game-state.service';
+import { ReviewIdService } from '../../review-id.service';
 
 const ACHIEVEMENTS_UPDATE_URL = 'https://yl2slri7psjvyzqscikel2cfgi0hlesx.lambda-url.us-west-2.on.aws/';
 const ACHIEVEMENTS_RETRIEVE_URL = 'https://v4sa2mtlxy5y5suuwwmj6p2i6e0epbqt.lambda-url.us-west-2.on.aws/';
@@ -18,7 +18,7 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly userService: UserService,
-		private readonly gameService: GameStateService,
+		private readonly reviewIdService: ReviewIdService,
 		private readonly diskCache: DiskCacheService,
 	) {}
 
@@ -53,7 +53,7 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 	public async publishRemoteAchievement(achievement: Achievement): Promise<void> {
 		const [currentUser, reviewId] = await Promise.all([
 			this.userService.getCurrentUser(),
-			this.gameService.getCurrentReviewId(),
+			this.reviewIdService.reviewId$$,
 		]);
 		const statEvent = {
 			creationDate: new Date(),

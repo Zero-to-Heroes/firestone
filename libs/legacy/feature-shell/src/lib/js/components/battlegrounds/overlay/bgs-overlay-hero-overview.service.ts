@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
 import { BgsPlayer, GameStateFacadeService } from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -14,14 +13,13 @@ export class BgsOverlayHeroOverviewService {
 	constructor(
 		private readonly gameState: GameStateFacadeService,
 		private readonly mouseOver: CardMousedOverService,
-		private readonly bgState: BgsStateFacadeService,
 		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 	}
 
 	private async init() {
-		await waitForReady(this.gameState, this.prefs, this.bgState);
+		await waitForReady(this.gameState, this.prefs);
 
 		this.gameState.gameState$$
 			.pipe(
@@ -34,27 +32,27 @@ export class BgsOverlayHeroOverviewService {
 				}
 			});
 
-		const players$ = this.bgState.gameState$$.pipe(
+		const players$ = this.gameState.gameState$$.pipe(
 			debounceTime(100),
-			map((state) => state?.currentGame?.players),
+			map((state) => state.bgState.currentGame?.players),
 			distinctUntilChanged(),
 		);
 		const componentClass$ = this.prefs.preferences$$.pipe(
 			map((prefs) => (prefs.bgsOpponentOverlayAtTop ? null : 'bottom')),
 			distinctUntilChanged(),
 		);
-		const lastOpponentPlayerId$ = this.bgState.gameState$$.pipe(
-			map((state) => state?.currentGame?.lastOpponentPlayerId),
+		const lastOpponentPlayerId$ = this.gameState.gameState$$.pipe(
+			map((state) => state.bgState.currentGame?.lastOpponentPlayerId),
 			distinctUntilChanged(),
 		);
-		const currentTurn$ = this.bgState.gameState$$.pipe(
-			map((state) => state?.currentGame?.currentTurn),
+		const currentTurn$ = this.gameState.gameState$$.pipe(
+			map((state) => state.currentTurnNumeric),
 			distinctUntilChanged(),
 		);
-		const config$ = this.bgState.gameState$$.pipe(
+		const config$ = this.gameState.gameState$$.pipe(
 			map((state) => ({
-				hasBuddies: state?.currentGame?.hasBuddies,
-				hasQuests: state?.currentGame?.hasQuests,
+				hasBuddies: state.bgState.currentGame?.hasBuddies,
+				hasQuests: state.bgState.currentGame?.hasQuests,
 			})),
 			distinctUntilChanged((a, b) => a?.hasBuddies === b?.hasBuddies && a?.hasQuests === b?.hasQuests),
 		);

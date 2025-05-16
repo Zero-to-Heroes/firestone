@@ -8,13 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
-import { BgsStateFacadeService } from '@firestone/battlegrounds/common';
-import { BgsPlayer } from '@firestone/game-state';
+import { BgsPlayer, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { debounceTime, filter, map } from 'rxjs/operators';
+import { auditTime, filter, map } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -75,50 +74,51 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
-		private readonly state: BgsStateFacadeService,
+		private readonly state: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
-		await this.state.isReady();
+		await waitForReady(this.scene, this.state);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listenDeckState$((state) => state.metadata),
-			this.store.listenBattlegrounds$(
-				([state]) => state?.inGame,
-				([state]) => state?.currentGame?.players?.length,
+			this.state.gameState$$.pipe(
+				auditTime(1000),
+				this.mapData(
+					(state) =>
+						state.gameStarted &&
+						!state.gameEnded &&
+						isBattlegrounds(state.metadata?.gameType) &&
+						(GameType.GT_BATTLEGROUNDS_FRIENDLY === state.metadata.gameType ||
+							state.bgState.currentGame?.players?.length === 8),
+				),
 			),
 		]).pipe(
-			this.mapData(
-				([currentScene, [metadata], [inGame, playerCount]]) =>
-					isBattlegrounds(metadata.gameType) &&
-					currentScene === SceneMode.GAMEPLAY &&
-					inGame &&
-					(GameType.GT_BATTLEGROUNDS_FRIENDLY === metadata.gameType ||
-						(isBattlegrounds(metadata.gameType) && playerCount === 8)),
-			),
+			this.mapData(([currentScene, displayFromState]) => displayFromState && currentScene === SceneMode.GAMEPLAY),
 			this.handleReposition(),
 		);
-		this.buddiesEnabled$ = this.store
-			.listenBattlegrounds$(([state]) => state?.currentGame?.hasBuddies)
-			.pipe(this.mapData(([hasBuddies]) => hasBuddies));
+		this.buddiesEnabled$ = this.state.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => state.bgState.currentGame?.hasBuddies),
+		);
 		this.bgsPlayers$ = this.state.gameState$$.pipe(
-			debounceTime(1000),
-			map((state) => state?.currentGame?.players),
+			auditTime(1000),
+			map((state) => state.bgState.currentGame?.players),
 			filter((players) => !!players?.length),
 			this.mapData((players) =>
 				[...players].sort((a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace),
 			),
 		);
-		this.lastOpponentPlayerId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentPlayerId)
-			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));
-		this.currentTurn$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame?.currentTurn)
-			.pipe(this.mapData(([currentTurn]) => currentTurn));
+		this.lastOpponentPlayerId$ = this.state.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => state.bgState.currentGame?.lastOpponentPlayerId),
+		);
+		this.currentTurn$ = this.state.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => (state.currentTurn === 'mulligan' ? 0 : state.currentTurn)),
+		);
 		this.showLastOpponentIcon$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowLastOpponentIconInOverlay),
 		);

@@ -1,15 +1,14 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
-import { ArenaNavigationService, ArenaRewardsService } from '@firestone/arena/common';
+import { ArenaNavigationService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MemoryInspectionService } from '@firestone/memory';
-import { MercenariesNavigationService } from '@firestone/mercenaries/common';
-import { AppNavigationService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { AppNavigationService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,20 +24,15 @@ import { AchievementHistoryService } from '../../achievement/achievements-histor
 import { AchievementsStateManagerService } from '../../achievement/achievements-state-manager.service';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../achievement/data/firestone-remote-achievements-loader.service';
-import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsPerfectGamesService } from '../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
-import { CollectionStorageService } from '../../collection/collection-storage.service';
 import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
-import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { Events } from '../../events.service';
-import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
-import { LiveStreamsService } from '../live-streams.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
@@ -113,8 +107,6 @@ import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { ActiveQuestsUpdatedEvent } from './events/quests/active-quests-updated-event';
 import { ReferenceQuestsLoadedEvent } from './events/quests/reference-quests-loaded-event';
-import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match-stats-number-of-tabs-event';
-import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-tab-event';
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowReplaysEvent } from './events/replays/show-replays-event';
@@ -223,8 +215,6 @@ import { NavigationNextProcessor } from './processors/navigation/navigation-next
 import { Processor } from './processors/processor';
 import { ActiveQuestsUpdatedProcessor } from './processors/quests/active-quests-updated-processor';
 import { ReferenceQuestsLoadedProcessor } from './processors/quests/reference-quests-loaded-processor';
-import { ChangeMatchStatsNumberOfTabsProcessor } from './processors/replays/change-match-stats-number-of-tabs-processor';
-import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-stats-tab-processor';
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
@@ -266,36 +256,28 @@ export class MainWindowStoreService {
 		private readonly collectionManager: CollectionManager,
 		private readonly achievementHistory: AchievementHistoryService,
 		private readonly firestoneRemoteAchievements: FirestoneRemoteAchievementsLoaderService,
-		private readonly collectionDb: CollectionStorageService,
 		private readonly gameStatsUpdater: GameStatsUpdaterService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
 		private readonly ow: OverwolfService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly events: Events,
-		private readonly notifs: OwNotificationsService,
-		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly storeBootstrap: StoreBootstrapService,
-		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly prefs: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
-		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 		private readonly translate: TranslateService,
 		private readonly i18n: LocalizationService,
 		private readonly packsService: PackStatsService,
-		private readonly streamsService: LiveStreamsService,
 		private readonly setsManager: SetsManagerService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
 		private readonly achievementsManager: AchievementsMemoryMonitor,
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly gameStats: GameStatsLoaderService,
-		private readonly arenaRewards: ArenaRewardsService,
 		private readonly bgsPerfectGames: BgsPerfectGamesService,
 		private readonly constructedPersonalDeckService: ConstructedPersonalDecksService,
 		private readonly constructedNavigation: ConstructedNavigationService,
 		private readonly collectionNavigation: CollectionNavigationService,
-		private readonly mercenariesNavigation: MercenariesNavigationService,
 		private readonly arenaNavigation: ArenaNavigationService,
 		private readonly battlegroundsNavigation: BattlegroundsNavigationService,
 		private readonly mainNavigation: MainWindowNavigationService,
@@ -563,11 +545,6 @@ export class MainWindowStoreService {
 					this.bgsPerfectGames,
 					this.mainNavigation,
 				),
-			],
-			[SelectMatchStatsTabEvent.eventName(), new SelectMatchStatsTabProcessor(this.prefs, this.mainNavigation)],
-			[
-				ChangeMatchStatsNumberOfTabsEvent.eventName(),
-				new ChangeMatchStatsNumberOfTabsProcessor(this.prefs, this.mainNavigation),
 			],
 			// Decktracker
 			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor(this.constructedNavigation)],

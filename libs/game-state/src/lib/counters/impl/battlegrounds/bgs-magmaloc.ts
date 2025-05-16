@@ -1,6 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../../models/_barrel';
 import { DeckCard } from '../../../models/deck-card';
 import { GameState } from '../../../models/game-state';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
@@ -14,19 +13,19 @@ export class BgsMagmalocCounterDefinitionV2 extends CounterDefinitionV2<number> 
 
 	readonly player = {
 		pref: 'playerBgsMagmalocCounter' as const,
-		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean =>
-			bgState?.currentGame?.phase === 'recruit' &&
+		display: (state: GameState): boolean =>
+			state.bgState.currentGame?.phase === 'recruit' &&
 			(hasMagmaloc(state.playerDeck.hand) ||
 				hasMagmaloc(state.playerDeck.board) ||
 				hasMagmaloc(state.opponentDeck.board)),
-		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
-			if (!bgState) {
+		value: (state: GameState) => {
+			if (!state.bgState.currentGame) {
 				return null;
 			}
 
 			return (
-				bgState.currentGame.liveStats.minionsPlayedOverTurn.find(
-					(info) => info.turn === bgState.currentGame.currentTurn,
+				state.bgState.currentGame.liveStats.minionsPlayedOverTurn.find(
+					(info) => info.turn === state.currentTurn,
 				)?.value ?? 0
 			);
 		},
@@ -43,13 +42,8 @@ export class BgsMagmalocCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		super();
 	}
 
-	protected override tooltip(
-		side: 'player' | 'opponent',
-		gameState: GameState,
-		allCards: CardsFacadeService,
-		bgState: BattlegroundsState,
-	): string {
-		const value = this[side]?.value(gameState, bgState) ?? 0;
+	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
+		const value = this[side]?.value(gameState) ?? 0;
 		return this.i18n.translateString(`counters.bgs-magmaloc.${side}`, { value: 1 + value });
 	}
 }

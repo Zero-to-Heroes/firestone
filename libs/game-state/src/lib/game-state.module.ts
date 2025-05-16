@@ -18,7 +18,6 @@ import { DeckHandlerService } from './services/deck-handler.service';
 import { GameConnectionService } from './services/game-connection.service';
 import { GameEventsFacadeService } from './services/game-events-facade.service';
 import { GameStateFacadeService } from './services/game-state-facade.service';
-import { GameStateUpdatesService } from './services/game-state-updates.service';
 import { GameUniqueIdService } from './services/game-unique-id.service';
 
 const components = [
@@ -45,7 +44,6 @@ const components = [
 	],
 	providers: [
 		BootstrapGameStateService,
-		GameStateUpdatesService,
 		GameStateFacadeService,
 		GameUniqueIdService,
 		GameConnectionService,

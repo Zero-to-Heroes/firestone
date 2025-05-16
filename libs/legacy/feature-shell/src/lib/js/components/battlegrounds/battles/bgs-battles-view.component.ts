@@ -1,18 +1,8 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { sleep } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService, OwUtilsService } from '@firestone/shared/framework/core';
-import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
-import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
+import { AnalyticsService, OwUtilsService } from '@firestone/shared/framework/core';
 import domtoimage from 'dom-to-image-more';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
@@ -73,10 +63,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: remove store and use stateUpdater instead
-export class BgsBattlesViewComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterViewInit, AfterContentInit
-{
+export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	screenshotText$: Observable<string>;
 	screenshotTooltip$: Observable<string>;
 
@@ -89,11 +76,9 @@ export class BgsBattlesViewComponent
 
 	@Input() set isMainWindow(value: boolean) {
 		this._isMainWindow = value;
-		this.ngAfterViewInit();
 	}
 
 	private _isMainWindow: boolean;
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	private screenshotText$$ = new BehaviorSubject<string>(null);
 	private screenshotTooltip$$ = new BehaviorSubject<string>('Copy the list of battles to your clipboard');
@@ -101,7 +86,6 @@ export class BgsBattlesViewComponent
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly owUtils: OwUtilsService,
 	) {
@@ -111,10 +95,6 @@ export class BgsBattlesViewComponent
 	ngAfterContentInit(): void {
 		this.screenshotText$ = this.screenshotText$$.asObservable();
 		this.screenshotTooltip$ = this.screenshotTooltip$$.asObservable();
-	}
-
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
@@ -128,7 +108,7 @@ export class BgsBattlesViewComponent
 	}
 
 	closeBattle() {
-		this.battlegroundsUpdater.next(new BgsSelectBattleEvent(null));
+		// Can't display the battle itself in the BG window, it automatically imports it in the simulator
 	}
 
 	trackByFn(index: number, item: BgsFaceOffWithSimulation) {

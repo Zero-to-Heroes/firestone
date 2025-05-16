@@ -8,6 +8,7 @@ export class GameEvent implements GameStateEvent {
 	// public static readonly GAME_STATS_UPDATED = 'GAME_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
 	public static readonly GLOBAL_STATS_UPDATED = 'GLOBAL_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
 	public static readonly MATCH_METADATA = 'MATCH_METADATA';
+	public static readonly REVIEW_ID = 'REVIEW_ID';
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
@@ -144,6 +145,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
 	public static readonly BATTLEGROUNDS_HERO_SELECTION = 'BATTLEGROUNDS_HERO_SELECTION';
 	public static readonly BATTLEGROUNDS_HERO_SELECTED = 'BATTLEGROUNDS_HERO_SELECTED';
+	public static readonly BATTLEGROUNDS_GLOBAL_INFO_UPDATE = 'BATTLEGROUNDS_GLOBAL_INFO_UPDATE';
 	public static readonly BATTLEGROUNDS_HERO_REROLL = 'BATTLEGROUNDS_HERO_REROLL';
 	public static readonly BATTLEGROUNDS_TRINKET_SELECTION = 'BATTLEGROUNDS_TRINKET_SELECTION';
 	public static readonly BATTLEGROUNDS_TRINKET_SELECTED = 'BATTLEGROUNDS_TRINKET_SELECTED';
@@ -161,14 +163,16 @@ export class GameEvent implements GameStateEvent {
 	public static readonly BATTLEGROUNDS_COMBAT_START = 'BATTLEGROUNDS_COMBAT_START';
 	public static readonly BATTLEGROUNDS_RECRUIT_PHASE = 'BATTLEGROUNDS_RECRUIT_PHASE';
 	public static readonly BATTLEGROUNDS_BATTLE_RESULT = 'BATTLEGROUNDS_BATTLE_RESULT';
+	public static readonly BATTLEGROUNDS_BATTLE_SIMULATION = 'BATTLEGROUNDS_BATTLE_SIMULATION';
 	public static readonly BATTLEGROUNDS_TRIPLE = 'BATTLEGROUNDS_TRIPLE';
 	public static readonly BATTLEGROUNDS_REROLL = 'BATTLEGROUNDS_REROLL';
 	public static readonly BATTLEGROUNDS_FREEZE = 'BATTLEGROUNDS_FREEZE';
 	public static readonly BATTLEGROUNDS_MINION_BOUGHT = 'BATTLEGROUNDS_MINION_BOUGHT';
 	public static readonly BATTLEGROUNDS_MINION_SOLD = 'BATTLEGROUNDS_MINION_SOLD';
-	public static readonly BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN = 'BATTLEGROUNDS_EXTRA_GOLD_NEXT_TURN';
 	public static readonly BATTLEGROUNDS_ENEMY_HERO_KILLED = 'BATTLEGROUNDS_ENEMY_HERO_KILLED';
 	public static readonly BATTLEGROUNDS_ACTIVE_PLAYER_BOARD = 'BATTLEGROUNDS_ACTIVE_PLAYER_BOARD';
+	public static readonly BATTLEGROUNDS_ACTIVE_PLAYER_BOARD_PROCESS = 'BATTLEGROUNDS_ACTIVE_PLAYER_BOARD_PROCESS';
+	public static readonly BATTLEGROUNDS_REAL_TIME_STATS_UPDATE = 'BATTLEGROUNDS_REAL_TIME_STATS_UPDATE';
 
 	public static readonly MERCENARIES_HERO_REVEALED = 'MERCENARIES_HERO_REVEALED';
 	public static readonly MERCENARIES_ABILITY_REVEALED = 'MERCENARIES_ABILITY_REVEALED';
@@ -192,6 +196,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly PLAYER_DECK_INFO = 'PLAYER_DECK_INFO';
 	public static readonly MERCENARIES_INFO = 'MERCENARIES_INFO';
 	public static readonly BATTLEGROUNDS_INFO = 'BATTLEGROUNDS_INFO';
+	public static readonly BATTLEGROUNDS_MMR_AT_START = 'BATTLEGROUNDS_MMR_AT_START';
 
 	readonly type: string;
 	readonly cardId: string;

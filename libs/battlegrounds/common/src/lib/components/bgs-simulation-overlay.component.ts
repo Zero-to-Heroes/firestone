@@ -7,12 +7,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsFaceOffWithSimulation } from '@firestone/game-state';
+import { BgsFaceOffWithSimulation, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { BgsStateFacadeService } from '../services/bgs-state-facade.service';
 
 @Component({
 	selector: 'bgs-simulation-overlay',
@@ -36,7 +35,7 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
-		private readonly gameState: BgsStateFacadeService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -45,7 +44,7 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		await Promise.all([this.prefs.isReady, this.gameState.isReady()]);
 
 		this.nextBattle$ = combineLatest([
-			this.gameState.gameState$$.pipe(this.mapData((state) => state?.currentGame)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state?.bgState.currentGame)),
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					bgsShowSimResultsOnlyOnRecruit: prefs?.bgsShowSimResultsOnlyOnRecruit,

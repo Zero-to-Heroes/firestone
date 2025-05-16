@@ -22,6 +22,5 @@ export * from './lib/services/deck-utils';
 export * from './lib/services/game-connection.service';
 export * from './lib/services/game-events-facade.service';
 export * from './lib/services/game-state-facade.service';
-export * from './lib/services/game-state-updates.service';
 export * from './lib/services/game-unique-id.service';
 export * from './lib/services/review-id.interface';

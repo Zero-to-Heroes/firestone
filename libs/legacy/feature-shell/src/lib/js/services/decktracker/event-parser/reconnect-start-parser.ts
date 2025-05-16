@@ -17,10 +17,14 @@ export class ReconnectStartParser implements EventParser {
 					board: [],
 			  })
 			: currentState.opponentDeck;
+		const newBgState = currentState.bgState?.update({
+			duoPendingBoards: [],
+		});
 		return currentState.update({
 			reconnectOngoing: true,
 			hasReconnected: true,
 			opponentDeck: newOpponentState,
+			bgState: newBgState,
 		});
 	}
 

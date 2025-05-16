@@ -37,6 +37,7 @@ export class BgsWinrateChartComponent {
 	@Input() set heroStat(
 		value: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] } | BgsQuestStat,
 	) {
+		console.debug('[bgs-winrate-chart] heroStat', value);
 		if (!value) {
 			return;
 		}
@@ -51,6 +52,7 @@ export class BgsWinrateChartComponent {
 			})
 			.filter((stat) => stat)
 			.slice(0, 15);
+		console.debug('[bgs-winrate-chart] communityValues', communityValues, value);
 		if (
 			this.communityValues?.length &&
 			communityValues?.length &&

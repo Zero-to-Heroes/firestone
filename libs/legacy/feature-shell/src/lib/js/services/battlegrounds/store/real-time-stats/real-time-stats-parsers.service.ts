@@ -27,7 +27,6 @@ import { RTStatsReconnectStartParser } from './event-parsers/rtstats-reconnect-s
 import { RTStatsResourcesWastedPerTurnParser } from './event-parsers/rtstats-resources-wasted-per-turn-parser';
 import { RTStatsTotalDamageDealtByHeroesParser } from './event-parsers/rtstats-total-damage-dealt-by-heroes-parser';
 import { RTStatsTotalDamageDealtByMinionsParser } from './event-parsers/rtstats-total-damage-dealt-by-minions-parser';
-import { RTStatsTotalDamageTakenByHeroesParser } from './event-parsers/rtstats-total-damage-taken-by-heroes-parser';
 import { RTStatsTotalDamageTakenByMinionsParser } from './event-parsers/rtstats-total-damage-taken-by-minions-parser';
 import { RTStatTurnStartParser } from './event-parsers/rtstats-turn-start-parser';
 
@@ -59,7 +58,7 @@ export class RealTimeStatsParsersService {
 				new RTStatsTotalDamageDealtByMinionsParser(this.allCards),
 				new RTStatsTotalDamageTakenByMinionsParser(this.allCards),
 				new RTStatsTotalDamageDealtByHeroesParser(this.allCards),
-				new RTStatsTotalDamageTakenByHeroesParser(this.allCards),
+				// new RTStatsTotalDamageTakenByHeroesParser(this.allCards),
 			],
 			[GameEvent.GAME_START]: [new RTStatsGameStartParser()],
 			[GameEvent.HERO_POWER_USED]: [new RTStatHeroPowerUsedParser()],

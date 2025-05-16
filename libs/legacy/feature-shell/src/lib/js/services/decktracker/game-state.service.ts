@@ -1,35 +1,30 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import {
-	DeckCard,
-	DeckState,
-	GameState,
-	GameStateUpdatesService,
-	HeroCard,
-	PlayerGameState,
-} from '@firestone/game-state';
+import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+import { DeckCard, DeckState, GameState, HeroCard, PlayerGameState, RealTimeStatsState } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
-import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { hasTag } from '@services/decktracker/attack-on-board.service';
+import { BehaviorSubject, distinctUntilChanged, filter } from 'rxjs';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
+import { BgsBestUserStatsService } from '../battlegrounds/bgs-best-user-stats.service';
+import { RealTimeStatsService } from '../battlegrounds/store/real-time-stats/real-time-stats.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { ProcessingQueue } from '../processing-queue.service';
-import { chunk, uuid } from '../utils';
-import { DeckCardService } from './deck-card.service';
+import { chunk } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
-import { StatePostProcessService } from './game-state/state-post-process.service';
 import { OverlayDisplayService } from './overlay-display.service';
-import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
 export class GameStateService {
@@ -51,7 +46,6 @@ export class GameStateService {
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
 	private eventEmitters: ((state: GameState) => void)[] = [];
 
-	private currentReviewId: string;
 	private secretWillTrigger: {
 		cardId: string;
 		reactingToCardId: string;
@@ -64,22 +58,24 @@ export class GameStateService {
 
 	private showDecktrackerFromGameMode: boolean;
 
+	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
+
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly events: Events,
 		private readonly gameStateMetaInfos: GameStateMetaInfoService,
-		private readonly zoneOrdering: ZoneOrderingService,
 		private readonly prefs: PreferencesService,
 		private readonly twitch: TwitchAuthService,
-		private readonly deckCardService: DeckCardService,
 		private readonly ow: OverwolfService,
 		private readonly secretsParser: SecretsParserService,
-		private readonly attackOnBoardService: AttackOnBoardService,
-		private readonly gameStateUpdates: GameStateUpdatesService,
 		private readonly parserService: GameStateParsersService,
-		private readonly statePostProcessService: StatePostProcessService,
 		// Just to make sure decktrackerDisplayEventBus is defined
 		private readonly display: OverlayDisplayService,
+		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
+		private readonly realTimeStats: RealTimeStatsService,
+		private readonly simulation: BgsBattleSimulationService,
+		private readonly bgsNav: BgsInGameWindowNavigationService,
+		private readonly bgsUserStatsService: BgsBestUserStatsService,
 	) {
 		this.init();
 	}
@@ -87,12 +83,12 @@ export class GameStateService {
 	private async init() {
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckUpdater'] = this.deckUpdater;
+		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
 		if (!this.ow) {
 			console.warn('[game-state] Could not find OW service');
 			return;
 		}
 
-		await this.gameStateUpdates.isReady();
 		await this.prefs.isReady();
 
 		this.eventParsers = this.parserService.buildEventParsers();
@@ -113,6 +109,34 @@ export class GameStateService {
 		this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
 			this.processingQueue.enqueue(event);
 		});
+		this.matchMemoryInfo.battlegroundsMemoryInfo$$.pipe(filter((info) => !!info)).subscribe((info) =>
+			this.processingQueue.enqueue({
+				type: GameEvent.BATTLEGROUNDS_GLOBAL_INFO_UPDATE,
+				additionalData: {
+					info: info,
+				},
+			}),
+		);
+		this.simulation.battleInfo$$.pipe(filter((info) => !!info)).subscribe((info) => {
+			this.processingQueue.enqueue({
+				type: GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION,
+				additionalData: {
+					info: info,
+				},
+			});
+		});
+		this.realTimeStats.addListener((statsState: RealTimeStatsState) => {
+			this.processingQueue.enqueue({
+				type: GameEvent.BATTLEGROUNDS_REAL_TIME_STATS_UPDATE,
+				additionalData: {
+					stats: statsState,
+				},
+			});
+		});
+		this.battlegroundsWindowsListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
+			this.bgsNav.toggleWindow();
+		});
+
 		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		decktrackerDisplayEventBus.subscribe((event) => {
 			if (this.showDecktrackerFromGameMode === event) {
@@ -128,34 +152,7 @@ export class GameStateService {
 		}
 	}
 
-	// TODO: this should move elsewhere
-	public async getCurrentReviewId(): Promise<string> {
-		return new Promise<string>((resolve) => this.getCurrentReviewIdInternal((reviewId) => resolve(reviewId)));
-	}
-
-	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
-		if (retriesLeft <= 0) {
-			console.error('[game-state] Review ID was never set, assigning new one');
-			this.currentReviewId = uuid();
-		}
-		if (!this.currentReviewId) {
-			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 1000);
-			return;
-		}
-		callback(this.currentReviewId);
-	}
-
 	private registerGameEvents() {
-		this.gameEvents.onGameStart.subscribe((event) => {
-			console.log('[game-state] game start event received, resetting currentReviewId');
-			this.currentReviewId = uuid();
-			console.log('[game-state] built currentReviewId', this.currentReviewId);
-			const info = {
-				type: 'new-empty-review',
-				reviewId: this.currentReviewId,
-			};
-			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
-		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
@@ -164,6 +161,24 @@ export class GameStateService {
 			.subscribe((event) =>
 				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
 			);
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
+			const info: ManastormInfo = event.data[0];
+			console.debug('[bgs-store] Replay created, received info', info.type);
+			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
+			// could be already reset when it arrives
+			if (info && info.type === 'new-review' && this.state?.bgState?.currentGame) {
+				const currentGame = this.state.bgState.currentGame;
+				console.debug('[bgs-store] will trigger START_BGS_RUN_STATS');
+				const bestBgsUserStats = await this.bgsUserStatsService.bestStats$$.getValueWithInit();
+				this.events.broadcast(
+					Events.START_BGS_RUN_STATS,
+					info.reviewId,
+					currentGame,
+					bestBgsUserStats,
+					info.game,
+				);
+			}
+		});
 
 		// Reset the deck if it exists
 		// this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
@@ -171,6 +186,8 @@ export class GameStateService {
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
 		// So that ZONE_POSITION_CHANGED events are processed a bit more often
+		const gameEndEvent = eventQueue.find((event) => event.type === GameEvent.GAME_END);
+		const shouldProcessGameEnd = gameEndEvent && eventQueue.length === 1;
 		const chunks = chunk(eventQueue, 50);
 		for (const subQueue of chunks) {
 			try {
@@ -185,6 +202,7 @@ export class GameStateService {
 				const dataScriptChangedEvent = mergeDataScriptChangedEvents(
 					subQueue.filter((event) => event.type === GameEvent.DATA_SCRIPT_CHANGED) as GameEvent[],
 				);
+				const gameEndEvent = subQueue.find((event) => event.type === GameEvent.GAME_END);
 				// Processing these should be super quick, as in most cases they won't lead to a state update
 				// const attackOnBoardEvents = subQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
 				const eventsToProcess = [
@@ -192,12 +210,14 @@ export class GameStateService {
 						(event) =>
 							event.type !== GameEvent.GAME_STATE_UPDATE &&
 							event.type !== GameEvent.ZONE_POSITION_CHANGED &&
-							event.type !== GameEvent.DATA_SCRIPT_CHANGED,
+							event.type !== GameEvent.DATA_SCRIPT_CHANGED &&
+							event.type !== GameEvent.GAME_END,
 					),
 					// stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 					zonePositionChangedEvent,
 					dataScriptChangedEvent,
 					stateUpdateEvent,
+					shouldProcessGameEnd ? gameEndEvent : null,
 					// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 				].filter((event) => event);
 				const start = Date.now();
@@ -278,7 +298,7 @@ export class GameStateService {
 				console.error('Exception while processing event', e);
 			}
 		}
-		return [];
+		return shouldProcessGameEnd || !gameEndEvent ? [] : [gameEndEvent];
 	}
 
 	private async processNonMatchEvent(currentState: GameState, event: GameStateEvent): Promise<GameState> {
@@ -304,6 +324,12 @@ export class GameStateService {
 				if (parser.applies(event, currentState)) {
 					currentState = await parser.parse(currentState, event);
 				}
+				if (parser?.sideEffects) {
+					// Don't block the main parser loop
+					setTimeout(() => {
+						parser.sideEffects(event, this.gameEvents);
+					});
+				}
 				// if (!this.state) {
 				// 	console.error('[game-state] parser returned null state for non-match event', parser.event());
 				// }
@@ -321,6 +347,7 @@ export class GameStateService {
 		return currentState;
 	}
 
+	public processedEvents = [];
 	private async processEvent(currentState: GameState, gameEvent: GameEvent, prefs: Preferences): Promise<GameState> {
 		const start = Date.now();
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
@@ -400,14 +427,8 @@ export class GameStateService {
 			);
 		}
 
-		// console.debug(
-		// 	'[game-state] processed event',
-		// 	gameEvent.type,
-		// 	gameEvent.cardId,
-		// 	currentState.playerDeck.deck.filter((d) => d.positionFromTop),
-		// 	currentState,
-		// 	gameEvent,
-		// );
+		console.debug('[game-state] processed event', gameEvent.type, gameEvent.cardId, currentState, gameEvent);
+		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}
 
@@ -456,10 +477,7 @@ export class GameStateService {
 	}
 
 	private async buildEventEmitters() {
-		const result = [
-			(event: GameState) => this.deckEventBus.next(event),
-			(event: GameState) => this.gameStateUpdates.updateGameState(event),
-		];
+		const result = [(event: GameState) => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
 		console.log('is logged in to Twitch?', !!prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {

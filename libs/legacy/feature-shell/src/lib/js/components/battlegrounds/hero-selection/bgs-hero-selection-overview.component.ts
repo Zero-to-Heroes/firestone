@@ -1,10 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
-import {
-	BgsPlayerHeroStatsService,
-	BgsStateFacadeService,
-	DEFAULT_MMR_PERCENTILE,
-} from '@firestone/battlegrounds/common';
+import { BgsPlayerHeroStatsService, DEFAULT_MMR_PERCENTILE } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -77,7 +73,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 		private readonly prefs: PreferencesService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly ads: AdService,
-		private readonly bgsState: BgsStateFacadeService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly achievements: AchievementsStateManagerService,
 	) {
@@ -85,28 +80,22 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(
-			this.playerHeroStats,
-			this.ads,
-			this.bgsState,
-			this.prefs,
-			this.achievements,
-			this.gameState,
-		);
+		await waitForReady(this.playerHeroStats, this.ads, this.prefs, this.achievements, this.gameState);
 
 		const statsConfig$: Observable<ExtendedConfig> = combineLatest([
 			this.gameState.gameState$$,
-			this.bgsState.gameState$$,
 			this.prefs.preferences$$,
 		]).pipe(
-			this.mapData(([gameState, bgState, prefs]) => {
+			this.mapData(([gameState, prefs]) => {
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
-					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? bgState.currentGame?.mmrAtStart ?? 0 : null,
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
+						? gameState?.bgState.currentGame?.mmrAtStart ?? 0
+						: null,
 					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
-						? bgState.currentGame?.availableRaces
+						? gameState.bgState.currentGame?.availableRaces
 						: [],
 					anomaliesFilter: [] as readonly string[], //bgState.currentGame?.anomalies ?? [],
 				};
@@ -126,12 +115,12 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 		this.heroOverviews$ = combineLatest([
 			tiers$,
 			this.achievements.groupedAchievements$$,
-			this.bgsState.gameState$$.pipe(
+			this.gameState.gameState$$.pipe(
 				this.mapData(
-					(state) =>
+					(gameState) =>
 						// Filter here to avoid recomputing achievements info every time something changes in
 						// another panel (finding the right panel is inexpensive)
-						state.panels?.find(
+						gameState.bgState.panels?.find(
 							(panel) => panel.id === 'bgs-hero-selection-overview',
 						) as BgsHeroSelectionOverviewPanel,
 				),
