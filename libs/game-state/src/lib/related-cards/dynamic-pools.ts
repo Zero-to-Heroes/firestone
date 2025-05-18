@@ -19,11 +19,9 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 
-import {
-	DeckState,
-	GameState,
-	PlayerGameState,
-} from '@firestone/game-state';
+import { DeckState } from '../models/deck-state';
+import { GameState } from '../models/game-state';
+import { PlayerGameState } from '../models/full-game-state';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -63,8 +61,8 @@ export const getDynamicRelatedCardIds = (
 				cardId,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-					c?.cost === 10,
+					hasCorrectType(c, CardType.MINION) &&
+					hasCost(c, '==', 10),
 			);
 		case CardIds.WhackAGnoll_MIS_700:
 			return filterCards(
@@ -73,7 +71,7 @@ export const getDynamicRelatedCardIds = (
 				cardId,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-					c?.type?.toUpperCase() === CardType[CardType.WEAPON] &&
+					hasCorrectType(c, CardType.WEAPON) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
 		case CardIds.ErodedSediment_WW_428:
@@ -91,9 +89,9 @@ export const getDynamicRelatedCardIds = (
 				{ ...options, format: GameFormat.FT_WILD },
 				cardId,
 				(c) =>
-					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasCorrectType(c, CardType.MINION) &&
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-					c?.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
+					hasCorrectRarity(c, CardRarity.LEGENDARY),
 			);
 		case CardIds.Botface_TOY_906:
 			// TODO: Fix these minis not showing up properly (are minis tagged properly?)
@@ -102,10 +100,10 @@ export const getDynamicRelatedCardIds = (
 				allCards,
 				{ ...options, format: GameFormat.FT_WILD },
 				cardId,
-				(c) => 
+				(c) =>
 					c?.mechanics?.includes(GameTag[GameTag.MINI]),
 			);
-	
+
 		case CardIds.EmergencyMeeting_GDB_119:
 			return [
 				...CREWMATES,
@@ -114,8 +112,8 @@ export const getDynamicRelatedCardIds = (
 					options,
 					cardId,
 					(c) =>
-						c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-						(c?.cost ?? 0) <= 3 &&
+						hasCorrectType(c, CardType.MINION) &&
+						hasCost(c, '<=', 3) &&
 						hasCorrectTribe(c, Race.DEMON),
 				),
 			];
@@ -131,7 +129,7 @@ export const getDynamicRelatedCardIds = (
 					.filter((c) =>
 						!!c.set
 							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-							  isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
+							isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
 					.sort(
@@ -167,340 +165,365 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
+
+		case CardIds.NecroticMortician:
+		case CardIds.NecroticMortician_CORE_RLK_116:
+			return (c) =>
+				hasCorrectRune(c, 'UNHOLY');
+		case CardIds.Hematurge_RLK_066:
+		case CardIds.Hematurge_CORE_RLK_066:
+			return (c) =>
+				hasCorrectRune(c, 'BLOOD');
+		case CardIds.FrostStrike:
+		case CardIds.FrostStrikeCore:
+			return (c) =>
+				hasCorrectRune(c, 'FROST');
+		
+		case CardIds.CorpseFarm_WW_374:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==',
+					Math.min(
+						8,
+						getPlayerTag(getPlayerOrOpponent(options.deckState, options.gameState), GameTag.CORPSES)
+					)
+				) && 
+				!hasCost(c, '==', 0); // Corpse Farm cannot be played if at 0 Corpses 
 		case CardIds.BlessingOfTheDragon_EmeraldPortalToken_EDR_445pt3:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DRAGON) &&
-				(c?.cost ?? 0) === Math.min(
-					10,
-					getPlayerOrOpponent(options.deckState, options.gameState)?.PlayerEntity?.tags?.find(
-						(t) => t.Name === GameTag.IMBUES_THIS_GAME,
-					)?.Value ?? 0,
+				hasCost(c, '==',
+					Math.min(
+						10,
+						getPlayerTag(getPlayerOrOpponent(options.deckState, options.gameState), GameTag.IMBUES_THIS_GAME)
+					)
 				);
 		case CardIds.ShiftySophomore:
 			return (c) =>
-				c.mechanics?.includes(GameTag[GameTag.COMBO]);
+				hasMechanic(c, GameTag.COMBO);
 		case CardIds.BloodsailRecruiter_VAC_430:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.PIRATE);
 		case CardIds.ObserverOfMysteries_TOY_520:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.mechanics?.includes(GameTag[GameTag.SECRET]);
+				hasCorrectType(c, CardType.SPELL) &&
+				hasMechanic(c, GameTag.SECRET);
 		case CardIds.DelayedProduct_MIS_305:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) >= 8 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '>=', 8) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CraftersAura_TOY_808:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) === 6;
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 6);
 		case CardIds.SpotTheDifference_TOY_374:
 		case CardIds.IncredibleValue_TOY_046:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) === 4 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 4) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.HiddenObjects_TOY_037:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && 
-				c?.mechanics?.includes(GameTag[GameTag.SECRET]) &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasMechanic(c, GameTag.SECRET) &&
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.WindowShopper_TOY_652:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.BlindBox_TOY_643:
 			return (c) =>
-				c?.type.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON);
 		case CardIds.SilkStitching_TOY_822:
 			return (c) =>
-				c?.type.toUpperCase() === CardType[CardType.SPELL] &&
-				(c?.cost ?? 0) <= 4 &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '<=', 4) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.ChaoticTendril_YOG_514:
 			return (c) =>
-				c?.type.toUpperCase() === CardType[CardType.SPELL] &&
-				(c?.cost ?? 0) === options.deckState.chaoticTendrilsPlayedThisMatch + 1;
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '==', options.deckState.chaoticTendrilsPlayedThisMatch + 1);
 		case CardIds.RunesOfDarkness_YOG_511:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.WEAPON] &&
+				hasCorrectType(c, CardType.WEAPON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.OnceUponATime_TOY_506:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(hasCorrectTribe(c, Race.BEAST) || 
-					hasCorrectTribe(c, Race.DRAGON) || 
-					hasCorrectTribe(c, Race.ELEMENTAL) || 
+				hasCorrectType(c, CardType.MINION) &&
+				(hasCorrectTribe(c, Race.BEAST) ||
+					hasCorrectTribe(c, Race.DRAGON) ||
+					hasCorrectTribe(c, Race.ELEMENTAL) ||
 					hasCorrectTribe(c, Race.MURLOC)) &&
-				(c?.cost ?? 0) == 3;
+				hasCost(c, '==', 3);
 		case CardIds.PartnerAssignment:
-			return (c) => 
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
-				((c?.cost ?? 0) === 2 || (c?.cost ?? 0) == 3);
+				(hasCost(c, '==', 2) || hasCost(c, '==', 3));
 		case CardIds.FoolsGold_DEEP_022:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				(hasCorrectTribe(c, Race.PIRATE) || hasCorrectTribe(c, Race.ELEMENTAL)) &&
-				fromAnotherClass(c, options.currentClass);	
+				fromAnotherClass(c, options.currentClass);
 		case CardIds.RitualOfTheNewMoon_EDR_461:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				((c?.cost ?? 0) === 6 || (c?.cost ?? 0) == 3);
-		
-		case CardIds.GorillabotA3Core:	
+				hasCorrectType(c, CardType.MINION) &&
+				(hasCost(c, '==', 6) || hasCost(c, '==', 3));
+
+		case CardIds.GorillabotA3Core:
 		case CardIds.GorillabotA3:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH);
 		case CardIds.MismatchedFossils_DEEP_001:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(hasCorrectTribe(c, Race.BEAST) || 
+				hasCorrectType(c, CardType.MINION) &&
+				(hasCorrectTribe(c, Race.BEAST) ||
 					hasCorrectTribe(c, Race.UNDEAD));
 		case CardIds.ObsidianRevenant_DEEP_005:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]) &&
-				(c?.cost ?? 0) <= 3;
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.DEATHRATTLE) &&
+				hasCost(c, '<=', 3);
 		case CardIds.Mothership_TSC_645:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH) &&
-				(c?.cost ?? 0) <= 3;
+				hasCost(c, '<=', 3);
 		case CardIds.OasisOutlaws_WW_404:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.NAGA) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CactusConstruct_WW_818:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) === 2 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 2) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SaddleUp_WW_812:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
-				(c?.cost ?? 0) <= 3;
+				hasCost(c, '<=', 3);
 		case CardIds.ReliquaryResearcher_WW_432:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && 
-				c?.mechanics?.includes(GameTag[GameTag.SECRET]) &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasMechanic(c, GameTag.SECRET) &&
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.WishingWell_WW_415:
 		case CardIds.SneedsOldShredder_CORE_GVG_114:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY];
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectRarity(c, CardRarity.LEGENDARY);
 		case CardIds.MaruutStonebinder_DEEP_037:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.ELEMENTAL);
 		case CardIds.WildernessPack_MIS_104:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				hasCorrectTribe(c, Race.BEAST);		
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.BEAST);
 		case CardIds.TeachersPet:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
-				(c?.cost ?? 0) === 3;
+				hasCost(c, '==', 3);
 		case CardIds.PackKodo:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(hasCorrectTribe(c, Race.BEAST) ||
-					(c?.type?.toUpperCase() === CardType[CardType.SPELL] && 
+				(hasCorrectType(c, CardType.MINION) ||
+					(hasCorrectType(c, CardType.SPELL) &&
 						c?.mechanics?.includes(GameTag[GameTag.SECRET])) ||
-					c?.type?.toUpperCase() === CardType[CardType.WEAPON]
+					hasCorrectType(c, CardType.WEAPON)
 				) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SchoolTeacher:
 			// TODO: Add nagaling token 
-			return (c) => 
-					(c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-					(c?.cost ?? 0) <= 3 &&
-					canBeDiscoveredByClass(c, options.currentClass));
+			return (c) =>
+			(hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '<=', 3) &&
+				canBeDiscoveredByClass(c, options.currentClass));
 		case CardIds.EverythingMustGo_TOY_519:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) === 4;
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 4);
 		case CardIds.AzsharanScroll:
-		case CardIds.AzsharanScroll_SunkenScrollToken: 
+		case CardIds.AzsharanScroll_SunkenScrollToken:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				c?.classes?.includes(options.currentClass.toUpperCase()) &&
-				(c?.spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) || 
-					c?.spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ||
-					c?.spellSchool?.includes(SpellSchool[SpellSchool.NATURE]))
+				(
+					hasCorrectSpellSchool(c, SpellSchool.FIRE) ||
+					hasCorrectSpellSchool(c, SpellSchool.FROST) ||
+					hasCorrectSpellSchool(c, SpellSchool.NATURE)
+				);
 		case CardIds.Peon_BAR_022:
 		case CardIds.OnyxMagescribe:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				c?.classes?.includes(options.currentClass.toUpperCase());
 		case CardIds.Jackpot:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				(c?.cost ?? 0) >= 5 &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '>=', 5) &&
 				fromAnotherClass(c, options.currentClass);
 		case CardIds.SunkenSweeper:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH);
 		case CardIds.SubmergedSpacerock:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]) &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCorrectSpellSchool(c, SpellSchool.ARCANE) &&
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.SavoryDeviateDelight:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				(hasCorrectTribe(c, Race.PIRATE) ||
 					c.mechanics?.includes(GameTag[GameTag.STEALTH]));
 		case CardIds.PlaguedProtodrake:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) === 7;
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 7);
 		case CardIds.ExarchHataaru_GDB_136:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InstructorFireheart:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				(c.cost ?? 0) >= 1 &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '>=', 1) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.TrickTotem_SCH_537:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				(c.cost ?? 0) <= 3
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '<=', 3);
 		case CardIds.WandThief_SCH_350:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				c.classes?.includes(CardClass[CardClass.MAGE])
 		case CardIds.SunsetVolley_WW_427:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c?.cost ?? 0) === 10;
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 10);
 		case CardIds.TrainingSession_NX2_029:
 		case CardIds.HikingTrail_VAC_517:
 		case CardIds.StonehillDefender_Core_UNG_072:
 		case CardIds.IKnowAGuy_CORE_WON_350:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.TAUNT) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.StandardizedPack_MIS_705:
 		case CardIds.InFormation:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.TAUNT);
 		case CardIds.SmokeBomb_FIR_920:
 			return (c) =>
 				canBeDiscoveredByClass(c, options.currentClass) &&
-				c.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c.mechanics?.includes(GameTag[GameTag.COMBO]) ||
-					c.mechanics?.includes(GameTag[GameTag.BATTLECRY]) ||
-					c.mechanics?.includes(GameTag[GameTag.STEALTH]));
+				hasCorrectType(c, CardType.MINION) &&
+				(hasMechanic(c, GameTag.COMBO) ||
+					hasMechanic(c, GameTag.BATTLECRY) ||
+					hasMechanic(c, GameTag.STEALTH));
 		case CardIds.ShadowflameSuffusion_FIR_939:
 			return (c) =>
-				c.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				c.classes?.includes(CardClass[CardClass.WARRIOR]);
 		case CardIds.AmbassadorFaelin_TSC_067:
 			return (c) =>
-				c.type?.toUpperCase() === CardType[CardType.MINION] && c.mechanics?.includes(GameTag[GameTag.COLOSSAL]);
+				hasCorrectType(c, CardType.MINION) && hasMechanic(c, GameTag.COLOSSAL);
 		case CardIds.FyrakkTheBlazing_FIR_959:
 			return (c) =>
-				c.spellSchool?.toUpperCase() === SpellSchool[SpellSchool.FIRE] &&
-				c.type?.toUpperCase() === CardType[CardType.SPELL];
+				hasCorrectSpellSchool(c, SpellSchool.FIRE) &&
+				hasCorrectType(c, CardType.SPELL);
 		case CardIds.Scorchreaver_FIR_952:
 			return (c) =>
 				canBeDiscoveredByClass(c, options.currentClass) &&
-				c.spellSchool === SpellSchool[SpellSchool.FEL] &&
-				c.type?.toUpperCase() === CardType[CardType.SPELL];
+				hasCorrectSpellSchool(c, SpellSchool.FEL) &&
+				hasCorrectType(c, CardType.SPELL);
 		case CardIds.ShadowflameStalker_FIR_924:
 			return (c) => hasCorrectTribe(c, Race.DEMON) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.EmberscarredWhelp_FIR_927:
-			return (c) => canBeDiscoveredByClass(c, options.currentClass) && c.cost === 5;
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 5);
 		case CardIds.Cremate_FIR_900:
-			return (c) => c.type?.toUpperCase() === CardType[CardType.MINION] && canBeDiscoveredByClass(c, options.currentClass);
+			return (c) => hasCorrectType(c, CardType.MINION) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InfernoHerald_FIR_913:
 			return (c) => hasCorrectTribe(c, Race.ELEMENTAL);
 		case CardIds.FarmHand_WW_358:
 		case CardIds.ToysnatchingGeist_MIS_006:
 		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
 		case CardIds.RiteOfAtrocity_EDR_811:
-			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
+			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass) && hasCorrectType(c, CardType.MINION);
 		case CardIds.SweetenedSnowflurry_TOY_307:
 		case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c.spellSchool === SpellSchool[SpellSchool.FROST];
+				hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FROST);
 		case CardIds.SparkOfLife_EDR_872:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				(c.classes?.includes(CardClass[CardClass.MAGE]) || c.classes?.includes(CardClass[CardClass.DRUID]))
 		case CardIds.BabblingBookcase_CORE_EDR_001:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c.classes?.includes(CardClass[CardClass.MAGE]);
+				hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.GiftOfFire_EDR_872A:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				c.classes?.includes(CardClass[CardClass.MAGE]) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.GiftOfNature_EDR_872B:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				c.classes?.includes(CardClass[CardClass.DRUID]) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.ForbiddenShrine_EDR_520:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c.cost === Math.min(10, options.deckState.manaLeft ?? 0);
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
 		case CardIds.Alarashi_EDR_493:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DEMON);
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.AvantGardening_EDR_488:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Jumpscare_EDR_882:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
-				(c.cost ?? 0) >= 5 &&
+				hasCost(c, '>=', 5) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		
+
 		case CardIds.Photosynthesis_EDR_848:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c.classes?.includes(CardClass[CardClass.DRUID]);
-		
+				hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.DRUID]);
+
 		case CardIds.Symbiosis_EDR_273:
 			return (c) => hasMechanic(c, GameTag.CHOOSE_ONE) && fromAnotherClass(c, options.currentClass);
 		case CardIds.DaydreamingPixie_EDR_530:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.spellSchool === SpellSchool[SpellSchool.NATURE];
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCorrectSpellSchool(c, SpellSchool.NATURE);
 		case CardIds.HornOfPlenty_EDR_270:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.spellSchool === SpellSchool[SpellSchool.NATURE] &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCorrectSpellSchool(c, SpellSchool.NATURE) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DragonTales_WW_821:
 		case CardIds.Ysondre_EDR_465:
 		case CardIds.SelenicDrake_EDR_462:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAGON);
-		case CardIds.Howdyfin_WW_333:	
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
+		case CardIds.Howdyfin_WW_333:
 		case CardIds.GnawingGreenfin_EDR_999:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.MURLOC);
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MURLOC);
 		case CardIds.TreacherousTormentor_EDR_102:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY] &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.FlintFirearm_WW_379:
 			return (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]);
@@ -510,31 +533,31 @@ const getDynamicFilters = (
 		case CardIds.LifebindersGift:
 		case CardIds.LifebindersBloom:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.spellSchool === SpellSchool[SpellSchool.NATURE];
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCorrectSpellSchool(c, SpellSchool.NATURE);
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
 			return (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION];
 		case CardIds.TravelSecurity_WORK_010:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 8;
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 		case CardIds.CreatureOfMadness_EDR_105:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.cost === 3 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 3) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DemonicDeal_WORK_014:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				(c.cost ?? 0) >= 5 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '>=', 5) &&
 				hasCorrectTribe(c, Race.DEMON);
-		
+
 		case CardIds.AssimilatingBlight_GDB_478:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.cost === 3 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 3) &&
 				canBeDiscoveredByClass(c, options.currentClass) &&
 				hasMechanic(c, GameTag.DEATHRATTLE);
-		
+
 		case CardIds.Blasteroid_GDB_303:
 		case CardIds.Supernova_GDB_301:
 			return (c) =>
@@ -543,25 +566,25 @@ const getDynamicFilters = (
 				c?.spellSchool?.includes(SpellSchool[SpellSchool.FIRE]);
 		case CardIds.ResonanceCoil_SC_760:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && c?.mechanics?.includes(GameTag[GameTag.PROTOSS]);
+				hasCorrectType(c, CardType.SPELL) && hasMechanic(c, GameTag.PROTOSS);
 		case CardIds.Mothership_SC_762:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.mechanics?.includes(GameTag[GameTag.PROTOSS]);
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.PROTOSS);
 		case CardIds.BroodQueen_LarvaToken_SC_003t:
 		case CardIds.BroodQueen_SC_003:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.mechanics?.includes(GameTag[GameTag.ZERG]) &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.ZERG) &&
 				c?.id !== CardIds.BroodQueen_SC_003;
 		case CardIds.WaywardProbe_SC_500:
-			return (c) => c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
+			return (c) => hasMechanic(c, GameTag.STARSHIP_PIECE);
 		case CardIds.DetailedNotes_GDB_844:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
 				canBeDiscoveredByClass(c, options.currentClass) &&
-				(c.cost ?? 0) >= 5;
+				hasCost(c, '>=', 5);
 
 		// Random X Cost Minion(s)
 		case CardIds.FirstContact_GDB_864:
@@ -569,8 +592,8 @@ const getDynamicFilters = (
 		case CardIds.FirstDayOfSchool:
 		case CardIds.ShimmerShot_DEEP_003:
 		case CardIds.BuildingBlockGolem_MIS_314:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 1;
-		
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
+
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.TwilightInfluence_EDR_463:
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
@@ -578,68 +601,68 @@ const getDynamicFilters = (
 		case CardIds.MazeGuide:
 		case CardIds.MazeGuide_CORE_REV_308:
 		case CardIds.DwarfPlanet_GDB_233:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 2;
-		
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
+
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
 		case CardIds.HiddenMeaning:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c?.cost === 3;
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
 
 		case CardIds.JandiceBarov_SCH_351:
 		case CardIds.WardOfEarth_EDR_060:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c.cost === 5;
-		
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 5);
+
 		case CardIds.FirelandsPortalCore:
 		case CardIds.FirelandsPortal:
 		case CardIds.ChaosCreation_DEEP_031:
 		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && c.cost === 6; 
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 6);
 
 		case CardIds.ScarabKeychain_TOY_006:
-			return (c) => canBeDiscoveredByClass(c, options.currentClass) && c?.cost === 2;
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 2);
 		case CardIds.ExarchOthaar_GDB_856:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]);
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCorrectSpellSchool(c, SpellSchool.ARCANE);
 		case CardIds.HuddleUp_WORK_012:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.NAGA);
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.NAGA);
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DRAENEI);
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAENEI);
 		case CardIds.RelentlessWrathguard_GDB_132:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.AbductionRay_GDB_123:
-			return (c) => c?.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.DEMON);
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.Nebula_GDB_479:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.cost === 8 &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 8) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Wandmaker:
 		case CardIds.Wandmaker_CORE_SCH_160:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
-				c?.cost === 1 &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '==', 1) &&
 				c?.classes?.includes(options.currentClass.toUpperCase());
 		case CardIds.PrimordialStudies_SCH_270:
 			return [
 				(c) => c?.id !== CardIds.Sif,
 				(c) =>
-					c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+					hasCorrectType(c, CardType.MINION) &&
 					hasMechanic(c, GameTag.SPELLPOWER) &&
 					canBeDiscoveredByClass(c, options.currentClass),
 			];
 		case CardIds.CarrionStudies:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.AthleticStudies_SCH_237:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.RUSH) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.IllidariStudiesCore:
@@ -647,12 +670,12 @@ const getDynamicFilters = (
 			return (c) => hasMechanic(c, GameTag.OUTCAST) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.NatureStudies_SCH_333:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] && canBeDiscoveredByClass(c, options.currentClass);
+				hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DemonicStudies:
 		case CardIds.DemonicStudies_CORE_SCH_158:
 		case CardIds.DemonicDynamics:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DraconicStudies:
@@ -660,21 +683,21 @@ const getDynamicFilters = (
 		case CardIds.NetherspiteHistorian:
 		case CardIds.Darkrider_EDR_456:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DRAGON) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.GalacticCrusader_GDB_862:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.SPELL] &&
+				hasCorrectType(c, CardType.SPELL) &&
 				c.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]);
 		case CardIds.ScroungingShipwright_GDB_876:
 		case CardIds.StarshipSchematic_GDB_102:
 			return (c) =>
-				c?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) && fromAnotherClass(c, options.currentClass);
+				hasMechanic(c, GameTag.STARSHIP_PIECE) && fromAnotherClass(c, options.currentClass);
 		case CardIds.LuckyComet_GDB_873:
 			return (c) =>
-				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
-				c?.mechanics?.includes(GameTag[GameTag.COMBO]) &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.COMBO) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		default:
 			return undefined;
@@ -709,16 +732,16 @@ const filterCards = (
 			.getCards()
 			.filter((c) => c.collectible)
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
-			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.TITAN]))
+			.filter((c) => !hasMechanic(c, GameTag.TITAN))
 			.filter((c) => !BAN_LIST.includes(c.id as CardIds))
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=6&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter(
 				(c) =>
-					!c.mechanics?.includes(GameTag[GameTag.QUEST]) &&
-					!c.mechanics?.includes(GameTag[GameTag.QUESTLINE]) &&
-					!c.mechanics?.includes(GameTag[GameTag.QUESTLINE_PART]),
+					!hasMechanic(c, GameTag.QUEST) &&
+					!hasMechanic(c, GameTag.QUESTLINE) &&
+					!hasMechanic(c, GameTag.QUESTLINE_PART),
 			)
-			.filter((c) => !c.mechanics?.includes(GameTag[GameTag.COLOSSAL]))
+			.filter((c) => !hasMechanic(c, GameTag.COLOSSAL))
 			.filter((c) => !hasThreeRunes(c))
 			.sort(
 				(a, b) =>
@@ -733,6 +756,37 @@ const filterCards = (
 		.filter((c) => !sourceCardId || c.id !== sourceCardId)
 		.map((c) => c.id);
 };
+
+// TODO: Move these to the hs-reference-data repo so it's all in the same place.
+
+const hasCorrectType = (card: ReferenceCard, targetType: CardType): boolean => {
+	return card?.type?.toUpperCase() === CardType[targetType];
+};
+
+const hasCorrectSpellSchool = (card: ReferenceCard, targetSpellSchool: SpellSchool): boolean => {
+	return card?.spellSchool?.toUpperCase() === SpellSchool[targetSpellSchool];
+};
+
+const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity): boolean => {
+	return card?.rarity?.toUpperCase() === CardRarity[targetRarity];
+};
+
+const getPlayerTag = (playerGameState: PlayerGameState | undefined, gameTag: GameTag, defaultValue: number = 0): number => {
+	return playerGameState?.PlayerEntity?.tags?.find((t) => t.Name === gameTag)?.Value ?? defaultValue
+}
+
+const hasCorrectRune = (card: ReferenceCard, runeType: string): boolean => {
+	switch (runeType) {
+		case 'BLOOD':
+			return (card?.additionalCosts?.BLOODRUNE ?? 0) > 0;
+		case 'UNHOLY':
+			return (card?.additionalCosts?.UNHOLYRUNE ?? 0) > 0;
+		case 'FROST':
+			return (card?.additionalCosts?.FROSTRUNE ?? 0) > 0;
+		default:
+			return false;
+	}
+}
 
 // https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=10&WikiBanPool_form_only%5BgameMode%5D=1
 const hasThreeRunes = (card: ReferenceCard): boolean => {
@@ -780,4 +834,20 @@ export const hasOverride = (
 	cards: readonly string[];
 } => {
 	return (result as { override: true; cards: readonly string[] })?.override;
+};
+
+const hasCost = (
+	card: ReferenceCard,
+	operator: '==' | '<=' | '>=' | '<' | '>' = '==',
+	value: number,
+): boolean => {
+	const cost = card?.cost ?? 0;
+	switch (operator) {
+		case '==': return cost === value;
+		case '<=': return cost <= value;
+		case '>=': return cost >= value;
+		case '<': return cost < value;
+		case '>': return cost > value;
+		default: return false;
+	}
 };
