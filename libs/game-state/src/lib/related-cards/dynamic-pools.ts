@@ -18,7 +18,12 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { DeckState } from '../models/deck-state';
+
+import {
+	DeckState,
+	GameState,
+	PlayerGameState,
+} from '@firestone/game-state';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -36,6 +41,7 @@ export const getDynamicRelatedCardIds = (
 		gameType: GameType;
 		currentClass: string;
 		deckState: DeckState;
+		gameState: GameState;
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
 	switch (cardId) {
@@ -157,9 +163,20 @@ const getDynamicFilters = (
 		gameType: GameType;
 		currentClass: string;
 		deckState: DeckState;
+		gameState: GameState;
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
+		case CardIds.BlessingOfTheDragon_EmeraldPortalToken_EDR_445pt3:
+			return (c) =>
+				c?.type?.toUpperCase() === CardType[CardType.MINION] &&
+				hasCorrectTribe(c, Race.DRAGON) &&
+				(c?.cost ?? 0) === Math.min(
+					10,
+					getPlayerOrOpponent(options.deckState, options.gameState)?.PlayerEntity?.tags?.find(
+						(t) => t.Name === GameTag.IMBUES_THIS_GAME,
+					)?.Value ?? 0,
+				);
 		case CardIds.ShiftySophomore:
 			return (c) =>
 				c.mechanics?.includes(GameTag[GameTag.COMBO]);
@@ -746,6 +763,15 @@ const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean =>
 		!card?.classes?.includes(CardClass[CardClass.NEUTRAL]) && !card?.classes?.includes(currentClass?.toUpperCase())
 	);
 };
+
+
+
+const getPlayerOrOpponent = (deckState: DeckState, gameState: GameState): PlayerGameState | undefined => {
+	return deckState.isOpponent
+		? gameState.fullGameState?.Opponent
+		: gameState.fullGameState?.Player;
+};
+
 
 export const hasOverride = (
 	result: readonly string[] | { override: true; cards: readonly string[] },

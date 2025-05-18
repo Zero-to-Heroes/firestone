@@ -1,5 +1,10 @@
 import { AfterContentInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
-import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
+import { 
+	DeckCard, 
+	DeckState, 
+	GameState, 
+	Metadata 
+} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -32,7 +37,7 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponen
 	// the play area are cropped
 	@Input() leftVwOffset: number;
 	@Input() topVwOffset: number;
-	@Input() context: { deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' };
+	@Input() context: { deck: DeckState; gameState: GameState, metadata: Metadata; currentTurn: number | 'mulligan' };
 	@Input() card: DeckCard;
 
 	constructor(

@@ -1,9 +1,13 @@
 /* eslint-disable no-case-declarations */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckState } from '../models/deck-state';
-import { Metadata } from '../models/metadata';
-import { getDynamicRelatedCardIds, hasOverride } from './dynamic-pools';
+import {
+	DeckState,
+	GameState,
+	getDynamicRelatedCardIds,
+	hasOverride,
+	Metadata,
+} from '@firestone/game-state';
 
 export const buildContextRelatedCardIds = (
 	cardId: string,
@@ -11,6 +15,7 @@ export const buildContextRelatedCardIds = (
 	deckState: DeckState,
 	metaData: Metadata,
 	allCards: CardsFacadeService,
+	gameState: GameState
 ): readonly string[] => {
 	switch (cardId) {
 		case CardIds.ETCBandManager_ETC_080:
@@ -25,6 +30,7 @@ export const buildContextRelatedCardIds = (
 				gameType: metaData.gameType,
 				currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 				deckState: deckState,
+				gameState: gameState
 			});
 			if (hasOverride(dynamicCards)) {
 				return (dynamicCards as { cards: readonly string[] }).cards;
