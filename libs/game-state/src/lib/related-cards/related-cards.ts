@@ -1,13 +1,10 @@
 /* eslint-disable no-case-declarations */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import {
-	DeckState,
-	GameState,
-	getDynamicRelatedCardIds,
-	hasOverride,
-	Metadata,
-} from '@firestone/game-state';
+import { DeckState } from '../models/deck-state';
+import { GameState } from '../models/game-state';
+import { Metadata } from '../models/metadata';
+import { getDynamicRelatedCardIds, hasOverride } from './dynamic-pools';
 
 export const buildContextRelatedCardIds = (
 	cardId: string,
