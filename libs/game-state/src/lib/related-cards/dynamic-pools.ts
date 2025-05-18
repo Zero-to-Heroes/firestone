@@ -48,8 +48,8 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.DreamplannerZephrys_ModestTourToken_WORK_027t1:
 		case CardIds.HopefulDryad_EDR_001:
 			return allCards.getCard(cardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId).id) ?? [];
-		case CardIds.FlutterwingGuardian_EDR_800:
 		case CardIds.BitterbloomKnight_EDR_852:
+		case CardIds.FlutterwingGuardian_EDR_800:
 			return {
 				override: true,
 				cards: IMBUED_HERO_POWERS.filter((hp) => allCards.getCard(hp).classes?.includes(options.currentClass)),
@@ -165,20 +165,25 @@ const getDynamicFilters = (
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
+		case CardIds.BlazingInvocation_CORE_GIL_836:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.BATTLECRY) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		case CardIds.NecroticMortician:
 		case CardIds.NecroticMortician_CORE_RLK_116:
 			return (c) =>
 				hasCorrectRune(c, 'UNHOLY');
-		case CardIds.Hematurge_RLK_066:
 		case CardIds.Hematurge_CORE_RLK_066:
+		case CardIds.Hematurge_RLK_066:
 			return (c) =>
 				hasCorrectRune(c, 'BLOOD');
 		case CardIds.FrostStrike:
 		case CardIds.FrostStrikeCore:
 			return (c) =>
 				hasCorrectRune(c, 'FROST');
-		
+
 		case CardIds.CorpseFarm_WW_374:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -187,7 +192,7 @@ const getDynamicFilters = (
 						8,
 						getPlayerTag(getPlayerOrOpponent(options.deckState, options.gameState), GameTag.CORPSES)
 					)
-				) && 
+				) &&
 				!hasCost(c, '==', 0); // Corpse Farm cannot be played if at 0 Corpses 
 		case CardIds.BlessingOfTheDragon_EmeraldPortalToken_EDR_445pt3:
 			return (c) =>
@@ -202,14 +207,16 @@ const getDynamicFilters = (
 		case CardIds.ShiftySophomore:
 			return (c) =>
 				hasMechanic(c, GameTag.COMBO);
-		case CardIds.BloodsailRecruiter_VAC_430:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.PIRATE);
+
 		case CardIds.ObserverOfMysteries_TOY_520:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasMechanic(c, GameTag.SECRET);
+		case CardIds.Perjury_CORE_MAW_018:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				hasMechanic(c, GameTag.SECRET) &&
+				fromAnotherClass(c, options.currentClass);
 		case CardIds.DelayedProduct_MIS_305:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -219,8 +226,8 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', 6);
-		case CardIds.SpotTheDifference_TOY_374:
 		case CardIds.IncredibleValue_TOY_046:
+		case CardIds.SpotTheDifference_TOY_374:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', 4) &&
@@ -248,10 +255,6 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '==', options.deckState.chaoticTendrilsPlayedThisMatch + 1);
-		case CardIds.RunesOfDarkness_YOG_511:
-			return (c) =>
-				hasCorrectType(c, CardType.WEAPON) &&
-				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.OnceUponATime_TOY_506:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -274,9 +277,8 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				(hasCost(c, '==', 6) || hasCost(c, '==', 3));
-
-		case CardIds.GorillabotA3Core:
 		case CardIds.GorillabotA3:
+		case CardIds.GorillabotA3Core:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH);
@@ -315,19 +317,113 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) &&
 				hasMechanic(c, GameTag.SECRET) &&
 				c.classes?.includes(CardClass[CardClass.MAGE]);
-		case CardIds.WishingWell_WW_415:
 		case CardIds.SneedsOldShredder_CORE_GVG_114:
+		case CardIds.WishingWell_WW_415:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectRarity(c, CardRarity.LEGENDARY);
+		case CardIds.WyrmrestPurifier:
+			return (c) =>
+				canBeDiscoveredByClass(c, options.currentClass);
+		// Random Class Cards from a specific class
+		case CardIds.LightforgedCrusader:
+			return (c) =>
+				c.classes?.includes(CardClass[CardClass.PALADIN]);
+		case CardIds.AnnounceDarkness_VAC_941:
+			return (c) =>
+				c.classes?.includes(CardClass[CardClass.WARLOCK]);
+		case CardIds.EnvoyOfTheGlade_EDR_873:
+			return (c) =>
+				c.classes?.includes(CardClass[CardClass.DRUID]);
+
+		case CardIds.WorldPillarFragmentToken_DEEP_999t3:
 		case CardIds.MaruutStonebinder_DEEP_037:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.ELEMENTAL);
+				hasCorrectTribe(c, Race.ELEMENTAL) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		// Random Legendaries
+		case CardIds.ArchVillainRafaam_CORE_DAL_422:
+		case CardIds.ChalkArtist_TOY_388:
+		case CardIds.GoldenKobold:
+		case CardIds.MarinTheManager_GoldenKoboldToken_VAC_702t4:
+		case CardIds.TreasureSeekerElise_GoldenMonkeyToken:
+		case CardIds.Transmogrifier:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
+
+		// Random X Tribe	
+		// Random Elementals
+		case CardIds.MenacingNimbusCore:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.ELEMENTAL);
+
+		// Random Naga
+		case CardIds.HuddleUp_WORK_012:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.NAGA);
+
+		// Random Murlocs
+		case CardIds.GnawingGreenfin_EDR_999:
+		case CardIds.Howdyfin_WW_333:
+		case CardIds.UnderlightAnglingRod:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MURLOC);
+
+		// Random Beasts
+		case CardIds.JeweledMacaw:
+		case CardIds.Webspinner_CORE_FP1_011:
 		case CardIds.WildernessPack_MIS_104:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST);
+
+		case CardIds.Kiljaeden_GDB_145:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.DEMON);
+
+		// Discover an X Tribe
+		// Discover a Dragon
+		case CardIds.AzureExplorer:
+		case CardIds.BronzeExplorer:
+		case CardIds.BronzeExplorerCore:
+		case CardIds.DraconicLackey:
+		case CardIds.EmeraldExplorer_DRG_313:
+		case CardIds.PrimordialExplorer:
+		case CardIds.Darkrider_EDR_456:
+		case CardIds.DraconicStudies:
+		case CardIds.NetherspiteHistorian:
+		case CardIds.Rheastrasza_WW_824:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.DRAGON) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		
+		// Discover a Beast
+		// TODO: Update Raptor Herald if it changes after EDR
+		case CardIds.RaptorHerald_CORE_EDR_004:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.BEAST) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		
+		// Discover a Pirate
+		case CardIds.BloodsailRecruiter_VAC_430:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.PIRATE) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
+		// Discover a Demon
+		case CardIds.WindowShopper_WindowShopperToken_TOY_652t:
+		case CardIds.DemonicStudies:
+		case CardIds.DemonicStudies_CORE_SCH_158:
+		case CardIds.ShadowflameStalker_FIR_924:
+		case CardIds.RelentlessWrathguard_GDB_132:
+		case CardIds.DemonicDynamics:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.DEMON) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		
+		case CardIds.ExoticMountseller:
 		case CardIds.TeachersPet:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -361,16 +457,16 @@ const getDynamicFilters = (
 					hasCorrectSpellSchool(c, SpellSchool.FROST) ||
 					hasCorrectSpellSchool(c, SpellSchool.NATURE)
 				);
-		case CardIds.Peon_BAR_022:
-		case CardIds.OnyxMagescribe:
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) &&
-				c?.classes?.includes(options.currentClass.toUpperCase());
+
 		case CardIds.Jackpot:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '>=', 5) &&
 				fromAnotherClass(c, options.currentClass);
+		case CardIds.TheFiresOfZinAzshari:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '>=', 5);
 		case CardIds.SunkenSweeper:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -385,10 +481,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				(hasCorrectTribe(c, Race.PIRATE) ||
 					c.mechanics?.includes(GameTag[GameTag.STEALTH]));
-		case CardIds.PlaguedProtodrake:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCost(c, '==', 7);
+
 		case CardIds.ExarchHataaru_GDB_136:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -402,14 +495,59 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '<=', 3);
+
+		// Discover a Spell Effects (or spell from class effects such as Peon / Magescribe)
+		case CardIds.Qonzu_EDR_517:
+		case CardIds.RunedOrb_BAR_541:
+		case CardIds.Spellcoiler:
+		case CardIds.VulperaScoundrel:
+		case CardIds.VenomousScorpid:
+		case CardIds.StewardOfScrolls_SCH_245:
+		case CardIds.PrimordialGlyph_CORE_UNG_941:
+		case CardIds.Kalecgos_CORE_DAL_609:
+		case CardIds.Marshspawn_CORE_BT_115:
+		case CardIds.EtherealLackey:
+		case CardIds.Peon_BAR_022:
+		case CardIds.OnyxMagescribe:
+		case CardIds.SuspiciousAlchemist:
+		case CardIds.AmphibiousElixir_WW_080:
+		case CardIds.Astrobiologist_GDB_874:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
+		// Discover a Weapon Effects (or spell from class effects such as Peon / Magescribe)
+		case CardIds.RunesOfDarkness_YOG_511:
+		case CardIds.SuspiciousPirate:
+			return (c) =>
+				hasCorrectType(c, CardType.WEAPON) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
+		// Discover a Legendary Minion Effects
+		case CardIds.TreacherousTormentor_EDR_102:
+		case CardIds.SuspiciousUsher_CORE_REV_002:
+		case CardIds.Paparazzi:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
+		// Random Mage Spell Effects
+		case CardIds.BabblingBookCore:
+		case CardIds.BabblingBookcase_CORE_EDR_001:
 		case CardIds.WandThief_SCH_350:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				c.classes?.includes(CardClass[CardClass.MAGE])
-		case CardIds.SunsetVolley_WW_427:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCost(c, '==', 10);
+
+		// Discover an X cost card
+		case CardIds.DarkPeddler_CORE_WON_096:
+		case CardIds.SuspiciousPeddler:
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 1);
+
+		case CardIds.ScarabKeychain_TOY_006:
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 2);
+
 		case CardIds.TrainingSession_NX2_029:
 		case CardIds.HikingTrail_VAC_517:
 		case CardIds.StonehillDefender_Core_UNG_072:
@@ -446,8 +584,6 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass) &&
 				hasCorrectSpellSchool(c, SpellSchool.FEL) &&
 				hasCorrectType(c, CardType.SPELL);
-		case CardIds.ShadowflameStalker_FIR_924:
-			return (c) => hasCorrectTribe(c, Race.DEMON) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.EmberscarredWhelp_FIR_927:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 5);
 		case CardIds.Cremate_FIR_900:
@@ -467,9 +603,6 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				(c.classes?.includes(CardClass[CardClass.MAGE]) || c.classes?.includes(CardClass[CardClass.DRUID]))
-		case CardIds.BabblingBookcase_CORE_EDR_001:
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.GiftOfFire_EDR_872A:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -517,14 +650,7 @@ const getDynamicFilters = (
 		case CardIds.Ysondre_EDR_465:
 		case CardIds.SelenicDrake_EDR_462:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
-		case CardIds.Howdyfin_WW_333:
-		case CardIds.GnawingGreenfin_EDR_999:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MURLOC);
-		case CardIds.TreacherousTormentor_EDR_102:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
-				canBeDiscoveredByClass(c, options.currentClass);
+
 		case CardIds.FlintFirearm_WW_379:
 			return (c) => c?.mechanics?.includes(GameTag[GameTag.QUICKDRAW]);
 		case CardIds.StickUp_WW_411:
@@ -587,53 +713,60 @@ const getDynamicFilters = (
 				hasCost(c, '>=', 5);
 
 		// Random X Cost Minion(s)
-		case CardIds.FirstContact_GDB_864:
 		case CardIds.AegisOfLight_EDR_264:
-		case CardIds.FirstDayOfSchool:
-		case CardIds.ShimmerShot_DEEP_003:
 		case CardIds.BuildingBlockGolem_MIS_314:
+		case CardIds.FirstContact_GDB_864:
+		case CardIds.FirstDayOfSchool:
+		case CardIds.MaelstromPortal_CORE_KAR_073:
+		case CardIds.ShriekingShroom:
+		case CardIds.ShimmerShot_DEEP_003:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
-
-		case CardIds.RayllaSandSculptor_VAC_424:
-		case CardIds.TwilightInfluence_EDR_463:
-		case CardIds.HarbingerOfTheBlighted_EDR_781:
 		case CardIds.DistressSignal_GDB_883:
+		case CardIds.DwarfPlanet_GDB_233:
+		case CardIds.FacelessLackey:
+		case CardIds.HarbingerOfTheBlighted_EDR_781:
 		case CardIds.MazeGuide:
 		case CardIds.MazeGuide_CORE_REV_308:
-		case CardIds.DwarfPlanet_GDB_233:
+		case CardIds.RayllaSandSculptor_VAC_424:
+		case CardIds.SilvermoonPortal_CORE_KAR_077:
+		case CardIds.TwilightInfluence_EDR_463:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
-
+		case CardIds.HiddenMeaning:
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
-		case CardIds.HiddenMeaning:
+		case CardIds.SerpentshrinePortal_BT_100:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
-
+		case CardIds.IronforgePortal:
+		case CardIds.IronforgePortal_WON_337:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 4);
 		case CardIds.JandiceBarov_SCH_351:
 		case CardIds.WardOfEarth_EDR_060:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 5);
-
-		case CardIds.FirelandsPortalCore:
-		case CardIds.FirelandsPortal:
+		case CardIds.BigBadArchmage:
 		case CardIds.ChaosCreation_DEEP_031:
+		case CardIds.FirelandsPortal:
+		case CardIds.FirelandsPortalCore:
+		case CardIds.MoongladePortal_KAR_075:
 		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 6);
 
-		case CardIds.ScarabKeychain_TOY_006:
-			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 2);
+		case CardIds.PlaguedProtodrake:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 7);
+
+		case CardIds.SunsetVolley_WW_427:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 10);
+
 		case CardIds.ExarchOthaar_GDB_856:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCorrectSpellSchool(c, SpellSchool.ARCANE);
-		case CardIds.HuddleUp_WORK_012:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.NAGA);
+
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAENEI);
-		case CardIds.RelentlessWrathguard_GDB_132:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.DEMON) &&
-				canBeDiscoveredByClass(c, options.currentClass);
+		
 		case CardIds.AbductionRay_GDB_123:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.Nebula_GDB_479:
@@ -671,21 +804,7 @@ const getDynamicFilters = (
 		case CardIds.NatureStudies_SCH_333:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
-		case CardIds.DemonicStudies:
-		case CardIds.DemonicStudies_CORE_SCH_158:
-		case CardIds.DemonicDynamics:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.DEMON) &&
-				canBeDiscoveredByClass(c, options.currentClass);
-		case CardIds.DraconicStudies:
-		case CardIds.Rheastrasza_WW_824:
-		case CardIds.NetherspiteHistorian:
-		case CardIds.Darkrider_EDR_456:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.DRAGON) &&
-				canBeDiscoveredByClass(c, options.currentClass);
+		
 		case CardIds.GalacticCrusader_GDB_862:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
