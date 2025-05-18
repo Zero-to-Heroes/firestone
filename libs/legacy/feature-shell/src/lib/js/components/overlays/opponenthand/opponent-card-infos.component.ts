@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DeckCard, DeckState, Metadata } from '@firestone/game-state';
+import { DeckCard, DeckState, Metadata, GameState } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 
@@ -26,7 +26,7 @@ export class OpponentCardInfosComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;
-	@Input() context: { deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' };
+	@Input() context: { deck: DeckState; gameState: GameState; metadata: Metadata; currentTurn: number | 'mulligan' };
 	@Input() cards: readonly DeckCard[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();

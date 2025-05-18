@@ -7,7 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameStateFacadeService, Metadata } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -34,7 +34,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
 	displayBuff$: Observable<boolean>;
-	context$: Observable<{ deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' }>;
+	context$: Observable<{ deck: DeckState; gameState: GameState; metadata: Metadata; currentTurn: number | 'mulligan' }>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -61,6 +61,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 			auditTime(500),
 			this.mapData((gameState) => ({
 				deck: gameState?.opponentDeck,
+				gameState: gameState,
 				metadata: gameState?.metadata,
 				currentTurn: gameState?.currentTurn,
 			})),

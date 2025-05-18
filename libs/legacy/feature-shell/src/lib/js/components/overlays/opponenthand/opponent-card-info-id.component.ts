@@ -4,6 +4,7 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import {
 	DeckCard,
 	DeckState,
+	GameState,
 	getDynamicRelatedCardIds,
 	getPossibleForgedCards,
 	GuessedInfo,
@@ -69,7 +70,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 
-	@Input() set context(value: { deck: DeckState; metadata: Metadata; currentTurn: number | 'mulligan' }) {
+	@Input() set context(value: { deck: DeckState; gameState: GameState; metadata: Metadata; currentTurn: number | 'mulligan' }) {
 		this.context$$.next(value);
 	}
 	@Input() set card(value: DeckCard) {
@@ -78,6 +79,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 
 	private context$$ = new BehaviorSubject<{
 		deck: DeckState;
+		gameState: GameState;
 		metadata: Metadata;
 		currentTurn: number | 'mulligan';
 	} | null>(null);
@@ -174,6 +176,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				gameType: metadata.gameType,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
 				deckState: context,
+				gameState: this.context$$.value?.gameState,
 			});
 			const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
 			if (!!pool?.length) {
