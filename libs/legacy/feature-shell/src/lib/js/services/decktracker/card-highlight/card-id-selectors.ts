@@ -242,6 +242,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.ApexisBlast:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.ApothecarysCaravan:
+			return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 		case CardIds.AquaArchivist:
 			return and(side(inputSide), inDeck, minion, elemental);
 		case CardIds.ArcaneArtificer:
@@ -767,7 +769,10 @@ export const cardIdSelector = (
 		case CardIds.CrystalWelder_GDB_130:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.CrushclawEnforcer:
-			return and(side(inputSide), inDeck, naga);
+			return highlightConditions(
+				and(side(inputSide), inDeck, naga),
+				and(side(inputSide), or(inHand, inDeck), spell),
+			);
 		case CardIds.CrystalsmithCultist:
 			return and(side(inputSide), or(inDeck, inHand), spell, shadow);
 		case CardIds.Crystology:
@@ -1548,7 +1553,7 @@ export const cardIdSelector = (
 		case CardIds.InspiringPresenceTavernBrawl:
 			return and(side(inputSide), minion, legendary);
 		case CardIds.InstrumentTech:
-			return and(side(inputSide), weapon);
+			return and(side(inputSide), inDeck, weapon);
 		case CardIds.InterstellarResearcher_GDB_728:
 			return and(side(inputSide), inDeck, cardIs(...LIBRAM_IDS));
 		case CardIds.InterstellarStarslicer_GDB_726:
