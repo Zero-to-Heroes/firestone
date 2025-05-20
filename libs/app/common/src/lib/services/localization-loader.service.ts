@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { translationFileVersion } from '@firestone/shared/framework/common';
-import { TranslateLoader } from '@ngx-translate/core';
+import { AppInjector } from '@firestone/shared/framework/core';
+import { TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { from, Observable, of, switchMap, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -21,7 +22,7 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 			switchMap((cachedData) => {
 				if (cachedData) {
 					console.debug('[bootstrap] [localization-loader] got cached translation', lang, cachedData);
-					this.fetchAndCacheTranslation(url, lang).subscribe();
+					this.fetchAndCacheTranslation(url, lang, true).subscribe();
 					// Emit cached data first
 					return of(cachedData);
 				} else {
@@ -32,11 +33,21 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 		);
 	}
 
-	private fetchAndCacheTranslation(url: string, lang: string): Observable<any> {
+	private fetchAndCacheTranslation(url: string, lang: string, emit = false): Observable<any> {
 		return this.http.get(url).pipe(
 			tap((response) => {
 				console.debug('[bootstrap] [localization-loader] got remote translation', lang, response);
 				this.cache.storeItem(`localization-${lang}.json`, response);
+				if (emit) {
+					// Reload the translations
+					const service = AppInjector.get(TranslateService);
+					console.debug(
+						'[bootstrap] [localization-loader] reloading translations',
+						lang,
+						service.currentLang,
+					);
+					service.reloadLang(lang);
+				}
 			}),
 		);
 	}
