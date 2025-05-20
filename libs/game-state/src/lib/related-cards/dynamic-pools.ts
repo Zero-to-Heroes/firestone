@@ -191,7 +191,7 @@ const getDynamicFilters = (
 				hasCost(c, '==',
 					Math.min(
 						8,
-						getPlayerTag(getPlayerOrOpponent(options.deckState, options.gameState), GameTag.CORPSES)
+						getPlayerTag(getPlayerOrOpponentFromFullGameState(options.deckState, options.gameState), GameTag.CORPSES)
 					)
 				) &&
 				!hasCost(c, '==', 0); // Corpse Farm cannot be played if at 0 Corpses 
@@ -202,7 +202,7 @@ const getDynamicFilters = (
 				hasCost(c, '==',
 					Math.min(
 						10,
-						getPlayerTag(getPlayerOrOpponent(options.deckState, options.gameState), GameTag.IMBUES_THIS_GAME)
+						getPlayerTag(getPlayerOrOpponentFromFullGameState(options.deckState, options.gameState), GameTag.IMBUES_THIS_GAME)
 					)
 				);
 		case CardIds.ShiftySophomore:
@@ -940,7 +940,7 @@ const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean =>
 
 
 
-const getPlayerOrOpponent = (deckState: DeckState, gameState: GameState): PlayerGameState | undefined => {
+const getPlayerOrOpponentFromFullGameState = (deckState: DeckState, gameState: GameState): PlayerGameState | undefined => {
 	return deckState.isOpponent
 		? gameState.fullGameState?.Opponent
 		: gameState.fullGameState?.Player;
