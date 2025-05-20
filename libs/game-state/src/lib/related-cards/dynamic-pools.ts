@@ -7,6 +7,7 @@ import {
 	CardRarity,
 	CardType,
 	CREWMATES,
+	DkruneTypes,
 	GameFormat,
 	GameTag,
 	GameType,
@@ -174,15 +175,15 @@ const getDynamicFilters = (
 		case CardIds.NecroticMortician:
 		case CardIds.NecroticMortician_CORE_RLK_116:
 			return (c) =>
-				hasCorrectRune(c, 'UNHOLY');
+				hasCorrectRune(c, DkruneTypes.UNHOLYRUNE);
 		case CardIds.Hematurge_CORE_RLK_066:
 		case CardIds.Hematurge_RLK_066:
 			return (c) =>
-				hasCorrectRune(c, 'BLOOD');
+				hasCorrectRune(c, DkruneTypes.BLOODRUNE);
 		case CardIds.FrostStrike:
 		case CardIds.FrostStrikeCore:
 			return (c) =>
-				hasCorrectRune(c, 'FROST');
+				hasCorrectRune(c, DkruneTypes.FROSTRUNE);
 
 		case CardIds.CorpseFarm_WW_374:
 			return (c) =>
@@ -894,13 +895,13 @@ const getPlayerTag = (playerGameState: PlayerGameState | undefined, gameTag: Gam
 	return playerGameState?.PlayerEntity?.tags?.find((t) => t.Name === gameTag)?.Value ?? defaultValue
 }
 
-const hasCorrectRune = (card: ReferenceCard, runeType: string): boolean => {
+const hasCorrectRune = (card: ReferenceCard, runeType: DkruneTypes): boolean => {
 	switch (runeType) {
-		case 'BLOOD':
+		case DkruneTypes.BLOODRUNE:
 			return (card?.additionalCosts?.BLOODRUNE ?? 0) > 0;
-		case 'UNHOLY':
+		case DkruneTypes.UNHOLYRUNE:
 			return (card?.additionalCosts?.UNHOLYRUNE ?? 0) > 0;
-		case 'FROST':
+		case DkruneTypes.FROSTRUNE:
 			return (card?.additionalCosts?.FROSTRUNE ?? 0) > 0;
 		default:
 			return false;
