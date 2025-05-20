@@ -19,6 +19,7 @@ import { AbstractMaxResourcesWidgetWrapperComponent } from './abstract-max-resou
 		<max-resources-widget
 			*ngIf="showWidget$ | async"
 			class="widget scalable"
+			[style.opacity]="(opacity$ | async) ?? 1"
 			[maxResources]="maxResources$ | async"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"

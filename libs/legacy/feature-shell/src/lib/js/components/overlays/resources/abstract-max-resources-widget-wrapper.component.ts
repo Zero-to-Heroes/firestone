@@ -39,6 +39,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 
 	showWidget$: Observable<boolean>;
 	maxResources$: Observable<MaxResources | null>;
+	opacity$: Observable<number | null>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -77,6 +78,9 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 					!isMercenaries(gameMode),
 			),
 			this.handleReposition(),
+		);
+		this.opacity$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => (prefs.globalWidgetOpacity ?? 100) / 100),
 		);
 		const alwaysOn$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs[this.alwaysOnPrefName]));
 		const maxResources$ = this.gameState.gameState$$.pipe(

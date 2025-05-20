@@ -4,3 +4,9 @@
 	// transform: scale(1.5);
 	// top: calc(1.5 * 1.5vh);
 }
+
+.widget {
+	&:hover {
+		opacity: 1 !important;
+	}
+}
