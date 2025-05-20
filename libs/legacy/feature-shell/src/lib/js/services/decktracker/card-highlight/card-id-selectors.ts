@@ -553,16 +553,16 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.CaptureColdtoothMine:
 			return (input: SelectorInput): SelectorOutput => {
-				const allMinionsOrderedByCost = input.deckState.deck
-					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost());
-				const highestCostMinion = allMinionsOrderedByCost[0];
-				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
-				const lowestCostMinion = allMinionsOrderedByCost[allMinionsOrderedByCost.length - 1];
-				const lowestMinionCost = lowestCostMinion?.getEffectiveManaCost() ?? 0;
+				const allCardsOrderedByCost = [...input.deckState.deck].sort(
+					(a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost(),
+				);
+				const highestCostCard = allCardsOrderedByCost[0];
+				const highestCardCost = highestCostCard?.getEffectiveManaCost() ?? 0;
+				const lowestCostCard = allCardsOrderedByCost[allCardsOrderedByCost.length - 1];
+				const lowestCardCost = lowestCostCard?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
-					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
-					and(side(inputSide), inDeck, minion, effectiveCostEqual(lowestMinionCost)),
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestCardCost)),
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(lowestCardCost)),
 				)(input);
 			};
 		case CardIds.CapturedFlag:
