@@ -40,13 +40,7 @@ export class NagaGiantCounterDefinitionV2 extends CounterDefinitionV2<{
 	protected override formatValue(
 		value: { spellsPlayedThisMatch: ShortCard[]; manaSpentOnSpellsThisMatch: number } | null | undefined,
 	): null | undefined | number | string {
-		const giantBaseCost = this.allCards.getCard(CardIds.NagaGiant).cost!;
-		if (!value) {
-			return `${giantBaseCost}`;
-		}
-		const totalCostReduction = value.manaSpentOnSpellsThisMatch ?? 0;
-		const costAfterReduction = Math.max(0, giantBaseCost - totalCostReduction);
-		return `${costAfterReduction}`;
+		return value?.manaSpentOnSpellsThisMatch ?? 0;
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
