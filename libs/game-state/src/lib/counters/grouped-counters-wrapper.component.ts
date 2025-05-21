@@ -8,9 +8,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, of, takeUntil } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { CounterInstance } from './_counter-definition-v2';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
@@ -58,14 +60,19 @@ export class GroupedCountersWrapperComponent extends AbstractWidgetWrapperCompon
 		protected override readonly prefs: PreferencesService,
 		protected override readonly renderer: Renderer2,
 		protected override readonly cdr: ChangeDetectorRef,
+		private readonly scene: SceneService,
 	) {
 		super(cdr, ow, el, prefs, renderer);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.scene);
 
-		this.showWidget$ = of(true).pipe(takeUntil(this.destroyed$), this.handleReposition());
+		this.showWidget$ = this.scene.currentScene$$.pipe(
+			this.mapData((scene) => scene === SceneMode.GAMEPLAY),
+			takeUntil(this.destroyed$),
+			this.handleReposition(),
+		);
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => (prefs.globalWidgetOpacity ?? 100) / 100),
 		);
