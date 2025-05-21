@@ -72,7 +72,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 		if (isCardCountered) {
-			console.log('[trigger-on-spell-play] counterspell triggered, no secrets will trigger');
+			console.log('[trigger-on-minion-play] counterspell triggered, no secrets will trigger');
 			return currentState;
 		}
 

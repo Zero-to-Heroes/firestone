@@ -60,7 +60,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			}[];
 		},
 	): Promise<GameState> {
-		const [cardId, controllerId, localPlayer] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		if (!cardId) {
 			console.warn('[trigger-on-spell-play] no card Id', gameEvent.parse());
 			return currentState;
@@ -75,10 +75,13 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		}
 
 		// If a counterspell has been triggered, the other secrets won't trigger
-		if (
-			COUNTERSPELLS.includes(this.secretWillTrigger?.cardId as CardIds) &&
-			gameEvent.cardId === this.secretWillTrigger?.reactingToCardId
-		) {
+		const isCardCountered =
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+		if (isCardCountered) {
 			console.log('[trigger-on-spell-play] counterspell triggered, no secrets will trigger');
 			return currentState;
 		}
