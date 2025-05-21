@@ -21,7 +21,7 @@ export class FatigueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			return state.playerDeck.hasRelevantCard(cards) || this.player.value(state) > 0;
 		},
 		value: (state: GameState) => {
-			return state.playerDeck.fatigue ?? 0;
+			return state.playerDeck.fatigue ? state.playerDeck.fatigue + 1 : 0;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -34,7 +34,7 @@ export class FatigueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentFatigueCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.fatigue ?? 0;
+			return state.opponentDeck.fatigue ? state.opponentDeck.fatigue + 1 : 0;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -50,7 +50,7 @@ export class FatigueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		const value = this[side]?.value(gameState) ?? 0;
-		const nextFatigue = value + 1;
+		const nextFatigue = value;
 		return this.i18n.translateString(`counters.fatigue.${side}`, { value: nextFatigue });
 	}
 }
