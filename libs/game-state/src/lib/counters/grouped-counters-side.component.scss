@@ -1,0 +1,41 @@
+.grouped-counters-side {
+	display: flex;
+	flex-direction: column;
+	// align-items: center;
+	justify-content: center;
+
+	.header {
+		margin-bottom: 5px;
+		height: 25px;
+		display: flex;
+		justify-content: center;
+	}
+
+	.counters {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		// width: 100%;
+		margin-left: 10px;
+		padding-bottom: 6px;
+
+		.counter {
+			height: 40px;
+			flex-shrink: 0;
+			width: 100%;
+		}
+	}
+
+	&.player {
+		.header {
+			color: #61ff47;
+		}
+	}
+	&.opponent {
+		.header {
+			color: #ff4747;
+		}
+	}
+}

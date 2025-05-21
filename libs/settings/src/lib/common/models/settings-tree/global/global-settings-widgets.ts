@@ -49,6 +49,24 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 					},
 					{
 						type: 'toggle',
+						field: 'useGroupedCounters',
+						label: context.i18n.translateString('settings.general.widgets.use-grouped-counters-label'),
+						tooltip: context.i18n.translateString('settings.general.widgets.use-grouped-counters-tooltip'),
+					},
+					{
+						type: 'slider',
+						field: 'groupedCountersScale',
+						label: context.i18n.translateString('settings.general.widgets.grouped-counters-size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 30,
+							max: 200,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
+					{
+						type: 'toggle',
 						field: 'lockWidgetPositions',
 						label: context.i18n.translateString('settings.general.widgets.lock-widgets-label'),
 						tooltip: context.i18n.translateString('settings.general.widgets.lock-widgets-tooltip'),

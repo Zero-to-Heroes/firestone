@@ -1,0 +1,50 @@
+.grouped-counters {
+	display: flex;
+	flex-direction: column;
+	width: 256px;
+	color: var(--color-2);
+	background: var(--color-7);
+	border-radius: 10px;
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 30px;
+		margin-bottom: 5px;
+		position: relative;
+
+		.minimize-container {
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			aspect-ratio: 1;
+
+			&:hover {
+				background: var(--color-2);
+				--icon-color: var(--color-7);
+			}
+		}
+
+		&.minimized {
+			margin-bottom: 0;
+
+			.minimize {
+				transform: rotate(180deg);
+			}
+		}
+	}
+
+	.content {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+
+		.side {
+			flex-shrink: 0;
+		}
+	}
+}

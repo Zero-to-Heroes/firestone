@@ -1,0 +1,33 @@
+.grouped-counters-element {
+	display: flex;
+	border-radius: 10px;
+
+	.icon {
+		width: 40px;
+		height: 40px;
+		margin-right: 10px;
+
+		img {
+			width: 100%;
+			height: 100%;
+			clip-path: circle(10px at 50% 50%);
+			transform: scale(1.5);
+		}
+	}
+
+	.value {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-grow: 1;
+	}
+
+	&.player {
+		color: white;
+		background: #2c891d69;
+	}
+	&.opponent {
+		color: white;
+		background: #ff474769;
+	}
+}

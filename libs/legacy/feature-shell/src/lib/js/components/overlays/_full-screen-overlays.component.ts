@@ -106,26 +106,37 @@ import { DebugService } from '../../services/debug.service';
 			<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
 			<arena-current-session-widget-wrapper></arena-current-session-widget-wrapper>
 
-			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>
-			<counters-positioner class="widget-positioner player-counters" [positionerId]="'player-counters'">
-				<counter-wrapper
-					*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
-					side="player"
-					[counter]="counter"
-				></counter-wrapper
-			></counters-positioner>
-			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
-
-			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
-			<counters-positioner class="widget-positioner opponent-counters" [positionerId]="'opponent-counters'">
-				<counter-wrapper
-					*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
-					side="opponent"
-					[counter]="counter"
-				></counter-wrapper>
-			</counters-positioner>
+
+			<ng-container *ngIf="(useGroupedCounters$ | async) === false">
+				<!-- Player Counters -->
+				<counters-positioner class="widget-positioner player-counters" [positionerId]="'player-counters'">
+					<counter-wrapper
+						*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
+						side="player"
+						[counter]="counter"
+					></counter-wrapper
+				></counters-positioner>
+
+				<!-- Opponent counters -->
+				<counters-positioner class="widget-positioner opponent-counters" [positionerId]="'opponent-counters'">
+					<counter-wrapper
+						*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
+						side="opponent"
+						[counter]="counter"
+					></counter-wrapper>
+				</counters-positioner>
+			</ng-container>
+			<ng-container *ngIf="(useGroupedCounters$ | async) === true">
+				<grouped-counters-wrapper
+					class="grouped-counters"
+					[playerCounters]="playerCounters$ | async"
+					[opponentCounters]="opponentCounters$ | async"
+				></grouped-counters-wrapper>
+			</ng-container>
+
+			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
 			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
 			<lottery-widget-wrapper></lottery-widget-wrapper>
@@ -143,6 +154,7 @@ export class FullScreenOverlaysComponent
 	@ViewChild('container', { static: false }) container: ElementRef;
 
 	activeTheme$: Observable<CurrentAppType>;
+	useGroupedCounters$: Observable<boolean>;
 	playerCounters$: Observable<readonly CounterInstance<any>[]>;
 	opponentCounters$: Observable<readonly CounterInstance<any>[]>;
 
@@ -168,6 +180,7 @@ export class FullScreenOverlaysComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs, this.bgState);
 
+		this.useGroupedCounters$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useGroupedCounters));
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,

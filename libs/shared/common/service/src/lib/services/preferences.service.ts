@@ -72,6 +72,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 	}
 
 	public async updatePrefs<K extends keyof Preferences>(key: K, value: Preferences[K]) {
+		console.debug('[preferences] updating prefs', key, value);
 		const prefs = this.preferences$$.getValue();
 		const newPrefs = {
 			...prefs,

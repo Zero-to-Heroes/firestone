@@ -61,11 +61,16 @@ export class Preferences implements IPreferences {
 	readonly globalWidgetOpacity: number | null = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly cardTooltipScale: number | null = 100;
+	readonly useGroupedCounters: boolean = false;
+	readonly groupedCountersScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly groupedCountersPosition: { left: number; top: number };
 
 	readonly showLottery: boolean | null = null;
 	readonly lotteryOverlay: boolean | null = null;
 	readonly lotteryCurrentModule: LotteryTabType = 'lottery';
 	readonly lotteryShowHiddenWindowNotification: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly lotteryPosition: { left: number; top: number };
 	readonly lotteryScale: number = 100;
 	readonly lotteryOpacity: number = 100;
