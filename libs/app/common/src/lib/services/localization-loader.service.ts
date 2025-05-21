@@ -8,6 +8,8 @@ import { from, Observable, of, switchMap, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LocalizationLoaderWithCache implements TranslateLoader {
+	private lastTranslationTimestamp = 0;
+
 	constructor(private readonly cache: DiskCacheService, private readonly http: HttpClient) {}
 
 	public getTranslation(lang: string): Observable<any> {
@@ -35,10 +37,10 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 
 	private fetchAndCacheTranslation(url: string, lang: string, emit = false): Observable<any> {
 		return this.http.get(url).pipe(
-			tap((response) => {
+			tap(async (response) => {
 				console.debug('[bootstrap] [localization-loader] got remote translation', lang, response);
-				this.cache.storeItem(`localization-${lang}.json`, response);
-				if (emit) {
+				await this.cache.storeItem(`localization-${lang}.json`, response);
+				if (emit && (Date.now() - this.lastTranslationTimestamp) / 1000 > 60) {
 					// Reload the translations
 					const service = AppInjector.get(TranslateService);
 					console.debug(
@@ -48,6 +50,7 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 					);
 					service.reloadLang(lang);
 				}
+				this.lastTranslationTimestamp = Date.now();
 			}),
 		);
 	}
