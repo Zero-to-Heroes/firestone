@@ -12,6 +12,7 @@ import {
 	and,
 	damage,
 	excavate,
+	givesAbyssalCurse,
 	highlightConditions,
 	imbue,
 	inDeck,
@@ -130,7 +131,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		const deckCards = deck.getAllCardsInDeckWithoutOptions();
 		const card =
 			deckCards.find((c) => !!entityId && c.entityId === entityId) ?? deckCards.find((c) => c.cardId === cardId);
-		const relatedCardIds = buildContextRelatedCardIds(cardId, card?.relatedCardIds, deck, metaData, this.allCards, this.gameState);
+		const relatedCardIds = buildContextRelatedCardIds(
+			cardId,
+			card?.relatedCardIds,
+			deck,
+			metaData,
+			this.allCards,
+			this.gameState,
+		);
 		return relatedCardIds?.length ? relatedCardIds : [];
 	}
 
@@ -355,6 +363,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
+		}
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.GIVES_ABYSSAL_CURSE]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.GIVES_ABYSSAL_CURSE])
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), givesAbyssalCurse));
 		}
 		if (
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.EXCAVATE]) ||

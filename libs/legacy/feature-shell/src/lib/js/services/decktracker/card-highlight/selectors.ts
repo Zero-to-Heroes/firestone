@@ -308,6 +308,7 @@ export const imbue = and(
 		),
 	),
 );
+export const givesAbyssalCurse = hasMechanic(GameTag.GIVES_ABYSSAL_CURSE);
 export const infuse = hasMechanic(GameTag.INFUSE);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
