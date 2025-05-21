@@ -2967,6 +2967,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.TrinketTracker:
 			return and(side(inputSide), inDeck, spell, effectiveCostEqual(1));
+		case CardIds.TrolleyProblem_WW_436:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.TroubledMechanic_GDB_463:
 			return and(side(inputSide), inDeck, draenei);
 		case CardIds.TrustyCompanion_WW_027:
