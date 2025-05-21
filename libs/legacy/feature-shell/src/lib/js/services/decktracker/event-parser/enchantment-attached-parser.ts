@@ -49,7 +49,7 @@ export class EnchantmentAttachedParser implements EventParser {
 
 		const newPlayerDeck = deck.update({
 			enchantments: [
-				...deck.enchantments,
+				...deck.enchantments.filter((enchantment) => enchantment.entityId !== entityId),
 				{
 					cardId,
 					entityId,
