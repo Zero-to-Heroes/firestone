@@ -1,4 +1,5 @@
 import { ARENA_DISCOVERS_DAILY_FREE_USES } from '@firestone/arena/common';
+import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs } from '../common';
 
@@ -24,6 +25,25 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 						field: 'arenaShowCardSelectionOverlay',
 						label: context.i18n.translateString('settings.arena.general.show-card-selection-overlay'),
 						tooltip: context.i18n.translateString('settings.arena.general.show-card-selection-overlay-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'arenaShowMulliganCardImpact',
+						label: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-card-impact-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-card-impact-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'arenaShowMulliganDeckOverview',
+						label: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-deck-overview-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-deck-overview-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'hideMulliganWhenFriendsListIsOpen',
+						label: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowMulliganDeckOverview,
 					},
 					{
 						type: 'toggle',

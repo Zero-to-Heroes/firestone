@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import {
 	ArenDeckDetailsService,
 	ArenaCardStatsService,
@@ -62,7 +63,6 @@ import { DeckParserFacadeService } from '../../js/services/decktracker/deck-pars
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
-import { GameNativeStateStoreService } from '../../js/services/game/game-native-state-store.service';
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
 import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';

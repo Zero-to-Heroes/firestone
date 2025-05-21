@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { AppCommonModule } from '@firestone/app/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
@@ -91,6 +92,7 @@ const components = [
 		MemoryModule,
 		GameStateModule,
 		ProfileCommonModule,
+		AppCommonModule,
 	],
 	providers: [
 		ArenaClassStatsService,

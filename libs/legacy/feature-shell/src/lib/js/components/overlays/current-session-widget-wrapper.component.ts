@@ -8,13 +8,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
 import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
-import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 const refBounds = {

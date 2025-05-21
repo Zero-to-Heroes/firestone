@@ -12,6 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import { MulliganDeckData, buildColor } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
@@ -41,6 +42,8 @@ import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guid
 	styleUrls: ['./arena-mulligan-deck.component.scss'],
 	template: `
 		<mulligan-deck-view
+			class="widget"
+			[ngClass]="{ hidden: hidden$ | async }"
 			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
 			[showMulliganOverview]="showMulliganOverview$ | async"
 			[sampleSize]="sampleSize$ | async"
@@ -66,6 +69,7 @@ export class ArenaMulliganDeckComponent
 	opponentTooltip$: Observable<string>;
 	timeLabel$: Observable<string>;
 	timeTooltip$: Observable<string>;
+	hidden$: Observable<boolean>;
 
 	private opponentActualClass$$ = new BehaviorSubject<string | null>(null);
 
@@ -81,6 +85,7 @@ export class ArenaMulliganDeckComponent
 		private readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
 		private readonly patches: PatchesConfigService,
+		private readonly gameNativeStore: GameNativeStateStoreService,
 	) {
 		super(cdr);
 	}
@@ -97,6 +102,15 @@ export class ArenaMulliganDeckComponent
 			showWidget$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
 		]).pipe(this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview));
+		this.hidden$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideMulliganWhenFriendsListIsOpen)),
+			this.gameNativeStore.isFriendsListOpen$$,
+		]).pipe(
+			this.mapData(
+				([hideCurrentSessionWidgetWhenFriendsListIsOpen, isFriendsListOpen]) =>
+					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
+			),
+		);
 
 		this.allDeckMulliganInfo$ = this.mulligan.mulliganAdvice$$.pipe(
 			filter((advice) => !!advice),

@@ -213,6 +213,7 @@ export class Preferences implements IPreferences {
 	readonly decktrackerOpponentHandScale: number = 100;
 
 	readonly decktrackerShowMulliganCardImpact: boolean = true;
+	readonly hideMulliganWhenFriendsListIsOpen: boolean = false;
 	readonly decktrackerShowMulliganDeckOverview: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerMulliganScale: number = 100;

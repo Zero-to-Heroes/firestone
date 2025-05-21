@@ -574,7 +574,6 @@ import { Events } from './js/services/events.service';
 import { GameEventsEmitterService } from './js/services/game-events-emitter.service';
 import { GameEvents } from './js/services/game-events.service';
 import { GameModeDataService } from './js/services/game-mode-data.service';
-import { GameNativeStateStoreService } from './js/services/game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
@@ -1350,7 +1349,6 @@ try {
 		LogRegisterService,
 		HsClientConfigService,
 		OutOfCardsService,
-		GameNativeStateStoreService,
 		TwitchPresenceService,
 		TwitchCardsFacadeManagerService,
 		TwitchLocalizationManagerService,

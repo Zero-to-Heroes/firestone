@@ -1,3 +1,4 @@
+import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs } from '../common';
 
@@ -23,6 +24,13 @@ export const decktrackerMulliganSettings = (context: SettingContext): SettingNod
 						field: 'decktrackerShowMulliganDeckOverview',
 						label: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-deck-overview-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.mulligan.show-mulligan-deck-overview-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'hideMulliganWhenFriendsListIsOpen',
+						label: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMulliganDeckOverview,
 					},
 					{
 						type: 'slider',

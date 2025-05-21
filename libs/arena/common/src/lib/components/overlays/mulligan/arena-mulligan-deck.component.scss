@@ -2,6 +2,10 @@
 	display: flex;
 }
 
+.widget.hidden {
+	display: none;
+}
+
 .root {
 	height: 100%;
 	display: flex;
