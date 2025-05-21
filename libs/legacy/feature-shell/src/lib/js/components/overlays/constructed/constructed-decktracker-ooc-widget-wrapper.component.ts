@@ -11,7 +11,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, takeUntil } from 'rxjs';
+import { Observable, combineLatest, shareReplay, takeUntil } from 'rxjs';
 import { AdService } from '../../../services/ad.service';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
@@ -39,22 +39,24 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 			[ngClass]="{ premium: value.premium }"
 		>
 			<div class="scalable container">
-				<div class="title-bar">
-					<button
-						class="toggle-button"
-						(click)="toggleMode(value.premium)"
-						inlineSVG="assets/svg/restore.svg"
-						[helpTooltip]="toggleButtonTooltip$ | async"
-					></button>
-					<control-close
-						[eventProvider]="closeHandler"
-						[helpTooltip]="'decktracker.overlay.lobby.close-button-tooltip' | fsTranslate"
-					></control-close>
-				</div>
-				<constructed-decktracker-ooc *ngIf="showWidgetListOnly$ | async"></constructed-decktracker-ooc>
-				<constructed-decktracker-extended-ooc
-					*ngIf="showWidgetExtended$ | async"
-				></constructed-decktracker-extended-ooc>
+				<ng-container *ngIf="(showWidgetListOnly$ | async) || (showWidgetExtended$ | async)">
+					<div class="title-bar">
+						<button
+							class="toggle-button"
+							(click)="toggleMode(value.premium)"
+							inlineSVG="assets/svg/restore.svg"
+							[helpTooltip]="toggleButtonTooltip$ | async"
+						></button>
+						<control-close
+							[eventProvider]="closeHandler"
+							[helpTooltip]="'decktracker.overlay.lobby.close-button-tooltip' | fsTranslate"
+						></control-close>
+					</div>
+					<constructed-decktracker-ooc *ngIf="showWidgetListOnly$ | async"></constructed-decktracker-ooc>
+					<constructed-decktracker-extended-ooc
+						*ngIf="showWidgetExtended$ | async"
+					></constructed-decktracker-extended-ooc>
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -125,6 +127,7 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			this.mapData(
 				([{ ooc, displayList }, canShowWidget, premium]) => canShowWidget && ooc && (displayList || !premium),
 			),
+			shareReplay(1),
 			this.handleReposition(),
 		);
 		this.showWidgetExtended$ = combineLatest([
@@ -133,6 +136,7 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			this.ads.enablePremiumFeatures$$,
 		]).pipe(
 			this.mapData(([displayFromPrefs, canShowWidget, premium]) => canShowWidget && premium && displayFromPrefs),
+			shareReplay(1),
 			this.handleReposition(),
 		);
 
