@@ -12,7 +12,8 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, Observable, takeUntil } from 'rxjs';
+import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { CounterInstance } from './_counter-definition-v2';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
@@ -61,15 +62,20 @@ export class GroupedCountersWrapperComponent extends AbstractWidgetWrapperCompon
 		protected override readonly renderer: Renderer2,
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr, ow, el, prefs, renderer);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.scene);
+		await waitForReady(this.prefs, this.scene, this.gameState);
 
-		this.showWidget$ = this.scene.currentScene$$.pipe(
-			this.mapData((scene) => scene === SceneMode.GAMEPLAY),
+		this.showWidget$ = combineLatest([this.scene.currentScene$$, this.gameState.gameState$$]).pipe(
+			debounceTime(1000),
+			this.mapData(
+				([scene, gameState]) =>
+					scene === SceneMode.GAMEPLAY && !!gameState?.gameStarted && !gameState.gameEnded,
+			),
 			takeUntil(this.destroyed$),
 			this.handleReposition(),
 		);
