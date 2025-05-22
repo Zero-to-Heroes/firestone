@@ -18,7 +18,6 @@
 		justify-content: center;
 		gap: 5px;
 		// width: 100%;
-		margin-left: 10px;
 		padding-bottom: 6px;
 
 		.counter {
@@ -32,10 +31,16 @@
 		.header {
 			color: #61ff47;
 		}
+		.counters {
+			padding-left: 6px;
+		}
 	}
 	&.opponent {
 		.header {
 			color: #ff4747;
+		}
+		.counters {
+			padding-right: 6px;
 		}
 	}
 }

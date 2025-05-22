@@ -1,16 +1,17 @@
 .grouped-counters-element {
 	display: flex;
 	border-radius: 10px;
+	height: 100%;
 
 	.icon {
-		width: 40px;
-		height: 40px;
+		height: 100%;
+		aspect-ratio: 1;
 		margin-right: 10px;
 
 		img {
 			width: 100%;
 			height: 100%;
-			clip-path: circle(10px at 50% 50%);
+			clip-path: circle(28% at 50% 50%);
 			transform: scale(1.5);
 		}
 	}
