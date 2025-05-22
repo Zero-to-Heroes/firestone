@@ -6,6 +6,7 @@ import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
 	ArenaDiscoversGuardianService,
+	ArenaDraftGuardianService,
 	ArenaDraftManagerService,
 	ArenaHighWinsRunsService,
 	ArenaMulliganGuideGuardianService,
@@ -55,7 +56,6 @@ import {
 	TebexService,
 } from '@firestone/shared/common/service';
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
-import { ArenaDraftGuardianService } from 'libs/arena/common/src/lib/services/arena-draft-guardian.service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
