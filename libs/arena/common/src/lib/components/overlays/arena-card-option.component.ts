@@ -11,9 +11,20 @@ import {
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
+import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	debounceTime,
+	filter,
+	shareReplay,
+	switchMap,
+	takeUntil,
+} from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
+import { ArenaDraftGuardianService } from '../../services/arena-draft-guardian.service';
+import { ArenaDraftManagerService } from '../../services/arena-draft-manager.service';
 import { ArenaCardOption } from './model';
 
 @Component({
@@ -73,20 +84,38 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
+		private readonly guardian: ArenaDraftGuardianService,
+		private readonly draftManager: ArenaDraftManagerService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.ads.isReady();
+		await waitForReady(this.ads, this.guardian);
 
 		this.widgetActive$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.arenaShowCardSelectionOverlay),
 		);
-		this.showWidget$ = combineLatest([this.pickNumber$$, this.ads.hasPremiumSub$$]).pipe(
-			// tap((info) => console.debug('[arena-card-option] showWidget', info)),
-			this.mapData(([pickNumber, hasPremium]) => pickNumber === 0 || hasPremium),
+		this.showWidget$ = combineLatest([
+			this.pickNumber$$,
+			this.ads.hasPremiumSub$$,
+			this.guardian.freeUsesLeft$$,
+		]).pipe(
+			debounceTime(500),
+			this.mapData(
+				([pickNumber, hasPremium, freeUsesLeft]) => pickNumber === 0 || hasPremium || freeUsesLeft >= 0,
+			),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
+		this.draftManager.currentDeck$$.pipe(debounceTime(1000)).subscribe((deck) => {
+			if (!deck?.Id) {
+				return;
+			}
+
+			const runId = deck.Id;
+			this.guardian.acknowledgeRunUsed(runId);
+		});
 		combineLatest([this.showWidget$, this.widgetActive$])
 			.pipe(
 				filter(([showWidget, widgetActive]) => showWidget && widgetActive),

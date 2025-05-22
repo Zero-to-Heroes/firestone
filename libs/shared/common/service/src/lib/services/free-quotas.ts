@@ -1,0 +1,9 @@
+export const CONSTRUCTED_MULLIGAN_DAILY_FREE_USES = 3;
+export const CONSTRUCTED_DISCOVERS_DAILY_FREE_USES = 3;
+export const ARENA_DISCOVERS_DAILY_FREE_USES = 3;
+export const ARENA_MULLIGAN_DAILY_FREE_USES = 3;
+export const ARENA_DRAFT_WEEKLY_FREE_USES = 1;
+export const BGS_HERO_SELECTION_DAILY_FREE_USES = 2;
+export const BGS_QUESTS_DAILY_FREE_USES = 2;
+// Because it's used twice per game
+export const BGS_TRINKETS_DAILY_FREE_USES = 4;

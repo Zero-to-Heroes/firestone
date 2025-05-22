@@ -192,6 +192,19 @@ export const decodeBase64 = (input: string): string => {
 	return JSON.parse(inflated);
 };
 
+// Returns the date string (YYYY-MM-DD) for the Monday of the current week
+export const getCurrentWeekStartMonday = (): string => {
+	const now = new Date();
+	const day = now.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+	const diff = (day + 6) % 7; // 0 (Sun) -> 6, 1 (Mon) -> 0, ..., 6 (Sat) -> 5
+	const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - diff);
+	// Format as YYYY-MM-DD in local time
+	const year = monday.getFullYear();
+	const month = String(monday.getMonth() + 1).padStart(2, '0');
+	const date = String(monday.getDate()).padStart(2, '0');
+	return `${year}-${month}-${date}`;
+};
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
