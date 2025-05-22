@@ -17,9 +17,19 @@
 	aspect-ratio: 1;
 	margin-right: 20px;
 
-	::ng-deep {
-		.health {
-			bottom: 0;
+	&.hero {
+		::ng-deep {
+			.health {
+				bottom: 0;
+			}
+		}
+	}
+	&.non-hero {
+		img {
+			height: 100%;
+			aspect-ratio: 1;
+			clip-path: circle(10px at 50% 50%);
+			transform: scale(1.5);
 		}
 	}
 }

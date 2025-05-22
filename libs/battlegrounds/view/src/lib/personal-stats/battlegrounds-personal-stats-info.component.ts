@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
+import { CardType, GameType, defaultStartingHp, getHeroPower } from '@firestone-hs/reference-data';
 
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -12,12 +12,16 @@ import { BattlegroundsYourStat } from './your-stats.model';
 	template: `
 		<div class="info">
 			<bgs-hero-portrait
+				*ngIf="isHero"
 				aria-hidden="true"
-				class="portrait"
+				class="portrait hero"
 				[heroCardId]="heroCardId"
 				[cardTooltip]="heroPowerCardId"
 				[health]="heroStartingHealth"
 			></bgs-hero-portrait>
+			<div class="portrait non-hero" *ngIf="!isHero">
+				<img [src]="nonHeroIcon" [cardTooltip]="heroCardId" [cardTooltipBgs]="true" />
+			</div>
 			<div class="hero-details">
 				<div class="name">{{ heroName }}</div>
 			</div>
@@ -57,6 +61,8 @@ import { BattlegroundsYourStat } from './your-stats.model';
 export class BattlegroundsPersonalStatsInfoComponent {
 	@Input() set stat(value: BattlegroundsYourStat) {
 		this.heroCardId = value.cardId;
+		this.isHero = this.allCards.getCard(value.cardId).type?.toUpperCase() === CardType[CardType.HERO];
+		this.nonHeroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.heroPowerCardId = getHeroPower(value.cardId, this.allCards);
 		this.heroName = this.allCards.getCard(value.cardId).name;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.cardId, this.allCards);
@@ -77,7 +83,9 @@ export class BattlegroundsPersonalStatsInfoComponent {
 		this.placementChartData = !!globalPlacementChartData ? [globalPlacementChartData] : null;
 	}
 
+	isHero: boolean;
 	heroCardId: string;
+	nonHeroIcon: string;
 	heroPowerCardId: string;
 	heroName: string;
 	heroStartingHealth: number;
