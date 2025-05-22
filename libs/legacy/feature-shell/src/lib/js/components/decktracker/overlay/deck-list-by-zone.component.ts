@@ -269,7 +269,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		// Board
 		if (showBoardCardsInSeparateZone) {
-			const boardZone = [...deckState.board, deckState.weapon].filter((c) => !!c);
+			const boardZone = [
+				...deckState.board,
+				...deckState.otherZone.filter((c) => c.zone === 'SECRET'),
+				deckState.weapon,
+			].filter((c) => !!c);
 			zones.push(
 				this.buildZone(
 					boardZone,
@@ -326,6 +330,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] tag=ZONE value=PLAY
 				// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
 				.filter((c) => !!c.cardId?.length)
+				.filter((c) => !showBoardCardsInSeparateZone || c.zone !== 'SECRET')
 				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
 			...(showBoardCardsInSeparateZone ? [] : deckState.board),
 		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length && !c.stolenFromOpponent : true));
