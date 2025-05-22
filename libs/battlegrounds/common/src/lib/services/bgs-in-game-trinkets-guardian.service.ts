@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
+import { BGS_TRINKETS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -9,8 +10,6 @@ import {
 import { BehaviorSubject } from 'rxjs';
 
 export const BG_USE_TRINKETS = true;
-// Because it's used twice per game
-export const DAILY_FREE_USES_TRINKETS = 4;
 
 @Injectable()
 export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsInGameTrinketsGuardianService> {
@@ -27,7 +26,7 @@ export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsI
 	}
 
 	protected async init() {
-		this.freeUsesLeft$$ = new BehaviorSubject<number>(DAILY_FREE_USES_TRINKETS);
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(BGS_TRINKETS_DAILY_FREE_USES);
 		this.localStorage = AppInjector.get(LocalStorageService);
 
 		const freeUseCount = this.localStorage.getItem<FreeUseCount>(
@@ -36,7 +35,7 @@ export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsI
 		const today = new Date().toISOString().substring(0, 10);
 		const todaysCount = freeUseCount?.day === today ? freeUseCount.count : 0;
 		console.log('[bgs-trinkets-guardian] use count in init', today, todaysCount);
-		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES_TRINKETS - todaysCount));
+		this.freeUsesLeft$$.next(Math.max(0, BGS_TRINKETS_DAILY_FREE_USES - todaysCount));
 
 		this.addDevMode();
 	}
@@ -56,7 +55,7 @@ export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsI
 			count: newCount,
 		});
 		console.log('[bgs-trinkets-guardian] new use count', today, newCount);
-		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES_TRINKETS - newCount));
+		this.freeUsesLeft$$.next(Math.max(0, BGS_TRINKETS_DAILY_FREE_USES - newCount));
 	}
 
 	private addDevMode() {
@@ -66,7 +65,7 @@ export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsI
 
 		window['resetBgsTrinketStatsDailyUses'] = () => {
 			this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_BGS_IN_GAME_TRINKETS_STATS_SEEN, null);
-			this.freeUsesLeft$$.next(DAILY_FREE_USES_TRINKETS);
+			this.freeUsesLeft$$.next(BGS_TRINKETS_DAILY_FREE_USES);
 		};
 	}
 }

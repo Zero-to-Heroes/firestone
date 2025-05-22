@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { CONSTRUCTED_MULLIGAN_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -34,10 +34,7 @@ import {
 	takeUntil,
 } from 'rxjs';
 import { MulliganChartData } from '../models/mulligan-advice';
-import {
-	ConstructedMulliganGuideGuardianService,
-	DAILY_FREE_USES,
-} from '../services/constructed-mulligan-guide-guardian.service';
+import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 import { buildColor } from './mulligan-deck-view.component';
 import { InternalMulliganAdvice } from './mulligan-hand-view.component';
@@ -70,7 +67,7 @@ export class ConstructedMulliganHandComponent
 	showPremiumBanner$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
 
-	freeUses = DAILY_FREE_USES;
+	freeUses = CONSTRUCTED_MULLIGAN_DAILY_FREE_USES;
 
 	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 	private noData$$ = new BehaviorSubject<boolean>(false);

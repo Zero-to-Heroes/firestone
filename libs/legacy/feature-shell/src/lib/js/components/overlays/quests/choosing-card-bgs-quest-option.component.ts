@@ -8,9 +8,9 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { DAILY_FREE_USES_HERO, IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
 import { BgsQuestCardChoiceOption } from '@firestone/battlegrounds/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { BGS_QUESTS_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { combineLatest, takeUntil } from 'rxjs';
@@ -203,7 +203,7 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 			value: value,
 		});
 		this.freeUsesTooltip = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-tooltip', {
-			max: DAILY_FREE_USES_HERO,
+			max: BGS_QUESTS_DAILY_FREE_USES,
 			left: value,
 		});
 

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
+import { CONSTRUCTED_MULLIGAN_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -9,7 +10,6 @@ import {
 import { BehaviorSubject } from 'rxjs';
 
 export const MULLIGAN_GUIDE_IS_ENABLED = true;
-export const DAILY_FREE_USES = 3;
 
 @Injectable()
 export class ConstructedMulliganGuideGuardianService extends AbstractFacadeService<ConstructedMulliganGuideGuardianService> {
@@ -26,7 +26,7 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 	}
 
 	protected async init() {
-		this.freeUsesLeft$$ = new BehaviorSubject<number>(DAILY_FREE_USES);
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(CONSTRUCTED_MULLIGAN_DAILY_FREE_USES);
 		this.localStorage = AppInjector.get(LocalStorageService);
 
 		const freeUseCount = this.localStorage.getItem<FreeUseCount>(
@@ -35,7 +35,7 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 		const today = new Date().toISOString().substring(0, 10);
 		const todaysCount = freeUseCount?.day === today ? freeUseCount.count : 0;
 		console.log('[mulligan-guide-guardian] use count in init', today, todaysCount);
-		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES - todaysCount));
+		this.freeUsesLeft$$.next(Math.max(0, CONSTRUCTED_MULLIGAN_DAILY_FREE_USES - todaysCount));
 
 		this.addDevMode();
 	}
@@ -55,7 +55,7 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 			count: newCount,
 		});
 		console.log('[mulligan-guide-guardian] new use count', today, newCount);
-		this.freeUsesLeft$$.next(Math.max(0, DAILY_FREE_USES - newCount));
+		this.freeUsesLeft$$.next(Math.max(0, CONSTRUCTED_MULLIGAN_DAILY_FREE_USES - newCount));
 	}
 
 	private addDevMode() {
@@ -65,7 +65,7 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 
 		window['resetDailyUses'] = () => {
 			this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_MULLIGAN_ADVICE_SEEN, null);
-			this.freeUsesLeft$$.next(DAILY_FREE_USES);
+			this.freeUsesLeft$$.next(CONSTRUCTED_MULLIGAN_DAILY_FREE_USES);
 		};
 	}
 }

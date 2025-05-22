@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { BGS_QUESTS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -6,7 +7,6 @@ import {
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
-import { DAILY_FREE_USES } from '../../services/bgs-in-game-quests-guardian.service';
 
 @Component({
 	selector: 'bgs-quest-stats-info-premium',
@@ -27,7 +27,7 @@ import { DAILY_FREE_USES } from '../../services/bgs-in-game-quests-guardian.serv
 })
 export class BgsQuestStatsInfoPremiumComponent {
 	helpTooltip = this.i18n.translateString('battlegrounds.in-game.quests.locked-premium-info-tooltip', {
-		value: DAILY_FREE_USES,
+		value: BGS_QUESTS_DAILY_FREE_USES,
 	});
 
 	constructor(

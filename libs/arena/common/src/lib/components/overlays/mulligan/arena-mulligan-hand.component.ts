@@ -15,7 +15,7 @@ import {
 import { getBaseCardId } from '@firestone-hs/reference-data';
 import { buildColor } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ARENA_MULLIGAN_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -34,10 +34,7 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import {
-	ArenaMulliganGuideGuardianService,
-	DAILY_FREE_USES,
-} from '../../../services/arena-mulligan-guide-guardian.service';
+import { ArenaMulliganGuideGuardianService } from '../../../services/arena-mulligan-guide-guardian.service';
 import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guide.service';
 
 @Component({
@@ -66,7 +63,7 @@ export class ArenaMulliganHandComponent
 	showHandInfo$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
-	freeUses = DAILY_FREE_USES;
+	freeUses = ARENA_MULLIGAN_DAILY_FREE_USES;
 
 	private showPremiumBanner$$ = new BehaviorSubject<boolean>(false);
 	private noData$$ = new BehaviorSubject<boolean>(false);

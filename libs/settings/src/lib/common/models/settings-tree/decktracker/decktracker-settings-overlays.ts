@@ -1,5 +1,4 @@
-import { CONSTRUCTED_DISCOVERS_DAILY_FREE_USES } from '@firestone/constructed/common';
-import { Preferences } from '@firestone/shared/common/service';
+import { CONSTRUCTED_DISCOVERS_DAILY_FREE_USES, Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs } from '../common';
 

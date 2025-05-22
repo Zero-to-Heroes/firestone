@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { BGS_TRINKETS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -6,7 +7,6 @@ import {
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
-import { DAILY_FREE_USES_TRINKETS } from '../../services/bgs-in-game-trinkets-guardian.service';
 
 @Component({
 	selector: 'bgs-trinket-stats-info-premium',
@@ -27,7 +27,7 @@ import { DAILY_FREE_USES_TRINKETS } from '../../services/bgs-in-game-trinkets-gu
 })
 export class BgsTrinketStatsInfoPremiumComponent {
 	helpTooltip = this.i18n.translateString('battlegrounds.in-game.quests.locked-premium-info-tooltip', {
-		value: DAILY_FREE_USES_TRINKETS,
+		value: BGS_TRINKETS_DAILY_FREE_USES,
 	});
 
 	constructor(

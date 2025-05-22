@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { BGS_HERO_SELECTION_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -6,7 +7,6 @@ import {
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
-import { DAILY_FREE_USES_HERO } from '../services/bgs-in-game-hero-selection-guardian.service';
 
 @Component({
 	selector: 'bgs-hero-stats-info-premium',
@@ -27,7 +27,7 @@ import { DAILY_FREE_USES_HERO } from '../services/bgs-in-game-hero-selection-gua
 })
 export class BgsHeroStatsInfoPremiumComponent {
 	helpTooltip = this.i18n.translateString('battlegrounds.hero-selection.locked-premium-info-tooltip', {
-		value: DAILY_FREE_USES_HERO,
+		value: BGS_HERO_SELECTION_DAILY_FREE_USES,
 	});
 
 	constructor(

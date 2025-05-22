@@ -9,9 +9,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { DAILY_FREE_USES_HERO } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { BGS_HERO_SELECTION_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, takeUntil } from 'rxjs';
@@ -147,7 +146,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 			value: value,
 		});
 		this.freeUsesTooltip = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-tooltip', {
-			max: DAILY_FREE_USES_HERO,
+			max: BGS_HERO_SELECTION_DAILY_FREE_USES,
 			left: value,
 		});
 

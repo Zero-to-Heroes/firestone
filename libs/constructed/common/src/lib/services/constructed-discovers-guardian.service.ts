@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { IReviewIdService, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
+import { CONSTRUCTED_DISCOVERS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -8,8 +9,6 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, debounceTime } from 'rxjs';
-
-export const CONSTRUCTED_DISCOVERS_DAILY_FREE_USES = 2;
 
 @Injectable()
 export class ConstructedDiscoversGuardianService extends AbstractFacadeService<ConstructedDiscoversGuardianService> {
