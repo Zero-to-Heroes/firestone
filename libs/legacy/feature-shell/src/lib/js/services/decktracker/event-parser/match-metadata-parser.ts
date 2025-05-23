@@ -1,6 +1,15 @@
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import {
+	BattlegroundsState,
+	BgsBattlesPanel,
+	BgsFaceOffWithSimulation,
+	BgsGame,
+	BgsHeroSelectionOverviewPanel,
+	BgsNextOpponentOverviewPanel,
+	BgsPanel,
+	BgsPlayer,
+	BgsPostMatchStatsPanel,
 	DeckCard,
 	DeckHandlerService,
 	DeckSideboard,
@@ -10,9 +19,10 @@ import {
 	Metadata,
 } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
 import { DeckInfo, DeckParserService } from '../deck-parser.service';
@@ -27,6 +37,8 @@ export class MatchMetadataParser implements EventParser {
 		private readonly memory: MemoryInspectionService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 		private readonly nav: BgsInGameWindowNavigationService,
+		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -59,14 +71,21 @@ export class MatchMetadataParser implements EventParser {
 		const prefs = await this.prefs.getPreferences();
 
 		if (stateWithMetaData.isBattlegrounds()) {
+			console.debug('[match-metadata-parser] bgs game start', gameEvent, stateWithMetaData);
 			this.nav.currentPanelId$$.next('bgs-hero-selection-overview');
 			this.nav.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
-			return stateWithMetaData.update({
+			this.highlighter.resetHighlights();
+
+			const newState = stateWithMetaData.update({
 				bgState: stateWithMetaData.bgState.update({
 					heroSelectionDone: false,
 					postMatchStats: undefined,
+					currentGame: new BgsGame(),
+					panels: buildEmptyPanels(currentState.bgState, prefs, this.i18n),
 				}),
 			});
+
+			return newState;
 		} else if (stateWithMetaData.isMercenaries()) {
 			return stateWithMetaData;
 		}
@@ -168,3 +187,54 @@ export class MatchMetadataParser implements EventParser {
 			)[0];
 	}
 }
+
+const buildEmptyPanels = (
+	currentState: BattlegroundsState,
+	prefs: Preferences,
+	i18n: LocalizationFacadeService,
+): readonly BgsPanel[] => {
+	return [
+		buildBgsHeroSelectionOverview(i18n),
+		buildBgsNextOpponentOverviewPanel(i18n),
+		buildPostMatchStatsPanel(currentState, prefs, i18n),
+		buildBgsBattlesPanel(i18n),
+	];
+};
+
+const buildBgsHeroSelectionOverview = (i18n: LocalizationFacadeService): BgsHeroSelectionOverviewPanel => {
+	return BgsHeroSelectionOverviewPanel.create({
+		name: i18n.translateString('battlegrounds.menu.hero-selection'),
+		heroOptions: [],
+	});
+};
+
+const buildBgsNextOpponentOverviewPanel = (i18n: LocalizationFacadeService): BgsNextOpponentOverviewPanel => {
+	return BgsNextOpponentOverviewPanel.create({
+		name: i18n.translateString('battlegrounds.menu.opponent'),
+		opponentOverview: null,
+	} as BgsNextOpponentOverviewPanel);
+};
+
+const buildBgsBattlesPanel = (i18n: LocalizationFacadeService): BgsBattlesPanel => {
+	return BgsBattlesPanel.create({
+		name: i18n.translateString('battlegrounds.menu.simulator'),
+		faceOffs: [] as readonly BgsFaceOffWithSimulation[],
+	} as BgsBattlesPanel);
+};
+
+const buildPostMatchStatsPanel = (
+	currentState: BattlegroundsState,
+	prefs: Preferences,
+	i18n: LocalizationFacadeService,
+): BgsPostMatchStatsPanel => {
+	const player: BgsPlayer = currentState.currentGame?.getMainPlayer();
+	return BgsPostMatchStatsPanel.create({
+		name: i18n.translateString('battlegrounds.menu.live-stats'),
+		stats: null,
+		newBestUserStats: null,
+		// globalStats: currentState.globalStats,
+		player: player,
+		tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
+		// isComputing: false,
+	} as BgsPostMatchStatsPanel);
+};
