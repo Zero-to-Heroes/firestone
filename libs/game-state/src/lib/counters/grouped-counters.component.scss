@@ -1,7 +1,8 @@
 .grouped-counters {
 	display: flex;
 	flex-direction: column;
-	width: 256px;
+	// width: 256px;
+	width: auto;
 	color: var(--color-2);
 	background: var(--color-7);
 	border-radius: 10px;

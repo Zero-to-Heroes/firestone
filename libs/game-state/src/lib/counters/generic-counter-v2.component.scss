@@ -39,7 +39,9 @@
 	align-items: center;
 	justify-content: center;
 	height: 28px;
-	width: 100%;
+	// width: 100%;
+	width: 120%;
+	left: -10%;
 
 	.value {
 		width: fit-content;
