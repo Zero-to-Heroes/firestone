@@ -163,12 +163,12 @@ export class GameStateService {
 			);
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			const info: ManastormInfo = event.data[0];
-			console.debug('[bgs-store] Replay created, received info', info.type);
+			console.debug('[game-state] Replay created, received info', info.type);
 			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
 			// could be already reset when it arrives
 			if (info && info.type === 'new-review' && this.state?.bgState?.currentGame) {
 				const currentGame = this.state.bgState.currentGame;
-				console.debug('[bgs-store] will trigger START_BGS_RUN_STATS');
+				console.debug('[game-state] will trigger START_BGS_RUN_STATS', this.state);
 				const bestBgsUserStats = await this.bgsUserStatsService.bestStats$$.getValueWithInit();
 				this.events.broadcast(
 					Events.START_BGS_RUN_STATS,
