@@ -1,4 +1,4 @@
-import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, isBattlegrounds, Race } from '@firestone-hs/reference-data';
 import {
 	BattlegroundsState,
 	BgsBattleHistory,
@@ -17,7 +17,7 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

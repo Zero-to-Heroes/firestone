@@ -1,3 +1,4 @@
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { BgsGame, GameState } from '@firestone/game-state';
 import { BugReportService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -18,7 +19,7 @@ export class BgsBattleResultParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

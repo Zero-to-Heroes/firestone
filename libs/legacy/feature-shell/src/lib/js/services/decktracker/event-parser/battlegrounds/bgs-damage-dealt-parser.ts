@@ -1,4 +1,4 @@
-import { CardType } from '@firestone-hs/reference-data';
+import { CardType, isBattlegrounds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DamageGameEvent } from '@legacy-import/src/lib/js/models/mainwindow/game-events/damage-game-event';
@@ -10,7 +10,10 @@ export class BgsDamageDealtParser implements EventParser {
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
-			!!state && gameEvent.additionalData.targets && Object.keys(gameEvent.additionalData.targets).length === 1
+			!!state &&
+			isBattlegrounds(state.metadata?.gameType) &&
+			gameEvent.additionalData.targets &&
+			Object.keys(gameEvent.additionalData.targets).length === 1
 		);
 	}
 

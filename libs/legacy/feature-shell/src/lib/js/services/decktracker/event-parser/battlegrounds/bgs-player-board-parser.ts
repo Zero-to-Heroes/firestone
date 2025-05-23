@@ -1,5 +1,11 @@
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { defaultStartingHp, GameTag, GameType, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import {
+	defaultStartingHp,
+	GameTag,
+	GameType,
+	isBattlegrounds,
+	normalizeHeroCardId,
+} from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
@@ -39,7 +45,7 @@ export class BgsPlayerBoardParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

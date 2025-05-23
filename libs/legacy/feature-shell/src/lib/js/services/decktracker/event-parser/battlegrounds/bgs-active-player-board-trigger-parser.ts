@@ -1,3 +1,4 @@
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { GameStateEvent } from '@legacy-import/src/lib/js/models/decktracker/game-state-event';
@@ -9,7 +10,7 @@ export class BgsActivePlayerBoardTriggerParser implements EventParser {
 	constructor(private readonly memory: MemoryInspectionService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
