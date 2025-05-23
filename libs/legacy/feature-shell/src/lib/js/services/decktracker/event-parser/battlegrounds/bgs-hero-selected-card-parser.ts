@@ -3,6 +3,7 @@ import {
 	GameType,
 	getHeroPower,
 	isBaconGhost,
+	isBattlegrounds,
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
 import {
@@ -27,7 +28,7 @@ export class BgsHeroSelectedCardParser implements EventParser {
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

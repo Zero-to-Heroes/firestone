@@ -1,4 +1,4 @@
-import { isBaconGhost, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { isBaconGhost, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsTavernUpgrade, BgsTriple, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
@@ -9,7 +9,7 @@ export class BgsTavernUpdateParser implements EventParser {
 	constructor(private readonly gameEventsService: GameEvents, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

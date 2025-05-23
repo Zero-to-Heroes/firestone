@@ -1,3 +1,4 @@
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
@@ -8,7 +9,7 @@ export class BgsRecruitPhaseParser implements EventParser {
 	constructor(private readonly owUtils: OwUtilsService, private readonly prefs: PreferencesService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return !!state;
+		return !!state && isBattlegrounds(state.metadata?.gameType);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
