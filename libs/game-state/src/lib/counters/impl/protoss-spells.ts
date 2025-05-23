@@ -19,9 +19,9 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 			)?.length ?? 0,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.protoss-spells-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.colossus-damage-label'),
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.protoss-spells-tooltip', {
+				i18n.translateString('settings.decktracker.your-deck.counters.colossus-damage-tooltip', {
 					cardName: allCards.getCard(CardIds.Colossus_SC_758).name,
 				}),
 		},
@@ -38,9 +38,9 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 			)?.length ?? 0,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.protoss-spells-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.colossus-damage-label'),
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
-				i18n.translateString('settings.decktracker.opponent-deck.counters.protoss-spells-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.colossus-damage-tooltip'),
 		},
 	};
 
@@ -48,8 +48,12 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 		super();
 	}
 
+	protected override formatValue(value: number): string {
+		return value === 0 ? `2 x 1` : `2 x ( 1 + ${value})`;
+	}
+
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		return this.i18n.translateString(`counters.protoss-spells.${side}`, {
+		return this.i18n.translateString(`counters.colossus-damage.${side}`, {
 			value: this[side]?.value(gameState) ?? 0,
 		});
 	}
