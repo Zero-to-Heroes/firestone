@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { BgsCompTip } from '@firestone-hs/content-craetor-input';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
@@ -34,6 +35,26 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[helpTooltipPosition]="'left'"
 					></div>
 					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
+				</div>
+				<div class="pro-advice" *ngIf="false && !value.collapsed && tips.length">
+					<div class="header">
+						<div class="section-title-text">How to play</div>
+						<!-- <div class="difficulty {{ difficultyClass }}">{{difficulty}}</div> -->
+					</div>
+					<div class="text-section how-to-play">
+						<div class="how-to-play-text">{{ tips[0].tip }}</div>
+					</div>
+					<div class="header">
+						<div class="section-title-text">When to commit</div>
+						<!-- <div class="difficulty {{ difficultyClass }}">{{difficulty}}</div> -->
+					</div>
+					<div class="text-section when-to-commit">
+						<div class="when-to-commit-text">{{ tips[0].whenToCommit }}</div>
+					</div>
+					<div class="footer">
+						<div class="footer-text">Brought to you by {{ tips[0].author }}</div>
+						<div class="footer-date">{{ tips[0].date }}</div>
+					</div>
 				</div>
 				<div class="cards core" *ngIf="!value.collapsed && coreCards?.length">
 					<div class="header">
@@ -169,12 +190,14 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	cycleCards: readonly ExtendedReferenceCard[];
 	trinkets: readonly ExtendedReferenceCard[];
 	enablerCards: readonly ExtendedReferenceCard[];
+	tips: BgsCompTip[];
 
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
 		console.debug('[bgs-minions-list-composition] setting composition', value);
 		this.compId$$.next(value.compId);
 		this.name = value.name;
 		this.powerLevel = value.powerLevel;
+		this.tips = value.tips;
 		this.coreCards = value.cards
 			.filter((c) => c.status === 'CORE')
 			.map((c) => {

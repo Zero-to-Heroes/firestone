@@ -79,6 +79,8 @@
 
 	.cards {
 		margin-top: 2px;
+		margin-left: 5px;
+		margin-right: 5px;
 
 		.header {
 			background: var(--color-5);
@@ -104,6 +106,38 @@
 	&.collapsed {
 		.header .caret {
 			transform: rotate(-90deg);
+		}
+	}
+
+	.pro-advice {
+		margin-top: 2px;
+		color: var(--default-text-color);
+		display: flex;
+		flex-direction: column;
+		font-size: 0.8em;
+		margin-left: 5px;
+		margin-right: 5px;
+		margin-bottom: 5px;
+
+		.header {
+			background: var(--color-5);
+			justify-content: center;
+		}
+
+		.text-section {
+			text-align: left;
+			padding: 5px;
+			margin-bottom: 5px;
+		}
+
+		.footer {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 0.9em;
+			opacity: 0.6;
+			margin-top: 5px;
+			padding: 0 10px;
 		}
 	}
 }
