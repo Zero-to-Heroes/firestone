@@ -42,7 +42,30 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 		},
 	};
 
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentProtossMinionReductionCounter' as const,
+		display: (state: GameState): boolean => true,
+		value: (state: GameState): string | null => {
+			const nextReductionCost =
+				3 *
+				state.opponentDeck.enchantments.filter(
+					(e) => e.cardId === CardIds.WarpGate_WarpConduitEnchantment_SC_751e,
+				).length;
+			const gameReductionCost = state.opponentDeck.enchantments
+				.filter((e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e)
+				.map((e) => (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1))
+				.reduce((a, b) => a + b, 0);
+			const showInfo =
+				nextReductionCost > 0 || gameReductionCost > 0 || state.opponentDeck.hasRelevantCard(reductionCards);
+			return showInfo ? `${gameReductionCost} | ${nextReductionCost}` : null;
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.protoss-minion-reduction-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.protoss-minion-reduction-tooltip'),
+		},
+	};
 
 	constructor(private readonly i18n: ILocalizationService) {
 		super();
