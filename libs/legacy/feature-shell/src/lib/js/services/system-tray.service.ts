@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { SettingsControllerService } from '@firestone/settings';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';
 
@@ -18,8 +19,13 @@ export class SystemTrayService {
 	}
 
 	private async init() {
-		await this.i18n.initReady();
 		await waitForReady(this.mainNav, this.settingsController);
+		await this.i18n.initReady();
+		// Not sure why this happens here
+		if (this.i18n.translateString('app.tray.main-window') === 'app.tray.main-window') {
+			await sleep(500);
+			await this.i18n.initReady();
+		}
 
 		const menu: overwolf.os.tray.ExtensionTrayMenu = {
 			menu_items: [
