@@ -510,6 +510,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BroodKeeper_EDR_457:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		case CardIds.Bubblebot_TSC_059:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.BulkUp:
 			return and(side(inputSide), or(inDeck, inHand), taunt, minion);
 		case CardIds.BumblingBellhop_VAC_521:
