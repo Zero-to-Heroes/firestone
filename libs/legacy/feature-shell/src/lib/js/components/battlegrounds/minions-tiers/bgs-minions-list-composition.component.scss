@@ -84,7 +84,8 @@
 
 		.header {
 			background: var(--color-5);
-			justify-content: center;
+			// justify-content: center;
+			justify-content: space-between;
 
 			.header-text {
 				font-size: 0.8em;
@@ -121,7 +122,20 @@
 
 		.header {
 			background: var(--color-5);
-			justify-content: center;
+			// justify-content: center;
+			justify-content: space-between;
+		}
+
+		.difficulty {
+			&.easy {
+				color: #61ff47;
+			}
+			&.medium {
+				color: #ffb948;
+			}
+			&.hard {
+				color: #ff4747;
+			}
 		}
 
 		.text-section {

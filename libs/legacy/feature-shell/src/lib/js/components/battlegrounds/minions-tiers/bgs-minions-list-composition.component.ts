@@ -5,7 +5,7 @@ import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@fires
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 
 @Component({
@@ -36,23 +36,36 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 					></div>
 					<div class="caret" inlineSVG="assets/svg/caret.svg"></div>
 				</div>
-				<div class="pro-advice" *ngIf="false && !value.collapsed && tips.length">
+				<div class="pro-advice" *ngIf="!value.collapsed && tips.length">
 					<div class="header">
-						<div class="section-title-text">How to play</div>
-						<!-- <div class="difficulty {{ difficultyClass }}">{{difficulty}}</div> -->
+						<div
+							class="section-title-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.advice.how-to-play'"
+						></div>
+						<div
+							class="difficulty {{ difficultyClass }}"
+							[helpTooltip]="
+								'battlegrounds.in-game.minions-list.compositions.advice.difficulty-tooltip'
+									| fsTranslate
+							"
+						>
+							{{ difficulty }}
+						</div>
 					</div>
 					<div class="text-section how-to-play">
 						<div class="how-to-play-text">{{ tips[0].tip }}</div>
 					</div>
 					<div class="header">
-						<div class="section-title-text">When to commit</div>
-						<!-- <div class="difficulty {{ difficultyClass }}">{{difficulty}}</div> -->
+						<div
+							class="section-title-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.advice.when-to-commit'"
+						></div>
 					</div>
 					<div class="text-section when-to-commit">
 						<div class="when-to-commit-text">{{ tips[0].whenToCommit }}</div>
 					</div>
 					<div class="footer">
-						<div class="footer-text">Brought to you by {{ tips[0].author }}</div>
+						<div class="footer-text">{{ author }}</div>
 						<div class="footer-date">{{ tips[0].date }}</div>
 					</div>
 				</div>
@@ -191,6 +204,9 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	trinkets: readonly ExtendedReferenceCard[];
 	enablerCards: readonly ExtendedReferenceCard[];
 	tips: BgsCompTip[];
+	author: string;
+	difficulty: string;
+	difficultyClass: string;
 
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
 		console.debug('[bgs-minions-list-composition] setting composition', value);
@@ -245,6 +261,13 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			});
 		this.headerImages = [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.minionIcon}.jpg`];
 		this.compCards$$.next([...(this.coreCards ?? []), ...(this.addonCards ?? [])]);
+		this.author = this.i18n.translateString('battlegrounds.in-game.minions-list.compositions.advice.author', {
+			author: value.tips?.[0]?.author ?? '',
+		});
+		this.difficulty = this.i18n.translateString(
+			`battlegrounds.in-game.minions-list.compositions.difficulty.${value.difficulty?.toLowerCase()}`,
+		);
+		this.difficultyClass = value.difficulty?.toLowerCase() ?? '';
 	}
 
 	@Input() set highlightedMinions(value: readonly string[]) {
@@ -275,6 +298,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		private readonly allCards: CardsFacadeService,
 		private readonly controller: BgsInGameCompositionsService,
 		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}

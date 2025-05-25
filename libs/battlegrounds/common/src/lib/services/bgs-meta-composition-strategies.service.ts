@@ -29,10 +29,12 @@ export class BgsMetaCompositionStrategiesService extends AbstractFacadeService<B
 		this.strategies$$.onFirstSubscribe(async () => {
 			const result = await this.api.callGetApi<readonly BgsCompAdvice[]>(META_COMPOSITION_STRATEGIES_URL);
 			this.strategies$$.next(
-				result?.map((s) => ({
-					...s,
-					cards: s.cards.filter((c) => c.cardId !== '#N/A'),
-				})) ?? null,
+				result
+					?.filter((s) => !!s.compId && !!s.cards?.length)
+					?.map((s) => ({
+						...s,
+						cards: s.cards.filter((c) => c.cardId !== '#N/A'),
+					})) ?? null,
 			);
 			console.debug('[bgs-meta-comp-strategies] loaded strategies', result);
 		});
