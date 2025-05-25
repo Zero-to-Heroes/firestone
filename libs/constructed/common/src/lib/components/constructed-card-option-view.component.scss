@@ -104,9 +104,10 @@
 			&.negative {
 				color: #ff4747;
 			}
-			&.low-data {
-				opacity: 0.5;
-			}
+			// TODO: Find another way to show low data, this isn't clear
+			// &.low-data {
+			// 	opacity: 0.8;
+			// }
 		}
 
 		// &:not(:last-child) {
