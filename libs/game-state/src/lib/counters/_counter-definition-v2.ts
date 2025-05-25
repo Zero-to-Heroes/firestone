@@ -61,16 +61,23 @@ export abstract class CounterDefinitionV2<T> {
 
 		if (!gameState?.gameStarted || gameState.gameEnded) {
 			this.debug &&
-				console.debug('[debug] game not started or ended', side, gameState.gameStarted, gameState.gameEnded);
+				console.debug(
+					'[debug] game not started or ended',
+					this.id,
+					side,
+					gameState.gameStarted,
+					gameState.gameEnded,
+				);
 			return false;
 		}
 
 		if (side === 'player') {
-			this.debug && console.debug('[debug] considering', side, gameState, bgState);
+			this.debug && console.debug('[debug] considering', this.id, side, gameState, bgState);
 			if (!this.player?.pref || !prefs[this.player.pref]) {
 				this.debug &&
 					console.debug(
 						'[debug] not visible from prefs',
+						this.id,
 						side,
 						this.player?.pref,
 						prefs[this.player?.pref ?? ''],
@@ -84,6 +91,7 @@ export abstract class CounterDefinitionV2<T> {
 				this.debug &&
 					console.debug(
 						'[debug] not visible from deck',
+						this.id,
 						side,
 						gameState.playerDeck?.hasRelevantCard(this.cards),
 					);
@@ -93,39 +101,54 @@ export abstract class CounterDefinitionV2<T> {
 				this.debug &&
 					console.debug(
 						'[debug] not visible from deck',
+						this.id,
 						side,
 						gameState.playerDeck?.hasRelevantCard(this.cards),
 					);
 				return false;
 			}
 			if ((this.player.cachedValue = this.player.value(gameState, bgState)) == null) {
-				this.debug && console.debug('[debug] no value', side, this.player.cachedValue);
+				this.debug && console.debug('[debug] no value', this.id, side, this.player.cachedValue);
 				return false;
 			}
-			this.debug && console.debug('[debug] show', side, gameState, bgState);
+			this.debug && console.debug('[debug] show', this.id, side, gameState, bgState);
 			return true;
 		} else if (side === 'opponent') {
 			this.debug &&
-				console.debug('checking opponent', side, this.opponent?.pref, prefs[this.opponent?.pref ?? '']);
+				console.debug(
+					'checking opponent',
+					this.id,
+					side,
+					this.opponent?.pref,
+					prefs[this.opponent?.pref ?? ''],
+				);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
+				this.debug && console.debug('hiding for pref', this.id, side);
 				return false;
 			}
 			if (prefs[this.opponent.pref] === 'always-on') {
+				this.debug && console.debug('showing as always-on', this.id, side);
 				return true;
 			}
-			this.debug && console.debug('hasRelevantCard?', side, gameState.opponentDeck?.hasRelevantCard(this.cards));
 			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
+				this.debug &&
+					console.debug(
+						'hasRelevantCard',
+						this.id,
+						side,
+						gameState.opponentDeck?.hasRelevantCard(this.cards),
+					);
 				return true;
 			}
-			this.debug && console.debug('display', side, this.opponent.display(gameState, bgState));
 			if (!this.opponent.display(gameState, bgState)) {
+				this.debug && console.debug('no display', this.id, side, this.opponent.display(gameState, bgState));
 				return false;
 			}
 			if (!(this.opponent.cachedValue = this.opponent.value(gameState, bgState))) {
-				this.debug && console.debug('value', side, this.opponent.cachedValue);
+				this.debug && console.debug('value', this.id, side, this.opponent.cachedValue);
 				return false;
 			}
-			this.debug && console.debug('returning true', this);
+			this.debug && console.debug('returning true', this.id, side, this);
 			return true;
 		}
 		return false;
@@ -139,9 +162,11 @@ export abstract class CounterDefinitionV2<T> {
 		countersUseExpandedView: boolean,
 	): CounterInstance<T> | undefined {
 		const sideObj = this[side];
-		const rawValue = sideObj?.cachedValue;
+		// Always not null here, as we already checked in isActive()
+		const rawValue = sideObj?.cachedValue ?? sideObj?.value(gameState, bgState);
 		const savedValue = sideObj?.savedValue;
 		if (rawValue === savedValue) {
+			this.debug && console.debug('[debug] returning saved instance', this.id, side, sideObj);
 			return sideObj?.savedInstance;
 		}
 
@@ -160,7 +185,7 @@ export abstract class CounterDefinitionV2<T> {
 			value: this.valueImg ? null : this.formatValue(rawValue),
 			cardTooltip: this.cardTooltip(side, gameState, bgState, rawValue),
 		};
-		this.debug && console.debug('[debug] emitting counter', this.id, result);
+		this.debug && console.debug('[debug] emitting counter', this.id, side, result);
 		if (sideObj) {
 			sideObj.savedValue = rawValue;
 			sideObj.savedInstance = result;
