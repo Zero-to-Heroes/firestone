@@ -271,10 +271,14 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && (hasCost(c, '==', 6) || hasCost(c, '==', 3));
 		case CardIds.GorillabotA3:
 		case CardIds.GorillabotA3Core:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MECH);
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.MECH) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.MismatchedFossils_DEEP_001:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
+				canBeDiscoveredByClass(c, options.currentClass) &&
 				(hasCorrectTribe(c, Race.BEAST) || hasCorrectTribe(c, Race.UNDEAD));
 		case CardIds.ObsidianRevenant_DEEP_005:
 			return (c) =>
