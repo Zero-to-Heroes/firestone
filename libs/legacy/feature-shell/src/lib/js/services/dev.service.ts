@@ -53,10 +53,12 @@ export class DevService {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
 
-		window['fakeGame'] = async (fileName: string) => {
+		window['fakeGame'] = async (fileName: string, allowReconnects = false) => {
 			const events = [];
 			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
+			// Do it everytime to reset its memory
+			await this.gameEvents['initPlugin']();
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			const logLines = logContents.split('\n');
@@ -65,6 +67,7 @@ export class DevService {
 			let currentIndex = 0;
 			for (const line of logLines) {
 				this.gameEvents.receiveLogLine(line);
+
 				currentIndex++;
 				if (currentIndex % 4000 === 0) {
 					console.log('[game-events] processed', currentIndex, 'lines out of', logLines.length);

@@ -1887,7 +1887,7 @@ export class GameEvents {
 		freeRegexp();
 	}
 
-	private async initPlugin() {
+	public async initPlugin() {
 		if (this.plugin || this.pluginBeingInitialized) {
 			return;
 		}
