@@ -28,5 +28,5 @@ export class BgsTavernMinionComponent {
 	highlighted: boolean;
 
 	minionTop = 10;
-	minionRight = 8;
+	minionRight = 14;
 }
