@@ -265,7 +265,9 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			author: value.tips?.[0]?.author ?? '',
 		});
 		this.difficulty = this.i18n.translateString(
-			`battlegrounds.in-game.minions-list.compositions.difficulty.${value.difficulty?.toLowerCase()}`,
+			`battlegrounds.in-game.minions-list.compositions.difficulty.${value.difficulty
+				?.replaceAll(' ', '-')
+				?.toLowerCase()}`,
 		);
 		this.difficultyClass = value.difficulty?.toLowerCase() ?? '';
 	}
