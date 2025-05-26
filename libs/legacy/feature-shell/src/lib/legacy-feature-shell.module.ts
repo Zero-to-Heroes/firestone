@@ -312,6 +312,7 @@ import { ConstructedMetaDeckDetailsViewComponent } from '@components/decktracker
 import { ConstructedMetaDeckDetailsComponent } from '@components/decktracker/main/constructed-meta-deck-details.component';
 import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
 import { ConstructedMetaDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-meta-deck-card-search.component';
+import { ConstructedPlayCoinFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-play-coin-filter-dropdown.component';
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
@@ -1050,6 +1051,7 @@ try {
 		DecktrackerFormatFilterDropdownComponent,
 		ConstructedSampleSizeFilterDropdownComponent,
 		ConstructedDustFilterDropdownComponent,
+		ConstructedPlayCoinFilterDropdownComponent,
 		ConstructedArchetypeSampleSizeFilterDropdownComponent,
 		DecktrackerTimeFilterDropdownComponent,
 		DecktrackerRankFilterDropdownComponent,

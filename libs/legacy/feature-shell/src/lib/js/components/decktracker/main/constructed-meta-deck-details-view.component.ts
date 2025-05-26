@@ -172,6 +172,8 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	gamesPlayedNumber: number;
 	gamesPlayed: string;
 	winrate: string;
+	winratePlay: string;
+	winrateCoin: string;
 	winrateNumber: number;
 	cards: readonly ConstructedCardData[];
 	discoverCards: readonly ConstructedDiscoverCardData[];
@@ -184,6 +186,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	@Input() showRelativeInfo: boolean;
 
 	@Input() set input(value: ConstructedDeckDetails) {
+		console.debug('[deck-details] setting input', value);
 		this.loading = value === undefined;
 		this.missing = value === null;
 		if (!value) {

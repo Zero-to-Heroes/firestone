@@ -48,6 +48,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 				class="filter"
 			></constructed-archetype-sample-size-filter-dropdown>
 			<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
+			<constructed-play-coin-filter-dropdown class="filter"></constructed-play-coin-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
 			<constructed-meta-deck-card-search

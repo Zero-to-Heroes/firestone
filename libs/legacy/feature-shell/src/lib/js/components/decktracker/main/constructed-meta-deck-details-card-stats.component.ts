@@ -34,6 +34,7 @@ import { ExtendedConstructedCardData } from './constructed-meta-deck-details-vie
 					[helpTooltip]="'app.decktracker.meta.details.cards.show-relative-info-button-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
+
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
 				<sortable-table-label
 					class="cell card-name"
