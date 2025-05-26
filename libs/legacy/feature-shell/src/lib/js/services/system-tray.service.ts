@@ -22,9 +22,11 @@ export class SystemTrayService {
 		await waitForReady(this.mainNav, this.settingsController);
 		await this.i18n.initReady();
 		// Not sure why this happens here
-		if (this.i18n.translateString('app.tray.main-window') === 'app.tray.main-window') {
+		let retriesLeft = 10;
+		while (retriesLeft > 0 && this.i18n.translateString('app.tray.main-window') === 'app.tray.main-window') {
 			await sleep(500);
 			await this.i18n.initReady();
+			retriesLeft--;
 		}
 
 		const menu: overwolf.os.tray.ExtensionTrayMenu = {
