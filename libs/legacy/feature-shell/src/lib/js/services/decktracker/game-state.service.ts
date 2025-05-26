@@ -8,7 +8,7 @@ import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { hasTag } from '@services/decktracker/attack-on-board.service';
-import { BehaviorSubject, distinctUntilChanged, filter } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
@@ -109,14 +109,19 @@ export class GameStateService {
 		this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
 			this.processingQueue.enqueue(event);
 		});
-		this.matchMemoryInfo.battlegroundsMemoryInfo$$.pipe(filter((info) => !!info)).subscribe((info) =>
-			this.processingQueue.enqueue({
-				type: GameEvent.BATTLEGROUNDS_GLOBAL_INFO_UPDATE,
-				additionalData: {
-					info: info,
-				},
-			}),
-		);
+		this.matchMemoryInfo.battlegroundsMemoryInfo$$
+			.pipe(
+				debounceTime(300),
+				filter((info) => !!info),
+			)
+			.subscribe((info) =>
+				this.processingQueue.enqueue({
+					type: GameEvent.BATTLEGROUNDS_GLOBAL_INFO_UPDATE,
+					additionalData: {
+						info: info,
+					},
+				}),
+			);
 		this.simulation.battleInfo$$.pipe(filter((info) => !!info)).subscribe((info) => {
 			this.processingQueue.enqueue({
 				type: GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION,
@@ -427,7 +432,14 @@ export class GameStateService {
 			);
 		}
 
-		console.debug('[game-state] processed event', gameEvent.type, gameEvent.cardId, currentState, gameEvent);
+		console.debug(
+			'[game-state] processed event',
+			gameEvent.type,
+			gameEvent.cardId,
+			currentState.opponentDeck.board.map((c) => c.cardName),
+			currentState,
+			gameEvent,
+		);
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}

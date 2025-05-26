@@ -36,7 +36,11 @@ export class BgsMatchMemoryInfoService {
 	private async startMemoryReading() {
 		await waitForReady(this.gameState, this.prefs);
 
+		let inProcess = false;
 		this.sub = interval(INTERVAL).subscribe(async () => {
+			if (inProcess) {
+				return;
+			}
 			const gameState = this.gameState.gameState$$.getValue();
 			if (
 				!gameState?.bgState?.currentGame ||
@@ -44,15 +48,31 @@ export class BgsMatchMemoryInfoService {
 				gameState.gameEnded ||
 				!isBattlegrounds(gameState.metadata.gameType)
 			) {
+				// console.debug(
+				// 	'[bgs-match-memory-info] no BG game in progress, stopping memory reading',
+				// 	gameState?.bgState?.currentGame,
+				// 	gameState?.gameStarted,
+				// 	gameState?.gameEnded,
+				// 	isBattlegrounds(gameState?.metadata?.gameType),
+				// );
 				return;
 			}
 
-			const prefs = await this.prefs.getPreferences();
-			const playersMmr =
-				prefs.bgsShowMmrInLeaderboardOverlay || prefs.bgsShowMmrInOpponentRecap
-					? await this.matchPlayers.playersMatchMmr$$.getValueWithInit()
-					: null;
+			inProcess = true;
+			// console.debug('[bgs-match-memory-info] reading memory info');
 			const memoryInfo = await this.memory.getBattlegroundsMatchWithPlayers(1);
+			// So that we send it right away to get the most important info
+			this.battlegroundsMemoryInfo$$.next(memoryInfo);
+			// console.debug('[bgs-match-memory-info] sent memory info basic info', memoryInfo);
+
+			const prefs = await this.prefs.getPreferences();
+			if (!prefs.bgsShowMmrInLeaderboardOverlay && !prefs.bgsShowMmrInOpponentRecap) {
+				inProcess = false;
+				return;
+			}
+
+			// console.debug('[bgs-match-memory-info] reading player MMR info');
+			const playersMmr = await this.matchPlayers.playersMatchMmr$$.getValueWithInit();
 			const result: BattlegroundsInfo = {
 				...memoryInfo,
 				Game: {
@@ -70,7 +90,9 @@ export class BgsMatchMemoryInfoService {
 					}),
 				},
 			} as BattlegroundsInfo;
+			// console.debug('[bgs-match-memory-info] memory info read', result);
 			this.battlegroundsMemoryInfo$$.next(result);
+			inProcess = false;
 		});
 	}
 
