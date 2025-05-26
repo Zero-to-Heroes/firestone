@@ -33,6 +33,7 @@ export class BgsDamageDealtParser implements EventParser {
 				'[bgs-damage] Could not find player to update for damage dealt',
 				playerId,
 				gameEvent,
+				this.allCards.getCard(playerCardId),
 				currentState.bgState.currentGame.players,
 			);
 			return currentState;
