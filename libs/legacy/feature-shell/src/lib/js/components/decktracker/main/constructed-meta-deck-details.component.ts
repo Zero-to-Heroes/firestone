@@ -76,9 +76,9 @@ export class ConstructedMetaDeckDetailsComponent
 
 				const statToUse =
 					playCoin === 'coin'
-						? stat.coinPlayInfo.find((s) => s.coinPlay === 'play')
-						: playCoin === 'play'
 						? stat.coinPlayInfo.find((s) => s.coinPlay === 'coin')
+						: playCoin === 'play'
+						? stat.coinPlayInfo.find((s) => s.coinPlay === 'play')
 						: stat;
 				const standardDeviation = Math.sqrt(
 					(statToUse.winrate * (1 - statToUse.winrate)) / statToUse.totalGames,
