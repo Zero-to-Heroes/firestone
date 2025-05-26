@@ -1993,6 +1993,8 @@ export const cardIdSelector = (
 		case CardIds.OakenSummons:
 		case CardIds.OakenSummons_CORE_LOOT_309:
 			return and(side(inputSide), inDeck, minion, effectiveCostLess(5));
+		case CardIds.OasisOutlaws_WW_404:
+			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.Obsidiansmith:
 			return highlightConditions(and(side(inputSide), inDeck, minion), and(side(inputSide), inDeck, weapon));
 		case CardIds.OldMilitiaHornTavernBrawl:
@@ -2132,6 +2134,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.PredatoryInstincts:
 			return and(side(inputSide), inDeck, minion, beast);
+		case CardIds.Predation:
+			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.PreparationCore:
 		case CardIds.PreparationLegacy:
 		case CardIds.PreparationVanilla:
