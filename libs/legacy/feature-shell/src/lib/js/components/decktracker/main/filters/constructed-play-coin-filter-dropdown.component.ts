@@ -65,7 +65,9 @@ export class ConstructedPlayCoinFilterDropdownComponent
 				return {
 					filter: '' + filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: ['constructed-meta-deck-details'].includes(currentView),
+					visible: ['constructed-meta-deck-details', 'constructed-meta-archetype-details'].includes(
+						currentView,
+					),
 				};
 			}),
 		);

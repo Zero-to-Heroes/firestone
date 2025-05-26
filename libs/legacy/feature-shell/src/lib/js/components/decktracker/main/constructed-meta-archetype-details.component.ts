@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -52,15 +53,42 @@ export class ConstructedMetaArchetypeDetailsComponent
 		this.deckDetails$ = combineLatest([
 			this.constructedMetaStats.currentConstructedMetaArchetype$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksUseConservativeWinrate)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDeckPlayCoinFilter)),
 		]).pipe(
-			this.mapData(([stat, conservativeEstimate]) => {
+			this.mapData(([stat, conservativeEstimate, playCoin]) => {
 				if (!stat) {
 					return stat === null ? null : undefined;
 				}
 
-				const standardDeviation = Math.sqrt((stat.winrate * (1 - stat.winrate)) / stat.totalGames);
-				const conservativeWinrate: number = stat.winrate - 3 * standardDeviation;
-				const winrateToUse = conservativeEstimate ? conservativeWinrate : stat.winrate;
+				const statToUse =
+					playCoin === 'coin'
+						? stat.coinPlayInfo.find((s) => s.coinPlay === 'play')
+						: playCoin === 'play'
+						? stat.coinPlayInfo.find((s) => s.coinPlay === 'coin')
+						: stat;
+				const standardDeviation = Math.sqrt(
+					(statToUse.winrate * (1 - statToUse.winrate)) / statToUse.totalGames,
+				);
+				const conservativeWinrate: number = statToUse.winrate - 3 * standardDeviation;
+				const winrateToUse = conservativeEstimate ? conservativeWinrate : statToUse.winrate;
+
+				const matchupInfo: readonly ConstructedMatchupInfo[] = stat.matchupInfo.map((matchup) => {
+					const derivedStat =
+						playCoin === 'coin'
+							? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
+							: playCoin === 'play'
+							? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+							: matchup;
+					const result: ConstructedMatchupInfo = {
+						...matchup,
+						winrate: derivedStat?.winrate ?? matchup.winrate,
+						totalGames: derivedStat?.totalGames ?? matchup.totalGames,
+						wins: derivedStat?.wins ?? matchup.wins,
+						losses: derivedStat?.losses ?? matchup.losses,
+						cardsData: derivedStat?.cardsData ?? matchup.cardsData,
+					};
+					return result;
+				});
 
 				const result: ConstructedDeckDetails = {
 					type: 'archetype',
@@ -72,12 +100,12 @@ export class ConstructedMetaArchetypeDetailsComponent
 							: this.i18n.translateString(`archetype.${stat.name}`)),
 					format: this.i18n.translateString(`global.format.${stat.format}`),
 					heroCardClass: stat.heroCardClass,
-					games: stat.totalGames,
+					games: statToUse.totalGames,
 					winrate: winrateToUse,
 					archetypeCoreCards: stat.coreCards,
-					cardsData: stat.cardsData.filter((c) => c.inStartingDeck > stat.totalGames / 50),
+					cardsData: statToUse.cardsData.filter((c) => c.inStartingDeck > stat.totalGames / 50),
 					discoverData: stat.discoverData.filter((c) => c.discovered > 10),
-					matchups: stat.matchupInfo,
+					matchups: matchupInfo,
 				};
 				console.debug('archetype', result);
 				return result;
