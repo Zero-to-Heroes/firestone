@@ -309,22 +309,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.tiers$ = combineLatest([
 			staticTiers$,
 			this.gameState.gameState$$.pipe(
-				tap((state) => console.debug('[bgs-minions-tiers] gameState', state)),
+				auditTime(500),
 				this.mapData((state) => state.bgState.currentGame?.getMainPlayer()?.cardId),
 			),
 			boardComposition$,
 			this.gameState.gameState$$.pipe(
-				tap((state) =>
-					console.debug(
-						'[bgs-minions-tiers] gameState',
-						state,
-						state.bgState.currentGame?.getMainPlayer()?.getCurrentTavernTier(),
-					),
-				),
+				auditTime(500),
 				this.mapData((state) => state.bgState.currentGame?.getMainPlayer()?.getCurrentTavernTier()),
 			),
 		]).pipe(
-			tap((info) => console.debug('[bgs-minions-tiers] tiers prep', info)),
 			this.mapData(([tiers, rawPlayerCardId, boardComposition, tavernLevel]) => {
 				const playerCardId = normalizeHeroCardId(rawPlayerCardId, this.allCards);
 				const result = enhanceTiers(
@@ -336,7 +329,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					this.allCards,
 					this.i18n,
 				);
-				console.debug('[bgs-minions-tiers] tiers', result, tiers, playerCardId, boardComposition, tavernLevel);
 				return result;
 			}),
 		);
