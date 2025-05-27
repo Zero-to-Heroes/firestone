@@ -70,7 +70,12 @@ export class MulliganDeckViewArchetypeComponent extends AbstractSubscriptionComp
 			filter(([archetypeId, archetypes]) => !!archetypeId && !!archetypes?.archetypeStats?.length),
 			this.mapData(([archetypeId, archetypes]) => {
 				const archetype = archetypes!.archetypeStats!.find((arch) => arch.id === archetypeId);
-				return archetype?.name ? this.i18n.translateString(`archetype.${archetype.name}`) : 'No archetype';
+				const nameKey = `archetype.${archetype?.name}`;
+				return archetype?.name
+					? this.i18n.translateString(`${nameKey}`) !== nameKey
+						? this.i18n.translateString(`${nameKey}`)
+						: archetype?.name
+					: 'No archetype';
 			}),
 			startWith(null),
 		);
