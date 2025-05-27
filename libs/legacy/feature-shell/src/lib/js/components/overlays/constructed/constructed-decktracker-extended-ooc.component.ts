@@ -45,6 +45,8 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 				[rankBracketLabel]="rankBracketLabel$ | async"
 				[opponentTooltip]="opponentTooltip$ | async"
 				[opponentLabel]="opponentLabel$ | async"
+				[playCoinLabel]="playCoinLabel$ | async"
+				[playCoinTooltip]="playCoinTooltip$ | async"
 				[timeTooltip]="timeTooltip$ | async"
 				[timeLabel]="timeLabel$ | async"
 				[formatLabel]="formatLabel$ | async"
@@ -53,6 +55,7 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 				[allowResize]="false"
 				[cycleRanks]="cycleRanks"
 				[cycleOpponent]="cycleOpponent"
+				[cyclePlayCoin]="cyclePlayCoin"
 				[cycleTime]="cycleTime"
 				[cycleFormat]="cycleFormat"
 			>
@@ -63,6 +66,7 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 					<div
 						class="subtitle"
 						[fsTranslate]="'decktracker.overlay.lobby.deck-stats.global-stats-subtitle'"
+						[helpTooltip]="'decktracker.overlay.lobby.deck-stats.global-stats-tooltip' | fsTranslate"
 					></div>
 					<div class="stats ">
 						<div class="stat total-games">
@@ -121,6 +125,8 @@ export class ConstructedDecktrackerExtendedOocComponent
 	rankBracketTooltip$: Observable<string>;
 	opponentLabel$: Observable<string>;
 	opponentTooltip$: Observable<string>;
+	playCoinLabel$: Observable<string>;
+	playCoinTooltip$: Observable<string>;
 	timeLabel$: Observable<string>;
 	timeTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
@@ -229,6 +235,27 @@ export class ConstructedDecktrackerExtendedOocComponent
 					})!,
 			),
 		);
+
+		this.playCoinLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`app.decktracker.meta.details.cards.play-coin-filter.${
+							prefs.decktrackerMulliganPlayCoinOoc ?? 'all'
+						}`,
+					)!,
+			),
+		);
+		this.playCoinTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.deck-mulligan-filter-play-coin-tooltip.${
+							prefs.decktrackerMulliganPlayCoinOoc ?? 'all'
+						}`,
+					)!,
+			),
+		);
 		this.timeLabel$ = this.prefs.preferences$$.pipe(
 			this.mapData(
 				(prefs) =>
@@ -306,6 +333,18 @@ export class ConstructedDecktrackerExtendedOocComponent
 			decktrackerOocMulliganOpponent: nextOpponent,
 		};
 		console.debug('[mulligan] cycling opponent', currentOpponent, nextOpponent, options);
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cyclePlayCoin = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentFormat = prefs.decktrackerMulliganPlayCoinOoc ?? 'all';
+		const options: readonly ('play' | 'coin' | 'all')[] = ['play', 'coin', 'all'];
+		const nextPlayCoin = options[(options.indexOf(currentFormat) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganPlayCoinOoc: nextPlayCoin,
+		};
 		await this.prefs.savePreferences(newPrefs);
 	};
 

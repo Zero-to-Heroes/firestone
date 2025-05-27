@@ -227,6 +227,7 @@ export class Preferences implements IPreferences {
 	readonly decktrackerMulliganTime: 'last-patch' | 'past-3' | 'past-7' = 'last-patch';
 	readonly decktrackerMulliganFormatOverride: GameFormatEnum | null = null;
 	readonly decktrackerMulliganPlayCoinOverride: 'play' | 'coin' | 'all' | null = null;
+	readonly decktrackerMulliganPlayCoinOoc: 'play' | 'coin' | 'all' | null = null;
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;

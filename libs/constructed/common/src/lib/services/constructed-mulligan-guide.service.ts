@@ -596,7 +596,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			distinctUntilChanged(),
 		);
 		const playCoinOverride$ = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganPlayCoinOverride),
+			map((prefs) => prefs.decktrackerMulliganPlayCoinOoc),
 			distinctUntilChanged(),
 		);
 		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
