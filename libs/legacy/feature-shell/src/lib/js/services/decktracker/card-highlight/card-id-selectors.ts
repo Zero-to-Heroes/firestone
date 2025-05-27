@@ -1958,6 +1958,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.NagaGiant:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.NagasPride:
+			return and(side(inputSide), or(inDeck, inHand), naga);
 		case CardIds.NaralexHeraldOfTheFlights_EDR_844:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NaturalForceTavernBrawl:
@@ -2455,6 +2457,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.SelflessSidekick:
 			return and(side(inputSide), inDeck, weapon);
+		case CardIds.Serpentbloom:
+			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.SerpentWig_TSC_215:
 			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.ServiceBell:
