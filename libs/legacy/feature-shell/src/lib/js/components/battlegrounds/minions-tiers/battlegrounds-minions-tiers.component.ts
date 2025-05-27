@@ -394,6 +394,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				let element = this.el.nativeElement.querySelector('.scalable');
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+					element.style.setProperty('--scale', `${newScale}`);
 					element = null;
 				}
 			});

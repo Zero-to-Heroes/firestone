@@ -29,4 +29,10 @@ battlegrounds-minions-tiers-view {
 
 .scalable {
 	transform-origin: top right;
+	// max-height: calc(90vh / var(--scale, 1));
+	// This is not perfect - it means the scrollbar will be linked to the full widget, instead of the list itself
+	// However I don't have a good solution to handle this if I move the scroll down to the list
+	height: fit-content;
+	// overflow: scroll;
+	// min-height: 0;
 }

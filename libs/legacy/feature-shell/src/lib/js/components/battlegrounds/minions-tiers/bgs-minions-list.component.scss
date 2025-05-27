@@ -17,6 +17,8 @@
 	overflow: visible;
 	position: relative;
 	margin-top: 2px;
+	background: var(--color-7);
+	max-height: calc(80vh / var(--scale, 1));
 }
 
 .group-header {
