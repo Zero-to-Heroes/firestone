@@ -226,7 +226,7 @@ const getDynamicFilters = (
 		case CardIds.SpotTheDifference_TOY_374:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
-				hasCost(c, '==', 4) &&
+				hasCost(c, '==', 3) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.HiddenObjects_TOY_037:
 			return (c) =>
