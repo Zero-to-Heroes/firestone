@@ -351,6 +351,11 @@ export const hasSpellSchool = (input: SelectorInput): boolean => {
 	return !!input.card?.spellSchool;
 };
 
+// TODO: Implement this
+export const canTargetFriendlyMinion = (input: SelectorInput): boolean => {
+	return true;
+};
+
 export const spellSchoolPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.uniqueSpellSchools?.includes(input.card?.spellSchool);
 

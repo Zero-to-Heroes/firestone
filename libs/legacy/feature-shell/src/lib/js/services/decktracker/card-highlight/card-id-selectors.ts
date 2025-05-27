@@ -14,6 +14,7 @@ import {
 	battlecry,
 	beast,
 	bloodRune,
+	canTargetFriendlyMinion,
 	cardIs,
 	cardType,
 	cardsPlayedLastTurn,
@@ -1947,6 +1948,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.MutatingInjection_NAX11_04:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.Myrmidon:
+			return and(side(inputSide), or(inDeck, inHand), spell, canTargetFriendlyMinion);
 		case CardIds.MysteriousChallenger:
 		case CardIds.MysteriousChallenger_WON_334:
 			return and(side(inputSide), inDeck, secret);
