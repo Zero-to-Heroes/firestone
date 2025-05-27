@@ -224,7 +224,9 @@ const buildSingleTribeTier = (
 		if (targetTribe === Race.BLANK) {
 			return (
 				!isSpell &&
-				(!isTrinket || requiredCardTribes.includes(Race.BLANK)) &&
+				(!isTrinket ||
+					requiredCardTribes.includes(Race.BLANK) ||
+					card.mechanics?.includes(GameTag[GameTag.BACON_TARGET_NO_TRIBE_MINION])) &&
 				(isTrinket || cardTribes.filter((r) => r !== Race.BLANK).length === 0)
 			);
 		}
