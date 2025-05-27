@@ -5,7 +5,7 @@ import {
 	BgsPlayerHeroStatsService,
 	DEFAULT_MMR_PERCENTILE,
 } from '@firestone/battlegrounds/common';
-import { BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
@@ -19,6 +19,7 @@ import {
 	distinctUntilChanged,
 	filter,
 	shareReplay,
+	startWith,
 	switchMap,
 	takeUntil,
 } from 'rxjs';
@@ -124,6 +125,8 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		const tiers$ = statsConfigs.pipe(
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
+			startWith([] as readonly BgsMetaHeroStatTier[]),
+			takeUntil(this.destroyed$),
 		);
 
 		const panel$ = this.gameState.gameState$$.pipe(
