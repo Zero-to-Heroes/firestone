@@ -11,7 +11,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { isBgsSpell } from '../card-utils';
+import { isBgsSpell, isBgsTrinket } from '../card-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
 import { getActualTribes } from '../tribe-utils';
 import { TierBuilderConfig } from './tiers-config.model';
@@ -213,7 +213,7 @@ const buildSingleTribeTier = (
 			config?.playerTrinkets,
 			config?.anomalies ?? [],
 		);
-		// const isTrinket = isBgsTrinket(card);
+		const isTrinket = isBgsTrinket(card);
 		const isSpell = isBgsSpell(card);
 		const requiredCardTribes = [
 			...(cardRules?.[card.id]?.bgsMinionTypesRules?.needTypesInLobby ?? []),
@@ -224,8 +224,8 @@ const buildSingleTribeTier = (
 		if (targetTribe === Race.BLANK) {
 			return (
 				!isSpell &&
-				(cardTribes.filter((t) => t !== Race.BLANK).length === 0 ||
-					requiredCardTribes.filter((t) => t !== Race.BLANK).length === 0)
+				(!isTrinket || requiredCardTribes.includes(Race.BLANK)) &&
+				(isTrinket || cardTribes.filter((r) => r !== Race.BLANK).length === 0)
 			);
 		}
 		if (cardTribes.length === 0 && requiredCardTribes.length === 0) {
@@ -245,9 +245,7 @@ const buildSingleTribeTier = (
 			? buildSpellGroup(cardsForTribe, i18n)
 			: null;
 	const trinketGroup =
-		config?.trinkets && config?.includeTrinketsInTribeGroups && targetTribe !== Race.BLANK
-			? buildTrinketGroup(cardsForTribe, i18n)
-			: null;
+		config?.trinkets && config?.includeTrinketsInTribeGroups ? buildTrinketGroup(cardsForTribe, i18n) : null;
 	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
 		? [...tribeGroups, spellGroup, trinketGroup]
 		: [spellGroup, trinketGroup, ...tribeGroups];
