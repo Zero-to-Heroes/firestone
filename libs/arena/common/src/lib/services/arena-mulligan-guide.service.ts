@@ -136,7 +136,36 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 				await this.prefs.savePreferences(newPrefs);
 			}
 		});
-		// const opponentClass$ = from(['all'] as ('all' | string)[]);
+
+		const actualPlayCoin$ = this.gameState.gameState$$.pipe(
+			map((gameState) => (gameState?.playerDeck?.hand?.length > 3 ? 'coin' : 'play')),
+			distinctUntilChanged(),
+		);
+		const playCoin$: Observable<'all' | 'play' | 'coin'> = combineLatest([
+			actualPlayCoin$,
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.decktrackerMulliganPlayCoinOverride ?? 'all'),
+				distinctUntilChanged(),
+			),
+		]).pipe(
+			map(
+				([actualPlayCoin, playCoinPref]) =>
+					(playCoinPref === 'all' ? 'all' : actualPlayCoin) as 'all' | 'play' | 'coin',
+			),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
+		playCoin$.subscribe(async (playCoin) => {
+			const prefs = await this.prefs.getPreferences();
+			const currentPlayCoinPref = prefs.decktrackerMulliganPlayCoinOverride;
+			if (currentPlayCoinPref !== playCoin) {
+				const newPrefs: Preferences = {
+					...prefs,
+					decktrackerMulliganPlayCoinOverride: playCoin,
+				};
+				await this.prefs.savePreferences(newPrefs);
+			}
+		});
 
 		const timeFrame$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.decktrackerMulliganTime),
@@ -212,17 +241,48 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
 			debounceTime(200),
 			switchMap(([cardsInHand, deckCards]) =>
-				combineLatest([cardStats$, classStats$, opponentClass$]).pipe(
-					map(([cardStats, classStats, opponentClass]) => ({
+				combineLatest([cardStats$, classStats$, opponentClass$, playCoin$]).pipe(
+					map(([cardStats, classStats, opponentClass, playCoin]) => ({
 						cardsInHand: cardsInHand,
 						deckCards: deckCards,
 						cardStats: cardStats,
 						classStats: classStats,
 						opponentClass: opponentClass,
+						playCoin: playCoin,
 					})),
 				),
 			),
-			map(({ cardsInHand, deckCards, cardStats, classStats, opponentClass }) => {
+			map(({ cardsInHand, deckCards, cardStats, classStats, opponentClass, playCoin }) => {
+				// const statToUse =
+				// 	playCoin === 'coin'
+				// 		? stat.coinPlayInfo.find((s) => s.coinPlay === 'coin')
+				// 		: playCoin === 'play'
+				// 		? stat.coinPlayInfo.find((s) => s.coinPlay === 'play')
+				// 		: stat;
+				// const standardDeviation = Math.sqrt(
+				// 	(statToUse.winrate * (1 - statToUse.winrate)) / statToUse.totalGames,
+				// );
+				// const conservativeWinrate: number = statToUse.winrate - 3 * standardDeviation;
+				// const winrateToUse = conservativeEstimate ? conservativeWinrate : statToUse.winrate;
+
+				// const matchupInfo: readonly ConstructedMatchupInfo[] = stat.matchupInfo.map((matchup) => {
+				// 	const derivedStat =
+				// 		playCoin === 'coin'
+				// 			? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
+				// 			: playCoin === 'play'
+				// 			? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+				// 			: matchup;
+				// 	const result: ConstructedMatchupInfo = {
+				// 		...matchup,
+				// 		winrate: derivedStat?.winrate ?? matchup.winrate,
+				// 		totalGames: derivedStat?.totalGames ?? matchup.totalGames,
+				// 		wins: derivedStat?.wins ?? matchup.wins,
+				// 		losses: derivedStat?.losses ?? matchup.losses,
+				// 		cardsData: derivedStat?.cardsData ?? matchup.cardsData,
+				// 	};
+				// 	return result;
+				// });
+
 				const matchup = classStats?.matchups?.find((matchup) => matchup.opponentClass === opponentClass);
 				const classWinrate = !!matchup
 					? !!matchup.totalGames
@@ -261,6 +321,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					allDeckCards: allDeckCards,
 					sampleSize: (!!matchup ? matchup.totalGames : classStats?.totalGames) ?? 0,
 					opponentClass: opponentClass,
+					playCoin: playCoin,
 					format: 'wild',
 					rankBracket: 'all',
 					archetypeId: null,

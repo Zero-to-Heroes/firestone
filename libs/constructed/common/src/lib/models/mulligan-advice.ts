@@ -8,6 +8,7 @@ export interface MulliganGuide {
 	readonly cardsInHand: readonly string[];
 	readonly sampleSize: number;
 	readonly format: GameFormatString;
+	readonly playCoin: 'coin' | 'play' | 'all';
 	readonly rankBracket: RankBracket;
 	readonly opponentClass: 'all' | string;
 	readonly noData?: boolean;

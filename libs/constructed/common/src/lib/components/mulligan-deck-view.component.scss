@@ -14,6 +14,10 @@
 	color: var(--color-2);
 	font-size: 14px;
 	border-radius: 15px;
+	// Because card tiles have a hard-coded width of 130px for the name. It might be worth revisiting
+	// this later
+	// + legendary icon
+	max-width: 347px;
 }
 
 .widget-header {
@@ -57,6 +61,10 @@
 
 .filters {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	align-items: center;
+	justify-content: center;
 
 	& > *:not(:last-child)::after {
 		content: '-';

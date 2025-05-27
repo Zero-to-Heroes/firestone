@@ -53,12 +53,15 @@ import { buildColor } from './mulligan-deck-view.component';
 			[rankBracketLabel]="rankBracketLabel$ | async"
 			[opponentTooltip]="opponentTooltip$ | async"
 			[opponentLabel]="opponentLabel$ | async"
+			[playCoinLabel]="playCoinLabel$ | async"
+			[playCoinTooltip]="playCoinTooltip$ | async"
 			[timeTooltip]="timeTooltip$ | async"
 			[timeLabel]="timeLabel$ | async"
 			[formatLabel]="formatLabel$ | async"
 			[sampleSize]="sampleSize$ | async"
 			[cycleRanks]="cycleRanks"
 			[cycleOpponent]="cycleOpponent"
+			[cyclePlayCoin]="cyclePlayCoin"
 			[cycleTime]="cycleTime"
 			[cycleFormat]="cycleFormat"
 		>
@@ -77,6 +80,8 @@ export class ConstructedMulliganDeckComponent
 	rankBracketTooltip$: Observable<string>;
 	opponentLabel$: Observable<string>;
 	opponentTooltip$: Observable<string>;
+	playCoinLabel$: Observable<string>;
+	playCoinTooltip$: Observable<string>;
 	timeLabel$: Observable<string>;
 	timeTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
@@ -199,6 +204,26 @@ export class ConstructedMulliganDeckComponent
 					})!,
 			),
 		);
+		this.playCoinLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`app.decktracker.meta.details.cards.play-coin-filter.${
+							prefs.decktrackerMulliganPlayCoinOverride ?? 'all'
+						}`,
+					)!,
+			),
+		);
+		this.playCoinTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.deck-mulligan-filter-play-coin-tooltip.${
+							prefs.decktrackerMulliganPlayCoinOverride ?? 'all'
+						}`,
+					)!,
+			),
+		);
 		this.timeLabel$ = this.prefs.preferences$$.pipe(
 			this.mapData(
 				(prefs) =>
@@ -308,6 +333,19 @@ export class ConstructedMulliganDeckComponent
 		const newPrefs: Preferences = {
 			...prefs,
 			decktrackerMulliganFormatOverride: nextFormat,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cyclePlayCoin = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentFormat =
+			prefs.decktrackerMulliganPlayCoinOverride ?? this.mulligan.mulliganAdvice$$.value!.playCoin;
+		const options: readonly ('play' | 'coin' | 'all')[] = ['play', 'coin', 'all'];
+		const nextPlayCoin = options[(options.indexOf(currentFormat) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganPlayCoinOverride: nextPlayCoin,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};

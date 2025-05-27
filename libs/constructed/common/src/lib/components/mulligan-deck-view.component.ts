@@ -65,6 +65,14 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 					<div class="filter time" *ngIf="cycleTime" (click)="cycleTime()" [helpTooltip]="timeTooltip">
 						<div class="text">{{ timeLabel }}</div>
 					</div>
+					<div
+						class="filter play-coin"
+						*ngIf="cyclePlayCoin"
+						(click)="cyclePlayCoin()"
+						[helpTooltip]="playCoinTooltip"
+					>
+						<div class="text">{{ playCoinLabel }}</div>
+					</div>
 				</div>
 				<div class="additional-info">
 					<div class="filter format" *ngIf="formatLabel" (click)="cycleFormat()">
@@ -141,6 +149,8 @@ export class MulliganDeckViewComponent
 	@Input() rankBracketLabel: string | null;
 	@Input() opponentTooltip: string | null;
 	@Input() opponentLabel: string | null;
+	@Input() playCoinLabel: string | null;
+	@Input() playCoinTooltip: string | null;
 	@Input() timeTooltip: string | null;
 	@Input() timeLabel: string | null;
 	@Input() formatLabel: string | null;
@@ -149,6 +159,7 @@ export class MulliganDeckViewComponent
 	@Input() allowResize = true;
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
+	@Input() cyclePlayCoin: () => void;
 	@Input() cycleTime: () => void;
 	@Input() cycleFormat: () => void;
 
