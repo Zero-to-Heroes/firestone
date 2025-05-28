@@ -21,6 +21,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	ready$: Observable<boolean>;
 
 	reviewId: string | null;
+	playerDecklist: string | null;
 	replayXml: string | null;
 	bgsSimulation: GameSample | null;
 	initialLocation: ReplayLocation;
@@ -83,12 +84,13 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		}
 
 		if (reviewId) {
-			const replayXml = await this.getReplayXml(reviewId);
+			const { replayXml, playerDecklist } = await this.getReplayXml(reviewId);
 			if (!replayXml) {
 				console.error('[game-replay] could not load replay xml', reviewId);
 				return;
 			}
 			this.replayXml = replayXml;
+			this.playerDecklist = playerDecklist;
 		} else if (bgsSimulationId) {
 			console.log('loading', bgsSimulationId);
 			const gameSample = await this.retrieveEncodedSimulation(bgsSimulationId);
@@ -123,17 +125,18 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		window.history.replaceState({ path: newUrl }, '', newUrl);
 	}
 
-	private async getReplayXml(reviewId: string): Promise<string | null> {
+	private async getReplayXml(reviewId: string): Promise<{ replayXml: string | null; playerDecklist: string | null }> {
 		// window['coliseum'].zone.run(() => {
 		// 	window['coliseum'].component.updateStatus('Downloading replay file');
 		// });
 		const review: any = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${reviewId}`);
 		if (!review) {
-			return null;
+			return { replayXml: null, playerDecklist: null };
 		}
+		console.debug('[game-replay] retrieved review', review);
 		const replay = (await this.loadReplay(review.replayKey)) ?? null;
 		console.log('loaded replay');
-		return replay;
+		return { replayXml: replay, playerDecklist: review.playerDecklist ?? null };
 	}
 
 	private async loadReplay(replayKey: string): Promise<string | undefined> {

@@ -15,10 +15,10 @@ import { Entity } from '@firestone-hs/replay-parser';
 	styleUrls: ['../../../text.scss', './deck.component.scss'],
 	template: `
 		<div class="deck">
-			<img
+			<!-- <img
 				class="cardback-icon"
 				src="https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/cardback.png"
-			/>
+			/> -->
 			<div class="count">
 				<div class="text">{{ numberOfCards }}</div>
 			</div>

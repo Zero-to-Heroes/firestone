@@ -12,7 +12,12 @@ const REPLAY_API = 'https://xml.firestoneapp.com/';
 	styleUrls: [`../../../css/component/replays/game-replay.component.scss`],
 	template: `
 		<div class="coliseum-container">
-			<fs-coliseum class="external-player" [replayXml]="_replayXml" [reviewId]="reviewId"></fs-coliseum>
+			<fs-coliseum
+				class="external-player"
+				[replayXml]="_replayXml"
+				[reviewId]="reviewId"
+				[decklist]="decklist"
+			></fs-coliseum>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +25,7 @@ const REPLAY_API = 'https://xml.firestoneapp.com/';
 export class GameReplayComponent {
 	_replayXml: string;
 	reviewId: string;
+	decklist: string;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -37,6 +43,7 @@ export class GameReplayComponent {
 		}
 
 		console.log('[game-replay] setting game', value.replayInfo.reviewId);
+		this.decklist = value.replayInfo.playerDecklist;
 		this.loadReview(value.replayInfo.reviewId);
 	}
 

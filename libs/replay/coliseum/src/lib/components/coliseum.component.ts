@@ -56,6 +56,8 @@ import { GameConfService } from '../services/game-conf.service';
 								[ngClass]="{ active: showPreloader }"
 								[status]="status"
 							></preloader>
+
+							<div class="player-decks"></div>
 						</div>
 					</div>
 				</div>
@@ -97,6 +99,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	currentAction$: Observable<Action | undefined>;
 
 	@Input() reviewId: string | null;
+	@Input() decklist: string | null;
 	@Input() set replayXml(value: string | null) {
 		if (!value?.length) {
 			return;
