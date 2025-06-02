@@ -878,7 +878,7 @@ export const cardIdSelector = (
 		case CardIds.DesertNestmatron_WW_826:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DetonationJuggernaut_WW_329:
-			return and(side(inputSide), inHand, minion, taunt);
+			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.DeviateDreadfang:
 			return and(side(inputSide), or(inDeck, inHand), nature, spell);
 		case CardIds.DevoutBlessingsTavernBrawlToken:
