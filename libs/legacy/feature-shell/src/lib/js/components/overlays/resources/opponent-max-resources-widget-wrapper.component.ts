@@ -21,6 +21,7 @@ import { AbstractMaxResourcesWidgetWrapperComponent } from './abstract-max-resou
 			class="widget scalable"
 			[style.opacity]="(opacity$ | async) ?? 1"
 			[maxResources]="maxResources$ | async"
+			[showHorizontally]="showHorizontally$ | async"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"

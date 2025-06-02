@@ -39,6 +39,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 
 	showWidget$: Observable<boolean>;
 	maxResources$: Observable<MaxResources | null>;
+	showHorizontally$: Observable<boolean | null>;
 	opacity$: Observable<number | null>;
 
 	constructor(
@@ -81,6 +82,9 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 		);
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => (prefs.globalWidgetOpacity ?? 100) / 100),
+		);
+		this.showHorizontally$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.maxResourcesWidgetShowHorizontally),
 		);
 		const alwaysOn$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs[this.alwaysOnPrefName]));
 		const maxResources$ = this.gameState.gameState$$.pipe(

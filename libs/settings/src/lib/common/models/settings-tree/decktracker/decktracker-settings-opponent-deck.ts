@@ -259,6 +259,12 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.always-on-tooltip'),
 					},
 					{
+						type: 'toggle',
+						field: 'maxResourcesWidgetShowHorizontally',
+						label: context.i18n.translateString('settings.decktracker.max-resources-widget.show-horizontally'),
+						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.show-horizontally-tooltip'),
+					},
+					{
 						type: 'slider',
 						field: 'opponentMaxResourcesWidgetScale',
 						label: context.i18n.translateString('twitch.scale'),

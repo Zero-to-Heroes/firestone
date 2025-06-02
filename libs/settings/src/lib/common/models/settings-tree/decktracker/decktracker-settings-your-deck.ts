@@ -183,6 +183,12 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.always-on-tooltip'),
 					},
 					{
+						type: 'toggle',
+						field: 'maxResourcesWidgetShowHorizontally',
+						label: context.i18n.translateString('settings.decktracker.max-resources-widget.show-horizontally'),
+						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.show-horizontally-tooltip'),
+					},
+					{
 						type: 'slider',
 						field: 'maxResourcesWidgetScale',
 						label: context.i18n.translateString('twitch.scale'),

@@ -5,7 +5,7 @@ import { MaxResources } from './model';
 	selector: 'max-resources-widget',
 	styleUrls: ['./max-resources-widget.component.scss'],
 	template: `
-		<div class="max-resources" *ngIf="maxResources">
+		<div class="max-resources" *ngIf="maxResources" [ngClass]="{ horizontal: showHorizontally }">
 			<div
 				class="info health"
 				*ngIf="maxResources.health"
@@ -47,5 +47,6 @@ import { MaxResources } from './model';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaxResourcesWidgetComponent {
+	@Input() showHorizontally: boolean | null;
 	@Input() maxResources: MaxResources | null;
 }

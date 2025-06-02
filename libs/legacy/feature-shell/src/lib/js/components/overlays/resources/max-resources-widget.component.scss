@@ -6,6 +6,15 @@
 	padding: 10px;
 	gap: 10px;
 	border-radius: 15px;
+
+	&.horizontal {
+		flex-direction: row;
+		gap: 30px;
+
+		.info .icon-container {
+			margin-right: 5px;
+		}
+	}
 }
 
 .title {
