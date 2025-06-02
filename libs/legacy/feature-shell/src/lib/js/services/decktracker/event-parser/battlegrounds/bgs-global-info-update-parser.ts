@@ -23,6 +23,7 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const bgsMemoryInfo: BattlegroundsInfo = gameEvent.additionalData.info;
 		if (!bgsMemoryInfo) {
+			console.warn('[bgs-info-updater] no memory info found in event', gameEvent);
 			return currentState;
 		}
 
@@ -30,12 +31,12 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 		const turn = currentState.getCurrentTurnAdjustedForAsyncPlay();
 		const playersFromMemory = game?.Players;
 		if (!playersFromMemory || playersFromMemory.length === 0) {
-			console.debug('no players, returning');
+			console.warn('[bgs-info-updater] no players found in memory');
 			return currentState;
 		}
 
 		if (!currentState.bgState?.currentGame) {
-			console.warn('no current game, returning');
+			console.warn('[bgs-info-updater] no current game found in state');
 			return currentState;
 		}
 
@@ -75,6 +76,10 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 				} as BgsPlayer);
 			});
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdateParser.buildRaces(game.AvailableRaces);
+		if (!availableRaces?.length) {
+			console.warn('[bgs-info-updater] no available races found in memory', game.AvailableRaces);
+		}
+
 		const newGame = currentState.bgState.currentGame.update({
 			players: newPlayers,
 			bannedRaces:

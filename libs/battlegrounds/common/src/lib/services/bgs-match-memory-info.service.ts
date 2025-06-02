@@ -28,25 +28,30 @@ export class BgsMatchMemoryInfoService {
 
 	private async init() {
 		this.startMemoryReading();
+
+		await waitForReady(this.gameStatus);
 		this.gameStatus.onGameExit(() => {
 			this.stopMemoryReading();
 		});
 	}
 
 	private async startMemoryReading() {
+		console.log('[bgs-match-memory-info] getting ready to start memory reading');
 		await waitForReady(this.gameState, this.prefs);
+		console.log('[bgs-match-memory-info] starting memory reading');
 
 		let inProcess = false;
 		this.sub = interval(INTERVAL).subscribe(async () => {
 			if (inProcess) {
 				return;
 			}
+
 			const gameState = this.gameState.gameState$$.getValue();
 			if (
 				!gameState?.bgState?.currentGame ||
 				!gameState.gameStarted ||
 				gameState.gameEnded ||
-				!isBattlegrounds(gameState.metadata.gameType)
+				!isBattlegrounds(gameState.metadata?.gameType)
 			) {
 				// console.debug(
 				// 	'[bgs-match-memory-info] no BG game in progress, stopping memory reading',
