@@ -54,7 +54,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 
 		const cardWithZone = card.update({
-			zone: 'SECRET',
+			zone: !isCardCountered ? 'SECRET' : 'SETASIDE',
 			countered: isCardCountered,
 		} as DeckCard);
 

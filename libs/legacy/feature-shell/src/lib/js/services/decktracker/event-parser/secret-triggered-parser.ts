@@ -18,7 +18,11 @@ export class SecretTriggeredParser implements EventParser {
 		const newSecrets: readonly BoardSecret[] = deck.secrets
 			.filter((secret) => secret.entityId !== entityId)
 			.map((secret) => this.helper.removeSecretOptionFromSecret(secret, cardId));
-		const newOther: readonly DeckCard[] = this.helper.updateCardInZone(deck.otherZone, entityId, cardId, null);
+		const secret = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
+		const newSecret = secret?.update({
+			zone: 'REMOVEDFROMGAME',
+		});
+		const newOther: readonly DeckCard[] = this.helper.updateCardInZone(deck.otherZone, entityId, cardId, newSecret);
 
 		const secretShortCard: ShortCardWithTurn = {
 			cardId: cardId,
