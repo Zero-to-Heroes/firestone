@@ -298,7 +298,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 				id: 'matchups' as const,
 				name: this.i18n.translateString('app.decktracker.meta.matchups-header'),
 				tooltip: this.i18n.translateString('app.decktracker.meta.matchups-header-tooltip'),
-				isPremium: true,
+				// isPremium: true,
 			},
 		].filter((t) => !!t);
 	}

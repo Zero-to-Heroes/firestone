@@ -70,7 +70,7 @@ export class MenuSelectionDecktrackerComponent
 			id: 'constructed-meta-archetypes',
 			translationKey: 'app.decktracker.menu.meta-archetypes-header',
 			subMenus: ['constructed-meta-archetype-details'],
-			isPremium: true,
+			// isPremium: true,
 			// comingSoon: true,
 		},
 		{
