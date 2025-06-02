@@ -2083,7 +2083,7 @@ export const cardIdSelector = (
 		case CardIds.PetParrot_VAC_961:
 			return (input: SelectorInput): SelectorOutput => {
 				const oneCostCardsPlayed = input.deckState.cardsPlayedThisMatch.filter(
-					(c) => (c.effectiveCost ?? allCards.getCard(c.cardId).cost) === 1,
+					(c) => allCards.getCard(c.cardId).cost === 1,
 				);
 				const target = pickLast(oneCostCardsPlayed);
 				return highlightConditions(
