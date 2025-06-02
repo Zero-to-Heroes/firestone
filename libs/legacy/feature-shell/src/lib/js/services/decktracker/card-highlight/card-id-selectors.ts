@@ -14,6 +14,7 @@ import {
 	battlecry,
 	beast,
 	bloodRune,
+	canTargetFriendlyCharacter,
 	canTargetFriendlyMinion,
 	cardIs,
 	cardType,
@@ -576,6 +577,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.CaricatureArtist_TOY_391:
 			return and(side(inputSide), inDeck, minion, effectiveCostMore(4));
+		case CardIds.CarielRoame_BAR_902:
+			return and(side(inputSide), or(inHand, inDeck), holy, spell);
 		case CardIds.CarnivorousCube:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.CarnivorousCubicle_WORK_042:
@@ -885,6 +888,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inGraveyard, minion, deathrattle, minionsDeadSinceLastTurn);
 		case CardIds.DevoutDungeoneer:
 			return highlightConditions(and(side(inputSide), inDeck, holy, spell), and(side(inputSide), inDeck, spell));
+		case CardIds.DevoutPupil:
+			return and(side(inputSide), or(inHand, inDeck), spell, canTargetFriendlyCharacter);
 		case CardIds.LesserDiamondSpellstone:
 		case CardIds.LesserDiamondSpellstone_DiamondSpellstoneToken:
 		case CardIds.LesserDiamondSpellstone_GreaterDiamondSpellstoneToken:
