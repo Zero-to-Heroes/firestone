@@ -13,6 +13,6 @@ export const Zuljin: GlobalHighlightCard = {
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const spellsPlayedThisGame = deckState.spellsPlayedThisMatch.map((c) => c.cardId);
-		return spellsPlayedThisGame;
+		return [...spellsPlayedThisGame, CardIds.Zuljin_BerserkerThrowHeroic];
 	},
 };
