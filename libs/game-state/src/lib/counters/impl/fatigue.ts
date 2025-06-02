@@ -9,7 +9,7 @@ import { CounterType } from '../_exports';
 const cards: readonly CardIds[] = [CardIds.CurseOfAgony_AgonyToken];
 
 export class FatigueCounterDefinitionV2 extends CounterDefinitionV2<number> {
-	public override id: CounterType = 'fatigue';
+	public override id: CounterType = '__fatigue';
 	public override image = '';
 	public override imageIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/FATIGUE.jpg`;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';

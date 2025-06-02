@@ -170,6 +170,8 @@ export const getAllCounters: (
 
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
+	| '__fatigue'
+	| '_ceaselessExpanse'
 	| 'galakrond'
 	| 'renferalTheMalignant'
 	| 'ysondre'
@@ -187,7 +189,6 @@ export type CounterType =
 	| 'starshipsLaunched'
 	| 'giftsPlayed'
 	| 'freeRefresh'
-	| 'ceaselessExpanse'
 	| 'discovers'
 	| 'astralAutomaton'
 	| 'chainedGuardian'
@@ -200,7 +201,6 @@ export type CounterType =
 	| 'attack'
 	| 'jadeGolem'
 	| 'cthun'
-	| 'fatigue'
 	| 'abyssalCurse'
 	| 'spells'
 	| 'elemental'

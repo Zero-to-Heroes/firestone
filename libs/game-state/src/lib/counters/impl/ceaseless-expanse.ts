@@ -5,7 +5,7 @@ import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
 export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<number> {
-	public override id: CounterType = 'ceaselessExpanse';
+	public override id: CounterType = '_ceaselessExpanse';
 	public override image = CardIds.TheCeaselessExpanse_GDB_142;
 	public override cards: readonly CardIds[] = [CardIds.TheCeaselessExpanse_GDB_142];
 	protected override singleton = true;
