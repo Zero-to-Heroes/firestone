@@ -168,6 +168,7 @@ export class ArenaDraftManagerService
 				}
 			});
 
+			// TODO-arena
 			combineLatest([this.scene.currentScene$$, this.currentStep$$, this.currentDeck$$])
 				.pipe(
 					map(([scene, step, deck]) =>

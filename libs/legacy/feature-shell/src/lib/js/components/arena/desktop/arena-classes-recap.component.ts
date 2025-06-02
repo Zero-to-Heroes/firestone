@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardClass } from '@firestone-hs/reference-data';
+import { CardClass, isArena } from '@firestone-hs/reference-data';
 import { ArenaRun } from '@firestone/arena/common';
 import {
 	ArenaClassFilterType,
@@ -133,20 +133,21 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 					(prefs) => ({
 						timeFilter: prefs.arenaActiveTimeFilter,
 						heroFilter: prefs.arenaActiveClassFilter,
+						mode: prefs.arenaActiveMode,
 					}),
-					(a, b) => a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter,
+					(a, b) => a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter && a.mode === b.mode,
 				),
 			),
 			this.patchesConfig.currentArenaMetaPatch$$,
 			this.patchesConfig.currentArenaSeasonPatch$$,
 		]).pipe(
-			this.mapData(([stats, { timeFilter, heroFilter }, patch, seasonPatch]) => {
-				const arenaMatches = stats?.filter((stat) => stat.gameMode === 'arena');
+			this.mapData(([stats, { timeFilter, heroFilter, mode }, patch, seasonPatch]) => {
+				const arenaMatches = stats?.filter((stat) => isArena(stat.gameMode));
 				if (!arenaMatches.length) {
 					return null;
 				}
 
-				const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch, seasonPatch);
+				const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, mode, patch, seasonPatch);
 				const totalRuns = arenaRuns.length;
 				return {
 					totalRuns: totalRuns,
@@ -263,6 +264,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 		arenaMatches: GameStat[],
 		timeFilter: ArenaTimeFilterType,
 		heroFilter: ArenaClassFilterType,
+		mode: 'arena' | 'arena-underground' | 'all',
 		patch: PatchInfo,
 		seasonPatch: PatchInfo,
 	): readonly ArenaRun[] {
@@ -275,17 +277,19 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 			const firstMatch = matches[0];
 			return ArenaRun.create({
 				id: firstMatch.runId,
+				gameMode: firstMatch.gameMode as 'arena' | 'arena-underground',
 				creationTimestamp: firstMatch.creationTimestamp,
 				heroCardId: firstMatch.playerCardId,
 				initialDeckList: firstMatch.playerDecklist,
 				wins: matches.filter((match) => match.result === 'won').length,
 				losses: matches.filter((match) => match.result === 'lost').length,
 				steps: matches,
-			} as ArenaRun);
+			});
 		});
 		return runs
 			.filter((match) => this.isCorrectHero(match, heroFilter))
-			.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch));
+			.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch))
+			.filter((match) => (mode === 'all' ? true : match.gameMode === mode));
 	}
 
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {

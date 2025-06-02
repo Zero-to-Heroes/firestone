@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
+import { isArena, TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { BgsGame, GameStateFacadeService } from '@firestone/game-state';
 import {
@@ -36,7 +36,15 @@ import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
 export class EndGameUploaderService {
-	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavern-brawl'];
+	private readonly supportedModesDeckRetrieve = [
+		'practice',
+		'friendly',
+		'ranked',
+		'casual',
+		'arena',
+		'arena-underground',
+		'tavern-brawl',
+	];
 
 	constructor(
 		private replayUploadService: ReplayUploadService,
@@ -195,7 +203,7 @@ export class EndGameUploaderService {
 				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
 					? await this.buildOpponentName(info.mercsInfo)
 					: null;
-		} else if (game.gameMode === 'arena') {
+		} else if (isArena(game.gameMode)) {
 			playerRank = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
 			game.additionalResult = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
@@ -343,7 +351,7 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
-		if (game.gameMode === 'arena') {
+		if (isArena(game.gameMode)) {
 			game.runId = info.arenaInfo?.runId;
 		}
 

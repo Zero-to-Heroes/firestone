@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardClass, GameFormat, GameType } from '@firestone-hs/reference-data';
+import { CardClass, GameFormat, GameType, isArena } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
 import { GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { ArenaInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
@@ -107,7 +107,7 @@ export class TwitchPresenceService {
 					if (hearthstoneInfo.metadata.gameType === GameType.GT_RANKED) {
 						return !!matchInfo;
 					}
-					if (hearthstoneInfo.metadata.gameType === GameType.GT_ARENA) {
+					if (isArena(hearthstoneInfo.metadata.gameType)) {
 						return !!arenaInfo;
 					}
 					return true;
@@ -327,6 +327,7 @@ const buildRankInfo = (metadata: Metadata, arenaInfo: ArenaInfo, matchInfo: Matc
 		case GameType.GT_RANKED:
 			return buildRankedRankInfo(metadata, matchInfo);
 		case GameType.GT_ARENA:
+		case GameType.GT_UNDERGROUND_ARENA:
 			return `${arenaInfo.wins}-${arenaInfo.losses}`;
 	}
 };

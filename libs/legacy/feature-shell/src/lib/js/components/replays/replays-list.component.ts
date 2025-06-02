@@ -280,6 +280,12 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 				return gameMode === 'ranked' && format === 'classic';
 			case 'ranked-twist':
 				return gameMode === 'ranked' && format === 'twist';
+			case 'arena-all':
+				return gameMode === 'arena' || gameMode === 'arena-underground';
+			case 'arena':
+				return gameMode === 'arena';
+			case 'arena-underground':
+				return gameMode === 'arena-underground';
 			case 'mercenaries-all':
 				return isMercenaries(gameMode);
 			case 'mercenaries-pve':

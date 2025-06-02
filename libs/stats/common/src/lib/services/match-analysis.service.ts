@@ -16,6 +16,7 @@ import { ReplayParser } from './match-analysis/replay-parser';
 const GAME_MODES_WITH_ANALYSIS: readonly StatGameModeType[] = [
 	'ranked',
 	'arena',
+	'arena-underground',
 	'tavern-brawl',
 	'casual',
 	'friendly',

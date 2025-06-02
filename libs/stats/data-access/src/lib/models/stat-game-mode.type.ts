@@ -4,6 +4,8 @@ export type StatGameModeType =
 	| 'unknown'
 	| 'arena'
 	| 'arena-draft'
+	| 'arena-underground'
+	| 'arena-underground-draft'
 	| 'casual'
 	| 'friendly'
 	| 'practice'
@@ -31,6 +33,8 @@ export const toGameTypeEnum = (gameType: StatGameModeType): GameType => {
 			return GameType.GT_TUTORIAL;
 		case 'arena':
 			return GameType.GT_ARENA;
+		case 'arena-underground':
+			return GameType.GT_UNDERGROUND_ARENA;
 		case 'ranked':
 			return GameType.GT_RANKED;
 		case 'casual':
@@ -72,6 +76,8 @@ export const toGameType = (gameType: GameType): StatGameModeType => {
 			return 'tutorial';
 		case GameType.GT_ARENA:
 			return 'arena';
+		case GameType.GT_UNDERGROUND_ARENA:
+			return 'arena-underground';
 		case GameType.GT_RANKED:
 			return 'ranked';
 		case GameType.GT_CASUAL:

@@ -1,6 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CardIds, formatFormat, GameFormat, GameType, ScenarioId, SpellSchool } from '@firestone-hs/reference-data';
+import {
+	arenaSets,
+	CardIds,
+	formatFormat,
+	GameFormat,
+	GameType,
+	isArena,
+	ScenarioId,
+	SpellSchool,
+} from '@firestone-hs/reference-data';
 import { Metadata } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -110,8 +119,8 @@ export class SecretConfigService {
 			return 'wild';
 		}
 
-		if (metadata.gameType === GameType.GT_ARENA) {
-			if (!!creatorCardId?.length) {
+		if (isArena(metadata.gameType)) {
+			if (!!creatorCardId?.length && arenaSets.length > 0) {
 				return 'arena';
 			}
 			// Non-generated cards come from the draft pool, which is a curated list

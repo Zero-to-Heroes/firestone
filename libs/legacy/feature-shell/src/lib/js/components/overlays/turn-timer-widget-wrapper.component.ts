@@ -85,6 +85,7 @@ export class TurnTimerWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 						GameType.GT_VS_AI,
 						GameType.GT_VS_FRIEND,
 						GameType.GT_ARENA,
+						GameType.GT_UNDERGROUND_ARENA,
 					].includes(gameType),
 			),
 			this.handleReposition(),

@@ -48,6 +48,8 @@ export type StatGameModeType =
 	| 'unknown'
 	| 'arena'
 	| 'arena-draft'
+	| 'arena-underground'
+	| 'arena-underground-draft'
 	| 'casual'
 	| 'friendly'
 	| 'practice'

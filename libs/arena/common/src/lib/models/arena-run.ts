@@ -5,10 +5,12 @@ import { ExtendedDraftDeckStats } from './arena-draft';
 
 export class ArenaRun {
 	readonly id: string;
+	readonly gameMode: 'arena' | 'arena-underground';
 	readonly initialDeckList: string;
 	readonly steps: readonly GameStat[];
 	readonly rewards: readonly ArenaRewardInfo[];
 	readonly draftStat: ExtendedDraftDeckStats;
+	// TODO: add support for cards added / removed during the run
 	readonly creationTimestamp: number;
 	readonly heroCardId: string;
 	// TODO: add support for hero power for dual arena

@@ -99,6 +99,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			this.mapData((state) => {
 				switch (state?.metadata?.gameType) {
 					case GameType.GT_ARENA:
+					case GameType.GT_UNDERGROUND_ARENA:
 						return 'arena' as const;
 					case GameType.GT_CASUAL:
 					case GameType.GT_RANKED:
@@ -157,6 +158,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 						GameType.GT_PVPDR_PAID,
 						GameType.GT_RANKED,
 						GameType.GT_ARENA,
+						GameType.GT_UNDERGROUND_ARENA,
 						GameType.GT_VS_AI,
 						GameType.GT_VS_FRIEND,
 					].includes(gameType)

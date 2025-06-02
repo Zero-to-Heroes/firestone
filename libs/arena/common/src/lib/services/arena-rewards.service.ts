@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Input } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
+import { formatGameType } from '@firestone-hs/reference-data';
 import { ArenaInfo, MemoryUpdatesService, Reward } from '@firestone/memory';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { groupByFunction2, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -127,7 +128,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		const rewardsInput: Input = {
 			userId: user.userId ?? '',
 			userName: user.username ?? '',
-			type: 'arena',
+			type: formatGameType(arenaInfo.gameType) as 'arena' | 'arena-underground',
 			runId: arenaInfo.runId,
 			rewards: groupedRewards,
 			currentWins: arenaInfo.wins,

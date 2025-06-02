@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { isArena, SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -78,8 +78,7 @@ export class ArenaCurrentSessionWidgetWrapperComponent
 			this.mapData(
 				([gameType, currentScene, prefs]) =>
 					prefs.arenaShowCurrentSessionWidget &&
-					(isArenaScene(currentScene) ||
-						(prefs.arenaShowCurrentSessionWidgetInGame && gameType === GameType.GT_ARENA)),
+					(isArenaScene(currentScene) || (prefs.arenaShowCurrentSessionWidgetInGame && isArena(gameType))),
 			),
 			this.handleReposition(),
 		);

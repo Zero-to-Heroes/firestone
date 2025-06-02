@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isArena } from '@firestone-hs/reference-data';
 import { GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject, distinctUntilChanged, filter, map, startWith } from 'rxjs';
 import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
@@ -16,7 +17,7 @@ export class ArenaLastMatchService {
 		this.gameStats.gameStats$$
 			.pipe(
 				filter((stats) => !!stats?.length),
-				map((stats) => stats?.filter((s) => s.gameMode === 'arena')),
+				map((stats) => stats?.filter((s) => isArena(s.gameMode))),
 				map((stats) => stats[0]),
 				filter((lastArenaMatch) => !!lastArenaMatch),
 				distinctUntilChanged(),

@@ -39,6 +39,7 @@ export class GameModeDataService {
 	private async triggerMatchInfoRetrieve(metadata: HsGameMetaData, spectating: boolean) {
 		switch (metadata.GameType) {
 			case GameType.GT_ARENA:
+			case GameType.GT_UNDERGROUND_ARENA:
 				this.triggerRankMatchInfoRetrieve();
 				this.arenaInfo.triggerArenaInfoRetrieve(spectating);
 				this.triggerPlayerDeckInfoRetrieve(spectating);

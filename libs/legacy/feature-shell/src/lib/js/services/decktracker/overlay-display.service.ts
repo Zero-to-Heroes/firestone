@@ -56,6 +56,7 @@ export class OverlayDisplayService {
 		}
 		switch (gameType) {
 			case GameType.GT_ARENA:
+			case GameType.GT_UNDERGROUND_ARENA:
 				return prefs.decktrackerShowArena;
 			case GameType.GT_CASUAL:
 				return prefs.decktrackerShowCasual;

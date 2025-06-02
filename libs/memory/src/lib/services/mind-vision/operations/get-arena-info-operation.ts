@@ -15,6 +15,7 @@ export class GetArenaInfoOperation extends MindVisionOperationFacade<ArenaInfo> 
 				losses: arenaInfo.Losses,
 				heroCardId: arenaInfo.HeroCardId,
 				runId: arenaInfo.Deck?.Id,
+				gameType: arenaInfo.GameType,
 			}),
 		);
 	}

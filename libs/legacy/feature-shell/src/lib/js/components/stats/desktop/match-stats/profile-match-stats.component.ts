@@ -114,6 +114,7 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
+// TODO-arena
 export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	modeOverviews$: Observable<readonly ModeOverview[]>;
 	currentMode$: Observable<'constructed' | 'arena' | 'battlegrounds'>;

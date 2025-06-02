@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { decode } from '@firestone-hs/deckstrings';
-import { BnetRegion } from '@firestone-hs/reference-data';
+import { BnetRegion, isArena } from '@firestone-hs/reference-data';
 import {
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
@@ -88,7 +88,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 					),
 					map(([stats, rewards, deckStats]) => {
 						const arenaMatches = stats
-							?.filter((stat) => stat.gameMode === 'arena')
+							?.filter((stat) => isArena(stat.gameMode))
 							.filter((stat) => !!stat.runId);
 						const arenaRuns = this.buildArenaRuns(arenaMatches, rewards, deckStats);
 						const filteredRuns = arenaRuns;
@@ -156,6 +156,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			const [wins, losses] = this.extractWins(sortedMatches);
 			return ArenaRun.create({
 				id: firstMatch.runId,
+				gameMode: firstMatch.gameMode as 'arena' | 'arena-underground',
 				creationTimestamp: firstMatch.creationTimestamp,
 				heroCardId: firstMatch.playerCardId,
 				initialDeckList: firstMatch.playerDecklist,

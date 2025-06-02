@@ -25,7 +25,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	private cachedGlobalStats: ArenaCombinedCardStats | null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'arenaCardStats', () => !!this.cardStats$$);
+		super(windowManager, 'ArenaCardStatsService', () => !!this.cardStats$$);
 	}
 
 	protected override assignSubjects() {

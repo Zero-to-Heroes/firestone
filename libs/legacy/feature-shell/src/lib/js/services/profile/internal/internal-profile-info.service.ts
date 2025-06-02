@@ -144,9 +144,13 @@ export class InternalProfileInfoService {
 			// Don't know what the Data field is used yet, but that's how the HS client does it
 			.filter((r) => r.Data === 0)
 			.filter((r) =>
-				[GameType.GT_ARENA, GameType.GT_RANKED, GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(
-					r.RecordType,
-				),
+				[
+					GameType.GT_ARENA,
+					GameType.GT_UNDERGROUND_ARENA,
+					GameType.GT_RANKED,
+					GameType.GT_PVPDR,
+					GameType.GT_PVPDR_PAID,
+				].includes(r.RecordType),
 			);
 		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords);
 		if (!!winsForMode?.length) {
@@ -154,6 +158,7 @@ export class InternalProfileInfoService {
 		}
 	}
 
+	// TODO-arena
 	private buildWinsForModes(playerRecords: MemoryPlayerRecord[]) {
 		if (!playerRecords?.length) {
 			return [];
@@ -165,7 +170,7 @@ export class InternalProfileInfoService {
 					mode === 'constructed'
 						? r.RecordType === GameType.GT_RANKED
 						: mode === 'arena'
-						? r.RecordType === GameType.GT_ARENA
+						? r.RecordType === GameType.GT_ARENA || r.RecordType === GameType.GT_UNDERGROUND_ARENA
 						: r.RecordType === GameType.GT_PVPDR || r.RecordType === GameType.GT_PVPDR_PAID,
 				);
 				const result: ProfileWinsForMode = {
