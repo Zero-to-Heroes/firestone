@@ -20,7 +20,17 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, pairwise, tap, withLatestFrom } from 'rxjs';
+import {
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	map,
+	pairwise,
+	skip,
+	tap,
+	withLatestFrom,
+} from 'rxjs';
 import { ArenaCombinedCardStats } from '../models/arena-combined-card-stat';
 import { ExtendedDraftDeckStats } from '../models/arena-draft';
 import { ArenaCardStatsService } from './arena-card-stats.service';
@@ -42,6 +52,7 @@ export class ArenaDraftManagerService
 	public heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
+	public draftScreenHidden$$: SubscriberAwareBehaviorSubject<boolean | null>;
 
 	private memoryUpdates: MemoryUpdatesService;
 	private scene: SceneService;
@@ -70,6 +81,7 @@ export class ArenaDraftManagerService
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
+		this.draftScreenHidden$$ = this.mainInstance.draftScreenHidden$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
 
@@ -78,6 +90,7 @@ export class ArenaDraftManagerService
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
+		this.draftScreenHidden$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
 		this.memory = AppInjector.get(MemoryInspectionService);
@@ -104,13 +117,29 @@ export class ArenaDraftManagerService
 			this.internalSubscriber$$.subscribe();
 		});
 
-		await waitForReady(this.account);
-		this.account.region$$.pipe(distinctUntilChanged()).subscribe(async (region) => {
-			this.currentDeck$$.next(null);
-			this.currentStep$$.next(null);
-			this.heroOptions$$.next(null);
-			this.cardOptions$$.next(null);
+		this.draftScreenHidden$$.onFirstSubscribe(async () => {
+			this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
+				if (changes.ArenaDraftScreenHidden != null) {
+					console.debug('[arena-draft-manager] received draft screen hidden', changes.ArenaDraftScreenHidden);
+					this.draftScreenHidden$$.next(changes.ArenaDraftScreenHidden);
+				}
+			});
 		});
+
+		await waitForReady(this.account);
+		this.account.region$$
+			.pipe(
+				filter((region) => !!region),
+				distinctUntilChanged(),
+				skip(1), // Initial region set doesn't reset everything
+			)
+			.subscribe(async (region) => {
+				console.log('[arena-draft-manager] region changed', region);
+				this.currentDeck$$.next(null);
+				this.currentStep$$.next(null);
+				this.heroOptions$$.next(null);
+				this.cardOptions$$.next(null);
+			});
 
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
 			await this.scene.isReady();
@@ -118,6 +147,7 @@ export class ArenaDraftManagerService
 
 			this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 				if (changes.ArenaDraftStep != null) {
+					console.debug('[arena-draft-manager] received draft step', changes.ArenaDraftStep);
 					this.currentStep$$.next(changes.ArenaDraftStep);
 
 					if (changes.ArenaDraftStep != null && changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_HERO) {

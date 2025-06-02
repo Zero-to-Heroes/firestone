@@ -151,16 +151,22 @@ export class GameStat {
 			if (!this.playerRank) {
 				return {};
 			}
-			// New format
-			if (this.playerRank.indexOf('-') !== -1) {
-				const wins = this.playerRank.split('-')[0];
-				rankIcon = `arena/arena${wins}wins`;
-				rankIconTooltip = i18n.translateString('global.game-mode.arena');
+			if (this.buildNumber <= 221850) {
+				if (this.playerRank.indexOf('-') !== -1) {
+					const wins = this.playerRank.split('-')[0];
+					rankIcon = `arena/arena${wins}wins`;
+					rankIconTooltip = i18n.translateString('global.game-mode.arena');
+				} else {
+					const wins = Math.ceil(+this.playerRank);
+					rankIcon = `arena/arena${wins}wins`;
+					rankIconTooltip = i18n.translateString('global.game-mode.arena');
+					console.debug('arena icon', wins, rankIcon);
+				}
 			} else {
-				const wins = Math.ceil(+this.playerRank);
-				rankIcon = `arena/arena${wins}wins`;
+				const wins = this.playerRank.split('-')[0];
+				const losses = wins === '0' ? '-' + this.playerRank.split('-')[1] : '';
+				rankIcon = `arena/${wins}${losses}`;
 				rankIconTooltip = i18n.translateString('global.game-mode.arena');
-				console.debug('arena icon', wins, rankIcon);
 			}
 		} else if (this.gameMode === 'tavern-brawl') {
 			rankIcon = 'tavernbrawl';

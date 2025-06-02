@@ -53,6 +53,11 @@ export class ArenaHeroSelectionWidgetWrapperComponent
 			this.scene.currentScene$$,
 		]).pipe(
 			mergeMap(([displayFromPrefs, currentScene]) => {
+				console.debug(
+					'[arena-hero-selection-widget-wrapper] currentScene',
+					currentScene,
+					this.arenaDraftManager.currentStep$$.value,
+				);
 				if (!displayFromPrefs || currentScene !== SceneMode.DRAFT) {
 					return of(false);
 				}
