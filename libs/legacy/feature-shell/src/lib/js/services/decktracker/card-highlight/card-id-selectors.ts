@@ -3033,7 +3033,7 @@ export const cardIdSelector = (
 		case CardIds.UnendingSwarm:
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(3)));
 		case CardIds.UngoroBrochure_WORK_050:
-			return and(side(inputSide), or(inDeck, inHand), minion);
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.UnlockedPotential:
 			return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 		case CardIds.UnluckyPowderman_WW_367:
