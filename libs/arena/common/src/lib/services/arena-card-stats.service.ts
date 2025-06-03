@@ -2,14 +2,14 @@
 import { Injectable } from '@angular/core';
 import { DraftCardCombinedStat, DraftStatsByContext } from '@firestone-hs/arena-draft-pick';
 import { ArenaCardStat, ArenaCardStats, PlayerClass } from '@firestone-hs/arena-stats';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
 
-const ARENA_CARD_MATCH_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/cards/%timePeriod%/%context%.gz.json`;
-const ARENA_CARD_DRAFT_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/draft/%timePeriod%/%context%.gz.json`;
+const ARENA_CARD_MATCH_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/cards/%modeFilter%/%timePeriod%/%context%.gz.json`;
+const ARENA_CARD_DRAFT_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/draft/%modeFilter%/%timePeriod%/%context%.gz.json`;
 
 export const ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD = 6;
 
@@ -47,12 +47,16 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 					map((prefs) => ({
 						timeFilter: prefs.arenaActiveTimeFilter,
 						classFilter: prefs.arenaActiveClassFilter,
+						modeFilter: prefs.arenaActiveMode,
 					})),
 					distinctUntilChanged(
-						(a, b) => a?.timeFilter === b?.timeFilter && a?.classFilter === b?.classFilter,
+						(a, b) =>
+							a?.timeFilter === b?.timeFilter &&
+							a?.classFilter === b?.classFilter &&
+							a?.modeFilter === b?.modeFilter,
 					),
 				)
-				.subscribe(async ({ timeFilter, classFilter }) => {
+				.subscribe(async ({ timeFilter, classFilter, modeFilter }) => {
 					// console.debug('building arena card stats', new Error().stack);
 					const timePeriod =
 						timeFilter === 'all-time'
@@ -63,25 +67,45 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 							? 'past-3'
 							: timeFilter;
 					const context = classFilter === 'all' || classFilter == null ? 'global' : classFilter;
-					const result: ArenaCombinedCardStats | null = await this.buildCardStats(context, timePeriod);
+					const result: ArenaCombinedCardStats | null = await this.buildCardStats(
+						context,
+						timePeriod,
+						modeFilter,
+					);
 					this.cardStats$$.next(result);
 				});
 		});
 	}
 
-	public async getStatsFor(cardId: string, playerClass: PlayerClass): Promise<ArenaCombinedCardStat | null> {
-		return this.mainInstance.getStatsForInternal(cardId, playerClass);
+	public async getStatsFor(
+		cardId: string,
+		playerClass: PlayerClass,
+		modeFilter: ArenaModeFilterType,
+	): Promise<ArenaCombinedCardStat | null> {
+		return this.mainInstance.getStatsForInternal(cardId, playerClass, modeFilter);
 	}
 
-	private async getStatsForInternal(cardId: string, playerClass: PlayerClass): Promise<ArenaCombinedCardStat | null> {
+	private async getStatsForInternal(
+		cardId: string,
+		playerClass: PlayerClass,
+		modeFilter: ArenaModeFilterType,
+	): Promise<ArenaCombinedCardStat | null> {
 		let cardStats = playerClass === 'global' ? this.cachedGlobalStats : this.cachedStats;
 		if (playerClass === 'global') {
-			if (!this.cachedGlobalStats?.stats?.length || this.cachedGlobalStats?.timePeriod !== 'last-patch') {
-				cardStats = await this.buildCardStats('global', 'last-patch');
+			if (
+				!this.cachedGlobalStats?.stats?.length ||
+				this.cachedGlobalStats?.timePeriod !== 'last-patch' ||
+				this.cachedGlobalStats?.mode !== modeFilter
+			) {
+				cardStats = await this.buildCardStats('global', 'last-patch', modeFilter);
 				this.cachedGlobalStats = cardStats;
 			}
-		} else if (this.cachedStats?.context !== playerClass || this.cachedStats?.timePeriod !== 'last-patch') {
-			cardStats = await this.buildCardStats(playerClass, 'last-patch');
+		} else if (
+			this.cachedStats?.context !== playerClass ||
+			this.cachedStats?.timePeriod !== 'last-patch' ||
+			this.cachedStats?.mode !== modeFilter
+		) {
+			cardStats = await this.buildCardStats(playerClass, 'last-patch', modeFilter);
 			this.cachedStats = cardStats;
 		}
 		const cardStat = cardStats?.stats?.find((s) => s.cardId === cardId) ?? null;
@@ -89,28 +113,49 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			playerClass !== 'global' &&
 			(!cardStat?.matchStats?.stats?.drawn || cardStat.matchStats.stats.drawn < 200)
 		) {
-			return this.getStatsFor(cardId, 'global');
+			return this.getStatsFor(cardId, 'global', modeFilter);
 		}
 		return cardStat;
 	}
 
-	public async buildCardStats(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
-		return this.mainInstance.buildCardStatsInternal(context, timePeriod);
+	public async buildCardStats(
+		context: string,
+		timePeriod: string,
+		modeFilter: ArenaModeFilterType,
+	): Promise<ArenaCombinedCardStats | null> {
+		return this.mainInstance.buildCardStatsInternal(context, timePeriod, modeFilter);
 	}
 
-	private async buildCardStatsInternal(context: string, timePeriod: string): Promise<ArenaCombinedCardStats | null> {
-		if (context === 'global' && this.cachedGlobalStats?.timePeriod === timePeriod) {
+	private async buildCardStatsInternal(
+		context: string,
+		timePeriod: string,
+		modeFilter: ArenaModeFilterType,
+	): Promise<ArenaCombinedCardStats | null> {
+		if (
+			context === 'global' &&
+			this.cachedGlobalStats?.timePeriod === timePeriod &&
+			this.cachedGlobalStats?.mode === modeFilter
+		) {
 			return this.cachedGlobalStats;
-		} else if (this.cachedStats?.context === context && this.cachedStats?.timePeriod === timePeriod) {
+		} else if (
+			this.cachedStats?.context === context &&
+			this.cachedStats?.timePeriod === timePeriod &&
+			this.cachedStats?.mode === modeFilter
+		) {
 			return this.cachedStats;
 		}
 
+		const modeFilterCorrected = modeFilter === 'arena-legacy' ? 'all' : modeFilter;
 		const [cardPerformanceStats, cardDraftStats] = await Promise.all([
 			this.api.callGetApi<ArenaCardStats>(
-				ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context),
+				ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod)
+					.replace('%context%', context)
+					.replace('%modeFilter%', modeFilterCorrected),
 			),
 			this.api.callGetApi<DraftStatsByContext>(
-				ARENA_CARD_DRAFT_STATS_URL.replace('%timePeriod%', timePeriod).replace('%context%', context),
+				ARENA_CARD_DRAFT_STATS_URL.replace('%timePeriod%', timePeriod)
+					.replace('%context%', context)
+					.replace('%modeFilter%', modeFilterCorrected),
 			),
 		]);
 		if (cardPerformanceStats == null || cardDraftStats == null) {
@@ -127,6 +172,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 
 		const result: ArenaCombinedCardStats = {
 			context: context,
+			mode: modeFilter,
 			timePeriod: timePeriod,
 			lastUpdated: cardPerformanceStats.lastUpdated,
 			stats: this.buildCombinedStats(cardPerformanceStats.stats, cardDraftStats.stats),

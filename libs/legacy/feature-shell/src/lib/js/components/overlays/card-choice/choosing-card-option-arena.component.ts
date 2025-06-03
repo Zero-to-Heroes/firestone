@@ -124,12 +124,12 @@ export class ChoosingCardOptionArenaComponent
 			.subscribe(([show, canSee]) => {
 				this.guardian.acknowledgeDiscoverStatsSeen();
 			});
-		// TODO-arena: game mode
+
 		this.arenaCardStats$ = combineLatest([this.cardId$$, this.playerClass$$]).pipe(
 			filter(([cardId]) => !!cardId),
 			distinctUntilChanged((a, b) => a[0] === b[0] && a[1] === b[1]),
 			switchMap(([cardId, playerClass]) =>
-				from(this.arenaCardStats.getStatsFor(cardId, playerClass)).pipe(
+				from(this.arenaCardStats.getStatsFor(cardId, playerClass, 'all')).pipe(
 					this.mapData((stat) => ({ stat, playerClass })),
 				),
 			),

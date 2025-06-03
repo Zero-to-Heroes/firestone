@@ -1,8 +1,10 @@
 import { ArenaCardStat, PlayerClass } from '@firestone-hs/arena-stats';
+import { ArenaModeFilterType } from '@firestone/shared/common/service';
 
 export interface ArenaCombinedCardStats {
 	lastUpdated: Date;
 	context: 'global' | PlayerClass;
+	mode: ArenaModeFilterType;
 	timePeriod: string;
 	stats: ArenaCombinedCardStat[];
 }
