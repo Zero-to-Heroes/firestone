@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { Race, isBattlegroundsDuo } from '@firestone-hs/reference-data';
 import {
 	BgsInGameHeroSelectionGuardianService,
 	BgsPlayerHeroStatsService,
@@ -14,6 +14,7 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import {
 	BehaviorSubject,
 	Observable,
+	auditTime,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -87,10 +88,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		);
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
 		const availableRaces$ = this.gameState.gameState$$.pipe(
-			debounceTime(200),
+			auditTime(200),
 			this.mapData((state) => state.bgState.currentGame?.availableRaces),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
+			startWith([] as readonly Race[]),
 			takeUntil(this.destroyed$),
 		);
 		const mmrAtStart$ = this.gameState.gameState$$.pipe(

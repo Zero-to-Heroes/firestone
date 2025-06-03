@@ -36,7 +36,6 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -265,18 +264,17 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					return result;
 				},
 			),
-			tap((info) => console.debug('[bgs-minions-tiers] staticTiers', info)),
 		);
 
 		const phase$ = this.gameState.gameState$$.pipe(
-			debounceTime(500),
+			auditTime(500),
 			this.mapData((state) => state.bgState.currentGame?.phase),
 			distinctUntilChanged(),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
 		const ownedCards$ = this.gameState.gameState$$.pipe(
-			debounceTime(500),
+			auditTime(500),
 			this.mapData((gameState) =>
 				[...(gameState?.playerDeck?.board ?? []), ...(gameState?.playerDeck?.hand ?? [])].map((e) => e.cardId),
 			),
@@ -303,6 +301,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				return composition;
 			}),
 			distinctUntilChanged((a, b) => a.length === b.length && a.every((e, i) => equalMinionInfo(e, b[i]))),
+			startWith([] as readonly MinionInfo[]),
 			takeUntil(this.destroyed$),
 		);
 		this.minionsOnBoardAndHand$ = boardComposition$.pipe(this.mapData((board) => board.map((b) => b.cardId)));
