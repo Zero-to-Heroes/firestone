@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { CardClass, SceneMode, getBaseCardId, isArena, isCoin } from '@firestone-hs/reference-data';
+import { CardClass, GameType, SceneMode, getBaseCardId, isArena, isCoin } from '@firestone-hs/reference-data';
 import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaModeFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -172,6 +172,13 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			distinctUntilChanged(),
 			shareReplay(1),
 		);
+		const gameMode$ = this.gameState.gameState$$.pipe(
+			map((gameState) =>
+				gameState?.metadata?.gameType === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena',
+			),
+			distinctUntilChanged(),
+			shareReplay(1),
+		);
 
 		const playerClass$ = this.gameState.gameState$$.pipe(
 			map((gameState) => gameState?.playerDeck.hero?.classes?.[0]),
@@ -189,10 +196,13 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			),
 			tap((stats) => console.debug('[mulligan-arena-guide] card stats', stats)),
 		);
-		const classStats$ = combineLatest([showWidget$, timeFrame$]).pipe(
+		const classStats$ = combineLatest([showWidget$, timeFrame$, gameMode$]).pipe(
 			filter(([showWidget]) => showWidget),
-			switchMap(([showWidget, timeFrame]) =>
-				combineLatest([this.classStats.buildClassStats(timeFrame), playerClass$]),
+			switchMap(([showWidget, timeFrame, gameMode]) =>
+				combineLatest([
+					this.classStats.buildClassStats(timeFrame, gameMode as ArenaModeFilterType),
+					playerClass$,
+				]),
 			),
 			map(([classStats, playerClass]) =>
 				classStats?.stats?.find(

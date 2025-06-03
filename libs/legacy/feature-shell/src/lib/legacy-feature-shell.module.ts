@@ -272,6 +272,7 @@ import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
 import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
+import { ArenaModeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-mode-filter-dropdown.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsCardTierFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-tier-filter-dropdown.component';
@@ -1138,6 +1139,7 @@ try {
 		ArenaClassesRecapComponent,
 		ArenaFiltersComponent,
 		ArenaTimeFilterDropdownComponent,
+		ArenaModeFilterDropdownComponent,
 		ArenaClassFilterDropdownComponent,
 		ArenaHighWinRunsWinsFilterDropdownComponent,
 		ArenaCardClassFilterDropdownComponent,

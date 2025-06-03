@@ -1,8 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass, isArena } from '@firestone-hs/reference-data';
-import { ArenaRun } from '@firestone/arena/common';
+import { ARENA_REVAMP_BUILD_NUMBER, ArenaRun } from '@firestone/arena/common';
 import {
 	ArenaClassFilterType,
+	ArenaModeFilterType,
 	PatchInfo,
 	PatchesConfigService,
 	PreferencesService,
@@ -264,7 +265,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 		arenaMatches: GameStat[],
 		timeFilter: ArenaTimeFilterType,
 		heroFilter: ArenaClassFilterType,
-		mode: 'arena' | 'arena-underground' | 'all',
+		mode: ArenaModeFilterType,
 		patch: PatchInfo,
 		seasonPatch: PatchInfo,
 	): readonly ArenaRun[] {
@@ -289,7 +290,13 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 		return runs
 			.filter((match) => this.isCorrectHero(match, heroFilter))
 			.filter((match) => this.isCorrectTime(match, timeFilter, patch, seasonPatch))
-			.filter((match) => (mode === 'all' ? true : match.gameMode === mode));
+			.filter((match) =>
+				mode === 'all'
+					? true
+					: mode === 'arena-legacy'
+					? match.gameMode === 'arena' && match.steps[0].buildNumber < ARENA_REVAMP_BUILD_NUMBER
+					: match.gameMode === mode,
+			);
 	}
 
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {

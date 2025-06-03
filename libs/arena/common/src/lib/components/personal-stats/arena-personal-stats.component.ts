@@ -8,7 +8,7 @@ import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/share
 import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
-import { ArenaRunsService, isCorrectTime } from '../../services/arena-runs.service';
+import { ArenaRunsService, isCorrectMode, isCorrectTime } from '../../services/arena-runs.service';
 import { ArenaClassSummary } from './arena-personal-stats.model';
 
 @Component({
@@ -253,13 +253,16 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 		this.runs$ = combineLatest([
 			this.arenaRuns.allRuns$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveTimeFilter)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveMode)),
 			this.patchesConfig.currentArenaMetaPatch$$,
 			this.patchesConfig.currentArenaSeasonPatch$$,
 		]).pipe(
 			this.mapData(
-				([runs, timeFilter, patch, seasonPatch]) =>
+				([runs, timeFilter, modeFilter, patch, seasonPatch]) =>
 					runs
-						?.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch))
+						?.filter((r) => !!r?.getFirstMatch())
+						.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch))
+						.filter((run) => isCorrectMode(run, modeFilter))
 						.map((r) =>
 							ArenaRun.create({
 								...r,

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { DraftPick, Pick, Picks } from '@firestone-hs/arena-draft-pick';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { DraftSlotType, SceneMode } from '@firestone-hs/reference-data';
+import { DraftSlotType, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
@@ -21,6 +21,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import {
+	BehaviorSubject,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
@@ -52,7 +53,8 @@ export class ArenaDraftManagerService
 	public heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
-	public draftScreenHidden$$: SubscriberAwareBehaviorSubject<boolean | null>;
+	public draftScreenHidden$$: BehaviorSubject<boolean | null>;
+	public currentMode$$: BehaviorSubject<GameType | null>;
 
 	private memoryUpdates: MemoryUpdatesService;
 	private scene: SceneService;
@@ -82,6 +84,7 @@ export class ArenaDraftManagerService
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.draftScreenHidden$$ = this.mainInstance.draftScreenHidden$$;
+		this.currentMode$$ = this.mainInstance.currentMode$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
 
@@ -90,7 +93,8 @@ export class ArenaDraftManagerService
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
-		this.draftScreenHidden$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
+		this.draftScreenHidden$$ = new BehaviorSubject<boolean | null>(null);
+		this.currentMode$$ = new BehaviorSubject<GameType | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
 		this.memory = AppInjector.get(MemoryInspectionService);
@@ -117,13 +121,15 @@ export class ArenaDraftManagerService
 			this.internalSubscriber$$.subscribe();
 		});
 
-		this.draftScreenHidden$$.onFirstSubscribe(async () => {
-			this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
-				if (changes.ArenaDraftScreenHidden != null) {
-					console.debug('[arena-draft-manager] received draft screen hidden', changes.ArenaDraftScreenHidden);
-					this.draftScreenHidden$$.next(changes.ArenaDraftScreenHidden);
-				}
-			});
+		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
+			if (changes.ArenaDraftScreenHidden != null) {
+				console.debug('[arena-draft-manager] received draft screen hidden', changes.ArenaDraftScreenHidden);
+				this.draftScreenHidden$$.next(changes.ArenaDraftScreenHidden);
+			}
+			if (changes.ArenaCurrentMode != null) {
+				console.debug('[arena-draft-manager] received current mode', changes.ArenaCurrentMode);
+				this.currentMode$$.next(changes.ArenaCurrentMode);
+			}
 		});
 
 		await waitForReady(this.account);
@@ -139,6 +145,8 @@ export class ArenaDraftManagerService
 				this.currentStep$$.next(null);
 				this.heroOptions$$.next(null);
 				this.cardOptions$$.next(null);
+				this.draftScreenHidden$$.next(null);
+				this.currentMode$$.next(null);
 			});
 
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
@@ -217,6 +225,14 @@ export class ArenaDraftManagerService
 							await this.prefs.savePreferences(newPrefs);
 						}
 					}
+				});
+			combineLatest([this.scene.currentScene$$, this.currentMode$$])
+				.pipe(filter(([scene, mode]) => scene === SceneMode.DRAFT))
+				.subscribe(async ([scene, mode]) => {
+					this.prefs.updatePrefs(
+						'arenaActiveMode',
+						mode === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena',
+					);
 				});
 
 			combineLatest([this.currentDeck$$, this.cardOptions$$])
@@ -379,6 +395,10 @@ export class ArenaDraftManagerService
 							creationTimestamp: new Date().getTime(),
 							heroCardId: currentDeck.HeroCardId,
 							initialDeckList: encode(partialDeckDefinition),
+							gameMode:
+								this.currentMode$$.value === GameType.GT_UNDERGROUND_ARENA
+									? 'arena-underground'
+									: 'arena',
 						};
 						this.arenaDeckStats.newDeckStat(deckDraftStats, isDeckFullyDrafted);
 					},

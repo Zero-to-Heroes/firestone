@@ -1,4 +1,4 @@
-import { DraftSlotType, RewardTrackType, SceneMode, Zone } from '@firestone-hs/reference-data';
+import { DraftSlotType, GameType, RewardTrackType, SceneMode, Zone } from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
@@ -27,6 +27,7 @@ export interface MemoryUpdate {
 	readonly ArenaCardOptions: readonly string[];
 	readonly ArenaCurrentCardsInDeck: number;
 	readonly ArenaDraftScreenHidden: boolean;
+	readonly ArenaCurrentMode: GameType;
 
 	// true means the treasure selection has started, null means nothing changed, and false means it has ended
 	readonly MercenariesTreasureSelectionIndex: number;

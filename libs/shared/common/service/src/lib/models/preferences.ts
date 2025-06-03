@@ -658,7 +658,7 @@ export class Preferences implements IPreferences {
 	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
 	// readonly mercenariesOutOfCombatPlayerTeamOverlayPosition: { left: number; top: number };
 
-	readonly arenaActiveMode: 'arena' | 'arena-underground' | 'all' = 'all';
+	readonly arenaActiveMode: ArenaModeFilterType = 'all';
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
 	readonly arenaActiveCardClassFilter: ArenaCardClassFilterType = 'all';
@@ -727,4 +727,5 @@ export type BgsCompositionsListMode = 'exploring' | 'browsing';
 export type BgsCardTypeFilterType = 'minion' | 'spell';
 export type BgsCardTierFilterType = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type ArenaSessionWidgetTimeFrame = 'current-season' | 'all-time';
+export type ArenaModeFilterType = 'arena' | 'arena-underground' | 'arena-legacy' | 'all';
 export type CornerPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';

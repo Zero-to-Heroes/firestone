@@ -14,6 +14,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	template: `
 		<div class="filters arena-filters">
 			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
+			<arena-mode-filter-dropdown class="filter time-filter"></arena-mode-filter-dropdown>
 			<arena-time-filter-dropdown class="filter time-filter"></arena-time-filter-dropdown>
 			<arena-class-filter-dropdown class="filter class-filter"></arena-class-filter-dropdown>
 			<arena-card-class-filter-dropdown class="filter card-class-filter"></arena-card-class-filter-dropdown>

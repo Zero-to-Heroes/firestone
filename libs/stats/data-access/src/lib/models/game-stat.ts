@@ -147,7 +147,6 @@ export class GameStat {
 		}
 		// TODO-arena
 		else if (this.gameMode === 'arena') {
-			// TODO: no-rank image
 			if (!this.playerRank) {
 				return {};
 			}

@@ -6,6 +6,7 @@ import { decode } from '@firestone-hs/deckstrings';
 import { BnetRegion, isArena } from '@firestone-hs/reference-data';
 import {
 	ArenaClassFilterType,
+	ArenaModeFilterType,
 	ArenaTimeFilterType,
 	PatchInfo,
 	PatchesConfigService,
@@ -22,6 +23,7 @@ import {
 import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { ARENA_REVAMP_BUILD_NUMBER, ARENA_REVAMP_RELEASE_DATE } from '../models/arena-category';
 import { ExtendedDraftDeckStats } from '../models/arena-draft';
 import { ArenaRun } from '../models/arena-run';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
@@ -106,11 +108,15 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 					map((prefs) => ({
 						timeFilter: prefs.arenaActiveTimeFilter,
 						heroFilter: prefs.arenaActiveClassFilter,
+						modeFilter: prefs.arenaActiveMode,
 						region: prefs.regionFilter,
 					})),
 					distinctUntilChanged(
 						(a, b) =>
-							a.timeFilter === b.timeFilter && a.heroFilter === b.heroFilter && a.region === b.region,
+							a.timeFilter === b.timeFilter &&
+							a.heroFilter === b.heroFilter &&
+							a.region === b.region &&
+							a.modeFilter === b.modeFilter,
 					),
 				),
 				this.patchesConfig.currentArenaMetaPatch$$,
@@ -118,11 +124,12 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			])
 				.pipe(
 					filter(([runs, { timeFilter, heroFilter }]) => !!runs?.length),
-					map(([runs, { timeFilter, heroFilter, region }, patch, seasonPatch]) => {
+					map(([runs, { timeFilter, heroFilter, modeFilter, region }, patch, seasonPatch]) => {
 						const filteredRuns = runs!
 							.filter((match) => isCorrectRegion(match, region))
 							.filter((match) => this.isCorrectHero(match, heroFilter))
-							.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch));
+							.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch))
+							.filter((match) => isCorrectMode(match, modeFilter));
 						return filteredRuns;
 					}),
 				)
@@ -156,7 +163,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			const [wins, losses] = this.extractWins(sortedMatches);
 			return ArenaRun.create({
 				id: firstMatch.runId,
-				gameMode: firstMatch.gameMode as 'arena' | 'arena-underground',
+				gameMode: (firstMatch.gameMode ?? draftStat?.gameMode) as 'arena' | 'arena-underground',
 				creationTimestamp: firstMatch.creationTimestamp,
 				heroCardId: firstMatch.playerCardId,
 				initialDeckList: firstMatch.playerDecklist,
@@ -236,6 +243,38 @@ export const isCorrectRegion = (run: ArenaRun, region: BnetRegion | 'all'): bool
 	// 	region,
 	// );
 	return region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region;
+};
+
+export const isCorrectMode = (run: ArenaRun, modeFilter: ArenaModeFilterType): boolean => {
+	const buildNumber = run.getFirstMatch()?.buildNumber ?? 0;
+	const runDate = new Date(run.creationTimestamp ?? run.getFirstMatch()?.creationTimestamp ?? 0);
+	const gameMode = run.gameMode ?? run.draftStat?.gameMode;
+	console.debug(
+		'[arena-runs] isCorrectMode',
+		run,
+		modeFilter,
+		buildNumber,
+		runDate,
+		buildNumber > ARENA_REVAMP_BUILD_NUMBER,
+		runDate >= ARENA_REVAMP_RELEASE_DATE,
+	);
+	switch (modeFilter) {
+		case 'arena-legacy':
+			return (
+				gameMode === 'arena' &&
+				(buildNumber ? buildNumber < ARENA_REVAMP_BUILD_NUMBER : runDate < ARENA_REVAMP_RELEASE_DATE)
+			);
+		case 'arena':
+			return (
+				gameMode === 'arena' &&
+				(buildNumber ? buildNumber > ARENA_REVAMP_BUILD_NUMBER : runDate >= ARENA_REVAMP_RELEASE_DATE)
+			);
+		case 'arena-underground':
+			return gameMode === 'arena-underground';
+		case 'all':
+		default:
+			return true;
+	}
 };
 
 export const isCorrectTime = (

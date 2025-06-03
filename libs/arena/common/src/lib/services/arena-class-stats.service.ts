@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -9,9 +9,9 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { distinctUntilChanged, map } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 
-const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/classes/%timePeriod%/overview.gz.json`;
+const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/classes/%modeFilter%/%timePeriod%/overview.gz.json`;
 
 @Injectable()
 export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStatsService> {
@@ -36,29 +36,37 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 		this.classStats$$.onFirstSubscribe(async () => {
 			await waitForReady(this.prefs);
 
-			this.prefs.preferences$$
-				.pipe(
+			combineLatest([
+				this.prefs.preferences$$.pipe(
 					map((prefs) => prefs.arenaActiveTimeFilter),
 					distinctUntilChanged(),
-				)
-				.subscribe(async (timeFilter) => {
-					const timePeriod =
-						timeFilter === 'all-time'
-							? 'past-20'
-							: timeFilter === 'past-seven'
-							? 'past-7'
-							: timeFilter === 'past-three'
-							? 'past-3'
-							: timeFilter;
-					const result: ArenaClassStats | null = await this.buildClassStats(timePeriod);
-					console.debug('[arena-class-stats] loaded class stats', result);
-					this.classStats$$.next(result);
-				});
+				),
+				this.prefs.preferences$$.pipe(
+					map((prefs) => prefs.arenaActiveMode),
+					distinctUntilChanged(),
+				),
+			]).subscribe(async ([timeFilter, modeFilter]) => {
+				const timePeriod =
+					timeFilter === 'all-time'
+						? 'past-20'
+						: timeFilter === 'past-seven'
+						? 'past-7'
+						: timeFilter === 'past-three'
+						? 'past-3'
+						: timeFilter;
+				const result: ArenaClassStats | null = await this.buildClassStats(timePeriod, modeFilter);
+				console.debug('[arena-class-stats] loaded class stats', result);
+				this.classStats$$.next(result);
+			});
 		});
 	}
 
-	public async buildClassStats(timePeriod: string): Promise<ArenaClassStats | null> {
-		const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod);
+	public async buildClassStats(timePeriod: string, modeFilter: ArenaModeFilterType): Promise<ArenaClassStats | null> {
+		const modeFilterCorrected = modeFilter === 'arena-legacy' ? 'all' : modeFilter;
+		const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod).replace(
+			'%modeFilter%',
+			modeFilterCorrected,
+		);
 		const result: ArenaClassStats | null = await this.api.callGetApi(url);
 		return result;
 	}

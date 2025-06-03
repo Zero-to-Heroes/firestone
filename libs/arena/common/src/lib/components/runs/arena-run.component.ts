@@ -189,10 +189,16 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 
 		this.wins = this._run.wins;
 		this.losses = this._run.losses;
-		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins ?? 0 });
-		this.gameModeImage = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${
-			this.wins ?? 0
-		}wins.png`;
+		const isNewFormat =
+			this._run.creationTimestamp && new Date(this._run.creationTimestamp) > new Date('2025-06-02T18:00:00Z');
+		this.gameModeTooltip = isNewFormat
+			? this.buildNewFormatGameModeTooltip()
+			: this.i18n.translateString('app.arena.runs.run-name', { value: this.wins ?? 0 });
+		this.gameModeImage = isNewFormat
+			? this.buildNewFormatGameModeImage()
+			: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${
+					this.wins ?? 0
+			  }wins.png`;
 		this.rewards = this._run.rewards;
 
 		const heroCard = this._run.heroCardId ? this.allCards.getCard(this._run.heroCardId) : null;
@@ -240,5 +246,24 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private buildNewFormatGameModeImage() {
+		const wins = this._run.wins;
+		const losses = wins === 0 ? '-' + this._run.losses : '';
+		const rankIcon = `arena/${wins}${losses}`;
+		return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/${rankIcon}.png`;
+	}
+
+	private buildNewFormatGameModeTooltip() {
+		if (this._run.gameMode === 'arena') {
+			return this.i18n.translateString('app.arena.runs.run-name', { value: this._run.wins });
+		} else if (this._run.gameMode === 'arena-underground') {
+			const wins = this._run.wins;
+			const losses = wins === 0 ? '-' + this._run.losses : '';
+			const winLoss = `${wins}${losses}`;
+			return this.i18n.translateString('app.arena.runs.underground-run-name', { value: winLoss });
+		}
+		return null;
 	}
 }

@@ -50,7 +50,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		});
 	}
 
-	public async newDeckStat(stat: DraftDeckStats, isFinalDeck: boolean) {
+	public async newDeckStat(stat: ExtendedDraftDeckStats, isFinalDeck: boolean) {
 		const user = await this.user.getCurrentUser();
 		const region = this.account.region$$.getValue();
 		const newStat: ExtendedDraftDeckStats = {
