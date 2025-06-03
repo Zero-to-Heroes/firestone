@@ -56,11 +56,13 @@ export class BgsNextOpponentParser implements EventParser {
 		const mainPlayer = bgState.currentGame.getMainPlayer();
 		const opponent = bgState.currentGame.findPlayer(newNextOpponentPanel.opponentOverview?.playerId);
 		if (!mainPlayer) {
-			console.error(
-				'[bgs-next-opponent] could not find main player',
-				currentState.currentTurnNumeric,
-				bgState.currentGame.players,
-			);
+			if (bgState.currentGame.players.length !== 8) {
+				console.error(
+					'[bgs-next-opponent] could not find main player',
+					currentState.currentTurnNumeric,
+					bgState.currentGame.players,
+				);
+			}
 			return currentState;
 		}
 
