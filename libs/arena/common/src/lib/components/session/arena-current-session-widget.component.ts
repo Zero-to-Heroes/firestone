@@ -2,7 +2,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BnetRegion } from '@firestone-hs/reference-data';
+import { BnetRegion, GameType } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { AccountService } from '@firestone/profile/common';
 import {
@@ -14,6 +14,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
+import { ArenaDraftManagerService } from '../../services/arena-draft-manager.service';
 import { ArenaRunsService } from '../../services/arena-runs.service';
 import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-tooltip.component';
 
@@ -124,12 +125,13 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		private readonly patches: PatchesConfigService,
 		private readonly region: AccountService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly draftManager: ArenaDraftManagerService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.runs, this.patches, this.region, this.gameState);
+		await waitForReady(this.prefs, this.runs, this.patches, this.region, this.gameState, this.draftManager);
 
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => Math.max(0.01, prefs.arenaSessionWidgetOpacity / 100)),
@@ -170,6 +172,8 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 			distinctUntilChanged(),
 		);
 
+		const gameType$ = this.draftManager.currentMode$$;
+
 		const lastRuns$ = combineLatest([
 			this.runs.allRuns$$.pipe(
 				this.mapData((runs) => runs),
@@ -177,14 +181,20 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 					(a, b) => (a?.length ?? 0) === (b?.length ?? 0) && a?.[0]?.steps?.length === b?.[0]?.steps?.length,
 				),
 			),
+			gameType$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaCurrentSessionStartDate)),
 			this.region.region$$.pipe(this.mapData((region) => region)),
 			timeFrame$,
 			seasonStart$,
 		]).pipe(
-			this.mapData(([runs, sessionStartDate, region, timeFrame, seasonStart]) =>
+			this.mapData(([runs, gameType, sessionStartDate, region, timeFrame, seasonStart]) =>
 				runs
 					?.filter((r) => !!r?.getFirstMatch())
+					.filter((r) =>
+						gameType === GameType.GT_UNDERGROUND_ARENA
+							? r.gameMode === 'arena-underground'
+							: r.gameMode === 'arena',
+					)
 					.filter((run) => isCorrectRegion(run, region))
 					.filter((run) => isCorrectTime(run, timeFrame, new Date(seasonStart!))),
 			),
