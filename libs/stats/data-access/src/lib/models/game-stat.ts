@@ -144,9 +144,7 @@ export class GameStat {
 		} else if (this.gameMode === 'friendly') {
 			rankIcon = 'friendly';
 			rankIconTooltip = i18n.translateString('global.game-mode.friendly');
-		}
-		// TODO-arena
-		else if (this.gameMode === 'arena') {
+		} else if (this.gameMode === 'arena') {
 			if (!this.playerRank) {
 				return {};
 			}
