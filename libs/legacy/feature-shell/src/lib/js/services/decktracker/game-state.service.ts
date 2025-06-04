@@ -114,14 +114,14 @@ export class GameStateService {
 				debounceTime(300),
 				filter((info) => !!info),
 			)
-			.subscribe((info) =>
+			.subscribe((info) => {
 				this.processingQueue.enqueue({
 					type: GameEvent.BATTLEGROUNDS_GLOBAL_INFO_UPDATE,
 					additionalData: {
 						info: info,
 					},
-				}),
-			);
+				});
+			});
 		this.simulation.battleInfo$$.pipe(filter((info) => !!info)).subscribe((info) => {
 			this.processingQueue.enqueue({
 				type: GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION,
@@ -436,6 +436,7 @@ export class GameStateService {
 			'[game-state] processed event',
 			gameEvent.type,
 			gameEvent.cardId,
+			gameEvent.entityId,
 			currentState.opponentDeck.board.map((c) => c.cardName),
 			currentState,
 			gameEvent,
