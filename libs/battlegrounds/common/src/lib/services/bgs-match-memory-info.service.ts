@@ -68,6 +68,12 @@ export class BgsMatchMemoryInfoService {
 				inProcess = true;
 				// console.debug('[bgs-match-memory-info] reading memory info');
 				const memoryInfo = await this.memory.getBattlegroundsMatchWithPlayers(1);
+				if (!memoryInfo) {
+					console.log('[bgs-match-memory-info] no memory info found, skipping this reading');
+					inProcess = false;
+					return;
+				}
+
 				// So that we send it right away to get the most important info
 				this.battlegroundsMemoryInfo$$.next(memoryInfo);
 				// console.debug('[bgs-match-memory-info] sent memory info basic info', memoryInfo?.Game?.AvailableRaces);
