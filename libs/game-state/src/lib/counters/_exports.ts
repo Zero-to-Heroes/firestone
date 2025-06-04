@@ -73,6 +73,7 @@ import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
+import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TreantCounterDefinitionV2 } from './impl/treant';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
@@ -123,6 +124,7 @@ export const getAllCounters: (
 	new MenagerieCounterDefinitionV2(i18n, allCards),
 	new HolySpellsCounterDefinitionV2(i18n, allCards),
 	new LightrayCounterDefinitionV2(i18n, allCards),
+	new TableFlipCounterDefinitionV2(i18n, allCards),
 	new SecretsPlayedCounterDefinitionV2(i18n, allCards),
 	new ChaoticTendrilCounterDefinitionV2(i18n, allCards),
 	new ExcavateCounterDefinitionV2(i18n, allCards),
@@ -177,6 +179,7 @@ export type CounterType =
 	| 'ysondre'
 	| 'dragonsInHand'
 	| 'imbue'
+	| 'tableFlip'
 	| 'heroPowerUse'
 	| 'tyrande'
 	| 'avianaElunesChosen'

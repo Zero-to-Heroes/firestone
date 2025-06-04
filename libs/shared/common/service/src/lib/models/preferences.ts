@@ -438,6 +438,8 @@ export class Preferences implements IPreferences {
 	readonly playerShockspitterCounter: BooleanWithLimited = true;
 	readonly opponentShockspitterCounter: BooleanWithLimited = true;
 	readonly playerQueensguardCounter: BooleanWithLimited = true;
+	readonly playerTableFlipCounter: BooleanWithLimited = false;
+	readonly opponentTableFlipCounter: BooleanWithLimited = false;
 
 	readonly showPlayerMaxResourcesWidget: boolean = true;
 	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };

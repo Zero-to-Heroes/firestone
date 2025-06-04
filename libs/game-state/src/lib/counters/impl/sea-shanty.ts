@@ -33,12 +33,11 @@ export class SeaShantyCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentSeaShantyCounter' as const,
 		display: (state: GameState): boolean => initialHeroClassIs(state.opponentDeck.hero, [CardClass.PALADIN]),
 		value: (state: GameState) => {
-			return (
-				[
-					...state.opponentDeck.spellsPlayedOnFriendlyEntities,
-					...state.opponentDeck.spellsPlayedOnEnemyEntities,
-				].length ?? 0
-			);
+			const result = [
+				...state.opponentDeck.spellsPlayedOnFriendlyEntities,
+				...state.opponentDeck.spellsPlayedOnEnemyEntities,
+			].length;
+			return result || null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
