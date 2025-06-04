@@ -25,6 +25,7 @@ export interface MemoryUpdate {
 	readonly ArenaRewards: readonly Reward[];
 	readonly ArenaHeroOptions: readonly string[];
 	readonly ArenaCardOptions: readonly ArenaCardOption[];
+	readonly ArenaPackageCardOptions: readonly string[];
 	readonly ArenaCurrentCardsInDeck: number;
 	readonly ArenaDraftScreenHidden: boolean;
 	readonly ArenaCurrentMode: GameType;

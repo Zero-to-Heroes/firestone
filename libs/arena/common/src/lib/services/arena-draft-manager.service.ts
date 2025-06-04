@@ -52,6 +52,7 @@ export class ArenaDraftManagerService
 	public currentStep$$: SubscriberAwareBehaviorSubject<DraftSlotType | null>;
 	public heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	public cardPackageOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 	public draftScreenHidden$$: BehaviorSubject<boolean | null>;
 	public currentMode$$: BehaviorSubject<GameType | null>;
@@ -82,6 +83,7 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = this.mainInstance.currentStep$$;
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
+		this.cardPackageOptions$$ = this.mainInstance.cardPackageOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.draftScreenHidden$$ = this.mainInstance.draftScreenHidden$$;
 		this.currentMode$$ = this.mainInstance.currentMode$$;
@@ -92,6 +94,7 @@ export class ArenaDraftManagerService
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardPackageOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.draftScreenHidden$$ = new BehaviorSubject<boolean | null>(null);
 		this.currentMode$$ = new BehaviorSubject<GameType | null>(null);
@@ -129,6 +132,9 @@ export class ArenaDraftManagerService
 			if (changes.ArenaCurrentMode != null) {
 				console.debug('[arena-draft-manager] received current mode', changes.ArenaCurrentMode);
 				this.currentMode$$.next(changes.ArenaCurrentMode);
+			}
+			if (changes.ArenaPackageCardOptions != null) {
+				this.cardPackageOptions$$.next(changes.ArenaPackageCardOptions);
 			}
 		});
 

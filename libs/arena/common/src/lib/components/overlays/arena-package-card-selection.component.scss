@@ -1,0 +1,26 @@
+.root {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	width: 80vh;
+	height: 12vh;
+	position: absolute;
+	top: 55vh;
+	left: 13vh;
+}
+
+.option {
+	top: -0.5vh;
+}
+
+.root-side {
+	display: flex;
+	position: absolute;
+	top: 22.5vh;
+	left: 91vh;
+	width: 15vh;
+	font-size: 12px;
+
+	arena-option-info-premium {
+		height: auto;
+	}
+}

@@ -8,11 +8,15 @@ import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
 export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent {
-	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
-	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
-	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
-	protected abstract positionExtractor: () => Promise<{ left: number; top: number }>;
-	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
+	protected abstract defaultPositionLeftProvider:
+		| null
+		| ((gameWidth: number, gameHeight: number, dpi: number) => number);
+	protected abstract defaultPositionTopProvider:
+		| null
+		| ((gameWidth: number, gameHeight: number, dpi: number) => number);
+	protected abstract positionUpdater: null | ((left: number, top: number) => Promise<void>);
+	protected abstract positionExtractor: null | (() => Promise<{ left: number; top: number }>);
+	protected abstract getRect: null | (() => { left: number; top: number; width: number; height: number });
 	protected bounds = {
 		left: -20,
 		top: -20,
@@ -112,8 +116,8 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		positionFromPrefs: { left: number; top: number },
 	): Promise<{ left: number; top: number }> {
 		// return;
-		let widgetRect = this.getRect();
-		while (!(widgetRect = this.getRect())?.width) {
+		let widgetRect = this.getRect?.();
+		while (!(widgetRect = this.getRect?.())?.width) {
 			await sleep(500);
 		}
 		// Make sure the widget stays in bounds
@@ -149,7 +153,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
 			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
 		};
-		await this.positionUpdater(newPosition.x, newPosition.y);
+		await this.positionUpdater?.(newPosition.x, newPosition.y);
 		this.reposition(() => event.source._dragRef.reset());
 	}
 

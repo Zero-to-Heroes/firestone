@@ -66,6 +66,7 @@ import { DebugService } from '../../services/debug.service';
 
 					<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
 					<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
+					<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
 					<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
 				</div>
 			</div>

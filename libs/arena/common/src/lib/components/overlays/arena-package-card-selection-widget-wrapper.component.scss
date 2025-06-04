@@ -1,0 +1,48 @@
+.widget {
+	::ng-deep .root {
+		top: 29vh;
+		left: 88vh;
+		height: fit-content;
+		width: fit-content;
+		display: flex;
+		flex-direction: column;
+
+		& > .option {
+			height: 4.4vh;
+
+			.option {
+				// height: 80%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.info-view {
+				height: 100%;
+
+				.info-container {
+					flex-direction: row;
+					padding: 10px;
+					transform-origin: left center;
+					height: 100%;
+
+					.stats {
+						border-bottom: none;
+						padding: 0;
+						display: flex;
+
+						.stat {
+							border-right: 1px solid var(--color-1);
+						}
+
+						&.pick {
+							.stat:last-child {
+								border-right: none;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

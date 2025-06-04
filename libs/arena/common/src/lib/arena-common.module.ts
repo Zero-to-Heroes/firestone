@@ -27,6 +27,8 @@ import { ArenaCardSelectionComponent } from './components/overlays/arena-card-se
 import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
 import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
+import { ArenaPackageCardSelectionWidgetWrapperComponent } from './components/overlays/arena-package-card-selection-widget-wrapper.component';
+import { ArenaPackageCardSelectionComponent } from './components/overlays/arena-package-card-selection.component';
 import { ArenaMulliganDeckComponent } from './components/overlays/mulligan/arena-mulligan-deck.component';
 import { ArenaMulliganHandComponent } from './components/overlays/mulligan/arena-mulligan-hand.component';
 import { ArenaPersonalStatsOverviewComponent } from './components/personal-stats/arena-personal-stats-overview.component';
@@ -75,6 +77,8 @@ const components = [
 	ArenaCurrentSessionWidgetComponent,
 	ArenaCurrentSessionTooltipComponent,
 	ArenaRunComponent,
+	ArenaPackageCardSelectionWidgetWrapperComponent,
+	ArenaPackageCardSelectionComponent,
 ];
 @NgModule({
 	imports: [
