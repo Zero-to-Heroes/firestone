@@ -176,7 +176,7 @@ export class ArenaDraftManagerService
 					this.heroOptions$$.next(changes.ArenaHeroOptions);
 				}
 				if (!!changes.ArenaCardOptions?.length) {
-					if (changes.ArenaCardOptions.every((c) => this.allCards.getCard(c).type === 'Hero')) {
+					if (changes.ArenaCardOptions.every((c) => this.allCards.getCard(c.CardId).type === 'Hero')) {
 						console.debug(
 							'[arena-draft-manager] received hero options as cards, ignoring',
 							changes.ArenaCardOptions,
@@ -189,7 +189,7 @@ export class ArenaDraftManagerService
 							this.cardOptions$$.getValue(),
 						);
 						this.heroOptions$$.next(null);
-						this.cardOptions$$.next(changes.ArenaCardOptions);
+						this.cardOptions$$.next(changes.ArenaCardOptions.map((c) => c.CardId));
 					}
 				}
 

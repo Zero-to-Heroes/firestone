@@ -24,7 +24,7 @@ export interface MemoryUpdate {
 	readonly ArenaDraftStep: DraftSlotType;
 	readonly ArenaRewards: readonly Reward[];
 	readonly ArenaHeroOptions: readonly string[];
-	readonly ArenaCardOptions: readonly string[];
+	readonly ArenaCardOptions: readonly ArenaCardOption[];
 	readonly ArenaCurrentCardsInDeck: number;
 	readonly ArenaDraftScreenHidden: boolean;
 	readonly ArenaCurrentMode: GameType;
@@ -42,6 +42,11 @@ export interface MemoryUpdate {
 	readonly OpenedPacks: readonly PackInfo[];
 	readonly MassOpenedPacks: readonly PackInfo[];
 	readonly NewCards: readonly CardPackInfo[];
+}
+
+export interface ArenaCardOption {
+	readonly CardId: string;
+	readonly PackageCardIds: readonly string[];
 }
 
 export interface XpChange {
