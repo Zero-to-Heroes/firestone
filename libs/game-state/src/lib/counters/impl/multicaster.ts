@@ -45,7 +45,7 @@ export class MulticasterCounterDefinitionV2 extends CounterDefinitionV2<readonly
 			state.opponentDeck?.spellsPlayedThisMatch?.length > 0 &&
 			initialHeroClassIs(state.opponentDeck.hero, [CardClass.MAGE, CardClass.SHAMAN, CardClass.DEATHKNIGHT]),
 		value: (state: GameState) => {
-			return state.opponentDeck.uniqueSpellSchools;
+			return !state.opponentDeck.uniqueSpellSchools?.length ? null : state.opponentDeck.uniqueSpellSchools;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -60,7 +60,7 @@ export class MulticasterCounterDefinitionV2 extends CounterDefinitionV2<readonly
 	}
 
 	protected override formatValue(value: readonly string[] | null | undefined): null | undefined | number | string {
-		return value?.length ?? 0;
+		return value == null ? null : value.length;
 	}
 
 	protected override tooltip(
