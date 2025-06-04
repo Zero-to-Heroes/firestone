@@ -30,10 +30,10 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 		const game: MemoryBgGame = bgsMemoryInfo?.Game;
 		const turn = currentState.getCurrentTurnAdjustedForAsyncPlay();
 		const playersFromMemory = game?.Players;
-		if (!playersFromMemory || playersFromMemory.length === 0) {
-			console.warn('[bgs-info-updater] no players found in memory');
-			return currentState;
-		}
+		// if (!playersFromMemory || playersFromMemory.length === 0) {
+		// 	console.warn('[bgs-info-updater] no players found in memory');
+		// 	return currentState;
+		// }
 
 		if (!currentState.bgState?.currentGame) {
 			console.warn('[bgs-info-updater] no current game found in state');
@@ -43,7 +43,7 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 		const newPlayers: readonly BgsPlayer[] = currentState.bgState.currentGame.players
 			.filter((player) => player.cardId !== 'TB_BaconShop_HERO_PH')
 			.map((player) => {
-				const playerFromMemory = playersFromMemory.find((mem) => mem.Id === player.playerId);
+				const playerFromMemory = playersFromMemory?.find((mem) => mem.Id === player.playerId);
 				// console.debug('found player from memory', playerFromMemory, playersFromMemory, player);
 				if (!playerFromMemory) {
 					return player;
@@ -97,6 +97,7 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 			panel.id === newPostMatchPanel.id ? newPostMatchPanel : panel,
 		);
 
+		console.debug('[bgs-info-updater] updating game info', newGame?.availableRaces?.join(', '));
 		return currentState.update({
 			bgState: currentState.bgState.update({
 				currentGame: newGame,
