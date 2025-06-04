@@ -11,8 +11,8 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 			(forceReset) => mindVision.getBattlegroundsInfo(),
 			(battlegroundsInfo) => battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
 			(battlegroundsInfo) => battlegroundsInfo,
-			50,
-			300,
+			10,
+			1500,
 		);
 	}
 }

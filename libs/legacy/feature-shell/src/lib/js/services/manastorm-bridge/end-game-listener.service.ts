@@ -208,6 +208,8 @@ export class EndGameListenerService {
 				// that the rating doesn't change, this obersvable isn't reliable enough
 				// It actually emits even if the ranking doesn't change, so we can use that
 				const bgMemoryInfo$ = bgNewRating$.pipe(
+					filter((newRating) => newRating != null),
+					distinctUntilChanged(),
 					concatMap(async (_) => {
 						return await this.getBattlegroundsEndGame();
 					}),
