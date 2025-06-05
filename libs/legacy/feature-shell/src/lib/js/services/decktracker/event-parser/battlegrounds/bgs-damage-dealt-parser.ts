@@ -34,7 +34,11 @@ export class BgsDamageDealtParser implements EventParser {
 				playerId,
 				gameEvent,
 				this.allCards.getCard(playerCardId),
-				currentState.bgState.currentGame.players,
+				currentState.bgState.currentGame.players.map((p) => ({
+					id: p.playerId,
+					cardId: p.cardId,
+					name: p.name,
+				})),
 			);
 			return currentState;
 		}
