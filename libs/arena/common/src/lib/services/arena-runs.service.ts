@@ -249,15 +249,15 @@ export const isCorrectMode = (run: ArenaRun, modeFilter: ArenaModeFilterType): b
 	const buildNumber = run.getFirstMatch()?.buildNumber ?? 0;
 	const runDate = new Date(run.creationTimestamp ?? run.getFirstMatch()?.creationTimestamp ?? 0);
 	const gameMode = run.gameMode ?? run.draftStat?.gameMode;
-	console.debug(
-		'[arena-runs] isCorrectMode',
-		run,
-		modeFilter,
-		buildNumber,
-		runDate,
-		buildNumber > ARENA_REVAMP_BUILD_NUMBER,
-		runDate >= ARENA_REVAMP_RELEASE_DATE,
-	);
+	// console.debug(
+	// 	'[arena-runs] isCorrectMode',
+	// 	run,
+	// 	modeFilter,
+	// 	buildNumber,
+	// 	runDate,
+	// 	buildNumber >= ARENA_REVAMP_BUILD_NUMBER,
+	// 	runDate >= ARENA_REVAMP_RELEASE_DATE,
+	// );
 	switch (modeFilter) {
 		case 'arena-legacy':
 			return (
@@ -267,7 +267,7 @@ export const isCorrectMode = (run: ArenaRun, modeFilter: ArenaModeFilterType): b
 		case 'arena':
 			return (
 				gameMode === 'arena' &&
-				(buildNumber ? buildNumber > ARENA_REVAMP_BUILD_NUMBER : runDate >= ARENA_REVAMP_RELEASE_DATE)
+				(buildNumber ? buildNumber >= ARENA_REVAMP_BUILD_NUMBER : runDate >= ARENA_REVAMP_RELEASE_DATE)
 			);
 		case 'arena-underground':
 			return gameMode === 'arena-underground';
