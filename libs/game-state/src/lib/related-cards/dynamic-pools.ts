@@ -41,6 +41,7 @@ export const getDynamicRelatedCardIds = (
 		currentClass: string;
 		deckState: DeckState;
 		gameState: GameState;
+		validArenaPool: readonly string[];
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
 	switch (cardId) {
@@ -141,7 +142,8 @@ export const getDynamicRelatedCardIds = (
 		return [];
 	}
 	if (Array.isArray(filters)) {
-		return filterCards(allCards, options, cardId, ...filters);
+		const result = filterCards(allCards, options, cardId, ...filters);
+		return result;
 	} else {
 		return filterCards(allCards, options, cardId, filters);
 	}
@@ -155,7 +157,7 @@ const getDynamicFilters = (
 		gameType: GameType;
 		currentClass: string;
 		deckState: DeckState;
-		gameState: GameState;
+		gameState: GameState | null;
 	},
 ): ((ref: ReferenceCard) => boolean | undefined) | ((ref: ReferenceCard) => boolean)[] | undefined => {
 	switch (cardId) {
@@ -758,6 +760,7 @@ const filterCards = (
 	options: {
 		format: GameFormat;
 		gameType: GameType;
+		validArenaPool: readonly string[];
 	},
 	sourceCardId: string,
 	...filters: ((ref: ReferenceCard) => boolean | undefined)[]
@@ -786,7 +789,20 @@ const filterCards = (
 			);
 	}
 	return baseCards
-		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, options.format, options.gameType) : false))
+		.filter((c) => {
+			let gameType = options.gameType;
+			let format = options.format;
+			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
+				if (options.validArenaPool.length > 0) {
+					return options.validArenaPool.includes(c.id);
+				} else {
+					// Default to ranked wild otherwise
+					gameType = GameType.GT_RANKED;
+					format = GameFormat.FT_WILD;
+				}
+			}
+			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
+		})
 		.filter((c) => filters.every((f) => f(c)))
 		.filter((c) => !sourceCardId || c.id !== sourceCardId)
 		.map((c) => c.id);
@@ -843,7 +859,7 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
 	// Missing some info from the context, so we avoid recomputing the list of cards because it is cached
 	if (!currentClass?.length) {
-		return false;
+		return true;
 	}
 	if (!card.classes?.length) {
 		return true;
@@ -859,9 +875,9 @@ const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean =>
 
 const getPlayerOrOpponentFromFullGameState = (
 	deckState: DeckState,
-	gameState: GameState,
+	gameState: GameState | null,
 ): PlayerGameState | undefined => {
-	return deckState.isOpponent ? gameState.fullGameState?.Opponent : gameState.fullGameState?.Player;
+	return deckState.isOpponent ? gameState?.fullGameState?.Opponent : gameState?.fullGameState?.Player;
 };
 
 export const hasOverride = (

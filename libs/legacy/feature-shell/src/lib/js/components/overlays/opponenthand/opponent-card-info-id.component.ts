@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameType } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/common';
 import {
 	DeckCard,
 	DeckState,
@@ -70,7 +71,12 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 
-	@Input() set context(value: { deck: DeckState; gameState: GameState; metadata: Metadata; currentTurn: number | 'mulligan' }) {
+	@Input() set context(value: {
+		deck: DeckState;
+		gameState: GameState;
+		metadata: Metadata;
+		currentTurn: number | 'mulligan';
+	}) {
 		this.context$$.next(value);
 	}
 	@Input() set card(value: DeckCard) {
@@ -89,6 +95,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly arenaRef: ArenaRefService,
 	) {
 		super(cdr);
 	}
@@ -171,12 +178,21 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			this.possibleCards = possibleForgedCards;
 		}
 		if (!this.possibleCards?.length) {
+			let validArenaPool: readonly string[] = [];
+			if (metadata.gameType === GameType.GT_ARENA || metadata.gameType === GameType.GT_UNDERGROUND_ARENA) {
+				// This will fail the first time, because the pool is not initialized yet, but we'll try it like that to avoid
+				// blocking the call
+				this.arenaRef.validDiscoveryPool$$.getValueWithInit();
+				validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
+			}
+
 			const dynamicPool = getDynamicRelatedCardIds(this.cardId, this.allCards.getService(), {
 				format: metadata.formatType,
 				gameType: metadata.gameType,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
 				deckState: context,
 				gameState: this.context$$.value?.gameState,
+				validArenaPool: validArenaPool,
 			});
 			const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
 			if (!!pool?.length) {

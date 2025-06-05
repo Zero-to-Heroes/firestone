@@ -12,7 +12,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService, Side } from '@firestone/memory';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -244,6 +244,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	@Input() removeDuplicatesInTooltip: boolean;
+	@Input() gameTypeOverride: GameType | null = null;
 
 	cardId: string;
 	entityId: number;
@@ -416,14 +417,15 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		//console.debug('mouse enter', this.cardId, this.cardsHighlightService, this._side, card);
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this.card$$.value);
 
 		const globalHighlights = this.cardsHighlightService?.getGlobalRelatedCards(
 			this.entityId,
 			this.cardId,
 			this._side,
+			this.gameTypeOverride,
 		);
+		// console.debug('mouse enter', this.cardId, this.gameTypeOverride, globalHighlights);
 		if (!!globalHighlights?.length) {
 			this.relatedCardIds = globalHighlights;
 			if (!(this.cdr as ViewRef)?.destroyed) {

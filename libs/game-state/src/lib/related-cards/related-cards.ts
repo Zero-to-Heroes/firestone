@@ -12,7 +12,8 @@ export const buildContextRelatedCardIds = (
 	deckState: DeckState,
 	metaData: Metadata,
 	allCards: CardsFacadeService,
-	gameState: GameState
+	gameState: GameState,
+	validArenaPool: readonly string[],
 ): readonly string[] => {
 	switch (cardId) {
 		case CardIds.ETCBandManager_ETC_080:
@@ -27,7 +28,8 @@ export const buildContextRelatedCardIds = (
 				gameType: metaData.gameType,
 				currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 				deckState: deckState,
-				gameState: gameState
+				gameState: gameState,
+				validArenaPool: validArenaPool,
 			});
 			if (hasOverride(dynamicCards)) {
 				return (dynamicCards as { cards: readonly string[] }).cards;

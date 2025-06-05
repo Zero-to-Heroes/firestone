@@ -1,7 +1,8 @@
-import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
-import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard } from '@firestone/game-state';
+import { CardClass, CardType, GameFormat, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/common';
+import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard, Metadata } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AppInjector, CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -38,8 +39,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	private shouldHighlightProvider: () => Promise<boolean>;
 
+	private readonly arenaRef: ArenaRefService;
+
 	constructor(protected readonly allCards: CardsFacadeService) {
 		super(null);
+		this.arenaRef = AppInjector.get(ArenaRefService);
 	}
 
 	protected async setup(gameStateObs: Observable<GameState>, shouldHighlightProvider: () => Promise<boolean>) {
@@ -117,27 +121,47 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 	}
 
-	getGlobalRelatedCards(entityId: number, cardId: string, side: 'player' | 'opponent' | 'single'): readonly string[] {
+	getGlobalRelatedCards(
+		entityId: number,
+		cardId: string,
+		side: 'player' | 'opponent' | 'single',
+		gameTypeOverride: GameType = null,
+	): readonly string[] {
 		const cardImpl = cardsMapping[cardId];
 		if (hasGetRelatedCards(cardImpl)) {
 			return cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
 		}
-		if (!this.gameState) {
-			return [];
-		}
+		// if (!this.gameState) {
+		// 	return [];
+		// }
 
-		const deck = side === 'opponent' ? this.gameState.opponentDeck : this.gameState.playerDeck;
-		const metaData = this.gameState.metadata;
-		const deckCards = deck.getAllCardsInDeckWithoutOptions();
+		const deck = side === 'opponent' ? this.gameState?.opponentDeck : this.gameState?.playerDeck;
+		const metaData = this.gameState?.metadata;
+		const deckCards = deck?.getAllCardsInDeckWithoutOptions() ?? [];
 		const card =
 			deckCards.find((c) => !!entityId && c.entityId === entityId) ?? deckCards.find((c) => c.cardId === cardId);
+
+		let validArenaPool: readonly string[] = [];
+		const gameType = gameTypeOverride ?? metaData?.gameType;
+		if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
+			// This will fail the first time, because the pool is not initialized yet, but we'll try it like that to avoid
+			// blocking the call
+			this.arenaRef.validDiscoveryPool$$.getValueWithInit();
+			validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
+		}
+
+		const updatedMetadata: Metadata =
+			gameType !== metaData?.gameType
+				? ({ formatType: GameFormat.FT_WILD, gameType: gameType } as Metadata)
+				: metaData;
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
 			card?.relatedCardIds,
 			deck,
-			metaData,
+			updatedMetadata,
 			this.allCards,
 			this.gameState,
+			validArenaPool,
 		);
 		return relatedCardIds?.length ? relatedCardIds : [];
 	}

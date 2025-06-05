@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { GameFormat } from '@firestone-hs/reference-data';
+import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { ArenaDraftManagerService } from '@firestone/arena/common';
 import { explodeDecklist, normalizeWithDbfIds } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -33,7 +33,8 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 					<div class="decktracker-container">
 						<div class="decktracker" *ngIf="!!deckstring">
 							<div class="background"></div>
-							<deck-list-static class="played-cards" [deckstring]="deckstring"> </deck-list-static>
+							<deck-list-static class="played-cards" [deckstring]="deckstring" [gameType]="gameType">
+							</deck-list-static>
 							<!-- <div class="backdrop" *ngIf="showBackdrop"></div> -->
 						</div>
 					</div>
@@ -45,6 +46,8 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 })
 export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	deckstring$: Observable<string>;
+
+	gameType = GameType.GT_ARENA;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,

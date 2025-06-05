@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -48,6 +48,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 					[colorManaCost]="value.colorManaCost"
 					[showRelatedCards]="true"
 					[side]="'single'"
+					[gameTypeOverride]="gameType"
 					(cardClicked)="onCardClicked($event)"
 				></deck-card>
 				<div class="sideboard" *ngIf="card.sideboard">
@@ -58,6 +59,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 						[colorManaCost]="value.colorManaCost"
 						[showRelatedCards]="true"
 						[side]="'single'"
+						[gameTypeOverride]="gameType"
 						(cardClicked)="onCardClicked($event)"
 					></deck-card>
 				</div>
@@ -71,6 +73,8 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 	colorManaCost$: Observable<boolean>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
+	@Input() gameType: GameType | null = null;
 
 	@Input() set deckstring(value: string) {
 		this.deckstring$$.next(value);

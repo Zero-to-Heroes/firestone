@@ -44,5 +44,6 @@ export * from './lib/services/arena-info.service';
 export * from './lib/services/arena-mulligan-guide-guardian.service';
 export * from './lib/services/arena-mulligan-guide.service';
 export * from './lib/services/arena-navigation.service';
+export * from './lib/services/arena-ref.service';
 export * from './lib/services/arena-rewards.service';
 export * from './lib/services/arena-runs.service';

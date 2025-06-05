@@ -91,7 +91,8 @@ export class CustomEffectsParser implements EventParser {
 					? CardClass[currentState.playerDeck.hero.classes[0]]
 					: null,
 				deckState: deck,
-				gameState: currentState
+				gameState: currentState,
+				validArenaPool: [],
 			},
 		);
 		const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;

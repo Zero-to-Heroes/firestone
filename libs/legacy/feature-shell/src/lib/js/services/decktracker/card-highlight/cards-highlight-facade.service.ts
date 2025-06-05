@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
 
+import { GameType } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
 import { Handler, SelectorOptions } from './cards-highlight-common.service';
@@ -56,8 +57,13 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
 	}
 
-	getGlobalRelatedCards(entityId, cardId: string, side: 'player' | 'opponent' | 'single'): readonly string[] {
-		return this.service.getGlobalRelatedCards(entityId, cardId, side);
+	getGlobalRelatedCards(
+		entityId,
+		cardId: string,
+		side: 'player' | 'opponent' | 'single',
+		gameTypeOverride: GameType = null,
+	): readonly string[] {
+		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride);
 	}
 
 	onMouseLeave(cardId: string) {
