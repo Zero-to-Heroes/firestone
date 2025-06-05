@@ -160,11 +160,16 @@ export class GameStat {
 					console.debug('arena icon', wins, rankIcon);
 				}
 			} else {
-				const wins = this.playerRank.split('-')[0];
-				const losses = wins === '0' ? '-' + this.playerRank.split('-')[1] : '';
-				rankIcon = `arena/${wins}${losses}`;
-				rankIconTooltip = i18n.translateString('global.game-mode.arena');
+				return {
+					frameImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/arena_new.webp`,
+					tooltip: i18n.translateString('global.game-mode.arena'),
+				};
 			}
+		} else if (this.gameMode === 'arena-underground') {
+			return {
+				frameImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/arena_underground.webp`,
+				tooltip: i18n.translateString('global.game-mode.arena-underground'),
+			};
 		} else if (this.gameMode === 'tavern-brawl') {
 			rankIcon = 'tavernbrawl';
 			rankIconTooltip = i18n.translateString('global.game-mode.tavern-brawl');
@@ -234,13 +239,15 @@ export const buildRankText = (playerRank: string | undefined, gameMode: string, 
 		}
 		return playerRank;
 	}
-	if (gameMode === 'arena') {
+	if (gameMode === 'arena' || gameMode === 'arena-underground') {
 		if (playerRank && playerRank.indexOf('-') !== -1) {
 			const wins = playerRank.split('-')[0];
 			const losses = playerRank.split('-')[1];
 			return `${wins}-${losses}`;
-		} else {
+		} else if (playerRank && playerRank !== 'undefined') {
 			return playerRank;
+		} else {
+			return null;
 		}
 	}
 	// Bug for old matches
