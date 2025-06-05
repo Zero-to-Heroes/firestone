@@ -217,6 +217,11 @@ export class GameStat {
 	}
 }
 
+export const buildNewFormatGameModeImage = (gameMode: 'arena' | 'arena-underground'): string => {
+	const gameModeKey = gameMode === 'arena-underground' ? 'arena_underground' : 'arena_new';
+	return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/${gameModeKey}.webp`;
+};
+
 export const buildRankText = (playerRank: string | undefined, gameMode: string, additionalResult: string): string => {
 	if (playerRank == null) {
 		return null;

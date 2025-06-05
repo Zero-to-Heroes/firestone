@@ -12,9 +12,9 @@ import {
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, formatClass, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, formatClass, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { extractTime, extractTimeWithHours } from '@firestone/stats/common';
-import { GameStat } from '@firestone/stats/data-access';
+import { buildNewFormatGameModeImage, GameStat } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 import { InternalNotableCard } from '../../models/arena-high-wins-runs';
 import { ArenaRun } from '../../models/arena-run';
@@ -195,7 +195,7 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 			? this.buildNewFormatGameModeTooltip()
 			: this.i18n.translateString('app.arena.runs.run-name', { value: this.wins ?? 0 });
 		this.gameModeImage = isNewFormat
-			? this.buildNewFormatGameModeImage()
+			? buildNewFormatGameModeImage(this._run.gameMode)
 			: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/arena/arena${
 					this.wins ?? 0
 			  }wins.png`;
@@ -246,13 +246,6 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private buildNewFormatGameModeImage() {
-		const wins = this._run.wins;
-		const losses = wins === 0 ? '-' + this._run.losses : '';
-		const rankIcon = `arena/${wins}${losses}`;
-		return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/${rankIcon}.png`;
 	}
 
 	private buildNewFormatGameModeTooltip() {
