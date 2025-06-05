@@ -216,8 +216,14 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 				? `${heroCard.name} (${formatClass(heroCard.classes[0], this.i18n)})`
 				: null;
 
-		this.deckScore = this._run.draftStat?.deckScore != null ? this._run.draftStat.deckScore.toFixed(1) : null;
-		this.deckImpact = this._run.draftStat?.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
+		this.deckScore =
+			this._run.draftStat?.deckScore != null && !isNaN(this._run.draftStat?.deckScore)
+				? this._run.draftStat.deckScore.toFixed(1)
+				: null;
+		this.deckImpact =
+			this._run.draftStat?.deckImpact != null && !isNaN(this._run.draftStat?.deckImpact)
+				? this._run.draftStat.deckImpact.toFixed(2)
+				: null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
 		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards);
 
