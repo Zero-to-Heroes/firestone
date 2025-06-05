@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardClass } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import {
 	ArenaCardClassFilterType,
 	ArenaCardTypeFilterType,
@@ -19,6 +19,7 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { ArenaCombinedCardStat } from '../../models/arena-combined-card-stat';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD, ArenaCardStatsService } from '../../services/arena-card-stats.service';
@@ -239,16 +240,21 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		]).pipe(
 			debounceTime(100),
 			// tap((info) => console.debug('[arena-card-stats] received info', info)),
-			// tap(([stats, info]) =>
-			// 	console.debug(
-			// 		'[arena-card-stats] Sylvanas',
-			// 		stats?.stats?.find((c) => c.cardId === CardIds.SylvanasTheAccused),
-			// 	),
-			// ),
+			tap(([stats, info]) =>
+				console.debug(
+					'[arena-card-stats] SylvanasWindrunnerLegacy',
+					stats?.stats?.find((c) => c.cardId === CardIds.SylvanasWindrunnerLegacy),
+				),
+			),
 			this.mapData(([stats, searchString, sortCriteria, { cardType, cardClass }]) =>
 				this.buildCardStats(stats?.stats, cardType, cardClass, searchString, sortCriteria),
 			),
-			// tap((info) => console.debug('[arena-card-stats] built card stats', info)),
+			tap((stats) =>
+				console.debug(
+					'[arena-card-stats] SylvanasWindrunnerLegacy 2',
+					stats?.find((c) => c.cardId === CardIds.SylvanasWindrunnerLegacy),
+				),
+			),
 			// tap((stats) =>
 			// 	console.debug(
 			// 		'[arena-card-stats] Sylvanas 2',
@@ -353,7 +359,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 					.map((token) => token.trim());
 		const result =
 			stats
-				?.filter((stat) => (stat.draftStats?.totalOffered ?? 0) > 0)
+				// We want cards that are not offered in the draft to still appear here, like the
+				// entourage cards for legendary
+				// ?.filter((stat) => (stat.draftStats?.totalOffered ?? 0) > 0)
 				?.filter((stat) => stat.matchStats.stats.decksWithCard > 50)
 				.filter((stat) => this.hasCorrectCardClass(stat.cardId, cardClass))
 				.filter((stat) => this.hasCorrectCardType(stat.cardId, cardType))
