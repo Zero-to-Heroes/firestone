@@ -1,9 +1,10 @@
-import { GameFormat } from '@firestone-hs/reference-data';
+import { GameFormat, GameType } from '@firestone-hs/reference-data';
 
 export interface DeckInfoFromMemory {
 	readonly DeckId?: number;
 	readonly Id?: string;
 	readonly Name: string;
+	readonly GameType?: GameType;
 	readonly DeckList: readonly (string | number)[];
 	readonly HeroCardId: string;
 	readonly HeroPowerCardId?: string;

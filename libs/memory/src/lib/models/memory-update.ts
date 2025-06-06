@@ -29,6 +29,8 @@ export interface MemoryUpdate {
 	readonly ArenaCurrentCardsInDeck: number;
 	readonly ArenaDraftScreenHidden: boolean;
 	readonly ArenaCurrentMode: GameType;
+	readonly ArenaLatestCardPick: ArenaCardPick;
+	readonly ArenaUndergroundLatestCardPick: ArenaCardPick;
 
 	// true means the treasure selection has started, null means nothing changed, and false means it has ended
 	readonly MercenariesTreasureSelectionIndex: number;
@@ -43,6 +45,15 @@ export interface MemoryUpdate {
 	readonly OpenedPacks: readonly PackInfo[];
 	readonly MassOpenedPacks: readonly PackInfo[];
 	readonly NewCards: readonly CardPackInfo[];
+}
+
+export interface ArenaCardPick {
+	readonly GameType: GameType;
+	readonly RunId: string;
+	readonly PickNumber: number;
+	readonly CardId: string;
+	readonly Options: readonly ArenaCardOption[];
+	readonly HeroCardId: string;
 }
 
 export interface ArenaCardOption {

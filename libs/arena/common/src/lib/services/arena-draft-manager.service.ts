@@ -6,10 +6,16 @@ import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { DraftSlotType, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
-import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import {
+	ArenaCardPick,
+	DeckInfoFromMemory,
+	MemoryInspectionService,
+	MemoryUpdatesService,
+	SceneService,
+} from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -56,6 +62,7 @@ export class ArenaDraftManagerService
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 	public draftScreenHidden$$: BehaviorSubject<boolean | null>;
 	public currentMode$$: BehaviorSubject<GameType | null>;
+	public lastPick$$: BehaviorSubject<ArenaCardPick | null>;
 
 	private memoryUpdates: MemoryUpdatesService;
 	private scene: SceneService;
@@ -87,6 +94,7 @@ export class ArenaDraftManagerService
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.draftScreenHidden$$ = this.mainInstance.draftScreenHidden$$;
 		this.currentMode$$ = this.mainInstance.currentMode$$;
+		this.lastPick$$ = this.mainInstance.lastPick$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
 
@@ -98,6 +106,7 @@ export class ArenaDraftManagerService
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.draftScreenHidden$$ = new BehaviorSubject<boolean | null>(null);
 		this.currentMode$$ = new BehaviorSubject<GameType | null>(null);
+		this.lastPick$$ = new BehaviorSubject<ArenaCardPick | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
 		this.memory = AppInjector.get(MemoryInspectionService);
@@ -135,6 +144,17 @@ export class ArenaDraftManagerService
 			}
 			if (changes.ArenaPackageCardOptions != null) {
 				this.cardPackageOptions$$.next(changes.ArenaPackageCardOptions);
+			}
+			if (changes.ArenaLatestCardPick != null) {
+				console.debug('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
+				this.lastPick$$.next(changes.ArenaLatestCardPick);
+			}
+			if (changes.ArenaUndergroundLatestCardPick != null) {
+				console.debug(
+					'[arena-draft-manager] received latest underground card pick',
+					changes.ArenaUndergroundLatestCardPick,
+				);
+				this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
 			}
 		});
 
@@ -208,6 +228,15 @@ export class ArenaDraftManagerService
 				if (changes.ArenaCurrentCardsInDeck || (scene === SceneMode.DRAFT && isDraftingCards)) {
 					const arenaDeck = await this.memory.getArenaDeck();
 					console.debug('[arena-draft-manager] received arena deck', arenaDeck);
+					// Force a reemit of options for the initial state
+					if (
+						// this.currentDeck$$.value?.GameType != null &&
+						this.currentDeck$$.value?.GameType !== arenaDeck?.GameType &&
+						this.cardOptions$$.value == null
+					) {
+						console.debug('[arena-draft-manager] game type changed, resetting options');
+						this.cardOptions$$.next([]);
+					}
 					this.currentDeck$$.next(arenaDeck);
 				}
 			});
@@ -240,89 +269,116 @@ export class ArenaDraftManagerService
 					);
 				});
 
-			combineLatest([this.currentDeck$$, this.cardOptions$$])
-				.pipe(
-					distinctUntilChanged(
-						([previousDeck, previousOptions], [currentDeck, currentOptions]) =>
-							this.deckLength(previousDeck) === this.deckLength(currentDeck) ||
-							arraysEqual(previousOptions, currentOptions),
-					),
-					pairwise(),
-				)
-				.subscribe(([[previousDeck, previousOptions], [currentDeck, currentOptions]]) => {
-					console.debug(
-						'[arena-draft-manager] considering new options',
-						previousDeck,
-						previousOptions,
-						currentDeck,
-						currentOptions,
-					);
+			this.lastPick$$.pipe(filter((pick) => !!pick?.RunId)).subscribe(async (pick) => {
+				const heroRefCard = this.allCards.getCard(pick!.HeroCardId);
+				const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
+				const payload: DraftPick = {
+					runId: pick!.RunId,
+					pickNumber: pick!.PickNumber,
+					options: pick!.Options?.map((option) => option.CardId) ?? [],
+					pick: pick!.CardId,
+					playerClass: playerClass,
+				};
+				console.debug('[arena-draft-manager] uploading pick', pick, payload);
+				this.sendDraftPick(payload);
+			});
 
-					if (!currentDeck) {
-						console.log('[arena-draft-manager] no current deck, not sending pick');
-						return;
-					}
-					if (
-						(previousDeck?.Id != null && previousDeck.Id !== currentDeck.Id) ||
-						currentDeck.DeckList.length === 0
-					) {
-						console.log('[arena-draft-manager] new deck, not sending pick');
-						return;
-					}
+			// combineLatest([this.currentDeck$$, this.cardOptions$$])
+			// 	.pipe(
+			// 		distinctUntilChanged(
+			// 			([previousDeck, previousOptions], [currentDeck, currentOptions]) =>
+			// 				this.deckLength(previousDeck) === this.deckLength(currentDeck) ||
+			// 				arraysEqual(previousOptions, currentOptions),
+			// 		),
+			// 		pairwise(),
+			// 	)
+			// 	.subscribe(async ([[previousDeck, previousOptions], [currentDeck, currentOptions]]) => {
+			// 		console.debug(
+			// 			'[arena-draft-manager] considering new options',
+			// 			previousDeck,
+			// 			previousOptions,
+			// 			currentDeck,
+			// 			currentOptions,
+			// 		);
 
-					const previousCards: readonly string[] =
-						previousDeck?.DeckList?.map((card) => card as string) ?? [];
-					// For each card in previousCards, remove one copy of it from the currentCards
-					// The remaining cards in currentCards are the ones that were added
-					// Be careful, as there can be multiple copies of cards in currentCards, and nly one
-					// copy in previousCards
-					const addedCards: string[] = currentDeck?.DeckList?.map((card) => card as string) ?? [];
-					for (const card of previousCards) {
-						const index = addedCards.indexOf(card);
-						if (index !== -1) {
-							addedCards.splice(index, 1);
-						}
-					}
+			// 		if (!currentDeck) {
+			// 			console.log('[arena-draft-manager] no current deck, not sending pick');
+			// 			return;
+			// 		}
+			// 		if (previousDeck?.GameType && previousDeck?.GameType !== currentDeck.GameType) {
+			// 			console.log(
+			// 				'[arena-draft-manager] game type changed, not sending pick',
+			// 				previousDeck?.GameType,
+			// 				currentDeck.GameType,
+			// 			);
+			// 			return;
+			// 		}
 
-					if (addedCards.length !== 1) {
-						console.warn(
-							'[arena-draft-manager] invalid added cards',
-							addedCards,
-							previousDeck,
-							currentDeck,
-							previousOptions,
-						);
-						return;
-					}
+			// 		if (
+			// 			(previousDeck?.Id != null && previousDeck.Id !== currentDeck.Id) ||
+			// 			currentDeck.DeckList.length === 0
+			// 		) {
+			// 			console.log('[arena-draft-manager] new deck, not sending pick');
+			// 			return;
+			// 		}
 
-					// The "distinctUntilChanged" waits until BOTH the deck and the options have changed
-					// This means that the options related to the pick will always be the "previousOptions",
-					// unless this is the first pick registered by the app (eg we left then came back)
-					// On the first pick, we don't have previous options
-					const pickNumber = currentDeck.DeckList.length;
-					const options = previousOptions ?? currentOptions;
-					const heroRefCard = this.allCards.getCard(currentDeck?.HeroCardId);
-					const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
-					const pick: DraftPick = {
-						runId: currentDeck.Id!,
-						pickNumber: pickNumber,
-						options: options!,
-						pick: addedCards[0],
-						playerClass: playerClass,
-					};
-					console.debug(
-						'[arena-draft-manager] uploading pick',
-						pick,
-						previousDeck,
-						currentDeck,
-						previousOptions,
-						currentOptions,
-					);
-					if (!pick.options?.includes(pick.pick)) {
-						console.error('[arena-draft-manager] invalid pick', pick, previousDeck, currentDeck);
-					}
-					this.sendDraftPick(pick);
-				});
+			// 		const previousCards: readonly string[] =
+			// 			previousDeck?.DeckList?.map((card) => card as string) ?? [];
+			// 		// For each card in previousCards, remove one copy of it from the currentCards
+			// 		// The remaining cards in currentCards are the ones that were added
+			// 		// Be careful, as there can be multiple copies of cards in currentCards, and nly one
+			// 		// copy in previousCards
+			// 		const addedCards: string[] = currentDeck?.DeckList?.map((card) => card as string) ?? [];
+			// 		for (const card of previousCards) {
+			// 			const index = addedCards.indexOf(card);
+			// 			if (index !== -1) {
+			// 				addedCards.splice(index, 1);
+			// 			}
+			// 		}
+
+			// 		if (addedCards.length !== 1) {
+			// 			console.warn(
+			// 				'[arena-draft-manager] invalid added cards',
+			// 				addedCards,
+			// 				previousDeck,
+			// 				currentDeck,
+			// 				previousOptions,
+			// 			);
+			// 			return;
+			// 		}
+
+			// 		// This doesn't work anymore, because of the redraft mechanics
+			// 		const pickNumber = await this.buildPickNumber(currentDeck);
+
+			// 		// The "distinctUntilChanged" waits until BOTH the deck and the options have changed
+			// 		// This means that the options related to the pick will always be the "previousOptions",
+			// 		// unless this is the first pick registered by the app (eg we left then came back)
+			// 		// On the first pick, we don't have previous options
+			// 		const options = previousOptions ?? currentOptions;
+			// 		const heroRefCard = this.allCards.getCard(currentDeck?.HeroCardId);
+			// 		const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
+			// 		const pick: DraftPick = {
+			// 			runId: currentDeck.Id!,
+			// 			pickNumber: pickNumber,
+			// 			options: options!,
+			// 			pick: addedCards[0],
+			// 			playerClass: playerClass,
+			// 		};
+			// 		console.debug(
+			// 			'[arena-draft-manager] uploading pick',
+			// 			pick,
+			// 			previousDeck,
+			// 			currentDeck,
+			// 			previousOptions,
+			// 			currentOptions,
+			// 		);
+			// 		if (!pick.options?.includes(pick.pick)) {
+			// 			console.error('[arena-draft-manager] invalid pick', pick, previousDeck, currentDeck);
+			// 		}
+			// 		this.sendDraftPick(pick);
+			// 	});
+
+			// Deck score
 			this.currentDeck$$
 				.pipe(
 					debounceTime(500),
@@ -426,6 +482,22 @@ export class ArenaDraftManagerService
 		);
 		return resultFromRemote?.picks ?? null;
 	}
+
+	// private async buildPickNumber(deck: DeckInfoFromMemory): Promise<number> {
+	// 	if (deck.DeckList.length < TOTAL_CARDS_IN_AN_ARENA_DECK) {
+	// 		return deck.DeckList.length;
+	// 	}
+
+	// 	// Possible redraft
+	// 	const existingPicks = await this.getPicksForRun(deck.Id!);
+	// 	if (!existingPicks?.length) {
+	// 		console.warn('[arena-draft-manager] no existing picks for deck', deck.Id);
+	// 		return deck.DeckList.length;
+	// 	}
+
+	// 	const lastPick = Math.max(...existingPicks.map((pick) => pick.pickNumber));
+	// 	return lastPick + 1;
+	// }
 
 	private async sendDraftPick(pick: DraftPick) {
 		await this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick);
