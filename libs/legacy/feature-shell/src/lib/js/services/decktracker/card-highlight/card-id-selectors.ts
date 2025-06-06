@@ -1405,6 +1405,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, frost);
 		case CardIds.HarborScamp:
 			return and(side(inputSide), inDeck, pirate);
+		case CardIds.HarmonicMetal:
+		case CardIds.HarmonicMetal_DissonantMetalToken:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.HarnessTheElementsTavernBrawl:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.HarpoonGun:
