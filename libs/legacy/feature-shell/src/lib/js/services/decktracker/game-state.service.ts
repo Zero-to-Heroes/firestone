@@ -432,15 +432,15 @@ export class GameStateService {
 			);
 		}
 
-		console.debug(
-			'[game-state] processed event',
-			gameEvent.type,
-			gameEvent.cardId,
-			gameEvent.entityId,
-			currentState.opponentDeck.board.map((c) => c.cardName),
-			currentState,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[game-state] processed event',
+		// 	gameEvent.type,
+		// 	gameEvent.cardId,
+		// 	gameEvent.entityId,
+		// 	currentState.opponentDeck.board.map((c) => c.cardName),
+		// 	currentState,
+		// 	gameEvent,
+		// );
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}
