@@ -5,7 +5,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { BattlegroundsInfo, MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Subscription, interval } from 'rxjs';
+import { BehaviorSubject, interval } from 'rxjs';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
 const INTERVAL = 3000;
@@ -13,8 +13,6 @@ const INTERVAL = 3000;
 @Injectable()
 export class BgsMatchMemoryInfoService {
 	public battlegroundsMemoryInfo$$ = new BehaviorSubject<BattlegroundsInfo | null>(null);
-
-	private sub: Subscription;
 
 	constructor(
 		private readonly memory: MemoryInspectionService,
@@ -28,21 +26,20 @@ export class BgsMatchMemoryInfoService {
 
 	private async init() {
 		this.startMemoryReading();
-
-		await waitForReady(this.gameStatus);
-		this.gameStatus.onGameExit(() => {
-			this.stopMemoryReading();
-		});
 	}
 
 	private async startMemoryReading() {
 		console.log('[bgs-match-memory-info] getting ready to start memory reading');
-		await waitForReady(this.gameState, this.prefs);
+		await waitForReady(this.gameState, this.prefs, this.gameStatus);
 		console.log('[bgs-match-memory-info] starting memory reading');
 
 		let inProcess = false;
-		this.sub = interval(INTERVAL).subscribe(async () => {
+		interval(INTERVAL).subscribe(async () => {
 			try {
+				if (!this.gameStatus.inGame$$.value) {
+					// console.debug('[bgs-match-memory-info] not in game, not reading memory');
+					return;
+				}
 				if (inProcess) {
 					// console.debug('[bgs-match-memory-info] already in process, skipping this reading');
 					return;
@@ -60,6 +57,7 @@ export class BgsMatchMemoryInfoService {
 					// 	!!gameState?.bgState?.currentGame,
 					// 	gameState?.gameStarted,
 					// 	gameState?.gameEnded,
+					// 	gameState?.metadata?.gameType,
 					// 	isBattlegrounds(gameState?.metadata?.gameType),
 					// );
 					return;
@@ -69,7 +67,7 @@ export class BgsMatchMemoryInfoService {
 				// console.debug('[bgs-match-memory-info] reading memory info');
 				const memoryInfo = await this.memory.getBattlegroundsMatchWithPlayers(1);
 				if (!memoryInfo) {
-					console.log('[bgs-match-memory-info] no memory info found, skipping this reading');
+					console.debug('[bgs-match-memory-info] no memory info found, skipping this reading');
 					inProcess = false;
 					return;
 				}
@@ -103,7 +101,7 @@ export class BgsMatchMemoryInfoService {
 						}),
 					},
 				} as BattlegroundsInfo;
-				// console.debug('[bgs-match-memory-info] memory info read', result);
+				// console.debug('[bgs-match-memory-info] memory info read', result?.Game?.AvailableRaces);
 				this.battlegroundsMemoryInfo$$.next(result);
 				inProcess = false;
 			} catch (e) {
@@ -111,10 +109,5 @@ export class BgsMatchMemoryInfoService {
 				inProcess = false;
 			}
 		});
-	}
-
-	private stopMemoryReading() {
-		console.debug('[bgs-match-memory-info] stopping memory reading');
-		this.sub?.unsubscribe();
 	}
 }
