@@ -555,6 +555,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.CaptainsLog_GDB_228:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
+		case CardIds.CaptainsParrotLegacy:
+		case CardIds.CaptainsParrotVanilla:
+			return and(side(inputSide), inDeck, pirate);
 		case CardIds.CaptureColdtoothMine:
 			return (input: SelectorInput): SelectorOutput => {
 				const allCardsOrderedByCost = [...input.deckState.deck].sort(
@@ -1524,7 +1527,7 @@ export const cardIdSelector = (
 		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t38:
 		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t39:
 			return highlightConditions(
-				tooltip(and(side(inputSide), inGraveyard, minion)),
+				and(side(inputSide), inGraveyard, minion),
 				and(side(inputSide), or(inHand, inDeck), minion),
 			);
 		case CardIds.IdolsOfEluneTavernBrawl:
@@ -2257,6 +2260,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Razorboar:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle, effectiveCostLess(4));
+		case CardIds.RazorfenBeastmaster:
+			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle, effectiveCostLess(5));
 		case CardIds.RazormaneBattleguard:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.RecordScratcher:
@@ -2749,6 +2754,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, taunt);
 		case CardIds.StonehearthVindicator:
 			return and(side(inputSide), inDeck, spell, effectiveCostLess(4));
+		case CardIds.StoneSentinel:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.Stormhammer:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.StormpikeBattleRam:
