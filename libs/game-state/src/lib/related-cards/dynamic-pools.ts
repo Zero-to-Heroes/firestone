@@ -367,6 +367,7 @@ const getDynamicFilters = (
 		case CardIds.Darkrider_EDR_456:
 		case CardIds.DraconicStudies:
 		case CardIds.NetherspiteHistorian:
+		case CardIds.NetherspiteHistorian_CORE_KAR_062:
 		case CardIds.Rheastrasza_WW_824:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
