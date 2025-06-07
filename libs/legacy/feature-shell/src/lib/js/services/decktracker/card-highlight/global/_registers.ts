@@ -8,6 +8,7 @@ import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { HungeringAncient } from './hungering-ancient';
+import { IchorOfUndeath } from './ichor-of-undeath';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
@@ -36,6 +37,7 @@ const cards = [
 	Merithra,
 	Ursoc,
 	GrotesqueRuneblade,
+	IchorOfUndeath,
 	SuccombToMadness,
 	RavenousFelhunter,
 	FerociousFelbat,
