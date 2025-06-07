@@ -1540,6 +1540,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.ImployeeOfTheMonth_WORK_009:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.ImprisonedScrapImp:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.IncantersFlow:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.InfantryReanimator:
