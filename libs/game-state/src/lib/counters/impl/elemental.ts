@@ -13,7 +13,13 @@ export class ElementalCounterDefinitionV2 extends CounterDefinitionV2<{
 	public override id: CounterType = 'elemental';
 	public override image = CardIds.GrandFinale;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.GrandFinale, CardIds.Ozruk, CardIds.UnchainedGladiator];
+	public override cards: readonly CardIds[] = [
+		CardIds.GrandFinale,
+		CardIds.Ozruk,
+		CardIds.UnchainedGladiator,
+		// For Discovers - useful to know if you have played an elemental last turn
+		CardIds.StoneSentinel,
+	];
 
 	readonly player = {
 		pref: 'playerElementalCounter' as const,
