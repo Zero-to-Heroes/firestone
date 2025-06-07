@@ -418,6 +418,10 @@ export class ArenaDraftManagerService
 						cardStats: ArenaCombinedCardStats;
 						classStats: ArenaClassStats;
 					}) => {
+						if (!currentDeck?.DeckList?.length) {
+							return;
+						}
+
 						const isDeckFullyDrafted = currentDeck.DeckList.length === TOTAL_CARDS_IN_AN_ARENA_DECK;
 						console.debug(
 							'[arena-draft-manager] [stat] computing stats for deck',
