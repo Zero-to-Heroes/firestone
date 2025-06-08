@@ -49,4 +49,21 @@
 			flex-shrink: 0;
 		}
 	}
+
+	&.battlegrounds {
+		min-width: 150px;
+
+		.content {
+			grid-template-columns: repeat(1, minmax(0, 1fr));
+			padding-right: 5px;
+		}
+		.opponent {
+			display: none;
+		}
+		::ng-deep .player {
+			.header {
+				display: none;
+			}
+		}
+	}
 }

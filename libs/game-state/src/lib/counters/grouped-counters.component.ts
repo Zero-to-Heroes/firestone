@@ -8,15 +8,18 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { auditTime, Observable } from 'rxjs';
+import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { CounterInstance } from './_counter-definition-v2';
 
 @Component({
 	selector: 'grouped-counters',
 	styleUrls: ['./grouped-counters.component.scss'],
 	template: `
-		<div class="grouped-counters scalable">
+		<div class="grouped-counters scalable" [ngClass]="{ battlegrounds: isBattlegrounds$ | async }">
 			<div class="header" [ngClass]="{ minimized: isMinimized }">
 				<div class="title">Counters</div>
 				<div class="minimize-container" (click)="toggleMinimize()">
@@ -43,6 +46,8 @@ export class GroupedCountersComponent extends AbstractSubscriptionComponent impl
 	@Input() playerCounters: readonly CounterInstance<any>[];
 	@Input() opponentCounters: readonly CounterInstance<any>[];
 
+	isBattlegrounds$: Observable<boolean>;
+
 	isMinimized: boolean;
 
 	constructor(
@@ -50,6 +55,7 @@ export class GroupedCountersComponent extends AbstractSubscriptionComponent impl
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -67,6 +73,10 @@ export class GroupedCountersComponent extends AbstractSubscriptionComponent impl
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
 			});
+		this.isBattlegrounds$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => isBattlegrounds(state.metadata?.gameType)),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
