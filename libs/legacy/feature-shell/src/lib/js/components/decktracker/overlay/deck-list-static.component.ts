@@ -136,7 +136,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 		this.deckstring$$
 			.pipe(
 				filter((deckstring) => !!deckstring?.length),
-				this.mapData((deckstring) => this.buildCardsFromDeckstring(deckstring)),
+				this.mapData((deckstring) => buildCardsFromDeckstring(deckstring, this.allCards)),
 			)
 			.subscribe(this.cards$$);
 		this.deckstring$$
@@ -164,26 +164,6 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 
 	onCardClicked(card: VisualDeckCard) {
 		this.cardClicked.next(card);
-	}
-
-	private buildCardsFromDeckstring(deckstring: string): readonly MinimalCard[] {
-		if (!deckstring?.length) {
-			return [];
-		}
-
-		const decklist = decode(deckstring);
-		return decklist.cards.map((pair) => {
-			const cardDbfId = pair[0];
-			const quantity = pair[1];
-			const card = this.allCards.getCard(cardDbfId);
-			const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
-			const sideboard = this.buildMinimalSideboard(sideboardFromList);
-			return {
-				cardId: card.id,
-				quantity: quantity,
-				sideboard: sideboard,
-			};
-		});
 	}
 
 	private buildCards(
@@ -218,22 +198,6 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 			.sort(sortByProperties((c: CardWithSideboard) => [c.refManaCost, c.cardName]));
 	}
 
-	private buildMinimalSideboard(sideboardFromList: Sideboard): readonly MinimalCard[] {
-		if (!sideboardFromList) {
-			return null;
-		}
-
-		return sideboardFromList.cards.map((pair) => {
-			const cardDbfId = pair[0];
-			const quantity = pair[1];
-			const card = this.allCards.getCard(cardDbfId);
-			return {
-				cardId: card.id,
-				quantity: quantity,
-			};
-		});
-	}
-
 	private buildSideboard(sideboardFromList: readonly MinimalCard[]): readonly VisualDeckCard[] {
 		if (!sideboardFromList?.length) {
 			return null;
@@ -257,7 +221,43 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 	}
 }
 
-class CardWithSideboard extends VisualDeckCard {
+export const buildCardsFromDeckstring = (deckstring: string, allCards: CardsFacadeService): readonly MinimalCard[] => {
+	if (!deckstring?.length) {
+		return [];
+	}
+
+	const decklist = decode(deckstring);
+	return decklist.cards.map((pair) => {
+		const cardDbfId = pair[0];
+		const quantity = pair[1];
+		const card = allCards.getCard(cardDbfId);
+		const sideboardFromList = decklist.sideboards?.find((s) => s.keyCardDbfId === cardDbfId);
+		const sideboard = buildMinimalSideboard(sideboardFromList, allCards);
+		return {
+			cardId: card.id,
+			quantity: quantity,
+			sideboard: sideboard,
+		};
+	});
+};
+
+const buildMinimalSideboard = (sideboardFromList: Sideboard, allCards: CardsFacadeService): readonly MinimalCard[] => {
+	if (!sideboardFromList) {
+		return null;
+	}
+
+	return sideboardFromList.cards.map((pair) => {
+		const cardDbfId = pair[0];
+		const quantity = pair[1];
+		const card = allCards.getCard(cardDbfId);
+		return {
+			cardId: card.id,
+			quantity: quantity,
+		};
+	});
+};
+
+export class CardWithSideboard extends VisualDeckCard {
 	readonly sideboard?: readonly VisualDeckCard[];
 
 	public static create(base: Partial<NonFunctionProperties<CardWithSideboard>>): CardWithSideboard {

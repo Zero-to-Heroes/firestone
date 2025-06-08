@@ -9,12 +9,16 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { CardWithSideboard } from '@components/decktracker/overlay/deck-list-static.component';
+import { GameType } from '@firestone-hs/reference-data';
 import { ArenaDraftManagerService } from '@firestone/arena/common';
-import { explodeDecklist, normalizeWithDbfIds } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, arraysEqual, groupByFunction } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	arraysEqual,
+	groupByFunction2,
+	uuidShort,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } from 'rxjs';
@@ -22,6 +26,8 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 @Component({
 	selector: 'arena-decktracker-ooc',
 	styleUrls: [
+		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
+		'../../../../css/global/scrollbar-cards-list.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../css/component/overlays/arena/arena-decktracker-ooc.component.scss',
 	],
@@ -29,13 +35,30 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 		<div class="root active" [activeTheme]="'decktracker'">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
-				<ng-container *ngIf="deckstring$ | async as deckstring">
+				<ng-container *ngIf="cards$ | async as cards">
 					<div class="decktracker-container">
-						<div class="decktracker" *ngIf="!!deckstring">
+						<div class="decktracker" *ngIf="!!cards">
 							<div class="background"></div>
-							<deck-list-static class="played-cards" [deckstring]="deckstring" [gameType]="gameType">
-							</deck-list-static>
-							<!-- <div class="backdrop" *ngIf="showBackdrop"></div> -->
+							<div class="played-cards">
+								<ng-scrollbar
+									class="deck-list"
+									*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
+									[autoHeightDisabled]="false"
+									[sensorDisabled]="false"
+									scrollable
+								>
+									<li class="card-container" *ngFor="let card of cards; trackBy: trackByCardId">
+										<deck-card
+											class="card"
+											[card]="card"
+											[colorManaCost]="value.colorManaCost"
+											[showRelatedCards]="true"
+											[side]="'single'"
+											[gameTypeOverride]="gameType"
+										></deck-card>
+									</li>
+								</ng-scrollbar>
+							</div>
 						</div>
 					</div>
 				</ng-container>
@@ -45,7 +68,9 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	deckstring$: Observable<string>;
+	// deckstring$: Observable<string>;
+	cards$: Observable<readonly CardWithSideboard[]>;
+	colorManaCost$: Observable<boolean>;
 
 	gameType = GameType.GT_ARENA;
 
@@ -65,34 +90,30 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		await this.draftManager.isReady();
 		await this.prefs.isReady();
 
-		this.deckstring$ = this.draftManager.currentDeck$$.pipe(
+		this.cards$ = this.draftManager.currentDeck$$.pipe(
 			filter((deck) => !!deck),
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
-				if (!deck?.HeroCardId?.length) {
-					return null;
-				}
-
 				const cardIds = deck.DeckList as readonly string[];
-				const deckDefinition: DeckDefinition = {
-					format: GameFormat.FT_WILD,
-					cards: Object.values(groupByFunction((cardId: string) => cardId)(cardIds)).flatMap((cardIds) => [
-						[this.allCards.getCard(cardIds[0]).dbfId, cardIds.length],
-					]),
-					heroes: [this.allCards.getCard(deck.HeroCardId).dbfId],
-					sideboards: !deck.Sideboards?.length
-						? null
-						: deck.Sideboards.map((sideboard) => {
-								return {
-									keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
-									cards: explodeDecklist(normalizeWithDbfIds(sideboard.Cards, this.allCards)),
-								};
-						  }),
-				};
-				console.debug('[arena-decktracker-ooc] encoding', deckDefinition, deck);
-				return encode(deckDefinition);
+				const groupedByCardId = groupByFunction2(cardIds, (cardId: string) => cardId);
+				const cards = Object.values(groupedByCardId).flatMap((cardIds) => {
+					const card = this.allCards.getCard(cardIds[0]);
+					const internalEntityId = uuidShort();
+					const result = CardWithSideboard.create({
+						cardId: card.id,
+						cardName: card.name,
+						refManaCost: card.hideStats ? null : card.cost,
+						rarity: card.rarity,
+						totalQuantity: cardIds.length,
+						internalEntityId: internalEntityId,
+						internalEntityIds: [internalEntityId],
+					});
+					return result;
+				});
+				return cards;
 			}),
 		);
+		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
 
 		combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
@@ -113,6 +134,10 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	trackByCardId(index: number, card: CardWithSideboard): string {
+		return card.cardId;
 	}
 
 	@HostListener('window:beforeunload')
