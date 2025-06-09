@@ -6,7 +6,8 @@
 	height: fit-content;
 	max-height: 100%;
 	min-height: 0;
-	min-width: 220px;
+	min-width: 380px;
+	width: 420px;
 
 	.scalable {
 		transform: scale(1);
@@ -26,22 +27,30 @@
 		padding-right: 10px;
 	}
 
+	.header {
+		display: flex;
+		color: var(--color-1);
+		background: var(--color-7);
+		height: 35px;
+	}
+
 	.played-cards {
 		position: relative;
-		left: 10px;
+		// left: 10px;
 		display: flex;
 		min-height: 1px;
-		padding-right: 10px;
+		// padding-right: 10px;
 	}
 
 	.deck-list {
 		list-style: none;
 		overflow: hidden;
 		max-height: 100%;
-		width: calc(100% + 20px);
-		min-width: calc(100% + 20px);
+		width: 100%;
+		// width: calc(100% + 20px);
+		// min-width: calc(100% + 20px);
 		position: relative;
-		left: -10px;
+		// left: -10px;
 
 		::ng-deep deck-card {
 			.deck-card {
@@ -50,8 +59,30 @@
 		}
 	}
 
-	.card {
-		margin-bottom: 1px;
+	.card-container {
 		display: flex;
+		margin-bottom: 1px;
+		background: var(--color-7);
+	}
+
+	.card {
+		display: flex;
+	}
+
+	.cell {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.pick-rate,
+	.deck-wr {
+		width: 100px;
+		flex-shrink: 0;
+		color: var(--color-1);
+	}
+
+	.name {
+		flex-grow: 1;
 	}
 }

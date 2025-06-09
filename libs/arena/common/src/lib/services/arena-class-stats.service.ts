@@ -62,6 +62,13 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 	}
 
 	public async buildClassStats(timePeriod: string, modeFilter: ArenaModeFilterType): Promise<ArenaClassStats | null> {
+		return this.mainInstance.buildClassStatsInternal(timePeriod, modeFilter);
+	}
+
+	private async buildClassStatsInternal(
+		timePeriod: string,
+		modeFilter: ArenaModeFilterType,
+	): Promise<ArenaClassStats | null> {
 		const modeFilterCorrected = modeFilter === 'arena-legacy' ? 'all' : modeFilter;
 		const url = ARENA_CLASS_STATS_URL.replace('%timePeriod%', timePeriod).replace(
 			'%modeFilter%',

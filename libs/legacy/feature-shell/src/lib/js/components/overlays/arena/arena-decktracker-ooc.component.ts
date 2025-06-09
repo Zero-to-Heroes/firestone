@@ -11,25 +11,36 @@ import {
 } from '@angular/core';
 import { CardWithSideboard } from '@components/decktracker/overlay/deck-list-static.component';
 import { GameType } from '@firestone-hs/reference-data';
-import { ArenaDraftManagerService } from '@firestone/arena/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { ArenaCardStatsService, ArenaClassStatsService, ArenaDraftManagerService } from '@firestone/arena/common';
+import { buildColor } from '@firestone/constructed/common';
+import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { invertDirection, SortCriteria } from '@firestone/shared/common/view';
 import {
 	AbstractSubscriptionComponent,
 	arraysEqual,
 	groupByFunction2,
 	uuidShort,
 } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import {
+	BehaviorSubject,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	Observable,
+	switchMap,
+	takeUntil,
+	tap,
+} from 'rxjs';
 
 @Component({
 	selector: 'arena-decktracker-ooc',
 	styleUrls: [
-		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
-		'../../../../css/global/scrollbar-cards-list.scss',
+		// `../../../../css/global/scrollbar-decktracker-overlay.scss`,
+		// '../../../../css/global/scrollbar-cards-list.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
-		'../../../../css/component/overlays/arena/arena-decktracker-ooc.component.scss',
+		'./arena-decktracker-ooc.component.scss',
 	],
 	template: `
 		<div class="root active" [activeTheme]="'decktracker'">
@@ -39,6 +50,36 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 					<div class="decktracker-container">
 						<div class="decktracker" *ngIf="!!cards">
 							<div class="background"></div>
+							<div class="header" *ngIf="sortCriteria$ | async as sort">
+								<sortable-table-label
+									class="cell pick-rate"
+									[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
+									[sort]="sort"
+									[criteria]="'pick-rate'"
+									[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
+									(sortClick)="onSortClick($event)"
+								>
+								</sortable-table-label>
+								<sortable-table-label
+									class="cell name"
+									[name]="'decktracker.overlay.mulligan.mulligan-card' | fsTranslate"
+									[sort]="sort"
+									[criteria]="'card'"
+									(sortClick)="onSortClick($event)"
+								>
+								</sortable-table-label>
+								<sortable-table-label
+									class="cell deck-wr"
+									[name]="'app.arena.card-stats.header-deck-winrate-impact' | fsTranslate"
+									[sort]="sort"
+									[criteria]="'impact'"
+									[helpTooltip]="
+										'app.arena.card-stats.header-deck-winrate-impact-tooltip' | fsTranslate
+									"
+									(sortClick)="onSortClick($event)"
+								>
+								</sortable-table-label>
+							</div>
 							<div class="played-cards">
 								<ng-scrollbar
 									class="deck-list"
@@ -47,15 +88,21 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 									[sensorDisabled]="false"
 									scrollable
 								>
-									<li class="card-container" *ngFor="let card of cards; trackBy: trackByCardId">
+									<li class="card-container" *ngFor="let cardInfo of cards; trackBy: trackByCardId">
+										<div class="cell pick-rate" [style.color]="cardInfo.pickedColor">
+											{{ cardInfo.pickrate | percent: '1.1' }}
+										</div>
 										<deck-card
-											class="card"
-											[card]="card"
+											class="cell card name"
+											[card]="cardInfo.card"
 											[colorManaCost]="value.colorManaCost"
 											[showRelatedCards]="true"
 											[side]="'single'"
 											[gameTypeOverride]="gameType"
 										></deck-card>
+										<div class="cell deck-wr" [style.color]="cardInfo.impactColor">
+											{{ cardInfo.deckWinrateImpact | number: '1.2-2' }}
+										</div>
 									</li>
 								</ng-scrollbar>
 							</div>
@@ -68,11 +115,16 @@ import { Observable, combineLatest, distinctUntilChanged, filter, takeUntil } fr
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	// deckstring$: Observable<string>;
-	cards$: Observable<readonly CardWithSideboard[]>;
+	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
+	cards$: Observable<readonly CardInfo[]>;
 	colorManaCost$: Observable<boolean>;
 
 	gameType = GameType.GT_ARENA;
+
+	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
+		criteria: 'card',
+		direction: 'asc',
+	});
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -82,38 +134,93 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		private readonly prefs: PreferencesService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
+		private readonly cardStats: ArenaCardStatsService,
+		private readonly classStats: ArenaClassStatsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.draftManager.isReady();
-		await this.prefs.isReady();
+		await waitForReady(this.draftManager, this.prefs, this.cardStats, this.classStats);
 
-		this.cards$ = this.draftManager.currentDeck$$.pipe(
+		this.sortCriteria$ = this.sortCriteria$$.asObservable().pipe(this.mapData((sort) => sort));
+		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
+		const cardsList$ = this.draftManager.currentDeck$$.pipe(
 			filter((deck) => !!deck),
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
 				const cardIds = deck.DeckList as readonly string[];
 				const groupedByCardId = groupByFunction2(cardIds, (cardId: string) => cardId);
 				const cards = Object.values(groupedByCardId).flatMap((cardIds) => {
-					const card = this.allCards.getCard(cardIds[0]);
+					const refCard = this.allCards.getCard(cardIds[0]);
 					const internalEntityId = uuidShort();
-					const result = CardWithSideboard.create({
-						cardId: card.id,
-						cardName: card.name,
-						refManaCost: card.hideStats ? null : card.cost,
-						rarity: card.rarity,
+					const card = CardWithSideboard.create({
+						cardId: refCard.id,
+						cardName: refCard.name,
+						refManaCost: refCard.hideStats ? null : refCard.cost,
+						rarity: refCard.rarity,
 						totalQuantity: cardIds.length,
 						internalEntityId: internalEntityId,
 						internalEntityIds: [internalEntityId],
 					});
-					return result;
+					return card;
 				});
 				return cards;
 			}),
 		);
-		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
+		const currentClass$ = this.draftManager.currentDeck$$.pipe(
+			this.mapData((deck) => this.allCards.getCard(deck?.HeroCardId).classes?.[0]?.toLowerCase() ?? null),
+		);
+		const currentMode$ = this.draftManager.currentMode$$.pipe(
+			this.mapData((mode) => (mode === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena')),
+		);
+		const classStats$ = currentMode$.pipe(
+			switchMap((mode) => this.classStats.buildClassStats('last-patch', mode as ArenaModeFilterType)),
+		);
+		const classStat$ = combineLatest([currentClass$, classStats$]).pipe(
+			filter(([playerClass, classStats]) => !!playerClass && !!classStats),
+			tap(([playerClass, classStats]) => console.debug('Will find class stat for', playerClass, classStats)),
+			this.mapData(([playerClass, classStats]) => classStats?.stats?.find((s) => s.playerClass === playerClass)),
+			tap((stat) => console.debug('Arena class stat', stat)),
+		);
+		const cardStats$ = combineLatest([currentClass$, currentMode$]).pipe(
+			tap((stats) => console.debug('Will build arena card stats', stats)),
+			switchMap(([playerClass, mode]) => this.cardStats.buildCardStats(playerClass, 'last-patch', mode)),
+			tap((stats) => console.debug('Arena card stats', stats)),
+		);
+		const cardsWithStats$ = combineLatest([cardsList$, cardStats$, classStat$]).pipe(
+			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
+			this.mapData(([cards, cardStats, classStat]) => {
+				const cardsWithStats: CardInfo[] = [];
+				const classWinrate = classStat.totalsWins / classStat.totalGames;
+				for (const card of cards) {
+					const stat = cardStats?.stats?.find((s) => s.cardId === card.cardId);
+					const decksWithCard = stat?.matchStats?.stats?.decksWithCard ?? 0;
+					const deckWinrate = !decksWithCard
+						? null
+						: (stat.matchStats?.stats?.decksWithCardThenWin ?? 0) / decksWithCard;
+					const deckImpact = deckWinrate == null ? null : 100 * (deckWinrate - classWinrate);
+					const pickrate = stat?.draftStats?.pickRateHighWins ?? stat?.draftStats?.pickRate ?? null;
+					const cardInfo: CardInfo = {
+						card: card,
+						deckWinrateImpact: deckImpact,
+						pickrate: pickrate,
+						pickedColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', pickrate ?? 0, 0.7, 0.3),
+						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', deckImpact ?? 0, 1, -1),
+					};
+					cardsWithStats.push(cardInfo);
+				}
+				console.debug('Arena decktracker cards with stats', cardsWithStats);
+				return cardsWithStats;
+			}),
+		);
+
+		// Add sort
+		this.cards$ = combineLatest([cardsWithStats$, this.sortCriteria$$]).pipe(
+			this.mapData(([cards, sort]) => {
+				return cards.sort((a, b) => this.sortCards(a, b, sort));
+			}),
+		);
 
 		combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
@@ -136,12 +243,64 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		}
 	}
 
-	trackByCardId(index: number, card: CardWithSideboard): string {
-		return card.cardId;
+	onSortClick(rawCriteria: string) {
+		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
+		this.sortCriteria$$.next({
+			criteria: criteria,
+			direction:
+				criteria === this.sortCriteria$$.value?.criteria
+					? invertDirection(this.sortCriteria$$.value.direction)
+					: 'desc',
+		});
+	}
+
+	trackByCardId(index: number, card: CardInfo): string {
+		return card.card.cardId;
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 	}
+
+	private sortCards(a: CardInfo, b: CardInfo, sortCriteria: SortCriteria<ColumnSortType>): number {
+		switch (sortCriteria?.criteria) {
+			case 'card':
+				return this.sortByCard(a, b, sortCriteria.direction);
+			case 'impact':
+				return this.sortByImpact(a, b, sortCriteria.direction);
+			case 'pick-rate':
+				return this.sortByPickRate(a, b, sortCriteria.direction);
+			default:
+				return 0;
+		}
+	}
+
+	private sortByCard(a: CardInfo, b: CardInfo, direction: 'asc' | 'desc'): number {
+		const aData = this.allCards.getCard(a.card.cardId)?.cost ?? 0;
+		const bData = this.allCards.getCard(b.card.cardId)?.cost ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByImpact(a: CardInfo, b: CardInfo, direction: 'asc' | 'desc'): number {
+		const aData = a.deckWinrateImpact ?? 0;
+		const bData = b.deckWinrateImpact ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByPickRate(a: CardInfo, b: CardInfo, direction: 'asc' | 'desc'): number {
+		const aData = a.pickrate ?? 0;
+		const bData = b.pickrate ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
 }
+
+interface CardInfo {
+	readonly card: CardWithSideboard;
+	readonly deckWinrateImpact: number | null;
+	readonly pickrate: number | null;
+	readonly pickedColor: string;
+	readonly impactColor: string;
+}
+
+type ColumnSortType = 'card' | 'pick-rate' | 'impact';

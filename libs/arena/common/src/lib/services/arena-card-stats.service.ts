@@ -123,7 +123,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		timePeriod: string,
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStats | null> {
-		return this.mainInstance.buildCardStatsInternal(context, timePeriod, modeFilter);
+		return this.mainInstance.buildCardStatsInternal(context?.toLowerCase(), timePeriod, modeFilter);
 	}
 
 	private async buildCardStatsInternal(
