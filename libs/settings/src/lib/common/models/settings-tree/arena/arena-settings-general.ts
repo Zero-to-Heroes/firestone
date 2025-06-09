@@ -53,10 +53,42 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 						}),
 					},
 					{
+						type: 'slider',
+						field: 'arenaDraftOverlayScale',
+						label: context.i18n.translateString('settings.arena.general.draft-overlay-size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 50,
+							max: 175,
+							snapSensitivity: 3,
+							knobs: sizeKnobs(context),
+						},
+					},
+				],
+			},
+			{
+				id: 'arena-draft-tracker',
+				title: context.i18n.translateString('settings.arena.menu.draft-tracker'),
+				settings: [
+					{
 						type: 'toggle',
 						field: 'arenaShowOocTracker',
 						label: context.i18n.translateString('settings.arena.general.show-draft-tracker'),
 						tooltip: context.i18n.translateString('settings.arena.general.show-draft-tracker-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'arenaOocTrackerShowPickRate',
+						label: context.i18n.translateString('settings.arena.general.show-draft-tracker-pick-rate'),
+						tooltip: context.i18n.translateString('settings.arena.general.show-draft-tracker-pick-rate-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowOocTracker,
+					},
+					{
+						type: 'toggle',
+						field: 'arenaOocTrackerShowImpact',
+						label: context.i18n.translateString('settings.arena.general.show-draft-tracker-impact'),
+						tooltip: context.i18n.translateString('settings.arena.general.show-draft-tracker-impact-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowOocTracker,
 					},
 					{
 						type: 'slider',
@@ -66,18 +98,6 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 						sliderConfig: {
 							min: 50,
 							max: 150,
-							snapSensitivity: 3,
-							knobs: sizeKnobs(context),
-						},
-					},
-					{
-						type: 'slider',
-						field: 'arenaDraftOverlayScale',
-						label: context.i18n.translateString('settings.arena.general.draft-overlay-size'),
-						tooltip: null,
-						sliderConfig: {
-							min: 50,
-							max: 175,
 							snapSensitivity: 3,
 							knobs: sizeKnobs(context),
 						},

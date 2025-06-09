@@ -12,6 +12,8 @@ export const ARENA_CARD_DRAFT_STATS_URL = `https://static.zerotoheroes.com/api/a
 export const ARENA_CARD_MATCH_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/cards/%modeFilter%/%timePeriod%/%context%.gz.json`;
 
 export const ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD = 6;
+// For normal arena
+export const ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK = 3;
 
 @Injectable()
 export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsService> {
@@ -214,18 +216,21 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		}
 
 		const pickRate = stat.statsByWins[0].picked / stat.statsByWins[0].offered;
+		let threshold = ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD;
+		if (stat.statsByWins[ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD]?.offered == null) {
+			threshold = ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK;
+		}
 		const pickRateHighWins =
-			stat.statsByWins[ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD]?.offered == null
+			stat.statsByWins[threshold]?.offered == null
 				? null
-				: stat.statsByWins[ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD]?.picked /
-				  stat.statsByWins[ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD]?.offered;
+				: stat.statsByWins[threshold]?.picked / stat.statsByWins[threshold]?.offered;
 		const pickRateImpact = pickRateHighWins == null ? null : pickRateHighWins - pickRate;
 		return {
 			totalOffered: stat.statsByWins[0].offered,
 			totalPicked: stat.statsByWins[0].picked,
 			pickRate: pickRate,
-			totalOfferedHighWins: stat.statsByWins[ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD]?.offered ?? 0,
-			totalPickedHighWins: stat.statsByWins[ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD]?.picked ?? 0,
+			totalOfferedHighWins: stat.statsByWins[threshold]?.offered ?? 0,
+			totalPickedHighWins: stat.statsByWins[threshold]?.picked ?? 0,
 			pickRateHighWins: pickRateHighWins,
 			pickRateImpact: pickRateImpact,
 		};

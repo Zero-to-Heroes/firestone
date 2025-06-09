@@ -672,6 +672,8 @@ export class Preferences implements IPreferences {
 	readonly arenaShowCardSelectionOverlayPremiumBanner: boolean = true;
 	readonly arenaShowCardStatDuringDiscovers: boolean = true;
 	readonly arenaShowOocTracker: boolean = true;
+	readonly arenaOocTrackerShowPickRate: boolean = true;
+	readonly arenaOocTrackerShowImpact: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly arenaOocTrackerScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

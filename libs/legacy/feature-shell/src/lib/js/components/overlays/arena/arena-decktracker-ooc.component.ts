@@ -11,7 +11,13 @@ import {
 } from '@angular/core';
 import { CardWithSideboard } from '@components/decktracker/overlay/deck-list-static.component';
 import { GameType } from '@firestone-hs/reference-data';
-import { ArenaCardStatsService, ArenaClassStatsService, ArenaDraftManagerService } from '@firestone/arena/common';
+import {
+	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
+	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK,
+	ArenaCardStatsService,
+	ArenaClassStatsService,
+	ArenaDraftManagerService,
+} from '@firestone/arena/common';
 import { buildColor } from '@firestone/constructed/common';
 import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { invertDirection, SortCriteria } from '@firestone/shared/common/view';
@@ -21,7 +27,7 @@ import {
 	groupByFunction2,
 	uuidShort,
 } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
 	BehaviorSubject,
@@ -29,9 +35,9 @@ import {
 	distinctUntilChanged,
 	filter,
 	Observable,
+	shareReplay,
 	switchMap,
 	takeUntil,
-	tap,
 } from 'rxjs';
 
 @Component({
@@ -53,10 +59,11 @@ import {
 							<div class="header" *ngIf="sortCriteria$ | async as sort">
 								<sortable-table-label
 									class="cell pick-rate"
+									*ngIf="showPickRate$ | async"
 									[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
 									[sort]="sort"
 									[criteria]="'pick-rate'"
-									[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
+									[helpTooltip]="headerPickrateTooltip"
 									(sortClick)="onSortClick($event)"
 								>
 								</sortable-table-label>
@@ -70,6 +77,7 @@ import {
 								</sortable-table-label>
 								<sortable-table-label
 									class="cell deck-wr"
+									*ngIf="showImpact$ | async"
 									[name]="'app.arena.card-stats.header-deck-winrate-impact' | fsTranslate"
 									[sort]="sort"
 									[criteria]="'impact'"
@@ -89,7 +97,11 @@ import {
 									scrollable
 								>
 									<li class="card-container" *ngFor="let cardInfo of cards; trackBy: trackByCardId">
-										<div class="cell pick-rate" [style.color]="cardInfo.pickedColor">
+										<div
+											class="cell pick-rate"
+											*ngIf="showPickRate$ | async"
+											[style.color]="cardInfo.pickedColor"
+										>
 											{{ cardInfo.pickrate | percent: '1.1' }}
 										</div>
 										<deck-card
@@ -100,7 +112,11 @@ import {
 											[side]="'single'"
 											[gameTypeOverride]="gameType"
 										></deck-card>
-										<div class="cell deck-wr" [style.color]="cardInfo.impactColor">
+										<div
+											class="cell deck-wr"
+											*ngIf="showImpact$ | async"
+											[style.color]="cardInfo.impactColor"
+										>
 											{{ cardInfo.deckWinrateImpact | number: '1.2-2' }}
 										</div>
 									</li>
@@ -118,6 +134,16 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	cards$: Observable<readonly CardInfo[]>;
 	colorManaCost$: Observable<boolean>;
+	showPickRate$: Observable<boolean>;
+	showImpact$: Observable<boolean>;
+
+	headerPickrateTooltip = this.i18n.translateString(
+		'app.arena.card-stats.header-pickrate-high-wins-variable-tooltip',
+		{
+			value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
+			value2: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK,
+		},
+	);
 
 	gameType = GameType.GT_ARENA;
 
@@ -136,6 +162,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		private readonly renderer: Renderer2,
 		private readonly cardStats: ArenaCardStatsService,
 		private readonly classStats: ArenaClassStatsService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}
@@ -145,6 +172,16 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable().pipe(this.mapData((sort) => sort));
 		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
+		this.showPickRate$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.arenaOocTrackerShowPickRate),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.showImpact$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.arenaOocTrackerShowImpact),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const cardsList$ = this.draftManager.currentDeck$$.pipe(
 			filter((deck) => !!deck),
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
@@ -179,14 +216,10 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		);
 		const classStat$ = combineLatest([currentClass$, classStats$]).pipe(
 			filter(([playerClass, classStats]) => !!playerClass && !!classStats),
-			tap(([playerClass, classStats]) => console.debug('Will find class stat for', playerClass, classStats)),
 			this.mapData(([playerClass, classStats]) => classStats?.stats?.find((s) => s.playerClass === playerClass)),
-			tap((stat) => console.debug('Arena class stat', stat)),
 		);
 		const cardStats$ = combineLatest([currentClass$, currentMode$]).pipe(
-			tap((stats) => console.debug('Will build arena card stats', stats)),
 			switchMap(([playerClass, mode]) => this.cardStats.buildCardStats(playerClass, 'last-patch', mode)),
-			tap((stats) => console.debug('Arena card stats', stats)),
 		);
 		const cardsWithStats$ = combineLatest([cardsList$, cardStats$, classStat$]).pipe(
 			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
@@ -210,7 +243,6 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 					};
 					cardsWithStats.push(cardInfo);
 				}
-				console.debug('Arena decktracker cards with stats', cardsWithStats);
 				return cardsWithStats;
 			}),
 		);

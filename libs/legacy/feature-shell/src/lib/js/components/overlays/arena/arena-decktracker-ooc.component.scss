@@ -6,8 +6,6 @@
 	height: fit-content;
 	max-height: 100%;
 	min-height: 0;
-	min-width: 380px;
-	width: 420px;
 
 	.scalable {
 		transform: scale(1);
@@ -84,5 +82,7 @@
 
 	.name {
 		flex-grow: 1;
+		min-width: 220px;
+		width: 220px;
 	}
 }
