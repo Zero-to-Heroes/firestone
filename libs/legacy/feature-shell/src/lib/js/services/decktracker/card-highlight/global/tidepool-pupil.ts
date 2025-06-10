@@ -1,0 +1,32 @@
+import { CardIds } from '@firestone-hs/reference-data';
+import { GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GlobalHighlightCard } from './_registers';
+
+export const TidepoolPupil: GlobalHighlightCard = {
+	cardIds: [CardIds.TidepoolPupil_VAC_304],
+	getRelatedCards: (
+		entityId: number,
+		side: 'player' | 'opponent' | 'single',
+		gameState: GameState,
+		allCards: CardsFacadeService,
+	) => {
+		// For player, things are handled more accurately
+		if (side !== 'opponent') {
+			return [];
+		}
+
+		const deckState = gameState.opponentDeck;
+		const card = deckState.findCard(entityId);
+		const turnAtWhichEnteredHand = card?.card?.metaInfo?.turnAtWhichCardEnteredHand;
+		if (!turnAtWhichEnteredHand || isNaN(+turnAtWhichEnteredHand)) {
+			return [];
+		}
+
+		return deckState.cardsPlayedThisMatch
+			.filter((c) => c.turn >= (turnAtWhichEnteredHand as number))
+			.sort((a, b) => a.turn - b.turn)
+			.slice(0, 3)
+			.map((c) => c.cardId);
+	},
+};

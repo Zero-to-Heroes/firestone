@@ -20,6 +20,7 @@ import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
 import { ReturnPolicy } from './return-policy';
 import { SuccombToMadness } from './succomb-to-madness';
+import { TidepoolPupil } from './tidepool-pupil';
 import { TramHeist } from './tram-heist';
 import { TwistedWebweaver } from './twisted-webweaver';
 import { Ursoc } from './ursoc';
@@ -38,6 +39,7 @@ const cards = [
 	Ursoc,
 	GrotesqueRuneblade,
 	IchorOfUndeath,
+	TidepoolPupil,
 	SuccombToMadness,
 	RavenousFelhunter,
 	FerociousFelbat,
