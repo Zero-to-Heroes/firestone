@@ -38,8 +38,16 @@ export class StartOfGameEffectParser implements EventParser {
 			? this.helper.addSingleCardToZone(deck.globalEffects, card)
 			: deck.globalEffects;
 		let newDeckContents = deck.deck;
-		if (!deck.getAllCardsInDeckWithoutOptions().some((card) => card.cardId === cardId)) {
-			newDeckContents = this.helper.addSingleCardToZone(deck.deck, card);
+		// we want to be able to add multiple copies of the same "start of combat" card, but we don't want to add
+		// a card if we already know it's in the list
+		// This happens when we have multiple Prince Malchezaar cards in the deck, for instance
+		if (!deck.deckList?.length && !deck.deckstring) {
+			const fillerCard = deck.deck.find(
+				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
+			);
+			newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
+			newDeckContents = this.helper.addSingleCardToZone(newDeckContents, card);
+			// newDeckContents = this.helper.empiricReplaceCardInZone(deck.deck, card, true);
 		}
 		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
 			cardId,
