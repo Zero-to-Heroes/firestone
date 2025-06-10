@@ -1753,6 +1753,9 @@ export const cardIdSelector = (
 		case CardIds.LadyAshvane_TSC_943:
 		case CardIds.LadyAshvane_Story_11_LadyAshvane:
 			return and(side(inputSide), inDeck, weapon);
+		case CardIds.LadyDarkvein:
+		case CardIds.LadyDarkvein_CORE_REV_373:
+			return and(side(inputSide), or(inHand, inDeck), spell, shadow);
 		case CardIds.LadyDeathwhisper_RLK_713:
 			return and(side(inputSide), or(inHand, inDeck), spell, frost);
 		case CardIds.LadyInWhite:
@@ -2005,7 +2008,10 @@ export const cardIdSelector = (
 		case CardIds.NydusWorm_SC_015:
 			return and(side(inputSide), inDeck, zerg);
 		case CardIds.NzothGodOfTheDeep:
-			return and(side(inputSide), inGraveyard, minion, (input: SelectorInput) => !!input.card?.races?.length);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, not(tribeless)),
+				and(side(inputSide), inGraveyard, minion, not(tribeless)),
+			);
 		case CardIds.NzothTheCorruptor:
 			return and(side(inputSide), or(inGraveyard, inHand, inDeck), minion, deathrattle);
 		case CardIds.OakenSummons:
@@ -2545,6 +2551,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.ShirvallahTheTiger:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.ShiveringSorceress:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ShoplifterGoldbeard_TOY_511:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ShroudOfConcealment:
@@ -2742,6 +2750,8 @@ export const cardIdSelector = (
 			return and(notInInitialDeck, inDeck);
 		case CardIds.SteamGuardian:
 			return highlightConditions(and(side(inputSide), inDeck, spell, fire), and(side(inputSide), inDeck, spell));
+		case CardIds.SteamSurger:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.StewardOfDarkshire_OG_310:
 		case CardIds.StewardOfDarkshire_WON_310:
 			return and(side(inputSide), or(inHand, inDeck), minion, healthLessThan(2));
@@ -3229,6 +3239,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.YoggInTheBox_TOY_372:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.YoggSaronHopesEnd_OG_134:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.YshaarjTheDefiler:
 			return and(side(inputSide), cardsPlayedThisMatch, corrupted);
 		case CardIds.YshaarjRageUnbound:
