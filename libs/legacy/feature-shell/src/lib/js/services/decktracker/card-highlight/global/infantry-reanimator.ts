@@ -13,7 +13,7 @@ export const InfantryReanimator: GlobalHighlightCard = {
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
-			deckState.minionsDeadThisTurn
+			deckState.minionsDeadThisMatch
 				.map((e) => allCards.getCard(e.cardId))
 				.filter((c) => hasCorrectTribe(c, Race.UNDEAD))
 				.map((e) => e.id)
