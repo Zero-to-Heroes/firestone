@@ -51,6 +51,7 @@ export class ReplayMetadataBuilderService {
 		const parser = new CardsPlayedByTurnParser();
 		parseGame(replay, [parser]);
 		const playerPlayedCardsByTurn = parser.cardsPlayedByTurn[game.replay.mainPlayerId];
+		const playerCastCardsByTurn = parser.cardsCastByTurn[game.replay.mainPlayerId];
 		console.debug('deckstring', game.deckstring);
 
 		const metadata: ReplayUploadMetadata = {
@@ -113,8 +114,10 @@ export class ReplayMetadataBuilderService {
 				matchAnalysis: matchAnalysis,
 				playerPlayedCards: playerPlayedCardsByTurn?.map((c) => c.cardId),
 				playerPlayedCardsByTurn: playerPlayedCardsByTurn,
+				playerCastCardsByTurn: playerCastCardsByTurn,
 				opponentPlayedCards: parser.cardsPlayedByTurn[game.replay.opponentPlayerId]?.map((c) => c.cardId),
 				opponentPlayedCardsByTurn: parser.cardsPlayedByTurn[game.replay.opponentPlayerId],
+				opponentCastCardsByTurn: parser.cardsCastByTurn[game.replay.opponentPlayerId],
 			},
 		};
 		return metadata;
