@@ -4,6 +4,7 @@ import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
+import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
@@ -16,6 +17,7 @@ import { LadyDarkvein } from './lady-darkvein';
 import { Merithra } from './merithra';
 import { MonstrousParrot } from './monstrous-parrot';
 import { MurozondTheInfinite } from './murozond-the-infinite';
+import { NzothGodOfTheDeep } from './nzoth-god-of-the-deep';
 import { ParrotMascot } from './parrot-mascot';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
@@ -34,7 +36,9 @@ const cards = [
 	JimRaynor,
 	CarryOnSuitcase,
 	WallowTheWretched,
+	NzothGodOfTheDeep,
 	HungeringAncient,
+	EndbringerUmbra,
 	Zuljin,
 	Merithra,
 	Ursoc,
