@@ -1545,7 +1545,10 @@ export const cardIdSelector = (
 		case CardIds.IncantersFlow:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.InfantryReanimator:
-			return and(side(inputSide), inGraveyard, undead);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), undead),
+				and(side(inputSide), inGraveyard, undead),
+			);
 		case CardIds.InfernoHerald_FIR_913:
 			return and(side(inputSide), or(inHand, inDeck), spell, fire);
 		case CardIds.InfernalStratagem_GDB_122:

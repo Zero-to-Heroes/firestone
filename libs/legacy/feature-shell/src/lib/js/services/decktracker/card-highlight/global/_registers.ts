@@ -9,6 +9,7 @@ import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
+import { InfantryReanimator } from './infantry-reanimator';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
@@ -37,6 +38,7 @@ const cards = [
 	Zuljin,
 	Merithra,
 	Ursoc,
+	InfantryReanimator,
 	GrotesqueRuneblade,
 	IchorOfUndeath,
 	TidepoolPupil,
