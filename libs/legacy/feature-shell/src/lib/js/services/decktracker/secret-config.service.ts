@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-	arenaSets,
 	CardIds,
 	formatFormat,
 	GameFormat,
@@ -120,7 +119,7 @@ export class SecretConfigService {
 		}
 
 		if (isArena(metadata.gameType)) {
-			if (!!creatorCardId?.length && arenaSets.length > 0) {
+			if (!!creatorCardId?.length) {
 				return 'arena';
 			}
 			// Non-generated cards come from the draft pool, which is a curated list
