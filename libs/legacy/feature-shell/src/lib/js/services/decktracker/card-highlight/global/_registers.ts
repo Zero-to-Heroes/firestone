@@ -8,6 +8,7 @@ import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
+import { Hadronox } from './hadronox';
 import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
 import { InfantryReanimator } from './infantry-reanimator';
@@ -36,6 +37,7 @@ const cards = [
 	JimRaynor,
 	CarryOnSuitcase,
 	WallowTheWretched,
+	Hadronox,
 	NzothGodOfTheDeep,
 	HungeringAncient,
 	EndbringerUmbra,

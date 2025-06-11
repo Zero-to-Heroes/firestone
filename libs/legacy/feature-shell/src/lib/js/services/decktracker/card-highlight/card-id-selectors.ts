@@ -1404,7 +1404,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, arcane);
 		case CardIds.Hadronox_CORE_ICC_835:
 		case CardIds.Hadronox_ICC_835:
-			return and(side(inputSide), inGraveyard, minion, taunt);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, taunt),
+				and(side(inputSide), inGraveyard, minion, taunt),
+			);
 		case CardIds.HamuulRunetotem_EDR_845:
 			return and(side(inputSide), inDeck, spell, not(nature));
 		case CardIds.Handmaiden:
