@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import { GameStateFacadeService } from '@firestone/game-state';
+import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { TwitchAuthService } from '@firestone/twitch/common';
@@ -82,6 +83,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_ConstructedConfigService: ConstructedConfigService,
 		private readonly init_DiscordPresenceManagerService: DiscordPresenceManagerService,
 		private readonly init_GameStateFacadeService: GameStateFacadeService,
+		private readonly init_MercenariesNavigationService: MercenariesNavigationService,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,
