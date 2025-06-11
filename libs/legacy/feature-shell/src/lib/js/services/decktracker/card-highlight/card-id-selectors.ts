@@ -1042,6 +1042,11 @@ export const cardIdSelector = (
 					),
 				)(input);
 			};
+		case CardIds.EndbringerUmbra_TLC_106:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), minion, deathrattle),
+				and(side(inputSide), inGraveyard, minion, deathrattle),
+			);
 		case CardIds.EnduranceTrainingTavernBrawl:
 			return and(side(inputSide), minion, taunt);
 		case CardIds.EnvoyOfTheGlade_EDR_873:
