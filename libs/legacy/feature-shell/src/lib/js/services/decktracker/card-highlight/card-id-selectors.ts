@@ -1409,7 +1409,10 @@ export const cardIdSelector = (
 				and(side(inputSide), inGraveyard, minion, taunt),
 			);
 		case CardIds.HamuulRunetotem_EDR_845:
-			return and(side(inputSide), inDeck, spell, not(nature));
+			return highlightConditions(
+				and(side(inputSide), inDeck, spell, not(nature)),
+				and(side(inputSide), inDeck, spell, nature),
+			);
 		case CardIds.Handmaiden:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.HarbingerOfWinterCore_RLK_511:
@@ -3251,6 +3254,7 @@ export const cardIdSelector = (
 		case CardIds.YoggInTheBox_TOY_372:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.YoggSaronHopesEnd_OG_134:
+		case CardIds.YoggSaronMasterOfFate:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.YshaarjTheDefiler:
 			return and(side(inputSide), cardsPlayedThisMatch, corrupted);
