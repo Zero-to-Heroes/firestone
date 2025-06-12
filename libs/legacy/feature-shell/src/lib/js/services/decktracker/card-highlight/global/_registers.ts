@@ -19,6 +19,7 @@ import { Merithra } from './merithra';
 import { MonstrousParrot } from './monstrous-parrot';
 import { MurozondTheInfinite } from './murozond-the-infinite';
 import { NzothGodOfTheDeep } from './nzoth-god-of-the-deep';
+import { NZothTheCorruptor } from './nzoth-the-corruptor';
 import { ParrotMascot } from './parrot-mascot';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
@@ -39,6 +40,7 @@ const cards = [
 	WallowTheWretched,
 	Hadronox,
 	NzothGodOfTheDeep,
+	NZothTheCorruptor,
 	HungeringAncient,
 	EndbringerUmbra,
 	Zuljin,
