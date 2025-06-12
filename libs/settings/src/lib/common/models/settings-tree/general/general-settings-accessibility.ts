@@ -18,6 +18,12 @@ export const generalAccessibilitySettings = (context: SettingContext): SettingNo
 						tooltip: context.i18n.translateString('settings.general.launch.flash-window-tooltip'),
 					},
 					{
+						type: 'toggle',
+						field: 'showNotificationOnYourTurn',
+						label: context.i18n.translateString('settings.general.launch.show-notification'),
+						tooltip: context.i18n.translateString('settings.general.launch.show-notification-tooltip'),
+					},
+					{
 						type: 'slider',
 						field: 'globalZoomLevel',
 						label: context.i18n.translateString('settings.general.launch.zoom-label'),

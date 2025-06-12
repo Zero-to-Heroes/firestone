@@ -27,6 +27,12 @@ export class BgsHeroSelectionParser implements EventParser {
 		if (prefs.flashWindowOnYourTurn) {
 			this.owUtils.flashWindow();
 		}
+		if (prefs.showNotificationOnYourTurn) {
+			this.owUtils.showWindowsNotification(
+				this.i18n.translateString('app.decktracker.notifications.turn-start-title'),
+				'',
+			);
+		}
 		console.debug('[bgs-hero-selection] handling event', gameEvent);
 		const newHeroSelectionPanel: BgsHeroSelectionOverviewPanel = this.buildHeroSelectionPanel(
 			currentState.bgState,

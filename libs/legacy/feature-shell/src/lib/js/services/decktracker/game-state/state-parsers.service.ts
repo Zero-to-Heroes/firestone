@@ -243,7 +243,7 @@ export class GameStateParsersService {
 			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED]: [new BgsRewardDestroyedParser(this.allCards, this.i18n)],
 			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED]: [new BgsRewardEquippedParser(this.allCards, this.i18n)],
 			[GameEvent.BATTLEGROUNDS_REAL_TIME_STATS_UPDATE]: [new BgsRealTimeStatsUpdateParser(this.i18n)],
-			[GameEvent.BATTLEGROUNDS_RECRUIT_PHASE]: [new BgsRecruitPhaseParser(this.owUtils, this.prefs)],
+			[GameEvent.BATTLEGROUNDS_RECRUIT_PHASE]: [new BgsRecruitPhaseParser(this.owUtils, this.prefs, this.i18n)],
 			[GameEvent.BATTLEGROUNDS_REWARD_GAINED]: [new BgsRewardGainedParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_REWARD_REVEALED]: [new BgsRewardRevealedParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE]: [

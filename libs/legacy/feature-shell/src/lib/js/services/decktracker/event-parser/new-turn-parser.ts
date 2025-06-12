@@ -56,6 +56,14 @@ export class NewTurnParser implements EventParser {
 			if (prefs.flashWindowOnYourTurn) {
 				this.owUtils.flashWindow();
 			}
+			if (prefs.showNotificationOnYourTurn) {
+				this.owUtils.showWindowsNotification(
+					this.i18n.translateString('app.decktracker.notifications.turn-start-title'),
+					this.i18n.translateString('app.decktracker.notifications.turn-start-message', {
+						value: numericTurn,
+					}),
+				);
+			}
 		}
 
 		const [playerTurnTimings, opponentTurnTimings] = buildTurnTimings(

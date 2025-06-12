@@ -85,6 +85,7 @@ export class Preferences implements IPreferences {
 	readonly dontShowNewVersionNotif: boolean = false;
 	readonly globalZoomLevel: number = 100;
 	readonly flashWindowOnYourTurn: boolean = true;
+	readonly showNotificationOnYourTurn: boolean = false;
 	readonly allowGamesShare: boolean = true;
 	readonly enableQuestsWidget: boolean = true;
 	readonly showQuestsWidgetWhenEmpty: boolean = false;

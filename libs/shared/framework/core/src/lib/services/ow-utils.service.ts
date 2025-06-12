@@ -1,5 +1,6 @@
 /* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from './overwolf.service';
 import { WindowManagerService } from './window-manager.service';
 
@@ -13,6 +14,11 @@ export class OwUtilsService {
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		this.initFacade();
+		window['showWindowsNotification'] = async () => {
+			await sleep(1000);
+			console.debug('[ow-utils] showing test notification');
+			this.showWindowsNotification('Test', 'This is a test notification');
+		};
 	}
 
 	private async initFacade() {
@@ -29,6 +35,10 @@ export class OwUtilsService {
 
 	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
 		return this.internalService.flashWindow(windowName);
+	}
+
+	public async showWindowsNotification(title: string, text: string): Promise<void> {
+		return this.internalService.showWindowsNotification(title, text);
 	}
 
 	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string | null, any]> {
@@ -83,6 +93,22 @@ class OwUtilsServiceInternal {
 				});
 			} catch (e) {
 				console.warn('[ow-utils] could not flash window', e);
+				resolve();
+			}
+		});
+	}
+
+	public async showWindowsNotification(title: string, text: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.debug('[ow-utils] showWindowsNotification', title, text);
+			const plugin = await this.get();
+			try {
+				plugin.showWindowsNotification(title, text, (result) => {
+					console.debug('[ow-utils] showWindowsNotification done', title, text, result);
+					resolve();
+				});
+			} catch (e) {
+				console.warn('[ow-utils] could not showWindowsNotification', e);
 				resolve();
 			}
 		});
