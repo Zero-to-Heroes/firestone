@@ -1,4 +1,13 @@
-import { DraftSlotType, GameType, RewardTrackType, SceneMode, Zone } from '@firestone-hs/reference-data';
+import {
+	ArenaClientStateType,
+	ArenaSessionState,
+	DraftMode,
+	DraftSlotType,
+	GameType,
+	RewardTrackType,
+	SceneMode,
+	Zone,
+} from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
@@ -29,6 +38,9 @@ export interface MemoryUpdate {
 	readonly ArenaCurrentCardsInDeck: number;
 	readonly ArenaDraftScreenHidden: boolean;
 	readonly ArenaCurrentMode: GameType;
+	readonly ArenaDraftMode: DraftMode;
+	readonly ArenaClientState: ArenaClientStateType;
+	readonly ArenaSessionState: ArenaSessionState;
 	readonly ArenaLatestCardPick: ArenaCardPick;
 	readonly ArenaUndergroundLatestCardPick: ArenaCardPick;
 

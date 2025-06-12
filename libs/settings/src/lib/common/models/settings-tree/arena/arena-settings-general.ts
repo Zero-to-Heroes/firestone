@@ -91,6 +91,13 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 						disabledIf: (prefs: Preferences) => !prefs.arenaShowOocTracker,
 					},
 					{
+						type: 'toggle',
+						field: 'arenaOocTrackerImpactOnlyOnRedraft',
+						label: context.i18n.translateString('settings.arena.general.show-impact-on-redraft'),
+						tooltip: context.i18n.translateString('settings.arena.general.show-impact-on-redraft-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.arenaShowOocTracker,
+					},
+					{
 						type: 'slider',
 						field: 'arenaOocTrackerScale',
 						label: context.i18n.translateString('settings.arena.general.tracker-size'),

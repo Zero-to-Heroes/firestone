@@ -4,7 +4,14 @@ import { Injectable } from '@angular/core';
 import { DraftPick, Pick, Picks } from '@firestone-hs/arena-draft-pick';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { DraftSlotType, GameType, SceneMode } from '@firestone-hs/reference-data';
+import {
+	ArenaClientStateType,
+	ArenaSessionState,
+	DraftMode,
+	DraftSlotType,
+	GameType,
+	SceneMode,
+} from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
 import {
 	ArenaCardPick,
@@ -62,6 +69,9 @@ export class ArenaDraftManagerService
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 	public draftScreenHidden$$: BehaviorSubject<boolean | null>;
 	public currentMode$$: BehaviorSubject<GameType | null>;
+	public clientStateType$$: BehaviorSubject<ArenaClientStateType | null>;
+	public sessionState$$: BehaviorSubject<ArenaSessionState | null>;
+	public currentDraftMode$$: BehaviorSubject<DraftMode | null>;
 	public lastPick$$: BehaviorSubject<ArenaCardPick | null>;
 
 	private memoryUpdates: MemoryUpdatesService;
@@ -94,6 +104,9 @@ export class ArenaDraftManagerService
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
 		this.draftScreenHidden$$ = this.mainInstance.draftScreenHidden$$;
 		this.currentMode$$ = this.mainInstance.currentMode$$;
+		this.currentDraftMode$$ = this.mainInstance.currentDraftMode$$;
+		this.clientStateType$$ = this.mainInstance.clientStateType$$;
+		this.sessionState$$ = this.mainInstance.sessionState$$;
 		this.lastPick$$ = this.mainInstance.lastPick$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
@@ -106,6 +119,9 @@ export class ArenaDraftManagerService
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.draftScreenHidden$$ = new BehaviorSubject<boolean | null>(null);
 		this.currentMode$$ = new BehaviorSubject<GameType | null>(null);
+		this.currentDraftMode$$ = new BehaviorSubject<DraftMode | null>(null);
+		this.clientStateType$$ = new BehaviorSubject<ArenaClientStateType | null>(null);
+		this.sessionState$$ = new BehaviorSubject<ArenaSessionState | null>(null);
 		this.lastPick$$ = new BehaviorSubject<ArenaCardPick | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
@@ -142,12 +158,24 @@ export class ArenaDraftManagerService
 				console.debug('[arena-draft-manager] received current mode', changes.ArenaCurrentMode);
 				this.currentMode$$.next(changes.ArenaCurrentMode);
 			}
+			if (changes.ArenaDraftMode != null) {
+				console.debug('[arena-draft-manager] received current draft mode', changes.ArenaDraftMode);
+				this.currentDraftMode$$.next(changes.ArenaDraftMode);
+			}
+			if (changes.ArenaClientState != null) {
+				console.debug('[arena-draft-manager] received current client state', changes.ArenaClientState);
+				this.clientStateType$$.next(changes.ArenaClientState);
+			}
 			if (changes.ArenaPackageCardOptions != null) {
 				this.cardPackageOptions$$.next(changes.ArenaPackageCardOptions);
 			}
 			if (changes.ArenaLatestCardPick != null) {
 				console.debug('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
 				this.lastPick$$.next(changes.ArenaLatestCardPick);
+			}
+			if (changes.ArenaSessionState != null) {
+				console.debug('[arena-draft-manager] received arena session state', changes.ArenaSessionState);
+				this.sessionState$$.next(changes.ArenaSessionState);
 			}
 			if (changes.ArenaUndergroundLatestCardPick != null) {
 				console.debug(

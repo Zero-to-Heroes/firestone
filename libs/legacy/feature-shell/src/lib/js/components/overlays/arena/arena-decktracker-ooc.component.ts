@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardWithSideboard } from '@components/decktracker/overlay/deck-list-static.component';
-import { GameType } from '@firestone-hs/reference-data';
+import { ArenaClientStateType, ArenaSessionState, GameType } from '@firestone-hs/reference-data';
 import {
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK,
@@ -172,13 +172,36 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable().pipe(this.mapData((sort) => sort));
 		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
-		this.showPickRate$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.arenaOocTrackerShowPickRate),
+		const isRedraft$ = combineLatest([this.draftManager.clientStateType$$, this.draftManager.sessionState$$]).pipe(
+			this.mapData(
+				([mode, sessionState]) =>
+					[
+						// ArenaClientStateType.Normal_Redraft,
+						ArenaClientStateType.Normal_DeckEdit,
+						// ArenaClientStateType.Underground_Redraft,
+						ArenaClientStateType.Underground_DeckEdit,
+					].includes(mode) || [ArenaSessionState.EDITING_DECK].includes(sessionState),
+			),
+		);
+		this.showPickRate$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerShowPickRate)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerImpactOnlyOnRedraft)),
+			isRedraft$,
+		]).pipe(
+			this.mapData(
+				([showPickRate, showOnlyOnRedraft, isRedraft]) => showPickRate && (!showOnlyOnRedraft || isRedraft),
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		this.showImpact$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.arenaOocTrackerShowImpact),
+		this.showImpact$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerShowImpact)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerImpactOnlyOnRedraft)),
+			isRedraft$,
+		]).pipe(
+			this.mapData(
+				([showPickRate, showOnlyOnRedraft, isRedraft]) => showPickRate && (!showOnlyOnRedraft || isRedraft),
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
