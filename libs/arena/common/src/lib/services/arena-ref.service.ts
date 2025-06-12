@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ArenaCardStats } from '@firestone-hs/arena-stats';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { ARENA_CARD_MATCH_STATS_URL } from './arena-card-stats.service';
+
+const DISCOVERY_POOL_URL = 'https://static.zerotoheroes.com/api/arena/stats/discover/latest.gz.json';
 
 @Injectable({ providedIn: 'root' })
 export class ArenaRefService extends AbstractFacadeService<ArenaRefService> {
@@ -23,14 +23,14 @@ export class ArenaRefService extends AbstractFacadeService<ArenaRefService> {
 		this.api = AppInjector.get(ApiRunner);
 
 		this.validDiscoveryPool$$.onFirstSubscribe(async () => {
-			const url = ARENA_CARD_MATCH_STATS_URL.replace('%modeFilter%', 'arena-underground')
-				.replace('%context%', 'global')
-				.replace('%timePeriod%', 'last-patch');
-			const stats = await this.api.callGetApi<ArenaCardStats>(url);
-			const cardIds = stats?.stats
+			const url = DISCOVERY_POOL_URL;
+			const stats = await this.api.callGetApi<any>(url);
+			const cardIds = stats?.cards
 				// TODO: how to filter out the cards that are not discovrable?
 				// .filter(s => s.stats.)
-				.map((s) => s.cardId);
+				.map((s) => s.cardId)
+				// Unique
+				.filter((cardId, index, self) => self.indexOf(cardId) === index);
 			console.debug('[arena-ref] retrieved valid discovery pool', cardIds);
 			this.validDiscoveryPool$$.next(cardIds ?? []);
 		});
