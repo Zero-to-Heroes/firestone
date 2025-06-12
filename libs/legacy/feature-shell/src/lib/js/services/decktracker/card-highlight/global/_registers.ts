@@ -86,7 +86,7 @@ export interface GlobalHighlightCard extends Card {
 		side: 'player' | 'opponent' | 'single',
 		gameState: GameState,
 		allCards: CardsFacadeService,
-	) => readonly string[];
+	) => readonly string[] | null;
 }
 export const hasGetRelatedCards = (card: Card): card is GlobalHighlightCard =>
 	(card as GlobalHighlightCard)?.getRelatedCards !== undefined;

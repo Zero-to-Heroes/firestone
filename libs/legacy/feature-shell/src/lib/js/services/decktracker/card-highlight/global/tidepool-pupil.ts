@@ -13,7 +13,7 @@ export const TidepoolPupil: GlobalHighlightCard = {
 	) => {
 		// For player, things are handled more accurately
 		if (side !== 'opponent') {
-			return [];
+			return null;
 		}
 
 		const deckState = gameState.opponentDeck;

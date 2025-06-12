@@ -129,7 +129,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	): readonly string[] {
 		const cardImpl = cardsMapping[cardId];
 		if (hasGetRelatedCards(cardImpl)) {
-			return cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
+			const result = cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
+			if (result != null) {
+				return result;
+			}
 		}
 		// if (!this.gameState) {
 		// 	return [];
