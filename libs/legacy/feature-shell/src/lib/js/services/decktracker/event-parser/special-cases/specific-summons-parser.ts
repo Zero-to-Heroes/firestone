@@ -16,7 +16,7 @@ const PROCESSORS = [
 			deck.update({ earthenGolemsSummoned: (deck.earthenGolemsSummoned ?? 0) + 1 }),
 	},
 	{
-		cardSelector: (card: ReferenceCard) => card.isTreant,
+		cardSelector: (card: ReferenceCard) => card?.isTreant,
 		updater: (deck: DeckState): DeckState => deck.update({ treantsSummoned: (deck.treantsSummoned ?? 0) + 1 }),
 	},
 	{
