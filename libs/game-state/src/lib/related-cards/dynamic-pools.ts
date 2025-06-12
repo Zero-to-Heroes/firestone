@@ -247,6 +247,8 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '<=', 4) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.CobaltSpellkin_DRG_075:
+			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', 1);
 		case CardIds.ChaoticTendril_YOG_514:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
