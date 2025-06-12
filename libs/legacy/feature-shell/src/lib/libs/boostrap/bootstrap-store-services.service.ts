@@ -29,7 +29,7 @@ import {
 	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/common';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
-import { HearthpwnService } from '@firestone/collection/common';
+import { HearthpwnService, HsGuruService } from '@firestone/collection/common';
 import { CommunityBootstrapService } from '@firestone/communities/common';
 import {
 	ConstructedDiscoverService,
@@ -55,7 +55,6 @@ import {
 	TebexService,
 } from '@firestone/shared/common/service';
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
-import { HsGuruService } from 'libs/collection/common/src/lib/services/third-party/hsguru.service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
