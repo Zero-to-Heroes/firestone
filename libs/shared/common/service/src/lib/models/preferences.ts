@@ -707,6 +707,7 @@ export class Preferences implements IPreferences {
 	readonly hearthpwnUserId: number;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly hearthpwnAuthToken: string;
+	readonly hsGuruCollectionSync: boolean = false;
 
 	readonly d0nkeySync: boolean = true;
 	readonly hearthstoneDecksSync: boolean = true;

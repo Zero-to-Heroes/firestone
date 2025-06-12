@@ -82,6 +82,11 @@ import { Observable } from 'rxjs';
 					field="d0nkeySync"
 					[label]="d0nkey.toggleLabel"
 				></preference-toggle>
+				<preference-toggle
+					class="enable-vs-button"
+					field="hsGuruCollectionSync"
+					[label]="d0nkey.toggleCollectionLabel"
+				></preference-toggle>
 			</section>
 
 			<section class="vs">
@@ -148,6 +153,7 @@ export class SettingsGeneralThirdPartyComponent
 			)}</a>`,
 		}),
 		toggleLabel: this.i18n.translateString('settings.general.third-party.d0nkey.toggle-label'),
+		toggleCollectionLabel: this.i18n.translateString('settings.general.third-party.d0nkey.toggle-collection-label'),
 	};
 	hsdecks = {
 		title: 'Hearthstone-decks',

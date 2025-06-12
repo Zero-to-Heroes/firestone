@@ -55,6 +55,7 @@ import {
 	TebexService,
 } from '@firestone/shared/common/service';
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
+import { HsGuruService } from 'libs/collection/common/src/lib/services/third-party/hsguru.service';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
@@ -147,6 +148,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_BootstrapSettingsService: BootstrapSettingsService,
 		private readonly init_BootstrapGameStateService: BootstrapGameStateService,
 		private readonly init_HearthpwnService: HearthpwnService,
+		private readonly init_HsGuruService: HsGuruService,
 		private readonly init_CardRulesService: CardRulesService,
 		private readonly init_ExpertContributorsService: ExpertContributorsService,
 		private readonly init_TavernBrawlService: TavernBrawlService,
