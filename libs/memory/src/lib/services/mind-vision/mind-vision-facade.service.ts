@@ -4,6 +4,7 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion, Board } from '@firestone-hs/reference-data';
 import { ArenaInfo } from '../../external-models/arena-info';
+import { AccountInfo } from '../../models/account';
 import { MemoryBgsPlayerInfo } from '../../models/battlegrounds-player-state';
 import { BoostersInfo } from '../../models/boosters-info';
 import { CoinInfo } from '../../models/coin-info';
@@ -502,6 +503,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.warn('[mind-vision] could not parse getRegion', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getAccountInfo(): Promise<AccountInfo | null> {
+		return new Promise<AccountInfo | null>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getAccountInfo((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.warn('[mind-vision] could not parse getAccountInfo', e);
 				resolve(null);
 			}
 		});

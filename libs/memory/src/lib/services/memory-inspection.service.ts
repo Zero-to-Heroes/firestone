@@ -7,6 +7,7 @@ import { ArenaInfo } from '../external-models/arena-info';
 import { Card } from '../external-models/card';
 import { CardBack } from '../external-models/card-back';
 import { MatchInfo } from '../external-models/match-info';
+import { AccountInfo } from '../models/account';
 import { BattlegroundsInfo } from '../models/battlegrounds-info';
 import { MemoryBgsPlayerInfo, MemoryBgsTeamInfo } from '../models/battlegrounds-player-state';
 import { CoinInfo } from '../models/coin-info';
@@ -19,6 +20,7 @@ import { MemoryQuestsLog } from '../models/quests';
 import { RewardsTrackInfos } from '../models/rewards-track-info';
 import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
 import { MindVisionStateMachineService } from './mind-vision/mind-vision-state-machine.service';
+import { GetAccountInfoOperation } from './mind-vision/operations/get-account-info-operation';
 import { GetAchievementCategoriesOperation } from './mind-vision/operations/get-achievements-categories-operation';
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';
@@ -105,6 +107,7 @@ export class MemoryInspectionService {
 	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.ow);
 	private getGameUniqueIdOperation = new GetGameUniqueIdOperation(this.mindVisionFacade, this.ow);
 	private getRegionOperation = new GetRegionOperation(this.mindVisionFacade, this.ow);
+	private getAccountInfoOperation = new GetAccountInfoOperation(this.mindVisionFacade, this.ow);
 
 	private listenersRegistered: boolean;
 
@@ -268,5 +271,10 @@ export class MemoryInspectionService {
 	public async getRegion(): Promise<BnetRegion | null> {
 		// return BnetRegion.REGION_CN;
 		return this.mindVision.callMindVision(() => this.getRegionOperation.call());
+	}
+
+	public async getAccountInfo(): Promise<AccountInfo | null> {
+		// return BnetRegion.REGION_CN;
+		return this.mindVision.callMindVision(() => this.getAccountInfoOperation.call());
 	}
 }

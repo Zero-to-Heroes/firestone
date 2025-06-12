@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
-import { MemoryInspectionService } from '@firestone/memory';
+import { AccountInfo, MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import {
@@ -54,5 +54,13 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 			console.log('[account-service] clearing region');
 			this.region$$.next(null);
 		});
+	}
+
+	public async getRegion(): Promise<BnetRegion | null> {
+		return this.memory.getRegion();
+	}
+
+	public async getAccountInfo(): Promise<AccountInfo | null> {
+		return this.memory.getAccountInfo();
 	}
 }
