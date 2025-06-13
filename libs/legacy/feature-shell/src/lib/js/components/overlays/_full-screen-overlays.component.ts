@@ -11,7 +11,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
@@ -186,24 +186,27 @@ export class FullScreenOverlaysComponent
 			this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState?.metadata?.gameType)),
 		]).pipe(
 			this.mapData(([currentScene, nonGameplayScene, gameType]) => {
-				if (!gameType) {
-					if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {
-						return 'battlegrounds';
+				if (currentScene === SceneMode.GAMEPLAY) {
+					switch (gameType) {
+						case GameType.GT_BATTLEGROUNDS:
+						case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
+						case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+						case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
+						case GameType.GT_BATTLEGROUNDS_DUO:
+						case GameType.GT_BATTLEGROUNDS_DUO_VS_AI:
+						case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
+						case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
+							return 'battlegrounds';
+						default:
+							return 'decktracker';
 					}
 				}
-				switch (gameType) {
-					case GameType.GT_BATTLEGROUNDS:
-					case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
-					case GameType.GT_BATTLEGROUNDS_FRIENDLY:
-					case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
-					case GameType.GT_BATTLEGROUNDS_DUO:
-					case GameType.GT_BATTLEGROUNDS_DUO_VS_AI:
-					case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
-					case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
-						return 'battlegrounds';
-					default:
-						return 'decktracker';
+
+				console.debug('[full-screen-overlays] currentScene', currentScene, nonGameplayScene, gameType);
+				if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {
+					return 'battlegrounds';
 				}
+				return 'decktracker';
 			}),
 		);
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
