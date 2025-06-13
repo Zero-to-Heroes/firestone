@@ -28,7 +28,7 @@ import { ArenaCardOption } from './model';
 
 @Component({
 	selector: 'arena-package-card-selection',
-	styleUrls: ['./arena-card-selection.component.scss'],
+	styleUrls: ['./arena-package-card-selection.component.scss'],
 	template: `
 		<div class="root">
 			<arena-card-option
