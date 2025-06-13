@@ -54,12 +54,12 @@ export class CardRevealedParser implements EventParser {
 				DeckCard.deckIndexFromBottom += 4;
 			}
 			positionFromBottom = DeckCard.deckIndexFromBottom + 3 - gameEvent.additionalData.indexInBlock;
-			console.debug(
-				'[card-revealed] dredge',
-				positionFromBottom,
-				DeckCard.deckIndexFromBottom,
-				gameEvent.additionalData.indexInBlock,
-			);
+			// console.debug(
+			// 	'[card-revealed] dredge',
+			// 	positionFromBottom,
+			// 	DeckCard.deckIndexFromBottom,
+			// 	gameEvent.additionalData.indexInBlock,
+			// );
 		}
 
 		const card = DeckCard.create({
@@ -75,7 +75,7 @@ export class CardRevealedParser implements EventParser {
 			positionFromBottom: positionFromBottom,
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : {},
 		} as DeckCard);
-		console.debug('[card-revealed] card', card.cardId, card, gameEvent);
+		// console.debug('[card-revealed] card', card.cardId, card, gameEvent);
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
 		// bottom of the deck with another card previously)
@@ -90,15 +90,15 @@ export class CardRevealedParser implements EventParser {
 				? this.helper.empiricReplaceCardInOtherZone(deck.otherZone, card, false, this.cards)
 				: this.helper.addSingleCardToOtherZone(deck.otherZone, card, this.cards);
 		(card as Mutable<DeckCard>).positionFromBottom = positionFromBottom;
-		console.debug(
-			'[card-revealed] newOther',
-			card.cardId,
-			gameEvent.additionalData.revealedFromBlock,
-			newOther,
-			deck.otherZone,
-			card,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[card-revealed] newOther',
+		// 	card.cardId,
+		// 	gameEvent.additionalData.revealedFromBlock,
+		// 	newOther,
+		// 	deck.otherZone,
+		// 	card,
+		// 	gameEvent,
+		// );
 		let globalEffects = deck.globalEffects;
 		if (
 			WHIZBANG_DECK_CARD_IDS.includes(card.cardId as CardIds) &&
