@@ -586,6 +586,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.CarnivorousCubicle_WORK_042:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.CarressCabaretStar_VAC_449:
+			return and(side(inputSide), or(inHand, inDeck), spell, hasSpellSchool);
 		case CardIds.CarrionStudies:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.CastleKennels_REV_362:
