@@ -4,7 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const AsvedonTheGrandshield: GlobalHighlightCard = {
-	cardIds: [CardIds.MurozondTheInfinite_DRG_090, CardIds.MurozondTheInfinite_CORE_DRG_090],
+	cardIds: [CardIds.AsvedonTheGrandshield],
 	getRelatedCards: (
 		entityId: number,
 		side: 'player' | 'opponent' | 'single',
