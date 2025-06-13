@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, Race } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -208,9 +208,12 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			return true;
 		}
 
-		const tribes: readonly Race[] = card.races?.length
-			? card.races.map((race) => Race[race.toUpperCase()])
-			: [Race.BLANK];
+		const tribes: readonly Race[] =
+			card.type?.toUpperCase() !== CardType[CardType.MINION]
+				? []
+				: card.races?.length
+				? card.races.map((race) => Race[race.toUpperCase()])
+				: [Race.BLANK];
 		const highlightedFromTribe =
 			tribes.some((tribe) => highlightedTribes.includes(tribe)) ||
 			(highlightedTribes.length > 0 && tribes.some((tribe) => tribe === Race.ALL));
