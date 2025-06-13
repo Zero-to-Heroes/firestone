@@ -258,7 +258,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 
 	viewOnline() {
 		this.analytics.trackEvent('meta-deck-view-online', { deckstring: this.deckstring });
-		const url = `https://www.d0nkey.top/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`;
+		const url = `https://www.hsguru.com/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`;
 		if (!!this.ow) {
 			this.ow.openUrlInDefaultBrowser(url);
 		} else {

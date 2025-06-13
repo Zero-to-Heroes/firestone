@@ -140,15 +140,15 @@ export class SettingsGeneralThirdPartyComponent
 		toggleLabel: this.i18n.translateString('settings.general.third-party.ooc.toggle-label'),
 	};
 	d0nkey = {
-		title: 'd0nkey.top',
+		title: 'hsguru.com',
 		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png',
 		pitch: this.i18n.translateString('settings.general.third-party.d0nkey.pitch', {
-			websiteLink: `<a href="https://www.d0nkey.top" target="_blank">${this.i18n.translateString(
+			websiteLink: `<a href="https://www.hsguru.com" target="_blank">${this.i18n.translateString(
 				'settings.general.third-party.d0nkey.website-link',
 			)}</a>`,
 		}),
 		whatNext: this.i18n.translateString('settings.general.third-party.d0nkey.next', {
-			link: `<a href="https://www.d0nkey.top/streamer-instructions" target="_blank">${this.i18n.translateString(
+			link: `<a href="https://www.hsguru.com/streamer-instructions" target="_blank">${this.i18n.translateString(
 				'settings.general.third-party.d0nkey.instructions-page-link',
 			)}</a>`,
 		}),

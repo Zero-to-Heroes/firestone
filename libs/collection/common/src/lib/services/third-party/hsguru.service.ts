@@ -6,7 +6,7 @@ import { Card } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, pairwise, take } from 'rxjs';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../collection-manager.interface';
 
 const UPLOAD_URL = `https://api.hsguru.com/api/dt/collection`;
@@ -43,32 +43,49 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 			.subscribe(() => {
 				console.debug('[hsguru] activating collection sync');
 				this.collectionManager.collection$$
-					.pipe(debounceTime(10000), distinctUntilChanged())
-					.subscribe(async (collection) => {
-						console.debug('[hsguru] will sync collection', collection);
-						const region = await this.account.getRegion();
-						console.debug('[hsguru] region', region);
-						const accountInfo = await this.account.getAccountInfo();
-						console.debug('[hsguru] account info', accountInfo);
-						if (!region || !accountInfo?.BattleTag) {
-							console.warn(
-								'[hsguru] cannot sync collection, region or account info not available',
-								region,
-								accountInfo,
-							);
-							return;
-						}
-
-						const payload: Payload = {
-							battleTag: accountInfo?.BattleTag,
-							region: region,
-							cards: collection,
-						};
-						console.debug('[hsguru] payload', payload);
-						const uploadResult = await this.api.callPostApi(UPLOAD_URL, payload);
-						console.debug('[hsguru] upload result', uploadResult);
+					.pipe(debounceTime(20_000), distinctUntilChanged())
+					.subscribe((collection) => {
+						this.syncCollection(collection);
 					});
 			});
+
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs.hsGuruCollectionSync),
+				pairwise(),
+			)
+			.subscribe(async ([previous, current]) => {
+				if (!previous && current) {
+					console.debug('[hsguru] forcing collection sync');
+					const collection = await this.collectionManager.collection$$.getValueWithInit();
+					if (collection?.length > 0) {
+						await this.syncCollection(collection);
+					} else {
+						console.warn('[hsguru] no collection to sync');
+					}
+				}
+			});
+	}
+
+	private async syncCollection(collection: readonly Card[]) {
+		console.debug('[hsguru] will sync collection', collection);
+		const region = await this.account.getRegion();
+		console.debug('[hsguru] region', region);
+		const accountInfo = await this.account.getAccountInfo();
+		console.debug('[hsguru] account info', accountInfo);
+		if (!region || !accountInfo?.BattleTag) {
+			console.warn('[hsguru] cannot sync collection, region or account info not available', region, accountInfo);
+			return;
+		}
+
+		const payload: Payload = {
+			battleTag: accountInfo?.BattleTag,
+			region: region,
+			cards: collection,
+		};
+		console.debug('[hsguru] payload', payload);
+		const uploadResult = await this.api.callPostApi(UPLOAD_URL, payload);
+		console.debug('[hsguru] upload result', uploadResult);
 	}
 }
 
