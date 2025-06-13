@@ -6,6 +6,10 @@
 	align-items: center;
 	justify-content: flex-start;
 	font-size: 13px;
+
+	&.hidden {
+		opacity: 0;
+	}
 }
 
 .info-view {

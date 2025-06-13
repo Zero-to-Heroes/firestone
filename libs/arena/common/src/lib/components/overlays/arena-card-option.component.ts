@@ -32,14 +32,18 @@ import { ArenaCardOption } from './model';
 	styleUrls: ['./arena-card-option.component.scss'],
 	template: `
 		<ng-container *ngIf="widgetActive$ | async">
-			<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
+			<div
+				class="option "
+				*ngIf="{ showWidget: showWidget$ | async } as value"
+				[ngClass]="{ hidden: !scaleApplied }"
+			>
 				<arena-card-option-view
 					class="info-view"
 					[card]="card"
-					*ngIf="value.showWidget"
+					*ngIf="value.showWidget === true"
 				></arena-card-option-view>
 				<arena-option-info-premium
-					*ngIf="!value.showWidget"
+					*ngIf="value.showWidget === false"
 					[conditionalOnField]="'arenaShowCardSelectionOverlayPremiumBanner'"
 				></arena-option-info-premium>
 			</div>
@@ -67,6 +71,8 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 	pickRateHighWins: string;
 	drawnImpactTooltip: string | null;
 	deckImpactTooltip: string | null;
+
+	scaleApplied: boolean;
 
 	pickRateHighWinsLabel = this.i18n.translateString(`app.arena.card-stats.header-pickrate-high-wins-short`, {
 		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
@@ -101,7 +107,7 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			this.ads.hasPremiumSub$$,
 			this.guardian.freeUsesLeft$$,
 		]).pipe(
-			debounceTime(500),
+			// debounceTime(500),
 			this.mapData(
 				([pickNumber, hasPremium, freeUsesLeft]) => pickNumber === 0 || hasPremium || freeUsesLeft >= 0,
 			),
@@ -133,6 +139,7 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
+				this.scaleApplied = true;
 				// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
 			});
 
