@@ -47,9 +47,13 @@ export class GameStat {
 	readonly bgsTrinkets: readonly string[];
 
 	readonly postMatchStats?: BgsPostMatchStats;
+	/** @deprecated */
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
+	/** @deprecated */
 	readonly mercOpponentHeroTimings: readonly { cardId: string; turnInPlay: number }[];
+	/** @deprecated */
 	readonly mercEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
+	/** @deprecated */
 	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 
 	public static create(base: Partial<NonFunctionProperties<GameStat>>): GameStat {

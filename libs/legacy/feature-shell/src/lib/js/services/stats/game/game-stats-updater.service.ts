@@ -3,14 +3,10 @@ import {
 	extractTotalDuration,
 	extractTotalTurns,
 	parseHsReplayString,
-	Replay,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { AllCardsService } from '@firestone-hs/reference-data';
-import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
-import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '@firestone/stats/common';
-import { extractPlayerInfoFromDeckstring, GameStat, StatGameModeType } from '@firestone/stats/data-access';
+import { extractPlayerInfoFromDeckstring, GameStat } from '@firestone/stats/data-access';
 import { BehaviorSubject } from 'rxjs';
 
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
@@ -21,10 +17,7 @@ import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
-import {
-	MercenariesReferenceData,
-	MercenariesReferenceDataService,
-} from '../../mercenaries/mercenaries-reference-data.service';
+import { MercenariesReferenceDataService } from '../../mercenaries/mercenaries-reference-data.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 
 @Injectable()
@@ -125,76 +118,6 @@ export class GameStatsUpdaterService {
 			return firstGame;
 		}
 
-		const refData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
-		if (!refData) {
-			return firstGame;
-		}
-		const { mercHeroTimings, mercOpponentHeroTimings, mercEquipments, mercOpponentEquipments } = extractHeroTimings(
-			firstGame,
-			replay,
-			refData,
-			this.allCards.getService(),
-		);
-		const gameWithMercStats = firstGame.update({
-			mercHeroTimings: mercHeroTimings,
-			mercOpponentHeroTimings: mercOpponentHeroTimings,
-			mercEquipments: mercEquipments,
-			mercOpponentEquipments: mercOpponentEquipments,
-		});
-		return gameWithMercStats;
+		return firstGame;
 	}
 }
-
-export const extractHeroTimings = (
-	game: { gameMode: StatGameModeType },
-	replay: Replay,
-	referenceData: MercenariesReferenceData,
-	allCards: AllCardsService,
-): {
-	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
-	readonly mercOpponentHeroTimings: readonly { cardId: string; turnInPlay: number }[];
-	readonly mercEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
-	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
-} => {
-	// FIXME: remove the "as any" once the lib has been updated with the new model
-	const mercStats = extractStats(game as ReviewMessage, replay, null, referenceData as any, allCards);
-
-	if (!mercStats?.filter((stat) => stat.statName === 'mercs-hero-timing').length) {
-		console.debug('no hero timings, returning', mercStats);
-		return {} as any;
-	}
-
-	return {
-		mercHeroTimings: mercStats
-			.filter((stat) => stat.statName === 'mercs-hero-timing')
-			.map((stat) => stat.statValue)
-			.map((stat) => {
-				const [heroId, timing] = stat.split('|');
-				return {
-					cardId: heroId,
-					turnInPlay: +timing,
-				};
-			}),
-		mercOpponentHeroTimings: mercStats
-			.filter((stat) => stat.statName === 'opponent-mercs-hero-timing')
-			.map((stat) => stat.statValue)
-			.map((stat) => {
-				const [heroId, timing] = stat.split('|');
-				return {
-					cardId: heroId,
-					turnInPlay: +timing,
-				};
-			}),
-		mercEquipments: mercStats
-			.filter((stat) => stat.statName === 'mercs-hero-equipment')
-			.map((stat) => stat.statValue)
-			.map((stat) => {
-				const [mercCardId, equipmentCardId] = stat.split('|');
-				return {
-					mercCardId: mercCardId,
-					equipmentCardId: equipmentCardId,
-				};
-			}),
-		mercOpponentEquipments: [],
-	};
-};

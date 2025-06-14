@@ -46,7 +46,6 @@ export class GlobalStatsNotifierService {
 			gameMode: game.gameMode,
 			replayKey: undefined,
 			playerRank: game.playerRank,
-			uploaderToken: undefined,
 		};
 		const statsFromGame = await extractStatsForGame(message, xml, this.allCards.getService());
 		if (!statsFromGame?.stats) {

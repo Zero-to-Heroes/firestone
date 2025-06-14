@@ -53,6 +53,7 @@ export class GameForUpload {
 	bgsAnomalies: readonly string[];
 	bgGame?: any /*BgsGame*/;
 
+	/** @deprecated */
 	mercsBountyId: number;
 
 	lotteryPoints?: number;

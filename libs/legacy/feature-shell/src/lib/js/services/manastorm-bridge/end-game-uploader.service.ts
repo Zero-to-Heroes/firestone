@@ -23,13 +23,7 @@ import {
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
 } from '../mercenaries/mercenaries-reference-data.service';
-import {
-	isMercenaries,
-	isMercenariesPvE,
-	isMercenariesPvP,
-	normalizeMercenariesCardId,
-} from '../mercenaries/mercenaries-utils';
-import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
+import { isMercenaries, isMercenariesPvE, normalizeMercenariesCardId } from '../mercenaries/mercenaries-utils';
 import { GameParserService } from './game-parser.service';
 import { ManastormInfo } from './manastorm-info';
 import { ReplayUploadService } from './replay-upload.service';
@@ -164,35 +158,8 @@ export class EndGameUploaderService {
 				  '-' +
 				  info.mercsInfo?.Map?.Seed
 				: null;
-			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? info.mercsInfo?.Map?.BountyId : null;
+			// game.mercsBountyId = isMercenariesPvE(game.gameMode) ? info.mercsInfo?.Map?.BountyId : null;
 
-			const referenceData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
-			const { mercHeroTimings, ...other } = extractHeroTimings(
-				{ gameMode: game.gameMode },
-				replay,
-				referenceData,
-				this.allCards.getService(),
-			);
-
-			// These don't work in PvP
-			if (!!mercHeroTimings?.length) {
-				if (isMercenariesPvE(game.gameMode)) {
-					game.deckName = info.mercsInfo?.Map?.PlayerTeamName;
-					game.deckstring = [...(info.mercsInfo?.Map?.PlayerTeamMercIds ?? [])].sort().join(',');
-				} else if (isMercenariesPvP(game.gameMode)) {
-					const allPlayerHeroes = mercHeroTimings
-						.map((timing) => timing.cardId)
-						.map((c) => normalizeMercenariesCardId(c))
-						.sort();
-					const team: MemoryTeam = this.findMercTeam(
-						info.mercsCollectionInfo?.Teams,
-						allPlayerHeroes,
-						referenceData,
-					);
-					game.deckName = team?.Name;
-					game.deckstring = [...(team?.Mercenaries?.map((merc) => merc.Id) ?? [])].sort().join(',');
-				}
-			}
 			playerRank =
 				game.gameMode === 'mercenaries-pvp'
 					? info.mercsInfo?.PvpRating

@@ -45,8 +45,8 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								*ngIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 							>
 							</mercenaries-personal-hero-stats>
-							<mercenaries-my-teams *ngIf="selectedCategoryId === 'mercenaries-my-teams'">
-							</mercenaries-my-teams>
+							<!-- <mercenaries-my-teams *ngIf="selectedCategoryId === 'mercenaries-my-teams'">
+							</mercenaries-my-teams> -->
 						</ng-container>
 					</div>
 				</with-loading>

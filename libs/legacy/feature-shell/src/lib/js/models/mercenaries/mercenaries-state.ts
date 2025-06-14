@@ -6,7 +6,10 @@ import { MercenariesCategoryId } from './mercenary-category-id.type';
 export class MercenariesState {
 	readonly loading: boolean = false;
 	readonly initComplete: boolean = true;
-	readonly categoryIds: MercenariesCategoryId[] = ['mercenaries-personal-hero-stats', 'mercenaries-my-teams'];
+	readonly categoryIds: MercenariesCategoryId[] = [
+		'mercenaries-personal-hero-stats',
+		// 'mercenaries-my-teams'
+	];
 	// Merc-specific collection info from the game's memory
 	// readonly collectionInfo: MemoryMercenariesCollectionInfo;
 	// readonly mapInfo: MemoryMercenariesInfo;
