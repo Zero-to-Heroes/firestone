@@ -2456,6 +2456,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.SeasideGiant_VAC_439:
 			return and(side(inputSide), or(inHand, inDeck), locationExtended);
+		case CardIds.SeaweedStrike:
+			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.SigilOfReckoning:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.SirFinleyMrrgglton_ScalesOfJustice_THD_044p:
