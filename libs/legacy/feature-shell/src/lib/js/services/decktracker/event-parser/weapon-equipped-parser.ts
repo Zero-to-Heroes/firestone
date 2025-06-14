@@ -36,6 +36,13 @@ export class WeaponEquippedParser implements EventParser {
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 		} as DeckCard);
 
+		const existingCard = deck.findCard(entityId);
+		let newDeck = deck.deck;
+		// Also need to remove it from the previous zone, if it was equipped directly
+		if (existingCard?.zone === 'deck' || !existingCard?.card) {
+			newDeck = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId, true)?.[0] ?? newDeck;
+		}
+
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,
 			card,
@@ -43,6 +50,7 @@ export class WeaponEquippedParser implements EventParser {
 		);
 		const newPlayerDeck = deck.update({
 			weapon: card,
+			deck: newDeck,
 			otherZone: newOtherZone,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
