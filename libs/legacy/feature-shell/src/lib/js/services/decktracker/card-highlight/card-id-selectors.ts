@@ -2124,7 +2124,7 @@ export const cardIdSelector = (
 				);
 				const target = pickLast(oneCostCardsPlayed);
 				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs({ entityId: target?.entityId, cardId: target?.cardId }))),
+					and(side(inputSide), entityIs({ entityId: target?.entityId, cardId: target?.cardId })),
 					and(side(inputSide), or(inHand, inDeck), baseCostEqual(1)),
 				)(input);
 			};
