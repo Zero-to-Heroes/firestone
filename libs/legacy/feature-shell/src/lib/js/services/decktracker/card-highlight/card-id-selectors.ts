@@ -355,6 +355,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.AxeBerserker:
 			return and(side(inputSide), inDeck, weapon);
+		case CardIds.AzeriteGiant_WW_025:
+			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.AzsharanGardens_SunkenGardensToken:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.AzsharanSaber_SunkenSaberToken:
@@ -2822,6 +2824,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.Surfalopod_VAC_443:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.SurvivalOfTheFittest:
+			return and(side(inputSide), or(inHand, inDeck, inPlay), minion);
 		case CardIds.SwiftscaleTrickster:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.SwinetuskShank:
@@ -3154,6 +3158,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.VolumeUp:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.VulperaToxinblade:
+			return and(side(inputSide), or(inHand, inDeck), weapon);
 		case CardIds.WailingVapor:
 		case CardIds.WailingVapor_CORE_WC_042:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
