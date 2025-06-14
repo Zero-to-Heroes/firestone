@@ -8,7 +8,6 @@ import {
 	Component,
 	ComponentRef,
 	ElementRef,
-	HostListener,
 	Input,
 	OnDestroy,
 	Renderer2,
@@ -206,6 +205,8 @@ export class CardTooltipComponent
 
 	private timeout;
 	private lifecycleHookDone: boolean;
+	private keydownListener: () => void;
+	private clickListener: () => void;
 
 	private isShowing: boolean;
 
@@ -222,9 +223,15 @@ export class CardTooltipComponent
 		// FIXME: For some reason, lifecycle methods are not called systematically. I've noticed this
 		// in the _clickthrough overlay
 		this.forceLifecycleHooks();
+		this.keydownListener = this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
+			this.onKeyDown(event);
+		});
+		this.clickListener = this.renderer.listen('window', 'click', (event: MouseEvent) => {
+			this.onMouseDown(event);
+		});
 	}
 
-	@HostListener('document:keydown', ['$event'])
+	// @HostListener('document:keydown', ['$event'])
 	onKeyDown(event: KeyboardEvent) {
 		console.debug('handling keydown', event.key);
 		if (event.key === 'q') {
@@ -232,7 +239,7 @@ export class CardTooltipComponent
 		}
 	}
 
-	@HostListener('window:click', ['$event'])
+	// @HostListener('window:click', ['$event'])
 	onMouseDown(event: MouseEvent) {
 		// If the click happens outside of the tooltip, we close it
 		if (this.isShowing && !this.el.nativeElement.contains(event.target)) {
@@ -281,6 +288,12 @@ export class CardTooltipComponent
 		}
 		if (this.resizeObserver) {
 			this.resizeObserver.disconnect();
+		}
+		if (this.keydownListener) {
+			this.keydownListener();
+		}
+		if (this.clickListener) {
+			this.clickListener();
 		}
 	}
 
