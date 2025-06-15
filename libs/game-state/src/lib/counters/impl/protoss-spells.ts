@@ -49,7 +49,7 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 	}
 
 	protected override formatValue(value: number): string {
-		return value === 0 ? `2 x 1` : `2 x ( 1 + ${value})`;
+		return `2 x ${1 + value}`;
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
