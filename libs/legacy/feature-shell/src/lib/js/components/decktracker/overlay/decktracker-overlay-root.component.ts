@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { DeckState, enrichDeck, GameState, GameStateFacadeService, StatsRecap } from '@firestone/game-state';
+import { AccountService } from '@firestone/profile/common';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
@@ -185,6 +186,7 @@ export class DeckTrackerOverlayRootComponent
 		private readonly gameStats: GameStatsProviderService,
 		private readonly mainWindowState: MainWindowStateFacadeService,
 		private readonly decksProvider: DecksProviderService,
+		private readonly region: AccountService,
 	) {
 		super(cdr);
 		this.cardsHighlight.init();
@@ -242,6 +244,11 @@ export class DeckTrackerOverlayRootComponent
 		this.showTotalCardsInZone$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => this.showTotalCardsInZoneExtractor(gameState.currentTurn !== 'mulligan')),
 		);
+		// const gamesForRegion$ = combineLatest([this.gameStats.gameStats$$, this.region.region$$]).pipe(
+		// 	filter(([gameStats, region]) => !!gameStats?.length),
+		// 	this.mapData(([gameStats, region]) => (!region ? gameStats : gameStats.filter((s) => s.region === region))),
+		// );
+		const gamesForRegion$ = this.gameStats.gameStats$$.pipe(this.mapData((gameStats) => gameStats));
 		const gamesForDeck$ = combineLatest([
 			this.showDeckWinrate$,
 			this.showMatchupWinrate$,
@@ -251,20 +258,20 @@ export class DeckTrackerOverlayRootComponent
 					formatType: gameState?.metadata?.formatType,
 				})),
 			),
-			this.mainWindowState.mainWindowState$$.pipe(
-				this.mapData((main) => ({
-					timeFilter: main.decktracker.filters.time,
-					rankFilter: main.decktracker.filters.rank,
-				})),
-			),
+			// this.mainWindowState.mainWindowState$$.pipe(
+			// 	this.mapData((main) => ({
+			// 		timeFilter: 'all-time',
+			// 		rankFilter: 'all',
+			// 	})),
+			// ),
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.gameStats.gameStats$$,
+			gamesForRegion$,
 			this.decksProvider.decks$$,
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					desktopDeckDeletes: prefs.desktopDeckDeletes,
-					desktopDeckStatsReset: prefs.desktopDeckStatsReset,
-					desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
+					// desktopDeckStatsReset: prefs.desktopDeckStatsReset,
+					// desktopDeckHiddenDeckCodes: prefs.desktopDeckHiddenDeckCodes,
 					desktopDeckShowHiddenDecks: prefs.desktopDeckShowHiddenDecks,
 				})),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
@@ -276,14 +283,14 @@ export class DeckTrackerOverlayRootComponent
 					showDeckWinrate,
 					showMatchupWinrate,
 					{ deckstring, formatType },
-					{ timeFilter, rankFilter },
+					// { timeFilter, rankFilter },
 					patch,
 					gameStats,
 					decks,
 					{
 						desktopDeckDeletes,
-						desktopDeckStatsReset,
-						desktopDeckHiddenDeckCodes,
+						// desktopDeckStatsReset,
+						// desktopDeckHiddenDeckCodes,
 						desktopDeckShowHiddenDecks,
 					},
 				]) => (showDeckWinrate || showMatchupWinrate) && !!gameStats?.length && !!decks?.length,
@@ -293,14 +300,14 @@ export class DeckTrackerOverlayRootComponent
 					showDeckWinrate,
 					showMatchupWinrate,
 					{ deckstring, formatType },
-					{ timeFilter, rankFilter },
+					// { timeFilter, rankFilter },
 					patch,
 					gameStats,
 					decks,
 					{
 						desktopDeckDeletes,
-						desktopDeckStatsReset,
-						desktopDeckHiddenDeckCodes,
+						// desktopDeckStatsReset,
+						// desktopDeckHiddenDeckCodes,
 						desktopDeckShowHiddenDecks,
 					},
 				]) => {
@@ -310,12 +317,12 @@ export class DeckTrackerOverlayRootComponent
 						gameFormatToStatGameFormatType(formatType),
 						// 'standard',
 						'ranked',
-						timeFilter,
-						rankFilter,
+						'all-time',
+						'all',
 						patch,
 						desktopDeckDeletes,
-						desktopDeckStatsReset,
-						desktopDeckHiddenDeckCodes,
+						null,
+						null,
 						desktopDeckShowHiddenDecks,
 						decks,
 					);

@@ -57,11 +57,11 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			></constructed-meta-deck-card-search>
 			<replays-icon-toggle class="use-class-icons" *ngIf="showUseClassCardIcon$ | async"></replays-icon-toggle>
 
-			<div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
+			<!-- <div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#info" />
 				</svg>
-			</div>
+			</div> -->
 			<preference-toggle
 				class="show-hidden-decks-link"
 				*ngIf="showHiddenDecksLink$ | async"
