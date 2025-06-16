@@ -2,6 +2,7 @@ export * from './lib/external-models/_barrel';
 export * from './lib/memory.module';
 export * from './lib/models/_barrel';
 export * from './lib/services/bgs-scene.service';
+export * from './lib/services/card-choices.service';
 export * from './lib/services/card-moused-over.service';
 export * from './lib/services/memory-inspection.service';
 export * from './lib/services/memory-updates.service';

@@ -11,7 +11,7 @@ import {
 import { CardClass, CardIds, GameTag, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
 import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
-import { SceneService } from '@firestone/memory';
+import { CardChoicesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
@@ -88,12 +88,13 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		private readonly scene: SceneService,
 		private readonly quests: BattlegroundsQuestsService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly choices: CardChoicesService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.quests, this.gameState);
+		await waitForReady(this.scene, this.quests, this.gameState, this.choices);
 
 		this.gameMode$ = this.gameState.gameState$$.pipe(
 			this.mapData((state) => {
@@ -135,9 +136,14 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				(deckState) => deckState?.playerDeck?.currentOptions,
 				(deckState) => deckState?.metadata?.gameType,
 			),
+			this.choices.choicesHidden$$,
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [currentOptions, gameType]]) => {
+			this.mapData(([currentScene, [displayFromPrefs], [currentOptions, gameType], hidden]) => {
 				if (!displayFromPrefs) {
+					return false;
+				}
+
+				if (hidden === true) {
 					return false;
 				}
 

@@ -41,7 +41,7 @@ import {
 } from '@firestone/constructed/common';
 import { BootstrapGameStateService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { BgsSceneService, CardMousedOverService } from '@firestone/memory';
+import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { ModsConfigService } from '@firestone/mods/common';
 import { AccountService } from '@firestone/profile/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings';
@@ -142,6 +142,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_ConstructedDiscoversGuardianService: ConstructedDiscoversGuardianService,
 		private readonly init_ConstructedDiscoverService: ConstructedDiscoverService,
 		private readonly init_CardMousedOverService: CardMousedOverService,
+		private readonly init_CardChoicesService: CardChoicesService,
 		private readonly init_CommunityBootstrapService: CommunityBootstrapService,
 		private readonly init_AchievementsNavigationService: AchievementsNavigationService,
 		private readonly init_BootstrapSettingsService: BootstrapSettingsService,

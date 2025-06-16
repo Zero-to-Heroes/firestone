@@ -52,6 +52,7 @@ export interface MemoryUpdate {
 	readonly BattlegroundsSelectedGameMode: string;
 
 	readonly MousedOverCard: MousedOverCard;
+	readonly CardChoicesHidden: boolean | null;
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPacks: readonly PackInfo[];
