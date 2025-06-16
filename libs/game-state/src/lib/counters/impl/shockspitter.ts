@@ -11,7 +11,7 @@ export class ShockspitterCounterDefinitionV2 extends CounterDefinitionV2<number>
 	public override id: CounterType = 'shockspitter';
 	public override image = CardIds.Shockspitter;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.Shockspitter];
+	public override cards: readonly CardIds[] = [CardIds.Shockspitter, CardIds.KurtrusDemonRender];
 
 	readonly player = {
 		pref: 'playerShockspitterCounter' as const,
@@ -21,9 +21,9 @@ export class ShockspitterCounterDefinitionV2 extends CounterDefinitionV2<number>
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.hero-attacks-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.hero-attacks-tooltip'),
 		},
 	};
 	readonly opponent = {
@@ -48,6 +48,6 @@ export class ShockspitterCounterDefinitionV2 extends CounterDefinitionV2<number>
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		const value = this[side]?.value(gameState) ?? 0;
-		return this.i18n.translateString(`counters.shockspitter.${side}`, { value: value + 1 });
+		return this.i18n.translateString(`counters.hero-attacks.${side}`, { value: value });
 	}
 }
