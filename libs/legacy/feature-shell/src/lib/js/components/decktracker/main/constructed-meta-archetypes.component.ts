@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
-import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, buildArchetypeName } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
@@ -155,10 +155,7 @@ export class ConstructedMetaArchetypesComponent extends AbstractSubscriptionComp
 					.map((a) => ({
 						...a,
 						totalGames: formatGamesCount(a.totalGames),
-						name:
-							this.i18n.translateString(`archetype.${a.name}`) === `archetype.${a.name}`
-								? a.name
-								: this.i18n.translateString(`archetype.${a.name}`),
+						name: buildArchetypeName(a.name, this.i18n),
 					}))
 					.map((stat) => this.enhanceStat(stat, useConservativeEstimate))
 					.sort((a, b) => this.sortArchetypes(a, b, sortCriteria)),

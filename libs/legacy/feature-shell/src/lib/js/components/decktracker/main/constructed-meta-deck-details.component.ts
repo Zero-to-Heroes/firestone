@@ -3,7 +3,7 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { ConstructedCardData, ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
-import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, buildArchetypeName, overrideDeckName } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -108,12 +108,7 @@ export class ConstructedMetaDeckDetailsComponent
 				const result: ConstructedDeckDetails = {
 					type: 'deck',
 					archetypeId: stat.archetypeId,
-					name:
-						overrideDeckName(stat, this.allCards) ??
-						(this.i18n.translateString(`archetype.${stat.archetypeName}`) ===
-						`archetype.${stat.archetypeName}`
-							? stat.archetypeName
-							: this.i18n.translateString(`archetype.${stat.archetypeName}`)),
+					name: overrideDeckName(stat, this.allCards) ?? buildArchetypeName(stat.archetypeName, this.i18n),
 					format: this.i18n.translateString(`global.format.${stat.format}`),
 					heroCardClass: stat.playerClass,
 					games: statToUse.totalGames,

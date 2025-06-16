@@ -7,7 +7,7 @@ import {
 	Input,
 } from '@angular/core';
 import { Sideboard } from '@firestone-hs/deckstrings';
-import { overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
+import { buildArchetypeName, overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
@@ -125,10 +125,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 					`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${deck.playerClass?.toLowerCase()}.png`;
 				this.classTooltip = this.i18n.translateString(`global.class.${deck.heroCardClass}`);
 				this.deckName =
-					overrideDeckName(deck, this.allCards) ??
-					(this.i18n.translateString(`archetype.${deck.archetypeName}`) === `archetype.${deck.archetypeName}`
-						? deck.archetypeName
-						: this.i18n.translateString(`archetype.${deck.archetypeName}`));
+					overrideDeckName(deck, this.allCards) ?? buildArchetypeName(deck.archetypeName, this.i18n);
 				this.winrate = this.buildPercents(deck.winrate);
 				this.totalGames = deck.totalGames;
 				this.removedCards = buildCardVariations(

@@ -8,6 +8,7 @@ import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, from, switchMap, tap } from 'rxjs';
+import { buildArchetypeName } from '../services/constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 import { ConstructedNavigationService } from '../services/constructed-navigation.service';
 
@@ -56,9 +57,8 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 		private readonly prefs: PreferencesService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly nav: ConstructedNavigationService,
-		private readonly allCards: CardsFacadeService,
-	) // private readonly mulligan: ConstructedMulliganGuideService,
-	{
+		private readonly allCards: CardsFacadeService, // private readonly mulligan: ConstructedMulliganGuideService,
+	) {
 		super(cdr);
 	}
 
@@ -97,7 +97,7 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 					.filter((a) => !playerClasses?.length || playerClasses.includes(a.heroCardClass?.toUpperCase()))
 					.flatMap((stat) => ({
 						id: stat.id,
-						name: stat.name,
+						name: buildArchetypeName(stat.name, this.i18n),
 						playerClass: stat.heroCardClass,
 					}));
 				const archetypesById = groupByFunction((a: { id: number; name: string; playerClass: string }) => a.id)(

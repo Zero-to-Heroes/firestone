@@ -7,6 +7,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, startWith } from 'rxjs';
+import { buildArchetypeName } from '../services/constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 
 @Component({
@@ -70,12 +71,7 @@ export class MulliganDeckViewArchetypeComponent extends AbstractSubscriptionComp
 			filter(([archetypeId, archetypes]) => !!archetypeId && !!archetypes?.archetypeStats?.length),
 			this.mapData(([archetypeId, archetypes]) => {
 				const archetype = archetypes!.archetypeStats!.find((arch) => arch.id === archetypeId);
-				const nameKey = `archetype.${archetype?.name}`;
-				return archetype?.name
-					? this.i18n.translateString(`${nameKey}`) !== nameKey
-						? this.i18n.translateString(`${nameKey}`)
-						: archetype?.name
-					: 'No archetype';
+				return buildArchetypeName(archetype?.name, this.i18n);
 			}),
 			startWith(null),
 		);

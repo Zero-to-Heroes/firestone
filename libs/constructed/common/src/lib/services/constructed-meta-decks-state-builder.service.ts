@@ -15,11 +15,12 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	CardsFacadeService,
+	ILocalizationService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { buildArchetypeName } from './constructed-archetype.service';
 import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
@@ -43,7 +44,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 	private api: ApiRunner;
 	private prefs: PreferencesService;
 	private navigation: ConstructedNavigationService;
-	private cards: CardsFacadeService;
+	private i18n: ILocalizationService;
 
 	private deckDetailsCache: { [key: string]: DeckStat | null } = {};
 	private archetypesCache: { [key: string]: ArchetypeStats | null } = {};
@@ -71,7 +72,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.navigation = AppInjector.get(ConstructedNavigationService);
-		this.cards = AppInjector.get(CardsFacadeService);
+		this.i18n = AppInjector.get(ILocalizationService);
 
 		await this.navigation.isReady();
 		await this.prefs.isReady();
@@ -252,6 +253,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 				return {
 					...deck,
 					allCardsInDeck: allCardsInDeck,
+					archetypeName: buildArchetypeName(deck.archetypeName, this.i18n),
 				};
 			}),
 		};

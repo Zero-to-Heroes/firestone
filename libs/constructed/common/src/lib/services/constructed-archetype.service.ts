@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 const ARCHETYPE_ID_FETCH_URL = 'https://mbw3zfj7y4ti3pmb3wxwqdzu7i0vxdjg.lambda-url.us-west-2.on.aws/%deckstring%';
 
@@ -22,3 +22,13 @@ export class ConstructedArchetypeService {
 		return archetypeId;
 	}
 }
+
+export const buildArchetypeName = (archetypeSlug: string | null | undefined, i18n: ILocalizationService): string => {
+	if (!archetypeSlug?.length) {
+		return 'No archetype';
+	}
+	archetypeSlug = archetypeSlug.replace('std-', '');
+	return i18n.translateString(`archetype.${archetypeSlug}`) === `archetype.${archetypeSlug}`
+		? archetypeSlug
+		: i18n.translateString(`archetype.${archetypeSlug}`);
+};
