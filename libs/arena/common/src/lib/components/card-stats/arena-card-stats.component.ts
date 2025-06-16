@@ -351,12 +351,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		// 	searchString,
 		// 	sortCriteria,
 		// );
+		searchString = searchString?.trim()?.toLowerCase();
 		const searchTokens = !searchString?.length
 			? []
-			: searchString
-					.toLowerCase()
-					.split(',')
-					.map((token) => token.trim());
+			: (searchString.includes('，') ? searchString.split('，') : searchString.split(','))
+					.map((token) => token.trim())
+					.filter((token) => token.length > 1);
 		const result =
 			stats
 				// We want cards that are not offered in the draft to still appear here, like the
