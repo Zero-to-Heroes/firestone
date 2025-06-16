@@ -1,12 +1,12 @@
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsFaceOffWithSimulation, BgsGame } from '@firestone/game-state';
+import { BgsFaceOffWithSimulation, GameState } from '@firestone/game-state';
 import { BugReportService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
 
 export const checkIntegrity = (
 	faceOff: BgsFaceOffWithSimulation,
-	gameState: BgsGame,
+	gameState: GameState,
 	bugService: BugReportService,
 	hasReconnected: boolean,
 	gameType: GameType,
@@ -31,7 +31,7 @@ export const checkIntegrity = (
 const report = async (
 	status: string,
 	faceOff: BgsFaceOffWithSimulation,
-	game: BgsGame,
+	game: GameState,
 	bugService: BugReportService,
 	hasReconnected: boolean,
 	gameType: GameType,

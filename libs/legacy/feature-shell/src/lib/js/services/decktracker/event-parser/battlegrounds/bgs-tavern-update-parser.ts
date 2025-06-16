@@ -23,7 +23,7 @@ export class BgsTavernUpdateParser implements EventParser {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 					console.warn(
 						'No player found to update the history',
-						currentState.bgState.currentGame.reviewId,
+						currentState.reviewId,
 						heroCardId,
 						normalizeHeroCardId(heroCardId, this.allCards),
 						currentState.bgState.currentGame.players.map((player) => player.cardId),

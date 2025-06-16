@@ -76,7 +76,7 @@ export class BgsBattleResultParser implements EventParser {
 		});
 		checkIntegrity(
 			newFaceOff,
-			gameAfterFirstFaceOff,
+			currentState,
 			this.bugService,
 			currentState?.reconnectOngoing || currentState?.hasReconnected,
 			currentState?.metadata.gameType,

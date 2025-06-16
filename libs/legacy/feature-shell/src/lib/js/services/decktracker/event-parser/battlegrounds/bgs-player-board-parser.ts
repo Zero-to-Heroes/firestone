@@ -103,7 +103,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					'no-format',
 					'Too many entities on the board',
 					currentState.spectating,
-					currentState.bgState.currentGame.reviewId,
+					currentState.reviewId,
 					gameLogsKey,
 					playerBoard?.heroCardId,
 					playerBoard?.board?.map((entity) => entity.CardId),
@@ -397,7 +397,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 				console.warn(
 					'[bgs-simulation] Could not idenfity player for whom to update board history',
-					currentState.bgState.currentGame.reviewId,
+					currentState.reviewId,
 					playerBoard.heroCardId,
 					playerBoard.playerId,
 					currentState.bgState.currentGame.players.map((player) => player.playerId),

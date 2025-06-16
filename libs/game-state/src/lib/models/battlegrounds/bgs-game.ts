@@ -6,7 +6,7 @@ import { BgsPlayer } from './bgs-player';
 import { RealTimeStatsState } from './real-time-stats';
 
 export class BgsGame {
-	readonly reviewId: string;
+	// readonly reviewId: string;
 	readonly players: readonly BgsPlayer[] = [];
 	readonly phase: 'recruit' | 'combat';
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];

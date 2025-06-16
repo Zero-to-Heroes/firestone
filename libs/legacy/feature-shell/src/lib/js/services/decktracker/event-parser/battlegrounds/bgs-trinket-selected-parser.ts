@@ -22,7 +22,7 @@ export class BgsTrinketSelectedParser implements EventParser {
 		if (!playerToUpdate) {
 			console.warn(
 				'Could not find player to update for trinkets',
-				currentState.bgState.currentGame.reviewId,
+				currentState.reviewId,
 				heroCardId,
 				playerId,
 				normalizeHeroCardId(heroCardId, this.allCards),

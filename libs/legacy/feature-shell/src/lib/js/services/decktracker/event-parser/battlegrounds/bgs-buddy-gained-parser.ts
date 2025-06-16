@@ -23,7 +23,7 @@ export class BgsBuddyGainedParser implements EventParser {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
 					console.error(
 						'No player found to update the buddy',
-						currentState.bgState.currentGame.reviewId,
+						currentState.reviewId,
 						heroCardId,
 						normalizeHeroCardId(heroCardId, this.allCards.getService()),
 						currentState.bgState.currentGame.players.map((player) => player.cardId),
