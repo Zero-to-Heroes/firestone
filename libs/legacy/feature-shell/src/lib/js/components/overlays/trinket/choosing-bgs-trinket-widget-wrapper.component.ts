@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { BgsInGameTrinketsGuardianService, BgsInGameTrinketsService } from '@firestone/battlegrounds/common';
 import { BgsTrinketCardChoiceOption } from '@firestone/game-state';
+import { CardChoicesService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import {
@@ -83,15 +84,16 @@ export class ChoosingBgsTrinketWidgetWrapperComponent
 		private readonly trinkets: BgsInGameTrinketsService,
 		private readonly guardian: BgsInGameTrinketsGuardianService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly choices: CardChoicesService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.trinkets, this.ads, this.guardian);
+		await waitForReady(this.trinkets, this.ads, this.guardian, this.choices);
 
-		this.showWidget$ = this.trinkets.showWidget$$.pipe(
-			this.mapData((showWidget) => showWidget),
+		this.showWidget$ = combineLatest([this.trinkets.showWidget$$, this.choices.choicesHidden$$]).pipe(
+			this.mapData(([showWidget, hidden]) => (hidden === true ? false : showWidget)),
 			this.handleReposition(),
 		);
 		this.options$ = this.trinkets.trinketStats$$.pipe(this.mapData((options) => options));
