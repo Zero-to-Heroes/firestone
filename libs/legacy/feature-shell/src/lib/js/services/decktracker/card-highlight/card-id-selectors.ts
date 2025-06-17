@@ -1336,6 +1336,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.GrimtotemBuzzkill:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
+		case CardIds.GrimyGadgeteer:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.GrizzledGuardian:
 			return and(side(inputSide), inDeck, minion, effectiveCostLess(5));
 		case CardIds.GrommashsArmguardsTavernBrawl:
