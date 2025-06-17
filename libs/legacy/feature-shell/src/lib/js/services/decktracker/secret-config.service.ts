@@ -4,6 +4,7 @@ import {
 	CardIds,
 	formatFormat,
 	GameFormat,
+	GameTag,
 	GameType,
 	isArena,
 	ScenarioId,
@@ -11,6 +12,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { Metadata } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { ALL_HANDS } from './event-parser/special-cases/stonebrew/stonebrew';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
 
@@ -24,6 +26,8 @@ const createsSecretsFromThePast = [
 @Injectable()
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
+
+	private stonebrewSecrets: readonly string[];
 
 	constructor(private readonly http: HttpClient, private readonly allCards: CardsFacadeService) {}
 
@@ -65,12 +69,19 @@ export class SecretConfigService {
 	private async init() {
 		this.secretConfigs = await this.getSecretsConfig();
 		console.log('[secrets-config] loaded secrets config');
+
+		this.stonebrewSecrets = ALL_HANDS.flatMap((cardId) => cardId).filter((c) =>
+			this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]),
+		);
 	}
 
 	private getStaticSecrets(creatorCardId: string, metadata: Metadata, playerClass: string): readonly string[] {
 		switch (creatorCardId) {
 			case CardIds.PuzzlemasterKhadgar_MagicWisdomballToken_TOY_373t:
 				return [CardIds.CounterspellCore, CardIds.IceBarrierCore];
+			case CardIds.HarthStonebrew_CORE_GIFT_01:
+			case CardIds.HarthStonebrew_GIFT_01:
+				return this.stonebrewSecrets?.filter((c) => this.allCards.getCard(c).playerClass === playerClass) ?? [];
 			default:
 				return null;
 		}

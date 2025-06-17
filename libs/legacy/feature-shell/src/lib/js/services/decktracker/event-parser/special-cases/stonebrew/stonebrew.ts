@@ -69,7 +69,7 @@ const WARLOCK_HAND = [
 	'LOOT_017',
 	'EX1_310',
 ];
-const ALL_HANDS = [
+export const ALL_HANDS = [
 	DK_BLOOD_HAND,
 	DK_FROST_HAND,
 	DK_UNHOLY_HAND,
