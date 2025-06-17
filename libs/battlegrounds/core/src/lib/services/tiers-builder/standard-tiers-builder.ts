@@ -101,7 +101,7 @@ const buildTribeGroup = (
 			`global.tribe.${(!targetTribe ? Race[Race.BLANK] : Race[targetTribe]).toLowerCase()}`,
 		),
 		cards: cardForGroup,
-		tribe: targetTribe,
+		tribe: targetTribe ?? Race.BLANK,
 	};
 	return result;
 };
