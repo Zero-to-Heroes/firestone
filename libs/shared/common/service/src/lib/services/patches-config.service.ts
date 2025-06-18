@@ -13,12 +13,12 @@ const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/pat
 
 @Injectable()
 export class PatchesConfigService extends AbstractFacadeService<PatchesConfigService> {
-	public config$$: SubscriberAwareBehaviorSubject<PatchesConfig | null | undefined>;
-	public currentBattlegroundsMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>;
-	public currentConstructedMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>;
-	public currentTwistMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>;
-	public currentArenaMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>;
-	public currentArenaSeasonPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>;
+	public config$$: SubscriberAwareBehaviorSubject<PatchesConfig | null>;
+	public currentBattlegroundsMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentConstructedMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentTwistMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentArenaMetaPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
+	public currentArenaSeasonPatch$$: SubscriberAwareBehaviorSubject<PatchInfo | null>;
 
 	private api: ApiRunner;
 
@@ -38,12 +38,12 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 	}
 
 	protected async init() {
-		this.config$$ = new SubscriberAwareBehaviorSubject<PatchesConfig | null | undefined>(null);
-		this.currentBattlegroundsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>(null);
-		this.currentConstructedMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>(null);
-		this.currentTwistMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>(null);
-		this.currentArenaMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>(null);
-		this.currentArenaSeasonPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null | undefined>(null);
+		this.config$$ = new SubscriberAwareBehaviorSubject<PatchesConfig | null>(null);
+		this.currentBattlegroundsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentConstructedMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentTwistMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentArenaMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentArenaSeasonPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 
 		this.config$$.onFirstSubscribe(() => {
@@ -71,29 +71,20 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 			console.debug('[patch-config] loaded config', patchConfig);
 			this.config$$.next(patchConfig);
 			this.currentBattlegroundsMetaPatch$$.next(
-				patchConfig?.patches
-					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
-					: null,
+				patchConfig?.patches?.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch) ??
+					null,
 			);
 			this.currentConstructedMetaPatch$$.next(
-				patchConfig?.patches
-					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
-					: null,
+				patchConfig?.patches?.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch) ?? null,
 			);
 			this.currentTwistMetaPatch$$.next(
-				patchConfig?.patches
-					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentTwistMetaPatch)
-					: null,
+				patchConfig?.patches?.find((patch) => patch.number === patchConfig.currentTwistMetaPatch) ?? null,
 			);
 			this.currentArenaMetaPatch$$.next(
-				patchConfig?.patches
-					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
-					: null,
+				patchConfig?.patches?.find((patch) => patch.number === patchConfig.currentArenaMetaPatch) ?? null,
 			);
 			this.currentArenaSeasonPatch$$.next(
-				patchConfig?.patches
-					? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaSeasonPatch)
-					: null,
+				patchConfig?.patches?.find((patch) => patch.number === patchConfig.currentArenaSeasonPatch) ?? null,
 			);
 		});
 	}

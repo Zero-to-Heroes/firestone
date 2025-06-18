@@ -733,7 +733,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		playerRank: RankBracket,
 		format: GameFormatEnum,
 		playCoin: 'coin' | 'play' | 'all',
-		patchInfo: PatchInfo | null,
+		patchInfo: PatchInfo | null | undefined,
 		archetype: ArchetypeStat | null,
 		deckDetails: DeckStat | null,
 		playerDeckMatches?: readonly GameStat[],
@@ -894,7 +894,7 @@ const isCorrectPlayCoin = (match: GameStat, playCoin: 'coin' | 'play' | 'all'): 
 const isCorrectTime = (
 	match: GameStat,
 	timeFrame: 'last-patch' | 'past-3' | 'past-7',
-	patchInfo: PatchInfo | null,
+	patchInfo: PatchInfo | null | undefined,
 ): boolean => {
 	switch (timeFrame) {
 		case 'past-3':

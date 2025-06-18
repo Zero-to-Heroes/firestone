@@ -58,17 +58,6 @@ import { GameConfService } from '../services/game-conf.service';
 							></preloader>
 
 							<div class="player-decks">
-								<div class="section player-deck">
-									<div class="title">Player Deck</div>
-									<deck-list-basic
-										class="deck-list"
-										*ngIf="decklist"
-										[deckstring]="decklist"
-									></deck-list-basic>
-									<div class="no-list" *ngIf="!decklist">
-										We couldn't find the decklist for this player
-									</div>
-								</div>
 								<div class="section opponent-deck">
 									<div class="title">Opponent Deck</div>
 									<deck-list-basic
@@ -77,6 +66,17 @@ import { GameConfService } from '../services/game-conf.service';
 										[deckstring]="opponentDecklist"
 									></deck-list-basic>
 									<div class="no-list" *ngIf="!opponentDecklist">
+										We couldn't find the decklist for this player
+									</div>
+								</div>
+								<div class="section player-deck">
+									<div class="title">Player Deck</div>
+									<deck-list-basic
+										class="deck-list"
+										*ngIf="decklist"
+										[deckstring]="decklist"
+									></deck-list-basic>
+									<div class="no-list" *ngIf="!decklist">
 										We couldn't find the decklist for this player
 									</div>
 								</div>
