@@ -110,7 +110,7 @@ import { Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsBroadcastComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	twitchUserName$: Observable<string>;
+	twitchUserName$: Observable<string | undefined>;
 
 	twitchedLoggedIn: boolean;
 	twitchLoginUrl: string = TWITCH_LOGIN_URL;

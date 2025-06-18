@@ -6,7 +6,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReplayParserModule } from '@firestone-hs/replay-parser';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer } from '@firestone/shared/framework/common';
-import { setAppInjector, SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	CardsFacadeStandaloneService,
+	setAppInjector,
+	SharedFrameworkCoreModule,
+} from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ColiseumComponent } from './components/coliseum.component';
 import { ControlsComponent } from './components/controls.component';
@@ -207,7 +212,13 @@ import { Events } from './services/events.service';
 		TransitionGroupItemDirective,
 	],
 	exports: [ColiseumComponent, CardStatsComponent, TavernLevelIconComponent],
-	providers: [{ provide: OverlayContainer, useClass: CdkOverlayContainer }, Events, ColiseumDebugService],
+	providers: [
+		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
+		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
+
+		Events,
+		ColiseumDebugService,
+	],
 })
 export class ReplayColiseumModule {
 	constructor(private readonly injector: Injector) {

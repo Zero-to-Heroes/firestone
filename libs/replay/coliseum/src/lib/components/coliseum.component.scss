@@ -51,19 +51,24 @@
 				align-items: center;
 				justify-content: center;
 				margin-left: 10px;
+				position: relative;
+
+				.info {
+					position: absolute;
+					right: 5%;
+					height: 60%;
+					aspect-ratio: 1;
+				}
 			}
 
 			.deck-list {
-				// left: 0;
 				width: calc(100% - 10px);
+				background-color: var(--color-5);
+				flex-grow: 1;
 			}
 
 			::ng-deep .deck-list {
 				ng-scrollbar {
-					// width: 100%;
-					// min-width: 100%;
-					// left: 0;
-
 					.ng-scroll-content {
 						min-width: calc(100% - 13px);
 					}

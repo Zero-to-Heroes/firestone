@@ -10,7 +10,8 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
+import { GameFormat, GameTag, isBattlegrounds } from '@firestone-hs/reference-data';
 import {
 	Action,
 	BaconBoardVisualStateAction,
@@ -20,6 +21,8 @@ import {
 	Turn,
 } from '@firestone-hs/replay-parser';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import { groupByFunction2 } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ColiseumDebugService } from '../services/coliseum-debug.service';
 import { GameConfService } from '../services/game-conf.service';
@@ -59,7 +62,16 @@ import { GameConfService } from '../services/game-conf.service';
 
 							<div class="player-decks">
 								<div class="section opponent-deck">
-									<div class="title">Opponent Deck</div>
+									<div class="title">
+										Opponent Deck
+										<div
+											class="info"
+											inlineSVG="assets/svg/info.svg"
+											[helpTooltip]="
+												'Shows cards that were played by the opponent during the game.'
+											"
+										></div>
+									</div>
 									<deck-list-basic
 										class="deck-list"
 										*ngIf="opponentDecklist"
@@ -169,6 +181,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly debugService: ColiseumDebugService,
+		private readonly cards: CardsFacadeService,
 	) {}
 
 	ngAfterContentInit() {
@@ -355,7 +368,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 	}
 
-	private populateInfo(complete = true) {
+	private async populateInfo(complete = true) {
 		this.gameConf.updateConfig(this.game);
 		if (
 			!this.game ||
@@ -377,11 +390,44 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.currentAction$$.next(currentAction);
 		this.text$$.next(this.computeText());
 		// this.turnString = this.computeTurnString();
-		this.gameMode$$.next(this.computeGameMode());
+		const gameMode = this.computeGameMode();
+		this.gameMode$$.next(gameMode);
 		// This avoid truncating the query string because we don't have all the info yet
 		if (complete) {
 			this.currentTime = this.computeCurrentTime();
 			this.updateUrlQueryString();
+
+			if (gameMode !== 'battlegrounds') {
+				const opponentHeroEntity = this.game.players[1].getTag(GameTag.HERO_ENTITY);
+				const opponentCards = this.game
+					.getLatestParsedState()
+					.valueSeq()
+					.filter(
+						(entity) =>
+							entity.getTag(GameTag.CONTROLLER) === this.game.players[1].playerId &&
+							entity.id !== opponentHeroEntity &&
+							entity.cardID &&
+							!entity.getTag(GameTag.CREATOR) &&
+							!entity.getTag(GameTag.CREATOR_DBID),
+					)
+					.toArray();
+				console.debug('[app] opponent cards', opponentCards);
+				const cardIds = opponentCards.map((e) => e.cardID);
+				const groupedByCardId = groupByFunction2(cardIds, (cardId) => cardId);
+				const deckDefinition: DeckDefinition = {
+					heroes: [7],
+					format: GameFormat.FT_WILD,
+					cards: Object.values(groupedByCardId).map((group) => {
+						const dbfId = this.cards.getCard(group[0])?.dbfId;
+						return [dbfId, group.length];
+					}),
+				};
+				const deckstring = encode(deckDefinition);
+				this.opponentDecklist = deckstring;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
 		}
 	}
 

@@ -38,7 +38,7 @@ export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
 	private deckEvents = new BehaviorSubject<GameState | null>(null);
-	private twitchAccessToken$: Observable<string>;
+	private twitchAccessToken$: Observable<string | undefined>;
 	private streamerPrefs$: Observable<Partial<Preferences>>;
 
 	private twitchDelay = 0;
@@ -134,7 +134,7 @@ export class TwitchAuthService {
 		currentScene: SceneMode | null,
 		state: GameState | null,
 		bgsState: BattlegroundsState | null,
-		twitchAccessToken: string,
+		twitchAccessToken: string | undefined,
 		streamerPrefs: Partial<Preferences>,
 	): TwitchEvent | null {
 		if (!twitchAccessToken) {
