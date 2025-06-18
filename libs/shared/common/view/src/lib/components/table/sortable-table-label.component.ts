@@ -8,8 +8,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			class="sortable-label"
 			[ngClass]="{
 				sortable: isSortable,
-				'active-asc': sort?.criteria === criteria && sort?.direction === 'asc',
-				'active-desc': sort?.criteria === criteria && sort?.direction === 'desc'
+				'active-asc': sort.criteria === criteria && sort.direction === 'asc',
+				'active-desc': sort.criteria === criteria && sort.direction === 'desc'
 			}"
 			(click)="startSort()"
 		>

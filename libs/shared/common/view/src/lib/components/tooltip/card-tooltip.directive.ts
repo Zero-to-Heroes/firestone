@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
@@ -23,13 +25,16 @@ import { CardTooltipAdditionalInfo, CardTooltipComponent, isGuessedInfoEmpty } f
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	@Input() cardTooltipType: 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE' = 'NORMAL';
-	@Input() cardTooltipCard: {
-		cardId: string;
-		buffCardIds?: readonly string[];
-		creatorCardId?: string;
-		lastAffectedByCardId?: string;
-	} = undefined;
-	@Input() cardTooltipClass: string = undefined;
+	@Input() cardTooltipCard:
+		| {
+				cardId: string;
+				buffCardIds?: readonly string[];
+				creatorCardId?: string;
+				lastAffectedByCardId?: string;
+		  }
+		| null
+		| undefined = undefined;
+	@Input() cardTooltipClass: string | null | undefined = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;
 	@Input() cardTooltipLocalized = true;
@@ -80,7 +85,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		this.forceMouseOver$$.next(value);
 	}
 
-	cardId: string;
+	cardId: string | null | undefined;
 
 	private relatedCardIds: readonly string[];
 	private _cardTooltipRelatedCardIds: readonly string[] = [];
@@ -88,8 +93,8 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	private _position: CardTooltipPositionType = 'auto';
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
-	private tooltipRef: ComponentRef<CardTooltipComponent>;
-	private positionStrategy: PositionStrategy;
+	private tooltipRef: ComponentRef<CardTooltipComponent> | null;
+	private positionStrategy: PositionStrategy | null;
 
 	private positionStrategyDirty = true;
 
@@ -116,7 +121,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 
 	private updatePositionStrategy() {
 		if (this.positionStrategy) {
-			this.positionStrategy.detach();
+			this.positionStrategy.detach?.();
 			this.positionStrategy.dispose();
 			this.positionStrategy = null;
 		}
@@ -146,7 +151,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	}
 
 	@HostListener('mouseenter', ['$event'])
-	async onMouseEnter(event: MouseEvent, forced?: boolean) {
+	async onMouseEnter(event: MouseEvent | null, forced?: boolean) {
 		if (event?.shiftKey) {
 			return;
 		}
@@ -179,6 +184,11 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 
 		// Attach tooltip portal to overlay
 		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+		if (!this.tooltipRef) {
+			console.warn('[card-tooltip] tooltipRef is null, not showing tooltip');
+			return;
+		}
+
 		// Pass content to tooltip component instance
 		// this.tooltipRef.instance.opacity = 0;
 		this.tooltipRef.instance.additionalClass = this.cardTooltipClass;
@@ -198,7 +208,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		}
 		this.tooltipRef.instance.additionalInfo = this.cardTooltipAdditionalInfo;
 
-		this.positionStrategy.apply();
+		this.positionStrategy!.apply();
 
 		await this.reposition(this.tooltipRef);
 		// await sleep(20);
@@ -220,7 +230,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	// }
 
 	@HostListener('mouseleave', ['$event'])
-	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
+	onMouseLeave(event: MouseEvent | null, willBeDestroyed = false) {
 		// return;
 		if (event?.shiftKey) {
 			return;
@@ -261,7 +271,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	}
 
 	private buildPositions(position: CardTooltipPositionType) {
-		let positions = [];
+		let positions: ConnectedPosition[] = [];
 		if (position === 'left') {
 			positions = [
 				{

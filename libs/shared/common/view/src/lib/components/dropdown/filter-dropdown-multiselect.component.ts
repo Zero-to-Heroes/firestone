@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -122,18 +123,24 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	valueText$: Observable<string>;
 	workingOptions$: Observable<InternalOption[]>;
 	validSelection$: Observable<boolean>;
-	currentSearch$: Observable<string>;
+	currentSearch$: Observable<string | null>;
 
 	showing: boolean;
 
 	_visible: boolean;
 	_selected: readonly string[];
 
-	private tempSelectedValues$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
-	private tempSelected$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
-	private options$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
-	private selected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
-	private currentSearch$$ = new BehaviorSubject<string>(null);
+	private tempSelectedValues$: BehaviorSubject<readonly string[] | null> = new BehaviorSubject<
+		readonly string[] | null
+	>(null);
+	private tempSelected$: BehaviorSubject<readonly MultiselectOption[] | null> = new BehaviorSubject<
+		readonly MultiselectOption[] | null
+	>(null);
+	private options$: BehaviorSubject<readonly MultiselectOption[] | null> = new BehaviorSubject<
+		readonly MultiselectOption[] | null
+	>(null);
+	private selected$: BehaviorSubject<readonly string[] | null> = new BehaviorSubject<readonly string[] | null>(null);
+	private currentSearch$$ = new BehaviorSubject<string | null>(null);
 
 	private sub$$: Subscription;
 
@@ -145,7 +152,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			.pipe(
 				filter(([options, tempSelectedValues]) => !!options?.length),
 				this.mapData(([options, tempSelectedValues]) => {
-					const tempSelected = options.filter((option) =>
+					const tempSelected = options!.filter((option) =>
 						tempSelectedValues?.some((e) => option.value === e),
 					);
 					return tempSelected;
@@ -155,14 +162,14 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		this.valueText$ = combineLatest([this.options$.asObservable(), this.selected$.asObservable()]).pipe(
 			filter(([options, selected]) => !!options?.length),
 			this.mapData(([options, selected]) => {
-				if (!selected?.length || selected.length === options.length) {
+				if (!selected?.length || selected.length === options!.length) {
 					return this.placeholder;
 				}
 				const result = this.buildIcons(
 					selected
-						.map((sel) => options.find((option) => option.value === sel))
+						.map((sel) => options!.find((option) => option.value === sel))
 						.filter((option) => !!option)
-						.sort((a, b) => (a.label < b.label ? -1 : 1)),
+						.sort((a, b) => a?.label?.localeCompare(b?.label ?? '') ?? 0) as MultiselectOption[],
 				);
 				return result;
 			}),
@@ -175,7 +182,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			)
 			.subscribe((options) => {
 				this.tempSelected$.next(
-					options.filter((option) => this.tempSelected$.value?.some((e) => option.value === option.value)),
+					options!.filter((option) => this.tempSelected$.value?.some((e) => option.value === option.value)),
 				);
 			});
 		this.workingOptions$ = combineLatest([
@@ -187,23 +194,24 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			debounceTime(this.debounceTime),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([options, tempSelected, currentSearch]) => {
-				const result = options
+				tempSelected = tempSelected ?? [];
+				const result = options!
 					.filter(
 						(option) =>
 							!currentSearch?.length ||
 							option.label.toLowerCase().includes(currentSearch.toLowerCase()) ||
-							tempSelected.some((o) => o.value === option.value),
+							tempSelected!.some((o) => o.value === option.value),
 					)
 					.map((option) => ({
 						...option,
-						selected: tempSelected.some((o) => o.value === option.value),
+						selected: tempSelected!.some((o) => o.value === option.value),
 					}));
 				return result;
 			}),
 		);
 		this.validSelection$ = combineLatest([this.options$.asObservable(), this.workingOptions$]).pipe(
 			filter(([options, workingOptions]) => !!options),
-			this.mapData(([options, workingOptions]) => this.isValidSelection(options, workingOptions)),
+			this.mapData(([options, workingOptions]) => this.isValidSelection(options ?? [], workingOptions ?? [])),
 		);
 		this.currentSearch$ = this.currentSearch$$.asObservable().pipe(this.mapData((v) => v));
 	}
@@ -238,9 +246,9 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	select(option: MultiselectOption, isSelected: boolean) {
 		let tempSelected = this.tempSelected$.value;
-		if (isSelected && !tempSelected.some((o) => o.value === option.value)) {
-			tempSelected = [...tempSelected, option];
-		} else if (!isSelected && tempSelected.some((o) => o.value === option.value)) {
+		if (isSelected && !tempSelected?.some((o) => o.value === option.value)) {
+			tempSelected = [...(tempSelected ?? []), option];
+		} else if (!isSelected && tempSelected?.some((o) => o.value === option.value)) {
 			tempSelected = removeFromReadonlyArray(
 				tempSelected,
 				tempSelected.map((e) => e.value).indexOf(option.value),
@@ -263,7 +271,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
-	buttonTooltip(validSelection: boolean): string {
+	buttonTooltip(validSelection: boolean | null): string | null {
 		return validSelection ? null : this.validationErrorTooltip;
 	}
 
@@ -276,7 +284,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		return result;
 	}
 
-	confirmSelection(validSelection: boolean) {
+	confirmSelection(validSelection: boolean | null) {
 		if (!validSelection) {
 			return;
 		}
@@ -289,7 +297,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		// 		: option.label.toLowerCase().includes(this.currentSearch$$.value.toLowerCase()),
 		// );
 		const value = this.tempSelected$.value;
-		this.optionSelected.next(value.map((o) => o.value));
+		this.optionSelected.next(value?.map((o) => o.value) ?? []);
 		this.toggle();
 	}
 

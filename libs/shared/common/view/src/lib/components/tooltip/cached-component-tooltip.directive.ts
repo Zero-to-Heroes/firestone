@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @angular-eslint/no-input-rename */
@@ -51,7 +52,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
-	private positionStrategy: PositionStrategy;
+	private positionStrategy: PositionStrategy | null;
 
 	private positionDirty = true;
 	private forceHide: boolean;
@@ -73,7 +74,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			return;
 		}
 		if (this.positionStrategy) {
-			this.positionStrategy.detach();
+			this.positionStrategy.detach?.();
 			this.positionStrategy.dispose();
 			this.positionStrategy = null;
 		}
@@ -109,7 +110,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		}
 	}
 
-	private tooltipRef: ComponentRef<any>;
+	private tooltipRef: ComponentRef<any> | null;
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
@@ -128,14 +129,14 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			this.tooltipPortal = new ComponentPortal(this._componentType);
 
 			// Attach tooltip portal to overlay
-			this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+			this.tooltipRef = this.overlayRef.attach(this.tooltipPortal)!;
 
 			// Pass content to tooltip component instance
-			this.tooltipRef.instance.config = this._componentInput;
-			this.tooltipRef.instance.cssClass = this.cssClass;
+			this.tooltipRef!.instance.config = this._componentInput;
+			this.tooltipRef!.instance.cssClass = this.cssClass;
 		}
-		this.tooltipRef.instance.visible = true;
-		this.positionStrategy.apply();
+		this.tooltipRef!.instance.visible = true;
+		this.positionStrategy?.apply();
 
 		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();

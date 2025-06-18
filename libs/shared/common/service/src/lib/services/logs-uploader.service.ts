@@ -15,7 +15,7 @@ export class LogsUploaderService {
 		private readonly prefs: PreferencesService,
 	) {}
 
-	public async uploadGameLogs(): Promise<string> {
+	public async uploadGameLogs(): Promise<string | null> {
 		try {
 			// Get the HS Power.log file
 			const res = await this.ow.getRunningGameInfo();
@@ -44,7 +44,7 @@ export class LogsUploaderService {
 		}
 	}
 
-	public async uploadAppLogs(): Promise<string> {
+	public async uploadAppLogs(): Promise<string | null> {
 		try {
 			const firestoneLogs: Blob = await this.io.zipAppLogFolder('Firestone');
 			const firestoneLogKey = await this.s3.postBlob(firestoneLogs, '.app.zip');

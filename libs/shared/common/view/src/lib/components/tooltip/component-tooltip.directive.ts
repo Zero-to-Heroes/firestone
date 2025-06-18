@@ -194,7 +194,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	@HostListener('mouseleave', ['$event'])
-	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
+	onMouseLeave(event: MouseEvent | null, willBeDestroyed = false) {
 		// return;
 		if (event?.shiftKey) {
 			return;

@@ -48,7 +48,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 
 	protected async init() {
 		this.storage = AppInjector.get(PreferencesStorageService);
-		this.preferences$$ = new BehaviorSubject<Preferences>(null);
+		this.preferences$$ = new BehaviorSubject<Preferences>(new Preferences());
 
 		console.log('[preferences] ready');
 
@@ -80,7 +80,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		this.preferences$$.next(newPrefs);
 	}
 
-	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
+	public async savePreferences(userPrefs: Preferences, eventName: string | null = null) {
 		// console.debug('saving prefs', new Error().stack);
 		const finalPrefs = {
 			...userPrefs,

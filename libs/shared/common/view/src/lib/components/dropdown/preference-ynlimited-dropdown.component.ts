@@ -72,7 +72,7 @@ export class PreferenceYNLimitedComponent extends AbstractSubscriptionComponent 
 			this.mapData((prefs) => prefs[this.field]),
 			this.mapData((pref) => ({
 				filter: '' + pref,
-				placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label,
+				placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label ?? '',
 				visible: true,
 			})),
 		);

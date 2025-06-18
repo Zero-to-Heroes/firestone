@@ -32,7 +32,7 @@ export class SimpleIOService {
 		const dirListingResult = await this.ow.listFilesInAppDirectory('Firestone');
 		const path = dirListingResult.path;
 		// It should be a flat structure for us
-		const files = dirListingResult.data.filter((d) => d.type === 'file').map((file) => file.name);
+		const files = (dirListingResult.data ?? []).filter((d) => d.type === 'file').map((file) => file.name);
 		const groupedFiles = groupByFunction((fileName: string) => fileName.split('.')[0])(files);
 		for (const fileRoot of Object.keys(groupedFiles)) {
 			if (EXCLUDED_FILES.includes(fileRoot) || fileRoot.startsWith('Counter')) {
@@ -52,7 +52,7 @@ export class SimpleIOService {
 		// Overwolf logs
 		const owResult = await this.ow.listFilesInOverwolfDirectory();
 		const owPath = owResult.path;
-		const owFiles = owResult.data.filter((d) => d.type === 'file').map((file) => file.name);
+		const owFiles = (owResult.data ?? []).filter((d) => d.type === 'file').map((file) => file.name);
 		const getOwFileRoot = (fileName: string) => {
 			if (fileName.startsWith('Trace_')) {
 				return 'Trace';

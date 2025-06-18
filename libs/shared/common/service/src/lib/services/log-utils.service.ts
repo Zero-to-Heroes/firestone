@@ -7,7 +7,7 @@ import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class LogUtilsService {
-	public logsDirRoot$$ = new BehaviorSubject<string>(null);
+	public logsDirRoot$$ = new BehaviorSubject<string | null>(null);
 
 	private watcherSub: Subscription;
 
@@ -42,9 +42,12 @@ export class LogUtilsService {
 
 export const getLogsDir = async (
 	ow: OverwolfService,
-	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
+	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo | null,
 	prefs: Preferences,
-): Promise<string> => {
+): Promise<string | null> => {
+	if (!gameInfo) {
+		return null;
+	}
 	const gameBaseDir = await getGameBaseDir(ow, gameInfo, prefs);
 	const logsBaseDir = gameBaseDir + 'Logs';
 	const filesInLogsDir = (await ow.listFilesInDirectory(logsBaseDir))?.data ?? [];
@@ -87,9 +90,9 @@ export const getGameBaseDir = async (
 	ow: OverwolfService,
 	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
 	prefs: Preferences,
-): Promise<string> => {
+): Promise<string | undefined> => {
 	gameInfo = gameInfo ?? (await ow.getRunningGameInfo());
-	let baseDir: string = extractBaseDirFromPath(gameInfo?.executionPath);
+	let baseDir: string | undefined = extractBaseDirFromPath(gameInfo?.executionPath);
 	if (!baseDir?.length) {
 		const gameDbInfo = await ow.getGameDbInfo();
 		baseDir = extractBaseDirFromPath(gameDbInfo?.installedGameInfo?.LauncherPath);
@@ -105,7 +108,7 @@ export const getGameBaseDir = async (
 	return baseDir;
 };
 
-const extractBaseDirFromPath = (path: string): string => {
+const extractBaseDirFromPath = (path: string | null | undefined): string | undefined => {
 	return path?.toLowerCase()?.includes('hearthstone beta launcher')
 		? path.toLowerCase().split('hearthstone beta launcher.exe')[0]
 		: path?.toLowerCase()?.split('hearthstone.exe')[0];

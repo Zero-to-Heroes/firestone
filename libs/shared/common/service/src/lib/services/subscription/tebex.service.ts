@@ -53,7 +53,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		const allPackages = await this.packages$$.getValueWithInit();
 		const currentUser = await this.user.getCurrentUser();
 		if (!currentUser?.username) {
-			return null;
+			return;
 		}
 		const userUuid = currentUser.uuid;
 		const packageForPlan = allPackages?.find((p) => p.name.toLowerCase() === planId);
@@ -98,7 +98,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 			return null;
 		}
 
-		const subDetails = null;
+		const subDetails: any = null;
 		// await this.api.callGetApi<TebexSubDetails>(`${TEBEX_SUB_DETAILS_URL}/${tebexPackage.id}`, {
 		// 	bearerToken: owToken,
 		// });

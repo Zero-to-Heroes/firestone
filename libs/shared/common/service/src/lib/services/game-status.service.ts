@@ -67,12 +67,12 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		this.exitListeners.push(callback);
 	}
 
-	public async inGame(): Promise<boolean> {
+	public async inGame(): Promise<boolean | null> {
 		await this.isReady();
 		return this.inGame$$.getValueWithInit();
 	}
 
-	private async updateExecutionPathInPrefs(executionPath: string) {
+	private async updateExecutionPathInPrefs(executionPath: string | null | undefined) {
 		if (!executionPath?.length) {
 			return;
 		}

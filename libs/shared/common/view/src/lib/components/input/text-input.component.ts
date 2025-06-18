@@ -36,9 +36,9 @@ import { BehaviorSubject, Observable, debounceTime } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextInputComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	value$: Observable<string>;
+	value$: Observable<string | null>;
 
-	@Output() fsModelUpdate = new EventEmitter<string>();
+	@Output() fsModelUpdate = new EventEmitter<string | null>();
 
 	@Input() set value(value: string | null) {
 		this.value$$.next(value);

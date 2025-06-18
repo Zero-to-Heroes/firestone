@@ -54,10 +54,10 @@ export class BasicBarChart2Component extends AbstractSubscriptionComponent imple
 
 	@Input() showLabels = true;
 
-	private chartData$$ = new BehaviorSubject<readonly SimpleBarChartData[]>(null);
-	private tooltipTitle$$ = new BehaviorSubject<string>(null);
-	private dataTextFormatter$$ = new BehaviorSubject<(value: string) => string>(null);
-	private midLineValue$$ = new BehaviorSubject<number>(null);
+	private chartData$$ = new BehaviorSubject<readonly SimpleBarChartData[] | null>(null);
+	private tooltipTitle$$ = new BehaviorSubject<string | null>(null);
+	private dataTextFormatter$$ = new BehaviorSubject<((value: string) => string) | null>(null);
+	private midLineValue$$ = new BehaviorSubject<number | null>(null);
 	private offsetValue$$ = new BehaviorSubject<number>(0);
 
 	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
@@ -84,19 +84,26 @@ export class BasicBarChart2Component extends AbstractSubscriptionComponent imple
 	}
 
 	buildBarContainers(
-		chartData: readonly SimpleBarChartData[],
-		midLineValue: number,
-		inputTooltipTitle: string,
-		dataTextFormatter: (value: string) => string,
+		chartData: readonly SimpleBarChartData[] | null,
+		midLineValue: number | null,
+		inputTooltipTitle: string | null,
+		dataTextFormatter: ((value: string) => string) | null,
 		offsetValue: number,
 	): { midLineValue: number; barContainers: readonly BarContainer[] } {
+		if (!chartData?.length) {
+			return { midLineValue: 0, barContainers: [] };
+		}
+		midLineValue = midLineValue ?? 0;
 		// console.debug('updating stats', chartData[0]?.data[0]?.value);
 		const maxValues: readonly number[] = chartData
 			.map((chartData) => chartData.data)
-			.map((data) =>
+			.map((data: readonly SimpleBarChartDataElement[]) =>
 				Math.max(
 					...data
-						.reduce((a, b) => a.concat(b), [])
+						.reduce(
+							(a: readonly SimpleBarChartDataElement[], b: SimpleBarChartDataElement) => a.concat(b),
+							[],
+						)
 						.map((element: SimpleBarChartDataElement) => element.value),
 				),
 			);
@@ -124,8 +131,8 @@ export class BasicBarChart2Component extends AbstractSubscriptionComponent imple
 		elements: SimpleBarChartDataElement[],
 		maxValues: readonly number[],
 		xValue: number,
-		inputTooltipTitle: string,
-		dataTextFormatter: (value: string) => string,
+		inputTooltipTitle: string | null,
+		dataTextFormatter: ((value: string) => string) | null,
 		offsetValue: number,
 	): BarContainer {
 		return {

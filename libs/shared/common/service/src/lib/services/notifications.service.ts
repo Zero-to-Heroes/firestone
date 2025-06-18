@@ -10,7 +10,7 @@ export class OwNotificationsService {
 	private isDev: boolean;
 	private isBeta: boolean;
 
-	private stateEmitter = new BehaviorSubject<Message>(undefined);
+	private stateEmitter = new BehaviorSubject<Message | null>(null);
 
 	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
 		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
@@ -131,7 +131,7 @@ export class OwNotificationsService {
 							{ selector: 'title', action: onClick },
 							{ selector: 'text', action: onClick },
 					  ]
-					: null,
+					: undefined,
 			},
 			true,
 		);

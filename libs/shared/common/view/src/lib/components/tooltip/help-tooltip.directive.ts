@@ -39,7 +39,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		}
 	}
 
-	@Input() bindTooltipToGameWindow = false;
+	@Input() bindTooltipToGameWindow: boolean | null = false;
 	@Input() stayOpenOnClick = false;
 	@Input() helpTooltipVisibleBeforeHover = false;
 	@Input() helpTooltipClasses: string;

@@ -34,7 +34,7 @@ export class DeckListBasicComponent extends AbstractSubscriptionComponent implem
 		this.deckstring$$.next(value);
 	}
 
-	private deckstring$$ = new BehaviorSubject<string>(null);
+	private deckstring$$ = new BehaviorSubject<string | null>(null);
 	private cards$$ = new BehaviorSubject<readonly MinimalCard[]>([]);
 
 	constructor(
@@ -62,7 +62,7 @@ export class DeckListBasicComponent extends AbstractSubscriptionComponent implem
 			.subscribe(this.cards$$);
 	}
 
-	private buildCardsFromDeckstring(deckstring: string): readonly MinimalCard[] {
+	private buildCardsFromDeckstring(deckstring: string | null): readonly MinimalCard[] {
 		if (!deckstring?.length) {
 			return [];
 		}
@@ -86,9 +86,9 @@ export class DeckListBasicComponent extends AbstractSubscriptionComponent implem
 			.sort(sortByProperties((c) => [c.cost, c.name]));
 	}
 
-	private buildMinimalSideboard(sideboardFromList: Sideboard): readonly MinimalCard[] {
+	private buildMinimalSideboard(sideboardFromList: Sideboard | undefined): readonly MinimalCard[] {
 		if (!sideboardFromList) {
-			return null;
+			return [];
 		}
 
 		return sideboardFromList.cards.map((pair) => {

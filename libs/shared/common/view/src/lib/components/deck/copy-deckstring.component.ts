@@ -24,7 +24,7 @@ import {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyDesckstringComponent {
-	@Input() copyText: string;
+	@Input() copyText: string | null;
 	@Input() showTooltip: boolean;
 	@Input() title: string;
 	@Input() origin: string;
@@ -47,7 +47,7 @@ export class CopyDesckstringComponent {
 
 	private _deckstring: string;
 	private normalizedDeckstring: string;
-	private inputCopy: string;
+	private inputCopy: string | null;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,

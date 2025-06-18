@@ -16,7 +16,7 @@ import { TebexService } from './tebex.service';
 
 @Injectable()
 export class SubscriptionService extends AbstractFacadeService<SubscriptionService> {
-	public currentPlan$$: SubscriberAwareBehaviorSubject<CurrentPlan>;
+	public currentPlan$$: SubscriberAwareBehaviorSubject<CurrentPlan | null>;
 
 	private legacy: OwLegacyPremiumService;
 	private tebex: TebexService;
@@ -36,7 +36,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 
 	protected async init() {
-		this.currentPlan$$ = new SubscriberAwareBehaviorSubject<CurrentPlan>(undefined);
+		this.currentPlan$$ = new SubscriberAwareBehaviorSubject<CurrentPlan | null>(null);
 		this.legacy = AppInjector.get(OwLegacyPremiumService);
 		this.tebex = AppInjector.get(TebexService);
 		this.localStorage = AppInjector.get(LocalStorageService);
@@ -86,7 +86,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		return this.mainInstance.unsubscribeInternal(planId);
 	}
 
-	public async fetchCurrentPlan(): Promise<CurrentPlan> {
+	public async fetchCurrentPlan(): Promise<CurrentPlan | null> {
 		return this.mainInstance.fetchCurrentPlanInternal();
 	}
 
@@ -108,7 +108,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		this.startCheckingForUpdates();
 	}
 
-	private async fetchCurrentPlanInternal(): Promise<CurrentPlan> {
+	private async fetchCurrentPlanInternal(): Promise<CurrentPlan | null> {
 		const currentPlan = await this.getCurrentPlanInternal();
 		console.debug('[ads] [subscription] current plan', currentPlan);
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
@@ -129,7 +129,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		return currentPlan;
 	}
 
-	private async getCurrentPlanInternal(): Promise<CurrentPlan> {
+	private async getCurrentPlanInternal(): Promise<CurrentPlan | null> {
 		const tebexPlan = await this.tebex.getSubscriptionStatus();
 		console.log('[ads] [subscription] tebex plan', tebexPlan);
 		if (tebexPlan != null) {

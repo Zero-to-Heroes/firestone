@@ -60,7 +60,7 @@ export class Preferences implements IPreferences {
 	readonly globalWidgetScale: number | null = 100;
 	readonly globalWidgetOpacity: number | null = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly cardTooltipScale: number | null = 100;
+	readonly cardTooltipScale: number = 100;
 	readonly useGroupedCounters: boolean = false;
 	readonly groupedCountersScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -185,7 +185,7 @@ export class Preferences implements IPreferences {
 	readonly constructedMetaDecksShowRelativeInfo2: boolean = true;
 	readonly constructedMetaDecksPlayerClassFilter: readonly string[] = [];
 	readonly constructedMetaDecksArchetypeFilter: readonly number[] = [];
-	readonly constructedMetaDecksSortCriteria: { criteria: string; direction: string } = null;
+	readonly constructedMetaDecksSortCriteria: { criteria: string; direction: string } | null = null;
 	readonly constructedShowOocTracker: boolean = true;
 	readonly constructedShowOocTrackerExtended: boolean = false;
 	readonly constructedOocTrackerScale: number = 100;
@@ -592,7 +592,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
 	readonly bgsActiveCardsCardType: BgsCardTypeFilterType = 'minion';
-	readonly bgsActiveCardsSearch: string = null;
+	readonly bgsActiveCardsSearch: string | null = null;
 	readonly bgsActiveCardsTiers: readonly BgsCardTierFilterType[] = [1];
 	readonly bgsActiveCardsTurn: number | null = 1;
 	readonly bgsSelectedTab3: BgsStatsFilterId = 'hp-by-turn';
@@ -692,17 +692,17 @@ export class Preferences implements IPreferences {
 	readonly discordRpcCustomInMatchText: string;
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly twitchAccessToken: string;
+	readonly twitchAccessToken: string | undefined;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly twitchUserName: string;
+	readonly twitchUserName: string | undefined;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly twitchLoginName: string;
+	readonly twitchLoginName: string | undefined;
 	readonly twitchDelay: number = 0;
 	readonly appearOnLiveStreams: boolean = true;
 
 	// TODO: move somewhere else
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly outOfCardsToken: OutOfCardsToken;
+	readonly outOfCardsToken: OutOfCardsToken | null;
 	readonly outOfCardsShowNotifOnSync: boolean = false;
 	readonly hearthpwnSync: boolean = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

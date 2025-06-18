@@ -63,8 +63,8 @@ export class CardTileComponent {
 	@Input() set cardId(value: string) {
 		this._cardId = value;
 		const refCard: ReferenceCard = this.allCards.getCard(value);
-		this.rarity = refCard.rarity?.toLowerCase();
-		this.cardClass = refCard.classes?.[0]?.toLowerCase();
+		this.rarity = refCard.rarity?.toLowerCase() ?? null;
+		this.cardClass = refCard.classes?.[0]?.toLowerCase() ?? null;
 		this.relatedCardIds = refCard.relatedCardDbfIds?.map((dbfId) => this.allCards.getCard(dbfId).id) ?? [];
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value}.jpg)`;
 		this.manaCostStr = refCard.hideStats ? '' : refCard.cost?.toString() ?? '?';

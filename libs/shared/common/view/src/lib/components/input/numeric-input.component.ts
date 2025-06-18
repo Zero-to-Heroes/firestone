@@ -28,12 +28,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 export class NumericInputComponent {
 	@Output() valueChange = new EventEmitter<number>();
 
-	@Input() label: string;
-	@Input() value: number;
+	@Input() label: string | null;
+	@Input() value: number | null;
 	@Input() disabled: boolean;
 	@Input() incrementStep = 1;
 	@Input() minValue: number;
-	@Input() labelTooltip: string;
+	@Input() labelTooltip: string | null;
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
@@ -44,14 +44,14 @@ export class NumericInputComponent {
 	}
 
 	increment() {
-		this.valueChange.next(this.value + this.incrementStep);
+		this.valueChange.next((this.value ?? 0) + this.incrementStep);
 	}
 
 	decrement() {
 		if (this.minValue != null) {
-			this.valueChange.next(Math.max(this.minValue, this.value - this.incrementStep));
+			this.valueChange.next(Math.max(this.minValue, (this.value ?? 0) - this.incrementStep));
 		} else {
-			this.valueChange.next(this.value - this.incrementStep);
+			this.valueChange.next((this.value ?? 0) - this.incrementStep);
 		}
 	}
 }

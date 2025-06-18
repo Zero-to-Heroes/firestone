@@ -43,7 +43,7 @@ export class PreferenceDropdownComponent extends AbstractSubscriptionComponent i
 		this.filter$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => ({
 				filter: prefs[this.field],
-				placeholder: this.options.find((option) => option.value === prefs[this.field])?.label,
+				placeholder: this.options.find((option) => option.value === prefs[this.field])?.label ?? '',
 				visible: true,
 			})),
 		);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -117,7 +118,7 @@ export class PreferenceSliderComponent extends AbstractSubscriptionComponent imp
 	getKnobRealValue(knob: Knob) {
 		const valueInPercent = knob.absoluteValue
 			? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
-			: knob.percentageValue;
+			: knob.percentageValue!;
 		const boundingRect = this.el.nativeElement.querySelector('.slider').getBoundingClientRect();
 		const width = boundingRect.width;
 		const height = boundingRect.height;
@@ -134,7 +135,7 @@ export class PreferenceSliderComponent extends AbstractSubscriptionComponent imp
 			for (const knob of this.knobs) {
 				const snapTestValue = knob.absoluteValue
 					? knob.absoluteValue
-					: (knob.percentageValue * (this.max - this.min)) / 100 + this.min;
+					: (knob.percentageValue! * (this.max - this.min)) / 100 + this.min;
 				const delta = Math.abs(snapTestValue - this.value);
 				const deltaPercent = (100 * delta) / (this.max - this.min);
 				if (deltaPercent < this.snapSensitivity) {

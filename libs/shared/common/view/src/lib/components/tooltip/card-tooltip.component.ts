@@ -65,7 +65,7 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 				}"
 				[ngStyle]="{ opacity: value.opacity }"
 			>
-				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards?.length > 6 }">
+				<div class="related-cards-container" [ngClass]="{ wide: (value.relatedCards?.length ?? 0) > 6 }">
 					<div class="header" *ngIf="relatedCardIdsHeader">{{ relatedCardIdsHeader }}</div>
 					<div class="related-cards" #relatedCards>
 						<div
@@ -129,11 +129,11 @@ export class CardTooltipComponent
 	relativePosition$: Observable<'left' | 'right'>;
 	displayBuffs$: Observable<boolean>;
 	opacity$: Observable<number>;
-	additionalInfo$: Observable<CardTooltipAdditionalInfo>;
+	additionalInfo$: Observable<CardTooltipAdditionalInfo | null | undefined>;
 
 	hasScrollbar: boolean;
 
-	@Input() set cardId(value: string) {
+	@Input() set cardId(value: string | null | undefined) {
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
 	}
 	@Input() relatedCardIdsHeader: string;
@@ -152,7 +152,7 @@ export class CardTooltipComponent
 	@Input() set cardType(value: CollectionCardType) {
 		this.cardType$$.next(value);
 	}
-	@Input() set additionalClass(value: string) {
+	@Input() set additionalClass(value: string | null | undefined) {
 		this.additionalClass$$.next(value);
 	}
 	@Input() set displayBuffs(value: boolean) {
@@ -184,7 +184,9 @@ export class CardTooltipComponent
 						})),
 		);
 		this.createdBy$$.next((!!value?.creatorCardId || !!value?.lastAffectedByCardId) && !value?.cardId);
-		this.cardIds$$.next([value?.cardId || value?.creatorCardId || value?.lastAffectedByCardId]);
+		this.cardIds$$.next(
+			[value?.cardId || value?.creatorCardId || value?.lastAffectedByCardId].filter((c) => !!c) as string[],
+		);
 	}
 
 	private cardIds$$ = new BehaviorSubject<readonly string[]>([]);
@@ -193,14 +195,14 @@ export class CardTooltipComponent
 	private isBgs$$ = new BehaviorSubject<boolean>(false);
 	private relativePosition$$ = new BehaviorSubject<'left' | 'right'>('left');
 	private cardType$$ = new BehaviorSubject<CollectionCardType>('NORMAL');
-	private additionalClass$$ = new BehaviorSubject<string | null>(null);
+	private additionalClass$$ = new BehaviorSubject<string | null | undefined>(null);
 	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
 	private opacity$$ = new BehaviorSubject<number>(0);
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
-	private additionalInfo$$ = new BehaviorSubject<CardTooltipAdditionalInfo>(null);
+	private additionalInfo$$ = new BehaviorSubject<CardTooltipAdditionalInfo | null>(null);
 
-	private keepInBound$$ = new BehaviorSubject<number>(null);
+	private keepInBound$$ = new BehaviorSubject<number | null>(null);
 	private resizeObserver: ResizeObserver;
 
 	private timeout;
@@ -259,7 +261,7 @@ export class CardTooltipComponent
 		await this.prefs.isReady();
 
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.cardTooltipScale)).subscribe(async (scale) => {
-			const newScale = scale / 100;
+			const newScale = (scale ?? 100) / 100;
 			const elements = await this.getScalableElements();
 			elements.forEach((element) => {
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
@@ -363,11 +365,12 @@ export class CardTooltipComponent
 										  })
 										: this.i18n.getNonLocalizedCardImage(cardId)
 									: null;
-								return {
+								const result: InternalCard = {
 									cardId: cardId,
 									image: image,
 									cardType: 'NORMAL',
 								};
+								return result;
 							})
 					);
 				},
@@ -411,7 +414,7 @@ export class CardTooltipComponent
 										  })
 										: this.i18n.getNonLocalizedCardImage(realCardId)
 									: null;
-								const result = {
+								const result: InternalCard = {
 									cardId: realCardId,
 									image: image,
 									// For now there are no cases where we have multiple card IDs, and different buffs for
@@ -419,7 +422,7 @@ export class CardTooltipComponent
 									buffs: buffs,
 									cardType: adjustedCardType,
 									createdBy: createdBy,
-									additionalClass: additionalClass,
+									additionalClass: additionalClass ?? undefined,
 								};
 								return result;
 							})
@@ -524,13 +527,13 @@ export interface CardTooltipAdditionalInfo {
 	readonly healthBuff?: number;
 	readonly spellSchools?: readonly SpellSchool[];
 }
-export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo) => {
+export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
 	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null && !info?.spellSchools?.length;
 };
 
 interface InternalCard {
 	readonly cardId: string;
-	readonly image: string;
+	readonly image: string | null;
 	readonly cardType: CollectionCardType;
 
 	readonly createdBy?: boolean;

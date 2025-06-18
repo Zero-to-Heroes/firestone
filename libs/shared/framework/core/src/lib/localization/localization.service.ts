@@ -12,7 +12,7 @@ export abstract class ILocalizationService {
 	abstract getUnknownManaSpellName(manaCost: number): string | null;
 	abstract getUnknownRaceName(race: string): string | null;
 	abstract translateString(key: string, params?: any): string;
-	abstract formatCurrentLocale(): string | null;
+	abstract formatCurrentLocale(): string;
 }
 
 export interface ImageLocalizationOptions {
