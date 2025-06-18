@@ -1,8 +1,13 @@
+import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReplayParserModule } from '@firestone-hs/replay-parser';
+import { SharedCommonViewModule } from '@firestone/shared/common/view';
+import { CdkOverlayContainer } from '@firestone/shared/framework/common';
+import { setAppInjector, SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ColiseumComponent } from './components/coliseum.component';
 import { ControlsComponent } from './components/controls.component';
 import { ActiveSpellComponent } from './components/game/active-spell.component';
@@ -89,7 +94,19 @@ import { ColiseumDebugService } from './services/coliseum-debug.service';
 import { Events } from './services/events.service';
 
 @NgModule({
-	imports: [CommonModule, FormsModule, BrowserAnimationsModule, ReplayParserModule.forRoot()],
+	imports: [
+		CommonModule,
+		FormsModule,
+		BrowserAnimationsModule,
+		OverlayModule,
+
+		InlineSVGModule.forRoot(),
+
+		ReplayParserModule.forRoot(),
+
+		SharedFrameworkCoreModule,
+		SharedCommonViewModule,
+	],
 	declarations: [
 		ColiseumComponent,
 		GameComponent,
@@ -190,6 +207,10 @@ import { Events } from './services/events.service';
 		TransitionGroupItemDirective,
 	],
 	exports: [ColiseumComponent, CardStatsComponent, TavernLevelIconComponent],
-	providers: [Events, ColiseumDebugService],
+	providers: [{ provide: OverlayContainer, useClass: CdkOverlayContainer }, Events, ColiseumDebugService],
 })
-export class ReplayColiseumModule {}
+export class ReplayColiseumModule {
+	constructor(private readonly injector: Injector) {
+		setAppInjector(injector);
+	}
+}

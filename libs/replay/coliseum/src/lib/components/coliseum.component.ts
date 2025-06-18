@@ -57,7 +57,30 @@ import { GameConfService } from '../services/game-conf.service';
 								[status]="status"
 							></preloader>
 
-							<div class="player-decks"></div>
+							<div class="player-decks">
+								<div class="section player-deck">
+									<div class="title">Player Deck</div>
+									<deck-list-basic
+										class="deck-list"
+										*ngIf="decklist"
+										[deckstring]="decklist"
+									></deck-list-basic>
+									<div class="no-list" *ngIf="!decklist">
+										We couldn't find the decklist for this player
+									</div>
+								</div>
+								<div class="section opponent-deck">
+									<div class="title">Opponent Deck</div>
+									<deck-list-basic
+										class="deck-list"
+										*ngIf="opponentDecklist"
+										[deckstring]="opponentDecklist"
+									></deck-list-basic>
+									<div class="no-list" *ngIf="!opponentDecklist">
+										We couldn't find the decklist for this player
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -100,6 +123,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 	@Input() reviewId: string | null;
 	@Input() decklist: string | null;
+	@Input() opponentDecklist: string | null;
 	@Input() set replayXml(value: string | null) {
 		if (!value?.length) {
 			return;

@@ -695,7 +695,6 @@ try {
 
 		// For the app
 		A11yModule,
-		OverlayModule,
 
 		SimpleNotificationsModule.forRoot(),
 		VirtualScrollerModule,

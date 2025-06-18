@@ -1,4 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	Optional,
+} from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import {
@@ -40,10 +48,10 @@ export class DeckListBasicComponent extends AbstractSubscriptionComponent implem
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		@Inject(CARDS_HIGHLIGHT_SERVICE_TOKEN) private readonly highlight: ICardsHighlightService,
+		@Inject(CARDS_HIGHLIGHT_SERVICE_TOKEN) @Optional() private readonly highlight: ICardsHighlightService,
 	) {
 		super(cdr);
-		this.highlight.init({
+		this.highlight?.init({
 			skipGameState: true,
 			skipPrefs: true,
 			uniqueZone: true,

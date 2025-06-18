@@ -171,6 +171,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 			: this.relatedCardIds;
 
 		if (forced && !relatedCards?.length && isGuessedInfoEmpty(this.cardTooltipAdditionalInfo)) {
+			console.debug('[card-tooltip] forced mouse over but no related cards, not showing tooltip');
 			return;
 		}
 
@@ -231,7 +232,6 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 
 	@HostListener('mouseleave', ['$event'])
 	onMouseLeave(event: MouseEvent | null, willBeDestroyed = false) {
-		// return;
 		if (event?.shiftKey) {
 			return;
 		}

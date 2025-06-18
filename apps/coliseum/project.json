@@ -15,7 +15,15 @@
 				"polyfills": ["zone.js", "apps/coliseum/src/polyfills.ts"],
 				"tsConfig": "apps/coliseum/tsconfig.app.json",
 				"inlineStyleLanguage": "scss",
-				"assets": ["apps/coliseum/src/favicon.ico", "apps/coliseum/src/assets"],
+				"assets": [
+					"apps/coliseum/src/favicon.ico",
+					"apps/coliseum/src/assets",
+					{
+						"input": "libs/shared/assets/src/assets",
+						"glob": "**/*",
+						"output": "./assets"
+					}
+				],
 				"styles": [
 					"apps/coliseum/src/styles.scss",
 					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss",
