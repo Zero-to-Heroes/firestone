@@ -1,14 +1,17 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
+import { CdkOverlayContainer } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	ILocalizationService,
 	LocalizationStandaloneService,
+	setAppInjector,
 	SharedFrameworkCoreModule,
 } from '@firestone/shared/framework/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -50,7 +53,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
+		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 	],
 	bootstrap: [ColiseumAppComponent],
 })
-export class AppModule {}
+export class AppModule {
+	constructor(private readonly injector: Injector) {
+		setAppInjector(injector);
+	}
+}

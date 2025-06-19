@@ -1,17 +1,11 @@
-import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { Injector, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReplayParserModule } from '@firestone-hs/replay-parser';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
-import { CdkOverlayContainer } from '@firestone/shared/framework/common';
-import {
-	CardsFacadeService,
-	CardsFacadeStandaloneService,
-	setAppInjector,
-	SharedFrameworkCoreModule,
-} from '@firestone/shared/framework/core';
+import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ColiseumComponent } from './components/coliseum.component';
 import { ControlsComponent } from './components/controls.component';
@@ -212,16 +206,6 @@ import { Events } from './services/events.service';
 		TransitionGroupItemDirective,
 	],
 	exports: [ColiseumComponent, CardStatsComponent, TavernLevelIconComponent],
-	providers: [
-		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
-		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
-
-		Events,
-		ColiseumDebugService,
-	],
+	providers: [Events, ColiseumDebugService],
 })
-export class ReplayColiseumModule {
-	constructor(private readonly injector: Injector) {
-		setAppInjector(injector);
-	}
-}
+export class ReplayColiseumModule {}

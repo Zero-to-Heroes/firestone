@@ -32,7 +32,13 @@ export class ReplaysBgHeroFilterDropdownComponent extends AbstractSubscriptionCo
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		const collator = new Intl.Collator('en-US');
+		console.debug('[replays-bg-hero-filter-dropdown] initializing', this.allCards);
 		this.options = [
 			{
 				value: null,
@@ -50,11 +56,6 @@ export class ReplaysBgHeroFilterDropdownComponent extends AbstractSubscriptionCo
 				)
 				.sort((a, b) => collator.compare(a.label, b.label)),
 		];
-	}
-
-	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
-
 		this.filter$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => ({
 				filter: prefs.replaysActiveBgHeroFilter,
