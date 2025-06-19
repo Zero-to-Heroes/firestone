@@ -1,0 +1,42 @@
+:host {
+	min-height: 0;
+}
+
+.events-log {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+	background: var(--color-5);
+	font-size: min(16px, 1.2cqh);
+	min-height: 0;
+	overflow: scroll;
+	height: 100%;
+
+	.log {
+		opacity: 0.8;
+		padding-top: min(2.5px, 0.5cqh);
+		padding-bottom: min(2.5px, 0.5cqh);
+		padding-left: 5%;
+
+		&.dimmed {
+			opacity: 0.3;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&.action {
+			padding-left: 10%;
+		}
+
+		&.turn {
+			margin-top: min(5px, 1cqh);
+			padding-top: min(5px, 1cqh);
+		}
+
+		&.player {
+			background: var(--color-4);
+		}
+	}
+}

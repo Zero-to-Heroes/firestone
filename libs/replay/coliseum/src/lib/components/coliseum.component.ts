@@ -60,39 +60,17 @@ import { GameConfService } from '../services/game-conf.service';
 								[status]="status"
 							></preloader>
 
-							<div class="player-decks">
-								<div class="section opponent-deck">
-									<div class="title">
-										Opponent Deck
-										<div
-											class="info"
-											inlineSVG="assets/svg/info.svg"
-											[helpTooltip]="
-												'Shows cards that were played by the opponent during the game.'
-											"
-										></div>
-									</div>
-									<deck-list-basic
-										class="deck-list"
-										*ngIf="opponentDecklist"
-										[deckstring]="opponentDecklist"
-									></deck-list-basic>
-									<div class="no-list" *ngIf="!opponentDecklist">
-										We couldn't find the decklist for this player
-									</div>
-								</div>
-								<div class="section player-deck">
-									<div class="title">Player Deck</div>
-									<deck-list-basic
-										class="deck-list"
-										*ngIf="decklist"
-										[deckstring]="decklist"
-									></deck-list-basic>
-									<div class="no-list" *ngIf="!decklist">
-										We couldn't find the decklist for this player
-									</div>
-								</div>
-							</div>
+							<sidebar
+								class="sidebar"
+								*ngIf="!!decklist?.length || !!opponentDecklist?.length"
+								[decklist]="decklist"
+								[opponentDecklist]="opponentDecklist"
+								[game]="game"
+								[currentTurn]="currentTurn"
+								[currentActionInTurn]="currentActionInTurn"
+								(updateCurrentAction)="updateCurrentAction($event)"
+							>
+							</sidebar>
 						</div>
 					</div>
 				</div>
@@ -167,8 +145,8 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 	game: Game;
 
-	private currentActionInTurn = 0;
-	private currentTurn = 0;
+	currentActionInTurn = 0;
+	currentTurn = 0;
 	private gameSub: Subscription;
 
 	private text$$ = new BehaviorSubject<string | undefined>(undefined);
@@ -351,8 +329,21 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 				lastTurnIndex = turnIndex;
 			}
 		}
-		this.currentTurn = lastTurnIndex;
-		this.currentActionInTurn = lastActionIndex;
+		this.updateCurrentAction({ turn: lastTurnIndex, action: lastActionIndex });
+		// So that the value is always what the user actually selected, and there are no weird jumps
+		this.currentTime = targetTimestamp;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	updateCurrentAction(location: { turn: number; action: number } | null) {
+		if (!location) {
+			return;
+		}
+		// console.debug(
+		this.currentTurn = location.turn;
+		this.currentActionInTurn = location.action;
 		// console.debug(
 		// 	'[app] finished seeking',
 		// 	this.currentTurn,
@@ -361,11 +352,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		// 	this.game.turns.get(this.currentTurn)?.actions,
 		// );
 		this.populateInfo();
-		// So that the value is always what the user actually selected, and there are no weird jumps
-		this.currentTime = targetTimestamp;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async populateInfo(complete = true) {

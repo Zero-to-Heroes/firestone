@@ -1,0 +1,92 @@
+.player-decks {
+	display: grid;
+	grid-template-rows: minmax(0, 20fr) minmax(0, 20fr);
+	height: 100%;
+
+	.section {
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			background: var(--color-5);
+			height: 4%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 10px;
+			position: relative;
+			font-size: min(16px, 1.2cqh);
+
+			.info {
+				position: absolute;
+				right: 5%;
+				height: 60%;
+				aspect-ratio: 1;
+			}
+		}
+
+		.deck-list {
+			width: calc(100% - 10px);
+			background-color: var(--color-5);
+			flex-grow: 1;
+		}
+
+		::ng-deep .deck-list {
+			ng-scrollbar {
+				.ng-scroll-content {
+					min-width: calc(100% - 13px);
+				}
+
+				.card .deck-card {
+					width: calc(100% - 10px);
+					height: min(26px, 2cqh);
+
+					.mana-cost {
+						width: min(30px, 15%);
+
+						span {
+							font-size: min(16px, 1.2cqh);
+						}
+					}
+
+					.card-name {
+						// Seems to work fine with auto-resizing...
+						width: 0;
+						padding-left: min(10px, 0.8cqh);
+
+						span {
+							font-size: min(13px, 0.8cqh);
+						}
+					}
+
+					.number-of-copies,
+					.position-from-bottom,
+					.position-from-top,
+					.legendary-symbol,
+					.icon-symbol,
+					.gift-symbol {
+						width: min(23px, 10%);
+						aspect-ratio: 1;
+						height: auto;
+
+						span {
+							font-size: min(15px, 0.9cqh);
+						}
+					}
+				}
+			}
+		}
+
+		.no-list {
+			display: flex;
+			align-items: flex-start;
+			justify-content: flex-start;
+			height: 100%;
+			background-color: var(--color-5);
+			margin-left: 10px;
+			color: var(--color-1);
+			padding: 20%;
+			font-size: min(18px, 1.2cqh);
+		}
+	}
+}

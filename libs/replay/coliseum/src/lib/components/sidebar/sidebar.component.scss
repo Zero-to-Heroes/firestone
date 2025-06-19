@@ -1,0 +1,40 @@
+:host {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.menu {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-left: 10px;
+	width: calc(100% - 10px);
+	background: var(--color-5);
+	font-size: min(16px, 1.2cqh);
+	gap: min(5px, 0.6cqh);
+	padding-bottom: min(10px, 1cqh);
+
+	.menu-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-grow: 0;
+		flex-shrink: 0;
+		opacity: 0.4;
+		background: var(--color-4);
+		padding: min(5px, 0.6cqh) min(10px, 1.2cqh);
+
+		&.selected {
+			opacity: 0.9;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.decks {
+	flex-grow: 1;
+	min-height: 0;
+}

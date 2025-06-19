@@ -82,6 +82,9 @@ import { SecretRevealedComponent } from './components/game/secret-revealed.compo
 import { TargetZoneComponent } from './components/game/target-zone.component';
 import { PreloaderComponent } from './components/preloader.component';
 import { SeekerComponent } from './components/seeker.component';
+import { EventsLogComponent } from './components/sidebar/events-log.component';
+import { PlayerDecksComponent } from './components/sidebar/player-decks.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { TooltipComponent, TooltipsComponent } from './components/tooltips.component';
 import { TransitionGroupComponent } from './components/transition-group.component';
 import { TurnNarratorComponent } from './components/turn-narrator.component';
@@ -115,6 +118,9 @@ import { Events } from './services/events.service';
 		PlayAreaComponent,
 		HandComponent,
 		ManaTrayComponent,
+		SidebarComponent,
+		PlayerDecksComponent,
+		EventsLogComponent,
 
 		BoardComponent,
 		CardOnBoardComponent,
