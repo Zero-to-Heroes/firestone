@@ -57,24 +57,6 @@ import { Subscription } from 'rxjs';
 					<div class="value">{{ gameTime }}</div>
 				</div>
 			</div>
-
-			<!-- <div class="right-info">
-				<div class="replay" *ngIf="reviewId" (click)="showReplay()">
-					<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
-					<div
-						class="watch-icon"
-						[helpTooltip]="
-							!showReplayLabel
-								? ('app.replays.replay-info.watch-replay-button-tooltip' | owTranslate)
-								: null
-						"
-					>
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-						</svg>
-					</div>
-				</div>
-			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -239,9 +221,10 @@ export const extractTime = (durationInSeconds: number): { min: string; sec: stri
 export const extractTimeWithHours = (durationInSeconds: number): { min: string; sec: string; hrs: string } => {
 	const hours = `${Math.floor(durationInSeconds / 3600)}`;
 
-	const minutes = hours === '0' 
-		? `${Math.floor((durationInSeconds % 3600) / 60)}` 
-		: `${Math.floor((durationInSeconds % 3600) / 60)}`.padStart(2, '0');
+	const minutes =
+		hours === '0'
+			? `${Math.floor((durationInSeconds % 3600) / 60)}`
+			: `${Math.floor((durationInSeconds % 3600) / 60)}`.padStart(2, '0');
 	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
 	return {
 		min: minutes,

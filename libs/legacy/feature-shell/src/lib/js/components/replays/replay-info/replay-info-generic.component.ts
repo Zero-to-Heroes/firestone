@@ -63,21 +63,12 @@ import { extractTime } from './replay-info-ranked.component';
 			</div>
 
 			<div class="right-info">
-				<div class="replay" *ngIf="reviewId" (click)="showReplay()">
-					<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
-					<div
-						class="watch-icon"
-						[helpTooltip]="
-							!showReplayLabel
-								? ('app.replays.replay-info.watch-replay-button-tooltip' | owTranslate)
-								: null
-						"
-					>
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-						</svg>
-					</div>
-				</div>
+				<watch-replay-button
+					class=""
+					*ngIf="reviewId"
+					[reviewId]="reviewId"
+					[showReplayEvent]="showReplay"
+				></watch-replay-button>
 			</div>
 		</div>
 	`,
@@ -149,9 +140,9 @@ export class ReplayInfoGenericComponent
 		this.sub$$?.unsubscribe();
 	}
 
-	showReplay() {
+	showReplay = () => {
 		this.store.send(new ShowReplayEvent(this.reviewId));
-	}
+	};
 
 	capitalize(input: string): string {
 		return capitalizeEachWord(input);

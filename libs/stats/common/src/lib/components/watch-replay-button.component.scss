@@ -1,0 +1,37 @@
+.replay {
+	display: flex;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--default-text-color);
+	--icon-color: var(--default-text-color);
+	align-items: center;
+	flex-grow: 0;
+	justify-content: flex-end;
+	// margin-left: auto;
+
+	.watch {
+		margin-right: 10px;
+	}
+
+	&:hover,
+	&:hover svg {
+		color: var(--on-menu-selection-color);
+		--icon-color: var(--on-menu-selection-color);
+	}
+}
+
+.watch-icon {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	transition: 0.15s;
+	color: transparent;
+
+	svg {
+		fill: transparent;
+	}
+}

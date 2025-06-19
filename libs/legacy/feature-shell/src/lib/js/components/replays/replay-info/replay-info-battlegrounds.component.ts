@@ -104,21 +104,12 @@ import { extractTime } from './replay-info-ranked.component';
 					</div>
 				</div>
 
-				<div class="replay" *ngIf="reviewId" (click)="showReplay()">
-					<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
-					<div
-						class="watch-icon"
-						[helpTooltip]="
-							!showReplayLabel
-								? ('app.replays.replay-info.watch-replay-button-tooltip' | owTranslate)
-								: null
-						"
-					>
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-						</svg>
-					</div>
-				</div>
+				<watch-replay-button
+					class=""
+					*ngIf="reviewId"
+					[reviewId]="reviewId"
+					[showReplayEvent]="showReplay"
+				></watch-replay-button>
 			</div>
 		</div>
 	`,
@@ -173,9 +164,9 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	showReplay() {
+	showReplay = () => {
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
-	}
+	};
 
 	showStats() {
 		this.stateUpdater.next(new TriggerShowMatchStatsEvent(this.reviewId));

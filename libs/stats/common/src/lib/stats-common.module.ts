@@ -6,10 +6,11 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { RankImageComponent } from './components/rank-image.component';
 import { ReplayInfoGeneric2Component } from './components/replay-info-generic-2.component';
+import { WatchReplayButtonComponent } from './components/watch-replay-button.component';
 import { MatchAnalysisService } from './services/match-analysis.service';
 import { ReplayMetadataBuilderService } from './services/replay-metadata-bulder.service';
 
-const components = [ReplayInfoGeneric2Component, RankImageComponent];
+const components = [ReplayInfoGeneric2Component, RankImageComponent, WatchReplayButtonComponent];
 
 @NgModule({
 	imports: [
