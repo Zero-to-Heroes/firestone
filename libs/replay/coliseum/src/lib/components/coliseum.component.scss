@@ -52,7 +52,7 @@
 				justify-content: center;
 				margin-left: 10px;
 				position: relative;
-				font-size: min(18px, 1.5vh);
+				font-size: min(16px, 1.2cqh);
 
 				.info {
 					position: absolute;
@@ -76,23 +76,23 @@
 
 					.card .deck-card {
 						width: calc(100% - 10px);
-						height: min(26px, 2vh);
-						font-size: min(16px, 1.6vh);
+						height: min(26px, 2cqh);
 
 						.mana-cost {
 							width: min(30px, 15%);
 
 							span {
-								font-size: min(16px, 1.6vh);
+								font-size: min(16px, 1.2cqh);
 							}
 						}
 
 						.card-name {
 							// Seems to work fine with auto-resizing...
 							width: 0;
+							padding-left: min(10px, 0.8cqh);
 
 							span {
-								font-size: min(13px, 1vh);
+								font-size: min(13px, 0.8cqh);
 							}
 						}
 
@@ -107,7 +107,7 @@
 							height: auto;
 
 							span {
-								font-size: min(15px, 1.3vh);
+								font-size: min(15px, 0.9cqh);
 							}
 						}
 					}
@@ -123,6 +123,7 @@
 				margin-left: 10px;
 				color: var(--color-1);
 				padding: 20%;
+				font-size: min(18px, 1.2cqh);
 			}
 		}
 	}

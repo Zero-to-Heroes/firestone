@@ -21,6 +21,9 @@
 			// display: grid;
 			// grid-template-rows: 1fr auto auto auto;
 		}
+		.player-decks .deck-list .deck-list {
+			min-width: calc(100% + 33px);
+		}
 		.ignored-wrapper {
 			display: flex !important;
 			flex-shrink: 0;

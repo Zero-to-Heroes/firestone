@@ -44,6 +44,7 @@ export class GameReplayComponent {
 
 		console.log('[game-replay] setting game', value.replayInfo.reviewId);
 		this.decklist = value.replayInfo.playerDecklist;
+		console.debug('[game-replay] setting decklist', this.decklist, value);
 		this.loadReview(value.replayInfo.reviewId);
 	}
 
