@@ -49,7 +49,7 @@ export class SidebarComponent {
 	@Input() currentTurn: number;
 	@Input() currentActionInTurn: number;
 
-	selectedMenu: 'decks' | 'events' = 'decks';
+	selectedMenu: 'decks' | 'events' = 'events';
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
