@@ -17,4 +17,6 @@ FileSizeLimit.Int=-1
 
 ### If this doesn't work
 
-Do you have another program that interacts with Hearthstone?
+Do you have another program that interacts with Hearthstone? From a Chinese user:
+
+> 我发现问题了，我用一个中国特有的启动器启动游戏，然后炉石传说的文件夹关于日志的文件就会消失。不用它启动就不会有问题。
