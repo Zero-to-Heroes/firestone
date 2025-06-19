@@ -3,7 +3,7 @@ import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ViewRef 
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { ColiseumDebugService, ReplayLocation } from '@firestone/replay/coliseum';
-import { ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
+import { AnalyticsService, ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { debugBgsSimulation } from './debug-sim';
@@ -37,6 +37,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		private readonly http: HttpClient,
 		private readonly allCards: CardsFacadeStandaloneService,
 		private readonly debugService: ColiseumDebugService,
+		private readonly analytics: AnalyticsService,
 	) {}
 
 	async ngAfterContentInit() {
@@ -85,6 +86,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 
 		if (reviewId) {
 			const { replayXml, playerDecklist } = await this.getReplayXml(reviewId);
+			this.analytics.trackEvent('reviewId');
 			if (!replayXml) {
 				console.error('[game-replay] could not load replay xml', reviewId);
 				return;
@@ -93,11 +95,13 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 			this.playerDecklist = playerDecklist;
 		} else if (bgsSimulationId) {
 			console.log('loading', bgsSimulationId);
+			this.analytics.trackEvent('bgsSimulationId');
 			const gameSample = await this.retrieveEncodedSimulation(bgsSimulationId);
 			console.debug('parsed', gameSample);
 			this.bgsSimulation = gameSample;
 		} else if (bgsSimulation) {
 			// console.log('decoding', bgsSimulation);
+			this.analytics.trackEvent('bgsSimulation');
 			const decoded = atob(bgsSimulation);
 			// console.log('decoded', decoded);
 			const parsed = JSON.parse(decoded);

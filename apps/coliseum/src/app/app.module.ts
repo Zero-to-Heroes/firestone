@@ -11,6 +11,7 @@ import {
 	CardsFacadeStandaloneService,
 	ILocalizationService,
 	LocalizationStandaloneService,
+	PLAUSIBLE_DOMAIN,
 	setAppInjector,
 	SharedFrameworkCoreModule,
 } from '@firestone/shared/framework/core';
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
+		{ provide: PLAUSIBLE_DOMAIN, useValue: 'replays.firestoneapp.com' },
 	],
 	bootstrap: [ColiseumAppComponent],
 })
