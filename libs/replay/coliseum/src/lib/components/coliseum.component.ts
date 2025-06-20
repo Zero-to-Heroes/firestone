@@ -11,12 +11,14 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { GameFormat, GameTag, isBattlegrounds } from '@firestone-hs/reference-data';
+import { CardIds, GameFormat, GameTag, isBattlegrounds } from '@firestone-hs/reference-data';
 import {
 	Action,
 	BaconBoardVisualStateAction,
 	BattlegroundsSimulationParserService,
+	CardDiscardAction,
 	CardDrawAction,
+	CardTargetAction,
 	Game,
 	GameParserService,
 	LocationActivatedAction,
@@ -37,7 +39,15 @@ const NON_COARSE_ACTIONS = [
 	PowerTargetAction,
 	MinionDeathAction,
 	LocationActivatedAction,
+	CardDiscardAction,
 ];
+
+const isSkippedAction = (action: Action): boolean => {
+	return (
+		action instanceof CardTargetAction &&
+		action.entities.get(action.originId)?.cardID === CardIds.BloodGemNoImpactToken
+	);
+};
 
 @Component({
 	selector: 'fs-coliseum',
@@ -538,7 +548,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 
 		const currentAction = currentTurn.actions[this.currentActionInTurn];
-		if (NON_COARSE_ACTIONS.some((cls) => currentAction instanceof cls)) {
+		if (NON_COARSE_ACTIONS.some((cls) => currentAction instanceof cls) || isSkippedAction(currentAction)) {
 			this.moveCursorToNextActionCoarse();
 			return;
 		}
@@ -597,7 +607,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 
 		const currentAction = currentTurn.actions[this.currentActionInTurn];
-		if (NON_COARSE_ACTIONS.some((cls) => currentAction instanceof cls)) {
+		if (NON_COARSE_ACTIONS.some((cls) => currentAction instanceof cls) || isSkippedAction(currentAction)) {
 			this.moveCursorToPreviousActionCoarse();
 			return;
 		}
