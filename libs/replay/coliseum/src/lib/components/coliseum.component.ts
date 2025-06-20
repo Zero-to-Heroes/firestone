@@ -16,8 +16,12 @@ import {
 	Action,
 	BaconBoardVisualStateAction,
 	BattlegroundsSimulationParserService,
+	CardDrawAction,
 	Game,
 	GameParserService,
+	LocationActivatedAction,
+	MinionDeathAction,
+	PowerTargetAction,
 	Turn,
 } from '@firestone-hs/replay-parser';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
@@ -26,6 +30,14 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ColiseumDebugService } from '../services/coliseum-debug.service';
 import { GameConfService } from '../services/game-conf.service';
+
+const NON_COARSE_ACTIONS = [
+	BaconBoardVisualStateAction,
+	CardDrawAction,
+	PowerTargetAction,
+	MinionDeathAction,
+	LocationActivatedAction,
+];
 
 @Component({
 	selector: 'fs-coliseum',
@@ -91,9 +103,9 @@ import { GameConfService } from '../services/game-conf.service';
 				class="ignored-wrapper"
 				[reviewId]="reviewId"
 				[active]="!!game && !showPreloader"
-				(nextAction)="onNextAction()"
+				(nextAction)="onNextActionCoarse()"
 				(nextTurn)="onNextTurn()"
-				(previousAction)="onPreviousAction()"
+				(previousAction)="onPreviousActionCoarse()"
 				(previousTurn)="onPreviousTurn()"
 				(showHiddenCards)="onShowHiddenCards($event)"
 			>
@@ -287,12 +299,20 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.moveCursorToNextAction();
 	}
 
+	onNextActionCoarse() {
+		this.moveCursorToNextActionCoarse();
+	}
+
 	onNextTurn() {
 		this.moveCursorToNextTurn();
 	}
 
 	onPreviousAction() {
 		this.moveCursorToPreviousAction();
+	}
+
+	onPreviousActionCoarse() {
+		this.moveCursorToPreviousActionCoarse();
 	}
 
 	onPreviousTurn() {
@@ -372,11 +392,12 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 
 		const currentAction = this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn];
+		console.debug('current action', currentAction, this.currentTurn, this.currentActionInTurn);
 		this.currentAction$$.next(currentAction);
 		this.text$$.next(this.computeText());
-		// this.turnString = this.computeTurnString();
 		const gameMode = this.computeGameMode();
 		this.gameMode$$.next(gameMode);
+
 		// This avoid truncating the query string because we don't have all the info yet
 		if (complete) {
 			this.currentTime = this.computeCurrentTime();
@@ -396,7 +417,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 							!entity.getTag(GameTag.CREATOR_DBID),
 					)
 					.toArray();
-				console.debug('[app] opponent cards', opponentCards);
 				const cardIds = opponentCards.map((e) => e.cardID);
 				const groupedByCardId = groupByFunction2(cardIds, (cardId) => cardId);
 				const deckDefinition: DeckDefinition = {
@@ -464,16 +484,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		return this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn]?.textRaw;
 	}
 
-	// private computeTurnString(): string | undefined {
-	// 	if (!this.game) {
-	// 		console.warn('[app] game not present, not performing operation', 'computeTurnString');
-	// 		return undefined;
-	// 	}
-	// 	return this.game.turns.get(this.currentTurn)?.turn === 'mulligan'
-	// 		? 'Mulligan'
-	// 		: `Turn${this.game.turns.get(this.currentTurn)?.turn}`;
-	// }
-
 	private moveCursorToNextAction() {
 		if (!this.game || !this.game.turns) {
 			return;
@@ -482,13 +492,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.currentActionInTurn >= (this.game.turns.get(this.currentTurn)?.actions?.length ?? 1) - 1 &&
 			this.currentTurn >= this.game.turns.size - 1
 		) {
-			// console.debug(
-			// 	'cannot go further',
-			// 	this.currentActionInTurn,
-			// 	this.currentTurn,
-			// 	this.game.turns.size,
-			// 	this.game.turns.toJS(),
-			// );
 			return;
 		}
 		this.currentActionInTurn++;
@@ -496,7 +499,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.currentActionInTurn = 0;
 			this.currentTurn++;
 		}
-		console.debug('went further', this.currentTurn, this.currentActionInTurn);
 		const currentTurn = this.game.turns.get(this.currentTurn);
 		if (!currentTurn) {
 			return;
@@ -507,6 +509,37 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			(currentTurn.actions.length === 1 && currentTurn.actions[0] instanceof BaconBoardVisualStateAction)
 		) {
 			this.moveCursorToNextAction();
+			return;
+		}
+		this.populateInfo();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private moveCursorToNextActionCoarse() {
+		if (!this.game || !this.game.turns) {
+			return;
+		}
+		if (
+			this.currentActionInTurn >= (this.game.turns.get(this.currentTurn)?.actions?.length ?? 1) - 1 &&
+			this.currentTurn >= this.game.turns.size - 1
+		) {
+			return;
+		}
+		this.currentActionInTurn++;
+		if (this.currentActionInTurn >= (this.game.turns.get(this.currentTurn)?.actions?.length ?? 0)) {
+			this.currentActionInTurn = 0;
+			this.currentTurn++;
+		}
+		const currentTurn = this.game.turns.get(this.currentTurn);
+		if (!currentTurn) {
+			return;
+		}
+
+		const currentAction = currentTurn.actions[this.currentActionInTurn];
+		if (NON_COARSE_ACTIONS.some((cls) => currentAction instanceof cls)) {
+			this.moveCursorToNextActionCoarse();
 			return;
 		}
 		this.populateInfo();
@@ -540,6 +573,35 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.moveCursorToPreviousAction();
 			return;
 		}
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private moveCursorToPreviousActionCoarse() {
+		if (!this.game || !this.game.turns) {
+			return;
+		}
+		if (this.currentActionInTurn === 0 && this.currentTurn === 0) {
+			return;
+		}
+		this.currentActionInTurn--;
+		if (this.currentActionInTurn < 0) {
+			this.currentTurn--;
+			this.currentActionInTurn = (this.game.turns.get(this.currentTurn)?.actions.length ?? 1) - 1;
+		}
+		this.populateInfo();
+		const currentTurn = this.game.turns.get(this.currentTurn);
+		if (!currentTurn) {
+			return;
+		}
+
+		const currentAction = currentTurn.actions[this.currentActionInTurn];
+		if (NON_COARSE_ACTIONS.some((cls) => currentAction instanceof cls)) {
+			this.moveCursorToPreviousActionCoarse();
+			return;
+		}
+
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
