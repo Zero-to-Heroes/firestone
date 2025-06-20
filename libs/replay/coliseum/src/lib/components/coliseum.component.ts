@@ -402,7 +402,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 
 		const currentAction = this.game.turns.get(this.currentTurn)?.actions[this.currentActionInTurn];
-		console.debug('current action', currentAction, this.currentTurn, this.currentActionInTurn);
+		// console.debug('current action', currentAction, this.currentTurn, this.currentActionInTurn);
 		this.currentAction$$.next(currentAction);
 		this.text$$.next(this.computeText());
 		const gameMode = this.computeGameMode();
@@ -619,7 +619,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 	private moveCursorToNextTurn() {
 		const start = Date.now();
-		console.debug('moving cursor', this.currentTurn, this.game.turns.size);
+		// console.debug('moving cursor', this.currentTurn, this.game.turns.size);
 		if (!this.game || !this.game.turns) {
 			return;
 		}
@@ -630,7 +630,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.currentTurn++;
 		this.populateInfo();
 
-		console.debug('moved cursor', Date.now() - start, this.currentTurn, this.game.turns.size);
+		// console.debug('moved cursor', Date.now() - start, this.currentTurn, this.game.turns.size);
 		const currentTurn = this.game.turns.get(this.currentTurn);
 		if (!currentTurn) {
 			return;

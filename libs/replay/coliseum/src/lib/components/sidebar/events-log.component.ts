@@ -110,14 +110,14 @@ export class EventsLogComponent extends AbstractSubscriptionComponent implements
 	private buildEventsLog(game: Game): ActionHistory[] {
 		// Process the game data to build the events log
 		// This is where you would implement the logic to extract and display events from the game
-		console.log('Game data received:', game);
+		// console.log('Game data received:', game);
 		const player = game.players[0];
 		const opponent = game.players[1];
 		const logs: ActionHistory[] = game.turns
 			.entrySeq()
 			.map(([turnNumber, turn]) => {
 				if (!turn.actions?.length) {
-					console.warn('No actions for turn', turnNumber, turn);
+					// console.warn('No actions for turn', turnNumber, turn);
 					return [];
 				}
 
@@ -162,19 +162,19 @@ export class EventsLogComponent extends AbstractSubscriptionComponent implements
 			.toArray()
 			.flat()
 			.sort((a, b) => a.turnNumber - b.turnNumber || a.actionNumber - b.actionNumber);
-		console.debug('Turn history:', logs);
+		// console.debug('Turn history:', logs);
 		return logs;
 	}
 
 	private buildBattlegroundsEventsLog(game: Game): ActionHistory[] {
 		// Process the game data to build the events log
 		// This is where you would implement the logic to extract and display events from the game
-		console.log('BG Game data received:', game);
+		// console.log('BG Game data received:', game);
 		const logs: ActionHistory[] = game.turns
 			.entrySeq()
 			.map(([turnNumber, turn]) => {
 				if (!turn.actions?.length) {
-					console.warn('No actions for turn', turnNumber, turn);
+					// console.warn('No actions for turn', turnNumber, turn);
 					return [];
 				}
 				// Nothing happens here, I think it's just the validation of the hero selection
@@ -231,7 +231,7 @@ export class EventsLogComponent extends AbstractSubscriptionComponent implements
 			.toArray()
 			.flat()
 			.sort((a, b) => a.turnNumber - b.turnNumber || a.actionNumber - b.actionNumber);
-		console.debug('Turn history:', logs);
+		// console.debug('Turn history:', logs);
 		return logs;
 	}
 }
