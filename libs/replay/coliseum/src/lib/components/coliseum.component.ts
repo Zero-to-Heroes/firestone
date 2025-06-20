@@ -62,7 +62,6 @@ import { GameConfService } from '../services/game-conf.service';
 
 							<sidebar
 								class="sidebar"
-								*ngIf="!!decklist?.length || !!opponentDecklist?.length"
 								[decklist]="decklist"
 								[opponentDecklist]="opponentDecklist"
 								[game]="game"
@@ -496,8 +495,8 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		if (this.currentActionInTurn >= (this.game.turns.get(this.currentTurn)?.actions?.length ?? 0)) {
 			this.currentActionInTurn = 0;
 			this.currentTurn++;
-			// console.debug('went further', this.currentTurn, this.currentActionInTurn);
 		}
+		console.debug('went further', this.currentTurn, this.currentActionInTurn);
 		const currentTurn = this.game.turns.get(this.currentTurn);
 		if (!currentTurn) {
 			return;

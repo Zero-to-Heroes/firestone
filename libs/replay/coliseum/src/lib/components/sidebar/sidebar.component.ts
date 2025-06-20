@@ -14,7 +14,7 @@ import { Game } from '@firestone-hs/replay-parser';
 	selector: 'sidebar',
 	styleUrls: ['../../global.scss', './sidebar.component.scss'],
 	template: `
-		<div class="menu">
+		<div class="menu" *ngIf="!!decklist?.length || !!opponentDecklist?.length">
 			<div class="menu-item" (click)="selectMenu('decks')" [ngClass]="{ selected: selectedMenu === 'decks' }">
 				Decks
 			</div>
