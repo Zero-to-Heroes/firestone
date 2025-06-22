@@ -65,6 +65,21 @@ import { Key } from 'ts-keycode-enum';
 					</button>
 					<button
 						class="gs-icon player-control-main player-control-element hint-tooltip-container"
+						(click)="goPreviousActionDetailed()"
+					>
+						<svg viewBox="0 0 30 30">
+							<polygon points="20 8 10 15 20 22 20 8" fill="currentcolor" />
+							<rect x="9" y="8" width="1" height="14" fill="currentcolor" />
+							<!-- Pause Symbol (bottom left) -->
+							<rect x="6.5" y="17.5" width="2" height="8" fill="currentcolor" rx="0.7" />
+							<rect x="10" y="17.5" width="2" height="8" fill="currentcolor" rx="0.7" />
+						</svg>
+						<div class="hint-tooltip hint-tooltip-top dark-theme">
+							<span>Previous action (step-by-step)<br /><kbd>Shift</kbd> + <kbd>🡨</kbd></span>
+						</div>
+					</button>
+					<button
+						class="gs-icon player-control-main player-control-element hint-tooltip-container"
 						(click)="goPreviousAction()"
 					>
 						<svg viewBox="0 0 30 30">
@@ -102,6 +117,22 @@ import { Key } from 'ts-keycode-enum';
 						</svg>
 						<div class="hint-tooltip hint-tooltip-top dark-theme">
 							<span>Next action<br /><kbd>🡪</kbd></span>
+						</div>
+					</button>
+					<button
+						class="gs-icon player-control-main player-control-element hint-tooltip-container"
+						(click)="goNextActionDetailed()"
+					>
+						<svg viewBox="0 0 30 30">
+							<!-- Play (Next) Arrow -->
+							<polygon points="10 8 20 15 10 22 10 8" fill="currentcolor" />
+							<rect x="20" y="8" width="1" height="14" fill="currentcolor" />
+							<!-- Pause Symbol (bottom right,) -->
+							<rect x="21.5" y="17.5" width="2" height="8" fill="currentcolor" rx="0.7" />
+							<rect x="25" y="17.5" width="2" height="8" fill="currentcolor" rx="0.7" />
+						</svg>
+						<div class="hint-tooltip hint-tooltip-top dark-theme">
+							<span>Next action (step-by-step)<br /><kbd>Shift</kbd> + <kbd>🡪</kbd></span>
 						</div>
 					</button>
 					<button
@@ -274,8 +305,10 @@ import { Key } from 'ts-keycode-enum';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlsComponent implements OnInit, OnDestroy {
+	@Output() nextActionDetailed = new EventEmitter<void>();
 	@Output() nextAction = new EventEmitter<void>();
 	@Output() nextTurn = new EventEmitter<void>();
+	@Output() previousActionDetailed = new EventEmitter<void>();
 	@Output() previousAction = new EventEmitter<void>();
 	@Output() previousTurn = new EventEmitter<void>();
 	@Output() showHiddenCards = new EventEmitter<boolean>();
@@ -320,10 +353,14 @@ export class ControlsComponent implements OnInit, OnDestroy {
 	onKeyPressHandler(event: KeyboardEvent) {
 		switch (event.which) {
 			case Key.RightArrow:
-				event.ctrlKey ? this.goNextTurn() : this.goNextAction();
+				event.ctrlKey ? this.goNextTurn() : event.shiftKey ? this.goNextActionDetailed() : this.goNextAction();
 				break;
 			case Key.LeftArrow:
-				event.ctrlKey ? this.goPreviousTurn() : this.goPreviousAction();
+				event.ctrlKey
+					? this.goPreviousTurn()
+					: event.shiftKey
+					? this.goPreviousActionDetailed()
+					: this.goPreviousAction();
 				break;
 			case Key.Space:
 				// eslint-disable-next-line no-case-declarations
@@ -356,8 +393,16 @@ export class ControlsComponent implements OnInit, OnDestroy {
 		this.previousTurn.next();
 	}
 
+	goPreviousActionDetailed() {
+		this.previousActionDetailed.next();
+	}
+
 	goPreviousAction() {
 		this.previousAction.next();
+	}
+
+	goNextActionDetailed() {
+		this.nextActionDetailed.next();
 	}
 
 	goNextAction() {
