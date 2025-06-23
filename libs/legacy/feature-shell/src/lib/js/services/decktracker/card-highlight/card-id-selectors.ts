@@ -212,6 +212,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, dragon);
 		case CardIds.AmitusThePeacekeeper:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.AmorphousSlime:
+			return and(side(inputSide), or(inHand, inDeck), undead, minion);
 		case CardIds.AmitusThePeacekeeper_ReinforcedToken:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.AmuletOfUndying:
@@ -232,6 +234,9 @@ export const cardIdSelector = (
 		case CardIds.AncientOfGrowth:
 		case CardIds.AncientOfGrowth_AncientGrowth:
 			return and(side(inputSide), or(inDeck, inHand), isTreant);
+		case CardIds.AnimaExtractor:
+		case CardIds.AnimaExtractor_CORE_REV_332:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.AnimateDead:
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(4)));
 		case CardIds.AnimatedAvalanche:
@@ -2888,6 +2893,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.TamsinsPhylactery:
 			return and(side(inputSide), minion, inGraveyard, deathrattle);
+		case CardIds.TamsinRoame_BAR_918:
+			return and(side(inputSide), or(inHand, inDeck), shadow, spell, effectiveCostMore(0));
 		case CardIds.TangledWrath:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.TastyFlyfish:
