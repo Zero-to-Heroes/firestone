@@ -1,4 +1,13 @@
-import { CardClass, CardType, GameFormat, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	CardClass,
+	CardType,
+	GameFormat,
+	GameTag,
+	GameType,
+	Race,
+	ReferenceCard,
+	SpellSchool,
+} from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
 import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard, Metadata } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -23,6 +32,7 @@ import {
 	minion,
 	or,
 	orWithHighlight,
+	raceIn,
 	restoreHealth,
 	side,
 	spell,
@@ -356,7 +366,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		context?: 'discover',
 	): Selector {
 		// Mechanic-specific highlights
-		const selectors = [];
+		const selectors: Selector[] = [];
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
 		if (!!selector) {
 			selectors.push(selector);
@@ -402,6 +412,24 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.EXCAVATE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), excavate));
+		}
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.KINDRED]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.KINDRED])
+		) {
+			const spellSchool = this.allCards.getCard(cardId).spellSchool
+				? SpellSchool[this.allCards.getCard(cardId).spellSchool]
+				: null;
+			selectors.push(
+				and(
+					side(inputSide),
+					or(inDeck, inHand),
+					or(
+						spellSchool(spellSchool),
+						raceIn(this.allCards.getCard(cardId).races?.map((r) => Race[r] as Race)),
+					),
+				),
+			);
 		}
 		if (
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||

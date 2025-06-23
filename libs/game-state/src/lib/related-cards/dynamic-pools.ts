@@ -20,6 +20,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 
+import { TempCardIds } from '@firestone/shared/common/service';
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
@@ -279,6 +280,11 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.SubmergedMap:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.MURLOC) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.MismatchedFossils_DEEP_001:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -308,6 +314,7 @@ const getDynamicFilters = (
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.SneedsOldShredder_CORE_GVG_114:
 		case CardIds.WishingWell_WW_415:
+		case TempCardIds.MerchantOfLegend:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
 		case CardIds.WyrmrestPurifier:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass);
@@ -354,6 +361,14 @@ const getDynamicFilters = (
 		case CardIds.Webspinner_CORE_FP1_011:
 		case CardIds.WildernessPack_MIS_104:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
+		case TempCardIds.ShokkJungleTyrant:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.BEAST) &&
+				(hasCost(c, '==', 8) || hasCost(c, '==', 6) || hasCost(c, '==', 4));
+		case TempCardIds.OddMap:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && (c?.attack ?? 0) % 2 === 1;
 
 		case CardIds.Kiljaeden_GDB_145:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
@@ -498,7 +513,6 @@ const getDynamicFilters = (
 		case CardIds.DarkPeddler_CORE_WON_096:
 		case CardIds.SuspiciousPeddler:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 1);
-
 		case CardIds.ScarabKeychain_TOY_006:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 2);
 
@@ -539,10 +553,15 @@ const getDynamicFilters = (
 		case CardIds.ToysnatchingGeist_MIS_006:
 		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
 		case CardIds.RiteOfAtrocity_EDR_811:
+		case TempCardIds.Paleomancy:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SweetenedSnowflurry_TOY_307:
 		case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FROST);
+		case TempCardIds.HiveMap:
+			return (c) => hasCorrectSpellSchool(c, SpellSchool.FEL) && canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.CryptMap:
+			return (c) => hasCorrectRune(c, DkruneTypes.FROSTRUNE) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SparkOfLife_EDR_872:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -560,6 +579,8 @@ const getDynamicFilters = (
 		case CardIds.ForbiddenShrine_EDR_520:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
+		case TempCardIds.ScrappyScavenger:
+			return (c) => hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
 		case CardIds.Alarashi_EDR_493:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.AvantGardening_EDR_488:
@@ -649,7 +670,10 @@ const getDynamicFilters = (
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.ShriekingShroom:
 		case CardIds.ShimmerShot_DEEP_003:
+		case TempCardIds.BloodpetalBiome:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
+		case TempCardIds.TunnelTerror:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.DistressSignal_GDB_883:
 		case CardIds.DwarfPlanet_GDB_233:
 		case CardIds.FacelessLackey:
@@ -659,7 +683,6 @@ const getDynamicFilters = (
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
 		case CardIds.TwilightInfluence_EDR_463:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.HiddenMeaning:
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
@@ -667,7 +690,11 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
 		case CardIds.IronforgePortal:
 		case CardIds.IronforgePortal_WON_337:
+		case TempCardIds.ThreshridersBlessing:
+		case TempCardIds.GravedawnVoidbulb:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 4);
+		case TempCardIds.UnearthedArtifact:
+			return (c) => hasCorrectType(c, CardType.MINION) && (hasCost(c, '==', 2) || hasCost(c, '==', 4));
 		case CardIds.JandiceBarov_SCH_351:
 		case CardIds.WardOfEarth_EDR_060:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 5);
@@ -678,15 +705,24 @@ const getDynamicFilters = (
 		case CardIds.MoongladePortal_KAR_075:
 		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 6);
-
 		case CardIds.PlaguedProtodrake:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 7);
-
 		case CardIds.SunsetVolley_WW_427:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
 
+		// Random X Cost Spell(s)
+		case TempCardIds.RelicOfKings:
+			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 8);
+
+		// Random X Spell School Spell(s)
 		case CardIds.ExarchOthaar_GDB_856:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.ARCANE);
+		case TempCardIds.WhisperingStone:
+			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FEL);
+		case TempCardIds.TwilightMender:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				(hasCorrectSpellSchool(c, SpellSchool.SHADOW) || hasCorrectSpellSchool(c, SpellSchool.HOLY));
 
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:

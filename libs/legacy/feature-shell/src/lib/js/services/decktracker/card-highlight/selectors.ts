@@ -11,6 +11,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
@@ -231,6 +232,11 @@ export const cardsPlayedThisMatch = (input: SelectorInput): boolean =>
 		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
 	);
 
+export const cardsPlayedThisTurn = (input: SelectorInput): boolean =>
+	input.deckState?.cardsPlayedThisTurn.some(
+		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
+	);
+
 export const cardsPlayedLastTurn = (input: SelectorInput): boolean =>
 	input.deckState?.cardsPlayedLastTurn.some(
 		(c) => Math.abs(c.entityId) === Math.abs(input.entityId) && c.cardId === input.cardId,
@@ -297,6 +303,7 @@ export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
+export const kindred = hasMechanic(GameTag.KINDRED);
 // Almost all the "imbue" tags are ref tags
 export const imbue = and(
 	or(hasMechanic(GameTag.IMBUE), hasReference(GameTag.IMBUE)),
@@ -339,7 +346,7 @@ export const isPlague = (input: SelectorInput): boolean => PLAGUES.includes(inpu
 export const spellSchool =
 	(spellSchool: SpellSchool) =>
 	(input: SelectorInput): boolean =>
-		input.card?.spellSchool === SpellSchool[spellSchool];
+		spellSchool == null ? false : input.card?.spellSchool === SpellSchool[spellSchool];
 export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
@@ -388,7 +395,7 @@ export const givesArmor = (Input: SelectorInput): boolean => {
 export const race =
 	(race: Race) =>
 	(input: SelectorInput): boolean =>
-		input.card?.races?.includes(Race[race]) || input.card?.races?.includes(Race[Race.ALL]);
+		race == null ? false : input.card?.races?.includes(Race[race]) || input.card?.races?.includes(Race[Race.ALL]);
 export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
@@ -404,6 +411,13 @@ export const undead = race(Race.UNDEAD);
 export const whelp = hasMechanic(GameTag.WHELP);
 export const tribeless = (input: SelectorInput): boolean =>
 	(input.card?.races?.filter((r) => r !== Race[Race.BLANK]).length ?? 0) === 0;
+export const raceIn =
+	(races: readonly Race[]) =>
+	(input: SelectorInput): boolean => {
+		return !races?.length
+			? false
+			: input.card?.races?.includes(Race[Race.ALL]) || input.card?.races?.some((r) => races.includes(Race[r]));
+	};
 
 export const classGroup =
 	(classGroup: GameTag.PROTOSS | GameTag.ZERG | GameTag.TERRAN) =>
@@ -474,6 +488,16 @@ export const spendCorpse = (input: SelectorInput): boolean => {
 export const generateCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]);
 };
+export const generateSlagclaw = cardIs(
+	TempCardIds.Slagclaw as unknown as CardIds,
+	TempCardIds.SizzlingCinder as unknown as CardIds,
+	TempCardIds.SizzlingSwarm as unknown as CardIds,
+	TempCardIds.Cinderfin as unknown as CardIds,
+);
+export const generatesTemporaryCard = cardIs(
+	TempCardIds.CursedCatacombs as unknown as CardIds,
+	TempCardIds.BloodpetalBiome as unknown as CardIds,
+);
 export const starshipPiece = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
@@ -508,10 +532,7 @@ export const isStarshipPieceFor =
 export const darkGift = (input: SelectorInput): boolean => {
 	return discover(input) && input.card?.referencedTags?.includes(GameTag[GameTag.DARK_GIFT]);
 };
-// export const createsDarkGift = cardIs(
-// 	CardIds.TreacherousTormentor_EDR_102,
-// 	CardIds.CreatureOfMadness_EDR_105,
-// 	CardIds.Darkride,
-// 	CardIds.Cremate,
-
-// )
+// TODO
+export const shufflesCardIntoDeck = (input: SelectorInput): boolean => {
+	return false;
+};

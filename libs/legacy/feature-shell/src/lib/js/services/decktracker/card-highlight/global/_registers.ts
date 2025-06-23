@@ -4,6 +4,7 @@ import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
+import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
 import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
@@ -24,6 +25,7 @@ import { ParrotMascot } from './parrot-mascot';
 import { PetParrot } from './pet-parrot';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
+import { Ressucitate } from './ressucitate';
 import { ReturnPolicy } from './return-policy';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TidepoolPupil } from './tidepool-pupil';
@@ -36,6 +38,8 @@ import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
 
 const cards = [
+	Ressucitate,
+	CreatureOfTheSacredCave,
 	JimRaynor,
 	CarryOnSuitcase,
 	WallowTheWretched,
