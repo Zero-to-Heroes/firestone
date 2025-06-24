@@ -1218,6 +1218,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ForebodingFlame_GDB_121:
 			return and(side(inputSide), or(inDeck, inHand), demon, notInInitialDeck);
+		case CardIds.ForsakenLieutenant_AV_601:
+			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.ForgedInFlame:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.FossilFanatic:
