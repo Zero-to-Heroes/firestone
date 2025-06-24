@@ -2560,6 +2560,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.SeafloorGateway_TSC_055:
 			return and(side(inputSide), inDeck, minion, mech);
+		case CardIds.SeafloorSavior_TSC_083:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.SeascoutOperator_TSC_646:
 			return and(side(inputSide), or(inHand, inDeck), minion, mech);
 		case CardIds.SecurityAutomaton_TSC_928:
