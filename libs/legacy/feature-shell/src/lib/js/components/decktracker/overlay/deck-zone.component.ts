@@ -318,7 +318,10 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 			? 'creators'
 			: 'creators-' + (card.creatorCardIds || []).join('-');
 		const keyWithGift =
-			!groupSameCardsTogether && showGiftsSeparately ? keyWithHighlights + creatorsKeySuffix : keyWithHighlights;
+			// Unknown cards are still displayed by their creator
+			!cardIdForGrouping || (!groupSameCardsTogether && showGiftsSeparately)
+				? keyWithHighlights + creatorsKeySuffix
+				: keyWithHighlights;
 		const keyWithBottom = showBottomCardsSeparately
 			? keyWithGift + 'bottom-' + (card.positionFromBottom ?? '')
 			: keyWithGift;
