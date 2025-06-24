@@ -3253,6 +3253,8 @@ export const cardIdSelector = (
 					and(side(inputSide), or(inDeck, inHand), draenei, or(battlecry, deathrattle)),
 				)(input);
 			};
+		case CardIds.Vendetta:
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.VeteranWarmedic:
 			return and(side(inputSide), or(inHand, inDeck), holy, spell);
 		case CardIds.VengefulSpirit_BAR_328:

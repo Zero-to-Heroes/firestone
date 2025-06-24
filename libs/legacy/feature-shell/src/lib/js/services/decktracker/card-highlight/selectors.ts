@@ -462,10 +462,13 @@ export const dream = cardClass(CardClass.DREAM);
 export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);
 
+const createsCardFromAnotherClass = (input: SelectorInput): boolean => {
+	return input.card?.mechanics?.includes('CREATES_FROM_ANOTHER_CLASS');
+};
 export const currentClass = (input: SelectorInput): boolean =>
 	!!input.deckState?.hero?.classes?.length &&
 	input.card?.classes.some((cardClass) => input.deckState.hero.classes.includes(CardClass[cardClass]));
-export const fromAnotherClass = and(not(currentClass), not(neutral), not(dream));
+export const fromAnotherClass = or(and(not(currentClass), not(neutral), not(dream)), createsCardFromAnotherClass);
 
 export const rarity =
 	(rarity: RarityTYpe) =>
