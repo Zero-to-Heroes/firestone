@@ -3,6 +3,7 @@ import { RewardTrackType } from '@firestone-hs/reference-data';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { XpForGameInfo } from '@firestone/stats/common';
 import { BehaviorSubject, filter, take } from 'rxjs';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -29,6 +30,8 @@ export class RewardMonitorService {
 	}
 
 	private async init() {
+		await waitForReady(this.gameStatus);
+
 		this.gameStatus.inGame$$
 			.pipe(
 				filter((inGame) => inGame),
