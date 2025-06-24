@@ -189,7 +189,6 @@ export const startOfGameGlobalEffectCards = [
 
 export const globalEffectCardsPlayed = [
 	...battlecryGlobalEffectCards,
-	CardIds.AirlockBreach_GDB_113,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.JourneyToTheEast_UberApocalypseTavernBrawl,
 	CardIds.BestialMadness_YOG_505,
