@@ -131,6 +131,13 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 							knobs: minionsListSizeKnobs(context),
 						},
 					},
+					{
+						type: 'toggle',
+						field: 'bgsMinionsListKeepInBounds',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-keep-in-bounds-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-keep-in-bounds-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
 				],
 			},
 			{

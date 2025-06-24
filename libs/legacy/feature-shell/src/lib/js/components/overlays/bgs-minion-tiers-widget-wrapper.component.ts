@@ -85,6 +85,13 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.handleReposition(),
 		);
 
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => prefs.bgsMinionsListKeepInBounds))
+			.subscribe(async (keepInBounds) => {
+				this.forceKeepInBounds = keepInBounds;
+				super.reposition();
+			});
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
