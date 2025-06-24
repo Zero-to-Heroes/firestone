@@ -180,9 +180,15 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 			[[], []] as [ArenaRun[], ArenaRun[]],
 		);
 		let currentAverage = firstThirty.reduce((acc, run) => acc + run.wins, 0) / firstThirty.length;
+		// for (let i = 0; i < others.length; i++) {
+		// 	const run = others[i];
+		// 	currentAverage = (currentAverage * 29) / 30 + run.wins / 30;
+		// }
+		// This has changed with 34.2.
+		// The new rating seems to require 30 runs, it basically works like the old leaderboard but your most recent run is now 10% of your score now
 		for (let i = 0; i < others.length; i++) {
 			const run = others[i];
-			currentAverage = (currentAverage * 29) / 30 + run.wins / 30;
+			currentAverage = currentAverage * 0.9 + run.wins * 0.1;
 		}
 		return {
 			average: currentAverage,
