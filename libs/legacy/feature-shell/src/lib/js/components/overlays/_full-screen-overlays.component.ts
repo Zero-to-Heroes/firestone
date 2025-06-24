@@ -19,6 +19,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
+	HEARTHSTONE_GAME_ID,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
@@ -252,7 +253,7 @@ export class FullScreenOverlaysComponent
 		console.debug('full screen ngAfterViewInit');
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
+			if (Math.floor(res?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
 				await this.changeWindowSize();
 			}
 		});

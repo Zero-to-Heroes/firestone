@@ -3,6 +3,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import {
 	AbstractFacadeService,
 	AppInjector,
+	HEARTHSTONE_GAME_ID,
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -37,14 +38,16 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		});
 
 		this.ow.addGameInfoUpdatedListener(async (res) => {
-			if (this.ow.exitGame(res)) {
-				this.inGame$$.next(false);
-				this.exitListeners.forEach((cb: any) => cb(res));
-			} else if ((await this.ow.inGame()) && (res.gameChanged || res.runningChanged)) {
-				this.inGame$$.next(true);
-				console.debug('[game-status] game launched', res);
-				this.startListeners.forEach((cb: any) => cb(res));
-				this.updateExecutionPathInPrefs(res.gameInfo?.executionPath ?? '');
+			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID) {
+				if (this.ow.exitGame(res)) {
+					this.inGame$$.next(false);
+					this.exitListeners.forEach((cb: any) => cb(res));
+				} else if ((await this.ow.inGame()) && (res.gameChanged || res.runningChanged)) {
+					this.inGame$$.next(true);
+					console.debug('[game-status] game launched', res);
+					this.startListeners.forEach((cb: any) => cb(res));
+					this.updateExecutionPathInPrefs(res.gameInfo?.executionPath ?? '');
+				}
 			}
 		});
 
