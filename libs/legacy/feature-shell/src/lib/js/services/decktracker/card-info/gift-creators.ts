@@ -1039,4 +1039,5 @@ export const giftCreators = [
 	TempCardIds.CloudSerpent,
 	TempCardIds.RelicMiner,
 	TempCardIds.MerchantOfLegend,
+	TempCardIds.NefersetWeaponsmith,
 ];

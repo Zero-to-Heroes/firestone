@@ -1,4 +1,6 @@
 export declare const enum TempCardIds {
+	NefersetWeaponsmith = 'NefersetWeaponsmith',
+	EyesInTheSky = 'EyesInTheSky',
 	MerchantOfLegend = 'MerchantOfLegend',
 	Knockback = 'Knockback',
 	UnderbrushTracker = 'UnderbrushTracker',

@@ -493,6 +493,8 @@ const getDynamicFilters = (
 		case CardIds.RunesOfDarkness_YOG_511:
 		case CardIds.SuspiciousPirate:
 			return (c) => hasCorrectType(c, CardType.WEAPON) && canBeDiscoveredByClass(c, options.currentClass);
+		case TempCardIds.NefersetWeaponsmith:
+			return (c) => hasCorrectType(c, CardType.WEAPON) && fromAnotherClass(c, options.currentClass);
 
 		// Discover a Legendary Minion Effects
 		case CardIds.TreacherousTormentor_EDR_102:

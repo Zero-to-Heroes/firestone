@@ -1,5 +1,6 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { forcedHiddenCardCreators } from '../../hs-utils';
@@ -22,6 +23,7 @@ const CARD_SENDING_TO_TOP = [
 	// take the lazy approach and use the base card
 	CardIds.DarkGiftToken_EDR_102t,
 	CardIds.SweetDreamsToken_EDR_100t8,
+	TempCardIds.EyesInTheSky,
 ];
 
 export class CardBackToDeckParser implements EventParser {
