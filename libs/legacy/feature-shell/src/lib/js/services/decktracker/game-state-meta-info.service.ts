@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CardMetaInfo, DeckCard, DeckState } from '@firestone/game-state';
-import { arraysEqual } from '@firestone/shared/framework/common';
+import { arraysEqual, Mutable } from '@firestone/shared/framework/common';
 
 @Injectable()
 export class GameStateMetaInfoService {
 	public updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
 		const newBoard = this.cleanZone(deckState.board, true);
 		const newDeck = this.cleanZone(deckState.deck, false);
-		const newHand = this.updateHand(deckState.hand, currentTurn, true);
+		const newHand = this.updateHand(deckState, deckState.hand, currentTurn, true);
 		const newOtherZone = this.cleanZone(deckState.otherZone, true);
 
 		const hasChanged =
@@ -48,19 +48,33 @@ export class GameStateMetaInfoService {
 	}
 
 	private updateHand(
+		deckState: DeckState,
 		hand: readonly DeckCard[],
 		currentTurn: number | 'mulligan',
 		removeBottomInfo: boolean,
 	): readonly DeckCard[] {
-		const newHand = hand.map((card) => this.updateCardInHand(card, currentTurn, removeBottomInfo));
+		const newHand = hand.map((card) => this.updateCardInHand(deckState, card, currentTurn, removeBottomInfo));
 		return arraysEqual(newHand, hand) ? hand : newHand;
 	}
 
-	private updateCardInHand(card: DeckCard, currentTurn: number | 'mulligan', removeBottomInfo: boolean): DeckCard {
+	private updateCardInHand(
+		deckState: DeckState,
+		card: DeckCard,
+		currentTurn: number | 'mulligan',
+		removeBottomInfo: boolean,
+	): DeckCard {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: card.metaInfo.turnAtWhichCardEnteredCurrentZone ?? currentTurn,
 			turnAtWhichCardEnteredHand: card.metaInfo.turnAtWhichCardEnteredHand ?? currentTurn,
 		} as CardMetaInfo);
+		if (
+			deckState.isOpponent &&
+			(newMeta.turnAtWhichCardEnteredHand === 'mulligan' || newMeta.turnAtWhichCardEnteredHand === 0)
+		) {
+			let startingCards = deckState.cardsInStartingHand.filter((c) => c.entityId !== card.entityId);
+			startingCards = [...startingCards, card];
+			(deckState as Mutable<DeckState>).cardsInStartingHand = startingCards;
+		}
 		const newBottomPosition = removeBottomInfo ? undefined : card.positionFromBottom;
 		const hasChanged =
 			newMeta.turnAtWhichCardEnteredCurrentZone !== card.metaInfo.turnAtWhichCardEnteredCurrentZone ||

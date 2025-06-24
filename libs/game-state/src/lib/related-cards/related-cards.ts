@@ -21,7 +21,11 @@ export const buildContextRelatedCardIds = (
 			return deckState.sideboards?.find((s) => s.keyCardId === cardId)?.cards ?? [];
 		case CardIds.StarlightWhelp:
 		case CardIds.HexLordMalacrass:
-			return deckState.cardsInStartingHand?.map((c) => c.cardId).filter((c) => c !== cardId) ?? [];
+			return (
+				deckState.cardsInStartingHand
+					?.map((c) => c.cardId ?? deckState.findCard(c.entityId)?.card?.cardId)
+					.filter((c) => c !== cardId) ?? []
+			);
 		default:
 			const dynamicCards = getDynamicRelatedCardIds(cardId, allCards.getService(), {
 				format: metaData.formatType,
