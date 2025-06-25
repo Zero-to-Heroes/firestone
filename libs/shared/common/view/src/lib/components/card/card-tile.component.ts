@@ -1,20 +1,25 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	HostListener,
 	Inject,
 	Input,
+	OnDestroy,
 	Optional,
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { uuidShort } from '@firestone/shared/framework/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import {
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
 	ICardsHighlightService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'card-tile',
@@ -25,7 +30,8 @@ import {
 			[ngClass]="{
 				'color-mana-cost': true,
 				'color-class-cards': false,
-				'linked-card': linkedCardHighlight
+				'linked-card': linkedCardHighlight,
+				'old-style': !useNewCardTileStyle
 			}"
 			[cardTooltip]="_cardId"
 			[cardTooltipPosition]="'auto'"
@@ -66,7 +72,7 @@ import {
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardTileComponent {
+export class CardTileComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() set cardId(value: string) {
 		this._cardId = value;
 		const refCard: ReferenceCard = this.allCards.getCard(value);
@@ -90,19 +96,41 @@ export class CardTileComponent {
 	relatedCardIds: readonly string[];
 	linkedCardHighlight: boolean | string;
 
+	useNewCardTileStyle = false;
+
 	private _uniqueId: string;
 	private _referenceCard: ReferenceCard;
 
 	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		@Inject(CARDS_HIGHLIGHT_SERVICE_TOKEN)
 		@Optional()
 		private readonly cardsHighlightService: ICardsHighlightService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+		private readonly prefs: PreferencesService,
+	) {
+		super(cdr);
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.prefs.preferences$$
+			.pipe(
+				this.mapData((prefs) => prefs.useNewCardTileStyle),
+				distinctUntilChanged(),
+			)
+			.subscribe((useNewCardTileStyle) => {
+				this.useNewCardTileStyle = useNewCardTileStyle;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+	}
 
 	@HostListener('window:beforeunload')
-	ngOnDestroy() {
+	override ngOnDestroy() {
+		super.ngOnDestroy();
 		this.cardsHighlightService?.onMouseLeave(this._cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, 'single');
 	}

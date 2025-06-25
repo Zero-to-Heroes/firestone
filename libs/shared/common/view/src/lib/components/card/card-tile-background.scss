@@ -1,3 +1,9 @@
+.old-style {
+	.card-info .gradiant-container {
+		display: none;
+	}
+}
+
 .card-info {
 	position: absolute;
 	top: 1px; // Otherwise there is a little band of color showing when art is blank
@@ -7,6 +13,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
+	background: #101530;
 
 	.card-image-container {
 		height: 100%;
@@ -14,7 +21,7 @@
 		.card-image {
 			height: 100%;
 			// Smooth the left edge of the card
-			mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 15%, black 25%, black 100%);
+			mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 15%, black 40%, black 100%);
 		}
 
 		.card-image-overlay {
@@ -50,8 +57,8 @@
 	background-position: center;
 	background-repeat: no-repeat;
 	filter: blur(8px) brightness(0.6);
-	mask-image: linear-gradient(to right, black 68%, transparent 100%);
-	// filter: blur(12px) grayscale(60%) brightness(0.7);
+	// mask-image: linear-gradient(to right, black 68%, transparent 100%);
+	mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
 
 .card-name {
@@ -77,6 +84,8 @@
 		line-height: normal;
 		font-size: 13px;
 		color: #ffe3ba;
+		// color: #e5e5e5;
+		// color: #ffffff;
 
 		text-shadow: calc(var(--card-name-outline-size) * -1) calc(var(--card-name-outline-size) * -1) 0
 				var(--card-name-outline),

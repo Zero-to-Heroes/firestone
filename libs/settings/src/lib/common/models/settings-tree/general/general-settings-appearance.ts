@@ -8,6 +8,18 @@ export const generalAppearanceSettings = (context: SettingContext): SettingNode 
 		children: null,
 		sections: [
 			{
+				id: 'decktracker-appearance',
+				title: context.i18n.translateString('settings.general.appearance.decktracker.title'),
+				settings: [
+					{
+						type: 'toggle',
+						field: 'useNewCardTileStyle',
+						label: context.i18n.translateString('settings.general.appearance.decktracker.use-new-card-tile-style'),
+						tooltip: context.i18n.translateString('settings.general.appearance.decktracker.use-new-card-tile-style-tooltip'),
+					},
+				],
+			},
+			{
 				id: 'general-appearance',
 				componentType: 'AppearanceCustomizationPageComponent',
 			},

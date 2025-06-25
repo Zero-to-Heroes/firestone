@@ -14,8 +14,9 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService, Side } from '@firestone/memory';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
 	auditTime,
@@ -53,7 +54,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				'color-mana-cost': _colorManaCost,
 				'color-class-cards': _colorClassCards,
 				missing: _isMissing,
-				'linked-card': linkedCardHighlight
+				'linked-card': linkedCardHighlight,
+				'old-style': !useNewCardTileStyle
 			}"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="'auto'"
@@ -283,6 +285,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	isUnknownCard: boolean;
 	_side: 'player' | 'opponent' | 'single';
 
+	useNewCardTileStyle = false;
+
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
@@ -299,6 +303,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly el: ElementRef,
 		private readonly cardMouseOverService: CardMousedOverService,
 		private readonly ads: AdService,
+		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
 	) {
@@ -306,10 +311,21 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	async ngAfterContentInit() {
-		await this.cardMouseOverService.isReady();
-		await this.ads.isReady();
+		await waitForReady(this.cardMouseOverService, this.ads, this.prefs);
 
 		this.forceMouseOver$ = this.forceMouseOver$$.pipe(this.mapData((value) => value));
+
+		this.prefs.preferences$$
+			.pipe(
+				this.mapData((prefs) => prefs.useNewCardTileStyle),
+				distinctUntilChanged(),
+			)
+			.subscribe((useNewCardTileStyle) => {
+				this.useNewCardTileStyle = useNewCardTileStyle;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 
 		combineLatest([
 			this.card$$.pipe(this.mapData((c) => c)),

@@ -61,6 +61,7 @@ export class Preferences implements IPreferences {
 	readonly globalWidgetOpacity: number | null = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly cardTooltipScale: number = 100;
+	readonly useNewCardTileStyle: boolean = false;
 	readonly useGroupedCounters: boolean = false;
 	readonly groupedCountersScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
