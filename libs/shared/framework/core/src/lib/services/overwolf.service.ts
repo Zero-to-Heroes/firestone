@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 export const EXTENSION_ID = 'lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob';
-const HEARTHSTONE_GAME_ID = 9898;
+export const HEARTHSTONE_GAME_ID = 9898;
 const NO_AD_PLAN = 13;
 
 // TODO: move types
