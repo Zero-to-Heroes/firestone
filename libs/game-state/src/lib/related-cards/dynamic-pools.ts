@@ -60,7 +60,8 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.FinalFrontier_GDB_857:
 			return filterCards(
 				allCards,
-				{ ...options, format: GameFormat.FT_WILD },
+				// So that we don't get cards from the arena-specific pool instead
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
@@ -70,7 +71,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.WhackAGnoll_MIS_700:
 			return filterCards(
 				allCards,
-				{ ...options, format: GameFormat.FT_WILD },
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
@@ -80,7 +81,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.ErodedSediment_WW_428:
 			return filterCards(
 				allCards,
-				{ ...options, format: GameFormat.FT_WILD },
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
@@ -89,7 +90,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.WaveOfNostalgia_MIS_701:
 			return filterCards(
 				allCards,
-				{ ...options, format: GameFormat.FT_WILD },
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
 					hasCorrectType(c, CardType.MINION) &&
