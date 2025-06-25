@@ -39,6 +39,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	selector: 'deck-card',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
+		'../../../../../../../../shared/common/view/src/lib/components/card/card-tile-background.scss',
 		'../../../../css/component/decktracker/overlay/deck-card.component.scss',
 	],
 	template: `
@@ -63,99 +64,97 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			(mouseleave)="onMouseLeave($event)"
 			(click)="onCardClicked($event)"
 		>
-			<div class="background-image" [style.background-image]="cardImage"></div>
+			<div class="card-info">
+				<div class="gradiant-container">
+					<div class="gradiant"></div>
+				</div>
+				<img [src]="cardImage" class="card-image" />
+				<div
+					class="icon-symbol"
+					*ngIf="isBurned"
+					[helpTooltip]="'decktracker.card-burned' | owTranslate"
+					[bindTooltipToGameWindow]="true"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_burned.svg"></div>
+					</div>
+				</div>
+				<div
+					class="icon-symbol transformed"
+					*ngIf="isTransformed"
+					[helpTooltip]="'decktracker.card-transformed' | owTranslate"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_transformed.svg"></div>
+					</div>
+				</div>
+				<div
+					class="gift-symbol"
+					*ngIf="creatorCardIds && creatorCardIds.length > 0"
+					[helpTooltip]="giftTooltip"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
+					</div>
+				</div>
+				<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_stolen.svg"></div>
+					</div>
+				</div>
+				<div
+					class="icon-symbol dredged"
+					*ngIf="isDredged"
+					[helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate"
+				>
+					<div class="inner-border">
+						<div class="icon svg-container" inlineSVG="assets/svg/dredged.svg"></div>
+					</div>
+				</div>
+				<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
+					</div>
+				</div>
+				<div
+					class="icon-symbol discard"
+					*ngIf="isDiscarded"
+					[helpTooltip]="'decktracker.card-discarded' | owTranslate"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_discarded.svg"></div>
+					</div>
+				</div>
+				<div
+					class="icon-symbol countered"
+					*ngIf="isCountered"
+					[helpTooltip]="'decktracker.card-countered' | owTranslate"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_burned.svg"></div>
+					</div>
+				</div>
+				<div
+					class="icon-symbol graveyard"
+					*ngIf="isGraveyard"
+					[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_graveyard.svg"></div>
+					</div>
+				</div>
+				<div class="number-of-copies" *ngIf="numberOfCopies > 1">
+					<div class="inner-border">
+						<span>{{ numberOfCopies }}</span>
+					</div>
+				</div>
+			</div>
 			<div class="mana-cost" [ngClass]="{ 'cost-reduction': manaCostReduction }">
 				<span>{{ manaCostStr }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
-			<div class="gradiant"></div>
 			<div class="card-name">
 				<span>{{ cardName }}</span>
-			</div>
-			<div
-				class="icon-symbol"
-				*ngIf="isBurned"
-				[helpTooltip]="'decktracker.card-burned' | owTranslate"
-				[bindTooltipToGameWindow]="true"
-			>
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_burned.svg"></div>
-				</div>
-			</div>
-			<div
-				class="icon-symbol transformed"
-				*ngIf="isTransformed"
-				[helpTooltip]="'decktracker.card-transformed' | owTranslate"
-			>
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_transformed.svg"></div>
-				</div>
-			</div>
-			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
-				</div>
-			</div>
-			<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_stolen.svg"></div>
-				</div>
-			</div>
-			<div
-				class="icon-symbol dredged"
-				*ngIf="isDredged"
-				[helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate"
-			>
-				<div class="inner-border">
-					<div class="icon svg-container" inlineSVG="assets/svg/dredged.svg"></div>
-				</div>
-			</div>
-			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
-				</div>
-			</div>
-			<div
-				class="icon-symbol discard"
-				*ngIf="isDiscarded"
-				[helpTooltip]="'decktracker.card-discarded' | owTranslate"
-			>
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_discarded.svg"></div>
-				</div>
-			</div>
-			<div
-				class="icon-symbol countered"
-				*ngIf="isCountered"
-				[helpTooltip]="'decktracker.card-countered' | owTranslate"
-			>
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_burned.svg"></div>
-				</div>
-			</div>
-			<div
-				class="icon-symbol graveyard"
-				*ngIf="isGraveyard"
-				[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
-			>
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_graveyard.svg"></div>
-				</div>
-			</div>
-			<!-- <div class="position-from-top" *ngIf="positionFromTop">
-				<div class="inner-border">
-					<span>{{ positionFromTop }}</span>
-				</div>
-			</div>
-			<div class="position-from-bottom" *ngIf="positionFromBottom">
-				<div class="inner-border">
-					<span>{{ positionFromBottom }}</span>
-				</div>
-			</div> -->
-			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
-				<div class="inner-border">
-					<span>{{ numberOfCopies }}</span>
-				</div>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
 			<div class="linked-card-overlay"></div>
@@ -473,7 +472,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.cardId = card.cardId;
 		this.entityId = card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
+		this.cardImage = `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`;
 		// We can't use the reference card cost, because of cards like Zilliax. So we need to make sure that the manaCost field
 		// is a strict reflection of the "raw" cost, and the actualManaCost is what gets updated after discounts
 		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;

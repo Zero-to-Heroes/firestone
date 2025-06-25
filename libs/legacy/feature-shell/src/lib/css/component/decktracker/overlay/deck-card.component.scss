@@ -59,26 +59,6 @@
 		}
 	}
 
-	.background-image {
-		position: absolute;
-		top: 1px; // Otherwise there is a little band of color showing when art is blank
-		left: 0;
-		right: 0;
-		bottom: 1px;
-		background-size: cover;
-		// Because some tiles still have a white border on the right
-		background-position-x: 15px;
-	}
-
-	.gradiant {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
-	}
-
 	&.strong {
 		background: linear-gradient(89.48deg, #090a0d 36.89%, #9fb6d7 66%, #9fb6d7 100%);
 		.background-image {
@@ -111,19 +91,6 @@
 		}
 	}
 
-	// &.in-hand {
-	// 	.gradiant {
-	// 		border: 3px solid;
-	// 		border-image: linear-gradient(45deg, rgba(159, 182, 215, 0), #ffb948) 1;
-	// 	}
-	// 	.mana-cost.mana-cost {
-	// 		background: #939393;
-	// 		span {
-	// 			color: #101530;
-	// 		}
-	// 	}
-	// }
-
 	&.color-class-cards {
 		.gradiant {
 			border: 2px solid;
@@ -147,28 +114,6 @@
 			.gradiant {
 				border-image: linear-gradient(to right, rgba(131, 5, 231, 0), #8305e7) 1;
 			}
-		}
-	}
-
-	.card-name {
-		flex-grow: 1;
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		padding-left: 10px;
-		z-index: 1;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-		width: 130px;
-
-		span {
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: normal;
-			line-height: normal;
-			font-size: 13px;
-			color: #ffe3ba;
 		}
 	}
 

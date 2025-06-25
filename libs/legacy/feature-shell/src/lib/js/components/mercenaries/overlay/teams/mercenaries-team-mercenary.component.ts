@@ -59,7 +59,7 @@ export class MercenariesTeamMercenaryComponent {
 	@Input() set mercenary(value: BattleMercenary) {
 		const refMercenaryCard = this.allCards.getCard(value.cardId);
 		this.mercCardId = value.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.png)`;
 		this.roleIcon =
 			!value.role || value.role === TagRole[TagRole.INVALID]
 				? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_neutral.png`

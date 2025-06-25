@@ -45,7 +45,7 @@ export class MercenariesActionComponent {
 		this.actionOrder = (value as any).actionOrder;
 		this.cardId = value.abilityCardId;
 		this.ownerCardId = value.ownerCardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.abilityCardId}.jpg)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.abilityCardId}.png)`;
 		this.name = abilityCard.name;
 		this.speed = value.speed != null ? Math.max(value.speed, 0) : null;
 		this.side = value.side;

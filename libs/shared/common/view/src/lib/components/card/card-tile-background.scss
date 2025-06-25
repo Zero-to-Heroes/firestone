@@ -1,0 +1,65 @@
+.card-info {
+	position: absolute;
+	top: 1px; // Otherwise there is a little band of color showing when art is blank
+	left: 0;
+	right: 0;
+	bottom: 1px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+
+	.card-image {
+		height: 100%;
+	}
+}
+
+.gradiant-container {
+	flex-grow: 1;
+	height: 100%;
+	position: relative;
+}
+
+.gradiant {
+	position: absolute;
+	top: -1px;
+	left: 0;
+	right: -55px;
+	bottom: -1px;
+	background: linear-gradient(90deg, rgb(0, 0, 0) 1%, #090a0d 75%, rgba(9, 10, 13, 0) 100%);
+}
+
+.card-name {
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding-left: 10px;
+	z-index: 1;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 130px;
+
+	// Add variables for outline color and size
+	--card-name-outline: #181818;
+	--card-name-outline-size: 1px;
+
+	span {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 13px;
+		color: #ffe3ba;
+
+		text-shadow: calc(var(--card-name-outline-size) * -1) calc(var(--card-name-outline-size) * -1) 0
+				var(--card-name-outline),
+			0 calc(var(--card-name-outline-size) * -1) 0 var(--card-name-outline),
+			calc(var(--card-name-outline-size)) calc(var(--card-name-outline-size) * -1) 0 var(--card-name-outline),
+			calc(var(--card-name-outline-size) * -1) 0 0 var(--card-name-outline),
+			calc(var(--card-name-outline-size)) 0 0 var(--card-name-outline),
+			calc(var(--card-name-outline-size) * -1) calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
+			0 calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
+			calc(var(--card-name-outline-size)) calc(var(--card-name-outline-size)) 0 var(--card-name-outline);
+	}
+}

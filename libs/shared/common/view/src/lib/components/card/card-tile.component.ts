@@ -18,7 +18,7 @@ import {
 
 @Component({
 	selector: 'card-tile',
-	styleUrls: ['./card-tile.component.scss'],
+	styleUrls: ['./card-tile.component.scss', './card-tile-background.scss'],
 	template: `
 		<div
 			class="deck-card {{ rarity }} {{ cardClass }} {{ linkedCardHighlight }}"
@@ -34,24 +34,28 @@ import {
 			(mouseenter)="onMouseEnter()"
 			(mouseleave)="onMouseLeave()"
 		>
-			<div class="background-image" [style.background-image]="cardImage"></div>
+			<div class="card-info">
+				<div class="gradiant-container">
+					<div class="gradiant"></div>
+				</div>
+				<img [src]="cardImage" class="card-image" />
+				<div class="number-of-copies" *ngIf="numberOfCopies > 1">
+					<div class="inner-border">
+						<span>{{ numberOfCopies }}</span>
+					</div>
+				</div>
+				<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
+					</div>
+				</div>
+			</div>
 			<div class="mana-cost">
 				<span>{{ manaCostStr }}</span>
 			</div>
 			<div class="missing-overlay"></div>
-			<div class="gradiant"></div>
 			<div class="card-name">
 				<span>{{ cardName }}</span>
-			</div>
-			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
-				<div class="inner-border">
-					<span>{{ numberOfCopies }}</span>
-				</div>
-			</div>
-			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
-				<div class="inner-border">
-					<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
-				</div>
 			</div>
 			<div class="linked-card-overlay"></div>
 			<div class="mouse-over"></div>
@@ -66,7 +70,7 @@ export class CardTileComponent {
 		this.rarity = refCard.rarity?.toLowerCase() ?? null;
 		this.cardClass = refCard.classes?.[0]?.toLowerCase() ?? null;
 		this.relatedCardIds = refCard.relatedCardDbfIds?.map((dbfId) => this.allCards.getCard(dbfId).id) ?? [];
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value}.jpg)`;
+		this.cardImage = `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value}.png`;
 		this.manaCostStr = refCard.hideStats ? '' : refCard.cost?.toString() ?? '?';
 		this.cardName = refCard.name;
 

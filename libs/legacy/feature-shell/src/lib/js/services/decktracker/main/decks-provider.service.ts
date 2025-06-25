@@ -579,7 +579,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 					differentCards: uniqueVersionCards,
 					backgroundImage: `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this.pickRandomCard(
 						fullyUniqueCards,
-					)}.jpg)`,
+					)}.png)`,
 				};
 			})
 			.sort((a, b) => b.lastUsedTimestamp - a.lastUsedTimestamp);

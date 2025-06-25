@@ -190,7 +190,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 						cardId: card.id,
 						displayedCardIds: this.buildAllCardIds(card.id, showGoldenCards),
 						relatedCardIds: this.buildRelatedCardIds(card.id),
-						image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.id}.jpg`,
+						image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.id}.png`,
 						fallbackImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 						name: card.name, // Already enhanced when building groups
 						highlighted: highlightedMinions.includes(card.id),
