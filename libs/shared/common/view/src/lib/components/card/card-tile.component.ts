@@ -36,9 +36,12 @@ import {
 		>
 			<div class="card-info">
 				<div class="gradiant-container">
-					<div class="gradiant"></div>
+					<div class="gradiant-image" [style.--card-image-url]="'url(' + cardImage + ')'"></div>
 				</div>
-				<img [src]="cardImage" class="card-image" />
+				<div class="card-image-container">
+					<img [src]="cardImage" class="card-image" />
+					<div class="card-image-overlay"></div>
+				</div>
 				<div class="number-of-copies" *ngIf="numberOfCopies > 1">
 					<div class="inner-border">
 						<span>{{ numberOfCopies }}</span>

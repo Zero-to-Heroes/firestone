@@ -66,9 +66,12 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		>
 			<div class="card-info">
 				<div class="gradiant-container">
-					<div class="gradiant"></div>
+					<div class="gradiant-image" [style.--card-image-url]="'url(' + cardImage + ')'"></div>
 				</div>
-				<img [src]="cardImage" class="card-image" />
+				<div class="card-image-container">
+					<img [src]="cardImage" class="card-image" />
+					<div class="card-image-overlay"></div>
+				</div>
 				<div
 					class="icon-symbol"
 					*ngIf="isBurned"

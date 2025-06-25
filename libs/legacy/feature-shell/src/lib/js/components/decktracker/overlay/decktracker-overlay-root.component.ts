@@ -167,6 +167,7 @@ export class DeckTrackerOverlayRootComponent
 	windowId: string;
 	activeTooltip: string;
 
+	// Why this value?
 	overlayWidthInPx = 227;
 
 	showBackdrop: boolean;
