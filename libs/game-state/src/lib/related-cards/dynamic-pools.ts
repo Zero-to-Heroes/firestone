@@ -727,6 +727,13 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) &&
 				(hasCorrectSpellSchool(c, SpellSchool.SHADOW) || hasCorrectSpellSchool(c, SpellSchool.HOLY));
 
+		// Discover X Spell School Spell(s)
+		case CardIds.LightningReflexes:
+			return (c) =>
+				hasCorrectSpellSchool(c, SpellSchool.NATURE) &&
+				hasCorrectType(c, CardType.SPELL) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAENEI);
