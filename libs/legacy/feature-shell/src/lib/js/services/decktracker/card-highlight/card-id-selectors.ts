@@ -238,7 +238,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.AncientOfGrowth:
 		case CardIds.AncientOfGrowth_AncientGrowth:
-			return and(side(inputSide), or(inDeck, inHand), isTreant);
+			return and(side(inputSide), or(inDeck, inHand), or(isTreant, summonsTreant));
 		case CardIds.AnimaExtractor:
 		case CardIds.AnimaExtractor_CORE_REV_332:
 			return and(side(inputSide), or(inDeck, inHand), minion);
