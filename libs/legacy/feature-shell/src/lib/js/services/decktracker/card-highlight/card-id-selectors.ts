@@ -1,6 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -505,7 +504,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), or(excavate, quickdraw, tradeable, legendary));
 		case CardIds.Braingill_GDB_878:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
-		case TempCardIds.BralmaSearstone:
+		case CardIds.BralmaSearstone_TLC_228:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.BrannBronzebeard_CORE_LOE_077:
 		case CardIds.BrannBronzebeard_LOE_077:
@@ -699,7 +698,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.CloningDevice:
 			return and(not(side(inputSide)), inDeck, minion);
-		case TempCardIds.CloudSerpent:
+		case CardIds.CloudSerpent_TLC_888:
 			return and(side(inputSide), or(inHand, inDeck), or(elemental, dragon));
 		case CardIds.ClutchOfCorruption_EDR_454:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
@@ -723,7 +722,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), fromAnotherClass);
 		case CardIds.Conductivity_YOG_522:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-		case TempCardIds.ConjuredBookkeeper:
+		case CardIds.ConjuredBookkeeper_TLC_226:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ConnivingConman_VAC_333:
 			return (input: SelectorInput): SelectorOutput => {
@@ -783,7 +782,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.CowardlyGrunt:
 			return and(side(inputSide), inDeck, minion);
-		case TempCardIds.CowerInFear:
+		case CardIds.CowerInFear_TLC_823:
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.CraneGame_TOY_884:
 			return and(side(inputSide), inDeck, demon);
@@ -792,7 +791,7 @@ export const cardIdSelector = (
 		case CardIds.CreationProtocol:
 		case CardIds.CreationProtocol_CreationProtocolToken:
 			return and(side(inputSide), inDeck, minion);
-		case TempCardIds.CreatureOfTheSacredCave:
+		case CardIds.CreatureOfTheSacredCave_TLC_430:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inDeck), holy, spell, cardsPlayedThisTurn),
 				and(side(inputSide), or(inDeck, inDeck), holy, spell),
@@ -851,7 +850,7 @@ export const cardIdSelector = (
 		// 	return and(side(inputSide), inDeck, spell);
 		case CardIds.Cultivation:
 			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
-		case TempCardIds.CursedCatacombs:
+		case CardIds.CursedCatacombs_TLC_451:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.CustomsEnforcer_VAC_440:
 			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
@@ -942,7 +941,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.DinnerPerformer:
 			return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
-		case TempCardIds.Dinositter:
+		case CardIds.Dinositter_TLC_822:
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.DirgeOfDespair:
 			return and(side(inputSide), inDeck, demon, minion);
@@ -999,7 +998,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DrBoomMadGenius:
 			return and(side(inputSide), or(inHand, inDeck), mech);
-		case TempCardIds.DreadRaptor:
+		case CardIds.DreadRaptor_TLC_432:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle, minion, effectiveCostLess(4));
 		case CardIds.DreamboundDisciple_EDR_847:
 			return and(side(inputSide), or(inHand, inDeck), imbue);
@@ -1087,8 +1086,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, taunt);
 		case CardIds.EnvoyOfTheGlade_EDR_873:
 			return and(side(inputSide), inDeck, neutral);
-		case TempCardIds.EscapeTheUnderfel:
-		case TempCardIds.EscapeTheUnderfel_UnderfelRift:
+		case CardIds.EscapeTheUnderfel_TLC_446:
+		case CardIds.EscapeTheUnderfel_UnderfelRiftToken_TLC_446t:
+		case CardIds.EscapeTheUnderfel_UnderfelRiftToken_TLC_446t1:
 			return and(side(inputSide), or(inHand, inDeck), generatesTemporaryCard);
 		case CardIds.Ensmallen_TOY_805:
 			return and(side(inputSide), inDeck, minion);
@@ -1202,7 +1202,7 @@ export const cardIdSelector = (
 		case CardIds.FlickeringLightbot_MIS_918:
 		case CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
-		case TempCardIds.FlightOfTheFirehawk:
+		case CardIds.FlightOfTheFirehawk_TLC_222:
 			return and(side(inputSide), inDeck, minion, not(tribeless));
 		case CardIds.Flowrider:
 			return highlightConditions(
@@ -1310,7 +1310,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), totem);
 		case CardIds.GiftwrappedWhelp_TOY_386:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
-		case TempCardIds.GladesongSiren:
+		case CardIds.GladesongSiren_TLC_819:
 			return and(side(inputSide), or(inDeck, inHand), or(holy, shadow), spell);
 		case CardIds.Glaivetar:
 			return and(side(inputSide), inDeck, outcast);
@@ -1475,7 +1475,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.HarrowingOx_WW_356:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
-		case TempCardIds.HatcheryHelper:
+		case CardIds.HatcheryHelper_TLC_233:
 			return and(side(inputSide), or(inDeck, inHand), minion, attackLessThan(3));
 		case CardIds.HealingWave:
 		case CardIds.HealingWave_WON_320:
@@ -1515,7 +1515,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.HighCultistBasaleph:
 			return tooltip(and(side(inputSide), minionsDeadSinceLastTurn, undead));
-		case TempCardIds.HighCultistHerenn:
+		case CardIds.HighCultistHerenn_TLC_810:
 			return and(side(inputSide), inDeck, deathrattle, minion);
 		case CardIds.HighTemplar_SC_765:
 			return and(side(inputSide), or(inHand, inDeck), templar);
@@ -1534,7 +1534,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inPlay), minion);
 		case CardIds.HornOfWrathion:
 			return and(side(inputSide), inDeck, dragon);
-		case TempCardIds.HotSpringGlider:
+		case CardIds.HotSpringGlider_TLC_428:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.HotStreak:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
@@ -1542,7 +1542,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.Hullbreaker:
 			return and(side(inputSide), inDeck, spell);
-		case TempCardIds.Hybridization:
+		case CardIds.Hybridization_TLC_236:
 			return and(side(inputSide), or(inDeck, inHand), minion, or(effectiveCostMore(0), effectiveCostLess(5)));
 		case CardIds.Hydralisk_SC_008:
 			return and(side(inputSide), or(inDeck, inHand), zerg);
@@ -1788,7 +1788,7 @@ export const cardIdSelector = (
 		case CardIds.KnightOfTheWild:
 		case CardIds.KnightOfTheWild_WON_003:
 			return and(side(inputSide), or(inDeck, inHand), beast);
-		case TempCardIds.Knockback:
+		case CardIds.Knockback_TLC_517:
 			return and(side(inputSide), or(inHand, inDeck), shufflesCardIntoDeck);
 		case CardIds.KoboldMiner_TheAzeriteRatToken_WW_001t26:
 			return (input: SelectorInput): SelectorOutput => {
@@ -1907,7 +1907,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.PatchesThePirate_LockedAndLoaded_THD_025p:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
-		case TempCardIds.LohTheLivingLegend:
+		case CardIds.LohTheLivingLegend_TLC_257:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.LokenJailerOfYoggSaron:
 			return and(side(inputSide), inDeck, minion);
@@ -1967,7 +1967,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.MaroonedArchmage_VAC_435:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-		case TempCardIds.MarshlandThresher:
+		case CardIds.MarshlandThresher_TLC_256:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Marshspawn_BT_115:
 		case CardIds.Marshspawn_CORE_BT_115:
@@ -1988,7 +1988,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Merithra_EDR_238:
 			return and(side(inputSide), or(inDeck, inHand), minion, costMore(7));
-		case TempCardIds.MechanizedMagma:
+		case CardIds.MechanizedMagma_TLC_224:
 			return and(side(inputSide), or(inDeck, inHand), fire, spell);
 		case CardIds.MechaShark_TSC_054:
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
@@ -2074,7 +2074,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.NineLives:
 			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
-		case TempCardIds.NiriOfTheCrater:
+		case CardIds.NiriOfTheCrater_TLC_836:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostEqual(1)),
 				and(side(inputSide), or(inHand, inDeck), spell, effectiveCostEqual(1)),
@@ -2156,7 +2156,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.PaintersVirtue_TOY_810:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-		case TempCardIds.Paleomancy:
+		case CardIds.Paleomancy_TLC_434:
 			return and(side(inputSide), or(inHand, inDeck), generateCorpse);
 		case CardIds.ParachuteBrigand:
 		case CardIds.PatchesThePirate_CFM_637:
@@ -2260,7 +2260,7 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, spell),
 				and(side(inputSide), inDeck, elemental),
 			);
-		case TempCardIds.PrimalfinChallenger:
+		case CardIds.PrimalfinChallenger_TLC_251:
 			return and(side(inputSide), or(inHand, inDeck), kindred);
 		case CardIds.PrimordialProtector_BAR_042:
 			return and(side(inputSide), inDeck, spell);
@@ -2358,14 +2358,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle, effectiveCostLess(5));
 		case CardIds.RazormaneBattleguard:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
-		case TempCardIds.ReachEquilibrium:
+		case CardIds.ReachEquilibrium_TLC_817:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), holy, spell),
 				and(side(inputSide), or(inHand, inDeck), shadow, spell),
 			);
-		case TempCardIds.ReanimateTheTerror:
+		case CardIds.ReanimateTheTerror_TLC_433:
 			return and(side(inputSide), or(inHand, inDeck), spendCorpse);
-		case TempCardIds.ReanimatedPterrodax:
+		case CardIds.ReanimatedPterrordax_TLC_436:
 			return and(side(inputSide), or(inHand, inDeck), spendCorpse);
 		case CardIds.RecordScratcher:
 			return and(side(inputSide), or(inHand, inDeck), combo);
@@ -2419,7 +2419,7 @@ export const cardIdSelector = (
 					.map((c) => ({ entityId: c.entityId, cardId: c.cardId }));
 				return tooltip(and(side(inputSide), entityIs(...targets)))(input);
 			};
-		case TempCardIds.Ressucitate:
+		case CardIds.Resuscitate_TLC_818:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostMore(0), effectiveCostLess(4)),
 				and(side(inputSide), inGraveyard, minion, effectiveCostMore(0), effectiveCostLess(4)),
@@ -2697,7 +2697,7 @@ export const cardIdSelector = (
 		case CardIds.SkulkingGeist_CORE_ICC_701:
 		case CardIds.SkulkingGeist_ICC_701:
 			return and(side(inputSide), or(inDeck, inHand), spell, baseCostEqual(1));
-		case TempCardIds.Slagclaw:
+		case CardIds.Slagclaw_TLC_482:
 			return and(side(inputSide), or(inDeck, inHand), generateSlagclaw);
 		case CardIds.SlagmawTheSlumbering_WW_375:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
@@ -2749,7 +2749,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Spellcoiler:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-		case TempCardIds.Spelunker:
+		case CardIds.Spelunker_TLC_450:
 			return and(side(inputSide), or(inDeck, inHand), generatesTemporaryCard);
 		case CardIds.LesserSpinelSpellstone_TOY_825:
 		case CardIds.LesserSpinelSpellstone_SpinelSpellstoneToken_TOY_825t:
@@ -2766,7 +2766,7 @@ export const cardIdSelector = (
 		case CardIds.SpiritOfTheBadlands_WW_337:
 		case CardIds.SpiritOfTheBadlands_MirageToken_WW_337t:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-		case TempCardIds.SpiritOfTheMountain:
+		case CardIds.SpiritOfTheMountain_TLC_229:
 			return and(side(inputSide), or(inHand, inDeck), minion, not(tribeless));
 		case CardIds.SpiritPeddler_WORK_015:
 			return and(side(inputSide), or(inHand, inDeck), minion);
@@ -2878,18 +2878,18 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, effectiveCostLess(4));
 		case CardIds.StoneSentinel:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
-		case TempCardIds.StorageScuffle:
+		case CardIds.StorageScuffle_TLC_365:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.Stormhammer:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.StormpikeBattleRam:
 			return and(side(inputSide), or(inDeck, inHand), minion, beast);
-		case TempCardIds.StoryOfBarnabus:
+		case CardIds.StoryOfBarnabus_TLC_231:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion, attackGreaterThan(4)),
 				and(side(inputSide), or(inDeck, inHand), minion),
 			);
-		case TempCardIds.StoryOfTheWaygate:
+		case CardIds.StoryOfTheWaygate_TLC_364:
 			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.StrandedSpaceman_GDB_861:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
@@ -2923,7 +2923,7 @@ export const cardIdSelector = (
 			};
 		case CardIds.SuperchargeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-		case TempCardIds.SupremeDinomancy:
+		case CardIds.SupremeDinomancy_TLC_828:
 			return and(side(inputSide), or(inHand, inDeck, inPlay), beast);
 		case CardIds.Surfalopod_VAC_443:
 			return and(side(inputSide), inDeck, spell);
@@ -3037,15 +3037,15 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.TheFistOfRaDen:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-		case TempCardIds.TheFoodChain:
+		case CardIds.TheFoodChain_TLC_830:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), beast, attackIs(1)),
 				and(side(inputSide), or(inDeck, inHand), beast, attackIs(3)),
 				and(side(inputSide), or(inDeck, inHand), beast, attackIs(5)),
 				and(side(inputSide), or(inDeck, inHand), beast, attackIs(7)),
 			);
-		case TempCardIds.TheForbiddenSequence:
-		case TempCardIds.TheForbiddenSequence_TheOriginStone:
+		case CardIds.TheForbiddenSequence_TLC_460:
+		case CardIds.TheForbiddenSequence_TheOriginStoneToken_TLC_460t:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t:
 			return and(side(inputSide), or(inDeck, inHand), spell);
@@ -3104,7 +3104,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, or(isPlague, generatesPlague));
 		case CardIds.TorethTheUnbreaking_EDR_258:
 			return and(side(inputSide), or(inDeck, inHand), divineShield);
-		case TempCardIds.Torga:
+		case CardIds.Torga_TLC_102:
 			return and(side(inputSide), inDeck, kindred);
 		case CardIds.TormentedDreadwing_EDR_572:
 			return and(side(inputSide), inDeck, dragon);
@@ -3183,13 +3183,13 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.UnchainedGladiator:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
-		case TempCardIds.UnderbrushTracker:
+		case CardIds.UnderbrushTracker_TLC_520:
 			return and(side(inputSide), or(inHand, inDeck), shufflesCardIntoDeck);
 		case CardIds.UnderTheSea_VAC_431:
 			return and(side(inputSide), inDeck, spell, not(cardIs(CardIds.UnderTheSea_VAC_431)));
 		case CardIds.UndyingAllies:
 			return and(side(inputSide), or(inDeck, inHand), minion, undead);
-		case TempCardIds.UnearthedArtifact:
+		case CardIds.UnearthedArtifacts_TLC_462:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.UnearthedRaptor:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
@@ -3197,8 +3197,8 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(3)));
 		case CardIds.UngoroBrochure_WORK_050:
 			return and(side(inputSide), inDeck, minion);
-		// case TempCardIds.UnleashTheColossus:
-		// case TempCardIds.GorishiColossus:
+		// case CardIds.UnleashTheColossus:
+		// case CardIds.GorishiColossus:
 		// 	return and(side(inputSide), or(inDeck, inHand), canDealExactDamage(2));
 		case CardIds.UnlockedPotential:
 			return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
@@ -3228,7 +3228,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.VarianWrynn_AT_072:
 			return and(side(inputSide), inDeck, minion);
-		case TempCardIds.VaultBreaker:
+		case CardIds.VaultBreaker_TLC_483:
 			return and(side(inputSide), or(inHand, inDeck), discover);
 		case CardIds.Vectus:
 			return highlightConditions(
@@ -3272,7 +3272,7 @@ export const cardIdSelector = (
 		case CardIds.ViciousSlitherspear_TSC_827:
 		case CardIds.ViciousSlitherspear_CORE_TSC_827:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-		case TempCardIds.VioletTreasuregill:
+		case CardIds.VioletTreasuregill_TLC_438:
 			return and(side(inputSide), inDeck, spell, effectiveCostLess(3));
 		case CardIds.Viper_SC_018:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
@@ -3286,7 +3286,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.VoidFlayer:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-		case TempCardIds.VolcanicThrasher:
+		case CardIds.VolcanicThrasher_TLC_223:
 			return and(side(inputSide), inDeck, fire, spell);
 		case CardIds.VolumeUp:
 			return and(side(inputSide), inDeck, spell);
@@ -3308,7 +3308,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.WarpGate_SC_751:
 			return and(side(inputSide), or(inHand, inDeck), protoss, minion);
-		case TempCardIds.WayOfTheShell:
+		case CardIds.WayOfTheShell_TLC_513hp:
 			return and(side(inputSide), inDeck, notInInitialDeck);
 		case CardIds.Zuljin:
 			return and(side(inputSide), or(inDeck, inHand), spell /*, generateSecret */);
@@ -3356,7 +3356,7 @@ export const cardIdSelector = (
 					CardIds.StagCharge,
 				),
 			);
-		case TempCardIds.WindsweptPageturner:
+		case CardIds.WindsweptPageturner_TLC_220:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.WingCommander:
 			return and(side(inputSide), or(inDeck, inHand), minion, dragon);

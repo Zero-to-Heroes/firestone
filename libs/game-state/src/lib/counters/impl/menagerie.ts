@@ -1,7 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState, ShortCard } from '../../models/game-state';
@@ -15,8 +14,8 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 	public override cards: readonly CardIds[] = [
 		CardIds.TheOneAmalgamBand,
 		CardIds.PowerSlider,
-		TempCardIds.SpiritOfTheMountain as unknown as CardIds,
-		TempCardIds.MountainMap as unknown as CardIds,
+		CardIds.SpiritOfTheMountain_TLC_229,
+		CardIds.MountainMap_TLC_464,
 	];
 
 	readonly player = {

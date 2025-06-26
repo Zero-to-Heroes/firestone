@@ -1,11 +1,10 @@
-import { SpellSchool } from '@firestone-hs/reference-data';
+import { CardIds, SpellSchool } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const CreatureOfTheSacredCave: GlobalHighlightCard = {
-	cardIds: [TempCardIds.CreatureOfTheSacredCave],
+	cardIds: [CardIds.CreatureOfTheSacredCave_TLC_430],
 	getRelatedCards: (
 		entityId: number,
 		side: 'player' | 'opponent' | 'single',

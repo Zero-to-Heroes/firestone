@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "15.15.1",
+	"version": "15.15.2",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -50,7 +50,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.152",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^2.0.137",
+		"@firestone-hs/reference-data": "^2.0.138",
 		"@firestone-hs/replay-metadata": "^0.0.80",
 		"@firestone-hs/replay-parser": "^1.2.53",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
@@ -164,7 +164,7 @@
 		"typescript": "^4.8.2"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^2.0.137",
+		"@firestone-hs/reference-data": "^2.0.138",
 		"@firestone-hs/hs-replay-xml-parser": "^0.0.152",
 		"@angular/common": "^15.0.0",
 		"@angular/core": "^15.0.0",

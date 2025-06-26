@@ -20,7 +20,6 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 
-import { TempCardIds } from '@firestone/shared/common/service';
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
@@ -281,7 +280,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.SubmergedMap:
+		case CardIds.SubmergedMap_TLC_442:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MURLOC) &&
@@ -315,7 +314,7 @@ const getDynamicFilters = (
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.SneedsOldShredder_CORE_GVG_114:
 		case CardIds.WishingWell_WW_415:
-		case TempCardIds.MerchantOfLegend:
+		case CardIds.MerchantOfLegend_TLC_514:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
 		case CardIds.WyrmrestPurifier:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass);
@@ -362,12 +361,12 @@ const getDynamicFilters = (
 		case CardIds.Webspinner_CORE_FP1_011:
 		case CardIds.WildernessPack_MIS_104:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
-		case TempCardIds.ShokkJungleTyrant:
+		case CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
 				(hasCost(c, '==', 8) || hasCost(c, '==', 6) || hasCost(c, '==', 4));
-		case TempCardIds.OddMap:
+		case CardIds.OddMap_TLC_824:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && (c?.attack ?? 0) % 2 === 1;
 
@@ -494,7 +493,7 @@ const getDynamicFilters = (
 		case CardIds.RunesOfDarkness_YOG_511:
 		case CardIds.SuspiciousPirate:
 			return (c) => hasCorrectType(c, CardType.WEAPON) && canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.NefersetWeaponsmith:
+		case CardIds.NefersetWeaponsmith_TLC_516:
 			return (c) => hasCorrectType(c, CardType.WEAPON) && fromAnotherClass(c, options.currentClass);
 
 		// Discover a Legendary Minion Effects
@@ -556,14 +555,14 @@ const getDynamicFilters = (
 		case CardIds.ToysnatchingGeist_MIS_006:
 		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
 		case CardIds.RiteOfAtrocity_EDR_811:
-		case TempCardIds.Paleomancy:
+		case CardIds.Paleomancy_TLC_434:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SweetenedSnowflurry_TOY_307:
 		case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FROST);
-		case TempCardIds.HiveMap:
+		case CardIds.HiveMap_TLC_900:
 			return (c) => hasCorrectSpellSchool(c, SpellSchool.FEL) && canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.CryptMap:
+		case CardIds.CryptMap_TLC_435:
 			return (c) => hasCorrectRune(c, DkruneTypes.FROSTRUNE) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SparkOfLife_EDR_872:
 			return (c) =>
@@ -582,7 +581,7 @@ const getDynamicFilters = (
 		case CardIds.ForbiddenShrine_EDR_520:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
-		case TempCardIds.ScrappyScavenger:
+		case CardIds.ScrappyScavenger_TLC_461:
 			return (c) => hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
 		case CardIds.Alarashi_EDR_493:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
@@ -673,9 +672,9 @@ const getDynamicFilters = (
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.ShriekingShroom:
 		case CardIds.ShimmerShot_DEEP_003:
-		case TempCardIds.BloodpetalBiome:
+		case CardIds.BloodpetalBiome_TLC_449:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
-		case TempCardIds.TunnelTerror:
+		case CardIds.TunnelTerror_TLC_469:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.DistressSignal_GDB_883:
 		case CardIds.DwarfPlanet_GDB_233:
@@ -693,10 +692,10 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
 		case CardIds.IronforgePortal:
 		case CardIds.IronforgePortal_WON_337:
-		case TempCardIds.ThreshridersBlessing:
-		case TempCardIds.GravedawnVoidbulb:
+		case CardIds.ThreshridersBlessing_TLC_477:
+		case CardIds.GravedawnVoidbulb_TLC_815:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 4);
-		case TempCardIds.UnearthedArtifact:
+		case CardIds.UnearthedArtifacts_TLC_462:
 			return (c) => hasCorrectType(c, CardType.MINION) && (hasCost(c, '==', 2) || hasCost(c, '==', 4));
 		case CardIds.JandiceBarov_SCH_351:
 		case CardIds.WardOfEarth_EDR_060:
@@ -714,15 +713,15 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
 
 		// Random X Cost Spell(s)
-		case TempCardIds.RelicOfKings:
+		case CardIds.RelicOfKings_TLC_334:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 8);
 
 		// Random X Spell School Spell(s)
 		case CardIds.ExarchOthaar_GDB_856:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.ARCANE);
-		case TempCardIds.WhisperingStone:
+		case CardIds.WhisperingStone_TLC_467:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FEL);
-		case TempCardIds.TwilightMender:
+		case CardIds.TwilightMender_TLC_814:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				(hasCorrectSpellSchool(c, SpellSchool.SHADOW) || hasCorrectSpellSchool(c, SpellSchool.HOLY));

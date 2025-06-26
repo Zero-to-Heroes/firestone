@@ -11,7 +11,6 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
@@ -492,15 +491,12 @@ export const generateCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]);
 };
 export const generateSlagclaw = cardIs(
-	TempCardIds.Slagclaw as unknown as CardIds,
-	TempCardIds.SizzlingCinder as unknown as CardIds,
-	TempCardIds.SizzlingSwarm as unknown as CardIds,
-	TempCardIds.Cinderfin as unknown as CardIds,
+	CardIds.Slagclaw_TLC_482,
+	CardIds.SizzlingCinder_TLC_249,
+	CardIds.SizzlingSwarm_TLC_221,
+	CardIds.Cinderfin_TLC_225,
 );
-export const generatesTemporaryCard = cardIs(
-	TempCardIds.CursedCatacombs as unknown as CardIds,
-	TempCardIds.BloodpetalBiome as unknown as CardIds,
-);
+export const generatesTemporaryCard = cardIs(CardIds.CursedCatacombs_TLC_451, CardIds.BloodpetalBiome_TLC_449);
 export const starshipPiece = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
