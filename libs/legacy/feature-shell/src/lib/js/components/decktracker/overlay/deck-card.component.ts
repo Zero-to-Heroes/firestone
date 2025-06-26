@@ -71,7 +71,12 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="gradiant-image" [style.--card-image-url]="'url(' + cardImage + ')'"></div>
 				</div>
 				<div class="card-image-container">
-					<img [src]="cardImage" class="card-image" />
+					<img
+						[src]="cardImage"
+						class="card-image"
+						(error)="onCardImageError()"
+						*ngIf="cardId && !cardImageError"
+					/>
 					<div class="card-image-overlay"></div>
 				</div>
 				<div
@@ -286,6 +291,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	_side: 'player' | 'opponent' | 'single';
 
 	useNewCardTileStyle = false;
+	cardImageError = false;
 
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
@@ -480,6 +486,13 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onCardClicked(event: MouseEvent) {
 		this.cardClicked.next(this.card$$.value);
+	}
+
+	onCardImageError() {
+		this.cardImageError = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async updateInfos(
