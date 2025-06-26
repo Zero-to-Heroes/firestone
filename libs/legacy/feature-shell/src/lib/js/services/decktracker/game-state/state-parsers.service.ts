@@ -73,6 +73,7 @@ import { CardRemovedFromHistoryParser } from '../event-parser/card-removed-from-
 import { CardRevealedParser } from '../event-parser/card-revealed-parser';
 import { CardStolenParser } from '../event-parser/card-stolen-parser';
 import { CardTradedParser } from '../event-parser/card-traded-parser';
+import { CardsShuffledIntoDeckParser } from '../event-parser/cards-shuffled-into-deck-parser';
 import { ChoosingOptionsParser } from '../event-parser/choosing-options-parser';
 import { ListCardsPlayedFromInitialDeckParser } from '../event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CopiedFromEntityIdParser } from '../event-parser/copied-from-entity-id-parser';
@@ -280,6 +281,7 @@ export class GameStateParsersService {
 			[GameEvent.REMOVE_FROM_HISTORY]: [new CardRemovedFromHistoryParser(this.helper)],
 			[GameEvent.CARD_REVEALED]: [new CardRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_STOLEN]: [new CardStolenParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.CARDS_SHUFFLED_INTO_DECK]: [new CardsShuffledIntoDeckParser()],
 			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser()],
 			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.i18n, this.allCards)],
 			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],

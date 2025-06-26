@@ -221,10 +221,16 @@ export const globalEffectCardsPlayed = [
 	CardIds.Wildfire,
 	CardIds.WishUponAStar_TOY_877,
 ];
+const globalEffectEnchantments = [
+	CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e,
+	CardIds.AshalonRidgeGuardian_PerfectEvolutionEnchantment_TLC_229t14e,
+];
+
 export const globalEffectCards = [
 	...globalEffectCardsPlayed,
 	...startOfGameGlobalEffectCards,
 	...deathrattleGlobalEffectCards,
+	...globalEffectEnchantments,
 ];
 
 // Also whitelist in the parser
@@ -292,7 +298,13 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 	switch (cardId) {
 		case CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e:
 			return CardIds.Kiljaeden_GDB_145;
+		case CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e:
+			return CardIds.UnleashTheColossus_GorishiColossusToken_TLC_631t;
 		default:
+			if (cardId.endsWith('e')) {
+				// This is a global effect enchantment, so we return the card id without the "e" at the end
+				return cardId.slice(0, -1);
+			}
 			return cardId;
 	}
 };

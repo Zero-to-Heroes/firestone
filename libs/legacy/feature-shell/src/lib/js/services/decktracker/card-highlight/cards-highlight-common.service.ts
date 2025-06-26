@@ -37,6 +37,7 @@ import {
 	side,
 	spell,
 	spellDamage,
+	spellSchool,
 	starshipExtended,
 	tooltip,
 } from './selectors';
@@ -417,7 +418,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.KINDRED]) ||
 			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.KINDRED])
 		) {
-			const spellSchool = this.allCards.getCard(cardId).spellSchool
+			const cardSpellSchool: SpellSchool = this.allCards.getCard(cardId).spellSchool
 				? SpellSchool[this.allCards.getCard(cardId).spellSchool]
 				: null;
 			selectors.push(
@@ -425,7 +426,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					side(inputSide),
 					or(inDeck, inHand),
 					or(
-						spellSchool(spellSchool),
+						spellSchool(cardSpellSchool),
 						raceIn(this.allCards.getCard(cardId).races?.map((r) => Race[r] as Race)),
 					),
 				),

@@ -1039,4 +1039,5 @@ export const giftCreators = [
 	CardIds.RelicMiner_TLC_109,
 	CardIds.MerchantOfLegend_TLC_514,
 	CardIds.NefersetWeaponsmith_TLC_516,
+	CardIds.IdoOfTheThreshfleet_TLC_241,
 ];

@@ -25,6 +25,7 @@ import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CardsPlayedFromAnotherClassCounterDefinitionV2 } from './impl/cards-played-from-another-class';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
+import { CardsShuffledIntoDeckCounterDefinitionV2 } from './impl/cards-shuffled-into-deck';
 import { CeaselessExpanseCounterDefinitionV2 } from './impl/ceaseless-expanse';
 import { ChainedGuardianCounterDefinitionV2 } from './impl/chained-guardian';
 import { ChaoticTendrilCounterDefinitionV2 } from './impl/chaotic-tendril';
@@ -106,6 +107,7 @@ export const getAllCounters: (
 	new SpellsPlayedConstructedCounterDefinitionV2(i18n),
 	new LibramPlayedCounterDefinitionV2(i18n),
 	new EarthenGolemCounterDefinitionV2(i18n, allCards),
+	new CardsShuffledIntoDeckCounterDefinitionV2(i18n, allCards),
 	new PiratesSummonedCounterDefinitionV2(i18n, allCards),
 	new TreantCounterDefinitionV2(i18n, allCards),
 	new ChainedGuardianCounterDefinitionV2(i18n, allCards),
@@ -176,6 +178,7 @@ export type CounterType =
 	| '_ceaselessExpanse'
 	| 'galakrond'
 	| 'renferalTheMalignant'
+	| 'cardsShuffledIntoDeck'
 	| 'ysondre'
 	| 'dragonsInHand'
 	| 'imbue'

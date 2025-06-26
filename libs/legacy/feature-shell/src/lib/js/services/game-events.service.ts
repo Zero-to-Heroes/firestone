@@ -979,6 +979,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'CARDS_SHUFFLED_INTO_DECK':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.CARDS_SHUFFLED_INTO_DECK, gameEvent, {
+						value: gameEvent.Value.AdditionalProps.Value,
+					}),
+				);
+				break;
 			case 'CORPSES_SPENT_THIS_GAME_CHANGED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED, gameEvent, {

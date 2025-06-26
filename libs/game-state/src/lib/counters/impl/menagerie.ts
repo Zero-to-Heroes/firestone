@@ -14,9 +14,10 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 	public override cards: readonly CardIds[] = [
 		CardIds.TheOneAmalgamBand,
 		CardIds.PowerSlider,
-		CardIds.SpiritOfTheMountain_TLC_229,
+		// CardIds.SpiritOfTheMountain_TLC_229, // Info is present when mousing over the quest
 		CardIds.MountainMap_TLC_464,
 	];
+	protected override debug = true;
 
 	readonly player = {
 		pref: 'playerMenagerieCounter' as const,
