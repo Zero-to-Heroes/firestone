@@ -38,7 +38,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		});
 
 		this.ow.addGameInfoUpdatedListener(async (res) => {
-			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID) {
+			if (Math.floor((res?.gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
 				if (this.ow.exitGame(res)) {
 					this.inGame$$.next(false);
 					this.exitListeners.forEach((cb: any) => cb(res));
