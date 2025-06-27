@@ -2342,6 +2342,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
 		case CardIds.RambunctiousStuffy_TOY_821:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
+		case CardIds.RamkahenWildtamer:
+			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.RangariScout_GDB_841:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.RatchetPrivateer:
