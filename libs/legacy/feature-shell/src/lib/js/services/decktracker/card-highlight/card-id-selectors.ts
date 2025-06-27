@@ -1817,6 +1817,8 @@ export const cardIdSelector = (
 					),
 				)(input);
 			};
+		case CardIds.KolkarPackRunner:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
 		case CardIds.LadyAnacondra_WC_006:
@@ -2073,7 +2075,7 @@ export const cardIdSelector = (
 		case CardIds.NightmareLordXavius_EDR_856:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.NineLives:
-			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
+			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle);
 		case CardIds.NiriOfTheCrater_TLC_836:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostEqual(1)),
