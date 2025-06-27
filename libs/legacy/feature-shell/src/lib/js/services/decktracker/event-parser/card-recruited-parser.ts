@@ -24,7 +24,10 @@ export class CardRecruitedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
-		if (dbCard.type?.toUpperCase() !== CardType[CardType.MINION]) {
+		if (
+			dbCard.type?.toUpperCase() !== CardType[CardType.MINION] &&
+			dbCard.type?.toUpperCase() !== CardType[CardType.LOCATION]
+		) {
 			return currentState;
 		}
 
