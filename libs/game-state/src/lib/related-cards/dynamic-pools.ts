@@ -428,6 +428,7 @@ const getDynamicFilters = (
 		case CardIds.ShadowflameStalker_FIR_924:
 		case CardIds.RelentlessWrathguard_GDB_132:
 		case CardIds.DemonicDynamics:
+		case CardIds.Netherwalker:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
