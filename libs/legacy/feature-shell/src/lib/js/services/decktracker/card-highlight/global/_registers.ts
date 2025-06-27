@@ -19,6 +19,7 @@ import { LadyDarkvein } from './lady-darkvein';
 import { Merithra } from './merithra';
 import { MonstrousParrot } from './monstrous-parrot';
 import { MurozondTheInfinite } from './murozond-the-infinite';
+import { NineLives } from './nine-lives';
 import { NzothGodOfTheDeep } from './nzoth-god-of-the-deep';
 import { NZothTheCorruptor } from './nzoth-the-corruptor';
 import { ParrotMascot } from './parrot-mascot';
@@ -52,6 +53,7 @@ const cards = [
 	PetParrot,
 	Merithra,
 	Ursoc,
+	NineLives,
 	InfantryReanimator,
 	GrotesqueRuneblade,
 	IchorOfUndeath,
