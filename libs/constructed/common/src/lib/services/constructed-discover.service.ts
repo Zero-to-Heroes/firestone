@@ -76,15 +76,15 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 			console.warn('[constructed-discover] no deck winrate', cardId, archetypeStat);
 			return null;
 		}
-		const drawWinrate = !drawnData?.drawn ? null : drawnData.drawnThenWin / drawnData.drawn;
-		const discoveredWinrate = !discoverData?.discovered
-			? null
-			: discoverData.discoveredThenWin / discoverData.discovered;
+
+		console.debug('[constructed-discover] data', cardId, drawnData, discoverData);
+		const dataPoints = (drawnData?.drawn ?? 0) + (discoverData?.discovered ?? 0);
+		const dataPointsThenWin = (drawnData?.drawnThenWin ?? 0) + (discoverData?.discoveredThenWin ?? 0);
+		const cardWinrate = dataPoints === 0 ? null : dataPointsThenWin / dataPoints;
 		const result: ConstructedCardStat = {
 			cardId: cardId,
-			discoverNumber: discoverData?.discovered ?? null,
-			discoverImpact: discoveredWinrate != null ? discoveredWinrate - deckWinrate : null,
-			drawnImpact: drawWinrate != null ? drawWinrate - deckWinrate : null,
+			dataPoints: dataPoints,
+			discoverImpact: cardWinrate != null ? cardWinrate - deckWinrate : null,
 		};
 		console.debug('[constructed-discover] result', result);
 		return result;
@@ -93,7 +93,6 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 
 export interface ConstructedCardStat {
 	readonly cardId: string;
-	readonly drawnImpact: number | null;
+	readonly dataPoints: number | null;
 	readonly discoverImpact: number | null;
-	readonly discoverNumber: number | null;
 }

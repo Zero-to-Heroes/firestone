@@ -8,6 +8,7 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ConstructedCardOptionViewComponent } from './components/constructed-card-option-view.component';
 import { ConstructedMulliganDeckComponent } from './components/constructed-mulligan-deck.component';
 import { ConstructedMulliganHandComponent } from './components/constructed-mulligan-hand.component';
@@ -39,6 +40,9 @@ const components = [
 @NgModule({
 	imports: [
 		CommonModule,
+
+		InlineSVGModule.forRoot(),
+
 		StatsDataAccessModule,
 		SharedFrameworkCoreModule,
 		SharedFrameworkCommonModule,

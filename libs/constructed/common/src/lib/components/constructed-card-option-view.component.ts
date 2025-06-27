@@ -21,26 +21,17 @@ import { ConstructedCardStat } from '../services/constructed-discover.service';
 	template: `
 		<div class="info-container scalable">
 			<div class="stats impact">
-				<div class="stat winrate draw" *ngIf="drawImpact !== '-'">
-					<span
-						class="label"
-						[fsTranslate]="'app.decktracker.meta.details.cards.drawn-winrate-impact-header'"
-					></span>
-					<span class="value {{ drawWinrateClass }}">{{ drawImpact }}</span>
-				</div>
-				<div class="stat winrate discover" *ngIf="drawImpact === '-' && discoverImpact !== '-'">
+				<div class="stat winrate discover" *ngIf="impact !== '-'" [helpTooltip]="tooltip">
 					<span
 						class="label"
 						[fsTranslate]="'app.decktracker.meta.details.cards.discovered-winrate-impact-header'"
 					></span>
-					<span
-						class="value {{ discoverWinrateClass }}"
-						[ngClass]="{ 'low-data': lowData }"
-						[helpTooltip]="discoverTooltip"
-						>{{ discoverImpact }}</span
-					>
+					<span class="value {{ winrateClass }}" [ngClass]="{ 'low-data': lowData }">
+						{{ impact }}
+						<div class="warning" inlineSVG="assets/svg/attention.svg"></div>
+					</span>
 				</div>
-				<div class="stat winrate discover" *ngIf="drawImpact === '-' && discoverImpact === '-'">
+				<div class="stat winrate discover" *ngIf="impact === '-'">
 					<span class="value" [helpTooltip]="'decktracker.overlay.mulligan.no-mulligan-data' | fsTranslate"
 						>-</span
 					>
@@ -52,31 +43,25 @@ import { ConstructedCardStat } from '../services/constructed-discover.service';
 })
 export class ConstructedCardOptionViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set card(value: ConstructedCardStat | null) {
-		this.drawImpact = value?.drawnImpact == null ? '-' : (100 * value.drawnImpact).toFixed(2);
-		this.drawWinrateClass = value?.drawnImpact == null ? '' : value.drawnImpact > 0 ? 'positive' : 'negative';
-		this.discoverImpact = value?.discoverImpact == null ? '-' : (100 * value.discoverImpact).toFixed(2);
-		this.discoverWinrateClass =
-			value?.discoverImpact == null ? '' : value.discoverImpact > 0 ? 'positive' : 'negative';
-		this.lowData = value?.discoverNumber == null || value.discoverNumber < 50;
-		this.discoverTooltip = this.lowData
+		this.impact = value?.discoverImpact == null ? '-' : (100 * value.discoverImpact).toFixed(2);
+		this.winrateClass = value?.discoverImpact == null ? '' : value.discoverImpact > 0 ? 'positive' : 'negative';
+		this.lowData = value?.dataPoints == null || value.dataPoints < 100;
+		this.tooltip = this.lowData
 			? this.i18n.translateString(
 					'app.decktracker.meta.details.cards.discovered-winrate-impact-tooltip-low-data',
 					{
-						value: value?.discoverNumber ?? 0,
+						value: value?.dataPoints ?? 0,
 					},
 			  )
 			: this.i18n.translateString('app.decktracker.meta.details.cards.discovered-winrate-impact-tooltip-data', {
-					value: value?.discoverNumber ?? 0,
+					value: value?.dataPoints ?? 0,
 			  });
 	}
 
-	drawImpact: string;
-	drawWinrateClass: string;
-	discoverImpact: string;
-	deckImpact: string;
-	discoverWinrateClass: string;
+	impact: string;
+	winrateClass: string;
+	tooltip: string | null;
 	lowData: boolean;
-	discoverTooltip: string | null;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,

@@ -147,7 +147,7 @@ export class ChoosingCardOptionConstructedComponent
 
 		combineLatest([this.showDiscoverStat$, this.showPremiumBanner$, this.cardStat$])
 			.pipe(
-				filter(([show, hidden, cardStat]) => show && !hidden && cardStat?.drawnImpact != null),
+				filter(([show, hidden, cardStat]) => show && !hidden && cardStat?.discoverImpact != null),
 				distinctUntilChanged(),
 			)
 			.subscribe(([show, canSee]) => {

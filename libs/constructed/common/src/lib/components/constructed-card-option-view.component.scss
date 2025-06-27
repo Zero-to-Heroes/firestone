@@ -17,8 +17,6 @@
 .scalable {
 	transform-origin: top center;
 	position: relative;
-	// transform: scale(1.5);
-	// top: calc(1.5 * 1.5vh);
 }
 
 .info-container {
@@ -70,15 +68,6 @@
 
 	.stats {
 		display: grid;
-		// grid-template-columns: repeat(2, minmax(0, 1fr));
-
-		// &:not(:last-child) {
-		// 	border-bottom: 1px solid var(--color-1);
-		// 	padding-bottom: 10px;
-		// }
-		// &:last-child {
-		// 	padding-top: 10px;
-		// }
 	}
 
 	.stat {
@@ -97,6 +86,18 @@
 		.value {
 			color: var(--default-title-color);
 			font-size: 1.3em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.warning {
+				display: none;
+				aspect-ratio: 1;
+				height: 80%;
+				margin-left: 5px;
+				font-size: 0.8em;
+				color: var(--default-text-color);
+			}
 
 			&.positive {
 				color: #61ff47;
@@ -104,14 +105,12 @@
 			&.negative {
 				color: #ff4747;
 			}
-			// TODO: Find another way to show low data, this isn't clear
-			// &.low-data {
-			// 	opacity: 0.8;
-			// }
-		}
 
-		// &:not(:last-child) {
-		// 	border-right: 1px solid var(--color-1);
-		// }
+			&.low-data {
+				.warning {
+					display: inline-block;
+				}
+			}
+		}
 	}
 }
