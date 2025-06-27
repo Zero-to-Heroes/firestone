@@ -11,12 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import {
-	ArenaCardOption,
-	ArenaCardStatsService,
-	ArenaClassStatsService,
-	ArenaDiscoversGuardianService,
-} from '@firestone/arena/common';
+import { ArenaCardStatsService, ArenaClassStatsService, ArenaDiscoversGuardianService } from '@firestone/arena/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
@@ -41,10 +36,11 @@ import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-
 	template: `
 		<div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
 			<ng-container *ngIf="showArenaCardStatDuringDiscovers$ | async">
-				<arena-card-option-view
+				<!-- It's the same info -->
+				<constructed-card-option-view
 					[card]="arenaCardStats$ | async"
 					*ngIf="canSeeWidget$ | async"
-				></arena-card-option-view>
+				></constructed-card-option-view>
 				<!-- <arena-option-info-premium
 					class="premium"
 					*ngIf="(canSeeWidget$ | async) === false"
@@ -60,7 +56,7 @@ export class ChoosingCardOptionArenaComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
-	arenaCardStats$: Observable<ArenaCardOption>;
+	arenaCardStats$: Observable<ConstructedCardStat>;
 	showArenaCardStatDuringDiscovers$: Observable<boolean | null>;
 	canSeeWidget$: Observable<boolean | null>;
 
@@ -149,10 +145,11 @@ export class ChoosingCardOptionArenaComponent
 					: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
 				const drawnImpact =
 					currentHeroWinrate == null || drawnWinrate == null ? null : drawnWinrate - currentHeroWinrate;
-				const result: ArenaCardOption = {
+				const result: ConstructedCardStat = {
 					cardId: stat.cardId,
-					drawnImpact: drawnImpact,
-				} as ArenaCardOption;
+					dataPoints: stat.matchStats?.stats?.drawn ?? null,
+					discoverImpact: drawnImpact ?? null,
+				};
 				return result;
 			}),
 			this.mapData((stat) => stat),
@@ -202,4 +199,10 @@ export class ChoosingCardOptionArenaComponent
 		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
 		this.cardsHighlightService.unregister(this._uniqueId, this.side);
 	}
+}
+
+interface ConstructedCardStat {
+	readonly cardId: string;
+	readonly dataPoints: number | null;
+	readonly discoverImpact: number | null;
 }
