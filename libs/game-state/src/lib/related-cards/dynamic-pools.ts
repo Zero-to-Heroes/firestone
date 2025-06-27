@@ -56,6 +56,20 @@ export const getDynamicRelatedCardIds = (
 				override: true,
 				cards: IMBUED_HERO_POWERS.filter((hp) => allCards.getCard(hp).classes?.includes(options.currentClass)),
 			};
+
+		// From the past
+		case CardIds.FalseDisciple:
+			return filterCards(
+				allCards,
+				// So that we don't get cards from the arena-specific pool instead
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					hasCorrectType(c, CardType.MINION) &&
+					c.classes?.includes(CardClass[CardClass.PALADIN]) &&
+					c.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
+			);
 		case CardIds.FinalFrontier_GDB_857:
 			return filterCards(
 				allCards,
@@ -96,6 +110,7 @@ export const getDynamicRelatedCardIds = (
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
 					hasCorrectRarity(c, CardRarity.LEGENDARY),
 			);
+
 		case CardIds.Botface_TOY_906:
 			// TODO: Fix these minis not showing up properly (are minis tagged properly?)
 			// TODO: Confirm if Botface can generate Boom Wrench - if not, add minion tag
