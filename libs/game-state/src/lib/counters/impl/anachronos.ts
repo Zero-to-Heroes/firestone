@@ -6,11 +6,13 @@ import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
+const relevantCardIds = [CardIds.Anachronos, CardIds.Anachronos_CORE_RLK_919];
+
 export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'anachronos';
 	public override image = CardIds.Anachronos;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.Anachronos, CardIds.Anachronos_CORE_RLK_919];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerAnachronosCounter' as const,
