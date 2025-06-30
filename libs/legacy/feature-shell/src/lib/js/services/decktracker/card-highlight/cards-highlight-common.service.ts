@@ -34,6 +34,7 @@ import {
 	orWithHighlight,
 	raceIn,
 	restoreHealth,
+	riff,
 	side,
 	spell,
 	spellDamage,
@@ -413,6 +414,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.EXCAVATE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), excavate));
+		}
+		if (
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.RIFF]) ||
+			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.RIFF])
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), riff));
 		}
 		if (
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.KINDRED]) ||

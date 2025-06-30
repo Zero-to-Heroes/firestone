@@ -322,6 +322,7 @@ export const outcast = hasMechanic(GameTag.OUTCAST);
 export const overload = hasMechanic(GameTag.OVERLOAD);
 export const quickdraw = hasMechanic(GameTag.QUICKDRAW);
 export const reborn = hasMechanic(GameTag.REBORN);
+export const riff = hasMechanic(GameTag.RIFF);
 export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
