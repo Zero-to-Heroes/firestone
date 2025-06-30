@@ -347,6 +347,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.ELEMENTAL) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+
 		// Random Legendaries
 		case CardIds.ArchVillainRafaam_CORE_DAL_422:
 		case CardIds.ChalkArtist_TOY_388:
@@ -355,6 +356,11 @@ const getDynamicFilters = (
 		case CardIds.TreasureSeekerElise_GoldenMonkeyToken:
 		case CardIds.Transmogrifier:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
+
+		// Random X Mechanic
+		// Random Outcast
+		case CardIds.FelerinTheForgotten:
+			return (c) => hasMechanic(c, GameTag.OUTCAST);
 
 		// Random X Tribe
 		// Random Elementals
