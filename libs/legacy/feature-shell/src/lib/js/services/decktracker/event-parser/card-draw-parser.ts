@@ -154,12 +154,13 @@ export class CardDrawParser implements EventParser {
 		// When the card should be known (created on top of deck) by we don't know the details (eg Merch Seller, or Dredge),
 		// we still want to surface the information we know
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
+		const refCard = this.allCards.getCard(card?.cardId);
 		const cardWithCreator = card.update({
 			entityId: entityId,
 			creatorCardId: isCreatorPublic ? creatorCardId ?? card.creatorCardId : undefined,
 			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
-			cardName: isCardInfoPublic ? this.allCards.getCard(card?.cardId).name ?? card?.cardName : undefined,
+			cardName: isCardInfoPublic ? refCard.name ?? card?.cardName : undefined,
 			lastAffectedByCardId: isCreatorPublic
 				? lastInfluencedByCardId ?? card.lastAffectedByCardId ?? drawnByCardId
 				: isDrawnByCardIdPublic
@@ -170,11 +171,13 @@ export class CardDrawParser implements EventParser {
 				: isDrawnByCardIdPublic
 				? gameEvent.additionalData.drawnByEntityId
 				: undefined,
-			refManaCost: isCardInfoPublic ? card.refManaCost : null,
+			refManaCost: isCardInfoPublic ? card.refManaCost ?? refCard.cost : null,
+			actualManaCost: isCardInfoPublic ? gameEvent.additionalData.cost : null,
 			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card.tags,
 		} as DeckCard);
+		// console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
 		const cardWithGuessInfo = addGuessInfoToDrawnCard(
 			cardWithCreator,
 			drawnByCardId,
@@ -182,7 +185,7 @@ export class CardDrawParser implements EventParser {
 			deck,
 			this.allCards,
 		);
-		// console.debug('cardWithGuessInfo', cardWithGuessInfo, gameEvent);
+		// console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
 		const previousDeck = deck.deck;
 
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
@@ -214,7 +217,7 @@ export class CardDrawParser implements EventParser {
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
-		// console.debug('added card to hand', newHand);
+		// console.debug('[card-draw] added card to hand', newHand);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			hand: newHand,
