@@ -330,6 +330,10 @@
 			"DiscordRPCPlugin": {
 				"file": "Files/plugins/DiscordRPCPlugin.dll",
 				"class": "overwolf.plugins.DiscordRPCPlugin"
+			},
+			"hearthpwn-cipher": {
+				"file": "Files/plugins/HpCipher.dll",
+				"class": "HpCipher.HpCipherPlugin"
 			}
 		},
 		"hotkeys": {

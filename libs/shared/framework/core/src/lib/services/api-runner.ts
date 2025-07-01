@@ -42,6 +42,7 @@ export class ApiRunner {
 		options?: {
 			contentType?: string;
 			bearerToken?: string;
+			userAgent?: string;
 		},
 		returnStatusCode = false,
 	): Promise<T | null> {
@@ -51,6 +52,9 @@ export class ApiRunner {
 			});
 			if (options?.bearerToken) {
 				headers = headers.set('Authorization', `Bearer ${options.bearerToken}`);
+			}
+			if (options?.userAgent) {
+				headers = headers.set('User-Agent', options.userAgent);
 			}
 			console.debug('[remote] calling POST', url);
 			this.http.post(url, input, { headers: headers }).subscribe(

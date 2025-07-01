@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable @typescript-eslint/no-empty-interface */
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../collection-manager.interface';
 
 const PROFILE_UPLOAD_URL = `https://www.hearthpwn.com/client/upload`;
 
+// TODO: how to get a user's Hearthpwn userId and authToken?
 @Injectable()
 export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	private collectionManager: ICollectionManagerService;
-	private api: ApiRunner;
+	private http: HttpClient;
 	private prefs: PreferencesService;
 
 	private cipherBridge: StringCipherBridge;
@@ -29,7 +32,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 		return;
 		console.debug('[hearthpwn] init');
 		this.collectionManager = AppInjector.get(COLLECTION_MANAGER_SERVICE_TOKEN);
-		this.api = AppInjector.get(ApiRunner);
+		this.http = AppInjector.get(HttpClient);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.cipherBridge = new StringCipherBridge();
 		this.cipherBridge.initialize();
@@ -49,16 +52,28 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 					.subscribe(async (collection) => {
 						console.debug('[hearthpwn] will sync collection', collection);
 						const uploadData: UploadData = await this.transformCollection(collection);
-						console.debug('[hearthpwn] uploadData', uploadData);
+						console.debug('[hearthpwn] uploadData', uploadData, JSON.stringify(uploadData.User));
 						const encryptedUser = await this.encrypt(JSON.stringify(uploadData.User));
-						const encryptedData = await this.encrypt(JSON.stringify(uploadData));
+						const encryptedData = await this.encrypt(JSON.stringify(uploadData.Game));
 						console.debug('[hearthpwn] encrypted', encryptedUser);
 						const payload = {
-							user: encryptedUser,
-							data: encryptedData,
+							user: encryptedUser!,
+							data: encryptedData!,
 						};
 						console.debug('[hearthpwn] upload data', payload);
-						const uploadResult = await this.api.callPostApi(PROFILE_UPLOAD_URL, payload);
+						const encoded = encodeDictionaryAsForm(payload);
+						console.debug('[hearthpwn] encoded data', encoded);
+
+						const uploadResult = await this.http
+							.post(PROFILE_UPLOAD_URL, encoded, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded; charset=us-ascii',
+									'User-Agent': 'Innkeeper/1 Version',
+									origin: 'https://www.hearthpwn.com',
+								},
+								responseType: 'text',
+							})
+							.toPromise();
 						console.debug('[hearthpwn] upload result', uploadResult);
 					});
 			});
@@ -81,32 +96,54 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 			UserId: userId,
 			Preferences: {},
 		};
-		const cards = memoryCollection.flatMap((c) => [
-			{
-				Name: c.id,
-				Count: c.count ?? 0,
-				IsPremium: false,
-			},
-			{
-				Name: c.id,
-				Count: c.premiumCount ?? 0,
-				IsPremium: true,
-			},
-		]);
+		const cards = memoryCollection
+			.flatMap((c) => [
+				{
+					Name: c.id,
+					Count: c.count ?? 0,
+					IsPremium: false,
+				},
+				{
+					Name: c.id,
+					Count: c.premiumCount ?? 0,
+					IsPremium: true,
+				},
+			])
+			.slice(0, 20000);
 		const result: UploadData = {
-			Cards: cards,
 			User: profile,
-			Status: UploadStatus.Processing,
-			Profile: {},
-			Rank: {},
-			Decks: [],
+			Game: {
+				Cards: cards,
+				Status: UploadStatus.Processing,
+				Profile: {},
+				Rank: {},
+				Decks: [],
+			},
 		};
 		return result;
 	}
 }
 
+function encodeDictionaryAsForm(dict: Record<string, string>): string {
+	const sb: string[] = [];
+	for (const key in dict) {
+		if (!Object.prototype.hasOwnProperty.call(dict, key)) continue;
+		const value = dict[key] ?? '';
+		let encodedValue = '';
+		for (let i = 0; i < value.length; i += 30000) {
+			encodedValue += encodeURIComponent(value.substring(i, i + 30000));
+		}
+		sb.push(`${encodeURIComponent(key)}=${encodedValue}`);
+	}
+	return sb.join('&');
+}
+
 interface UploadData {
 	readonly User: UploadUser;
+	readonly Game: GameData;
+}
+
+interface GameData {
 	readonly Cards: readonly UploadCard[];
 	readonly Status: UploadStatus;
 	readonly Profile: UploadProfile;
@@ -115,8 +152,8 @@ interface UploadData {
 }
 
 interface UploadUser {
-	readonly UserId: number;
 	readonly AuthToken: string;
+	readonly UserId: number;
 	readonly Preferences?: { [pref: string]: string };
 }
 
