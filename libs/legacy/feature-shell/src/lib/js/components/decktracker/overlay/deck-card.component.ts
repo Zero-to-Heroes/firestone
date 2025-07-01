@@ -450,9 +450,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this._side,
 			this.gameTypeOverride,
 		);
-		console.debug('globalHighlights', this.cardId, globalHighlights);
+		// console.debug('globalHighlights', this.cardId, globalHighlights);
 		if (!!globalHighlights?.length) {
-			this.relatedCardIds = globalHighlights;
+			const sort = relatedCardIdsSelectorSort(this.cardId, this.cards);
+			this.relatedCardIds = sort == null ? globalHighlights : [...globalHighlights].sort(sort);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -460,20 +461,16 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 
 		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this.card$$.value);
-		console.debug('cardsToShow', this.cardId, cardsToShow);
+		// console.debug('cardsToShow', this.cardId, cardsToShow);
 		if (!cardsToShow?.length) {
 			return;
 		}
-		const sort =
-			relatedCardIdsSelectorSort(this.cardId, this.cards) ??
-			((a: { cardId: string; timing: number }, b: { cardId: string; timing: number }) => a.timing - b.timing);
-		console.debug('relatedCardIdsSelectorSort', this.cardId, sort);
 		this.relatedCardIds = cardsToShow
 			.flatMap((info) => ({
 				cardId: info.cardId,
 				timing: info.playTiming,
 			}))
-			.sort((a, b) => sort(a, b))
+			.sort((a, b) => a.timing - b.timing)
 			.map((info) => info.cardId);
 		if (
 			this.removeDuplicatesInTooltip ||

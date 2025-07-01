@@ -30,10 +30,10 @@ export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
 export const relatedCardIdsSelectorSort = (
 	cardId: string,
 	allCards: CardsFacadeService,
-): ((a: { cardId: string }, b: { cardId: string }) => number) | null => {
+): ((a: string, b: string) => number) | null => {
 	switch (cardId) {
 		case CardIds.HedraTheHeretic_TSC_658:
-			return (a, b) => (allCards.getCard(a.cardId).cost ?? 0) - (allCards.getCard(b.cardId).cost ?? 0);
+			return (a, b) => (allCards.getCard(a).cost ?? 0) - (allCards.getCard(b).cost ?? 0);
 		default:
 			return null;
 	}
