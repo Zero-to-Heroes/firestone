@@ -32,6 +32,7 @@ import {
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { AdService } from '../../../services/ad.service';
+import { relatedCardIdsSelectorSort } from '../../../services/decktracker/card-highlight/card-id-selector-sort';
 import { Handler, SelectorOutput } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
 import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES } from '../../../services/decktracker/card-highlight/merged-highlights';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -449,7 +450,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this._side,
 			this.gameTypeOverride,
 		);
-		// console.debug('mouse enter', this.cardId, this.gameTypeOverride, globalHighlights);
+		console.debug('globalHighlights', this.cardId, globalHighlights);
 		if (!!globalHighlights?.length) {
 			this.relatedCardIds = globalHighlights;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -459,15 +460,20 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 
 		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this.card$$.value);
+		console.debug('cardsToShow', this.cardId, cardsToShow);
 		if (!cardsToShow?.length) {
 			return;
 		}
+		const sort =
+			relatedCardIdsSelectorSort(this.cardId, this.cards) ??
+			((a: { cardId: string; timing: number }, b: { cardId: string; timing: number }) => a.timing - b.timing);
+		console.debug('relatedCardIdsSelectorSort', this.cardId, sort);
 		this.relatedCardIds = cardsToShow
 			.flatMap((info) => ({
 				cardId: info.cardId,
 				timing: info.playTiming,
 			}))
-			.sort((a, b) => a.timing - b.timing)
+			.sort((a, b) => sort(a, b))
 			.map((info) => info.cardId);
 		if (
 			this.removeDuplicatesInTooltip ||
