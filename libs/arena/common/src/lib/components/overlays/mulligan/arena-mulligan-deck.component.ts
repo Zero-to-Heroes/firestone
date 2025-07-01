@@ -100,7 +100,7 @@ export class ArenaMulliganDeckComponent
 		);
 		this.showMulliganOverview$ = combineLatest([
 			showWidget$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowMulliganDeckOverview)),
 		]).pipe(this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview));
 		this.hidden$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideMulliganWhenFriendsListIsOpen)),

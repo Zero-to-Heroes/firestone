@@ -104,7 +104,7 @@ export class ArenaMulliganHandComponent
 			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
 		this.showHandInfo$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.decktrackerShowMulliganCardImpact),
+			this.mapData((prefs) => prefs.arenaShowMulliganCardImpact),
 		);
 		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
