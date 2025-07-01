@@ -83,6 +83,8 @@ import {
 	kindred,
 	lastAffectedByCardId,
 	legendary,
+	libram,
+	libramDiscount,
 	lifesteal,
 	locationExtended,
 	magnetic,
@@ -194,6 +196,10 @@ export const cardIdSelector = (
 			);
 		case CardIds.AlarmedSecuritybot_YOG_510:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.AldorAttendant:
+			return and(side(inputSide), or(inDeck, inHand), libram);
+		case CardIds.AldorTruthseeker:
+			return and(side(inputSide), or(inDeck, inHand), libram);
 		case CardIds.AlienEncounters_GDB_237:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.AllianceBannerman:
@@ -1640,11 +1646,11 @@ export const cardIdSelector = (
 		case CardIds.InstrumentTech:
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.InterstellarResearcher_GDB_728:
-			return and(side(inputSide), inDeck, cardIs(...LIBRAM_IDS));
+			return and(side(inputSide), inDeck, libram);
 		case CardIds.InterstellarStarslicer_GDB_726:
-			return and(side(inputSide), or(inHand, inDeck), cardIs(...LIBRAM_IDS));
+			return and(side(inputSide), or(inHand, inDeck), libram);
 		case CardIds.InterstellarWayfarer_GDB_721:
-			return and(side(inputSide), or(inHand, inDeck), cardIs(...LIBRAM_IDS));
+			return and(side(inputSide), or(inHand, inDeck), libram);
 		case CardIds.IntoTheFray:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.InventorBoom_TOY_607:
@@ -1860,7 +1866,22 @@ export const cardIdSelector = (
 		case CardIds.LeylineManipulator:
 			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.LibramOfClarity_GDB_137:
-			return and(side(inputSide), inDeck, minion);
+			return highlightConditions(
+				and(side(inputSide), inDeck, minion),
+				and(side(inputSide), inDeck, libramDiscount),
+			);
+		case CardIds.LibramOfDivinity_GDB_138:
+			return and(side(inputSide), inDeck, libramDiscount)
+		case CardIds.LibramOfFaith_GDB_139:
+			return and(side(inputSide), inDeck, libramDiscount)
+		case CardIds.LibramOfJustice_BT_011:
+			return and(side(inputSide), inDeck, libramDiscount)
+		case CardIds.LibramOfJudgment:
+			return and(side(inputSide), inDeck, libramDiscount)
+		case CardIds.LibramOfHope:
+			return and(side(inputSide), inDeck, libramDiscount)
+		case CardIds.LibramOfWisdom_BT_025:
+			return and(side(inputSide), inDeck, libramDiscount)
 		case CardIds.LifebindersGift:
 		case CardIds.LifebindersGrowth:
 			return and(side(inputSide), or(inHand, inDeck), spell);

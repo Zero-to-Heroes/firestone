@@ -5,6 +5,7 @@ import {
 	CardType,
 	DkruneTypes,
 	GameTag,
+	LIBRAM_IDS,
 	Locale,
 	Race,
 	RarityTYpe,
@@ -302,7 +303,6 @@ export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
-export const kindred = hasMechanic(GameTag.KINDRED);
 // Almost all the "imbue" tags are ref tags
 export const imbue = and(
 	or(hasMechanic(GameTag.IMBUE), hasReference(GameTag.IMBUE)),
@@ -316,6 +316,14 @@ export const imbue = and(
 );
 export const givesAbyssalCurse = hasMechanic(GameTag.GIVES_ABYSSAL_CURSE);
 export const infuse = hasMechanic(GameTag.INFUSE);
+export const kindred = hasMechanic(GameTag.KINDRED);
+export const libram = cardIs(...LIBRAM_IDS);
+export const libramDiscount = cardIs(
+	CardIds.AldorAttendant,
+	CardIds.AldorTruthseeker,
+	CardIds.InterstellarStarslicer_GDB_726,
+	CardIds.InterstellarWayfarer_GDB_721,
+);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
