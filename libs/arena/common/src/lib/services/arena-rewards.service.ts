@@ -128,7 +128,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		const rewardsInput: Input = {
 			userId: user.userId ?? '',
 			userName: user.username ?? '',
-			type: formatGameType(arenaInfo.gameType) as 'arena' | 'arena-underground',
+			type: formatGameType(arenaInfo.gameType) as 'arena' | 'arena-underground' as any,
 			runId: arenaInfo.runId,
 			rewards: groupedRewards,
 			currentWins: arenaInfo.wins,
