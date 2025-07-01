@@ -317,7 +317,7 @@ export const imbue = and(
 export const givesAbyssalCurse = hasMechanic(GameTag.GIVES_ABYSSAL_CURSE);
 export const infuse = hasMechanic(GameTag.INFUSE);
 export const kindred = hasMechanic(GameTag.KINDRED);
-export const libram = cardIs(...LIBRAM_IDS);
+export const libram = cardIs(...LIBRAM_IDS, CardIds.YrelBeaconOfHope_GDB_141);
 export const libramDiscount = cardIs(
 	CardIds.AldorAttendant,
 	CardIds.AldorTruthseeker,
