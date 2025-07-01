@@ -545,6 +545,11 @@ export const CARDS_THAT_REMEMBER_SPELLS_PLAYED = [
 		mustHaveSpellSchool: false,
 		numberOfCards: 3,
 	},
+	{
+		cardId: CardIds.HedraTheHeretic_TSC_658,
+		mustHaveSpellSchool: false,
+		numberOfCards: 9999,
+	},
 ];
 export const CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED = CARDS_THAT_REMEMBER_SPELLS_PLAYED.map((c) => c.cardId);
 

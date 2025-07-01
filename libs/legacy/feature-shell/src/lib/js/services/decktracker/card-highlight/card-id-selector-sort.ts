@@ -1,4 +1,5 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { SelectorInput, SelectorSort } from './cards-highlight-common.service';
 
 export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
@@ -24,4 +25,16 @@ export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
 			};
 	}
 	return null;
+};
+
+export const relatedCardIdsSelectorSort = (
+	cardId: string,
+	allCards: CardsFacadeService,
+): ((a: { cardId: string }, b: { cardId: string }) => number) | null => {
+	switch (cardId) {
+		case CardIds.HedraTheHeretic_TSC_658:
+			return (a, b) => (allCards.getCard(a.cardId).cost ?? 0) - (allCards.getCard(b.cardId).cost ?? 0);
+		default:
+			return null;
+	}
 };
