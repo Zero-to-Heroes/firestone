@@ -1,4 +1,5 @@
 {
 	"eslint.validate": ["json"],
-	"typescript.preferences.importModuleSpecifier": "shortest"
+	"typescript.preferences.importModuleSpecifier": "shortest",
+	"nxConsole.generateAiAgentRules": true
 }
