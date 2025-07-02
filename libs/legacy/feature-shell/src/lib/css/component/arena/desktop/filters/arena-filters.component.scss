@@ -12,10 +12,11 @@
 	margin-bottom: 0;
 	width: 100%;
 	position: relative;
-	margin-bottom: 15px;
+	margin-bottom: 20px;
+    gap: 15px;
 
 	.card-search {
-		margin-left: auto;
+		// margin-left: auto;
 		margin-right: 10px;
 	}
 
@@ -24,5 +25,9 @@
 		align-items: center;
 		justify-content: center;
 		margin-left: auto;
+	}
+
+	::ng-deep ng-select {
+		margin-right: 0;
 	}
 }
