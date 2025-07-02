@@ -151,10 +151,14 @@ export class DeckParserService {
 			console.log('[deck-parser] trying to read tavern brawl previous deck from logs', metadata.scenarioId);
 			// This could work, because it looks like that the deck is named "Brawl Deck" in all languages
 			// UPDATE 2024-11-02: the pre-release Brawl Deck is named "乱斗模式套牌" in chinese
+			// UPDATE 2025-07-01: it now has a localized name
 			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType, [
 				'Brawl Deck',
 				'乱斗模式套牌',
 			]);
+			if (!deckInfo) {
+				deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType);
+			}
 		} else {
 			console.warn('[deck-parser] could not read any deck from memory');
 			deckInfo = null;

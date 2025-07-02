@@ -84,6 +84,9 @@ export class CopyDesckstringComponent {
 }
 
 export const sanitizeDeckstring = (deckstring: string, allCards: CardsFacadeService): string => {
+	if (!deckstring?.length) {
+		return null;
+	}
 	const deckDefinition = decode(deckstring);
 	const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, allCards);
 	return encode(updatedDeckDefinition);
