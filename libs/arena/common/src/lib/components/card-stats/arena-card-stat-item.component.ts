@@ -10,17 +10,20 @@ import { ArenaCardStatInfo } from './model';
 			<div class="cell card-details">
 				<card-tile [cardId]="cardId"></card-tile>
 			</div>
-			<div class="cell deck-total">{{ deckTotal }}</div>
 			<div class="cell deck-winrate">{{ deckWinrate }}</div>
 			<div class="cell drawn-winrate">{{ drawnWinrate }}</div>
 			<div class="cell mulligan-winrate">{{ mulliganWinrate }}</div>
-			<div class="cell pickrate">{{ pickrateTotal }}</div>
 			<div class="cell pickrate-high-wins">{{ pickrateHighWins }}</div>
-			<div class="cell play-on-curve-winrate">{{ playOnCurveWinrate }}</div>
-			<div class="cell drawn-total">{{ drawTotal }}</div>
-			<div class="cell offered-total">{{ offeredTotal }}</div>
-			<div class="cell play-on-curve-total">{{ playOnCurveTotal }}</div>
-			<div class="cell pickrate-impact">{{ pickrateImpact }}</div>
+
+			<ng-container *ngIf="showAdvancedStats">
+				<div class="cell deck-total">{{ deckTotal }}</div>
+				<div class="cell offered-total">{{ offeredTotal }}</div>
+				<div class="cell pickrate">{{ pickrateTotal }}</div>
+				<div class="cell play-on-curve-winrate">{{ playOnCurveWinrate }}</div>
+				<div class="cell drawn-total">{{ drawTotal }}</div>
+				<div class="cell play-on-curve-total">{{ playOnCurveTotal }}</div>
+				<div class="cell pickrate-impact">{{ pickrateImpact }}</div>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +52,7 @@ export class ArenaCardStatItemComponent {
 				: value.totalPlayOnCurve.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS');
 		this.pickrateHighWins = value.pickRateHighWins == null ? '-' : (100 * value.pickRateHighWins).toFixed(1) + '%';
 	}
+	@Input() showAdvancedStats: boolean|null;
 
 	cardId: string;
 	drawTotal: string;

@@ -22,6 +22,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<arena-high-win-runs-wins-filter-dropdown
 				class="filter card-type-filter"
 			></arena-high-win-runs-wins-filter-dropdown>
+			<preference-toggle
+				class="filter show-advanced-card-stats"
+				*ngIf="showAdvancedCardStats$ | async"
+				field="arenaShowAdvancedCardStats"
+				[label]="'app.arena.filters.show-advanced-card-stats' | owTranslate"
+			></preference-toggle>
 			<replays-icon-toggle class="class-icons" *ngIf="showClassIconToggle$"></replays-icon-toggle>
 			<!-- Do it here because for now the current view is in the store -->
 			<arena-card-search class="filter card-search" *ngIf="showArenaCardSearch$ | async"></arena-card-search>
@@ -37,6 +43,7 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 	showRegionFilter$: Observable<boolean>;
 	showArenaCardSearch$: Observable<boolean>;
 	showArenaHighWinsCardSearch$: Observable<boolean>;
+	showAdvancedCardStats$: Observable<boolean>;
 	showClassIconToggle$: Observable<boolean>;
 
 	constructor(
@@ -54,6 +61,9 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 			this.mapData((currentView) => ['arena-runs', 'arena-stats'].includes(currentView)),
 		);
 		this.showArenaCardSearch$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((currentView) => ['card-stats'].includes(currentView)),
+		);
+		this.showAdvancedCardStats$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['card-stats'].includes(currentView)),
 		);
 		this.showArenaHighWinsCardSearch$ = this.nav.selectedCategoryId$$.pipe(

@@ -36,7 +36,7 @@ const MIN_STATS_THRESHOLD = 100;
 			<section
 				class="arena-card-stats"
 				[attr.aria-label]="'Arena card stats'"
-				*ngIf="{ cards: cards$ | async } as value"
+				*ngIf="{ cards: cards$ | async, showAdvancedStats: showAdvancedStats$ | async } as value"
 			>
 				<div class="data-info">
 					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
@@ -54,15 +54,6 @@ const MIN_STATS_THRESHOLD = 100;
 						[name]="'app.arena.card-stats.header-card-name' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'name'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell deck-total"
-						[name]="'app.arena.card-stats.header-deck-total' | fsTranslate"
-						[helpTooltip]="'app.arena.card-stats.header-deck-total-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'deck-total'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -94,15 +85,6 @@ const MIN_STATS_THRESHOLD = 100;
 					>
 					</sortable-table-label>
 					<sortable-table-label
-						class="cell pickrate"
-						[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
-						[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'pickrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
 						class="cell pickrate-high-wins"
 						[name]="headerPickrateHighWins"
 						[helpTooltip]="headerPickrateHighWinsTooltip"
@@ -111,49 +93,70 @@ const MIN_STATS_THRESHOLD = 100;
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
-					<sortable-table-label
-						class="cell play-on-curve-winrate"
-						[name]="'app.arena.card-stats.header-play-on-curve-winrate' | fsTranslate"
-						[helpTooltip]="'app.arena.card-stats.header-play-on-curve-winrate-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'play-on-curve-winrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell drawn-total"
-						[name]="'app.arena.card-stats.header-drawn-total' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'drawn-total'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell offered-total"
-						[name]="'app.arena.card-stats.header-offered-total' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'offered-total'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell play-on-curve-total"
-						[name]="'app.arena.card-stats.header-play-on-curve-total' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'play-on-curve-total'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell pickrate-impact"
-						[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
-						[helpTooltip]="headerPickrateSkillTooltip"
-						[sort]="sort"
-						[criteria]="'pickrate-impact'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<!-- <sortable-table-label
+
+					<ng-container *ngIf="value.showAdvancedStats">
+						<sortable-table-label
+							class="cell deck-total"
+							[name]="'app.arena.card-stats.header-deck-total' | fsTranslate"
+							[helpTooltip]="'app.arena.card-stats.header-deck-total-tooltip' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'deck-total'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell offered-total"
+							[name]="'app.arena.card-stats.header-offered-total' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'offered-total'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+
+						<sortable-table-label
+							class="cell pickrate"
+							[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
+							[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'pickrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell play-on-curve-winrate"
+							[name]="'app.arena.card-stats.header-play-on-curve-winrate' | fsTranslate"
+							[helpTooltip]="'app.arena.card-stats.header-play-on-curve-winrate-tooltip' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'play-on-curve-winrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell drawn-total"
+							[name]="'app.arena.card-stats.header-drawn-total' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'drawn-total'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell play-on-curve-total"
+							[name]="'app.arena.card-stats.header-play-on-curve-total' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'play-on-curve-total'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell pickrate-impact"
+							[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
+							[helpTooltip]="headerPickrateSkillTooltip"
+							[sort]="sort"
+							[criteria]="'pickrate-impact'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<!-- <sortable-table-label
 						class="cell offered-total-high-wins"
 						[name]="'app.arena.card-stats.header-offered-total-high-wins' | fsTranslate"
 						[sort]="sort"
@@ -161,6 +164,7 @@ const MIN_STATS_THRESHOLD = 100;
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label> -->
+					</ng-container>
 				</div>
 				<virtual-scroller
 					#scroll
@@ -175,6 +179,7 @@ const MIN_STATS_THRESHOLD = 100;
 						class="card-info"
 						role="listitem"
 						[card]="card"
+						[showAdvancedStats]="value.showAdvancedStats"
 					></arena-card-stat-item>
 				</virtual-scroller>
 			</section>
@@ -190,6 +195,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	lastUpdateFull$: Observable<string | null>;
 	totalGames$: Observable<string>;
 	totalCardsDrafted$: Observable<string>;
+	showAdvancedStats$: Observable<boolean>;
 
 	headerPickrateHighWins: string = this.i18n.translateString('app.arena.card-stats.header-pickrate-high-wins', {
 		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
@@ -226,6 +232,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 
 		// console.debug('[arena-card-stats] after content init');
 		this.sortCriteria$ = this.sortCriteria$$;
+		this.showAdvancedStats$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.arenaShowAdvancedCardStats),
+		);
 		this.cards$ = combineLatest([
 			this.arenaCardStats.cardStats$$,
 			this.arenaCardStats.searchString$$,

@@ -239,6 +239,7 @@ export class Preferences implements IPreferences {
 	readonly arenaSessionWidgetShowGroupInGame: boolean = true;
 	readonly arenaSessionWidgetShowMatches: boolean = true;
 	readonly arenaSessionWidgetShowMatchesInGame: boolean = true;
+	readonly arenaShowAdvancedCardStats: boolean = false;
 	readonly arenaSessionWidgetScale: number = 100;
 	readonly arenaSessionWidgetOpacity: number = 100;
 	readonly arenaSessionWidgetNumberOfMatchesToShow: number = 5;
