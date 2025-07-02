@@ -2181,6 +2181,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Paleomancy_TLC_434:
 			return and(side(inputSide), or(inHand, inDeck), generateCorpse);
+		case CardIds.PalmReading:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ParachuteBrigand:
 		case CardIds.PatchesThePirate_CFM_637:
 			return and(side(inputSide), or(inDeck, inHand), minion, pirate);
