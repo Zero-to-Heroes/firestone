@@ -1549,7 +1549,7 @@ export const cardIdSelector = (
 		case CardIds.Hullbreaker:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Hybridization_TLC_236:
-			return and(side(inputSide), or(inDeck, inHand), minion, or(effectiveCostMore(0), effectiveCostLess(5)));
+			return and(side(inputSide), or(inDeck, inHand), minion, and(effectiveCostMore(0), effectiveCostLess(5)));
 		case CardIds.Hydralisk_SC_008:
 			return and(side(inputSide), or(inDeck, inHand), zerg);
 		case CardIds.HydrationStation_VAC_948:
