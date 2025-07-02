@@ -86,6 +86,7 @@ export class NotificationsComponent implements AfterViewInit {
 				}),
 			)
 			.subscribe();
+
 		this.prefs.preferences$$
 			.pipe(
 				debounceTime(200),
@@ -103,7 +104,10 @@ export class NotificationsComponent implements AfterViewInit {
 					this.elRef.nativeElement.querySelector('simple-notifications').style.justifyContent = 'flex-end';
 					this.elRef.nativeElement.querySelector('.simple-notification-wrapper').style.justifyContent =
 						'flex-end';
-					this.elRef.nativeElement.querySelector('.simple-notification').style.justifyContent = 'flex-end';
+					if (!!this.elRef.nativeElement.querySelector('.simple-notification')) {
+						this.elRef.nativeElement.querySelector('.simple-notification').style.justifyContent =
+							'flex-end';
+					}
 					sidePosition = 'right';
 				} else {
 					this.elRef.nativeElement.style.left = '10px';
@@ -111,7 +115,10 @@ export class NotificationsComponent implements AfterViewInit {
 					this.elRef.nativeElement.querySelector('simple-notifications').style.justifyContent = 'flex-start';
 					this.elRef.nativeElement.querySelector('.simple-notification-wrapper').style.justifyContent =
 						'flex-start';
-					this.elRef.nativeElement.querySelector('.simple-notification').style.justifyContent = 'flex-start';
+					if (!!this.elRef.nativeElement.querySelector('.simple-notification')) {
+						this.elRef.nativeElement.querySelector('.simple-notification').style.justifyContent =
+							'flex-start';
+					}
 					sidePosition = 'left';
 				}
 				if (position.includes('top')) {
