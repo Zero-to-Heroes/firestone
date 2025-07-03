@@ -207,7 +207,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 				draftStats: this.buildDraftStats(draftStat),
 			};
 			return result;
-		});
+		})
 	}
 
 	private buildDraftStats(stat: DraftCardCombinedStat | undefined): ArenaDraftCardStat | null {

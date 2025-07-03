@@ -27,6 +27,7 @@ import { ArenaClassStatsService } from '../../services/arena-class-stats.service
 import { ArenaCardStatInfo } from './model';
 
 const MIN_STATS_THRESHOLD = 100;
+const MIN_STATS_THRESHOLD_DRAFT = 500;
 
 @Component({
 	selector: 'arena-card-stats',
@@ -458,11 +459,18 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			totalOffered: stat.draftStats?.totalOffered,
 			totalPicked: stat.draftStats?.totalPicked,
 			totalPlayOnCurve: stat.matchStats?.stats?.playedOnCurve,
-			pickRate: stat.draftStats?.pickRate,
+			pickRate:
+				(stat.draftStats?.totalOffered ?? 0) > MIN_STATS_THRESHOLD_DRAFT ? stat.draftStats?.pickRate : null,
 			totalOfferedHighWins: stat.draftStats?.totalOfferedHighWins,
 			totalPickedHighWins: stat.draftStats?.totalPickedHighWins,
-			pickRateHighWins: stat.draftStats?.pickRateHighWins,
-			pickRateImpact: stat.draftStats?.pickRateImpact,
+			pickRateHighWins:
+				(stat.draftStats?.totalOffered ?? 0) > MIN_STATS_THRESHOLD_DRAFT
+					? stat.draftStats?.pickRateHighWins
+					: null,
+			pickRateImpact:
+				(stat.draftStats?.totalOffered ?? 0) > MIN_STATS_THRESHOLD_DRAFT
+					? stat.draftStats?.pickRateImpact
+					: null,
 		};
 	}
 
@@ -589,8 +597,6 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		const bData = b.mulliganKept ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
-
-	
 
 	private sortByPlayOnCurveWinrate(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
 		const aData = a.playOnCurveWinrate ?? 0;
