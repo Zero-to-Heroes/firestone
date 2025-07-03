@@ -252,8 +252,8 @@ export class FullScreenOverlaysComponent
 	async ngAfterViewInit() {
 		console.debug('full screen ngAfterViewInit');
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (Math.floor(res?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
+		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res) => {
+			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
 				await this.changeWindowSize();
 			}
 		});
