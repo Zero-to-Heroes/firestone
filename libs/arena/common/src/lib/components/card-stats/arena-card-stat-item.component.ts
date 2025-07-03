@@ -12,8 +12,9 @@ import { ArenaCardStatInfo } from './model';
 			</div>
 			<div class="cell deck-winrate">{{ deckWinrate }}</div>
 			<div class="cell drawn-winrate">{{ drawnWinrate }}</div>
-			<div class="cell mulligan-winrate">{{ mulliganWinrate }}</div>
 			<div class="cell pickrate-high-wins">{{ pickrateHighWins }}</div>
+			<div class="cell mulligan-winrate">{{ mulliganWinrate }}</div>
+			<div class="cell mulligan-kept">{{ mulliganKept }}</div>
 
 			<ng-container *ngIf="showAdvancedStats">
 				<div class="cell deck-total">{{ deckTotal }}</div>
@@ -38,6 +39,7 @@ export class ArenaCardStatItemComponent {
 		this.drawnWinrate = value.drawWinrate == null ? '-' : (100 * value.drawWinrate).toFixed(1) + '%';
 		this.deckWinrate = value.deckWinrate == null ? '-' : (100 * value.deckWinrate).toFixed(1) + '%';
 		this.mulliganWinrate = value.mulliganWinrate == null ? '-' : (100 * value.mulliganWinrate).toFixed(1) + '%';
+		this.mulliganKept = value.mulliganKept == null ? '-' : (100 * value.mulliganKept).toFixed(1) + '%';
 		this.playOnCurveWinrate =
 			value.playOnCurveWinrate == null ? '-' : (100 * value.playOnCurveWinrate).toFixed(1) + '%';
 		this.pickrateImpact = value.pickRateImpact == null ? '-' : (100 * value.pickRateImpact).toFixed(1) + '%';
@@ -60,6 +62,7 @@ export class ArenaCardStatItemComponent {
 	drawnWinrate: string;
 	deckWinrate: string;
 	mulliganWinrate: string;
+	mulliganKept: string;
 	playOnCurveWinrate: string;
 	pickrateImpact: string;
 	offeredTotal: string;

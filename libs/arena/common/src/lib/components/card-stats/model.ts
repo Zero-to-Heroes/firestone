@@ -3,6 +3,7 @@ export interface ArenaCardStatInfo {
 	readonly deckTotal: number;
 	readonly deckWinrate: number | null | undefined;
 	readonly mulliganWinrate: number | null | undefined;
+	readonly mulliganKept: number | null | undefined;
 	readonly playOnCurveWinrate: number | null | undefined;
 	readonly drawnTotal: number;
 	readonly drawWinrate: number | null | undefined;

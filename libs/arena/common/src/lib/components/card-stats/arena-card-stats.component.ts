@@ -76,6 +76,15 @@ const MIN_STATS_THRESHOLD = 100;
 					>
 					</sortable-table-label>
 					<sortable-table-label
+						class="cell pickrate-high-wins"
+						[name]="headerPickrateHighWins"
+						[helpTooltip]="headerPickrateHighWinsTooltip"
+						[sort]="sort"
+						[criteria]="'pickrate-high-wins'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell mulligan-winrate"
 						[name]="'app.arena.card-stats.header-mulligan-winrate' | fsTranslate"
 						[helpTooltip]="'app.arena.card-stats.header-mulligan-winrate-tooltip' | fsTranslate"
@@ -85,11 +94,11 @@ const MIN_STATS_THRESHOLD = 100;
 					>
 					</sortable-table-label>
 					<sortable-table-label
-						class="cell pickrate-high-wins"
-						[name]="headerPickrateHighWins"
-						[helpTooltip]="headerPickrateHighWinsTooltip"
+						class="cell mulligan-kept"
+						[name]="'decktracker.overlay.mulligan.mulligan-keep-rate' | fsTranslate"
+						[helpTooltip]="'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate"
 						[sort]="sort"
-						[criteria]="'pickrate-high-wins'"
+						[criteria]="'mulligan-kept'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -212,7 +221,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 	)!;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
-		criteria: 'drawn-winrate',
+		criteria: 'deck-winrate',
 		direction: 'desc',
 	});
 
@@ -433,6 +442,10 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				stat.matchStats.stats.inHandAfterMulligan > MIN_STATS_THRESHOLD
 					? stat.matchStats.stats.inHandAfterMulliganThenWin / stat.matchStats.stats.inHandAfterMulligan
 					: null,
+			mulliganKept:
+				stat.matchStats.stats.keptInMulligan > MIN_STATS_THRESHOLD
+					? stat.matchStats.stats.keptInMulligan / stat.matchStats.stats.drawnBeforeMulligan
+					: null,
 			playOnCurveWinrate:
 				stat.matchStats.stats.playedOnCurve > MIN_STATS_THRESHOLD
 					? stat.matchStats.stats.playedOnCurveThenWin / stat.matchStats.stats.playedOnCurve
@@ -474,6 +487,8 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				return this.sortByDeckWinrate(a, b, sortCriteria.direction);
 			case 'mulligan-winrate':
 				return this.sortByMulliganWinrate(a, b, sortCriteria.direction);
+			case 'mulligan-kept':
+				return this.sortByMulliganKept(a, b, sortCriteria.direction);
 			case 'play-on-curve-winrate':
 				return this.sortByPlayOnCurveWinrate(a, b, sortCriteria.direction);
 			case 'drawn-total':
@@ -569,6 +584,14 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
+	private sortByMulliganKept(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
+		const aData = a.mulliganKept ?? 0;
+		const bData = b.mulliganKept ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	
+
 	private sortByPlayOnCurveWinrate(a: ArenaCardStatInfo, b: ArenaCardStatInfo, direction: SortDirection): number {
 		const aData = a.playOnCurveWinrate ?? 0;
 		const bData = b.playOnCurveWinrate ?? 0;
@@ -583,6 +606,7 @@ type ColumnSortType =
 	| 'deck-total'
 	| 'deck-winrate'
 	| 'mulligan-winrate'
+	| 'mulligan-kept'
 	| 'play-on-curve-winrate'
 	| 'play-on-curve-total'
 	| 'pickrate-impact'
