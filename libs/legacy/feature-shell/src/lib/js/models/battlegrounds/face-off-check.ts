@@ -44,11 +44,12 @@ const report = async (
 		return;
 	}
 	const isSupported = isSupportedScenario(faceOff.battleInfo).isSupported;
+	const reviewId = game.reviewId;
 	if (isSupported) {
 		console.warn(
 			'no-format',
 			'[bgs-simulation] Impossible battle ' + status,
-			game.reviewId,
+			reviewId,
 			currentTurn,
 			isSupported,
 			faceOff.battleInfo,
@@ -59,7 +60,7 @@ const report = async (
 				type: 'bg-sim',
 				info: JSON.stringify({
 					message: '[bgs-simulation] Impossible battle ' + status,
-					reviewId: game.reviewId,
+					reviewId: reviewId,
 					currentTurn: currentTurn,
 					gameType: gameType,
 					battleInfo: faceOff.battleInfo,

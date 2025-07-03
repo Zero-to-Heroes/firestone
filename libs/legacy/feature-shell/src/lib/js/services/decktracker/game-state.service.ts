@@ -405,6 +405,12 @@ export class GameStateService {
 						console.warn('[game-state] parser took too long', elapsed, gameEvent.type);
 					}
 				}
+				if (parser?.sideEffects) {
+					// Don't block the main parser loop
+					setTimeout(() => {
+						parser.sideEffects(event, this.gameEvents);
+					});
+				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
@@ -432,15 +438,15 @@ export class GameStateService {
 			);
 		}
 
-		// console.debug(
-		// 	'[game-state] processed event',
-		// 	gameEvent.type,
-		// 	gameEvent.cardId,
-		// 	gameEvent.entityId,
-		// 	currentState.opponentDeck.board.map((c) => c.cardName),
-		// 	currentState,
-		// 	gameEvent,
-		// );
+		console.debug(
+			'[game-state] processed event',
+			gameEvent.type,
+			gameEvent.cardId,
+			gameEvent.entityId,
+			currentState.opponentDeck.board.map((c) => c.cardName),
+			currentState,
+			gameEvent,
+		);
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}
