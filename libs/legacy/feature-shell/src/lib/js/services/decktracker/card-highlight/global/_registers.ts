@@ -37,10 +37,12 @@ import { UrsolsAura } from './ursols-aura';
 import { VanessaVanCleef } from './vanessa-van-cleef';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
+import { CatrinaMuerte } from './catrina-muerte';
 
 const cards = [
 	Ressucitate,
 	CreatureOfTheSacredCave,
+	CatrinaMuerte,
 	JimRaynor,
 	CarryOnSuitcase,
 	WallowTheWretched,
