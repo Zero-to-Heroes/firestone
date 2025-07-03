@@ -491,7 +491,15 @@ export const damage = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]);
 };
 export const restoreHealth = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes('RESTORE_HEALTH');
+	return (
+		input.card?.mechanics?.includes('RESTORE_HEALTH') &&
+		!cardIs(
+			CardIds.OverzealousHealer_GDB_454,
+			CardIds.ZombieChow,
+			CardIds.CorruptedHealbot,
+			CardIds.HenchClanShadequill,
+		)(input)
+	);
 };
 export const spendCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]);

@@ -1729,6 +1729,8 @@ export const cardIdSelector = (
 		case CardIds.KabalCrystalRunner:
 		case CardIds.KabalCrystalRunner_WON_308:
 			return and(side(inputSide), or(inHand, inDeck), secret);
+		case CardIds.KabalTalonpriest:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.KalimosPrimalLord:
 		case CardIds.KalimosPrimalLord_Core_UNG_211:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
@@ -1871,17 +1873,17 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, libramDiscount),
 			);
 		case CardIds.LibramOfDivinity_GDB_138:
-			return and(side(inputSide), inDeck, libramDiscount)
+			return and(side(inputSide), inDeck, libramDiscount);
 		case CardIds.LibramOfFaith_GDB_139:
-			return and(side(inputSide), inDeck, libramDiscount)
+			return and(side(inputSide), inDeck, libramDiscount);
 		case CardIds.LibramOfJustice_BT_011:
-			return and(side(inputSide), inDeck, libramDiscount)
+			return and(side(inputSide), inDeck, libramDiscount);
 		case CardIds.LibramOfJudgment:
-			return and(side(inputSide), inDeck, libramDiscount)
+			return and(side(inputSide), inDeck, libramDiscount);
 		case CardIds.LibramOfHope:
-			return and(side(inputSide), inDeck, libramDiscount)
+			return and(side(inputSide), inDeck, libramDiscount);
 		case CardIds.LibramOfWisdom_BT_025:
-			return and(side(inputSide), inDeck, libramDiscount)
+			return and(side(inputSide), inDeck, libramDiscount);
 		case CardIds.LifebindersGift:
 		case CardIds.LifebindersGrowth:
 			return and(side(inputSide), or(inHand, inDeck), spell);
@@ -2265,6 +2267,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.PowerWordFortitude:
 			return and(side(inputSide), or(inHand, inDeck), spell);
+		case CardIds.PowerChordSynchronize:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.PredatoryInstincts:
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.Predation:
@@ -2393,7 +2397,7 @@ export const cardIdSelector = (
 		case CardIds.ReanimateTheTerror_TLC_433:
 			return and(side(inputSide), or(inHand, inDeck), spendCorpse);
 		case CardIds.ReanimatedPterrordax_TLC_436:
-			return and(side(inputSide), or(inHand, inDeck), spendCorpse);
+			return and(side(inputSide), or(inHand, inDeck), generateCorpse);
 		case CardIds.RecordScratcher:
 			return and(side(inputSide), or(inHand, inDeck), combo);
 		case CardIds.RedscaleDragontamer:
