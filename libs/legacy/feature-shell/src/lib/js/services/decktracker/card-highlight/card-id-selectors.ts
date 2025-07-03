@@ -617,7 +617,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.CatrinaMuerteCore:
 		case CardIds.CatrinaMuerte:
-			return tooltip(and(side(inputSide), inGraveyard, undead, minion));
+			return highlightConditions(
+				and(side(inputSide), inGraveyard, undead, minion),
+				and(side(inputSide), or(inHand, inDeck), undead),
+			);
 		case CardIds.CattleRustler_WW_351:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.CenarionHold_WON_015:
@@ -3243,6 +3246,17 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.Ursatron:
 			return and(side(inputSide), inDeck, mech);
+		case CardIds.UrsineMaul_EDR_253:
+			return (input: SelectorInput): SelectorOutput => {
+				const highestCostMinion = input.deckState.deck
+					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
+					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
+				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
+				return highlightConditions(
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
+					and(side(inputSide), inDeck, minion),
+				)(input);
+			};
 		case CardIds.Ursol_EDR_259:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ValstannStaghelm_WON_345:
