@@ -34,6 +34,7 @@ import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
+import { DiveTheGolakkaDepthsCounterDefinitionV2 } from './impl/dive-the-golakka-depths';
 import { DragonsInHandCounterDefinitionV2 } from './impl/dragons-in-hand';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
@@ -154,6 +155,7 @@ export const getAllCounters: (
 	new FriendlyMinionsDeadThisGameCounterDefinitionV2(i18n),
 	new ImbueCounterDefinitionV2(i18n, allCards),
 	new RenferalTheMalignantCounterDefinitionV2(i18n, allCards),
+	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -176,6 +178,7 @@ export const getAllCounters: (
 export type CounterType =
 	| '__fatigue'
 	| '_ceaselessExpanse'
+	| 'diveTheGolakkaDepths'
 	| 'galakrond'
 	| 'renferalTheMalignant'
 	| 'cardsShuffledIntoDeck'
