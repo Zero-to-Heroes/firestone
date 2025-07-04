@@ -13,7 +13,7 @@ export const Ressucitate: GlobalHighlightCard = {
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
-			deckState.minionsDeadThisTurn
+			deckState.minionsDeadThisMatch
 				.map((e) => allCards.getCard(e.cardId))
 				.filter((c) => c.cost >= 1 && c.cost <= 3)
 				.map((e) => e.id)
