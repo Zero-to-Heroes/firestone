@@ -501,6 +501,8 @@ export const restoreHealth = (input: SelectorInput): boolean => {
 		)(input)
 	);
 };
+// TODO: ignore effects that target the hero specifically
+export const restoreHealthToMinion = and(restoreHealth, not(cardIs(CardIds.WatcherOfTheSun)));
 export const spendCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]);
 };

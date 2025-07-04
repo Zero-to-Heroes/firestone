@@ -1,4 +1,4 @@
-import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -109,6 +109,7 @@ import {
 	race,
 	reborn,
 	restoreHealth,
+	restoreHealthToMinion,
 	rush,
 	secret,
 	secretsTriggeredThisMatch,
@@ -235,7 +236,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, pirate);
 		case CardIds.Anchorite_GDB_441:
 			return highlightConditions(
-				and(side(inputSide), or(inDeck, inHand), restoreHealth),
+				and(side(inputSide), or(inDeck, inHand), restoreHealthToMinion),
 				and(side(inputSide), or(inDeck, inHand), minion),
 			);
 		case CardIds.AncientKrakenbane:
@@ -3304,6 +3305,8 @@ export const cardIdSelector = (
 					and(side(inputSide), or(inDeck, inHand), draenei, or(battlecry, deathrattle)),
 				)(input);
 			};
+		case CardIds.VelensChosen:
+			return and(side(inputSide), or(inHand, inDeck), spell, damage);
 		case CardIds.Vendetta:
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.VeteranWarmedic:

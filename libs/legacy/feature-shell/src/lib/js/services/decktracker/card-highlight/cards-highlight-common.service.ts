@@ -33,7 +33,7 @@ import {
 	or,
 	orWithHighlight,
 	raceIn,
-	restoreHealth,
+	restoreHealthToMinion,
 	riff,
 	side,
 	spell,
@@ -385,7 +385,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spell));
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
-			selectors.push(and(side(inputSide), or(inDeck, inHand), restoreHealth));
+			selectors.push(and(side(inputSide), or(inDeck, inHand), restoreHealthToMinion));
 		}
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
