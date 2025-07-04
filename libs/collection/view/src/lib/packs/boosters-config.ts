@@ -33,9 +33,14 @@ export const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_ISLAND_VACATION,
 	BoosterType.GOLDEN_THE_GREAT_DARK_BEYOND,
 	BoosterType.GOLDEN_INTO_THE_EMERALD_DREAM,
+	BoosterType.GOLDEN_THE_LOST_CITY,
 ];
 
-export const GOLDEN_YEAR_PACKS = [BoosterType.GOLDEN_YEAR_OF_THE_PHOENIX, BoosterType.GOLDEN_YEAR_OF_THE_PEGASUS];
+export const GOLDEN_YEAR_PACKS = [
+	BoosterType.GOLDEN_YEAR_OF_THE_PHOENIX,
+	BoosterType.GOLDEN_YEAR_OF_THE_PEGASUS,
+	BoosterType.GOLDEN_YEAR_OF_THE_RAPTOR,
+];
 
 export const GOLDEN_FORMAT_PACKS = [
 	BoosterType.GOLDEN_STANDARD_PACK,
@@ -57,7 +62,12 @@ export const CLASS_PACKS = [
 	BoosterType.STANDARD_WARLOCK,
 ];
 
-export const YEAR_PACKS = [BoosterType.YEAR_OF_THE_PEGASUS, BoosterType.YEAR_OF_PHOENIX, BoosterType.YEAR_OF_DRAGON];
+export const YEAR_PACKS = [
+	BoosterType.YEAR_OF_THE_PEGASUS,
+	BoosterType.YEAR_OF_PHOENIX,
+	BoosterType.YEAR_OF_DRAGON,
+	BoosterType.YEAR_OF_THE_RAPTOR,
+];
 
 export const NON_BUYABLE_BOOSTER_IDS = [
 	...GOLDEN_SET_PACKS,
@@ -72,4 +82,5 @@ export const CATCH_UP_PACK_IDS = [
 	BoosterType.WHIZBANG_CATCH_UP,
 	BoosterType.THE_GREAT_DARK_BEYOND_CATCH_UP,
 	BoosterType.INTO_THE_EMERALD_DREAM_CATCH_UP,
+	BoosterType.THE_LOST_CITY_CATCH_UP,
 ];
