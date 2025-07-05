@@ -1,0 +1,15 @@
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0)">
+        <!-- Ticket outline with notches and rounded edges -->
+        <path d="M4 6C5.1 6 6 5.1 6 4V3C6 2.44772 6.44772 2 7 2H15C15.5523 2 16 2.44772 16 3V4C16 5.1 16.9 6 18 6V16C16.9 16 16 16.9 16 18V19C16 19.5523 15.5523 20 15 20H7C6.44772 20 6 19.5523 6 19V18C6 16.9 5.1 16 4 16V6Z" stroke="#FFB948" stroke-width="1.5"/>
+
+        <!-- Perforation line -->
+        <path d="M11 5V17" stroke="#FFB948" stroke-width="1" stroke-dasharray="1 1"/>
+    </g>
+    <defs>
+        <clipPath id="clip0">
+            <rect width="22" height="22" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>

@@ -44,6 +44,8 @@ export class ArenaRewardComponent {
 			case RewardType.CARD:
 			case RewardType.RANDOM_CARD:
 				return 'assets/svg/rewards/reward_card.svg';
+			case RewardType.FORGE_TICKET:
+				return 'assets/svg/rewards/reward_ticket.svg';
 			default:
 				return null;
 		}
@@ -60,8 +62,10 @@ export class ArenaRewardComponent {
 			case RewardType.CARD:
 			case RewardType.RANDOM_CARD:
 				return this.i18n.translateString('app.global.reward.card');
+			case RewardType.FORGE_TICKET:
+				return this.i18n.translateString('app.global.reward.ticket');
 			default:
-				return null;
+				return RewardType[rewardType]?.toLowerCase() ?? null;
 		}
 	}
 }
