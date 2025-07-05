@@ -416,6 +416,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.Barnes:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.BaritoneImp:
+			return and(side(inputSide), or(inHand, inDeck), cardIs(CardIds.CrazedConductor, CardIds.Crescendo));
 		case CardIds.BaronRivendare_FP1_031:
 		case CardIds.BaronRivendare_CORE_FP1_031:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
@@ -798,6 +800,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.CrashOfThunder:
 			return and(side(inputSide), or(inHand, inDeck), spell, nature);
+		case CardIds.CrazedConductor:
+			return and(side(inputSide), or(inHand, inDeck), cardIs(CardIds.BaritoneImp, CardIds.Crescendo));
+		case CardIds.Crescendo:
+			return and(side(inputSide), or(inHand, inDeck), cardIs(CardIds.BaritoneImp, CardIds.CrazedConductor));
 		case CardIds.CreationProtocol:
 		case CardIds.CreationProtocol_CreationProtocolToken:
 			return and(side(inputSide), inDeck, minion);
@@ -2168,6 +2174,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.OvergrownBeanstalk_MIS_301:
 			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
+		case CardIds.OvergrownHorror_EDR_654:
+			return and(side(inputSide), or(inDeck, inHand), darkGift);
 		case CardIds.Overheat_FIR_906:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), nature, spell),
