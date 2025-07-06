@@ -52,6 +52,7 @@ export class GameForUpload {
 	bgBattleOdds: readonly { turn: number; wonPercent: number }[];
 	bgsAnomalies: readonly string[];
 	bgGame?: any /*BgsGame*/;
+	compArchetype: string | null;
 
 	/** @deprecated */
 	mercsBountyId: number;

@@ -112,6 +112,7 @@ export class GameStatsUpdaterService {
 			bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],
 			bgsAnomalies: game.bgsAnomalies,
 			bgsTrinkets: metadata.bgs?.trinkets?.map((t) => t.cardId) ?? [],
+			bgsCompArchetype: metadata.bgs?.compArchetype,
 		});
 
 		if (!isMercenaries(game.gameMode)) {

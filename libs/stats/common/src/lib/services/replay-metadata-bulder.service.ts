@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Inject, Injectable } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import {
 	BgsBoard,
 	BgsPostMatchStats,
@@ -16,7 +17,9 @@ import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { MatchAnalysisService } from './match-analysis.service';
 
 import { isMercenaries } from '@firestone-hs/reference-data';
+import { PatchesConfigService, PatchInfo } from '@firestone/shared/common/service';
 import { IAdsService } from '@firestone/shared/framework/core';
+import { assignCompArchetype } from './bgs/comps';
 
 @Injectable()
 export class ReplayMetadataBuilderService {
@@ -24,6 +27,7 @@ export class ReplayMetadataBuilderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly matchAnalysisService: MatchAnalysisService,
+		private readonly patches: PatchesConfigService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
@@ -31,6 +35,7 @@ export class ReplayMetadataBuilderService {
 		game: GameForUpload,
 		xml: string,
 		bgsRunStats: BgsComputeRunStatsInput | null,
+		comps: readonly BgsCompAdvice[] | null,
 		userId: string,
 		userName: string,
 		allowGameShare: boolean,
@@ -39,7 +44,14 @@ export class ReplayMetadataBuilderService {
 		const replay = game.replay;
 		const totalDurationTurns = extractTotalTurns(replay);
 		const totalDurationSeconds = extractTotalDuration(replay);
-		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(game, xml, bgsRunStats);
+		const currentBgPatch = await this.patches.currentBattlegroundsMetaPatch$$.getValueWithInit();
+		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(
+			game,
+			xml,
+			bgsRunStats,
+			comps,
+			currentBgPatch,
+		);
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		const isPremium = this.ads.hasPremiumSub$$.getValue();
 		const newSuffix = !userName?.length ? 'anonymous' : isPremium ? 'premium' : 'logged-in';
@@ -127,6 +139,8 @@ export class ReplayMetadataBuilderService {
 		game: GameForUpload,
 		xml: string,
 		bgsRunStats: BgsComputeRunStatsInput | null,
+		comps: readonly BgsCompAdvice[] | null,
+		currentBgPatch: PatchInfo | null,
 	): ReplayUploadMetadata['bgs'] | undefined {
 		if (
 			!bgsRunStats ||
@@ -155,6 +169,10 @@ export class ReplayMetadataBuilderService {
 						newMmr: game.newPlayerRank,
 				  };
 		const boardHistory: readonly BgsBoardLight[] = buildBoardHistory(postMatchStats.boardHistory);
+		const finalComp = postMatchStats?.boardHistory?.length
+			? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
+			: null;
+		const compArchetype = assignCompArchetype(comps, finalComp, this.allCards, currentBgPatch);
 		return {
 			hasPrizes: game.hasBgsPrizes,
 			hasSpells: game.hasBgsSpells,
@@ -169,9 +187,8 @@ export class ReplayMetadataBuilderService {
 			anomalies: game.replay.bgsAnomalies,
 			trinkets: game.replay.bgsHeroTrinkets,
 			trinketsOffered: game.replay.bgsHeroTrinketsOffered,
-			finalComp: postMatchStats?.boardHistory?.length
-				? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
-				: null,
+			finalComp: finalComp,
+			compArchetype: compArchetype,
 			battleOdds: !!game.bgBattleOdds?.length ? game.bgBattleOdds : null,
 			warbandStats: warbandStats,
 			postMatchStats: finalPostMatchStats,

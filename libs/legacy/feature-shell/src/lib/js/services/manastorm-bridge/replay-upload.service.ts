@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
+import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/common';
@@ -18,6 +19,7 @@ export class ReplayUploadService {
 		private readonly ow: OverwolfService,
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
+		private readonly bgsComps: BgsMetaCompositionStrategiesService,
 	) {}
 
 	public async uploadGame(game: GameForUpload, xml: string): Promise<ReplayUploadMetadata> {
@@ -48,10 +50,12 @@ export class ReplayUploadService {
 			game.gameMode === 'battlegrounds-duo'
 				? this.bgsRunStatsService.buildInput(reviewId, game, game.bgGame, userId, userName)
 				: null;
+		const comps = await this.bgsComps.strategies$$.getValueWithInit();
 		const fullMetaData = await this.metadataBuilder.buildMetadata(
 			game,
 			xml,
 			bgsRunStats,
+			comps,
 			userId,
 			userName,
 			prefs.allowGamesShare,

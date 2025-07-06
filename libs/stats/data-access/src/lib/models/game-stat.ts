@@ -45,6 +45,7 @@ export class GameStat {
 	readonly bgsHeroQuestRewards: readonly string[];
 	readonly region: BnetRegion;
 	readonly bgsTrinkets: readonly string[];
+	readonly bgsCompArchetype: string | null;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 	/** @deprecated */
