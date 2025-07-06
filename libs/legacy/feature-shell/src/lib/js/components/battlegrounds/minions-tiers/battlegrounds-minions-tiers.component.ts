@@ -36,6 +36,7 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -280,6 +281,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
+			tap((ownedCards) => console.debug('[bgs] owned cards', ownedCards)),
 			takeUntil(this.destroyed$),
 		);
 		const boardComposition$: Observable<readonly MinionInfo[]> = combineLatest([

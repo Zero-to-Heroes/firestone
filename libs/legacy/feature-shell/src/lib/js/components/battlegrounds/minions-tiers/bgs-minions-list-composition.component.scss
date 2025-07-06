@@ -82,6 +82,9 @@
 		margin-top: 2px;
 		margin-left: 5px;
 		margin-right: 5px;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
 
 		.header {
 			background: var(--color-5);
@@ -94,13 +97,11 @@
 		}
 
 		.minion {
-			&.controlled {
-				outline: 2px solid;
-				outline-color: linear-gradient(to left, rgba(255, 185, 72, 0), #f1af0d) 1;
+			&.controlled ::ng-deep .minion {
+				outline: 2px solid var(--bgs-color-8);
 			}
-			&.inShop {
-				outline: 2px solid;
-				outline-color: linear-gradient(to left, rgba(220, 16, 238, 0), #dc10ee) 1;
+			&.inShop ::ng-deep .minion {
+				outline: 2px solid var(--default-title-color);
 			}
 		}
 	}

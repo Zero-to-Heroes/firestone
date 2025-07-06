@@ -83,6 +83,10 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 					<bgs-minion-item
 						class="minion"
 						*ngFor="let minion of coreCards; trackBy: trackByFn"
+						[ngClass]="{
+							controlled: minionsOnBoardAndHand?.includes(minion.id),
+							inShop: minionsInShop?.includes(minion.id)
+						}"
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
 						[showTrinketTips]="showTrinketTips"
@@ -110,6 +114,10 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 					<bgs-minion-item
 						class="minion"
 						*ngFor="let minion of addonCards; trackBy: trackByFn"
+						[ngClass]="{
+							controlled: minionsOnBoardAndHand?.includes(minion.id),
+							inShop: minionsInShop?.includes(minion.id)
+						}"
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
 						[showTrinketTips]="showTrinketTips"
