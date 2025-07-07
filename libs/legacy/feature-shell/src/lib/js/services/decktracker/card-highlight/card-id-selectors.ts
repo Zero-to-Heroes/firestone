@@ -1118,7 +1118,7 @@ export const cardIdSelector = (
 		case CardIds.EtherealOracle_GDB_310:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spell, damage),
-				and(side(inputSide), or(inHand, inDeck), spell),
+				and(side(inputSide), inDeck, spell),
 			);
 		case CardIds.Eureka:
 			return and(side(inputSide), or(inHand, inDeck), minion);
@@ -3154,7 +3154,7 @@ export const cardIdSelector = (
 		case CardIds.TortollanPilgrim:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.TortollanTraveler_VAC_518:
-			return and(side(inputSide), inDeck, minion, taunt);
+			return and(side(inputSide), inDeck, minion, taunt, not(cardIs(CardIds.TortollanTraveler_VAC_518)));
 		case CardIds.TotemicMightLegacy:
 		case CardIds.TotemicMightVanilla:
 		case CardIds.TotemicSurge:
