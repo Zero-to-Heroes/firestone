@@ -1,7 +1,8 @@
-import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsBoard, BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BnetRegion, GALAKROND_EVIL, GALAKROND_EXPLORER, isMercenariesPvP, Race } from '@firestone-hs/reference-data';
 import { capitalizeEachWord, NonFunctionProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
+import { deflate, inflate } from 'pako';
 import { StatGameFormatType } from './stat-game-format.type';
 import { StatGameModeType } from './stat-game-mode.type';
 
@@ -46,6 +47,8 @@ export class GameStat {
 	readonly region: BnetRegion;
 	readonly bgsTrinkets: readonly string[];
 	readonly bgsCompArchetype: string | null;
+	/** Compressed + base64 encoded */
+	readonly finalComp?: string;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 	/** @deprecated */
@@ -224,6 +227,29 @@ export class GameStat {
 			default:
 				return '';
 		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/member-ordering
+	public static encodeBgsFinalComp(finalComp: BgsBoard | null | undefined): string {
+		if (!finalComp?.board?.length) {
+			return null;
+		}
+
+		const compressedStats = deflate(JSON.stringify(finalComp), { to: 'string' });
+		const buff = Buffer.from(compressedStats, 'utf8');
+		const base64data = buff.toString('base64');
+		return base64data;
+	}
+	// eslint-disable-next-line @typescript-eslint/member-ordering
+	public static decodeBgsFinalComp(finalComp: string | null | undefined): BgsBoard {
+		if (!finalComp?.length) {
+			return null;
+		}
+
+		const buff = Buffer.from(finalComp, 'base64');
+		const compressedStats = buff.toString('utf8');
+		const stats = inflate(compressedStats, { to: 'string' });
+		return JSON.parse(stats);
 	}
 }
 

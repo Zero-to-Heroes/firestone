@@ -113,6 +113,7 @@ export class GameStatsUpdaterService {
 			bgsAnomalies: game.bgsAnomalies,
 			bgsTrinkets: metadata.bgs?.trinkets?.map((t) => t.cardId) ?? [],
 			bgsCompArchetype: metadata.bgs?.compArchetype,
+			finalComp: GameStat.encodeBgsFinalComp(metadata.bgs?.finalComp),
 		});
 
 		if (!isMercenaries(game.gameMode)) {

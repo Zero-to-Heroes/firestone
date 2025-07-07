@@ -63,6 +63,9 @@ import { extractTime } from './replay-info-ranked.component';
 					</div>
 				</div>
 
+				<div class="group archetype" *ngIf="archetype">
+					{{ archetype }}
+				</div>
 				<div class="group warband" *ngIf="finalWarband">
 					<bgs-board
 						[entities]="finalWarband.entities"
@@ -133,6 +136,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	gameMode: StatGameModeType;
 	playerClassImage: string;
 	playerClassTooltip: string;
+	archetype: string;
 
 	result: string;
 	reviewId: string;
@@ -181,8 +185,17 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 			return;
 		}
 
+		console.debug('updateInfo', this.replayInfo);
+
 		this.gameMode = this.replayInfo.gameMode;
-		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(this.replayInfo, true);
+		this.playerClassImage = this.buildPlayerClassImage(this.replayInfo);
+		this.playerClassTooltip = this.replayInfo.playerCardId
+			? this.allCards.getCard(this.replayInfo.playerCardId).name
+			: null;
+		if (this.replayInfo.bgsCompArchetype) {
+			this.archetype = this.i18n.translateString(`bgs-comp.${this.replayInfo.bgsCompArchetype.toLowerCase()}`);
+			this.playerClassTooltip += ` - ${this.archetype}`;
+		}
 
 		this.result = buildMatchResultText(this.replayInfo, this.i18n);
 		this.reviewId = this.replayInfo.reviewId;
@@ -241,15 +254,13 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.replayDate = new Date(this.replayInfo.creationTimestamp).toLocaleString(this.i18n.formatCurrentLocale());
 	}
 
-	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {
-		if (!isPlayer) {
-			return [null, null];
-		} else if (info.playerCardId) {
+	private buildPlayerClassImage(info: GameStat): string {
+		if (info.playerCardId) {
 			const card = this.allCards.getCard(info.playerCardId);
-			return [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerCardId}.jpg`, card.name];
+			return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerCardId}.jpg`;
 		} else {
 			// Return Bob to not have an empty image
-			return [`https://static.zerotoheroes.com/hearthstone/cardart/256x/TB_BaconShop_HERO_PH.jpg`, null];
+			return `https://static.zerotoheroes.com/hearthstone/cardart/256x/TB_BaconShop_HERO_PH.jpg`;
 		}
 	}
 }
@@ -271,6 +282,13 @@ export const buildFinalWarband = (replayInfo: GameStat, allCards: CardsFacadeSer
 	const postMatch = replayInfo.postMatchStats;
 	const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
 	if (!bgsBoard) {
+		if (replayInfo.finalComp?.length) {
+			const decoded = GameStat.decodeBgsFinalComp(replayInfo.finalComp);
+			return {
+				entities: decoded.board.map((entity) => Entity.create(new Entity(), entity)),
+				minionStats: [],
+			};
+		}
 		return null;
 	}
 

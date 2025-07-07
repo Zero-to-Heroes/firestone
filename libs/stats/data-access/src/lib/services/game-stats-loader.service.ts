@@ -166,7 +166,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		const stats: readonly GameStat[] = endpointResult
 			.map((stat) => {
-				const decoded = (stat as any).finalComp ? decodeBase64((stat as any).finalComp) : null;
+				const decoded = stat.finalComp ? decodeBase64(stat.finalComp) : null;
 				const postMatchStats: BgsPostMatchStats = decoded == null ? null : ({ boardHistory: [decoded] } as any);
 				let playerInfoFromDeckstring = null;
 				return {
