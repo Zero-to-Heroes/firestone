@@ -13,22 +13,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameType, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardMousedOverService, Side } from '@firestone/memory';
+import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import {
-	auditTime,
-	BehaviorSubject,
-	combineLatest,
-	distinctUntilChanged,
-	filter,
-	map,
-	Observable,
-	pairwise,
-	takeUntil,
-} from 'rxjs';
+import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { AdService } from '../../../services/ad.service';
@@ -349,40 +339,44 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 				this.updateInfos(card, showUpdatedCost, showStatsChange, groupSameCardsTogether);
 			});
 
-		combineLatest([this.ads.enablePremiumFeatures$$, this.cardMouseOverService.mousedOverCard$$])
-			.pipe(
-				// HDT offers this for free
-				// filter(([enablePremiumFeatures]) => enablePremiumFeatures),
-				map(([enablePremiumFeatures, mousedOverCard]) => mousedOverCard),
-				distinctUntilChanged(
-					(a, b) => a?.EntityId === b?.EntityId && a?.Zone === b?.Zone && a?.Side === b?.Side,
-				),
-				pairwise(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([previousMouseOverCard, mousedOverCard]) => {
-				if (!this.entityId) {
-					return;
-				}
-				if (mousedOverCard?.Side === Side.OPPOSING && this._side === 'player') {
-					return;
-				}
-				if (mousedOverCard?.Side === Side.FRIENDLY && this._side === 'opponent') {
-					return;
-				}
+		// TODO: why have this in the deck card component? This means that when the display options don't show the currently
+		// moused over card, we won't get any highlight? (like hero power highlights, or discovery highlights when the DIscovery zone
+		// is not shown)
+		// combineLatest([this.ads.enablePremiumFeatures$$, this.cardMouseOverService.mousedOverCard$$])
+		// 	.pipe(
+		// 		// HDT offers this for free
+		// 		// filter(([enablePremiumFeatures]) => enablePremiumFeatures),
+		// 		map(([enablePremiumFeatures, mousedOverCard]) => mousedOverCard),
+		// 		distinctUntilChanged(
+		// 			(a, b) => a?.EntityId === b?.EntityId && a?.Zone === b?.Zone && a?.Side === b?.Side,
+		// 		),
+		// 		pairwise(),
+		// 		takeUntil(this.destroyed$),
+		// 	)
+		// 	.subscribe(([previousMouseOverCard, mousedOverCard]) => {
+		// 		console.debug('[meta] [bgs] mouse over card', previousMouseOverCard, mousedOverCard);
+		// 		if (!this.entityId) {
+		// 			return;
+		// 		}
+		// 		if (mousedOverCard?.Side === Side.OPPOSING && this._side === 'player') {
+		// 			return;
+		// 		}
+		// 		if (mousedOverCard?.Side === Side.FRIENDLY && this._side === 'opponent') {
+		// 			return;
+		// 		}
 
-				// We use cardId instead of entityId so that it still works when we have multiple cards in hand (since only one entity
-				// id is assigned)
-				if (mousedOverCard?.CardId === this.cardId) {
-					this.onMouseEnter(null);
-					// Not sure we actually want this, as it could start to show up too often and
-					// get annoying
-					// this.forceMouseOver$$.next(true);
-				} else if (previousMouseOverCard?.CardId === this.cardId) {
-					this.onMouseLeave(null);
-					// this.forceMouseOver$$.next(false);
-				}
-			});
+		// 		// We use cardId instead of entityId so that it still works when we have multiple cards in hand (since only one entity
+		// 		// id is assigned)
+		// 		if (mousedOverCard?.CardId === this.cardId) {
+		// 			this.onMouseEnter(null);
+		// 			// Not sure we actually want this, as it could start to show up too often and
+		// 			// get annoying
+		// 			// this.forceMouseOver$$.next(true);
+		// 		} else if (previousMouseOverCard?.CardId === this.cardId) {
+		// 			this.onMouseLeave(null);
+		// 			// this.forceMouseOver$$.next(false);
+		// 		}
+		// 	});
 		this.forceMouseOver$$.pipe(this.mapData((value) => value)).subscribe((value) => {
 			if (value) {
 				this.onMouseEnter(null);

@@ -3,6 +3,7 @@ import { ICardsHighlightService, OverwolfService } from '@firestone/shared/frame
 
 import { GameType } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
+import { sleep } from '@firestone/shared/framework/common';
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
 import { Handler, SelectorOptions } from './cards-highlight-common.service';
 
@@ -11,7 +12,14 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 	private service: CardsHighlightService;
 
 	constructor(private readonly ow: OverwolfService) {
-		this.service = ow.getMainWindow().cardsHighlightService;
+		this.initService();
+	}
+
+	private async initService() {
+		while (!this.service) {
+			this.service = this.ow.getMainWindow().cardsHighlightService;
+			await sleep(500);
+		}
 	}
 
 	public async init(options?: SelectorOptions) {
