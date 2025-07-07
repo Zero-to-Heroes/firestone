@@ -17,9 +17,9 @@ import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { MatchAnalysisService } from './match-analysis.service';
 
 import { isMercenaries } from '@firestone-hs/reference-data';
+import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { PatchesConfigService, PatchInfo } from '@firestone/shared/common/service';
 import { IAdsService } from '@firestone/shared/framework/core';
-import { assignCompArchetype } from './bgs/comps';
 
 @Injectable()
 export class ReplayMetadataBuilderService {
@@ -28,6 +28,7 @@ export class ReplayMetadataBuilderService {
 		private readonly ow: OverwolfService,
 		private readonly matchAnalysisService: MatchAnalysisService,
 		private readonly patches: PatchesConfigService,
+		private readonly compsDetector: CompositionDetectorService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
@@ -172,7 +173,26 @@ export class ReplayMetadataBuilderService {
 		const finalComp = postMatchStats?.boardHistory?.length
 			? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
 			: null;
-		const compArchetype = assignCompArchetype(comps, finalComp, this.allCards, currentBgPatch);
+		const validComps = comps?.filter((comp) => !!currentBgPatch && comp.patchNumber >= currentBgPatch.number) ?? [];
+		const compArchetype = this.compsDetector.detectComposition(
+			{
+				board: finalComp?.board?.map((e) => e.cardID) ?? [],
+				hand: [],
+			},
+			validComps,
+		);
+		console.debug(
+			'compArchetype',
+			compArchetype,
+			this.compsDetector.getMatchAnalysis(compArchetype),
+			this.compsDetector.getPossibleCompositions(
+				{
+					board: finalComp?.board?.map((e) => e.cardID) ?? [],
+					hand: [],
+				},
+				validComps,
+			),
+		);
 		return {
 			hasPrizes: game.hasBgsPrizes,
 			hasSpells: game.hasBgsSpells,
@@ -188,7 +208,7 @@ export class ReplayMetadataBuilderService {
 			trinkets: game.replay.bgsHeroTrinkets,
 			trinketsOffered: game.replay.bgsHeroTrinketsOffered,
 			finalComp: finalComp,
-			compArchetype: compArchetype,
+			compArchetype: compArchetype?.composition?.compId ?? null,
 			battleOdds: !!game.bgBattleOdds?.length ? game.bgBattleOdds : null,
 			warbandStats: warbandStats,
 			postMatchStats: finalPostMatchStats,

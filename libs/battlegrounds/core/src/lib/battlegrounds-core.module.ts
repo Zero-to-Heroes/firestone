@@ -8,6 +8,7 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { BattleStatusPremiumComponent } from './components/battle-status-premium.component';
 import { BgsBattleStatusComponent } from './components/bgs-battle-status.component';
 import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
+import { CompositionDetectorService } from './services/compositions/composition-detector.service';
 import { BgsBattleSimulationMockExecutorService } from './services/simulation/bgs-battle-simulation-mock-executor.service';
 import { BgsBattleSimulationService } from './services/simulation/bgs-battle-simulation.service';
 import { BgsIntermediateResultsSimGuardianService } from './services/simulation/bgs-intermediate-results-sim-guardian.service';
@@ -28,6 +29,7 @@ const components = [BgsCardTooltipComponent, BgsBattleStatusComponent, BattleSta
 		BgsBattleSimulationMockExecutorService,
 		BgsBattleSimulationService,
 		BgsIntermediateResultsSimGuardianService,
+		CompositionDetectorService,
 	],
 	declarations: components,
 	exports: components,
