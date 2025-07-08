@@ -1603,6 +1603,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.IceRevenant:
 			return and(side(inputSide), inDeck, spell, frost);
+		case CardIds.IllidariStudiesCore:
+		case CardIds.IllidariStudies_YOP_001:
+			return and(side(inputSide), or(inHand, inDeck), outcast);
 		case CardIds.Illuminate:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Kazakus_IchorOfUndeathToken_CFM_621t37:
@@ -3320,6 +3323,8 @@ export const cardIdSelector = (
 		case CardIds.VeteranWarmedic:
 			return and(side(inputSide), or(inHand, inDeck), holy, spell);
 		case CardIds.VengefulSpirit_BAR_328:
+			return and(side(inputSide), or(inHand, inDeck), outcast);
+		case CardIds.VengefulWalloper:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.Vexallus:
 			return and(side(inputSide), or(inDeck, inHand), spell, arcane);
