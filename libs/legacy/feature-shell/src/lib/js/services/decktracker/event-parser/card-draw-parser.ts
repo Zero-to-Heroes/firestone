@@ -191,7 +191,8 @@ export class CardDrawParser implements EventParser {
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
 		// This happens when the top card is not identified, eg when the opponent plays Disarming Elemental
 		const drawFromTop = !useTopOfDeckToIdentifyCard && previousDeck.filter((c) => c.positionFromTop != null);
-		let newDeck: readonly DeckCard[] = isCardInfoPublic
+		// eslint-disable-next-line prefer-const
+		let [newDeck, removedCard] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
 					previousDeck,
 					updatedCardId,
@@ -201,17 +202,19 @@ export class CardDrawParser implements EventParser {
 					{
 						cost: gameEvent.additionalData.cost,
 					},
-			  )[0]
-			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
-		// console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck);
+			  )
+			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
+		// console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
 
-		if (drawFromTop) {
+		// It can happen that the previous step still removed something (like a filler or created by card)
+		if (drawFromTop && !removedCard) {
 			const topCard = newDeck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0];
 			const isTopCardUnknown = !topCard?.cardId?.length;
 			// console.debug('removing top card from deck?', isTopCardUnknown, topCard, newDeck);
 			if (!!topCard && isTopCardUnknown) {
 				// console.debug('removing top card from deck', topCard, newDeck);
 				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
+				// console.debug('after removing top card from deck', topCard, newDeck);
 			}
 		}
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
