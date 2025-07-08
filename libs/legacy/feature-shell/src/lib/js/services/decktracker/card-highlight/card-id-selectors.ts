@@ -2343,7 +2343,10 @@ export const cardIdSelector = (
 		case CardIds.Queensguard:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.RaiseDead_SCH_514:
-			return tooltip(and(side(inputSide), inGraveyard, minion));
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion),
+				and(side(inputSide), inGraveyard, minion),
+			);
 		case CardIds.ImpendingCatastrophe:
 			return and(side(inputSide), or(inDeck, inHand), minion, imp);
 		case CardIds.ImpKingRafaam_REV_789:

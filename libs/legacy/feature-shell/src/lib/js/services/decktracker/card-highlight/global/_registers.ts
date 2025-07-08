@@ -4,6 +4,7 @@ import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
+import { CatrinaMuerte } from './catrina-muerte';
 import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
 import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
@@ -24,6 +25,7 @@ import { NzothGodOfTheDeep } from './nzoth-god-of-the-deep';
 import { NZothTheCorruptor } from './nzoth-the-corruptor';
 import { ParrotMascot } from './parrot-mascot';
 import { PetParrot } from './pet-parrot';
+import { RaiseDead } from './raise-dead';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
 import { Ressucitate } from './ressucitate';
@@ -37,10 +39,10 @@ import { UrsolsAura } from './ursols-aura';
 import { VanessaVanCleef } from './vanessa-van-cleef';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
-import { CatrinaMuerte } from './catrina-muerte';
 
 const cards = [
 	Ressucitate,
+	RaiseDead,
 	CreatureOfTheSacredCave,
 	CatrinaMuerte,
 	JimRaynor,
