@@ -562,11 +562,6 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasMechanic(c, GameTag.COLOSSAL);
 		case CardIds.FyrakkTheBlazing_FIR_959:
 			return (c) => hasCorrectSpellSchool(c, SpellSchool.FIRE) && hasCorrectType(c, CardType.SPELL);
-		case CardIds.Scorchreaver_FIR_952:
-			return (c) =>
-				canBeDiscoveredByClass(c, options.currentClass) &&
-				hasCorrectSpellSchool(c, SpellSchool.FEL) &&
-				hasCorrectType(c, CardType.SPELL);
 		case CardIds.EmberscarredWhelp_FIR_927:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 5);
 		case CardIds.Cremate_FIR_900:
@@ -582,8 +577,6 @@ const getDynamicFilters = (
 		case CardIds.SweetenedSnowflurry_TOY_307:
 		case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FROST);
-		case CardIds.HiveMap_TLC_900:
-			return (c) => hasCorrectSpellSchool(c, SpellSchool.FEL) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CryptMap_TLC_435:
 			return (c) => hasCorrectRune(c, DkruneTypes.FROSTRUNE) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SparkOfLife_EDR_872:
@@ -754,6 +747,10 @@ const getDynamicFilters = (
 				hasCorrectSpellSchool(c, SpellSchool.NATURE) &&
 				hasCorrectType(c, CardType.SPELL) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.Scorchreaver_FIR_952:
+		case CardIds.HiveMap_TLC_900:
+		case CardIds.TasteOfChaos:
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL);
 
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
