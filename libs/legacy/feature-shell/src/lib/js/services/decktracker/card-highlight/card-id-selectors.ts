@@ -969,6 +969,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.DisksOfLegendTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
+		case CardIds.DiveTheGolakkaDepths_TLC_426:
+			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.DivineIlluminationTavernBrawl:
 			return and(side(inputSide), holy);
 		case CardIds.DivineStar_GDB_460:
@@ -2021,6 +2023,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, minion),
 			);
 		case CardIds.MasterJouster:
+			return and(side(inputSide), inDeck, minion);
+		case CardIds.MaximaBlastenheimer:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.MeatGrinder_RLK_120:
 			return and(side(inputSide), inDeck, minion);
