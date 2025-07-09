@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
+import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { CardNotificationsService } from './collection/card-notifications.service';
@@ -12,9 +15,8 @@ import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipula
 import { GameStateService } from './decktracker/game-state.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { GameEvents } from './game-events.service';
-// const HEARTHSTONE_GAME_ID = 9898;
 
-// declare var overwolf: any;
+const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
 export class DevService {
@@ -29,6 +31,9 @@ export class DevService {
 		private readonly prefs: PreferencesService,
 		private readonly cardNotification: CardNotificationsService,
 		private readonly scene: SceneService,
+		private readonly api: ApiRunner,
+		private readonly compositionDetector: CompositionDetectorService,
+		private readonly strategies: BgsMetaCompositionStrategiesService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -37,14 +42,6 @@ export class DevService {
 	}
 
 	private addTestCommands() {
-		window['clearDeckVersions'] = async () => {
-			const prefs = await this.prefs.getPreferences();
-			await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: [] });
-		};
-		this.addAchievementCommands();
-	}
-
-	private addAchievementCommands() {
 		window['showCardNotification'] = (
 			cardId = 'GVG_118',
 			isSecondCopy = false,
@@ -124,6 +121,7 @@ export class DevService {
 		window['normalizeDeck'] = (deckstring: string) => {
 			console.debug(this.allCards.normalizeDeckList(deckstring));
 		};
+		window['bgComp'] = async (reviewId: string) => this.bgCompTest(reviewId);
 	}
 
 	private async loadEvents(events: any, awaitEvents: boolean, deckstring?: string, timeBetweenEvents?: number) {
@@ -175,28 +173,29 @@ export class DevService {
 		}
 	}
 
-	private addCustomLogLoaderCommand() {
-		// window['loadLog'] = (logName, deckString) => {
-		// 	if (deckString) {
-		// 		this.deckService.currentDeck.deckstring = deckString;
-		// 		this.deckService.decodeDeckString();
-		// 	}
-		// 	overwolf.games.getRunningGameInfo(async (res: any) => {
-		// 		if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-		// 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
-		// 			const logContents = await this.io.getFileContents(logsLocation);
-		// 			this.loadArbitraryLogContent(logContents);
-		// 		}
-		// 	});
-		// };
-	}
-
 	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
 		return cards.map((card) =>
 			card.update({
 				inInitialDeck: true,
 			} as DeckCard),
 		);
+	}
+
+	private async bgCompTest(reviewId: string) {
+		console.debug('[bgComp] test', reviewId);
+		const review: GameStat = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${reviewId}`);
+		const finalComp = GameStat.decodeBgsFinalComp(review.finalComp);
+		console.debug('[bgComp] final comp', finalComp, review);
+		const refComps = await this.strategies.strategies$$.getValueWithInit();
+		console.debug('[bgComp] ref comps', refComps);
+		const detected = this.compositionDetector.getPossibleCompositions(
+			{
+				board: finalComp.board.map((entity) => entity.cardID),
+				hand: [],
+			},
+			refComps,
+		);
+		console.debug('[bgComp] detected', detected);
 	}
 }
 

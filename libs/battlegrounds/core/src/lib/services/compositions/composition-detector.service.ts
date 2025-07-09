@@ -39,7 +39,16 @@ export class CompositionDetectorService {
 
 		const matches: CompositionMatch[] = availableCompositions
 			.map((comp) => this.calculateCompositionMatch(comp, normalizedPlayerCardIds))
-			.filter((match) => match.confidence > 0)
+			.filter((match): match is CompositionMatch => match != null)
+			.filter((match) => {
+				// Require either multiple core cards OR at least one core + one addon card
+				// This prevents false positives from single utility cards
+				const hasMultipleCoreCards = match.coreCardsFound.length >= 2;
+				const hasCoreAndAddon = match.coreCardsFound.length >= 1 && match.addonCardsFound.length >= 1;
+				const hasMinimumRequirement = hasMultipleCoreCards || hasCoreAndAddon;
+
+				return match.confidence > 0 && hasMinimumRequirement;
+			})
 			.sort((a, b) => b.confidence - a.confidence);
 
 		// Return the best match if it has sufficient confidence
@@ -72,12 +81,22 @@ export class CompositionDetectorService {
 
 		return availableCompositions
 			.map((comp) => this.calculateCompositionMatch(comp, normalizedPlayerCardIds))
-			.filter((match) => match.confidence > 0.1) // Lower threshold for suggestions
+			.filter((match): match is CompositionMatch => match != null)
+			.filter((match) => {
+				// Require either multiple core cards OR at least one core + one addon card
+				// This prevents false positives from single utility cards
+				const hasMultipleCoreCards = match.coreCardsFound.length >= 2;
+				const hasCoreAndAddon = match.coreCardsFound.length >= 1 && match.addonCardsFound.length >= 1;
+				const hasMinimumRequirement = hasMultipleCoreCards || hasCoreAndAddon;
+
+				return match.confidence > 0 && hasMinimumRequirement;
+			})
+			.filter((match) => match.confidence > 0.3) // Lower threshold for suggestions
 			.sort((a, b) => b.confidence - a.confidence)
 			.slice(0, maxResults);
 	}
 
-	private calculateCompositionMatch(composition: BgsCompAdvice, playerCardIds: string[]): CompositionMatch {
+	private calculateCompositionMatch(composition: BgsCompAdvice, playerCardIds: string[]): CompositionMatch | null {
 		const coreCards = composition.cards.filter((card) => card.status === 'CORE');
 		const addonCards = composition.cards.filter((card) => card.status === 'ADDON');
 
@@ -101,6 +120,11 @@ export class CompositionDetectorService {
 		// 3. Total composition size (smaller compositions get higher confidence for same match ratio)
 		const coreRatio = coreCards.length > 0 ? coreCardsFound.length / coreCards.length : 0;
 		const addonRatio = addonCards.length > 0 ? addonCardsFound.length / addonCards.length : 0;
+
+		// Return null if no cards found at all
+		if (coreCardsFound.length === 0 && addonCardsFound.length === 0) {
+			return null;
+		}
 
 		// Core cards are much more important than addon cards
 		const coreWeight = 0.7;

@@ -1,0 +1,616 @@
+{
+	"games": [
+		{
+			"reviewId": "7f7f0f73-7771-49ed-811b-9aca868cfaed",
+			"expected": null
+		}
+	],
+	"refComps": [
+		{
+			"compId": "kalecgos_dragons",
+			"name": "Kalecgos Dragons",
+			"cards": [
+				{ "cardId": "BGS_041", "name": "Kalecgos Arcane Aspect", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "CORE" },
+				{ "cardId": "BGS_040", "name": "Nadina the Red", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG29_813", "name": "Persistent Poet", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_823", "name": "Spirited Whimsydrake", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG30_MagicItem_418", "name": "Bronzebeard Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_430", "name": "Rockin' Music Box", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_900", "name": "Dragonwing Glider", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_008", "name": "Greenskeeper", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_824", "name": "Bronze Steward", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG25_027", "name": "Hunter of Gatherers", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG25_309", "name": "General Drakkisath", "tips": [], "status": "CYCLE" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "C",
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Most of the time, you will play with Greenskeeper & Spirited Whimsydrake. When you get Kalecgos & brann, play only good battlecry like drakkisath, primalfin etc.",
+					"whenToCommit": "Brann + kalecgos",
+					"date": "2025-05-15",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "overflow_undead",
+			"name": "Overflow Undead",
+			"cards": [
+				{ "cardId": "BG30_129", "name": "Catacomb Crasher", "tips": [], "status": "CORE" },
+				{ "cardId": "BG30_125", "name": "Cadaver Caretaker", "tips": [], "status": "CORE" },
+				{ "cardId": "BGS_078", "name": "Monstrous Macaw", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "CORE" },
+				{ "cardId": "BG27_079", "name": "Hawkstrider Herald", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_105", "name": "Indomitable Mount", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_306", "name": "Herald Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_700", "name": "Deathly Phylactery", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_310", "name": "Rivendare Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG24_005", "name": "Sinrunner Blanchy", "tips": [], "status": "CORE" },
+				{ "cardId": "BG28_308", "name": "Archlich Kel'Thuzad", "tips": [], "status": "CORE" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "B",
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "If possible, try to dupplicate Catacomb crasher (with reborn) with kel'thuzad and you can have multiple Golden Catacomb with this tips",
+					"whenToCommit": "Catacomb Crasher + Cadaver Caretaker (and if possible titus)",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "beetle_beasts",
+			"name": "Beetle Beasts",
+			"cards": [
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG27_084", "name": "Sprightly Scarab", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_801", "name": "Rylak Metalhead", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_204", "name": "Silky Shimmermoth", "tips": [], "status": "CORE" },
+				{ "cardId": "BG21_002", "name": "Bird Buddy", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_809", "name": "Turquoise Skitterer", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_105", "name": "Indomitable Mount", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_808", "name": "Runed Progenitor", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_860", "name": "Beetle Band", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_864", "name": "Bird Feeder", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_862", "name": "Unholy Sanctum", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "C",
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Protect Shimmermoth & bird buddy with taunt, at the end play almost only beetle minions",
+					"whenToCommit": "Shimmermoth and bird buddy",
+					"date": "2025-05-15",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "shop_eating_demons",
+			"name": "Shop-Eating Demons",
+			"cards": [
+				{ "cardId": "BG31_871", "name": "Batty Terrorguard", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_873", "name": "Ashen Corruptor", "tips": [], "status": "CORE" },
+				{ "cardId": "BG26_524", "name": "Malchezaar Prince of Dance", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_892", "name": "Dream Inquisitor", "tips": [], "status": "ADDON" },
+				{ "cardId": "BGS_004", "name": "Wrath Weaver", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_525", "name": "Imposing Percussionist", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG32_893", "name": "Bounding Felstalker", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG30_MagicItem_701", "name": "The Eye of Sargeras", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_541", "name": "Nether Pendant", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_420", "name": "Book of Medivh", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_821", "name": "Felfire Conjurer", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_891", "name": "Shadowdancer", "tips": [], "status": "ADDON" }
+			],
+			"difficulty": "Hard",
+			"powerLevel": "S",
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Cycle tavern spell with terrorguard, and boost the shop with Ashen Corruptor and Malchezaar/Dream inquisitor",
+					"whenToCommit": "Terrorguard, Malchezaar, Ashen Corruptor",
+					"date": "2025-05-15",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "poet_dragons",
+			"name": "Poet Dragons",
+			"cards": [
+				{ "cardId": "BG29_813", "name": "Persistent Poet", "tips": [], "status": "CORE" },
+				{ "cardId": "BG21_014", "name": "Prized Promo-Drake", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_822", "name": "Fire-forged Evoker", "tips": [], "status": "CORE" },
+				{ "cardId": "BGS_040", "name": "Nadina the Red", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG28_595", "name": "Ignition Specialist", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_111", "name": "Nightmare Par-tea Guest", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_419", "name": "Yu'lon Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_433", "name": "Alliance Keychain", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_363", "name": "Faerie Dragon Scale", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_820", "name": "Firescale Hoarder", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_MagicItem_420", "name": "Book of Medivh", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "A",
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "You have to play with Evoker, poet and promo-drake is not enough, so keep in mind you need tavern spell generation like Ignition Specialist or Par-tea",
+					"whenToCommit": "Tavern spell generation + Fire-forged Evoker",
+					"date": "2025-05-15",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "spell_buff",
+			"name": "Spell Buff",
+			"cards": [
+				{ "cardId": "BG26_ICC_901", "name": "Drakkari Enchanter", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_821", "name": "Felfire Conjurer", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_111", "name": "Nightmare Par-tea Guest", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_820", "name": "Firescale Hoarder", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG27_079", "name": "Hawkstrider Herald", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG28_308", "name": "Archlich Kel'Thuzad", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_866", "name": "Tauren Spiritwalker", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG22_403", "name": "Young Murk-Eye", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_801", "name": "Heart of the Forest", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_420", "name": "Book of Medivh", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_860", "name": "Shoalfin Mystic", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_801", "name": "Rylak Metalhead", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_367", "name": "Ghastly Sticker", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "S",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "You NEED spell generation (Firescale Hoarder or Par-tea Guest) and trigger him as much as possible with brann, titus, herald etc.",
+					"whenToCommit": "Felfire Conjurer (or Shoalfin Mystic & rylak) and Firescale Hoarder/Par-tea Guest",
+					"date": "2025-05-15",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "electron_mechs",
+			"name": "Electron Mechs",
+			"cards": [
+				{ "cardId": "BG32_174", "name": "Electron Powered Up", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_177", "name": "Mechagnome Interpreter", "tips": [], "status": "CORE" },
+				{ "cardId": "BG28_741", "name": "Charging Czarina", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_175", "name": "Holo Rover", "tips": [], "status": "ADDON" },
+				{ "cardId": "BGS_071", "name": "Deflect-o-Bot", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_176", "name": "Dr. Boom's Monster", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG30_MagicItem_709", "name": "Electromagnetic Device", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_172", "name": "Boom's Monster Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_173", "name": "Rickety Repairbot", "tips": [], "status": "CORE" },
+				{ "cardId": "BG26_ICC_901", "name": "Drakkari Enchanter", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_MagicItem_367", "name": "Ghastly Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_179", "name": "Drakkari Portrait", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "C",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Unlike the last patch, you need end of turn minion absolutely and not spell generation, drakkari is a must have like Electron",
+					"whenToCommit": "Early Rickety Repairbot + drakkari + electron",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "hand_buff_murlocs",
+			"name": "Hand buff Murlocs",
+			"cards": [
+				{ "cardId": "BG26_354", "name": "Choral Mrrrglr", "tips": [], "status": "CORE" },
+				{ "cardId": "BG26_350", "name": "Bassgill", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "CORE" },
+				{ "cardId": "BG26_888", "name": "Operatic Belcher", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_137", "name": "Bream Counter", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_330", "name": "Flighty Scout", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_335", "name": "Murkbrine Expeditioner", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG22_202", "name": "Tad", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BGS_020", "name": "Primalfin Lookout", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG30_MagicItem_914", "name": "Nerglish Phrasebook", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_893", "name": "Bluegill Flippers", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_822", "name": "Twin Sky Lanterns", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_926", "name": "Morgl Portrait", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "C",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "You Absolutely need a good trinket (the best is Nerglish Phrasebook or Morgl Portrait), if you have it, try to boost Flighty Scout (golden if possible) because you can summon it twice with bassguil",
+					"whenToCommit": "Good trinket + brann",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "scam_murlocs",
+			"name": "Scam Murlocs",
+			"cards": [
+				{ "cardId": "BG26_888", "name": "Operatic Belcher", "tips": [], "status": "CORE" },
+				{ "cardId": "BG26_350", "name": "Bassgill", "tips": [], "status": "CORE" },
+				{ "cardId": "BG23_318", "name": "Leeroy the Reckless", "tips": [], "status": "CORE" },
+				{ "cardId": "BGS_131", "name": "Deadly Spore", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_149", "name": "Bubble Gunner", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG27_513", "name": "Tide Oracle Morgl", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_926", "name": "Morgl Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_111", "name": "Toxic Stinger", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_822", "name": "Twin Sky Lanterns", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_432", "name": "Belcher Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_807", "name": "Curator Sticker", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "B",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Try to have 1 big minion and buy all scam units",
+					"whenToCommit": "When you have no choice and no gameplan",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "end_of_turn_elementals",
+			"name": "End of turn Elem",
+			"cards": [
+				{ "cardId": "BG26_ICC_901", "name": "Drakkari Enchanter", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_844", "name": "Lokholar Frostforger", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_845", "name": "Amplifying Lightspawn", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "ADDON" },
+				{ "cardId": "BGS_121", "name": "Gentle Djinni", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_817", "name": "Windfall Tornado", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BGS_116", "name": "Refreshing Anomaly", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BGS_115", "name": "Sellemental", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG32_846", "name": "Unleashed Mana Surge", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_MagicItem_802", "name": "Fountain Pen", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_555", "name": "Surprise Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_888", "name": "Recycling Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_367", "name": "Ghastly Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_832", "name": "Windfall Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_426", "name": "Colorful Compass", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_831", "name": "Sellemental Portrait", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "C",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "You need early Lightspawn and drakkari, Lokholar is not enough now, you absolutely need Unleashed Mana surge",
+					"whenToCommit": "Lightspawn + drakkari/lokholar/mana surge",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "boost_quilboar",
+			"name": "Boost Quilboar ",
+			"cards": [
+				{ "cardId": "BG26_867", "name": "Three Lil' Quilboar", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_432", "name": "Needling Crone", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_431", "name": "Corrupted Bristler", "tips": [], "status": "CORE" },
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "CORE" },
+				{ "cardId": "BG29_708", "name": "Pokey Thornmantle", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_433", "name": "Dreaming Thornweaver", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_160", "name": "Prickly Piper", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_157", "name": "Bristlebach", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG20_104", "name": "Bonker", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_123", "name": "Fearless Foodie", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG30_MagicItem_988", "name": "Great Boar Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_410", "name": "Quilligraphy Set", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_546", "name": "Jar o' Gems", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "B",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Scale blood gem with Pokey/Dreaming Thornweaver or Quilligraphy Set (trinket), after play with Three Lil' Quilboar and titus (better than bristlebach)",
+					"whenToCommit": "Gem scaling + Three Lil' Quilboar or bristlebach",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "deathrattle_naga",
+			"name": "Deathrattle Naga",
+			"cards": [
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_925", "name": "Showy Cyclist", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_836", "name": "Coilskar Sapper", "tips": [], "status": "CORE" },
+				{ "cardId": "BG27_079", "name": "Hawkstrider Herald", "tips": [], "status": "ADDON" },
+				{ "cardId": "BGS_078", "name": "Monstrous Macaw", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_830", "name": "Weary Mage", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_035", "name": "Groundbreaker", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG28_405", "name": "Silivaz the Vindictive", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_933", "name": "Weary Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_920", "name": "Thaumaturgist Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_700", "name": "Deathly Phylactery", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_306", "name": "Herald Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_821", "name": "Fish Portrait", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "C",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Generate a lot of spellcraft with Coilskar Sapper, if you don't have Weary Portrait, try to keep a Weary Mage on your board",
+					"whenToCommit": "Early Sapper + Showy Cyclist",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "apm_pirates",
+			"name": "APM Pirates",
+			"cards": [
+				{ "cardId": "BG31_826", "name": "Doubloon Grifter", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_820", "name": "Spacefarer", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_234", "name": "Dastardly Drust", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_824", "name": "Dual-Wield Corsair", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG28_903", "name": "Spellbound Seafarer", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_810", "name": "Gunpowder Courier", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_231", "name": "Elite Navigator", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG31_822", "name": "Gritty Headhunter", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG26_814", "name": "Lovesick Balladist", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BGS_049", "name": "Freedealing Gambler", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG26_135", "name": "Southsea Busker", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG32_MagicItem_957", "name": "Grifter Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_232", "name": "Shark Cannon", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_439", "name": "Designer Eyepatch", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_426", "name": "Colorful Compass", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_987", "name": "Balladist Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_950", "name": "Gritty Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG31_827", "name": "Coast Guard", "tips": [], "status": "CYCLE" }
+			],
+			"difficulty": "Hard",
+			"powerLevel": "A",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "There is 2 plan, if you have early Doubloon Grifter, try to buy good pirate unit. If you have a \"golden start\" with Aureate Laureate and goldgrubber for ex, you can play with Thieveing Rascal and try to golden it with Elite navigator",
+					"whenToCommit": "Gold generation (Doubloon Grifter / thieving Rascal) AND pirate scaling (Gunpowder courier / dual-wield Corsair)",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "silithid_beasts",
+			"name": "Silithid Beasts",
+			"cards": [
+				{ "cardId": "BG29_871", "name": "Silithid Burrower", "tips": [], "status": "CORE" },
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "CORE" },
+				{ "cardId": "BG27_079", "name": "Hawkstrider Herald", "tips": [], "status": "CORE" },
+				{ "cardId": "BGS_078", "name": "Monstrous Macaw", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_800", "name": "Manasaber", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG24_005", "name": "Sinrunner Blanchy", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG_LOOT_078", "name": "Cave Hydra", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_MagicItem_700", "name": "Deathly Phylactery", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_821", "name": "Fish Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_306", "name": "Herald Sticker", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_310", "name": "Rivendare Portrait", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "A",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Stop scaling Silithid when you can die, after that trigger him as much as possible with macaw/herald",
+					"whenToCommit": "Silithid, some deathrattle/reborn and more than 15HP",
+					"date": "2025-05-15",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "buff_shop_demons",
+			"name": "Buff Shop Demons",
+			"cards": [
+				{ "cardId": "BG32_821", "name": "Felfire Conjurer", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_891", "name": "Shadowdancer", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_871", "name": "Batty Terrorguard", "tips": [], "status": "CORE" },
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG27_079", "name": "Hawkstrider Herald", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG21_005", "name": "Famished Felbat", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG29_140", "name": "False Implicator", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_ICC_901", "name": "Drakkari Enchanter", "tips": [], "status": "ADDON" },
+				{ "cardId": "BGS_078", "name": "Monstrous Macaw", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_MagicItem_700", "name": "Deathly Phylactery", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_341", "name": "Humon'gozz", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_MagicItem_991", "name": "Felbat Portrait", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_420", "name": "Book of Medivh", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "S",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Use felfire conjurer with Shadowdancer and boost the shop with this combo",
+					"whenToCommit": "Felfire Conjurer + Shadowdancer",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "groundbreaker_naga",
+			"name": "Groundbreaker Naga",
+			"cards": [
+				{ "cardId": "BG31_035", "name": "Groundbreaker", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_830", "name": "Weary Mage", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG28_405", "name": "Silivaz the Vindictive", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_836", "name": "Coilskar Sapper", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG23_002", "name": "Shell Collector", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BGS_200", "name": "Warden of Old", "tips": [], "status": "CYCLE" },
+				{ "cardId": "BG23_008", "name": "Glowscale", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_MagicItem_426", "name": "Colorful Compass", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_919", "name": "Nazjatar Postcard", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_917", "name": "Rusty Trident", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG31_920", "name": "Darkcrest Strategist", "tips": [], "status": "CORE" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "B",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Keep on your board Darkcrest Strategist and cycle all good naga, you will have only 1 or 2 big unit so try to protect them",
+					"whenToCommit": "Strategist + Groundbreaker",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "attack_undead",
+			"name": "Attack Undead",
+			"cards": [
+				{ "cardId": "BG28_308", "name": "Archlich Kel'Thuzad", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG25_007", "name": "Anub'arak Nerubian King", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_324", "name": "Drustfallen Butcher", "tips": [], "status": "CORE" },
+				{ "cardId": "BG31_835", "name": "Deathly Striker", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_325", "name": "Noisul of the Many Faces", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG25_354", "name": "Titus Rivendare", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG28_304", "name": "Moroes Steward of Death", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_125", "name": "Cadaver Caretaker", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG30_MagicItem_406", "name": "Butcher's Sickle", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_547", "name": "Comfy Coffin", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG30_MagicItem_713", "name": "Bleeding Heart", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG25_010", "name": "Handless Forsaken", "tips": [], "status": "CORE" },
+				{ "cardId": "BG30_MagicItem_437", "name": "Staff of the Scourge", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Easy",
+			"powerLevel": "B",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "you need to protect Drustfallen Butcher & Deathly Striker as much as possible, some card like Vorkai Guardian can help you ! also don't keep too much card, you need hand place during the fight ",
+					"whenToCommit": "Drustfallen Butcher and some deathrattle/reborn undead like handless Forsaken",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "stew_murlocs",
+			"name": "Stew Murloc",
+			"cards": [
+				{ "cardId": "BG32_336", "name": "Gormling Gourmet", "tips": [], "status": "CORE" },
+				{ "cardId": "BG32_860", "name": "Shoalfin Mystic", "tips": [], "status": "CORE" },
+				{ "cardId": "BG_LOE_077", "name": "Brann Bronzebeard", "tips": [], "status": "CORE" },
+				{ "cardId": "BG30_008", "name": "Greenskeeper", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG22_403", "name": "Young Murk-Eye", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_332", "name": "Apprentice of Sefin", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG31_149", "name": "Bubble Gunner", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_335", "name": "Murkbrine Expeditioner", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG26_801", "name": "Rylak Metalhead", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_341", "name": "Humon'gozz", "tips": [], "status": "ADDON" },
+				{ "cardId": "BG32_MagicItem_801", "name": "Heart of the Forest", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_892", "name": "Vibrant Bubble", "tips": [], "status": "TRINKET" },
+				{ "cardId": "BG32_MagicItem_803", "name": "Macaw Portrait", "tips": [], "status": "TRINKET" }
+			],
+			"difficulty": "Medium",
+			"powerLevel": "A",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "Try to get the most Bonus Keyword you can on your board (with bubble gunner or Apprentice of Sefin), scale tavern spell with Shoalfin mystic or Felfire Conjurer and generate stew with Gormling Gourmet. Humon'gozz can help early/mid game",
+					"whenToCommit": "Gormling Gourmet, spell buff, rylak/greenskeeper/brann",
+					"date": "2025-05-16",
+					"patchNumber": 221175
+				}
+			],
+			"patchNumber": 223542
+		},
+		{
+			"compId": "",
+			"name": "",
+			"patchNumber": 223542,
+			"cards": [],
+			"difficulty": "",
+			"powerLevel": "",
+			"forcedTribes": [],
+			"tips": [
+				{
+					"author": "slyders",
+					"language": "enUS",
+					"tip": "/!\\ it's a very very hard composition, you absolutely need to stay tavern 2, and cycle all gold spell, after this you need to find a way to scale your unit (trinket, tier 6 with patient scout like Evoquer, Groundbreaker, Drust)",
+					"whenToCommit": "Lubber and very good APM ",
+					"date": "2025-07-08",
+					"patchNumber": 223184
+				}
+			]
+		}
+	]
+}
