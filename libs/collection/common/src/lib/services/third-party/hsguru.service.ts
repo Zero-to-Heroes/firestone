@@ -68,9 +68,9 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 	}
 
 	private async syncCollection(collection: readonly Card[]) {
-		console.debug('[hsguru] will sync collection', collection);
+		console.log('[hsguru] will sync collection');
 		const region = await this.account.getRegion();
-		console.debug('[hsguru] region', region);
+		console.debug('[hsguru] region', region, collection);
 		const accountInfo = await this.account.getAccountInfo();
 		console.debug('[hsguru] account info', accountInfo);
 		if (!region || !accountInfo?.BattleTag) {
@@ -85,7 +85,7 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 		};
 		console.debug('[hsguru] payload', payload);
 		const uploadResult = await this.api.callPostApi(UPLOAD_URL, payload);
-		console.debug('[hsguru] upload result', uploadResult);
+		console.log('[hsguru] collection uploaded', uploadResult);
 	}
 }
 
