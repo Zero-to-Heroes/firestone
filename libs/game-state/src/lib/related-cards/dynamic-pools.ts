@@ -264,7 +264,11 @@ const getDynamicFilters = (
 				hasCost(c, '<=', 4) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CobaltSpellkin_DRG_075:
-			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', 1);
+			return (c) =>
+				!!options.currentClass &&
+				c.classes?.includes(options.currentClass.toUpperCase()) &&
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '==', 1);
 		case CardIds.ChaoticTendril_YOG_514:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -375,6 +379,8 @@ const getDynamicFilters = (
 		case CardIds.GnawingGreenfin_EDR_999:
 		case CardIds.Howdyfin_WW_333:
 		case CardIds.UnderlightAnglingRod:
+		case CardIds.UnderlightAnglingRod_CORE_BT_018:
+		case CardIds.Grunty_SC_013:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MURLOC);
 
 		// Random Beasts
@@ -509,6 +515,8 @@ const getDynamicFilters = (
 		case CardIds.SuspiciousAlchemist:
 		case CardIds.AmphibiousElixir_WW_080:
 		case CardIds.Astrobiologist_GDB_874:
+		case CardIds.PlantedEvidence:
+		case CardIds.PlantedEvidence_CORE_REV_313:
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 
 		// Discover a Weapon Effects (or spell from class effects such as Peon / Magescribe)
