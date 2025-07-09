@@ -182,6 +182,7 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 					return ArenaRun.create({
 						id: stat.runId,
 						creationTimestamp: stat.creationTimestamp,
+						gameMode: stat.gameMode,
 						heroCardId: stat.heroCardId,
 						initialDeckList: stat.initialDeckList,
 						steps: [],
