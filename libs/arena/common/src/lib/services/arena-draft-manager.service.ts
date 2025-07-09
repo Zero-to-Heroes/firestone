@@ -311,101 +311,6 @@ export class ArenaDraftManagerService
 				this.sendDraftPick(payload);
 			});
 
-			// combineLatest([this.currentDeck$$, this.cardOptions$$])
-			// 	.pipe(
-			// 		distinctUntilChanged(
-			// 			([previousDeck, previousOptions], [currentDeck, currentOptions]) =>
-			// 				this.deckLength(previousDeck) === this.deckLength(currentDeck) ||
-			// 				arraysEqual(previousOptions, currentOptions),
-			// 		),
-			// 		pairwise(),
-			// 	)
-			// 	.subscribe(async ([[previousDeck, previousOptions], [currentDeck, currentOptions]]) => {
-			// 		console.debug(
-			// 			'[arena-draft-manager] considering new options',
-			// 			previousDeck,
-			// 			previousOptions,
-			// 			currentDeck,
-			// 			currentOptions,
-			// 		);
-
-			// 		if (!currentDeck) {
-			// 			console.log('[arena-draft-manager] no current deck, not sending pick');
-			// 			return;
-			// 		}
-			// 		if (previousDeck?.GameType && previousDeck?.GameType !== currentDeck.GameType) {
-			// 			console.log(
-			// 				'[arena-draft-manager] game type changed, not sending pick',
-			// 				previousDeck?.GameType,
-			// 				currentDeck.GameType,
-			// 			);
-			// 			return;
-			// 		}
-
-			// 		if (
-			// 			(previousDeck?.Id != null && previousDeck.Id !== currentDeck.Id) ||
-			// 			currentDeck.DeckList.length === 0
-			// 		) {
-			// 			console.log('[arena-draft-manager] new deck, not sending pick');
-			// 			return;
-			// 		}
-
-			// 		const previousCards: readonly string[] =
-			// 			previousDeck?.DeckList?.map((card) => card as string) ?? [];
-			// 		// For each card in previousCards, remove one copy of it from the currentCards
-			// 		// The remaining cards in currentCards are the ones that were added
-			// 		// Be careful, as there can be multiple copies of cards in currentCards, and nly one
-			// 		// copy in previousCards
-			// 		const addedCards: string[] = currentDeck?.DeckList?.map((card) => card as string) ?? [];
-			// 		for (const card of previousCards) {
-			// 			const index = addedCards.indexOf(card);
-			// 			if (index !== -1) {
-			// 				addedCards.splice(index, 1);
-			// 			}
-			// 		}
-
-			// 		if (addedCards.length !== 1) {
-			// 			console.warn(
-			// 				'[arena-draft-manager] invalid added cards',
-			// 				addedCards,
-			// 				previousDeck,
-			// 				currentDeck,
-			// 				previousOptions,
-			// 			);
-			// 			return;
-			// 		}
-
-			// 		// This doesn't work anymore, because of the redraft mechanics
-			// 		const pickNumber = await this.buildPickNumber(currentDeck);
-
-			// 		// The "distinctUntilChanged" waits until BOTH the deck and the options have changed
-			// 		// This means that the options related to the pick will always be the "previousOptions",
-			// 		// unless this is the first pick registered by the app (eg we left then came back)
-			// 		// On the first pick, we don't have previous options
-			// 		const options = previousOptions ?? currentOptions;
-			// 		const heroRefCard = this.allCards.getCard(currentDeck?.HeroCardId);
-			// 		const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
-			// 		const pick: DraftPick = {
-			// 			runId: currentDeck.Id!,
-			// 			pickNumber: pickNumber,
-			// 			options: options!,
-			// 			pick: addedCards[0],
-			// 			playerClass: playerClass,
-			// 		};
-			// 		console.debug(
-			// 			'[arena-draft-manager] uploading pick',
-			// 			pick,
-			// 			previousDeck,
-			// 			currentDeck,
-			// 			previousOptions,
-			// 			currentOptions,
-			// 		);
-			// 		if (!pick.options?.includes(pick.pick)) {
-			// 			console.error('[arena-draft-manager] invalid pick', pick, previousDeck, currentDeck);
-			// 		}
-			// 		this.sendDraftPick(pick);
-			// 	});
-
 			// Deck score
 			this.currentDeck$$
 				.pipe(
@@ -415,14 +320,6 @@ export class ArenaDraftManagerService
 					),
 					tap((deck) => console.debug('[arena-draft-manager] [stat] current deck', deck)),
 					pairwise(),
-					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck', info)),
-					// So that we only do it once, when we finish the draft
-					// filter(
-					// 	([previousDeck, currentDeck]) =>
-					// 		currentDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK &&
-					// 		previousDeck?.DeckList?.length === TOTAL_CARDS_IN_AN_ARENA_DECK - 1,
-					// ),
-					// tap((info) => console.debug('[arena-draft-manager] [stat] with previous deck 2', info)),
 					map(([previousDeck, currentDeck]) => currentDeck),
 					filter((deck) => !!deck),
 					withLatestFrom(this.arenaCardStats.cardStats$$, this.arenaClassStats.classStats$$),
@@ -458,6 +355,7 @@ export class ArenaDraftManagerService
 							currentDeck,
 							cardStats,
 							classStats,
+							this.currentMode$$.value,
 						);
 						const deckClass = this.allCards.getCard(currentDeck.HeroCardId)?.playerClass?.toUpperCase();
 						const classStat = classStats.stats.find((s) => s.playerClass?.toUpperCase() === deckClass);
@@ -514,22 +412,6 @@ export class ArenaDraftManagerService
 		);
 		return resultFromRemote?.picks ?? null;
 	}
-
-	// private async buildPickNumber(deck: DeckInfoFromMemory): Promise<number> {
-	// 	if (deck.DeckList.length < TOTAL_CARDS_IN_AN_ARENA_DECK) {
-	// 		return deck.DeckList.length;
-	// 	}
-
-	// 	// Possible redraft
-	// 	const existingPicks = await this.getPicksForRun(deck.Id!);
-	// 	if (!existingPicks?.length) {
-	// 		console.warn('[arena-draft-manager] no existing picks for deck', deck.Id);
-	// 		return deck.DeckList.length;
-	// 	}
-
-	// 	const lastPick = Math.max(...existingPicks.map((pick) => pick.pickNumber));
-	// 	return lastPick + 1;
-	// }
 
 	private async sendDraftPick(pick: DraftPick) {
 		await this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick);
