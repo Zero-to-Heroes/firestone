@@ -9,6 +9,12 @@ export interface CompositionMatch {
 	addonCardsFound: string[];
 	missingCoreCards: string[];
 	missingAddonCards: string[];
+	// Add debugging info for the new weighting system
+	weightedScore?: number;
+	cardWeights?: { [cardId: string]: number };
+	// Cards that don't belong to this composition at all
+	foreignCards?: string[];
+	foreignCardsPenalty?: number;
 }
 
 export interface PlayerCards {
@@ -18,6 +24,9 @@ export interface PlayerCards {
 
 @Injectable()
 export class CompositionDetectorService {
+	private cardFrequencyCache: Map<string, number> = new Map();
+	private lastCompositionsHash = '';
+
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	/**
@@ -38,14 +47,18 @@ export class CompositionDetectorService {
 		const normalizedPlayerCardIds = this.normalizeCardIds(allPlayerCardIds);
 
 		const matches: CompositionMatch[] = availableCompositions
-			.map((comp) => this.calculateCompositionMatch(comp, normalizedPlayerCardIds))
+			.map((comp) =>
+				this.calculateCompositionMatch(
+					comp,
+					normalizedPlayerCardIds,
+					this.calculateCardFrequencies(availableCompositions),
+				),
+			)
 			.filter((match): match is CompositionMatch => match != null)
 			.filter((match) => {
-				// Require either multiple core cards OR at least one core + one addon card
-				// This prevents false positives from single utility cards
-				const hasMultipleCoreCards = match.coreCardsFound.length >= 2;
-				const hasCoreAndAddon = match.coreCardsFound.length >= 1 && match.addonCardsFound.length >= 1;
-				const hasMinimumRequirement = hasMultipleCoreCards || hasCoreAndAddon;
+				// Require at least one core card to prevent false positives from utility cards
+				// Since we no longer score addon cards, we focus purely on core card presence
+				const hasMinimumRequirement = match.coreCardsFound.length >= 1;
 
 				return match.confidence > 0 && hasMinimumRequirement;
 			})
@@ -80,14 +93,18 @@ export class CompositionDetectorService {
 		const normalizedPlayerCardIds = this.normalizeCardIds(allPlayerCardIds);
 
 		return availableCompositions
-			.map((comp) => this.calculateCompositionMatch(comp, normalizedPlayerCardIds))
+			.map((comp) =>
+				this.calculateCompositionMatch(
+					comp,
+					normalizedPlayerCardIds,
+					this.calculateCardFrequencies(availableCompositions),
+				),
+			)
 			.filter((match): match is CompositionMatch => match != null)
 			.filter((match) => {
-				// Require either multiple core cards OR at least one core + one addon card
-				// This prevents false positives from single utility cards
-				const hasMultipleCoreCards = match.coreCardsFound.length >= 2;
-				const hasCoreAndAddon = match.coreCardsFound.length >= 1 && match.addonCardsFound.length >= 1;
-				const hasMinimumRequirement = hasMultipleCoreCards || hasCoreAndAddon;
+				// Require at least one core card to prevent false positives from utility cards
+				// Since we no longer score addon cards, we focus purely on core card presence
+				const hasMinimumRequirement = match.coreCardsFound.length >= 1;
 
 				return match.confidence > 0 && hasMinimumRequirement;
 			})
@@ -96,14 +113,64 @@ export class CompositionDetectorService {
 			.slice(0, maxResults);
 	}
 
-	private calculateCompositionMatch(composition: BgsCompAdvice, playerCardIds: string[]): CompositionMatch | null {
+	/**
+	 * Calculates how frequently each card appears across all compositions
+	 * Cards that appear in fewer compositions get higher weights (more informative)
+	 */
+	private calculateCardFrequencies(compositions: readonly BgsCompAdvice[]): Map<string, number> {
+		const compositionsHash = JSON.stringify(compositions.map((c) => c.compId)).slice(0, 100);
+
+		// Use cache if compositions haven't changed
+		if (this.lastCompositionsHash === compositionsHash && this.cardFrequencyCache.size > 0) {
+			return this.cardFrequencyCache;
+		}
+
+		const cardCounts = new Map<string, number>();
+		const totalCompositions = compositions.length;
+
+		// Count how many compositions each card appears in
+		compositions.forEach((comp) => {
+			const seenCards = new Set<string>();
+			comp.cards.forEach((card) => {
+				if (!seenCards.has(card.cardId)) {
+					seenCards.add(card.cardId);
+					cardCounts.set(card.cardId, (cardCounts.get(card.cardId) || 0) + 1);
+				}
+			});
+		});
+
+		// Calculate IDF weights: log(totalCompositions / cardFrequency)
+		// Cards appearing in fewer compositions get higher weights
+		const cardWeights = new Map<string, number>();
+		cardCounts.forEach((count, cardId) => {
+			// Use natural log for IDF calculation (count is always > 0 since we only process existing cards)
+			const idf = Math.log(totalCompositions / count);
+			// Normalize to a reasonable range (0.1 to 2.0)
+			const normalizedWeight = Math.max(0.1, Math.min(2.0, idf));
+			cardWeights.set(cardId, normalizedWeight);
+		});
+
+		this.cardFrequencyCache = cardWeights;
+		this.lastCompositionsHash = compositionsHash;
+		return cardWeights;
+	}
+
+	private calculateCompositionMatch(
+		composition: BgsCompAdvice,
+		playerCardIds: string[],
+		cardWeights: Map<string, number>,
+	): CompositionMatch | null {
 		const coreCards = composition.cards.filter((card) => card.status === 'CORE');
 		const addonCards = composition.cards.filter((card) => card.status === 'ADDON');
+		const allCompositionCardIds = [...coreCards, ...addonCards].map((card) => card.cardId);
 
 		// Having multiple of the same core card should definitely count, because it means the user
 		// is really trying to get that comp
 		const coreCardsFound = playerCardIds.filter((cardId) => coreCards.some((c) => c.cardId === cardId));
 		const addonCardsFound = playerCardIds.filter((cardId) => addonCards.some((c) => c.cardId === cardId));
+
+		// Calculate foreign cards - cards that don't belong to this composition at all
+		const foreignCards = playerCardIds.filter((cardId) => !allCompositionCardIds.includes(cardId));
 
 		const missingCoreCards = coreCards
 			.filter((card) => !playerCardIds.includes(card.cardId))
@@ -112,42 +179,66 @@ export class CompositionDetectorService {
 			.filter((card) => !playerCardIds.includes(card.cardId))
 			.map((card) => card.cardId);
 
-		// Calculate confidence based on:
-		// 1. Core cards found (weighted heavily)
-		// 2. Addon cards found (weighted moderately)
-		// 3. Total composition size (smaller compositions get higher confidence for same match ratio)
-		const coreRatio = coreCards.length > 0 ? coreCardsFound.length / coreCards.length : 0;
-		const addonRatio = addonCards.length > 0 ? addonCardsFound.length / addonCards.length : 0;
-
 		// Return null if no cards found at all
 		if (coreCardsFound.length === 0 && addonCardsFound.length === 0) {
 			return null;
 		}
 
-		// Core cards are much more important than addon cards
-		const coreWeight = 0.7;
-		const addonWeight = 0.3;
+		// Calculate weighted scores for found cards
+		const coreWeightedScore = coreCardsFound.reduce((sum, cardId) => {
+			const weight = cardWeights.get(cardId) || 1.0;
+			return sum + weight;
+		}, 0);
 
-		let confidence = coreRatio * coreWeight + addonRatio * addonWeight;
+		// Calculate maximum possible weighted scores for this composition
+		const maxCoreWeightedScore = coreCards.reduce((sum, card) => {
+			const weight = cardWeights.get(card.cardId) || 1.0;
+			return sum + weight;
+		}, 0);
+
+		// Calculate core ratio - addon cards don't contribute to confidence, only core cards matter
+		const coreRatio = maxCoreWeightedScore > 0 ? coreWeightedScore / maxCoreWeightedScore : 0;
+
+		// Base confidence is purely based on core cards found
+		let confidence = coreRatio;
 
 		// Bonus for having at least some core cards
 		if (coreCardsFound.length > 0) {
 			confidence += 0.1;
 		}
 
-		// Penalty for very large compositions with few matches
-		const totalCompositionSize = coreCards.length + addonCards.length;
-		if (totalCompositionSize > 10 && coreCardsFound.length + addonCardsFound.length < 3) {
+		// Foreign cards penalty - cards that don't belong to this composition at all
+		// This helps distinguish between genuine composition play vs coincidental card overlap
+		let foreignCardsPenalty = 0;
+		if (foreignCards.length >= 1) {
+			// 1-2 foreign cards: small penalty (transitional/utility cards are normal)
+			if (foreignCards.length <= 2) {
+				foreignCardsPenalty = 0.05 + (foreignCards.length - 1) * 0.025; // 0.05 - 0.1
+			} else {
+				// 3+ foreign cards: larger penalty (likely not playing this composition)
+				foreignCardsPenalty = 0.15 + (foreignCards.length - 3) * 0.05; // 0.15+
+			}
+		}
+		confidence -= foreignCardsPenalty;
+
+		// Penalty for very large compositions with few core matches
+		if (coreCards.length > 5 && coreCardsFound.length < 2) {
 			confidence *= 0.5;
 		}
 
-		// Bonus for having a good mix of core and addon cards
-		if (coreCardsFound.length >= 2 && addonCardsFound.length >= 2) {
+		// Bonus for having multiple core cards (shows strong commitment to composition)
+		if (coreCardsFound.length >= 3) {
 			confidence += 0.1;
 		}
 
 		// Cap confidence at 1.0
 		confidence = Math.min(confidence, 1.0);
+
+		// Create debugging info for card weights
+		const matchCardWeights: { [cardId: string]: number } = {};
+		[...coreCardsFound, ...addonCardsFound].forEach((cardId) => {
+			matchCardWeights[cardId] = cardWeights.get(cardId) || 1.0;
+		});
 
 		return {
 			composition,
@@ -156,6 +247,10 @@ export class CompositionDetectorService {
 			addonCardsFound,
 			missingCoreCards,
 			missingAddonCards,
+			weightedScore: coreWeightedScore,
+			cardWeights: matchCardWeights,
+			foreignCards,
+			foreignCardsPenalty,
 		};
 	}
 
@@ -188,7 +283,16 @@ export class CompositionDetectorService {
 		if (!match) {
 			return null;
 		}
-		const { composition, confidence, coreCardsFound, addonCardsFound, missingCoreCards, missingAddonCards } = match;
+		const {
+			composition,
+			confidence,
+			coreCardsFound,
+			addonCardsFound,
+			missingCoreCards,
+			missingAddonCards,
+			foreignCards,
+			foreignCardsPenalty,
+		} = match;
 
 		const strengths: string[] = [];
 		const weaknesses: string[] = [];
@@ -199,7 +303,7 @@ export class CompositionDetectorService {
 			strengths.push(`Strong core with ${coreCardsFound.length} core cards`);
 		}
 		if (addonCardsFound.length >= 2) {
-			strengths.push(`Good support with ${addonCardsFound.length} addon cards`);
+			strengths.push(`Good support with ${addonCardsFound.length} addon cards available`);
 		}
 		if (confidence >= 0.7) {
 			strengths.push('High confidence match');
@@ -215,21 +319,24 @@ export class CompositionDetectorService {
 		if (confidence < 0.5) {
 			weaknesses.push('Low confidence match');
 		}
+		if (foreignCards && foreignCards.length >= 3) {
+			weaknesses.push(`${foreignCards.length} cards don't belong to this composition`);
+		}
 
 		// Suggest next steps
 		if (missingCoreCards.length > 0) {
 			nextSteps.push(`Look for missing core cards: ${missingCoreCards.slice(0, 3).join(', ')}`);
 		}
-		if (
-			addonCardsFound.length < 2 &&
-			addonCardsFound.length < match.composition.cards.filter((c) => c.status === 'ADDON').length
-		) {
-			nextSteps.push('Add more support cards to strengthen the composition');
+		if (coreCardsFound.length < 3) {
+			nextSteps.push('Find more core cards to strengthen the composition');
+		}
+		if (foreignCards && foreignCards.length >= 3) {
+			nextSteps.push(`Consider replacing off-composition cards with relevant core/addon cards`);
 		}
 
 		const summary = `Confidence: ${Math.round(confidence * 100)}% - ${coreCardsFound.length} core, ${
 			addonCardsFound.length
-		} addon cards`;
+		} addon cards${foreignCards && foreignCards.length > 0 ? `, ${foreignCards.length} foreign cards` : ''}`;
 
 		return {
 			summary,
@@ -237,5 +344,54 @@ export class CompositionDetectorService {
 			weaknesses,
 			nextSteps,
 		};
+	}
+
+	/**
+	 * Analyzes card frequency across all compositions for debugging
+	 * @param compositions - List of compositions to analyze
+	 * @returns Analysis showing how often each card appears and its weight
+	 */
+	getCardFrequencyAnalysis(compositions: readonly BgsCompAdvice[]): {
+		cardId: string;
+		frequency: number;
+		weight: number;
+		compositionNames: string[];
+	}[] {
+		const cardWeights = this.calculateCardFrequencies(compositions);
+		const cardFrequencies = new Map<string, { count: number; compositionNames: string[] }>();
+
+		// Count occurrences and track composition names
+		compositions.forEach((comp) => {
+			const seenCards = new Set<string>();
+			comp.cards.forEach((card) => {
+				if (!seenCards.has(card.cardId)) {
+					seenCards.add(card.cardId);
+					const current = cardFrequencies.get(card.cardId) || { count: 0, compositionNames: [] };
+					current.count += 1;
+					current.compositionNames.push(comp.name || comp.compId);
+					cardFrequencies.set(card.cardId, current);
+				}
+			});
+		});
+
+		// Convert to analysis format
+		const analysis: {
+			cardId: string;
+			frequency: number;
+			weight: number;
+			compositionNames: string[];
+		}[] = [];
+
+		cardFrequencies.forEach((data, cardId) => {
+			analysis.push({
+				cardId,
+				frequency: data.count,
+				weight: cardWeights.get(cardId) || 1.0,
+				compositionNames: data.compositionNames,
+			});
+		});
+
+		// Sort by frequency (most common first)
+		return analysis.sort((a, b) => b.frequency - a.frequency);
 	}
 }

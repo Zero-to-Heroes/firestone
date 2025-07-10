@@ -234,7 +234,13 @@ export class DevService {
 				);
 				console.error('❌ [bgComp] expected', game.expected, 'detected', detected.composition.compId);
 			} else {
-				console.debug('✅ [bgComp] all good', game.expected, 'detected', detected?.composition?.compId);
+				console.debug(
+					'✅ [bgComp] all good',
+					game.expected,
+					'detected',
+					detected?.composition?.compId,
+					detected?.confidence,
+				);
 			}
 		}
 	}
