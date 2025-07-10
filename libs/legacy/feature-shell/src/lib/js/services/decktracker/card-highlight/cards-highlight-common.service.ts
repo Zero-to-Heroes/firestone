@@ -387,7 +387,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), restoreHealthToMinion));
 		}
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
+		if (!!card && this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
 		}
 		if (
