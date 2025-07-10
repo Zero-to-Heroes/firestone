@@ -3370,6 +3370,8 @@ export const cardIdSelector = (
 				),
 				and(side(inputSide), deathrattle, minion, not(cardIs(CardIds.WakenerOfSouls_GDB_468))),
 			);
+		case CardIds.WallowTheWretched_EDR_487:
+			return and(side(inputSide), or(inHand, inDeck), darkGift);
 		case CardIds.WarCommandsTavernBrawl:
 			return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
 		case CardIds.WarpDrive_GDB_474:
