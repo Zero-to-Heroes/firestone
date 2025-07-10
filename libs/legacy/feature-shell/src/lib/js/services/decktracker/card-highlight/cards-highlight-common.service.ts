@@ -421,10 +421,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), riff));
 		}
-		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.KINDRED]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.KINDRED])
-		) {
+		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.KINDRED])) {
 			const cardSpellSchool: SpellSchool = this.allCards.getCard(cardId).spellSchool
 				? SpellSchool[this.allCards.getCard(cardId).spellSchool]
 				: null;
