@@ -58,24 +58,29 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 				if (!previous && current) {
 					console.debug('[hsguru] forcing collection sync');
 					const collection = await this.collectionManager.collection$$.getValueWithInit();
+					let synched = false;
 					if (collection?.length > 0) {
-						await this.syncCollection(collection);
-					} else {
+						synched = await this.syncCollection(collection);
+					}
+					if (!synched) {
 						console.warn('[hsguru] no collection to sync');
 					}
 				}
 			});
 	}
 
-	private async syncCollection(collection: readonly Card[]) {
-		console.log('[hsguru] will sync collection');
+	private async syncCollection(collection: readonly Card[]): Promise<boolean> {
+		const totalCards = collection
+			.map((c) => (c.count ?? 0) + (c.premiumCount ?? 0) + (c.diamondCount ?? 0) + (c.signatureCount ?? 0))
+			.reduce((a, b) => a + b, 0);
+		console.log('[hsguru] will sync collection', totalCards);
 		const region = await this.account.getRegion();
-		console.debug('[hsguru] region', region, collection);
+		console.log('[hsguru] region', region, collection);
 		const accountInfo = await this.account.getAccountInfo();
-		console.debug('[hsguru] account info', accountInfo);
+		console.log('[hsguru] account info', accountInfo);
 		if (!region || !accountInfo?.BattleTag) {
 			console.warn('[hsguru] cannot sync collection, region or account info not available', region, accountInfo);
-			return;
+			return false;
 		}
 
 		const payload: Payload = {
@@ -86,6 +91,7 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 		console.debug('[hsguru] payload', payload);
 		const uploadResult = await this.api.callPostApi(UPLOAD_URL, payload);
 		console.log('[hsguru] collection uploaded', uploadResult);
+		return true;
 	}
 }
 
