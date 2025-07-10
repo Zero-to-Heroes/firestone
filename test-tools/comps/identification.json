@@ -3,6 +3,10 @@
 		{
 			"reviewId": "7f7f0f73-7771-49ed-811b-9aca868cfaed",
 			"expected": null
+		},
+		{
+			"reviewId": "11fa4e0f-67c1-44ab-8f9e-2ae3f8af1ff7",
+			"expected": "beetle_beasts"
 		}
 	],
 	"refComps": [

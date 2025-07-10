@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
@@ -122,6 +123,7 @@ export class DevService {
 			console.debug(this.allCards.normalizeDeckList(deckstring));
 		};
 		window['bgComp'] = async (reviewId: string) => this.bgCompTest(reviewId);
+		window['bgCompsAll'] = async () => this.testAllBgsComps();
 	}
 
 	private async loadEvents(events: any, awaitEvents: boolean, deckstring?: string, timeBetweenEvents?: number) {
@@ -195,7 +197,46 @@ export class DevService {
 			},
 			refComps,
 		);
-		console.debug('[bgComp] detected', detected);
+		console.debug(
+			'[bgComp] detected',
+			finalComp.board.map((entity) => entity.cardID),
+			detected,
+		);
+	}
+
+	private async testAllBgsComps() {
+		const location = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\comps\\identification.json`;
+		const rawContent = await this.ow.readTextFile(location);
+		const content = JSON.parse(rawContent);
+
+		const refComps: readonly BgsCompAdvice[] = content.refComps;
+		const games: readonly { reviewId: string; expected: string | null }[] = content.games;
+
+		for (const game of games) {
+			const review: GameStat = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${game.reviewId}`);
+			const finalComp = GameStat.decodeBgsFinalComp(review.finalComp);
+			const detecteds = this.compositionDetector.getPossibleCompositions(
+				{
+					board: finalComp.board.map((entity) => entity.cardID),
+					hand: [],
+				},
+				refComps,
+			);
+			const detected = detecteds[0];
+			if (game.expected != detected?.composition?.compId) {
+				console.debug('[bgComp] final comp', finalComp, review);
+				console.debug('[bgComp] ref comps', refComps);
+				console.debug(
+					'[bgComp] detected',
+					finalComp.board.map((entity) => entity.cardID),
+					detected,
+					detecteds,
+				);
+				console.error('❌ [bgComp] expected', game.expected, 'detected', detected.composition.compId);
+			} else {
+				console.debug('✅ [bgComp] all good', game.expected, 'detected', detected?.composition?.compId);
+			}
+		}
 	}
 }
 

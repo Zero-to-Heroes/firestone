@@ -100,12 +100,10 @@ export class CompositionDetectorService {
 		const coreCards = composition.cards.filter((card) => card.status === 'CORE');
 		const addonCards = composition.cards.filter((card) => card.status === 'ADDON');
 
-		const coreCardsFound = coreCards
-			.filter((card) => playerCardIds.includes(card.cardId))
-			.map((card) => card.cardId);
-		const addonCardsFound = addonCards
-			.filter((card) => playerCardIds.includes(card.cardId))
-			.map((card) => card.cardId);
+		// Having multiple of the same core card should definitely count, because it means the user
+		// is really trying to get that comp
+		const coreCardsFound = playerCardIds.filter((cardId) => coreCards.some((c) => c.cardId === cardId));
+		const addonCardsFound = playerCardIds.filter((cardId) => addonCards.some((c) => c.cardId === cardId));
 
 		const missingCoreCards = coreCards
 			.filter((card) => !playerCardIds.includes(card.cardId))
