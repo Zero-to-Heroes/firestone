@@ -15,9 +15,9 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CollectionManager } from '@legacy-import/src/lib/js/services/collection/collection-manager.service';
+import { getPackDustValue } from '@legacy-import/src/lib/js/services/collection/collection-utils';
 import { CollectionBootstrapService } from '@legacy-import/src/lib/js/services/mainwindow/store/collection-bootstrap.service';
 import { Observable, combineLatest } from 'rxjs';
-import { getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 
@@ -229,7 +229,10 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 		);
 		this.bestPacks$ = this.collectionBootstrapService.packStats$$.pipe(
 			this.mapData((packStats) =>
-				[...packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a)).slice(0, 5),
+				packStats
+					.filter((p) => !CATCH_UP_PACK_IDS.includes(p.boosterId))
+					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))
+					.slice(0, 5),
 			),
 		);
 
