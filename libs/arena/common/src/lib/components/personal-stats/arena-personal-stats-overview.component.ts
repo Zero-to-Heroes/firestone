@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { RewardType } from '@firestone-hs/reference-data';
@@ -86,6 +87,12 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 			.reduce((a, b) => a + b, 0);
 		const rewardAveragePacks = totalRunsWithRewards > 0 ? rewardTotalPacks / totalRunsWithRewards : null;
 
+		const rewardTotalTickets = allRewards
+			.filter((r) => r.rewardType === RewardType.FORGE_TICKET)
+			.map((r) => r.rewardAmount)
+			.reduce((a, b) => a + b, 0);
+		const rewardAverageTickets = totalRunsWithRewards > 0 ? rewardTotalTickets / totalRunsWithRewards : null;
+
 		const totalMatchTime = replays.map((replay) => replay.gameDurationSeconds).reduce((a, b) => a + b, 0);
 		const averageMatchTimeInSeconds = replays.length ? Math.round(totalMatchTime / replays.length) : null;
 		const averageMatchTime: string | null = averageMatchTimeInSeconds
@@ -104,17 +111,22 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 			{
 				label: this.i18n.translateString('app.arena.personal-stats.reward-gold')!,
 				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-gold-tooltip')!,
-				value: `${rewardTotalGold?.toLocaleString() ?? '-'} / ${rewardAverageGold?.toFixed(0) ?? '-'}`,
+				value: `${rewardTotalGold?.toLocaleString() ?? '-'} / ${rewardAverageGold?.toFixed(1) ?? '-'}`,
 			},
 			{
 				label: this.i18n.translateString('app.arena.personal-stats.reward-dust')!,
 				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-dust-tooltip')!,
-				value: `${rewardTotalDust?.toLocaleString() ?? '-'} / ${rewardAverageDust?.toFixed(0) ?? '-'}`,
+				value: `${rewardTotalDust?.toLocaleString() ?? '-'} / ${rewardAverageDust?.toFixed(1) ?? '-'}`,
 			},
 			{
 				label: this.i18n.translateString('app.arena.personal-stats.reward-packs')!,
 				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-packs-tooltip')!,
-				value: `${rewardTotalPacks?.toLocaleString() ?? '-'} / ${rewardAveragePacks?.toFixed(0) ?? '-'}`,
+				value: `${rewardTotalPacks?.toLocaleString() ?? '-'} / ${rewardAveragePacks?.toFixed(1) ?? '-'}`,
+			},
+			{
+				label: this.i18n.translateString('app.arena.personal-stats.reward-tickets')!,
+				tooltip: this.i18n.translateString('app.arena.personal-stats.reward-tickets-tooltip')!,
+				value: `${rewardTotalTickets?.toLocaleString() ?? '-'} / ${rewardAverageTickets?.toFixed(1) ?? '-'}`,
 			},
 			{
 				label: this.i18n.translateString('app.arena.personal-stats.average-match-time')!,
