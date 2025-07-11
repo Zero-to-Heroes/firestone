@@ -459,12 +459,6 @@ const getDynamicFilters = (
 					(hasCorrectType(c, CardType.SPELL) && c?.mechanics?.includes(GameTag[GameTag.SECRET])) ||
 					hasCorrectType(c, CardType.WEAPON)) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case CardIds.SchoolTeacher:
-			// TODO: Add nagaling token
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) &&
-				hasCost(c, '<=', 3) &&
-				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.EverythingMustGo_TOY_519:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 4);
 		case CardIds.AzsharanScroll:
@@ -493,13 +487,6 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				(hasCorrectTribe(c, Race.PIRATE) || c.mechanics?.includes(GameTag[GameTag.STEALTH]));
 
-		case CardIds.ExarchHataaru_GDB_136:
-			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
-		case CardIds.InstructorFireheart:
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) &&
-				hasCost(c, '>=', 1) &&
-				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.TrickTotem_SCH_537:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 3);
 
@@ -521,7 +508,20 @@ const getDynamicFilters = (
 		case CardIds.Astrobiologist_GDB_874:
 		case CardIds.PlantedEvidence:
 		case CardIds.PlantedEvidence_CORE_REV_313:
+		case CardIds.VoidScripture_YOG_507:
+		case CardIds.ExarchHataaru_GDB_136:
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.InstructorFireheart:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '>=', 1) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.SchoolTeacher:
+			// TODO: Add nagaling token
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '<=', 3) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Discover a Weapon Effects (or spell from class effects such as Peon / Magescribe)
 		case CardIds.RunesOfDarkness_YOG_511:
