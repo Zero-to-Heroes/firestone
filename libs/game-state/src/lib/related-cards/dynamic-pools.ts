@@ -337,7 +337,11 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
 		case CardIds.WyrmrestPurifier:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass);
+
 		// Random Class Cards from a specific class
+		case CardIds.ShimmeringTempest:
+		case CardIds.AstromancerSolarian_SolarianPrimeToken:
+			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.LightforgedCrusader:
 			return (c) => c.classes?.includes(CardClass[CardClass.PALADIN]);
 		case CardIds.AnnounceDarkness_VAC_941:
@@ -735,7 +739,6 @@ const getDynamicFilters = (
 		case CardIds.SunsetVolley_WW_427:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
 
-		// Random X Cost Spell(s)
 		case CardIds.RelicOfKings_TLC_334:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 8);
 
