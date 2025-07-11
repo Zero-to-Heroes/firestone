@@ -5,6 +5,43 @@
 			"expected": null
 		},
 		{
+			"reviewId": "9d18148b-771e-4471-b592-4aa5a32e54fb",
+			"expected": null
+		},
+		{
+			"reviewId": "11b85a77-0730-4180-9be5-9126a586abac",
+			"expected": null
+		},
+
+		{
+			"reviewId": "116a9b22-7534-4417-b73d-695b7aabb25c",
+			"expected": "buff_shop_demons"
+		},
+		{
+			"reviewId": "258ac7dc-789d-4872-848a-6b59a8ca6761",
+			"expected": "buff_shop_demons"
+		},
+
+		{
+			"reviewId": "220e95d7-4dce-4000-9cd4-7298172784be",
+			"expected": "spell_buff"
+		},
+
+		{
+			"reviewId": "82fd7acf-4b43-4ba6-8c21-85dac2b99c74",
+			"expected": "poet_dragons"
+		},
+		{
+			"reviewId": "de23c83e-fd98-4dcd-a969-4b1ef111195d",
+			"expected": "poet_dragons"
+		},
+
+		{
+			"reviewId": "780a5f47-427a-45a6-afee-e034ebc9ae12",
+			"expected": "scam_murlocs"
+		},
+
+		{
 			"reviewId": "a563b46e-c91c-4dec-88da-319c202b1c98",
 			"expected": "boost_quilboar"
 		},
@@ -15,10 +52,6 @@
 		{
 			"reviewId": "9159ab4e-a0d3-4453-ab2f-0e495d68e1ab",
 			"expected": "shop_eating_demons"
-		},
-		{
-			"reviewId": "116a9b22-7534-4417-b73d-695b7aabb25c",
-			"expected": "buff_shop_demons"
 		},
 		{
 			"reviewId": "11fa4e0f-67c1-44ab-8f9e-2ae3f8af1ff7",
@@ -550,7 +583,7 @@
 					"name": "Nightmare Par-tea Guest",
 					"tips": [],
 					"status": "CORE",
-					"finalBoardWeight": 5
+					"finalBoardWeight": 15
 				},
 				{
 					"cardId": "BG32_820",

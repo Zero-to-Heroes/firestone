@@ -257,6 +257,7 @@ export class DevService {
 				);
 			}
 		}
+		console.log('[bgComp] Job done');
 	}
 }
 
