@@ -1338,6 +1338,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, undead);
 		case CardIds.GluthTavernBrawl_PVPDR_Sai_T1:
 			return and(side(inputSide), or(inDeck, inHand), minion, undead);
+		case CardIds.GlacialAdvance_RLK_512:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GlacialDownpourTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
 		case CardIds.GoboglideTech:
