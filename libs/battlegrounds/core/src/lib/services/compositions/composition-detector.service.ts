@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export interface CompositionMatch {
 	composition: BgsCompAdvice;
+	baseConfidence: number;
 	confidence: number;
 	coreCardsFound: string[];
 	addonCardsFound: string[];
@@ -11,6 +12,7 @@ export interface CompositionMatch {
 	missingAddonCards: string[];
 	// Add debugging info for the new weighting system
 	weightedScore?: number;
+	addonWeightedScore?: number;
 	cardWeights?: { [cardId: string]: number };
 	// Cards that don't belong to this composition at all
 	foreignCards?: string[];
@@ -56,9 +58,9 @@ export class CompositionDetectorService {
 			)
 			.filter((match): match is CompositionMatch => match != null)
 			.filter((match) => {
-				// Require at least one core card to prevent false positives from utility cards
-				// Since we no longer score addon cards, we focus purely on core card presence
-				const hasMinimumRequirement = match.coreCardsFound.length >= 1;
+				// Weight-based minimum requirements
+				// Require either decent confidence (25%+) OR at least one important card (weight >= 20)
+				const hasMinimumRequirement = match.confidence >= 0.25 || match.coreCardsFound.length >= 1; // coreCardsFound now represents weight >= 20 cards
 
 				return match.confidence > 0 && hasMinimumRequirement;
 			})
@@ -66,7 +68,7 @@ export class CompositionDetectorService {
 
 		// Return the best match if it has sufficient confidence
 		const bestMatch = matches[0];
-		if (bestMatch && bestMatch.confidence >= 0.3) {
+		if (bestMatch && bestMatch.confidence >= 0.25) {
 			return bestMatch;
 		}
 
@@ -84,6 +86,7 @@ export class CompositionDetectorService {
 		playerCards: PlayerCards,
 		availableCompositions: readonly BgsCompAdvice[],
 		maxResults: number = 5,
+		ignoreConfidenceThreshold: boolean = false,
 	): CompositionMatch[] {
 		if (!playerCards.board.length && !playerCards.hand.length) {
 			return [];
@@ -92,7 +95,9 @@ export class CompositionDetectorService {
 		const allPlayerCardIds = [...playerCards.board, ...playerCards.hand];
 		const normalizedPlayerCardIds = this.normalizeCardIds(allPlayerCardIds);
 
-		return availableCompositions
+		// TODO: if there is not a clear winner (eg two comps are rather similar, and the board we have from the user doesn't let
+		// us really know which of these it is), we shouldn't assign anything
+		const sortedComps = availableCompositions
 			.map((comp) =>
 				this.calculateCompositionMatch(
 					comp,
@@ -101,16 +106,11 @@ export class CompositionDetectorService {
 				),
 			)
 			.filter((match): match is CompositionMatch => match != null)
-			.filter((match) => {
-				// Require at least one core card to prevent false positives from utility cards
-				// Since we no longer score addon cards, we focus purely on core card presence
-				const hasMinimumRequirement = match.coreCardsFound.length >= 1;
-
-				return match.confidence > 0 && hasMinimumRequirement;
-			})
-			.filter((match) => match.confidence > 0.3) // Lower threshold for suggestions
-			.sort((a, b) => b.confidence - a.confidence)
-			.slice(0, maxResults);
+			.sort((a, b) => b.confidence - a.confidence);
+		if (ignoreConfidenceThreshold) {
+			return sortedComps;
+		}
+		return sortedComps.filter((match) => match.confidence >= 0.25).slice(0, maxResults);
 	}
 
 	/**
@@ -160,94 +160,131 @@ export class CompositionDetectorService {
 		playerCardIds: string[],
 		cardWeights: Map<string, number>,
 	): CompositionMatch | null {
-		const coreCards = composition.cards.filter((card) => card.status === 'CORE');
-		const addonCards = composition.cards.filter((card) => card.status === 'ADDON');
-		const allCompositionCardIds = [...coreCards, ...addonCards].map((card) => card.cardId);
-
-		// Having multiple of the same core card should definitely count, because it means the user
-		// is really trying to get that comp
-		const coreCardsFound = playerCardIds.filter((cardId) => coreCards.some((c) => c.cardId === cardId));
-		const addonCardsFound = playerCardIds.filter((cardId) => addonCards.some((c) => c.cardId === cardId));
+		const allCompositionCardIds = composition.cards.map((card) => card.cardId);
+		const allCardsFound = playerCardIds.filter((cardId) => allCompositionCardIds.includes(cardId));
 
 		// Calculate foreign cards - cards that don't belong to this composition at all
 		const foreignCards = playerCardIds.filter((cardId) => !allCompositionCardIds.includes(cardId));
 
-		const missingCoreCards = coreCards
-			.filter((card) => !playerCardIds.includes(card.cardId))
-			.map((card) => card.cardId);
-		const missingAddonCards = addonCards
-			.filter((card) => !playerCardIds.includes(card.cardId))
-			.map((card) => card.cardId);
-
 		// Return null if no cards found at all
-		if (coreCardsFound.length === 0 && addonCardsFound.length === 0) {
+		if (allCardsFound.length === 0) {
 			return null;
 		}
 
-		// Calculate weighted scores for found cards
-		const coreWeightedScore = coreCardsFound.reduce((sum, cardId) => {
-			const weight = cardWeights.get(cardId) || 1.0;
-			return sum + weight;
+		// Calculate total weight of the composition
+		const totalCompositionWeight = composition.cards.reduce((sum, card) => {
+			return sum + (card.finalBoardWeight || 1);
 		}, 0);
 
-		// Calculate maximum possible weighted scores for this composition
-		const maxCoreWeightedScore = coreCards.reduce((sum, card) => {
-			const weight = cardWeights.get(card.cardId) || 1.0;
-			return sum + weight;
+		// Calculate weight of found cards
+		const foundCardsWeight = allCardsFound.reduce((sum, cardId) => {
+			const card = composition.cards.find((c) => c.cardId === cardId);
+			return sum + (card?.finalBoardWeight || 1);
 		}, 0);
 
-		// Calculate core ratio - addon cards don't contribute to confidence, only core cards matter
-		const coreRatio = maxCoreWeightedScore > 0 ? coreWeightedScore / maxCoreWeightedScore : 0;
+		// Check for critical cards (weight >= 80) - these are essentially mandatory
+		const criticalCards = composition.cards.filter((card) => (card.finalBoardWeight || 1) >= 80);
+		const criticalCardsFound = allCardsFound.filter((cardId) => criticalCards.some((c) => c.cardId === cardId));
 
-		// Base confidence is purely based on core cards found
-		let confidence = coreRatio;
+		// If composition has critical cards and none are found, apply major penalty or disqualify
+		if (criticalCards.length > 0 && criticalCardsFound.length === 0) {
+			// Don't completely disqualify, but apply severe penalty
+			// This allows for edge cases where critical cards might be temporarily off-board
+			return null;
+		}
 
-		// Bonus for having at least some core cards
-		if (coreCardsFound.length > 0) {
+		// Base confidence: ratio of found weight to total weight
+		let confidence = foundCardsWeight / totalCompositionWeight;
+		const baseConfidence = confidence;
+		// console.debug(
+		// 	'[bgComp] baseConfidence',
+		// 	baseConfidence,
+		// 	totalCompositionWeight,
+		// 	foundCardsWeight,
+		// 	composition.cards,
+		// 	allCardsFound,
+		// );
+
+		// High-importance card bonus
+		const importantCards = composition.cards.filter((card) => (card.finalBoardWeight || 1) >= 20);
+		const importantCardsFound = allCardsFound.filter((cardId) => importantCards.some((c) => c.cardId === cardId));
+
+		if (importantCardsFound.length > 0) {
+			confidence += 0.1; // Bonus for having important cards
+		}
+
+		// Multiple important cards bonus
+		if (importantCardsFound.length >= 2) {
+			confidence += 0.05; // Additional bonus for multiple important cards
+		}
+
+		// Bonus for having many cards from composition (shows commitment)
+		if (allCardsFound.length >= 4) {
 			confidence += 0.1;
 		}
 
-		// Foreign cards penalty - cards that don't belong to this composition at all
-		// This helps distinguish between genuine composition play vs coincidental card overlap
+		// Foreign cards penalty - scaled by weight vs composition weight
+		// Heavy penalty if foreign cards dominate the board
 		let foreignCardsPenalty = 0;
-		if (foreignCards.length >= 1) {
-			// 1-2 foreign cards: small penalty (transitional/utility cards are normal)
-			if (foreignCards.length <= 2) {
-				foreignCardsPenalty = 0.05 + (foreignCards.length - 1) * 0.025; // 0.05 - 0.1
+		if (foreignCards.length > 0) {
+			const foreignCardRatio = foreignCards.length / (foreignCards.length + allCardsFound.length);
+			if (foreignCardRatio > 0.5) {
+				// More than half the cards are foreign - major penalty
+				foreignCardsPenalty = 0.3 * foreignCardRatio;
+			} else if (foreignCardRatio > 0.3) {
+				// 30-50% foreign cards - moderate penalty
+				foreignCardsPenalty = 0.15 * foreignCardRatio;
 			} else {
-				// 3+ foreign cards: larger penalty (likely not playing this composition)
-				foreignCardsPenalty = 0.15 + (foreignCards.length - 3) * 0.05; // 0.15+
+				// <30% foreign cards - small penalty (normal utility cards)
+				foreignCardsPenalty = 0.05 * foreignCardRatio;
 			}
 		}
 		confidence -= foreignCardsPenalty;
 
-		// Penalty for very large compositions with few core matches
-		if (coreCards.length > 5 && coreCardsFound.length < 2) {
+		// Penalty for very large compositions with few matches
+		if (composition.cards.length > 8 && allCardsFound.length < 3) {
 			confidence *= 0.5;
-		}
-
-		// Bonus for having multiple core cards (shows strong commitment to composition)
-		if (coreCardsFound.length >= 3) {
-			confidence += 0.1;
 		}
 
 		// Cap confidence at 1.0
 		confidence = Math.min(confidence, 1.0);
 
-		// Create debugging info for card weights
+		// Create debugging info combining IDF weights with final board weights
 		const matchCardWeights: { [cardId: string]: number } = {};
-		[...coreCardsFound, ...addonCardsFound].forEach((cardId) => {
-			matchCardWeights[cardId] = cardWeights.get(cardId) || 1.0;
+		allCardsFound.forEach((cardId) => {
+			const card = composition.cards.find((c) => c.cardId === cardId);
+			const finalBoardWeight = card?.finalBoardWeight || 1;
+			const idfWeight = cardWeights.get(cardId) || 1.0;
+			matchCardWeights[cardId] = finalBoardWeight * idfWeight;
 		});
+
+		// Legacy compatibility - separate cards into core/addon based on weight
+		const coreCardsFound = allCardsFound.filter((cardId) => {
+			const card = composition.cards.find((c) => c.cardId === cardId);
+			return (card?.finalBoardWeight || 1) >= 20; // Consider weight >= 20 as "core"
+		});
+		const addonCardsFound = allCardsFound.filter((cardId) => {
+			const card = composition.cards.find((c) => c.cardId === cardId);
+			return (card?.finalBoardWeight || 1) < 20; // Consider weight < 20 as "addon"
+		});
+
+		const missingCoreCards = composition.cards
+			.filter((card) => (card.finalBoardWeight || 1) >= 20 && !playerCardIds.includes(card.cardId))
+			.map((card) => card.cardId);
+		const missingAddonCards = composition.cards
+			.filter((card) => (card.finalBoardWeight || 1) < 20 && !playerCardIds.includes(card.cardId))
+			.map((card) => card.cardId);
 
 		return {
 			composition,
+			baseConfidence,
 			confidence,
 			coreCardsFound,
 			addonCardsFound,
 			missingCoreCards,
 			missingAddonCards,
-			weightedScore: coreWeightedScore,
+			weightedScore: foundCardsWeight,
+			addonWeightedScore: foundCardsWeight, // Combined now
 			cardWeights: matchCardWeights,
 			foreignCards,
 			foreignCardsPenalty,
@@ -300,10 +337,10 @@ export class CompositionDetectorService {
 
 		// Analyze strengths
 		if (coreCardsFound.length >= 2) {
-			strengths.push(`Strong core with ${coreCardsFound.length} core cards`);
+			strengths.push(`Strong foundation with ${coreCardsFound.length} important cards (weight ≥20)`);
 		}
 		if (addonCardsFound.length >= 2) {
-			strengths.push(`Good support with ${addonCardsFound.length} addon cards available`);
+			strengths.push(`Good support with ${addonCardsFound.length} supporting cards`);
 		}
 		if (confidence >= 0.7) {
 			strengths.push('High confidence match');
@@ -311,10 +348,10 @@ export class CompositionDetectorService {
 
 		// Analyze weaknesses
 		if (missingCoreCards.length > 0) {
-			weaknesses.push(`Missing ${missingCoreCards.length} core cards`);
+			weaknesses.push(`Missing ${missingCoreCards.length} important cards (weight ≥20)`);
 		}
 		if (coreCardsFound.length === 0) {
-			weaknesses.push('No core cards found');
+			weaknesses.push('No important cards found');
 		}
 		if (confidence < 0.5) {
 			weaknesses.push('Low confidence match');
@@ -325,18 +362,18 @@ export class CompositionDetectorService {
 
 		// Suggest next steps
 		if (missingCoreCards.length > 0) {
-			nextSteps.push(`Look for missing core cards: ${missingCoreCards.slice(0, 3).join(', ')}`);
+			nextSteps.push(`Look for missing important cards: ${missingCoreCards.slice(0, 3).join(', ')}`);
 		}
 		if (coreCardsFound.length < 3) {
-			nextSteps.push('Find more core cards to strengthen the composition');
+			nextSteps.push('Find more important cards to strengthen the composition');
 		}
 		if (foreignCards && foreignCards.length >= 3) {
-			nextSteps.push(`Consider replacing off-composition cards with relevant core/addon cards`);
+			nextSteps.push(`Consider replacing off-composition cards with relevant composition cards`);
 		}
 
-		const summary = `Confidence: ${Math.round(confidence * 100)}% - ${coreCardsFound.length} core, ${
+		const summary = `Confidence: ${Math.round(confidence * 100)}% - ${coreCardsFound.length} important, ${
 			addonCardsFound.length
-		} addon cards${foreignCards && foreignCards.length > 0 ? `, ${foreignCards.length} foreign cards` : ''}`;
+		} supporting cards${foreignCards && foreignCards.length > 0 ? `, ${foreignCards.length} foreign cards` : ''}`;
 
 		return {
 			summary,

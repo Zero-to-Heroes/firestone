@@ -230,12 +230,26 @@ export class DevService {
 					'[bgComp] detected',
 					finalComp.board.map((entity) => entity.cardID),
 					detected,
-					detecteds,
+					this.compositionDetector.getPossibleCompositions(
+						{
+							board: finalComp.board.map((entity) => entity.cardID),
+							hand: [],
+						},
+						refComps,
+						5,
+						true,
+					),
 				);
-				console.error('❌ [bgComp] expected', game.expected, 'detected', detected.composition.compId);
+				console.error(
+					'❌ [bgComp] expected',
+					game.expected,
+					'detected',
+					detected?.composition?.compId,
+					game.reviewId,
+				);
 			} else {
 				console.debug(
-					'✅ [bgComp] all good',
+					'✅ [bgComp] expected',
 					game.expected,
 					'detected',
 					detected?.composition?.compId,
