@@ -929,7 +929,7 @@ export class GameEvents {
 			case 'ARMOR_CHANGED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
-						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
+						armorChange: gameEvent.Value.AdditionalProps.ArmorChange,
 						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
 					}),

@@ -19,6 +19,7 @@ import {
 	ArchetypeCategorizationEvent,
 	ArchetypeCategorizationParser,
 } from '../event-parser/archetype-categorization-parser';
+import { ArmorChangedParser } from '../event-parser/armor-changed-parser';
 import { AssignCardIdParser } from '../event-parser/assign-card-ids-parser';
 import { AttackOnBoardParser } from '../event-parser/attack-on-board-parser';
 import { AttackParser } from '../event-parser/attack-parser';
@@ -198,7 +199,7 @@ export class GameStateParsersService {
 		return {
 			[ArchetypeCategorizationEvent.EVENT_NAME]: [new ArchetypeCategorizationParser()],
 			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.ARMOR_CHANGED]: [new BgsArmorChangedParser()],
+			[GameEvent.ARMOR_CHANGED]: [new ArmorChangedParser(), new BgsArmorChangedParser()],
 			[GameEvent.ATTACKING_HERO]: [new AttackParser(this.allCards)],
 			[GameEvent.ATTACKING_MINION]: [new AttackParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_ACTIVE_PLAYER_BOARD]: [new BgsActivePlayerBoardTriggerParser(this.memory)],

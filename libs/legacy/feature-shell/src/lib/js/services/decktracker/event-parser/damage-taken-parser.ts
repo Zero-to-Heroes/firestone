@@ -9,7 +9,7 @@ export class DamageTakenParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: DamageGameEvent): Promise<GameState> {
-		const localPlayerCardId = gameEvent.localPlayer?.CardID;
+		const localPlayerCardId = currentState.playerDeck.hero?.cardId;
 		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const damageForLocalPlayer = gameEvent.findTarget(localPlayerCardId);
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
@@ -19,7 +19,7 @@ export class DamageTakenParser implements EventParser {
 				: 0;
 
 		// So that we also handle the case where the player has switched to another hero
-		const opponentPlayerCardId = gameEvent.opponentPlayer?.CardID;
+		const opponentPlayerCardId = currentState.opponentDeck.hero?.cardId;
 		const opponentPlayerId = gameEvent.opponentPlayer?.PlayerId;
 		const damageForOpponentPlayer = gameEvent.findTarget(opponentPlayerCardId);
 		const opponentPlayerDamage =

@@ -235,6 +235,7 @@ export interface GameEventPlayer {
 	AccountLo: string;
 	PlayerId: number;
 	Name: string;
+	// This is not updated when the hero changes, so use currentState.playerDeck.hero?.cardId instead
 	CardID: string;
 	standard: Rank;
 	wild: Rank;
