@@ -369,7 +369,23 @@ const getDynamicFilters = (
 		// Random Outcast
 		case CardIds.FelerinTheForgotten:
 		case CardIds.WretchedExile:
+		case CardIds.ShockHopper_YOG_524:
 			return (c) => hasMechanic(c, GameTag.OUTCAST);
+
+		// Discover X Mechanic
+		// Random Deathrattle
+		case CardIds.CarrionStudies:
+		case CardIds.AssimilatingBlight_GDB_478:
+		case CardIds.AvantGardening_EDR_488:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.DEATHRATTLE) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.Reconnaissance:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.DEATHRATTLE) &&
+				fromAnotherClass(c, options.currentClass);
 
 		// Random X Tribe
 		// Random Elementals
@@ -525,6 +541,12 @@ const getDynamicFilters = (
 				hasCost(c, '<=', 3) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 
+		// Discover a Choose One card
+		case CardIds.RaidNegotiator:
+			return (c) => hasMechanic(c, GameTag.CHOOSE_ONE) && canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.Symbiosis_EDR_273:
+			return (c) => hasMechanic(c, GameTag.CHOOSE_ONE) && fromAnotherClass(c, options.currentClass);
+
 		// Discover a Weapon Effects (or spell from class effects such as Peon / Magescribe)
 		case CardIds.RunesOfDarkness_YOG_511:
 		case CardIds.SuspiciousPirate:
@@ -614,11 +636,6 @@ const getDynamicFilters = (
 			return (c) => hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
 		case CardIds.Alarashi_EDR_493:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
-		case CardIds.AvantGardening_EDR_488:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasMechanic(c, GameTag.DEATHRATTLE) &&
-				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Jumpscare_EDR_882:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -629,8 +646,6 @@ const getDynamicFilters = (
 		case CardIds.Photosynthesis_EDR_848:
 			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.DRUID]);
 
-		case CardIds.Symbiosis_EDR_273:
-			return (c) => hasMechanic(c, GameTag.CHOOSE_ONE) && fromAnotherClass(c, options.currentClass);
 		case CardIds.DaydreamingPixie_EDR_530:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.NATURE);
 		case CardIds.HornOfPlenty_EDR_270:
@@ -663,11 +678,6 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DemonicDeal_WORK_014:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5) && hasCorrectTribe(c, Race.DEMON);
-		case CardIds.AssimilatingBlight_GDB_478:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				canBeDiscoveredByClass(c, options.currentClass) &&
-				hasMechanic(c, GameTag.DEATHRATTLE);
 		case CardIds.Blasteroid_GDB_303:
 		case CardIds.Supernova_GDB_301:
 			return (c) =>
@@ -790,11 +800,6 @@ const getDynamicFilters = (
 					hasMechanic(c, GameTag.SPELLPOWER) &&
 					canBeDiscoveredByClass(c, options.currentClass),
 			];
-		case CardIds.CarrionStudies:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasMechanic(c, GameTag.DEATHRATTLE) &&
-				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.AthleticStudies_SCH_237:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
