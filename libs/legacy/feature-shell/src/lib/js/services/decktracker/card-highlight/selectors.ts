@@ -173,29 +173,41 @@ export const healthBiggerThanAttack = (input: SelectorInput): boolean => input.c
 
 export const attackGreaterThan =
 	(attack: number) =>
-	(input: SelectorInput): boolean =>
-		input.card.attack != null && input.card.attack > attack;
+	(input: SelectorInput): boolean => {
+		const card = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return card?.attack != null && card.attack > attack;
+	};
 export const attackLessThan =
 	(attack: number) =>
-	(input: SelectorInput): boolean =>
-		input.card.attack != null && input.card.attack < attack;
+	(input: SelectorInput): boolean => {
+		const card = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return card?.attack != null && card.attack < attack;
+	};
 export const attackIs =
 	(attack: number) =>
-	(input: SelectorInput): boolean =>
-		input.card.attack === attack;
+	(input: SelectorInput): boolean => {
+		const card = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return card?.attack != null && card.attack === attack;
+	};
 
 export const healthGreaterThan =
 	(health: number) =>
-	(input: SelectorInput): boolean =>
-		input.card.health != null && input.card.health > health;
+	(input: SelectorInput): boolean => {
+		const card = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return card?.health != null && card.health > health;
+	};
 export const healthLessThan =
 	(health: number) =>
-	(input: SelectorInput): boolean =>
-		input.card.health != null && input.card.health < health;
+	(input: SelectorInput): boolean => {
+		const card = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return card?.health != null && card.health < health;
+	};
 export const healthIs =
 	(health: number) =>
-	(input: SelectorInput): boolean =>
-		input.card.health === health;
+	(input: SelectorInput): boolean => {
+		const card = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
+		return card?.health != null && card.health === health;
+	};
 
 export const cardIs =
 	(...cardIds: readonly CardIds[]) =>

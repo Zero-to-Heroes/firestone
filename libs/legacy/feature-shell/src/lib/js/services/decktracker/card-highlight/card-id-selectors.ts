@@ -1744,6 +1744,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, beast);
 		case CardIds.Kazakusan_ONY_005:
 			return and(side(inputSide), or(inDeck, cardsPlayedThisMatch), minion, dragon);
+		case CardIds.Khazgoroth:
 		case CardIds.Khazgoroth_TitanforgeToken:
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.KhadgarsScryingOrb:
@@ -3148,6 +3149,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.TortollanPilgrim:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.TortollanStoryteller_TLC_254:
+			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 		case CardIds.TortollanTraveler_VAC_518:
 			return and(side(inputSide), inDeck, minion, taunt, not(cardIs(CardIds.TortollanTraveler_VAC_518)));
 		case CardIds.TotemicMightLegacy:
