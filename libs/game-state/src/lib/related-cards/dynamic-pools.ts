@@ -368,6 +368,7 @@ const getDynamicFilters = (
 		// Random X Mechanic
 		// Random Outcast
 		case CardIds.FelerinTheForgotten:
+		case CardIds.WretchedExile:
 			return (c) => hasMechanic(c, GameTag.OUTCAST);
 
 		// Random X Tribe
@@ -510,6 +511,7 @@ const getDynamicFilters = (
 		case CardIds.PlantedEvidence_CORE_REV_313:
 		case CardIds.VoidScripture_YOG_507:
 		case CardIds.ExarchHataaru_GDB_136:
+		case CardIds.InfinitizeTheMaxitude:
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InstructorFireheart:
 			return (c) =>
