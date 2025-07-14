@@ -357,6 +357,12 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		return item.cardId;
 	}
 
+	private hasIdeographicCharacters(token: string): boolean {
+		// Check for CJK Unified Ideographs (Chinese characters), Hiragana, Katakana, and Hangul
+		const ideographicRegex = /[\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF]/;
+		return ideographicRegex.test(token);
+	}
+
 	private buildCardStats(
 		stats: readonly ArenaCombinedCardStat[] | null | undefined,
 		cardType: ArenaCardTypeFilterType | null | undefined,
@@ -375,7 +381,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			? []
 			: (searchString.includes('，') ? searchString.split('，') : searchString.split(','))
 					.map((token) => token.trim())
-					.filter((token) => token.length > 1);
+					.filter((token) => token.length > 1 || this.hasIdeographicCharacters(token));
 		const result =
 			stats
 				// We want cards that are not offered in the draft to still appear here, like the
