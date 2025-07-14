@@ -304,24 +304,7 @@ export const cardIdSelector = (
 		case CardIds.ArmsDealer_RLK_824:
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.Archimonde_GDB_128:
-			return (input: SelectorInput): SelectorOutput => {
-				const demonsPlayed = input.deckState.cardsPlayedThisMatch
-					.filter(
-						(c) =>
-							allCards.getCard(c.cardId).races?.includes(Race[Race.DEMON]) ||
-							allCards.getCard(c.cardId).races?.includes(Race[Race.ALL]),
-					)
-					.map((c) => input.deckState.findCard(c.entityId)?.card)
-					.filter((c) => !!c)
-					.filter((c) => c.creatorCardId != null || c.stolenFromOpponent);
-				return tooltip(
-					and(
-						side(inputSide),
-						entityIs(...demonsPlayed.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
-					),
-				)(input);
-			};
-
+			return and(side(inputSide), or(inDeck, inHand, inGraveyard), demon, notInInitialDeck);
 		case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Artanis_SC_754:
@@ -3458,6 +3441,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), locationExtended);
 		case CardIds.WyrmrestPurifier:
 			return and(side(inputSide), inDeck, neutral);
+		case CardIds.Xyrella_BAR_735:
+			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.XyrellaTheDevout:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
 		case CardIds.YellingYodeler:

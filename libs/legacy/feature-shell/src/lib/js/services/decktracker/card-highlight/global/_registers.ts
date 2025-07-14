@@ -1,6 +1,7 @@
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
+import { Archimonde } from './archimonde';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
@@ -41,6 +42,7 @@ import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
 
 const cards = [
+	Archimonde,
 	Ressucitate,
 	RaiseDead,
 	CreatureOfTheSacredCave,
