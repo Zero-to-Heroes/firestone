@@ -19,6 +19,8 @@ export class ElementalCounterDefinitionV2 extends CounterDefinitionV2<{
 		CardIds.UnchainedGladiator,
 		// For Discovers - useful to know if you have played an elemental last turn
 		CardIds.StoneSentinel,
+		CardIds.SteamSurger,
+		CardIds.TaintedRemnant_YOG_519,
 	];
 
 	readonly player = {
