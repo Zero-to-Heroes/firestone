@@ -240,11 +240,15 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CraftersAura_TOY_808:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 6);
-		case CardIds.IncredibleValue_TOY_046:
 		case CardIds.SpotTheDifference_TOY_374:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', 3) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.IncredibleValue_TOY_046:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 4) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.HiddenObjects_TOY_037:
 			return (c) =>
@@ -333,8 +337,12 @@ const getDynamicFilters = (
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.SneedsOldShredder_CORE_GVG_114:
 		case CardIds.WishingWell_WW_415:
-		case CardIds.MerchantOfLegend_TLC_514:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
+		case CardIds.MerchantOfLegend_TLC_514:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.WyrmrestPurifier:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass);
 
