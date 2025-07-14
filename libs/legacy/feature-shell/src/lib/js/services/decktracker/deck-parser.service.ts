@@ -156,8 +156,10 @@ export class DeckParserService {
 				'Brawl Deck',
 				'乱斗模式套牌',
 			]);
+			console.debug('[deck-parser] tavern brawl deck info', deckInfo);
 			if (!deckInfo) {
 				deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType);
+				console.debug('[deck-parser] tavern brawl deck info 2', deckInfo);
 			}
 		} else {
 			console.warn('[deck-parser] could not read any deck from memory');
