@@ -5,6 +5,7 @@
 	color: var(--color-2);
 	padding-bottom: 10px;
 	font-size: 14px;
+	width: fit-content;
 
 	.background {
 		position: absolute;
@@ -187,6 +188,7 @@
 				overflow: hidden;
 				position: relative;
 				height: 100%;
+				max-width: 125px;
 
 				.group-detail {
 					// margin-right: 5px;
