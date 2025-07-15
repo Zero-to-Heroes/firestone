@@ -306,7 +306,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		const cardIdForGrouping = !!card.cardId ? refCard?.counterpartCards?.[0] ?? card.cardId : '';
 		const keyWithBonus =
 			!groupSameCardsTogether && showStatsChange
-				? cardIdForGrouping + '_' + (card.mainAttributeChange || 0)
+				? cardIdForGrouping + '_' + (card.mainAttributeChange || 0) + '_' + (card.turnsUntilImmolate || 0)
 				: cardIdForGrouping;
 		// We never want cards that are played to be grouped with cards that are not played
 		const keyWithHighlights = keyWithBonus + '-' + card.highlight;

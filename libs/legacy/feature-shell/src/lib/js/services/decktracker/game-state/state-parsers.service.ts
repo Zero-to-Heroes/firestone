@@ -111,6 +111,7 @@ import { HeroPowerChangedParser } from '../event-parser/hero-power-changed-parse
 import { HeroPowerDamageParser } from '../event-parser/hero-power-damage-parser';
 import { HeroPowerUsedParser } from '../event-parser/hero-power-used-parser';
 import { HeroRevealedParser } from '../event-parser/hero-revealed-parser';
+import { ImmolateChangedParser } from '../event-parser/immolate-changed-parser';
 import { LinkedEntityParser } from '../event-parser/linked-entity-parser';
 import { LocalPlayerParser } from '../event-parser/local-player-parser';
 import { LocationDestroyedParser } from '../event-parser/location-destroyed-parser';
@@ -329,6 +330,7 @@ export class GameStateParsersService {
 			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
 			[GameEvent.HERO_POWER_USED]: [new HeroPowerUsedParser(this.allCards)],
 			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
+			[GameEvent.IMMOLATE_CHANGED]: [new ImmolateChangedParser(this.helper, this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n, this.allCards)],
 			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards, this.deckParser, this.deckHandler)],

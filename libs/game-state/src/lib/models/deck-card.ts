@@ -53,6 +53,7 @@ export class DeckCard {
 	// Store state for cards like Ignite. Similar state info will be added for attack / health (maybe
 	// other things too)
 	readonly mainAttributeChange?: number;
+	readonly turnsUntilImmolate?: number;
 	readonly playTiming?: number;
 	readonly positionFromBottom?: number;
 	readonly positionFromTop?: number;

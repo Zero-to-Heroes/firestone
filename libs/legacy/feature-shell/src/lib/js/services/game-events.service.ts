@@ -1519,6 +1519,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'IMMOLATE_CHANGED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.IMMOLATE_CHANGED, gameEvent, {
+						stage: gameEvent.Value.AdditionalProps.Stage,
+						immolating: gameEvent.Value.AdditionalProps.Immolating,
+					}),
+				);
+				break;
 			case 'ZONE_POSITION_CHANGED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {

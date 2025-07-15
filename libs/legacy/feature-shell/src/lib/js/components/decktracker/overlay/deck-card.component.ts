@@ -585,32 +585,40 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private buildCardName(card: VisualDeckCard, showStatsChange: boolean): string {
+		let cardName = '';
 		if (!!card.cardName?.length) {
-			return card.cardName + this.buildSuffix(card, showStatsChange);
-		}
-		if (this._referenceCard?.name?.length) {
-			return this._referenceCard.name;
-		}
-		if (!card.creatorCardIds?.length) {
-			return this.i18n.getUnknownCardName();
+			cardName = card.cardName;
+		} else if (this._referenceCard?.name?.length) {
+			cardName = this._referenceCard.name;
+		} else if (!card.creatorCardIds?.length) {
+			cardName = this.i18n.getUnknownCardName();
 		} else {
 			const creatorCardId = card.creatorCardIds[0];
 			const creatorName = this.cards.getCard(creatorCardId)?.name;
-			return creatorName?.length ? this.i18n.getCreatedByCardName(creatorName) : this.i18n.getUnknownCardName();
+			cardName = creatorName?.length
+				? this.i18n.getCreatedByCardName(creatorName)
+				: this.i18n.getUnknownCardName();
 		}
+		return cardName + this.buildSuffix(card, showStatsChange);
 	}
 
 	private buildSuffix(_card: VisualDeckCard, showStatsChange: boolean): string {
 		if (_card.mainAttributeChange) {
 			console.debug('building suffixt', _card.cardName, _card.mainAttributeChange, showStatsChange);
 		}
+		let suffix = '';
 		if (!showStatsChange) {
-			return '';
+			return suffix;
 		}
 		if (_card.mainAttributeChange) {
-			return ` (+${_card.mainAttributeChange})`;
+			suffix += ` (+${_card.mainAttributeChange})`;
 		}
-		return '';
+		if (_card.turnsUntilImmolate && _card.zone === 'HAND') {
+			suffix += ` (${this.i18n.translateString('decktracker.burns-in', {
+				value: _card.turnsUntilImmolate,
+			})})`;
+		}
+		return suffix;
 	}
 
 	private updateGiftTooltip() {

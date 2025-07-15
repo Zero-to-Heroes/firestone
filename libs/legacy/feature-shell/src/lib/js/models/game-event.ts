@@ -107,6 +107,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly CORPSES_SPENT_THIS_GAME_CHANGED = 'CORPSES_SPENT_THIS_GAME_CHANGED';
 	public static readonly OVERLOADED_CRYSTALS_CHANGED = 'OVERLOADED_CRYSTALS_CHANGED';
 	public static readonly DATA_SCRIPT_CHANGED = 'DATA_SCRIPT_CHANGED';
+	public static readonly IMMOLATE_CHANGED = 'IMMOLATE_CHANGED';
 	public static readonly HEALTH_DEF_CHANGED = 'HEALTH_DEF_CHANGED';
 	public static readonly MAX_RESOURCES_UPDATED = 'MAX_RESOURCES_UPDATED';
 	public static readonly NUM_CARDS_PLAYED_THIS_TURN = 'NUM_CARDS_PLAYED_THIS_TURN';
