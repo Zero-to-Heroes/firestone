@@ -39,7 +39,7 @@ export class ArmorChangedParser implements EventParser {
 				damageTakenOnYourTurns: playerDamageByTurn,
 			});
 			return currentState.update({
-				playerDeck: playerDeck,
+				[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeck,
 			});
 		}
 
