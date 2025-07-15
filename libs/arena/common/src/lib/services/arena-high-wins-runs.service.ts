@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
 import { decode } from '@firestone-hs/deckstrings';
-import { isSignatureTreasure } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -14,6 +13,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { ExtendedArenaRunInfo, ExtendedHighWinRunsInfo, InternalNotableCard } from '../models/arena-high-wins-runs';
+import { ArenaCardStatsService } from './arena-card-stats.service';
 
 const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
 
@@ -27,6 +27,7 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 	private api: ApiRunner;
 	private prefs: PreferencesService;
 	private cards: CardsFacadeService;
+	private cardStats: ArenaCardStatsService;
 
 	private internalSubject$$ = new SubscriberAwareBehaviorSubject<boolean>(false);
 
@@ -47,6 +48,7 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.cards = AppInjector.get(CardsFacadeService);
+		this.cardStats = AppInjector.get(ArenaCardStatsService);
 
 		this.notableCards$$.onFirstSubscribe(() => {
 			this.internalSubject$$.subscribe();
@@ -82,7 +84,7 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 					?.map((r) => {
 						const run: ExtendedArenaRunInfo = {
 							...r,
-							notabledCards: buildNotableCards(r.decklist, this.cards),
+							notabledCards: buildNotableCards(r.decklist, this.cards, this.cardStats),
 						};
 						return run;
 					})
@@ -120,7 +122,11 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 	}
 }
 
-export const buildNotableCards = (decklist: string, allCards: CardsFacadeService): readonly InternalNotableCard[] => {
+export const buildNotableCards = (
+	decklist: string,
+	allCards: CardsFacadeService,
+	stats: ArenaCardStatsService,
+): readonly InternalNotableCard[] => {
 	if (!decklist?.length) {
 		return [];
 	}
@@ -128,9 +134,13 @@ export const buildNotableCards = (decklist: string, allCards: CardsFacadeService
 	const deckDefinition = decode(decklist);
 	const allDbfIds = deckDefinition.cards.flatMap((c) => c[0]);
 	const allDeckCards = allDbfIds.map((cardId) => allCards.getCard(cardId));
-	const treasures = allDeckCards.filter((c) => isSignatureTreasure(c.id));
+	// const treasures = allDeckCards.filter((c) => isSignatureTreasure(c.id));
 	const legendaries = allDeckCards.filter((c) => c?.rarity === 'Legendary');
-	const cardIds = [...new Set([...legendaries, ...treasures])].map((c) => c.id);
+	// const cardIds = [...new Set([...legendaries, ...treasures])].map((c) => c.id);
+	const allStats = stats.cardStats$$?.value;
+	const cardIds = legendaries
+		.filter((c) => !!allStats?.stats?.find((s) => s.cardId === c.id)?.draftStats?.totalOffered)
+		.map((c) => c.id);
 	return cardIds.map((c) => ({
 		image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c}.jpg`,
 		cardId: c,

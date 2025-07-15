@@ -18,6 +18,7 @@ import { buildNewFormatGameModeImage, GameStat } from '@firestone/stats/data-acc
 import { Subscription } from 'rxjs';
 import { InternalNotableCard } from '../../models/arena-high-wins-runs';
 import { ArenaRun } from '../../models/arena-run';
+import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
@@ -132,12 +133,13 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 		private readonly allCards: CardsFacadeService,
 		private readonly nav: ArenaNavigationService,
 		private readonly prefs: PreferencesService,
+		private readonly stats: ArenaCardStatsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.stats);
 
 		this.sub$$ = this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon))
@@ -225,7 +227,7 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 				? this._run.draftStat.deckImpact.toFixed(2)
 				: null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
-		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards);
+		this.notableCards = buildNotableCards(this._run.initialDeckList, this.allCards, this.stats);
 
 		const totalRunTime = this._run.steps.map((step) => step.gameDurationSeconds).reduce((a, b) => a + b, 0);
 		this.totalRunTime = !totalRunTime

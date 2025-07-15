@@ -5,6 +5,7 @@ import { CardsFacadeService, ILocalizationService, formatClass } from '@fireston
 import { ExtendedDraftDeckStats } from '../../models/arena-draft';
 import { ExtendedArenaRunInfo, InternalNotableCard } from '../../models/arena-high-wins-runs';
 import { ArenaRun } from '../../models/arena-run';
+import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
@@ -82,6 +83,7 @@ export class ArenaRunVignetteComponent {
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly nav: ArenaNavigationService,
+		private readonly cardStats: ArenaCardStatsService,
 	) {}
 
 	async showDeck() {
@@ -107,7 +109,7 @@ export class ArenaRunVignetteComponent {
 		this.deckScore = value.deckScore != null ? value.deckScore.toFixed(1) : null;
 		// this.deckImpact = value.deckImpact != null ? this._run.draftStat.deckImpact.toFixed(2) : null;
 		this.deckScoreTooltip = this.i18n.translateString('app.arena.runs.deck-score-tooltip');
-		this.notableCards = value.notabledCards ?? buildNotableCards(value.decklist, this.allCards);
+		this.notableCards = value.notabledCards ?? buildNotableCards(value.decklist, this.allCards, this.cardStats);
 
 		this._run = ArenaRun.create({
 			id: '' + value.id,
