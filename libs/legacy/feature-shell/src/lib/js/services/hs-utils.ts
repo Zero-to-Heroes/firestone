@@ -224,6 +224,7 @@ export const globalEffectCardsPlayed = [
 const globalEffectEnchantments = [
 	CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e,
 	CardIds.AshalonRidgeGuardian_PerfectEvolutionEnchantment_TLC_229t14e,
+	CardIds.LohTheLivingLegend_LivingLegendEnchantment_TLC_257e1,
 ];
 
 export const globalEffectCards = [
@@ -277,6 +278,10 @@ export const globalEffectTriggers = [
 		effectPrefab: 'ReuseFX_Beast_BuffImpact_Paw_Super',
 		cardId: CardIds.FreeSpirit,
 	},
+	{
+		effectPrefab: '',
+		cardId: CardIds.LohTheLivingLegend_TLC_257,
+	},
 ];
 
 export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => effect.effectPrefab);
@@ -304,6 +309,10 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 			if (cardId.endsWith('e')) {
 				// This is a global effect enchantment, so we return the card id without the "e" at the end
 				return cardId.slice(0, -1);
+			}
+			if (cardId.endsWith('e1')) {
+				// This is a global effect enchantment, so we return the card id without the "e" at the end
+				return cardId.slice(0, -2);
 			}
 			return cardId;
 	}
