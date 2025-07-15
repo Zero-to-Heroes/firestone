@@ -67,7 +67,7 @@ export const getDynamicRelatedCardIds = (
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
 					hasCorrectType(c, CardType.MINION) &&
-					c.classes?.includes(CardClass[CardClass.PALADIN]) &&
+					c.classes?.includes(CardClass[CardClass.PRIEST]) &&
 					c.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
 			);
 		case CardIds.FinalFrontier_GDB_857:
