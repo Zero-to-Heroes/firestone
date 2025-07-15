@@ -2,11 +2,17 @@
 // prettier-ignore
 import { getAllCounters } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
+import { Mutable } from '@firestone/shared/framework/common';
+import { debounceTime, map, Observable } from 'rxjs';
 import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
 import { CounterSetting } from './internal/decktracker-settings-internal';
 
 export const decktrackerOpponentDeckSettings = (context: SettingContext): SettingNode => {
+	const isAtLeastOneCounterDisabled$: Observable<boolean> = context.prefs.preferences$$.pipe(
+		debounceTime(500),
+		map((prefs) => counters(context).some((c) => !prefs[c.field])),
+	);
 	return {
 		id: 'decktracker-opponent-deck',
 		name: context.i18n.translateString('settings.decktracker.menu.opponent-deck'),
@@ -203,7 +209,19 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 			{
 				id: 'decktracker-opponent-deck-counters',
 				title: context.i18n.translateString('settings.decktracker.opponent-deck.counters.title'),
-				settings: counters(context).map((counter) => toSetting(counter)),
+				settings: [
+					{
+						text: isAtLeastOneCounterDisabled$.pipe(
+							map((isDisabled) => (isDisabled ? context.i18n.translateString('settings.decktracker.your-deck.counters.enable-all') : context.i18n.translateString('settings.decktracker.your-deck.counters.disable-all'))),
+						),
+						tooltip: null,
+						action: async () => {
+							const isAtLeastOneCounterDisabled = counters(context).some((c) => !context.prefs.preferences$$.value[c.field]);
+							isAtLeastOneCounterDisabled ? enableAllCounters(context) : disableAllCounters(context);
+						},
+					},
+					...counters(context).map((counter) => toSetting(counter)),
+				],
 			},
 			{
 				id: 'decktracker-counters-size-other',
@@ -280,6 +298,23 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 			},
 		],
 	};
+};
+
+const enableAllCounters = (context: SettingContext) => {
+	const allCounters = counters(context);
+	const newPrefs: Mutable<Preferences> = { ...context.prefs.preferences$$.value };
+	allCounters.forEach((c) => {
+		(newPrefs as any)[c.field as keyof Preferences] = true;
+	});
+	context.prefs.savePreferences(newPrefs);
+};
+const disableAllCounters = (context: SettingContext) => {
+	const allCounters = counters(context);
+	const newPrefs: Mutable<Preferences> = { ...context.prefs.preferences$$.value };
+	allCounters.forEach((c) => {
+		(newPrefs as any)[c.field as keyof Preferences] = false;
+	});
+	context.prefs.savePreferences(newPrefs);
 };
 
 const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
