@@ -66,7 +66,7 @@ export class ArenaCardClassFilterDropdownComponent
 					placeholder:
 						options.find((option) => option.value === filter)?.label ??
 						this.i18n.translateString('app.arena.filters.card-class.all'),
-					visible: ['card-stats'].includes(selectedCategoryId),
+					visible: true,
 				};
 			}),
 		);

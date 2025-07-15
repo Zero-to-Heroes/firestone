@@ -60,9 +60,7 @@ export class ArenaModeFilterDropdownComponent extends AbstractSubscriptionCompon
 					filter: filter,
 					options: options,
 					placeholder: options.find((option) => option.value === filter)?.label,
-					visible: ['arena-runs', 'class-tier-list', 'card-stats', 'arena-stats'].includes(
-						selectedCategoryId,
-					),
+					visible: true,
 				};
 			}),
 		);

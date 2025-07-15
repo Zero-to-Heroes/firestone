@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
+import { ArenaRunInfo, HighWinRunsInfo } from '@firestone-hs/arena-high-win-runs';
 import { decode } from '@firestone-hs/deckstrings';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -15,7 +15,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { ExtendedArenaRunInfo, ExtendedHighWinRunsInfo, InternalNotableCard } from '../models/arena-high-wins-runs';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 
-const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
+const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json?v=5`;
 
 const EXPECTED_NOTABLE_CARDS_LENGTH = 1;
 @Injectable()
@@ -71,31 +71,32 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 
 			const timePeriod = 'past-20';
 			const runs = await this.api.callGetApi<HighWinRunsInfo>(
-				RUNS_OVERVIEW_URL.replace('%timePeriod%', timePeriod),
+				RUNS_OVERVIEW_URL.replace('%timePeriod%', 'last-patch'),
 			);
 			if (runs == null) {
 				console.error('[arena-high-wins-runs] could not load arena high-wins runs');
 				return;
 			}
+			console.debug('[arena-high-wins-runs] runs', runs);
 
 			const extendedRuns: ExtendedHighWinRunsInfo = {
 				...runs,
 				runs: runs.runs
-					?.map((r) => {
+					?.map((r) => r as ArenaRunInfo & { notableCards: readonly string[] })
+					.filter((r) => !!r.notableCards?.length)
+					.map((r) => {
 						const run: ExtendedArenaRunInfo = {
 							...r,
-							notabledCards: buildNotableCards(r.decklist, this.cards, this.cardStats),
+							notabledCards: r.notableCards.map((c) => ({
+								image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c}.jpg`,
+								cardId: c,
+							})),
 						};
 						return run;
-					})
-					.filter(
-						(r) =>
-							EXPECTED_NOTABLE_CARDS_LENGTH === null ||
-							r.notabledCards.length === EXPECTED_NOTABLE_CARDS_LENGTH,
-					),
+					}),
 			};
 			console.log('[arena-high-wins-runs] loaded arena stats');
-			console.debug('[arena-high-wins-runs] loaded arena stats', runs);
+			console.debug('[arena-high-wins-runs] loaded arena stats', extendedRuns);
 			this.runs$$.next(extendedRuns);
 		});
 	}

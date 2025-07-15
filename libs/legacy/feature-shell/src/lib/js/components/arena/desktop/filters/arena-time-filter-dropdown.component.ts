@@ -82,9 +82,7 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionCompon
 					placeholder:
 						options.find((option) => option.value === filter)?.label ??
 						this.i18n.translateString('app.arena.filters.time.past-100'),
-					visible: ['arena-runs', 'class-tier-list', 'card-stats', 'arena-stats'].includes(
-						selectedCategoryId,
-					),
+					visible: true,
 				};
 			}),
 		);
