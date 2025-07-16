@@ -1,4 +1,4 @@
-export const ENABLE_BGS_COMPS = true;
+export const ENABLE_BGS_COMPS_IN_WIDGET = true;
 export const BG_USE_ANOMALIES = true;
 
 // Shelved for now
