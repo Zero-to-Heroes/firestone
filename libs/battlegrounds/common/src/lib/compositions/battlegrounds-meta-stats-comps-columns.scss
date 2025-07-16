@@ -13,3 +13,14 @@
 .average-placement {
 	width: 140px;
 }
+
+.cards {
+	&.core {
+		width: 250px;
+		margin-right: 20px;
+	}
+	&.addon {
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+}

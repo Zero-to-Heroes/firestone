@@ -2,7 +2,6 @@
 	padding-bottom: 5px;
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 15px;
 
 	.header {
 		margin-bottom: 10px;
@@ -36,11 +35,12 @@
 	.items {
 		display: flex;
 		flex-direction: column;
+		gap: 8px;
 
 		.item-container {
 			position: relative;
-			margin-bottom: 2px;
 			font-size: 16px;
+			height: 75px;
 		}
 	}
 }

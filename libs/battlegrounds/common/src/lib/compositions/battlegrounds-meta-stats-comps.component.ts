@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import {
-	BgsMetaCompStatTier,
-	BgsMetaCompStatTierItem,
-	ColumnSortTypeComp,
-	buildCompStats,
-	buildCompTiers,
-} from '@firestone/battlegrounds/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -23,7 +16,10 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
+import { BgsMetaCompositionStrategiesService } from '../services/bgs-meta-composition-strategies.service';
 import { BattlegroundsCompsService } from './bgs-comps.service';
+import { ColumnSortTypeComp, buildCompStats, buildCompTiers } from './bgs-meta-comp-stats';
+import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-comps',
@@ -53,6 +49,14 @@ import { BattlegroundsCompsService } from './bgs-comps.service';
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
+					<div
+						class="cell cards core"
+						[fsTranslate]="'app.battlegrounds.compositions.columns.core-cards'"
+					></div>
+					<div
+						class="cell cards addon"
+						[fsTranslate]="'app.battlegrounds.compositions.columns.addon-cards'"
+					></div>
 				</div>
 				<div class="comps-list" role="list" scrollable>
 					<ng-container *ngIf="sortCriteria$ | async as sort">
@@ -98,8 +102,9 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
-		private readonly bgComps: BattlegroundsCompsService,
 		private readonly prefs: PreferencesService,
+		private readonly bgComps: BattlegroundsCompsService,
+		private readonly compStrategies: BgsMetaCompositionStrategiesService,
 	) {
 		super(cdr);
 	}
@@ -112,7 +117,7 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.bgComps, this.prefs);
+		await waitForReady(this.bgComps, this.prefs, this.compStrategies);
 
 		this.loading$ = this.loading$$.pipe(this.mapData((loading) => loading));
 		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((criteria) => criteria));
@@ -130,9 +135,10 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 		const stats$ = combineLatest([
 			baseStats$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveRankFilter)),
+			this.compStrategies.strategies$$.pipe(this.mapData((strategies) => strategies)),
 		]).pipe(
-			this.mapData(([stats, rankFilter]) => {
-				return buildCompStats(stats?.compStats ?? [], rankFilter, this.allCards, this.i18n);
+			this.mapData(([stats, rankFilter, strategies]) => {
+				return buildCompStats(stats?.compStats ?? [], rankFilter, strategies ?? [], this.allCards, this.i18n);
 			}),
 			shareReplay(1),
 			takeUntil(this.destroyed$),

@@ -1,26 +1,42 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 
 import { BgsCompStat } from '@firestone-hs/bgs-global-stats';
+import { BgsCompAdvice, BgsCompCardAdvice } from '@firestone-hs/content-craetor-input';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BgsRankFilterType } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsCompTier, BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
+import { BgsCompTier, BgsMetaCompCard, BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 export const buildCompStats = (
 	stats: readonly BgsCompStat[],
 	rankFilter: BgsRankFilterType,
+	strategies: readonly BgsCompAdvice[],
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly BgsMetaCompStatTierItem[] => {
-	console.debug('building comp stats', stats);
-	const mainStats = stats.map((s) => ({
-		compId: s.archetype,
-		name: i18n.translateString(`bgs-comp.${s.archetype}`),
-		dataPoints: s.averagePlacementAtMmr.find((p) => p.mmr === rankFilter)?.dataPoints ?? 0,
-		averagePlacement: s.averagePlacementAtMmr.find((p) => p.mmr === rankFilter)?.placement ?? 0,
-	}));
+	const mainStats = stats.map((s) => {
+		const refInfo = strategies.find((strategy) => strategy.compId === s.archetype);
+		const result: BgsMetaCompStatTierItem = {
+			compId: s.archetype,
+			name: i18n.translateString(`bgs-comp.${s.archetype}`),
+			dataPoints: s.averagePlacementAtMmr.find((p) => p.mmr === rankFilter)?.dataPoints ?? 0,
+			averagePlacement: s.averagePlacementAtMmr.find((p) => p.mmr === rankFilter)?.placement ?? 0,
+			coreCards: refInfo?.cards.filter((c) => c.status === 'CORE').map((c) => buildCompCard(c, allCards)) ?? [],
+			addonCards: refInfo?.cards.filter((c) => c.status === 'ADDON').map((c) => buildCompCard(c, allCards)) ?? [],
+		};
+		return result;
+	});
 	return mainStats;
+};
+
+const buildCompCard = (card: BgsCompCardAdvice, allCards: CardsFacadeService): BgsMetaCompCard => {
+	const refCard = allCards.getCard(card.cardId);
+	return {
+		cardId: card.cardId,
+		entity: Entity.default(refCard),
+	};
 };
 
 export const buildCompTiers = (
@@ -88,7 +104,7 @@ export const filterCompItems = (
 	stats: readonly BgsMetaCompStatTierItem[],
 	sort: SortCriteria<ColumnSortTypeComp>,
 	threshold: number,
-	upper: number,
+	upper: number | null,
 ): readonly BgsMetaCompStatTierItem[] => {
 	return stats
 		.filter((stat) => getSortProperty(stat, sort) != null)

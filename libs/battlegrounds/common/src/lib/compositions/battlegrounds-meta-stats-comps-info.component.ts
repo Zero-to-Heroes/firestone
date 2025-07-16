@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsMetaCompStatTierItem } from '@firestone/battlegrounds/data-access';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-comps-info',
@@ -19,6 +19,28 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</div>
 			</div>
 			<div class="cell average-placement">{{ averagePlacement }}</div>
+			<div class="cell cards core">
+				<div class="card-container" *ngFor="let card of coreCards">
+					<card-on-board
+						class="card"
+						[entity]="card.entity"
+						[cardTooltip]="card.cardId"
+						[cardTooltipBgs]="true"
+					>
+					</card-on-board>
+				</div>
+			</div>
+			<div class="cell cards addon">
+				<div class="card-container" *ngFor="let card of addonCards">
+					<card-on-board
+						class="card"
+						[entity]="card.entity"
+						[cardTooltip]="card.cardId"
+						[cardTooltipBgs]="true"
+					>
+					</card-on-board>
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,12 +53,15 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
 		});
 		this.averagePlacement = this.buildValue(value.averagePlacement);
+		this.coreCards = value.coreCards;
+		this.addonCards = value.addonCards;
 	}
 
 	compId: string;
 	compName: string;
 	dataPoints: string;
-
+	coreCards: readonly BgsMetaCompCard[];
+	addonCards: readonly BgsMetaCompCard[];
 	impactValue: number;
 	impact: string;
 	averagePlacement: string;

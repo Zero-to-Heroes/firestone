@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	selector: 'battlegrounds-meta-stats-comps-tier',

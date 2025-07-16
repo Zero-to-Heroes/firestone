@@ -9,9 +9,7 @@
 	width: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
-	flex-wrap: wrap;
 	overflow: hidden;
-	height: 50px;
 
 	&.clickable:hover {
 		background: rgba(255, 255, 255, 0.12);
@@ -54,19 +52,26 @@
 		}
 	}
 
-	.impact {
-		&.positive {
-			color: #61ff47;
+	.cards {
+		height: 100%;
+		overflow: hidden;
+		display: flex;
+		justify-content: flex-start;
+		// overflow: hidden;
 
-			&:before {
-				content: '-';
+		.card-container {
+			position: relative;
+			display: flex;
+			height: 100%;
+			aspect-ratio: 1;
+
+			&:not(:first-child) {
+				margin-left: -20px;
 			}
-		}
-		&.negative {
-			color: #ff4747;
 
-			&:before {
-				content: '+';
+			.card {
+				height: 100%;
+				aspect-ratio: 77 / 113;
 			}
 		}
 	}
