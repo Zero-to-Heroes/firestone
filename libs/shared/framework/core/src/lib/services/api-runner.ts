@@ -64,9 +64,9 @@ export class ApiRunner {
 				},
 				(error) => {
 					if (error.status === 404) {
-						console.warn('Could not execute POST call', url, input, error);
+						console.warn('Could not execute POST call', url, input);
 					} else {
-						console.error('Could not execute POST call', url, input, error);
+						console.warn('Could not execute POST call', url, input);
 					}
 					if (returnStatusCode) {
 						reject(error.status);
@@ -100,7 +100,8 @@ export class ApiRunner {
 					// Some users have a VPN / ISP config that prevents them from accessing our static
 					// data, so there's nothing we can do unless they contact us directly
 					// We still log an error though, because it can be useful when debugging other things
-					console.error('Could not execute GET call', url, error);
+					// UPDATE: we don't log an error anymore, because it's too noisy
+					console.warn('Could not execute GET call', url);
 					resolve(null);
 				},
 			);
@@ -124,7 +125,7 @@ export class ApiRunner {
 							// Some users have a VPN / ISP config that prevents them from accessing our static
 							// data, so there's nothing we can do unless they contact us directly
 							// We still log an error though, because it can be useful when debugging other things
-							console.error('Could not execute GET call', url, error);
+							console.warn('Could not execute GET call', url);
 						}
 						resolve(undefined);
 					},
