@@ -588,6 +588,8 @@ const getDynamicFilters = (
 		case CardIds.HikingTrail_VAC_517:
 		case CardIds.StonehillDefender_Core_UNG_072:
 		case CardIds.IKnowAGuy_CORE_WON_350:
+		case CardIds.IKnowAGuy_WON_350:
+		case CardIds.IvoryRook_WON_116:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.TAUNT) &&
@@ -836,6 +838,8 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 
 		case CardIds.GalacticCrusader_GDB_862:
+		case CardIds.WatcherOfTheSun:
+		case CardIds.WatcherOfTheSun_WatcherOfTheSunToken:
 			return (c) => hasCorrectType(c, CardType.SPELL) && c.spellSchool?.includes(SpellSchool[SpellSchool.HOLY]);
 		case CardIds.ScroungingShipwright_GDB_876:
 		case CardIds.StarshipSchematic_GDB_102:
