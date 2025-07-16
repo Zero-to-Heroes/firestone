@@ -40,7 +40,7 @@
 		"@firestone-hs/arena-high-win-runs": "^0.0.1",
 		"@firestone-hs/arena-stats": "^0.0.6",
 		"@firestone-hs/assign-constructed-archetype": "^0.0.3",
-		"@firestone-hs/bgs-global-stats": "^1.0.52",
+		"@firestone-hs/bgs-global-stats": "^1.0.53",
 		"@firestone-hs/build-global-stats": "^1.0.8",
 		"@firestone-hs/coliseum-components": "^0.0.27",
 		"@firestone-hs/communities": "^0.0.11",

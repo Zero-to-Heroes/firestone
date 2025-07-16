@@ -14,6 +14,7 @@ import {
 	BattlegroundsNavigationService,
 	CategoryId,
 } from '@firestone/battlegrounds/common';
+import { ENABLE_BGS_COMP_STATS } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -126,6 +127,12 @@ export class BattlegroundsDesktopComponent
 				id: 'bgs-category-meta-heroes',
 				name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
 			},
+			ENABLE_BGS_COMP_STATS
+				? {
+						id: 'bgs-category-meta-comps',
+						name: this.i18n.translateString('app.battlegrounds.menu.comps'),
+				  }
+				: null,
 			{
 				id: 'bgs-category-meta-cards',
 				name: this.i18n.translateString('app.battlegrounds.menu.cards'),

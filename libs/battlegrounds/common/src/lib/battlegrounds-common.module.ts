@@ -37,7 +37,11 @@ import { BgsTrinketStrategiesWrapperComponent } from './components/strategies/bg
 import { BgsTrinketStrategyTipsTooltipComponent } from './components/strategies/bgs-trinket-strategy-tips-tooltip.component';
 import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
 import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
+import { BattlegroundsMetaStatsCompInfoComponent } from './compositions/battlegrounds-meta-stats-comps-info.component';
+import { BattlegroundsMetaStatsCompTierComponent } from './compositions/battlegrounds-meta-stats-comps-tier.component';
+import { BattlegroundsMetaStatsCompsComponent } from './compositions/battlegrounds-meta-stats-comps.component';
 import { BattlegroundsCompositionsViewSelectDropdownComponent } from './compositions/bgs-comps-view-select-dropdown';
+import { BattlegroundsCompsService } from './compositions/bgs-comps.service';
 import { BgsBoardHighlighterService } from './highlights/bgs-board-highlighter.service';
 import { BgsReconnectorComponent } from './reconnect/bgs-reconnector.component';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
@@ -86,6 +90,9 @@ const components = [
 	BattlegroundsMetaStatsCardsComponent,
 	BattlegroundsMetaStatsCardInfoComponent,
 	BattlegroundsMetaStatsCardTierComponent,
+	BattlegroundsMetaStatsCompsComponent,
+	BattlegroundsMetaStatsCompTierComponent,
+	BattlegroundsMetaStatsCompInfoComponent,
 	BgsReconnectorComponent,
 ];
 
@@ -132,6 +139,7 @@ const components = [
 		BgsInGameCompositionsService,
 		BgsBoardHighlighterService,
 		BattlegroundsCardsService,
+		BattlegroundsCompsService,
 		BgsInGameWindowNavigationService,
 	],
 	declarations: components,

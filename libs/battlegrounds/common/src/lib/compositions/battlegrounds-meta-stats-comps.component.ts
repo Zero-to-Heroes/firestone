@@ -1,0 +1,229 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @angular-eslint/template/no-negated-async */
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	BgsMetaCompStatTier,
+	BgsMetaCompStatTierItem,
+	ColumnSortTypeComp,
+	buildCompStats,
+	buildCompTiers,
+} from '@firestone/battlegrounds/data-access';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { SortCriteria } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	shareReplay,
+	switchMap,
+	takeUntil,
+	tap,
+} from 'rxjs';
+import { BattlegroundsCompsService } from './bgs-comps.service';
+
+@Component({
+	selector: 'battlegrounds-meta-stats-comps',
+	styleUrls: [`./battlegrounds-meta-stats-comps-columns.scss`, `./battlegrounds-meta-stats-comps.component.scss`],
+	template: `
+		<ng-container *ngIf="{ loading: loading$ | async, tiers: tiers$ | async } as value">
+			<section
+				class="battlegrounds-meta-stats-comps"
+				[attr.aria-label]="'Battlegrounds meta composition stats'"
+				*ngIf="value.loading === false; else loadingState"
+			>
+				<div class="data-info">
+					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
+					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
+					<div class="separator">-</div>
+					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
+					<div class="value">{{ totalGames$ | async }}</div>
+				</div>
+
+				<div class="header" *ngIf="sortCriteria$ | async as sort">
+					<div class="cell name" [fsTranslate]="'app.battlegrounds.compositions.columns.name'"></div>
+					<sortable-table-label
+						class="cell average-placement"
+						[name]="'app.battlegrounds.compositions.columns.position' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'position'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+				</div>
+				<div class="comps-list" role="list" scrollable>
+					<ng-container *ngIf="sortCriteria$ | async as sort">
+						<ng-container *ngIf="sort.criteria === 'position'">
+							<battlegrounds-meta-stats-comps-tier
+								*ngFor="let tier of value.tiers; trackBy: trackByFn"
+								role="listitem"
+								[tier]="tier"
+							></battlegrounds-meta-stats-comps-tier>
+						</ng-container>
+					</ng-container>
+				</div>
+			</section>
+			<ng-template #loadingState>
+				<battlegrounds-empty-state
+					[subtitle]="'Loading data'"
+					[emptyStateIcon]="'Please wait while we load the data'"
+				></battlegrounds-empty-state
+			></ng-template>
+		</ng-container>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	tiers$: Observable<readonly BgsMetaCompStatTier[]>;
+	loading$: Observable<boolean>;
+
+	lastUpdate$: Observable<string | null>;
+	lastUpdateFull$: Observable<string | null>;
+	totalGames$: Observable<string>;
+
+	sortCriteria$: Observable<SortCriteria<ColumnSortTypeComp>>;
+
+	headerCollapsed = true;
+
+	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeComp>>({
+		criteria: 'position',
+		direction: 'asc',
+	});
+	private loading$$ = new BehaviorSubject<boolean>(true);
+
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+		private readonly bgComps: BattlegroundsCompsService,
+		private readonly prefs: PreferencesService,
+	) {
+		super(cdr);
+	}
+
+	trackByFn(index: number, stat: BgsMetaCompStatTier) {
+		return stat.id;
+	}
+	trackByFnItem(index: number, stat: BgsMetaCompStatTierItem) {
+		return stat.compId;
+	}
+
+	async ngAfterContentInit() {
+		await waitForReady(this.bgComps, this.prefs);
+
+		this.loading$ = this.loading$$.pipe(this.mapData((loading) => loading));
+		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((criteria) => criteria));
+		const baseStats$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => ({
+				timeFilter: prefs.bgsActiveTimeFilter,
+				rankFilter: prefs.bgsActiveRankFilter,
+			})),
+			distinctUntilChanged((a, b) => a?.timeFilter === b?.timeFilter && a?.rankFilter === b?.rankFilter),
+			tap(() => this.loading$$.next(true)),
+			switchMap(({ timeFilter, rankFilter }) => this.bgComps.loadCompStats(timeFilter, rankFilter)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const stats$ = combineLatest([
+			baseStats$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveRankFilter)),
+		]).pipe(
+			this.mapData(([stats, rankFilter]) => {
+				return buildCompStats(stats?.compStats ?? [], rankFilter, this.allCards, this.i18n);
+			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.tiers$ = combineLatest([stats$, this.sortCriteria$$]).pipe(
+			tap((info) => console.debug('received info for comps', info)),
+			filter(([stats, sortCriteria]) => !!stats?.length),
+			this.mapData(([stats, sortCriteria]) => {
+				const filtered = stats;
+				console.debug('filtered', filtered);
+				const tiers = buildCompTiers(filtered, sortCriteria, this.i18n);
+				const result = tiers;
+				return result;
+			}),
+			tap(() => this.loading$$.next(false)),
+			takeUntil(this.destroyed$),
+		);
+		this.totalGames$ = stats$.pipe(
+			filter((stats) => !!stats),
+			this.mapData(
+				(stats) =>
+					stats!
+						.map((s) => s.dataPoints)
+						.reduce((a, b) => a + b, 0)
+						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
+			),
+		);
+		const lastUpdate$: Observable<string | null> = baseStats$.pipe(
+			this.mapData((stats) => (stats ? '' + stats.lastUpdateDate : null)),
+		);
+		this.lastUpdate$ = lastUpdate$.pipe(
+			filter((date): date is string => !!date),
+			this.mapData((dateStr: string) => {
+				// Show the date as a relative date, unless it's more than 1 week old
+				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
+				const date = new Date(dateStr);
+				const now = new Date();
+				const diff = now.getTime() - date.getTime();
+				const days = diff / (1000 * 3600 * 24);
+				if (days < 7) {
+					return getDateAgo(date, this.i18n);
+				}
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS');
+			}),
+		);
+		this.lastUpdateFull$ = lastUpdate$.pipe(
+			filter((date): date is string => !!date),
+			this.mapData((dateStr) => {
+				const date = new Date(dateStr!);
+				return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric',
+					second: 'numeric',
+				});
+			}),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	onSortClick(rawCriteria: string) {
+		const criteria: ColumnSortTypeComp = rawCriteria as ColumnSortTypeComp;
+		// No point in sorting by the "worse hero" first, at least until I've got asks for it
+		if (criteria === this.sortCriteria$$.value?.criteria) {
+			return;
+		}
+
+		this.sortCriteria$$.next({
+			criteria: criteria,
+			direction: getDefaultDirection(criteria),
+		});
+	}
+
+	toggleHeader() {
+		this.headerCollapsed = !this.headerCollapsed;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+}
+
+const getDefaultDirection = (criteria: ColumnSortTypeComp): 'asc' | 'desc' => {
+	switch (criteria) {
+		case 'position':
+			return 'asc';
+		default:
+			return 'desc';
+	}
+};

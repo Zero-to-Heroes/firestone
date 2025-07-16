@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { BgsCardStats } from '@firestone-hs/bgs-global-stats';
+import { BgsCompStats } from '@firestone-hs/bgs-global-stats';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
-const BGS_CARDS_URL =
-	'https://static.zerotoheroes.com/api/bgs/card-stats/mmr-%mmrPercentile%/%timePeriod%/overview-from-hourly.gz.json';
+const BGS_CARDS_URL = 'https://static.zerotoheroes.com/api/bgs/comp-stats/%timePeriod%/overview-from-hourly.gz.json';
 
 @Injectable()
-export class BattlegroundsCardsService extends AbstractFacadeService<BattlegroundsCardsService> {
+export class BattlegroundsCompsService extends AbstractFacadeService<BattlegroundsCompsService> {
 	private prefs: PreferencesService;
 	private api: ApiRunner;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'BattlegroundsCardsService', () => true);
+		super(windowManager, 'BattlegroundsCompsService', () => true);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -27,25 +26,22 @@ export class BattlegroundsCardsService extends AbstractFacadeService<Battlegroun
 		await this.prefs.isReady();
 	}
 
-	public async loadCardStats(
+	public async loadCompStats(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,
-	): Promise<BgsCardStats | null> {
-		return this.mainInstance.loadCardStatsInternal(timeFilter, rankFilter);
+	): Promise<BgsCompStats | null> {
+		return this.mainInstance.loadCompStatsInternal(timeFilter, rankFilter);
 	}
 
-	private async loadCardStatsInternal(
+	private async loadCompStatsInternal(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,
-	): Promise<BgsCardStats | null> {
-		const url = BGS_CARDS_URL.replace('%mmrPercentile%', rankFilter.toString()).replace(
-			'%timePeriod%',
-			fixInvalidTimeSuffix(timeFilter ?? 'last-patch'),
-		);
-		console.debug('[bgs-cards] loading cards', url);
-		const cards: BgsCardStats | null = await this.api.callGetApi(url);
-		console.debug('[bgs-cards] loaded cards', cards);
-		return cards;
+	): Promise<BgsCompStats | null> {
+		const url = BGS_CARDS_URL.replace('%timePeriod%', fixInvalidTimeSuffix(timeFilter ?? 'last-patch'));
+		console.debug('[bgs-comps] loading comps', url);
+		const comps: BgsCompStats | null = await this.api.callGetApi(url);
+		console.debug('[bgs-comps] loaded comps', comps);
+		return comps;
 	}
 }
 

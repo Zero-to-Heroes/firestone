@@ -83,14 +83,8 @@ export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComp
 
 		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
 			filter((currentView) => !!currentView),
-			this.mapData(
-				(currentView) =>
-					currentView !== 'bgs-category-personal-stats' &&
-					currentView !== 'bgs-category-perfect-games' &&
-					currentView !== 'bgs-category-meta-quests' &&
-					currentView !== 'bgs-category-meta-trinkets' &&
-					currentView !== 'bgs-category-leaderboard' &&
-					currentView !== 'bgs-category-simulator',
+			this.mapData((currentView) =>
+				['bgs-category-meta-heroes', 'bgs-category-personal-rating'].includes(currentView),
 			),
 		);
 		this.showConservativeEstimateLink$ = this.nav.selectedCategoryId$$.pipe(

@@ -91,6 +91,7 @@ export class BattlegroundsTimeFilterDropdownComponent
 							'bgs-category-personal-heroes',
 							'bgs-category-meta-heroes',
 							'bgs-category-meta-quests',
+							'bgs-category-meta-comps',
 							'bgs-category-meta-trinkets',
 							'bgs-category-meta-cards',
 							'bgs-category-personal-quests',

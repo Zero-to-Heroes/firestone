@@ -23,7 +23,11 @@ export * from './lib/components/strategies/bgs-trinket-strategies-wrapper.compon
 export * from './lib/components/strategies/bgs-trinket-strategy-tips-tooltip.component';
 export * from './lib/components/trinkets/battlegrounds-meta-stats-trinkets.component';
 export * from './lib/components/trinkets/bgs-trinket-stats-info-premium.component';
+export * from './lib/compositions/battlegrounds-meta-stats-comps-info.component';
+export * from './lib/compositions/battlegrounds-meta-stats-comps-tier.component';
+export * from './lib/compositions/battlegrounds-meta-stats-comps.component';
 export * from './lib/compositions/bgs-comps-view-select-dropdown';
+export * from './lib/compositions/bgs-comps.service';
 export * from './lib/highlights/bgs-board-highlighter.service';
 export * from './lib/minion-stats/bgs-board-stats.service';
 export * from './lib/models/strategies';

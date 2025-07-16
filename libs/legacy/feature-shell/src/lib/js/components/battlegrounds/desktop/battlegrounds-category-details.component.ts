@@ -28,6 +28,8 @@ import { filter } from 'rxjs/operators';
 				role="region"
 			>
 			</battlegrounds-meta-stats-trinkets>
+			<battlegrounds-meta-stats-comps *ngIf="selectedCategoryId === 'bgs-category-meta-comps'" role="region">
+			</battlegrounds-meta-stats-comps>
 			<battlegrounds-meta-stats-cards *ngIf="selectedCategoryId === 'bgs-category-meta-cards'" role="region">
 			</battlegrounds-meta-stats-cards>
 			<battlegrounds-personal-stats-rating *ngIf="selectedCategoryId === 'bgs-category-personal-rating'">

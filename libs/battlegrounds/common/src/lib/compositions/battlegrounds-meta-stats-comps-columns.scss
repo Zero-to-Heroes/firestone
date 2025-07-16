@@ -1,0 +1,15 @@
+.cell {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.name {
+	width: 200px;
+	margin-right: 15px;
+}
+
+.average-placement {
+	width: 140px;
+}
