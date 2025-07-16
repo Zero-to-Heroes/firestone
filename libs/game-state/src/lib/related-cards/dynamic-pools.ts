@@ -639,9 +639,25 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.ForbiddenShrine_EDR_520:
 			return (c) =>
-				hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(
+					c,
+					'==',
+					Math.min(
+						10,
+						Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)),
+					),
+				);
 		case CardIds.ScrappyScavenger_TLC_461:
-			return (c) => hasCost(c, '==', Math.min(10, options.deckState.manaLeft ?? 0));
+			return (c) =>
+				hasCost(
+					c,
+					'==',
+					Math.min(
+						10,
+						Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)),
+					),
+				);
 		case CardIds.Alarashi_EDR_493:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.Jumpscare_EDR_882:
