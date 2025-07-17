@@ -5,7 +5,8 @@ import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import { BgsRankFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
-const BGS_CARDS_URL = 'https://static.zerotoheroes.com/api/bgs/comp-stats/%timePeriod%/overview-from-hourly.gz.json';
+const BGS_CARDS_URL =
+	'https://static.zerotoheroes.com/api/bgs/comp-stats/%timePeriod%/overview-from-hourly.gz.json?v=20250717';
 
 @Injectable()
 export class BattlegroundsCompsService extends AbstractFacadeService<BattlegroundsCompsService> {

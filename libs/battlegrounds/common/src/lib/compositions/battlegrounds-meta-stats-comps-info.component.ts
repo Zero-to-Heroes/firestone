@@ -19,6 +19,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 					{{ dataPoints }}
 				</div>
 			</div>
+			<div class="cell first-percent">{{ firstPercent | percent: '1.1' }}</div>
 			<div class="cell average-placement">{{ averagePlacement }}</div>
 			<div class="cell expert-rating {{ expertRating?.toLowerCase() }}">{{ expertRating }}</div>
 			<div class="cell expert-difficulty {{ expertDifficulty?.toLowerCase() }}">{{ expertDifficulty }}</div>
@@ -52,6 +53,7 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	@Input() set stat(value: BgsMetaCompStatTierItem) {
 		this.compId = value.compId;
 		this.compName = value.name;
+		this.firstPercent = value.firstPercent;
 		this.expertRating = capitalizeFirstLetter(value.expertRating);
 		this.expertDifficulty = capitalizeFirstLetter(value.expertDifficulty);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
@@ -60,12 +62,12 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.coreCards = value.coreCards;
 		this.addonCards = value.addonCards;
-		console.debug('[bgComp] comp info', value);
 	}
 
 	compId: string;
 	compName: string;
 	dataPoints: string;
+	firstPercent: number;
 	expertRating: string | null;
 	expertDifficulty: string | null;
 	coreCards: readonly BgsMetaCompCard[];

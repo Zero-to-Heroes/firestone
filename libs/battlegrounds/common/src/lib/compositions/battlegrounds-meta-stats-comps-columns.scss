@@ -3,20 +3,13 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	// Default width
+	width: 100px;
 }
 
 .name {
 	width: 150px;
 	margin-right: 15px;
-}
-
-.average-placement {
-	width: 100px;
-}
-
-.expert-rating,
-.expert-difficulty {
-	width: 100px;
 }
 
 .cards {
@@ -25,7 +18,13 @@
 		margin-right: 20px;
 	}
 	&.addon {
+		width: unset;
 		flex-grow: 1;
 		flex-shrink: 1;
 	}
+}
+
+.first-percent {
+	// display: none;
+	width: 120px;
 }

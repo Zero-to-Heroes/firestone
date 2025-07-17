@@ -54,7 +54,7 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 					<div class="expert-info">
 						<div class="expert-details">
 							<div class="expert-name">Slyders</div>
-							<div class="expert-credentials">Multiple top 1 finishes</div>
+							<div class="expert-credentials">Multiple leaderboard #1 finishes</div>
 							<div class="expert-links">
 								<a class="link twitch-icon" href="https://www.twitch.tv/slyders_hs" target="_blank">
 									<svg>
@@ -74,6 +74,15 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<div class="cell name" [fsTranslate]="'app.battlegrounds.compositions.columns.name'"></div>
+					<sortable-table-label
+						class="cell first-percent"
+						[name]="'app.battlegrounds.compositions.columns.first-percent' | fsTranslate"
+						[helpTooltip]="'app.battlegrounds.compositions.columns.first-percent-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'first'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 					<sortable-table-label
 						class="cell average-placement"
 						[name]="'app.battlegrounds.compositions.columns.position' | fsTranslate"
@@ -112,8 +121,15 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 				</div>
 				<div class="comps-list" role="list" scrollable>
 					<ng-container *ngIf="sortCriteria$ | async as sort">
-						<ng-container [ngSwitch]="sort.criteria + '-' + sort.direction">
-							<ng-container *ngSwitchCase="'position-asc'">
+						<ng-container [ngSwitch]="sort.criteria">
+							<ng-container *ngSwitchCase="'position'">
+								<battlegrounds-meta-stats-comps-tier
+									*ngFor="let tier of value.tiers; trackBy: trackByFn"
+									role="listitem"
+									[tier]="tier"
+								></battlegrounds-meta-stats-comps-tier>
+							</ng-container>
+							<ng-container *ngSwitchCase="'first'">
 								<battlegrounds-meta-stats-comps-tier
 									*ngFor="let tier of value.tiers; trackBy: trackByFn"
 									role="listitem"
@@ -155,8 +171,8 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 	headerCollapsed = true;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeComp>>({
-		criteria: 'position',
-		direction: 'asc',
+		criteria: 'first',
+		direction: 'desc',
 	});
 	private loading$$ = new BehaviorSubject<boolean>(true);
 
@@ -206,11 +222,9 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 			takeUntil(this.destroyed$),
 		);
 		this.tiers$ = combineLatest([stats$, this.sortCriteria$$]).pipe(
-			tap((info) => console.debug('received info for comps', info)),
 			filter(([stats, sortCriteria]) => !!stats?.length),
 			this.mapData(([stats, sortCriteria]) => {
 				const filtered = stats;
-				console.debug('filtered', filtered);
 				const tiers = buildCompTiers(filtered, sortCriteria, this.i18n);
 				const result = tiers;
 				return result;
