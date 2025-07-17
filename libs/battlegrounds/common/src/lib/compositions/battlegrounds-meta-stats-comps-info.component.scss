@@ -9,7 +9,7 @@
 	width: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
-	overflow: hidden;
+	// overflow: hidden;
 
 	&.clickable:hover {
 		background: rgba(255, 255, 255, 0.12);
@@ -54,7 +54,6 @@
 
 	.cards {
 		height: 100%;
-		overflow: hidden;
 		display: flex;
 		justify-content: flex-start;
 		// overflow: hidden;

@@ -55,6 +55,7 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.coreCards = value.coreCards;
 		this.addonCards = value.addonCards;
+		console.debug('[bgComp] comp info', value);
 	}
 
 	compId: string;

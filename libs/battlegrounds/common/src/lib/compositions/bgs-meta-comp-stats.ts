@@ -33,6 +33,7 @@ export const buildCompStats = (
 
 const buildCompCard = (card: BgsCompCardAdvice, allCards: CardsFacadeService): BgsMetaCompCard => {
 	const refCard = allCards.getCard(card.cardId);
+	console.debug('[bgComp] buildCompCard', card.cardId, refCard);
 	return {
 		cardId: card.cardId,
 		entity: Entity.default(refCard),
