@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
@@ -19,6 +20,8 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 				</div>
 			</div>
 			<div class="cell average-placement">{{ averagePlacement }}</div>
+			<div class="cell expert-rating {{ expertRating?.toLowerCase() }}">{{ expertRating }}</div>
+			<div class="cell expert-difficulty {{ expertDifficulty?.toLowerCase() }}">{{ expertDifficulty }}</div>
 			<div class="cell cards core">
 				<div class="card-container" *ngFor="let card of coreCards">
 					<card-on-board
@@ -49,6 +52,8 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	@Input() set stat(value: BgsMetaCompStatTierItem) {
 		this.compId = value.compId;
 		this.compName = value.name;
+		this.expertRating = capitalizeFirstLetter(value.expertRating);
+		this.expertDifficulty = capitalizeFirstLetter(value.expertDifficulty);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
 		});
@@ -61,6 +66,8 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	compId: string;
 	compName: string;
 	dataPoints: string;
+	expertRating: string | null;
+	expertDifficulty: string | null;
 	coreCards: readonly BgsMetaCompCard[];
 	addonCards: readonly BgsMetaCompCard[];
 	impactValue: number;

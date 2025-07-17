@@ -2,7 +2,7 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria } from '@firestone/shared/common/view';
+import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import {
@@ -44,8 +44,27 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 					<sortable-table-label
 						class="cell average-placement"
 						[name]="'app.battlegrounds.compositions.columns.position' | fsTranslate"
+						[helpTooltip]="'app.battlegrounds.compositions.columns.position-tooltip' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'position'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell expert-rating"
+						[name]="'app.battlegrounds.compositions.columns.expert-rating' | fsTranslate"
+						[helpTooltip]="'app.battlegrounds.compositions.columns.expert-rating-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'expert-rating'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell expert-difficulty"
+						[name]="'app.battlegrounds.compositions.columns.expert-difficulty' | fsTranslate"
+						[helpTooltip]="'app.battlegrounds.compositions.columns.expert-difficulty-tooltip' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'expert-difficulty'"
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
@@ -60,12 +79,22 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 				</div>
 				<div class="comps-list" role="list" scrollable>
 					<ng-container *ngIf="sortCriteria$ | async as sort">
-						<ng-container *ngIf="sort.criteria === 'position'">
-							<battlegrounds-meta-stats-comps-tier
-								*ngFor="let tier of value.tiers; trackBy: trackByFn"
-								role="listitem"
-								[tier]="tier"
-							></battlegrounds-meta-stats-comps-tier>
+						<ng-container [ngSwitch]="sort.criteria + '-' + sort.direction">
+							<ng-container *ngSwitchCase="'position-asc'">
+								<battlegrounds-meta-stats-comps-tier
+									*ngFor="let tier of value.tiers; trackBy: trackByFn"
+									role="listitem"
+									[tier]="tier"
+								></battlegrounds-meta-stats-comps-tier>
+							</ng-container>
+							<ng-container *ngSwitchDefault>
+								<battlegrounds-meta-stats-comps-tier
+									*ngFor="let tier of value.tiers; trackBy: trackByFn"
+									class="single-tier"
+									role="listitem"
+									[tier]="tier"
+								></battlegrounds-meta-stats-comps-tier>
+							</ng-container>
 						</ng-container>
 					</ng-container>
 				</div>
@@ -206,14 +235,12 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 
 	onSortClick(rawCriteria: string) {
 		const criteria: ColumnSortTypeComp = rawCriteria as ColumnSortTypeComp;
-		// No point in sorting by the "worse hero" first, at least until I've got asks for it
-		if (criteria === this.sortCriteria$$.value?.criteria) {
-			return;
-		}
-
 		this.sortCriteria$$.next({
 			criteria: criteria,
-			direction: getDefaultDirection(criteria),
+			direction:
+				criteria === this.sortCriteria$$.value?.criteria
+					? invertDirection(this.sortCriteria$$.value.direction)
+					: getDefaultDirection(criteria),
 		});
 	}
 

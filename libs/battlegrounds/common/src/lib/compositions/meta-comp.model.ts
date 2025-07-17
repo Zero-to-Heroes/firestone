@@ -1,9 +1,9 @@
 import { Entity } from '@firestone-hs/replay-parser';
 
 export interface BgsMetaCompStatTier {
-	readonly id: BgsCompTier;
-	readonly label: string;
-	readonly tooltip: string;
+	readonly id: BgsCompTier | null;
+	readonly label: string | null;
+	readonly tooltip: string | null;
 	readonly items: readonly BgsMetaCompStatTierItem[];
 }
 
@@ -12,6 +12,8 @@ export interface BgsMetaCompStatTierItem {
 	readonly name: string;
 	readonly dataPoints: number;
 	readonly averagePlacement: number;
+	readonly expertRating?: 'D' | 'C' | 'B' | 'A' | 'S';
+	readonly expertDifficulty?: 'Easy' | 'Medium' | 'Hard';
 	readonly coreCards: readonly BgsMetaCompCard[];
 	readonly addonCards: readonly BgsMetaCompCard[];
 }

@@ -155,7 +155,7 @@ export const capitalizeEachWord = (input: string): string | null => {
 	return !lowerInput ? null : lowerInput.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1));
 };
 
-export const capitalizeFirstLetter = (input: string): string | null => {
+export const capitalizeFirstLetter = (input: string | null | undefined): string | null => {
 	if (!input) {
 		return null;
 	}
