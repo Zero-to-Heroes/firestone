@@ -441,6 +441,8 @@ export const publicTutors = [
 ];
 
 export const publicCardInfos = [...cardsConsideredPublic, ...publicCardGiftCreators, ...publicTutors];
+// Some cards both create in hand and in deck - we want to hide the information when drawn from the deck
+export const hiddenWhenDrawFromDeck = [CardIds.MerchantOfLegend_TLC_514];
 
 export const publicCardCreators = [...cardsConsideredPublic, ...publicCardGiftCreators, ...cardTutors, ...publicTutors];
 
