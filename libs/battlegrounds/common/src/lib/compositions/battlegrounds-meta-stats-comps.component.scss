@@ -66,10 +66,11 @@
 				align-items: center;
 				gap: 8px;
 
-				.info {
-					--icon-color: var(--color-2);
+				::ng-deep .info {
 					opacity: 0.7;
 					transition: opacity 0.2s ease;
+					width: 17px;
+					aspect-ratio: 1;
 
 					&:hover {
 						opacity: 1;

@@ -19,7 +19,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 					{{ dataPoints }}
 				</div>
 			</div>
-			<div class="cell first-percent">{{ firstPercent | percent: '1.1' }}</div>
+			<div class="cell first-percent">{{ firstPercent | number: '1.1-1' }}</div>
 			<div class="cell average-placement">{{ averagePlacement }}</div>
 			<div class="cell expert-rating {{ expertRating?.toLowerCase() }}">{{ expertRating }}</div>
 			<div class="cell expert-difficulty {{ expertDifficulty?.toLowerCase() }}">{{ expertDifficulty }}</div>
@@ -53,7 +53,7 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	@Input() set stat(value: BgsMetaCompStatTierItem) {
 		this.compId = value.compId;
 		this.compName = value.name;
-		this.firstPercent = value.firstPercent;
+		this.firstPercent = value.firstPercent * 100;
 		this.expertRating = capitalizeFirstLetter(value.expertRating);
 		this.expertDifficulty = capitalizeFirstLetter(value.expertDifficulty);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
