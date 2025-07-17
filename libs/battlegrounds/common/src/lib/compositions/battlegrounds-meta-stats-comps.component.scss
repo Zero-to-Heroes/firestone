@@ -15,7 +15,6 @@
 		justify-content: flex-end;
 		padding-right: 10px;
 		font-size: 0.8em;
-		margin-bottom: 20px;
 		// position: absolute;
 		// top: 0;
 		// right: 0;
@@ -35,9 +34,209 @@
 		}
 	}
 
+	.expert-notification {
+		margin-top: 20px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: stretch;
+		gap: 30px;
+		max-width: 1000px;
+		margin-left: auto;
+		margin-right: auto;
+
+		.text {
+			display: flex;
+			flex-direction: column;
+			border-radius: 12px;
+			border: 1px solid var(--default-title-color);
+			padding: 20px;
+			background: linear-gradient(145deg, var(--color-7), rgba(255, 255, 255, 0.05));
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
+			width: 420px;
+			justify-content: center;
+			position: relative;
+
+			.text-header {
+				font-size: 1.3em;
+				font-weight: 600;
+				margin-bottom: 16px;
+				color: var(--default-title-color);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+
+				.info {
+					--icon-color: var(--color-2);
+					opacity: 0.7;
+					transition: opacity 0.2s ease;
+
+					&:hover {
+						opacity: 1;
+					}
+				}
+			}
+
+			.text-body {
+				font-size: 0.9em;
+				line-height: 1.5;
+				color: var(--color-1);
+			}
+		}
+
+		.expert-info {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			border-radius: 12px;
+			border: 1px solid var(--default-title-color);
+			padding: 20px;
+			background: linear-gradient(145deg, var(--color-7), rgba(255, 255, 255, 0.05));
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
+			width: 320px;
+			position: relative;
+			overflow: hidden;
+
+			.expert-details {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				font-size: 0.85em;
+				gap: 6px;
+				flex: 1;
+				padding-right: 16px;
+
+				.expert-name {
+					font-size: 1.4em;
+					font-weight: 700;
+					color: var(--default-title-color);
+					margin-bottom: 4px;
+				}
+
+				.expert-credentials {
+					color: var(--color-2);
+					font-size: 0.9em;
+					text-align: center;
+					line-height: 1.3;
+				}
+
+				.expert-links {
+					--size: 20px;
+					margin-top: 8px;
+					display: flex;
+					gap: 8px;
+
+					.link {
+						position: relative;
+						width: var(--size);
+						height: var(--size);
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						border-radius: 50%;
+						background: rgba(255, 255, 255, 0.1);
+						transition: all 0.2s ease;
+						cursor: pointer;
+						color: var(--color-2);
+
+						&:hover {
+							background: rgba(255, 255, 255, 0.2);
+							color: var(--default-title-color);
+							transform: scale(1.1);
+						}
+					}
+				}
+			}
+
+			.expert-picture {
+				flex: 0 0 80px;
+				height: 80px;
+				position: relative;
+				border-radius: 50%;
+				overflow: hidden;
+				border: 2px solid rgba(255, 255, 255, 0.1);
+				transition: all 0.3s ease;
+
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					transition: transform 0.3s ease;
+				}
+			}
+
+			// Prepare for cycling animations
+			&.cycling-in {
+				animation: slideInFromRight 0.5s ease;
+			}
+
+			&.cycling-out {
+				animation: slideOutToLeft 0.5s ease;
+			}
+
+			@keyframes slideInFromRight {
+				from {
+					transform: translateX(100%);
+					opacity: 0;
+				}
+				to {
+					transform: translateX(0);
+					opacity: 1;
+				}
+			}
+
+			@keyframes slideOutToLeft {
+				from {
+					transform: translateX(0);
+					opacity: 1;
+				}
+				to {
+					transform: translateX(-100%);
+					opacity: 0;
+				}
+			}
+		}
+
+		// Add cycling controls for future use
+		.cycling-controls {
+			position: absolute;
+			bottom: -40px;
+			left: 50%;
+			transform: translateX(-50%);
+			display: flex;
+			gap: 8px;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+
+			.dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: var(--color-4);
+				cursor: pointer;
+				transition: all 0.2s ease;
+
+				&.active {
+					background: var(--default-title-color);
+					transform: scale(1.2);
+				}
+
+				&:hover:not(.active) {
+					background: var(--color-2);
+				}
+			}
+		}
+
+		&:hover .cycling-controls {
+			opacity: 1;
+		}
+	}
+
 	.header {
 		display: flex;
 		font-size: 14px;
+		margin-top: 20px;
 		margin-bottom: 10px;
 		overflow: hidden;
 		height: 35px;

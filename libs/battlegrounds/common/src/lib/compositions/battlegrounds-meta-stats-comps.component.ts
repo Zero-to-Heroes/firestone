@@ -39,6 +39,39 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 					<div class="value">{{ totalGames$ | async }}</div>
 				</div>
 
+				<div class="expert-notification">
+					<div class="text">
+						<div class="text-header">
+							{{ 'app.battlegrounds.compositions.contributors.header' | fsTranslate }}
+							<div
+								class="info"
+								inlineSVG="assets/svg/info.svg"
+								[helpTooltip]="'app.battlegrounds.compositions.contributors.info' | fsTranslate"
+							></div>
+						</div>
+						<div class="text-body" [fsTranslate]="'app.battlegrounds.compositions.contributors.text'"></div>
+					</div>
+					<div class="expert-info">
+						<div class="expert-details">
+							<div class="expert-name">Slyders</div>
+							<div class="expert-credentials">Multiple top 1 finishes</div>
+							<div class="expert-links">
+								<a class="link twitch-icon" href="https://www.twitch.tv/slyders_hs" target="_blank">
+									<svg>
+										<use xlink:href="assets/svg/sprite.svg#twitch" />
+									</svg>
+								</a>
+							</div>
+						</div>
+						<div class="expert-picture">
+							<img
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/partners/slyders.png"
+								alt="Expert Picture"
+							/>
+						</div>
+					</div>
+				</div>
+
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<div class="cell name" [fsTranslate]="'app.battlegrounds.compositions.columns.name'"></div>
 					<sortable-table-label
