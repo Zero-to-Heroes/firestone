@@ -523,6 +523,7 @@ const getDynamicFilters = (
 		case CardIds.VenomousScorpid:
 		case CardIds.StewardOfScrolls_SCH_245:
 		case CardIds.PrimordialGlyph_CORE_UNG_941:
+		case CardIds.PocketDimension_GDB_133:
 		case CardIds.Kalecgos_CORE_DAL_609:
 		case CardIds.Marshspawn_CORE_BT_115:
 		case CardIds.EtherealLackey:
@@ -543,6 +544,7 @@ const getDynamicFilters = (
 				hasCost(c, '>=', 1) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SchoolTeacher:
+		case CardIds.TidePools_VAC_522:
 			// TODO: Add nagaling token
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -576,6 +578,11 @@ const getDynamicFilters = (
 		case CardIds.BabblingBookcase_CORE_EDR_001:
 		case CardIds.WandThief_SCH_350:
 			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.MAGE]);
+		case CardIds.FiddlefireImp:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCorrectSpellSchool(c, SpellSchool.FIRE) &&
+				(hasCorrectClass(c, CardClass.MAGE) || hasCorrectClass(c, CardClass.WARLOCK));
 
 		// Discover an X cost card
 		case CardIds.DarkPeddler_CORE_WON_096:
@@ -659,7 +666,7 @@ const getDynamicFilters = (
 						10,
 						Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)),
 					),
-				);
+				) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Alarashi_EDR_493:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.Jumpscare_EDR_882:
@@ -929,6 +936,10 @@ const hasCorrectType = (card: ReferenceCard, targetType: CardType): boolean => {
 
 const hasCorrectSpellSchool = (card: ReferenceCard, targetSpellSchool: SpellSchool): boolean => {
 	return card?.spellSchool?.toUpperCase() === SpellSchool[targetSpellSchool];
+};
+
+const hasCorrectClass = (card: ReferenceCard, targetClass: CardClass): boolean => {
+	return card?.classes?.includes(CardClass[targetClass]) ?? false;
 };
 
 const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity): boolean => {
