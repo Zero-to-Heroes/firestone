@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegrounds, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { StatGameModeType } from '@firestone-hs/replay-metadata';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -126,6 +127,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 					deckstringsFilter: prefs.replaysActiveDeckstringsFilter,
 					playerClassFilter: prefs.replaysActivePlayerClassFilter,
 					opponentClassFilter: prefs.replaysActiveOpponentClassFilter,
+					hideGamesVsAi: prefs.replaysHideGamesVsAi,
 				})),
 				distinctUntilChanged(
 					(a, b) =>
@@ -133,7 +135,8 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 						a.bgHeroFilter === b.bgHeroFilter &&
 						arraysEqual(a.deckstringsFilter, b.deckstringsFilter) &&
 						a.playerClassFilter === b.playerClassFilter &&
-						a.opponentClassFilter === b.opponentClassFilter,
+						a.opponentClassFilter === b.opponentClassFilter &&
+						a.hideGamesVsAi === b.hideGamesVsAi,
 				),
 			),
 			this.heroSearchString$$,
@@ -143,7 +146,14 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 			this.mapData(
 				([
 					gameStats,
-					{ gameModeFilter, bgHeroFilter, deckstringsFilter, playerClassFilter, opponentClassFilter },
+					{
+						gameModeFilter,
+						bgHeroFilter,
+						deckstringsFilter,
+						playerClassFilter,
+						opponentClassFilter,
+						hideGamesVsAi,
+					},
 					heroSearchString,
 					opponentSearchString,
 				]) => {
@@ -156,6 +166,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 						opponentClassFilter,
 						heroSearchString,
 						opponentSearchString,
+						hideGamesVsAi,
 					);
 				},
 			),
@@ -190,9 +201,10 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		opponentClassFilter: string,
 		heroSearchString: string,
 		opponentSearchString: string,
+		hideGamesVsAi: boolean,
 	): readonly GameStat[] {
 		const result = replays
-			.filter((replay) => this.gameModeFilter(replay, gameModeFilter))
+			.filter((replay) => this.gameModeFilter(replay, gameModeFilter, hideGamesVsAi))
 			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter, gameModeFilter))
 			.filter((replay) => this.deckstringFilter(replay, deckstringsFilter, gameModeFilter))
 			.filter((replay) => this.playerClassFilter(replay, playerClassFilter, gameModeFilter))
@@ -266,12 +278,12 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		return !filter || normalizeHeroCardId(stat.playerCardId, this.allCards) === filter;
 	}
 
-	private gameModeFilter(stat: GameStat, filter: string): boolean {
+	private gameModeFilter(stat: GameStat, filter: string, hideGamesVsAi: boolean): boolean {
 		const gameMode = stat.gameMode;
 		const format = stat.gameFormat;
 		switch (filter) {
 			case null:
-				return !isMercenariesPvE(gameMode);
+				return !isMercenariesPvE(gameMode) && (!hideGamesVsAi || !isAiGame(gameMode));
 			case 'ranked-standard':
 				return gameMode === 'ranked' && format === 'standard';
 			case 'ranked-wild':
@@ -297,6 +309,16 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		}
 	}
 }
+
+const isAiGame = (gameMode: StatGameModeType): boolean => {
+	return (
+		gameMode === 'mercenaries-ai-vs-ai' ||
+		gameMode === 'mercenaries-pve' ||
+		gameMode === 'practice' ||
+		gameMode === 'tutorial' ||
+		gameMode === 'unknown'
+	);
+};
 
 export interface HeaderInfo {
 	header: string;

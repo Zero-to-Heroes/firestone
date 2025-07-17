@@ -508,6 +508,7 @@ export class Preferences implements IPreferences {
 	readonly replaysActiveBgHeroFilter: string | null = null;
 	readonly replaysActivePlayerClassFilter: string | null = null;
 	readonly replaysActiveOpponentClassFilter: string | null = null;
+	readonly replaysHideGamesVsAi: boolean = false;
 
 	readonly bgsFullToggle = true;
 	readonly bgsEnableApp = true;

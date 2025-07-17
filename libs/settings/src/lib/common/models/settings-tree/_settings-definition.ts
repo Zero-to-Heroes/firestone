@@ -9,6 +9,7 @@ import { globalSettings } from './global/_global-settings';
 import { integrationsSettings } from './integrations/_integrations-settings';
 import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
 import { modsSettings } from './mods/_mods-settings';
+import { replaySettings } from './replay/_replay-settings';
 import { troubleshootingSettings } from './troubleshooting/_troubleshooting-settings';
 
 /**
@@ -27,6 +28,7 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			battlegroundsSettings(context),
 			arenaSettings(context),
 			mercenariesSettings(context),
+			replaySettings(context),
 			collectionSettings(context),
 			achievementsSettings(context),
 			integrationsSettings(context),
