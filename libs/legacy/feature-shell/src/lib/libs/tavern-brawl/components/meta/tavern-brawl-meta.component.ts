@@ -116,49 +116,54 @@ export class TavernBrawlMetaComponent
 			return false;
 		}
 
-		const deckDefinition = decode(deck.decklist);
-		const flatDeckCardIds = deckDefinition.cards
-			.flatMap((pair) => new Array(pair[1]).fill(pair[0]))
-			.map((dbfId) => this.allCards.getCard(dbfId).id)
-			.sort();
-		const cardsInCollection = collection
-			.filter((card) => flatDeckCardIds.includes(card.id))
-			.flatMap((card) => {
-				const maxTheoretical = this.allCards.getCard(card.id).rarity?.toLowerCase() === 'legendary' ? 1 : 2;
-				const maxUsed = flatDeckCardIds.filter((c) => c === card.id).length;
-				const max = Math.min(maxTheoretical, maxUsed);
-				return new Array(
-					Math.min(
-						max,
-						(card.count ?? 0) +
-							(card.premiumCount ?? 0) +
-							(card.diamondCount ?? 0) +
-							(card.signatureCount ?? 0),
-					),
-				).fill(card.id);
-			})
-			.sort();
-		// if (deckDefinition.heroes.includes(getDefaultHeroDbfIdForClass('druid'))) {
-		// 	console.debug(
-		// 		'[tavern-brawl-meta] deck',
-		// 		deckDefinition,
-		// 		flatDeckCardIds,
-		// 		deckDefinition.cards
-		// 			.flatMap((pair) => new Array(pair[1]).fill(pair[0]))
-		// 			.map((dbfId) => this.allCards.getCard(dbfId).name)
-		// 			.sort(),
-		// 		cardsInCollection,
-		// 	);
-		// }
-		if (flatDeckCardIds.length !== cardsInCollection.length) {
-			return false;
-		}
-		for (let i = 0; i < flatDeckCardIds.length; i++) {
-			if (flatDeckCardIds[i] !== cardsInCollection[i]) {
+		try {
+			const deckDefinition = decode(deck.decklist);
+			const flatDeckCardIds = deckDefinition.cards
+				.flatMap((pair) => new Array(pair[1]).fill(pair[0]))
+				.map((dbfId) => this.allCards.getCard(dbfId).id)
+				.sort();
+			const cardsInCollection = collection
+				.filter((card) => flatDeckCardIds.includes(card.id))
+				.flatMap((card) => {
+					const maxTheoretical = this.allCards.getCard(card.id).rarity?.toLowerCase() === 'legendary' ? 1 : 2;
+					const maxUsed = flatDeckCardIds.filter((c) => c === card.id).length;
+					const max = Math.min(maxTheoretical, maxUsed);
+					return new Array(
+						Math.min(
+							max,
+							(card.count ?? 0) +
+								(card.premiumCount ?? 0) +
+								(card.diamondCount ?? 0) +
+								(card.signatureCount ?? 0),
+						),
+					).fill(card.id);
+				})
+				.sort();
+			// if (deckDefinition.heroes.includes(getDefaultHeroDbfIdForClass('druid'))) {
+			// 	console.debug(
+			// 		'[tavern-brawl-meta] deck',
+			// 		deckDefinition,
+			// 		flatDeckCardIds,
+			// 		deckDefinition.cards
+			// 			.flatMap((pair) => new Array(pair[1]).fill(pair[0]))
+			// 			.map((dbfId) => this.allCards.getCard(dbfId).name)
+			// 			.sort(),
+			// 		cardsInCollection,
+			// 	);
+			// }
+			if (flatDeckCardIds.length !== cardsInCollection.length) {
 				return false;
 			}
+			for (let i = 0; i < flatDeckCardIds.length; i++) {
+				if (flatDeckCardIds[i] !== cardsInCollection[i]) {
+					return false;
+				}
+			}
+			return true;
+		} catch (e) {
+			console.warn('[tavern-brawl-meta] error', e);
+			return false;
 		}
-		return true;
 	}
 }
 
