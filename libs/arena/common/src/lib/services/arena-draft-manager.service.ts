@@ -170,7 +170,7 @@ export class ArenaDraftManagerService
 				this.cardPackageOptions$$.next(changes.ArenaPackageCardOptions);
 			}
 			if (changes.ArenaLatestCardPick != null) {
-				console.debug('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
+				console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
 				this.lastPick$$.next(changes.ArenaLatestCardPick);
 			}
 			if (changes.ArenaSessionState != null) {
@@ -178,7 +178,7 @@ export class ArenaDraftManagerService
 				this.sessionState$$.next(changes.ArenaSessionState);
 			}
 			if (changes.ArenaUndergroundLatestCardPick != null) {
-				console.debug(
+				console.log(
 					'[arena-draft-manager] received latest underground card pick',
 					changes.ArenaUndergroundLatestCardPick,
 				);
@@ -307,7 +307,7 @@ export class ArenaDraftManagerService
 					pick: pick!.CardId,
 					playerClass: playerClass,
 				};
-				console.debug('[arena-draft-manager] uploading pick', pick, payload);
+				console.log('[arena-draft-manager] uploading pick', payload);
 				this.sendDraftPick(payload);
 			});
 
@@ -414,8 +414,10 @@ export class ArenaDraftManagerService
 	}
 
 	private async sendDraftPick(pick: DraftPick) {
-		await this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick);
-		const result = await this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick);
+		await Promise.all([
+			this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick),
+			this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick),
+		]);
 		console.debug('[arena-draft-manager] uploaded draft pick');
 	}
 
