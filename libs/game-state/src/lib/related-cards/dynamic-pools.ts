@@ -395,6 +395,14 @@ const getDynamicFilters = (
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
 				fromAnotherClass(c, options.currentClass);
 
+		// Discover X Mechanic
+		// Random Secret
+		case CardIds.RuniTimeExplorer_TheNightholdToken_WON_053t4:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				hasMechanic(c, GameTag.SECRET) &&
+				hasCorrectClass(c, CardClass.PALADIN);
+
 		// Random X Tribe
 		// Random Elementals
 		case CardIds.MenacingNimbusCore:
@@ -426,8 +434,13 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && (c?.attack ?? 0) % 2 === 1;
 
+		// Random Demons
 		case CardIds.Kiljaeden_GDB_145:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
+
+		// Random Dragons
+		case CardIds.TimeLostProtodrake:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
 
 		// Discover an X Tribe
 		// Discover a Dragon
