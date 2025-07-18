@@ -1276,6 +1276,7 @@ export const cardIdSelector = (
 				return highlightConditions(
 					tooltip(and(side(inputSide), entityIs(...firstOfEachCost))),
 					and(side(inputSide), spellPlayedThisMatch),
+					and(side(inputSide), or(inHand, inDeck), spell),
 				)(input);
 			};
 		case CardIds.GameMasterNemsy_TOY_524:
