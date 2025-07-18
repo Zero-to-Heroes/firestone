@@ -13,6 +13,7 @@ export class MinionsDeadThisGameCounterDefinitionV2 extends CounterDefinitionV2<
 		CardIds.ReskaThePitBoss_WW_373,
 		CardIds.BookOfTheDead_ULDA_006,
 		CardIds.BookOfTheDead_ONY_005tc2,
+		CardIds.TreasureHunterEudora_BookOfTheDeadToken_VAC_464t24,
 	];
 
 	readonly player = {
