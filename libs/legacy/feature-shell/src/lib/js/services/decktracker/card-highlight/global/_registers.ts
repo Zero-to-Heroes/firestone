@@ -14,6 +14,7 @@ import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { Hadronox } from './hadronox';
 import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
+import { ImpKingRafaam } from './imp-king-rafaam';
 import { InfantryReanimator } from './infantry-reanimator';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
@@ -52,6 +53,7 @@ const cards = [
 	WallowTheWretched,
 	Hadronox,
 	NzothGodOfTheDeep,
+	ImpKingRafaam,
 	NZothTheCorruptor,
 	HungeringAncient,
 	EndbringerUmbra,

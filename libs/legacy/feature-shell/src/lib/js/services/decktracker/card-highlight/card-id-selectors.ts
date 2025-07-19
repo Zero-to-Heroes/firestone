@@ -2344,8 +2344,8 @@ export const cardIdSelector = (
 		case CardIds.ImpKingRafaam_REV_835:
 		case CardIds.ImpKingRafaam_ImpKingRafaamToken:
 			return highlightConditions(
-				tooltip(and(side(inputSide), inGraveyard, minion, imp)),
 				and(side(inputSide), or(inDeck, inHand), minion, imp),
+				and(side(inputSide), inGraveyard, minion, imp),
 			);
 		case CardIds.RadarDetector_TSC_079:
 			return and(side(inputSide), inDeck, mech);
