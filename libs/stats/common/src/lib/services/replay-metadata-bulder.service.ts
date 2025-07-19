@@ -181,6 +181,7 @@ export class ReplayMetadataBuilderService {
 			},
 			validComps,
 		);
+		console.log('compArchetype', compArchetype);
 		console.debug(
 			'compArchetype',
 			compArchetype,
