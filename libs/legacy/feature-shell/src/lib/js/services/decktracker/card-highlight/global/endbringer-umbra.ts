@@ -12,15 +12,9 @@ export const EndbringerUmbra: GlobalHighlightCard = {
 		allCards: CardsFacadeService,
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return (
-			deckState.minionsDeadThisMatch
-				.map((e) => allCards.getCard(e.cardId))
-				.filter(
-					(c) => hasMechanic(c, GameTag.DEATHRATTLE) && c.type?.toUpperCase() === CardType[CardType.MINION],
-				)
-				.map((e) => e.id)
-				// distinct
-				.filter((value, index, self) => self.indexOf(value) === index)
-		);
+		return deckState.minionsDeadThisMatch
+			.map((e) => allCards.getCard(e.cardId))
+			.filter((c) => hasMechanic(c, GameTag.DEATHRATTLE) && c.type?.toUpperCase() === CardType[CardType.MINION])
+			.map((e) => e.id);
 	},
 };
