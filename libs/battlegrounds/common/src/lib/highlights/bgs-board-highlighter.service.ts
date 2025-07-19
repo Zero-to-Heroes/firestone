@@ -262,13 +262,15 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 					hasCurrentGame: !!gameState?.bgState?.currentGame,
 					gameEnded: gameState?.gameEnded,
 					heroCardId: gameState?.bgState?.currentGame?.getMainPlayer()?.cardId,
+					tavernTier: gameState?.bgState?.currentGame?.getMainPlayer()?.getCurrentTavernTier(),
 				})),
 				filter((info) => !!info.heroCardId),
 				distinctUntilChanged(
 					(a, b) =>
 						a.heroCardId === b.heroCardId &&
 						a.gameEnded === b.gameEnded &&
-						a.hasCurrentGame === b.hasCurrentGame,
+						a.hasCurrentGame === b.hasCurrentGame &&
+						a.tavernTier === b.tavernTier,
 				),
 			),
 			board$,
@@ -276,36 +278,41 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			.pipe(
 				auditTime(1000),
 				filter(
-					([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId }]) =>
+					([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId, tavernTier }]) =>
 						hasCurrentGame && premium,
 				),
 			)
-			.subscribe(([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId }, board]) => {
-				if (gameEnded) {
-					return;
-				}
+			.subscribe(
+				([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId, tavernTier }, board]) => {
+					if (gameEnded) {
+						return;
+					}
 
-				const minionsToHighlight: readonly string[] = this.buildMinionToHighlightFromHero(heroCardId);
-				if (!!minionsToHighlight?.length && minionAuto) {
-					const existingHighlights = this.highlightedMinions$$.value;
-					const newHighlights = [...existingHighlights, ...minionsToHighlight];
-					this.highlightedMinions$$.next(newHighlights);
-				}
+					const minionsToHighlight: readonly string[] = this.buildMinionToHighlightFromHero(heroCardId);
+					if (!!minionsToHighlight?.length && minionAuto) {
+						const existingHighlights = this.highlightedMinions$$.value;
+						const newHighlights = [...existingHighlights, ...minionsToHighlight];
+						this.highlightedMinions$$.next(newHighlights);
+					}
 
-				const tribeToHighlight: readonly Race[] | null = this.buildTribesToHighlight(heroCardId);
-				if (!!tribeToHighlight?.length && tribeAuto) {
-					const existingHighlights = this.highlightedTribes$$.value;
-					const newHighlights = [...existingHighlights, ...tribeToHighlight];
-					this.highlightedTribes$$?.next(newHighlights);
-				}
+					const tribeToHighlight: readonly Race[] | null = this.buildTribesToHighlight(
+						heroCardId,
+						tavernTier,
+					);
+					if (!!tribeToHighlight?.length && tribeAuto) {
+						const existingHighlights = this.highlightedTribes$$.value;
+						const newHighlights = [...existingHighlights, ...tribeToHighlight];
+						this.highlightedTribes$$?.next(newHighlights);
+					}
 
-				const mechanicsToHighlight: readonly GameTag[] = this.buildMechanicsToHighlightFromBoard(board);
-				if (!!mechanicsToHighlight?.length && minionAuto) {
-					const existingHighlights = this.highlightedMechanics$$.value;
-					const newHighlights = [...existingHighlights, ...mechanicsToHighlight];
-					this.highlightedMechanics$$?.next(newHighlights);
-				}
-			});
+					const mechanicsToHighlight: readonly GameTag[] = this.buildMechanicsToHighlightFromBoard(board);
+					if (!!mechanicsToHighlight?.length && minionAuto) {
+						const existingHighlights = this.highlightedMechanics$$.value;
+						const newHighlights = [...existingHighlights, ...mechanicsToHighlight];
+						this.highlightedMechanics$$?.next(newHighlights);
+					}
+				},
+			);
 	}
 
 	private buildMechanicsToHighlightFromBoard(board: readonly string[] | undefined): readonly GameTag[] {
@@ -354,12 +361,15 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		}
 	}
 
-	private buildTribesToHighlight(heroCardId: string | null | undefined): readonly Race[] | null {
+	private buildTribesToHighlight(
+		heroCardId: string | null | undefined,
+		tavernTier: number | undefined,
+	): readonly Race[] | null {
 		switch (heroCardId) {
 			case CardIds.PatchesThePirate_TB_BaconShop_HERO_18:
 				return [Race.PIRATE];
 			case CardIds.Chenvaala_TB_BaconShop_HERO_78:
-				return [Race.ELEMENTAL];
+				return (tavernTier ?? 0) >= 6 ? null : [Race.ELEMENTAL];
 			default:
 				return null;
 		}
