@@ -1043,4 +1043,5 @@ export const giftCreators = [
 	CardIds.Infestation_TLC_902,
 	CardIds.Rockskipper_TLC_427,
 	CardIds.GorishiWasp_TLC_630,
+	CardIds.Darkrider_EDR_456,
 ];
