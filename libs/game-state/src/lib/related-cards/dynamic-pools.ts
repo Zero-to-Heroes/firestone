@@ -603,6 +603,22 @@ const getDynamicFilters = (
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 1);
 		case CardIds.ScarabKeychain_TOY_006:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 2);
+		case CardIds.EmberscarredWhelp_FIR_927:
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 5);
+		case CardIds.TravelSecurity_WORK_010:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
+
+		// Discover an X cost minion
+		case CardIds.CreatureOfMadness_EDR_105:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 3) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.PowerOfCreation:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 8) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		case CardIds.TrainingSession_NX2_029:
 		case CardIds.HikingTrail_VAC_517:
@@ -628,8 +644,6 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasMechanic(c, GameTag.COLOSSAL);
 		case CardIds.FyrakkTheBlazing_FIR_959:
 			return (c) => hasCorrectSpellSchool(c, SpellSchool.FIRE) && hasCorrectType(c, CardType.SPELL);
-		case CardIds.EmberscarredWhelp_FIR_927:
-			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCost(c, '==', 5);
 		case CardIds.Cremate_FIR_900:
 			return (c) => hasCorrectType(c, CardType.MINION) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InfernoHerald_FIR_913:
@@ -715,13 +729,6 @@ const getDynamicFilters = (
 		case CardIds.CruiseCaptainLora_VAC_506:
 		case CardIds.TravelAgent_VAC_438:
 			return (c) => c?.type?.toUpperCase() === CardType[CardType.LOCATION];
-		case CardIds.TravelSecurity_WORK_010:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
-		case CardIds.CreatureOfMadness_EDR_105:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCost(c, '==', 3) &&
-				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.DemonicDeal_WORK_014:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.Blasteroid_GDB_303:
