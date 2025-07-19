@@ -366,7 +366,10 @@ export const isPlague = (input: SelectorInput): boolean => PLAGUES.includes(inpu
 export const spellSchool =
 	(spellSchool: SpellSchool) =>
 	(input: SelectorInput): boolean =>
-		spellSchool == null ? false : input.card?.spellSchool === SpellSchool[spellSchool];
+		spellSchool == null
+			? false
+			: input.card?.spellSchool === SpellSchool[spellSchool] ||
+			  input.deckCard?.guessedInfo?.spellSchools?.includes(spellSchool);
 export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
@@ -393,7 +396,8 @@ export const passive = hasMechanic(GameTag.DUNGEON_PASSIVE_BUFF);
 export const cardType =
 	(type: CardType) =>
 	(input: SelectorInput): boolean =>
-		input.card?.type?.toLowerCase() === CardType[type].toLowerCase();
+		input.card?.type?.toLowerCase() === CardType[type].toLowerCase() ||
+		input.deckCard?.guessedInfo?.cardType === type;
 export const location = cardType(CardType.LOCATION);
 export const minion = cardType(CardType.MINION);
 export const spell = and(cardType(CardType.SPELL), not(passive));

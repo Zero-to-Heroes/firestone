@@ -1,4 +1,4 @@
-import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
@@ -142,9 +142,9 @@ export class CreateCardInDeckParser implements EventParser {
 					gameEvent.additionalData.creatorCardId,
 				),
 			});
-		// .update(updateSpecificFields(card, gameEvent.additionalData.creatorCardId));
+		card = card.update(buildKnownFields(card, gameEvent.additionalData.creatorCardId));
 
-		// console.debug('[create-card-in-deck]', 'adding card', card);
+		console.debug('[create-card-in-deck]', 'adding card', card, gameEvent);
 
 		// The initial card might be found in the other zone, so we remove it before adding it back
 		const deckWithoutCard = this.helper.removeCardFromDeck(deck, entityId);
@@ -210,6 +210,23 @@ export class CreateCardInDeckParser implements EventParser {
 		return null;
 	}
 }
+
+// Maybe merge that with what we do for card in hand
+export const buildKnownFields = (card: DeckCard, creatorCardId: string): Partial<DeckCard> => {
+	console.debug('[create-card-in-deck] adding known fields', card, creatorCardId);
+	switch (creatorCardId) {
+		case CardIds.Blasteroid_GDB_303:
+			return {
+				guessedInfo: {
+					...(card.guessedInfo ?? {}),
+					cardType: CardType.SPELL,
+					spellSchools: [SpellSchool.FIRE],
+				},
+			};
+		default:
+			return {};
+	}
+};
 
 export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number => {
 	switch (creatorCardId) {

@@ -46,7 +46,8 @@ export class CardCreatorChangedParser implements EventParser {
 					creatorCardId: gameEvent.additionalData.creatorCardId,
 					creatorEntityId: gameEvent.additionalData.creatorEntityId,
 					lastAffectedByCardId: null,
-					guessedInfo: {},
+					// So that we keep information added by the creator card, like the card type
+					guessedInfo: cardInDeck.guessedInfo,
 			  })
 			: null;
 
