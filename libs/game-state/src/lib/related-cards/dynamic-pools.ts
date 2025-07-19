@@ -558,11 +558,13 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SchoolTeacher:
 		case CardIds.TidePools_VAC_522:
-			// TODO: Add nagaling token
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '<=', 3) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.KajamiteCreation:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 3) && fromAnotherClass(c, options.currentClass);
 
 		// Discover a Choose One card
 		case CardIds.RaidNegotiator:
