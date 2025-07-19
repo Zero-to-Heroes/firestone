@@ -798,7 +798,10 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
 
 		case CardIds.RelicOfKings_TLC_334:
-			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 8);
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) &&
+				hasCost(c, '>=', 8) &&
+				!c.classes?.includes(CardClass[CardClass.NEUTRAL]);
 
 		// Random X Spell School Spell(s)
 		case CardIds.ExarchOthaar_GDB_856:
