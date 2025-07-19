@@ -239,6 +239,8 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				return CardIds.RingOfPhaseshiftingTavernBrawl;
 			case CardIds.AnomalyLootFilled_LootFilledDummy:
 				return CardIds.AnomalyLootFilled;
+			case CardIds.DopEmergencyEnchant2Enchantment_DOP_002e:
+				return CardIds.EverburningPhoenix_FIR_919;
 		}
 
 		// The base case

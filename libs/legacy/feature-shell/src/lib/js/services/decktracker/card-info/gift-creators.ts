@@ -1044,4 +1044,5 @@ export const giftCreators = [
 	CardIds.Rockskipper_TLC_427,
 	CardIds.GorishiWasp_TLC_630,
 	CardIds.Darkrider_EDR_456,
+	CardIds.DopEmergencyEnchant2Enchantment_DOP_002e,
 ];
