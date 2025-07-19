@@ -79,6 +79,8 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		});
 	}
 
+	// public async getCardStats(timeFilter: ArenaTimeFilterType, classFilter: ArenaClassFilterType, modeFilter: ArenaModeFilterType): Promise<ArenaCombinedCardStats | null> {
+
 	public async getStatsFor(
 		cardId: string,
 		playerClass: PlayerClass,
@@ -207,7 +209,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 				draftStats: this.buildDraftStats(draftStat),
 			};
 			return result;
-		})
+		});
 	}
 
 	private buildDraftStats(stat: DraftCardCombinedStat | undefined): ArenaDraftCardStat | null {

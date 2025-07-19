@@ -7,6 +7,7 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -20,7 +21,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, switchMap, takeUntil, tap } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
@@ -56,12 +57,12 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly arenaCardStats: ArenaCardStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
-		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly prefs: PreferencesService,
+		private readonly arenaCardStats: ArenaCardStatsService,
+		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly mouseOverService: CardMousedOverService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		// Provided in the app
@@ -92,10 +93,21 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			),
 		);
 		// TODO: load the context of the current class
+		const gameMode$ = this.draftManager.currentMode$$.pipe(
+			this.mapData((mode) => mode ?? GameType.GT_UNDERGROUND_ARENA),
+		);
 		// So this means storing somewhere the current draft info (including the decklist)
 		// this.updateClassContext();
 		const currentHero$ = this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId));
-		const currentHeroWinrate$ = combineLatest([currentHero$, this.arenaClassStats.classStats$$]).pipe(
+		const classStats$ = gameMode$.pipe(
+			switchMap((gameMode) =>
+				this.arenaClassStats.buildClassStats(
+					'last-patch',
+					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
+				),
+			),
+		);
+		const currentHeroWinrate$ = combineLatest([currentHero$, classStats$]).pipe(
 			this.mapData(([currentHero, stats]) => {
 				const heroStats = stats?.stats.find(
 					(s) =>
@@ -107,11 +119,17 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			distinctUntilChanged(),
 			takeUntil(this.destroyed$),
 		);
-		this.options$ = combineLatest([
-			this.draftManager.cardOptions$$,
-			this.arenaCardStats.cardStats$$,
-			currentHeroWinrate$,
-		]).pipe(
+		const cardStats$ = combineLatest([currentHero$, gameMode$]).pipe(
+			switchMap(([currentHero, gameMode]) =>
+				this.arenaCardStats.buildCardStats(
+					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
+					'last-patch',
+					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
+				),
+			),
+			tap((stats) => console.log('[arena-card-selection] card stats', stats)),
+		);
+		this.options$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, currentHeroWinrate$]).pipe(
 			this.mapData(
 				([options, stats, currentHeroWinrate]) =>
 					options?.map((option) => {
@@ -146,6 +164,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 						return result;
 					}) ?? [],
 			),
+			tap((options) => console.log('[arena-card-selection] options', options)),
 		);
 		this.showing$ = combineLatest([this.options$, this.showingSideBanner$]).pipe(
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),

@@ -288,14 +288,14 @@ export class ArenaDraftManagerService
 						}
 					}
 				});
-			combineLatest([this.scene.currentScene$$, this.currentMode$$])
-				.pipe(filter(([scene, mode]) => scene === SceneMode.DRAFT))
-				.subscribe(async ([scene, mode]) => {
-					this.prefs.updatePrefs(
-						'arenaActiveMode',
-						mode === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena',
-					);
-				});
+			// combineLatest([this.scene.currentScene$$, this.currentMode$$])
+			// 	.pipe(filter(([scene, mode]) => scene === SceneMode.DRAFT))
+			// 	.subscribe(async ([scene, mode]) => {
+			// 		this.prefs.updatePrefs(
+			// 			'arenaActiveMode',
+			// 			mode === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena',
+			// 		);
+			// 	});
 
 			this.lastPick$$.pipe(filter((pick) => !!pick?.RunId)).subscribe(async (pick) => {
 				const heroRefCard = this.allCards.getCard(pick!.HeroCardId);
