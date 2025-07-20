@@ -30,31 +30,40 @@ export const buildCompStats = (
 			return firsts / gamesForFirstDistrib;
 		})
 		.reduce((a, b) => a + b, 0);
-	const mainStats = stats.map((s) => {
-		const refInfo = strategies.find((strategy) => strategy.compId === s.archetype);
-		const placementInfo = s.averagePlacementAtMmr.find((p) => p.mmr === rankFilter);
-		const distribInfo = s.placementDistributionAtMmr.find((p) => p.mmr === rankFilter);
-		const gamesForFirstDistrib =
-			s.placementDistributionAtMmr
-				.find((p) => p.mmr === rankFilter)
-				?.placementDistribution.filter((p) => p.rank <= 4)
-				.reduce((a, b) => a + b.totalMatches, 0) ?? 0;
-		const firstForStat =
-			(distribInfo?.placementDistribution?.find((p) => p.rank === 1)?.totalMatches ?? 0) / gamesForFirstDistrib;
-		const firstPercent = firstForStat / allStatsFirsts;
-		const result: BgsMetaCompStatTierItem = {
-			compId: s.archetype,
-			name: i18n.translateString(`bgs-comp.${s.archetype}`),
-			dataPoints: placementInfo?.dataPoints ?? 0,
-			averagePlacement: placementInfo?.placement ?? 0,
-			firstPercent: firstPercent,
-			expertRating: refInfo?.powerLevel,
-			expertDifficulty: refInfo?.difficulty,
-			coreCards: refInfo?.cards.filter((c) => c.status === 'CORE').map((c) => buildCompCard(c, allCards)) ?? [],
-			addonCards: refInfo?.cards.filter((c) => c.status === 'ADDON').map((c) => buildCompCard(c, allCards)) ?? [],
-		};
-		return result;
-	});
+	const mainStats = stats
+		.map((s) => {
+			const refInfo = strategies.find((strategy) => strategy.compId === s.archetype);
+			// Typically for outdated comps
+			if (!refInfo) {
+				return null;
+			}
+			const placementInfo = s.averagePlacementAtMmr.find((p) => p.mmr === rankFilter);
+			const distribInfo = s.placementDistributionAtMmr.find((p) => p.mmr === rankFilter);
+			const gamesForFirstDistrib =
+				s.placementDistributionAtMmr
+					.find((p) => p.mmr === rankFilter)
+					?.placementDistribution.filter((p) => p.rank <= 4)
+					.reduce((a, b) => a + b.totalMatches, 0) ?? 0;
+			const firstForStat =
+				(distribInfo?.placementDistribution?.find((p) => p.rank === 1)?.totalMatches ?? 0) /
+				gamesForFirstDistrib;
+			const firstPercent = firstForStat / allStatsFirsts;
+			const result: BgsMetaCompStatTierItem = {
+				compId: s.archetype,
+				name: i18n.translateString(`bgs-comp.${s.archetype}`),
+				dataPoints: placementInfo?.dataPoints ?? 0,
+				averagePlacement: placementInfo?.placement ?? 0,
+				firstPercent: firstPercent,
+				expertRating: refInfo.powerLevel,
+				expertDifficulty: refInfo.difficulty,
+				coreCards:
+					refInfo.cards.filter((c) => c.status === 'CORE').map((c) => buildCompCard(c, allCards)) ?? [],
+				addonCards:
+					refInfo.cards.filter((c) => c.status === 'ADDON').map((c) => buildCompCard(c, allCards)) ?? [],
+			};
+			return result;
+		})
+		.filter((s) => s != null);
 	return mainStats;
 };
 
