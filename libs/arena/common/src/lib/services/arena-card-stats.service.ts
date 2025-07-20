@@ -153,13 +153,13 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		const [cardPerformanceStats, cardDraftStats] = await Promise.all([
 			this.api.callGetApi<ArenaCardStats>(
 				ARENA_CARD_MATCH_STATS_URL.replace('%timePeriod%', timePeriod)
-					.replace('%context%', context)
-					.replace('%modeFilter%', modeFilterCorrected),
+					.replace('%context%', context || 'global')
+					.replace('%modeFilter%', modeFilterCorrected || 'arena-underground'),
 			),
 			this.api.callGetApi<DraftStatsByContext>(
 				ARENA_CARD_DRAFT_STATS_URL.replace('%timePeriod%', timePeriod)
-					.replace('%context%', context)
-					.replace('%modeFilter%', modeFilterCorrected),
+					.replace('%context%', context || 'global')
+					.replace('%modeFilter%', modeFilterCorrected || 'arena-underground'),
 			),
 		]);
 		if (cardPerformanceStats == null || cardDraftStats == null) {
