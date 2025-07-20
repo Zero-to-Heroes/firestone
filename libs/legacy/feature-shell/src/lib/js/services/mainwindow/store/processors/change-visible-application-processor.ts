@@ -8,7 +8,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
-import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
@@ -38,20 +37,18 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		if (event.module === 'collection') {
 			this.collectionNav.currentView$$.next('sets');
 			this.collectionNav.menuDisplayType$$.next('menu');
-		}
-		if (event.module === 'battlegrounds') {
+		} else if (event.module === 'battlegrounds') {
 			this.bgNav.selectedCategoryId$$.next('bgs-category-meta-heroes');
-		}
-		if (event.module === 'decktracker') {
+			this.bgNav.currentView$$.next('list');
+			this.bgNav.menuDisplayType$$.next('menu');
+		} else if (event.module === 'decktracker') {
 			this.constructedNav.currentView$$.next('decks');
 			this.constructedNav.selectedDeckstring$$.next(null);
-		}
-		if (event.module === 'achievements') {
+		} else if (event.module === 'achievements') {
 			this.achievementsNav.currentView$$.next('categories');
 			this.achievementsNav.menuDisplayType$$.next('menu');
 			this.achievementsNav.selectedCategoryId$$.next(null);
-		}
-		if (event.module === 'arena') {
+		} else if (event.module === 'arena') {
 			this.arenaNav.menuDisplayType$$.next('menu');
 			this.arenaNav.expandedRunIds$$.next([]);
 		}
@@ -69,19 +66,12 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						selectedReplay: undefined,
 				  } as NavigationReplays)
 				: navigationState.navigationReplays;
-		const battlegrounds =
-			event.module === 'battlegrounds'
-				? navigationState.navigationBattlegrounds.update({
-						currentView: 'list',
-						menuDisplayType: 'menu',
-				  } as NavigationBattlegrounds)
-				: navigationState.navigationBattlegrounds;
 		const decktracker =
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
 						menuDisplayType: 'menu',
 				  } as NavigationDecktracker)
-				: navigationState.navigationBattlegrounds;
+				: navigationState.navigationDecktracker;
 		// TODO: if this is the live tab, default to the decktracker
 		await this.prefs.setMainVisibleSection(event.module === 'live' ? 'decktracker' : event.module);
 		this.mainNav.text$$.next(this.getInitialText(event.module));
@@ -93,7 +83,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			navigationState.update({
 				navigationAchievements: achievements,
 				navigationReplays: replays,
-				navigationBattlegrounds: battlegrounds,
 				navigationDecktracker: decktracker,
 			} as NavigationState),
 		];

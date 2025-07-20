@@ -6,7 +6,6 @@ import { BehaviorSubject, sampleTime, tap } from 'rxjs';
 import {
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
-	BgsActiveTimeFilterType,
 	BgsHeroSortFilterType,
 	CurrentAppType,
 	DeckFilters,
@@ -367,12 +366,6 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		const prefs = await this.getPreferences();
 		const propertyName = 'overlayZoneToggleDefaultClose_' + side + '_' + name;
 		return prefs[propertyName];
-	}
-
-	public async updateBgsTimeFilter(value: BgsActiveTimeFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, bgsActiveTimeFilter: value };
-		await this.savePreferences(newPrefs);
 	}
 
 	public async updateBgsTribesFilter(value: readonly Race[]) {

@@ -3,13 +3,12 @@ import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { BattlegroundsNavigationService, BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { RankFilterOption } from '@firestone/battlegrounds/view';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-rank-filter-dropdown',
@@ -26,7 +25,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsRankFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	mmrPercentiles$: Observable<readonly MmrPercentile[]>;
@@ -34,13 +33,12 @@ export class BattlegroundsRankFilterDropdownComponent
 	visible$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
 		private readonly nav: BattlegroundsNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -51,15 +49,12 @@ export class BattlegroundsRankFilterDropdownComponent
 			filter((percentiles) => !!percentiles?.length),
 			this.mapData((percentiles) => percentiles),
 		);
-		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveRankFilter);
-		this.visible$ = combineLatest([
-			this.nav.selectedCategoryId$$,
-			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
-		]).pipe(
-			filter(([categoryId, [currentView]]) => !!categoryId && !!currentView),
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveRankFilter));
+		this.visible$ = combineLatest([this.nav.selectedCategoryId$$, this.nav.currentView$$]).pipe(
+			filter(([categoryId, currentView]) => !!categoryId && !!currentView),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(
-				([categoryId, [currentView]]) =>
+				([categoryId, currentView]) =>
 					!['categories', 'category'].includes(currentView) &&
 					[
 						// 'bgs-category-your-stats',

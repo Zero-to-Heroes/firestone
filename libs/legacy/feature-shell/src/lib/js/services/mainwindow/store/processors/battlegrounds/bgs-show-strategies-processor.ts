@@ -27,11 +27,7 @@ export class BgsShowStrategiesProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		this.mainNav.isVisible$$.next(true);
 		this.mainNav.currentApp$$.next('battlegrounds');
-		const newNavState = navigationState.update({
-			navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-				selectedPersonalHeroStatsTab: 'strategies',
-			}),
-		} as NavigationState);
+		this.nav.selectedPersonalHeroStatsTab$$.next('strategies');
 		return new BgsPersonalStatsSelectHeroDetailsProcessor(
 			this.events,
 			this.allCards,
@@ -41,7 +37,7 @@ export class BgsShowStrategiesProcessor implements Processor {
 		).process(
 			new BgsPersonalStatsSelectHeroDetailsEvent(normalizeHeroCardId(event.heroId, this.allCards)),
 			currentState,
-			newNavState,
+			navigationState,
 		);
 	}
 }

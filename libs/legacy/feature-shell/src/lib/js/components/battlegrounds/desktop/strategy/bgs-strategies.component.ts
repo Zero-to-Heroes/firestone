@@ -21,9 +21,7 @@ export class BgsStrategiesComponent extends AbstractSubscriptionComponent implem
 	async ngAfterContentInit() {
 		await waitForReady(this.nav);
 
-		this.heroId$ = this.nav.selectedCategoryId$$.pipe(
-			this.mapData((categoryId) => currentBgHeroId(null, categoryId)),
-		);
+		this.heroId$ = this.nav.selectedCategoryId$$.pipe(this.mapData((categoryId) => currentBgHeroId(categoryId)));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

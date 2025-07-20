@@ -1,15 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-rank-group-dropdown',
@@ -27,26 +26,22 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsRankGroupDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class BattlegroundsRankGroupDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	options: MmrGroupFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: BattlegroundsNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.options = [
 			{
@@ -60,12 +55,12 @@ export class BattlegroundsRankGroupDropdownComponent
 			} as MmrGroupFilterOption,
 		];
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveMmrGroupFilter)),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
-			filter(([[filter], selectedCategoryId]) => !!filter && !!selectedCategoryId),
+			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([[filter], selectedCategoryId]) => ({
+			this.mapData(([filter, selectedCategoryId]) => ({
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,
 				visible: selectedCategoryId === 'bgs-category-personal-rating',
@@ -77,13 +72,8 @@ export class BattlegroundsRankGroupDropdownComponent
 		}
 	}
 
-	async onSelected(option: IOption) {
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = {
-			...prefs,
-			bgsActiveMmrGroupFilter: (option as MmrGroupFilterOption).value,
-		};
-		await this.prefs.savePreferences(newPrefs);
+	onSelected(option: IOption) {
+		this.prefs.updatePrefs('bgsActiveMmrGroupFilter', (option as MmrGroupFilterOption).value);
 	}
 }
 

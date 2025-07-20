@@ -3,7 +3,6 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Events } from '../../../../events.service';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-event';
@@ -35,20 +34,13 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 		}
 
 		this.nav.selectedCategoryId$$.next('bgs-category-personal-hero-details-' + event.heroCardId);
-		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
-			currentView: 'list',
-			menuDisplayType: 'breadcrumbs',
-		} as NavigationBattlegrounds);
+		this.nav.currentView$$.next('list');
+		this.nav.menuDisplayType$$.next('breadcrumbs');
 		this.mainNav.text$$.next(
 			this.allCards.getCard(event.heroCardId)?.name ?? this.i18n.translateString('app.battlegrounds.menu.heroes'),
 		);
 		this.mainNav.image$$.next(null);
 		this.mainNav.isVisible$$.next(true);
-		return [
-			newState,
-			navigationState.update({
-				navigationBattlegrounds: navigationBattlegrounds,
-			} as NavigationState),
-		];
+		return [newState, null];
 	}
 }

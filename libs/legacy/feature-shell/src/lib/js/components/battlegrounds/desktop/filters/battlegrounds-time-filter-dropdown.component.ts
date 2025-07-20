@@ -2,15 +2,13 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { TimeFilterOption } from '@firestone/battlegrounds/view';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-time-filter-dropdown',
@@ -28,20 +26,19 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsTimeFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly prefs: PreferencesService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -51,10 +48,10 @@ export class BattlegroundsTimeFilterDropdownComponent
 			this.patchesConfig.currentBattlegroundsMetaPatch$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTimeFilter)),
 			this.nav.selectedCategoryId$$,
-			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
+			this.nav.currentView$$,
 		]).pipe(
-			filter(([patch, filter, selectedCategoryId, [currentView]]) => !!filter && !!patch),
-			this.mapData(([patch, filter, selectedCategoryId, [currentView]]) => {
+			filter(([patch, filter, selectedCategoryId, currentView]) => !!filter && !!patch),
+			this.mapData(([patch, filter, selectedCategoryId, currentView]) => {
 				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',
@@ -108,6 +105,6 @@ export class BattlegroundsTimeFilterDropdownComponent
 	}
 
 	onSelected(option: IOption) {
-		this.store.send(new BgsTimeFilterSelectedEvent((option as TimeFilterOption).value));
+		this.prefs.updatePrefs('bgsActiveTimeFilter', (option as TimeFilterOption).value);
 	}
 }

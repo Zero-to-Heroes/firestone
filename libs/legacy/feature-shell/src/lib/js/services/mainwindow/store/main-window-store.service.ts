@@ -47,10 +47,8 @@ import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/b
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategies-event';
-import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { BgsTribesFilterSelectedEvent } from './events/battlegrounds/bgs-tribes-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
-import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs-updated-event';
@@ -143,10 +141,8 @@ import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battleg
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsShowStrategiesProcessor } from './processors/battlegrounds/bgs-show-strategies-processor';
-import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { BgsTribesFilterSelectedProcessor } from './processors/battlegrounds/bgs-tribes-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
-import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
@@ -370,6 +366,7 @@ export class MainWindowStoreService {
 					this.collectionNavigation,
 					this.achievementsNavigation,
 					this.achievementsStateManager,
+					this.battlegroundsNavigation,
 				),
 			],
 			[NavigationNextEvent.eventName(), new NavigationNextProcessor(this.mainNavigation)],
@@ -610,7 +607,6 @@ export class MainWindowStoreService {
 				SelectBattlegroundsCategoryEvent.eventName(),
 				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation, this.mainNavigation),
 			],
-			[BgsTimeFilterSelectedEvent.eventName(), new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater)],
 			[
 				BgsTribesFilterSelectedEvent.eventName(),
 				new BgsTribesFilterSelectedProcessor(this.prefs, this.stateUpdater),
@@ -635,10 +631,6 @@ export class MainWindowStoreService {
 			[
 				BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
 				new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor(),
-			],
-			[
-				SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
-				new SelectBattlegroundsPersonalStatsHeroProcessor(this.mainNavigation),
 			],
 			[
 				BattlegroundsMainWindowSelectBattleEvent.eventName(),

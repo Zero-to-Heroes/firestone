@@ -15,6 +15,7 @@ import {
 	CategoryId,
 } from '@firestone/battlegrounds/common';
 import { ENABLE_BGS_COMP_STATS } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -22,8 +23,6 @@ import { AdService } from '../../../services/ad.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-desktop',
@@ -90,7 +89,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsDesktopComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	categories: readonly BattlegroundsCategory[];
@@ -104,7 +103,6 @@ export class BattlegroundsDesktopComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
@@ -112,7 +110,7 @@ export class BattlegroundsDesktopComponent
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly ads: AdService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -167,13 +165,9 @@ export class BattlegroundsDesktopComponent
 			},
 		].filter((c) => !!c) as readonly BattlegroundsCategory[];
 
-		this.menuDisplayType$ = this.store
-			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
-			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.categoryId$ = this.nav.selectedCategoryId$$.pipe(this.mapData((selectedCategoryId) => selectedCategoryId));
-		this.currentView$ = this.store
-			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
-			.pipe(this.mapData(([currentView]) => currentView));
+		this.menuDisplayType$ = this.nav.menuDisplayType$$.pipe(this.mapData((menuDisplayType) => menuDisplayType));
+		this.categoryId$ = this.nav.selectedCategoryId$$.pipe(this.mapData((categoryId) => categoryId));
+		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {

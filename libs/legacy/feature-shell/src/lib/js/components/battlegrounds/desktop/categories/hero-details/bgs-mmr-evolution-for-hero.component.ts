@@ -43,15 +43,11 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionStoreCo
 	async ngAfterContentInit() {
 		await waitForReady(this.nav);
 
-		this.value$ = combineLatest(
-			this.store.gameStats$(),
-			this.store.listen$(([main, nav]) => main.battlegrounds),
-			this.nav.selectedCategoryId$$,
-		).pipe(
-			this.mapData(([gameStats, [battlegrounds], selectedCategoryId]) =>
+		this.value$ = combineLatest(this.store.gameStats$(), this.nav.selectedCategoryId$$).pipe(
+			this.mapData(([gameStats, selectedCategoryId]) =>
 				this.buildValue(
 					gameStats.filter((stat) => isBattlegrounds(stat.gameMode)),
-					currentBgHeroId(battlegrounds, selectedCategoryId),
+					currentBgHeroId(selectedCategoryId),
 				),
 			),
 		);

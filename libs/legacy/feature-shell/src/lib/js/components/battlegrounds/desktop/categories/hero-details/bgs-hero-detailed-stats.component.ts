@@ -138,14 +138,10 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComp
 	async ngAfterContentInit() {
 		await waitForReady(this.heroStats, this.nav);
 
-		this.bgHeroStats$ = combineLatest([
-			this.heroStats.tiersWithPlayerData$$,
-			this.store.listen$(([main, nav]) => main.battlegrounds),
-			this.nav.selectedCategoryId$$,
-		]).pipe(
-			map(([heroStats, [battlegrounds], selectedCategoryId]) => ({
+		this.bgHeroStats$ = combineLatest([this.heroStats.tiersWithPlayerData$$, this.nav.selectedCategoryId$$]).pipe(
+			map(([heroStats, selectedCategoryId]) => ({
 				heroStats: heroStats,
-				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
+				heroId: currentBgHeroId(selectedCategoryId),
 			})),
 			filter((info) => !!info.heroId),
 			this.mapData((info) => info.heroStats?.find((stat) => stat.id === info.heroId)),

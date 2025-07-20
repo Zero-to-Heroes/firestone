@@ -52,16 +52,13 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 
 		this.values$ = combineLatest([
 			this.heroStats.tiersWithPlayerData$$,
-			this.store.listen$(
-				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
-				([main, nav]) => main.battlegrounds,
-			),
+			this.store.listen$(([main, nav]) => main.battlegrounds.lastHeroPostMatchStats),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
-			map(([heroStats, [postMatch, battlegrounds], selectedCategoryId]) => ({
+			map(([heroStats, [postMatch], selectedCategoryId]) => ({
 				heroStats: heroStats,
 				postMatch: postMatch,
-				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
+				heroId: currentBgHeroId(selectedCategoryId),
 			})),
 			filter((info) => !!info.heroStats?.length && !!info.postMatch && !!info.heroId),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),

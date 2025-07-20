@@ -39,14 +39,8 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 		this.mainNav.isVisible$$.next(true);
 		this.mainNav.text$$.next(this.i18n.translateString('battlegrounds.sim.resimulating-battle'));
 		this.mainNav.currentApp$$.next('battlegrounds');
-		return [
-			null,
-			navigationState.update({
-				navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-					currentView: 'list',
-					menuDisplayType: 'breadcrumbs',
-				}),
-			}),
-		];
+		this.nav.currentView$$.next('list');
+		this.nav.menuDisplayType$$.next('breadcrumbs');
+		return [null, null];
 	}
 }

@@ -1,8 +1,8 @@
 import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -19,6 +19,7 @@ export class NavigationBackProcessor implements Processor {
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly achievementsNav: AchievementsNavigationService,
 		private readonly achievementsState: AchievementsStateManagerService,
+		private readonly bgsNav: BattlegroundsNavigationService,
 	) {}
 
 	public async process(
@@ -35,6 +36,7 @@ export class NavigationBackProcessor implements Processor {
 				this.collectionNav,
 				this.achievementsNav,
 				this.achievementsState,
+				this.bgsNav,
 			) ?? navigationState;
 
 		// 	(history.currentIndexInHistory > 0
@@ -64,6 +66,7 @@ export class NavigationBackProcessor implements Processor {
 		collectionNav: CollectionNavigationService,
 		achievementsNav: AchievementsNavigationService,
 		achievementsState: AchievementsStateManagerService,
+		bgsNav: BattlegroundsNavigationService,
 	): NavigationState {
 		switch (mainNav.currentApp$$.value) {
 			case 'achievements':
@@ -88,7 +91,12 @@ export class NavigationBackProcessor implements Processor {
 			case 'replays':
 				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState, mainNav);
 			case 'battlegrounds':
-				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState, mainNav);
+				return NavigationBackProcessor.buildParentBattlegroundsState(
+					navigationState,
+					bgsNav,
+					dataState,
+					mainNav,
+				);
 			case 'mercenaries':
 				return NavigationBackProcessor.buildParentMercenariesState(navigationState, dataState);
 			case 'arena':
@@ -142,6 +150,7 @@ export class NavigationBackProcessor implements Processor {
 
 	private static buildParentBattlegroundsState(
 		navigationState: NavigationState,
+		bgsNav: BattlegroundsNavigationService,
 		dataState: MainWindowState,
 		mainNav: MainWindowNavigationService,
 	): NavigationState {
@@ -149,7 +158,7 @@ export class NavigationBackProcessor implements Processor {
 			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
-		switch (navigationState.navigationBattlegrounds.currentView) {
+		switch (bgsNav.currentView$$.getValue()) {
 			case 'categories':
 				return null;
 			case 'category':
@@ -158,12 +167,9 @@ export class NavigationBackProcessor implements Processor {
 				// This is starting to be weird. It would probably be best to have an FSM,
 				// and derive the name of the current navigation from the state we are in
 				mainNav.text$$.next(null);
-				return navigationState.update({
-					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-						menuDisplayType: 'menu',
-						currentView: 'list',
-					} as NavigationBattlegrounds),
-				} as NavigationState);
+				bgsNav.menuDisplayType$$.next('menu');
+				bgsNav.currentView$$.next('list');
+				return null;
 			default:
 				return null;
 		}

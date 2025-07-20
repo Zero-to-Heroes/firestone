@@ -9,14 +9,14 @@ import {
 } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-tribes-filter-dropdown',
@@ -34,7 +34,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsTribesFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	allTribes = ALL_BG_RACES;
@@ -48,24 +48,21 @@ export class BattlegroundsTribesFilterDropdownComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
-		this.currentFilter$ = this.listenForBasicPref$((prefs) => prefs.bgsActiveTribesFilter);
-		this.visible$ = combineLatest([
-			this.nav.selectedCategoryId$$,
-			this.store.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView),
-		]).pipe(
-			filter(([categoryId, [currentView]]) => !!categoryId && !!currentView),
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTribesFilter));
+		this.visible$ = combineLatest([this.nav.selectedCategoryId$$, this.nav.currentView$$]).pipe(
+			filter(([categoryId, currentView]) => !!categoryId && !!currentView),
 			this.mapData(
-				([categoryId, [currentView]]) =>
+				([categoryId, currentView]) =>
 					!['categories', 'category'].includes(currentView) &&
 					[
 						'bgs-category-personal-heroes',

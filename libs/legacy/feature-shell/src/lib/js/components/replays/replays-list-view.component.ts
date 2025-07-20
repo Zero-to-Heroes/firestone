@@ -57,12 +57,12 @@ export class ReplaysListViewComponent {
 	}
 
 	flatReplays: (GameStat | HeaderInfo)[] = [];
-	scrollDebounceTime = 0;
+	scrollDebounceTime = 10;
 
 	constructor(private readonly i18n: LocalizationFacadeService, private readonly cdr: ChangeDetectorRef) {}
 
 	onScrolling(scrolling: boolean) {
-		this.scrollDebounceTime = scrolling ? 1000 : 0;
+		this.scrollDebounceTime = scrolling ? 1000 : 10;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -8,6 +8,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
@@ -15,8 +17,6 @@ import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-hero-filter-dropdown',
@@ -35,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsHeroFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
 	options: HeroFilterOption[];
@@ -46,14 +46,14 @@ export class BattlegroundsHeroFilterDropdownComponent
 	private collator = new Intl.Collator('en-US');
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.options = [
 			{
 				value: 'all',
@@ -74,14 +74,14 @@ export class BattlegroundsHeroFilterDropdownComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav, prefs]) => prefs.bgsActiveHeroFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroFilter)),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
-			filter(([[filter], selectedCategoryId]) => !!filter && !!selectedCategoryId),
-			this.mapData(([[filter], selectedCategoryId]) => ({
+			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+			this.mapData(([filter, selectedCategoryId]) => ({
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,
 				visible: selectedCategoryId === 'bgs-category-perfect-games',

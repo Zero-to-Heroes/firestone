@@ -18,7 +18,6 @@ import { PatchesConfigService, Preferences, PreferencesService } from '@fireston
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
-import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
@@ -389,7 +388,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	}
 }
 
-export const currentBgHeroId = (battlegrounds: BattlegroundsAppState, selectedCategoryId: string): string => {
+export const currentBgHeroId = (selectedCategoryId: string): string => {
 	return selectedCategoryId?.includes('bgs-category-personal-hero-details-')
 		? selectedCategoryId.split('bgs-category-personal-hero-details-')[1]
 		: null;

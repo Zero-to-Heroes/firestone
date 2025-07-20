@@ -1,25 +1,18 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
-import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
+import {
+	BattlegroundsNavigationService,
+	BgsHeroStatsFilterId,
+	BgsPlayerHeroStatsService,
+} from '@firestone/battlegrounds/common';
 import { BgsPlayer } from '@firestone/game-state';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-hero-details',
@@ -58,8 +51,8 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPersonalStatsHeroDetailsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit
 {
 	tabs: readonly BgsHeroStatsFilterId[] = [
 		'strategies',
@@ -72,37 +65,29 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 	selectedTab$: Observable<BgsHeroStatsFilterId>;
 	player$: Observable<BgsPlayer>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly heroStats: BgsPlayerHeroStatsService,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly mainNav: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.heroStats, this.nav);
 
-		this.selectedTab$ = this.store
-			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
-			.pipe(
-				filter(([tab]) => !!tab),
-				this.mapData(([tab]) => tab),
-			);
-		this.player$ = combineLatest([
-			this.heroStats.tiersWithPlayerData$$,
-			this.store.listen$(([main, nav]) => main.battlegrounds),
-			this.nav.selectedCategoryId$$,
-		]).pipe(
-			map(([heroStats, [battlegrounds], selectedCategoryId]) => ({
+		this.selectedTab$ = this.nav.selectedPersonalHeroStatsTab$$.pipe(
+			filter((tab) => !!tab),
+			this.mapData((tab) => tab),
+		);
+		this.player$ = combineLatest([this.heroStats.tiersWithPlayerData$$, this.nav.selectedCategoryId$$]).pipe(
+			map(([heroStats, selectedCategoryId]) => ({
 				heroStats: heroStats,
-				heroId: currentBgHeroId(battlegrounds, selectedCategoryId),
+				heroId: currentBgHeroId(selectedCategoryId),
 			})),
 			filter((info) => !!info.heroId),
 			map((info) => info.heroStats?.find((stat) => stat.id === info.heroId)),
@@ -124,15 +109,12 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	getLabel(tab: BgsHeroStatsFilterId) {
 		return this.i18n.translateString(`app.battlegrounds.personal-stats.hero-details.tabs.${tab}`);
 	}
 
 	selectTab(tab: BgsHeroStatsFilterId) {
-		this.stateUpdater.next(new SelectBattlegroundsPersonalStatsHeroTabEvent(tab));
+		this.nav.selectedPersonalHeroStatsTab$$.next(tab);
+		this.mainNav.isVisible$$.next(true);
 	}
 }
