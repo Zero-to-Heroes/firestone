@@ -1,6 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
-import { BgsCardTierFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import {
+	BattlegroundsNavigationService,
+	BgsMetaCompositionStrategiesService,
+	CategoryId,
+} from '@firestone/battlegrounds/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -8,13 +12,13 @@ import { Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
-	selector: 'battlegrounds-card-tier-filter-dropdown',
-	styleUrls: ['./battlegrounds-card-tier-filter-dropdown.component.scss'],
+	selector: 'battlegrounds-comps-filter-dropdown',
+	styleUrls: ['./battlegrounds-comps-filter-dropdown.component.scss'],
 	template: `
 		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"
 			class="filter-dropdown"
-			[options]="options"
+			[options]="options$ | async"
 			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="visible$ | async"
@@ -23,12 +27,12 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsCardTierFilterDropdownComponent
+export class BattlegroundsCompsFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	visible$: Observable<boolean>;
-	options: MultiselectOption[];
+	options$: Observable<MultiselectOption[]>;
 	filter$: Observable<{ selected: readonly string[]; placeholder: string }>;
 
 	constructor(
@@ -36,27 +40,34 @@ export class BattlegroundsCardTierFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly comps: BgsMetaCompositionStrategiesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.prefs);
+		await waitForReady(this.nav, this.prefs, this.comps);
 
-		this.options = [1, 2, 3, 4, 5, 6, 7].map((tier) => ({
-			value: '' + tier,
-			label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: tier }),
-			image: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${tier}.png`,
-		}));
+		this.options$ = this.comps.strategies$$.pipe(
+			this.mapData((comps) =>
+				comps.map((comp) => ({
+					value: comp.compId,
+					label: comp.name,
+					image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${
+						comp.cards.find((c) => c.status === 'CORE')?.cardId
+					}.jpg`,
+				})),
+			),
+		);
 		this.filter$ = this.prefs.preferences$$.pipe(
-			tap((prefs) => console.debug('[bgs-card-tier-filter] prefs', prefs)),
+			tap((prefs) => console.debug('[bgs-comps-filter] prefs', prefs)),
 			this.mapData((prefs) => ({
-				selected: prefs.bgsActiveCardsTiers?.map((a) => '' + a) ?? [],
-				placeholder: this.i18n.translateString(`app.battlegrounds.filters.tier.all-tiers`),
+				selected: prefs.bgsActiveCompsFilter?.map((a) => '' + a) ?? [],
+				placeholder: this.i18n.translateString(`app.battlegrounds.filters.comps.all-comps`),
 			})),
 		);
 		this.visible$ = this.nav.selectedCategoryId$$.pipe(
-			this.mapData((selectedCategoryId) => selectedCategoryId === 'bgs-category-meta-cards'),
+			this.mapData((selectedCategoryId: CategoryId) => selectedCategoryId === 'bgs-category-perfect-games'),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -65,11 +76,6 @@ export class BattlegroundsCardTierFilterDropdownComponent
 	}
 
 	async onSelected(selected: readonly string[]) {
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = {
-			...prefs,
-			bgsActiveCardsTiers: selected.map((tier) => parseInt(tier) as BgsCardTierFilterType),
-		};
-		await this.prefs.savePreferences(newPrefs);
+		this.prefs.updatePrefs('bgsActiveCompsFilter', selected);
 	}
 }

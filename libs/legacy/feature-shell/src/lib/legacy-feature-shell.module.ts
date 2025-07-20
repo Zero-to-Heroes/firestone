@@ -278,6 +278,7 @@ import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battl
 import { BattlegroundsCardTierFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-tier-filter-dropdown.component';
 import { BattlegroundsCardTurnFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-turn-filter-dropdown.component';
 import { BattlegroundsCardTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-type-filter-dropdown.component';
+import { BattlegroundsCompsFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-comps-filter-dropdown.component';
 import { BattlegroundsLeaderboardRegionFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-leaderboard-region-filter-dropdown.component';
 import { BattlegroundsModeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-mode-filter-dropdown.component';
 import { BattlegroundsQuestTypeFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-quest-type-filter-dropdown.component';
@@ -1131,6 +1132,7 @@ try {
 		BattlegroundsCardTypeFilterDropdownComponent,
 		BattlegroundsCardTierFilterDropdownComponent,
 		BattlegroundsCardTurnFilterDropdownComponent,
+		BattlegroundsCompsFilterDropdownComponent,
 
 		ArenaDesktopComponent,
 		ArenaEmptyStateComponent,

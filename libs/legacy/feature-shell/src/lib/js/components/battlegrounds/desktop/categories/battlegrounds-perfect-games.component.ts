@@ -54,12 +54,14 @@ export class BattlegroundsPerfectGamesComponent
 					heroFilter: prefs.bgsActiveHeroFilter,
 					anomaliesFilter: [] as readonly string[], //prefs.bgsActiveAnomaliesFilter,
 					tribesFilter: prefs.bgsActiveTribesFilter,
+					compsFilter: prefs.bgsActiveCompsFilter,
 				}),
 				(a, b) =>
 					a.rankFilter === b.rankFilter &&
 					a.heroFilter === b.heroFilter &&
 					arraysEqual(a.anomaliesFilter, b.anomaliesFilter) &&
-					arraysEqual(a.tribesFilter, b.tribesFilter),
+					arraysEqual(a.tribesFilter, b.tribesFilter) &&
+					arraysEqual(a.compsFilter, b.compsFilter),
 			),
 		);
 		this.replays$ = combineLatest([
@@ -76,6 +78,7 @@ export class BattlegroundsPerfectGamesComponent
 					filters.heroFilter,
 					filters.tribesFilter,
 					filters.anomaliesFilter,
+					filters.compsFilter,
 				);
 			}),
 			tap((filteredReplays) => console.debug('[perfect-games] filtered replays', filteredReplays)),
@@ -92,12 +95,14 @@ export class BattlegroundsPerfectGamesComponent
 		heroFilter: string,
 		tribesFilter: readonly Race[],
 		anomaliesFilter: readonly string[],
+		compsFilter: readonly string[],
 	): readonly GameStat[] {
 		return replays
 			.filter((replay) => this.rankFilter(replay, rankFilter))
 			.filter((replay) => this.heroFilter(replay, heroFilter))
 			.filter((replay) => this.tribesFilter(replay, tribesFilter))
-			.filter((replay) => (BG_USE_ANOMALIES ? this.anomaliesFilter(replay, anomaliesFilter) : true));
+			.filter((replay) => (BG_USE_ANOMALIES ? this.anomaliesFilter(replay, anomaliesFilter) : true))
+			.filter((replay) => this.compsFilter(replay, compsFilter));
 	}
 
 	private tribesFilter(stat: GameStat, tribesFilter: readonly Race[]) {
@@ -133,5 +138,12 @@ export class BattlegroundsPerfectGamesComponent
 			default:
 				return stat.playerCardId === heroFilter;
 		}
+	}
+
+	private compsFilter(stat: GameStat, compsFilter: readonly string[]) {
+		if (!compsFilter?.length) {
+			return true;
+		}
+		return compsFilter.some((comp) => stat.bgsCompArchetype === comp);
 	}
 }
