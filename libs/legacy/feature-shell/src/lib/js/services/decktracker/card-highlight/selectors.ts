@@ -531,7 +531,10 @@ export const generateSlagclaw = cardIs(
 	CardIds.SizzlingSwarm_TLC_221,
 	CardIds.Cinderfin_TLC_225,
 );
-export const generatesTemporaryCard = cardIs(CardIds.CursedCatacombs_TLC_451, CardIds.BloodpetalBiome_TLC_449);
+export const generatesTemporaryCard = and(
+	or(hasMechanic(GameTag.TEMPORARY), hasReference(GameTag.TEMPORARY)),
+	not(cardIs(CardIds.EscapeTheUnderfel_TLC_446, CardIds.Spelunker_TLC_450)),
+);
 export const starshipPiece = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
 };
