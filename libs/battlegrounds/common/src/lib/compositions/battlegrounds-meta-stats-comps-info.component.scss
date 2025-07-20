@@ -9,7 +9,49 @@
 	width: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
-	// overflow: hidden;
+
+	.background {
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		overflow: hidden;
+		display: flex;
+
+		.background-image {
+			opacity: 0.2;
+			overflow: hidden;
+			position: relative;
+
+			img {
+				clip-path: polygon(43% 0%, 100% 0%, 94% 100%, 37% 100%);
+				height: 100%;
+				margin-left: -120px;
+			}
+
+			&:first-child img {
+				clip-path: polygon(0 0%, 100% 0%, 94% 100%, 37% 100%);
+			}
+
+			&:last-child img {
+				clip-path: polygon(43% 0%, 100% 0%, 100% 100%, 37% 100%);
+				mask: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+				-webkit-mask: linear-gradient(
+					to right,
+					rgba(0, 0, 0, 1) 0%,
+					rgba(0, 0, 0, 1) 80%,
+					rgba(0, 0, 0, 0) 100%
+				);
+			}
+
+			&:not(:first-child) {
+				margin-left: -20px;
+			}
+		}
+	}
 
 	&.clickable:hover {
 		background: rgba(255, 255, 255, 0.12);

@@ -13,6 +13,11 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 	],
 	template: `
 		<div class="info">
+			<div class="background">
+				<div class="background-image" *ngFor="let card of coreCardArts">
+					<img [src]="card" />
+				</div>
+			</div>
 			<div class="cell name">
 				<div class="text">{{ compName }}</div>
 				<div class="data-points">
@@ -62,6 +67,9 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.coreCards = value.coreCards;
 		this.addonCards = value.addonCards;
+		this.coreCardArts = value.coreCards.map(
+			(card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`,
+		);
 	}
 
 	compId: string;
@@ -78,6 +86,7 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	averagePlacementHighMmr: string;
 	pickRate: string;
 	pickRateHighMmr: string;
+	coreCardArts: string[];
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 
