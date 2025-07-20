@@ -63,8 +63,8 @@ import { extractTime } from './replay-info-ranked.component';
 					</div>
 				</div>
 
-				<div class="group archetype" *ngIf="archetype">
-					{{ archetype }}
+				<div class="group archetype" *ngIf="archetype != null">
+					{{ archetype || '-' }}
 				</div>
 				<div class="group warband" *ngIf="finalWarband">
 					<bgs-board
@@ -185,8 +185,6 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 			return;
 		}
 
-		console.debug('updateInfo', this.replayInfo);
-
 		this.gameMode = this.replayInfo.gameMode;
 		this.playerClassImage = this.buildPlayerClassImage(this.replayInfo);
 		this.playerClassTooltip = this.replayInfo.playerCardId
@@ -195,6 +193,8 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		if (this.replayInfo.bgsCompArchetype) {
 			this.archetype = this.i18n.translateString(`bgs-comp.${this.replayInfo.bgsCompArchetype.toLowerCase()}`);
 			this.playerClassTooltip += ` - ${this.archetype}`;
+		} else {
+			this.archetype = this.replayInfo.bgsCompArchetype;
 		}
 
 		this.result = buildMatchResultText(this.replayInfo, this.i18n);

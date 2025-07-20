@@ -3,7 +3,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 
-const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json';
+const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs/bgs-perfect-games.json';
 
 @Injectable()
 export class BgsPerfectGamesService extends AbstractFacadeService<BgsPerfectGamesService> {
@@ -34,7 +34,9 @@ export class BgsPerfectGamesService extends AbstractFacadeService<BgsPerfectGame
 						gameMode: 'battlegrounds',
 						additionalResult: '1',
 						bgsPerfectGame: true,
-					} as GameStat),
+						// So that it's displayed in the UI
+						bgsCompArchetype: res.bgsCompArchetype || '',
+					}),
 				)
 				.filter((stat) => stat.playerRank);
 			this.perfectGames$$.next(remotePerfectGames);

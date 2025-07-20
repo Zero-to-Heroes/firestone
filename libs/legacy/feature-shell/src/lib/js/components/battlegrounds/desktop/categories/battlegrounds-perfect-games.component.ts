@@ -19,9 +19,7 @@ import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 
 @Component({
 	selector: 'battlegrounds-perfect-games',
-	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-perfect-games.component.scss`,
-	],
+	styleUrls: [`./battlegrounds-perfect-games.component.scss`],
 	template: `
 		<div class="battlegrounds-perfect-games" *ngIf="{ replays: replays$ | async } as value">
 			<with-loading [isLoading]="value.replays == null">
