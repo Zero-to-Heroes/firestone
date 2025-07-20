@@ -21,6 +21,7 @@ import { sortByProperties } from '../../../services/utils';
 			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
+			[resetIsClear]="true"
 			(optionSelected)="onSelected($event)"
 		></filter-dropdown-multiselect>
 	`,

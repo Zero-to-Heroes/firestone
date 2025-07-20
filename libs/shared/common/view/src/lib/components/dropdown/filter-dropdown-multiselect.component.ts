@@ -74,11 +74,11 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 						(click)="clearSelection()"
 						[fsTranslate]="'app.global.controls.multiselect-clear-button'"
 					></div>
-					<div
+					<!-- <div
 						class="button reset"
 						(click)="resetSelection()"
 						[fsTranslate]="'app.global.controls.multiselect-reset-button'"
-					></div>
+					></div> -->
 					<div
 						class="button apply"
 						[ngClass]="{ disabled: !value.validSelection }"
@@ -114,7 +114,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
-	@Input() resetIsClear: boolean;
+	@Input() resetIsClear = true;
 	@Input() allowSearch: boolean;
 	@Input() validSelectionNumber: number;
 	@Input() validationErrorTooltip: string;
