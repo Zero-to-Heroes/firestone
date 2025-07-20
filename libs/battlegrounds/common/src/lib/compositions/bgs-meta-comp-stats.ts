@@ -63,7 +63,7 @@ export const buildCompStats = (
 			};
 			return result;
 		})
-		.filter((s) => s != null);
+		.filter((s): s is BgsMetaCompStatTierItem => s != null);
 	return mainStats;
 };
 

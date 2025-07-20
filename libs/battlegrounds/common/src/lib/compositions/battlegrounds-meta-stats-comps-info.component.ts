@@ -67,9 +67,9 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.coreCards = value.coreCards;
 		this.addonCards = value.addonCards;
-		this.coreCardArts = value.coreCards.map(
-			(card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`,
-		);
+		this.coreCardArts = value.coreCards
+			.slice(0, 3)
+			.map((card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`);
 	}
 
 	compId: string;
