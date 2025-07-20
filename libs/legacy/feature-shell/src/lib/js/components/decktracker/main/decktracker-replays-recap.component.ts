@@ -53,9 +53,9 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 		this.replays$ = combineLatest([
 			this.decks.decks$$,
 			this.nav.selectedDeckstring$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveDeckstringsFilter)),
+			// this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveDeckstringsFilter)),
 		]).pipe(
-			this.mapData(([decks, selectedDeckstring, deckstringsFilter]) =>
+			this.mapData(([decks, selectedDeckstring]) =>
 				(decks ?? [])
 					.filter((deck) =>
 						selectedDeckstring
@@ -63,14 +63,14 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 							  (deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring)
 							: true,
 					)
-					.filter(
-						(deck) =>
-							!deckstringsFilter?.length ||
-							deckstringsFilter.includes(deck.deckstring) ||
-							(deck.allVersions?.map((v) => v.deckstring) ?? []).some((d) =>
-								deckstringsFilter.includes(d),
-							),
-					)
+					// .filter(
+					// 	(deck) =>
+					// 		!deckstringsFilter?.length ||
+					// 		deckstringsFilter.includes(deck.deckstring) ||
+					// 		(deck.allVersions?.map((v) => v.deckstring) ?? []).some((d) =>
+					// 			deckstringsFilter.includes(d),
+					// 		),
+					// )
 					.flatMap((deck) => deck.replays)
 					.sort((a: GameStat, b: GameStat) => (a.creationTimestamp <= b.creationTimestamp ? 1 : -1))
 					.slice(0, 20),
