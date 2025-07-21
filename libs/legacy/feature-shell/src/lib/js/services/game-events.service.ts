@@ -1313,6 +1313,11 @@ export class GameEvents {
 						: GameEvent.BATTLEGROUNDS_DUO_FUTURE_TEAMMATE_BOARD;
 				console.debug('[game-events] receiving ' + gameEvent.Type, gameEvent, eventName);
 				const playerBoardEvent = this.buildBattlegroundsPlayerBoardEvent(eventName, gameEvent);
+				console.log(
+					eventName,
+					playerBoardEvent.additionalData.playerBoard.board.map((b) => b.CardId),
+					playerBoardEvent.additionalData.opponentBoard.board.map((b) => b.CardId),
+				);
 				this.doEventDispatch(playerBoardEvent);
 				break;
 			case 'BATTLEGROUNDS_LEADERBOARD_PLACE':

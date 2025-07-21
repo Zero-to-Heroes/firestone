@@ -97,7 +97,7 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 			panel.id === newPostMatchPanel.id ? newPostMatchPanel : panel,
 		);
 
-		console.debug('[bgs-info-updater] updating game info', newGame?.availableRaces?.join(', '));
+		// console.debug('[bgs-info-updater] updating game info', newGame?.availableRaces?.join(', '));
 		return currentState.update({
 			bgState: currentState.bgState.update({
 				currentGame: newGame,

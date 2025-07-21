@@ -143,7 +143,7 @@ export class BgsNextOpponentParser implements EventParser {
 		const currentTurn = currentState.getCurrentTurnAdjustedForAsyncPlay();
 		return BgsNextOpponentOverviewPanel.create({
 			opponentOverview: opponentOverview,
-			name: this.i18n.translateString('battlegrounds.in-game.opponents', {
+			name: this.i18n.translateString('battlegrounds.in-game.opponents.next-opponent-title', {
 				turn: currentTurn,
 			}),
 		} as BgsNextOpponentOverviewPanel);

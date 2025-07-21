@@ -7,7 +7,7 @@ export class MemoryUpdatesService {
 	public memoryUpdates$$ = new BehaviorSubject<MemoryUpdate>({} as MemoryUpdate);
 
 	newUpdate(changes: MemoryUpdate) {
-		console.debug('[memory-updates] new update', changes);
+		// console.debug('[memory-updates] new update', changes);
 		this.memoryUpdates$$.next(changes);
 	}
 }

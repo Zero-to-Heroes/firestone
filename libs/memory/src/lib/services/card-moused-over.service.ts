@@ -45,7 +45,6 @@ export class CardMousedOverService extends AbstractFacadeService<CardMousedOverS
 					pairwise(),
 				)
 				.subscribe(([previousMouseOverCard, mousedOverCard]) => {
-					console.debug('[debug] [card-moused-over] mouse over card', previousMouseOverCard, mousedOverCard);
 					if (previousMouseOverCard) {
 						if (!mousedOverCard || previousMouseOverCard.CardId !== mousedOverCard.CardId) {
 							this.cardsHighlightService.onMouseLeave(previousMouseOverCard.CardId);

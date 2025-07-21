@@ -91,7 +91,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		console.debug(
 			'[bgs-simulation] received player boards',
-			event,
+			gameEvent,
 			currentState.bgState.currentGame.getMainPlayer(),
 			currentState,
 		);
@@ -184,7 +184,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					'duoPendingBoard',
 					duoPendingBoard,
 					'event',
-					event,
+					gameEvent,
 					'player',
 					player,
 				);
@@ -197,7 +197,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					'duoPendingBoard',
 					duoPendingBoard,
 					'event',
-					event,
+					gameEvent,
 					'opponent',
 					opponent,
 				);
@@ -326,7 +326,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				opponentBoard.playerId,
 				lastFaceOff,
 			);
-			console.debug(currentState, event);
+			console.debug(currentState, gameEvent);
 			return currentState;
 		}
 
@@ -335,13 +335,14 @@ export class BgsPlayerBoardParser implements EventParser {
 			lastFaceOff.opponentPlayerId !== opponentBoard.playerId &&
 			lastFaceOff.opponentPlayerId !== opponentTeammateBoard?.playerId
 		) {
+			// This happens when the "next opponent" event was not sent / received
 			console.error(
 				'[bgs-player-board-parser] got incorrect matching face-off',
 				lastFaceOff?.opponentPlayerId,
 				opponentBoard.playerId,
 				lastFaceOff,
 			);
-			console.debug(currentState, event);
+			console.debug(currentState, gameEvent);
 			return currentState;
 		}
 
