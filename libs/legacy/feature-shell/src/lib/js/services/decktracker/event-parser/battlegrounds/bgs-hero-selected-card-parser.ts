@@ -154,9 +154,8 @@ export class BgsHeroSelectedCardParser implements EventParser {
 					}),
 				);
 			}
-		} else {
-			return updatedState;
 		}
+		return updatedState;
 	}
 
 	event(): string {
