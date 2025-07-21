@@ -78,7 +78,7 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveAnomaliesFilter[0]));
 		this.visible$ = this.nav.selectedCategoryId$$.pipe(
 			filter((categoryId) => !!categoryId),
-			this.mapData((categoryId) => categoryId === 'bgs-category-meta-heroes'),
+			this.mapData((categoryId) => false && categoryId === 'bgs-category-meta-heroes'),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -90,7 +90,7 @@ export class BattlegroundsAnomaliesFilterDropdownComponent
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsActiveUseAnomalyFilterInHeroSelection: true,
+			// bgsActiveUseAnomalyFilterInHeroSelection: true,
 			bgsActiveAnomaliesFilter: !value?.value ? [] : [value.value],
 		};
 		console.debug('[bgs-anomalies-filter-dropdown] setting new prefs', value, newPrefs);

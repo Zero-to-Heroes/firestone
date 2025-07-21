@@ -72,7 +72,7 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 						const config: Config = {
 							rankFilter: prefs.bgsActiveRankFilter,
 							tribesFilter: prefs.bgsActiveTribesFilter,
-							anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+							anomaliesFilter: [] as readonly string[], // prefs.bgsActiveAnomaliesFilter,
 							timeFilter: prefs.bgsActiveTimeFilter,
 						} as Config;
 						return config;

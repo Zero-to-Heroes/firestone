@@ -82,7 +82,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 			switchMap((prefs) => {
 				const config: Config = {
 					gameMode: prefs.bgsActiveGameMode,
-					anomaliesFilter: prefs.bgsActiveAnomaliesFilter,
+					anomaliesFilter: [] as readonly string[], // prefs.bgsActiveAnomaliesFilter,
 					rankFilter: prefs.bgsActiveRankFilter,
 					tribesFilter: prefs.bgsActiveTribesFilter,
 					timeFilter: prefs.bgsActiveTimeFilter,
