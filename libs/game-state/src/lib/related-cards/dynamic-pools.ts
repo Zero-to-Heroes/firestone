@@ -611,6 +611,11 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 
 		// Discover an X cost minion
+		case CardIds.BloodpetalBiome_TLC_449:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 1) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CreatureOfMadness_EDR_105:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -766,7 +771,6 @@ const getDynamicFilters = (
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.ShriekingShroom:
 		case CardIds.ShimmerShot_DEEP_003:
-		case CardIds.BloodpetalBiome_TLC_449:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
 		case CardIds.TunnelTerror_TLC_469:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
