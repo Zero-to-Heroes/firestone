@@ -443,7 +443,7 @@ export class GameStateService {
 			gameEvent.type,
 			gameEvent.cardId,
 			gameEvent.entityId,
-			currentState.opponentDeck.board.map((c) => c.cardName),
+			currentState?.opponentDeck.board.map((c) => c.cardName),
 			currentState,
 			gameEvent,
 		);
