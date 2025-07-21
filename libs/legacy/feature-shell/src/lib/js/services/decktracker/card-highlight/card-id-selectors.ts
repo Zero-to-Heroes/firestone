@@ -2638,6 +2638,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.Shadowcasting101TavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.ShadowclothNeedle:
+			return and(side(inputSide), or(inDeck, inHand), shadow, spell);
 		case CardIds.ShadowEssence_CORE_ICC_235:
 		case CardIds.ShadowEssence_ICC_235:
 			return and(side(inputSide), inDeck, minion);
