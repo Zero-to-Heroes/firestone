@@ -59,17 +59,19 @@ export const getDynamicRelatedCardIds = (
 
 		// From the past
 		case CardIds.FalseDisciple:
-			return filterCards(
+			// eslint-disable-next-line no-case-declarations
+			const result = filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
 					c.classes?.includes(CardClass[CardClass.PRIEST]) &&
 					c.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
 			);
+			return result;
 		case CardIds.FinalFrontier_GDB_857:
 			return filterCards(
 				allCards,
@@ -77,7 +79,7 @@ export const getDynamicRelatedCardIds = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
 					hasCost(c, '==', 10),
 			);
@@ -87,7 +89,7 @@ export const getDynamicRelatedCardIds = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.WEAPON) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
@@ -97,7 +99,7 @@ export const getDynamicRelatedCardIds = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectTribe(c, Race.ELEMENTAL),
 			);
 		case CardIds.WaveOfNostalgia_MIS_701:
@@ -107,7 +109,7 @@ export const getDynamicRelatedCardIds = (
 				cardId,
 				(c) =>
 					hasCorrectType(c, CardType.MINION) &&
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectRarity(c, CardRarity.LEGENDARY),
 			);
 
@@ -937,10 +939,10 @@ const filterCards = (
 					a.name.localeCompare(b.name),
 			);
 	}
+	let gameType = options.gameType;
+	let format = options.format;
 	return baseCards
 		.filter((c) => {
-			let gameType = options.gameType;
-			let format = options.format;
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
 				if (options.validArenaPool.length > 0) {
 					return options.validArenaPool.includes(c.id);
