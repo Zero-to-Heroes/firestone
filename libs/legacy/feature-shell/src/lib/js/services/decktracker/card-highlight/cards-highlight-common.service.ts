@@ -28,6 +28,7 @@ import {
 	inDeck,
 	inHand,
 	isStarshipPieceFor,
+	kindred,
 	mech,
 	minion,
 	or,
@@ -375,72 +376,76 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			// return selector;
 		}
 
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.MODULAR])) {
+		const refCard = this.allCards.getCard(cardId);
+		if (refCard.mechanics?.includes(GameTag[GameTag.MODULAR])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), minion, mech));
 		}
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SPELLPOWER])) {
+		if (refCard.mechanics?.includes(GameTag[GameTag.SPELLPOWER])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spell, damage));
 		}
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SPELLBURST])) {
+		if (refCard.mechanics?.includes(GameTag[GameTag.SPELLBURST])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spell));
 		}
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
+		if (refCard.mechanics?.includes(GameTag[GameTag.OVERHEAL])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), restoreHealthToMinion));
 		}
-		if (!!card && this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP])) {
+		if (!!card && refCard.mechanics?.includes(GameTag[GameTag.STARSHIP])) {
 			selectors.push(tooltip(and(side(inputSide), isStarshipPieceFor(card.entityId))));
 		}
-		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]) &&
-			this.allCards.getCard(cardId).type === CardType[CardType.SPELL]
-		) {
+		if (refCard.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]) && refCard.type === CardType[CardType.SPELL]) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spellDamage));
 		}
 		// Looks like this can still be useful in-game
 		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.IMBUE]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.IMBUE])
+			refCard.mechanics?.includes(GameTag[GameTag.IMBUE]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.IMBUE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), imbue));
 		}
 		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.GIVES_ABYSSAL_CURSE]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.GIVES_ABYSSAL_CURSE])
+			refCard.mechanics?.includes(GameTag[GameTag.GIVES_ABYSSAL_CURSE]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.GIVES_ABYSSAL_CURSE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), givesAbyssalCurse));
 		}
 		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.EXCAVATE]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.EXCAVATE])
+			refCard.mechanics?.includes(GameTag[GameTag.EXCAVATE]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.EXCAVATE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), excavate));
 		}
 		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.RIFF]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.RIFF])
+			refCard.mechanics?.includes(GameTag[GameTag.RIFF]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.RIFF])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), riff));
 		}
-		if (this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.KINDRED])) {
-			const cardSpellSchool: SpellSchool = this.allCards.getCard(cardId).spellSchool
-				? SpellSchool[this.allCards.getCard(cardId).spellSchool]
-				: null;
+		if (refCard.mechanics?.includes(GameTag[GameTag.KINDRED])) {
+			const cardSpellSchool: SpellSchool = refCard.spellSchool ? SpellSchool[refCard.spellSchool] : null;
 			selectors.push(
 				and(
 					side(inputSide),
 					or(inDeck, inHand),
-					or(
-						spellSchool(cardSpellSchool),
-						raceIn(this.allCards.getCard(cardId).races?.map((r) => Race[r] as Race)),
-					),
+					or(spellSchool(cardSpellSchool), raceIn(refCard.races?.map((r) => Race[r] as Race))),
 				),
 			);
 		}
+		// Reverse kindred
+		if (refCard.races?.length) {
+			selectors.push(
+				and(side(inputSide), or(inDeck, inHand), kindred, raceIn(refCard.races?.map((r) => Race[r] as Race))),
+			);
+		}
+		if (refCard.spellSchool) {
+			selectors.push(
+				and(side(inputSide), or(inDeck, inHand), kindred, spellSchool(SpellSchool[refCard.spellSchool])),
+			);
+		}
 		if (
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.STARSHIP]) ||
-			this.allCards.getCard(cardId).referencedTags?.includes(GameTag[GameTag.STARSHIP])
+			refCard.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.STARSHIP_PIECE]) ||
+			refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.STARSHIP])
 		) {
 			// console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
 			selectors.push(and(side(inputSide), or(inDeck, inHand), starshipExtended));
