@@ -17,9 +17,14 @@ export const TidepoolPupil: GlobalHighlightCard = {
 		}
 
 		const deckState = gameState.opponentDeck;
-		const card = deckState.findCard(entityId);
-		const turnAtWhichEnteredHand = card?.card?.metaInfo?.turnAtWhichCardEnteredHand;
-		if (!turnAtWhichEnteredHand || isNaN(+turnAtWhichEnteredHand)) {
+		const pupil = deckState.findCard(entityId);
+		let turnAtWhichEnteredHand = pupil?.card?.metaInfo?.turnAtWhichCardEnteredHand;
+		console.debug('[debug] tidepool pupil', pupil, turnAtWhichEnteredHand);
+		if (turnAtWhichEnteredHand === 'mulligan') {
+			turnAtWhichEnteredHand = 0;
+		}
+		console.debug('[debug] tidepool pupil corrected', pupil, turnAtWhichEnteredHand);
+		if (turnAtWhichEnteredHand == null) {
 			return [];
 		}
 
