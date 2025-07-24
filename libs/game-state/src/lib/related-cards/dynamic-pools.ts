@@ -628,6 +628,11 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', 8) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.FreeFromAmber:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '>=', 8) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		case CardIds.TrainingSession_NX2_029:
 		case CardIds.HikingTrail_VAC_517:
