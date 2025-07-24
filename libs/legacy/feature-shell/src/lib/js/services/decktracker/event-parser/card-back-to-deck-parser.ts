@@ -113,7 +113,7 @@ export class CardBackToDeckParser implements EventParser {
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
 		});
-		const cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
+		let cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
 			? cardWithInfluenceBack.update({
 					positionFromBottom: DeckCard.deckIndexFromBottom++,
 			  })
@@ -122,6 +122,18 @@ export class CardBackToDeckParser implements EventParser {
 					positionFromTop: DeckCard.deckIndexFromTop--,
 			  })
 			: cardWithInfluenceBack;
+		if (
+			gameEvent.additionalData.influencedByCardId === CardIds.DarkGiftToken_EDR_102t &&
+			initialZone === 'HAND' &&
+			!card.creatorCardId
+		) {
+			cardWithPosition = cardWithPosition.update({
+				cardId: CardIds.WallowTheWretched_EDR_487,
+				refManaCost: this.allCards.getCard(CardIds.WallowTheWretched_EDR_487).cost,
+				cardName: this.allCards.getCard(CardIds.WallowTheWretched_EDR_487).name,
+				rarity: this.allCards.getCard(CardIds.WallowTheWretched_EDR_487).rarity,
+			});
+		}
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
 			: this.helper.addSingleCardToZone(previousDeck, cardWithPosition);
