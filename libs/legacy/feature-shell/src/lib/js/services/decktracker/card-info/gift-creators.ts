@@ -1045,4 +1045,6 @@ export const giftCreators = [
 	CardIds.GorishiWasp_TLC_630,
 	CardIds.Darkrider_EDR_456,
 	CardIds.DopEmergencyEnchant2Enchantment_DOP_002e,
+	CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t,
+	CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
 ];
