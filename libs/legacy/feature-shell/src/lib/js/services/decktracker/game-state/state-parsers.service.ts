@@ -149,6 +149,7 @@ import { SecretPlayedFromHandParser } from '../event-parser/secret-played-from-h
 import { SecretTriggeredParser } from '../event-parser/secret-triggered-parser';
 import { SecretWillTriggerParser } from '../event-parser/secret-will-trigger-parser';
 import { ShuffleDeckParser } from '../event-parser/shuffle-deck-parser';
+import { SpawnTimeCountChangedParser } from '../event-parser/spawn-time-changed-parser';
 import { SpecialCardPowerTriggeredParser } from '../event-parser/special-card-power-triggered-parser';
 import { CthunParser } from '../event-parser/special-cases/cthun-parser';
 import { CthunRevealedParser } from '../event-parser/special-cases/cthun-revealed-parser';
@@ -416,6 +417,7 @@ export class GameStateParsersService {
 			[GameEvent.SECRET_TRIGGERED]: [new SecretTriggeredParser(this.helper)],
 			[GameEvent.SECRET_WILL_TRIGGER]: [new SecretWillTriggerParser(this.helper)],
 			[GameEvent.SHUFFLE_DECK]: [new ShuffleDeckParser()],
+			[GameEvent.SPAWN_TIME_COUNT_CHANGED]: [new SpawnTimeCountChangedParser()],
 			[GameEvent.SPECIAL_CARD_POWER_TRIGGERED]: [
 				new SpecialCardPowerTriggeredParser(this.allCards, this.helper),
 				new SphereOfSapienceParser(this.helper),

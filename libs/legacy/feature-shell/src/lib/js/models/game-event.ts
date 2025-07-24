@@ -29,6 +29,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly TURN_DURATION_UPDATED = 'TURN_DURATION_UPDATED';
 	public static readonly SHUFFLE_DECK = 'SHUFFLE_DECK';
 	public static readonly COST_CHANGED = 'COST_CHANGED';
+	public static readonly SPAWN_TIME_COUNT_CHANGED = 'SPAWN_TIME_COUNT_CHANGED';
 	public static readonly ZONE_CHANGED = 'ZONE_CHANGED';
 	public static readonly ZONE_POSITION_CHANGED = 'ZONE_POSITION_CHANGED';
 	public static readonly GAME_RESULT = 'GAME_RESULT';

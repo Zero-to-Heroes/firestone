@@ -1490,6 +1490,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'SPAWN_TIME_COUNT_CHANGED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.SPAWN_TIME_COUNT_CHANGED, gameEvent, {
+						count: gameEvent.Value.AdditionalProps.Count,
+					}),
+				);
+				break;
 			case 'WHIZBANG_DECK_ID':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.WHIZBANG_DECK_ID, gameEvent, {

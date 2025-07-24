@@ -173,7 +173,7 @@ export const deathrattleGlobalEffectCards = [
 	CardIds.Infestor_SC_002,
 	CardIds.InterstellarStarslicer_GDB_726,
 	CardIds.JadeDisplay_TOY_803,
-	CardIds.Sentry_SC_764,
+	// CardIds.Sentry_SC_764,
 	CardIds.Therazane_DEEP_036,
 	CardIds.UnluckyPowderman_WW_367,
 ];

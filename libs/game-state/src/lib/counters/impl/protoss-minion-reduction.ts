@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -28,8 +28,13 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 				).length;
 			const gameReductionCost = state.playerDeck.enchantments
 				.filter((e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e)
-				.map((e) => (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1))
+				.map(
+					(e) =>
+						(e.tags?.[GameTag.SPAWN_TIME_COUNT] ?? 1) *
+						(e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1),
+				)
 				.reduce((a, b) => a + b, 0);
+			console.debug('nextReductionCost', nextReductionCost, state.playerDeck.enchantments);
 			const showInfo =
 				nextReductionCost > 0 || gameReductionCost > 0 || state.playerDeck.hasRelevantCard(reductionCards);
 			return showInfo ? `${gameReductionCost} | ${nextReductionCost}` : null;
@@ -53,7 +58,11 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 				).length;
 			const gameReductionCost = state.opponentDeck.enchantments
 				.filter((e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e)
-				.map((e) => (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1))
+				.map(
+					(e) =>
+						(e.tags?.[GameTag.SPAWN_TIME_COUNT] ?? 1) *
+						(e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1),
+				)
 				.reduce((a, b) => a + b, 0);
 			const showInfo =
 				nextReductionCost > 0 || gameReductionCost > 0 || state.opponentDeck.hasRelevantCard(reductionCards);
