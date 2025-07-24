@@ -20,6 +20,7 @@ import { cardIdSelector } from './card-id-selectors';
 import { cardsMapping, hasGetRelatedCards } from './global/_registers';
 import {
 	and,
+	barrelOfSludge,
 	damage,
 	excavate,
 	givesAbyssalCurse,
@@ -449,6 +450,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		) {
 			// console.debug('[cards-highlight] building starship selector', cardId, card, inputSide);
 			selectors.push(and(side(inputSide), or(inDeck, inHand), starshipExtended));
+		}
+		if (refCard.mechanics?.includes('BARREL_OF_SLUDGE')) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), barrelOfSludge));
 		}
 		// Specific highlights for draft
 		if (inputSide === 'single' || context === 'discover') {

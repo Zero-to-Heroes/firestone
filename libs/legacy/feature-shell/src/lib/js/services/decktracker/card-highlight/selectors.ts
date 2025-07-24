@@ -293,6 +293,7 @@ const hasReference =
 		return refCard?.referencedTags?.includes(GameTag[mechanic]);
 	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
+export const barrelOfSludge = hasMechanicStr('BARREL_OF_SLUDGE');
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const charge = hasMechanic(GameTag.CHARGE);
 export const chooseOne = and(
