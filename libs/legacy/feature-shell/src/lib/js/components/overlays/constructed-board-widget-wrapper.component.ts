@@ -22,7 +22,7 @@ import { BoardCardOverlay } from './board/board-card-overlay';
 	styleUrls: ['../../../css/component/overlays/constructed-board-widget-wrapper.component.scss'],
 	template: `
 		<ng-container *ngIf="{ board: board$ | async } as value">
-			<div class="board-container" *ngIf="showWidget$ | async">
+			<div class="board-container" *ngIf="showWidget$ | async" [style.opacity]="opacity$ | async">
 				<ul class="board top">
 					<minion-on-board-overlay
 						*ngFor="let card of value.board.top || []; trackBy: trackByMinion"
@@ -51,6 +51,7 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 
 	showWidget$: Observable<boolean>;
 	board$: Observable<BoardOverlay>;
+	opacity$: Observable<number>;
 
 	windowWidth: number;
 	windowHeight: number;
@@ -94,6 +95,9 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 				return !gameEnded;
 			}),
 			this.handleReposition(),
+		);
+		this.opacity$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => Math.max(0.01, prefs.decktrackerMinionPlayOrderOpacity / 100)),
 		);
 
 		this.board$ = this.store

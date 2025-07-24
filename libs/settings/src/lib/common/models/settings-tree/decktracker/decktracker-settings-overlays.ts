@@ -46,6 +46,18 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 						label: context.i18n.translateString('settings.decktracker.global.minions-play-order'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.minions-play-order-tooltip'),
 					},
+					{
+						type: 'slider',
+						field: 'decktrackerMinionPlayOrderOpacity',
+						label: context.i18n.translateString('settings.decktracker.turn-timer.opacity-title'),
+						tooltip: null,
+						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard,
+						sliderConfig: {
+							min: 0,
+							max: 100,
+							snapSensitivity: 5,
+						},
+					},
 				],
 			},
 			{
