@@ -25,7 +25,10 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 
 @Component({
 	selector: 'decktracker-overlay-root',
-	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss'],
+	styleUrls: [
+		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
+		'./decktracker-overlay-root.component.scss',
+	],
 	template: `
 		<div
 			class="root {{ player }}"

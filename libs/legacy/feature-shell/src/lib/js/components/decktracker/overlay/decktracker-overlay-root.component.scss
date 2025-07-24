@@ -1,0 +1,14 @@
+:host {
+	pointer-events: none;
+}
+
+.root {
+	pointer-events: none;
+
+	.scalable {
+		pointer-events: auto;
+	}
+	.icon {
+		pointer-events: auto;
+	}
+}

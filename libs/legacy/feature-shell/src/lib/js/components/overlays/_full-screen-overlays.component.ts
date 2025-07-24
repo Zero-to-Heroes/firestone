@@ -78,8 +78,12 @@ import { DebugService } from '../../services/debug.service';
 			<mercs-quests-widget-wrapper></mercs-quests-widget-wrapper>
 
 			<!-- "Constructed" -->
-			<decktracker-player-widget-wrapper class="focusable" tabindex="0"></decktracker-player-widget-wrapper>
-			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
+			<decktracker-player-widget-wrapper
+				class="focusable"
+				style="pointer-events: none;"
+				tabindex="0"
+			></decktracker-player-widget-wrapper>
+			<decktracker-opponent-widget-wrapper style="pointer-events: none;"></decktracker-opponent-widget-wrapper>
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
 			<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
