@@ -237,6 +237,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 					if (complete) {
 						this.status = null;
 						console.log('[app] Received complete game', game.turns.size);
+						console.log('[app] Events log', game.fullStoryRaw);
 					}
 
 					// We do this so that the initial drawing is already done when hiding the preloader

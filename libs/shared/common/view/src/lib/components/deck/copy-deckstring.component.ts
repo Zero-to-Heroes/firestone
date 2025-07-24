@@ -83,7 +83,7 @@ export class CopyDesckstringComponent {
 	}
 }
 
-export const sanitizeDeckstring = (deckstring: string, allCards: CardsFacadeService): string => {
+export const sanitizeDeckstring = (deckstring: string, allCards: CardsFacadeService): string | null => {
 	if (!deckstring?.length) {
 		return null;
 	}
