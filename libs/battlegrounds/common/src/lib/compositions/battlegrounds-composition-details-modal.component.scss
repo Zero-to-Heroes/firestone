@@ -178,6 +178,88 @@
 	}
 }
 
+.advice-section {
+	margin-bottom: 24px;
+
+	h3 {
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: var(--default-title-color);
+		margin: 0 0 16px 0;
+		padding-bottom: 8px;
+		border-bottom: 1px solid var(--color-4);
+	}
+
+	.advice-content {
+		.tips-list {
+			.tip {
+				background: var(--color-7);
+				border: 1px solid var(--color-4);
+				border-radius: 8px;
+				padding: 16px;
+				margin-bottom: 12px;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+				.tip-section {
+					margin-bottom: 16px;
+
+					&:last-of-type {
+						margin-bottom: 8px;
+					}
+
+					.tip-header {
+						font-size: 0.9rem;
+						font-weight: 600;
+						color: var(--default-title-color);
+						margin: 0 0 8px 0;
+						text-transform: uppercase;
+						letter-spacing: 0.5px;
+						opacity: 0.9;
+					}
+				}
+
+				.tip-content {
+					color: var(--default-text-color);
+					line-height: 1.5;
+				}
+
+				.tip-when-to-commit {
+					background: var(--color-5);
+					border-left: 3px solid var(--default-title-color);
+					padding: 8px 12px;
+					border-radius: 0 4px 4px 0;
+					color: var(--default-text-color);
+					line-height: 1.4;
+				}
+
+				.tip-meta {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					font-size: 0.85rem;
+					color: var(--default-text-color);
+					opacity: 0.7;
+					margin-top: 12px;
+					padding-top: 12px;
+					border-top: 1px solid var(--color-4);
+
+					.author {
+						font-weight: 500;
+						color: var(--default-title-color);
+					}
+
+					.date {
+						font-size: 0.8rem;
+					}
+				}
+			}
+		}
+	}
+}
+
 .cards-section {
 	padding-bottom: 10px;
 

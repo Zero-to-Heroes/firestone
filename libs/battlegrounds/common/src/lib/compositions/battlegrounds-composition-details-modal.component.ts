@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
@@ -32,7 +33,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 									class="stat-label"
 									[fsTranslate]="'app.battlegrounds.compositions.columns.first-percent'"
 								></div>
-								<div class="stat-value">{{ firstPercent | number: '1.1-1' }}</div>
+								<div class="stat-value">{{ firstPercent | number: '1.1-1' }}%</div>
 							</div>
 							<div class="stat-item">
 								<div
@@ -62,6 +63,39 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 							<div class="stat-item">
 								<div class="stat-label" [fsTranslate]="'app.decktracker.meta.games-header'"></div>
 								<div class="stat-value">{{ dataPoints }}</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Strategic Advice Section -->
+					<div class="advice-section" *ngIf="compositionAdvice && hasAdvice">
+						<h3 [fsTranslate]="'app.battlegrounds.compositions.advice.title'"></h3>
+						<div class="advice-content">
+							<div class="tips-list" *ngIf="compositionAdvice.tips?.length">
+								<div class="tip" *ngFor="let tip of compositionAdvice.tips">
+									<div class="tip-section">
+										<h4
+											class="tip-header"
+											[fsTranslate]="
+												'battlegrounds.in-game.minions-list.compositions.advice.how-to-play'
+											"
+										></h4>
+										<div class="tip-content" [innerHTML]="tip.tip | safe"></div>
+									</div>
+									<div class="tip-section" *ngIf="tip.whenToCommit">
+										<h4
+											class="tip-header"
+											[fsTranslate]="
+												'battlegrounds.in-game.minions-list.compositions.advice.when-to-commit'
+											"
+										></h4>
+										<div class="tip-when-to-commit" [innerHTML]="tip.whenToCommit | safe"></div>
+									</div>
+									<div class="tip-meta">
+										<span class="author">{{ tip.author }}</span>
+										<span class="date">{{ formatDate(tip.date) }}</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -105,6 +139,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 })
 export class BattlegroundsCompositionDetailsModalComponent {
 	@Input() closeHandler: () => void;
+	@Input() compositionAdvice: BgsCompAdvice | null = null;
 
 	@Input() set composition(value: BgsMetaCompStatTierItem) {
 		if (!value) return;
@@ -135,11 +170,28 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	averagePlacement: string;
 	coreCardArts: string[];
 
+	get hasAdvice(): boolean {
+		return !!(this.compositionAdvice && this.compositionAdvice.tips?.length);
+	}
+
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
 
 	closeModal() {
 		if (this.closeHandler) {
 			this.closeHandler();
+		}
+	}
+
+	formatDate(dateString: string): string {
+		try {
+			const date = new Date(dateString);
+			return date.toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+			});
+		} catch {
+			return dateString;
 		}
 	}
 

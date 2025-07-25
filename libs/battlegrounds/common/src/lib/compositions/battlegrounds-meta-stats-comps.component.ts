@@ -354,7 +354,12 @@ export class BattlegroundsMetaStatsCompsComponent
 		const portal = new ComponentPortal(BattlegroundsCompositionDetailsModalComponent);
 		const modalRef: ComponentRef<BattlegroundsCompositionDetailsModalComponent> = this.overlayRef.attach(portal);
 
+		// Find matching composition advice
+		const compositionAdvice =
+			this.compStrategies.strategies$$?.value?.find((advice) => advice.compId === composition.compId) || null;
+
 		modalRef.instance.composition = composition;
+		modalRef.instance.compositionAdvice = compositionAdvice;
 		modalRef.instance.closeHandler = () => {
 			this.closeModal();
 		};
