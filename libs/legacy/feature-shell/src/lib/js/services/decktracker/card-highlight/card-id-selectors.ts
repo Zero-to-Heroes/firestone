@@ -2743,6 +2743,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), generateSlagclaw);
 		case CardIds.SlagmawTheSlumbering_WW_375:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
+		case CardIds.SlipperySlope_VAC_513:
+			return and(side(inputSide), or(inDeck, inHand), freeze);
 		case CardIds.SlitheringDeathscale:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.SmallTimeBuccaneer:

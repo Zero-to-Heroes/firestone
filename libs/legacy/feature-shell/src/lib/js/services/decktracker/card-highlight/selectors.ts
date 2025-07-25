@@ -314,7 +314,7 @@ export const excavate = or(
 );
 export const forge = hasMechanic(GameTag.FORGE);
 export const forged = hasMechanic(GameTag.FORGED);
-export const freeze = hasMechanic(GameTag.FREEZE);
+export const freeze = and(hasMechanic(GameTag.FREEZE), not(cardIs(CardIds.SnowShredder_VAC_429)));
 export const frenzy = hasMechanic(GameTag.FRENZY);
 // Almost all the "imbue" tags are ref tags
 export const imbue = and(
