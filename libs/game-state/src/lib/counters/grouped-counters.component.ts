@@ -16,6 +16,7 @@ import { GameStateFacadeService } from '../services/game-state-facade.service';
 import { CounterInstance } from './_counter-definition-v2';
 
 @Component({
+	standalone: false,
 	selector: 'grouped-counters',
 	styleUrls: ['./grouped-counters.component.scss'],
 	template: `

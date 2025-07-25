@@ -6,6 +6,7 @@ import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-details-matchups',
 	styleUrls: [`../../../../css/component/decktracker/main/constructed-meta-deck-details-matchups.component.scss`],
 	template: `

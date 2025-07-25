@@ -5,6 +5,7 @@ import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays'
 import { groupByFunction } from '../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'replays-list-view',
 	styleUrls: [`../../../css/component/replays/replays-list-view.component.scss`],
 	template: `
@@ -13,7 +14,7 @@ import { groupByFunction } from '../../services/utils';
 			*ngIf="flatReplays?.length; else emptyState"
 			class="replays-list"
 			[items]="flatReplays"
-			[scrollDebounceTime]="scrollDebounceTime"
+			[scrollThrottlingTime]="scrollDebounceTime"
 			scrollable
 			(scrolling)="onScrolling($event)"
 		>
@@ -59,9 +60,12 @@ export class ReplaysListViewComponent {
 	flatReplays: (GameStat | HeaderInfo)[] = [];
 	scrollDebounceTime = 10;
 
-	constructor(private readonly i18n: LocalizationFacadeService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
-	onScrolling(scrolling: boolean) {
+	onScrolling(scrolling: number | boolean) {
 		this.scrollDebounceTime = scrolling ? 1000 : 10;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 
 @Component({
+	standalone: false,
 	selector: 'mulligan-hand-view',
 	styleUrls: ['./mulligan-hand-view.component.scss'],
 	template: `

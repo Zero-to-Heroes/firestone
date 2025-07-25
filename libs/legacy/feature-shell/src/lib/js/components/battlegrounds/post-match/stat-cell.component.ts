@@ -5,6 +5,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 
 @Component({
+	standalone: false,
 	selector: 'stat-cell',
 	styleUrls: [`../../../../css/component/battlegrounds/post-match/stat-cell.component.scss`],
 	template: `

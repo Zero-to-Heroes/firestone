@@ -22,6 +22,7 @@ import { LocalizationFacadeService } from '../../../js/services/localization-fac
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'pack-stats',
 	styleUrls: [`./pack-stats.component.scss`],
 	template: `

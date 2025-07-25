@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-empty-state',
 	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-empty-state.component.scss`],
 	template: `

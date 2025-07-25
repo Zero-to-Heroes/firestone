@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'card-enchantments',
 	styleUrls: ['../../../text.scss', './card-enchantments.component.scss'],
 	template: `

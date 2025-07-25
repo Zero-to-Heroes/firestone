@@ -9,6 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-trinket-stats-info-premium',
 	styleUrls: ['./bgs-trinket-stats-info-premium.component.scss'],
 	template: `

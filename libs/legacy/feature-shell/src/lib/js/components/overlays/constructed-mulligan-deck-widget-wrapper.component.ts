@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-mulligan-deck-widget-wrapper',
 	styleUrls: ['./constructed-mulligan-deck-widget-wrapper.component.scss'],
 	template: `

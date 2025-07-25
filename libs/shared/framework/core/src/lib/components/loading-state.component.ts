@@ -12,6 +12,7 @@ import { ILocalizationService } from '../localization/localization.service';
 @Component({
 	selector: 'loading-state',
 	styleUrls: [`./loading-state.component.scss`],
+	standalone: false,
 	template: `
 		<div class="loading-state {{ className }}">
 			<div class="state-container">
@@ -40,7 +41,10 @@ export class LoadingStateComponent implements OnDestroy {
 
 	private interval;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {

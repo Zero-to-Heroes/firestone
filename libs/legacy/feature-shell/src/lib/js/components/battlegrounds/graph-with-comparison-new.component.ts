@@ -14,6 +14,7 @@ import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { BehaviorSubject, Observable, combineLatest, filter, share, takeUntil } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'graph-with-comparison-new',
 	styleUrls: [`../../../css/component/battlegrounds/graph-with-comparison.component.scss`],
 	template: `

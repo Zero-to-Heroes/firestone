@@ -16,6 +16,7 @@ import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'menu-selection-decktracker',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

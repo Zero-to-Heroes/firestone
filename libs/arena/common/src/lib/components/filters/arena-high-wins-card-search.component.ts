@@ -6,6 +6,7 @@ import { Observable, tap } from 'rxjs';
 import { ArenaHighWinsRunsService } from '../../services/arena-high-wins-runs.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-high-wins-card-search',
 	styleUrls: [`./arena-high-wins-card-search.component.scss`],
 	template: `

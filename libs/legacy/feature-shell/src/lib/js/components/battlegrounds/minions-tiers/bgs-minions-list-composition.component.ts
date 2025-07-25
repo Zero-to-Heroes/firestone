@@ -9,6 +9,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-minions-list-composition',
 	styleUrls: [`./bgs-minions-list-composition.component.scss`],
 	template: `

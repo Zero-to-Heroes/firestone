@@ -3,6 +3,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat, buildRankText } from '@firestone/stats/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'rank-image',
 	styleUrls: [`./rank-image.component.scss`],
 	template: `

@@ -3,6 +3,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 
 @Component({
+	standalone: false,
 	selector: 'grouped-replays',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/grouped-replays.component.scss`],
 	template: `

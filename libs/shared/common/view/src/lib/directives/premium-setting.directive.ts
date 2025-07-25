@@ -16,6 +16,7 @@ import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/
 import { PreferenceToggleComponent } from '../components/toggle/preference-toggle.component';
 
 @Directive({
+	standalone: false,
 	selector: '[premiumSetting]',
 })
 export class PremiumSettingDirective extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {

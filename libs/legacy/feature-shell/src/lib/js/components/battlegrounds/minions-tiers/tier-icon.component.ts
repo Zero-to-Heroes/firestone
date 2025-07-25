@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Tier } from '@firestone/battlegrounds/core';
 
 @Component({
+	standalone: false,
 	selector: 'tier-icon',
 	styleUrls: ['./tier-icon.component.scss'],
 	template: `

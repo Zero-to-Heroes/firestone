@@ -3,6 +3,7 @@ import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'board-card-frame',
 	styleUrls: ['./board-card-frame.component.scss'],
 	template: `

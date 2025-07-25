@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'achievement-image',
 	styleUrls: [`../../../css/component/achievements/achievement-image.component.scss`],
 	template: `

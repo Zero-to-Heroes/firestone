@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+import 'cross-fetch/polyfill';
 
 (window as any).global = window;
 

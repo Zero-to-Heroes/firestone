@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { DeckCard } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'opponent-card-turn-number',
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-turn-number.component.scss'],
 	template: `

@@ -20,6 +20,7 @@ import {
 import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'arena-option-info-premium',
 	styleUrls: ['./arena-option-info-premium.component.scss'],
 	template: `

@@ -7,6 +7,7 @@ import { LotteryConfigResourceStatType, LotteryState } from '../../services/lott
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'lottery-lottery',
 	styleUrls: [
 		'../../../css/component/lottery/lottery-section.scss',

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { Set } from '../../models/set';
 
 @Component({
+	standalone: false,
 	selector: 'sets-container',
 	styleUrls: [`../../../css/component/collection/sets-container.component.scss`],
 	template: `

@@ -14,7 +14,8 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+
+import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { BattlegroundsMetaStatsCardInfoComponent } from './cards/battlegrounds-meta-stats-card-info.component';
 import { BattlegroundsMetaStatsCardTierComponent } from './cards/battlegrounds-meta-stats-card-tier.component';
 import { BattlegroundsMetaStatsCardsComponent } from './cards/battlegrounds-meta-stats-cards.component';
@@ -106,7 +107,6 @@ const components = [
 		OverlayModule,
 
 		VirtualScrollerModule,
-
 		InlineSVGModule.forRoot(),
 
 		ReplayColiseumModule,

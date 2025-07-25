@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-achievements',
 	styleUrls: [`./website-profile-achievements.component.scss`],
 	template: `

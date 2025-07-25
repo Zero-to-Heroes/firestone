@@ -7,6 +7,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'card-search',
 	styleUrls: [`../../../css/component/collection/card-search.component.scss`],
 	template: `

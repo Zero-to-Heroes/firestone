@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { BattlegroundsTrinketsService } from '../../services/bgs-trinkets.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-trinkets',
 	styleUrls: [`./battlegrounds-meta-stats-trinkets.component.scss`],
 	template: `

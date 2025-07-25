@@ -5,6 +5,7 @@ import { WebsiteLocalizationService } from '@firestone/website/core';
 import { ProfileClassStat } from './profile-class-stat';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-class-stat',
 	styleUrls: [`./website-profile-class-stat.component.scss`],
 	template: `

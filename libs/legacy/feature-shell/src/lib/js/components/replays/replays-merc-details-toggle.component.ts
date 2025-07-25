@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'replays-merc-details-toggle',
 	styleUrls: [`../../../css/component/replays/replays-icon-toggle.component.scss`],
 	template: `

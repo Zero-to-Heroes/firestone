@@ -1,0 +1,24 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/twitch/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/twitch/common/src/lib/services/twitch-auth.service.ts[0m:[93m333[0m:[93m7[0m - [91merror[0m[90m TS2591: [0mCannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.[39m
+
+
+[7m333[0m       Buffer.byteLength(deflate(JSON.stringify(newEvent), { to: 'string' }), 'utf8'),
+[7m   [0m [91m      ~~~~~~[0m
+[96mlibs/twitch/common/src/lib/services/twitch-auth.service.ts[0m:[93m333[0m:[93m61[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'to' does not exist in type 'DeflateFunctionOptions'.
+
+[7m333[0m       Buffer.byteLength(deflate(JSON.stringify(newEvent), { to: 'string' }), 'utf8'),
+[7m   [0m [91m                                                            ~~[0m
+[96mlibs/twitch/common/src/lib/services/twitch-auth.service.ts[0m:[93m334[0m:[93m7[0m - [91merror[0m[90m TS2591: [0mCannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+
+[7m334[0m       Buffer.byteLength(deflate(JSON.stringify(newEvent)), 'utf8'),
+[7m   [0m [91m      ~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

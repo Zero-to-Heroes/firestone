@@ -6,6 +6,7 @@ import { WebsiteProfileState } from '../+state/website/profile.models';
 import { getStatsForModes } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-ranked-overviews',
 	styleUrls: [`./website-profile-ranked-overviews.component.scss`],
 	template: `

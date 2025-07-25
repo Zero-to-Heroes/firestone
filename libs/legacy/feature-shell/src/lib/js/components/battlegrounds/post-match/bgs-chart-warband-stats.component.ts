@@ -4,6 +4,7 @@ import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { equalNumericTurnInfo, NumericTurnInfo } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-chart-warband-stats',
 	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-stats.component.scss`],
 	template: `

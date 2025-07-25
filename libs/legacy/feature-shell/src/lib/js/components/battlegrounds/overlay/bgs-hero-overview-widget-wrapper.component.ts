@@ -4,6 +4,7 @@ import { distinctUntilChanged, Observable } from 'rxjs';
 import { BgsOverlayHeroOverviewService, PlayerInfo } from './bgs-overlay-hero-overview.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-overview-widget-wrapper',
 	styleUrls: ['./bgs-hero-overview-widget-wrapper.component.scss'],
 	template: `

@@ -19,6 +19,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
+	standalone: false,
 	selector: 'deck-winrate-matrix',
 	styleUrls: [`../../../../css/component/decktracker/main/deck-winrate-matrix.component.scss`],
 	template: `

@@ -16,6 +16,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'quests-widget-view',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,
@@ -174,6 +175,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 }
 
 @Component({
+	standalone: false,
 	selector: 'hs-quests-list',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,

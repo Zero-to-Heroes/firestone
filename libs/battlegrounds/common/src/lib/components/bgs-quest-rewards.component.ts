@@ -4,6 +4,7 @@ import { QuestReward } from '@firestone/game-state';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-quest-rewards',
 	styleUrls: [`./bgs-quest-rewards.component.scss`],
 	template: `

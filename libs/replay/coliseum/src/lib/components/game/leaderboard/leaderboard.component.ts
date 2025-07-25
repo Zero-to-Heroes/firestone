@@ -4,6 +4,7 @@ import { Entity, PlayerEntity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'leaderboard',
 	styleUrls: ['./leaderboard.component.scss'],
 	template: `

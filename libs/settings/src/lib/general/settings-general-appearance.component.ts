@@ -5,6 +5,7 @@ import { CustomAppearanceService } from '../common/services/custom-appearance.se
 
 // Deprecated?
 @Component({
+	standalone: false,
 	selector: 'settings-general-appearance',
 	styleUrls: [`../settings-common.component.scss`, `./settings-general-appearance.component.scss`],
 	template: `

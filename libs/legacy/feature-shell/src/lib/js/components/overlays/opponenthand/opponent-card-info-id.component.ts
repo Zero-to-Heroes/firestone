@@ -20,6 +20,7 @@ import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'opponent-card-info-id',
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-info-id.component.scss'],
 	template: `

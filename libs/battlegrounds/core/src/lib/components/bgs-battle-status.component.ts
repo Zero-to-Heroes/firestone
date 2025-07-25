@@ -27,6 +27,7 @@ import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-si
 import { BgsIntermediateResultsSimGuardianService } from '../services/simulation/bgs-intermediate-results-sim-guardian.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-battle-status',
 	styleUrls: [`./bgs-battle-status.component.scss`],
 	template: `

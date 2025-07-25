@@ -10,12 +10,12 @@ import { PieChartComponent } from '@components/common/chart/pie-chart.component'
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { ProfileCommonModule } from '@firestone/profile/common';
+import { SelectModule } from '@sebastientromp/ng-select';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
+import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { SelectModule } from 'ng-select';
-import { NgChartsModule } from 'ng2-charts';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AchievementCategoryComponent } from './js/components/achievements/achievement-category.component';
 import { AchievementCompletionStepComponent } from './js/components/achievements/achievement-completion-step.component';
 import { AchievementHistoryItemComponent } from './js/components/achievements/achievement-history-item.component';
@@ -267,6 +267,7 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
@@ -436,6 +437,7 @@ import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-b
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -644,17 +646,25 @@ try {
 
 @NgModule({
 	imports: [
-		// Needed for Twitch
 		CommonModule,
 		HttpClientModule,
 		BrowserAnimationsModule,
 		FormsModule,
 		ReactiveFormsModule,
 		NgScrollbarModule,
-		InlineSVGModule.forRoot(),
-
-		OverlayModule,
 		SelectModule,
+		ScrollingModule,
+		InlineSVGModule.forRoot(),
+		OverlayModule,
+		SimpleNotificationsModule.forRoot(),
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useClass: LocalizationLoaderWithCache,
+			},
+		}),
+
+		ColiseumComponentsModule,
 
 		AppCommonModule,
 		SharedCommonViewModule,
@@ -687,18 +697,20 @@ try {
 
 		ColiseumComponentsModule,
 		NgxChartsModule,
-		NgChartsModule,
+		// NgChartsModule,
 		TranslateModule.forRoot({
 			defaultLanguage: 'enUS',
 			loader: { provide: TranslateLoader, useExisting: LocalizationLoaderWithCache },
 		}),
+		VirtualScrollerModule,
 		DragDropModule,
 
 		// For the app
 		A11yModule,
 
 		SimpleNotificationsModule.forRoot(),
-		VirtualScrollerModule,
+
+		BaseChartDirective,
 	],
 	declarations: [
 		// Needed for Twitch
@@ -863,7 +875,6 @@ try {
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,
-		BgsHeroMiniComponent,
 		BgsHeroStrategyTipsTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPostMatchStatsComponent,
@@ -1277,6 +1288,8 @@ try {
 		TwitchConfigWidgetComponent,
 	],
 	providers: [
+		provideCharts(withDefaultRegisterables()),
+
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 		// Why??
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationMockExecutorService },
@@ -1434,14 +1447,14 @@ try {
 		LotteryService,
 		LotteryWidgetControllerService,
 	],
-	entryComponents: [
-		ConfirmationComponent,
-		BgsHeroSelectionTooltipComponent,
-		BgsHeroStrategyTipsTooltipComponent,
-		TwitterShareModalComponent,
-		RedditShareModalComponent,
-		BgsOverlayHeroOverviewComponent,
-	],
+	// entryComponents: [
+	// 	ConfirmationComponent,
+	// 	BgsHeroSelectionTooltipComponent,
+	// 	BgsHeroStrategyTipsTooltipComponent,
+	// 	TwitterShareModalComponent,
+	// 	RedditShareModalComponent,
+	// 	BgsOverlayHeroOverviewComponent,
+	// ],
 	exports: [
 		DaemonComponent,
 		MainWindowComponent,

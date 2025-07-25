@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostListener, ViewRef } from '@angular/core';
 
 @Directive({
+	standalone: false,
 	selector: '[cardResize]',
 })
 export class CardResizeDirective implements AfterViewInit {

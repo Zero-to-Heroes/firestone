@@ -7,6 +7,7 @@ import { AdService } from '../../../services/ad.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-desktop',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

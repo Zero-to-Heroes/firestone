@@ -10,6 +10,7 @@ import { groupByFunction } from '../../../services/utils';
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-personal-team-summary',
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,

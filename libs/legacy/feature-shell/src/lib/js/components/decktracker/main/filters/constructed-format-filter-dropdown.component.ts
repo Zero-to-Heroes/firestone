@@ -10,16 +10,17 @@ import {
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-format-filter-dropdown',
 	styleUrls: [
 		`../../../../../css/component/decktracker/main/filters/decktracker-rank-filter-dropdown.component.scss`,
@@ -69,7 +70,7 @@ export class ConstructedFormatFilterDropdownComponent
 						({
 							value: option,
 							label: this.i18n.translateString(`global.format.${option}`),
-						} as FilterOption),
+						}) as FilterOption,
 				);
 				return {
 					filter: filter,

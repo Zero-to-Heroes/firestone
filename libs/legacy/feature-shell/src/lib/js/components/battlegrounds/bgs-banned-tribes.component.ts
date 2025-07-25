@@ -18,6 +18,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-banned-tribes',
 	styleUrls: [
 		// `../../../css/themes/battlegrounds-theme.scss`,

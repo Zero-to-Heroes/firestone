@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../../../models/game-event';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-team-control-bar',
 	styleUrls: [
 		`../../../../../css/component/controls/controls.scss`,

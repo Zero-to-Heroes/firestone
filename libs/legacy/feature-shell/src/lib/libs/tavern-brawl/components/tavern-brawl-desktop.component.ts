@@ -13,6 +13,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { from, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'tavern-brawl-desktop',
 	styleUrls: [`../../../css/component/app-section.component.scss`, `./tavern-brawl-desktop.component.scss`],
 	template: `

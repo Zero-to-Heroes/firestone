@@ -5,6 +5,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, tap } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'preference-numeric-input',
 	styleUrls: [
 		`../../../../../../../../libs/legacy/feature-shell/src/lib/css/global/toggle.scss`,

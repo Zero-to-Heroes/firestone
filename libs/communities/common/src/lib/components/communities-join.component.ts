@@ -19,6 +19,7 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 import { CommunitiesJoinModalComponent } from './communities-join-modal.component';
 
 @Component({
+	standalone: false,
 	selector: 'communities-join',
 	styleUrls: [`./communities-join.component.scss`],
 	template: `

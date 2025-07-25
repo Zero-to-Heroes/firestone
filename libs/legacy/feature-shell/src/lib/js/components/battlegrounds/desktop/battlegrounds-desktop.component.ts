@@ -25,6 +25,7 @@ import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/s
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-desktop',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

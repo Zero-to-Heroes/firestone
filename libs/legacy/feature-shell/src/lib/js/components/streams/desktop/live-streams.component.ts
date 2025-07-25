@@ -15,6 +15,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'live-streams',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

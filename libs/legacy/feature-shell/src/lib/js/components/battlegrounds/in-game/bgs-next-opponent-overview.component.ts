@@ -14,6 +14,7 @@ import { auditTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, t
 import { AdService } from '../../../services/ad.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-next-opponent-overview',
 	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`],
 	template: `

@@ -22,6 +22,7 @@ const refBounds = {
 };
 
 @Component({
+	standalone: false,
 	selector: 'arena-current-session-widget-wrapper',
 	styleUrls: ['./arena-current-session-widget-wrapper.component.scss'],
 	template: `

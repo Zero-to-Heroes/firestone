@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'set-view',
 	styleUrls: [`./set-view.component.scss`],
 	template: `

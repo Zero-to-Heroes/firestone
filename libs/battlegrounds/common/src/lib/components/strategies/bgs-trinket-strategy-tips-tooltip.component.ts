@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-trinket-strategy-tips-tooltip',
 	styleUrls: [`./bgs-trinket-strategy-tips-tooltip.component.scss`],
 	template: `

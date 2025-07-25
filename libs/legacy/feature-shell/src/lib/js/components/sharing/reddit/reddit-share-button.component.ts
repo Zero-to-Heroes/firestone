@@ -13,6 +13,7 @@ import { SocialShareButtonComponent } from '../social-share-button.component';
 import { RedditShareModalComponent } from './reddit-share-modal.component';
 
 @Component({
+	standalone: false,
 	selector: 'reddit-share-button',
 	styleUrls: [
 		`../../../../css/component/sharing/social-share-button.component.scss`,

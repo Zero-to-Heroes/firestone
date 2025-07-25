@@ -4,6 +4,7 @@ import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'card-name',
 	styleUrls: ['../../../text.scss', './card-name.component.scss'],
 	template: `

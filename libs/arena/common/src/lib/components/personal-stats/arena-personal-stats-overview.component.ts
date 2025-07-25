@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ArenaRun } from '../../models/arena-run';
 
 @Component({
+	standalone: false,
 	selector: 'arena-personal-stats-overview',
 	styleUrls: [`./arena-personal-stats-overview.component.scss`],
 	template: `

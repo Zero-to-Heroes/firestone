@@ -8,6 +8,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'community-friendly-battle-player',
 	styleUrls: [`./community-friendly-battle-player.component.scss`],
 	template: `

@@ -4,6 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 
 /// Doesn't send a click event when a double click happens
 @Directive({
+	standalone: false,
 	selector: '[exDoubleClick]',
 })
 export class DoubleClickDirective implements AfterViewInit {

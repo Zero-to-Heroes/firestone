@@ -30,6 +30,7 @@ export const templateBase = `
 `;
 
 @Component({
+	standalone: false,
 	selector: 'counter-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: templateBase,

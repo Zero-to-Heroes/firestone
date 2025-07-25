@@ -18,6 +18,7 @@ import { Observable } from 'rxjs';
 import { PremiumPlan } from './premium-desktop.component';
 
 @Component({
+	standalone: false,
 	selector: 'premium-package',
 	styleUrls: [`./premium-package.component.scss`],
 	template: `

@@ -110,6 +110,7 @@ const versions: readonly AppVersion[] = [
 ];
 
 @Component({
+	standalone: false,
 	selector: 'new-version-notification',
 	styleUrls: [
 		`../../../../../legacy/feature-shell/src/lib/css/global/menu.scss`,
@@ -288,10 +289,10 @@ export class NewVersionNotificationComponent
 		}
 	}
 
-	selectVersion(version: AppVersion) {
+	async selectVersion(version: AppVersion) {
 		if (version.versionDetails && !version.textHtml) {
 			const parsed = this.markdownService.parse(version.versionDetails);
-			version.textHtml = parsed;
+			version.textHtml = typeof parsed === 'string' ? parsed : await parsed;
 		}
 		this.selectedVersion = version;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -333,6 +334,7 @@ export class NewVersionNotificationComponent
 			this.showNewVersion = true;
 		}
 		this.notificationDisplayed.next(this.showNewVersion);
+		console.debug('updateInfo', this.showNewVersion);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -3,6 +3,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { Events } from '../../../services/events.service';
 
 @Component({
+	standalone: false,
 	selector: 'quest',
 	styleUrls: ['./quest.component.scss'],
 	template: `

@@ -5,6 +5,7 @@ import { BgsMetaQuestStatTierItem } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-quest-info',
 	styleUrls: [
 		`./battlegrounds-meta-stats-quests-columns.scss`,

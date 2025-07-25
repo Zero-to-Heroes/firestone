@@ -13,6 +13,7 @@ import { Events } from '../../services/events.service';
 import { GameHelper } from '../../services/game-helper';
 
 @Component({
+	standalone: false,
 	selector: 'game',
 	styleUrls: ['./game.component.scss', './game-battlegrounds.scss'],
 	template: `

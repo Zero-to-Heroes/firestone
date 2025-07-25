@@ -23,6 +23,7 @@ import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/event
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-deck-summary',
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,

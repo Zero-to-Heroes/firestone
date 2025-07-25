@@ -9,6 +9,7 @@ import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.s
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-detailed-stats',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component.scss`,
@@ -161,6 +162,7 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComp
 }
 
 @Component({
+	standalone: false,
 	selector: 'bgs-global-value',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component.scss`,

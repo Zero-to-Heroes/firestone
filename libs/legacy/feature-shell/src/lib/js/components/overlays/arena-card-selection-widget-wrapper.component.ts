@@ -18,6 +18,7 @@ import { AdService } from '../../services/ad.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-selection-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/background-widget.component.scss'],
 	template: ` <arena-card-selection class="widget" *ngIf="showWidget$ | async"></arena-card-selection> `,

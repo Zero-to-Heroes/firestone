@@ -8,6 +8,7 @@ import { SkipFtueEvent } from '../../../services/mainwindow/store/events/ftue/sk
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'ftue',
 	styleUrls: [`../../../../css/global/menu.scss`, `../../../../css/component/main-window/ftue/ftue.component.scss`],
 	template: `

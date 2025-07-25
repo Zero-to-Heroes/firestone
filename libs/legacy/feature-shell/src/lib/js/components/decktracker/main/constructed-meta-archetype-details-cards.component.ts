@@ -9,6 +9,7 @@ import { MinimalCard } from '../overlay/deck-list-static.component';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-archetype-details-cards',
 	styleUrls: [
 		`../../../../css/component/decktracker/main/constructed-meta-deck-details-cards.component.scss`,

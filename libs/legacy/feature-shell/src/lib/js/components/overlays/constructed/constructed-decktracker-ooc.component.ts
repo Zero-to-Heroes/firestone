@@ -12,6 +12,7 @@ import { DecksProviderService } from '../../../services/decktracker/main/decks-p
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-decktracker-ooc',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',

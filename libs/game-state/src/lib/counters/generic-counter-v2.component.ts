@@ -14,6 +14,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 import { CounterInstance } from './_counter-definition-v2';
 
 @Component({
+	standalone: false,
 	selector: 'generic-counter-v2',
 	styleUrls: ['./generic-counter-v2.component.scss'],
 	template: `

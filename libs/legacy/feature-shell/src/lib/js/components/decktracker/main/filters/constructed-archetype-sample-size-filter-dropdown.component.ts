@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-archetype-sample-size-filter-dropdown',
 	styleUrls: [],
 	template: `

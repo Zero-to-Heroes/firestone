@@ -28,6 +28,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'choosing-bgs-trinket-widget-wrapper',
 	styleUrls: ['./choosing-bgs-trinket-widget-wrapper.component.scss'],
 	template: `

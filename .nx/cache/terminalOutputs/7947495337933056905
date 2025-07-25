@@ -1,0 +1,34 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/arena/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts[0m:[93m36[0m:[93m58[0m - [91merror[0m[90m TS2322: [0mType '(index: any, item: ArenaGroupedRuns) => string' is not assignable to type 'TrackByFunction<string | ArenaRunInfo>'.[39m
+
+  Types of parameters 'item' and 'item' are incompatible.
+    Type '(string | ArenaRunInfo) & U' is not assignable to type 'ArenaGroupedRuns'.
+      Type 'string & U' is not assignable to type 'ArenaGroupedRuns'.
+
+[7m36[0m       <ng-container *ngFor="let stat of value.runGroups; trackBy: trackByGroup">
+[7m  [0m [91m                                                         ~~~~~~~[0m
+[96mlibs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts[0m:[93m37[0m:[93m41[0m - [91merror[0m[90m TS2339: [0mProperty 'creationDate' does not exist on type 'string | ArenaRunInfo'.
+  Property 'creationDate' does not exist on type 'string'.
+
+[7m37[0m        <div class="header" *ngIf="!stat.creationDate">{{ stat }}</div>
+[7m  [0m [91m                                        ~~~~~~~~~~~~[0m
+[96mlibs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts[0m:[93m38[0m:[93m40[0m - [91merror[0m[90m TS2339: [0mProperty 'creationDate' does not exist on type 'string | ArenaRunInfo'.
+  Property 'creationDate' does not exist on type 'string'.
+
+[7m38[0m        <arena-run-vignette *ngIf="stat.creationDate" [stat]="stat"></arena-run-vignette>
+[7m  [0m [91m                                       ~~~~~~~~~~~~[0m
+[96mlibs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts[0m:[93m38[0m:[93m55[0m - [91merror[0m[90m TS2322: [0mType 'string | ArenaRunInfo' is not assignable to type 'ExtendedArenaRunInfo'.
+  Type 'string' is not assignable to type 'ExtendedArenaRunInfo'.
+
+[7m38[0m        <arena-run-vignette *ngIf="stat.creationDate" [stat]="stat"></arena-run-vignette>
+[7m  [0m [91m                                                      ~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

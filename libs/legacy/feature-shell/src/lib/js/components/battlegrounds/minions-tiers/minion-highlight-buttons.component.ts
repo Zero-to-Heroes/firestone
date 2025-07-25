@@ -5,6 +5,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { Minion } from './bgs-minion-item.component';
 
 @Component({
+	standalone: false,
 	selector: 'minion-highlight-buttons',
 	styleUrls: [`./minion-highlight-buttons.component.scss`],
 	template: `

@@ -21,6 +21,7 @@ import { CardsFacadeService, ILocalizationService, OverwolfService } from '@fire
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'card-tooltip',
 	styleUrls: [`./card-tooltip.component.scss`],
 	template: `

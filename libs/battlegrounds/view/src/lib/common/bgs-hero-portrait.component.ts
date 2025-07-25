@@ -6,6 +6,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-portrait',
 	styleUrls: [`./bgs-hero-portrait.component.scss`],
 	template: `

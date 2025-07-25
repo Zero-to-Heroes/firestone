@@ -11,6 +11,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 
 @Component({
+	standalone: false,
 	selector: 'set-stats',
 	styleUrls: [`../../../css/global/forms.scss`, `../../../css/global/toggle.scss`, `./set-stats.component.scss`],
 	template: `

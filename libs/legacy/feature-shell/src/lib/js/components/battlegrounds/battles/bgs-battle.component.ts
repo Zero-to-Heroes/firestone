@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-battle',
 	styleUrls: [`./bgs-battle.component.scss`],
 	template: `

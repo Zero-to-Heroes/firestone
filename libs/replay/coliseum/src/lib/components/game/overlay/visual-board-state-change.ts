@@ -2,6 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'visual-board-state-change',
 	styleUrls: ['./visual-board-state-change.component.scss'],
 	template: `

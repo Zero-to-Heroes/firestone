@@ -16,6 +16,7 @@ import { combineLatest, filter, Observable, switchMap, takeUntil, tap } from 'rx
 import { ArenaHeroOption } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-hero-option',
 	styleUrls: ['./arena-hero-option.component.scss'],
 	template: `

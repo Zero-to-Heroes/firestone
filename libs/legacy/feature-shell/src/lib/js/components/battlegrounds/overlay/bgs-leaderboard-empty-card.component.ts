@@ -25,6 +25,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 import { BgsOverlayHeroOverviewService, PlayerInfo } from './bgs-overlay-hero-overview.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-leaderboard-empty-card',
 	styleUrls: ['./bgs-leaderboard-empty-card.component.scss'],
 	template: `

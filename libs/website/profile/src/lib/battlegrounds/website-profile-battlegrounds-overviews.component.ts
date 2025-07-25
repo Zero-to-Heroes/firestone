@@ -6,6 +6,7 @@ import { WebsiteProfileState } from '../+state/website/profile.models';
 import { getBgsHeroStats } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-battlegrounds-overviews',
 	styleUrls: [`./website-profile-battlegrounds-overviews.component.scss`],
 	template: `

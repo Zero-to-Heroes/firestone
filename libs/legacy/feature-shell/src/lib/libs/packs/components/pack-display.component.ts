@@ -4,6 +4,7 @@ import { CollectionCardType } from '@legacy-import/src/lib/js/models/collection/
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'pack-display',
 	styleUrls: [`../../../css/global/forms.scss`, `../../../css/global/toggle.scss`, `./pack-display.component.scss`],
 	template: `
@@ -28,7 +29,10 @@ export class PackDisplayComponent {
 
 	cards: readonly CardPackResult[];
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	getLeft(i: number): number {
 		const offset = 0;

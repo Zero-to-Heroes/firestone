@@ -6,7 +6,7 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -14,6 +14,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-type-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -60,7 +61,7 @@ export class ArenaCardTypeFilterDropdownComponent
 						({
 							value: option,
 							label: this.i18n.translateString(`app.arena.filters.card-type.${option}`),
-						} as ClassFilterOption),
+						}) as ClassFilterOption,
 				);
 				return {
 					filter: filter,

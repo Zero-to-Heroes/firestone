@@ -3,6 +3,7 @@ import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateDirective, TranslateService } from '@ngx-translate/core';
 
 @Directive({
+	standalone: false,
 	selector: '[owTranslate]',
 })
 export class OwTranslateDirective extends TranslateDirective {

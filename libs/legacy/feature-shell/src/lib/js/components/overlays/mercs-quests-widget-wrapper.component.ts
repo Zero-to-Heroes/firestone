@@ -16,6 +16,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercs-quests-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/quests-widget-wrapper.component.scss'],
 	template: `

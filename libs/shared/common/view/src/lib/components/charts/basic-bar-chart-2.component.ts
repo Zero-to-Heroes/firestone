@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-chart-data';
 
 @Component({
+	standalone: false,
 	selector: 'basic-bar-chart-2',
 	styleUrls: [`./basic-bar-chart-2.component.scss`],
 	template: `

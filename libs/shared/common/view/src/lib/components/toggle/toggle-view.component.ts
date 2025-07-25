@@ -10,6 +10,7 @@ import { AbstractSubscriptionComponent, uuid } from '@firestone/shared/framework
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'fs-toggle-view',
 	styleUrls: [`../label.scss`, `./toggle.scss`, `./toggle-view.component.scss`],
 	template: `

@@ -9,6 +9,7 @@ import { WebsiteProfileState } from '../+state/website/profile.models';
 import { getPacks } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-packs-overview',
 	styleUrls: [`./website-profile-packs-overview.component.scss`],
 	template: `

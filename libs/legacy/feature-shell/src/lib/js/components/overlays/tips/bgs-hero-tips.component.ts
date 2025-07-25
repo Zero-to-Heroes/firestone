@@ -8,6 +8,7 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-tips',
 	styleUrls: [
 		// `../../../../css/themes/battlegrounds-theme.scss`,

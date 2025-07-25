@@ -12,6 +12,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { preloader } from '../assets/preloader';
 
 @Component({
+	standalone: false,
 	selector: 'preloader',
 	styleUrls: ['./preloader.component.scss'],
 	template: `

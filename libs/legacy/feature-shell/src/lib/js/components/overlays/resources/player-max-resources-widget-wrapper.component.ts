@@ -13,6 +13,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { AbstractMaxResourcesWidgetWrapperComponent } from './abstract-max-resources-widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'player-max-resources-widget-wrapper',
 	styleUrls: ['./player-max-resources-widget-wrapper.component.scss'],
 	template: `

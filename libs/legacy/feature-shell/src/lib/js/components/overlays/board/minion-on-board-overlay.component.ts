@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'minion-on-board-overlay',
 	styleUrls: ['../../../../css/component/overlays/board/minion-on-board-overlay.component.scss'],
 	template: `

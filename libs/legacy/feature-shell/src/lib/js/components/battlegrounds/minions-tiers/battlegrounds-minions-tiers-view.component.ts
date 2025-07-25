@@ -5,6 +5,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-minions-tiers-view',
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './battlegrounds-minions-tiers-view.component.scss'],
 	template: `

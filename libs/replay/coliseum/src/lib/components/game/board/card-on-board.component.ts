@@ -5,6 +5,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { ColiseumDebugService } from '../../../services/coliseum-debug.service';
 
 @Component({
+	standalone: false,
 	selector: 'card-on-board',
 	styleUrls: ['./card-on-board.component.scss'],
 	template: `

@@ -20,6 +20,7 @@ import { Events } from '../services/events.service';
 const CARD_ASPECT_RATIO = 1.56;
 
 @Component({
+	standalone: false,
 	selector: 'tooltip',
 	styleUrls: [`./tooltip.component.scss`],
 	template: `
@@ -49,9 +50,9 @@ export class TooltipComponent {
 }
 
 @Component({
+	standalone: false,
 	selector: 'tooltips',
 	styleUrls: [`./tooltips.component.scss`],
-	entryComponents: [TooltipComponent],
 	template: ` <div class="tooltips"><ng-template #tooltips></ng-template></div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

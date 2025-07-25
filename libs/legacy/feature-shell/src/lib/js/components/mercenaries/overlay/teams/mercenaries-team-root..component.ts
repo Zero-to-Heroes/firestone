@@ -30,6 +30,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-team-root',
 	styleUrls: [
 		`../../../../../css/global/cdk-overlay.scss`,
@@ -192,6 +193,7 @@ export class MercenariesTeamRootComponent
 }
 
 @Component({
+	standalone: false,
 	selector: 'mercs-tasks-list',
 	styleUrls: [
 		`../../../../../css/themes/decktracker-theme.scss`,

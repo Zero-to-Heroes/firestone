@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'hero-frame',
 	styleUrls: ['./hero-frame.component.scss'],
 	template: ` <img src="{{ image }}" class="hero-frame" /> `,

@@ -8,6 +8,7 @@ import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-personal-stats-stats',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component.scss`,

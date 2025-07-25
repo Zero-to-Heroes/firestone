@@ -10,6 +10,7 @@ import { buildNotableCards } from '../../services/arena-high-wins-runs.service';
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-run-vignette',
 	styleUrls: [`./arena-run-vignette.component.scss`],
 	template: `

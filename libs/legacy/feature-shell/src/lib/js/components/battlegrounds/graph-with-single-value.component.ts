@@ -16,6 +16,7 @@ import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { Subscription, fromEvent } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'graph-with-single-value',
 	styleUrls: [`../../../css/component/battlegrounds/graph-with-single-value.component.scss`],
 	template: `

@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-hero-search',
 	styleUrls: [`../../../../../css/component/mercenaries/desktop/secondary/mercenaries-hero-search.component.scss`],
 	template: `

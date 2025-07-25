@@ -3,6 +3,7 @@ import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/d
 import { BgsQuestStat } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-tier',
 	styleUrls: [`./bgs-hero-tier.component.scss`],
 	template: `

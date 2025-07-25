@@ -19,6 +19,7 @@ import { map } from 'rxjs/operators';
 import { TavernBrawlService } from '../../services/tavern-brawl.service';
 
 @Component({
+	standalone: false,
 	selector: 'tavern-brawl-meta',
 	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-meta.component.scss`],
 	template: `

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { QuestReward } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-short-recap',
 	styleUrls: ['./bgs-hero-short-recap.component.scss'],
 	template: `

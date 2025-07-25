@@ -3,6 +3,7 @@ import { ProfileSet } from '@firestone-hs/api-user-profile';
 import { ExtendedProfileSet } from '../+state/website/profile.models';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-sets',
 	styleUrls: [`./website-profile-sets.component.scss`],
 	template: `

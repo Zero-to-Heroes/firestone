@@ -21,6 +21,7 @@ import {
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUntil, tap } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'premium-desktop',
 	styleUrls: [`./premium-desktop.component.scss`],
 	template: `

@@ -1,8 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'collection-owned-filter',
 	styleUrls: [`../../../../css/component/collection/filters/owned-filter.component.scss`],
 	template: `

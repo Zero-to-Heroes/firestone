@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'trinkets',
 	styleUrls: ['./trinkets.component.scss'],
 	template: `

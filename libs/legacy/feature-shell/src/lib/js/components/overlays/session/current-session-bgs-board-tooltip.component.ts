@@ -3,6 +3,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'current-session-bgs-board-tooltip',
 	styleUrls: [
 		// `../../battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,

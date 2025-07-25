@@ -18,6 +18,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-action-queue',
 	styleUrls: [
 		'../../../../../css/component/mercenaries/overlay/action-queue/mercenaries-action-queue.component.scss',

@@ -24,6 +24,7 @@ import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collec
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'notifications',
 	styleUrls: [
 		'../../css/component/notifications/notifications.component.scss',

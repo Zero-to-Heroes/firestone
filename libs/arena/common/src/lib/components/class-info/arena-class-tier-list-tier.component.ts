@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ArenaClassTier } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-class-tier-list-tier',
 	styleUrls: [`./arena-class-tier-list-tier.component.scss`],
 	template: `

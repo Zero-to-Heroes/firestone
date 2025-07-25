@@ -19,6 +19,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { HelpTooltipComponent } from './help-tooltip.component';
 
 @Directive({
+	standalone: false,
 	selector: '[helpTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138

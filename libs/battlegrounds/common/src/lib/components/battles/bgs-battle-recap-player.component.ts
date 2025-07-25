@@ -7,6 +7,7 @@ import { BgsCardTooltipComponent, buildEntityFromBoardEntity } from '@firestone/
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-battle-recap-player',
 	styleUrls: [`./bgs-battle-recap-player.component.scss`],
 	template: `

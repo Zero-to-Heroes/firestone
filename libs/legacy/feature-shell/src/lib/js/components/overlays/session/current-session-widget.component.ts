@@ -36,6 +36,7 @@ import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
+	standalone: false,
 	selector: 'current-session-widget',
 	styleUrls: ['./current-session-widget.component.scss'],
 	template: `

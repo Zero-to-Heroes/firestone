@@ -6,6 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'community-internal-ladder-view',
 	styleUrls: [`./community-internal-ladder-view.component.scss`],
 	template: `

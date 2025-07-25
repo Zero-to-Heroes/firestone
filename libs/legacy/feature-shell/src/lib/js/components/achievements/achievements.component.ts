@@ -7,6 +7,7 @@ import { CurrentView } from '../../models/mainwindow/achievement/current-view.ty
 import { AdService } from '../../services/ad.service';
 
 @Component({
+	standalone: false,
 	selector: 'achievements',
 	styleUrls: [
 		`../../../css/component/app-section.component.scss`,

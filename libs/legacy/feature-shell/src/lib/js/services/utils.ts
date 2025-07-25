@@ -1,7 +1,6 @@
 // import equal from 'fast-deep-equal/es6';
 import { PatchInfo } from '@firestone/shared/common/service';
 import equal from 'deep-equal';
-import { inflate } from 'pako';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 /**@deprecated */
@@ -179,13 +178,6 @@ export const updateFirstElementWithoutProp = <T>(
 	}
 	const indexWithoutProperty = array.indexOf(withoutPropertyElements[0]);
 	return replaceInArray(array, indexWithoutProperty, base as T);
-};
-
-/** deprecated use decodeBase64 */
-export const decode = (input: string): string => {
-	const fromBase64 = Buffer.from(input, 'base64').toString();
-	const inflated = inflate(fromBase64, { to: 'string' });
-	return JSON.parse(inflated);
 };
 
 // Because floating point computations are not super reliable and lead to false

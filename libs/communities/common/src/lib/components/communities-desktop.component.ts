@@ -22,6 +22,7 @@ import { ComunitiesCategory } from '../models/navigation';
 import { CommunityNavigationService } from '../services/community-navigation.service';
 
 @Component({
+	standalone: false,
 	selector: 'communities-desktop',
 	styleUrls: [
 		`../../../../../shared/styles/src/lib/styles/app-section.component.scss`,

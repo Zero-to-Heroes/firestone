@@ -3,6 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, V
 
 // TODO: this should be moved to a more common module
 @Component({
+	standalone: false,
 	selector: 'circular-progress',
 	styleUrls: [`./circular-progress.component.scss`],
 	template: `

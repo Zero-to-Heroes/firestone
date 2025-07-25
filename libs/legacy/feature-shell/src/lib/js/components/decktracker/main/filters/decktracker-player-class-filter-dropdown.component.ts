@@ -9,6 +9,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-player-class-filter-dropdown',
 	styleUrls: [`./decktracker-player-class-filter-dropdown.component.scss`],
 	template: `

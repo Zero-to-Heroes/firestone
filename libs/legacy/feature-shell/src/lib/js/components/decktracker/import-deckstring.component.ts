@@ -8,6 +8,7 @@ import { DeckstringOverrideEvent } from '../../services/decktracker/event/deckst
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'import-deckstring',
 	styleUrls: ['../../../css/component/decktracker/import-deckstring.component.scss'],
 	template: `

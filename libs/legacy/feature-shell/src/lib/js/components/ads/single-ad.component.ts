@@ -17,6 +17,7 @@ declare let adsReady: any;
 declare let OwAd: any;
 
 @Component({
+	standalone: false,
 	selector: 'single-ad',
 	styleUrls: [`./single-ad.component.scss`],
 	template: `

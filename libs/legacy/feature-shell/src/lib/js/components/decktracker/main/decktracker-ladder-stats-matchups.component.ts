@@ -10,6 +10,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-ladder-stats-matchups',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

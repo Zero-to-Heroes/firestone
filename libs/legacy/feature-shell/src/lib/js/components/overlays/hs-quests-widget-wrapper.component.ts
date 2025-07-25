@@ -17,6 +17,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'hs-quests-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/quests-widget-wrapper.component.scss'],
 	template: `

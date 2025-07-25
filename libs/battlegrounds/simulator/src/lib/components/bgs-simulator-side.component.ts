@@ -11,6 +11,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator-side',
 	styleUrls: [`./bgs-simulator-side.component.scss`],
 	template: `

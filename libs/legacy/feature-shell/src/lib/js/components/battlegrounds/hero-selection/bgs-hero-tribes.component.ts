@@ -3,6 +3,7 @@ import { getTribeIcon } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-tribes',
 	styleUrls: [
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,

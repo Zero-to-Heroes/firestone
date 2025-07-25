@@ -6,6 +6,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-comps-info',
 	styleUrls: [
 		`./battlegrounds-meta-stats-comps-columns.scss`,

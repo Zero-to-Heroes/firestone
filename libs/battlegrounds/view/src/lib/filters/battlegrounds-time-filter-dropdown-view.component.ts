@@ -8,13 +8,14 @@ import {
 	Output,
 } from '@angular/core';
 import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-time-filter-dropdown-view',
 	styleUrls: [],
 	template: `
@@ -53,7 +54,10 @@ export class BattlegroundsTimeFilterDropdownViewComponent
 	private currentFilter$$ = new BehaviorSubject<BgsActiveTimeFilterType>(null);
 	private visible$$ = new BehaviorSubject<boolean>(null);
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+	) {
 		super(cdr);
 	}
 
@@ -66,7 +70,7 @@ export class BattlegroundsTimeFilterDropdownViewComponent
 						({
 							value: '' + period,
 							label: getBgsTimeFilterLabelFor(period, this.i18n),
-						} as TimeFilterOption),
+						}) as TimeFilterOption,
 				),
 			),
 		);

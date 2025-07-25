@@ -15,6 +15,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { combineLatest, takeUntil } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-overlay-hero-overview',
 	styleUrls: [
 		// '../../../../css/themes/battlegrounds-theme.scss',

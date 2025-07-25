@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-search',
 	styleUrls: [`./arena-card-search.component.scss`],
 	template: `

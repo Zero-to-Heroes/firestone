@@ -1,0 +1,20 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/service'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/common/service/src/lib/shared-common-service.module.ts[0m:[93m47[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective AdvancedSettingDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?[39m
+
+
+[7m47[0m  declarations: components,
+[7m  [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/service/src/lib/shared-common-service.module.ts[0m:[93m48[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m48[0m  exports: components,
+[7m  [0m [91m          ~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

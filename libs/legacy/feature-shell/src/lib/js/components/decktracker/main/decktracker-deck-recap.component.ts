@@ -11,6 +11,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-deck-recap',
 	styleUrls: [`../../../../css/component/decktracker/main/decktracker-deck-recap.component.scss`],
 	template: `

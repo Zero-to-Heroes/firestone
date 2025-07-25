@@ -23,6 +23,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'full-card',
 	styleUrls: [`./full-card.component.scss`],
 	template: `

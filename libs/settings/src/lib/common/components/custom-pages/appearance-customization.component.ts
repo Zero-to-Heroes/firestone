@@ -4,6 +4,7 @@ import { ILocalizationService, waitForReady } from '@firestone/shared/framework/
 import { CustomAppearanceService } from '../../services/custom-appearance.service';
 
 @Component({
+	standalone: false,
 	selector: 'appearance-customization',
 	styleUrls: [`../../../settings-common.component.scss`, `./appearance-customization.component.scss`],
 	template: `

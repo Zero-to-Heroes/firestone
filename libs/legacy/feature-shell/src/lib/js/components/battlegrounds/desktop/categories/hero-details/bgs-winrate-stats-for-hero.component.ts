@@ -12,6 +12,7 @@ import { arraysEqual } from '../../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-winrate-stats-for-hero',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-winrate-stats-for-hero.component.scss`,

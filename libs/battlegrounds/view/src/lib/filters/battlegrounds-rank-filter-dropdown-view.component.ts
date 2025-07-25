@@ -8,13 +8,14 @@ import {
 	Output,
 } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-rank-filter-dropdown-view',
 	styleUrls: [],
 	template: `
@@ -53,7 +54,10 @@ export class BattlegroundsRankFilterDropdownViewComponent
 	private currentFilter$$ = new BehaviorSubject<number>(null);
 	private visible$$ = new BehaviorSubject<boolean>(null);
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+	) {
 		super(cdr);
 	}
 
@@ -69,7 +73,7 @@ export class BattlegroundsRankFilterDropdownViewComponent
 							({
 								value: '' + percentile.percentile,
 								label: getBgsRankFilterLabelFor(percentile, this.i18n),
-							} as RankFilterOption),
+							}) as RankFilterOption,
 					),
 			),
 		);

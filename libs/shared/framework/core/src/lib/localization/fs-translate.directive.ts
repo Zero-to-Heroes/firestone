@@ -4,6 +4,7 @@ import { ILocalizationService } from './localization.service';
 
 @Directive({
 	selector: '[fsTranslate]',
+	standalone: false,
 })
 export class FsTranslateDirective extends TranslateDirective {
 	@Input() set fsTranslate(key: string | null) {

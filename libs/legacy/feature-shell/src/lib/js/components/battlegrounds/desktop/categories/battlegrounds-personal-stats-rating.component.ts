@@ -13,6 +13,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-personal-stats-rating',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component.scss`,

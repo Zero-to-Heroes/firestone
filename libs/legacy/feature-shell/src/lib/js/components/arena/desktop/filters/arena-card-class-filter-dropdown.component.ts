@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
 import { ArenaCardClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { classes } from '../../../../services/hs-utils';
@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-class-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -58,7 +59,7 @@ export class ArenaCardClassFilterDropdownComponent
 							label: classes.includes(option)
 								? this.i18n.translateString(`global.class.${option?.toLowerCase()}`)
 								: this.i18n.translateString(`app.arena.filters.card-class.${option}`),
-						} as ClassFilterOption),
+						}) as ClassFilterOption,
 				);
 				return {
 					filter: filter,

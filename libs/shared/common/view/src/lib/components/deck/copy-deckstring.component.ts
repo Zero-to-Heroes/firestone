@@ -8,6 +8,7 @@ import {
 } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'copy-deckstring',
 	styleUrls: ['./copy-deckstring.component.scss'],
 	template: `

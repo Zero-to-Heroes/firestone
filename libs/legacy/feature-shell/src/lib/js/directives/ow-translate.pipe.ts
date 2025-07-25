@@ -4,6 +4,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 @Pipe({
+	standalone: false,
 	name: 'owTranslate',
 	pure: false, // required to update the value when the promise is resolved
 })

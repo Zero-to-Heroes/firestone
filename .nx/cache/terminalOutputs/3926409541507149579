@@ -1,0 +1,16 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m71[0m:[93m43[0m - [91merror[0m[90m TS2339: [0mProperty 'unselectable' does not exist on type 'InternalOption'.[39m
+
+
+[7m71[0m         [ngClass]="{ unselectable: option.unselectable }"
+[7m  [0m [91m                                          ~~~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

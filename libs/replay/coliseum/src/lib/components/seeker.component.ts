@@ -11,6 +11,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'seeker',
 	styleUrls: ['./seeker.component.scss'],
 	template: `

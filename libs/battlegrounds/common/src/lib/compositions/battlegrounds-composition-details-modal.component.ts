@@ -5,6 +5,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-composition-details-modal',
 	styleUrls: ['./battlegrounds-composition-details-modal.component.scss'],
 	template: `

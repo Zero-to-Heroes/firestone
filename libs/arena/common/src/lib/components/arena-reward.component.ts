@@ -4,6 +4,7 @@ import { RewardType } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'arena-reward',
 	styleUrls: [`./arena-reward.component.scss`],
 	template: `

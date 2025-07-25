@@ -6,6 +6,7 @@ import { TWITCH_LOGIN_URL, TwitchAuthService } from '@firestone/twitch/common';
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'settings-broadcast',
 	styleUrls: [
 		`../scrollbar-settings.scss`,

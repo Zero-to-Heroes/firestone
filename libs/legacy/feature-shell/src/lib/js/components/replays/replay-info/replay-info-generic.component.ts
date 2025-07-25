@@ -23,6 +23,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
+	standalone: false,
 	selector: 'replay-info-generic',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

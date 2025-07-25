@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsMetaTrinketStatTier, BgsMetaTrinketStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-trinket-tier',
 	styleUrls: [`./battlegrounds-meta-stats-trinket-tier.component.scss`],
 	template: `

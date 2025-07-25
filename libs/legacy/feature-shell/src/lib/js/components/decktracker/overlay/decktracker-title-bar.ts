@@ -3,6 +3,7 @@ import { DeckState, StatsRecap } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-title-bar',
 	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss'],
 	template: `

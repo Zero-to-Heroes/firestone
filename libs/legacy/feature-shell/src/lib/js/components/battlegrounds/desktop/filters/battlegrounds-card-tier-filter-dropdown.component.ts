@@ -8,6 +8,7 @@ import { Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-card-tier-filter-dropdown',
 	styleUrls: ['./battlegrounds-card-tier-filter-dropdown.component.scss'],
 	template: `

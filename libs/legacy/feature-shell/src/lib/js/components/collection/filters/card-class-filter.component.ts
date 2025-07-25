@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { IOption } from '@firestone/shared/common/view';
 import { CollectionCardClassFilterType } from '@models/collection/filter-types';
 import { classes } from '@services/hs-utils';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'card-class-filter',
 	styleUrls: [],
 	template: `

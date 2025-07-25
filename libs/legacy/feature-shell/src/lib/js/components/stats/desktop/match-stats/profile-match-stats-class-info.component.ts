@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ClassInfo } from './profile-match-stats.model';
 
 @Component({
+	standalone: false,
 	selector: 'profile-match-stats-class-info',
 	styleUrls: [
 		`../../../../../css/component/stats/desktop/match-stats/profile-match-stats-columns.scss`,

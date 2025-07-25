@@ -17,6 +17,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-opponent-widget-wrapper',
 	styleUrls: [
 		'../../../css/component/overlays/foreground-widget.component.scss',

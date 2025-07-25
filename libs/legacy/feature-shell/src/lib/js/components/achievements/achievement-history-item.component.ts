@@ -6,6 +6,7 @@ import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/e
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'achievement-history-item',
 	styleUrls: [`../../../css/component/achievements/achievement-history-item.component.scss`],
 	template: `

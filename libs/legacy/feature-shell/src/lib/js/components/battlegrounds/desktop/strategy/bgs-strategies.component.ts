@@ -6,6 +6,7 @@ import { currentBgHeroId } from '@legacy-import/src/lib/js/services/ui-store/app
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-strategies',
 	styleUrls: [`./bgs-strategies.component.scss`],
 	template: ` <bgs-strategies-wrapper [heroId]="heroId$ | async"></bgs-strategies-wrapper> `,

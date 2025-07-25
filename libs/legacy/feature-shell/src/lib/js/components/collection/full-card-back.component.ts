@@ -6,6 +6,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
+	standalone: false,
 	selector: 'full-card-back',
 	styleUrls: [`../../../css/component/collection/full-card-back.component.scss`],
 	template: `

@@ -7,6 +7,7 @@ import { changeMetaHeroStatsPercentileFilter } from './+state/meta-hero-stats/me
 import { getCurrentPercentileFilter, getMmrPercentiles } from './+state/meta-hero-stats/meta-hero-stats.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-battlegrounds-rank-filter-dropdown',
 	styleUrls: [],
 	template: `

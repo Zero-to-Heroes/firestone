@@ -20,6 +20,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 import { CardTooltipAdditionalInfo, CardTooltipComponent, isGuessedInfoEmpty } from './card-tooltip.component';
 
 @Directive({
+	standalone: false,
 	selector: '[cardTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138

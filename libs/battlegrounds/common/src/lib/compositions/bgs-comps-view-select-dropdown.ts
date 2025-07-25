@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsCompositionsListMode, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { BattlegroundsNavigationService } from '../services/bgs-navigation.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-comps-view-select-dropdown',
 	styleUrls: [],
 	template: `

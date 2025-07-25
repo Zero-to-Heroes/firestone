@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-empty-state',
 	styleUrls: [`../../../../css/component/arena/desktop/arena-empty-state.component.scss`],
 	template: `

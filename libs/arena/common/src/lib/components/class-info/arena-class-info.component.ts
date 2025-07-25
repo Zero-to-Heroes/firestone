@@ -5,6 +5,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { ArenaClassInfo } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-class-info',
 	styleUrls: [`./arena-class-tier-list-columns.scss`, `./arena-class-info.component.scss`],
 	template: `

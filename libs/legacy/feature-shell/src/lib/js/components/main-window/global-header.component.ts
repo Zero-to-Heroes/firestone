@@ -19,6 +19,7 @@ import { NavigationBackEvent } from '../../services/mainwindow/store/events/navi
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
 
 @Component({
+	standalone: false,
 	selector: 'global-header',
 	styleUrls: [
 		`../../../css/global/menu.scss`,

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-quest-tier',
 	styleUrls: [`./battlegrounds-meta-stats-quest-tier.component.scss`],
 	template: `

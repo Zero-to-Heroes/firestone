@@ -2,15 +2,16 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { TimeFilterOption } from '@firestone/battlegrounds/view';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { formatPatch } from '../../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-time-filter-dropdown',
 	styleUrls: [],
 	template: `

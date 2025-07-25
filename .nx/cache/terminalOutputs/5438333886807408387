@@ -1,0 +1,29 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/framework/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/framework/common/src/lib/libs/utils.ts[0m:[93m191[0m:[93m27[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.[39m
+
+  Overload 1 of 2, '(data: Data, options: InflateFunctionOptions & { to: "string"; }): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Data'.
+  Overload 2 of 2, '(data: Data, options?: InflateFunctionOptions | undefined): Uint8Array', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Data'.
+
+[7m191[0m  const inflated = inflate(fromBase64, { to: 'string' });
+[7m   [0m [91m                          ~~~~~~~~~~[0m
+
+[96mlibs/shared/framework/common/src/lib/shared-framework-common.module.ts[0m:[93m11[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mPipe HighlighterPipe is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m11[0m  declarations: components,
+[7m  [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/framework/common/src/lib/shared-framework-common.module.ts[0m:[93m12[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m12[0m  exports: components,
+[7m  [0m [91m          ~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

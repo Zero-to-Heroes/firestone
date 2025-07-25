@@ -20,6 +20,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'main-window',
 	styleUrls: [`../../css/global/ngx-tooltips.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
@@ -28,7 +29,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 			*ngIf="{
 				showAds: showAds$ | async,
 				showFtue: showFtue$ | async,
-				currentApp: currentApp$ | async
+				currentApp: currentApp$ | async,
 			} as value"
 			[activeTheme]="activeTheme$ | async"
 			[allowResize]="true"
@@ -277,6 +278,7 @@ export class MainWindowComponent
 	}
 
 	onNewVersionDisplayed(value: boolean) {
+		console.debug('onNewVersionDisplayed', value);
 		this.displayingNewVersion.next(value);
 		if (!value) {
 			this.forceShowReleaseNotes.next(false);
@@ -294,6 +296,7 @@ export class MainWindowComponent
 		currentApp: CurrentAppType,
 		displayingNewVersionNotification: boolean,
 	): CurrentAppType | 'decktracker-desktop' {
+		console.debug('buildActiveTheme', showFtue, currentApp, displayingNewVersionNotification);
 		if (displayingNewVersionNotification) {
 			return 'general';
 		}

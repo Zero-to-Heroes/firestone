@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'control-share',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

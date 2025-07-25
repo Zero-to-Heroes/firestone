@@ -4,6 +4,7 @@ import { Strategy } from '../../models/strategies';
 import { BgsStrategyCurveComponent } from './bgs-strategy-curve.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-strategies-view',
 	styleUrls: [`./bgs-strategies.component.scss`],
 	template: `

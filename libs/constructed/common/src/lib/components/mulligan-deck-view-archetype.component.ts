@@ -11,6 +11,7 @@ import { buildArchetypeName } from '../services/constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 
 @Component({
+	standalone: false,
 	selector: 'mulligan-deck-view-archetype',
 	styleUrls: ['./mulligan-deck-view-archetype.component.scss'],
 	template: `

@@ -13,6 +13,7 @@ import { Observable, Subject, from } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'app-bootstrap',
 	styleUrls: [`./app-bootstrap.component.scss`],
 	template: `

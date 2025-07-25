@@ -8,6 +8,7 @@ import { isPassiveMercsTreasure } from '../../../../services/mercenaries/mercena
 import { Ability } from './mercenaries-team-ability.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-team-mercenary',
 	styleUrls: [
 		'../../../../../css/directive/mercenaries-highlight.directive.scss',

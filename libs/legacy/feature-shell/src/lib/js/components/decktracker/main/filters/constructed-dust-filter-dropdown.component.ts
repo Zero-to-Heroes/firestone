@@ -1,14 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOptionWithImage } from '@firestone/shared/common/view';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-dust-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -85,7 +86,7 @@ export class ConstructedDustFilterDropdownComponent
 		}
 	}
 
-	async onSelected(option: IOption) {
+	async onSelected(option: IOptionWithImage) {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
@@ -95,6 +96,6 @@ export class ConstructedDustFilterDropdownComponent
 	}
 }
 
-interface DustFilterOption extends IOption {
+interface DustFilterOption extends IOptionWithImage {
 	value: string /*ConstructedMetaDecksDustFilterType*/;
 }

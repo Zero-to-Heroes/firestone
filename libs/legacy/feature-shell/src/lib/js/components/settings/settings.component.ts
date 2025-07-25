@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 
 @Component({
+	standalone: false,
 	selector: 'settings',
 	styleUrls: [`./settings.component.scss`],
 	template: `

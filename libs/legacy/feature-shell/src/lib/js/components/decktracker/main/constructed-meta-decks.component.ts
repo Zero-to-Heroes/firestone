@@ -15,6 +15,7 @@ import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/colle
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-decks',
 	styleUrls: [
 		`../../../../css/component/decktracker/main/constructed-meta-decks-columns.scss`,
@@ -27,7 +28,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				showStandardDeviation: showStandardDeviation$ | async,
 				collection: collection$ | async,
 				lastUpdate: lastUpdate$ | async,
-				totalGames: totalGames$ | async
+				totalGames: totalGames$ | async,
 			} as value"
 		>
 			<with-loading [isLoading]="!value.decks">
@@ -290,7 +291,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 		await this.prefs.savePreferences(newPrefs);
 	}
 
-	trackByDeck(index: number, item: DeckStat) {
+	trackByDeck(index: number, item: DeckStat | EnhancedDeckStat) {
 		return item.decklist;
 	}
 

@@ -14,6 +14,7 @@ import { Strategy } from '../../models/strategies';
 import { BgsMetaTrinketStrategiesService, BgsTrinketTipItem } from '../../services/bgs-meta-trinket-strategies.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-trinket-strategies-wrapper',
 	styleUrls: [`./bgs-trinket-strategies-wrapper.component.scss`],
 	template: `

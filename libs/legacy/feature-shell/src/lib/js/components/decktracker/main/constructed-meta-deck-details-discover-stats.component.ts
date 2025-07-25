@@ -9,6 +9,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-details-discover-stats',
 	styleUrls: [
 		`./constructed-meta-deck-details-discover-columns.scss`,

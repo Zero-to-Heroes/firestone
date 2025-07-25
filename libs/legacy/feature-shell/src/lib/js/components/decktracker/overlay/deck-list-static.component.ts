@@ -26,6 +26,7 @@ import { getOwnedForDeckBuilding } from '../../../services/collection/collection
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'deck-list-static',
 	styleUrls: [
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
@@ -34,13 +35,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 		'../../../../css/component/decktracker/overlay/deck-list-static.component.scss',
 	],
 	template: `
-		<ng-scrollbar
-			class="deck-list"
-			*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
-			[autoHeightDisabled]="false"
-			[sensorDisabled]="false"
-			scrollable
-		>
+		<ng-scrollbar class="deck-list" *ngIf="{ colorManaCost: colorManaCost$ | async } as value">
 			<li class="card-container" *ngFor="let card of cards$ | async">
 				<deck-card
 					class="card"
@@ -181,7 +176,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 						: getOwnedForDeckBuilding(card.id, collection, this.allCards) >= miniCard.quantity;
 				const cardCost =
 					card.id === CardIds.ZilliaxDeluxe3000_TOY_330
-						? sideboard?.map((c) => c.refManaCost).reduce((a, b) => a + b, 0) ?? 0
+						? (sideboard?.map((c) => c.refManaCost).reduce((a, b) => a + b, 0) ?? 0)
 						: card.cost;
 				return CardWithSideboard.create({
 					cardId: card.id,

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'control-discord',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

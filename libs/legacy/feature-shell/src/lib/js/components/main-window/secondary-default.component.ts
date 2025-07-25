@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'secondary-default',
 	styleUrls: [`../../../css/component/main-window/secondary-default.component.scss`],
 	template: `

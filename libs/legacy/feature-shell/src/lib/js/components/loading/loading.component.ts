@@ -14,6 +14,7 @@ import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'loading',
 	styleUrls: [`../../../css/component/loading/loading.component.scss`],
 	template: `

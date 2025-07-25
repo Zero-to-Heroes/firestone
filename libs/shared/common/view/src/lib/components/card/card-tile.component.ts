@@ -22,6 +22,7 @@ import {
 import { distinctUntilChanged } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'card-tile',
 	styleUrls: ['./card-tile.component.scss', './card-tile-background.scss'],
 	template: `

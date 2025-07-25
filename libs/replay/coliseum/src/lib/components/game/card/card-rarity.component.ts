@@ -3,6 +3,7 @@ import { CardRarity } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'card-rarity',
 	styleUrls: ['./card-rarity.component.scss'],
 	template: ` <img *ngIf="image" src="{{ image }}" class="card-rarity" /> `,

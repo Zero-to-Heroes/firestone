@@ -10,10 +10,11 @@ import {
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
+import { IOption } from './filter-dropdown-multiselect.component';
 
 @Component({
+	standalone: false,
 	selector: 'preference-ynlimited',
 	styleUrls: [`./preference-dropdown.component.scss`, `./preference-ynlimited-dropdown.component.scss`],
 	template: `

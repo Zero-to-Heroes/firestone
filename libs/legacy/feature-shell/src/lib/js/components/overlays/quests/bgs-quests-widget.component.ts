@@ -3,6 +3,7 @@ import { RewardTrackType } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-quests-widget',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,

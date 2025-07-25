@@ -7,11 +7,12 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 
 @Component({
+	standalone: false,
 	selector: 'fs-filter-dropdown',
 	styleUrls: [],
 	template: `

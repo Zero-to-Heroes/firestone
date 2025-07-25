@@ -10,6 +10,7 @@ import { auditTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 
 import { FaceOffHero, faceOfHeroesArrayEqual } from './bgs-hero-face-off.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-face-offs',
 	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-hero-face-offs.component.scss`],
 	template: `

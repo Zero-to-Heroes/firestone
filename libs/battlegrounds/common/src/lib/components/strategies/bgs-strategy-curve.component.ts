@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { LocalizedBgsHeroCurve } from '../../models/strategies';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-strategy-curve',
 	styleUrls: [`./bgs-strategy-curve.component.scss`],
 	template: `

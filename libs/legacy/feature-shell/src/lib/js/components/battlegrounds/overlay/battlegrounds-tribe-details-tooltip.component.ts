@@ -3,6 +3,7 @@ import { Race, getTribeIcon } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-tribe-details-tooltip',
 	styleUrls: [`./battlegrounds-tribe-details-tooltip.component.scss`],
 	template: `

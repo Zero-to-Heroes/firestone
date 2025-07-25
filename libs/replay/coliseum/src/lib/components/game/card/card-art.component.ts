@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardType } from '@firestone-hs/reference-data';
 
 @Component({
+	standalone: false,
 	selector: 'card-art',
 	styleUrls: ['./card-art.component.scss'],
 	template: ` <img src="{{ image }}" class="card-art {{ _cardType }}" /> `,

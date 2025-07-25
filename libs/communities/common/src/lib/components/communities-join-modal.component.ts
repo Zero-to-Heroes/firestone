@@ -4,6 +4,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { CommunityJoinService } from '../services/community-join.service';
 
 @Component({
+	standalone: false,
 	selector: 'communities-join-modal',
 	styleUrls: [`./communities-join-modal.component.scss`],
 	template: `

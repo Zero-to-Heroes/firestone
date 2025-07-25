@@ -4,6 +4,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-card-tooltip',
 	styleUrls: [`./bgs-card-tooltip.component.scss`],
 	template: `

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'sortable-table-label',
 	styleUrls: [`./sortable-table-label.component.scss`],
 	template: `

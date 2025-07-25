@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SettingButton } from '../models/settings.types';
 
 @Component({
+	standalone: false,
 	selector: 'setting-button',
 	styleUrls: [`../../settings-common.component.scss`, `./setting-element.component.scss`],
 	template: `

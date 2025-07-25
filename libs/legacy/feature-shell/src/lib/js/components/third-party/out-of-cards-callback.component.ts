@@ -4,6 +4,7 @@ import { DebugService } from '../../services/debug.service';
 import { OutOfCardsToken } from '../../services/mainwindow/out-of-cards.service';
 
 @Component({
+	standalone: false,
 	selector: 'out-of-cards-callback',
 	styleUrls: [],
 	template: ` <div class="root"></div> `,

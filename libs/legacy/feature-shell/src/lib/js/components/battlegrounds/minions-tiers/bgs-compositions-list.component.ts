@@ -8,6 +8,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-compositions-list',
 	styleUrls: ['./bgs-compositions-list.component.scss'],
 	template: `

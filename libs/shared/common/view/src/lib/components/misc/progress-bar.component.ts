@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'progress-bar',
 	styleUrls: [`./progress-bar.component.scss`],
 	template: `

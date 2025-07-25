@@ -16,6 +16,7 @@ import { Observable, combineLatest, mergeMap, of, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-decktracker-ooc-widget-wrapper',
 	styleUrls: [
 		'../../../css/component/overlays/foreground-widget.component.scss',

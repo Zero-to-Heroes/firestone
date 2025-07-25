@@ -16,6 +16,7 @@ import { combineLatest, takeUntil } from 'rxjs';
 import { ConstructedCardStat } from '../services/constructed-discover.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-card-option-view',
 	styleUrls: ['./constructed-card-option-view.component.scss'],
 	template: `

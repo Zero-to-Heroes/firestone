@@ -6,6 +6,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-filters',
 	styleUrls: [
 		`../../../../../css/component/app-section.component.scss`,

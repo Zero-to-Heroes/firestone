@@ -7,6 +7,7 @@ import { ExtendedProfileSet, WebsiteProfileState } from '../+state/website/profi
 import { getSets } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-overview',
 	styleUrls: [`./website-profile-overview.component.scss`],
 	template: `

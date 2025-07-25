@@ -64,7 +64,8 @@
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
 			"crypto": ["./node_modules/crypto-browserify"],
-			"stream": ["./node_modules/stream-browserify"]
+			"stream": ["./node_modules/stream-browserify"],
+			"vm": ["./node_modules/vm-browserify"]
 		},
 		"strict": false,
 		"noImplicitAny": false,

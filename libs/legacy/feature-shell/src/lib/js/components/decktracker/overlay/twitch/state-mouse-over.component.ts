@@ -18,6 +18,7 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'state-mouse-over',
 	styleUrls: ['./state-mouse-over.component.scss'],
 	template: `

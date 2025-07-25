@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
@@ -11,6 +11,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-rank-group-dropdown',
 	styleUrls: [],
 	template: `

@@ -14,6 +14,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-anomalies-filter-dropdown-view',
 	styleUrls: [],
 	template: `

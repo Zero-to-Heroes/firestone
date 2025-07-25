@@ -16,6 +16,7 @@ import { Observable, combineLatest, mergeMap, of, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-hero-selection-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/background-widget.component.scss'],
 	template: ` <arena-hero-selection class="widget" *ngIf="showWidget$ | async"></arena-hero-selection> `,

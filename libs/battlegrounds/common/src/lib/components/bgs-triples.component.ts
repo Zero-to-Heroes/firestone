@@ -4,6 +4,7 @@ import { groupByFunction } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-triples',
 	styleUrls: [`./bgs-triples.component.scss`],
 	template: `

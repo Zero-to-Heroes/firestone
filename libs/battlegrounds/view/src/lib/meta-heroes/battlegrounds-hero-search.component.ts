@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-hero-search',
 	styleUrls: [`./battlegrounds-hero-search.component.scss`],
 	template: `

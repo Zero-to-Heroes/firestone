@@ -7,6 +7,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
 
 @Component({
+	standalone: false,
 	selector: 'live-stream-info',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,
@@ -80,6 +81,7 @@ export class LiveStreamInfoComponent {
 }
 
 @Component({
+	standalone: false,
 	selector: 'stream-hero-infos',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

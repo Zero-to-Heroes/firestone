@@ -9,6 +9,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 import { HeroStat } from './hero-stat';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-heroes-records-broken',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component.scss`,

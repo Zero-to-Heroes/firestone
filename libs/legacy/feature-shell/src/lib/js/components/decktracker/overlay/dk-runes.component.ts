@@ -16,6 +16,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'dk-runes',
 	styleUrls: ['../../../../css/component/decktracker/overlay/dk-runes.component.scss'],
 	template: `

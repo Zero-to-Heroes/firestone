@@ -5,6 +5,7 @@ import { getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'pack-history-item',
 	styleUrls: [`./pack-history-item.component.scss`],
 	template: `

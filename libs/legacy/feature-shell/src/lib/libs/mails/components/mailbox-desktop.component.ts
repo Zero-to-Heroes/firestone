@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { MailCategoryType } from '../mail-state';
 
 @Component({
+	standalone: false,
 	selector: 'mailbox-desktop',
 	styleUrls: [`../../../css/component/app-section.component.scss`, `./mailbox-desktop.component.scss`],
 	template: `

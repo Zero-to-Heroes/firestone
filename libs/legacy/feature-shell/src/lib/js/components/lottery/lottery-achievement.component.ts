@@ -3,6 +3,7 @@ import { AchievementsProgressTracking } from '../../services/achievement/achieve
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'lottery-achievement',
 	styleUrls: ['../../../css/component/lottery/lottery-achievement.component.scss'],
 	template: `

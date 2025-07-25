@@ -17,6 +17,7 @@ import { DeckParserFacadeService } from '../../../services/decktracker/deck-pars
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-decktracker-ooc-widget-wrapper',
 	styleUrls: [
 		'../../../../css/component/overlays/foreground-widget.component.scss',

@@ -19,6 +19,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { sortByProperties, sumOnArray } from '../../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-tier-list',
 	styleUrls: [`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-tier-list.component.scss`],
 	template: `

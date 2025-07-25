@@ -13,6 +13,7 @@ import { ConstructedMetaDecksStateService } from '../services/constructed-meta-d
 import { ConstructedNavigationService } from '../services/constructed-navigation.service';
 
 @Component({
+	standalone: false,
 	selector: 'mulligan-deck-guide-archetype-selection',
 	styleUrls: [`./mulligan-deck-guide-archetype-selection.component.scss`],
 	template: `

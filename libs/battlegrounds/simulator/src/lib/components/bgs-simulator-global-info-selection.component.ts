@@ -4,6 +4,7 @@ import { BgsPlayerGlobalInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator-global-info-selection',
 	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-global-info-selection.component.scss`],
 	template: `

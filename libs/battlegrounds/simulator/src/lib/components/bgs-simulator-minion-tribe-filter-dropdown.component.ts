@@ -1,12 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-sim-minion-tribe-filter',
 	styleUrls: [],
 	template: `
@@ -54,7 +55,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 						({
 							label: this.i18n.translateString(`global.tribe.${tribe.toLowerCase()}`),
 							value: tribe,
-						} as IOption),
+						}) as IOption,
 				)
 				.sort((a, b) => this.collator.compare(a.label, b.label)),
 			{

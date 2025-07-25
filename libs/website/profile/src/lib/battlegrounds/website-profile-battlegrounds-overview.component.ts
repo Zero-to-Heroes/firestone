@@ -4,6 +4,7 @@ import { WebsiteLocalizationService } from '@firestone/website/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-battlegrounds-overview',
 	styleUrls: [`./website-profile-battlegrounds-overview.component.scss`],
 	template: `

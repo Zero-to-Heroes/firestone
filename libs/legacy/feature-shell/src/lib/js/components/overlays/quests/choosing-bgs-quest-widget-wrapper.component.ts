@@ -26,6 +26,7 @@ import {
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'choosing-bgs-quest-widget-wrapper',
 	styleUrls: ['./choosing-bgs-quest-widget-wrapper.component.scss'],
 	template: `

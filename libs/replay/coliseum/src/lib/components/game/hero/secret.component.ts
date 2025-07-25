@@ -3,6 +3,7 @@ import { CardClass, GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'secret',
 	styleUrls: ['./secret.component.scss'],
 	template: `

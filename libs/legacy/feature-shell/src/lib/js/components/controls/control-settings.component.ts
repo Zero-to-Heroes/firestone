@@ -4,6 +4,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'control-settings',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

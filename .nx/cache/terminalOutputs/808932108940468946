@@ -1,0 +1,68 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m71[0m:[93m20[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19[39m
+
+
+[7m71[0m         [ngClass]="{ unselectable: (option as any).unselectable }"
+[7m  [0m [91m                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m72[0m:[93m22[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m72[0m         [innerHTML]="option?.label"
+[7m  [0m [91m                     ~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m74[0m:[93m29[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m74[0m        <div class="tooltip" *ngIf="option.tooltip" [helpTooltip]="option.tooltip">
+[7m  [0m [91m                            ~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m74[0m:[93m67[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m74[0m        <div class="tooltip" *ngIf="option.tooltip" [helpTooltip]="option.tooltip">
+[7m  [0m [91m                                                                  ~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m79[0m:[93m38[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m79[0m        <i class="i-30 selected-icon" *ngIf="option.selected">
+[7m  [0m [91m                                     ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m87[0m:[93m27[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m87[0m     <div class="controls" *ngIf="value.allowMultipleSelection">
+[7m  [0m [91m                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m90[0m:[93m16[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m90[0m       (click)="clearSelection()"
+[7m  [0m [91m               ~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m91[0m:[93m22[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m91[0m       [fsTranslate]="'app.global.controls.multiselect-clear-button'"
+[7m  [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m95[0m:[93m16[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m95[0m       (click)="resetSelection()"
+[7m  [0m [91m               ~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m96[0m:[93m22[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m96[0m       [fsTranslate]="'app.global.controls.multiselect-reset-button'"
+[7m  [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m100[0m:[93m18[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m100[0m       [ngClass]="{ disabled: !value.validSelection }"
+[7m   [0m [91m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m101[0m:[93m22[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m101[0m       [helpTooltip]="buttonTooltip(value.validSelection)"
+[7m   [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m102[0m       (click)="confirmSelection(value.validSelection)"
+[7m   [0m [91m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m103[0m:[93m22[0m - [91merror[0m[90m NG5002: [0mParser Error: Missing expected ) at column 25 in [{ unselectable: (option as any).unselectable }] in E:/Source/zerotoheroes/firestone/libs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts@70:19
+
+[7m103[0m       [fsTranslate]="'app.global.controls.multiselect-validation-button'"
+[7m   [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

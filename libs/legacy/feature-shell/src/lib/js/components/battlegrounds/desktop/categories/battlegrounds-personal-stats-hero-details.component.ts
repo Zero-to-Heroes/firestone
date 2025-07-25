@@ -15,6 +15,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-personal-stats-hero-details',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component.scss`,

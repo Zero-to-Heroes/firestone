@@ -7,7 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
-import { Card, CardBack, MemoryMercenary } from '@firestone/memory';
+import { Card, MemoryMercenary } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
@@ -28,6 +28,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
+	standalone: false,
 	selector: 'hero-portraits',
 	styleUrls: [`../../../css/component/collection/hero-portraits.component.scss`],
 	template: `
@@ -176,7 +177,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		}
 	}
 
-	showFullHeroPortrait(heroPortrait: CollectionReferenceCard) {
+	showFullHeroPortrait(heroPortrait: ReferenceCard | CollectionReferenceCard) {
 		this.store.send(new ShowCardDetailsEvent(heroPortrait.id));
 	}
 
@@ -187,7 +188,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		}
 	}
 
-	trackByCardId(index: number, card: CardBack) {
+	trackByCardId(index: number, card: ReferenceCard | CollectionReferenceCard) {
 		return card.id;
 	}
 
@@ -307,11 +308,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 				? ({
 						...card,
 						numberOwned: 1,
-				  } as CollectionReferenceCard)
+					} as CollectionReferenceCard)
 				: ({
 						...card,
 						numberOwned: 0,
-				  } as CollectionReferenceCard),
+					} as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
 		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
 		return sortedHeroes;
@@ -348,11 +349,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 					? ({
 							...card,
 							numberOwned: 1,
-					  } as CollectionReferenceCard)
+						} as CollectionReferenceCard)
 					: ({
 							...card,
 							numberOwned: 0,
-					  } as CollectionReferenceCard),
+						} as CollectionReferenceCard),
 			) as CollectionReferenceCard[];
 		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
 		return sortedHeroes;
@@ -375,11 +376,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 				? ({
 						...card,
 						numberOwned: 1,
-				  } as CollectionReferenceCard)
+					} as CollectionReferenceCard)
 				: ({
 						...card,
 						numberOwned: 0,
-				  } as CollectionReferenceCard),
+					} as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
 		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [...(card.classes ?? []), card.id]));
 		return sortedHeroes;
@@ -394,7 +395,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 				({
 					...card,
 					numberOwned: 1,
-				} as CollectionReferenceCard),
+				}) as CollectionReferenceCard,
 		) as CollectionReferenceCard[];
 		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
 		return sortedHeroes;

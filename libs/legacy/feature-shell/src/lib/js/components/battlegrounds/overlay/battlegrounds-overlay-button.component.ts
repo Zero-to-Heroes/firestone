@@ -3,6 +3,7 @@ import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/commo
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-overlay-button',
 	styleUrls: [
 		`../../../../css/global/cdk-overlay.scss`,

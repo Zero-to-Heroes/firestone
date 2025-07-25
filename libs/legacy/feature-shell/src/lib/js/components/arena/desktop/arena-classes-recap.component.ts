@@ -19,6 +19,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'arena-classes-recap',
 	styleUrls: [`../../../../css/component/arena/desktop/arena-classes-recap.component.scss`],
 	template: `

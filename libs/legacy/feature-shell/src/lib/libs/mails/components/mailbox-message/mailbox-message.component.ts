@@ -4,6 +4,7 @@ import { capitalizeFirstLetter } from '../../../../js/services/utils';
 import { Mail } from '../../mail-state';
 
 @Component({
+	standalone: false,
 	selector: 'mailbox-message',
 	styleUrls: [`./mailbox-message.component.scss`],
 	template: `

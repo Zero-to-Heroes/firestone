@@ -2,6 +2,7 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { CurrentAppType } from '@firestone/shared/common/service';
 
 @Directive({
+	standalone: false,
 	selector: '[activeTheme]',
 })
 export class ActiveThemeDirective {

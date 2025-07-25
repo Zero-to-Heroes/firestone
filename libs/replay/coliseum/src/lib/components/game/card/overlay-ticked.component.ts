@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'overlay-ticked',
 	styleUrls: ['./overlay-ticked.component.scss'],
 	template: `

@@ -312,27 +312,27 @@
 		},
 		"extra-objects": {
 			"overwolf-replay-converter": {
-				"file": "Files/plugins/HearthstoneReplays.dll",
+				"file": "plugins/HearthstoneReplays.dll",
 				"class": "HearthstoneReplays.ReplayConverterPlugin"
 			},
 			"mind-vision": {
-				"file": "Files/plugins/OverwolfUnitySpy.dll",
+				"file": "plugins/OverwolfUnitySpy.dll",
 				"class": "OverwolfUnitySpy.MindVisionPlugin"
 			},
 			"ow-utils": {
-				"file": "Files/plugins/OwUtils.dll",
+				"file": "plugins/OwUtils.dll",
 				"class": "OwUtils.OwUtilsPlugin"
 			},
 			"bgs-reconnector": {
-				"file": "Files/plugins/OwBgReconnector.dll",
+				"file": "plugins/OwBgReconnector.dll",
 				"class": "OwBgReconnector.OwBgReconnectorPlugin"
 			},
 			"DiscordRPCPlugin": {
-				"file": "Files/plugins/DiscordRPCPlugin.dll",
+				"file": "plugins/DiscordRPCPlugin.dll",
 				"class": "overwolf.plugins.DiscordRPCPlugin"
 			},
 			"hearthpwn-cipher": {
-				"file": "Files/plugins/HpCipher.dll",
+				"file": "plugins/HpCipher.dll",
 				"class": "HpCipher.HpCipherPlugin"
 			}
 		},

@@ -20,6 +20,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'menu-selection',
 	styleUrls: [`../../css/global/menu.scss`, `../../css/component/main-menu.component.scss`],
 	template: `

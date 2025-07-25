@@ -19,6 +19,7 @@ import { TwitchPreferencesService } from '../services/twitch-preferences.service
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulation-overlay-standalone',
 	styleUrls: [
 		`../../../../../battlegrounds/common/src/lib/components/bgs-simulation-overlay.component.scss`,

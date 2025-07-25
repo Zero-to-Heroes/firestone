@@ -10,6 +10,7 @@ import { CommunityNavigationService } from '../services/community-navigation.ser
 import { PersonalCommunitiesService } from '../services/personal-communities.service';
 
 @Component({
+	standalone: false,
 	selector: 'my-communities',
 	styleUrls: [`./my-communities-columns.scss`, `./my-communities.component.scss`],
 	template: `

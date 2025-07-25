@@ -3,6 +3,7 @@ import { BugReportService, PreferencesService } from '@firestone/shared/common/s
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'settings-general-bug-report',
 	styleUrls: [
 		`../scrollbar-settings.scss`,

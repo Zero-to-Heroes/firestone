@@ -15,12 +15,13 @@ import { ArenaGroupedRuns, ExtendedHighWinRunsInfo } from '../../models/arena-hi
 import { ArenaHighWinsRunsService } from '../../services/arena-high-wins-runs.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-high-wins-runs',
 	styleUrls: [`./arena-high-wins-runs.component.scss`],
 	template: `
 		<ng-container
 			*ngIf="{
-				runGroups: runGroups$ | async
+				runGroups: runGroups$ | async,
 			} as value"
 		>
 			<div class="runs-container">
@@ -119,7 +120,18 @@ export class ArenaHighWinsRunsComponent extends AbstractSubscriptionComponent im
 		};
 	}
 
-	trackByGroup(index, item: ArenaGroupedRuns) {
-		return item.header;
+	isStringHeader(item: string | ArenaRunInfo): item is string {
+		return typeof item === 'string';
+	}
+
+	castToExtended(item: string | ArenaRunInfo): any {
+		return item as any;
+	}
+
+	trackByGroup(index: number, item: string | ArenaRunInfo) {
+		if (typeof item === 'string') {
+			return `header-${item}`;
+		}
+		return `run-${item.id}`;
 	}
 }

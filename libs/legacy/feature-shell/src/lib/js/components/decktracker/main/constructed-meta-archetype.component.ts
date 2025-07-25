@@ -8,6 +8,7 @@ import { EnhancedArchetypeStat } from './constructed-meta-archetypes.component';
 import { CardVariation, buildCardVariations } from './constructed-meta-deck-summary.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-archetype',
 	styleUrls: [
 		`../../../../css/component/decktracker/main/constructed-meta-archetypes-columns.scss`,

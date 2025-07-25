@@ -7,6 +7,7 @@ import { MinionStat } from '@firestone/game-state';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-board',
 	styleUrls: [`./bgs-board.component.scss`],
 	template: `

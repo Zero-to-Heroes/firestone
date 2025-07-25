@@ -6,6 +6,7 @@ import { WebsiteProfileState } from '../+state/website/profile.models';
 import { getStatsForModes } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-arena-overviews',
 	styleUrls: [`./website-profile-arena-overviews.component.scss`],
 	template: `

@@ -18,6 +18,7 @@ import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-filters',
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,

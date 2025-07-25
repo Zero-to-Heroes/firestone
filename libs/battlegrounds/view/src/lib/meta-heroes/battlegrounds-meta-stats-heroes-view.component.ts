@@ -15,6 +15,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, takeUntil } from 'r
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-heroes-view',
 	styleUrls: [
 		`./battlegrounds-meta-stats-hero-columns.scss`,

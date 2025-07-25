@@ -32,6 +32,7 @@ import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/b
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-selection-overlay',
 	styleUrls: [
 		// '../../../../css/themes/battlegrounds-theme.scss',

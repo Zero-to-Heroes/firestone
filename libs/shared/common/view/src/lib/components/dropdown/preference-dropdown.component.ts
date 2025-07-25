@@ -2,10 +2,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
+import { IOption } from './filter-dropdown-multiselect.component';
 
 @Component({
+	standalone: false,
 	selector: 'preferences-dropdown',
 	styleUrls: [`./preference-dropdown.component.scss`],
 	template: `
@@ -33,7 +34,10 @@ export class PreferenceDropdownComponent extends AbstractSubscriptionComponent i
 	@Input() tooltip: string | null;
 	@Input() afterSelection: ((newValue: string) => void) | undefined;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(cdr);
 	}
 

@@ -5,6 +5,7 @@ import { BgsMetaCardStatTierItem } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-card-info',
 	styleUrls: [`./battlegrounds-meta-stats-cards-columns.scss`, `./battlegrounds-meta-stats-card-info.component.scss`],
 	template: `

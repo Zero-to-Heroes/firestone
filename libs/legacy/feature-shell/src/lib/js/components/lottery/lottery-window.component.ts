@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener } from 
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'lottery-window',
 	styleUrls: [
 		`../../../css/themes/general-theme.scss`,

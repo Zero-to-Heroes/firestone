@@ -4,6 +4,7 @@ import { BgsPlayer, BgsTavernUpgrade, BgsTriple, QuestReward } from '@firestone/
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-opponent-overview',
 	styleUrls: [`./bgs-opponent-overview.component.scss`],
 	template: `

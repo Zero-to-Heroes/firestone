@@ -3,6 +3,7 @@ import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
 import { capitalizeEachWord } from '../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'social-share-modal',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

@@ -20,6 +20,7 @@ import { InternalFriendlyBattle } from './community-friendly-battle.component';
 import { LadderEntry } from './community-internal-ladder-view.component';
 
 @Component({
+	standalone: false,
 	selector: 'community-internal-ladder',
 	styleUrls: [`./community-internal-ladder.component.scss`],
 	template: `

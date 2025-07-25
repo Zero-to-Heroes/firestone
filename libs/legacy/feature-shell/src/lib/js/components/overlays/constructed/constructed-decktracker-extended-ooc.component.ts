@@ -32,6 +32,7 @@ import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, s
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-decktracker-extended-ooc',
 	styleUrls: ['./constructed-decktracker-extended-ooc.component.scss'],
 	template: `

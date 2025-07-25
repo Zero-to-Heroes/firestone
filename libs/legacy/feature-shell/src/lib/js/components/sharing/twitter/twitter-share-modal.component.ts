@@ -13,6 +13,7 @@ import { TwitterUserInfo } from '../../../models/mainwindow/twitter-user-info';
 import { ShareInfoComponent } from '../share-info.component';
 
 @Component({
+	standalone: false,
 	selector: 'twitter-share-modal',
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,

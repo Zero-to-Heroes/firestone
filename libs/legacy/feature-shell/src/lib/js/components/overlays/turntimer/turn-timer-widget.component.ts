@@ -18,6 +18,7 @@ import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { sumOnArray } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'turn-timer-widget',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,
@@ -195,6 +196,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 }
 
 @Component({
+	standalone: false,
 	selector: 'turn-timer-player',
 	styleUrls: ['../../../../css/component/overlays/turntimer/turn-timer-widget.component.scss'],
 	template: `

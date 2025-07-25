@@ -12,6 +12,7 @@ import { Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-comps-filter-dropdown',
 	styleUrls: ['./battlegrounds-comps-filter-dropdown.component.scss'],
 	template: `

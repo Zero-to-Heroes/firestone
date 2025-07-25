@@ -1,16 +1,21 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
-import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import {
+	ArenaTimeFilterType,
+	PatchesConfigService,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { formatPatch } from '../../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'arena-time-filter-dropdown',
 	styleUrls: [],
 	template: `

@@ -10,6 +10,7 @@ import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/co
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-quest-rewards-view',
 	styleUrls: [
 		`./battlegrounds-meta-stats-quest-rewards-columns.scss`,

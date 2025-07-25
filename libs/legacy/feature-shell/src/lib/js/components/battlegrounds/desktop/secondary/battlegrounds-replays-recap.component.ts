@@ -8,6 +8,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-replays-recap',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component.scss`,

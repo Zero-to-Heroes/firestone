@@ -31,6 +31,7 @@ import { AbstractSubscriptionTwitchResizableComponent, TwitchPreferencesService 
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, from, takeUntil } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-minions-tiers-twitch',
 	styleUrls: [
 		`../../../../../css/global/cdk-overlay.scss`,

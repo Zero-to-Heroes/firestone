@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'weapon-art',
 	styleUrls: ['./weapon-art.component.scss'],
 	template: ` <img src="{{ image }}" class="weapon-art" /> `,

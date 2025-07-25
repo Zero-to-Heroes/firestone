@@ -19,6 +19,7 @@ import { ArenaRunsService } from '../../services/arena-runs.service';
 import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-current-session-widget',
 	styleUrls: ['./arena-current-session-widget.component.scss'],
 	template: `

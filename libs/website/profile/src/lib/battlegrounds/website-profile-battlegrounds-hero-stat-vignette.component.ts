@@ -3,6 +3,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { ExtendedProfileBgHeroStat } from '../+state/website/profile.models';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-battlegrounds-hero-stat-vignette',
 	styleUrls: [`./website-profile-battlegrounds-hero-stat-vignette.component.scss`],
 	template: `

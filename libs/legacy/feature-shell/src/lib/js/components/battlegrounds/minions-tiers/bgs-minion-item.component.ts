@@ -11,6 +11,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { BgsMinionsGroup } from './bgs-minions-group';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-minion-item',
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './bgs-minion-item.component.scss'],
 	template: `

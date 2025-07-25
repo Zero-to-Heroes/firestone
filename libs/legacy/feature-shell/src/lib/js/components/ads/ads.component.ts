@@ -15,6 +15,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'ads',
 	styleUrls: [`../../../css/component/ads/ads.component.scss`],
 	template: `

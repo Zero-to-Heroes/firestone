@@ -55,6 +55,7 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 import { BgsSimulatorTrinketSelectionComponent } from './bgs-simulator-trinket-selection.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator',
 	styleUrls: [`./bgs-simulator.component.scss`],
 	template: `

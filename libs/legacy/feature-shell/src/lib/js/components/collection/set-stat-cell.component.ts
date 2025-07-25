@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'set-stat-cell',
 	styleUrls: [
 		`../../../css/global/forms.scss`,

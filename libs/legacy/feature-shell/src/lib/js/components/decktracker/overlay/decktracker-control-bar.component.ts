@@ -3,6 +3,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-control-bar',
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,

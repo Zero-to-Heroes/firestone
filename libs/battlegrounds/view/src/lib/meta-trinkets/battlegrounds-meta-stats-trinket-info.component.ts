@@ -6,6 +6,7 @@ import { buildPercents } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-trinket-info',
 	styleUrls: [
 		`./battlegrounds-meta-stats-trinkets-columns.scss`,

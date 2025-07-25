@@ -4,6 +4,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'mulligan',
 	styleUrls: ['./mulligan.component.scss'],
 	template: `

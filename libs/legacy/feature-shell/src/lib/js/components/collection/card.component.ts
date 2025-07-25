@@ -21,6 +21,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
+	standalone: false,
 	selector: 'card-view',
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `

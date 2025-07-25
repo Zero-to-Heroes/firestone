@@ -15,6 +15,7 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'preference-slider',
 	styleUrls: [
 		// `../../../css/component/settings/settings-common.component.scss`,

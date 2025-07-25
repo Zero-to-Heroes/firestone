@@ -38,6 +38,7 @@ import { ArenaMulliganGuideGuardianService } from '../../../services/arena-mulli
 import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guide.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-mulligan-hand',
 	styleUrls: ['./arena-mulligan-hand.component.scss'],
 	template: `

@@ -15,6 +15,7 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, share
 import { BattlegroundsYourStat } from './your-stats.model';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-desktop-your-stats',
 	styleUrls: [`./battlegrounds-personal-stats-columns.scss`, `./battlegrounds-desktop-your-stats.component.scss`],
 	template: `

@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-minions-group',
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './bgs-minions-group.component.scss'],
 	template: `

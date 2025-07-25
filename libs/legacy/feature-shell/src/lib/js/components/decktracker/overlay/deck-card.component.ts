@@ -28,6 +28,7 @@ import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES } from '../../../
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'deck-card',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',

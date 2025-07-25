@@ -25,6 +25,7 @@ const refBounds = {
 };
 
 @Component({
+	standalone: false,
 	selector: 'current-session-widget-wrapper',
 	styleUrls: ['./current-session-widget-wrapper.component.scss'],
 	template: `

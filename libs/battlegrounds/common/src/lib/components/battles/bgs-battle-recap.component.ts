@@ -8,6 +8,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-battle-recap',
 	styleUrls: [`./bgs-battle-recap.component.scss`],
 	template: `

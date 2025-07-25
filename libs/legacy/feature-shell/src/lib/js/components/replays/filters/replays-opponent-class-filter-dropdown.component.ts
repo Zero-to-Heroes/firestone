@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 import { Observable } from 'rxjs';
 import { classes, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -8,6 +8,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'replays-opponent-class-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -47,7 +48,7 @@ export class ReplaysOpponentClassFilterDropdownComponent
 						({
 							label: formatClass(playerClass, this.i18n),
 							value: playerClass,
-						} as IOption),
+						}) as IOption,
 				)
 				.sort((a, b) => collator.compare(a.label, b.label)),
 		];

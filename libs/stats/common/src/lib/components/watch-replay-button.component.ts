@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'watch-replay-button',
 	styleUrls: [`./watch-replay-button.component.scss`],
 	template: `

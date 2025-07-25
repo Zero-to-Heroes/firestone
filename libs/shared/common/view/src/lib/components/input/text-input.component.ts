@@ -12,6 +12,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { BehaviorSubject, Observable, debounceTime } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'fs-text-input',
 	styleUrls: ['../button.scss', './text-input.component.scss'],
 	template: `

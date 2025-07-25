@@ -10,8 +10,9 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
+import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+
 import { ArenaRewardComponent } from './components/arena-reward.component';
 import { ArenaCardSearchComponent } from './components/card-stats/arena-card-search.component';
 import { ArenaCardStatItemComponent } from './components/card-stats/arena-card-stat-item.component';
@@ -84,8 +85,8 @@ const components = [
 	imports: [
 		CommonModule,
 
-		VirtualScrollerModule,
 		InlineSVGModule.forRoot(),
+		VirtualScrollerModule,
 
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,

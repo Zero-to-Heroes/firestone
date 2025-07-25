@@ -9,6 +9,7 @@ import { ShareStatusMessageType, WebsiteProfileState } from '../+state/website/p
 import { getShareAlias, getShareStatusMessage, isShowingShareModal } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-share-modal',
 	styleUrls: [`./website-profile-share-modal.component.scss`],
 	template: `

@@ -16,6 +16,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator-hero-selection',
 	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-hero-selection.component.scss`],
 	template: `

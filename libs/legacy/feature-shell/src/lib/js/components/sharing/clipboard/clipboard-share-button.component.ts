@@ -13,6 +13,7 @@ import { Events } from '../../../services/events.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 
 @Component({
+	standalone: false,
 	selector: 'clipboard-share-button',
 	styleUrls: [
 		`../../../../css/component/sharing/social-share-button.component.scss`,

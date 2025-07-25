@@ -22,6 +22,7 @@ import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'replay-info-generic-2',
 	styleUrls: [`./replay-info.component.scss`],
 	template: `

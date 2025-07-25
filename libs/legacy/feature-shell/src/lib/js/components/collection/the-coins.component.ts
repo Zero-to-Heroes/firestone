@@ -1,14 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Coin } from '../../models/coin';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
+	standalone: false,
 	selector: 'the-coins',
 	styleUrls: [`../../../css/component/collection/the-coins.component.scss`],
 	template: `

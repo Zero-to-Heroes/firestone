@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-comps-tier',
 	styleUrls: [`./battlegrounds-meta-stats-comps-tier.component.scss`],
 	template: `

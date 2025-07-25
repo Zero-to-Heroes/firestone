@@ -1,15 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsAnomaliesService, BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { BG_USE_ANOMALIES, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { IOptionWithImage } from '@firestone/shared/common/view';
+import { IOption, IOptionWithImage } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-anomalies-filter-dropdown',
 	styleUrls: [],
 	template: `

@@ -9,6 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-stats-info-premium',
 	styleUrls: ['./bgs-hero-stats-info-premium.component.scss'],
 	template: `

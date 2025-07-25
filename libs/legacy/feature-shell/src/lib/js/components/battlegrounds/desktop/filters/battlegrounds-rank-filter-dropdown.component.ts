@@ -11,6 +11,7 @@ import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/b
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-rank-filter-dropdown',
 	styleUrls: [],
 	template: `

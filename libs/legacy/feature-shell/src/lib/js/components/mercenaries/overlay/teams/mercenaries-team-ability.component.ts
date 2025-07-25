@@ -5,6 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-team-ability',
 	styleUrls: [
 		'../../../../../css/directive/mercenaries-highlight.directive.scss',

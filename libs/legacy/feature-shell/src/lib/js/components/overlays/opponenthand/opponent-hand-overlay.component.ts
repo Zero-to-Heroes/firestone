@@ -14,6 +14,7 @@ import { OverwolfService, waitForReady } from '@firestone/shared/framework/core'
 import { auditTime, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'opponent-hand-overlay',
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-hand-overlay.component.scss'],
 	template: `

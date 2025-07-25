@@ -18,6 +18,7 @@ export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 240;
 
 @Component({
+	standalone: false,
 	selector: 'cards',
 	styleUrls: [`../../../css/component/collection/cards.component.scss`],
 	template: `
@@ -126,7 +127,7 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 		this._searchString = searchString;
 	}
 
-	trackByCardId(index: number, card: Card) {
+	trackByCardId(index: number, card: Card | any) {
 		return card.id;
 	}
 

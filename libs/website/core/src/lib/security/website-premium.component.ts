@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { loginUrl } from './authentication.service';
 
 @Component({
+	standalone: false,
 	selector: 'website-premium',
 	styleUrls: [`./website-premium.component.scss`],
 	template: `

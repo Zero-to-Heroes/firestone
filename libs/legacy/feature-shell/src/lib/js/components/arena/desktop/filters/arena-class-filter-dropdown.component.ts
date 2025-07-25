@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { classes, formatClass } from '../../../../services/hs-utils';
@@ -15,6 +15,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
  * to this approach
  */
 @Component({
+	standalone: false,
 	selector: 'arena-class-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -58,7 +59,7 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionStore
 						({
 							value: option,
 							label: formatClass(option, this.i18n),
-						} as ClassFilterOption),
+						}) as ClassFilterOption,
 				);
 				return {
 					filter: filter,

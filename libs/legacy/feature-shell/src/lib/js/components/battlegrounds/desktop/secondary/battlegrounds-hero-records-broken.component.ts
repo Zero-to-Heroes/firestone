@@ -3,6 +3,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { HeroStat } from './hero-stat';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-hero-records-broken',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component.scss`,

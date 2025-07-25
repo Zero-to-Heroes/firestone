@@ -5,6 +5,7 @@ import { DebugService } from '../../js/services/debug.service';
 import { AppBootstrapService } from './app-bootstrap.service';
 
 @Component({
+	standalone: false,
 	selector: 'app-root',
 	styleUrls: [`../../css/component/app.component.scss`],
 	template: ` <div></div> `,

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CounterInstance } from './_counter-definition-v2';
 
 @Component({
+	standalone: false,
 	selector: 'grouped-counters-side',
 	styleUrls: ['./grouped-counters-side.component.scss'],
 	template: `

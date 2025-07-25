@@ -5,6 +5,7 @@ import { ILocalizationService } from '../localization/localization.service';
 @Component({
 	selector: 'with-loading',
 	styleUrls: [`./with-loading.component.scss`],
+	standalone: false,
 	template: `
 		<ng-container>
 			<ng-container *ngIf="!isLoading">

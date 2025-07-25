@@ -31,6 +31,7 @@ import { CardsHighlightFacadeService } from '../../../services/decktracker/card-
 import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'choosing-card-option-arena',
 	styleUrls: ['./choosing-card-option-arena.component.scss'],
 	template: `

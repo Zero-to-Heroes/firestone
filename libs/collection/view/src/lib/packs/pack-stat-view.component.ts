@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { PackInfo } from './pack-info';
 
 @Component({
+	standalone: false,
 	selector: 'pack-stat-view',
 	styleUrls: [`./pack-stat-view.component.scss`],
 	template: `

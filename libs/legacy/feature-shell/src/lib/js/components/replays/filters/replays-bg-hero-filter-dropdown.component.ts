@@ -1,12 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { IOption } from 'ng-select';
 import { distinctUntilChanged, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'replays-bg-hero-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -52,7 +53,7 @@ export class ReplaysBgHeroFilterDropdownComponent extends AbstractSubscriptionCo
 						({
 							label: card.name,
 							value: card.id,
-						} as IOption),
+						}) as IOption,
 				)
 				.sort((a, b) => collator.compare(a.label, b.label)),
 		];

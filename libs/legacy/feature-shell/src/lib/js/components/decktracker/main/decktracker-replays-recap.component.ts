@@ -8,6 +8,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-replays-recap',
 	styleUrls: [`../../../../css/component/decktracker/main/decktracker-replays-recap.component.scss`],
 	template: `

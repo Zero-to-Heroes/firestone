@@ -18,6 +18,7 @@ import { filter, tap } from 'rxjs/operators';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-perfect-games',
 	styleUrls: [`./battlegrounds-perfect-games.component.scss`],
 	template: `

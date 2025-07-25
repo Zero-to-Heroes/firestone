@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { StatGameFormatType } from '@firestone/stats/data-access';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Set } from '../../models/set';
@@ -12,6 +12,7 @@ import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/e
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'sets',
 	styleUrls: [`../../../css/component/collection/sets.component.scss`],
 	template: `
@@ -82,10 +83,10 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 					activeFilter === 'all'
 						? allSets
 						: activeFilter === 'standard'
-						? allSets.filter((set) => set.standard)
-						: activeFilter === 'twist'
-						? allSets.filter((set) => set.twist)
-						: allSets.filter((set) => !set.standard);
+							? allSets.filter((set) => set.standard)
+							: activeFilter === 'twist'
+								? allSets.filter((set) => set.twist)
+								: allSets.filter((set) => !set.standard);
 				return [...sets].sort(this.sortSets());
 			}),
 		);

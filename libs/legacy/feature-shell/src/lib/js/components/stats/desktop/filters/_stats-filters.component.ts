@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'stats-filters',
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,

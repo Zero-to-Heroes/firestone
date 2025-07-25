@@ -16,6 +16,7 @@ import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-
 import { ArenaCardOption } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-option-view',
 	styleUrls: ['./arena-card-option-view.component.scss'],
 	template: `

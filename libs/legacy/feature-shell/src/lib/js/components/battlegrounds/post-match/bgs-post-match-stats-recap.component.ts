@@ -4,6 +4,7 @@ import { StatName } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-post-match-stats-recap',
 	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-recap.component.scss`],
 	template: `

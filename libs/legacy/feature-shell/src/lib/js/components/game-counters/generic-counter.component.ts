@@ -13,6 +13,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'generic-counter',
 	styleUrls: [
 		`../../../css/global/cdk-overlay.scss`,

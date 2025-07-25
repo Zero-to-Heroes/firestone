@@ -7,6 +7,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-mini',
 	styleUrls: [`./bgs-hero-mini.component.scss`],
 	template: `

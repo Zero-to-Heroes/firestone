@@ -21,6 +21,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Directive({
+	standalone: false,
 	selector: '[mercenariesHighlight]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138

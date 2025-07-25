@@ -30,6 +30,7 @@ const MIN_STATS_THRESHOLD = 100;
 const MIN_STATS_THRESHOLD_DRAFT = 500;
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-stats',
 	styleUrls: [`./arena-card-stats-columns.scss`, `./arena-card-stats.component.scss`],
 	template: `

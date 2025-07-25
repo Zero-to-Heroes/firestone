@@ -17,6 +17,7 @@ import { auditTime, filter, startWith } from 'rxjs/operators';
 import { AdService } from '../../services/ad.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-content',
 	styleUrls: [`../../../css/component/battlegrounds/battlegrounds-content.component.scss`],
 	template: `

@@ -12,6 +12,7 @@ import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'collection-menu-selection',
 	styleUrls: [
 		`../../../css/global/menu.scss`,

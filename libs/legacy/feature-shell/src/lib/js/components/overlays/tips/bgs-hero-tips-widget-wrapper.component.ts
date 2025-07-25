@@ -17,6 +17,7 @@ import { AdService } from '../../../services/ad.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-tips-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `

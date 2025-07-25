@@ -6,6 +6,7 @@ import { AbstractSubscriptionComponent, uuid } from '@firestone/shared/framework
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-minions-list',
 	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './bgs-minions-list.component.scss'],
 	template: `

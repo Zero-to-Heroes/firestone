@@ -31,6 +31,7 @@ import { TwitchCardsFacadeManagerService } from './twitch-cards-facade-manager.s
 import { TwitchLocalizationManagerService } from './twitch-localization-manager.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-overlay-container',
 	styleUrls: [
 		`../../../../../css/themes/decktracker-theme.scss`,

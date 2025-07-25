@@ -6,6 +6,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'menu-selection-bgs',
 	styleUrls: [
 		`../../../css/global/menu.scss`,

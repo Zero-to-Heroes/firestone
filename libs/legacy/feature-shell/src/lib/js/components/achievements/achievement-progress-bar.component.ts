@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 
 /** @deprecated Use generic progress-bar component instead */
 @Component({
+	standalone: false,
 	selector: 'achievement-progress-bar',
 	styleUrls: [`../../../css/component/achievements/achievement-progress-bar.component.scss`],
 	template: `

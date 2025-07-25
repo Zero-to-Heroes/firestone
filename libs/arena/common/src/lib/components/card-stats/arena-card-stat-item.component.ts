@@ -3,6 +3,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { ArenaCardStatInfo } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-stat-item',
 	styleUrls: [`./arena-card-stats-columns.scss`, `./arena-card-stat-item.component.scss`],
 	template: `

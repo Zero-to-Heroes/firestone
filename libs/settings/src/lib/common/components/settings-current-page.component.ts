@@ -8,6 +8,7 @@ import { Section, SectionReference, SettingNode } from '../models/settings.types
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
+	standalone: false,
 	selector: 'settings-current-page',
 	styleUrls: [
 		`../../settings-common.component.scss`,

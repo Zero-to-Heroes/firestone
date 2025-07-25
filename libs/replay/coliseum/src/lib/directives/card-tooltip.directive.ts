@@ -3,6 +3,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { Events } from '../services/events.service';
 
 @Directive({
+	standalone: false,
 	selector: '[cardTooltip]',
 })
 export class CardTooltipDirective {

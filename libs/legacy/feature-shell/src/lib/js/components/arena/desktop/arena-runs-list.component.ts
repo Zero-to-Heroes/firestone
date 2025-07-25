@@ -15,6 +15,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'arena-runs-list',
 	styleUrls: [`../../../../css/component/arena/desktop/arena-runs-list.component.scss`],
 	template: `
@@ -78,7 +79,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 		}
 	}
 
-	trackByRun(index: number, item: ArenaRun) {
+	trackByRun(index: number, item: ArenaRun | any) {
 		return item.id;
 	}
 

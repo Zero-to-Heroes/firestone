@@ -17,6 +17,7 @@ import { Observable, combineLatest, distinctUntilChanged, pairwise, shareReplay,
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-selection-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/bgs-hero-selection-widget-wrapper.component.scss'],
 	template: `

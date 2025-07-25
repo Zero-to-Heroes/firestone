@@ -24,6 +24,7 @@ import { MainWindowStateFacadeService } from '../../../services/mainwindow/store
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-overlay-root',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',

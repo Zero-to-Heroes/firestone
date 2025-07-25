@@ -18,6 +18,7 @@ import { auditTime, combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-board-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/bgs-board-widget-wrapper.component.scss'],
 	template: `

@@ -5,6 +5,7 @@ import { WebsiteBootstrapService } from '@firestone/website/core';
 import { Observable, from, startWith } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'website-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],

@@ -12,6 +12,7 @@ import {
 } from './battlegrounds-hero-average-position-details-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-hero-info',
 	styleUrls: [`./battlegrounds-meta-stats-hero-columns.scss`, `./battlegrounds-meta-stats-hero-info.component.scss`],
 	template: `

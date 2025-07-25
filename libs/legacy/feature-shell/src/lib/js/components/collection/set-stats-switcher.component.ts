@@ -8,6 +8,7 @@ import { Set } from '../../models/set';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
 
 @Component({
+	standalone: false,
 	selector: 'set-stats-switcher',
 	styleUrls: [
 		`../../../css/global/forms.scss`,

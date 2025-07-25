@@ -30,6 +30,7 @@ import { filterSettings } from '../services/search';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
+	standalone: false,
 	selector: 'settings-root',
 	styleUrls: [`../../settings-common.component.scss`, `./settings-root.component.scss`],
 	template: `

@@ -19,6 +19,7 @@ import { combineLatest, Observable, takeUntil } from 'rxjs';
 
 // TODO: sample size
 @Component({
+	standalone: false,
 	selector: 'choosing-card-bgs-trinket-option',
 	styleUrls: ['./choosing-card-bgs-trinket-option.component.scss'],
 	template: `

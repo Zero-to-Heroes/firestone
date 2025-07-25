@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 
 @Directive({
+	standalone: false,
 	selector: '[ngxCacheIf]',
 })
 export class NgxCacheIfDirective {

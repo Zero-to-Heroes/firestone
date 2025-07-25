@@ -15,6 +15,7 @@ import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/b
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-selection-overview',
 	styleUrls: [`./bgs-hero-selection-overview.component.scss`],
 	template: `

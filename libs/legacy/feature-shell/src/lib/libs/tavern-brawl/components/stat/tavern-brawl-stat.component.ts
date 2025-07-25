@@ -5,6 +5,7 @@ import { LocalizationFacadeService } from '../../../../js/services/localization-
 import { TavernStatWithCollection } from '../meta/tavern-brawl-meta.component';
 
 @Component({
+	standalone: false,
 	selector: 'tavern-brawl-stat',
 	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-stat.component.scss`],
 	template: `

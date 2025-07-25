@@ -1,0 +1,308 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m58[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.[39m
+
+
+[7m58[0m  @Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+[7m  [0m [91m                                          ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m58[0m:[93m71[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m58[0m  @Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+[7m  [0m [91m                                                                      ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m124[0m:[93m17[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m124[0m  select(option: IOption) {
+[7m   [0m [91m                ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m129[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m129[0m export interface IOptionWithImage extends IOption {
+[7m   [0m [91m                                          ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-dropdown.component.ts[0m:[93m30[0m:[93m29[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m30[0m  @Input() options: readonly IOption[];
+[7m  [0m [91m                            ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-dropdown.component.ts[0m:[93m56[0m:[93m21[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m56[0m  onSelected(option: IOption) {
+[7m  [0m [91m                    ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m45[0m:[93m4[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'label' does not exist in type 'BooleanOption'.
+
+[7m45[0m    label: this.i18n.translateString('settings.global.counter-dropdown.on'),
+[7m  [0m [91m   ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m50[0m:[93m4[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'label' does not exist in type 'BooleanOption'.
+
+[7m50[0m    label: this.i18n.translateString('settings.global.counter-dropdown.off'),
+[7m  [0m [91m   ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m55[0m:[93m4[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'label' does not exist in type 'BooleanOption'.
+
+[7m55[0m    label: this.i18n.translateString('settings.global.counter-dropdown.limited'),
+[7m  [0m [91m   ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m75[0m:[93m95[0m - [91merror[0m[90m TS2339: [0mProperty 'label' does not exist on type 'BooleanOption'.
+
+[7m75[0m     placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label ?? '',
+[7m  [0m [91m                                                                                              ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m85[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m85[0m  onSelected(option: /*BooleanOption*/ IOption) {
+[7m  [0m [91m                                      ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m95[0m:[93m33[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m95[0m interface BooleanOption extends IOption {
+[7m  [0m [91m                                ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent BuffInfoComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent CardTooltipComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective CardTooltipDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective HelpTooltipDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent HelpTooltipComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective ComponentTooltipDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective CachedComponentTooltipDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent CardTileComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent CopyDesckstringComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent DeckListBasicComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent FilterDropdownComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent FilterDropdownMultiselectComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent FilterDropdownCombinedComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent PreferenceDropdownComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent PreferenceYNLimitedComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent NumericInputComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent NumericInputWithArrowsComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent PreferenceNumericInputComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent TextInputComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent CheckboxComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent BasicBarChart2Component is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent StatCellComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent SortableLabelComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent ProgressBarComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent ToggleViewComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent PreferenceToggleComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mComponent PreferenceSliderComponent is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective ScrollableDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mDirective PremiumSettingDirective is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mPipe ShortDatePipe is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m102[0m:[93m16[0m - [91merror[0m[90m NG6008: [0mPipe SafeHtmlPipe is standalone, and cannot be declared in an NgModule. Did you mean to import it instead?
+
+[7m102[0m  declarations: components,
+[7m   [0m [91m               ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m103[0m:[93m11[0m - [91merror[0m[90m NG6004: [0mCan't be exported from this NgModule, as it must be imported first
+
+[7m103[0m  exports: components,
+[7m   [0m [91m          ~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

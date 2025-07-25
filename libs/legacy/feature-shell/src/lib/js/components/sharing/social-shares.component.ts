@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'social-shares',
 	styleUrls: [`../../../css/component/sharing/social-shares.component.scss`],
 	template: `

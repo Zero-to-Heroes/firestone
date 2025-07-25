@@ -18,6 +18,7 @@ import {
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-out-of-combat-player-team',
 	styleUrls: [],
 	template: ` <mercenaries-team-root

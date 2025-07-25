@@ -8,11 +8,12 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { IOption } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'filter',
 	styleUrls: [`../../css/component/filter.component.scss`],
 	template: `
@@ -22,7 +23,7 @@ import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-w
 				[options]="filterOptions"
 				[ngModel]="activeFilter"
 				[placeholder]="placeholder"
-				(selected)="selectFilter($event)"
+				(selected)="selectFilter($event?.value)"
 				(opened)="refresh()"
 				(closed)="refresh()"
 				[noFilter]="1"
@@ -49,7 +50,11 @@ export class FilterComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private ow: OverwolfService,
+		private el: ElementRef,
+		private cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -69,7 +74,10 @@ export class FilterComponent implements AfterViewInit {
 		});
 	}
 
-	selectFilter(option: IOption) {
+	selectFilter(value: string) {
+		const option = this.filterOptions.find((opt) => opt.value === value);
+		if (!option) return;
+
 		if (this.delegateFullControl) {
 			this.filterChangeFunction(option);
 		} else {

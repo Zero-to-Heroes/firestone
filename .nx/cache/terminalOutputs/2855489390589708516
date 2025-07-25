@@ -1,0 +1,20 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/arena/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts[0m:[93m38[0m:[93m59[0m - [91merror[0m[90m TS2741: [0mProperty 'notabledCards' is missing in type 'ArenaRunInfo' but required in type 'ExtendedArenaRunInfo'.[39m
+
+
+[7m38[0m        <arena-run-vignette *ngIf="!isStringHeader(stat)" [stat]="stat as any"></arena-run-vignette>
+[7m  [0m [91m                                                          ~~~~[0m
+[96mlibs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts[0m:[93m38[0m:[93m66[0m - [91merror[0m[90m NG5002: [0mParser Error: Unexpected token 'as' at column 6 in [stat as any] in E:/Source/zerotoheroes/firestone/libs/arena/common/src/lib/components/high-wins-runs/arena-high-wins-runs.component.ts@37:65
+
+[7m38[0m        <arena-run-vignette *ngIf="!isStringHeader(stat)" [stat]="stat as any"></arena-run-vignette>
+[7m  [0m [91m                                                                 ~~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

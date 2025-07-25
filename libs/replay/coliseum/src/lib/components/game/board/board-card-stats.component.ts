@@ -3,6 +3,7 @@ import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'board-card-stats',
 	styleUrls: ['../../../text.scss', './board-card-stats.component.scss', '../card/card-stats-colors.scss'],
 	template: `

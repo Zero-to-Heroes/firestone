@@ -1,14 +1,15 @@
 import { A11yModule } from '@angular/cdk/a11y';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { SelectModule } from '@sebastientromp/ng-select';
+import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { SelectModule } from 'ng-select';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { CardTileComponent } from './components/card/card-tile.component';
 import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.component';
 import { StatCellComponent } from './components/charts/stat-cell.component';
@@ -89,11 +90,12 @@ const components = [
 		FormsModule,
 		ReactiveFormsModule,
 		A11yModule,
+		SelectModule,
 
 		InlineSVGModule.forRoot(),
-		SelectModule,
-		VirtualScrollerModule,
+		ScrollingModule,
 		NgScrollbarModule,
+		VirtualScrollerModule,
 
 		SharedFrameworkCommonModule,
 		SharedFrameworkCoreModule,

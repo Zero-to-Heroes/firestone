@@ -16,6 +16,7 @@ import { LocalizationFacadeService } from '../../../js/services/localization-fac
 import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 
 @Component({
+	standalone: false,
 	selector: 'pack-stat-tooltip',
 	styleUrls: [`./pack-stat-tooltip.component.scss`],
 	template: `

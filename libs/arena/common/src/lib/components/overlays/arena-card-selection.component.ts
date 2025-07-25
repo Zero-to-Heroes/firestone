@@ -31,6 +31,7 @@ import {
 import { ArenaCardOption } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-card-selection',
 	styleUrls: ['./arena-card-selection.component.scss'],
 	template: `

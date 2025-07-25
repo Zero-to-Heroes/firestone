@@ -9,6 +9,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 
 @Component({
+	standalone: false,
 	selector: 'profile-match-stats',
 	styleUrls: [
 		`../../../../../css/component/stats/desktop/match-stats/profile-match-stats-columns.scss`,

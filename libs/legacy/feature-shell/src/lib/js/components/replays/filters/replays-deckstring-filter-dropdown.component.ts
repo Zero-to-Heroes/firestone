@@ -12,6 +12,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { sortByProperties } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'replays-deckstring-filter-dropdown',
 	styleUrls: [],
 	template: `

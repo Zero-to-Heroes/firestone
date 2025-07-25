@@ -11,6 +11,7 @@ import { parseClipboardContent } from '../../import-deckstring.component';
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
 @Component({
+	standalone: false,
 	selector: 'constructed-deckbuilder-breadcrumbs',
 	styleUrls: [
 		`../../../../../css/component/decktracker/main/deckbuilder/constructed-deckbuilder-breadcrumbs.component.scss`,

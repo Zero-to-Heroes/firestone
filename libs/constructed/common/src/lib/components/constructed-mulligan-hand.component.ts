@@ -40,6 +40,7 @@ import { buildColor } from './mulligan-deck-view.component';
 import { InternalMulliganAdvice } from './mulligan-hand-view.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-mulligan-hand',
 	styleUrls: ['./constructed-mulligan-hand.component.scss'],
 	template: `

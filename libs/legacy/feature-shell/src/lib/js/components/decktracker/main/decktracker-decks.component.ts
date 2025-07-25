@@ -20,6 +20,7 @@ import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/sto
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-decks',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,
@@ -280,6 +281,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 }
 
 @Component({
+	standalone: false,
 	selector: 'deck-drag-template',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

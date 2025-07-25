@@ -19,6 +19,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-battle-side',
 	styleUrls: [`./bgs-battle-side.component.scss`],
 	template: `

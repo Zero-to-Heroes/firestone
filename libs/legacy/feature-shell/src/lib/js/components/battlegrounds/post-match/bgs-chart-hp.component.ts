@@ -17,6 +17,7 @@ import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-chart-hp',
 	styleUrls: [
 		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,

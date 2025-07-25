@@ -4,6 +4,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { FtueKey } from '../models/preferences/ftue';
 
 @Directive({
+	standalone: false,
 	selector: '[pulse]',
 })
 export class PulseDirective {

@@ -17,6 +17,7 @@ import { BehaviorSubject, combineLatest, debounceTime, filter, Observable, takeU
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-overlay-standalone',
 	styleUrls: [
 		`../../../../../css/themes/decktracker-theme.scss`,

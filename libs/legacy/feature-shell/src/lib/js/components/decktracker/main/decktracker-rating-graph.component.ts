@@ -17,6 +17,7 @@ import { MainWindowStateFacadeService } from '../../../services/mainwindow/store
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-rating-graph',
 	styleUrls: [`../../../../css/component/decktracker/main/decktracker-rating-graph.component.scss`],
 	template: `

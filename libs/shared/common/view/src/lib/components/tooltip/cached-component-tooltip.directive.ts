@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 
 @Directive({
+	standalone: false,
 	selector: '[cachedComponentTooltip] ',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138

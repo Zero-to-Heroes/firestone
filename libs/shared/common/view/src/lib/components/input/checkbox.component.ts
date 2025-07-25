@@ -10,6 +10,7 @@ import {
 import { uuid } from '@firestone/shared/framework/common';
 
 @Component({
+	standalone: false,
 	selector: 'checkbox',
 	styleUrls: [`./checkbox.component.scss`],
 	template: `

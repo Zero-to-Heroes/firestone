@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ExtendedProfileSet } from '../+state/website/profile.models';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-collection-overview',
 	styleUrls: [`./website-profile-collection-overview.component.scss`],
 	template: `

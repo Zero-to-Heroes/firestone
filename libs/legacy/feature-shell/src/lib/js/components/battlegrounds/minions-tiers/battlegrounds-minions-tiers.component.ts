@@ -42,6 +42,7 @@ import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-minions-tiers',
 	styleUrls: [
 		`../../../../css/global/cdk-overlay.scss`,

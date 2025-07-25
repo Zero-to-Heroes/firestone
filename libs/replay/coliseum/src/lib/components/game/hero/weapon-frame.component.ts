@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'weapon-frame',
 	styleUrls: ['./weapon-frame.component.scss'],
 	template: ` <img src="{{ image }}" class="weapon-frame" /> `,

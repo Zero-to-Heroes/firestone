@@ -4,6 +4,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'minion-icon',
 	styleUrls: [`../../../css/component/battlegrounds/minion-icon.component.scss`],
 	template: `

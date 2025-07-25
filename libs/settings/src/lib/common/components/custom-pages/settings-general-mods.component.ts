@@ -21,6 +21,7 @@ import { ILocalizationService, OverwolfService } from '@firestone/shared/framewo
 import { Observable, filter } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'settings-general-mods',
 	styleUrls: [
 		`../scrollbar-settings.scss`,

@@ -17,6 +17,7 @@ import { TwitchPreferencesService } from '../services/twitch-preferences.service
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
+	standalone: false,
 	selector: 'twitch-bgs-hero-overview',
 	styleUrls: [
 		'../../../../../legacy/feature-shell/src/lib/css/themes/battlegrounds-theme.scss',

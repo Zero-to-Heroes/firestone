@@ -14,6 +14,7 @@ import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { Setting } from '../models/settings.types';
 
 @Component({
+	standalone: false,
 	selector: 'setting-element',
 	styleUrls: [`../../settings-common.component.scss`, `./setting-element.component.scss`],
 	template: `

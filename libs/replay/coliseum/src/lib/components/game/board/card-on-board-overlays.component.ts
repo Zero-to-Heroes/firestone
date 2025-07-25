@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'card-on-board-overlays',
 	styleUrls: ['../../..//text.scss', './card-on-board-overlays.component.scss'],
 	template: `

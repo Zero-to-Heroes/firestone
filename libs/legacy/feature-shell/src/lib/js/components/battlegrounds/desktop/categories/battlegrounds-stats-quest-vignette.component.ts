@@ -3,6 +3,7 @@ import { BgsQuestStat } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-stats-quest-vignette',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-stats-quest-vignette.component.scss`,

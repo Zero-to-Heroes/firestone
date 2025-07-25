@@ -5,6 +5,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstr
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'pack-history',
 	styleUrls: [`../../../css/global/forms.scss`, `../../../css/global/toggle.scss`, `./pack-history.component.scss`],
 	template: `

@@ -4,6 +4,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { CardsByCost } from './cards-by-cost';
 
 @Component({
+	standalone: false,
 	selector: 'deck-mana-curve-bar',
 	styleUrls: [`../../../../css/component/decktracker/main/deck-mana-curve-bar.component.scss`],
 	template: `

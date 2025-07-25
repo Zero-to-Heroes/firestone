@@ -9,6 +9,7 @@ import { Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rx
 import { BattlegroundsOfficialLeaderboardService } from '../services/bgs-official-leaderboards.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-leaderboards',
 	styleUrls: ['./battlegrounds-leaderboards.component.scss'],
 	template: `
@@ -84,7 +85,7 @@ export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent impl
 					? entries
 					: entries.filter((entry) =>
 							entry.accountId.toLocaleLowerCase().includes(bgsLeaderboardPlayerSearch.toLowerCase()),
-					  );
+						);
 			}),
 		);
 		this.lastUpdate$ = this.leaderboardsService.leaderboards$$.pipe(

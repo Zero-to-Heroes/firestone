@@ -28,6 +28,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
 @Component({
+	standalone: false,
 	selector: 'constructed-deckbuilder-cards',
 	styleUrls: [
 		`../../../../../css/component/decktracker/main/deckbuilder/constructed-deckbuilder-cards.component.scss`,
@@ -42,7 +43,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					allowedCards: allowedCards$ | async,
 					activeCards: activeCards$ | async,
 					showRelatedCards: showRelatedCards$ | async,
-					deckstring: deckstring$ | async
+					deckstring: deckstring$ | async,
 				} as value"
 			>
 				<div class="decklist-container">
@@ -223,10 +224,10 @@ export class ConstructedDeckbuilderCardsComponent
 					currentFormat === 'classic'
 						? config.vanillaSets
 						: currentFormat === 'standard'
-						? config.standardSets
-						: currentFormat === 'twist'
-						? config.twistSets
-						: config.wildSets;
+							? config.standardSets
+							: currentFormat === 'twist'
+								? config.twistSets
+								: config.wildSets;
 
 				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
 				const searchCardClasses: CardClass[] = [CardClass[currentClass.toUpperCase()], CardClass.NEUTRAL];
@@ -402,10 +403,10 @@ export class ConstructedDeckbuilderCardsComponent
 						currentFormat === 'classic'
 							? GameFormat.FT_CLASSIC
 							: currentFormat === 'standard'
-							? GameFormat.FT_STANDARD
-							: currentFormat === 'twist'
-							? GameFormat.FT_TWIST
-							: GameFormat.FT_WILD,
+								? GameFormat.FT_STANDARD
+								: currentFormat === 'twist'
+									? GameFormat.FT_TWIST
+									: GameFormat.FT_WILD,
 					cards: cardDbfIds,
 					heroes: [heroDbfId],
 					sideboards: sideboards,
@@ -476,7 +477,7 @@ export class ConstructedDeckbuilderCardsComponent
 		return runesMissing <= freeRunes;
 	}
 
-	trackByCardId(index: number, item: DeckBuilderCard) {
+	trackByCardId(index: number, item: DeckBuilderCard | any) {
 		return item.cardId;
 	}
 

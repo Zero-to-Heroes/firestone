@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { IOption } from 'ng-select';
+import { IOption } from '@firestone/shared/common/view';
 
 @Component({
+	standalone: false,
 	selector: 'dropdown',
 	styleUrls: [
 		// `../../../css/themes/battlegrounds-theme.scss`,

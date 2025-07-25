@@ -50,6 +50,7 @@ const isSkippedAction = (action: Action): boolean => {
 };
 
 @Component({
+	standalone: false,
 	selector: 'fs-coliseum',
 	styleUrls: ['../global.scss', './coliseum.component.scss'],
 	template: `

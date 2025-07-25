@@ -27,6 +27,7 @@ import { ArenaDraftManagerService } from '../../services/arena-draft-manager.ser
 import { ArenaCardOption } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-package-card-selection',
 	styleUrls: ['./arena-package-card-selection.component.scss'],
 	template: `

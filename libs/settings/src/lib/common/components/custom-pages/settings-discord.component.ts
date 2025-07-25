@@ -5,6 +5,7 @@ import { AnalyticsService, ILocalizationService } from '@firestone/shared/framew
 import { Observable, take, takeUntil } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'settings-discord',
 	styleUrls: [`../../../settings-common.component.scss`, `./settings-discord.component.scss`],
 	template: `

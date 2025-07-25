@@ -18,6 +18,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-desktop',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

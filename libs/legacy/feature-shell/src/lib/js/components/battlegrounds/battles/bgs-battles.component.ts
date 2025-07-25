@@ -15,6 +15,7 @@ import { auditTime, filter } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-battles',
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,

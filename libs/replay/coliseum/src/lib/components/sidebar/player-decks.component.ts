@@ -2,6 +2,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'player-decks',
 	styleUrls: ['../../global.scss', './player-decks.component.scss'],
 	template: `

@@ -187,7 +187,7 @@ export const removeFromReadonlyArray = <T>(array: readonly T[], index: number): 
 };
 
 export const decodeBase64 = (input: string): string => {
-	const fromBase64 = Buffer.from(input, 'base64').toString();
+	const fromBase64 = Buffer.from(input, 'base64');
 	const inflated = inflate(fromBase64, { to: 'string' });
 	return JSON.parse(inflated);
 };

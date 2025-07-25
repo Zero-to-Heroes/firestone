@@ -15,6 +15,7 @@ import { SettingNode } from '../models/settings.types';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
+	standalone: false,
 	selector: 'settings-navigation-node',
 	styleUrls: [`../../settings-common.component.scss`, `./settings-navigation-node.component.scss`],
 	template: `

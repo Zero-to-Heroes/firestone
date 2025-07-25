@@ -11,12 +11,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { IOption } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'reddit-share-info',
 	styleUrls: [`../../../../css/component/sharing/reddit/reddit-share-info.component.scss`],
 	template: `
@@ -66,7 +67,10 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 
 	private subscription: Subscription;
 
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.subscription = this.form.valueChanges

@@ -34,6 +34,7 @@ import { ColumnSortTypeComp, buildCompStats, buildCompTiers } from './bgs-meta-c
 import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-comps',
 	styleUrls: [`./battlegrounds-meta-stats-comps-columns.scss`, `./battlegrounds-meta-stats-comps.component.scss`],
 	template: `

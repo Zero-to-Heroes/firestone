@@ -8,6 +8,7 @@ const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url
 const REPLAY_API = 'https://xml.firestoneapp.com/';
 
 @Component({
+	standalone: false,
 	selector: 'game-replay',
 	styleUrls: [`../../../css/component/replays/game-replay.component.scss`],
 	template: `

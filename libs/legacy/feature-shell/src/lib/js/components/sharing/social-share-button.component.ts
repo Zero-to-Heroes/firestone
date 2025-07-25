@@ -12,6 +12,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { capitalizeFirstLetter } from '../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'social-share-button',
 	styleUrls: [`../../../css/component/sharing/social-share-button.component.scss`],
 	template: ``,

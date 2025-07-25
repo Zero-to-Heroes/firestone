@@ -21,6 +21,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 import { buildBasicCardChoiceValue } from './card-choice-values';
 
 @Component({
+	standalone: false,
 	selector: 'choosing-card-widget-wrapper',
 	styleUrls: ['./choosing-card-widget-wrapper.component.scss'],
 	template: `

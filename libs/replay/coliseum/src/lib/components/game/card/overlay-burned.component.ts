@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'overlay-burned',
 	styleUrls: ['./overlay-burned.component.scss'],
 	template: `

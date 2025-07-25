@@ -7,6 +7,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 
 // UNUSED
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-personal-stats-quests',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component.scss`,

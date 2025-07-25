@@ -4,6 +4,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../models/game-event';
 
 @Component({
+	standalone: false,
 	selector: 'secrets-helper-widget-icon',
 	styleUrls: [
 		`../../../css/themes/decktracker-theme.scss`,

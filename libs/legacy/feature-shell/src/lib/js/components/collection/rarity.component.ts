@@ -3,6 +3,7 @@ import { RarityTYpe } from '@firestone-hs/reference-data';
 import { Set } from '../../models/set';
 
 @Component({
+	standalone: false,
 	selector: 'rarity-view',
 	styleUrls: [`../../../css/component/collection/rarity.component.scss`],
 	template: `

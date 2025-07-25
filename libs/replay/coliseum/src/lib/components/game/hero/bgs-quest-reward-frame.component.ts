@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-quest-reward-frame',
 	styleUrls: ['./bgs-quest-reward-frame.component.scss'],
 	template: ` <img src="{{ image }}" class="bgs-quest-reward-frame" /> `,

@@ -8,6 +8,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { InternalFriendlyBattlePlayer } from './community-friendly-battle-player.component';
 
 @Component({
+	standalone: false,
 	selector: 'community-friendly-battle',
 	styleUrls: [`./community-friendly-battle.component.scss`],
 	template: `

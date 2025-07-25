@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import { GameHelper } from '../../services/game-helper';
 
 @Component({
+	standalone: false,
 	selector: 'play-area',
 	styleUrls: ['./play-area.component.scss'],
 	template: `

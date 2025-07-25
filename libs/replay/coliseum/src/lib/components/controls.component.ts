@@ -13,6 +13,7 @@ import {
 import { Key } from 'ts-keycode-enum';
 
 @Component({
+	standalone: false,
 	selector: 'controls',
 	styleUrls: ['./controls.component.scss', '../global.scss'],
 	template: `

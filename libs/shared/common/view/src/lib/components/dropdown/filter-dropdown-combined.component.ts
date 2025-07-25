@@ -23,6 +23,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { MultiselectOption } from './filter-dropdown-multiselect.component';
 
 @Component({
+	standalone: false,
 	selector: 'filter-dropdown-combined',
 	styleUrls: [`./filter-dropdown-combined.component.scss`],
 	template: `
@@ -37,7 +38,7 @@ import { MultiselectOption } from './filter-dropdown-multiselect.component';
 					showing && {
 						workingOptions: (workingOptions$ | async) || [],
 						validSelection: validSelection$ | async,
-						allowMultipleSelection: allowMultipleSelection$ | async
+						allowMultipleSelection: allowMultipleSelection$ | async,
 					} as value
 				"
 			>
@@ -52,15 +53,8 @@ import { MultiselectOption } from './filter-dropdown-multiselect.component';
 					(ngModelChange)="onCurrentSearchChanged($event)"
 					(mousedown)="preventDrag($event)"
 				/>
-				<virtual-scroller
-					#scroll
-					[items]="value.workingOptions!"
-					[bufferAmount]="25"
-					role="list"
-					class="choices"
-					scrollable
-				>
-					<div class="option" *ngFor="let option of scroll.viewPortItems; trackBy: trackByFn">
+				<div role="list" class="choices virtual-scroll-container" style="max-height: 300px; overflow-y: auto;">
+					<div class="option" *ngFor="let option of value.workingOptions; trackBy: trackByFn">
 						<checkbox
 							class="checkbox-option"
 							*ngIf="value.allowMultipleSelection"
@@ -74,7 +68,7 @@ import { MultiselectOption } from './filter-dropdown-multiselect.component';
 							<img class="image" *ngIf="option.image" [src]="option.image" />
 							<span
 								[helpTooltip]="option.tooltip ?? option.label"
-								[ngClass]="{ unselectable: option.unselectable }"
+								[ngClass]="{ unselectable: isUnselectable(option) }"
 								[innerHTML]="option?.label"
 							></span>
 							<div class="tooltip" *ngIf="option.tooltip" [helpTooltip]="option.tooltip">
@@ -89,7 +83,7 @@ import { MultiselectOption } from './filter-dropdown-multiselect.component';
 							</i>
 						</div>
 					</div>
-				</virtual-scroller>
+				</div>
 				<div class="controls" *ngIf="value.allowMultipleSelection">
 					<div
 						class="button clear"
@@ -175,7 +169,10 @@ export class FilterDropdownCombinedComponent
 
 	private sub$$: Subscription;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+	) {
 		super(cdr);
 	}
 
@@ -360,6 +357,10 @@ export class FilterDropdownCombinedComponent
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
+	}
+
+	isUnselectable(option: InternalOption): boolean {
+		return (option as any).unselectable || false;
 	}
 
 	private buildIcons(options: MultiselectOption[]): string {

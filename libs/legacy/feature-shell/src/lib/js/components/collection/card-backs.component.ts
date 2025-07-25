@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { CardBack } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
@@ -18,6 +18,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
+	standalone: false,
 	selector: 'card-backs',
 	styleUrls: [`../../../css/component/collection/card-backs.component.scss`],
 	template: `

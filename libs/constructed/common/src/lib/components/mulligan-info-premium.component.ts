@@ -9,6 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'mulligan-info-premium',
 	styleUrls: ['./mulligan-info-premium.component.scss'],
 	template: `

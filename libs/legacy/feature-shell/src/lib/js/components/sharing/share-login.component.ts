@@ -3,6 +3,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
 
 @Component({
+	standalone: false,
 	selector: 'share-login',
 	styleUrls: [`../../../css/component/sharing/share-login.component.scss`],
 	template: `

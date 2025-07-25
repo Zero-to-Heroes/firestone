@@ -8,6 +8,7 @@ import { MetaHeroStatsState } from './+state/meta-hero-stats/meta-hero-stats.mod
 import { getAllMetaHeroStats, getLoaded } from './+state/meta-hero-stats/meta-hero-stats.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-battlegrounds',
 	styleUrls: [`./website-battlegrounds.component.scss`],
 	template: `

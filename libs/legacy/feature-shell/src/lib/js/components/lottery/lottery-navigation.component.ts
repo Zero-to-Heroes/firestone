@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'lottery-navigation',
 	styleUrls: ['../../../css/component/lottery/lottery-navigation.component.scss'],
 	template: `

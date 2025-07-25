@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-my-decks-search',
 	styleUrls: [`../../../../../css/component/decktracker/main/filters/constructed-my-decks-search.component.scss`],
 	template: `

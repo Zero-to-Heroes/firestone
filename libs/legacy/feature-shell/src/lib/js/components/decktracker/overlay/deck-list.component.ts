@@ -6,6 +6,7 @@ import { SetCard } from '../../../models/set';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'deck-list',
 	styleUrls: [
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,

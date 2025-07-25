@@ -6,6 +6,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { isWindowClosed } from '../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'control-close',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

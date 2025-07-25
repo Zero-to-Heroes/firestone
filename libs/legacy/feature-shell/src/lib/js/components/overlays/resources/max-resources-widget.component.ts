@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MaxResources } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'max-resources-widget',
 	styleUrls: ['./max-resources-widget.component.scss'],
 	template: `

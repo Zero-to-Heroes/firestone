@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'stat-cell-simple',
 	styleUrls: [`./stat-cell.component.scss`],
 	template: `

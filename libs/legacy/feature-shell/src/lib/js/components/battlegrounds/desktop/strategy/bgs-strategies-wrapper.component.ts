@@ -20,6 +20,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-strategies-wrapper',
 	styleUrls: [`./bgs-strategies.component.scss`],
 	template: `

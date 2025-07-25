@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsMetaCardStatTier, BgsMetaCardStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-card-tier',
 	styleUrls: [`./battlegrounds-meta-stats-card-tier.component.scss`],
 	template: `

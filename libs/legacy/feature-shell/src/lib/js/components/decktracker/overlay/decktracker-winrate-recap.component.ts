@@ -12,6 +12,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-winrate-recap',
 	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-winrate-recap.component.scss'],
 	template: `

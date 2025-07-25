@@ -18,6 +18,7 @@ import { CounterInstance } from './_counter-definition-v2';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'grouped-counters-wrapper',
 	styleUrls: ['./grouped-counters-wrapper.component.scss'],
 	template: `

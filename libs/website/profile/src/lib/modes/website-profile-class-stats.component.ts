@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ProfileClassStat } from './profile-class-stat';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-class-stats',
 	styleUrls: [`./website-profile-class-stats.component.scss`],
 	template: `

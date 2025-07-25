@@ -5,6 +5,7 @@ import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-ba
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-action',
 	styleUrls: [
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-ability.component.scss',

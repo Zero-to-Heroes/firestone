@@ -22,6 +22,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { ConstructedMatchupDetails } from './constructed-meta-deck-details-matchups.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-details-view',
 	styleUrls: [`../../../../css/component/decktracker/main/constructed-meta-deck-details-view.component.scss`],
 	template: `

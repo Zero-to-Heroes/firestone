@@ -11,6 +11,7 @@ import {
 import { Game } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'sidebar',
 	styleUrls: ['../../global.scss', './sidebar.component.scss'],
 	template: `

@@ -6,6 +6,7 @@ import { CustomStyleKey, defaultStyleKeys } from '../common/models/custom-appear
 import { CustomAppearanceService } from '../common/services/custom-appearance.service';
 
 @Component({
+	standalone: false,
 	selector: 'custom-color-picker',
 	styleUrls: [`../settings-common.component.scss`, `./custom-color-picker.component.scss`],
 	template: `

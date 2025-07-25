@@ -12,6 +12,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { BattlegroundsQuestsService } from '../../services/bgs-quests.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-quests',
 	styleUrls: [`./battlegrounds-meta-stats-quests.component.scss`],
 	template: `

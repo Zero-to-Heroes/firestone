@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Directive, ElementRef, HostBinding, HostListener, Vi
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Directive({
+	standalone: false,
 	selector: '[rotateOnMouseOver]',
 })
 export class RotateOnMouseOverDirective {

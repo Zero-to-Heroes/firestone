@@ -4,6 +4,7 @@ import { Preferences } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 
 @Component({
+	standalone: false,
 	selector: 'hs-quests-widget',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,

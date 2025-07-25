@@ -14,6 +14,7 @@ import { SettingsGeneralModsComponent } from './custom-pages/settings-general-mo
 import { SettingsGeneralThirdPartyComponent } from './custom-pages/settings-general-third-party.component';
 
 @Component({
+	standalone: false,
 	selector: 'settings-current-page-section-reference',
 	styleUrls: [`../../settings-common.component.scss`, `./settings-current-page-section-reference.component.scss`],
 	template: `

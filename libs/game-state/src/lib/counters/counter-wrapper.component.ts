@@ -24,6 +24,7 @@ import { CountersPositionerComponent } from './counters-positioner.component';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'counter-wrapper',
 	styleUrls: ['./counter-wrapper.component.scss'],
 	template: `

@@ -18,6 +18,7 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator-trinket-selection',
 	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-trinket-selection.component.scss`],
 	template: `

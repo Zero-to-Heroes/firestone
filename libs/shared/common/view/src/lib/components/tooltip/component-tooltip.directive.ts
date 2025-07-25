@@ -14,6 +14,7 @@ import {
 import { Subscription } from 'rxjs';
 
 @Directive({
+	standalone: false,
 	selector: '[componentTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138

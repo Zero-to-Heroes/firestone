@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DeckState } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-cards-recap',
 	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-cards-recap.component.scss'],
 	template: `

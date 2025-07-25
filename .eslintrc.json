@@ -1,12 +1,12 @@
 {
 	"root": true,
 	"ignorePatterns": ["**/*"],
-	"plugins": ["@nrwl/nx"],
+	"plugins": ["@nx/eslint"],
 	"overrides": [
 		{
 			"files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
 			"rules": {
-				"@nrwl/nx/enforce-module-boundaries": [
+				"@nx/eslint/enforce-module-boundaries": [
 					"off",
 					{
 						"enforceBuildableLibDependency": true,
@@ -23,12 +23,12 @@
 		},
 		{
 			"files": ["*.ts", "*.tsx"],
-			"extends": ["plugin:@nrwl/nx/typescript"],
+			"extends": ["plugin:@nx/eslint/typescript"],
 			"rules": {}
 		},
 		{
 			"files": ["*.js", "*.jsx"],
-			"extends": ["plugin:@nrwl/nx/javascript"],
+			"extends": ["plugin:@nx/eslint/javascript"],
 			"rules": {}
 		},
 		{
@@ -40,7 +40,7 @@
 		},
 		{
 			"files": ["*.ts"],
-			"extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
+			"extends": ["plugin:@nx/eslint/angular", "plugin:@angular-eslint/template/process-inline-templates"],
 			"rules": {
 				"no-extra-boolean-cast": ["off"],
 				"@typescript-eslint/member-ordering": ["off"],

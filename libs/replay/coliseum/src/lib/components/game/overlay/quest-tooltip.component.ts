@@ -4,6 +4,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'quest-tooltip',
 	styleUrls: ['./quest-tooltip.component.scss'],
 	template: `

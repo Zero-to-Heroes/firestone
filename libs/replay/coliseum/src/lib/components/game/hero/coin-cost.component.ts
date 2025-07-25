@@ -12,6 +12,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { sleep } from '@firestone/shared/framework/common';
 
 @Component({
+	standalone: false,
 	selector: 'coin-cost',
 	styleUrls: ['../../../text.scss', '../card/card-cost-colors.scss', './coin-cost.component.scss'],
 	template: `

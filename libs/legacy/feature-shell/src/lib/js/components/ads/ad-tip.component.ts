@@ -5,6 +5,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { TIP_URL, Tip, TipService } from '../../services/tip.service';
 
 @Component({
+	standalone: false,
 	selector: 'ad-tip',
 	styleUrls: [`../../../css/component/ads/ad-tip.component.scss`],
 	template: `

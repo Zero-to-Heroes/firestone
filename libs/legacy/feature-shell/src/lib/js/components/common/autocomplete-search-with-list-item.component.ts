@@ -5,6 +5,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'autocomplete-search-with-list-item',
 	styleUrls: [`../../../css/component/common/autocomplete-search-with-list-item.component.scss`],
 	template: `

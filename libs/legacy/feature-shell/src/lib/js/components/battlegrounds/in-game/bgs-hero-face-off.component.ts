@@ -4,6 +4,7 @@ import { getHeroPower } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-face-off',
 	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-hero-face-off.component.scss`],
 	template: `

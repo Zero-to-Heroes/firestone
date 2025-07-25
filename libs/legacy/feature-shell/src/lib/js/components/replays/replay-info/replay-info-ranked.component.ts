@@ -22,6 +22,7 @@ import { ShowReplayEvent } from '../../../services/mainwindow/store/events/repla
 import { capitalizeEachWord } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'replay-info-ranked',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CompletionStep } from '../../models/visual-achievement';
 
 @Component({
+	standalone: false,
 	selector: 'achievement-completion-step',
 	styleUrls: [`../../../css/component/achievements/achievement-completion-step.component.scss`],
 	template: `

@@ -13,6 +13,7 @@ import {
 import { fromJS } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'leaderboard-empty-card',
 	styleUrls: ['../../../../../css/component/decktracker/overlay/twitch/leaderboard-empty-card.component.scss'],
 	template: `

@@ -7,6 +7,7 @@ import { changeMetaHeroStatsTimeFilter } from './+state/meta-hero-stats/meta-her
 import { getCurrentTimerFilter } from './+state/meta-hero-stats/meta-hero-stats.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-battlegrounds-time-filter-dropdown',
 	styleUrls: [],
 	template: `

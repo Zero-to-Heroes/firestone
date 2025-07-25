@@ -18,6 +18,7 @@ import { MinimalCard } from '../overlay/deck-list-static.component';
 import { EnhancedDeckStat } from './constructed-meta-decks.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-summary',
 	styleUrls: [
 		`../../../../css/component/decktracker/main/constructed-meta-decks-columns.scss`,

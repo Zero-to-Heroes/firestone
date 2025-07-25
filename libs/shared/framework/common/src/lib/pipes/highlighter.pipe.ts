@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'highlighter',
+	standalone: false,
 })
 export class HighlighterPipe implements PipeTransform {
 	transform(value: any, args: any): unknown {

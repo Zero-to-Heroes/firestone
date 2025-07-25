@@ -1,0 +1,49 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[37m[96mlibs/battlegrounds/common/src/lib/components/battlegrounds-leaderboards.component.ts[0m:[93m35[0m:[93m63[0m - [91merror[0m[90m TS2339: [0mProperty 'viewPortItems' does not exist on type 'HTMLElement'.[39m
+[37m[39m
+[37m[7m35[0m     <li class="leaderboard-entry" *ngFor="let entry of scroll.viewPortItems; trackBy: trackByFn">[39m
+[37m[7m  [0m [91m                                                              ~~~~~~~~~~~~~[0m[39m
+[37m[96mlibs/battlegrounds/common/src/lib/components/battlegrounds-leaderboards.component.ts[0m:[93m29[0m:[93m5[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'items' since it isn't a known property of 'virtual-scroller'.[39m
+[37m1. If 'virtual-scroller' is an Angular component and it has 'items' input, then verify that it is part of this module.[39m
+[37m2. If 'virtual-scroller' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.[39m
+[37m3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[39m
+[37m[39m
+[37m[7m29[0m     [items]="value.leaderboard!"[39m
+[37m[7m  [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m
+[37m[96mlibs/battlegrounds/common/src/lib/components/battlegrounds-leaderboards.component.ts[0m:[93m30[0m:[93m5[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'bufferAmount' since it isn't a known property of 'virtual-scroller'.[39m
+[37m1. If 'virtual-scroller' is an Angular component and it has 'bufferAmount' input, then verify that it is part of this module.[39m
+[37m2. If 'virtual-scroller' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.[39m
+[37m3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.[39m
+[37m[39m
+[37m[7m30[0m     [bufferAmount]="25"[39m
+[37m[7m  [0m [91m    ~~~~~~~~~~~~~~~~~~~[0m[39m
+[37m[39m
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/battlegrounds/common/src/lib/components/battlegrounds-leaderboards.component.ts[0m:[93m35[0m:[93m63[0m - [91merror[0m[90m TS2339: [0mProperty 'viewPortItems' does not exist on type 'HTMLElement'.[39m
+
+
+[7m35[0m     <li class="leaderboard-entry" *ngFor="let entry of scroll.viewPortItems; trackBy: trackByFn">
+[7m  [0m [91m                                                              ~~~~~~~~~~~~~[0m
+[96mlibs/battlegrounds/common/src/lib/components/battlegrounds-leaderboards.component.ts[0m:[93m29[0m:[93m5[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'items' since it isn't a known property of 'virtual-scroller'.
+1. If 'virtual-scroller' is an Angular component and it has 'items' input, then verify that it is part of this module.
+2. If 'virtual-scroller' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.
+
+[7m29[0m     [items]="value.leaderboard!"
+[7m  [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/battlegrounds/common/src/lib/components/battlegrounds-leaderboards.component.ts[0m:[93m30[0m:[93m5[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'bufferAmount' since it isn't a known property of 'virtual-scroller'.
+1. If 'virtual-scroller' is an Angular component and it has 'bufferAmount' input, then verify that it is part of this module.
+2. If 'virtual-scroller' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.
+
+[7m30[0m     [bufferAmount]="25"
+[7m  [0m [91m    ~~~~~~~~~~~~~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

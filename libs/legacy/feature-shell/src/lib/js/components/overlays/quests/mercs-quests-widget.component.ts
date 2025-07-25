@@ -31,6 +31,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..component';
 
 @Component({
+	standalone: false,
 	selector: 'mercs-quests-widget',
 	styleUrls: [
 		`../../../../css/themes/decktracker-theme.scss`,

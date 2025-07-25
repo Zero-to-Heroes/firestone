@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-category-details',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

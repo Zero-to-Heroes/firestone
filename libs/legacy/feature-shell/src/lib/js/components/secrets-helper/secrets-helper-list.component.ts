@@ -18,6 +18,7 @@ import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'secrets-helper-list',
 	styleUrls: [
 		`../../../css/global/scrollbar-decktracker-overlay.scss`,

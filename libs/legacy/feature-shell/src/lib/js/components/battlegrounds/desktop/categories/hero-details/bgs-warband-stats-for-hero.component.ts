@@ -11,6 +11,7 @@ import { arraysEqual } from '../../../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-warband-stats-for-hero',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-warband-stats-for-hero.component.scss`,

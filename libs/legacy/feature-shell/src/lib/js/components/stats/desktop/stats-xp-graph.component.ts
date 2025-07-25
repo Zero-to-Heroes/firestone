@@ -22,6 +22,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'stats-xp-graph',
 	styleUrls: [`../../../../css/component/stats/desktop/stats-xp-graph.component.scss`],
 	template: `

@@ -16,6 +16,7 @@ import {
 } from '../../../../../libs/website/core/src/lib/security/authentication.service';
 
 @Component({
+	standalone: false,
 	selector: 'website-top-bar',
 	styleUrls: [`./website-top-bar.component.scss`],
 	template: `

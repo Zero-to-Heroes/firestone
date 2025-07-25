@@ -18,6 +18,7 @@ import { buildArenaClassInfoTiers } from '../class-info/arena-class-tier-list.co
 import { ArenaHeroOption } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-hero-selection',
 	styleUrls: ['./arena-hero-selection.component.scss'],
 	template: `

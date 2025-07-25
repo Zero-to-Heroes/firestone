@@ -22,6 +22,7 @@ import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
+	standalone: false,
 	selector: 'replay-info-battlegrounds',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

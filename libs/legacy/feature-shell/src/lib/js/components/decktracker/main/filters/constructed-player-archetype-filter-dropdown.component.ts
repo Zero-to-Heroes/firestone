@@ -8,6 +8,7 @@ import { Observable, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-player-archetype-filter-dropdown',
 	styleUrls: [
 		`../../../../../css/component/decktracker/main/filters/constructed-player-class-filter-dropdown.component.scss`,

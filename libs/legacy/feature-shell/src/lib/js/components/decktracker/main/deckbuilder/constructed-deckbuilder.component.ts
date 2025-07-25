@@ -7,6 +7,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
 @Component({
+	standalone: false,
 	selector: 'constructed-deckbuilder',
 	styleUrls: [`../../../../../css/component/decktracker/main/deckbuilder/constructed-deckbuilder.component.scss`],
 	template: `

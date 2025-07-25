@@ -23,6 +23,7 @@ import { MainWindowStoreEvent } from '@legacy-import/src/lib/js/services/mainwin
 import { Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-heroes',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component.scss`,

@@ -23,6 +23,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SetCard } from '../../../models/set';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-deck-list',
 	styleUrls: [
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
@@ -32,13 +33,7 @@ import { SetCard } from '../../../models/set';
 	],
 	template: `
 		<dk-runes [deckstring]="deckstring$ | async" [showRunes]="showDkRunes"></dk-runes>
-		<ng-scrollbar
-			class="deck-list"
-			[ngClass]="{ active: isScroll }"
-			[autoHeightDisabled]="false"
-			[sensorDisabled]="false"
-			scrollable
-		>
+		<ng-scrollbar class="deck-list" [ngClass]="{ active: isScroll }" [disableSensor]="false" scrollable>
 			<ng-container [ngSwitch]="displayMode">
 				<!-- <div class="list-background"></div> -->
 				<deck-list-by-zone
@@ -198,7 +193,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 										groupByFunction((cardId: string) => cardId)(sideboard.cards),
 									).map((cardIds) => [this.allCards.getCard(cardIds[0]).dbfId, cardIds.length]),
 								};
-						  }),
+							}),
 				};
 				return encode(deckDefinition);
 			}),

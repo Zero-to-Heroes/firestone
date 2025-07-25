@@ -4,6 +4,7 @@ import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsQuestStat, equalNumericTurnInfo, NumericTurnInfo } from '@firestone/game-state';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-winrate-chart',
 	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-winrate-chart.component.scss`],
 	template: `

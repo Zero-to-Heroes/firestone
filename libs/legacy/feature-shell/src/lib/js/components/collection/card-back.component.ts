@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input } from '@angular/
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
+	standalone: false,
 	selector: 'card-back',
 	styleUrls: [`../../../css/component/collection/card-back.component.scss`],
 	template: `

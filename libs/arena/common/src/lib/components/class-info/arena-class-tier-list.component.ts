@@ -11,6 +11,7 @@ import { ArenaClassStatsService } from '../../services/arena-class-stats.service
 import { ArenaClassInfo, ArenaClassTier } from './model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-class-tier-list',
 	styleUrls: [`./arena-class-tier-list-columns.scss`, `./arena-class-tier-list.component.scss`],
 	template: `

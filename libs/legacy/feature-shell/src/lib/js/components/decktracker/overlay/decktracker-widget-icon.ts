@@ -3,6 +3,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-widget-icon',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/decktracker-widget-icon.component.scss',

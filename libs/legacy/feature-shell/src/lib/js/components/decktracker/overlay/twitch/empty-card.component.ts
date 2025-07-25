@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'empty-card',
 	styleUrls: ['./empty-card.component.scss'],
 	template: `

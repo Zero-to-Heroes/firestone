@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'secrets',
 	styleUrls: ['./secrets.component.scss'],
 	template: `

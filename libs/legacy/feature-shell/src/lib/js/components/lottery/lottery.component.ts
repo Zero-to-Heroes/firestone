@@ -18,6 +18,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { LotteryTabType } from './lottery-navigation.component';
 
 @Component({
+	standalone: false,
 	selector: 'lottery',
 	styleUrls: [`../../../css/themes/general-theme.scss`, '../../../css/component/lottery/lottery.component.scss'],
 	template: `

@@ -8,6 +8,7 @@ import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'hero-power-overlay',
 	styleUrls: ['../../../../css/component/overlays/board/hero-power-overlay.component.scss'],
 	template: `

@@ -18,6 +18,7 @@ import { SetCard } from '../../../models/set';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'deck-zone',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/deck-zone.component.scss',

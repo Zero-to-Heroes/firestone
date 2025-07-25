@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+	standalone: false,
 	selector: 'help-tooltip',
 	styleUrls: [`./help-tooltip.component.scss`],
 	template: `

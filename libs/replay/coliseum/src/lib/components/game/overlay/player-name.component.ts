@@ -11,6 +11,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { playerName } from '../../../assets/player_name';
 
 @Component({
+	standalone: false,
 	selector: 'player-name',
 	styleUrls: ['./player-name.component.scss'],
 	template: `

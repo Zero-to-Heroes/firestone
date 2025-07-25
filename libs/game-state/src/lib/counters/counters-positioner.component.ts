@@ -15,6 +15,7 @@ import { BehaviorSubject, takeUntil } from 'rxjs';
 import { CounterWrapperComponent } from './counter-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'counters-positioner',
 	styleUrls: [`./counters-positioner.component.scss`],
 	template: `

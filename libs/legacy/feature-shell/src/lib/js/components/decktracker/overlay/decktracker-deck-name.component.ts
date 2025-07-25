@@ -6,6 +6,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-deck-name',
 	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-deck-name.component.scss'],
 	template: `

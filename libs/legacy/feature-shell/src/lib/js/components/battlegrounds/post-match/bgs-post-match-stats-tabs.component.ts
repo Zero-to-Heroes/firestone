@@ -11,6 +11,7 @@ import { isSupportedScenario } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-post-match-stats-tabs',
 	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-tabs.component.scss`],
 	template: `

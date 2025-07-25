@@ -12,6 +12,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-simulator',
 	styleUrls: [`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-simulator.component.scss`],
 	template: `

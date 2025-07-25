@@ -14,6 +14,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'lottery-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `

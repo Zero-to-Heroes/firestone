@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PatchesConfigService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sort.type';
@@ -21,6 +21,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-deck-sort-dropdown',
 	styleUrls: [],
 	template: `

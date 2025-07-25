@@ -8,6 +8,7 @@ import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/lo
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-card-search',
 	styleUrls: [`./constructed-meta-deck-card-search.component.scss`],
 	template: `

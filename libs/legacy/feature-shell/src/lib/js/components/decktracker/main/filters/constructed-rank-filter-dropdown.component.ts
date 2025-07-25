@@ -10,16 +10,17 @@ import {
 import { RankBracket } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-rank-filter-dropdown',
 	styleUrls: [
 		`../../../../../css/component/decktracker/main/filters/decktracker-rank-filter-dropdown.component.scss`,
@@ -83,9 +84,9 @@ export class ConstructedRankFilterDropdownComponent
 								option === 'competitive'
 									? this.i18n.translateString(
 											'app.decktracker.filters.rank-bracket.competitive-tooltip',
-									  )
+										)
 									: null,
-						} as DeckRankOption),
+						}) as DeckRankOption,
 				);
 				return {
 					filter: filter,

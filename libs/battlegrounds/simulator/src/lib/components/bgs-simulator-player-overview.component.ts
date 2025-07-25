@@ -4,6 +4,7 @@ import { BgsPlayer, BgsTavernUpgrade } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator-player-overview',
 	styleUrls: [`./bgs-simulator-player-overview.component.scss`],
 	template: `

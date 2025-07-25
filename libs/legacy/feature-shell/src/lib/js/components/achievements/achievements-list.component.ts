@@ -19,6 +19,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'achievements-list',
 	styleUrls: [`../../../css/component/achievements/achievements-list.component.scss`],
 	encapsulation: ViewEncapsulation.None,

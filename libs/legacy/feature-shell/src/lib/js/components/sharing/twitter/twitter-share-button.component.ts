@@ -13,6 +13,7 @@ import { SocialShareButtonComponent } from '../social-share-button.component';
 import { TwitterShareModalComponent } from './twitter-share-modal.component';
 
 @Component({
+	standalone: false,
 	selector: 'twitter-share-button',
 	styleUrls: [
 		`../../../../css/component/sharing/social-share-button.component.scss`,

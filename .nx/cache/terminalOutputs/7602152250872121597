@@ -1,0 +1,123 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m63[0m:[93m55[0m - [91merror[0m[90m TS2339: [0mProperty 'viewPortItems' does not exist on type 'HTMLElement'.[39m
+
+
+[7m63[0m      <div class="option" *ngFor="let option of scroll.viewPortItems; trackBy: trackByFn">
+[7m  [0m [91m                                                      ~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m57[0m:[93m6[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'items' since it isn't a known property of 'virtual-scroller'.
+1. If 'virtual-scroller' is an Angular component and it has 'items' input, then verify that it is part of this module.
+2. If 'virtual-scroller' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.
+
+[7m57[0m      [items]="value.workingOptions!"
+[7m  [0m [91m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown-combined.component.ts[0m:[93m58[0m:[93m6[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'bufferAmount' since it isn't a known property of 'virtual-scroller'.
+1. If 'virtual-scroller' is an Angular component and it has 'bufferAmount' input, then verify that it is part of this module.
+2. If 'virtual-scroller' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.
+
+[7m58[0m      [bufferAmount]="25"
+[7m  [0m [91m     ~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m58[0m:[93m43[0m - [91merror[0m[90m TS4031: [0mPublic property 'onOptionSelected' of exported class has or is using private name 'IOption'.
+
+[7m58[0m  @Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+[7m  [0m [91m                                          ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m124[0m:[93m17[0m - [91merror[0m[90m TS4073: [0mParameter 'option' of public method from exported class has or is using private name 'IOption'.
+
+[7m124[0m  select(option: IOption) {
+[7m   [0m [91m                ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m129[0m:[93m43[0m - [91merror[0m[90m TS4022: [0m'extends' clause of exported interface 'IOptionWithImage' has or is using private name 'IOption'.
+
+[7m129[0m export interface IOptionWithImage extends IOption {
+[7m   [0m [91m                                          ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m58[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m58[0m  @Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+[7m  [0m [91m                                          ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m58[0m:[93m71[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m58[0m  @Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+[7m  [0m [91m                                                                      ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m124[0m:[93m17[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m124[0m  select(option: IOption) {
+[7m   [0m [91m                ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m129[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m129[0m export interface IOptionWithImage extends IOption {
+[7m   [0m [91m                                          ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m21[0m:[93m4[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'options' since it isn't a known property of 'ng-select'.
+1. If 'options' is an Angular directive, then add 'CommonModule' to the '@NgModule.imports' of this component.
+2. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.
+
+[7m21[0m    [options]="_options"
+[7m  [0m [91m   ~~~~~~~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/filter-dropdown.component.ts[0m:[93m27[0m:[93m4[0m - [91merror[0m[90m NG8002: [0mCan't bind to 'noFilter' since it isn't a known property of 'ng-select'.
+1. If 'noFilter' is an Angular directive, then add 'CommonModule' to the '@NgModule.imports' of this component.
+2. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.
+
+[7m27[0m    [noFilter]="1"
+[7m  [0m [91m   ~~~~~~~~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-dropdown.component.ts[0m:[93m30[0m:[93m29[0m - [91merror[0m[90m TS4031: [0mPublic property 'options' of exported class has or is using private name 'IOption'.
+
+[7m30[0m  @Input() options: readonly IOption[];
+[7m  [0m [91m                            ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-dropdown.component.ts[0m:[93m56[0m:[93m21[0m - [91merror[0m[90m TS4073: [0mParameter 'option' of public method from exported class has or is using private name 'IOption'.
+
+[7m56[0m  onSelected(option: IOption) {
+[7m  [0m [91m                    ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-dropdown.component.ts[0m:[93m30[0m:[93m29[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m30[0m  @Input() options: readonly IOption[];
+[7m  [0m [91m                            ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-dropdown.component.ts[0m:[93m56[0m:[93m21[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m56[0m  onSelected(option: IOption) {
+[7m  [0m [91m                    ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m85[0m:[93m39[0m - [91merror[0m[90m TS4073: [0mParameter 'option' of public method from exported class has or is using private name 'IOption'.
+
+[7m85[0m  onSelected(option: /*BooleanOption*/ IOption) {
+[7m  [0m [91m                                      ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m95[0m:[93m33[0m - [91merror[0m[90m TS4022: [0m'extends' clause of exported interface 'BooleanOption' has or is using private name 'IOption'.
+
+[7m95[0m interface BooleanOption extends IOption {
+[7m  [0m [91m                                ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m45[0m:[93m4[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'label' does not exist in type 'BooleanOption'.
+
+[7m45[0m    label: this.i18n.translateString('settings.global.counter-dropdown.on'),
+[7m  [0m [91m   ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m50[0m:[93m4[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'label' does not exist in type 'BooleanOption'.
+
+[7m50[0m    label: this.i18n.translateString('settings.global.counter-dropdown.off'),
+[7m  [0m [91m   ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m55[0m:[93m4[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'label' does not exist in type 'BooleanOption'.
+
+[7m55[0m    label: this.i18n.translateString('settings.global.counter-dropdown.limited'),
+[7m  [0m [91m   ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m75[0m:[93m95[0m - [91merror[0m[90m TS2339: [0mProperty 'label' does not exist on type 'BooleanOption'.
+
+[7m75[0m     placeholder: this.options.find((option) => this.convertToBoolean(option.value) === pref)?.label ?? '',
+[7m  [0m [91m                                                                                              ~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m85[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m85[0m  onSelected(option: /*BooleanOption*/ IOption) {
+[7m  [0m [91m                                      ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m95[0m:[93m33[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m95[0m interface BooleanOption extends IOption {
+[7m  [0m [91m                                ~~~~~~~[0m
+[96mlibs/shared/common/view/src/lib/components/dropdown/preference-ynlimited-dropdown.component.ts[0m:[93m26[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'BooleanOption[]' is not assignable to type 'readonly IOptionWithImage[]'.
+  Type 'BooleanOption' has no properties in common with type 'IOptionWithImage'.
+
+[7m26[0m    [options]="options"
+[7m  [0m [91m    ~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

@@ -16,7 +16,10 @@ ng-select.disabled {
 	height: 30px;
 	background: rgba(255, 255, 255, 0.08);
 	width: 155px;
-	transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
+	transition:
+		opacity 0.4s ease-in-out,
+		visibility 0.4s ease-in-out,
+		max-height 0.4s ease-in-out;
 
 	&:focus,
 	&:active {
@@ -30,6 +33,9 @@ ng-select.disabled {
 		div.single > div.toggle:hover {
 			background: transparent;
 		}
+	}
+
+	.ng-select-container {
 	}
 
 	.placeholder {

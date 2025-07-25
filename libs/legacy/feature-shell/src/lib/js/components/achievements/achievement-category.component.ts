@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 @Component({
+	standalone: false,
 	selector: 'achievement-category',
 	styleUrls: [`../../../css/component/achievements/achievement-category.component.scss`],
 	template: `

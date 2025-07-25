@@ -11,6 +11,7 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+	standalone: false,
 	selector: 'target-zone',
 	styleUrls: ['./target-zone.component.scss'],
 	template: ` <div class="target-zone" [innerHTML]="svg" [ngClass]="{ inactive: !_active }"></div> `,

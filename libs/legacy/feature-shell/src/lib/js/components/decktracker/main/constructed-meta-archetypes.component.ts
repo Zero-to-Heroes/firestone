@@ -11,6 +11,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { formatGamesCount } from './constructed-meta-decks.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-archetypes',
 	styleUrls: [
 		`../../../../css/component/decktracker/main/constructed-meta-archetypes-columns.scss`,
@@ -22,7 +23,7 @@ import { formatGamesCount } from './constructed-meta-decks.component';
 				archetypes: archetypes$ | async,
 				showStandardDeviation: showStandardDeviation$ | async,
 				lastUpdate: lastUpdate$ | async,
-				totalGames: totalGames$ | async
+				totalGames: totalGames$ | async,
 			} as value"
 		>
 			<with-loading [isLoading]="!value.archetypes">

@@ -3,6 +3,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'discover',
 	styleUrls: ['./discover.component.scss'],
 	template: `

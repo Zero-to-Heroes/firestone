@@ -15,6 +15,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, filter, Observable, switchMap, takeUntil } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'secrets-helper',
 	styleUrls: ['../../../css/component/secrets-helper/secrets-helper.component.scss'],
 	template: `

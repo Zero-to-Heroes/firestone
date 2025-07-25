@@ -3,6 +3,7 @@ import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'card-cost',
 	styleUrls: ['../../../text.scss', './card-cost.component.scss', './card-cost-colors.scss'],
 	template: `

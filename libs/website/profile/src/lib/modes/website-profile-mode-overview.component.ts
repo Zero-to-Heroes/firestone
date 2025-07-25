@@ -4,6 +4,7 @@ import { WebsiteLocalizationService } from '@firestone/website/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-mode-overview',
 	styleUrls: [`./website-profile-mode-overview.component.scss`],
 	template: `

@@ -19,6 +19,7 @@ import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/st
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-tribes-filter-dropdown',
 	styleUrls: [],
 	template: `

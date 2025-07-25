@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'anomaly-entity',
 	styleUrls: ['./anomaly-entity.component.scss'],
 	template: `

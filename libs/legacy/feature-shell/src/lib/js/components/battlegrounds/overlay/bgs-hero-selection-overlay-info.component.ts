@@ -23,6 +23,7 @@ import {
 } from './battlegrounds-tribe-details-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-selection-overlay-info',
 	styleUrls: [
 		// '../../../../css/themes/battlegrounds-theme.scss',

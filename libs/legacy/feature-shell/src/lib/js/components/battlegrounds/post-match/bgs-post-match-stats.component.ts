@@ -17,6 +17,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { normalizeCardId } from './card-utils';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-post-match-stats',
 	styleUrls: [
 		// `../in-game/bgs-opponent-overview-big.component.scss`,

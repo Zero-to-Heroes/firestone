@@ -12,6 +12,7 @@ import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../service
 import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 
 @Component({
+	standalone: false,
 	selector: 'replays-list',
 	styleUrls: [`../../../css/component/replays/replays-list.component.scss`],
 	template: `

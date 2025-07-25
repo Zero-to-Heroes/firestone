@@ -17,6 +17,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-ladder-stats-overview',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

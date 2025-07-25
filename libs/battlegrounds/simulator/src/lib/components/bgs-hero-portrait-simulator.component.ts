@@ -6,6 +6,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-portrait-simulator',
 	styleUrls: [`./bgs-hero-portrait-simulator.component.scss`],
 	template: `

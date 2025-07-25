@@ -30,6 +30,7 @@ import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
 @Component({
+	standalone: false,
 	selector: 'full-screen-overlays',
 	styleUrls: [
 		`../../../css/global/cdk-overlay.scss`,

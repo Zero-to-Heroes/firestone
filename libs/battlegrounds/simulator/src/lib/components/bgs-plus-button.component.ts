@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-plus-button',
 	styleUrls: [`./bgs-plus-button.component.scss`],
 	template: `

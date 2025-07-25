@@ -6,6 +6,7 @@ import { ExtendedProfileAchievementCategory, WebsiteProfileState } from '../+sta
 import { getAchievementCategories } from '../+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-achievements-overview',
 	styleUrls: [`./website-profile-achievements-overview.component.scss`],
 	template: `

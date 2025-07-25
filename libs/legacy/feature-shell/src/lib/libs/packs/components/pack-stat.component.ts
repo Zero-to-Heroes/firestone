@@ -4,6 +4,7 @@ import { InternalPackInfo } from '@firestone/collection/view';
 import { PackStatTooltipComponent } from './pack-stat-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'pack-stat',
 	styleUrls: [`./pack-stat.component.scss`],
 	template: `

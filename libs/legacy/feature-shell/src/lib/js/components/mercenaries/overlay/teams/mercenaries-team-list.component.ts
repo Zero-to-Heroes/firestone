@@ -20,6 +20,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { BattleMercenary, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-team-list',
 	styleUrls: [
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,

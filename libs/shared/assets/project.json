@@ -6,7 +6,7 @@
 	"prefix": "firestone",
 	"targets": {
 		"test": {
-			"executor": "@nrwl/jest:jest",
+			"executor": "@nx/jest:jest",
 			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
 			"options": {
 				"jestConfig": "libs/shared/assets/jest.config.ts",
@@ -14,7 +14,7 @@
 			}
 		},
 		"lint": {
-			"executor": "@nrwl/linter:eslint",
+			"executor": "@nx/linter:eslint",
 			"options": {
 				"lintFilePatterns": ["libs/shared/assets/**/*.ts", "libs/shared/assets/**/*.html"]
 			}

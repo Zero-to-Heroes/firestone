@@ -4,6 +4,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'opponent-card-infos',
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-infos.component.scss'],
 	template: `

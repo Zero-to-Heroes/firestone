@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 
 // TODO: refactor this to extend from toggle-view
 @Component({
+	standalone: false,
 	selector: 'preference-toggle',
 	styleUrls: [
 		`./toggle.scss`,

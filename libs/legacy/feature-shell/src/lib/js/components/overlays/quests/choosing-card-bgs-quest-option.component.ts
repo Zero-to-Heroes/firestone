@@ -16,6 +16,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { combineLatest, takeUntil } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'choosing-card-bgs-quest-option',
 	styleUrls: ['./choosing-card-bgs-quest-option.component.scss'],
 	template: `

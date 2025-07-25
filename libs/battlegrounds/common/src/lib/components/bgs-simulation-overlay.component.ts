@@ -14,6 +14,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulation-overlay',
 	styleUrls: [`./bgs-simulation-overlay.component.scss`],
 	template: `

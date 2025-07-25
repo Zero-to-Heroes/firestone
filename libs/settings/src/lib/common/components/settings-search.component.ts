@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
+	standalone: false,
 	selector: 'settings-search',
 	styleUrls: [`./settings-search.component.scss`],
 	template: `

@@ -12,6 +12,7 @@ import {
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'overlays',
 	styleUrls: ['./overlays.component.scss'],
 	template: `

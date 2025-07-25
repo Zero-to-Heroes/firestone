@@ -7,6 +7,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BattlegroundsYourStat } from './your-stats.model';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-presonal-stats-info',
 	styleUrls: [`./battlegrounds-personal-stats-columns.scss`, `./battlegrounds-personal-stats-info.component.scss`],
 	template: `

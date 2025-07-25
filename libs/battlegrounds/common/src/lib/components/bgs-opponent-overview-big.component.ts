@@ -4,6 +4,7 @@ import { BgsFaceOffWithSimulation, BgsPlayer, BgsTavernUpgrade, BgsTriple, Quest
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-opponent-overview-big',
 	styleUrls: [`./bgs-opponent-overview-big.component.scss`],
 	template: `

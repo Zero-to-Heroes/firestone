@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'hero-art',
 	styleUrls: ['./hero-art.component.scss'],
 	template: ` <img src="{{ image }}" class="hero-art" /> `,

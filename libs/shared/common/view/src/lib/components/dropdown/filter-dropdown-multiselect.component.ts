@@ -17,11 +17,17 @@ import {
 	arraysEqual,
 	removeFromReadonlyArray,
 } from '@firestone/shared/framework/common';
-import { IOption } from 'ng-select';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
+// Custom interface to maintain compatibility with existing code
+export interface IOption {
+	label: string;
+	value: any;
+}
+
 @Component({
+	standalone: false,
 	selector: 'filter-dropdown-multiselect',
 	styleUrls: [`./filter-dropdown-multiselect.component.scss`],
 	template: `
@@ -35,7 +41,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 				*ngIf="
 					showing && {
 						workingOptions: (workingOptions$ | async) || [],
-						validSelection: validSelection$ | async
+						validSelection: validSelection$ | async,
 					} as value
 				"
 			>
@@ -144,7 +150,10 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	private sub$$: Subscription;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+	) {
 		super(cdr);
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
 		// the first time (maybe because of "visible"?)

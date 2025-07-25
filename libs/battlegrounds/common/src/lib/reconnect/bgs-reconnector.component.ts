@@ -7,6 +7,7 @@ import { auditTime, distinctUntilChanged } from 'rxjs';
 import { BgsReconnectorService } from './bgs-reconnector.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-reconnector',
 	styleUrls: ['./bgs-reconnector.component.scss'],
 	template: ` <div class="reconnector">

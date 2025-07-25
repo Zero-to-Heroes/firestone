@@ -6,6 +6,7 @@ import { changeMetaHeroStatsTribesFilter } from './+state/meta-hero-stats/meta-h
 import { getAllTribes, getCurrentTribesFilter } from './+state/meta-hero-stats/meta-hero-stats.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-battlegrounds-tribes-filter-dropdown',
 	styleUrls: [],
 	template: `

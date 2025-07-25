@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ModeOverview } from './profile-match-stats.model';
 
 @Component({
+	standalone: false,
 	selector: 'profile-match-stats-mode-overview',
 	styleUrls: [
 		`../../../../../css/component/stats/desktop/match-stats/profile-match-stats-mode-overview.component.scss`,

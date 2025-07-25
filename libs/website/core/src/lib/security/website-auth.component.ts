@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 
 @Component({
+	standalone: false,
 	selector: 'website-premium',
 	styleUrls: [`./website-premium.component.scss`],
 	template: ``,

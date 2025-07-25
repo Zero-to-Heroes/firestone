@@ -3,6 +3,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-selection-tooltip',
 	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-strategy-tips-tooltip.component.scss`],
 	template: `

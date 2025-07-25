@@ -19,6 +19,7 @@ import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/c
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'minions-list-tiers-header-2',
 	styleUrls: [`./minions-list-tiers-header.component.scss`],
 	template: `

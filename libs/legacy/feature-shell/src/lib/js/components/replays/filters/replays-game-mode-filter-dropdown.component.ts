@@ -1,11 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'replays-game-mode-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -56,7 +57,7 @@ export class ReplaysGameModeFilterDropdownComponent extends AbstractSubscription
 				({
 					value: value === 'all' ? null : value,
 					label: this.i18n.translateString(`app.replays.filters.game-mode.${value}`),
-				} as IOption),
+				}) as IOption,
 		);
 	}
 

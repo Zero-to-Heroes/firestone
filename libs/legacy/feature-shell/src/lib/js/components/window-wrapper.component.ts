@@ -19,6 +19,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'window-wrapper',
 	styleUrls: [
 		`../../css/global/cdk-overlay.scss`,

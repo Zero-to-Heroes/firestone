@@ -3,6 +3,7 @@ import { DeckState } from '@firestone/game-state';
 import { TwitchPreferences, TwitchPreferencesService } from '@firestone/twitch/common';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-twitch-title-bar',
 	styleUrls: [
 		'../../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',

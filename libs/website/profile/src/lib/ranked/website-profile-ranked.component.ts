@@ -7,6 +7,7 @@ import { getClassStats } from '../+state/website/profile.selectors';
 import { ProfileClassStat } from '../modes/profile-class-stat';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile-ranked',
 	styleUrls: [`./website-profile-ranked.component.scss`],
 	template: `

@@ -21,6 +21,7 @@ import { PLAGUES } from '../../../services/decktracker/event-parser/special-case
 import { shouldKeepOriginalCost } from '../../../services/hs-utils';
 
 @Component({
+	standalone: false,
 	selector: 'grouped-deck-list',
 	styleUrls: ['../../../../css/component/decktracker/overlay/grouped-deck-list.component.scss'],
 	template: `

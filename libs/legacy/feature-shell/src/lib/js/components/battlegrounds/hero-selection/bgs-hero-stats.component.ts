@@ -17,6 +17,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-stats',
 	styleUrls: [
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,

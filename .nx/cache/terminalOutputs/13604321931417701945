@@ -1,0 +1,6 @@
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31mrequire() of ES Module E:\Source\zerotoheroes\firestone\node_modules\find-cache-directory\index.js from E:\Source\zerotoheroes\firestone\node_modules\ng-packagr\src\lib\ng-package\options.di.js not supported.[39m
+
+Instead change the require of index.js in E:\Source\zerotoheroes\firestone\node_modules\ng-packagr\src\lib\ng-package\options.di.js to a dynamic import() which is available in all CommonJS modules.
+Pass --verbose to see the stacktrace.
+

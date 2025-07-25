@@ -8,6 +8,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-my-teams',
 	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-my-teams.component.scss`],
 	template: `

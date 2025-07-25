@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ShopMinion } from '@firestone/battlegrounds/common';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-tavern-minion',
 	styleUrls: [
 		// '../../../../css/themes/battlegrounds-theme.scss',

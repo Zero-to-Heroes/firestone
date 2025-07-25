@@ -12,6 +12,7 @@ import { ArenaRunsService, isCorrectMode, isCorrectTime } from '../../services/a
 import { ArenaClassSummary } from './arena-personal-stats.model';
 
 @Component({
+	standalone: false,
 	selector: 'arena-personal-stats',
 	styleUrls: [`./arena-personal-stats-columns.scss`, `./arena-personal-stats.component.scss`],
 	template: `

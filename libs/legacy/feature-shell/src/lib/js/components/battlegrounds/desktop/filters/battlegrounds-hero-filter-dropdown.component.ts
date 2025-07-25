@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -19,6 +19,7 @@ import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/stor
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-hero-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -67,7 +68,7 @@ export class BattlegroundsHeroFilterDropdownComponent
 						({
 							label: card.name,
 							value: card.id,
-						} as HeroFilterOption),
+						}) as HeroFilterOption,
 				)
 				.sort((a, b) => this.collator.compare(a.label, b.label)),
 		];

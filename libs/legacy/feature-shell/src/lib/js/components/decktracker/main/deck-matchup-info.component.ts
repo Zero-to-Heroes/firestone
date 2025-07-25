@@ -4,6 +4,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'deck-matchup-info',
 	styleUrls: [`../../../../css/component/decktracker/main/deck-matchup-info.component.scss`],
 	template: `

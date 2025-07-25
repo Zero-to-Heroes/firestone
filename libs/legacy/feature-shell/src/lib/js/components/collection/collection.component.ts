@@ -12,6 +12,7 @@ import { SetsManagerService } from '../../services/collection/sets-manager.servi
 import { MainWindowStateFacadeService } from '../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'collection',
 	styleUrls: [
 		`../../../css/component/app-section.component.scss`,

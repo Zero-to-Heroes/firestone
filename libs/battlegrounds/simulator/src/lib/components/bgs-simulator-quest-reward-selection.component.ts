@@ -16,6 +16,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-simulator-quest-reward-selection',
 	styleUrls: [`./bgs-selection-popup.scss`, `./bgs-simulator-quest-reward-selection.component.scss`],
 	template: `

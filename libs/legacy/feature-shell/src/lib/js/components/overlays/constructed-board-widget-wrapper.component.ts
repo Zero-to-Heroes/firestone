@@ -18,6 +18,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 import { BoardCardOverlay } from './board/board-card-overlay';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-board-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/constructed-board-widget-wrapper.component.scss'],
 	template: `

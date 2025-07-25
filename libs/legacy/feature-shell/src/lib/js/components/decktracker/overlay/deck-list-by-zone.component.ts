@@ -17,6 +17,7 @@ import { PLAGUES } from '../../../services/decktracker/event-parser/special-case
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'deck-list-by-zone',
 	styleUrls: ['../../../../css/component/decktracker/overlay/deck-list-by-zone.component.scss'],
 	template: `

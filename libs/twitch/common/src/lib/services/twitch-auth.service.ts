@@ -207,7 +207,7 @@ export class TwitchAuthService {
 						hasTrinkets: bgsState.currentGame?.hasTrinkets,
 						anomalies: bgsState.currentGame?.anomalies,
 					},
-			  } as TwitchBgsState)
+				} as TwitchBgsState)
 			: null;
 
 		const result: TwitchEvent = {
@@ -247,7 +247,7 @@ export class TwitchAuthService {
 			deck: this.cleanZone(deckState.deck, isBattlegrounds),
 			otherZone: this.cleanZone(deckState.otherZone, isBattlegrounds),
 			deckList: deckState.deckList?.map(
-				(c) => ({ cardId: c.cardId, refManaCost: c.refManaCost } as DeckCard),
+				(c) => ({ cardId: c.cardId, refManaCost: c.refManaCost }) as DeckCard,
 			) as readonly DeckCard[],
 			sideboards: deckState.sideboards,
 		};
@@ -330,8 +330,8 @@ export class TwitchAuthService {
 					console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
 					console.debug(
 						'[twitch] message debug',
-						Buffer.byteLength(deflate(JSON.stringify(newEvent), { to: 'string' }), 'utf8'),
-						Buffer.byteLength(deflate(JSON.stringify(newEvent)), 'utf8'),
+						deflate(JSON.stringify(newEvent)).byteLength,
+						deflate(JSON.stringify(newEvent)).byteLength,
 						JSON.stringify(newEvent),
 					);
 					console.error(

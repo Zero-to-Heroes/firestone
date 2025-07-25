@@ -16,6 +16,7 @@ import { Observable, mergeMap, of, takeUntil, tap } from 'rxjs';
 import { ArenaDraftManagerService } from '../../services/arena-draft-manager.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-package-card-selection-widget-wrapper',
 	styleUrls: ['./arena-package-card-selection-widget-wrapper.component.scss'],
 	template: `

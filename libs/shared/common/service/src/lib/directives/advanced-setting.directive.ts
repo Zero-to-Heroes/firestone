@@ -5,6 +5,7 @@ import { PreferencesService } from '../services/preferences.service';
 
 @Directive({
 	selector: '[advancedSetting]',
+	standalone: false,
 })
 export class AdvancedSettingDirective extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() advancedSetting: boolean | undefined | '';

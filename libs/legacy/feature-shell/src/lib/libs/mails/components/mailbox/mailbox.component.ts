@@ -6,6 +6,7 @@ import { Mail } from '../../mail-state';
 import { MailboxMarkMessageReadEvent } from '../../services/mailbox-mark-message-read-event';
 
 @Component({
+	standalone: false,
 	selector: 'mailbox',
 	styleUrls: [`./mailbox.component.scss`],
 	template: `

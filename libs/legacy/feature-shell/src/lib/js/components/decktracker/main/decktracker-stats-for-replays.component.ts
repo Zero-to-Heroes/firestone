@@ -3,6 +3,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-stats-for-replays',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

@@ -17,6 +17,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-reconnector-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `

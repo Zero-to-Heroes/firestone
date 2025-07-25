@@ -6,6 +6,7 @@ import { groupByFunction } from '../../../services/utils';
 import { CardsByCost } from './cards-by-cost';
 
 @Component({
+	standalone: false,
 	selector: 'deck-mana-curve',
 	styleUrls: [`../../../../css/component/decktracker/main/deck-mana-curve.component.scss`],
 	template: `

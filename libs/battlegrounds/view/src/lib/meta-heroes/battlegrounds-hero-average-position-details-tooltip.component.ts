@@ -3,6 +3,7 @@ import { Race, getTribeIcon } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-hero-average-position-details-tooltip',
 	styleUrls: [`./battlegrounds-hero-average-position-details-tooltip.component.scss`],
 	template: `

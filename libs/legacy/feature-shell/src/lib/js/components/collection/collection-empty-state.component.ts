@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Set } from '../../models/set';
 
 @Component({
+	standalone: false,
 	selector: 'collection-empty-state',
 	styleUrls: [`../../../css/component/collection/collection-empty-state.component.scss`],
 	template: `

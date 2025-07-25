@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { IOption } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesHeroLevelFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-level-filter-selected-event';
@@ -8,6 +8,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-hero-level-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -45,7 +46,7 @@ export class MercenariesHeroLevelFilterDropdownComponent
 				({
 					value: filter,
 					label: this.i18n.translateString(`mercenaries.filters.hero-level.level-${filter}`),
-				} as FilterOption),
+				}) as FilterOption,
 		);
 		this.filter$ = this.store
 			.listen$(

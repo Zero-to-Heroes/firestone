@@ -3,6 +3,7 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GroupDetail } from './arena-current-session-widget.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-current-session-tooltip',
 	styleUrls: [`./arena-current-session-tooltip.component.scss`],
 	template: `

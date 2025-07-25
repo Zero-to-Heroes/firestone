@@ -10,6 +10,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-hero-overview',
 	styleUrls: [
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,

@@ -16,6 +16,7 @@ import { auditTime, combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-minion-tiers-widget-wrapper',
 	styleUrls: ['./bgs-minion-tiers-widget-wrapper.component.scss'],
 	template: `

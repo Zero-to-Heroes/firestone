@@ -11,6 +11,7 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { Tier } from '@firestone/battlegrounds/core';
 
 @Component({
+	standalone: false,
 	selector: 'minions-list-tiers-header',
 	styleUrls: [`./minions-list-tiers-header.component.scss`],
 	template: `

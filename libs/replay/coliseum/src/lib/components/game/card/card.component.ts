@@ -4,6 +4,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { GameConfService } from '../../../services/game-conf.service';
 
 @Component({
+	standalone: false,
 	selector: 'card',
 	styleUrls: ['./card.component.scss'],
 	template: `

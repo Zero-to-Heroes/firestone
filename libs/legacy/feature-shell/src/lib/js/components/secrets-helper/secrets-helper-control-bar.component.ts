@@ -3,6 +3,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../models/game-event';
 
 @Component({
+	standalone: false,
 	selector: 'secrets-helper-control-bar',
 	styleUrls: ['../../../css/component/secrets-helper/secrets-helper-control-bar.component.scss'],
 	template: `

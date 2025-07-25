@@ -14,6 +14,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'confirmation',
 	styleUrls: [`../../../css/component/tooltip/confirmation.component.scss`],
 	template: `

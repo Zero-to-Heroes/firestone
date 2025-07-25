@@ -14,6 +14,7 @@ import { sleep } from '../../../services/utils';
 import { InputPieChartData, InputPieChartOptions } from './input-pie-chart-data';
 
 @Component({
+	standalone: false,
 	selector: 'pie-chart',
 	styleUrls: [`../../../../css/component/common/chart/pie-chart.component.scss`],
 	template: `

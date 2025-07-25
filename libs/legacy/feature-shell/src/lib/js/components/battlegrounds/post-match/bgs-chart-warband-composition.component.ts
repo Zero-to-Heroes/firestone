@@ -17,6 +17,7 @@ import { Color, ScaleType } from '@sebastientromp/ngx-charts';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-chart-warband-composition',
 	styleUrls: [
 		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,

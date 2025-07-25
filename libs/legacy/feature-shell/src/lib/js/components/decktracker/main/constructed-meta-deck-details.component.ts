@@ -14,6 +14,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { ConstructedDeckDetails, ExtendedConstructedCardData } from './constructed-meta-deck-details-view.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-details',
 	styleUrls: [`../../../../css/component/decktracker/main/constructed-meta-deck-details.component.scss`],
 	template: `

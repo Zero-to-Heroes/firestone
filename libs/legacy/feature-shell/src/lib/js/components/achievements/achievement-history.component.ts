@@ -5,6 +5,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'achievement-history',
 	styleUrls: [`../../../css/component/achievements/achievement-history.component.scss`],
 	template: `

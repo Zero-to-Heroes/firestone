@@ -11,6 +11,7 @@ import { AttackCounterDefinition } from './definitions/attack-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 
 @Component({
+	standalone: false,
 	selector: 'game-counters',
 	styleUrls: ['../../../css/component/game-counters/game-counters.component.scss'],
 	template: `

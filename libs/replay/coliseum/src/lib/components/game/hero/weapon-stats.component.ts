@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'weapon-stats',
 	styleUrls: ['../../../text.scss', './weapon-stats.component.scss', '../card/card-stats-colors.scss'],
 	template: `

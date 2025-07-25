@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'control-help',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

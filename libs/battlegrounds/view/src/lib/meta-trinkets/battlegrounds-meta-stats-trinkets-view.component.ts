@@ -14,6 +14,7 @@ import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone
 import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-trinkets-view',
 	styleUrls: [
 		`./battlegrounds-meta-stats-trinkets-columns.scss`,

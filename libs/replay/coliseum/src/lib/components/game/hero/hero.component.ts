@@ -6,6 +6,7 @@ import { GameConfService } from '../../../services/game-conf.service';
 import { GameHelper } from '../../../services/game-helper';
 
 @Component({
+	standalone: false,
 	selector: 'hero',
 	styleUrls: ['./hero.component.scss'],
 	template: `

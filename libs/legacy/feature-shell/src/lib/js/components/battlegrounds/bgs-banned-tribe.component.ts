@@ -5,6 +5,7 @@ import { BehaviorSubject, combineLatest, filter, takeUntil } from 'rxjs';
 import { classForTribe, colorForClass } from '../../services/hs-utils';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-banned-tribe',
 	styleUrls: [
 		`../../../css/global/cdk-overlay.scss`,

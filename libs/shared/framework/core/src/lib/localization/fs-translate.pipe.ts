@@ -6,6 +6,7 @@ import { ILocalizationService } from './localization.service';
 @Pipe({
 	name: 'fsTranslate',
 	pure: false, // required to update the value when the promise is resolved
+	standalone: false,
 })
 export class FsTranslatePipe extends TranslatePipe implements PipeTransform {
 	constructor(_ref: ChangeDetectorRef, i18n: ILocalizationService) {

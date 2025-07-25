@@ -12,6 +12,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
+	standalone: false,
 	selector: 'replay-info-mercenaries',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,
@@ -202,6 +203,7 @@ interface MercenaryHero {
 }
 
 @Component({
+	standalone: false,
 	selector: 'replay-info-merc-player',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,

@@ -13,6 +13,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'hotkey',
 	styleUrls: [`../../css/component/hotkey.component.scss`],
 	template: ` <a class="hotkey" [innerHTML]="hotkeyHtml" href="overwolf://settings/hotkeys"></a> `,

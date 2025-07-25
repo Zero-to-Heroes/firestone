@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
+	standalone: false,
 	selector: 'arena-mulligan-widget-wrapper',
 	styleUrls: ['./arena-mulligan-widget-wrapper.component.scss'],
 	template: `

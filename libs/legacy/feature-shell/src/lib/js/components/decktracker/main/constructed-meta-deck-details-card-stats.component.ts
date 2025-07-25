@@ -16,6 +16,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { ExtendedConstructedCardData } from './constructed-meta-deck-details-view.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-meta-deck-details-card-stats',
 	styleUrls: [
 		`../../../../css/component/decktracker/main/constructed-meta-deck-details-cards-columns.scss`,

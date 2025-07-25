@@ -13,6 +13,7 @@ import { RedditUserInfo } from '../../../models/mainwindow/reddit-user-info';
 import { RedditShareInfoComponent } from './reddit-share-info.component';
 
 @Component({
+	standalone: false,
 	selector: 'reddit-share-modal',
 	styleUrls: [
 		`../../../../css/component/controls/controls.scss`,

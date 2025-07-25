@@ -3,6 +3,7 @@ import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'basic-bar-chart',
 	styleUrls: [`../../../../css/component/common/chart/basic-bar-chart.component.scss`],
 	template: `

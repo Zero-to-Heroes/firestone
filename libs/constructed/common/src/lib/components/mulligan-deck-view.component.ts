@@ -31,6 +31,7 @@ import { ConstructedMulliganGuideGuardianService } from '../services/constructed
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
 
 @Component({
+	standalone: false,
 	selector: 'mulligan-deck-view',
 	styleUrls: ['./mulligan-deck-view.component.scss'],
 	template: `

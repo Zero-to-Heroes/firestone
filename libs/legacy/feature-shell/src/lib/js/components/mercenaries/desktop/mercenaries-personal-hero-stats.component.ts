@@ -29,6 +29,7 @@ import { applySearchStringFilter, buildBounties } from '../../../services/ui-sto
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-personal-hero-stats',
 	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stats.component.scss`],
 	template: `
@@ -538,6 +539,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 }
 
 @Component({
+	standalone: false,
 	selector: 'sortable-label',
 	styleUrls: [`../../../../css/component/mercenaries/desktop/sortable-label.component.scss`],
 	template: `

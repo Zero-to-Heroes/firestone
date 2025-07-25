@@ -19,6 +19,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, tap } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'events-log',
 	styleUrls: ['../../global.scss', './events-log.component.scss'],
 	template: `

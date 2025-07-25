@@ -4,6 +4,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 
 @Component({
+	standalone: false,
 	selector: 'hero-selection',
 	styleUrls: ['./hero-selection.component.scss'],
 	template: `

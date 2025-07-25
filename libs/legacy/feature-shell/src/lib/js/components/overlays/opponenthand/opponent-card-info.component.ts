@@ -13,6 +13,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'opponent-card-info',
 	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-info.component.scss'],
 	template: `

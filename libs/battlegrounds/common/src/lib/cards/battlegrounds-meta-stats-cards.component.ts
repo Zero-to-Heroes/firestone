@@ -27,6 +27,7 @@ import {
 import { BattlegroundsCardsService } from './bgs-cards.service';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-cards',
 	styleUrls: [`./battlegrounds-meta-stats-cards-columns.scss`, `./battlegrounds-meta-stats-cards.component.scss`],
 	template: `

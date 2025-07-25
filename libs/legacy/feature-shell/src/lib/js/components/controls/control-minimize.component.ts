@@ -4,6 +4,7 @@ import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/clo
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'control-minimize',
 	styleUrls: [
 		`../../../css/component/controls/controls.scss`,

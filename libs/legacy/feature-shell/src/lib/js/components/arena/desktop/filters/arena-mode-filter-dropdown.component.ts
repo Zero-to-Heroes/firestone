@@ -1,14 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
 import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-mode-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -54,7 +55,7 @@ export class ArenaModeFilterDropdownComponent extends AbstractSubscriptionCompon
 								value: value,
 								label: this.i18n.translateString(`app.arena.filters.mode.${value}`),
 								tooltip: this.i18n.translateString(`app.arena.filters.mode.${value}-tooltip`),
-							} as FilterOption),
+							}) as FilterOption,
 					);
 				return {
 					filter: filter,

@@ -5,6 +5,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-personal-hero-stat',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,

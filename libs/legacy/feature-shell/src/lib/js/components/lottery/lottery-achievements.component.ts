@@ -8,6 +8,7 @@ import { AchievementsTrackRandomAchievementsEvent } from '../../services/mainwin
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
+	standalone: false,
 	selector: 'lottery-achievements',
 	styleUrls: [
 		'../../../css/component/lottery/lottery-section.scss',

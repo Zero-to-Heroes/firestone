@@ -1,0 +1,54 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-rank-filter-dropdown-view.component.ts[0m:[93m82[0m:[93m77[0m - [91merror[0m[90m TS2339: [0mProperty 'label' does not exist on type 'RankFilterOption'.[39m
+
+
+[7m82[0m     placeholder: options.find((option) => +option.value === currentFilter)?.label ?? options[0].label,
+[7m  [0m [91m                                                                            ~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-rank-filter-dropdown-view.component.ts[0m:[93m82[0m:[93m97[0m - [91merror[0m[90m TS2339: [0mProperty 'label' does not exist on type 'RankFilterOption'.
+
+[7m82[0m     placeholder: options.find((option) => +option.value === currentFilter)?.label ?? options[0].label,
+[7m  [0m [91m                                                                                                ~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-rank-filter-dropdown-view.component.ts[0m:[93m88[0m:[93m21[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m88[0m  onSelected(option: IOption) {
+[7m  [0m [91m                    ~~~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-rank-filter-dropdown-view.component.ts[0m:[93m93[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m93[0m export interface RankFilterOption extends IOption {
+[7m  [0m [91m                                          ~~~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-rank-filter-dropdown-view.component.ts[0m:[93m25[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'RankFilterOption[]' is not assignable to type 'readonly IOptionWithImage[]'.
+  Property 'label' is missing in type 'RankFilterOption' but required in type 'IOptionWithImage'.
+
+[7m25[0m    [options]="options$ | async"
+[7m  [0m [91m    ~~~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-time-filter-dropdown-view.component.ts[0m:[93m79[0m:[93m76[0m - [91merror[0m[90m TS2339: [0mProperty 'label' does not exist on type 'TimeFilterOption'.
+
+[7m79[0m     placeholder: options.find((option) => option.value === currentFilter)?.label ?? options[0].label,
+[7m  [0m [91m                                                                           ~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-time-filter-dropdown-view.component.ts[0m:[93m79[0m:[93m96[0m - [91merror[0m[90m TS2339: [0mProperty 'label' does not exist on type 'TimeFilterOption'.
+
+[7m79[0m     placeholder: options.find((option) => option.value === currentFilter)?.label ?? options[0].label,
+[7m  [0m [91m                                                                                               ~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-time-filter-dropdown-view.component.ts[0m:[93m85[0m:[93m21[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m85[0m  onSelected(option: IOption) {
+[7m  [0m [91m                    ~~~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-time-filter-dropdown-view.component.ts[0m:[93m90[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'IOption'.
+
+[7m90[0m export interface TimeFilterOption extends IOption {
+[7m  [0m [91m                                          ~~~~~~~[0m
+[96mlibs/battlegrounds/view/src/lib/filters/battlegrounds-time-filter-dropdown-view.component.ts[0m:[93m25[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'TimeFilterOption[]' is not assignable to type 'readonly IOptionWithImage[]'.
+  Property 'label' is missing in type 'TimeFilterOption' but required in type 'IOptionWithImage'.
+
+[7m25[0m    [options]="options$ | async"
+[7m  [0m [91m    ~~~~~~~[0m
+
+Pass --verbose to see the stacktrace.
+

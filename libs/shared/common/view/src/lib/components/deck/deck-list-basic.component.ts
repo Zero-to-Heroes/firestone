@@ -17,10 +17,11 @@ import {
 import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'deck-list-basic',
 	styleUrls: [`./deck-list-basic.component.scss`],
 	template: `
-		<ng-scrollbar class="deck-list" [autoHeightDisabled]="false" [sensorDisabled]="false" scrollable>
+		<ng-scrollbar class="deck-list">
 			<li class="card-container" *ngFor="let card of cards$ | async">
 				<card-tile class="card" [cardId]="card.cardId" [numberOfCopies]="card.quantity"></card-tile>
 				<div class="sideboard" *ngIf="card.sideboard">

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsMetaQuestRewardStatTier, BgsMetaQuestRewardStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-meta-stats-quest-reward-tier',
 	styleUrls: [`./battlegrounds-meta-stats-quest-reward-tier.component.scss`],
 	template: `

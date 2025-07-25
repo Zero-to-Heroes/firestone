@@ -15,6 +15,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
+	standalone: false,
 	selector: 'battlegrounds-tribes-filter-dropdown-view',
 	styleUrls: [],
 	template: `

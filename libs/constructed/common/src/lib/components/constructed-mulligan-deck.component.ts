@@ -39,6 +39,7 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 import { buildColor } from './mulligan-deck-view.component';
 
 @Component({
+	standalone: false,
 	selector: 'constructed-mulligan-deck',
 	styleUrls: ['./constructed-mulligan-deck.component.scss'],
 	template: `

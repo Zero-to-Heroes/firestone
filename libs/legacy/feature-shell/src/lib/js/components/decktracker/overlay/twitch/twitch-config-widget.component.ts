@@ -17,6 +17,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DropdownOption } from '../../../settings/dropdown.component';
 
 @Component({
+	standalone: false,
 	selector: 'twitch-config-widget',
 	styleUrls: [
 		// `../../../../../css/themes/battlegrounds-theme.scss`,

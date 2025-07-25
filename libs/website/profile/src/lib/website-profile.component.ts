@@ -9,6 +9,7 @@ import { WebsiteProfileState } from './+state/website/profile.models';
 import { getLoaded } from './+state/website/profile.selectors';
 
 @Component({
+	standalone: false,
 	selector: 'website-profile',
 	styleUrls: [`./website-profile.component.scss`],
 	template: `

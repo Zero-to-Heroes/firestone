@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -35,7 +35,8 @@ export class BgsIntermediateResultsSimGuardianService extends AbstractFacadeServ
 	}
 
 	private addDevMode() {
-		if (process.env['NODE_ENV'] === 'production') {
+		// Only add dev functions in development mode
+		if (!isDevMode()) {
 			return;
 		}
 

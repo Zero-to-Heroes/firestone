@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'achievement-category-view',
 	styleUrls: [`./achievement-category-view.component.scss`],
 	template: `

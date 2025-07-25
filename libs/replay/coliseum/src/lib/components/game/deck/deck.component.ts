@@ -11,6 +11,7 @@ import {
 import { Entity } from '@firestone-hs/replay-parser';
 
 @Component({
+	standalone: false,
 	selector: 'deck',
 	styleUrls: ['../../../text.scss', './deck.component.scss'],
 	template: `

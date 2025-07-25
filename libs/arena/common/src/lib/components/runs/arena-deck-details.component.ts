@@ -8,6 +8,7 @@ import { ArenDeckDetailsService } from '../../services/arena-deck-details.servic
 import { ArenaNavigationService } from '../../services/arena-navigation.service';
 
 @Component({
+	standalone: false,
 	selector: 'arena-deck-details',
 	styleUrls: [`./arena-deck-details.component.scss`],
 	template: `

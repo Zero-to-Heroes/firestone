@@ -18,6 +18,7 @@ import { ConfirmationComponent } from '../components/tooltip/confirmation.compon
 import { Events } from '../services/events.service';
 
 @Directive({
+	standalone: false,
 	selector: '[confirmationTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138

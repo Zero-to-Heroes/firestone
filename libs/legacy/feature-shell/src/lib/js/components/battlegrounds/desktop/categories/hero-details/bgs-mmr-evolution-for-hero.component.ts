@@ -12,6 +12,7 @@ import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.s
 import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-mmr-evolution-for-hero',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component.scss`,

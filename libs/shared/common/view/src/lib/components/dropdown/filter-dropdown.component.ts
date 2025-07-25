@@ -9,9 +9,10 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { IOption } from 'ng-select';
+import { IOption } from './filter-dropdown-multiselect.component';
 
 @Component({
+	standalone: false,
 	selector: 'filter-dropdown',
 	styleUrls: [`./filter-dropdown.component.scss`],
 	template: `
@@ -84,7 +85,10 @@ export class FilterDropdownComponent implements AfterViewInit {
 	_visible: boolean;
 	_filter: string;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+	) {}
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {

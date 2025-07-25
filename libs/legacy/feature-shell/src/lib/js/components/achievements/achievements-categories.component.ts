@@ -16,6 +16,7 @@ import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
+	standalone: false,
 	selector: 'achievements-categories',
 	styleUrls: [`../../../css/component/achievements/achievements-categories.component.scss`],
 	template: `

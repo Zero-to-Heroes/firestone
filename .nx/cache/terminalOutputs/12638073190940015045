@@ -1,0 +1,30 @@
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+[31m✖[39m Compiling with Angular sources in Ivy full compilation mode.
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31m[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m94[0m:[93m3[0m - [91merror[0m[90m NG6002: [0m'SelectModule' does not appear to be an NgModule class.[39m
+
+
+[7m94[0m   SelectModule,
+[7m  [0m [91m  ~~~~~~~~~~~~[0m
+
+  [96mnode_modules/ng-select/lib/ng-select.module.d.ts[0m:[93m3[0m:[93m22[0m
+    [7m3[0m export declare class SelectModule {
+    [7m [0m [96m                     ~~~~~~~~~~~~[0m
+    This likely means that the library (ng-select) which declares SelectModule is not compatible with Angular Ivy. Check if a newer version of the library is available, and update if so. Also consider checking with the library's authors to see if the library is expected to be compatible with Ivy.
+[96mlibs/shared/common/view/src/lib/shared-common-view.module.ts[0m:[93m95[0m:[93m3[0m - [91merror[0m[90m NG6002: [0m'VirtualScrollerModule' does not appear to be an NgModule class.
+
+[7m95[0m   VirtualScrollerModule,
+[7m  [0m [91m  ~~~~~~~~~~~~~~~~~~~~~[0m
+
+  [96mnode_modules/ngx-virtual-scroller/virtual-scroller.d.ts[0m:[93m169[0m:[93m22[0m
+    [7m169[0m export declare class VirtualScrollerModule {
+    [7m   [0m [96m                     ~~~~~~~~~~~~~~~~~~~~~[0m
+    This likely means that the library (ngx-virtual-scroller) which declares VirtualScrollerModule is not compatible with Angular Ivy. Check if a newer version of the library is available, and update if so. Also consider checking with the library's authors to see if the library is expected to be compatible with Ivy.
+
+Pass --verbose to see the stacktrace.
+

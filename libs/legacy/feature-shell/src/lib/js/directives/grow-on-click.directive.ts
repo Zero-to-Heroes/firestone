@@ -3,6 +3,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 
 @Directive({
+	standalone: false,
 	selector: '[growOnClick]',
 })
 export class GrowOnClickDirective {

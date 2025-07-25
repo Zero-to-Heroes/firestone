@@ -12,6 +12,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 import { normalizeCardId } from '../../../post-match/card-utils';
 
 @Component({
+	standalone: false,
 	selector: 'bgs-last-warbands',
 	styleUrls: [
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,

@@ -6,8 +6,8 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { IOption } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { FilterOption } from '../../../models/filter-option';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -16,6 +16,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'achievements-completed-filter-dropdown',
 	styleUrls: [],
 	template: `

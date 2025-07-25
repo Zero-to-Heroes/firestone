@@ -41,6 +41,7 @@ import {
 } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'arena-decktracker-ooc',
 	styleUrls: [
 		// `../../../../css/global/scrollbar-decktracker-overlay.scss`,
@@ -92,8 +93,6 @@ import {
 								<ng-scrollbar
 									class="deck-list"
 									*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
-									[autoHeightDisabled]="false"
-									[sensorDisabled]="false"
 									scrollable
 								>
 									<li class="card-container" *ngFor="let cardInfo of cards; trackBy: trackByCardId">

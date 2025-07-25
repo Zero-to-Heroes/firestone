@@ -5,6 +5,7 @@ import { BehaviorSubject, filter, Observable, switchMap } from 'rxjs';
 import { Section, Setting, SettingButton } from '../models/settings.types';
 
 @Component({
+	standalone: false,
 	selector: 'settings-current-page-section',
 	styleUrls: [`../../settings-common.component.scss`, `./settings-current-page-section.component.scss`],
 	template: `

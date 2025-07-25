@@ -235,9 +235,8 @@ export class GameStat {
 			return null;
 		}
 
-		const compressedStats = deflate(JSON.stringify(finalComp), { to: 'string' });
-		const buff = Buffer.from(compressedStats, 'utf8');
-		const base64data = buff.toString('base64');
+		const compressedStats = deflate(JSON.stringify(finalComp));
+		const base64data = Buffer.from(compressedStats).toString('base64');
 		return base64data;
 	}
 	// eslint-disable-next-line @typescript-eslint/member-ordering
@@ -246,8 +245,7 @@ export class GameStat {
 			return null;
 		}
 
-		const buff = Buffer.from(finalComp, 'base64');
-		const compressedStats = buff.toString('utf8');
+		const compressedStats = Buffer.from(finalComp, 'base64');
 		const stats = inflate(compressedStats, { to: 'string' });
 		return JSON.parse(stats);
 	}

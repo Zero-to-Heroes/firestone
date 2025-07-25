@@ -3,6 +3,7 @@ import { GameState } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 
 @Component({
+	standalone: false,
 	selector: 'decktracker-overlay-player',
 	styleUrls: [],
 	template: `

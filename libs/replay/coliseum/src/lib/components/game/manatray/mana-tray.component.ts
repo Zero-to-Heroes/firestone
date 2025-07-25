@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+	standalone: false,
 	selector: 'mana-tray',
 	styleUrls: ['../../../text.scss', './mana-tray.component.scss'],
 	template: `

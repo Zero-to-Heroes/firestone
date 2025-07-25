@@ -12,6 +12,7 @@ import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/
 import { Observable } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'settings-general-third-party',
 	styleUrls: [
 		`../scrollbar-settings.scss`,

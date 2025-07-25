@@ -10,6 +10,7 @@ import { getShareAlias, getWatchingOtherPlayer } from 'libs/website/profile/src/
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';
 
 @Component({
+	standalone: false,
 	selector: 'website-navigation',
 	styleUrls: [`./website-navigation.component.scss`],
 	template: `
@@ -150,6 +151,7 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 }
 
 @Component({
+	standalone: false,
 	selector: 'website-navigation-node',
 	styleUrls: [`./website-navigation.component.scss`],
 	template: `

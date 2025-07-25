@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Preferences } from '@firestone/shared/common/service';
+import { IOption } from '@firestone/shared/common/view';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesOwnedFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
+	standalone: false,
 	selector: 'mercenaries-owned-filter-dropdown',
 	styleUrls: [],
 	template: `
@@ -47,7 +48,7 @@ export class MercenariesOwnedFilterDropdownComponent
 				({
 					value: filter,
 					label: this.i18n.translateString(`mercenaries.filters.owned.${filter}`),
-				} as FilterOption),
+				}) as FilterOption,
 		);
 		this.filter$ = this.store
 			.listen$(
