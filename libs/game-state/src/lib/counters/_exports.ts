@@ -33,6 +33,7 @@ import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
 import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
+import { DarkGiftsCounterDefinitionV2 } from './impl/dark-gifts';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DiveTheGolakkaDepthsCounterDefinitionV2 } from './impl/dive-the-golakka-depths';
 import { DragonsInHandCounterDefinitionV2 } from './impl/dragons-in-hand';
@@ -91,6 +92,7 @@ export const getAllCounters: (
 	new DragonsInHandCounterDefinitionV2(i18n, allCards),
 	new DragonsSummonedCounterDefinitionV2(i18n),
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
+	new DarkGiftsCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),
 	new DiscoversCounterDefinitionV2(i18n),
 	new LibramReductionCounterDefinitionV2(i18n),
@@ -179,6 +181,7 @@ export type CounterType =
 	| '__fatigue'
 	| '_ceaselessExpanse'
 	| 'diveTheGolakkaDepths'
+	| 'darkGifts'
 	| 'galakrond'
 	| 'renferalTheMalignant'
 	| 'cardsShuffledIntoDeck'

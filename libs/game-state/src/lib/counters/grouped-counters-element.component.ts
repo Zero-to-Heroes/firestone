@@ -5,7 +5,12 @@ import { CounterInstance } from './_counter-definition-v2';
 	selector: 'grouped-counters-element',
 	styleUrls: ['./grouped-counters-element.component.scss'],
 	template: `
-		<div class="grouped-counters-element {{ side }}" [helpTooltip]="tooltip">
+		<div
+			class="grouped-counters-element {{ side }}"
+			[helpTooltip]="tooltip"
+			cardTooltip
+			[cardTooltipRelatedCardIds]="cardTooltip"
+		>
 			<div class="icon">
 				<img [src]="icon" />
 			</div>
@@ -21,10 +26,12 @@ export class GroupedCountersElementComponent {
 		this.icon = value.image;
 		this.tooltip = value.tooltip;
 		this.value = value.value ?? '-';
+		this.cardTooltip = value.cardTooltip;
 	}
 	@Input() side: 'player' | 'opponent';
 
 	icon: string;
 	tooltip: string | null;
 	value: string | number;
+	cardTooltip: readonly string[] | undefined;
 }
