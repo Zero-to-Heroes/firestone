@@ -116,7 +116,7 @@ export class ReplayUploadService {
 				ACL: 'public-read',
 				Body: fileReplayBlob,
 				ContentType: 'application/zip',
-				Tagging: `userType=${tags.userType}`,
+				// Tagging: `userType=${tags.userType}`, // Shouldn't be used anywhere
 			};
 			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 				if (err) {
