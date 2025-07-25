@@ -477,6 +477,13 @@ const getDynamicFilters = (
 				hasCorrectTribe(c, Race.PIRATE) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 
+		// Discover a Mech
+		case CardIds.OmegaAssembly:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.MECH) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
 		// Discover a Demon
 		case CardIds.WindowShopper_WindowShopperToken_TOY_652t:
 		case CardIds.DemonicStudies:
