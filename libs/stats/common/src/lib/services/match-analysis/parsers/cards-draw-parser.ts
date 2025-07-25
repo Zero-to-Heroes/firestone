@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Replay } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Element } from 'elementtree';
 import { EventName } from '../json-event';
 import { ParsingStructure } from '../parsing-structure';
 import { toTimestamp } from './utils';
+
+const INCORRECT_CAST_WHEN_DRAWN = [CardIds.TimeLostProtodrake];
 
 export const cardDrawn = {
 	parser: (
@@ -46,7 +48,12 @@ const handleCardDraw = (
 			if (previousZone !== Zone.DECK) {
 				return;
 			}
-			if (!!entity.creatorDBId || !!entity.creatorEntityId || entity.topDeck || !!entity.transformedFromCard) {
+			if (
+				!!entity.creatorDBId ||
+				!!entity.creatorEntityId ||
+				(entity.topDeck && !INCORRECT_CAST_WHEN_DRAWN.includes(entity.cardId as CardIds)) ||
+				!!entity.transformedFromCard
+			) {
 				return;
 			}
 
