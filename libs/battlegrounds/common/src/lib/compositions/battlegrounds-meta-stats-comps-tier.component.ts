@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
@@ -19,6 +19,7 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 					class="item-container"
 					*ngFor="let item of tier.items; trackBy: trackByFn"
 					[stat]="item"
+					(compositionClick)="onCompositionClick($event)"
 				>
 				</battlegrounds-meta-stats-comps-info>
 			</div>
@@ -28,6 +29,11 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 })
 export class BattlegroundsMetaStatsCompTierComponent {
 	@Input() tier: BgsMetaCompStatTier;
+	@Output() compositionClick = new EventEmitter<BgsMetaCompStatTierItem>();
+
+	onCompositionClick(composition: BgsMetaCompStatTierItem) {
+		this.compositionClick.emit(composition);
+	}
 
 	trackByFn(index, item: BgsMetaCompStatTierItem) {
 		return item.compId;

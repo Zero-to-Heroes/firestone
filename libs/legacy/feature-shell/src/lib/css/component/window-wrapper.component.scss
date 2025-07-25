@@ -60,7 +60,7 @@ body {
 
 		&.cdk-overlay-backdrop-showing {
 			background: var(--confirmation-backdrop-color);
-			opacity: 0.9;
+			opacity: 0.6;
 
 			// Not sure exactly why this was needed, but at least now it's limited to social shares
 			&.social-share-backdrop {

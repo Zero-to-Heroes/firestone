@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -12,7 +12,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 		`./battlegrounds-meta-stats-comps-info.component.scss`,
 	],
 	template: `
-		<div class="info">
+		<div class="info clickable" (click)="onCompositionClick()">
 			<div class="background">
 				<div class="background-image" *ngFor="let card of coreCardArts">
 					<img [src]="card" />
@@ -55,7 +55,10 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMetaStatsCompInfoComponent {
+	@Output() compositionClick = new EventEmitter<BgsMetaCompStatTierItem>();
+
 	@Input() set stat(value: BgsMetaCompStatTierItem) {
+		this._stat = value;
 		this.compId = value.compId;
 		this.compName = value.name;
 		this.firstPercent = value.firstPercent * 100;
@@ -72,6 +75,7 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 			.map((card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`);
 	}
 
+	private _stat: BgsMetaCompStatTierItem;
 	compId: string;
 	compName: string;
 	dataPoints: string;
@@ -89,6 +93,10 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	coreCardArts: string[];
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+
+	onCompositionClick() {
+		this.compositionClick.emit(this._stat);
+	}
 
 	buildValue(value: number): string {
 		return value == null

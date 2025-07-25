@@ -1,3 +1,4 @@
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
@@ -38,6 +39,7 @@ import { BgsTrinketStrategiesWrapperComponent } from './components/strategies/bg
 import { BgsTrinketStrategyTipsTooltipComponent } from './components/strategies/bgs-trinket-strategy-tips-tooltip.component';
 import { BattlegroundsMetaStatsTrinketsComponent } from './components/trinkets/battlegrounds-meta-stats-trinkets.component';
 import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-trinket-stats-info-premium.component';
+import { BattlegroundsCompositionDetailsModalComponent } from './compositions/battlegrounds-composition-details-modal.component';
 import { BattlegroundsMetaStatsCompInfoComponent } from './compositions/battlegrounds-meta-stats-comps-info.component';
 import { BattlegroundsMetaStatsCompTierComponent } from './compositions/battlegrounds-meta-stats-comps-tier.component';
 import { BattlegroundsMetaStatsCompsComponent } from './compositions/battlegrounds-meta-stats-comps.component';
@@ -91,6 +93,7 @@ const components = [
 	BattlegroundsMetaStatsCardsComponent,
 	BattlegroundsMetaStatsCardInfoComponent,
 	BattlegroundsMetaStatsCardTierComponent,
+	BattlegroundsCompositionDetailsModalComponent,
 	BattlegroundsMetaStatsCompsComponent,
 	BattlegroundsMetaStatsCompTierComponent,
 	BattlegroundsMetaStatsCompInfoComponent,
@@ -100,6 +103,7 @@ const components = [
 @NgModule({
 	imports: [
 		CommonModule,
+		OverlayModule,
 
 		VirtualScrollerModule,
 

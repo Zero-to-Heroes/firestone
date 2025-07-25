@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/no-negated-async */
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ComponentRef,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -8,6 +18,7 @@ import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } fr
 import {
 	BehaviorSubject,
 	Observable,
+	Subscription,
 	combineLatest,
 	distinctUntilChanged,
 	filter,
@@ -17,6 +28,7 @@ import {
 	tap,
 } from 'rxjs';
 import { BgsMetaCompositionStrategiesService } from '../services/bgs-meta-composition-strategies.service';
+import { BattlegroundsCompositionDetailsModalComponent } from './battlegrounds-composition-details-modal.component';
 import { BattlegroundsCompsService } from './bgs-comps.service';
 import { ColumnSortTypeComp, buildCompStats, buildCompTiers } from './bgs-meta-comp-stats';
 import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
@@ -127,6 +139,7 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 									*ngFor="let tier of value.tiers; trackBy: trackByFn"
 									role="listitem"
 									[tier]="tier"
+									(compositionClick)="onCompositionClick($event)"
 								></battlegrounds-meta-stats-comps-tier>
 							</ng-container>
 							<ng-container *ngSwitchCase="'first'">
@@ -134,6 +147,7 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 									*ngFor="let tier of value.tiers; trackBy: trackByFn"
 									role="listitem"
 									[tier]="tier"
+									(compositionClick)="onCompositionClick($event)"
 								></battlegrounds-meta-stats-comps-tier>
 							</ng-container>
 							<ng-container *ngSwitchDefault>
@@ -142,6 +156,7 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 									class="single-tier"
 									role="listitem"
 									[tier]="tier"
+									(compositionClick)="onCompositionClick($event)"
 								></battlegrounds-meta-stats-comps-tier>
 							</ng-container>
 						</ng-container>
@@ -158,7 +173,10 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model'
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsMetaStatsCompsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy
+{
 	tiers$: Observable<readonly BgsMetaCompStatTier[]>;
 	loading$: Observable<boolean>;
 
@@ -176,6 +194,10 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 	});
 	private loading$$ = new BehaviorSubject<boolean>(true);
 
+	private overlayRef: OverlayRef;
+	private positionStrategy: PositionStrategy;
+	private modalSubscription: Subscription;
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
@@ -183,8 +205,11 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 		private readonly prefs: PreferencesService,
 		private readonly bgComps: BattlegroundsCompsService,
 		private readonly compStrategies: BgsMetaCompositionStrategiesService,
+		private readonly overlay: Overlay,
+		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 	) {
 		super(cdr);
+		this.setupModal();
 	}
 
 	trackByFn(index: number, stat: BgsMetaCompStatTier) {
@@ -280,6 +305,20 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 		}
 	}
 
+	override ngOnDestroy(): void {
+		super.ngOnDestroy();
+		if (this.modalSubscription) {
+			this.modalSubscription.unsubscribe();
+		}
+		if (this.overlayRef) {
+			this.overlayRef.dispose();
+		}
+	}
+
+	onCompositionClick(composition: BgsMetaCompStatTierItem) {
+		this.showCompositionModal(composition);
+	}
+
 	onSortClick(rawCriteria: string) {
 		const criteria: ColumnSortTypeComp = rawCriteria as ColumnSortTypeComp;
 		this.sortCriteria$$.next({
@@ -293,6 +332,38 @@ export class BattlegroundsMetaStatsCompsComponent extends AbstractSubscriptionCo
 
 	toggleHeader() {
 		this.headerCollapsed = !this.headerCollapsed;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private setupModal() {
+		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
+		this.overlayRef = this.overlay.create({
+			positionStrategy: this.positionStrategy,
+			hasBackdrop: true,
+			backdropClass: 'composition-modal-backdrop',
+		});
+
+		this.modalSubscription = this.overlayRef.backdropClick().subscribe(() => {
+			this.closeModal();
+		});
+	}
+
+	private showCompositionModal(composition: BgsMetaCompStatTierItem) {
+		const portal = new ComponentPortal(BattlegroundsCompositionDetailsModalComponent);
+		const modalRef: ComponentRef<BattlegroundsCompositionDetailsModalComponent> = this.overlayRef.attach(portal);
+
+		modalRef.instance.composition = composition;
+		modalRef.instance.closeHandler = () => {
+			this.closeModal();
+		};
+
+		this.positionStrategy.apply();
+	}
+
+	private closeModal() {
+		this.overlayRef.detach();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
