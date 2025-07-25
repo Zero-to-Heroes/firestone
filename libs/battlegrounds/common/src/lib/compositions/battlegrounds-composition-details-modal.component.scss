@@ -44,21 +44,22 @@
 	}
 
 	.close-button {
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		padding: 8px;
-		border-radius: 6px;
-		transition: background-color 0.2s ease;
+		position: relative;
+		width: var(--size, 30px);
+		height: var(--size, 30px);
+		--icon-color: var(--control-button-color);
+		color: var(--control-button-color);
+		background-color: trasnparent;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		cursor: default;
 
 		&:hover {
-			background: var(--color-4);
-		}
-
-		.svg-icon-fill {
-			width: 16px;
-			height: 16px;
-			fill: var(--default-text-color);
+			background: var(--on-close-button-background-color); // #2F0D0D;
+			color: var(--on-close-button-color); //#CCA2B3;
+			--icon-color: var(--on-close-button-color); //#CCA2B3;
 		}
 	}
 }

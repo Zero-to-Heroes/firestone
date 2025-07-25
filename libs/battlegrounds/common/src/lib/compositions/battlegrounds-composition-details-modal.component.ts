@@ -12,11 +12,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 			<div class="modal-content" (click)="$event.stopPropagation()">
 				<div class="modal-header">
 					<h2 class="composition-name">{{ compName }}</h2>
-					<button class="close-button" (click)="closeModal()">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#window-control_close" />
-						</svg>
-					</button>
+					<button class="close-button" (click)="closeModal()" inlineSVG="assets/svg/close.svg"></button>
 				</div>
 
 				<div class="modal-body" scrollable>
@@ -33,7 +29,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 									class="stat-label"
 									[fsTranslate]="'app.battlegrounds.compositions.columns.first-percent'"
 								></div>
-								<div class="stat-value">{{ firstPercent | number: '1.1-1' }}%</div>
+								<div class="stat-value">{{ firstPercent | number: '1.1-1' }}</div>
 							</div>
 							<div class="stat-item">
 								<div
@@ -156,7 +152,7 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		this.addonCards = value.addonCards;
 		this.coreCardArts =
 			value.coreCards
-				?.slice(0, 5)
+				?.slice(0, 3)
 				.map((card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`) || [];
 	}
 
