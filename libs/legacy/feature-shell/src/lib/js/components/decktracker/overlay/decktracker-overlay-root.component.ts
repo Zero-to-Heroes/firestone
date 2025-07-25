@@ -337,7 +337,13 @@ export class DeckTrackerOverlayRootComponent
 		);
 
 		this.matchupStatsRecap$ = combineLatest([
-			this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState?.opponentDeck?.hero?.classes)),
+			this.gameState.gameState$$.pipe(
+				this.mapData((gameState) =>
+					!!gameState?.opponentDeck?.hero?.initialClasses?.length
+						? gameState?.opponentDeck?.hero?.initialClasses
+						: gameState?.opponentDeck?.hero?.classes,
+				),
+			),
 			gamesForDeck$,
 		]).pipe(
 			this.mapData(([opponentClasses, gamesForDeck]) => {
