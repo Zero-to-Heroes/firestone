@@ -7,7 +7,6 @@ import { Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PieChartComponent } from '@components/common/chart/pie-chart.component';
-import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { ProfileCommonModule } from '@firestone/profile/common';
 import { SelectModule } from '@sebastientromp/ng-select';
@@ -664,7 +663,7 @@ try {
 			},
 		}),
 
-		ColiseumComponentsModule,
+		// ColiseumComponentsModule,
 
 		AppCommonModule,
 		SharedCommonViewModule,
@@ -695,7 +694,6 @@ try {
 		ModsCommonModule,
 		ProfileCommonModule,
 
-		ColiseumComponentsModule,
 		NgxChartsModule,
 		// NgChartsModule,
 		TranslateModule.forRoot({

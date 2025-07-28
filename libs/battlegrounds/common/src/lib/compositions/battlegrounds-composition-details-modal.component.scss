@@ -293,8 +293,11 @@
 				.card {
 					height: 100%;
 					aspect-ratio: 77 / 113;
-					transition: transform 0.2s ease, box-shadow 0.2s ease;
+					transition:
+						transform 0.2s ease,
+						box-shadow 0.2s ease;
 					border-radius: 8px;
+					font-size: 2em;
 
 					&:hover {
 						transform: scale(1.05);

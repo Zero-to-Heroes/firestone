@@ -46,6 +46,7 @@
 					"@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off",
 					"@firestone-hs/reference-data",
 					"@firestone-hs/simulate-bgs-battle",
+					"@firestone-hs/communities",
 					"@tweenjs/tween.js",
 					"bezier-easing",
 					"deep-equal",

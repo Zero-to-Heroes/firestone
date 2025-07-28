@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
@@ -61,7 +60,7 @@ const components = [
 		InlineSVGModule.forRoot(),
 
 		ReplayColiseumModule,
-		ColiseumComponentsModule,
+		// ColiseumComponentsModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		BattlegroundsCoreModule,
