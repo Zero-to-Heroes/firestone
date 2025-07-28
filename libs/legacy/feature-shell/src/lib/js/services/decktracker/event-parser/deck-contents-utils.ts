@@ -52,6 +52,8 @@ export const modifyDecksForSpecialCards = (
 				return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.HemetJungleHunter:
 				return [handleHemet(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.CerathineFleetrunner:
+				return [handleCerathineFleetrunner(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.LadyPrestor_SW_078:
 				return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.EnvoyOfTheGlade_EDR_873:
@@ -295,6 +297,31 @@ const handleWyrmrestPurifier = (
 				actualManaCost: undefined,
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+			} as DeckCard),
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleCerathineFleetrunner = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: i18n.getUnknownManaMinionName(Math.max(0, card.getEffectiveManaCost() - 2)),
+				creatorCardId: CardIds.CerathineFleetrunner,
+				actualManaCost: Math.max(0, card.getEffectiveManaCost() - 2),
+				rarity: 'unknown',
+				cardType: 'Minion',
+				relatedCardIds: undefined,
+				cardMatchCondition: (other: ReferenceCard) =>
+					(!other.type || other.type === 'Minion') && other.cost === card.getEffectiveManaCost() - 2,
 			} as DeckCard),
 		deckState,
 		allCards,
