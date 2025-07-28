@@ -1,24 +1,24 @@
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .achievement-history-item {
 	@extend %you-have-viewed;
 	display: flex;
 	flex-direction: row;
-    align-items: center;
+	align-items: center;
 	height: 36px;
 	padding-left: 10px;
 
 	.name {
 		// width: 195px;
 		flex-grow: 1;
-	    white-space: nowrap;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-    }
-    
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
 	.date {
 		@extend %breadcrumbs;
-		color: #7D5A87;
+		color: #7d5a87;
 		margin-right: 12px;
 	}
 }

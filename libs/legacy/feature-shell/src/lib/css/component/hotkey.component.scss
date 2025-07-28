@@ -1,5 +1,4 @@
-@import '../global/variables';
-@import '../global/fonts';
+@use '../global/fonts' as *;
 
 .hotkey {
 	display: flex;

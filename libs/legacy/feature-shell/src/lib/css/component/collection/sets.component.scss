@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .sets {
 	// margin-top: 12px;

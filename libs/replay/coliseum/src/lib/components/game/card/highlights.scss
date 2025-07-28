@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 $highlight: drop-shadow(-#{$glowSize} -#{$glowSize} 1px $innerGlow) drop-shadow($glowSize $glowSize 1px $innerGlow)
 	drop-shadow(-#{$glowSize} $glowSize 1px $innerGlow) drop-shadow($glowSize -#{$glowSize} 1px $innerGlow)

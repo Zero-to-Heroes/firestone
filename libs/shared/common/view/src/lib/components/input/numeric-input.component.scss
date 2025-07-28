@@ -52,7 +52,7 @@
 			}
 
 			&.down {
-				transform: scale(-1);
+				transform: scaleX(-1);
 			}
 
 			&:hover {

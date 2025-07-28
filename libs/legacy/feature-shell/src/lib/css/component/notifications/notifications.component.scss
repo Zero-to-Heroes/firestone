@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 :host {
 	pointer-events: none;
@@ -126,14 +125,14 @@
 					height: 100%;
 
 					.left {
-						transform: scale(1, -1);
+						transform: scaleY(-1);
 						position: absolute;
 						left: -29px;
 						top: 0;
 					}
 
 					.right {
-						transform: scale(-1, 1);
+						transform: scaleX(-1);
 						position: absolute;
 						right: 10px;
 						bottom: 0;

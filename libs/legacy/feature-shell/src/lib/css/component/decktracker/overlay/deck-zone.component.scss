@@ -44,7 +44,7 @@
 		display: flex;
 
 		&.close {
-			transform: scale(1, -1);
+			transform: scaleY(-1);
 		}
 	}
 

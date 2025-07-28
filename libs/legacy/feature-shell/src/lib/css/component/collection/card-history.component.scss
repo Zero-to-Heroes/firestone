@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .card-history {
 	width: 400px;

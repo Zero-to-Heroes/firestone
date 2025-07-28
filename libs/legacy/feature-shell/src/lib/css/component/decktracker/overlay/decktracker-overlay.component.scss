@@ -1,4 +1,4 @@
-@import '../../../global/variables';
+@use '../../../global/variables' as *;
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
 :host {
@@ -27,7 +27,7 @@
 	&:not(.active) {
 		.scalable {
 			// display: none;
-			transform: scale(0) !important;
+			transform: scaleX(0) scaleY(0) !important;
 			opacity: 0;
 			transition-property: transform, opacity;
 			transition-duration: 0.2s;
@@ -44,11 +44,11 @@
 		transition-property: opacity;
 		transition-duration: 0.2s;
 		transition-timing-function: ease-out;
-		transform: scale(0.8);
+		transform: scaleX(0.8) scaleY(0.8);
 	}
 
 	.scalable {
-		transform: scale(1);
+		transform: scaleX(1) scaleY(1);
 		// top: 30px;
 		position: relative;
 		opacity: 1;

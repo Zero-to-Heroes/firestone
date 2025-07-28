@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 i,
 button {
@@ -54,7 +53,7 @@ button {
 	}
 
 	.right {
-		transform: scale(-1, 1);
+		transform: scaleX(-1);
 		margin-left: 15px;
 	}
 }

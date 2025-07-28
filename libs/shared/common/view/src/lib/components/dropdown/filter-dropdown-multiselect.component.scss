@@ -13,7 +13,10 @@
 	display: flex;
 	flex-direction: column;
 	color: var(--color-1);
-	transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
+	transition:
+		opacity 0.4s ease-in-out,
+		visibility 0.4s ease-in-out,
+		max-height 0.4s ease-in-out;
 	border: 1px solid var(--color-3);
 	outline: none;
 
@@ -190,7 +193,7 @@
 	&.showing {
 		.value {
 			.caret {
-				transform: scale(1, -1);
+				transform: scaleY(-1);
 			}
 		}
 		.options {

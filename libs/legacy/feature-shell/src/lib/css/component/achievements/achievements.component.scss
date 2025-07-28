@@ -1,10 +1,13 @@
-@import '../../global/variables';
+@use '../../global/variables' as *;
 
 .achievements {
 	padding-top: 14px;
 
 	achievements-menu {
-		transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, flex-shrink 0.4s ease-in-out,
+		transition:
+			opacity 0.4s ease-in-out,
+			visibility 0.4s ease-in-out,
+			flex-shrink 0.4s ease-in-out,
 			flex-grow 0.4s ease-in-out;
 	}
 

@@ -1,10 +1,10 @@
-@import '../card/highlights.scss';
+@use '../card/highlights.scss' as *;
 
 .hero-card {
-    height: 100%;
-    position: relative;
-    
-    &.highlight {
-        filter: $highlight;
-    }
+	height: 100%;
+	position: relative;
+
+	&.highlight {
+		filter: $highlight;
+	}
 }

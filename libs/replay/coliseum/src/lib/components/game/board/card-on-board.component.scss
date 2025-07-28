@@ -1,4 +1,4 @@
-@import '../card/highlights.scss';
+@use '../card/highlights.scss' as *;
 
 :host {
 	// So that when we animate it it stays in the center
@@ -17,7 +17,13 @@
 		text-align: center;
 		width: 100%;
 		z-index: 9999;
-		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+		text-shadow:
+			-1px -1px 0 #000,
+			0px -1px 0 #000,
+			1px -1px 0 #000,
+			-1px 1px 0 #000,
+			0px 1px 0 #000,
+			1px 1px 0 #000;
 	}
 
 	&::before {

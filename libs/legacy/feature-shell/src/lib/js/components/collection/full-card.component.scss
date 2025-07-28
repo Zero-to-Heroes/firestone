@@ -246,7 +246,7 @@
 		&.deco-bottom {
 			left: calc(50% - 25px);
 			bottom: -7px;
-			transform: scale(1, -1);
+			transform: scaleY(-1);
 		}
 	}
 }

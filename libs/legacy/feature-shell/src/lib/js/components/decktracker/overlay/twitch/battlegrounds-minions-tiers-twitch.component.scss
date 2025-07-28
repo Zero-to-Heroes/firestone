@@ -11,7 +11,7 @@
 
 	.scalable {
 		display: flex;
-		transform: scale(0.8);
+		transform: scaleX(0.8) scaleY(0.8);
 		transform-origin: top right;
 	}
 }

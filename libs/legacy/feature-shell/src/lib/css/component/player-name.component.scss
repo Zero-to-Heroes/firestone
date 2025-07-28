@@ -1,4 +1,4 @@
-@import '../global/fonts';
+@use '../global/fonts' as *;
 
 .player-name {
 	display: flex;
@@ -9,4 +9,3 @@
 		margin-left: 9px;
 	}
 }
-

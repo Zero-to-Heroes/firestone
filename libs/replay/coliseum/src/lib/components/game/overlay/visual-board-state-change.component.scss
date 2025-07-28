@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 :host {
 	// So that when we animate it it stays in the center

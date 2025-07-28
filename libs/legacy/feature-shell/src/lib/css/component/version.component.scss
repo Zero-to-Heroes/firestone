@@ -1,4 +1,4 @@
-@import '../global/fonts';
+@use '../global/fonts' as *;
 
 :host {
 	display: flex;

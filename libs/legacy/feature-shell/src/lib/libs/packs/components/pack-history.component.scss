@@ -1,5 +1,4 @@
-@import '../../../css/global/variables';
-@import '../../../css/global/fonts';
+@use '../../../css/global/fonts' as *;
 
 .pack-history {
 	width: 400px;

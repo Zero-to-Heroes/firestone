@@ -1,5 +1,4 @@
-@import '../global/variables';
-@import '../global/fonts';
+@use '../global/fonts' as *;
 
 .filter {
 	min-width: 150px;
@@ -12,7 +11,10 @@
 	background: rgba(255, 255, 255, 0.08);
 	margin-right: 15px;
 	width: 215px;
-	transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
+	transition:
+		opacity 0.4s ease-in-out,
+		visibility 0.4s ease-in-out,
+		max-height 0.4s ease-in-out;
 
 	&:focus,
 	&:active {
@@ -47,7 +49,7 @@
 	}
 
 	.open .caret {
-		transform: scale(1, -1);
+		transform: scaleY(-1);
 	}
 
 	select-dropdown {

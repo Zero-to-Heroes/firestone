@@ -1,5 +1,4 @@
-@import '../../../../global/variables';
-@import '../../../../global/fonts';
+@use '../../../../global/fonts' as *;
 
 :host {
 	display: flex;
@@ -13,7 +12,7 @@
 	width: 100%;
 	position: relative;
 	margin-bottom: 20px;
-    gap: 15px;
+	gap: 15px;
 
 	.card-search {
 		margin-left: auto;

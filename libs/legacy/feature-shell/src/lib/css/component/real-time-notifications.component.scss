@@ -1,9 +1,9 @@
-@import '../global/fonts';
+@use '../global/fonts' as *;
 
 .real-time-notifications {
 	@extend %app-status;
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 
 	.warning-icon {
 		display: none;
@@ -15,19 +15,20 @@
 	}
 
 	span {
-        display: flex;
-        align-items: center;
+		display: flex;
+		align-items: center;
 
-		a, a:active {
+		a,
+		a:active {
 			text-decoration: none;
-            color: #D9C3AB ;
-            width: auto;
-            margin-left: 5px;
+			color: #d9c3ab;
+			width: auto;
+			margin-left: 5px;
 		}
 
 		a:hover {
 			text-decoration: none;
-			color: #FFB948;
+			color: #ffb948;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-@import '../card/highlights.scss';
+@use '../card/highlights.scss' as *;
 
 .hero-power {
 	height: 100%;

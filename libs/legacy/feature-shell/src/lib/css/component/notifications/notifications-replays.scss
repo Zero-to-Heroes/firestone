@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .match-stats-message-container {
 	display: flex;
@@ -118,7 +117,12 @@
 		.rank-text {
 			position: absolute;
 			bottom: -9%;
-			text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000,
+			text-shadow:
+				-2px -2px 0 #000,
+				0px -2px 0 #000,
+				2px -2px 0 #000,
+				-2px 2px 0 #000,
+				0px 2px 0 #000,
 				2px 2px 0 #000;
 			color: white;
 			font-size: 12px;

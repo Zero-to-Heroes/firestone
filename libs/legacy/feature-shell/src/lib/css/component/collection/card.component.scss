@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .card-container {
 	position: relative;
@@ -92,7 +91,7 @@
 			}
 
 			.right {
-				transform: scale(-1, 1);
+				transform: scaleX(-1);
 				right: 0;
 			}
 		}

@@ -1,4 +1,4 @@
-@import '../../../css/global/fonts';
+@use '../../../css/global/fonts' as *;
 
 .pack-history-item {
 	@extend %you-have-viewed;

@@ -1,30 +1,29 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .achievement-progress-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-    .achieved {
-        @extend %achievements-number-achieved;
-        flex-grow: 0;
-        flex-shrink: 0;
-        margin-bottom: 10px;
-    }
-    
-    .progress-bar {
-        width: 95px;
-        height: 5px;
-        background: rgba(217, 195, 171, 0.3);
-        display: flex;
-        flex-grow: 0;
-        flex-shrink: 0;
-        align-items: flex-start;
-    
-        .progress {
-            height : 100%;
-            background: #FFB948;
-        }
-    }
+	.achieved {
+		@extend %achievements-number-achieved;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 10px;
+	}
+
+	.progress-bar {
+		width: 95px;
+		height: 5px;
+		background: rgba(217, 195, 171, 0.3);
+		display: flex;
+		flex-grow: 0;
+		flex-shrink: 0;
+		align-items: flex-start;
+
+		.progress {
+			height: 100%;
+			background: #ffb948;
+		}
+	}
 }

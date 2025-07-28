@@ -1,4 +1,4 @@
-@import '../global/variables';
+@use '../global/variables' as *;
 
 .menu-selection {
 	color: var(--menu-selection-color);

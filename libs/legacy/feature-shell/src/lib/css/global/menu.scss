@@ -1,5 +1,4 @@
-@import 'variables';
-@import 'fonts';
+@use 'fonts' as *;
 
 .menu-selection {
 	@extend %tab;

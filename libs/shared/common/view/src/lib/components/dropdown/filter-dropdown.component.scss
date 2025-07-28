@@ -75,7 +75,7 @@ ng-select.disabled {
 	}
 
 	.open .caret {
-		transform: scale(1, -1);
+		transform: scaleY(-1);
 	}
 
 	.below .single .value {

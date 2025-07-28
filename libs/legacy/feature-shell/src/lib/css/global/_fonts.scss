@@ -1,4 +1,5 @@
-@import './variables';
+@forward './variables';
+@use './variables' as *;
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
 %app-title {

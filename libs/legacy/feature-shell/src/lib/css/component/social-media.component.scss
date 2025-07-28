@@ -1,19 +1,19 @@
-@import '../global/variables';
+@use '../global/variables' as *;
 
 .social-media {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    display: flex;
-    z-index: 1;
+	position: absolute;
+	bottom: 15px;
+	left: 15px;
+	display: flex;
+	z-index: 1;
 
-    button {
-    	margin-right: 5px;
-        --icon-color: #d9c3ab;
-    }
+	button {
+		margin-right: 5px;
+		--icon-color: #d9c3ab;
+	}
 
-    button:hover {
-	    --icon-color: #ffb948;
-	    color: var(--icon-color);
-    }
+	button:hover {
+		--icon-color: #ffb948;
+		color: var(--icon-color);
+	}
 }

@@ -1,3 +1,7 @@
+// Forward for @use imports
+@forward 'sass:color';
+@forward 'sass:math';
+
 // colors
 $black: #190505;
 $darkred: #2f0d0d;
@@ -15,7 +19,7 @@ $green01: #d9c3ab;
 $green02: #84625f;
 
 // transitions
-$fast-hover: .15s;
+$fast-hover: 0.15s;
 
 // specific to home screen
 $pink01: #8c0f34;

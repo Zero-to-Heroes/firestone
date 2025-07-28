@@ -35,7 +35,7 @@
 			}
 			.caret {
 				display: flex;
-				transform: scale(1, -1);
+				transform: scaleY(-1);
 				margin-top: 5px;
 			}
 		}

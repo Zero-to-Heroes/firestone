@@ -1,5 +1,4 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@use '../../global/fonts' as *;
 
 .empty-state {
 	@extend %empty-state;
@@ -11,9 +10,9 @@
 
 	.state-container {
 		margin: auto;
-	    display: flex;
-	    flex-direction: column;
-	    align-items: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 
 		i {
 			margin-bottom: 30px;
@@ -28,5 +27,4 @@
 			margin-bottom: 15px;
 		}
 	}
-
 }

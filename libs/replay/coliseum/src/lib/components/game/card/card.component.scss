@@ -1,4 +1,4 @@
-@import './highlights.scss';
+@use './highlights.scss' as *;
 
 .card {
 	position: relative;
