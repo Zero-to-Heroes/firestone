@@ -39,18 +39,21 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 	readonly opponent = {
 		pref: 'opponentDarkGiftsCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): readonly string[] | null =>
-			state.fullGameState?.Opponent?.AllEntities?.filter(
-				(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
-			)
-				.filter((e) => {
-					const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
-					return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
-				})
-				.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL)
-				.map((e) => e.cardId)
-				// Unique - each dark gift is only applied once
-				.filter((e, index, self) => self.indexOf(e) === index) ?? null,
+		value: (state: GameState): readonly string[] | null => {
+			const result =
+				state.fullGameState?.Opponent?.AllEntities?.filter(
+					(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
+				)
+					.filter((e) => {
+						const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
+						return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
+					})
+					.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL)
+					.map((e) => e.cardId)
+					// Unique - each dark gift is only applied once
+					.filter((e, index, self) => self.indexOf(e) === index) ?? null;
+			return !!result?.length ? result : null;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.dark-gifts-label'),
@@ -61,7 +64,10 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
