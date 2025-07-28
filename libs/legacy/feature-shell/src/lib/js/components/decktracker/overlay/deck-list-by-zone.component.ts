@@ -25,6 +25,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<li *ngFor="let zone of zones$ | async; trackBy: trackZone">
 				<deck-zone
 					[zone]="zone"
+					[deckState]="deckState$ | async"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
 					[showTransformedInto]="showTransformedInto"
@@ -49,6 +50,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	zones$: Observable<readonly DeckZone[]>;
 	showTopCardsSeparately$: Observable<boolean>;
 	showBottomCardsSeparately$: Observable<boolean>;
+	deckState$: Observable<DeckState>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
@@ -130,8 +132,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	}
 
 	ngAfterContentInit(): void {
-		this.showTopCardsSeparately$ = this.showTopCardsSeparately$$.asObservable();
-		this.showBottomCardsSeparately$ = this.showBottomCardsSeparately$$.asObservable();
+		this.showTopCardsSeparately$ = this.showTopCardsSeparately$$.asObservable().pipe(this.mapData((info) => info));
+		this.showBottomCardsSeparately$ = this.showBottomCardsSeparately$$
+			.asObservable()
+			.pipe(this.mapData((info) => info));
+		this.deckState$ = this.deckState$$.asObservable().pipe(this.mapData((info) => info));
 		this.zones$ = combineLatest([
 			this.deckState$$,
 			this.showGlobalEffectsZone$$,
@@ -282,7 +287,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					'board',
 					this.i18n.translateString('decktracker.zones.board'),
 					sortCardsByManaCostInOtherZone
-						? (a, b) => a.refManaCost - b.refManaCost
+						? (a, b) =>
+								getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+								getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 						: (a, b) => this.sortByIcon(a, b),
 					null,
 				),
@@ -342,7 +349,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				'other',
 				this.i18n.translateString('decktracker.zones.other'),
 				sortCardsByManaCostInOtherZone
-					? (a, b) => a.refManaCost - b.refManaCost
+					? (a, b) =>
+							getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+							getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 					: (a, b) => this.sortByIcon(a, b),
 				null,
 				// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
@@ -376,7 +385,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					'other-generated',
 					this.i18n.translateString('decktracker.zones.other-generated'),
 					sortCardsByManaCostInOtherZone
-						? (a, b) => a.refManaCost - b.refManaCost
+						? (a, b) =>
+								getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+								getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 						: (a, b) => this.sortByIcon(a, b),
 					null,
 					(a: VisualDeckCard) => (!a.temporaryCard || a.zone !== 'SETASIDE') && !a.createdByJoust,

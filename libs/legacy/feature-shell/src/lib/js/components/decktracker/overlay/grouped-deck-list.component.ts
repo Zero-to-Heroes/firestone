@@ -29,6 +29,7 @@ import { shouldKeepOriginalCost } from '../../../services/hs-utils';
 			<deck-zone
 				*ngIf="zone$ | async as zone"
 				[zone]="zone"
+				[deckState]="deckState$ | async"
 				[colorManaCost]="colorManaCost"
 				[showRelatedCards]="showRelatedCards"
 				[showUnknownCards]="showUnknownCards"
@@ -57,6 +58,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	showGiftsSeparately$: Observable<boolean>;
 	groupSameCardsTogether$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
+	deckState$: Observable<DeckState>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
@@ -123,6 +125,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.showGiftsSeparately$ = this.showGiftsSeparately$$.asObservable().pipe(this.mapData((info) => info));
 		this.groupSameCardsTogether$ = this.groupSameCardsTogether$$.asObservable().pipe(this.mapData((info) => info));
 		this.showStatsChange$ = this.showStatsChange$$.asObservable().pipe(this.mapData((info) => info));
+		this.deckState$ = this.deckState$$.asObservable().pipe(this.mapData((info) => info));
 		this.zone$ = combineLatest([
 			this.deckState$$.asObservable(),
 			this.showWarning$$.asObservable(),
@@ -227,7 +230,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						header: zone.header,
 						cards: zone.cards,
 						sortingFunction: zone.sortingFunction,
-					} as DeckZoneSection),
+					}) as DeckZoneSection,
 			);
 		return {
 			id: 'single-zone',

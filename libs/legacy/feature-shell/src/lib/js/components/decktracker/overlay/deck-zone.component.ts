@@ -8,6 +8,7 @@ import {
 	Optional,
 	Output,
 } from '@angular/core';
+import { DeckState, getProcessedCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -122,6 +123,9 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	@Input() set showTotalCardsInZone(value: boolean) {
 		this.showTotalCardsInZone$$.next(value);
 	}
+	@Input() set deckState(value: DeckState) {
+		this.deckState$$.next(value);
+	}
 
 	private zone$$ = new BehaviorSubject<DeckZone>(null);
 	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
@@ -134,6 +138,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTotalCardsInZone$$ = new BehaviorSubject<boolean>(true);
+	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -167,6 +172,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 			this.groupSameCardsTogether$$.asObservable(),
 			this.showBottomCardsSeparately$$.asObservable(),
 			this.showTopCardsSeparately$$.asObservable(),
+			this.deckState$$.asObservable(),
 		]).pipe(
 			this.mapData(
 				([
@@ -178,6 +184,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 					groupSameCardsTogether,
 					showBottomCardsSeparately,
 					showTopCardsSeparately,
+					deckState,
 				]) =>
 					this.refreshZone(
 						zone,
@@ -188,6 +195,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 						groupSameCardsTogether,
 						showBottomCardsSeparately,
 						showTopCardsSeparately,
+						deckState,
 					),
 			),
 		);
@@ -228,6 +236,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		groupSameCardsTogether: boolean,
 		showBottomCardsSeparately: boolean,
 		showTopCardsSeparately: boolean,
+		deckState: DeckState,
 	): readonly DeckZoneSection[] {
 		if (!zone) {
 			return null;
@@ -267,7 +276,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 					});
 					return result;
 				})
-				.sort((a, b) => this.compare(a, b, showUpdatedCost));
+				.sort((a, b) => this.compare(a, b, showUpdatedCost, deckState));
 			if (section.sortingFunction) {
 				cards = [...cards].sort(section.sortingFunction);
 			}
@@ -304,7 +313,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		collection: readonly SetCard[],
 	): string {
 		const refCard = this.allCards.getCard(card.cardId);
-		const cardIdForGrouping = !!card.cardId ? refCard?.counterpartCards?.[0] ?? card.cardId : '';
+		const cardIdForGrouping = !!card.cardId ? (refCard?.counterpartCards?.[0] ?? card.cardId) : '';
 		const keyWithBonus =
 			!groupSameCardsTogether && showStatsChange
 				? cardIdForGrouping + '_' + (card.mainAttributeChange || 0) + '_' + (card.turnsUntilImmolate || 0)
@@ -314,10 +323,10 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		const creatorsKeySuffix = card.stolenFromOpponent
 			? 'stolen'
 			: !card.creatorCardIds?.length
-			? ''
-			: !!cardIdForGrouping
-			? 'creators'
-			: 'creators-' + (card.creatorCardIds || []).join('-');
+				? ''
+				: !!cardIdForGrouping
+					? 'creators'
+					: 'creators-' + (card.creatorCardIds || []).join('-');
 		const keyWithGift =
 			// Unknown cards are still displayed by their creator
 			!cardIdForGrouping || (!groupSameCardsTogether && showGiftsSeparately)
@@ -350,11 +359,11 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		return keyWithRelatedCards + '-missing';
 	}
 
-	private compare(a: VisualDeckCard, b: VisualDeckCard, showUpdatedCost: boolean): number {
-		if (this.getCost(a, showUpdatedCost) < this.getCost(b, showUpdatedCost)) {
+	private compare(a: VisualDeckCard, b: VisualDeckCard, showUpdatedCost: boolean, deckState: DeckState): number {
+		if (this.getCost(a, showUpdatedCost, deckState) < this.getCost(b, showUpdatedCost, deckState)) {
 			return -1;
 		}
-		if (this.getCost(a, showUpdatedCost) > this.getCost(b, showUpdatedCost)) {
+		if (this.getCost(a, showUpdatedCost, deckState) > this.getCost(b, showUpdatedCost, deckState)) {
 			return 1;
 		}
 		if (a.cardName?.toLowerCase() < b.cardName?.toLowerCase()) {
@@ -372,8 +381,15 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		return 0;
 	}
 
-	private getCost(card: VisualDeckCard, showUpdatedCost: boolean): number {
+	private getCost(card: VisualDeckCard, showUpdatedCost: boolean, deckState: DeckState): number {
 		const refCard = this.allCards.getCard(card.cardId);
-		return refCard.hideStats ? null : showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
+		const processedCard = getProcessedCard(card.cardId, card.entityId, deckState, this.allCards);
+		return refCard.hideStats
+			? null
+			: processedCard.cost !== refCard.cost
+				? processedCard.cost
+				: showUpdatedCost
+					? card.getEffectiveManaCost()
+					: processedCard.cost;
 	}
 }
