@@ -225,6 +225,7 @@ const globalEffectEnchantments = [
 	CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e,
 	CardIds.AshalonRidgeGuardian_PerfectEvolutionEnchantment_TLC_229t14e,
 	CardIds.LohTheLivingLegend_LivingLegendEnchantment_TLC_257e1,
+	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
 export const globalEffectCards = [
@@ -235,7 +236,7 @@ export const globalEffectCards = [
 ];
 
 // Also whitelist in the parser
-export const globalEffectPowers = [CardIds.DewProcess];
+export const globalEffectPowers = [CardIds.DewProcess, CardIds.CityChiefEsho_TLC_110];
 export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
 
 export const globalEffectTriggers = [
@@ -277,10 +278,6 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'ReuseFX_Beast_BuffImpact_Paw_Super',
 		cardId: CardIds.FreeSpirit,
-	},
-	{
-		effectPrefab: '',
-		cardId: CardIds.LohTheLivingLegend_TLC_257,
 	},
 ];
 
