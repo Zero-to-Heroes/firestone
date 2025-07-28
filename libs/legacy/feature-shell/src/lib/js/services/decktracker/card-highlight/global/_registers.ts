@@ -39,11 +39,13 @@ import { TwistedWebweaver } from './twisted-webweaver';
 import { Ursoc } from './ursoc';
 import { UrsolsAura } from './ursols-aura';
 import { VanessaVanCleef } from './vanessa-van-cleef';
+import { WakenerOfSouls } from './wakener-of-souls';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
 
 const cards = [
 	Archimonde,
+	WakenerOfSouls,
 	Ressucitate,
 	RaiseDead,
 	CreatureOfTheSacredCave,

@@ -142,7 +142,7 @@ export const getDynamicRelatedCardIds = (
 					.filter((c) =>
 						!!c.set
 							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-							  isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
+								isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
 					.sort(
@@ -787,13 +787,13 @@ const getDynamicFilters = (
 		case CardIds.ShimmerShot_DEEP_003:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
 		case CardIds.TunnelTerror_TLC_469:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
+		case CardIds.MazeGuide:
+		case CardIds.MazeGuide_CORE_REV_308:
 		case CardIds.DistressSignal_GDB_883:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.DwarfPlanet_GDB_233:
 		case CardIds.FacelessLackey:
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
-		case CardIds.MazeGuide:
-		case CardIds.MazeGuide_CORE_REV_308:
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
 		case CardIds.TwilightInfluence_EDR_463:
