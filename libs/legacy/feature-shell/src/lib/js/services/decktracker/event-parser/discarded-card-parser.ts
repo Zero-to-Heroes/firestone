@@ -5,7 +5,10 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class DiscardedCardParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -44,12 +47,14 @@ export class DiscardedCardParser implements EventParser {
 				? null
 				: originCard.update({
 						relatedCardIds: [cardId, ...(originCard.relatedCardIds ?? [])],
-				  });
+					});
 			board = !newOriginCard ? board : this.helper.replaceCardInZone(board, newOriginCard);
 		}
 
+		const refCard = this.allCards.getCard(cardId);
 		const cardWithZone = card.update({
 			zone: 'DISCARD',
+			refManaCost: card.refManaCost ?? refCard.cost,
 		} as DeckCard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,
