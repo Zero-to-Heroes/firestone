@@ -307,12 +307,12 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 						this.highlightedMinions$$.next(newHighlights);
 					}
 
-					// const minionsFromTrinkets: readonly string[] = this.buildMinionToHighlightFromTrinkets(trinkets);
-					// if (!!minionsFromTrinkets?.length && minionAuto) {
-					// 	const existingHighlights = this.highlightedMinions$$.value;
-					// 	const newHighlights = [...existingHighlights, ...minionsFromTrinkets];
-					// 	this.highlightedMinions$$.next(newHighlights);
-					// }
+					const minionsFromTrinkets: readonly string[] = this.buildMinionToHighlightFromTrinkets(trinkets);
+					if (!!minionsFromTrinkets?.length && minionAuto) {
+						const existingHighlights = this.highlightedMinions$$.value;
+						const newHighlights = [...existingHighlights, ...minionsFromTrinkets];
+						this.highlightedMinions$$.next(newHighlights);
+					}
 
 					const tribeToHighlight: readonly Race[] | null = this.buildTribesToHighlight(
 						heroPowerCardId,
@@ -378,6 +378,14 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			default:
 				return [];
 		}
+	}
+
+	private buildMinionToHighlightFromTrinkets(trinkets: readonly string[] | undefined): readonly string[] {
+		const result: string[] = [];
+		if (trinkets?.includes(CardIds.FungalmancerSticker_BG30_MagicItem_710)) {
+			result.push(CardIds.FreedealingGambler_BGS_049);
+		}
+		return result;
 	}
 
 	private buildTribesToHighlight(
