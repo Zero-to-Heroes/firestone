@@ -416,7 +416,7 @@ export class GameEvents {
 									cost: gameEvent.Value.AdditionalProps.Cost,
 									magnetized: gameEvent.Value.AdditionalProps.Magnetized,
 									tags: gameEvent.Value.AdditionalProps.Tags,
-							  }
+								}
 							: {},
 					),
 				);
@@ -438,7 +438,7 @@ export class GameEvents {
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 							tags: gameEvent.Value.AdditionalProps.Tags,
-					  }
+						}
 					: null;
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_SUMMONED_FROM_HAND, gameEvent, summonFromHandAdditionProps),
@@ -602,7 +602,7 @@ export class GameEvents {
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 							lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
-					  }
+						}
 					: null;
 				this.doEventDispatch(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2));
 				break;
@@ -716,7 +716,7 @@ export class GameEvents {
 							? {
 									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
 									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
-							  }
+								}
 							: null,
 					),
 				);
@@ -730,7 +730,7 @@ export class GameEvents {
 							? {
 									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
 									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
-							  }
+								}
 							: null,
 					),
 				);
@@ -752,7 +752,7 @@ export class GameEvents {
 									defenderCardId: gameEvent.Value.AdditionalProps.ProposedDefenderCardId,
 									defenderEntityId: gameEvent.Value.AdditionalProps.ProposedDefenderEntityId,
 									defenderControllerId: gameEvent.Value.AdditionalProps.ProposedDefenderControllerId,
-							  }
+								}
 							: null,
 					),
 				);
@@ -864,7 +864,7 @@ export class GameEvents {
 							health: gameEvent.Value.AdditionalProps.Health,
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 							tags: gameEvent.Value.AdditionalProps.Tags,
-					  }
+						}
 					: null;
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps),
@@ -989,6 +989,13 @@ export class GameEvents {
 			case 'CORPSES_SPENT_THIS_GAME_CHANGED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED, gameEvent, {
+						value: gameEvent.Value.AdditionalProps.Value,
+					}),
+				);
+				break;
+			case 'CORPSES_CHANGED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.CORPSES_CHANGED, gameEvent, {
 						value: gameEvent.Value.AdditionalProps.Value,
 					}),
 				);
@@ -1585,7 +1592,7 @@ export class GameEvents {
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 							tags: gameEvent.Value.AdditionalProps.Tags,
-					  }
+						}
 					: null;
 				this.doEventDispatch(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
 				break;

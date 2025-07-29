@@ -78,6 +78,7 @@ import { CardsShuffledIntoDeckParser } from '../event-parser/cards-shuffled-into
 import { ChoosingOptionsParser } from '../event-parser/choosing-options-parser';
 import { ListCardsPlayedFromInitialDeckParser } from '../event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CopiedFromEntityIdParser } from '../event-parser/copied-from-entity-id-parser';
+import { CorpsesParser } from '../event-parser/corpses-parser';
 import { CorpsesSpentThisGameParser } from '../event-parser/corpses-spent-this-game-parser';
 import { CostChangedParser } from '../event-parser/cost-changed-parser';
 import { CreateCardInDeckParser } from '../event-parser/create-card-in-deck-parser';
@@ -287,6 +288,7 @@ export class GameStateParsersService {
 			[GameEvent.CARDS_SHUFFLED_INTO_DECK]: [new CardsShuffledIntoDeckParser()],
 			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser()],
 			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.CORPSES_CHANGED]: [new CorpsesParser()],
 			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],
 			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper, this.allCards)],
 			[GameEvent.CREATE_CARD_IN_DECK]: [

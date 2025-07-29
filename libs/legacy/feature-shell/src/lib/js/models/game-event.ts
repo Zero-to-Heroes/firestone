@@ -105,6 +105,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly TOTAL_MAGNETIZE_CHANGED = 'TOTAL_MAGNETIZE_CHANGED';
 	public static readonly BALLER_BUFF_CHANGED = 'BALLER_BUFF_CHANGED';
 	public static readonly EXCAVATE_TIER_CHANGED = 'EXCAVATE_TIER_CHANGED';
+	public static readonly CORPSES_CHANGED = 'CORPSES_CHANGED';
 	public static readonly CORPSES_SPENT_THIS_GAME_CHANGED = 'CORPSES_SPENT_THIS_GAME_CHANGED';
 	public static readonly OVERLOADED_CRYSTALS_CHANGED = 'OVERLOADED_CRYSTALS_CHANGED';
 	public static readonly DATA_SCRIPT_CHANGED = 'DATA_SCRIPT_CHANGED';

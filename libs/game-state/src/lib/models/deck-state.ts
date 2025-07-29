@@ -77,6 +77,7 @@ export class DeckState {
 	readonly piratesSummoned: number = 0;
 	readonly fatigue: number = 0;
 	readonly overloadedCrystals: number = 0;
+	readonly corpses: number = 0;
 	readonly corpsesSpent: number = 0;
 	readonly cardsShuffledIntoDeck: number = 0;
 	readonly abyssalCurseHighestValue: number = 0;
