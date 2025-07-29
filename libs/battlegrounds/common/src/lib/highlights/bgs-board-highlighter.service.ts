@@ -373,8 +373,10 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				return [CardIds.FreedealingGambler_BGS_049];
 			case CardIds.DieInsects_TB_BaconShop_HP_087:
 				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
-			case CardIds.RockMasterVoone_BG26_HERO_104:
-				return [CardIds.RockMasterVoone_UpbeatHarmony];
+			case CardIds.RockMasterVoone_UpbeatHarmony:
+				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
+			case CardIds.GoneFishing:
+				return [CardIds.FreedealingGambler_BGS_049];
 			default:
 				return [];
 		}
