@@ -290,7 +290,11 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
 			});
+
 		this.cardsHighlight.initForSingle();
+		this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId)).subscribe((heroCardId) => {
+			this.cardsHighlight.forceHeroCardId(heroCardId);
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
