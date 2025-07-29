@@ -12,7 +12,7 @@ export class CorpsesParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const newPlayerDeck = deck.update({
-			corpses: gameEvent.additionalData.value,
+			corpsesGainedThisGame: gameEvent.additionalData.value,
 		});
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

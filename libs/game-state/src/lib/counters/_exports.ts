@@ -31,6 +31,7 @@ import { ChainedGuardianCounterDefinitionV2 } from './impl/chained-guardian';
 import { ChaoticTendrilCounterDefinitionV2 } from './impl/chaotic-tendril';
 import { ComboCardsPlayedCounterDefinitionV2 } from './impl/combo-cards-played';
 import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
+import { CorpsesCounterDefinitionV2 } from './impl/corpses';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
 import { DarkGiftsCounterDefinitionV2 } from './impl/dark-gifts';
@@ -125,6 +126,7 @@ export const getAllCounters: (
 	new GardensGraceCounterDefinitionV2(i18n, allCards),
 	new NagaGiantCounterDefinitionV2(i18n, allCards),
 	new OverdraftCounterDefinitionV2(i18n, allCards),
+	new CorpsesCounterDefinitionV2(i18n, allCards),
 	new CorpseSpentCounterDefinitionV2(i18n, allCards),
 	new MenagerieCounterDefinitionV2(i18n, allCards),
 	new HolySpellsCounterDefinitionV2(i18n, allCards),
@@ -238,6 +240,7 @@ export type CounterType =
 	| 'holySpells'
 	| 'menagerie'
 	| 'corpseSpent'
+	| 'corpses'
 	| 'overdraft'
 	| 'nagaGiant'
 	| 'gardensGrace'

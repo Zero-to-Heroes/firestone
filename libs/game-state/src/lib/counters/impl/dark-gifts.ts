@@ -9,7 +9,6 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 	public override id: CounterType = 'darkGifts';
 	public override image = CardIds.WallowTheWretched_EDR_487;
 	public override cards: readonly CardIds[] = [];
-	protected override debug = true;
 
 	readonly player = {
 		pref: 'playerDarkGiftsCounter' as const,

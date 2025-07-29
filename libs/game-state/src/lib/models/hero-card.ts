@@ -33,7 +33,7 @@ export const hasOrHadHeroClass = (card: HeroCard | undefined, cardClasses: reado
 };
 
 export const initialHeroClassIs = (card: HeroCard | undefined, cardClasses: readonly CardClass[]): boolean => {
-	// TODO: handle Tourists
+	// Tourists are already included in the initial classes
 	let classes = card?.classes;
 	if (card?.initialClasses?.length) {
 		classes = card.initialClasses;
