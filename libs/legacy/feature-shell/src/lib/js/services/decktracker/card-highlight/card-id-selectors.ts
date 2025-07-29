@@ -624,7 +624,7 @@ export const cardIdSelector = (
 				const lastSpellOnEnemy = input.deckState.spellsPlayedOnEnemyEntities?.length
 					? input.deckState.spellsPlayedOnEnemyEntities[
 							input.deckState.spellsPlayedOnEnemyEntities.length - 1
-					  ]
+						]
 					: null;
 				return tooltip(
 					and(
@@ -963,6 +963,8 @@ export const cardIdSelector = (
 		case CardIds.DoorOfShadows:
 		case CardIds.DoorOfShadows_DoorOfShadowsToken:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.DoubleAgent:
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.DoubleJump_SCH_422:
 			return and(side(inputSide), inDeck, outcast);
 		case CardIds.DoubleTime:
@@ -3292,6 +3294,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
 				and(side(inputSide), inGraveyard, minion, deathrattle),
 			);
+		case CardIds.VelarokWindblade_WW_364:
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.VelenLeaderOfTheExiled_GDB_131:
 			return (input: SelectorInput): SelectorOutput => {
 				const candidates = input.deckState.cardsPlayedThisMatch
