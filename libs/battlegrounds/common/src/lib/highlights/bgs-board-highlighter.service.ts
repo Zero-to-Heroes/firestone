@@ -212,8 +212,8 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			card.type?.toUpperCase() !== CardType[CardType.MINION]
 				? []
 				: card.races?.length
-				? card.races.map((race) => Race[race.toUpperCase()])
-				: [Race.BLANK];
+					? card.races.map((race) => Race[race.toUpperCase()])
+					: [Race.BLANK];
 		const highlightedFromTribe =
 			tribes.some((tribe) => highlightedTribes.includes(tribe)) ||
 			(highlightedTribes.length > 0 && tribes.some((tribe) => tribe === Race.ALL));
@@ -261,16 +261,18 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				map((gameState) => ({
 					hasCurrentGame: !!gameState?.bgState?.currentGame,
 					gameEnded: gameState?.gameEnded,
-					heroCardId: gameState?.bgState?.currentGame?.getMainPlayer()?.cardId,
+					heroPowerCardId: gameState?.bgState?.currentGame?.getMainPlayer()?.heroPowerCardId,
+					trinkets: gameState?.bgState?.currentGame?.getMainPlayer()?.getTrinkets(),
 					tavernTier: gameState?.bgState?.currentGame?.getMainPlayer()?.getCurrentTavernTier(),
 				})),
-				filter((info) => !!info.heroCardId),
+				filter((info) => !!info.heroPowerCardId),
 				distinctUntilChanged(
 					(a, b) =>
-						a.heroCardId === b.heroCardId &&
+						a.heroPowerCardId === b.heroPowerCardId &&
 						a.gameEnded === b.gameEnded &&
 						a.hasCurrentGame === b.hasCurrentGame &&
-						a.tavernTier === b.tavernTier,
+						a.tavernTier === b.tavernTier &&
+						arraysEqual(a.trinkets, b.trinkets),
 				),
 			),
 			board$,
@@ -278,25 +280,42 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			.pipe(
 				auditTime(1000),
 				filter(
-					([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId, tavernTier }]) =>
-						hasCurrentGame && premium,
+					([
+						premium,
+						minionAuto,
+						tribeAuto,
+						{ hasCurrentGame, gameEnded, heroPowerCardId, trinkets, tavernTier },
+					]) => hasCurrentGame && premium,
 				),
 			)
 			.subscribe(
-				([premium, minionAuto, tribeAuto, { hasCurrentGame, gameEnded, heroCardId, tavernTier }, board]) => {
+				([
+					premium,
+					minionAuto,
+					tribeAuto,
+					{ hasCurrentGame, gameEnded, heroPowerCardId, trinkets, tavernTier },
+					board,
+				]) => {
 					if (gameEnded) {
 						return;
 					}
 
-					const minionsToHighlight: readonly string[] = this.buildMinionToHighlightFromHero(heroCardId);
-					if (!!minionsToHighlight?.length && minionAuto) {
+					const minionsFromHp: readonly string[] = this.buildMinionToHighlightFromHeroPower(heroPowerCardId);
+					if (!!minionsFromHp?.length && minionAuto) {
 						const existingHighlights = this.highlightedMinions$$.value;
-						const newHighlights = [...existingHighlights, ...minionsToHighlight];
+						const newHighlights = [...existingHighlights, ...minionsFromHp];
 						this.highlightedMinions$$.next(newHighlights);
 					}
 
+					// const minionsFromTrinkets: readonly string[] = this.buildMinionToHighlightFromTrinkets(trinkets);
+					// if (!!minionsFromTrinkets?.length && minionAuto) {
+					// 	const existingHighlights = this.highlightedMinions$$.value;
+					// 	const newHighlights = [...existingHighlights, ...minionsFromTrinkets];
+					// 	this.highlightedMinions$$.next(newHighlights);
+					// }
+
 					const tribeToHighlight: readonly Race[] | null = this.buildTribesToHighlight(
-						heroCardId,
+						heroPowerCardId,
 						tavernTier,
 					);
 					if (!!tribeToHighlight?.length && tribeAuto) {
@@ -329,33 +348,33 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		);
 	}
 
-	private buildMinionToHighlightFromHero(heroCardId: string | null | undefined): readonly string[] {
-		switch (heroCardId) {
-			case CardIds.CapnHoggarr_BG26_HERO_101:
+	private buildMinionToHighlightFromHeroPower(heroPowerCardId: string | null | undefined): readonly string[] {
+		switch (heroPowerCardId) {
+			case CardIds.CapnHoggarr_ImTheCapnNow:
 				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.Cthun_TB_BaconShop_HERO_29:
+			case CardIds.SaturdayCthuns:
 				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
-			case CardIds.DancinDeryl:
+			case CardIds.HatTrick:
 				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.EdwinVancleef_TB_BaconShop_HERO_01:
+			case CardIds.SharpenBlades:
 				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.TradePrinceGallywix_TB_BaconShop_HERO_10:
+			case CardIds.SmartSavings:
 				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.MillhouseManastorm_TB_BaconShop_HERO_49:
+			case CardIds.Manastorm_TB_BaconShop_HP_054:
 				return [
 					CardIds.FreedealingGambler_BGS_049,
 					CardIds.PatientScout_BG24_715,
 					CardIds.Sellemental_BGS_115,
 					CardIds.RecyclingWraith_BG21_040,
 				];
-			case CardIds.ThorimStormlord_BG27_HERO_801:
+			case CardIds.ThorimStormlord_ChooseYourChampion_BG27_HERO_801p2:
 				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.PatchesThePirate_TB_BaconShop_HERO_18:
+			case CardIds.PirateParrrrty:
 				return [CardIds.FreedealingGambler_BGS_049];
-			case CardIds.RagnarosTheFirelord_TB_BaconShop_HERO_11:
+			case CardIds.DieInsects_TB_BaconShop_HP_087:
 				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
 			case CardIds.RockMasterVoone_BG26_HERO_104:
-				return [CardIds.DrakkariEnchanter_BG26_ICC_901];
+				return [CardIds.RockMasterVoone_UpbeatHarmony];
 			default:
 				return [];
 		}

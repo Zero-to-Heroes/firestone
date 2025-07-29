@@ -83,8 +83,8 @@ export class BgsPlayer implements IBgsPlayer {
 		return !this.boardHistory
 			? null
 			: this.boardHistory.length === 0
-			? []
-			: this.boardHistory[this.boardHistory.length - 1].board;
+				? []
+				: this.boardHistory[this.boardHistory.length - 1].board;
 	}
 
 	public getLastKnownBoardStateAsReplayEntities(): readonly ReplayEntity[] | null {
@@ -107,6 +107,10 @@ export class BgsPlayer implements IBgsPlayer {
 
 	public getLastBoardStateTurn(): number | undefined {
 		return !this.boardHistory?.length ? undefined : this.boardHistory[this.boardHistory.length - 1].turn;
+	}
+
+	public getTrinkets(): readonly string[] {
+		return [this.lesserTrinket, this.greaterTrinket].filter((t) => !!t);
 	}
 }
 
