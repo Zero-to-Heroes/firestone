@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardRules, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { QuestReward } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filterCardsToInclude } from './tiers-builder/cards-to-include';
 import { buildMechanicsTiers } from './tiers-builder/mechanics-tiers-builder';
@@ -27,6 +28,7 @@ export const buildTiers = (
 	showSpellsAtBottom: boolean,
 	hasTrinkets: boolean,
 	playerTrinkets: readonly string[],
+	questRewards: readonly QuestReward[],
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
@@ -49,7 +51,7 @@ export const buildTiers = (
 		showAllBuddyCards ||
 		(hasBuddies && [CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(heroPowerCardId as CardIds));
 
-	const tiersToInclude = buildTiersToInclude(showTierSeven, anomalies, heroPowerCardId, playerTrinkets);
+	const tiersToInclude = buildTiersToInclude(showTierSeven, anomalies, heroPowerCardId, playerTrinkets, questRewards);
 	const cardsToInclude: readonly ExtendedReferenceCard[] = filterCardsToInclude(
 		cardsInGame,
 		tiersToInclude,
@@ -98,7 +100,7 @@ export const buildTiers = (
 				allCards,
 				i18n,
 				config,
-		  )
+			)
 		: [];
 	const tribeTiers: readonly Tier[] = showTribeTiers
 		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, allCards, config)

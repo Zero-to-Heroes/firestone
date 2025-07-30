@@ -125,6 +125,13 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
+		const questRewards$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((gameState) => gameState.bgState.currentGame?.getMainPlayer()?.questRewards),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const prefs$ = this.prefs.preferences$$.pipe(
 			debounceTime(200),
 			this.mapData((prefs) => ({
@@ -192,13 +199,21 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		const staticTiers$ = combineLatest([prefs$, currentGameInfo$, playerCardIds$, gameMode$, playerTrinkets$]).pipe(
-			map(([prefs, currentGameInfo, playerCardIds, gameMode, playerTrinkets]) => ({
+		const staticTiers$ = combineLatest([
+			prefs$,
+			currentGameInfo$,
+			playerCardIds$,
+			gameMode$,
+			playerTrinkets$,
+			questRewards$,
+		]).pipe(
+			map(([prefs, currentGameInfo, playerCardIds, gameMode, playerTrinkets, questRewards]) => ({
 				...prefs,
 				...currentGameInfo,
 				...playerCardIds,
 				gameMode: gameMode,
 				playerTrinkets: [playerTrinkets?.lesser, playerTrinkets?.greater].filter((trinket) => !!trinket),
+				questRewards: questRewards,
 			})),
 			this.mapData(
 				({
@@ -220,6 +235,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					playerCardId,
 					allPlayersCardIds,
 					playerTrinkets,
+					questRewards,
 				}) => {
 					// hasSpells = true;
 					const willShowBuddies = hasBuddies || showBuddies;
@@ -259,6 +275,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showSpellsAtBottom,
 						hasTrinkets,
 						playerTrinkets,
+						questRewards,
 						cardRules,
 						this.i18n,
 						this.allCards,

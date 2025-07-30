@@ -20,7 +20,7 @@ import {
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
-import { GameState } from '@firestone/game-state';
+import { GameState, QuestReward } from '@firestone/game-state';
 import {
 	CardRulesService,
 	CardsFacadeService,
@@ -135,6 +135,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private playerCardId$$ = new BehaviorSubject<string>(null);
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerTrinkets$$ = new BehaviorSubject<readonly string[]>([]);
+	private questRewards$$ = new BehaviorSubject<readonly QuestReward[]>([]);
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTribeTiers$$ = new BehaviorSubject<boolean>(false);
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
@@ -180,6 +181,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.includeTrinketsInTribeGroups$$,
 			this.gameMode$$,
 			this.playerTrinkets$$,
+			this.questRewards$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -200,6 +202,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
 					playerTrinkets,
+					questRewards,
 				]) => {
 					const willShowBuddies = showBuddies || hasBuddies;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
@@ -239,6 +242,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						true,
 						hasTrinkets,
 						playerTrinkets,
+						questRewards,
 						cardRules,
 						this.i18n,
 						this.allCards,

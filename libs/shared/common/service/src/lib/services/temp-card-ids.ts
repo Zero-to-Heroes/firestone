@@ -1,1 +1,3 @@
-export declare const enum TempCardIds {}
+export declare const enum TempCardIds {
+	SecretsOfNorgannon = 'SecretsOfNorgannon',
+}

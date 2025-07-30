@@ -1,17 +1,21 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { QuestReward } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 
 export const buildTiersToInclude = (
 	showTierSeven: boolean,
 	anomalies: readonly string[],
 	heroPowerCardId: string,
 	playerTrinkets: readonly string[],
+	questRewards: readonly QuestReward[],
 ): readonly number[] => {
 	let tiersToInclude = [1, 2, 3, 4, 5, 6];
 	if (
 		showTierSeven ||
 		anomalies.includes(CardIds.SecretsOfNorgannon_BG27_Anomaly_504) ||
 		heroPowerCardId === CardIds.ThorimStormlord_ChooseYourChampion_BG27_HERO_801p2 ||
-		playerTrinkets?.includes(CardIds.PaglesFishingRod_BG30_MagicItem_993)
+		playerTrinkets?.includes(CardIds.PaglesFishingRod_BG30_MagicItem_993) ||
+		questRewards?.some((reward) => reward.cardId === TempCardIds.SecretsOfNorgannon)
 	) {
 		tiersToInclude.push(7);
 	}
