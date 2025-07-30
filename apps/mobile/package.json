@@ -1,0 +1,29 @@
+{
+	"name": "firestone-mobile",
+	"version": "1.0.0",
+	"description": "Firestone Mobile App",
+	"main": "index.js",
+	"scripts": {
+		"build": "nx build mobile",
+		"serve": "nx serve mobile",
+		"cap:init": "nx run mobile:cap:init",
+		"cap:add:android": "nx run mobile:cap:add:android",
+		"cap:add:ios": "nx run mobile:cap:add:ios",
+		"cap:sync": "nx run mobile:cap:sync",
+		"cap:open:android": "nx run mobile:cap:open:android",
+		"cap:open:ios": "nx run mobile:cap:open:ios"
+	},
+	"keywords": [
+		"hearthstone",
+		"mobile",
+		"capacitor"
+	],
+	"dependencies": {
+		"@capacitor/android": "^5.0.0",
+		"@capacitor/core": "^5.0.0",
+		"@capacitor/ios": "^5.0.0",
+		"@capacitor/push-notifications": "^5.0.0",
+		"@capacitor/status-bar": "^5.0.0",
+		"@capacitor/splash-screen": "^5.0.0"
+	}
+}

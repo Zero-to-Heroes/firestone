@@ -1,0 +1,144 @@
+/* Global styles for the Firestone Web App */
+
+// Import base styles
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+// Reset and base styles
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	font-family: 'Open Sans', sans-serif;
+	background: var(--color-7);
+	color: var(--color-1);
+	overflow-x: hidden;
+}
+
+body {
+	font-size: 14px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+// Disable text selection on UI elements
+button,
+.nav-item {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+// Improve touch targets for mobile
+button,
+a,
+[role='button'] {
+	min-height: 44px;
+	min-width: 44px;
+}
+
+// Focus styles for accessibility
+*:focus {
+	outline: 2px solid var(--color-orange);
+	outline-offset: 2px;
+}
+
+// Hide scrollbars but keep functionality
+.web-content {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+
+	&::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
+}
+
+// Smooth scrolling
+html {
+	scroll-behavior: smooth;
+}
+
+// Mobile safe area handling
+@supports (padding: max(0px)) {
+	body {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+}
+
+// Prevent zoom on double tap (mobile)
+* {
+	touch-action: manipulation;
+}
+
+// Better tap highlight (mobile)
+* {
+	-webkit-tap-highlight-color: rgba(255, 165, 0, 0.2);
+}
+
+// Desktop improvements
+@media (min-width: 1024px) {
+	body {
+		font-size: 16px;
+	}
+
+	button,
+	a,
+	[role='button'] {
+		min-height: 36px;
+		min-width: 36px;
+	}
+
+	// Re-enable text selection on desktop
+	.nav-item {
+		-webkit-user-select: auto;
+		-moz-user-select: auto;
+		-ms-user-select: auto;
+		user-select: auto;
+	}
+
+	// Show scrollbars on desktop
+	.web-content {
+		scrollbar-width: thin;
+		-ms-overflow-style: auto;
+
+		&::-webkit-scrollbar {
+			display: block;
+			width: 8px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: var(--color-6);
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--color-4);
+			border-radius: 4px;
+
+			&:hover {
+				background: var(--color-3);
+			}
+		}
+	}
+}
+
+// Loading states
+.loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: var(--color-2);
+}
+
+// Error states
+.error {
+	color: var(--color-red);
+	text-align: center;
+	padding: 20px;
+}

@@ -65,7 +65,8 @@
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
-			"vm": ["./node_modules/vm-browserify"]
+			"vm": ["./node_modules/vm-browserify"],
+			"@firestone/shared/web-shell": ["libs/shared/web-shell/src/index.ts"]
 		},
 		"strict": false,
 		"noImplicitAny": false,

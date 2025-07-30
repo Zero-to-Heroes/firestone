@@ -1,0 +1,548 @@
+.web-app {
+	&.general-theme {
+		--color-1: #e9cdb5;
+		--color-2: #d9c3ab;
+		--color-3: #9b8063;
+		--color-4: #5a3f23;
+		--color-5: #190505;
+		--color-6: #42290f;
+		--color-7: #251405;
+		--color-8: #a1723f;
+		--default-title-color: #ffb948;
+		--default-text-color: #d9c3ab;
+
+		--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/home-screen-bg.png');
+
+		--tooltip-background-color: var(--color-5);
+		--tooltip-color: var(--color-1);
+	}
+
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+
+	--window-background-image:
+		radial-gradient(30vw at 50% 50%, rgba(90, 63, 35, 0.7) 0%, rgba(26, 15, 8, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
+
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	background-attachment: fixed;
+	overflow-y: scroll;
+
+	color: var(--default-text-color);
+}
+
+.web-header {
+	background: var(--color-5);
+	border-bottom: 1px solid var(--color-5);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	position: relative;
+	z-index: 1000;
+
+	.header-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 0 auto;
+		height: 50px;
+		padding-left: 10px;
+		padding-right: 10px;
+
+		.download-button {
+			height: 80%;
+			display: none;
+		}
+	}
+
+	.header-left {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		padding-left: 12px;
+		gap: 12px;
+
+		.logo {
+			position: relative;
+			height: 100%;
+			width: 160px;
+			--icon-color: var(--default-title-color);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			::ng-deep svg {
+				height: 100%;
+				width: auto;
+			}
+		}
+	}
+}
+
+// Desktop Navigation with Dropdown
+.desktop-nav {
+	display: none;
+	align-items: center;
+	gap: 20px;
+	height: 100%;
+
+	// Section Dropdown
+	.section-dropdown {
+		position: relative;
+
+		.dropdown-trigger {
+			background: rgba(255, 255, 255, 0.08);
+			border: 2px solid transparent;
+			padding: 7px 14px;
+			color: var(--color-2);
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border-radius: 8px;
+			font-family: inherit;
+			font-size: 16px;
+			font-weight: 600;
+			min-width: 180px;
+			justify-content: space-between;
+
+			&:hover,
+			&:focus,
+			&.active {
+				background: rgba(255, 255, 255, 0.12);
+				color: var(--color-1);
+				border-color: rgba(255, 255, 255, 0.2);
+			}
+
+			.dropdown-icon {
+				width: 26px;
+				height: 26px;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				::ng-deep svg {
+					width: 100%;
+					height: 100%;
+					object-fit: contain;
+				}
+			}
+
+			.dropdown-label {
+				flex: 1;
+				text-align: left;
+				white-space: nowrap;
+			}
+
+			.dropdown-arrow {
+				font-size: 12px;
+				transition: transform 0.3s ease;
+				color: var(--color-2);
+
+				&.rotated {
+					transform: rotate(180deg);
+				}
+			}
+		}
+
+		.dropdown-menu {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: var(--color-5);
+			border: 1px solid var(--color-5);
+			border-radius: 8px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(-10px);
+			transition: all 0.3s ease;
+			z-index: 1001;
+			overflow: hidden;
+
+			&.open {
+				opacity: 1;
+				visibility: visible;
+				transform: translateY(0);
+			}
+
+			.dropdown-item {
+				width: 100%;
+				background: none;
+				border: none;
+				padding: 14px 18px;
+				color: var(--color-2);
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				font-family: inherit;
+				font-size: 15px;
+				font-weight: 500;
+				text-align: left;
+
+				&:hover,
+				&:focus {
+					background: rgba(255, 255, 255, 0.08);
+					color: var(--color-1);
+				}
+
+				&.active {
+					background: rgba(255, 255, 255, 0.12);
+					color: var(--color-1);
+				}
+
+				.item-icon {
+					width: 26px;
+					height: 26px;
+					flex-shrink: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+
+					::ng-deep svg {
+						width: 100%;
+						height: 100%;
+						object-fit: contain;
+					}
+				}
+
+				.item-label {
+					white-space: nowrap;
+				}
+			}
+		}
+	}
+
+	// Sub-menu Items
+	.sub-menu {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		height: 100%;
+
+		.sub-menu-item {
+			background: none;
+			border: none;
+			padding: 8px 16px;
+			color: var(--color-2);
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border-radius: 6px;
+			font-family: inherit;
+			font-size: 14px;
+			font-weight: 500;
+			white-space: nowrap;
+			position: relative;
+
+			&:hover,
+			&:focus {
+				background: rgba(255, 255, 255, 0.06);
+				color: var(--color-1);
+			}
+
+			&.active {
+				background: rgba(255, 255, 255, 0.1);
+				color: var(--color-1);
+
+				&::after {
+					content: '';
+					position: absolute;
+					bottom: 0;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 24px;
+					height: 2px;
+					background: var(--color-orange);
+					border-radius: 1px;
+				}
+			}
+		}
+	}
+}
+
+// Hamburger Menu Button
+.hamburger-btn {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	gap: 4px;
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 6px;
+	}
+
+	.hamburger-line {
+		width: 20px;
+		height: 2px;
+		background: var(--color-1);
+		border-radius: 2px;
+		transition: all 0.3s ease;
+		transform-origin: center;
+	}
+
+	&.active {
+		.hamburger-line {
+			&:nth-child(1) {
+				transform: rotate(45deg) translate(6px, 6px);
+			}
+
+			&:nth-child(2) {
+				opacity: 0;
+				transform: scale(0);
+			}
+
+			&:nth-child(3) {
+				transform: rotate(-45deg) translate(6px, -6px);
+			}
+		}
+	}
+}
+
+// Mobile Navigation
+.mobile-nav {
+	position: fixed;
+	top: 0;
+	right: -100%;
+	width: 320px;
+	height: 100vh;
+	background: var(--color-5);
+	box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+	transition: right 0.3s ease;
+	z-index: 1001;
+
+	&.open {
+		right: 0;
+	}
+
+	.mobile-nav-content {
+		padding: 100px 24px 24px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.mobile-nav-item {
+		background: none;
+		border: none;
+		padding: 20px 24px;
+		height: 80px;
+		color: var(--color-2);
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		border-radius: 12px;
+		font-family: inherit;
+		width: 100%;
+		text-align: left;
+
+		&:hover,
+		&:focus {
+			background: rgba(255, 255, 255, 0.08);
+			color: var(--color-1);
+			transform: translateX(4px);
+		}
+
+		&.active {
+			background: rgba(255, 255, 255, 0.12);
+			color: var(--color-1);
+
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				width: 4px;
+				background: var(--color-orange);
+				border-radius: 0 4px 4px 0;
+			}
+		}
+
+		.nav-icon {
+			font-size: 24px;
+			line-height: 1;
+			width: 32px;
+			height: 32px;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			::ng-deep svg {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
+		}
+
+		.nav-label {
+			font-size: 18px;
+			font-weight: 600;
+		}
+	}
+}
+
+// Mobile Overlay
+.mobile-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease;
+	z-index: 999;
+
+	&.visible {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+// Content Area
+.web-content {
+	flex: 1;
+	background: var(--color-5);
+	position: relative;
+	margin-top: 15px;
+	display: flex;
+	justify-content: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 10px;
+}
+
+// Responsive Design
+@media (min-width: 768px) {
+	.hamburger-btn {
+		display: none;
+	}
+
+	.desktop-nav {
+		display: flex;
+	}
+
+	.mobile-nav {
+		display: none;
+	}
+
+	.web-header .header-content {
+		height: 60px;
+	}
+
+	.web-header .header-left .app-title {
+		font-size: 32px;
+	}
+
+	.web-content {
+		padding: 32px;
+		padding-top: 10px;
+		min-width: 500px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.desktop-nav {
+		gap: 28px;
+
+		.section-dropdown .dropdown-trigger {
+			min-width: 180px;
+			padding: 9px 18px;
+			font-size: 16px;
+		}
+
+		.sub-menu {
+			gap: 10px;
+
+			.sub-menu-item {
+				padding: 10px 20px;
+				font-size: 14px;
+			}
+		}
+	}
+
+	.web-content {
+		// padding: 48px;
+		max-width: 1400px;
+		min-width: 800px;
+		align-self: center;
+	}
+}
+
+@media (min-width: 1200px) {
+	.desktop-nav {
+		gap: 36px;
+
+		.section-dropdown .dropdown-trigger {
+			min-width: 200px;
+			padding: 10px 22px;
+			font-size: 17px;
+		}
+
+		.sub-menu {
+			gap: 14px;
+
+			.sub-menu-item {
+				padding: 12px 24px;
+				font-size: 15px;
+			}
+		}
+	}
+
+	.web-content {
+		// padding: 64px;
+		min-width: 1000px;
+	}
+
+	.web-header .header-content .download-button {
+		display: flex;
+	}
+}
+
+// Small mobile screens
+@media (max-width: 480px) {
+	.web-header .header-content {
+		height: 48px;
+	}
+
+	.web-header .header-left {
+		.app-title {
+			font-size: 24px;
+		}
+
+		.app-subtitle {
+			font-size: 12px;
+		}
+	}
+
+	.mobile-nav {
+		width: 280px;
+	}
+}
+
+// Very large screens
+@media (min-width: 1600px) {
+	.web-content {
+		// padding: 80px;
+		max-width: 1600px;
+	}
+}

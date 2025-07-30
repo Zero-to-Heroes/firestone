@@ -141,7 +141,7 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 		console.debug('[bgs-reconnector] current remote info', remoteInfo);
 		if (!remoteInfo) {
 			console.warn('[bgs-reconnector] no remote info found, not reconnecting');
-			return;
+			return null;
 		}
 		return new Promise<string>((resolve) => {
 			plugin.triggerReconnect(remoteInfo.address, remoteInfo.port, (result: string) => {

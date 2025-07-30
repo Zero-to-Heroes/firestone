@@ -65,7 +65,7 @@ const components = [
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		BattlegroundsCoreModule,
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 	],
 	declarations: components,
 	exports: components,

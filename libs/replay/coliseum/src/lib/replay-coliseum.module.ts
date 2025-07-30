@@ -2,7 +2,6 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReplayParserModule } from '@firestone-hs/replay-parser';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
@@ -99,12 +98,11 @@ import { Events } from './services/events.service';
 	imports: [
 		CommonModule,
 		FormsModule,
-		BrowserAnimationsModule,
 		OverlayModule,
 
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 
-		ReplayParserModule.forRoot(),
+		ReplayParserModule,
 
 		SharedFrameworkCoreModule,
 		SharedCommonViewModule,

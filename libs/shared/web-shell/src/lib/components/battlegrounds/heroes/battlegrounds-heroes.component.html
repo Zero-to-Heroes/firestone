@@ -1,0 +1,25 @@
+<web-battlegrounds-filters>
+	<web-battlegrounds-mode-filter-dropdown></web-battlegrounds-mode-filter-dropdown>
+	<web-battlegrounds-rank-filter-dropdown></web-battlegrounds-rank-filter-dropdown>
+	<web-battlegrounds-time-filter-dropdown></web-battlegrounds-time-filter-dropdown>
+	<!-- <web-battlegrounds-tribes-filter-dropdown></web-battlegrounds-tribes-filter-dropdown> -->
+</web-battlegrounds-filters>
+
+<battlegrounds-meta-stats-heroes-view
+	*ngIf="{
+		stats: stats$ | async,
+		heroSort: heroSort$ | async,
+		searchString: searchString$ | async,
+		totalGames: totalGames$ | async,
+		lastUpdate: lastUpdate$ | async,
+	} as data"
+	class="hero-stats-container"
+	[stats]="data.stats || []"
+	[heroSort]="data.heroSort || 'tier'"
+	[searchString]="data.searchString || ''"
+	[totalGames]="data.totalGames || 0"
+	[lastUpdate]="data.lastUpdate || defaultDate"
+	[positionTooltipHidden]="true"
+	(heroStatClick)="onHeroStatsClick($event)"
+	(searchStringChange)="onSearchStringChange($event)"
+></battlegrounds-meta-stats-heroes-view>

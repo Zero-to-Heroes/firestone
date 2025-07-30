@@ -48,6 +48,7 @@ import {
 					[componentType]="averagePositionComponentType"
 					[componentInput]="averagePositionTooltipInput"
 					[componentTooltipCssClass]="'bgs-average-position-details'"
+					[componentTooltipForceHide]="positionTooltipHidden"
 				>
 					{{ averagePosition }}
 				</div>
@@ -97,7 +98,7 @@ import {
 					[ngClass]="{
 						positive: netMmr > 0,
 						negative: netMmr < 0,
-						missing: buildValue(netMmr) === '-'
+						missing: buildValue(netMmr) === '-',
 					}"
 				>
 					{{ buildValue(netMmr) }}
@@ -122,6 +123,8 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 
 	@Output() heroStatClick = new EventEmitter<string>();
 
+	@Input() positionTooltipHidden = false;
+
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
 		this.heroCardId = value.id;
 		this.heroPowerCardId = value.heroPowerCardId;
@@ -139,7 +142,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			!!value.playerDataPoints && showPlayerData
 				? this.i18n.translateString('app.battlegrounds.tier-list.player-data-points', {
 						value: value.playerDataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
-				  })
+					})
 				: null;
 		this.averagePosition = value.averagePosition.toFixed(2);
 		this.pickrate = value.pickrate == null ? '-' : (100 * value.pickrate).toFixed(1) + '%';
@@ -198,7 +201,10 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	tribes: readonly TribeInfo[];
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	buildValue(value: number): string {
 		return value == null ? '-' : value === 0 ? '0' : value.toFixed(0);

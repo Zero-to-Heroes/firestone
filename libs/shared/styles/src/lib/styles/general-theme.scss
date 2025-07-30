@@ -1,0 +1,48 @@
+:host.general-theme,
+.general-theme {
+	--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/home-screen-bg.png');
+	--window-outline-color: #472406;
+
+	--color-1: #ffb948;
+	--color-2: #d9c3ab;
+	--color-3: #d9c3ab;
+	--color-4: #a89782;
+	--color-5: #190505;
+	--color-7: #472406;
+	--color-common-1: #d9c3ab;
+
+	--ad-link-color: var(--color-3);
+	--on-ad-link-color-hover: var(--color-1);
+
+	--default-text-color: #d9c3ab;
+	--default-title-color: var(--color-1);
+	--inactive-link-color: #a89782;
+	--secondary-text-color: var(--color-3);
+
+	--menu-selection-color: #8e5b23;
+	--backdrop-color: rgba(25, 5, 5, 0.8); // #190505
+	--ftue-popup-background-color: #472406;
+
+	--tooltip-background-color: #a89782;
+	--tooltip-color: var(--color-7);
+
+	--ads-background-color: var(--color-5);
+	--ads-color: rgba(47, 13, 13, 0.8); //#2a1030;
+
+	--main-menu-background-color: var(--color-7);
+	--control-button-color: #d9c3ab;
+	--on-control-button-background-color: #472406;
+	--on-close-button-color: #d9c3ab;
+	--on-close-button-background-color: #2f0d0d;
+
+	--fs-scrollbar-thumb-color: var(--color-4);
+	--on-fs-scrollbar-thumb-color: #d9c3ab;
+
+	--toggle-color-border: var(--color-1);
+	--toggle-color-knob: var(--color-1);
+
+	--card-highlight-color-1: rgba(255, 185, 72, 0.4);
+	--card-highlight-color-2: rgba(72, 255, 231, 0.4);
+	--card-highlight-color-3: rgba(255, 72, 157, 0.4);
+	--card-highlight-color-4: rgba(127, 72, 255, 0.4);
+}

@@ -89,42 +89,42 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 							overlayX: 'start',
 							overlayY: 'top',
 						},
-				  ]
+					]
 				: this.position === 'right'
-				? [
-						{
-							originX: 'end',
-							originY: 'center',
-							overlayX: 'start',
-							overlayY: 'center',
-						},
-				  ]
-				: this.position === 'top'
-				? [
-						{
-							originX: 'center',
-							originY: 'top',
-							overlayX: 'center',
-							overlayY: 'bottom',
-						},
-				  ]
-				: this.position === 'bottom-left'
-				? [
-						{
-							originX: 'end',
-							originY: 'bottom',
-							overlayX: 'end',
-							overlayY: 'top',
-						},
-				  ]
-				: [
-						{
-							originX: 'start',
-							originY: 'center',
-							overlayX: 'end',
-							overlayY: 'center',
-						},
-				  ];
+					? [
+							{
+								originX: 'end',
+								originY: 'center',
+								overlayX: 'start',
+								overlayY: 'center',
+							},
+						]
+					: this.position === 'top'
+						? [
+								{
+									originX: 'center',
+									originY: 'top',
+									overlayX: 'center',
+									overlayY: 'bottom',
+								},
+							]
+						: this.position === 'bottom-left'
+							? [
+									{
+										originX: 'end',
+										originY: 'bottom',
+										overlayX: 'end',
+										overlayY: 'top',
+									},
+								]
+							: [
+									{
+										originX: 'start',
+										originY: 'center',
+										overlayX: 'end',
+										overlayY: 'center',
+									},
+								];
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.target)

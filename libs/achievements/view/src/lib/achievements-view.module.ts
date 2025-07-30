@@ -7,7 +7,7 @@ import { AchievementCategoryViewComponent } from './components/achievement-categ
 
 const components = [AchievementCategoryViewComponent];
 @NgModule({
-	imports: [CommonModule, InlineSVGModule.forRoot(), SharedCommonViewModule, SharedFrameworkCoreModule],
+	imports: [CommonModule, InlineSVGModule, SharedCommonViewModule, SharedFrameworkCoreModule],
 	declarations: components,
 	exports: components,
 })

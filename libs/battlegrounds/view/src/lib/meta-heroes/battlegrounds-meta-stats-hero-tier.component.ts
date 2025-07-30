@@ -20,6 +20,7 @@ import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battleg
 					class="item-container"
 					*ngFor="let item of tier.items; trackBy: trackByFn"
 					[stat]="item"
+					[positionTooltipHidden]="positionTooltipHidden"
 					(heroStatClick)="onHeroStatsClick($event)"
 				>
 				</battlegrounds-meta-stats-hero-info>
@@ -32,6 +33,7 @@ export class BattlegroundsMetaStatsHeroTierComponent {
 	@Output() heroStatClick = new EventEmitter<string>();
 
 	@Input() tier: BgsMetaHeroStatTier;
+	@Input() positionTooltipHidden = false;
 
 	onHeroStatsClick(heroCardId: string) {
 		this.heroStatClick.next(heroCardId);

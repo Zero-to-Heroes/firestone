@@ -706,8 +706,6 @@ try {
 		// For the app
 		A11yModule,
 
-		SimpleNotificationsModule.forRoot(),
-
 		BaseChartDirective,
 	],
 	declarations: [

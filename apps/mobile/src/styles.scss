@@ -1,0 +1,175 @@
+/* Global styles for the Firestone Mobile App */
+
+// Import base styles
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+// Reset and base styles
+* {
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	font-family:
+		'Inter',
+		-apple-system,
+		BlinkMacSystemFont,
+		sans-serif;
+	background: var(--color-7);
+	color: var(--color-1);
+	overflow-x: hidden;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	font-size: 16px;
+	line-height: 1.5;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+// Native mobile optimizations
+* {
+	touch-action: manipulation;
+	-webkit-touch-callout: none;
+}
+
+// Improve touch targets
+button,
+a,
+[role='button'] {
+	min-height: 44px;
+	min-width: 44px;
+	cursor: pointer;
+}
+
+// Focus styles for accessibility
+*:focus {
+	outline: 2px solid var(--color-orange);
+	outline-offset: 2px;
+}
+
+// Native scrolling
+.mobile-content {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	-webkit-overflow-scrolling: touch;
+
+	&::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
+}
+
+// iOS safe area handling
+@supports (padding: max(0px)) {
+	body {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+}
+
+// Prevent text selection except where needed
+p,
+span,
+div {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+// Allow text selection for descriptions
+.description {
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
+
+// Loading states
+.loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: var(--color-2);
+	font-weight: 500;
+}
+
+// Error states
+.error {
+	color: var(--color-red);
+	text-align: center;
+	padding: 20px;
+	font-weight: 500;
+}
+
+// Native button improvements
+button {
+	font-family: inherit;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: none;
+	background: none;
+	outline: none;
+
+	&:active {
+		transform: scale(0.98);
+	}
+}
+
+// Prevent zoom on inputs (not needed for this app but good practice)
+input,
+textarea,
+select {
+	font-size: 16px; // Prevents zoom on iOS
+}
+
+// Haptic feedback preparation
+.haptic-light {
+	// Can be used with JS to trigger light haptic feedback
+}
+
+.haptic-medium {
+	// Can be used with JS to trigger medium haptic feedback
+}
+
+.haptic-heavy {
+	// Can be used with JS to trigger heavy haptic feedback
+}
+
+// Dark mode optimizations (native apps often respect system theme)
+@media (prefers-color-scheme: dark) {
+	// Already using dark theme, but could add overrides here
+}
+
+// Landscape orientation adjustments
+@media (orientation: landscape) and (max-height: 500px) {
+	.mobile-header .app-title {
+		font-size: 18px;
+		padding: 12px 0;
+	}
+
+	.mobile-nav .nav-item {
+		padding: 10px 8px;
+
+		.nav-label {
+			font-size: 11px;
+		}
+	}
+}
+
+// High DPI displays (Retina, etc.)
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	// Optimize for high-DPI displays
+	.mobile-header .app-title {
+		text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.8);
+	}
+}

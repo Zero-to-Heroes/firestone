@@ -4,7 +4,7 @@
 	width: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	overflow: hidden;
 
 	&:hover {
@@ -31,6 +31,7 @@
 	.hero-details {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 
 		.name {
 			color: var(--default-title-color);
@@ -122,6 +123,8 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		max-height: 50px;
+		align-self: center;
 
 		.tribe {
 			display: flex;
@@ -170,27 +173,27 @@
 	}
 }
 
-@media (max-width: 720px) {
-	:host {
-		height: auto !important;
-	}
+// @media (max-width: 720px) {
+// 	:host {
+// 		height: auto !important;
+// 	}
 
-	.info {
-		flex-wrap: wrap;
-		margin-bottom: 10px;
+// 	.info {
+// 		flex-wrap: wrap;
+// 		margin-bottom: 10px;
 
-		.hero-details {
-			align-items: center;
-			width: calc((100% - 60px) / 2);
-		}
+// 		.hero-details {
+// 			align-items: center;
+// 			width: calc((100% - 60px) / 2);
+// 		}
 
-		.position {
-			width: calc((100% - 60px) / 2);
-		}
+// 		.position {
+// 			width: calc((100% - 60px) / 2);
+// 		}
 
-		.placement {
-			width: 100%;
-			height: 50px;
-		}
-	}
-}
+// 		.placement {
+// 			width: 100%;
+// 			height: 50px;
+// 		}
+// 	}
+// }

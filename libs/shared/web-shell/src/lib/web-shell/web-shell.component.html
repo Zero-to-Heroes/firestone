@@ -1,0 +1,79 @@
+<div class="general-theme web-app overlay-container-parent">
+	<header class="web-header">
+		<div class="header-content">
+			<div class="header-left">
+				<div class="logo" inlineSVG="assets/svg/firestone_logo_full.svg"></div>
+
+				<!-- Desktop Navigation with Dropdown -->
+				<div class="desktop-nav">
+					<!-- Main Section Dropdown -->
+					<div class="section-dropdown" #dropdownContainer>
+						<button class="dropdown-trigger" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
+							<span class="dropdown-icon" [inlineSVG]="currentSection.icon"></span>
+							<span class="dropdown-label">{{ currentSection.label }}</span>
+							<span class="dropdown-arrow" [class.rotated]="isDropdownOpen">▼</span>
+						</button>
+
+						<div class="dropdown-menu" [class.open]="isDropdownOpen">
+							<button
+								*ngFor="let section of navigationSections"
+								class="dropdown-item"
+								[class.active]="section.id === currentSection.id"
+								(click)="selectSection(section)"
+							>
+								<span class="item-icon" [inlineSVG]="section.icon"></span>
+								<span class="item-label">{{ section.label }}</span>
+							</button>
+						</div>
+					</div>
+
+					<!-- Sub-menu Items -->
+					<div class="sub-menu">
+						<button
+							*ngFor="let subItem of getCurrentSubItems()"
+							class="sub-menu-item"
+							[routerLink]="subItem.route"
+							routerLinkActive="active"
+							[routerLinkActiveOptions]="{ exact: true }"
+						>
+							{{ subItem.label }}
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<web-download-button class="download-button"></web-download-button>
+
+			<!-- Mobile Hamburger Button -->
+			<button class="hamburger-btn" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+			</button>
+		</div>
+	</header>
+
+	<!-- Mobile Navigation Overlay -->
+	<nav class="mobile-nav" [class.open]="isMobileMenuOpen">
+		<div class="mobile-nav-content">
+			<button
+				*ngFor="let section of navigationSections"
+				class="mobile-nav-item"
+				[routerLink]="section.route"
+				routerLinkActive="active"
+				(click)="closeMobileMenu()"
+				[routerLinkActiveOptions]="{ exact: false }"
+			>
+				<span class="nav-icon" [inlineSVG]="section.icon"></span>
+				<span class="nav-label">{{ section.label }}</span>
+			</button>
+		</div>
+	</nav>
+
+	<!-- Mobile Overlay Background -->
+	<div class="mobile-overlay" [class.visible]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+	<main class="web-content">
+		<router-outlet></router-outlet>
+	</main>
+</div>

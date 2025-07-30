@@ -92,7 +92,7 @@ const components = [
 		A11yModule,
 		SelectModule,
 
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 		ScrollingModule,
 		NgScrollbarModule,
 		VirtualScrollerModule,

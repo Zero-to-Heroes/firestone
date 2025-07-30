@@ -23,7 +23,7 @@ const components = [NewVersionNotificationComponent, PremiumDesktopComponent, Pr
 		FormsModule,
 		ReactiveFormsModule,
 
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 		MarkdownModule.forRoot({ loader: HttpClient }),
 
 		SharedFrameworkCoreModule,
