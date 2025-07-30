@@ -1,0 +1,126 @@
+.web-app {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.web-header {
+	background: var(--color-4);
+	padding: env(safe-area-inset-top, 0px) 20px 0 20px;
+	border-bottom: 1px solid var(--color-5);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+	.app-title {
+		margin: 0;
+		padding: 16px 0;
+		color: var(--color-1);
+		font-size: 20px;
+		font-weight: 600;
+		text-align: center;
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+	}
+}
+
+.web-nav {
+	display: flex;
+	background: var(--color-4);
+	border-bottom: 1px solid var(--color-5);
+	padding: 0;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+	.nav-item {
+		flex: 1;
+		background: none;
+		border: none;
+		padding: 12px 8px;
+		color: var(--color-2);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		position: relative;
+
+		&:hover,
+		&:focus {
+			background: rgba(255, 255, 255, 0.05);
+			color: var(--color-1);
+		}
+
+		&.active {
+			background: rgba(255, 255, 255, 0.1);
+			color: var(--color-1);
+
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 3px;
+				background: var(--color-orange);
+				border-radius: 3px 3px 0 0;
+			}
+		}
+
+		.nav-icon {
+			font-size: 20px;
+			line-height: 1;
+		}
+
+		.nav-label {
+			font-size: 12px;
+			font-weight: 500;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+	}
+}
+
+.web-content {
+	flex: 1;
+	overflow-y: auto;
+	background: var(--color-7);
+	padding: 0;
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+	.web-nav .nav-item {
+		padding: 10px 6px;
+
+		.nav-icon {
+			font-size: 18px;
+		}
+
+		.nav-label {
+			font-size: 11px;
+		}
+	}
+}
+
+// Desktop responsiveness
+@media (min-width: 1024px) {
+	.web-nav {
+		justify-content: center;
+		max-width: 600px;
+		margin: 0 auto;
+		border-radius: 0 0 12px 12px;
+	}
+
+	.web-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 20px;
+	}
+}
+
+// Safe area handling for iOS
+@supports (padding: max(0px)) {
+	.web-header {
+		padding-left: max(20px, env(safe-area-inset-left));
+		padding-right: max(20px, env(safe-area-inset-right));
+	}
+}

@@ -1,0 +1,139 @@
+.mobile-app {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+	background: var(--color-7);
+}
+
+.mobile-header {
+	background: var(--color-4);
+	padding: env(safe-area-inset-top, 20px) 20px 0 20px;
+	border-bottom: 1px solid var(--color-5);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	z-index: 10;
+
+	.app-title {
+		margin: 0;
+		padding: 16px 0;
+		color: var(--color-1);
+		font-size: 22px;
+		font-weight: 700;
+		text-align: center;
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+		letter-spacing: 0.5px;
+	}
+}
+
+.mobile-nav {
+	display: flex;
+	background: var(--color-4);
+	border-bottom: 1px solid var(--color-5);
+	padding: 0;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	z-index: 9;
+
+	.nav-item {
+		flex: 1;
+		background: none;
+		border: none;
+		padding: 16px 12px;
+		color: var(--color-2);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		position: relative;
+		font-family: inherit;
+		-webkit-tap-highlight-color: transparent;
+
+		&:active {
+			background: rgba(255, 255, 255, 0.1);
+			transform: scale(0.95);
+		}
+
+		&:hover,
+		&:focus {
+			background: rgba(255, 255, 255, 0.05);
+			color: var(--color-1);
+			outline: none;
+		}
+
+		&.active {
+			background: rgba(255, 255, 255, 0.15);
+			color: var(--color-1);
+
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 4px;
+				background: var(--color-orange);
+				border-radius: 4px 4px 0 0;
+			}
+		}
+
+		.nav-icon {
+			font-size: 24px;
+			line-height: 1;
+			filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+		}
+
+		.nav-label {
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+		}
+	}
+}
+
+.mobile-content {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: var(--color-7);
+	padding: 0;
+	-webkit-overflow-scrolling: touch;
+}
+
+// iOS safe area handling
+@supports (padding: max(0px)) {
+	.mobile-header {
+		padding-left: max(20px, env(safe-area-inset-left));
+		padding-right: max(20px, env(safe-area-inset-right));
+	}
+
+	.mobile-content {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+}
+
+// Small screens optimization
+@media (max-width: 375px) {
+	.mobile-nav .nav-item {
+		padding: 12px 8px;
+
+		.nav-icon {
+			font-size: 20px;
+		}
+
+		.nav-label {
+			font-size: 11px;
+		}
+	}
+}
+
+// Hide scrollbar but keep functionality
+.mobile-content {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+
+	&::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
+}

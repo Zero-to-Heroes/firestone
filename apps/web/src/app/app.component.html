@@ -1,0 +1,39 @@
+<div class="battlegrounds-theme web-app">
+	<header class="web-header">
+		<h1 class="app-title">Firestone</h1>
+	</header>
+
+	<nav class="web-nav">
+		<button
+			class="nav-item"
+			routerLink="/battlegrounds"
+			routerLinkActive="active"
+			[routerLinkActiveOptions]="{ exact: false }"
+		>
+			<span class="nav-icon">⚔️</span>
+			<span class="nav-label">Battlegrounds</span>
+		</button>
+		<button
+			class="nav-item"
+			routerLink="/arena"
+			routerLinkActive="active"
+			[routerLinkActiveOptions]="{ exact: false }"
+		>
+			<span class="nav-icon">🏛️</span>
+			<span class="nav-label">Arena</span>
+		</button>
+		<button
+			class="nav-item"
+			routerLink="/constructed"
+			routerLinkActive="active"
+			[routerLinkActiveOptions]="{ exact: false }"
+		>
+			<span class="nav-icon">🃏</span>
+			<span class="nav-label">Constructed</span>
+		</button>
+	</nav>
+
+	<main class="web-content">
+		<router-outlet></router-outlet>
+	</main>
+</div>
