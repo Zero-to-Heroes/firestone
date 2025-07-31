@@ -4,6 +4,10 @@
 	height: 100vh;
 	overflow: hidden;
 
+	--window-background-image:
+		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
+
 	background-size: 100%;
 	background-repeat: round;
 	background-image: var(--window-background-image);
@@ -445,7 +449,7 @@
 	.web-content {
 		padding: 48px;
 		max-width: 1400px;
-		margin: 0 auto;
+		align-self: center;
 	}
 }
 
