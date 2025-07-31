@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsCompTip } from '@firestone-hs/content-craetor-input';
-import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { GameTag, normalizeMinionCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
@@ -17,7 +17,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 			*ngIf="{
 				collapsed: collapsed$ | async,
 				displayMode: displayMode$ | async,
-				highlightedMinions: highlightedMinions$ | async
+				highlightedMinions: highlightedMinions$ | async,
 			} as value"
 		>
 			<div class="composition {{ value.displayMode ?? '' }}" [ngClass]="{ collapsed: value.collapsed }">
@@ -85,8 +85,8 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						class="minion"
 						*ngFor="let minion of coreCards; trackBy: trackByFn"
 						[ngClass]="{
-							controlled: minionsOnBoardAndHand?.includes(minion.id),
-							inShop: minionsInShop?.includes(minion.id)
+							controlled: isIncluded(minionsOnBoardAndHand, minion.id),
+							inShop: isIncluded(minionsInShop, minion.id),
 						}"
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
@@ -117,7 +117,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						*ngFor="let minion of addonCards; trackBy: trackByFn"
 						[ngClass]="{
 							controlled: minionsOnBoardAndHand?.includes(minion.id),
-							inShop: minionsInShop?.includes(minion.id)
+							inShop: minionsInShop?.includes(minion.id),
 						}"
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
@@ -151,7 +151,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						*ngFor="let minion of cycleCards; trackBy: trackByFn"
 						[ngClass]="{
 							controlled: minionsOnBoardAndHand?.includes(minion.id),
-							inShop: minionsInShop?.includes(minion.id)
+							inShop: minionsInShop?.includes(minion.id),
 						}"
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
@@ -354,5 +354,11 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			...this.coreCards.map((c) => c.id),
 			...this.addonCards.map((c) => c.id),
 		]);
+	}
+
+	isIncluded(minionsOnBoardAndHand: readonly string[], minionId: string) {
+		const normalizedMinionsOnBoard = minionsOnBoardAndHand?.map((id) => normalizeMinionCardId(id, this.allCards));
+		const normalizedMinionId = normalizeMinionCardId(minionId, this.allCards);
+		return normalizedMinionsOnBoard?.includes(normalizedMinionId);
 	}
 }
