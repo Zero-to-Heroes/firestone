@@ -113,6 +113,7 @@ import {
 	rush,
 	secret,
 	secretsTriggeredThisMatch,
+	selfDamageHero,
 	shadow,
 	shufflesCardIntoDeck,
 	side,
@@ -609,6 +610,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.CattleRustler_WW_351:
 			return and(side(inputSide), inDeck, beast);
+		case CardIds.CelestialShot_YOG_082:
+			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.CenarionHold_WON_015:
 			return and(side(inputSide), or(inHand, inDeck), chooseOne);
 		case CardIds.ChainedGuardian:
@@ -1049,6 +1052,8 @@ export const cardIdSelector = (
 		case CardIds.ElvenMinstrel:
 		case CardIds.ElvenMinstrelCore:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.EmberrootDestroyer_FIR_955:
+			return and(side(inputSide), or(inHand, inDeck), selfDamageHero);
 		case CardIds.Embiggen:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.EmbraceOfNature:
@@ -2372,6 +2377,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.RaidTheDocks:
 			return highlightConditions(and(side(inputSide), inDeck, pirate), and(side(inputSide), inDeck, weapon));
+		case CardIds.RaidTheSkyTemple:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.RajNazjan:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.Rally:

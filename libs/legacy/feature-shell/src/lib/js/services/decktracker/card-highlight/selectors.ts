@@ -103,8 +103,8 @@ export const opposingSide =
 		return side === 'player'
 			? input.side === 'opponent'
 			: side === 'opponent'
-			? input.side === 'player'
-			: input.side === 'single';
+				? input.side === 'player'
+				: input.side === 'single';
 	};
 
 export const hasMultipleCopies = (input: SelectorInput): boolean =>
@@ -370,7 +370,7 @@ export const spellSchool =
 		spellSchool == null
 			? false
 			: input.card?.spellSchool === SpellSchool[spellSchool] ||
-			  input.deckCard?.guessedInfo?.spellSchools?.includes(spellSchool);
+				input.deckCard?.guessedInfo?.spellSchools?.includes(spellSchool);
 export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
@@ -570,7 +570,11 @@ export const isStarshipPieceFor =
 export const darkGift = (input: SelectorInput): boolean => {
 	return discover(input) && input.card?.referencedTags?.includes(GameTag[GameTag.DARK_GIFT]);
 };
+
 // TODO
 export const shufflesCardIntoDeck = (input: SelectorInput): boolean => {
+	return false;
+};
+export const selfDamageHero = (input: SelectorInput): boolean => {
 	return false;
 };

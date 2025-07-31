@@ -8,7 +8,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 
 // Used for cache purposes, only in dev
 export const CARDS_VERSION = '';
-export const isPreReleaseBuild = true;
+export const isPreReleaseBuild = false;
 
 /** @deprecated use ALL_CLASSES */
 export const classes = [
