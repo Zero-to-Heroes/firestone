@@ -12,7 +12,7 @@
 }
 
 .web-header {
-	background: var(--color-4);
+	background: var(--color-5);
 	border-bottom: 1px solid var(--color-5);
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 	position: relative;
@@ -29,10 +29,10 @@
 
 	.header-left {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
+		align-items: center;
 		height: 100%;
 		padding-left: 20px;
+		gap: 20px;
 
 		.logo {
 			position: relative;
@@ -51,72 +51,188 @@
 	}
 }
 
-// Desktop Navigation
+// Desktop Navigation with Dropdown
 .desktop-nav {
 	display: none;
-	gap: 8px;
+	align-items: center;
+	gap: 24px;
 	height: 100%;
 
-	.nav-item {
-		background: none;
-		border: none;
-		padding: 12px 24px;
-		color: var(--color-2);
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		cursor: pointer;
-		transition: all 0.3s ease;
+	// Section Dropdown
+	.section-dropdown {
 		position: relative;
-		border-radius: 8px;
-		font-family: inherit;
-		flex-shrink: 0;
 
-		&:hover,
-		&:focus {
+		.dropdown-trigger {
 			background: rgba(255, 255, 255, 0.08);
-			color: var(--color-1);
-			transform: translateY(-1px);
-		}
-
-		&.active {
-			background: rgba(255, 255, 255, 0.12);
-			color: var(--color-1);
-
-			// &::before {
-			// 	content: '';
-			// 	position: absolute;
-			// 	left: 0;
-			// 	top: 50%;
-			// 	transform: translateY(-50%);
-			// 	width: 3px;
-			// 	height: 24px;
-			// 	background: var(--color-orange);
-			// 	border-radius: 0 3px 3px 0;
-			// }
-		}
-
-		.nav-icon {
-			font-size: 20px;
-			line-height: 1;
-			width: 50px;
-			height: 50px;
-			flex-shrink: 0;
+			border: 2px solid transparent;
+			padding: 12px 18px;
+			color: var(--color-2);
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			gap: 12px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border-radius: 8px;
+			font-family: inherit;
+			font-size: 16px;
+			font-weight: 600;
+			min-width: 180px;
+			justify-content: space-between;
 
-			::ng-deep svg {
-				width: 100%;
-				height: 100%;
-				object-fit: contain;
+			&:hover,
+			&:focus,
+			&.active {
+				background: rgba(255, 255, 255, 0.12);
+				color: var(--color-1);
+				border-color: rgba(255, 255, 255, 0.2);
+			}
+
+			.dropdown-icon {
+				width: 30px;
+				height: 30px;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				::ng-deep svg {
+					width: 100%;
+					height: 100%;
+					object-fit: contain;
+				}
+			}
+
+			.dropdown-label {
+				flex: 1;
+				text-align: left;
+				white-space: nowrap;
+			}
+
+			.dropdown-arrow {
+				font-size: 12px;
+				transition: transform 0.3s ease;
+				color: var(--color-2);
+
+				&.rotated {
+					transform: rotate(180deg);
+				}
 			}
 		}
 
-		.nav-label {
-			font-size: 16px;
-			font-weight: 600;
+		.dropdown-menu {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: var(--color-5);
+			border: 1px solid var(--color-5);
+			border-radius: 8px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(-10px);
+			transition: all 0.3s ease;
+			z-index: 1001;
+			overflow: hidden;
+
+			&.open {
+				opacity: 1;
+				visibility: visible;
+				transform: translateY(0);
+			}
+
+			.dropdown-item {
+				width: 100%;
+				background: none;
+				border: none;
+				padding: 14px 18px;
+				color: var(--color-2);
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				font-family: inherit;
+				font-size: 15px;
+				font-weight: 500;
+				text-align: left;
+
+				&:hover,
+				&:focus {
+					background: rgba(255, 255, 255, 0.08);
+					color: var(--color-1);
+				}
+
+				&.active {
+					background: rgba(255, 255, 255, 0.12);
+					color: var(--color-1);
+				}
+
+				.item-icon {
+					width: 30px;
+					height: 30px;
+					flex-shrink: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+
+					::ng-deep svg {
+						width: 100%;
+						height: 100%;
+						object-fit: contain;
+					}
+				}
+
+				.item-label {
+					white-space: nowrap;
+				}
+			}
+		}
+	}
+
+	// Sub-menu Items
+	.sub-menu {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		height: 100%;
+
+		.sub-menu-item {
+			background: none;
+			border: none;
+			padding: 10px 20px;
+			color: var(--color-2);
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border-radius: 6px;
+			font-family: inherit;
+			font-size: 14px;
+			font-weight: 500;
 			white-space: nowrap;
+			position: relative;
+
+			&:hover,
+			&:focus {
+				background: rgba(255, 255, 255, 0.06);
+				color: var(--color-1);
+			}
+
+			&.active {
+				background: rgba(255, 255, 255, 0.1);
+				color: var(--color-1);
+
+				&::after {
+					content: '';
+					position: absolute;
+					bottom: 0;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 24px;
+					height: 2px;
+					background: var(--color-orange);
+					border-radius: 1px;
+				}
+			}
 		}
 	}
 }
@@ -174,7 +290,7 @@
 	right: -100%;
 	width: 320px;
 	height: 100vh;
-	background: var(--color-3);
+	background: var(--color-5);
 	box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
 	transition: right 0.3s ease;
 	z-index: 1001;
@@ -308,13 +424,20 @@
 
 @media (min-width: 1024px) {
 	.desktop-nav {
-		gap: 16px;
+		gap: 32px;
 
-		.nav-item {
-			padding: 16px 32px;
+		.section-dropdown .dropdown-trigger {
+			min-width: 200px;
+			padding: 14px 20px;
+			font-size: 17px;
+		}
 
-			.nav-label {
-				font-size: 18px;
+		.sub-menu {
+			gap: 12px;
+
+			.sub-menu-item {
+				padding: 12px 24px;
+				font-size: 15px;
 			}
 		}
 	}
@@ -328,10 +451,21 @@
 
 @media (min-width: 1200px) {
 	.desktop-nav {
-		gap: 24px;
+		gap: 40px;
 
-		.nav-item {
-			padding: 18px 40px;
+		.section-dropdown .dropdown-trigger {
+			min-width: 220px;
+			padding: 16px 24px;
+			font-size: 18px;
+		}
+
+		.sub-menu {
+			gap: 16px;
+
+			.sub-menu-item {
+				padding: 14px 28px;
+				font-size: 16px;
+			}
 		}
 	}
 
