@@ -3,6 +3,12 @@
 	flex-direction: column;
 	height: 100vh;
 	overflow: hidden;
+
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	background-attachment: fixed;
+	overflow-y: scroll;
 }
 
 .web-header {
@@ -16,9 +22,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 1400px;
 		margin: 0 auto;
 		height: 70px;
+		padding-left: 10px;
 	}
 
 	.header-left {
@@ -49,6 +55,7 @@
 .desktop-nav {
 	display: none;
 	gap: 8px;
+	height: 100%;
 
 	.nav-item {
 		background: none;
@@ -63,6 +70,7 @@
 		position: relative;
 		border-radius: 8px;
 		font-family: inherit;
+		flex-shrink: 0;
 
 		&:hover,
 		&:focus {
@@ -72,25 +80,37 @@
 		}
 
 		&.active {
-			background: rgba(255, 165, 0, 0.15);
+			background: rgba(255, 255, 255, 0.12);
 			color: var(--color-1);
 
-			&::before {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 50%;
-				transform: translateY(-50%);
-				width: 3px;
-				height: 24px;
-				background: var(--color-orange);
-				border-radius: 0 3px 3px 0;
-			}
+			// &::before {
+			// 	content: '';
+			// 	position: absolute;
+			// 	left: 0;
+			// 	top: 50%;
+			// 	transform: translateY(-50%);
+			// 	width: 3px;
+			// 	height: 24px;
+			// 	background: var(--color-orange);
+			// 	border-radius: 0 3px 3px 0;
+			// }
 		}
 
 		.nav-icon {
 			font-size: 20px;
 			line-height: 1;
+			width: 50px;
+			height: 50px;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			::ng-deep svg {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
 		}
 
 		.nav-label {
@@ -174,6 +194,7 @@
 		background: none;
 		border: none;
 		padding: 20px 24px;
+		height: 80px;
 		color: var(--color-2);
 		display: flex;
 		align-items: center;
@@ -193,7 +214,7 @@
 		}
 
 		&.active {
-			background: rgba(255, 165, 0, 0.2);
+			background: rgba(255, 255, 255, 0.12);
 			color: var(--color-1);
 
 			&::before {
@@ -211,6 +232,18 @@
 		.nav-icon {
 			font-size: 24px;
 			line-height: 1;
+			width: 32px;
+			height: 32px;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			::ng-deep svg {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
 		}
 
 		.nav-label {
@@ -242,7 +275,6 @@
 // Content Area
 .web-content {
 	flex: 1;
-	overflow-y: auto;
 	background: var(--color-7);
 	position: relative;
 }
@@ -275,19 +307,11 @@
 }
 
 @media (min-width: 1024px) {
-	.web-header .header-content {
-		padding: 0 48px;
-	}
-
 	.desktop-nav {
 		gap: 16px;
 
 		.nav-item {
 			padding: 16px 32px;
-
-			.nav-icon {
-				font-size: 22px;
-			}
 
 			.nav-label {
 				font-size: 18px;
@@ -303,10 +327,6 @@
 }
 
 @media (min-width: 1200px) {
-	.web-header .header-content {
-		padding: 0 64px;
-	}
-
 	.desktop-nav {
 		gap: 24px;
 
@@ -323,7 +343,6 @@
 // Small mobile screens
 @media (max-width: 480px) {
 	.web-header .header-content {
-		padding: 0 16px;
 		height: 64px;
 	}
 

@@ -4,7 +4,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: calc(100vh - 140px); // Account for header and nav
+	// min-height: calc(100vh - 140px); // Account for header and nav
 }
 
 .coming-soon-card {
@@ -34,6 +34,12 @@
 		margin-bottom: 16px;
 		line-height: 1;
 		filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+		height: 160px;
+
+		::ng-deep svg {
+			height: 100%;
+			width: auto;
+		}
 	}
 
 	h2 {
@@ -52,7 +58,7 @@
 		letter-spacing: 1px;
 		margin: 0 0 20px 0;
 		padding: 8px 16px;
-		background: rgba(255, 165, 0, 0.1);
+		background: rgba(255, 255, 255, 0.12);
 		border-radius: 20px;
 		display: inline-block;
 	}
@@ -70,7 +76,7 @@
 @media (max-width: 768px) {
 	.section-container {
 		padding: 16px;
-		min-height: calc(100vh - 120px);
+		// min-height: calc(100vh - 120px);
 	}
 
 	.coming-soon-card {
