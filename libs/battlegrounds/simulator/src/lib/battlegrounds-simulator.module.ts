@@ -2,8 +2,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
@@ -51,13 +49,11 @@ const components = [
 @NgModule({
 	imports: [
 		CommonModule,
-		BrowserModule,
-		BrowserAnimationsModule,
 		DragDropModule,
 		ReactiveFormsModule,
 		FormsModule,
 
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 
 		ReplayColiseumModule,
 		// ColiseumComponentsModule,

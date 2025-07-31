@@ -35,7 +35,7 @@ const components = [
 		CommonModule,
 		DragDropModule,
 
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 
 		SharedFrameworkCoreModule,
 		SharedFrameworkCommonModule,

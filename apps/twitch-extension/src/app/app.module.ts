@@ -24,13 +24,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { TwitchStoreService } from './twitch-store.service';
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 	// The current date, in a yyyyMMdd format
 	const currentDate = new Date();
 	const translationFileVersion = `${currentDate.getFullYear()}${currentDate.getMonth()}${currentDate.getDate()}`;
-	// const translationFileVersion = `${currentDate.getTime()}`;
-	// Force a refresh every day, as we don't want to load a new version simply to update the translations
 	return new TranslateHttpLoader(
 		http,
 		'https://static.firestoneapp.com/data/i18n/',

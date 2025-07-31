@@ -106,7 +106,7 @@ const components = [
 		OverlayModule,
 
 		VirtualScrollerModule,
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 
 		ReplayColiseumModule,
 		// ColiseumComponentsModule,

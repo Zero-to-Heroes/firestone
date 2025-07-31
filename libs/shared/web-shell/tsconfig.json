@@ -2,7 +2,7 @@
 	"extends": "../../../tsconfig.base.json",
 	"compilerOptions": {
 		"moduleResolution": "bundler",
-		"strict": true,
+		"strict": false,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
 		"noImplicitReturns": true,

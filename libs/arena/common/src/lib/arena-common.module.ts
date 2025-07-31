@@ -85,7 +85,7 @@ const components = [
 	imports: [
 		CommonModule,
 
-		InlineSVGModule.forRoot(),
+		InlineSVGModule,
 		VirtualScrollerModule,
 
 		SharedFrameworkCoreModule,
