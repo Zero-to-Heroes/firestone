@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
+import { AllCardsService, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DiskCacheService, GlobalErrorService, PreferencesService } from '@firestone/shared/common/service';
 import { distinctUntilChanged, map, skip } from 'rxjs';
-import { CARDS_VERSION } from './hs-utils';
+import { CARDS_VERSION, isPreReleaseBuild } from './hs-utils';
 
 @Injectable()
 export class CardsInitService {
@@ -45,7 +45,7 @@ export class CardsInitService {
 		const fileName = this.getFileName(locale);
 		console.log('[cards-init] initializing cards db with', fileName);
 		const localCards: readonly ReferenceCard[] | null = await this.retrieveLocalCards(fileName);
-		if (!!localCards?.length && localCards.length % 8000 !== 0) {
+		if (!isPreReleaseBuild && !!localCards?.length && localCards.length % 8000 !== 0) {
 			this.cards.initializeCardsDbFromCards(localCards);
 			console.log('[cards-init] initialized cards with local cache', localCards?.length);
 			// Make this non-blocking, so the app can already start with the cached info, while we get the
@@ -62,6 +62,10 @@ export class CardsInitService {
 		try {
 			await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
 			console.log('[cards-init] loaded cards from remote', this.cards.getCards()?.length);
+			console.debug(
+				'[cards-init] loaded cards from remote',
+				this.cards.getCards()?.find((c) => c.id === CardIds.SoulJuggler_BGS_002),
+			);
 			// An exact count means that we are missing the last split
 			if (!this.cards.getCards()?.length || this.cards.getCards().length % 8000 === 0) {
 				console.error('[cards-init] could not load cards');
@@ -81,7 +85,8 @@ export class CardsInitService {
 	}
 
 	private getFileName(locale: string) {
-		return `cards_${locale}.gz.json`;
+		const preReleaseSuffix = isPreReleaseBuild ? '_pre_release' : '';
+		return `cards_${locale}${preReleaseSuffix}.gz.json`;
 	}
 
 	private async saveCardsLocally(fileName: string, cards: readonly ReferenceCard[]) {
