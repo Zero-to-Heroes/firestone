@@ -8,4 +8,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 	title = 'Firestone Web';
+	isMobileMenuOpen = false;
+
+	toggleMobileMenu() {
+		this.isMobileMenuOpen = !this.isMobileMenuOpen;
+	}
+
+	closeMobileMenu() {
+		this.isMobileMenuOpen = false;
+	}
 }

@@ -1,37 +1,88 @@
 <div class="battlegrounds-theme web-app">
 	<header class="web-header">
-		<h1 class="app-title">Firestone</h1>
+		<div class="header-content">
+			<div class="header-left">
+				<div class="logo" inlineSVG="assets/svg/firestone_logo_full.svg"></div>
+			</div>
+
+			<!-- Desktop Navigation -->
+			<nav class="desktop-nav">
+				<button
+					class="nav-item"
+					routerLink="/battlegrounds"
+					routerLinkActive="active"
+					[routerLinkActiveOptions]="{ exact: false }"
+				>
+					<span class="nav-icon" inlineSVG="assets/svg/ftue/battlegrounds.svg"></span>
+					<span class="nav-label">Battlegrounds</span>
+				</button>
+				<button
+					class="nav-item"
+					routerLink="/arena"
+					routerLinkActive="active"
+					[routerLinkActiveOptions]="{ exact: false }"
+				>
+					<span class="nav-icon">🏛️</span>
+					<span class="nav-label">Arena</span>
+				</button>
+				<button
+					class="nav-item"
+					routerLink="/constructed"
+					routerLinkActive="active"
+					[routerLinkActiveOptions]="{ exact: false }"
+				>
+					<span class="nav-icon">🃏</span>
+					<span class="nav-label">Constructed</span>
+				</button>
+			</nav>
+
+			<!-- Mobile Hamburger Button -->
+			<button class="hamburger-btn" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+			</button>
+		</div>
 	</header>
 
-	<nav class="web-nav">
-		<button
-			class="nav-item"
-			routerLink="/battlegrounds"
-			routerLinkActive="active"
-			[routerLinkActiveOptions]="{ exact: false }"
-		>
-			<span class="nav-icon">⚔️</span>
-			<span class="nav-label">Battlegrounds</span>
-		</button>
-		<button
-			class="nav-item"
-			routerLink="/arena"
-			routerLinkActive="active"
-			[routerLinkActiveOptions]="{ exact: false }"
-		>
-			<span class="nav-icon">🏛️</span>
-			<span class="nav-label">Arena</span>
-		</button>
-		<button
-			class="nav-item"
-			routerLink="/constructed"
-			routerLinkActive="active"
-			[routerLinkActiveOptions]="{ exact: false }"
-		>
-			<span class="nav-icon">🃏</span>
-			<span class="nav-label">Constructed</span>
-		</button>
+	<!-- Mobile Navigation Overlay -->
+	<nav class="mobile-nav" [class.open]="isMobileMenuOpen">
+		<div class="mobile-nav-content">
+			<button
+				class="mobile-nav-item"
+				routerLink="/battlegrounds"
+				routerLinkActive="active"
+				(click)="closeMobileMenu()"
+				[routerLinkActiveOptions]="{ exact: false }"
+			>
+				<span class="nav-icon" inlineSVG="assets/svg/ftue/battlegrounds.svg"></span>
+				<span class="nav-label">Battlegrounds</span>
+			</button>
+			<button
+				class="mobile-nav-item"
+				routerLink="/arena"
+				routerLinkActive="active"
+				(click)="closeMobileMenu()"
+				[routerLinkActiveOptions]="{ exact: false }"
+			>
+				<span class="nav-icon">🏛️</span>
+				<span class="nav-label">Arena</span>
+			</button>
+			<button
+				class="mobile-nav-item"
+				routerLink="/constructed"
+				routerLinkActive="active"
+				(click)="closeMobileMenu()"
+				[routerLinkActiveOptions]="{ exact: false }"
+			>
+				<span class="nav-icon">🃏</span>
+				<span class="nav-label">Constructed</span>
+			</button>
+		</div>
 	</nav>
+
+	<!-- Mobile Overlay Background -->
+	<div class="mobile-overlay" [class.visible]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
 
 	<main class="web-content">
 		<router-outlet></router-outlet>

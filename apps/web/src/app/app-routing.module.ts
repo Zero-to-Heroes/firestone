@@ -4,7 +4,7 @@ import { ArenaComponent } from './arena/arena.component';
 import { BattlegroundsComponent } from './battlegrounds/battlegrounds.component';
 import { ConstructedComponent } from './constructed/constructed.component';
 
-const routes: Routes = [
+export const routes: Routes = [
 	{ path: '', redirectTo: '/battlegrounds', pathMatch: 'full' },
 	{ path: 'battlegrounds', component: BattlegroundsComponent },
 	{ path: 'arena', component: ArenaComponent },
