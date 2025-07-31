@@ -27,7 +27,7 @@
 		align-items: center;
 		justify-content: space-between;
 		margin: 0 auto;
-		height: 70px;
+		height: 50px;
 		padding-left: 10px;
 		padding-right: 10px;
 
@@ -40,13 +40,13 @@
 		display: flex;
 		align-items: center;
 		height: 100%;
-		padding-left: 20px;
-		gap: 20px;
+		padding-left: 12px;
+		gap: 12px;
 
 		.logo {
 			position: relative;
 			height: 100%;
-			width: 200px;
+			width: 160px;
 			--icon-color: var(--default-title-color);
 			display: flex;
 			align-items: center;
@@ -64,7 +64,7 @@
 .desktop-nav {
 	display: none;
 	align-items: center;
-	gap: 24px;
+	gap: 20px;
 	height: 100%;
 
 	// Section Dropdown
@@ -74,7 +74,7 @@
 		.dropdown-trigger {
 			background: rgba(255, 255, 255, 0.08);
 			border: 2px solid transparent;
-			padding: 12px 18px;
+			padding: 7px 14px;
 			color: var(--color-2);
 			display: flex;
 			align-items: center;
@@ -97,8 +97,8 @@
 			}
 
 			.dropdown-icon {
-				width: 30px;
-				height: 30px;
+				width: 26px;
+				height: 26px;
 				flex-shrink: 0;
 				display: flex;
 				align-items: center;
@@ -178,8 +178,8 @@
 				}
 
 				.item-icon {
-					width: 30px;
-					height: 30px;
+					width: 26px;
+					height: 26px;
 					flex-shrink: 0;
 					display: flex;
 					align-items: center;
@@ -209,7 +209,7 @@
 		.sub-menu-item {
 			background: none;
 			border: none;
-			padding: 10px 20px;
+			padding: 8px 16px;
 			color: var(--color-2);
 			cursor: pointer;
 			transition: all 0.3s ease;
@@ -251,8 +251,8 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	width: 32px;
-	height: 32px;
+	width: 28px;
+	height: 28px;
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -266,8 +266,8 @@
 	}
 
 	.hamburger-line {
-		width: 24px;
-		height: 3px;
+		width: 20px;
+		height: 2px;
 		background: var(--color-1);
 		border-radius: 2px;
 		transition: all 0.3s ease;
@@ -277,7 +277,7 @@
 	&.active {
 		.hamburger-line {
 			&:nth-child(1) {
-				transform: rotate(45deg) translate(7px, 7px);
+				transform: rotate(45deg) translate(6px, 6px);
 			}
 
 			&:nth-child(2) {
@@ -286,7 +286,7 @@
 			}
 
 			&:nth-child(3) {
-				transform: rotate(-45deg) translate(7px, -7px);
+				transform: rotate(-45deg) translate(6px, -6px);
 			}
 		}
 	}
@@ -419,7 +419,7 @@
 	}
 
 	.web-header .header-content {
-		height: 80px;
+		height: 60px;
 	}
 
 	.web-header .header-left .app-title {
@@ -433,20 +433,20 @@
 
 @media (min-width: 1024px) {
 	.desktop-nav {
-		gap: 32px;
+		gap: 28px;
 
 		.section-dropdown .dropdown-trigger {
-			min-width: 200px;
-			padding: 14px 20px;
-			font-size: 17px;
+			min-width: 180px;
+			padding: 9px 18px;
+			font-size: 16px;
 		}
 
 		.sub-menu {
-			gap: 12px;
+			gap: 10px;
 
 			.sub-menu-item {
-				padding: 12px 24px;
-				font-size: 15px;
+				padding: 10px 20px;
+				font-size: 14px;
 			}
 		}
 	}
@@ -460,20 +460,20 @@
 
 @media (min-width: 1200px) {
 	.desktop-nav {
-		gap: 40px;
+		gap: 36px;
 
 		.section-dropdown .dropdown-trigger {
-			min-width: 220px;
-			padding: 16px 24px;
-			font-size: 18px;
+			min-width: 200px;
+			padding: 10px 22px;
+			font-size: 17px;
 		}
 
 		.sub-menu {
-			gap: 16px;
+			gap: 14px;
 
 			.sub-menu-item {
-				padding: 14px 28px;
-				font-size: 16px;
+				padding: 12px 24px;
+				font-size: 15px;
 			}
 		}
 	}
@@ -486,7 +486,7 @@
 // Small mobile screens
 @media (max-width: 480px) {
 	.web-header .header-content {
-		height: 64px;
+		height: 48px;
 	}
 
 	.web-header .header-left {
