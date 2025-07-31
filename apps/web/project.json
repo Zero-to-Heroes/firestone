@@ -24,7 +24,11 @@
 						"output": "./assets"
 					}
 				],
-				"styles": ["apps/web/src/styles.scss", "libs/shared/styles/src/lib/styles/battlegrounds-theme.scss"],
+				"styles": [
+					"apps/web/src/styles.scss",
+					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss",
+					"libs/shared/styles/src/lib/styles/general-theme.scss"
+				],
 				"scripts": []
 			},
 			"configurations": {

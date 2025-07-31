@@ -5,7 +5,7 @@
 	overflow: hidden;
 
 	--window-background-image:
-		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 0.7) 100%),
+		radial-gradient(30vw at 50% 50%, rgba(90, 63, 35, 0.7) 0%, rgba(26, 15, 8, 0.7) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 
 	background-size: 100%;
@@ -13,6 +13,15 @@
 	background-image: var(--window-background-image);
 	background-attachment: fixed;
 	overflow-y: scroll;
+
+	&.general-theme {
+		--color-1: #e9cdb5;
+		--color-2: #d9c3ab;
+		--color-4: #5a3f23;
+		--color-7: #251405;
+
+		--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/home-screen-bg.png');
+	}
 }
 
 .web-header {
