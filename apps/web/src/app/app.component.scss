@@ -29,6 +29,11 @@
 		margin: 0 auto;
 		height: 70px;
 		padding-left: 10px;
+		padding-right: 10px;
+
+		.download-button {
+			height: 80%;
+		}
 	}
 
 	.header-left {
@@ -504,5 +509,11 @@
 	.web-content {
 		padding: 80px;
 		max-width: 1600px;
+	}
+}
+
+@media (max-width: 1200px) {
+	.download-button {
+		display: none;
 	}
 }

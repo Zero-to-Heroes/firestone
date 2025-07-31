@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DownloadButtonComponent } from './common/download-button/download-button.component';
 
 interface NavigationSection {
 	id: string;
@@ -24,7 +25,7 @@ interface NavigationSubItem {
 	selector: 'web-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
-	imports: [RouterOutlet, RouterLink, RouterLinkActive, InlineSVGModule, CommonModule],
+	imports: [RouterOutlet, RouterLink, RouterLinkActive, InlineSVGModule, CommonModule, DownloadButtonComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
 	@ViewChild('dropdownContainer', { read: ElementRef }) dropdownContainer?: ElementRef;
