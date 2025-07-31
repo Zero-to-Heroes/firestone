@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component } from '@angular/core';
+import { AfterContentInit, Component, Injector } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
-import { CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
+import { CardsFacadeStandaloneService, setAppInjector } from '@firestone/shared/framework/core';
 import { WebShellComponent } from '@firestone/shared/web-shell';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -17,7 +17,12 @@ export class AppComponent implements AfterContentInit {
 
 	ready = false;
 
-	constructor(private readonly allCards: CardsFacadeStandaloneService) {}
+	constructor(
+		private readonly allCards: CardsFacadeStandaloneService,
+		private readonly injector: Injector,
+	) {
+		setAppInjector(injector);
+	}
 
 	async ngAfterContentInit() {
 		await this.allCards.init(new AllCardsService(), 'enUS');

@@ -2,7 +2,9 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { translationFileVersion } from '@firestone/shared/framework/common';
+
 import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
@@ -37,7 +39,7 @@ export const appConfig: ApplicationConfig = {
 			InlineSVGModule.forRoot(),
 		]),
 
-		importProvidersFrom(SharedFrameworkCoreModule),
+		importProvidersFrom(SharedFrameworkCoreModule, SharedCommonServiceModule),
 
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },

@@ -1,5 +1,13 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
@@ -68,7 +76,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 				? null
 				: this.i18n.translateString('battlegrounds.in-game.opponents.mmr', {
 						value: value.toLocaleString(this.i18n.formatCurrentLocale()),
-				  });
+					});
 	}
 
 	@Input() set heroCardId(value: string) {
@@ -122,13 +130,13 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly prefs: PreferencesService,
+		@Optional() private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.showMmr$ = this.prefs.preferences$$.pipe(
+		this.showMmr$ = this.prefs?.preferences$$?.pipe(
 			this.mapData((prefs) => prefs.bgsUseLeaderboardDataInOverlay && prefs.bgsShowMmrInOpponentRecap),
 		);
 	}
