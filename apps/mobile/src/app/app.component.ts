@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 		try {
 			// Configure status bar
 			await StatusBar.setStyle({ style: Style.Dark });
-			await StatusBar.setBackgroundColor({ color: '#0c1017' });
+			await StatusBar.setBackgroundColor({ color: '#251405' }); // Updated to match general theme
 
 			// Hide splash screen after app loads
 			await SplashScreen.hide();
