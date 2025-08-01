@@ -35,5 +35,6 @@
 
 	&.sortable:hover {
 		color: var(--default-text-color-bright);
+		cursor: default;
 	}
 }

@@ -16,6 +16,9 @@ import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battleg
 				{{ tier.label }}
 			</div>
 			<div class="items">
+				<!-- <div class="item-container" *ngFor="let item of tier.items; trackBy: trackByFn">
+					{{ item.name }}
+				</div> -->
 				<battlegrounds-meta-stats-hero-info
 					class="item-container"
 					*ngFor="let item of tier.items; trackBy: trackByFn"

@@ -96,9 +96,7 @@ export class BattlegroundsHeroSortDropdownComponent
 				filter: filter,
 				placeholder: this.options.find((option) => option.value === filter)?.label,
 				visible:
-					(categoryId === 'bgs-category-personal-heroes' ||
-						categoryId === 'bgs-category-meta-heroes' ||
-						categoryId === 'bgs-category-personal-quests') &&
+					(categoryId === 'bgs-category-personal-heroes' || categoryId === 'bgs-category-personal-quests') &&
 					!['categories', 'category'].includes(currentView),
 			})),
 		);

@@ -9,9 +9,19 @@ import {
 	Output,
 } from '@angular/core';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, takeUntil } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	map,
+	shareReplay,
+	takeUntil,
+} from 'rxjs';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 
 @Component({
@@ -43,11 +53,26 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 						<div class="value">{{ totalGames$ | async }}</div>
 					</div>
 				</div>
-				<div class="header">
+				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<div class="portrait"></div>
 					<div class="hero-details" [fsTranslate]="'app.battlegrounds.tier-list.header-hero-details'"></div>
-					<div class="position" [fsTranslate]="'app.battlegrounds.tier-list.header-average-position'"></div>
-					<div class="pickrate" [fsTranslate]="'app.battlegrounds.tier-list.header-pickrate'"></div>
+
+					<sortable-table-label
+						class="cell position"
+						[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'average-position'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell pickrate"
+						[name]="'app.battlegrounds.tier-list.header-pickrate' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'pick-rate'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 					<div
 						class="placement"
 						[fsTranslate]="'app.battlegrounds.tier-list.header-placement-distribution'"
@@ -57,16 +82,24 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 						[fsTranslate]="'app.battlegrounds.tier-list.header-tribes'"
 						[helpTooltip]="'app.battlegrounds.tier-list.header-tribes-tooltip' | fsTranslate"
 					></div>
-					<div
-						class="net-mmr"
-						[fsTranslate]="'app.battlegrounds.tier-list.header-net-mmr'"
+					<sortable-table-label
+						class="cell net-mmr"
+						[name]="'app.battlegrounds.tier-list.header-net-mmr' | fsTranslate"
 						[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | fsTranslate"
-					></div>
-					<div
-						class="player-games-played"
-						[fsTranslate]="'app.battlegrounds.tier-list.header-games-played'"
+						[sort]="sort"
+						[criteria]="'mmr'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
+						class="cell player-games-played"
+						[name]="'app.battlegrounds.tier-list.header-games-played' | fsTranslate"
 						[helpTooltip]="'app.battlegrounds.tier-list.header-games-played-tooltip' | fsTranslate"
-					></div>
+						[sort]="sort"
+						[criteria]="'games-played'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 					<!-- <div class="winrate" [owTranslate]="'app.battlegrounds.tier-list.header-combat-winrate'"></div> -->
 				</div>
 				<div class="heroes-list" role="list" scrollable>
@@ -98,15 +131,13 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	lastUpdateFull$: Observable<string>;
 	totalGames$: Observable<string>;
 	searchString$: Observable<string>;
+	sortCriteria$: Observable<SortCriteria<BgsHeroSortFilterType>>;
 
 	@Output() heroStatClick = new EventEmitter<string>();
 	@Output() searchStringChange = new EventEmitter<string>();
 
 	@Input() set stats(value: readonly BgsMetaHeroStatTierItem[]) {
 		this.stats$$.next(value);
-	}
-	@Input() set heroSort(value: BgsHeroSortFilterType) {
-		this.heroSort$$.next(value);
 	}
 	@Input() set searchString(value: string) {
 		this.searchString$$.next(value);
@@ -120,10 +151,14 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	@Input() positionTooltipHidden = false;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
-	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>('tier');
 	private searchString$$ = new BehaviorSubject<string | null>(null);
 	private totalGames$$ = new BehaviorSubject<number>(null);
 	private lastUpdate$$ = new BehaviorSubject<Date>(null);
+
+	private sortCriteria$$ = new BehaviorSubject<SortCriteria<BgsHeroSortFilterType>>({
+		criteria: 'average-position',
+		direction: 'asc',
+	});
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -133,39 +168,70 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	}
 
 	ngAfterContentInit() {
-		const tiers$ = combineLatest([this.stats$$, this.heroSort$$]).pipe(
-			this.mapData(([stats, heroSort]) => {
+		this.sortCriteria$ = this.sortCriteria$$.pipe(
+			distinctUntilChanged((a, b) => a.criteria === b.criteria && a.direction === b.direction),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const tiers$ = combineLatest([this.stats$$, this.sortCriteria$]).pipe(
+			map(([stats, sortCriteria]) => {
 				if (!stats) {
 					return null;
 				}
 
-				switch (heroSort) {
-					case 'average-position':
-						// Make sure we keep the items without data at the end
-						return this.buildMonoTier(
-							[...stats].sort(sortByProperties((s) => [s.playerAveragePosition ?? 9])),
-						);
+				switch (sortCriteria.criteria) {
+					// Make sure we keep the items without data at the end
+					// return this.buildMonoTier(
+					// 	[...stats].sort(
+					// 		sortByProperties((s) => [
+					// 			s.playerAveragePosition ?? 9 * (sortCriteria.direction === 'asc' ? 1 : -1),
+					// 		]),
+					// 	),
+					// );
 					case 'pick-rate':
 						// Make sure we keep the items without data at the end
-						return this.buildMonoTier([...stats].sort(sortByProperties((s) => [-(s.pickrate ?? 0)])));
+						return this.buildMonoTier(
+							[...stats].sort(
+								sortByProperties((s) => [
+									(s.pickrate ?? 0) * (sortCriteria.direction === 'asc' ? 1 : -1),
+								]),
+							),
+						);
 					case 'games-played':
-						return this.buildMonoTier([...stats].sort(sortByProperties((s) => [-s.playerDataPoints])));
+						return this.buildMonoTier(
+							[...stats].sort(
+								sortByProperties((s) => [
+									s.playerDataPoints * (sortCriteria.direction === 'asc' ? 1 : -1),
+								]),
+							),
+						);
 					case 'mmr':
 						return this.buildMonoTier(
-							[...stats].sort(sortByProperties((s) => [-(s.playerNetMmr ?? -10000)])),
+							[...stats].sort(
+								sortByProperties((s) => [
+									(s.playerNetMmr ?? -10000) * (sortCriteria.direction === 'asc' ? 1 : -1),
+								]),
+							),
 						);
 					case 'last-played':
 						return this.buildMonoTier(
-							[...stats].sort(sortByProperties((s) => [-s.playerLastPlayedTimestamp])),
+							[...stats].sort(
+								sortByProperties((s) => [
+									s.playerLastPlayedTimestamp * (sortCriteria.direction === 'asc' ? 1 : -1),
+								]),
+							),
 						);
 					case 'tier':
+					case 'average-position':
 					default:
 						return buildTiers(stats, this.i18n);
 				}
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.tiers$ = combineLatest([tiers$, this.searchString$$]).pipe(
-			this.mapData(([tiers, searchString]) => {
+			map(([tiers, searchString]) => {
 				return tiers
 					?.map((tier) => {
 						const result: BgsMetaHeroStatTier = {
@@ -181,6 +247,8 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 					})
 					.filter((t) => t.items.length > 0);
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 
 		this.totalGames$ = this.totalGames$$.pipe(
@@ -223,6 +291,25 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 		if (this.heroStatClick) {
 			this.heroStatClick.next(heroCardId);
 		}
+	}
+
+	onSortClick(rawCriteria: string) {
+		if (rawCriteria === 'average-position' && this.sortCriteria$$.value?.criteria === 'average-position') {
+			return;
+		}
+
+		const criteria: BgsHeroSortFilterType = rawCriteria as BgsHeroSortFilterType;
+		this.sortCriteria$$.next({
+			criteria: criteria,
+			direction:
+				criteria === this.sortCriteria$$.value?.criteria
+					? invertDirection(this.sortCriteria$$.value.direction)
+					: this.getDefaultSortDirection(criteria),
+		});
+	}
+
+	private getDefaultSortDirection(criteria: BgsHeroSortFilterType): SortDirection {
+		return criteria === 'average-position' ? 'asc' : 'desc';
 	}
 
 	private buildMonoTier(items: BgsMetaHeroStatTierItem[]): readonly BgsMetaHeroStatTier[] {

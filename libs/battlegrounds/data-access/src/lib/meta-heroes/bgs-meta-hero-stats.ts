@@ -97,7 +97,6 @@ export const buildTiers = (
 
 	const heroStats = [...stats].sort(sortByProperties((s) => [s.averagePosition]));
 	const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.averagePosition));
-	console.debug('[debug]', i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'S' }), i18n);
 
 	return [
 		{
