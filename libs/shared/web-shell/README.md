@@ -1,7 +1,7 @@
-# web-shell
+## TODO
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test web-shell` to execute the unit tests.
+- Missing localization
+- Sorting for heroes
+- filters
+- mobile display
+- Since this will be deployed to firestoneapp.com, I need to also support the other standalone pages (like oog-login)

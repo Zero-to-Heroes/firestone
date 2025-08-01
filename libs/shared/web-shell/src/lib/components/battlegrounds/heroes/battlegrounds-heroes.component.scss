@@ -33,7 +33,9 @@ battlegrounds-meta-stats-heroes-view {
 	}
 
 	.net-mmr,
-	.player-games-played {
+	.player-games-played,
+	.tribes,
+	.placement {
 		display: none;
 	}
 
@@ -50,6 +52,47 @@ battlegrounds-meta-stats-heroes-view {
 		.health {
 			right: 0%;
 			bottom: 1%;
+		}
+	}
+}
+
+@media (max-width: 520px) {
+	::ng-deep
+		.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container {
+		.hero-details {
+			width: 80px;
+		}
+	}
+}
+
+@media (max-width: 560px) {
+	::ng-deep
+		.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container {
+		.top {
+			flex-direction: column;
+			gap: 10px;
+			align-items: flex-start;
+		}
+	}
+}
+
+@media (min-width: 725px) {
+	::ng-deep
+		.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container {
+		.placement {
+			display: block;
+		}
+		.header .placement {
+			display: flex;
+		}
+	}
+}
+
+@media (min-width: 1000px) {
+	::ng-deep
+		.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container {
+		.tribes {
+			display: flex;
 		}
 	}
 }
