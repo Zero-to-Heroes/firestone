@@ -164,38 +164,54 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
+		console.log('[game-stats-loader] Retrieved game stats from API', endpointResult?.length);
 		const stats: readonly GameStat[] = endpointResult
 			.map((stat) => {
-				const decoded = stat.finalComp ? decodeBase64(stat.finalComp) : null;
-				const postMatchStats: BgsPostMatchStats = decoded == null ? null : ({ boardHistory: [decoded] } as any);
-				let playerInfoFromDeckstring = null;
-				return {
-					...stat,
-					playerDecklist: isMercenaries(stat.gameMode)
-						? stat.playerDecklist
-						: this.allCards.normalizeDeckList(stat.playerDecklist),
-					// Because old stats are corrupted
-					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
-					postMatchStats: postMatchStats,
-					playerClass:
-						stat.playerClass ??
-						(playerInfoFromDeckstring =
-							playerInfoFromDeckstring ??
-							extractPlayerInfoFromDeckstring(stat.playerDecklist, this.allCards, stat.gameMode, stat))
-							?.playerClass,
-					playerCardId:
-						stat.playerCardId ??
-						(playerInfoFromDeckstring =
-							playerInfoFromDeckstring ??
-							extractPlayerInfoFromDeckstring(stat.playerDecklist, this.allCards, stat.gameMode, stat))
-							?.playerCardId,
-				};
+				try {
+					const decoded = stat.finalComp ? decodeBase64(stat.finalComp) : null;
+					const postMatchStats: BgsPostMatchStats =
+						decoded == null ? null : ({ boardHistory: [decoded] } as any);
+					let playerInfoFromDeckstring = null;
+					return {
+						...stat,
+						playerDecklist: isMercenaries(stat.gameMode)
+							? stat.playerDecklist
+							: this.allCards.normalizeDeckList(stat.playerDecklist),
+						// Because old stats are corrupted
+						runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
+						postMatchStats: postMatchStats,
+						playerClass:
+							stat.playerClass ??
+							(playerInfoFromDeckstring =
+								playerInfoFromDeckstring ??
+								extractPlayerInfoFromDeckstring(
+									stat.playerDecklist,
+									this.allCards,
+									stat.gameMode,
+									stat,
+								))?.playerClass,
+						playerCardId:
+							stat.playerCardId ??
+							(playerInfoFromDeckstring =
+								playerInfoFromDeckstring ??
+								extractPlayerInfoFromDeckstring(
+									stat.playerDecklist,
+									this.allCards,
+									stat.gameMode,
+									stat,
+								))?.playerCardId,
+					};
+				} catch (e) {
+					console.error('[game-stats-loader] error parsing stat', stat, e);
+					return null;
+				}
 			})
+			.filter((stat) => !!stat)
 			.map((stat) => Object.assign(new GameStat(), stat))
 			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
 			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
-		await this.saveLocalStats(stats);
 		console.log('[game-stats-loader] Retrieved game stats for user', stats?.length);
+		await this.saveLocalStats(stats);
 		//console.debug('[game-stats-loader] Retrieved game stats for user', stats);
 		return GameStats.create({
 			stats: stats
@@ -263,10 +279,13 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			if (existingGameStats?.length) {
 				const start = Date.now();
 				console.debug('[game-stats-loader] retrieved stats from disk cache', existingGameStats.length);
-				const reviewIdCount = existingGameStats.reduce((acc, stat) => {
-					acc[stat.reviewId] = (acc[stat.reviewId] || 0) + 1;
-					return acc;
-				}, {} as Record<string, number>);
+				const reviewIdCount = existingGameStats.reduce(
+					(acc, stat) => {
+						acc[stat.reviewId] = (acc[stat.reviewId] || 0) + 1;
+						return acc;
+					},
+					{} as Record<string, number>,
+				);
 				const duplicateReviewIdStats = existingGameStats.filter((stat) => reviewIdCount[stat.reviewId] > 1);
 				console.debug('[game-stats-loader] duplicate reviewId stats', duplicateReviewIdStats);
 				const nonDuplicates = existingGameStats.filter((stat) => reviewIdCount[stat.reviewId] === 1);
