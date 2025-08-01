@@ -164,7 +164,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
-		console.log('[game-stats-loader] endpointResult', endpointResult.length);
+		console.log('[game-stats-loader] Retrieved game stats from API', endpointResult?.length);
 		const stats: readonly GameStat[] = endpointResult
 			.map((stat) => {
 				try {
