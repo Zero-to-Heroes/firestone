@@ -74,6 +74,7 @@ import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 						*ngFor="let tier of value.tiers; trackBy: trackByFn"
 						role="listitem"
 						[tier]="tier"
+						[positionTooltipHidden]="positionTooltipHidden"
 						(heroStatClick)="onHeroStatsClick($event)"
 					></battlegrounds-meta-stats-hero-tier>
 					<a
@@ -116,6 +117,7 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	@Input() set lastUpdate(value: Date) {
 		this.lastUpdate$$.next(value);
 	}
+	@Input() positionTooltipHidden = false;
 
 	private stats$$ = new BehaviorSubject<readonly BgsMetaHeroStatTierItem[]>(null);
 	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>('tier');

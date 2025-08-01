@@ -422,6 +422,7 @@
 	justify-content: center;
 	padding-left: 10px;
 	padding-right: 10px;
+	padding-top: 10px;
 }
 
 // Responsive Design
@@ -448,6 +449,7 @@
 
 	.web-content {
 		padding: 32px;
+		padding-top: 10px;
 		min-width: 500px;
 	}
 }
@@ -473,7 +475,7 @@
 	}
 
 	.web-content {
-		padding: 48px;
+		// padding: 48px;
 		max-width: 1400px;
 		min-width: 800px;
 		align-self: center;
@@ -501,7 +503,7 @@
 	}
 
 	.web-content {
-		padding: 64px;
+		// padding: 64px;
 		min-width: 1000px;
 	}
 
@@ -534,7 +536,7 @@
 // Very large screens
 @media (min-width: 1600px) {
 	.web-content {
-		padding: 80px;
+		// padding: 80px;
 		max-width: 1600px;
 	}
 }

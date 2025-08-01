@@ -1,20 +1,33 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatsAccessService, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsViewModule, BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { Config } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { BehaviorSubject, from, Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { WebBattlegroundsFiltersComponent } from '../filters/_web-battlegrounds-filters.component';
+import { WebBattlegroundsModeFilterDropdownComponent } from '../filters/web-battlegrounds-mode-filter-dropdown.component';
+import { WebBattlegroundsRankFilterDropdownComponent } from '../filters/web-battlegrounds-rank-filter-dropdown.component';
+import { WebBattlegroundsTimeFilterDropdownComponent } from '../filters/web-battlegrounds-time-filter-dropdown.component';
 
 @Component({
 	standalone: true,
 	selector: 'battlegrounds-heroes',
 	templateUrl: './battlegrounds-heroes.component.html',
 	styleUrls: ['./battlegrounds-heroes.component.scss'],
-	imports: [CommonModule, BattlegroundsViewModule],
+	imports: [
+		CommonModule,
+
+		BattlegroundsViewModule,
+		WebBattlegroundsFiltersComponent,
+		WebBattlegroundsModeFilterDropdownComponent,
+		WebBattlegroundsRankFilterDropdownComponent,
+		WebBattlegroundsTimeFilterDropdownComponent,
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
@@ -31,30 +44,49 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly router: Router,
+		private readonly prefs: PreferencesService,
 		private readonly metaHeroStats: BgsMetaHeroStatsAccessService,
 		private readonly metaHeroStatsService: BgsMetaHeroStatsService,
 	) {
 		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.metaHeroStatsService, this.prefs);
+
 		this.heroSort$ = this.heroSort$$.asObservable();
 		this.searchString$ = this.searchString$$.asObservable();
 
-		const config: Config = {
-			gameMode: 'battlegrounds',
-			anomaliesFilter: [] as readonly string[], // prefs.bgsActiveAnomaliesFilter,
-			rankFilter: 100,
-			tribesFilter: [],
-			timeFilter: 'last-patch',
-			options: {
-				convervativeEstimate: true,
-			},
-		};
-		const statsProvider$: Observable<BgsHeroStatsV2> = from(
-			this.metaHeroStats.loadMetaHeroStats(config.timeFilter, config.anomaliesFilter, config.rankFilter),
-		).pipe(takeUntil(this.destroyed$));
+		const config$: Observable<Config> = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => {
+				return {
+					gameMode: prefs.bgsActiveGameMode,
+					anomaliesFilter: [] as readonly string[], // prefs.bgsActiveAnomaliesFilter,
+					rankFilter: prefs.bgsActiveRankFilter,
+					tribesFilter: prefs.bgsActiveTribesFilter,
+					timeFilter: prefs.bgsActiveTimeFilter,
+					options: {
+						convervativeEstimate: true,
+					},
+				};
+			}),
+		);
+		const statsProvider$: Observable<BgsHeroStatsV2> = config$.pipe(
+			switchMap((config) =>
+				config.gameMode === 'battlegrounds-duo'
+					? this.metaHeroStats.loadMetaHeroStatsDuo(
+							config.timeFilter,
+							config.anomaliesFilter,
+							config.rankFilter,
+						)
+					: this.metaHeroStats.loadMetaHeroStats(
+							config.timeFilter,
+							config.anomaliesFilter,
+							config.rankFilter,
+						),
+			),
+			takeUntil(this.destroyed$),
+		);
 		const metaData$ = statsProvider$.pipe(
 			tap((stats) => console.debug('[meta-stats] received stats', stats)),
 			this.mapData((stats) => ({
@@ -68,10 +100,12 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 		this.lastUpdate$ = metaData$.pipe(
 			this.mapData((data) => (data?.lastUpdate ? new Date(data.lastUpdate) : null)),
 		);
-		this.stats$ = statsProvider$.pipe(
-			switchMap((stats) => this.metaHeroStatsService.getTiers(config, stats)),
+		this.stats$ = combineLatest([config$, statsProvider$]).pipe(
+			switchMap(([config, stats]) => this.metaHeroStatsService.getTiers(config, stats)),
 			takeUntil(this.destroyed$),
 		);
+
+		this.cdr.detectChanges();
 	}
 
 	onHeroStatsClick(heroCardId: string) {

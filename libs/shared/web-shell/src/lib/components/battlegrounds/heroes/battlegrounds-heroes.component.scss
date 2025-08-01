@@ -3,6 +3,7 @@
 :host {
 	flex-grow: 1;
 	display: flex;
+	flex-direction: column;
 }
 
 battlegrounds-meta-stats-heroes-view {
@@ -52,6 +53,12 @@ battlegrounds-meta-stats-heroes-view {
 		.health {
 			right: 0%;
 			bottom: 1%;
+		}
+	}
+
+	battlegrounds-hero-search {
+		.search-label {
+			border: 1px solid rgba(161, 114, 63, 0.5);
 		}
 	}
 }
