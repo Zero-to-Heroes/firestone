@@ -31,6 +31,7 @@
 	.hero-details {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 
 		.name {
 			color: var(--default-title-color);
@@ -122,6 +123,8 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		max-height: 50px;
+		align-self: center;
 
 		.tribe {
 			display: flex;

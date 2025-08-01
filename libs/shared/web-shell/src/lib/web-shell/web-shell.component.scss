@@ -1,4 +1,16 @@
 .web-app {
+	&.general-theme {
+		--color-1: #e9cdb5;
+		--color-2: #d9c3ab;
+		--color-4: #5a3f23;
+		--color-7: #251405;
+		--color-8: #a1723f;
+		--default-title-color: #ffb948;
+		--default-text-color: #d9c3ab;
+
+		--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/home-screen-bg.png');
+	}
+
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
@@ -14,14 +26,7 @@
 	background-attachment: fixed;
 	overflow-y: scroll;
 
-	&.general-theme {
-		--color-1: #e9cdb5;
-		--color-2: #d9c3ab;
-		--color-4: #5a3f23;
-		--color-7: #251405;
-
-		--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/home-screen-bg.png');
-	}
+	color: var(--default-text-color);
 }
 
 .web-header {
@@ -410,8 +415,11 @@
 // Content Area
 .web-content {
 	flex: 1;
-	background: var(--color-7);
+	background: var(--color-5);
 	position: relative;
+	margin-top: 15px;
+	display: flex;
+	justify-content: center;
 }
 
 // Responsive Design
@@ -438,6 +446,7 @@
 
 	.web-content {
 		padding: 32px;
+		min-width: 500px;
 	}
 }
 
@@ -464,6 +473,7 @@
 	.web-content {
 		padding: 48px;
 		max-width: 1400px;
+		min-width: 800px;
 		align-self: center;
 	}
 }
@@ -490,6 +500,7 @@
 
 	.web-content {
 		padding: 64px;
+		min-width: 1000px;
 	}
 
 	.web-header .header-content .download-button {

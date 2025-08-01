@@ -123,7 +123,10 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	private totalGames$$ = new BehaviorSubject<number>(null);
 	private lastUpdate$$ = new BehaviorSubject<Date>(null);
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+	) {
 		super(cdr);
 	}
 

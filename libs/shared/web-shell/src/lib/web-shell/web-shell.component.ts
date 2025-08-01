@@ -59,7 +59,7 @@ export class WebShellComponent implements OnInit, OnDestroy {
 		{
 			id: 'constructed',
 			label: 'Constructed',
-			icon: 'assets/svg/ftue/constructed.svg',
+			icon: 'assets/svg/ftue/decktracker.svg',
 			route: '/constructed',
 			subItems: [
 				{ id: 'constructed-decks', label: 'Decks', route: '/constructed/decks' },

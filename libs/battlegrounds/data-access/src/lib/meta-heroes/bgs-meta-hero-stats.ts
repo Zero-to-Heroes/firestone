@@ -37,7 +37,7 @@ export const enhanceHeroStat = (
 			gamesForHero.length === 0
 				? null
 				: gamesForHero.map((g) => parseInt(g.additionalResult)).reduce((a, b) => a + b, 0) /
-				  gamesForHero.length,
+					gamesForHero.length,
 		playerNetMmr: mmrDeltas.length === 0 ? null : mmrDeltas.reduce((a, b) => a + b, 0) / mmrDeltas.length,
 		playerPlacementDistribution: playerPlacementDistribution,
 		playerAverageMmrGain:
@@ -97,6 +97,7 @@ export const buildTiers = (
 
 	const heroStats = [...stats].sort(sortByProperties((s) => [s.averagePosition]));
 	const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.averagePosition));
+	console.debug('[debug]', i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'S' }), i18n);
 
 	return [
 		{
@@ -183,13 +184,13 @@ export const buildHeroStats = (
 			}
 
 			const tribesModifier = useTribesModifier
-				? tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0
+				? (tribeStatsToUse?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0)
 				: 0;
 			const tribesAveragePositionModifierDetails = useTribesModifier
 				? tribeStatsToUse?.map((t) => ({
 						tribe: t.tribe,
 						impact: t.impactAveragePosition,
-				  }))
+					}))
 				: null;
 			const allTribesAveragePositionModifierDetails = modifiedTribeStats.map((t) => ({
 				tribe: t.tribe,
