@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 
 @Component({
@@ -6,6 +7,6 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 	selector: 'web-constructed',
 	templateUrl: './constructed.component.html',
 	styleUrls: ['./constructed.component.scss'],
-	imports: [InlineSVGModule],
+	imports: [InlineSVGModule, SharedFrameworkCoreModule],
 })
 export class ConstructedComponent {}

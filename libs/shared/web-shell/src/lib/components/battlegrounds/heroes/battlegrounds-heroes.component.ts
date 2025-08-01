@@ -85,6 +85,13 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 							config.rankFilter,
 						),
 			),
+			tap((stats) =>
+				console.debug(
+					'[meta-stats] received stats',
+					stats,
+					stats.heroStats?.find((s) => s.heroCardId === 'TB_BaconShop_HERO_17'),
+				),
+			),
 			takeUntil(this.destroyed$),
 		);
 		const metaData$ = statsProvider$.pipe(

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -34,41 +35,13 @@ export class WebShellComponent implements OnInit, OnDestroy {
 	currentSection: NavigationSection;
 	private routerSubscription?: Subscription;
 
-	navigationSections: NavigationSection[] = [
-		{
-			id: 'battlegrounds',
-			label: 'Battlegrounds',
-			icon: 'assets/svg/ftue/battlegrounds.svg',
-			route: '/battlegrounds',
-			subItems: [
-				{ id: 'bg-heroes', label: 'Heroes', route: '/battlegrounds/heroes' },
-				{ id: 'bg-comps', label: 'Compositions', route: '/battlegrounds/comps' },
-				{ id: 'bg-cards', label: 'Cards', route: '/battlegrounds/cards' },
-			],
-		},
-		{
-			id: 'arena',
-			label: 'Arena',
-			icon: 'assets/svg/ftue/arena.svg',
-			route: '/arena',
-			subItems: [
-				{ id: 'arena-stats', label: 'Stats', route: '/arena/stats' },
-				{ id: 'arena-cards', label: 'Cards', route: '/arena/cards' },
-			],
-		},
-		{
-			id: 'constructed',
-			label: 'Constructed',
-			icon: 'assets/svg/ftue/decktracker.svg',
-			route: '/constructed',
-			subItems: [
-				{ id: 'constructed-decks', label: 'Decks', route: '/constructed/decks' },
-				{ id: 'constructed-meta', label: 'Meta', route: '/constructed/meta' },
-			],
-		},
-	];
+	navigationSections: NavigationSection[] = [];
 
-	constructor(private router: Router) {
+	constructor(
+		private readonly router: Router,
+		private readonly i18n: ILocalizationService,
+	) {
+		this.navigationSections = this.buildNavigationSections();
 		this.currentSection = this.navigationSections[0];
 	}
 
@@ -115,5 +88,69 @@ export class WebShellComponent implements OnInit, OnDestroy {
 
 	closeMobileMenu() {
 		this.isMobileMenuOpen = false;
+	}
+
+	private buildNavigationSections() {
+		return [
+			{
+				id: 'battlegrounds',
+				label: this.i18n.translateString('app.menu.battlegrounds-header'),
+				icon: 'assets/svg/ftue/battlegrounds.svg',
+				route: '/battlegrounds',
+				subItems: [
+					{
+						id: 'bg-heroes',
+						label: this.i18n.translateString('app.battlegrounds.menu.heroes'),
+						route: '/battlegrounds/heroes',
+					},
+					{
+						id: 'bg-comps',
+						label: this.i18n.translateString('app.battlegrounds.menu.comps'),
+						route: '/battlegrounds/comps',
+					},
+					{
+						id: 'bg-cards',
+						label: this.i18n.translateString('app.battlegrounds.menu.cards'),
+						route: '/battlegrounds/cards',
+					},
+				],
+			},
+			{
+				id: 'arena',
+				label: this.i18n.translateString('app.menu.arena-header'),
+				icon: 'assets/svg/ftue/arena.svg',
+				route: '/arena',
+				subItems: [
+					{
+						id: 'arena-stats',
+						label: this.i18n.translateString('app.arena.menu.classes'),
+						route: '/arena/classes',
+					},
+					{
+						id: 'arena-cards',
+						label: this.i18n.translateString('app.arena.menu.cards'),
+						route: '/arena/cards',
+					},
+				],
+			},
+			{
+				id: 'constructed',
+				label: this.i18n.translateString('app.menu.constructed-header'),
+				icon: 'assets/svg/ftue/decktracker.svg',
+				route: '/constructed',
+				subItems: [
+					{
+						id: 'constructed-meta',
+						label: this.i18n.translateString('app.constructed.menu.meta'),
+						route: '/constructed/meta',
+					},
+					{
+						id: 'constructed-decks',
+						label: this.i18n.translateString('app.constructed.menu.decks'),
+						route: '/constructed/decks',
+					},
+				],
+			},
+		];
 	}
 }

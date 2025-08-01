@@ -1,10 +1,11 @@
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
-import { translationFileVersion } from '@firestone/shared/framework/common';
+import { CdkOverlayContainer, translationFileVersion } from '@firestone/shared/framework/common';
 
 import {
 	CardsFacadeService,
@@ -44,5 +45,8 @@ export const appConfig: ApplicationConfig = {
 
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
+		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
+
+		// CdkOverlayContainer,
 	],
 };

@@ -2,13 +2,19 @@
 	&.general-theme {
 		--color-1: #e9cdb5;
 		--color-2: #d9c3ab;
+		--color-3: #9b8063;
 		--color-4: #5a3f23;
+		--color-5: #190505;
+		--color-6: #42290f;
 		--color-7: #251405;
 		--color-8: #a1723f;
 		--default-title-color: #ffb948;
 		--default-text-color: #d9c3ab;
 
 		--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/home-screen-bg.png');
+
+		--tooltip-background-color: var(--color-5);
+		--tooltip-color: var(--color-1);
 	}
 
 	display: flex;
