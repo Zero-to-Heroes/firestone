@@ -5,6 +5,7 @@ import { LocalStorageService } from './local-storage';
 import { OverwolfService } from './overwolf.service';
 
 const FIRESTONE_TOKEN_URL = 'https://xuzigy2zcqg6qxrdztvg42suae0skqkr.lambda-url.us-west-2.on.aws/';
+
 @Injectable()
 export class ApiRunner {
 	constructor(
@@ -59,7 +60,7 @@ export class ApiRunner {
 			console.debug('[remote] calling POST', url);
 			this.http.post(url, input, { headers: headers }).subscribe(
 				(result: any) => {
-					console.debug('retrieved POST call', url);
+					console.debug('retrieved POST call', url, result);
 					resolve(result);
 				},
 				(error) => {
