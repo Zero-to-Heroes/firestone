@@ -2183,7 +2183,10 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), minion),
 			);
 		case CardIds.OverlordSaurfang_BAR_334:
-			return and(side(inputSide), minion, inGraveyard, frenzy);
+			return highlightConditions(
+				and(side(inputSide), minion, or(inHand, inDeck), frenzy),
+				and(side(inputSide), minion, inGraveyard, frenzy),
+			);
 		case CardIds.OverseerFrigidaraCore_RLK_224:
 		case CardIds.OverseerFrigidara_LEG_RLK_224:
 		case CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224:

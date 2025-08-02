@@ -42,10 +42,12 @@ import { VanessaVanCleef } from './vanessa-van-cleef';
 import { WakenerOfSouls } from './wakener-of-souls';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
+import { OverlordSaurfang } from './overlord-saurfang';
 
 const cards = [
 	Archimonde,
 	WakenerOfSouls,
+	OverlordSaurfang,
 	Ressucitate,
 	RaiseDead,
 	CreatureOfTheSacredCave,
