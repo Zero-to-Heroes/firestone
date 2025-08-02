@@ -790,8 +790,8 @@ const getDynamicFilters = (
 		case CardIds.MazeGuide:
 		case CardIds.MazeGuide_CORE_REV_308:
 		case CardIds.DistressSignal_GDB_883:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.DwarfPlanet_GDB_233:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.FacelessLackey:
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
 		case CardIds.RayllaSandSculptor_VAC_424:
@@ -966,6 +966,16 @@ const filterCards = (
 					format = GameFormat.FT_WILD;
 				}
 			}
+			const debug = c.id.includes(CardIds.BreathOfSindragosa_ICC_836);
+			debug &&
+				console.log(
+					'debug',
+					c.id,
+					!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false,
+					c,
+					format,
+					gameType,
+				);
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
 		.filter((c) => filters.every((f) => f(c)))
