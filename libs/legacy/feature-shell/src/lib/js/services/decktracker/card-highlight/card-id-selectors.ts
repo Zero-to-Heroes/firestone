@@ -3264,6 +3264,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.UnstableMagicTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, arcane);
+		case CardIds.UntappedPotential:
+		case CardIds.UntappedPotential_OssirianTear:
+			return and(side(inputSide), or(inDeck, inHand), chooseOne);
 		case CardIds.UnyieldingVindicator_GDB_232:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.UrchinSpines:
