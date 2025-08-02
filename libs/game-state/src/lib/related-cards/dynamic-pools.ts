@@ -434,7 +434,10 @@ const getDynamicFilters = (
 				(hasCost(c, '==', 8) || hasCost(c, '==', 6) || hasCost(c, '==', 4));
 		case CardIds.OddMap_TLC_824:
 			return (c) =>
-				hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && (c?.attack ?? 0) % 2 === 1;
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.BEAST) &&
+				(c?.attack ?? 0) % 2 === 1 &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Random Demons
 		case CardIds.Kiljaeden_GDB_145:
@@ -633,7 +636,7 @@ const getDynamicFilters = (
 		case CardIds.PowerOfCreation:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
-				hasCost(c, '==', 8) &&
+				hasCost(c, '==', 6) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.FreeFromAmber:
 			return (c) =>
