@@ -76,7 +76,7 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 						field: 'replaysLoadPeriod',
 						label: context.i18n.translateString('settings.general.data.games-period'),
 						tooltip: null,
-						advancedSetting: true,
+						// advancedSetting: true,
 						dropdownConfig: {
 							options: gamesPeriodOptions(context),
 						},
