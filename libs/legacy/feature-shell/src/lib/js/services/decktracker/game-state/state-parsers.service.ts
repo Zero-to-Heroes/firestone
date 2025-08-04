@@ -436,7 +436,7 @@ export class GameStateParsersService {
 			[GameEvent.TOTAL_ATTACK_ON_BOARD]: [new AttackOnBoardParser()],
 			[GameEvent.TOTAL_MAGNETIZE_CHANGED]: [new BgsTotalMagnetizedChangedParser()],
 			[GameEvent.TOURIST_REVEALED]: [new TouristRevealedParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs)],
+			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs, this.allCards)],
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
 			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs, this.i18n, this.nav)],
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],

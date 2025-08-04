@@ -5,9 +5,14 @@ import { GameEvent } from '../../../models/game-event';
 import { CARDS_THAT_IMPROVE_WHEN_TRADED } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export class CardTradedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly prefs: PreferencesService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -57,13 +62,16 @@ export class CardTradedParser implements EventParser {
 			? card.update({
 					entityId: card.entityId,
 					cardId: card.cardId ?? cardId,
+					refManaCost: card.refManaCost ?? this.allCards.getCard(card.cardId ?? cardId)?.cost,
+					cardName: card.cardName ?? this.allCards.getCard(card.cardId ?? cardId)?.name,
+					rarity: card.rarity ?? this.allCards.getCard(card.cardId ?? cardId)?.rarity,
 					lastAffectedByCardId: undefined,
 					mainAttributeChange: buildAttributeChange(card),
 					positionFromTop: undefined,
 					positionFromBottom: undefined,
 					dredged: undefined,
 					zone: undefined,
-			  } as DeckCard)
+				} as DeckCard)
 			: card;
 
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
@@ -80,7 +88,7 @@ export class CardTradedParser implements EventParser {
 						positionFromTop: undefined,
 						dredged: undefined,
 					}),
-			  )
+				)
 			: newDeck;
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
