@@ -6,11 +6,5 @@ import { Buffer } from 'buffer';
 	env: { DEBUG: undefined },
 	version: 'v22.0.0', // Mock Node.js version
 };
-// (window as any).vm = {
-// 	createContext: () => ({}),
-// 	runInContext: (code: string, context: any) => {
-// 		return eval(code);
-// 	},
-// };
 
 global.Buffer = global.Buffer || Buffer;
