@@ -36,8 +36,8 @@ export class CheckboxComponent {
 	@Output() valueChanged = new EventEmitter<boolean>();
 
 	@Input() label: string;
-	@Input() labelTooltip: string;
-	@Input() image: string;
+	@Input() labelTooltip: string | undefined;
+	@Input() image: string | null;
 	@Input() value: boolean;
 	@Input() disabled: boolean;
 
