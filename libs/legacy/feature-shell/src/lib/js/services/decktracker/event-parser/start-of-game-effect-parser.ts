@@ -20,14 +20,14 @@ export class StartOfGameEffectParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const refCard = this.allCards.getCard(cardId);
 		const card = DeckCard.create({
-			entityId: null,
+			entityId: entityId, // We need the entityId to know if the same effect is registered multiple times
 			cardId: cardId,
 			cardName: refCard.name,
 			refManaCost: refCard?.cost,
@@ -41,7 +41,7 @@ export class StartOfGameEffectParser implements EventParser {
 		// we want to be able to add multiple copies of the same "start of combat" card, but we don't want to add
 		// a card if we already know it's in the list
 		// This happens when we have multiple Prince Malchezaar cards in the deck, for instance
-		if (!deck.deckList?.length && !deck.deckstring) {
+		if (!deck.deckList?.length && !deck.deckstring && !deck.deck.some((e) => e.entityId === entityId)) {
 			const fillerCard = deck.deck.find(
 				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
 			);
