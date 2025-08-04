@@ -2954,7 +2954,10 @@ export const cardIdSelector = (
 		case CardIds.StrandedSpaceman_GDB_861:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.StranglethornHeart:
-			return tooltip(and(side(inputSide), inGraveyard, beast, effectiveCostMore(4)));
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), beast, effectiveCostMore(4)),
+				and(side(inputSide), inGraveyard, beast, effectiveCostMore(4)),
+			);
 		case CardIds.StrengthInNumbers:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SuccumbToMadness_EDR_455:
