@@ -361,11 +361,15 @@ export class ArenaDraftManagerService
 						const classStat = classStats.stats.find((s) => s.playerClass?.toUpperCase() === deckClass);
 						const classWinrate = classStat?.totalGames ? classStat.totalsWins / classStat.totalGames : null;
 						const cardImpacts = currentDeck.DeckList.map((card) => {
-							const cardStat = cardStats.stats.find((s) => s.cardId === card);
+							const cardStat = cardStats.stats.find(
+								(s) =>
+									this.allCards.getRootCardId(s.cardId) ===
+									this.allCards.getRootCardId(this.allCards.getCard(card).id),
+							);
 							const deckWinrate = !cardStat?.matchStats?.stats?.decksWithCard
 								? 0
 								: cardStat.matchStats.stats.decksWithCardThenWin /
-								  cardStat.matchStats.stats.decksWithCard;
+									cardStat.matchStats.stats.decksWithCard;
 							const deckImpact =
 								classWinrate == null || deckWinrate == null ? null : deckWinrate - classWinrate;
 							return deckImpact;

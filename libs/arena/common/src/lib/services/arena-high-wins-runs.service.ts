@@ -140,7 +140,11 @@ export const buildNotableCards = (
 	// const cardIds = [...new Set([...legendaries, ...treasures])].map((c) => c.id);
 	const allStats = stats.cardStats$$?.value;
 	const cardIds = legendaries
-		.filter((c) => !!allStats?.stats?.find((s) => s.cardId === c.id)?.draftStats?.totalOffered)
+		.filter(
+			(c) =>
+				!!allStats?.stats?.find((s) => allCards.getRootCardId(s.cardId) === allCards.getRootCardId(c.id))
+					?.draftStats?.totalOffered,
+		)
 		.map((c) => c.id);
 	return cardIds.map((c) => ({
 		image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${c}.jpg`,

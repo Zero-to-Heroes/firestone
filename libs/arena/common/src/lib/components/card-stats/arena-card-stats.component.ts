@@ -400,10 +400,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 				)
 				.map((stat) => this.buildCardStat(stat))
 				.sort((a, b) => this.sortCards(a, b, sortCriteria)) ?? [];
-		// console.debug(
-		// 	'[arena-card-stats] built card stats',
-		// 	result?.filter((s) => s.cardId === 'WW_406'),
-		// );
+		console.debug('[arena-card-stats] built card stats', result);
 		return result;
 		// .sort(sortByProperties((a: ArenaCardStatInfo) => [-(a.drawWinrate ?? 0)])) ?? []
 	}
