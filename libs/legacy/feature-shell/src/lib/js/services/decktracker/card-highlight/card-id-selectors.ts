@@ -2415,6 +2415,10 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), holy, spell),
 				and(side(inputSide), or(inHand, inDeck), shadow, spell),
 			);
+		case CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t:
+			return and(side(inputSide), or(inHand, inDeck), holy, spell);
+		case CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2:
+			return and(side(inputSide), or(inHand, inDeck), shadow, spell);
 		case CardIds.ReanimateTheTerror_TLC_433:
 			return and(side(inputSide), or(inHand, inDeck), spendCorpse);
 		case CardIds.ReanimatedPterrordax_TLC_436:
