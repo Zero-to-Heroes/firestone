@@ -383,7 +383,7 @@ const getDynamicFilters = (
 			return (c) => hasMechanic(c, GameTag.OUTCAST);
 
 		// Discover X Mechanic
-		// Random Deathrattle
+		// Discover Deathrattle
 		case CardIds.CarrionStudies:
 		case CardIds.AssimilatingBlight_GDB_478:
 		case CardIds.AvantGardening_EDR_488:
@@ -397,7 +397,14 @@ const getDynamicFilters = (
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
 				fromAnotherClass(c, options.currentClass);
 
-		// Discover X Mechanic
+		// Discover Taunt
+		case CardIds.FrightenedFlunky:
+		case CardIds.FrightenedFlunkyCore:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.TAUNT) &&
+				fromAnotherClass(c, options.currentClass);
+
 		// Random Secret
 		case CardIds.RuniTimeExplorer_TheNightholdToken_WON_053t4:
 			return (c) =>
