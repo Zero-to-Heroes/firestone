@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -21,7 +21,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, pairwise, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, filter, pairwise, switchMap, takeUntil, tap } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
@@ -65,6 +65,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly arenaCardStats: ArenaCardStatsService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly mouseOverService: CardMousedOverService,
+		private readonly patches: PatchesConfigService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		// Provided in the app
 		@Inject(ARENA_DRAFT_MANAGER_SERVICE_TOKEN) private readonly draftManager: IArenaDraftManagerService,
@@ -74,7 +75,14 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.draftManager, this.arenaCardStats, this.arenaClassStats, this.ads, this.prefs);
+		await waitForReady(
+			this.draftManager,
+			this.arenaCardStats,
+			this.arenaClassStats,
+			this.ads,
+			this.prefs,
+			this.patches,
+		);
 
 		const isHearthArenaRunning = await this.ow.getExtensionRunningState(`eldaohcjmecjpkpdhhoiolhhaeapcldppbdgbnbc`);
 		console.log('[arena-card-selection] isHearthArenaRunning', isHearthArenaRunning);
@@ -100,10 +108,17 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		// So this means storing somewhere the current draft info (including the decklist)
 		// this.updateClassContext();
 		const currentHero$ = this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId));
-		const classStats$ = gameMode$.pipe(
-			switchMap((gameMode) =>
+		const timeFrame$ = this.patches.currentArenaMetaPatch$$.pipe(
+			filter((patch) => !!patch),
+			this.mapData((patch) => {
+				const isPatchTooRecent = new Date(patch.date).getTime() > Date.now() - 3 * 24 * 60 * 60 * 1000;
+				return isPatchTooRecent ? 'past-3' : 'last-patch';
+			}),
+		);
+		const classStats$ = combineLatest([gameMode$, timeFrame$]).pipe(
+			switchMap(([gameMode, timeFrame]) =>
 				this.arenaClassStats.buildClassStats(
-					'last-patch',
+					timeFrame,
 					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
 				),
 			),
@@ -120,11 +135,11 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			distinctUntilChanged(),
 			takeUntil(this.destroyed$),
 		);
-		const cardStats$ = combineLatest([currentHero$, gameMode$]).pipe(
-			switchMap(([currentHero, gameMode]) =>
+		const cardStats$ = combineLatest([currentHero$, gameMode$, timeFrame$]).pipe(
+			switchMap(([currentHero, gameMode, timeFrame]) =>
 				this.arenaCardStats.buildCardStats(
 					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
-					'last-patch',
+					timeFrame,
 					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
 				),
 			),
