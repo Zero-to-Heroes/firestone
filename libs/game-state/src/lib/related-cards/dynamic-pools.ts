@@ -438,7 +438,7 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
-				(hasCost(c, '==', 8) || hasCost(c, '==', 6) || hasCost(c, '==', 4));
+				(c.attack === 8 || c.attack === 6 || c.attack === 4);
 		case CardIds.OddMap_TLC_824:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
