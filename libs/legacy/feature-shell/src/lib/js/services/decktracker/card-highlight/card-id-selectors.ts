@@ -3544,7 +3544,7 @@ export const cardIdSelector = (
 		case CardIds.GrimscaleOracleLegacy:
 		case CardIds.GrimscaleOracleVanilla:
 		case CardIds.GrimscaleChum:
-		case CardIds.MurlocTidecaller:
+		// case CardIds.MurlocTidecaller:
 		case CardIds.MurlocTidecallerCore:
 		case CardIds.MurlocTidecallerVanilla:
 		case CardIds.MurlocTidecallerLegacy:

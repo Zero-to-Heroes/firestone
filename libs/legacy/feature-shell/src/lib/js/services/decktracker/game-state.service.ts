@@ -257,7 +257,7 @@ export class GameStateService {
 						? currentState.update({
 								playerDeck: updatedPlayerDeck,
 								opponentDeck: udpatedOpponentDeck,
-						  })
+							})
 						: currentState;
 				}
 
@@ -282,7 +282,7 @@ export class GameStateService {
 						? currentState.update({
 								playerDeck: updatedPlayerDeck,
 								opponentDeck: udpatedOpponentDeck,
-						  })
+							})
 						: currentState;
 				}
 
@@ -438,15 +438,15 @@ export class GameStateService {
 			);
 		}
 
-		console.debug(
-			'[game-state] processed event',
-			gameEvent.type,
-			gameEvent.cardId,
-			gameEvent.entityId,
-			currentState?.opponentDeck.board.map((c) => c.cardName),
-			currentState,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[game-state] processed event',
+		// 	gameEvent.type,
+		// 	gameEvent.cardId,
+		// 	gameEvent.entityId,
+		// 	currentState?.opponentDeck.board.map((c) => c.cardName),
+		// 	currentState,
+		// 	gameEvent,
+		// );
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}
@@ -473,7 +473,7 @@ export class GameStateService {
 			manaLeft != deck.hero?.manaLeft
 				? deck.hero?.update({
 						manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
-				  })
+					})
 				: deck.hero;
 
 		// We need this because we don't know the exact content of cards in the opponent's deck
@@ -491,7 +491,7 @@ export class GameStateService {
 					hero: newHero,
 					cardsLeftInDeck: cardsLeftInDeck,
 					// totalAttackOnBoard: totalAttackOnBoard,
-			  })
+				})
 			: deck;
 	}
 

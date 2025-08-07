@@ -93,8 +93,8 @@ const isValidBgSpellForTribes = (cardId: string, availableTribes: readonly Race[
 			return availableTribes.includes(Race.BEAST);
 		case CardIds.Butchering_BG28_604:
 			return availableTribes.includes(Race.UNDEAD);
-		case CardIds.SuspiciousStimulant_BG28_605:
-			return availableTribes.includes(Race.ELEMENTAL);
+		// case CardIds.SuspiciousStimulant_BG28_605:
+		// 	return availableTribes.includes(Race.ELEMENTAL);
 		case CardIds.SpitescaleSpecial_BG28_606:
 			return availableTribes.includes(Race.NAGA);
 		case CardIds.CorruptedCupcakes_BG28_607:
