@@ -186,6 +186,8 @@ export class BgsBattleSideComponent {
 	maxHealth: number;
 	tavernTier: number;
 	undeadArmy: number;
+	hauntedCarapaceAttackBonus: number;
+	hauntedCarapaceHealthBonus: number;
 	eternalLegion: number;
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
@@ -199,7 +201,10 @@ export class BgsBattleSideComponent {
 	undeadArmyLabel = this.allCards.getCard(CardIds.NerubianDeathswarmer_UndeadArmyEnchantment).name;
 	eternalLegionLabel = this.allCards.getCard(CardIds.EternalLegionEnchantment).name;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	trackByFn(index, item: Entity) {
 		return item.id;
@@ -305,6 +310,8 @@ export class BgsBattleSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
+		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
+		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
 		// this.bloodGemAttackBonus = this._player.player?.globalInfo?.BloodGemAttackBonus ?? 0;
 		// this.bloodGemHealthBonus = this._player.player?.globalInfo?.BloodGemHealthBonus ?? 0;
 		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;

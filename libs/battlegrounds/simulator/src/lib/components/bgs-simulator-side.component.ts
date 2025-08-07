@@ -168,6 +168,8 @@ export class BgsSimulatorSideComponent {
 
 	undeadArmy: number;
 	eternalLegion: number;
+	hauntedCarapaceAttackBonus: number;
+	hauntedCarapaceHealthBonus: number;
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
@@ -270,6 +272,8 @@ export class BgsSimulatorSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
+		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
+		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
 		// this.bloodGemAttackBonus = this._player.player?.globalInfo?.BloodGemAttackBonus ?? 0;
 		// this.bloodGemHealthBonus = this._player.player?.globalInfo?.BloodGemHealthBonus ?? 0;
 		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;

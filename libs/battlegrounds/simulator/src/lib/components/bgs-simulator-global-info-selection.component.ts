@@ -39,6 +39,24 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input haunted-carapace-attack"
+					[label]="'battlegrounds.sim.haunted-carapace-attack' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.haunted-carapace-attack-tooltip' | fsTranslate"
+					[value]="hauntedCarapaceAttackBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onHauntedCarapaceAttackBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input haunted-carapace-health"
+					[label]="'battlegrounds.sim.haunted-carapace-health' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.haunted-carapace-health-tooltip' | fsTranslate"
+					[value]="hauntedCarapaceHealthBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onHauntedCarapaceHealthBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input"
 					[label]="'battlegrounds.sim.frostling-bonus' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.frostling-bonus-tooltip' | fsTranslate"
@@ -210,6 +228,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.inputGlobalInfo = value;
 		this.eternalKnightsDeadThisGame = value?.EternalKnightsDeadThisGame ?? 0;
 		this.undeadAttackBonus = value?.UndeadAttackBonus ?? 0;
+		this.hauntedCarapaceAttackBonus = value?.HauntedCarapaceAttackBonus ?? 0;
+		this.hauntedCarapaceHealthBonus = value?.HauntedCarapaceHealthBonus ?? 0;
 		this.frostlingBonus = value?.FrostlingBonus ?? 0;
 		this.bloodGemAttackBonus = value?.BloodGemAttackBonus ?? 0;
 		this.bloodGemHealthBonus = value?.BloodGemHealthBonus ?? 0;
@@ -235,6 +255,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	eternalKnightsDeadThisGame: number;
 	undeadAttackBonus: number;
+	hauntedCarapaceAttackBonus: number;
+	hauntedCarapaceHealthBonus: number;
 	frostlingBonus: number;
 	bloodGemAttackBonus: number;
 	bloodGemHealthBonus: number;
@@ -270,6 +292,14 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onUndeadAttackBonusChanged(value: number) {
 		this.undeadAttackBonus = value;
+	}
+
+	onHauntedCarapaceAttackBonusChanged(value: number) {
+		this.hauntedCarapaceAttackBonus = value;
+	}
+
+	onHauntedCarapaceHealthBonusChanged(value: number) {
+		this.hauntedCarapaceHealthBonus = value;
 	}
 
 	onFrostlingBonusChanged(value: number) {
@@ -318,6 +348,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			...(this.inputGlobalInfo ?? {}),
 			EternalKnightsDeadThisGame: this.eternalKnightsDeadThisGame,
 			UndeadAttackBonus: this.undeadAttackBonus,
+			HauntedCarapaceAttackBonus: this.hauntedCarapaceAttackBonus,
+			HauntedCarapaceHealthBonus: this.hauntedCarapaceHealthBonus,
 			FrostlingBonus: this.frostlingBonus,
 			BloodGemAttackBonus: this.bloodGemAttackBonus,
 			BloodGemHealthBonus: this.bloodGemHealthBonus,
