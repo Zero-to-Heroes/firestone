@@ -318,12 +318,14 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 1323;
 		case CardIds.Buttons_BG32_HERO_002:
 			return 1322;
+		case CardIds.LohTheLivingLegend_BG33_HERO_001:
+			return 1364;
 		// case CardIds.Diablo:
 		// 	return;
 		default:
-			if (heroCardId !== CardIds.Diablo) {
-				console.error('missing achievements section for ', heroCardId);
-			}
+			// if (heroCardId !== CardIds.Diablo) {
+			// 	console.error('missing achievements section for ', heroCardId);
+			// }
 			return null;
 	}
 };
