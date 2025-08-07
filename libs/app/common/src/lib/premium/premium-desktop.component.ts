@@ -60,7 +60,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					中国大陆用户：如果您打算使用支付宝付款，请使用“旧版”订阅，因为此付款方式与新的 Tebex
 					系统兼容不佳。我们预计问题需要几个月才能解决。感谢您的理解。
 				</div>
-				<!-- <div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
+				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
 					{{ discountBannerText }}
 					<pre
 						class="code"
@@ -69,7 +69,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div> -->
+				</div>
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
 						class="plan"
@@ -79,15 +79,6 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 						(unsubscribe)="onUnsubscribeRequest($event)"
 					></premium-package>
 				</div>
-				<!-- <div class="redeem-code-container">
-					<fs-text-input
-						[showSearchIcon]="false"
-						[placeholder]="'XXXX-XXXX-XXXX-XXXX'"
-						[debounceTime]="500"
-						(fsModelUpdate)="onCodeUpdated($event)"
-					></fs-text-input>
-					<button class="button redeem-button" [fsTranslate]="'Redeem code'" (click)="redeem()"></button>
-				</div> -->
 			</div>
 		</div>
 		<div class="modal-container confirmation-modal" *ngIf="showConfirmationPopUp$ | async as model">
@@ -148,10 +139,10 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	possibleChineseUser$: Observable<boolean>;
 
 	yearlySubtext: string;
-	couponCode = '83dafbb3-fbf6-4544-99c7-83667378a406';
+	couponCode = '6B74-BY6Z-XZ2G';
 	discountBannerText = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
-		endDate: new Date('2025-04-08').toLocaleDateString(this.i18n.formatCurrentLocale()!),
-		reduction: '30%',
+		endDate: new Date('2025-09-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
+		reduction: '20%',
 	});
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);
@@ -233,8 +224,8 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 								rawPrice == null
 									? '-'
 									: billingPeriodicity === 'yearly'
-									? (rawPrice / 12).toFixed(2)
-									: rawPrice;
+										? (rawPrice / 12).toFixed(2)
+										: rawPrice;
 							const result: PremiumPlan = {
 								...plan,
 								price: price,
