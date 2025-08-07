@@ -852,8 +852,8 @@ export const cardIdSelector = (
 		// 	return and(side(inputSide), inDeck, spell);
 		case CardIds.Cultivation:
 			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
-		case CardIds.CursedCatacombs_TLC_451:
-			return and(side(inputSide), inDeck, minion);
+		// case CardIds.CursedCatacombs_TLC_451:
+		// 	return and(side(inputSide), inDeck, minion);
 		case CardIds.CustomsEnforcer_VAC_440:
 			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.CutlassCourier:
