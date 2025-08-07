@@ -569,6 +569,7 @@ const getDynamicFilters = (
 		case CardIds.VoidScripture_YOG_507:
 		case CardIds.ExarchHataaru_GDB_136:
 		case CardIds.InfinitizeTheMaxitude:
+		case CardIds.Jettison_GDB_227:
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InstructorFireheart:
 			return (c) =>
