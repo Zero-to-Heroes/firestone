@@ -23,6 +23,7 @@ import {
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -35,7 +36,7 @@ const IMBUED_HERO_POWERS = [
 export const getDynamicRelatedCardIds = (
 	cardId: string,
 	allCards: AllCardsService,
-	options: {
+	inputOptions: {
 		format: GameFormat;
 		gameType: GameType;
 		currentClass: string;
@@ -44,6 +45,10 @@ export const getDynamicRelatedCardIds = (
 		validArenaPool: readonly string[];
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
+	const options = {
+		...inputOptions,
+		initialDecklist: inputOptions.deckState?.deckList?.map((c) => c.cardId) ?? [],
+	};
 	switch (cardId) {
 		case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
 		case CardIds.DreamplannerZephrys_HecticTourToken_WORK_027t3:
@@ -936,6 +941,7 @@ const filterCards = (
 	options: {
 		format: GameFormat;
 		gameType: GameType;
+		initialDecklist: readonly string[];
 		validArenaPool: readonly string[];
 	},
 	sourceCardId: string,
@@ -967,6 +973,7 @@ const filterCards = (
 	let gameType = options.gameType;
 	let format = options.format;
 	return baseCards
+		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, allCards))
 		.filter((c) => {
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
 				if (options.validArenaPool.length > 0) {
@@ -1095,4 +1102,45 @@ const hasCost = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>' =
 		default:
 			return false;
 	}
+};
+
+const canIncludeStarcraftFaction = (
+	refCard: ReferenceCard,
+	initialDecklist: readonly string[],
+	allCards: AllCardsService,
+): boolean => {
+	if (!initialDecklist?.length) {
+		return true;
+	}
+
+	if (
+		!refCard.mechanics?.includes(GameTag[GameTag.ZERG]) &&
+		!refCard.mechanics?.includes(GameTag[GameTag.PROTOSS]) &&
+		!refCard.mechanics?.includes(GameTag[GameTag.TERRAN])
+	) {
+		return true;
+	}
+	const isZergOk = hasFaction(refCard, GameTag.ZERG) && hasFactionInDecklist(initialDecklist, GameTag.ZERG, allCards);
+	const isProtossOk =
+		hasFaction(refCard, GameTag.PROTOSS) && hasFactionInDecklist(initialDecklist, GameTag.PROTOSS, allCards);
+	const isTerranOk =
+		hasFaction(refCard, GameTag.TERRAN) && hasFactionInDecklist(initialDecklist, GameTag.TERRAN, allCards);
+	return isZergOk || isProtossOk || isTerranOk;
+};
+
+const hasFaction = (card: ReferenceCard, faction: GameTag): boolean => {
+	return card.mechanics?.includes(GameTag[faction]);
+};
+
+const hasFactionInDecklist = (decklist: readonly string[], faction: GameTag, allCards: AllCardsService): boolean => {
+	for (const cardId of decklist) {
+		const refCard = allCards.getCard(cardId);
+		if (!refCard) {
+			return true;
+		}
+		if (refCard.mechanics?.includes(GameTag[faction])) {
+			return true;
+		}
+	}
+	return false;
 };
