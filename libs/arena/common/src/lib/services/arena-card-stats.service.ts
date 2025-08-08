@@ -4,7 +4,13 @@ import { DraftCardCombinedStat, DraftStatsByContext } from '@firestone-hs/arena-
 import { ArenaCardStat, ArenaCardStats, PlayerClass } from '@firestone-hs/arena-stats';
 import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
 
@@ -22,6 +28,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 
 	private api: ApiRunner;
 	private prefs: PreferencesService;
+	private allCards: CardsFacadeService;
 
 	private cachedStats: ArenaCombinedCardStats | null;
 	private cachedGlobalStats: ArenaCombinedCardStats | null;
@@ -40,6 +47,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		this.searchString$$ = new BehaviorSubject<string | undefined>(undefined);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.allCards = AppInjector.get(CardsFacadeService);
 
 		this.cardStats$$.onFirstSubscribe(async () => {
 			await this.prefs.isReady();
@@ -64,10 +72,10 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 						timeFilter === 'all-time'
 							? 'past-20'
 							: timeFilter === 'past-seven'
-							? 'past-7'
-							: timeFilter === 'past-three'
-							? 'past-3'
-							: timeFilter;
+								? 'past-7'
+								: timeFilter === 'past-three'
+									? 'past-3'
+									: timeFilter;
 					const context = classFilter === 'all' || classFilter == null ? 'global' : classFilter;
 					const result: ArenaCombinedCardStats | null = await this.buildCardStats(
 						context,
@@ -202,7 +210,10 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		draftStats: readonly DraftCardCombinedStat[],
 	): ArenaCombinedCardStat[] {
 		return performanceStats.map((stat: ArenaCardStat) => {
-			const draftStat = draftStats.find((draftStat) => draftStat.cardId === stat.cardId);
+			const draftStat = draftStats.find(
+				(draftStat) =>
+					this.allCards.getRootCardId(draftStat.cardId) === this.allCards.getRootCardId(stat.cardId),
+			);
 			const result: ArenaCombinedCardStat = {
 				cardId: stat.cardId,
 				matchStats: stat,

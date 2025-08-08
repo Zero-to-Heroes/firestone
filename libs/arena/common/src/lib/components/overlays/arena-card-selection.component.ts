@@ -149,7 +149,10 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			this.mapData(
 				([options, stats, currentHeroWinrate]) =>
 					options?.map((option) => {
-						const stat = stats?.stats?.find((s) => s.cardId === option);
+						const stat = stats?.stats?.find(
+							(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option),
+						);
+						console.debug('[debug] stat', stat, option, stats);
 						const drawnWinrate = !stat?.matchStats?.stats?.drawn
 							? null
 							: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
