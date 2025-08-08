@@ -29,9 +29,9 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 			const gameReductionCost = state.playerDeck.enchantments
 				.filter((e) => e.cardId === CardIds.ConstructPylons_PsionicPowerEnchantment_SC_755e)
 				.map(
-					(e) =>
-						(e.tags?.[GameTag.SPAWN_TIME_COUNT] ?? 1) *
-						(e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1),
+					(e) => e.tags?.[GameTag.SPAWN_TIME_COUNT] ?? 1,
+					// Looks like the SPAWN_TIME_COUNT actually takes this increased reduction from Artanis into account
+					// * (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1),
 				)
 				.reduce((a, b) => a + b, 0);
 			console.debug('nextReductionCost', nextReductionCost, state.playerDeck.enchantments);
