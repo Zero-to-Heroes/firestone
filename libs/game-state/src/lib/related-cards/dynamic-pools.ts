@@ -512,7 +512,7 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && hasCost(c, '==', 3);
 		case CardIds.PackKodo:
 			return (c) =>
-				(hasCorrectType(c, CardType.MINION) ||
+				((hasCorrectTribe(c, Race.BEAST) && hasCorrectType(c, CardType.MINION)) ||
 					(hasCorrectType(c, CardType.SPELL) && c?.mechanics?.includes(GameTag[GameTag.SECRET])) ||
 					hasCorrectType(c, CardType.WEAPON)) &&
 				canBeDiscoveredByClass(c, options.currentClass);
