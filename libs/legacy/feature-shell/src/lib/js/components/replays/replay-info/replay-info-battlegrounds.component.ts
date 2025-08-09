@@ -209,8 +209,8 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		const isDuo = this.replayInfo.gameMode === 'battlegrounds-duo';
 		this.visualResult = isBg
 			? this.replayInfo.bgsPerfectGame ||
-			  (!isDuo && parseInt(this.replayInfo.additionalResult) <= 4) ||
-			  (isDuo && parseInt(this.replayInfo.additionalResult) <= 2)
+				(!isDuo && parseInt(this.replayInfo.additionalResult) <= 4) ||
+				(isDuo && parseInt(this.replayInfo.additionalResult) <= 2)
 				? 'won'
 				: 'lost'
 			: this.replayInfo.result;
@@ -280,36 +280,46 @@ export interface KnownBoard {
 }
 
 export const buildFinalWarband = (replayInfo: GameStat, allCards: CardsFacadeService): KnownBoard => {
-	const postMatch = replayInfo.postMatchStats;
-	const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
-	if (!bgsBoard) {
-		if (replayInfo.finalComp?.length) {
-			const decoded = GameStat.decodeBgsFinalComp(replayInfo.finalComp);
-			return {
-				entities: decoded.board.map((entity) => Entity.create(new Entity(), entity)),
-				minionStats: [],
-			};
+	try {
+		const postMatch = replayInfo.postMatchStats;
+		const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
+		if (!bgsBoard) {
+			if (replayInfo.finalComp?.length) {
+				const decoded = GameStat.decodeBgsFinalComp(replayInfo.finalComp);
+				return {
+					entities: decoded.board.map((entity) => Entity.create(new Entity(), entity)),
+					minionStats: [],
+				};
+			}
+			return null;
 		}
+
+		const boardEntities = bgsBoard.board.map((boardEntity) =>
+			boardEntity instanceof Entity || boardEntity.tags instanceof Map
+				? Entity.create(new Entity(), boardEntity as EntityDefinition)
+				: Entity.fromJS(boardEntity as unknown as EntityAsJS),
+		) as readonly Entity[];
+		const normalizedIds = [...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, allCards)))];
+		const minionStats = normalizedIds.map(
+			(cardId) =>
+				({
+					cardId: cardId,
+				}) as MinionStat,
+		);
+
+		return {
+			entities: boardEntities,
+			minionStats: minionStats,
+		} as KnownBoard;
+	} catch (e) {
+		try {
+			console.error('could not decode comp', replayInfo.finalComp);
+		} catch (e) {
+			console.error('could not decode comp', e);
+		}
+		console.error('could not build final warband', replayInfo.reviewId, e);
 		return null;
 	}
-
-	const boardEntities = bgsBoard.board.map((boardEntity) =>
-		boardEntity instanceof Entity || boardEntity.tags instanceof Map
-			? Entity.create(new Entity(), boardEntity as EntityDefinition)
-			: Entity.fromJS(boardEntity as unknown as EntityAsJS),
-	) as readonly Entity[];
-	const normalizedIds = [...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, allCards)))];
-	const minionStats = normalizedIds.map(
-		(cardId) =>
-			({
-				cardId: cardId,
-			} as MinionStat),
-	);
-
-	return {
-		entities: boardEntities,
-		minionStats: minionStats,
-	} as KnownBoard;
 };
 
 export const buildMatchResultText = (info: GameStat, i18n: LocalizationFacadeService): string => {
