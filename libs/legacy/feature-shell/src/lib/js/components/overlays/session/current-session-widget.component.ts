@@ -92,7 +92,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 									[ngClass]="{
 										positive: value.deltaRank > 0,
 										negative: value.deltaRank < 0,
-										neutral: value.deltaRank == 0
+										neutral: value.deltaRank == 0,
 									}"
 									[helpTooltip]="'session.summary.delta-mmr-tooltip' | owTranslate"
 								>
@@ -150,7 +150,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 										class="delta-mmr"
 										[ngClass]="{
 											positive: match.deltaMmr > 0,
-											negative: match.deltaMmr < 0
+											negative: match.deltaMmr < 0,
 										}"
 									>
 										{{ match.deltaMmr }}
@@ -263,10 +263,10 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 								day: '2-digit',
 								year: 'numeric',
 							}),
-					  })
+						})
 					: this.i18n.translateString('session.summary.total-games-tooltip-all-time', {
 							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
-					  }),
+						}),
 			),
 		);
 
@@ -449,36 +449,42 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 		return gamesWithFinalPosition
 			.map((match) => this.toSessionMatch(match))
+			.filter((match) => !!match)
 			.slice(0, sessionWidgetNumberOfMatchesToShow);
 	}
 
 	private toSessionMatch(info: GameStat): SessionMatch {
-		const heroCard = this.allCards.getCard(info.playerCardId);
-		const normalizedCardId = normalizeHeroCardId(heroCard.id, this.allCards);
-		return {
-			reviewId: info.reviewId,
-			heroName: this.allCards.getCard(normalizedCardId).name,
-			heroPortraitImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${normalizedCardId}.jpg`,
-			heroPortraitTooltip: heroCard.name,
-			placement: buildMatchResultText(info, this.i18n),
-			deltaMmr: parseInt(info.newPlayerRank) - parseInt(info.playerRank),
-			anomalies: [...(info.bgsAnomalies ?? [])]
-				.filter((a) => !!a?.length)
-				.sort()
-				.map((anomaly) => ({
-					cardId: anomaly,
-					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
-					tooltip: this.allCards.getCard(anomaly).name,
-				})),
-			availableTribes: [...(info.bgsAvailableTribes ?? [])]
-				.sort((a, b) => a - b)
-				.map((race) => ({
-					cardId: getReferenceTribeCardId(race),
-					icon: getTribeIcon(race),
-					tooltip: getTribeName(race, this.i18n),
-				})),
-			finalWarband: buildFinalWarband(info, this.allCards),
-		};
+		try {
+			const heroCard = this.allCards.getCard(info.playerCardId);
+			const normalizedCardId = normalizeHeroCardId(heroCard.id, this.allCards);
+			return {
+				reviewId: info.reviewId,
+				heroName: this.allCards.getCard(normalizedCardId).name,
+				heroPortraitImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${normalizedCardId}.jpg`,
+				heroPortraitTooltip: heroCard.name,
+				placement: buildMatchResultText(info, this.i18n),
+				deltaMmr: parseInt(info.newPlayerRank) - parseInt(info.playerRank),
+				anomalies: [...(info.bgsAnomalies ?? [])]
+					.filter((a) => !!a?.length)
+					.sort()
+					.map((anomaly) => ({
+						cardId: anomaly,
+						icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${anomaly}.jpg`,
+						tooltip: this.allCards.getCard(anomaly).name,
+					})),
+				availableTribes: [...(info.bgsAvailableTribes ?? [])]
+					.sort((a, b) => a - b)
+					.map((race) => ({
+						cardId: getReferenceTribeCardId(race),
+						icon: getTribeIcon(race),
+						tooltip: getTribeName(race, this.i18n),
+					})),
+				finalWarband: buildFinalWarband(info, this.allCards),
+			};
+		} catch (e) {
+			console.error('could not build session match', info.reviewId, e);
+			return null;
+		}
 	}
 
 	private buildBgsDetails(gamesForPosition: readonly GameStat[]): readonly BgsDetail[] {
