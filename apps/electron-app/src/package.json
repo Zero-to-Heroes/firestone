@@ -1,0 +1,18 @@
+{
+	"name": "firestone-desktop",
+	"productName": "Firestone Desktop",
+	"version": "0.0.1",
+	"description": "Firestone Desktop - Hearthstone companion app",
+	"main": "main.js",
+	"author": {
+		"name": "Sébastien Tromp",
+		"email": "sebastien@firestoneapp.com"
+	},
+	"overwolf": {
+		"packages": [
+			"gep",
+			"overlay"
+		]
+	},
+	"license": "MIT"
+}

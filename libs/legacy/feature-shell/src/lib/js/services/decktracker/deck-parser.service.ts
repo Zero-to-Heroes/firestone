@@ -14,7 +14,7 @@ import {
 import { DeckHandlerService, explodeDecklist, Metadata, normalizeWithDbfIds } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
-import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -48,6 +48,7 @@ export class DeckParserService {
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
+		private readonly gameInfoService: GameInfoService,
 	) {
 		this.init();
 		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
@@ -217,7 +218,7 @@ export class DeckParserService {
 						({
 							...template,
 							DeckList: template.DeckList.map((dbfId) => +dbfId),
-						} as DeckTemplate),
+						}) as DeckTemplate,
 				);
 		}
 		return this.deckTemplates ?? [];
@@ -345,8 +346,8 @@ export class DeckParserService {
 			heroes: deckFromMemory.HeroCardId
 				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, this.allCards)]
 				: deckFromMemory.HeroClass
-				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
-				: [7],
+					? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
+					: [7],
 			sideboards: !deckFromMemory.Sideboards?.length
 				? null
 				: deckFromMemory.Sideboards.map((sideboard) => {
@@ -354,7 +355,7 @@ export class DeckParserService {
 							keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
 							cards: explodeDecklist(normalizeWithDbfIds(sideboard.Cards, this.allCards)),
 						};
-				  }),
+					}),
 		};
 		console.log(
 			'[deck-parser] built deck definition',

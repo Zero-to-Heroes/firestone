@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Global styles for Electron overlay */
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden; /* Prevent scrollbars in overlay */
+	width: 100vw;
+	height: 100vh;
+	background: transparent;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Ensure no default browser styling interferes */
+* {
+	box-sizing: border-box;
+}
+
+/* Remove any default margins/padding that might cause scrollbars */
+body {
+	-webkit-user-select: none; /* Prevent text selection in overlay */
+	user-select: none;
+}

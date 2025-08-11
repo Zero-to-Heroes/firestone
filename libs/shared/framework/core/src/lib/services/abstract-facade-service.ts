@@ -1,8 +1,11 @@
 import { sleep } from '@firestone/shared/framework/common';
+import { isElectronContext, isMainProcess } from './electron-utils';
 import { WindowManagerService } from './window-manager.service';
 
 export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> {
 	protected mainInstance: T;
+
+	protected isElectronContext: boolean;
 
 	constructor(
 		protected readonly windowManager: WindowManagerService,
@@ -20,17 +23,40 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 	private async initFacade() {
 		const isMainWindow = await this.windowManager.isMainWindow();
+		this.isElectronContext = isElectronContext();
+		console.debug('[abstract-facade-service] isElectronContext', this.isElectronContext);
 		// Check if the service is already initialized, which is useful for single-window apps, like
 		// the website
-		if (isMainWindow && !window[this.serviceName]) {
-			window[this.serviceName] = this;
-			this.mainInstance = this as unknown as T;
-			this.init();
+		if (this.isElectronContext) {
+			// In Electron context, we need to handle main vs renderer process differently
+			if (isMainProcess()) {
+				console.debug('[abstract-facade-service] isMainProcess');
+				// We're in the main process, initialize normally like a main window
+				// window[this.serviceName] = this;
+				this.mainInstance = this as unknown as T;
+				this.init();
+			} else {
+				console.debug('[abstract-facade-service] isRendererProcess');
+				// We're in a renderer process, create IPC proxy
+				this.mainInstance = this as unknown as T;
+				this.createElectronProxy();
+			}
 		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.mainInstance = mainWindow[this.serviceName];
-			this.assignSubjects();
+			if (isMainWindow && !window[this.serviceName]) {
+				window[this.serviceName] = this;
+				this.mainInstance = this as unknown as T;
+				this.init();
+			} else {
+				const mainWindow = await this.windowManager.getMainWindow();
+				this.mainInstance = mainWindow[this.serviceName];
+				this.assignSubjects();
+			}
 		}
+	}
+
+	protected createElectronProxy(): void | Promise<void> {
+		// Do nothing by default
+		console.warn(this.constructor.name, 'createElectronProxy not implemented');
 	}
 
 	protected abstract assignSubjects(): void;

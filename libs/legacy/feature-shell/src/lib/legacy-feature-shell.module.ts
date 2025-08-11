@@ -1431,6 +1431,9 @@ try {
 		LotteryWindowComponent,
 
 		DeckTrackerOverlayContainerComponent,
+
+		// For electron
+		ConstructedDecktrackerOocWidgetWrapperComponent,
 	],
 })
 export class LegacyFeatureShellModule {

@@ -14,6 +14,8 @@ export * from './lib/services/card-rules.service';
 export * from './lib/services/cards-facade-standalone.service';
 export * from './lib/services/cards-facade.service';
 export * from './lib/services/cards-highlight-service.interface';
+export * from './lib/services/electron-utils';
+export * from './lib/services/game-info.service';
 export * from './lib/services/indexeddb.service';
 export * from './lib/services/local-storage';
 export * from './lib/services/overwolf.service';

@@ -19,6 +19,7 @@ import { PreferencesService, ScalingService } from '@firestone/shared/common/ser
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
+	GameInfoService,
 	HEARTHSTONE_GAME_ID,
 	ILocalizationService,
 	OverwolfService,
@@ -172,6 +173,7 @@ export class FullScreenOverlaysComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly ow: OverwolfService,
+		private readonly gameInfo: GameInfoService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
@@ -279,7 +281,7 @@ export class FullScreenOverlaysComponent
 
 	// Just make it full screen, always
 	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}

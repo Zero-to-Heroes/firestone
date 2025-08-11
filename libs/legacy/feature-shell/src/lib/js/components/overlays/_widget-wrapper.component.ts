@@ -2,7 +2,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { AppInjector, GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { Observable, UnaryFunction, pipe } from 'rxjs';
 import { distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -30,6 +30,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected isDragging = false;
 
 	protected debug = false;
+	private gameInfo: GameInfoService;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -39,6 +40,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(cdr);
+		this.gameInfo = AppInjector.get(GameInfoService);
 		this.init();
 	}
 
@@ -75,7 +77,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		}
 		this.repositioning = true;
 		const prefs = await this.prefs.getPreferences();
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
 			console.warn('missing game info', gameInfo);
 			this.repositioning = false;
