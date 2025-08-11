@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { GameEvent } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../models/game-event';
 
 @Component({
 	standalone: false,
@@ -27,7 +27,10 @@ export class SecretsHelperWidgetIconComponent implements AfterViewInit {
 	private draggingTimeout;
 	private isDragging: boolean;
 
-	constructor(private prefs: PreferencesService, private ow: OverwolfService) {}
+	constructor(
+		private prefs: PreferencesService,
+		private ow: OverwolfService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;

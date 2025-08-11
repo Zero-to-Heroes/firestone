@@ -7,14 +7,20 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardIds, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
+import {
+	CURRENT_EFFECTS_WHITELIST,
+	DeckCard,
+	DeckState,
+	DeckZone,
+	DeckZoneSection,
+	getCardForCurrentEffect,
+	getProcessedCard,
+	PLAGUES,
+	VisualDeckCard,
+} from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, filter, startWith, takeUntil } from 'rxjs';
-import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
-import { CURRENT_EFFECTS_WHITELIST, getCardForCurrentEffect } from '../../../services/hs-utils';
+import { BehaviorSubject, combineLatest, filter, Observable, startWith, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -383,7 +389,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		const handSortingFunction = sortHandByZoneOrder
 			? (a: VisualDeckCard, b: VisualDeckCard) =>
-				(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0)
+					(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0)
 			: null;
 		zones.push(
 			this.buildZone(
@@ -502,8 +508,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.i18n.translateString('decktracker.zones.other'),
 				sortCardsByManaCostInOtherZone
 					? (a, b) =>
-						getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
-						getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
+							getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+							getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 					: (a, b) => this.sortByIcon(a, b),
 				null,
 				// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
@@ -541,8 +547,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					this.i18n.translateString('decktracker.zones.other-generated'),
 					sortCardsByManaCostInOtherZone
 						? (a, b) =>
-							getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
-							getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
+								getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+								getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 						: (a, b) => this.sortByIcon(a, b),
 					null,
 					(a: VisualDeckCard) => (!a.temporaryCard || a.zone !== 'SETASIDE') && !a.createdByJoust,

@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getNoCardsUrl } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -93,6 +93,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		private readonly debugService: DebugService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
+		private readonly gameInfo: GameInfoService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {}
@@ -154,7 +155,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		if (currentWindow.isVisible && (currentWindow.left > 0 || currentWindow.top > 0)) {
 			return;
 		}
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}

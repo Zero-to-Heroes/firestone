@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { currentBgHeroId } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store.service';
@@ -15,7 +15,10 @@ import { Observable } from 'rxjs';
 export class BgsStrategiesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroId$: Observable<string>;
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly nav: BattlegroundsNavigationService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: BattlegroundsNavigationService,
+	) {
 		super(cdr);
 	}
 

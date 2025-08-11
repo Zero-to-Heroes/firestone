@@ -4,17 +4,23 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	Inject,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
+import { DeckParserFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	IAdsService,
+	ILocalizationService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable, combineLatest, shareReplay, takeUntil } from 'rxjs';
-import { AdService } from '../../../services/ad.service';
-import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
-import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
 	standalone: false,
@@ -70,7 +76,10 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 250;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) => this.updatePosition(left, top);
-	protected positionExtractor = async (prefs: Preferences) => prefs.constructedOocTrackerPosition;
+	protected positionExtractor = async () => {
+		const prefs = await this.prefs.getPreferences();
+		return prefs.constructedOocTrackerPosition;
+	};
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected bounds = {
 		left: -200,
@@ -92,10 +101,10 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly deck: DeckParserFacadeService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly i18n: ILocalizationService,
 	) {
-		super(ow, el, prefs, renderer, cdr);
+		super(cdr, ow, el, prefs, renderer);
 	}
 
 	async ngAfterContentInit() {

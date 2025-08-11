@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Events } from '../../../services/events.service';
+import { Events } from '@firestone/shared/common/service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 
 @Component({

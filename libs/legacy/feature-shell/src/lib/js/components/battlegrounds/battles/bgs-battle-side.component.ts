@@ -12,7 +12,8 @@ import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsCardTooltipComponent, buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
+import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
+import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -369,7 +370,7 @@ export class BgsBattleSideComponent {
 
 	private buildEntity(boardEntity: BoardEntity): Entity {
 		const refCard = this.allCards.getCard(boardEntity.cardId);
-		const tags: { [key: string]: number } = {
+		const tags: { [tagName: string]: number } = {
 			[GameTag[GameTag.CARDTYPE]]: CardType.MINION,
 			[GameTag[GameTag.ZONE]]: Zone.PLAY,
 			[GameTag[GameTag.ATK]]: boardEntity.attack,

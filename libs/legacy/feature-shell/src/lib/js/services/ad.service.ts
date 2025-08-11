@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { AppNavigationService, premiumPlanIds, SubscriptionService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
@@ -18,6 +19,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	private store: AppUiStoreFacadeService;
 	private subscriptions: SubscriptionService;
 	private appNavigation: AppNavigationService;
+	private lottery: LotteryWidgetControllerService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'adsService', () => !!this.hasPremiumSub$$);
@@ -34,6 +36,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.store = AppInjector.get(AppUiStoreFacadeService);
 		this.subscriptions = AppInjector.get(SubscriptionService);
 		this.appNavigation = AppInjector.get(AppNavigationService);
+		this.lottery = AppInjector.get(LotteryWidgetControllerService);
 		this.addDevMode();
 
 		await waitForReady(this.subscriptions);
@@ -44,19 +47,22 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 			const hasPremiumSub = premiumPlanIds.includes(plan?.id);
 			this.hasPremiumSub$$.next(hasPremiumSub);
 		});
-		combineLatest([this.hasPremiumSub$$, this.store.shouldTrackLottery$()]).subscribe(
-			([isPremium, shouldTrack]) => {
-				console.debug('[ads] isPremium', isPremium, 'show ads?', shouldTrack);
-				this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
-			},
-		);
+		combineLatest([this.hasPremiumSub$$, this.lottery.shouldTrack$$]).subscribe(([isPremium, shouldTrack]) => {
+			console.debug('[ads] isPremium', isPremium, 'show ads?', shouldTrack);
+			this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
+		});
 		this.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremiumSub) => {
 			console.debug('[ads] hasPremiumSub?', hasPremiumSub);
 		});
 	}
 
-	public async goToPremium() {
-		return this.mainInstance.goToPremiumInternal();
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('goToPremiumInternal', () => this.goToPremiumInternal());
+		this.registerMainProcessMethod('shouldDisplayAdsInternal', () => this.shouldDisplayAdsInternal());
+	}
+
+	public async goToPremium(): Promise<void> {
+		await this.callOnMainProcess<void>('goToPremiumInternal');
 	}
 
 	private async goToPremiumInternal() {
@@ -64,7 +70,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
-		return this.mainInstance.shouldDisplayAdsInternal();
+		return this.callOnMainProcess<boolean>('shouldDisplayAdsInternal');
 	}
 
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
@@ -76,7 +82,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	private addDevMode() {
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV === 'production' || typeof window === 'undefined') {
 			return;
 		}
 		window['toggleAds'] = () => {

@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsCompTip } from '@firestone-hs/content-craetor-input';
 import { GameTag, normalizeMinionCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard, isCardOrSubstitute } from '@firestone/battlegrounds/core';
+import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/services';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';

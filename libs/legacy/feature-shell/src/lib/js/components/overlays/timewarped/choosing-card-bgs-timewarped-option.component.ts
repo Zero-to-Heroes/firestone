@@ -6,8 +6,8 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { TIMEWARPED_MMR_PERCENTILE } from '@firestone/battlegrounds/common';
-import { buildColor } from '@firestone/constructed/common';
+import { TIMEWARPED_MMR_PERCENTILE } from '@firestone/battlegrounds/services';
+import { buildColor } from '@firestone/constructed/view';
 import { BgsTimewarpedCardChoiceOption } from '@firestone/game-state';
 import { BGS_TIMEWARPED_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

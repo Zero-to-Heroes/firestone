@@ -57,8 +57,15 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 		this.searchString$$.next(searchString);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('exportSettingsInternal', () => this.exportSettingsInternal());
+		this.registerMainProcessMethod('importSettingsInternal', (filePath: string) =>
+			this.importSettingsInternal(filePath),
+		);
+	}
+
 	public async exportSettings() {
-		this.mainInstance.exportSettingsInternal();
+		await this.callOnMainProcess('exportSettingsInternal');
 	}
 	private async exportSettingsInternal() {
 		const prefs = await this.prefs.getPreferences();
@@ -77,7 +84,7 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	}
 
 	public async importSettings(filePath: string) {
-		this.mainInstance.importSettingsInternal(filePath);
+		await this.callOnMainProcess('importSettingsInternal', filePath);
 	}
 	private async importSettingsInternal(filePath: string) {
 		const prefsAsString = await this.ow.readTextFile(filePath);

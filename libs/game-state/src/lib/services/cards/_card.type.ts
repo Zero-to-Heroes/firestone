@@ -1,9 +1,9 @@
 import { AllCardsService, CardIds, GameFormat, GameTag, GameType } from '@firestone-hs/reference-data';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
-import { GameEvent } from '../../models/game-event';
 import { GameState } from '../../models/game-state';
 import { Metadata } from '../../models/metadata';
+import { GameEvent } from '../game-events/game-event';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Card {
@@ -30,7 +30,7 @@ export interface GuessInfoInput {
 	opponentDeckState: DeckState;
 	gameState: GameState;
 	allCards: AllCardsService;
-	creatorEntityId: number;
+	creatorEntityId: number | undefined | null;
 	options?: {
 		positionInHand?: number;
 		tags?: readonly { Name: GameTag; Value: number }[];

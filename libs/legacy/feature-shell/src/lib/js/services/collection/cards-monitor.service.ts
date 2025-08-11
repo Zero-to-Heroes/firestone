@@ -11,13 +11,10 @@ import { CollectionCardType } from '../../models/collection/collection-card-type
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
-import { Events } from '../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import {
-	MercenariesReferenceData,
-	MercenariesReferenceDataService,
-} from '../mercenaries/mercenaries-reference-data.service';
+import { MercenariesReferenceData, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';

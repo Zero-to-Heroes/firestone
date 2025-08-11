@@ -1,12 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
 import { ICollectionPackService } from '@firestone/collection/common';
 import { DiskCacheService } from '@firestone/shared/common/service';
-import { ApiRunner, COLLECTION_PACK_STATS, IndexedDbService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	ApiRunner,
+	COLLECTION_PACK_STATS,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
-import { Events } from '../../../js/services/events.service';
+import { Events } from '@firestone/shared/common/service';
 import { CollectionPacksUpdatedEvent } from '../../../js/services/mainwindow/store/events/collection/colection-packs-updated-event';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
@@ -22,13 +28,14 @@ export class PackStatsService implements ICollectionPackService {
 		private readonly api: ApiRunner,
 		private readonly diskCache: DiskCacheService,
 		private readonly store: AppUiStoreFacadeService,
-		private readonly indexedDb: IndexedDbService,
+		@Inject(DATABASE_SERVICE_TOKEN) private readonly indexedDb: IDatabaseService,
 	) {
 		this.events.on(Events.NEW_PACK).subscribe((event) => this.publishPackStat(event));
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
-		let existingPackStats = (await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).toArray()).sort(
+		const existingPackStatsRaw = await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).toArray();
+		let existingPackStats = [...existingPackStatsRaw].sort(
 			(a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime(),
 		) as readonly PackResult[];
 		console.debug('[pack-stats] existing pack stats in db', existingPackStats);
@@ -81,7 +88,7 @@ export class PackStatsService implements ICollectionPackService {
 					: {
 							...pack,
 							boosterId: getDefaultBoosterIdForSetId(pack.setId),
-					  },
+						},
 			)
 			.sort((a, b) => b.creationDate - a.creationDate);
 		if (packs.length) {

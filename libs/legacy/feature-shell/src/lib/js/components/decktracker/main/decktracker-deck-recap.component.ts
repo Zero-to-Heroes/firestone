@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
+import { formatClass } from '@firestone/game-state';
 import { ENABLE_RANKED_ARCHETYPE, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplaysEvent } from '../../../services/mainwindow/store/events/replays/show-replays-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -136,7 +136,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionStoreComp
 							? parseFloat('' + deck.winRatePercentage).toLocaleString('en-US', {
 									minimumIntegerDigits: 1,
 									maximumFractionDigits: 1,
-							  })
+								})
 							: '-',
 					games: deck.totalGames,
 					bestAgainsts: [...(deck.matchupStats ?? [])]
@@ -148,7 +148,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionStoreComp
 								({
 									icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
 									playerClass: formatClass(matchUp.opponentClass, this.i18n),
-								} as BestAgainst),
+								}) as BestAgainst,
 						),
 				};
 			}),

@@ -350,4 +350,12 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			this.mulliganAdvice$$.next(showWidget ? advice : null),
 		);
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.mulliganAdvice$$, 'arena-mulligan-guide-mulligan-advice');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.mulliganAdvice$$ = new BehaviorSubject<MulliganGuide | null>(null);
+	}
 }

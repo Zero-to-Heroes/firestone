@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent, GameState } from '../../../../models/game-event';
 import { MinionAttackReq } from './minion-attack-req';
 
 describe('minion-attack-req', () => {
@@ -72,7 +72,7 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
-						gameState: ({
+						gameState: {
 							Player: {
 								Board: [
 									{
@@ -82,7 +82,7 @@ describe('minion-attack-req', () => {
 									},
 								],
 							},
-						} as unknown) as GameState,
+						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -97,7 +97,7 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
-						gameState: ({
+						gameState: {
 							Player: {
 								Board: [
 									{
@@ -107,7 +107,7 @@ describe('minion-attack-req', () => {
 									},
 								],
 							},
-						} as unknown) as GameState,
+						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -122,7 +122,7 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
-						gameState: ({
+						gameState: {
 							Player: {
 								Board: [
 									{
@@ -132,7 +132,7 @@ describe('minion-attack-req', () => {
 									},
 								],
 							},
-						} as unknown) as GameState,
+						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -147,7 +147,7 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
-						gameState: ({
+						gameState: {
 							Player: {
 								Board: [
 									{
@@ -162,7 +162,7 @@ describe('minion-attack-req', () => {
 									},
 								],
 							},
-						} as unknown) as GameState,
+						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -177,7 +177,7 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 2,
 						localPlayer: { PlayerId: 1 },
-						gameState: ({
+						gameState: {
 							Player: {
 								Board: [
 									{
@@ -187,7 +187,7 @@ describe('minion-attack-req', () => {
 									},
 								],
 							},
-						} as unknown) as GameState,
+						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -202,11 +202,11 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
-						gameState: ({
+						gameState: {
 							Player: {
 								Board: [],
 							},
-						} as unknown) as GameState,
+						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -219,8 +219,8 @@ describe('minion-attack-req', () => {
 
 	test('req is intantiated with the correct target rank', () => {
 		const rawReq: RawRequirement = {
-			'type': 'MINION_ATTACK_ON_BOARD',
-			'values': ['100', 'AT_LEAST'],
+			type: 'MINION_ATTACK_ON_BOARD',
+			values: ['100', 'AT_LEAST'],
 		};
 
 		const req = MinionAttackReq.create(rawReq);

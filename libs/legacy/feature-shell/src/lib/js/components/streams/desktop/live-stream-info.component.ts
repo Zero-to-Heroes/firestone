@@ -4,7 +4,7 @@ import { PresenceInfo } from '@firestone-hs/twitch-presence';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, toFormatType, toGameType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
+import { isMercenaries } from '@firestone/mercenaries/common';
 
 @Component({
 	standalone: false,

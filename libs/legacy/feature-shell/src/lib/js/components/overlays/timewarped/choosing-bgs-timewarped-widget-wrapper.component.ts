@@ -10,7 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsInGameTimewarpedGuardianService, BgsInGameTimewarpedService } from '@firestone/battlegrounds/common';
+import { BgsInGameTimewarpedGuardianService, BgsInGameTimewarpedService } from '@firestone/battlegrounds/services';
 import { BgsTimewarpedCardChoiceOption } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';

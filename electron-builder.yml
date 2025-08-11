@@ -1,0 +1,71 @@
+# electron-builder.yml
+# Configuration for ow-electron-builder to create optimized builds
+
+appId: com.firestoneapp.desktop
+productName: Firestone
+copyright: Copyright © 2024 Sébastien Tromp
+
+# Directories
+directories:
+  # The built app location (contains package.json with deps)
+  app: dist/apps/electron-app
+  output: dist/executables
+  buildResources: overwolf
+
+# Files to include in the app (relative to directories.app)
+files:
+  # Include everything from the built app
+  - "**/*"
+  # Exclude source maps
+  - "!**/*.map"
+  - "!**/*.ts"
+  # Exclude test files
+  - "!**/*.spec.*"
+  - "!**/test/**"
+
+# Files that must be unpacked from asar (native modules and .NET DLLs)
+asarUnpack:
+  - "node_modules/better-sqlite3/**/*"
+  - "node_modules/electron-edge-js/**/*"
+  - "node_modules/@overwolf/**/*"
+  - "electron-edge-libs/**/*"  # .NET DLLs cannot be loaded from asar archive
+
+# Extra resources to copy to resources folder (for files that need to be accessible)
+extraResources:
+  # Copy the frontend build to resources folder
+  - from: "dist/apps/electron-frontend"
+    to: "electron-frontend"
+    filter:
+      - "**/*"
+      - "!**/*.map"
+
+# Windows-specific configuration
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: overwolf/launcher_icon.ico
+
+# NSIS installer configuration
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: overwolf/launcher_icon.ico
+  uninstallerIcon: overwolf/launcher_icon.ico
+  artifactName: "${productName} Setup ${version}.${ext}"
+
+# Compression settings
+compression: maximum
+
+# Remove unnecessary locales (keeps only English)
+# This saves ~40MB
+electronLanguages:
+  - en-US
+  - en-GB
+
+# Post-pack optimization hook (removes non-Windows binaries)
+afterPack: "./build-tools/electron-afterpack.js"
+
+# Don't publish
+publish: null

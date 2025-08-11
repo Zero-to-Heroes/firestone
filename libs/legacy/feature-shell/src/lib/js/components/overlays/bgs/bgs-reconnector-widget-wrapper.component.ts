@@ -42,7 +42,6 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionExtractor = async (prefs: Preferences) => prefs.bgsReconnectorWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected draggable = false;
-	protected debug = true;
 
 	showWidget$: Observable<boolean>;
 

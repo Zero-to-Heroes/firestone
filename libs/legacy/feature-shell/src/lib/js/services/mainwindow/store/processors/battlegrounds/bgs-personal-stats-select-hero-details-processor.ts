@@ -1,10 +1,10 @@
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { Events } from '../../../../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { Processor } from '../processor';
 

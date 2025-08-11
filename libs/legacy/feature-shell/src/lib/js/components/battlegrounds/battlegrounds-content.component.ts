@@ -7,7 +7,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { BgsFaceOffWithSimulation, BgsPanel, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

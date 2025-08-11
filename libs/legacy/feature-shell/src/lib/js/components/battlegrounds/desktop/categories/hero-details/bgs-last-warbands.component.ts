@@ -137,6 +137,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 		const title =
 			review && review.additionalResult
 				? this.i18n.translateString(
+
 					'app.battlegrounds.personal-stats.hero-details.last-warbands.finished-position',
 					{ value: this.getFinishPlace(parseInt(review.additionalResult)) },
 				)

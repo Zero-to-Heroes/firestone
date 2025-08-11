@@ -35,8 +35,12 @@ export class CommunityJoinService extends AbstractFacadeService<CommunityJoinSer
 		this.personalCommunities = AppInjector.get(PersonalCommunitiesService);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('joinCommunityInternal', (code: string) => this.joinCommunityInternal(code));
+	}
+
 	public async joinCommunity(code: string): Promise<CommunityInfo | null> {
-		return this.mainInstance.joinCommunityInternal(code);
+		return this.callOnMainProcess<CommunityInfo | null>('joinCommunityInternal', code);
 	}
 
 	private async joinCommunityInternal(code: string): Promise<CommunityInfo | null> {

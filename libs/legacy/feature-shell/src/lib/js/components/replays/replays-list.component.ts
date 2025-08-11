@@ -8,7 +8,7 @@ import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
+import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '@firestone/mercenaries/common';
 import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 
 @Component({

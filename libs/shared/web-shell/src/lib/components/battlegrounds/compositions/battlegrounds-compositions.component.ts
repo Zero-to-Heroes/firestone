@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectorRef, Component, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
-import { BattlegroundsCompsService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
+import { BattlegroundsCompsService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsMetaStatsCompsViewComponent,
 	BattlegroundsViewModule,

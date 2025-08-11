@@ -10,15 +10,15 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardClass, ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
+import { formatClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
+import { getHeroFaction } from '@firestone/mercenaries/common';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
-import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
 
@@ -209,7 +209,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 					card.rarity != null
 						? this.i18n.translateString(
 								`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`,
-						  )
+							)
 						: null;
 				this.race = !!card.races?.length
 					? card.races
@@ -229,10 +229,10 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 					!!this.card.ownedSignature
 						? 'SIGNATURE'
 						: !!this.card.ownedDiamond
-						? 'DIAMOND'
-						: !!this.card.ownedPremium
-						? 'GOLDEN'
-						: 'NORMAL',
+							? 'DIAMOND'
+							: !!this.card.ownedPremium
+								? 'GOLDEN'
+								: 'NORMAL',
 				);
 				console.debug('current quality', this.currentQualityToDisplay$$.value);
 
@@ -404,7 +404,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 						.replace(/MALE_[A-Z-]+_/gi, '')
 						.replace(/_/g, ' ')
 						.trim(),
-			  )
+				)
 			: '';
 	}
 

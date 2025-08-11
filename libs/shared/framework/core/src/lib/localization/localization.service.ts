@@ -8,9 +8,11 @@ export abstract class ILocalizationService {
 	abstract getCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
 	abstract getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string | null;
 	abstract getCreatedByCardName(creatorCardId: string): string | null;
-	abstract getUnknownCardName(playerClass: string | null): string | null;
-	abstract getUnknownManaSpellName(manaCost: number): string | null;
-	abstract getUnknownRaceName(race: string): string | null;
+	abstract getUnknownCardName(playerClass?: string | null): string;
+	abstract getUnknownManaSpellName(manaCost: number): string;
+	abstract getUnknownRaceName(race: string): string;
+	abstract getUnknownMinionName(): string;
+	abstract getUnknownManaMinionName(cost: number): string;
 	abstract translateString(key: string, params?: any): string;
 	abstract formatCurrentLocale(): string;
 }

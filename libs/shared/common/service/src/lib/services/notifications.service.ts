@@ -1,29 +1,29 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
-export class OwNotificationsService {
+export class NotificationsService extends AbstractFacadeService<NotificationsService> {
+	public notifications$$: BehaviorSubject<Message | null>;
+
 	private isDev: boolean;
-	private isBeta: boolean;
+	private prefs: PreferencesService;
 
-	private stateEmitter = new BehaviorSubject<Message | null>(null);
-
-	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
-		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
-			filter((message) => !!message),
-			tap((message) => console.debug('[notifications] emitting new message', message)),
-		);
-		this.init();
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'OwNotificationsService', () => !!this.notifications$$);
 	}
 
-	private async init() {
+	protected override assignSubjects() {
+		this.notifications$$ = this.mainInstance.notifications$$;
+	}
+
+	protected async init() {
+		this.notifications$$ = new BehaviorSubject<Message | null>(null);
+		this.prefs = AppInjector.get(PreferencesService);
+
 		this.isDev = process.env['NODE_ENV'] !== 'production';
-		const settings = await this.ow.getExtensionSettings();
-		this.isBeta = settings?.settings?.channel === 'beta';
 	}
 
 	public async addNotification(htmlMessage: Message) {
@@ -31,7 +31,7 @@ export class OwNotificationsService {
 			console.log('not showing any notification');
 			return;
 		}
-		this.stateEmitter.next(htmlMessage);
+		this.notifications$$.next(htmlMessage);
 	}
 
 	// This directly share JS objects, without stringifying them, so it lets us do some
@@ -43,11 +43,11 @@ export class OwNotificationsService {
 			return;
 		}
 		console.debug('emitting new notification', htmlMessage);
-		this.stateEmitter.next(htmlMessage);
+		this.notifications$$.next(htmlMessage);
 	}
 
 	public notifyDebug(title: string, text: string, code: string) {
-		if (!this.isDev && !this.isBeta) {
+		if (!this.isDev) {
 			return;
 		}
 
@@ -130,7 +130,7 @@ export class OwNotificationsService {
 							{ selector: 'message', action: onClick },
 							{ selector: 'title', action: onClick },
 							{ selector: 'text', action: onClick },
-					  ]
+						]
 					: undefined,
 			},
 			true,

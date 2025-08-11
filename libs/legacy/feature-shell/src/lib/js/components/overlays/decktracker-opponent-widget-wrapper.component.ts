@@ -7,13 +7,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
-import { GameNativeStateStoreService } from '@firestone/app/common';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
+import { GameNativeStateStoreService } from '@firestone/app/services';
+import { GameStateFacadeService, OverlayDisplayService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -61,19 +61,19 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 		private readonly gameNativeStore: GameNativeStateStoreService,
+		private readonly overlayDisplay: OverlayDisplayService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs, this.gameNativeStore);
+		await waitForReady(this.scene, this.prefs, this.gameNativeStore, this.overlayDisplay);
 
-		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
+		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(
@@ -87,13 +87,15 @@ export class DecktrackerOpponentWidgetWrapperComponent
 						a.decktrackerCloseOnGameEnd === b.decktrackerCloseOnGameEnd,
 				),
 			),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.opponentTrackerClosedByUser,
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
-				(deckState) => deckState?.opponentDeck?.totalCardsInZones(),
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					closedByUser: state?.opponentTrackerClosedByUser,
+					gameStarted: state?.gameStarted,
+					gameEnded: state?.gameEnded,
+					isBgs: isBattlegrounds(state?.metadata?.gameType),
+					isMercs: isMercenaries(state?.metadata?.gameType),
+					totalCardsInZones: state?.opponentDeck?.totalCardsInZones(),
+				})),
 			),
 			displayFromGameMode$,
 		]).pipe(
@@ -101,7 +103,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 				([
 					currentScene,
 					{ displayFromPrefs, decktrackerCloseOnGameEnd },
-					[closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones],
+					{ closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones },
 					displayFromGameMode,
 				]) => {
 					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {

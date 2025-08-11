@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { MemoryBgsPlayerInfo } from '../../../models/battlegrounds-player-state';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetBgsPlayerTeammateBoardOperation extends MindVisionOperationFacade<MemoryBgsPlayerInfo> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getBgsPlayerTeammateBoard',
 			() => mindVision.getBgsPlayerTeammateBoard(),
 			(info) => false,

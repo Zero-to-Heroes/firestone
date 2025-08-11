@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { DamageAtEndReq } from './damage-at-end-req';
 
 describe('damage-at-end-req', () => {
@@ -60,8 +60,8 @@ describe('damage-at-end-req', () => {
 
 	test('req is intantiated with the correct target damage', () => {
 		const rawReq: RawRequirement = {
-			'type': 'DAMAGE_AT_END',
-			'values': ['1'],
+			type: 'DAMAGE_AT_END',
+			values: ['1'],
 		};
 
 		const req = DamageAtEndReq.create(rawReq);

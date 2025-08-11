@@ -6,13 +6,13 @@ import {
 	Component,
 	ViewRef,
 } from '@angular/core';
+import { classesForPieChart, colorForClass, formatClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 

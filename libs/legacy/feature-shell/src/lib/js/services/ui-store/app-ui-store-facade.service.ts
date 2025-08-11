@@ -3,20 +3,18 @@ import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
-import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
-import { Card, CardBack } from '@firestone/memory';
+import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { Set } from '../../models/set';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
-import { LotteryState } from '../lottery/lottery.model';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { sleep } from '../utils';
 import {
@@ -26,14 +24,11 @@ import {
 	MercenariesOutOfCombatStateSelector,
 	MercenariesStateSelector,
 	Selector,
-	StoreEvent,
 } from './app-ui-store.service';
 
 // To be used in the UI, so that we only have a single service instantiated
 @Injectable()
 export class AppUiStoreFacadeService {
-	public eventBus$$ = new BehaviorSubject<StoreEvent>(null);
-
 	private store: AppUiStoreService;
 
 	constructor(private readonly ow: OverwolfService) {
@@ -50,7 +45,6 @@ export class AppUiStoreFacadeService {
 			this.store = this.ow.getMainWindow()?.appStore;
 			attempts++;
 		}
-		this.eventBus$$ = this.store.eventBus$$;
 	}
 
 	public async initComplete(): Promise<void> {
@@ -110,14 +104,6 @@ export class AppUiStoreFacadeService {
 		return this.store.mails$();
 	}
 
-	public shouldTrackLottery$(): Observable<boolean> {
-		return this.store.shouldTrackLottery$();
-	}
-
-	public shouldShowLotteryOverlay$(): Observable<boolean> {
-		return this.store.shouldShowLotteryOverlay$();
-	}
-
 	public sets$(): Observable<readonly Set[]> {
 		return this.store.sets$();
 	}
@@ -140,10 +126,6 @@ export class AppUiStoreFacadeService {
 
 	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
 		return this.store.allTimeBoosters$();
-	}
-
-	public lottery$(): Observable<LotteryState> {
-		return this.store.lottery$();
 	}
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {

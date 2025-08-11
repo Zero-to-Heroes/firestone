@@ -7,12 +7,18 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState, CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
+import {
+	BattlegroundsState,
+	CounterType,
+	GameState,
+	GameStateFacadeService,
+	OverlayDisplayService,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 export const templateBase = `
@@ -65,6 +71,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 
 	private scene: SceneService;
 	private gameState: GameStateFacadeService;
+	private overlayDisplay: OverlayDisplayService;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -76,13 +83,13 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 		super(ow, el, prefs, renderer, cdr);
 		this.scene = AppInjector.get(SceneService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
+		this.overlayDisplay = AppInjector.get(OverlayDisplayService);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.gameState);
+		await waitForReady(this.scene, this.gameState, this.overlayDisplay);
 
-		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
+		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(
@@ -90,8 +97,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 			),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameStarted)),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameEnded)),
-			this.gameState.gameState$$.pipe(this.mapData((state) => state.isBattlegrounds())),
-			this.gameState.gameState$$.pipe(this.mapData((state) => state.isMercenaries())),
+			this.gameState.gameState$$.pipe(this.mapData((state) => isBattlegrounds(state?.metadata?.gameType))),
+			this.gameState.gameState$$.pipe(this.mapData((state) => isMercenaries(state?.metadata?.gameType))),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state)),
 			displayFromGameMode$,
 		]).pipe(

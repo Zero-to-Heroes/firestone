@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { MemoryMercenariesCollectionInfo } from '../../../models/memory-mercenaries-collection-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetMercenariesCollectionInfoOperation extends MindVisionOperationFacade<MemoryMercenariesCollectionInfo> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getMercenariesCollectionInfo',
 			(forceReset?: boolean) => mindVision.getMercenariesCollectionInfo(forceReset),
 			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length || info?.Visitors == null,

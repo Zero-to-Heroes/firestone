@@ -9,8 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -30,7 +29,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	ngAfterViewInit() {

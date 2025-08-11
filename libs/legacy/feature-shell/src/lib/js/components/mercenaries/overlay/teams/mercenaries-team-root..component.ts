@@ -19,13 +19,12 @@ import { MemoryMercenariesCollectionInfo } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
-import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
+import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
+import { getShortMercHeroName, isMercenariesPvP, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { getShortMercHeroName, isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 

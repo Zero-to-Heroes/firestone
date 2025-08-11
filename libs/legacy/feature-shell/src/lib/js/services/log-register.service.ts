@@ -1,11 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HsLogsWatcherService } from '@firestone/app/common';
-import { GameStatusService, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Events } from '../services/events.service';
+import { Inject, Injectable } from '@angular/core';
+import { HsLogsWatcherService } from '@firestone/app/services';
+import { GameEvents } from '@firestone/game-state';
+import type { LogFileBackend } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	LOG_FILE_BACKEND,
+	LogListenerService,
+	LogUtilsService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
+import { Events } from '@firestone/shared/common/service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
-import { GameEvents } from './game-events.service';
-import { LogListenerService } from './log-listener.service';
 
 @Injectable()
 export class LogRegisterService {
@@ -18,12 +23,12 @@ export class LogRegisterService {
 	constructor(
 		private readonly events: Events,
 		private readonly cardsMonitor: CardsMonitorService,
-		private readonly ow: OverwolfService,
 		private readonly gameEvents: GameEvents,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly logUtils: LogUtilsService,
 		private readonly hsLogsWatcher: HsLogsWatcherService,
+		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
 		// the app from starting to parse the game logs while in an uninitialized state, which in
@@ -34,7 +39,7 @@ export class LogRegisterService {
 	}
 
 	private init(): void {
-		new LogListenerService(this.ow, this.gameStatus, this.prefs, this.logUtils)
+		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils)
 			.configure(
 				'Net.log',
 				(data) => this.cardsMonitor.receiveLogLine(data),
@@ -51,7 +56,7 @@ export class LogRegisterService {
 				this.events.broadcast(status, 'Net.log');
 			})
 			.start();
-		new LogListenerService(this.ow, this.gameStatus, this.prefs, this.logUtils)
+		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils)
 			.configure(
 				'Power.log',
 				(data) => this.gameEvents.receiveLogLine(data),
@@ -61,7 +66,7 @@ export class LogRegisterService {
 				console.log('[log-register] status for Power.log', status);
 			})
 			.start();
-		new LogListenerService(this.ow, this.gameStatus, this.prefs, this.logUtils)
+		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils)
 			.configure(
 				'Hearthstone.log',
 				(data) => this.hsLogsWatcher.receiveLogLine(data),

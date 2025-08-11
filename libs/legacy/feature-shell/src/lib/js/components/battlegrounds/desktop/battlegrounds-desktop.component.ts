@@ -7,7 +7,7 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
-import { BG_USE_TRINKETS, BattlegroundsNavigationService, CategoryId } from '@firestone/battlegrounds/common';
+import { BG_USE_TRINKETS, BattlegroundsNavigationService, CategoryId } from '@firestone/battlegrounds/services';
 import { ENABLE_BGS_COMP_STATS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';

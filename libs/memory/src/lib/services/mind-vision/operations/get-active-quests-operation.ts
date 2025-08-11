@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { MemoryQuestsLog } from '../../../models/quests';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetActiveQuestsOperation extends MindVisionOperationFacade<MemoryQuestsLog> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getActiveQuests',
 			() => mindVision.getActiveQuests(),
 			(info) => false,

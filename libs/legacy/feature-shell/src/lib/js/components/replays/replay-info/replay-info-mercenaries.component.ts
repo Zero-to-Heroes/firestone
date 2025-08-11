@@ -5,7 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

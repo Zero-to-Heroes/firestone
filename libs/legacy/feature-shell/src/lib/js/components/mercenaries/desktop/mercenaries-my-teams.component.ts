@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
-import { isMercenariesPvP, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { isMercenariesPvP, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

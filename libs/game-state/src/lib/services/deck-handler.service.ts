@@ -8,13 +8,13 @@ import {
 	normalizeDeckHeroDbfId,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../models/deck-card';
 import { DeckSideboard } from '../models/deck-state';
 
 @Injectable()
 export class DeckHandlerService {
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
 		if (!deckstring) {

@@ -33,10 +33,13 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 	private isDragging: boolean;
 	private isDebounce: boolean;
 
-	constructor(private prefs: PreferencesService, private ow: OverwolfService) {}
+	constructor(
+		private prefs: PreferencesService,
+		private ow: OverwolfService,
+	) {}
 
 	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.windowId = (await this.ow.getCurrentWindow())?.id;
 	}
 
 	toggleDecktracker(event: MouseEvent) {

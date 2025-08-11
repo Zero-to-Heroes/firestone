@@ -19,7 +19,7 @@ import {
 	getBaseCardId,
 	isCoin,
 } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { ConstructedArchetypeService, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PatchInfo, PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
@@ -45,11 +45,11 @@ import {
 	map,
 	of,
 	shareReplay,
+	startWith,
 	switchMap,
 	tap,
 } from 'rxjs';
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
-import { ConstructedArchetypeService } from './constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { MULLIGAN_GUIDE_IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
 
@@ -120,6 +120,12 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				// );
 
 				if (!gameStarted || mulliganOver || !displayFromPrefs) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 1',
+						gameStarted,
+						mulliganOver,
+						displayFromPrefs,
+					);
 					return false;
 				}
 
@@ -128,6 +134,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						gameState.metadata.gameType,
 					)
 				) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 2',
+						gameState.metadata.gameType,
+					);
 					return false;
 				}
 
@@ -135,21 +145,34 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					gameState.metadata.gameType === GameType.GT_VS_AI &&
 					!PRACTICE_ALL.includes(gameState.metadata.scenarioId)
 				) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 3',
+						gameState.metadata.gameType,
+					);
 					return false;
 				}
 
 				if (currentScene !== SceneMode.GAMEPLAY) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 4',
+						currentScene,
+					);
 					return false;
 				}
 
 				if (gameEnded) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 5',
+						gameEnded,
+					);
 					return false;
 				}
 
+				console.debug('[mulligan-guide] constructed-mulligan-guide-service showing widget');
 				return true;
 			}),
 			distinctUntilChanged(),
-			// tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
+			tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
 			shareReplay(1),
 		);
 
@@ -170,6 +193,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const formatOverride$ = this.prefs.preferences$$.pipe(
 			debounceTime(500),
 			map((prefs) => prefs.decktrackerMulliganFormatOverride),
+			startWith(null),
 			distinctUntilChanged(),
 		);
 		const format$ = showWidget$.pipe(
@@ -351,7 +375,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			// tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
 			// shareReplay(1),
 		);
-		const deckDetails$: Observable<DeckStat | null> = combineLatest([showWidget$, format$, timeFrame$]).pipe(
+
+		const deckDetails$ = combineLatest([showWidget$, format$, timeFrame$]).pipe(
 			filter(([showWidget, format, timeFrame]) => showWidget),
 			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			switchMap(([showWidget, format, timeFrame]) =>
@@ -378,7 +403,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					return of(null);
 				}
 
-				const result = this.archetypes.loadNewDeckDetails(
+				const result = this.archetypes.loadNewDeckDetailsInternal(
 					deckString,
 					toFormatType(format as any) as GameFormat,
 					timeFrame,
@@ -409,10 +434,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					map((deckDetails) => deckDetails ?? null),
 				);
 			}),
-			// filter((archetype) => !!archetype),
-			// map(archetype => archetype as ArchetypeStat),
-			tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
-			// shareReplay(1),
 		);
 
 		const cardsInHand$ = showWidget$.pipe(
@@ -427,7 +448,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 										gameState?.playerDeck.hand
 											?.map((c) => c.cardId)
 											.filter((c) => !isCoin(c, this.allCards)) ?? [];
-									console.debug('[mulligan-guide] cardsInHand', cardsInHand, gameState);
+									// console.log(
+									// 	'[mulligan-guide] cardsInHand 1',
+									// 	cardsInHand,
+									// 	gameState?.playerDeck.hand,
+									// );
 									return cardsInHand.length > 0 ? cardsInHand : null;
 								}),
 								distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -456,7 +481,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 									return cards;
 								}),
 								distinctUntilChanged((a, b) => arraysEqual(a, b)),
-								tap((deckCards) => console.debug('[mulligan-guide] deckCards', deckCards)),
 							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
@@ -464,7 +488,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 
 		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]).pipe(
+			// tap((info) => console.log('[mulligan-guide] mulliganAdvice 0', info)),
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
+			// tap((info) => console.log('[mulligan-guide] mulliganAdvice 1', info)),
 			debounceTime(200),
 			switchMap(([cardsInHand, deckCards]) =>
 				combineLatest([
@@ -518,7 +544,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					opponentClass,
 					deckstring,
 				}) => {
-					console.debug('[mulligan-guide] deck details result', deckDetails, format, playerRank);
 					const aStatToUse =
 						playCoin === 'coin'
 							? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'coin')
@@ -631,222 +656,91 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					return result;
 				},
 			),
-			tap((mulliganAdvice) => console.debug('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
 			shareReplay(1),
 		);
-		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) =>
-			this.mulliganAdvice$$.next(showWidget ? advice : null),
+		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) => {
+			this.mulliganAdvice$$.next(showWidget ? advice : null);
+		});
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.mulliganAdvice$$, 'constructed-mulligan-guide-mulligan-advice');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.mulliganAdvice$$ = new BehaviorSubject<MulliganGuide | null>(null);
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'getMulliganAdviceInternal',
+			(deckstring: string, prefs: Preferences, options?: MulliganGuideOptions) => this.getMulliganAdviceInternal(deckstring, prefs, options),
 		);
 	}
 
-	// WARNING: if refactoring this, we need to expose prefs in input, as we want to be able to change
-	// the filters and get updated stats
-	public getMulliganAdvice$(
+	// TODO: refactor this to get the prefs in input. Just recomputing and passing the new prefs
+	// might be good enough,  to be tested
+	public getMulliganAdvice(
 		deckstring: string,
+		prefs: Preferences,
 		options?: MulliganGuideOptions,
-	): Observable<MulliganGuideWithDeckStats | null> {
-		return this.mainInstance.getMulliganAdviceInternal$(deckstring, options);
+	): Promise<MulliganGuideWithDeckStats | null> {
+		return this.callOnMainProcess<MulliganGuideWithDeckStats | null>(
+			'getMulliganAdviceInternal',
+			deckstring,
+			prefs,
+			options,
+		);
 	}
 
-	private getMulliganAdviceInternal$(
+	protected async getMulliganAdviceInternal(
 		deckstring: string,
+		prefs: Preferences,
 		options?: MulliganGuideOptions,
-	): Observable<MulliganGuideWithDeckStats | null> {
+	): Promise<MulliganGuideWithDeckStats | null> {
 		const deckDefinition = decode(deckstring);
-		// TODO: use current format of the lobby screen
-		const formatOverride$ = this.prefs.preferences$$.pipe(
-			map((prefs) =>
-				options?.useDeckFormat
-					? (deckDefinition.format as GameFormatEnum)
-					: (prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
-			),
-			distinctUntilChanged(),
+		const format = options?.useDeckFormat
+			? (deckDefinition.format as GameFormatEnum)
+			: (prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD);
+		const playCoin = prefs.decktrackerMulliganPlayCoinOoc;
+		const playerRank = prefs.decktrackerMulliganRankBracket;
+		const opponentClass = prefs.decktrackerOocMulliganOpponent;
+		const timeFrame = prefs.decktrackerMulliganTime;
+		const patchInfo = await this.patches.currentConstructedMetaPatch$$.getValueWithInit();
+		const archetypeForDeck = await this.archetypeService.getArchetypeForDeck(deckstring);
+		const archetypeOverrides = prefs.constructedDeckArchetypeOverrides;
+		const archetypeId = (!!deckstring ? archetypeOverrides[deckstring] : null) ?? archetypeForDeck;
+		const archetype = await this.archetypes.loadNewArchetypeDetails(
+			archetypeId as number,
+			toFormatType(format as any) as GameFormat,
+			timeFrame,
+			playerRank,
 		);
-		const playCoinOverride$ = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganPlayCoinOoc),
-			distinctUntilChanged(),
-		);
-		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganRankBracket),
-			distinctUntilChanged(),
-		);
-		const opponentClass$: Observable<'all' | string> = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerOocMulliganOpponent),
-			distinctUntilChanged(),
-		);
-		const timeFrame$ = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganTime),
-			distinctUntilChanged(),
-			shareReplay(1),
-		);
-
-		const archetypeId$ = combineLatest([
-			this.prefs.preferences$$.pipe(
-				map((prefs) => prefs.constructedDeckArchetypeOverrides),
-				distinctUntilChanged(),
-			),
-			this.archetypeService.getArchetypeForDeck(deckstring),
-		]).pipe(
-			map(([overrides, archetypeId]) => (!!deckstring ? overrides[deckstring] : null) ?? archetypeId),
-			distinctUntilChanged(),
-		);
-		const archetype$: Observable<ArchetypeStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
-			debounceTime(200),
-			switchMap(([format, timeFrame]) => combineLatest([archetypeId$, playerRank$, of(format), of(timeFrame)])),
-			map(([archetypeId, playerRank, format, timeFrame]) => ({
-				archetypeId: archetypeId,
-				format: format,
-				playerRank: playerRank,
-				timeFrame: timeFrame,
-			})),
-			filter((info) => !!info.format),
-			distinctUntilChanged(
-				(a, b) =>
-					a.archetypeId === b.archetypeId &&
-					a.format === b.format &&
-					a.playerRank === b.playerRank &&
-					a.timeFrame === b.timeFrame,
-			),
-			switchMap(({ archetypeId, format, playerRank, timeFrame }) => {
-				if (!this.archetypes) {
-					console.warn('[mulligan-guide] archetypes service is undefined');
-					return of(null);
-				}
-
-				const result = this.archetypes.loadNewArchetypeDetails(
-					archetypeId as number,
-					toFormatType(format as any) as GameFormat,
-					timeFrame,
-					playerRank,
-				);
-
-				if (!result) {
-					console.warn(
-						'[mulligan-guide] loadNewArchetypeDetails returned undefined',
-						archetypeId,
-						format,
-						timeFrame,
-						playerRank,
-					);
-					return of(null);
-				}
-
-				return from(result).pipe(
-					tap((archetype) => {
-						if (archetype === undefined) {
-							console.warn(
-								'[mulligan-guide] loadNewArchetypeDetails promise resolved to undefined',
-								archetypeId,
-								format,
-							);
-						}
-					}),
-					map((archetype) => archetype ?? null),
-				);
-			}),
-		);
-		const deckDetails$: Observable<DeckStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
-			debounceTime(200),
-			switchMap(([format, timeFrame]) => combineLatest([playerRank$, of(format), of(timeFrame)])),
-			map(([playerRank, format, timeFrame]) => ({
-				format: format,
-				playerRank: playerRank,
-				timeFrame: timeFrame,
-			})),
-			filter((info) => !!info.format),
-			distinctUntilChanged(
-				(a, b) => a.format === b.format && a.playerRank === b.playerRank && a.timeFrame === b.timeFrame,
-			),
-			switchMap(({ format, playerRank, timeFrame }) => {
-				if (!this.archetypes) {
-					console.warn('[mulligan-guide] archetypes service is undefined');
-					return of(null);
-				}
-
-				const result = this.archetypes.loadNewDeckDetails(
-					deckstring,
-					toFormatType(format as any) as GameFormat,
-					timeFrame,
-					playerRank,
-				);
-
-				if (!result) {
-					console.warn(
-						'[mulligan-guide] loadNewDeckDetails returned undefined',
-						deckstring,
-						format,
-						timeFrame,
-						playerRank,
-					);
-					return of(null);
-				}
-
-				return from(result).pipe(
-					tap((deckDetails) => {
-						if (!deckDetails) {
-							console.warn(
-								'[mulligan-guide] loadNewDeckDetails promise resolved to undefined',
-								deckstring,
-								format,
-							);
-						}
-					}),
-					map((deckDetails) => deckDetails ?? null),
-					// filter((deckDetails): deckDetails is DeckStat => !!deckDetails),
-				);
-			}),
+		const deckDetails = await this.archetypes.loadNewDeckDetailsInternal(
+			deckstring,
+			toFormatType(format as any) as GameFormat,
+			timeFrame,
+			playerRank,
 		);
 		const deckCards = deckDefinition?.cards?.map((card) => card[0]).map((dbfId) => this.allCards.getCard(dbfId).id);
-		const playerDeckMatches$ = this.gameStats.gameStats$$.pipe(
-			map((gameStats) =>
-				gameStats?.stats.filter((s) => s.gameMode === 'ranked').filter((s) => s.playerDecklist === deckstring),
-			),
-			distinctUntilChanged((a, b) => a.length === b.length),
-		);
-		const patchInfo$ = this.patches.currentConstructedMetaPatch$$;
+		const allGames = await this.gameStats.gameStats$$.getValueWithInit();
+		const playerDeckMatches = allGames?.stats
+			.filter((s) => s.gameMode === 'ranked')
+			.filter((s) => s.playerDecklist === deckstring);
 
-		const mulliganAdvice$ = combineLatest([
-			archetype$,
-			deckDetails$,
-			formatOverride$,
-			playerRank$,
-			opponentClass$,
-			timeFrame$,
-			playCoinOverride$,
-			patchInfo$,
-			playerDeckMatches$,
-		]).pipe(
-			map(
-				([
-					archetype,
-					deckDetails,
-					format,
-					playerRank,
-					opponentClass,
-					timeFrame,
-					playCoin,
-					patchInfo,
-					playerDeckMatches,
-				]) => {
-					return this.getStatsFor(
-						deckstring,
-						deckCards,
-						opponentClass,
-						timeFrame,
-						playerRank,
-						format,
-						playCoin ?? 'all',
-						patchInfo,
-						archetype,
-						deckDetails,
-						playerDeckMatches,
-					);
-				},
-			),
-			tap((mulliganAdvice) => console.debug('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
-			shareReplay(1),
+		return this.getStatsFor(
+			deckstring,
+			deckCards,
+			opponentClass,
+			timeFrame,
+			playerRank,
+			format,
+			playCoin ?? 'all',
+			patchInfo,
+			archetype,
+			deckDetails,
+			playerDeckMatches,
 		);
-		return mulliganAdvice$;
 	}
 
 	private getStatsFor(

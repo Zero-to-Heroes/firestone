@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DeckCard } from '@firestone/game-state';
+import { DeckCard, Handler, SelectorOptions } from '@firestone/game-state';
 import { HighlightSide, ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
-import {
-	Handler,
-	SelectorOptions,
-} from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-common.service';
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
 @Injectable()

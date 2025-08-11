@@ -1,6 +1,6 @@
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { ArenaNavigationService } from '@firestone/arena/common';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
@@ -57,20 +57,20 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'achievements'
 				? navigationState.navigationAchievements.update({
 						selectedAchievementId: undefined,
-				  } as NavigationAchievements)
+					} as NavigationAchievements)
 				: navigationState.navigationAchievements;
 		const replays =
 			event.module === 'replays'
 				? navigationState.navigationReplays.update({
 						currentView: 'list',
 						selectedReplay: undefined,
-				  } as NavigationReplays)
+					} as NavigationReplays)
 				: navigationState.navigationReplays;
 		const decktracker =
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
 						menuDisplayType: 'menu',
-				  } as NavigationDecktracker)
+					} as NavigationDecktracker)
 				: navigationState.navigationDecktracker;
 		// TODO: if this is the live tab, default to the decktracker
 		await this.prefs.setMainVisibleSection(event.module === 'live' ? 'decktracker' : event.module);

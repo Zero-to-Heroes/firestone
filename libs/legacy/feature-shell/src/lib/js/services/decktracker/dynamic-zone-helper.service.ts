@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DeckState } from '@firestone/game-state';
+import { DeckState, DynamicZone } from '@firestone/game-state';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { DynamicZone } from '../../models/decktracker/view/dynamic-zone';
-import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 
 @Injectable()
 export class DynamicZoneHelperService {
-	constructor(private readonly helper: DeckManipulationHelper) {}
-
 	public fillDynamicZones(deckState: DeckState, i18n: LocalizationFacadeService): DeckState {
 		return deckState;
 		// const dynamicZones: DynamicZone[] = [];

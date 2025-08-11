@@ -19,17 +19,15 @@ import {
 	MercenariesStarterFilterType,
 } from '../../models/mercenaries/mercenaries-filter-types';
 import {
-	MercenariesComposition,
-	MercenariesHeroStat,
-	MercenariesReferenceData,
-} from '../mercenaries/mercenaries-reference-data.service';
-import {
 	getHeroRole,
 	getShortMercHeroName,
 	isMercenariesPvE,
 	isMercenariesPvP,
+	MercenariesComposition,
+	MercenariesHeroStat,
+	MercenariesReferenceData,
 	normalizeMercenariesCardId,
-} from '../mercenaries/mercenaries-utils';
+} from '@firestone/mercenaries/common';
 
 export const filterMercenariesHeroStats = (
 	heroStats: readonly MercenariesHeroStat[],

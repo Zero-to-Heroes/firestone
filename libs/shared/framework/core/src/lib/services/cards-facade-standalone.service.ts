@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
+import { AllCardsService, CardType, ReferenceCard } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
 
 @Injectable()
 export class CardsFacadeStandaloneService {
 	private service: AllCardsService;
+	private allAnomalies: readonly ReferenceCard[];
 
 	public async init(service: AllCardsService, locale: string) {
 		this.service = service;
@@ -33,7 +34,7 @@ export class CardsFacadeStandaloneService {
 		const fileName = this.getFileName(locale);
 		console.log('initializing cards db with', fileName);
 		await this.service.initializeCardsDb(undefined, fileName);
-		console.log('cards initialized', this.service.getCards()[0]);
+		console.debug('cards initialized', this.service.getCards()[0]);
 	}
 
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards
@@ -64,5 +65,21 @@ export class CardsFacadeStandaloneService {
 
 	public getRootCardId(cardId: string): string {
 		return this.service.getRootCardId(cardId);
+	}
+
+	public normalizeDeckList(decklist: string | null | undefined): string | null {
+		return !!decklist?.length ? this.service.normalizeDeckList(decklist) : null;
+	}
+
+	public getAnomalies(): readonly ReferenceCard[] {
+		if (this.allAnomalies?.length) {
+			return this.allAnomalies;
+		}
+
+		const allAnomalies = this.getCards().filter(
+			(card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_ANOMALY],
+		);
+		this.allAnomalies = allAnomalies;
+		return allAnomalies;
 	}
 }

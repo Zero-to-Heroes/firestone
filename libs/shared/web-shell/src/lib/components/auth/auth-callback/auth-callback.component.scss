@@ -1,0 +1,133 @@
+.callback-page {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+	min-height: calc(100vh - 200px); // Account for header
+	color: var(--color-1, #e4e4e4);
+	font-family: 'Open Sans', sans-serif;
+}
+
+.callback-container {
+	background: var(--color-5, rgba(26, 31, 46, 0.95));
+	border: 1px solid var(--color-6, rgba(255, 255, 255, 0.1));
+	border-radius: 16px;
+	padding: 48px 40px;
+	max-width: 420px;
+	width: 100%;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+	text-align: center;
+}
+
+// Loading state
+.loading {
+	.spinner {
+		width: 48px;
+		height: 48px;
+		border: 3px solid rgba(255, 185, 72, 0.2);
+		border-top-color: var(--default-title-color, #ffb948);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 0 auto 24px;
+	}
+
+	h2 {
+		font-size: 20px;
+		font-weight: 600;
+		margin: 0 0 8px 0;
+		color: var(--color-1, #e4e4e4);
+	}
+
+	p {
+		color: var(--color-3, #8b8b8b);
+		font-size: 14px;
+		margin: 0;
+	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+// Success state
+.success {
+	.checkmark {
+		width: 48px;
+		height: 48px;
+		background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0 auto 24px;
+
+		svg {
+			width: 24px;
+			height: 24px;
+			fill: white;
+		}
+	}
+
+	h2 {
+		color: #4caf50;
+		font-size: 20px;
+		font-weight: 600;
+		margin: 0 0 8px 0;
+	}
+
+	p {
+		color: var(--color-3, #8b8b8b);
+		font-size: 14px;
+		margin: 0;
+	}
+}
+
+// Error state
+.error {
+	h2 {
+		color: #ff6b6b;
+		font-size: 20px;
+		font-weight: 600;
+		margin: 0 0 8px 0;
+	}
+
+	p {
+		color: var(--color-3, #8b8b8b);
+		font-size: 14px;
+		margin: 0 0 20px 0;
+	}
+
+	.retry-btn {
+		display: inline-block;
+		padding: 12px 24px;
+		background: var(--default-title-color, #ffb948);
+		color: var(--color-5, #190505);
+		text-decoration: none;
+		border-radius: 8px;
+		font-weight: 600;
+		font-size: 14px;
+		border: none;
+		cursor: pointer;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+
+		&:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 20px rgba(255, 185, 72, 0.4);
+		}
+
+		&:active {
+			transform: translateY(0);
+		}
+	}
+}
+
+// Mobile adjustments
+@media (max-width: 480px) {
+	.callback-container {
+		padding: 32px 24px;
+	}
+}

@@ -1,11 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
-import { Metadata } from '../../models/metadata';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const BarakKodobane: GeneratingCard = {
 	cardIds: [CardIds.BarakKodobane_BAR_551, CardIds.BarakKodobane_CORE_BAR_551],

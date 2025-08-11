@@ -9,10 +9,10 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardsHighlightFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
-import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-wrapper.component';
 
 @Component({

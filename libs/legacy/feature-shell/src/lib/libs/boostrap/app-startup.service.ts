@@ -3,7 +3,7 @@ import { generateToken } from '@components/third-party/out-of-cards-callback.com
 import {
 	FORCE_LOCAL_PROP,
 	GameStatusService,
-	OwNotificationsService,
+	NotificationsService,
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
@@ -40,7 +40,7 @@ export class AppStartupService {
 		private readonly oocAuth: OutOfCardsService,
 		private readonly ads: AdService,
 		private readonly localizationService: LocalizationFacadeService,
-		private readonly notifs: OwNotificationsService,
+		private readonly notifs: NotificationsService,
 		private readonly api: ApiRunner,
 	) {}
 

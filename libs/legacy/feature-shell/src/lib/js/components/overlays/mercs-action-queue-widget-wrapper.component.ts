@@ -10,7 +10,7 @@ import {
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
+import { isMercenariesPvE, isMercenariesPvP } from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 

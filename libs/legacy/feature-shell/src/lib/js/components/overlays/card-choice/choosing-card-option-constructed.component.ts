@@ -17,7 +17,7 @@ import {
 	ConstructedDiscoverService,
 	ConstructedDiscoversGuardianService,
 } from '@firestone/constructed/common';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { CardsHighlightFacadeService, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
@@ -34,7 +34,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-wrapper.component';
 
 @Component({

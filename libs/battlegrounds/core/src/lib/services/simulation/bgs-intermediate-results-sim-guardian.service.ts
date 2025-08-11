@@ -36,7 +36,7 @@ export class BgsIntermediateResultsSimGuardianService extends AbstractFacadeServ
 
 	private addDevMode() {
 		// Only add dev functions in development mode
-		if (!isDevMode()) {
+		if (!isDevMode() || typeof window === 'undefined') {
 			return;
 		}
 

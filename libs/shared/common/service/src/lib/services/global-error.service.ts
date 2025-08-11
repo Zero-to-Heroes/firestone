@@ -1,12 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { OwNotificationsService } from './notifications.service';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalErrorService {
 	constructor(
-		private readonly notifications: OwNotificationsService,
+		private readonly notifications: NotificationsService,
 		private readonly i18n: ILocalizationService,
 		private readonly ow: OverwolfService,
 	) {
@@ -22,7 +22,7 @@ export class GlobalErrorService {
 			const onClick = url
 				? () => {
 						this.ow.openUrlInDefaultBrowser(url);
-				  }
+					}
 				: undefined;
 			this.notifications.notifyError(title, message, error, onClick);
 		} else if (url) {

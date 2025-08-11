@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
 import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/game-state';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -93,7 +93,7 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 								? {
 										turn: turn,
 										value: statsForTurn.reduce((a, b) => a + b, 0) / statsForTurn.length,
-								  }
+									}
 								: null;
 						})
 						.filter((info) => info);
@@ -101,7 +101,7 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionStoreCo
 		console.debug('building value', heroStat, heroStats, postMatch, heroId);
 		return {
 			community: heroStat?.warbandStats
-				?.map((stat) => ({ turn: stat.turn, value: stat.averageStats } as NumericTurnInfo))
+				?.map((stat) => ({ turn: stat.turn, value: stat.averageStats }) as NumericTurnInfo)
 				.filter((stat) => stat)
 				.slice(0, 15),
 			your: your,

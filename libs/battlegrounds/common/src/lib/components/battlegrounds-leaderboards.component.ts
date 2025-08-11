@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { LeaderboardEntry } from '@firestone-hs/official-leaderboards';
+import { BattlegroundsOfficialLeaderboardService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, filter, tap } from 'rxjs';
-import { BattlegroundsOfficialLeaderboardService } from '../services/bgs-official-leaderboards.service';
 
 @Component({
 	standalone: false,

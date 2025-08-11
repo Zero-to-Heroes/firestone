@@ -8,7 +8,9 @@ import {
 	ApiRunner,
 	AppInjector,
 	ARENA_DECK_STATS,
-	IndexedDbService,
+	CurrentUser,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -24,7 +26,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	private api: ApiRunner;
 	private user: UserService;
 	private diskCache: DiskCacheService;
-	private db: IndexedDbService;
+	private db: IDatabaseService;
 	private account: AccountService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
@@ -40,7 +42,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		this.api = AppInjector.get(ApiRunner);
 		this.user = AppInjector.get(UserService);
 		this.diskCache = AppInjector.get(DiskCacheService);
-		this.db = AppInjector.get(IndexedDbService);
+		this.db = AppInjector.get(DATABASE_SERVICE_TOKEN);
 		this.account = AppInjector.get(AccountService);
 
 		this.deckStats$$.onFirstSubscribe(async () => {
@@ -48,6 +50,14 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 			const existingStats: readonly ExtendedDraftDeckStats[] | null = await this.loadArenaDeckStats(currentUser);
 			this.deckStats$$.next(existingStats);
 		});
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.deckStats$$ = new SubscriberAwareBehaviorSubject<readonly ExtendedDraftDeckStats[] | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.deckStats$$, 'ArenaDeckStatsService-deckStats');
 	}
 
 	public async newDeckStat(stat: ExtendedDraftDeckStats, isFinalDeck: boolean) {
@@ -74,7 +84,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	}
 
 	private async loadArenaDeckStats(
-		currentUser: overwolf.profile.GetCurrentUserResult | null,
+		currentUser: CurrentUser | null,
 		skipLocal = false,
 	): Promise<readonly ExtendedDraftDeckStats[] | null> {
 		if (!skipLocal) {

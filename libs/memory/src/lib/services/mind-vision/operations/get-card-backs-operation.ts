@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { CardBack } from '../../../external-models/card-back';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetCardBacksOperation extends MindVisionOperationFacade<readonly CardBack[]> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getCardBacks',
 			() => mindVision.getCardBacks(),
 			// Classic is ID = 0
@@ -18,7 +18,7 @@ export class GetCardBacksOperation extends MindVisionOperationFacade<readonly Ca
 						({
 							id: cardBack.CardBackId,
 							owned: true,
-						} as CardBack),
+						}) as CardBack,
 				);
 				return result;
 			},

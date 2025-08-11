@@ -1,8 +1,8 @@
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
-import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';
-import { isMercenaries } from '../mercenaries-utils';
+import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
+import { isMercenaries } from '@firestone/mercenaries/common';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesMatchMetadataParser implements MercenariesParser {

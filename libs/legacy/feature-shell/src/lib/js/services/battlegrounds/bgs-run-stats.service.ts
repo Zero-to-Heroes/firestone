@@ -2,10 +2,11 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
+import { buildBgsRunStatsInput } from '@firestone/battlegrounds/services';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
 import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
-import { GameForUpload } from '@firestone/stats/common';
-import { Events } from '../events.service';
+import { GameForUpload } from '@firestone/stats/services';
+import { Events } from '@firestone/shared/common/service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -93,38 +94,6 @@ export class BgsRunStatsService {
 		return gamesForHero.slice(0, numberOfStats).map((s) => s.reviewId);
 	}
 
-	public buildInput(
-		reviewId: string,
-		game: GameForUpload,
-		currentGame: BgsGame,
-		userId: string,
-		userName: string,
-	): BgsComputeRunStatsInput {
-		const newMmr = parseInt(game.newPlayerRank);
-		const input: BgsComputeRunStatsInput = {
-			reviewId: reviewId,
-			heroCardId: currentGame.getMainPlayer()?.cardId,
-			userId: userId,
-			userName: userName,
-			battleResultHistory: currentGame.buildBattleResultHistory().map((history) => ({
-				...history,
-				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
-			})),
-			mainPlayer: currentGame.getMainPlayer(),
-			faceOffs: currentGame.faceOffs.map((faceOff) => ({
-				damage: faceOff.damage,
-				opponentCardId: faceOff.opponentCardId,
-				opponentPlayerId: faceOff.opponentPlayerId,
-				playerCardId: faceOff.playerCardId,
-				result: faceOff.result,
-				turn: faceOff.turn,
-			})),
-			oldMmr: currentGame.mmrAtStart,
-			newMmr: isNaN(newMmr) ? null : newMmr,
-		};
-		return input;
-	}
-
 	private async computeRunStats(
 		reviewId: string,
 		currentGame: BgsGame,
@@ -133,7 +102,7 @@ export class BgsRunStatsService {
 	) {
 		const liveStats = currentGame.liveStats;
 		const user = await this.userService.getCurrentUser();
-		const input = this.buildInput(reviewId, game, currentGame, user.userId, user.username);
+		const input = buildBgsRunStatsInput(reviewId, game, currentGame, user.userId, user.username);
 
 		const [postMatchStats, newBestValues] = this.populateObject(
 			liveStats,
@@ -158,8 +127,8 @@ export class BgsRunStatsService {
 			boardHistory: !!realTimeStatsState?.boardHistory?.length
 				? realTimeStatsState?.boardHistory
 				: input.mainPlayer?.boardHistory?.length
-				? input.mainPlayer?.boardHistory
-				: [],
+					? input.mainPlayer?.boardHistory
+					: [],
 			tripleTimings:
 				input.mainPlayer && realTimeStatsState?.triplesPerHero[mainPlayerId]
 					? new Array(realTimeStatsState.triplesPerHero[mainPlayerId])

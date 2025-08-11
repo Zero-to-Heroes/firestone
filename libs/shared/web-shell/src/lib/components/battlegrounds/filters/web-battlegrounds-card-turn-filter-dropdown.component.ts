@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
-import { BattlegroundsViewModule, CardTurnFilterOption, RankFilterOption } from '@firestone/battlegrounds/view';
-import { BgsRankFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { BattlegroundsViewModule, CardTurnFilterOption } from '@firestone/battlegrounds/view';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { filter, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
 	standalone: true,

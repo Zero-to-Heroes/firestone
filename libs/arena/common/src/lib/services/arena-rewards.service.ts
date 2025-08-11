@@ -11,7 +11,9 @@ import {
 	ApiRunner,
 	AppInjector,
 	ARENA_REWARDS,
-	IndexedDbService,
+	CurrentUser,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
 	OverwolfService,
 	UserService,
 	WindowManagerService,
@@ -32,7 +34,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	private arenaInfoService: ArenaInfoService;
 	private ow: OverwolfService;
 	private diskCache: DiskCacheService;
-	private indexedDb: IndexedDbService;
+	private indexedDb: IDatabaseService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaRewardsService', () => !!this.arenaRewards$$);
@@ -48,7 +50,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.userService = AppInjector.get(UserService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.arenaInfoService = AppInjector.get(ArenaInfoService);
-		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
 		this.ow = AppInjector.get(OverwolfService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 
@@ -77,8 +79,12 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('addRewardsInternal', (rewards: Input) => this.addRewardsInternal(rewards));
+	}
+
 	public async addRewards(rewards: Input) {
-		return this.mainInstance.addRewardsInternal(rewards);
+		return this.callOnMainProcess('addRewardsInternal', rewards);
 	}
 	private async addRewardsInternal(rewards: Input) {
 		const currentRewards = await this.arenaRewards$$.getValueWithInit();
@@ -92,9 +98,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).bulkPut(newRewards);
 	}
 
-	private async loadArenaRewards(
-		currentUser: overwolf.profile.GetCurrentUserResult | null,
-	): Promise<readonly ArenaRewardInfo[] | null> {
+	private async loadArenaRewards(currentUser: CurrentUser | null): Promise<readonly ArenaRewardInfo[] | null> {
 		const localRewards = await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).toArray();
 		if (!!localRewards?.length) {
 			console.log('[arena-rewards] returning rewards from indexedDb', localRewards.length);

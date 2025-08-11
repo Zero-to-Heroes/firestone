@@ -9,13 +9,19 @@ import {
 } from '@firestone/shared/framework/core';
 
 import { ICollectionManagerService } from '@firestone/collection/common';
-import { PackInfo } from '@firestone/collection/view';
-import { Card, CardBack, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import {
+	Card,
+	CardBack,
+	MemoryInspectionService,
+	MemoryUpdatesService,
+	PackInfoForCollection as PackInfo,
+	SceneService,
+} from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Coin } from '../../models/coin';
-import { Events } from '../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { CollectionStorageService } from './collection-storage.service';
 import { AllTimeBoostersInternalService } from './details/all-time-boosters';
 import { BgHeroSkinsInternalService } from './details/bg-hero-skins';

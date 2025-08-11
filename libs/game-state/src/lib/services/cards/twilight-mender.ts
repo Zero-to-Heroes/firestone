@@ -1,12 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameTag, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
-import { Metadata } from '../../models/metadata';
+import { CardIds, CardType, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
 import { filterCards } from './utils';
 
 export const TwilightMender: GeneratingCard = {

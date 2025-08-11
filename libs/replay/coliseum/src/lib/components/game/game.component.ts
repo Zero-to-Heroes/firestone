@@ -23,7 +23,7 @@ import { GameHelper } from '../../services/game-helper';
 				blur: isOverlay,
 				'dark-blur': isDarkOverlay,
 				quest: _quest,
-				recruit: isRecruitPhase
+				recruit: isRecruitPhase,
 			}"
 		>
 			<div class="play-areas">
@@ -116,12 +116,16 @@ export class GameComponent implements AfterViewInit {
 	private secretRevealedId: number | null;
 	private questCompletedId: number | null;
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef, private cards: AllCardsService) {
+	constructor(
+		private events: Events,
+		private cdr: ChangeDetectorRef,
+		private cards: AllCardsService,
+	) {
 		window['getEntity'] = (entityId: number) => {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const entity = this._entities.get(entityId)!;
 			const refCard = this.cards.getCard(entity.cardID);
-			const tags = entity.tags
+			const tags = entity.tags;
 			console.debug('entity', entity.cardID, refCard.name, tags, entity, refCard);
 		};
 	}

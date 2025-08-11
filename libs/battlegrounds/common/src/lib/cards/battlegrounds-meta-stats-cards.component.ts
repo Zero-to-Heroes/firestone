@@ -2,11 +2,11 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsMetaCardStatTierItem, buildCardStats } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsCardsService } from '@firestone/battlegrounds/services';
 import { BgsCardTierFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, switchMap, takeUntil } from 'rxjs';
-import { BattlegroundsCardsService } from './bgs-cards.service';
 
 @Component({
 	standalone: false,
