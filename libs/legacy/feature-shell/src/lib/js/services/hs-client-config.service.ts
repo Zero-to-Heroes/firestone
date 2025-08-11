@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isPreReleaseBuild } from '@firestone/game-state';
 import {
 	GameStatusService,
 	getGameBaseDir,
@@ -7,7 +8,6 @@ import {
 } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { isPreReleaseBuild } from './hs-utils';
 import { LocalizationService } from './localization.service';
 
 @Injectable()

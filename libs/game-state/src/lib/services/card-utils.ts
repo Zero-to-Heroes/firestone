@@ -155,7 +155,7 @@ export const storeInformationOnCardPlayed = (
 export const addGuessInfoToCard = (
 	card: DeckCard,
 	creatorCardId: string,
-	creatorEntityId: number,
+	creatorEntityId: number | null,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
 	allCards: CardsFacadeService,

@@ -15,3 +15,9 @@ export interface CardPackInfo {
 	readonly MercenaryArtVariationPremium: number;
 	readonly MercenaryId: number;
 }
+
+export interface PackInfoForCollection {
+	readonly packType: BoosterType;
+	readonly totalObtained: number;
+	readonly unopened: number;
+}

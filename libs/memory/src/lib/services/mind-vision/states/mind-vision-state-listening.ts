@@ -1,7 +1,6 @@
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { sleep } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { Action, CurrentState } from '../mind-vision-actions';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionState } from './_mind-vision-state';
@@ -12,7 +11,6 @@ export class MindVisionStateListening implements MindVisionState {
 	constructor(
 		private readonly mindVision: MindVisionFacadeService,
 		private readonly dispatcher: (action: Action) => Promise<void>,
-		private readonly ow: OverwolfService,
 	) {}
 
 	stateId = () => CurrentState.LISTENING;

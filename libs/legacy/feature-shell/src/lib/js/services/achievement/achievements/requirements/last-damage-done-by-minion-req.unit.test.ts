@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { LastDamageDoneByMinionReq } from './last-damage-done-by-minion-req';
 
 describe('last-damage-done-by-minion-req', () => {
@@ -11,7 +11,7 @@ describe('last-damage-done-by-minion-req', () => {
 			additionalData: {
 				sourceCardId: 'ULDA_026',
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -28,7 +28,7 @@ describe('last-damage-done-by-minion-req', () => {
 			additionalData: {
 				sourceCardId: 'other',
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -45,7 +45,7 @@ describe('last-damage-done-by-minion-req', () => {
 			additionalData: {
 				sourceCardId: 'ULDA_026',
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -55,7 +55,7 @@ describe('last-damage-done-by-minion-req', () => {
 			additionalData: {
 				sourceCardId: 'other',
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -74,7 +74,7 @@ describe('last-damage-done-by-minion-req', () => {
 			additionalData: {
 				sourceCardId: 'ULDA_026',
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -86,8 +86,8 @@ describe('last-damage-done-by-minion-req', () => {
 
 	test('req is intantiated with the correct target damage', () => {
 		const rawReq: RawRequirement = {
-			'type': 'LAST_DAMAGE_DONE_BY_MINION',
-			'values': ['ULDA_026'],
+			type: 'LAST_DAMAGE_DONE_BY_MINION',
+			values: ['ULDA_026'],
 		};
 
 		const req = LastDamageDoneByMinionReq.create(rawReq);

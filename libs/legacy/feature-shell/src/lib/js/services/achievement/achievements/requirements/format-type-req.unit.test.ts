@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { FormatTypeReq } from './format-type-req';
 
 describe('format-type-req', () => {
@@ -37,8 +37,8 @@ describe('format-type-req', () => {
 
 test('req is intantiated with the correct format type', () => {
 	const rawReq: RawRequirement = {
-		'type': 'FORMAT_TYPE',
-		'values': ['2'],
+		type: 'FORMAT_TYPE',
+		values: ['2'],
 	};
 
 	const req = FormatTypeReq.create(rawReq);

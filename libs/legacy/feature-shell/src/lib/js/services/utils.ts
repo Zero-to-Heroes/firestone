@@ -40,6 +40,7 @@ export const uuid = () => {
 	});
 };
 
+/** @deprecated */
 export const sleep = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -190,6 +191,7 @@ export const mod = (n: number, m: number): number => {
 	return ((n % m) + m) % m;
 };
 
+/** @deprecated */
 // https://www.just-bi.nl/a-tale-of-a-javascript-memory-leak/
 export const freeRegexp = () => /\s*/g.exec('');
 
@@ -219,6 +221,7 @@ export const getStandardDeviation = (array: readonly number[]): { mean: number; 
 	};
 };
 
+/** @deprecated */
 export const chunk = <T>(array: readonly T[], chunkSize: number): T[][] => {
 	const chunks: T[][] = [];
 	for (let i = 0; i < array.length; i += chunkSize) {

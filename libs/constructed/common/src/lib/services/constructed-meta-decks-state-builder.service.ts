@@ -9,6 +9,7 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
+import { buildArchetypeName } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -20,7 +21,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { buildArchetypeName } from './constructed-archetype.service';
 import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';

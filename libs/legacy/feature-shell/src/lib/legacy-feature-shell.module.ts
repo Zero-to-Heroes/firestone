@@ -311,11 +311,13 @@ import { ConstructedMetaDeckDetailsViewComponent } from '@components/decktracker
 import { ConstructedMetaDeckDetailsComponent } from '@components/decktracker/main/constructed-meta-deck-details.component';
 import { ConstructedArchetypeSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-archetype-sample-size-filter-dropdown.component';
 import { ConstructedMetaDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-meta-deck-card-search.component';
+import { ConstructedPersonalDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-personal-deck-card-search.component';
 import { ConstructedPlayCoinFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-play-coin-filter-dropdown.component';
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
 import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { DecktrackerPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/decktracker-player-class-filter-dropdown.component';
+import { MetaDecksVisualizationComponent } from '@components/decktracker/main/meta-decks-visualization.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
@@ -342,6 +344,7 @@ import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-
 import { ArenaCurrentSessionWidgetWrapperComponent } from '@components/overlays/arena/arena-current-session-widget-wrapper.component';
 import { ArenaDecktrackerOocComponent } from '@components/overlays/arena/arena-decktracker-ooc.component';
 import { BgsReconnectorWidgetWrapperComponent } from '@components/overlays/bgs/bgs-reconnector-widget-wrapper.component';
+import { ChoosingCardAdditionalInfoComponent } from '@components/overlays/card-choice/choosing-card-additional-info.component';
 import { ChoosingCardOptionArenaComponent } from '@components/overlays/card-choice/choosing-card-option-arena.component';
 import { ChoosingCardOptionConstructedComponent } from '@components/overlays/card-choice/choosing-card-option-constructed.component';
 import { ChoosingCardOptionComponent } from '@components/overlays/card-choice/choosing-card-option.component';
@@ -367,6 +370,7 @@ import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@fi
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
+import { AppViewModule } from '@firestone/app/view';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
 	ArenaCommonModule,
@@ -394,7 +398,13 @@ import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DiscordModule } from '@firestone/discord';
-import { GameStateModule, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
+import {
+	GameEventsPluginService,
+	GameStateModule,
+	IGameEventsPlugin,
+	REVIEW_ID_SERVICE_TOKEN,
+	ReviewIdService,
+} from '@firestone/game-state';
 import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule } from '@firestone/mercenaries/common';
@@ -432,10 +442,6 @@ import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-b
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-
-import { ConstructedPersonalDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-personal-deck-card-search.component';
-import { MetaDecksVisualizationComponent } from '@components/decktracker/main/meta-decks-visualization.component';
-import { ChoosingCardAdditionalInfoComponent } from '@components/overlays/card-choice/choosing-card-additional-info.component';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -534,12 +540,10 @@ import { FirestoneAchievementsChallengeService } from './js/services/achievement
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
-import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
-import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
 import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
@@ -548,32 +552,18 @@ import { CollectionStorageService } from './js/services/collection/collection-st
 import { SetsManagerService } from './js/services/collection/sets-manager.service';
 import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
-import { AiDeckService } from './js/services/decktracker/ai-deck-service.service';
-import { AttackOnBoardService } from './js/services/decktracker/attack-on-board.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
-import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
-import { DeckParserFacadeService } from './js/services/decktracker/deck-parser-facade.service';
-import { DeckParserService } from './js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
-import { DeckManipulationHelper } from './js/services/decktracker/event-parser/deck-manipulation-helper';
-import { SecretsParserService } from './js/services/decktracker/event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './js/services/decktracker/game-state-meta-info.service';
 import { GameStateService } from './js/services/decktracker/game-state.service';
-import { GameStateParsersService } from './js/services/decktracker/game-state/state-parsers.service';
-import { StatePostProcessService } from './js/services/decktracker/game-state/state-post-process.service';
 import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
-import { OverlayDisplayService } from './js/services/decktracker/overlay-display.service';
-import { SecretConfigService } from './js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
 import { Events } from './js/services/events.service';
-import { GameEventsEmitterService } from './js/services/game-events-emitter.service';
-import { GameEvents } from './js/services/game-events.service';
-import { GameModeDataService } from './js/services/game-mode-data.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
@@ -601,7 +591,6 @@ import { MercenariesMemoryCacheService } from './js/services/mercenaries/mercena
 import { MercenariesReferenceDataService } from './js/services/mercenaries/mercenaries-reference-data.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
@@ -609,8 +598,8 @@ import { InternalProfileInfoService } from './js/services/profile/internal/inter
 import { ProfileUploaderService } from './js/services/profile/profile-uploader.service';
 import { QuestsService } from './js/services/quests.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
-import { ReviewIdService } from './js/services/review-id.service';
 import { RewardMonitorService } from './js/services/rewards/rewards-monitor';
+import { GameOverService } from './js/services/stats/game/game-over.service';
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
 import { MatchStatsService } from './js/services/stats/match-stats.service';
@@ -683,6 +672,7 @@ try {
 		DiscordModule,
 		MemoryModule,
 		GameStateModule,
+		AppViewModule,
 		StatsCommonModule,
 		ConstructedCommonModule,
 		CommunitiesCommonModule,
@@ -1329,6 +1319,7 @@ try {
 		{ provide: Store, useClass: AppUiStoreFacadeService },
 		AppUiStoreFacadeService,
 		{ provide: ILocalizationService, useClass: LocalizationFacadeService },
+		{ provide: IGameEventsPlugin, useExisting: GameEventsPluginService },
 		LocalizationFacadeService,
 
 		LocalizationService,
@@ -1339,10 +1330,6 @@ try {
 		{ provide: AllCardsService, useExisting: CardsFacadeService },
 
 		DevService,
-		GameEvents,
-		GameEventsEmitterService,
-		GameEventsPluginService,
-		GameModeDataService,
 		LogListenerService,
 		CardsMonitorService,
 		LogRegisterService,
@@ -1366,23 +1353,15 @@ try {
 		DecktrackerStateLoaderService,
 		DecksProviderService,
 		ConstructedConfigService,
-		ConstructedArchetypeServiceOrchestrator,
 
 		EndGameListenerService,
 		EndGameUploaderService,
 		GameParserService,
 		ReplayUploadService,
-		SecretsParserService,
-		GameStateParsersService,
-		StatePostProcessService,
-		DeckManipulationHelper,
-		AttackOnBoardService,
 
 		BgsPerfectGamesService,
 		BgsGlobalStatsService,
 		BgsRunStatsService,
-		BgsBestUserStatsService,
-		RealTimeStatsService,
 		BgsCustomSimulationService,
 		BgsOverlayHeroOverviewService,
 
@@ -1392,17 +1371,12 @@ try {
 		MercenariesReferenceDataService,
 		MercenariesSynergiesHighlightService,
 
-		AiDeckService,
-		SecretConfigService,
-
 		GameStatsUpdaterService,
+		GameOverService,
 		GameStatsProviderService,
 		MatchStatsService,
 
-		OverlayDisplayService,
 		DeckCardService,
-		DeckParserService,
-		DeckParserFacadeService,
 		ReviewIdService,
 		GameStateService,
 		DynamicZoneHelperService,
@@ -1441,6 +1415,10 @@ try {
 		LotteryWindowComponent,
 
 		DeckTrackerOverlayContainerComponent,
+
+		// For electron
+		ConstructedDecktrackerOocWidgetWrapperComponent,
+		DecktrackerPlayerWidgetWrapperComponent,
 	],
 })
 export class LegacyFeatureShellModule {

@@ -12,7 +12,7 @@ export const Metrognome: GeneratingCard = {
 		deckState: DeckState,
 		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
-		creatorEntityId: number,
+		creatorEntityId: number | null,
 	): GuessedInfo | null => {
 		const found = deckState.findCard(creatorEntityId);
 		if (!found) {

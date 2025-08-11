@@ -3,8 +3,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BgsCardTooltipComponent, buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
+import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
 @Component({
 	standalone: false,

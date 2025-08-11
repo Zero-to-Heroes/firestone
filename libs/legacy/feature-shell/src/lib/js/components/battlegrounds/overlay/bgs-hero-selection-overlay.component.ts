@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Race, isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { Race, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
 	BgsInGameHeroSelectionGuardianService,
 	BgsPlayerHeroStatsService,
@@ -28,7 +28,7 @@ import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { AdService } from '../../../services/ad.service';
-import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
+import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../../models/game-event';
 import { QualifierType } from '../_qualifier.type';
 import { Requirement } from '../_requirement';
 
@@ -8,7 +8,10 @@ export class BattlegroundsFinishReq implements Requirement {
 	private latestPlace: number;
 	private gameOver: boolean;
 
-	constructor(private readonly targetPlace: number, private readonly qualifier: QualifierType) {}
+	constructor(
+		private readonly targetPlace: number,
+		private readonly qualifier: QualifierType,
+	) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 2) {

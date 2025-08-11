@@ -1,11 +1,14 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class ResummonRecurringVillainRew implements Requirement {
 	private numberOfResummons = 0;
 
-	constructor(private readonly targetNumberOfResummons: number, private readonly qualifier: string) {}
+	constructor(
+		private readonly targetNumberOfResummons: number,
+		private readonly qualifier: string,
+	) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {

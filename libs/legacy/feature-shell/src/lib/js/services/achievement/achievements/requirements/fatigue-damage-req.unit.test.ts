@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { FatigueDamageReq } from './fatigue-damage-req';
 
 describe('fatigue-damage-req', () => {
@@ -116,8 +116,8 @@ describe('fatigue-damage-req', () => {
 
 	test('req is intantiated with the correct target damage', () => {
 		const rawReq: RawRequirement = {
-			'type': 'FATIGUE_DAMAGE',
-			'values': ['1', 'AT_LEAST', 'OPPONENT'],
+			type: 'FATIGUE_DAMAGE',
+			values: ['1', 'AT_LEAST', 'OPPONENT'],
 		};
 
 		const req = FatigueDamageReq.create(rawReq);

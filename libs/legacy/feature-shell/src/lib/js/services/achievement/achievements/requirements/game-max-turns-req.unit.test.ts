@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { GameMaxTurnsReq } from './game-max-turns-req';
 
 describe('game-max-turns-req', () => {
@@ -40,8 +40,8 @@ describe('game-max-turns-req', () => {
 
 	test('req is intantiated with the correct target number of turns', () => {
 		const rawReq: RawRequirement = {
-			'type': 'GAME_MAX_TURN',
-			'values': ['4'],
+			type: 'GAME_MAX_TURN',
+			values: ['4'],
 		};
 
 		const req = GameMaxTurnsReq.create(rawReq);

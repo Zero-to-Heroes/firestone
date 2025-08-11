@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
-import { GameStatusService, GlobalErrorService, OwNotificationsService } from '@firestone/shared/common/service';
+import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
-import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { MemoryUpdate } from '../../models/memory-update';
@@ -86,15 +85,14 @@ export class MindVisionStateMachineService {
 
 	constructor(
 		private readonly mindVisionFacade: MindVisionFacadeService,
-		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 		private readonly memoryUpdates: MemoryUpdatesService,
-		private readonly notifs: OwNotificationsService,
-		private readonly i18n: ILocalizationService,
 		private readonly globalError: GlobalErrorService,
 	) {
 		this.setup();
-		window['resetMemory'] = () => this.performAction(Action.RESET);
+		if (typeof window !== 'undefined') {
+			window['resetMemory'] = () => this.performAction(Action.RESET);
+		}
 	}
 
 	public async callMindVision<T>(apiCall: () => Promise<T>): Promise<T | null> {
@@ -127,12 +125,12 @@ export class MindVisionStateMachineService {
 
 	private async setup() {
 		this.states
-			.set(CurrentState.IDLE, new MindVisionStateIdle(this.mindVisionFacade, this.dispatcher, this.ow))
-			.set(CurrentState.INIT, new MindVisionStateInit(this.mindVisionFacade, this.dispatcher, this.ow))
-			.set(CurrentState.LISTENING, new MindVisionStateListening(this.mindVisionFacade, this.dispatcher, this.ow))
-			.set(CurrentState.ACTIVE, new MindVisionStateActive(this.mindVisionFacade, this.dispatcher, this.ow))
+			.set(CurrentState.IDLE, new MindVisionStateIdle(this.gameStatus))
+			.set(CurrentState.INIT, new MindVisionStateInit(this.mindVisionFacade, this.dispatcher))
+			.set(CurrentState.LISTENING, new MindVisionStateListening(this.mindVisionFacade, this.dispatcher))
+			.set(CurrentState.ACTIVE, new MindVisionStateActive(this.dispatcher))
 			.set(CurrentState.RESET, new MindVisionStateReset(this.mindVisionFacade, this.dispatcher))
-			.set(CurrentState.TEAR_DOWN, new MindVisionStateTearDown(this.mindVisionFacade, this.dispatcher, this.ow));
+			.set(CurrentState.TEAR_DOWN, new MindVisionStateTearDown(this.mindVisionFacade, this.dispatcher));
 
 		this.globalEventQueue
 			.asObservable()
@@ -190,6 +188,12 @@ export class MindVisionStateMachineService {
 
 	private async setState(newState: MindVisionState) {
 		if (newState?.stateId() != this.currentState?.stateId()) {
+			console.debug(
+				'[mind-vision] setting state',
+				CurrentState[this.currentState?.stateId()],
+				'to',
+				CurrentState[newState?.stateId()],
+			);
 			await this.currentState.onExit();
 			this.currentState = newState;
 			await this.currentState.onEnter();
@@ -217,7 +221,7 @@ export class MindVisionStateMachineService {
 			// 	first,
 			// );
 			if (!this.hasNotifiedRootMemoryReadingError) {
-				this.globalError.notifyCriticalError('memory-reading');
+				this.globalError?.notifyCriticalError('memory-reading');
 				this.hasNotifiedRootMemoryReadingError = true;
 			}
 		} else if (first === 'reset') {
@@ -229,7 +233,7 @@ export class MindVisionStateMachineService {
 	}
 
 	private hasRootMemoryReadingError(message: string): boolean {
-		return !!message && message.includes('ReadProcessMemory') && message.includes('WriteProcessMemory');
+		return !!message && message.includes?.('ReadProcessMemory') && message.includes('WriteProcessMemory');
 	}
 
 	private async waitForActiveState() {

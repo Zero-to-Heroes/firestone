@@ -12,7 +12,7 @@ export const YrelBeaconOfHope: GeneratingCard = {
 		deckState: DeckState,
 		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
-		creatorEntityId: number,
+		creatorEntityId: number | null,
 	): GuessedInfo | null => {
 		return {
 			possibleCards: [CardIds.LibramOfJustice_BT_011, CardIds.LibramOfHope, CardIds.LibramOfWisdom_BT_025],

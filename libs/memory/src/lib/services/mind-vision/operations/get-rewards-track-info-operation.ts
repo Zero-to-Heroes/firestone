@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { RewardsTrackInfos } from '../../../models/rewards-track-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetRewardsTrackInfoOperation extends MindVisionOperationFacade<RewardsTrackInfos> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getRewardsTrackInfo',
 			() => mindVision.getRewardsTrackInfo(),
 			(rewardsTrackInfo) => false,

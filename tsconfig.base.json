@@ -22,6 +22,7 @@
 			"@firestone/achievements/data-access": ["libs/achievements/data-access/src/index.ts"],
 			"@firestone/achievements/view": ["libs/achievements/view/src/index.ts"],
 			"@firestone/app/common": ["libs/app/common/src/index.ts"],
+			"@firestone/app/view": ["libs/app/view/src/index.ts"],
 			"@firestone/arena/common": ["libs/arena/common/src/index.ts"],
 			"@firestone/battlegrounds/common": ["libs/battlegrounds/common/src/index.ts"],
 			"@firestone/battlegrounds/core": ["libs/battlegrounds/core/src/index.ts"],
@@ -33,6 +34,7 @@
 			"@firestone/communities/common": ["libs/communities/common/src/index.ts"],
 			"@firestone/constructed/common": ["libs/constructed/common/src/index.ts"],
 			"@firestone/discord": ["libs/discord/src/index.ts"],
+			"@firestone/electron/common": ["libs/electron/common/src/index.ts"],
 			"@firestone/game-state": ["libs/game-state/src/index.ts"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/mainwindow/common": ["libs/mainwindow/common/src/index.ts"],
@@ -49,6 +51,7 @@
 			"@firestone/shared/framework/common": ["libs/shared/framework/common/src/index.ts"],
 			"@firestone/shared/framework/core": ["libs/shared/framework/core/src/index.ts"],
 			"@firestone/shared/styles": ["libs/shared/styles/src/index.ts"],
+			"@firestone/shared/web-shell": ["libs/shared/web-shell/src/index.ts"],
 			"@firestone/stats/common": ["libs/stats/common/src/index.ts"],
 			"@firestone/stats/data-access": ["libs/stats/data-access/src/index.ts"],
 			"@firestone/twitch/common": ["libs/twitch/common/src/index.ts"],
@@ -63,10 +66,11 @@
 			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
+			"common": ["libs/electron/common/src/index.ts"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
-			"vm": ["./node_modules/vm-browserify"],
-			"@firestone/shared/web-shell": ["libs/shared/web-shell/src/index.ts"]
+			"view": ["libs/app/view/src/index.ts"],
+			"vm": ["./node_modules/vm-browserify"]
 		},
 		"strict": false,
 		"noImplicitAny": false,
@@ -74,6 +78,7 @@
 		"strictPropertyInitialization": false,
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
+		"useDefineForClassFields": false,
 		"noPropertyAccessFromIndexSignature": false
 	},
 	"exclude": ["node_modules", "tmp"]

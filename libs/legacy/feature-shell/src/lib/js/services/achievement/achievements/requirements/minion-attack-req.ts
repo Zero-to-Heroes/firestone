@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class MinionAttackReq implements Requirement {
@@ -7,7 +7,10 @@ export class MinionAttackReq implements Requirement {
 	// I'll wait until I have a real use case to change the behavior
 	private minionAttack: number;
 
-	constructor(private readonly targetMinionAttack: number, private readonly qualifier: string) {}
+	constructor(
+		private readonly targetMinionAttack: number,
+		private readonly qualifier: string,
+	) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {

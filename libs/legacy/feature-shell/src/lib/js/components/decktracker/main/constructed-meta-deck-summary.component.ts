@@ -8,7 +8,8 @@ import {
 	Output,
 } from '@angular/core';
 import { Sideboard } from '@firestone-hs/deckstrings';
-import { buildArchetypeName, overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
+import { overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
+import { buildArchetypeName } from '@firestone/game-state';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';

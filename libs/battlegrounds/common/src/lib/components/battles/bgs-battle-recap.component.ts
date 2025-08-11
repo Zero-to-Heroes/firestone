@@ -2,9 +2,9 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsCardTooltipComponent } from '@firestone/battlegrounds/core';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 import { BattleRecapPlayer } from './bgs-battle-recap-player.component';
 
 @Component({
@@ -76,7 +76,7 @@ export class BgsBattleRecapComponent {
 					health: playerTeammateBattleInfo.player?.hpLeft,
 					tavernTier: playerTeammateBattleInfo.player?.tavernTier,
 					board: playerTeammateBattleInfo,
-			  }
+				}
 			: null;
 		const opponentTeammateBattleInfo = value.battleInfo?.opponentTeammateBoard;
 		this.opponentTeammate = !!opponentTeammateBattleInfo?.player
@@ -85,7 +85,7 @@ export class BgsBattleRecapComponent {
 					health: opponentTeammateBattleInfo.player?.hpLeft,
 					tavernTier: opponentTeammateBattleInfo.player?.tavernTier,
 					board: opponentTeammateBattleInfo,
-			  }
+				}
 			: null;
 
 		this.battle = value;
@@ -102,7 +102,10 @@ export class BgsBattleRecapComponent {
 
 	@Input() selectable = true;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	trackByEntityFn(index: number, entity: Entity) {
 		return entity.id;

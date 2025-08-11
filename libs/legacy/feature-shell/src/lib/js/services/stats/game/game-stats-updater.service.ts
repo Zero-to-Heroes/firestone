@@ -10,9 +10,9 @@ import { extractPlayerInfoFromDeckstring, GameStat } from '@firestone/stats/data
 import { BehaviorSubject } from 'rxjs';
 
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
+import { isBattlegrounds } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
@@ -75,7 +75,7 @@ export class GameStatsUpdaterService {
 			playerCardId = playerInfoFromDeckstring?.playerCardId;
 		}
 
-		const quests = isBattlegrounds(replay.gameType) ? replay.bgsHeroQuests ?? [] : [];
+		const quests = isBattlegrounds(replay.gameType) ? (replay.bgsHeroQuests ?? []) : [];
 		const firstGame = GameStat.create({
 			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,

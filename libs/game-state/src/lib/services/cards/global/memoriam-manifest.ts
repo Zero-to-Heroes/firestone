@@ -1,0 +1,17 @@
+import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GlobalHighlightCard } from './_registers';
+
+export const MemoriamManifest: GlobalHighlightCard = {
+	cardIds: [CardIds.MemoriamManifest_TIME_616],
+	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
+		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		const candidates = deckState.minionsDeadThisMatch
+			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
+			.filter((c) => hasCorrectTribe(c, Race.UNDEAD));
+		const highestCost = candidates.reduce((max, c) => Math.max(max, c.cost ?? 0), 0);
+		return candidates.filter((c) => c.cost === highestCost).map((e) => e.id);
+	},
+};

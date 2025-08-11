@@ -14,9 +14,8 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard, isCardCreated } from '@firestone/game-state';
+import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard, isCardCreated, PLAGUES } from '@firestone/game-state';
 import { HighlightSide } from '@firestone/shared/framework/core';
-import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
 export const CONCOCTION_GENERATORS = [

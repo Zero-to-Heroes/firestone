@@ -19,7 +19,7 @@ import {
 	getBaseCardId,
 	isCoin,
 } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { ConstructedArchetypeService, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PatchInfo, PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
@@ -48,7 +48,6 @@ import {
 	tap,
 } from 'rxjs';
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
-import { ConstructedArchetypeService } from './constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { MULLIGAN_GUIDE_IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
 

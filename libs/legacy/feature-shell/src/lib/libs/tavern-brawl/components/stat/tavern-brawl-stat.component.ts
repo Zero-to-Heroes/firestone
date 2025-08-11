@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BrawlInfo, StatForClass } from '@firestone-hs/tavern-brawl-stats';
+import { formatClass } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { formatClass } from '../../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../../js/services/localization-facade.service';
 
 @Component({

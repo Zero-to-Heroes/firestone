@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { MinionSummonedReq } from './minion-summoned-req';
 
 describe('minion-summoned-req', () => {
@@ -144,8 +144,8 @@ describe('minion-summoned-req', () => {
 
 	test('is intantiated with the correct cardId', () => {
 		const rawReq: RawRequirement = {
-			'type': 'MINION_SUMMONED',
-			'values': ['ULD_705t'],
+			type: 'MINION_SUMMONED',
+			values: ['ULD_705t'],
 		};
 
 		const req = MinionSummonedReq.create(rawReq);

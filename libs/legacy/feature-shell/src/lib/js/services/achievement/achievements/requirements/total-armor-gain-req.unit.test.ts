@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { TotalArmorGainReq } from './total-armor-gain-req';
 
 describe('total-armor-gain-req', () => {
@@ -153,8 +153,8 @@ describe('total-armor-gain-req', () => {
 
 	test('req is intantiated with the correct target armor gained and qualifier', () => {
 		const rawReq: RawRequirement = {
-			'type': 'TOTAL_ARMOR_GAINED',
-			'values': ['1', 'AT_LEAST'],
+			type: 'TOTAL_ARMOR_GAINED',
+			values: ['1', 'AT_LEAST'],
 		};
 
 		const req = TotalArmorGainReq.create(rawReq);

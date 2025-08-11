@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -24,7 +23,10 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 	private achievementId: string;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

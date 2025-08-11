@@ -4,7 +4,15 @@ import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
-import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckHandlerService,
+	DeckManipulationHelper,
+	DeckState,
+	GameEvents,
+	GameEventsEmitterService,
+	GameState,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -12,10 +20,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { CardNotificationsService } from './collection/card-notifications.service';
-import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
-import { GameEventsEmitterService } from './game-events-emitter.service';
-import { GameEvents } from './game-events.service';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 

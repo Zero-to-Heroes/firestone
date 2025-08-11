@@ -12,19 +12,25 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
+import {
+	CounterInstance,
+	equalCounterInstance,
+	GameStateFacadeService,
+	getAllCounters,
+	isBattlegroundsScene,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
+	GameInfoService,
 	HEARTHSTONE_GAME_ID,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
@@ -173,6 +179,7 @@ export class FullScreenOverlaysComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly ow: OverwolfService,
+		private readonly gameInfo: GameInfoService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
@@ -280,7 +287,7 @@ export class FullScreenOverlaysComponent
 
 	// Just make it full screen, always
 	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}

@@ -9,10 +9,11 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { GameNativeStateStoreService } from '@firestone/app/common';
+import { OverlayDisplayService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -65,15 +66,15 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly gameNativeStore: GameNativeStateStoreService,
+		private readonly overlayDisplay: OverlayDisplayService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs, this.gameNativeStore);
+		await waitForReady(this.scene, this.prefs, this.gameNativeStore, this.overlayDisplay);
 
-		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
+		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(

@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 

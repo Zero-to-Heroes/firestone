@@ -2,6 +2,7 @@
 import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -171,10 +172,10 @@ export class DeckState {
 	}
 
 	public updateSpellsPlayedThisMatch(
-		spell: DeckCard,
+		spell: DeckCard | null,
 		allCards: CardsFacadeService,
 		cardCost: number,
-		targetEntityId: number,
+		targetEntityId: number | null,
 	): DeckState {
 		if (!spell) {
 			return this;
@@ -227,7 +228,12 @@ export class DeckState {
 		});
 	}
 
-	public findCard(entityId: number): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } | null {
+	public findCard(
+		entityId: number | null | undefined,
+	): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } | null {
+		if (entityId == null) {
+			return null;
+		}
 		const zones: { id: 'hand' | 'deck' | 'board' | 'other'; cards: readonly DeckCard[] }[] = [
 			{ id: 'hand', cards: this.hand },
 			{ id: 'deck', cards: this.deck },
@@ -452,9 +458,7 @@ export interface CardOption {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly source: string;
-	readonly context: /*ChoosingOptionsGameEvent['additionalData']['context'];*/ {
-		readonly DataNum1: number;
-	};
+	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
 	readonly questDifficulty?: number;
 	readonly questReward?: {
 		readonly EntityId: number;

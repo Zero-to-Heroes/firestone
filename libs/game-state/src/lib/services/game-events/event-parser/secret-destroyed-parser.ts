@@ -1,0 +1,47 @@
+import { BoardSecret } from '../../../models/board-secret';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
+import { EventParser } from './_event-parser';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
+
+export class SecretDestroyedParser implements EventParser {
+	constructor(private readonly helper: DeckManipulationHelper) {}
+
+	// Whenever something occurs that publicly reveal a card, we try to assign its
+	// cardId to the corresponding entity
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return !!state;
+	}
+
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		const newSecrets: readonly BoardSecret[] = deck.secrets.filter((secret) => secret.entityId !== entityId);
+
+		let otherZone = deck.otherZone;
+		const card = otherZone.find((c) => c.entityId === entityId);
+		if (card) {
+			const newCard = card.update({
+				zone: 'REMOVEDFROMGAME',
+			});
+			otherZone = otherZone.map((c) => (c.entityId === entityId ? newCard : c));
+		}
+
+		const newPlayerDeck = deck.update({
+			secrets: newSecrets,
+			otherZone: otherZone,
+		} as DeckState);
+
+		return Object.assign(new GameState(), currentState, {
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			miscCardsDestroyed: [...(currentState.miscCardsDestroyed || []), cardId],
+		});
+	}
+
+	event(): string {
+		return GameEvent.SECRET_DESTROYED;
+	}
+}

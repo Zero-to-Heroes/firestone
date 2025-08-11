@@ -43,7 +43,8 @@ export class OverwolfService {
 	}
 
 	public getMainWindow(): any {
-		// When dealing with the website / SPA without overwolf, the main window is simply the current window (since there is only one window)
+		// When dealing with the website, the main window is simply the current window (since there is only one window)
+		// On electron, we don't have a window
 		return this.isOwEnabled() ? overwolf.windows.getMainWindow() : window;
 	}
 

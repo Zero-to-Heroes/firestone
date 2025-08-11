@@ -100,6 +100,16 @@ export class LocalizationStandaloneService implements ILocalizationService {
 		return `Unknown ${capitalizeEachWord(race)}`;
 	}
 
+	public getUnknownManaMinionName(manaCost: number): string {
+		return this.translateString('decktracker.unknown-mana-minion', {
+			manaCost: manaCost,
+		});
+	}
+
+	public getUnknownMinionName(): string {
+		return this.translateString('decktracker.unknown-minion');
+	}
+
 	public translateString(key: string, params: any = null): string {
 		return this.translate.instant(key, params);
 	}

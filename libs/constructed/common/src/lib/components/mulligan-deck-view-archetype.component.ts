@@ -3,11 +3,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameFormatString } from '@firestone-hs/reference-data';
+import { buildArchetypeName } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, startWith } from 'rxjs';
-import { buildArchetypeName } from '../services/constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 
 @Component({

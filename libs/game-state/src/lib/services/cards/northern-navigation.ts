@@ -12,7 +12,7 @@ export const NorthernNavigation: GeneratingCard = {
 		deckState: DeckState,
 		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
-		creatorEntityId: number,
+		creatorEntityId: number | null,
 	): GuessedInfo | null => {
 		return {
 			spellSchools: [SpellSchool.FROST],

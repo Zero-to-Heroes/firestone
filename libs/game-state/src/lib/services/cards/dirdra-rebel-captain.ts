@@ -12,7 +12,7 @@ export const DirdraRebelCaptain: GeneratingCard = {
 		deckState: DeckState,
 		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
-		creatorEntityId: number,
+		creatorEntityId: number | null,
 	): GuessedInfo | null => {
 		const allCrewmates =
 			allCards

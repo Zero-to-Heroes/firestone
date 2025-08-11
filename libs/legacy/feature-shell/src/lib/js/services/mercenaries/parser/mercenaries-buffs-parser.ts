@@ -1,7 +1,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { EntityGameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import {
 	BattleMercenary,
 	BattleSpeedModifier,
@@ -139,7 +139,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 							value: -buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value,
 						})),
 					],
-			  }
+				}
 			: null;
 	}
 }

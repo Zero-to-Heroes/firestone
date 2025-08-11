@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
-import { GameStateFacadeService } from '@firestone/game-state';
+import {
+	BgsBestUserStatsService,
+	DeckParserService,
+	GameModeDataService,
+	GameStateFacadeService,
+	OverlayDisplayService,
+	RealTimeStatsService,
+	ReviewIdService,
+} from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
@@ -10,19 +18,14 @@ import { AchievementsStorageService as AchievementsDb } from '../../js/services/
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
 import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
-import { BgsBestUserStatsService } from '../../js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
 import { CardsHighlightService } from '../../js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
-import { DeckParserService } from '../../js/services/decktracker/deck-parser.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
-import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
 import { DevService } from '../../js/services/dev.service';
-import { GameModeDataService } from '../../js/services/game-mode-data.service';
 import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
 import { LogRegisterService } from '../../js/services/log-register.service';
@@ -32,7 +35,6 @@ import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-prese
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
 import { QuestsService } from '../../js/services/quests.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
-import { ReviewIdService } from '../../js/services/review-id.service';
 import { RewardMonitorService } from '../../js/services/rewards/rewards-monitor';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { SystemTrayService } from '../../js/services/system-tray.service';

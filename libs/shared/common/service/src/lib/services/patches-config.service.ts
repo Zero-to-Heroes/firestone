@@ -11,6 +11,13 @@ import { PatchInfo, PatchesConfig } from '../models/patches';
 
 const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json';
 
+const configEventName = 'patches-config';
+const battlegroundsMetaPatchEventName = 'current-battlegrounds-meta-patch';
+const constructedMetaPatchEventName = 'current-constructed-meta-patch';
+const twistMetaPatchEventName = 'current-twist-meta-patch';
+const arenaMetaPatchEventName = 'current-arena-meta-patch';
+const arenaSeasonPatchEventName = 'current-arena-season-patch';
+
 @Injectable()
 export class PatchesConfigService extends AbstractFacadeService<PatchesConfigService> {
 	public config$$: SubscriberAwareBehaviorSubject<PatchesConfig | null>;
@@ -87,6 +94,26 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 				patchConfig?.patches?.find((patch) => patch.number === patchConfig.currentArenaSeasonPatch) ?? null,
 			);
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		console.log('[patches-config] initElectronSubjects');
+		this.setupElectronSubject(this.config$$, configEventName);
+		this.setupElectronSubject(this.currentBattlegroundsMetaPatch$$, battlegroundsMetaPatchEventName);
+		this.setupElectronSubject(this.currentConstructedMetaPatch$$, constructedMetaPatchEventName);
+		this.setupElectronSubject(this.currentTwistMetaPatch$$, twistMetaPatchEventName);
+		this.setupElectronSubject(this.currentArenaMetaPatch$$, arenaMetaPatchEventName);
+		this.setupElectronSubject(this.currentArenaSeasonPatch$$, arenaSeasonPatchEventName);
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		console.log('[patches-config] createElectronProxy');
+		this.config$$ = new SubscriberAwareBehaviorSubject<PatchesConfig | null>(null);
+		this.currentBattlegroundsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentConstructedMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentTwistMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentArenaMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
+		this.currentArenaSeasonPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 	}
 }
 

@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
+import { formatClass } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
@@ -8,7 +9,6 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { formatClass } from '../../../services/hs-utils';
 import { sortByProperties } from '../../../services/utils';
 
 @Component({
@@ -95,7 +95,7 @@ export class ReplaysDeckstringFilterDropdownComponent
 										},
 									),
 								}),
-							} as MultiselectOption),
+							}) as MultiselectOption,
 					);
 				return {
 					options: options,

@@ -8,11 +8,17 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState, CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
+import {
+	BattlegroundsState,
+	CounterType,
+	GameState,
+	GameStateFacadeService,
+	OverlayDisplayService,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 export const templateBase = `
@@ -65,6 +71,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 
 	private scene: SceneService;
 	private gameState: GameStateFacadeService;
+	private overlayDisplay: OverlayDisplayService;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -76,13 +83,13 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 		super(ow, el, prefs, renderer, cdr);
 		this.scene = AppInjector.get(SceneService);
 		this.gameState = AppInjector.get(GameStateFacadeService);
+		this.overlayDisplay = AppInjector.get(OverlayDisplayService);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.gameState);
+		await waitForReady(this.scene, this.gameState, this.overlayDisplay);
 
-		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
+		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(

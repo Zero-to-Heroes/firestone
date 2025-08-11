@@ -12,6 +12,8 @@ import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
+const eventName = 'game-stats-changed';
+
 @Injectable()
 export class GameStatsProviderService
 	extends AbstractFacadeService<GameStatsProviderService>
@@ -63,5 +65,15 @@ export class GameStatsProviderService
 				)
 				.subscribe(this.gameStats$$);
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		console.log('[game-stats-provider] initElectronSubjects');
+		this.setupElectronSubject(this.gameStats$$, eventName);
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		console.log('[game-stats-provider] createElectronProxy');
+		this.gameStats$$ = new SubscriberAwareBehaviorSubject<readonly GameStat[] | null>(null);
 	}
 }

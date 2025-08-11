@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { TotalDamageDealtReq } from './total-damage-dealt-req';
 
 describe('total-damage-dealt-req', () => {
@@ -201,8 +201,8 @@ describe('total-damage-dealt-req', () => {
 
 	test('req is intantiated with the correct target total damage and qualifier', () => {
 		const rawReq: RawRequirement = {
-			'type': 'TOTAL_DAMAGE_DEALT',
-			'values': ['1', 'AT_LEAST'],
+			type: 'TOTAL_DAMAGE_DEALT',
+			values: ['1', 'AT_LEAST'],
 		};
 
 		const req = TotalDamageDealtReq.create(rawReq);
@@ -214,8 +214,8 @@ describe('total-damage-dealt-req', () => {
 
 	test('req is intantiated with the correct target total damage, qualifier and source damage card', () => {
 		const rawReq: RawRequirement = {
-			'type': 'TOTAL_DAMAGE_DEALT',
-			'values': ['1', 'AT_LEAST', 'AT_001'],
+			type: 'TOTAL_DAMAGE_DEALT',
+			values: ['1', 'AT_LEAST', 'AT_001'],
 		};
 
 		const req = TotalDamageDealtReq.create(rawReq);

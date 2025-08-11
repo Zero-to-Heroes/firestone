@@ -1,0 +1,19 @@
+{
+	"name": "electron/common",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/electron/common/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/electron/common",
+				"main": "libs/electron/common/src/index.ts",
+				"tsConfig": "libs/electron/common/tsconfig.lib.json",
+				"assets": ["libs/electron/common/*.md"]
+			}
+		}
+	},
+	"tags": []
+}

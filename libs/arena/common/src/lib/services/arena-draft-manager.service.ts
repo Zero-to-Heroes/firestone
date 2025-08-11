@@ -303,7 +303,7 @@ export class ArenaDraftManagerService
 					}
 				}
 
-				const scene = changes.CurrentScene || (await this.scene.currentScene$$.getValueWithInit());
+				const scene = changes.CurrentScene || this.scene.currentScene$$.getValue();
 				const currentStep = await this.currentStep$$.getValueWithInit();
 				const isDraftingCards = ![DraftSlotType.DRAFT_SLOT_HERO, DraftSlotType.DRAFT_SLOT_HERO_POWER].includes(
 					currentStep!,

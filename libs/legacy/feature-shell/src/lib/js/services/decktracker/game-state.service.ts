@@ -2,30 +2,30 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
-import { DeckCard, DeckState, GameState, HeroCard, PlayerGameState, RealTimeStatsState } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckState,
+	EventParser,
+	GameEvent,
+	GameEventsEmitterService,
+	GameState,
+	GameStateEvent,
+	GameStateParsersService,
+	HeroCard,
+	MinionsDiedEvent,
+	OverlayDisplayService,
+	PlayerGameState,
+	RealTimeStatsService,
+	RealTimeStatsState,
+	SecretsParserService,
+} from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { arraysEqual, chunk, sleep } from '@firestone/shared/framework/common';
+import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
-import { hasTag } from '@services/decktracker/attack-on-board.service';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { GameStateEvent } from '../../models/decktracker/game-state-event';
-import { GameEvent } from '../../models/game-event';
-import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
-import { BgsBestUserStatsService } from '../battlegrounds/bgs-best-user-stats.service';
-import { RealTimeStatsService } from '../battlegrounds/store/real-time-stats/real-time-stats.service';
-import { Events } from '../events.service';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
-import { ProcessingQueue } from '../processing-queue.service';
-import { chunk, sleep } from '../utils';
-import { EventParser } from './event-parser/event-parser';
-import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
-import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
-import { GameStateMetaInfoService } from './game-state-meta-info.service';
-import { GameStateParsersService } from './game-state/state-parsers.service';
-import { OverlayDisplayService } from './overlay-display.service';
 
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { GameStateMetaInfoService } from './game-state-meta-info.service';
 @Injectable()
 export class GameStateService {
 	public state: GameState = new GameState();
@@ -62,20 +62,17 @@ export class GameStateService {
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly events: Events,
 		private readonly gameStateMetaInfos: GameStateMetaInfoService,
 		private readonly prefs: PreferencesService,
 		private readonly twitch: TwitchAuthService,
 		private readonly ow: OverwolfService,
 		private readonly secretsParser: SecretsParserService,
 		private readonly parserService: GameStateParsersService,
-		// Just to make sure decktrackerDisplayEventBus is defined
-		private readonly display: OverlayDisplayService,
+		private readonly overlayDisplay: OverlayDisplayService,
 		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
 		private readonly realTimeStats: RealTimeStatsService,
 		private readonly simulation: BgsBattleSimulationService,
 		private readonly bgsNav: BgsInGameWindowNavigationService,
-		private readonly bgsUserStatsService: BgsBestUserStatsService,
 	) {
 		this.init();
 	}
@@ -89,7 +86,7 @@ export class GameStateService {
 			return;
 		}
 
-		await this.prefs.isReady();
+		await waitForReady(this.prefs, this.overlayDisplay);
 
 		this.eventParsers = this.parserService.buildEventParsers();
 		this.registerGameEvents();
@@ -142,7 +139,7 @@ export class GameStateService {
 			this.bgsNav.toggleWindow();
 		});
 
-		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		decktrackerDisplayEventBus.subscribe((event) => {
 			if (this.showDecktrackerFromGameMode === event) {
 				return;
@@ -161,32 +158,6 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events
-			.on(Events.ACHIEVEMENT_PROGRESSION)
-			.subscribe((event) =>
-				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
-			);
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
-			const info: ManastormInfo = event.data[0];
-			console.debug('[game-state] Replay created, received info', info.type);
-			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
-			// could be already reset when it arrives
-			if (info && info.type === 'new-review' && this.state?.bgState?.currentGame) {
-				const currentGame = this.state.bgState.currentGame;
-				console.debug('[game-state] will trigger START_BGS_RUN_STATS', this.state);
-				const bestBgsUserStats = await this.bgsUserStatsService.bestStats$$.getValueWithInit();
-				this.events.broadcast(
-					Events.START_BGS_RUN_STATS,
-					info.reviewId,
-					currentGame,
-					bestBgsUserStats,
-					info.game,
-				);
-			}
-		});
-
-		// Reset the deck if it exists
-		// this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
@@ -547,4 +518,12 @@ const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent
 		},
 	});
 	return merged;
+};
+
+const hasTag = (entity, tag: number, value = 1): boolean => {
+	if (!entity?.tags) {
+		return false;
+	}
+	const matches = entity.tags.some((t) => t.Name === tag && t.Value === value);
+	return matches;
 };

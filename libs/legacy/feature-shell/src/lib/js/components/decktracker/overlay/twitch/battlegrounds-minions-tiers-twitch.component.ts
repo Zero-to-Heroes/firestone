@@ -13,6 +13,7 @@ import {
 import { CardIds, GameType, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
 	MinionInfo,
+	QuestReward,
 	Tier,
 	buildTiers,
 	enhanceTiers,
@@ -20,7 +21,7 @@ import {
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
-import { GameState, QuestReward } from '@firestone/game-state';
+import { GameState } from '@firestone/game-state';
 import {
 	CardRulesService,
 	CardsFacadeService,

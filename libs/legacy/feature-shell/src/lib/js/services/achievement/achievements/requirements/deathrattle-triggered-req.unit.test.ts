@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { DeathrattleTriggeredReq } from './deathrattle-triggered-req';
 
 describe('deathrattle-triggered-req', () => {

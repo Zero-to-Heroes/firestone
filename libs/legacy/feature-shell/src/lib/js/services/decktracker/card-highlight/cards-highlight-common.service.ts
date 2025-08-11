@@ -11,7 +11,16 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
-import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard, Metadata } from '@firestone/game-state';
+import {
+	buildContextRelatedCardIds,
+	cardsMapping,
+	DeckCard,
+	DeckState,
+	GameState,
+	hasGetRelatedCards,
+	HeroCard,
+	Metadata,
+} from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AppInjector, CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -20,7 +29,6 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { getSelectorsForArenaDraft } from './arena-draft';
 import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
-import { cardsMapping, hasGetRelatedCards } from './global/_registers';
 import {
 	and,
 	barrelOfSludge,

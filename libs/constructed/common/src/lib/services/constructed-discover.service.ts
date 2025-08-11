@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
+import { ConstructedArchetypeService } from '@firestone/game-state';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { ConstructedArchetypeService } from './constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 
 export interface Requirement {
 	individualResetEvents?: readonly string[];

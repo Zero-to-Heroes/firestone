@@ -15,7 +15,7 @@ export const GuitarSoloist: GeneratingCard = {
 		deckState: DeckState,
 		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
-		creatorEntityId: number,
+		creatorEntityId: number | null,
 		options?: {
 			positionInHand?: number;
 			tags?: readonly { Name: GameTag; Value: number }[];

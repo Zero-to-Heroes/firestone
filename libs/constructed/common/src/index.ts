@@ -9,7 +9,6 @@ export * from './lib/components/mulligan-info-premium.component';
 export * from './lib/constructed-common.module';
 export * from './lib/models/deck-summary';
 export * from './lib/models/mulligan-advice';
-export * from './lib/services/constructed-archetype.service';
 export * from './lib/services/constructed-discover.service';
 export * from './lib/services/constructed-discovers-guardian.service';
 export * from './lib/services/constructed-meta-decks-state-builder.service';
