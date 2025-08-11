@@ -19,12 +19,12 @@ import {
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
+import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import {
+	getHeroRole,
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
-} from '../../../services/mercenaries/mercenaries-reference-data.service';
-import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
+} from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

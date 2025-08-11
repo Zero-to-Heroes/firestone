@@ -5,8 +5,8 @@ import { Preferences } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MercenariesMemoryCacheService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-memory-cache.service';
-import { MercenariesReferenceDataService } from '@legacy-import/src/lib/js/services/mercenaries/mercenaries-reference-data.service';
+import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
+import { getHeroRole, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import {
@@ -15,7 +15,6 @@ import {
 	BattleMercenary,
 	MercenariesBattleTeam,
 } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
 
 @Component({
 	standalone: false,

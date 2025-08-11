@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Message, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { Events, Message, NotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { Achievement } from '../../models/achievement';
-import { Events } from '../events.service';
 import { uuid } from '../utils';
 
 @Injectable()
 export class AchievementsNotificationService {
 	constructor(
-		private notificationService: OwNotificationsService,
+		private notificationService: NotificationsService,
 		private prefs: PreferencesService,
 		private events: Events,
 	) {

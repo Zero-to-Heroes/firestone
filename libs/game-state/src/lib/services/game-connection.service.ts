@@ -18,8 +18,14 @@ export class GameConnectionService extends AbstractFacadeService<GameConnectionS
 		this.currentGameServerInfo$$ = new BehaviorSubject<GameServerInfo | null>(null);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('updateGameServerInfoInternal', (address: string, port: number) =>
+			this.updateGameServerInfoInternal(address, port),
+		);
+	}
+
 	public updateGameServerInfo(address: string, port: number) {
-		this.mainInstance.updateGameServerInfoInternal(address, port);
+		void this.callOnMainProcess('updateGameServerInfoInternal', address, port);
 	}
 	private updateGameServerInfoInternal(address: string, port: number) {
 		const info: GameServerInfo = { address, port };

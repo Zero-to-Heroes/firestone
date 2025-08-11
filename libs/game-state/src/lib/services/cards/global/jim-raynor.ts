@@ -1,0 +1,17 @@
+import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { getStarshipsLaunchedCardIds } from '../../../counters/impl/starships-launched';
+import { GameState } from '../../../models/game-state';
+import { GlobalHighlightCard } from './_registers';
+
+export const JimRaynor: GlobalHighlightCard = {
+	cardIds: [CardIds.JimRaynor_SC_400, CardIds.Thor_SC_414, CardIds.Thor_ThorExplosivePayloadToken_SC_414t],
+	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
+		if (side === 'single' || side === 'arena-draft') {
+			return [];
+		}
+		const cardIds = getStarshipsLaunchedCardIds(side, gameState, allCards);
+		console.debug('[jim-raynor] related cards', cardIds);
+		return cardIds;
+	},
+};

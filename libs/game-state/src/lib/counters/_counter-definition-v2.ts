@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ComponentType } from '@angular/cdk/overlay';
 import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -21,7 +20,7 @@ export abstract class CounterDefinitionV2<T> {
 	protected showOnlyInDiscovers = false;
 	protected includeBoardForCards = false;
 	protected debug = false;
-	protected advancedTooltipType?: ComponentType<any>;
+	protected advancedTooltipType?: string;
 	// Only show one instance of the counter at the same time. Useful for counters like
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
@@ -273,7 +272,7 @@ export interface CounterInstance<T> {
 	readonly value: string | number | undefined | null;
 	readonly valueImg?: string;
 	readonly cardTooltip?: readonly string[];
-	readonly advancedTooltipType?: ComponentType<any>;
+	readonly advancedTooltipType?: string;
 	readonly advancedTooltipInput?: any;
 }
 

@@ -1,6 +1,6 @@
 import { GameType, Zone } from '@firestone-hs/reference-data';
 import { MemoryMercenariesInfo } from '@firestone/memory';
-import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
+import { normalizeMercenariesCardId } from '@firestone/mercenaries/common';
 import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../services/utils';
 
 export class MercenariesBattleState {

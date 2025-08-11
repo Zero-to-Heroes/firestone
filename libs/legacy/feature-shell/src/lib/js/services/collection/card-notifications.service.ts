@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { NotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
@@ -7,7 +7,7 @@ import { CollectionCardType } from '../../models/collection/collection-card-type
 @Injectable()
 export class CardNotificationsService {
 	constructor(
-		private readonly notificationService: OwNotificationsService,
+		private readonly notificationService: NotificationsService,
 		private readonly cards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
@@ -38,12 +38,12 @@ export class CardNotificationsService {
 					version: goldenClass
 						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
 						: '',
-			  })
+				})
 			: this.i18n.translateString('app.collection.card-history.new-copy-long', {
 					version: goldenClass
 						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
 						: '',
-			  });
+				});
 		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 

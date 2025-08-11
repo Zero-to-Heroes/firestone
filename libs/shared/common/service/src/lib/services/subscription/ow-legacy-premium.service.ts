@@ -32,12 +32,18 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		this.ow = AppInjector.get(OverwolfService);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('getSubscriptionStatusInternal', () => this.getSubscriptionStatusInternal());
+		this.registerMainProcessMethod('subscribeInternal', () => this.subscribeInternal());
+		this.registerMainProcessMethod('unsubscribeInternal', () => this.unsubscribeInternal());
+	}
+
 	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {
-		return this.mainInstance.getSubscriptionStatusInternal();
+		return this.callOnMainProcess<CurrentPlan | null>('getSubscriptionStatusInternal');
 	}
 
 	public async subscribe() {
-		return this.mainInstance.subscribeInternal();
+		return this.callOnMainProcess('subscribeInternal');
 	}
 
 	private async subscribeInternal() {
@@ -45,7 +51,7 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 	}
 
 	public async unsubscribe() {
-		return this.mainInstance.unsubscribeInternal();
+		return this.callOnMainProcess('unsubscribeInternal');
 	}
 
 	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {

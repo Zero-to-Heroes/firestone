@@ -1,12 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardClass, CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
-import { Metadata } from '../../models/metadata';
+import { CardClass, CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
 import { filterCards } from './utils';
 
 export const MismatchedFossils: GeneratingCard = {

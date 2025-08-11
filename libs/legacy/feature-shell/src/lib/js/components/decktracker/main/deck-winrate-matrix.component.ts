@@ -8,10 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
+import { classesForPieChart, colorForClass, formatClass } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
-import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';

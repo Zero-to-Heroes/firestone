@@ -1,0 +1,19 @@
+:host {
+	pointer-events: none;
+}
+
+.electron-overlay-container {
+	width: 100%;
+	height: 100%;
+	font-family: 'Open Sans', sans-serif;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: 1000;
+	display: flex;
+
+	full-screen-overlays {
+		flex: 1;
+		pointer-events: all;
+	}
+}

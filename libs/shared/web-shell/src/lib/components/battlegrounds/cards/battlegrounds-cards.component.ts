@@ -8,8 +8,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BattlegroundsCardsService, buildMinTurn } from '@firestone/battlegrounds/common';
+import { BattlegroundsCommonModule, buildMinTurn } from '@firestone/battlegrounds/common';
 import { BgsMetaCardStatTierItem, buildCardStats } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsCardsService } from '@firestone/battlegrounds/services';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -33,6 +34,7 @@ import { WebBattlegroundsTribesFilterDropdownComponent } from '../filters/web-ba
 		CommonModule,
 
 		BattlegroundsViewModule,
+		BattlegroundsCommonModule,
 
 		WebBattlegroundsFiltersComponent,
 		WebBattlegroundsRankFilterDropdownComponent,

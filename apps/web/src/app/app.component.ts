@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, Component, Injector } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeStandaloneService, ILocalizationService, setAppInjector } from '@firestone/shared/framework/core';
-import { WebShellComponent } from '@firestone/shared/web-shell';
 import { TranslateModule } from '@ngx-translate/core';
 import { AnalyticsService } from '../../../../libs/shared/framework/core/src';
 
@@ -12,7 +12,7 @@ import { AnalyticsService } from '../../../../libs/shared/framework/core/src';
 	selector: 'web-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
-	imports: [CommonModule, WebShellComponent, TranslateModule],
+	imports: [CommonModule, RouterOutlet, TranslateModule],
 })
 export class AppComponent implements AfterContentInit {
 	title = 'Firestone Web';

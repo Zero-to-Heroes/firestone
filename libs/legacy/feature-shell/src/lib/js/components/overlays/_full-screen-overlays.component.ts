@@ -12,20 +12,27 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
+import {
+	CardsHighlightFacadeService,
+	CounterInstance,
+	equalCounterInstance,
+	GameStateFacadeService,
+	getAllCounters,
+	isBattlegroundsScene,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
+	GameInfoService,
 	HEARTHSTONE_GAME_ID,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { auditTime, combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
+import { auditTime, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
@@ -76,7 +83,7 @@ import { DebugService } from '../../services/debug.service';
 			<!-- Use different wrappers to make it easier to position each one differently -->
 			<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
 			<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
-			<mercs-quests-widget-wrapper></mercs-quests-widget-wrapper>
+			<!-- <mercs-quests-widget-wrapper></mercs-quests-widget-wrapper> -->
 
 			<!-- "Constructed" -->
 			<decktracker-player-widget-wrapper
@@ -104,10 +111,10 @@ import { DebugService } from '../../services/debug.service';
 			<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
 
 			<!-- Mercs -->
-			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
+			<!-- <mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
 			<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
 			<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
-			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
+			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper> -->
 
 			<!-- Arena -->
 			<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
@@ -147,9 +154,9 @@ import { DebugService } from '../../services/debug.service';
 			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
 			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
-			<lottery-widget-wrapper></lottery-widget-wrapper>
+			<!-- <lottery-widget-wrapper></lottery-widget-wrapper> -->
 
-			<notifications></notifications>
+			<!-- <notifications></notifications> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -174,6 +181,7 @@ export class FullScreenOverlaysComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly ow: OverwolfService,
+		private readonly gameInfo: GameInfoService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
@@ -181,6 +189,7 @@ export class FullScreenOverlaysComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly init_ScalingService: ScalingService,
+		private readonly init_cardsHighlight: CardsHighlightFacadeService,
 	) {
 		super(cdr);
 	}
@@ -218,6 +227,7 @@ export class FullScreenOverlaysComponent
 				return 'decktracker';
 			}),
 		);
+
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
 			auditTime(500),
@@ -259,7 +269,7 @@ export class FullScreenOverlaysComponent
 
 	async ngAfterViewInit() {
 		console.debug('full screen ngAfterViewInit');
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.windowId = (await this.ow.getCurrentWindow())?.id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
 				await this.changeWindowSize();
@@ -281,7 +291,7 @@ export class FullScreenOverlaysComponent
 
 	// Just make it full screen, always
 	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
@@ -293,6 +303,10 @@ export class FullScreenOverlaysComponent
 		console.log('no-format', 'gameInfo', gameInfo);
 		const currentWindow = await this.ow.getCurrentWindow();
 		console.log('no-format', 'full screen current window', currentWindow);
+		if (!this.windowId) {
+			console.log('[full-screen-overlays] missing windowId');
+			return;
+		}
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		console.log('full screen change window position');
 		await this.ow.changeWindowPosition(this.windowId, 0, 0);

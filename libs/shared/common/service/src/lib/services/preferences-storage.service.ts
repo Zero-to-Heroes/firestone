@@ -12,8 +12,9 @@ export class PreferencesStorageService {
 	}
 
 	public getUserPreferences(): Preferences {
-		const strPrefs = localStorage.getItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES);
-		const result = !!strPrefs ? Object.assign(new Preferences(), JSON.parse(strPrefs)) : new Preferences();
+		const result =
+			this.localStorageService.getItem<Preferences>(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES) ??
+			new Preferences();
 		const resultWithDate: Preferences = Preferences.deserialize(result);
 		return resultWithDate;
 	}

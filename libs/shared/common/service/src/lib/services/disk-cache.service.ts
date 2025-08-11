@@ -29,12 +29,16 @@ export class DiskCacheService {
 		PROFILE_PACKS: 'profile-packs.json',
 		PROFILE_CLASSES_PROGRESS: 'profile-classes-progress.json',
 		PROFILE_WINS_FOR_MODE: 'profile-wins-for-mode.json',
+		LOCAL_USER: 'user.firestone-standalone.json',
 	};
 
 	private cacheDisabled = false;
 	private savingFiles: { [fileKey: string]: boolean } = {};
 
-	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+	) {
 		this.init();
 	}
 

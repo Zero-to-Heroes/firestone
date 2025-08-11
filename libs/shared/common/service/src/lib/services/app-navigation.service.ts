@@ -27,12 +27,16 @@ export class AppNavigationService extends AbstractFacadeService<AppNavigationSer
 		this.ow = AppInjector.get(OverwolfService);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('selectTabInternal', (tab: CurrentAppType) => this.selectTabInternal(tab));
+	}
+
 	public async goToPremium() {
 		this.selectTab('premium');
 	}
 
 	public selectTab(tab: CurrentAppType) {
-		this.mainInstance.selectTabInternal(tab);
+		void this.callOnMainProcess('selectTabInternal', tab);
 	}
 
 	public selectTabInternal(tab: CurrentAppType) {

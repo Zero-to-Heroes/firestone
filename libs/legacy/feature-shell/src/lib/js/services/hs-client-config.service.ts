@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { isPreReleaseBuild } from '@firestone/game-state';
+import type { LogFileBackend } from '@firestone/shared/common/service';
 import {
 	GameStatusService,
 	getGameBaseDir,
-	OwNotificationsService,
+	LOG_FILE_BACKEND,
+	NotificationsService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { isPreReleaseBuild } from './hs-utils';
 import { LocalizationService } from './localization.service';
 
 const targetConfigRaw = `
@@ -64,9 +66,10 @@ export class HsClientConfigService {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
-		private readonly notifService: OwNotificationsService,
+		private readonly notifService: NotificationsService,
 		private readonly i18n: LocalizationService,
 		private readonly prefs: PreferencesService,
+		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 	) {
 		this.init();
 	}
@@ -78,7 +81,7 @@ export class HsClientConfigService {
 
 	private async writeConfig() {
 		const prefs = await this.prefs.getPreferences();
-		const gameInstallPath = await getGameBaseDir(this.ow, null, prefs);
+		const gameInstallPath = await getGameBaseDir(this.backend, null, prefs);
 		console.debug('[hs-client-config] game install path', gameInstallPath);
 		if (!gameInstallPath?.length) {
 			return;

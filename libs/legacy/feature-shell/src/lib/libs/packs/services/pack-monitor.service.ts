@@ -1,12 +1,11 @@
 import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
+import { dustFor, GameEventsEmitterService } from '@firestone/game-state';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';
-import { Events } from '../../../js/services/events.service';
-import { GameEventsEmitterService } from '../../../js/services/game-events-emitter.service';
-import { dustFor } from '../../../js/services/hs-utils';
+import { Events } from '@firestone/shared/common/service';
 
 @Injectable()
 export class PackMonitor {
@@ -50,7 +49,7 @@ export class PackMonitor {
 									const dust = dustFor(dbCard.rarity, card.cardType);
 									this.totalDustInPack += dust;
 									this.totalDuplicateCards++;
-							  },
+								},
 					revealed: false,
 					eventTriggered: false,
 				} as CardWithEvents;

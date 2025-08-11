@@ -30,7 +30,8 @@ import {
 	AppInjector,
 	ARENA_CURRENT_DECK_PICKS,
 	CardsFacadeService,
-	IndexedDbService,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -85,7 +86,7 @@ export class ArenaDraftManagerService
 	private arenaCardStats: ArenaCardStatsService;
 	private arenaClassStats: ArenaClassStatsService;
 	private arenaDeckStats: ArenaDeckStatsService;
-	private indexedDb: IndexedDbService;
+	private indexedDb: IDatabaseService;
 	private account: AccountService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
@@ -145,7 +146,7 @@ export class ArenaDraftManagerService
 		this.arenaCardStats = AppInjector.get(ArenaCardStatsService);
 		this.arenaClassStats = AppInjector.get(ArenaClassStatsService);
 		this.arenaDeckStats = AppInjector.get(ArenaDeckStatsService);
-		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
 		this.account = AppInjector.get(AccountService);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
@@ -303,7 +304,7 @@ export class ArenaDraftManagerService
 					}
 				}
 
-				const scene = changes.CurrentScene || (await this.scene.currentScene$$.getValueWithInit());
+				const scene = changes.CurrentScene || this.scene.currentScene$$.getValue();
 				const currentStep = await this.currentStep$$.getValueWithInit();
 				const isDraftingCards = ![DraftSlotType.DRAFT_SLOT_HERO, DraftSlotType.DRAFT_SLOT_HERO_POWER].includes(
 					currentStep!,
@@ -578,6 +579,32 @@ export class ArenaDraftManagerService
 					},
 				);
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.currentStep$$, 'arena-draft-manager-current-step');
+		this.setupElectronSubject(this.heroOptions$$, 'arena-draft-manager-hero-options');
+		this.setupElectronSubject(this.cardOptions$$, 'arena-draft-manager-card-options');
+		this.setupElectronSubject(this.cardPackageOptions$$, 'arena-draft-manager-card-package-options');
+		this.setupElectronSubject(this.currentDeck$$, 'arena-draft-manager-current-deck');
+		this.setupElectronSubject(this.draftScreenHidden$$, 'arena-draft-manager-draft-screen-hidden');
+		this.setupElectronSubject(this.currentMode$$, 'arena-draft-manager-current-mode');
+		this.setupElectronSubject(this.clientStateType$$, 'arena-draft-manager-client-state-type');
+		this.setupElectronSubject(this.sessionState$$, 'arena-draft-manager-session-state');
+		this.setupElectronSubject(this.currentDraftMode$$, 'arena-draft-manager-current-draft-mode');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
+		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>(null);
+		this.cardPackageOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
+		this.draftScreenHidden$$ = new BehaviorSubject<boolean | null>(null);
+		this.currentMode$$ = new BehaviorSubject<GameType | null>(null);
+		this.clientStateType$$ = new BehaviorSubject<ArenaClientStateType | null>(null);
+		this.sessionState$$ = new BehaviorSubject<ArenaSessionState | null>(null);
+		this.currentDraftMode$$ = new BehaviorSubject<DraftMode | null>(null);
 	}
 
 	public async getPicksForRun(runId: string | number): Promise<readonly Pick[] | null> {

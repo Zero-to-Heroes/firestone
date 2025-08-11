@@ -10,7 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BgsInGameQuestsGuardianService, BgsInGameQuestsService } from '@firestone/battlegrounds/common';
+import { BgsInGameQuestsGuardianService, BgsInGameQuestsService } from '@firestone/battlegrounds/services';
 import { BgsQuestCardChoiceOption } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService } from '@firestone/shared/framework/core';

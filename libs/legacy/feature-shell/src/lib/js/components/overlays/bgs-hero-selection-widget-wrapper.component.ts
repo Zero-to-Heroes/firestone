@@ -8,12 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BgsInGameHeroSelectionGuardianService } from '@firestone/battlegrounds/common';
+import { BgsInGameHeroSelectionGuardianService } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, pairwise, shareReplay, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, shareReplay, takeUntil, tap } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -88,6 +88,7 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 					currentScene === SceneMode.GAMEPLAY
 				);
 			}),
+			tap((data) => console.log('[debug] [bgs-hero-selection-widget-wrapper] showWidget', data)),
 			this.handleReposition(),
 		);
 

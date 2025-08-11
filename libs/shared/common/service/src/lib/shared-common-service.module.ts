@@ -10,7 +10,8 @@ import { ExpertContributorsService } from './services/expert-contributors.servic
 import { GameStatusService } from './services/game-status.service';
 import { LogUtilsService } from './services/log-utils.service';
 import { LogsUploaderService } from './services/logs-uploader.service';
-import { OwNotificationsService } from './services/notifications.service';
+import { LogListenerService } from './services/logs/log-listener.service';
+import { NotificationsService } from './services/notifications.service';
 import { PatchesConfigService } from './services/patches-config.service';
 import { SimpleIOService } from './services/plugins/simple-io.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
@@ -29,7 +30,7 @@ const components = [AdvancedSettingDirective];
 		PreferencesService,
 		PreferencesStorageService,
 		GameStatusService,
-		OwNotificationsService,
+		NotificationsService,
 		PatchesConfigService,
 		LogUtilsService,
 		S3FileUploadService,
@@ -43,6 +44,7 @@ const components = [AdvancedSettingDirective];
 		OwLegacyPremiumService,
 		PremiumDeeplinkService,
 		AppNavigationService,
+		LogListenerService,
 	],
 	declarations: components,
 	exports: components,

@@ -783,6 +783,7 @@ export class Preferences implements IPreferences {
 
 	public static deserialize(input: Preferences): Preferences {
 		return {
+			...new Preferences(),
 			...input,
 			lastUpdateDate: input.lastUpdateDate ? new Date(input.lastUpdateDate) : null,
 			currentSessionStartDate: input.currentSessionStartDate ? new Date(input.currentSessionStartDate) : null,

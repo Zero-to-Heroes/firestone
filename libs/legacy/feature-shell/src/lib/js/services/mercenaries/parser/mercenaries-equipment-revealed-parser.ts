@@ -1,8 +1,8 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
-import { getMercCardLevel } from '../mercenaries-utils';
+import { getMercCardLevel } from '@firestone/mercenaries/common';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesEquipmentRevealedParser implements MercenariesParser {

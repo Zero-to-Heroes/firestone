@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { LotteryConfigResourceStatType, LotteryFacadeService, LotteryState } from '@firestone/lottery/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, UserService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { LotteryConfigResourceStatType, LotteryState } from '../../services/lottery/lottery.model';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	standalone: false,
@@ -71,7 +70,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
 	loggedIn$: Observable<boolean>;
@@ -91,13 +90,13 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 	constructedTooltip$: Observable<string>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
+		private readonly lottery: LotteryFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -113,7 +112,7 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionStoreComp
 			),
 		);
 
-		const lottery$ = this.store.lottery$().pipe(
+		const lottery$ = this.lottery.lottery$$.pipe(
 			filter((lottery) => !!lottery),
 			shareReplay(1),
 			this.mapData((info) => info),

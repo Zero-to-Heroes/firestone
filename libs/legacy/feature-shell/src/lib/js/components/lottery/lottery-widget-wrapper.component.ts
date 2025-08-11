@@ -8,10 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractWidgetWrapperComponent } from '@components/overlays/_widget-wrapper.component';
+import { LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	standalone: false,
@@ -50,8 +50,8 @@ export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponen
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly lottery: LotteryWidgetControllerService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 		this.forceKeepInBounds = true;
@@ -61,7 +61,7 @@ export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponen
 		await waitForReady(this.prefs);
 
 		this.showWidget$ = combineLatest([
-			this.store.shouldShowLotteryOverlay$(),
+			this.lottery.shouldShowOverlay$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.lotteryOverlay)),
 		]).pipe(
 			this.mapData(([shouldShowLotteryOverlay, overlay]) => shouldShowLotteryOverlay && overlay),

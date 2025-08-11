@@ -1,6 +1,6 @@
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { ArenaNavigationService } from '@firestone/arena/common';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
@@ -9,7 +9,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
-import { Events } from '../../../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { StoreInitEvent } from '../events/store-init-event';
 import { ChangeVisibleApplicationProcessor } from './change-visible-application-processor';
@@ -68,7 +68,9 @@ export class StoreInitProcessor implements Processor {
 			return navState;
 		}
 
-		const currentApp = !prefs.ftue.hasSeenGlobalFtue ? undefined : this.mainNav.currentApp$$.value ?? 'decktracker';
+		const currentApp = !prefs.ftue.hasSeenGlobalFtue
+			? undefined
+			: (this.mainNav.currentApp$$.value ?? 'decktracker');
 		this.mainNav.currentApp$$.next(currentApp);
 		return navigationState;
 	}

@@ -7,12 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { GameTag, SceneMode } from '@firestone-hs/reference-data';
+import { GameTag, isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard, GameStateFacadeService, ShortCard } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 import { BoardCardOverlay } from './board/board-card-overlay';
 
@@ -94,8 +94,8 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 				this.mapData((state) => ({
 					gameStarted: state.gameStarted,
 					gameEnded: state.gameEnded,
-					isBgs: state.isBattlegrounds(),
-					isMercs: state.isMercenaries(),
+					isBgs: isBattlegrounds(state?.metadata?.gameType),
+					isMercs: isMercenaries(state?.metadata?.gameType),
 				})),
 				distinctUntilChanged(
 					(a, b) =>

@@ -29,7 +29,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				currentTurn: currentTurn$ | async,
 				lastOpponentPlayerId: lastOpponentPlayerId$ | async,
 				showLastOpponentIcon: showLastOpponentIcon$ | async,
-				buddiesEnabled: buddiesEnabled$ | async
+				buddiesEnabled: buddiesEnabled$ | async,
 			} as value"
 		>
 			<div class="bgs-leaderboard" *ngIf="showWidget$ | async">

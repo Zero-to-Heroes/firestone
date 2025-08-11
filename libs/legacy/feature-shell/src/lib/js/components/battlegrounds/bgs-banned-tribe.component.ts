@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardClass, getTribeIcon, Race } from '@firestone-hs/reference-data';
+import { classForTribe, colorForClass } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest, filter, takeUntil } from 'rxjs';
-import { classForTribe, colorForClass } from '../../services/hs-utils';
 
 @Component({
 	standalone: false,

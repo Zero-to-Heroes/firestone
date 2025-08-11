@@ -9,6 +9,7 @@ import {
 	RankBracket,
 	TimePeriod,
 } from '@firestone-hs/constructed-deck-stats';
+import { buildArchetypeName } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -20,7 +21,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { buildArchetypeName } from './constructed-archetype.service';
 import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
@@ -140,7 +140,12 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			.subscribe(async ([deckstring, { rankFilter, timeFilter, formatFilter }]) => {
 				this.currentConstructedMetaDeck$$.next(null);
 				if (deckstring?.length) {
-					const deck = await this.loadNewDeckDetails(deckstring, formatFilter, timeFilter, rankFilter);
+					const deck = await this.loadNewDeckDetailsInternal(
+						deckstring,
+						formatFilter,
+						timeFilter,
+						rankFilter,
+					);
 					this.currentConstructedMetaDeck$$.next(deck);
 				}
 			});
@@ -203,8 +208,43 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			});
 	}
 
+	override async initElectronSubjects() {
+		this.setupElectronSubject(this.constructedMetaDecks$$, 'constructed-meta-decks');
+		this.setupElectronSubject(this.currentConstructedMetaDeck$$, 'constructed-meta-deck');
+		this.setupElectronSubject(this.constructedMetaArchetypes$$, 'constructed-meta-archetypes');
+		this.setupElectronSubject(this.currentConstructedMetaArchetype$$, 'constructed-meta-archetype');
+		this.setupElectronSubject(this.allCardsInDeck$$, 'constructed-meta-all-cards-in-deck');
+		this.setupElectronSubject(this.cardSearch$$, 'constructed-meta-card-search');
+	}
+
+	override async createElectronProxy(ipcRenderer: any) {
+		this.constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<ExtendedDeckStats | null>(null);
+		this.currentConstructedMetaDeck$$ = new SubscriberAwareBehaviorSubject<DeckStat | null>(null);
+		this.constructedMetaArchetypes$$ = new SubscriberAwareBehaviorSubject<ArchetypeStats | null>(null);
+		this.currentConstructedMetaArchetype$$ = new SubscriberAwareBehaviorSubject<ArchetypeStat | null>(null);
+		this.allCardsInDeck$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('newCardSearchInternal', (search: readonly string[]) =>
+			this.newCardSearchInternal(search),
+		);
+		this.registerMainProcessMethod(
+			'loadNewDeckDetailsInternal',
+			(deckstring: string | undefined | null, format: GameFormat, time: TimePeriod, rank: RankBracket) =>
+				this.loadNewDeckDetailsInternal(deckstring, format, time, rank),
+		);
+		this.registerMainProcessMethod(
+			'loadNewArchetypesInternal',
+			(format: GameFormat, time: TimePeriod, rank: RankBracket) =>
+				this.loadNewArchetypesInternal(format, time, rank),
+		);
+	}
+
 	public newCardSearch(search: readonly string[]) {
-		this.mainInstance.newCardSearchInternal(search);
+		// Fire and forget - the method is synchronous but callOnMainProcess is async
+		void this.callOnMainProcess('newCardSearchInternal', search);
 	}
 
 	private newCardSearchInternal(search: readonly string[]) {
@@ -261,19 +301,19 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		return result;
 	}
 
-	public async loadNewDeckDetails(
-		deckstring: string | undefined | null,
-		format: GameFormat,
-		time: TimePeriod,
-		rank: RankBracket,
-	): Promise<DeckStat | null> {
-		// if (12 % 2 === 60) {
-		// 	return null;
-		// }
-		return this.mainInstance.loadNewDeckDetailsInternal(deckstring, format, time, rank);
-	}
+	// public async loadNewDeckDetails(
+	// 	deckstring: string | undefined | null,
+	// 	format: GameFormat,
+	// 	time: TimePeriod,
+	// 	rank: RankBracket,
+	// ): Promise<DeckStat | null> {
+	// 	// if (12 % 2 === 60) {
+	// 	// 	return null;
+	// 	// }
+	// 	return this.callOnMainProcess<DeckStat | null>('loadNewDeckDetailsInternal', deckstring, format, time, rank);
+	// }
 
-	private async loadNewDeckDetailsInternal(
+	public async loadNewDeckDetailsInternal(
 		deckstring: string | undefined | null,
 		format: GameFormat,
 		time: TimePeriod,
@@ -307,10 +347,15 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			return null;
 		}
 
-		const deck: DeckStat = JSON.parse(resultStr);
-		console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
-		this.deckDetailsCache[cacheKey] = deck;
-		return deck;
+		try {
+			const deck: DeckStat = JSON.parse(resultStr);
+			console.debug('[constructed-meta-decks] loaded deck', format, time, rank, deck?.totalGames, deck);
+			this.deckDetailsCache[cacheKey] = deck;
+			return deck;
+		} catch (e) {
+			console.warn('Error parsing deck', url, resultStr, e);
+			return null;
+		}
 	}
 
 	// private async loadNewDeckDetailsInternal2(
@@ -361,7 +406,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<ArchetypeStats | null> {
-		return this.mainInstance.loadNewArchetypesInternal(format, time, rank);
+		return this.callOnMainProcess<ArchetypeStats | null>('loadNewArchetypesInternal', format, time, rank);
 	}
 
 	private async loadNewArchetypesInternal(
@@ -419,9 +464,14 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			return null;
 		}
 
-		const deck: ArchetypeStat = JSON.parse(resultStr);
-		console.debug('[constructed-meta-decks] loaded archetype', format, time, rank, deck?.totalGames);
-		return deck;
+		try {
+			const deck: ArchetypeStat = JSON.parse(resultStr);
+			console.debug('[constructed-meta-decks] loaded archetype', format, time, rank, deck?.totalGames);
+			return deck;
+		} catch (e) {
+			console.warn('Error parsing archetype', url, resultStr, e);
+			return null;
+		}
 	}
 }
 

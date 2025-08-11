@@ -16,9 +16,9 @@ import {
 	ConstructedMulliganGuideService,
 	MulliganDeckData,
 	MulliganDeckStats,
-	buildColor,
 } from '@firestone/constructed/common';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { buildColor } from '@firestone/constructed/view';
+import { DeckParserFacadeService, GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -29,7 +29,6 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
-import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
 	standalone: false,
@@ -156,10 +155,10 @@ export class ConstructedDecktrackerExtendedOocComponent
 			this.mapData((deck) => deck?.deckstring),
 		);
 
-		this.allDeckMulliganInfo$ = deckstring$.pipe(
+		this.allDeckMulliganInfo$ = combineLatest([deckstring$, this.prefs.preferences$$]).pipe(
 			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
 			distinctUntilChanged(),
-			switchMap((deckstring) => this.mulligan.getMulliganAdvice$(deckstring, { useDeckFormat: true })),
+			switchMap(([deckstring, prefs]) => this.mulligan.getMulliganAdvice(deckstring, prefs, { useDeckFormat: true })),
 			tap((info) => console.debug('[mulligan] received mulligan info', info)),
 			filter((advice) => !!advice),
 			this.mapData((guide) => {

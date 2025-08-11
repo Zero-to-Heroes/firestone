@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ArenaClassStatsService, ArenaCommonModule } from '@firestone/arena/common';
+import { ArenaViewModule } from '@firestone/arena/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -18,6 +19,7 @@ import { WebArenaTimeFilterDropdownComponent } from '../filters/web-arena-time-f
 		CommonModule,
 
 		ArenaCommonModule,
+		ArenaViewModule,
 
 		WebArenaFiltersComponent,
 		WebArenaModeFilterDropdownComponent,

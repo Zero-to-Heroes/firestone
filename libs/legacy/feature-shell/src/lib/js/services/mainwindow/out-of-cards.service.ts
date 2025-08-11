@@ -1,11 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Card } from '@firestone/memory';
-import { GameStatusService, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, NotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { CollectionManager } from '../collection/collection-manager.service';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const COLLECTION_UPLOAD = `https://outof.games/api/hearthstone/collection/import/`;
 
@@ -19,9 +18,8 @@ export class OutOfCardsService {
 		private readonly i18n: LocalizationFacadeService,
 		// These are not needed for generating tokens
 		private allCards: CardsFacadeService,
-		private notifs: OwNotificationsService,
+		private notifs: NotificationsService,
 		private collectionManager: CollectionManager,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly gameStatus: GameStatusService,
 	) {
 		window['outOfCardsAuthUpdater'] = this.stateUpdater;

@@ -1,0 +1,172 @@
+import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import {
+	COUNTERSPELLS,
+	battlecryGlobalEffectCards,
+	deathrattleGlobalEffectCards,
+	globalEffectCards,
+} from '../../hs-utils';
+import { revealCard } from '../card-reveal';
+import { GameEvent } from '../game-event';
+import { EventParser } from './_event-parser';
+import { modifyDecksForSpecialCards } from './deck-contents-utils';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
+
+export class CardPlayedByEffectParser implements EventParser {
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+	) {}
+
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return !!state;
+	}
+
+	async parse(
+		currentState: GameState,
+		gameEvent: GameEvent,
+		additionalInfo?: {
+			secretWillTrigger?: {
+				cardId: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
+			};
+			minionsWillDie?: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
+		},
+	): Promise<GameState> {
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const creatorCardId = gameEvent.additionalData.creatorCardId;
+
+		// Hack to avoid showing the the "choose one" options, which sometimes cause a "card-play-by-effect" event
+		// to be triggered
+		// 2026-01-06: let's see when this happens again, as it doesn't seem to be a good solution - what if the effect of
+		// a CHOOSE_ONE card is to play a card?
+		// if (this.allCards.getCard(creatorCardId)?.mechanics?.includes(GameTag[GameTag.CHOOSE_ONE])) {
+		// 	return currentState;
+		// }
+		const refCard = this.allCards.getCard(cardId);
+		// Weapons trigger a WEAPON_EQUIPPED event
+		if (refCard.type?.toUpperCase() === CardType[CardType.WEAPON]) {
+			return currentState;
+		}
+
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		const isCardCountered: boolean = !!(
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds)
+		);
+
+		// Only minions end up on the board
+		const isOnBoard =
+			!isCardCountered &&
+			// Because CASTS_WHEN_DRAWN cards create another card on the board
+			!gameEvent.additionalData.castWhenDrawn &&
+			refCard &&
+			(refCard.type === 'Minion' || refCard.type === 'Location');
+		// Some of these cards can come from hand, when the event is triggered by "casts when drawn" effects
+		const cardFromHand = deck.hand.find((card) => card.entityId === entityId);
+		let newHand = deck.hand;
+		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!!cardFromHand) {
+			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
+			// Remove only the first occurrence
+			additionalKnownCardsInHand = additionalKnownCardsInHand.filter(
+				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInHand.indexOf(c) !== i,
+			);
+
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
+		const cardWithZone = DeckCard.create({
+			entityId: entityId,
+			cardId: cardId,
+			cardName: refCard?.name,
+			refManaCost: refCard?.cost,
+			rarity: refCard?.rarity?.toLowerCase(),
+			zone: isOnBoard ? 'PLAY' : null,
+			temporaryCard: false,
+			playTiming: isOnBoard ? GameState.playTiming++ : null,
+			countered: isCardCountered,
+			creatorCardId: creatorCardId,
+			creatorEntityId: gameEvent.additionalData.creatorEntityId,
+			putIntoPlay: true,
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : {},
+		} as DeckCard);
+		//console.debug('card with zone', cardWithZone, refCard, cardId);
+		// In the case of cards played by effect, the card is first revealed, then played. So we need to replace the
+		// existing card to take the new info into account
+		const newBoard: readonly DeckCard[] = isOnBoard
+			? this.helper.empiricReplaceCardInZone(deck.board, cardWithZone, false)
+			: deck.board;
+		const newOtherZone: readonly DeckCard[] = isOnBoard
+			? deck.otherZone
+			: this.helper.empiricReplaceCardInOtherZone(deck.otherZone, cardWithZone, false, this.allCards);
+
+		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
+		if (
+			!isCardCountered &&
+			globalEffectCards.includes(cardId as CardIds) &&
+			// Battlecries don't trigger in this case
+			!battlecryGlobalEffectCards.includes(cardId as CardIds) &&
+			!deathrattleGlobalEffectCards.includes(cardId as CardIds)
+		) {
+			newGlobalEffects = this.helper.addSingleCardToZone(
+				deck.globalEffects,
+				cardWithZone?.update({
+					// So that if the card is sent back to hand, we can track multiple plays of it
+					entityId: undefined,
+					// Use the ref mana cost
+					actualManaCost: undefined,
+				}),
+			);
+		}
+		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+			hand: newHand,
+			additionalKnownCardsInHand: additionalKnownCardsInHand,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
+			board: newBoard,
+			otherZone: newOtherZone,
+			globalEffects: newGlobalEffects,
+		} as DeckState);
+		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
+		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
+			cardId,
+			entityId,
+			isCardCountered,
+			newPlayerDeck,
+			opponentDeck,
+			this.allCards,
+			this.helper,
+			this.i18n,
+		);
+
+		const playerDeckAfterReveal = isPlayer ? playerDeckAfterSpecialCaseUpdate : opponentDeckAfterSpecialCaseUpdate;
+		const opponentDeckAfterReveal = isPlayer
+			? opponentDeckAfterSpecialCaseUpdate
+			: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone, this.allCards);
+
+		return currentState.update({
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
+		});
+	}
+
+	event(): string {
+		return GameEvent.CARD_PLAYED_BY_EFFECT;
+	}
+}

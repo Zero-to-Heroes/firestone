@@ -22,13 +22,13 @@ import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 
 export const getProcessedCard = (
-	cardId: string,
-	entityId: number,
+	cardId: string | undefined | null,
+	entityId: number | undefined | null,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
 	debug = false,
 ): ReferenceCard => {
-	const refCard = allCards.getCard(cardId);
+	const refCard = allCards.getCard(cardId!);
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
 		const updatedRefCard: Mutable<ReferenceCard> = { ...refCard };
 		const sideboard = deckState.sideboards?.find((s) => s.keyCardId.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330));
@@ -86,7 +86,7 @@ export const getProcessedCard = (
 	return refCard;
 };
 
-export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFacadeService): number | null => {
+export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFacadeService): number => {
 	const refCard = getProcessedCard(card.cardId, card.entityId, deckState, allCards);
 	const isStarship = refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]);
 	if (isStarship) {
@@ -97,7 +97,7 @@ export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFac
 		const cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
 		return cost;
 	}
-	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost;
+	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost ?? 0;
 };
 
 export const getCardType = (
@@ -174,7 +174,7 @@ export const storeInformationOnCardPlayed = (
 export const addGuessInfoToCard = (
 	card: DeckCard,
 	creatorCardId: string,
-	creatorEntityId: number,
+	creatorEntityId: number | null,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
 	gameState: GameState,

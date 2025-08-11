@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';

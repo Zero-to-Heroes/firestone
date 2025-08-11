@@ -26,4 +26,12 @@ export class CardChoicesService extends AbstractFacadeService<CardChoicesService
 			this.choicesHidden$$.next(areChoicesHidden);
 		});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.choicesHidden$$, 'card-choices-hidden');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.choicesHidden$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
+	}
 }

@@ -1,15 +1,15 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2, ViewRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, HostListener, OnInit, Renderer2, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { AppInjector, GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { sleep } from '@services/utils';
 import { Observable, UnaryFunction, pipe } from 'rxjs';
 import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
-export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent {
+export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent implements OnInit {
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
@@ -30,6 +30,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected isDragging = false;
 
 	protected debug = false;
+	private gameInfo: GameInfoService;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -39,6 +40,11 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(cdr);
+		this.gameInfo = AppInjector.get(GameInfoService);
+		// this.init();
+	}
+
+	ngOnInit(): void {
 		this.init();
 	}
 
@@ -52,6 +58,8 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 					this.cdr.markForCheck();
 				}
 			});
+		await sleep(500);
+		await this.onResize();
 	}
 
 	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {
@@ -75,13 +83,14 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		}
 		this.repositioning = true;
 		const prefs = await this.prefs.getPreferences();
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
+			this.debug && console.debug('missing game info', gameInfo);
 			console.warn('missing game info', gameInfo);
 			this.repositioning = false;
 			return;
 		}
-		this.debug && console.debug('gameInfo', gameInfo);
+		this.debug && console.debug('gameInfo', this.constructor.name, gameInfo);
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
@@ -95,7 +104,8 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
 		}
-		this.debug && console.debug('positionFromPrefs', positionFromPrefs, this.forceKeepInBounds);
+		this.debug &&
+			console.debug('positionFromPrefs', this.constructor.name, positionFromPrefs, this.forceKeepInBounds);
 		if (positionFromPrefs) {
 			this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
 			this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');

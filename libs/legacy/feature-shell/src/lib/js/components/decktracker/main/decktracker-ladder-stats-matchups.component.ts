@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { classes, formatClass } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { classes, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { groupByFunction } from '../../../services/utils';
 
@@ -67,7 +67,7 @@ import { groupByFunction } from '../../../services/utils';
 							[ngClass]="{
 								empty: matchup.wins === 0 && matchup.losses === 0,
 								positive: matchup.wins > 0 && matchup.winrate > 51,
-								negative: matchup.losses > 0 && matchup.winrate < 49
+								negative: matchup.losses > 0 && matchup.winrate < 49,
 							}"
 							*ngIf="value.showPercentages"
 						>
@@ -143,7 +143,7 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 				const groupedByPlayerClass = groupByFunction((replay: GameStat) => replay.playerClass)(replays);
 				return [...classes, 'total'].map((playerClass) => {
 					const replaysForPlayerClass =
-						playerClass === 'total' ? replays : groupedByPlayerClass[playerClass] ?? [];
+						playerClass === 'total' ? replays : (groupedByPlayerClass[playerClass] ?? []);
 					return this.buildMatchupStatsForPlayerClass(
 						playerClass,
 						replaysForPlayerClass,

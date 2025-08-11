@@ -8,7 +8,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
@@ -66,6 +66,7 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 		private readonly debug: DebugService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
+		private readonly gameInfo: GameInfoService,
 		private readonly init_ScalingService: ScalingService,
 	) {
 		super(store, cdr);
@@ -128,7 +129,7 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 	private async positionWindowOnSecondScreen() {
 		const [monitorsList, gameInfo, prefs] = await Promise.all([
 			this.ow.getMonitorsList(),
-			this.ow.getRunningGameInfo(),
+			this.gameInfo.getRunningGameInfo(),
 			this.prefs.getPreferences(),
 		]);
 		if (monitorsList.displays.length === 1 || prefs.bgsUseOverlay) {

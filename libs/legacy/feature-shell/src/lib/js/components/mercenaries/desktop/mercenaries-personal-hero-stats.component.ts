@@ -18,12 +18,13 @@ import {
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { AdService } from '../../../services/ad.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
-import { MercenariesMemoryCacheService } from '../../../services/mercenaries/mercenaries-memory-cache.service';
+import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import {
+	getHeroRole,
+	isPassiveMercsTreasure,
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
-} from '../../../services/mercenaries/mercenaries-reference-data.service';
-import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenaries/mercenaries-utils';
+} from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { StandardRankedMinLeagueReq } from './standard-ranked-min-rank-req';
 
 describe('standard-ranked-min-rank-req', () => {
@@ -107,8 +107,8 @@ describe('standard-ranked-min-rank-req', () => {
 
 	test('req is intantiated with the correct target rank', () => {
 		const rawReq: RawRequirement = {
-			'type': 'RANKED_MIN_LEAGUE',
-			'values': ['19'],
+			type: 'RANKED_MIN_LEAGUE',
+			values: ['19'],
 		};
 
 		const req = StandardRankedMinLeagueReq.create(rawReq);

@@ -9,6 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { CardsHighlightFacadeService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
@@ -142,6 +143,7 @@ export class MainWindowComponent
 		private readonly nav: MainWindowNavigationService,
 		private readonly ads: AdService,
 		private readonly init_ScalingService: ScalingService,
+		private readonly init_cardsHighlight: CardsHighlightFacadeService,
 	) {
 		super(store, cdr);
 	}

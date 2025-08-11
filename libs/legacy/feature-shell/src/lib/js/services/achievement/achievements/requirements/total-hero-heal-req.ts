@@ -1,11 +1,14 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class TotalHeroHealReq implements Requirement {
 	private totalHealingReceived = 0;
 
-	constructor(private readonly targetHealing: number, private readonly qualifier: string) {}
+	constructor(
+		private readonly targetHealing: number,
+		private readonly qualifier: string,
+	) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 2) {

@@ -1,5 +1,5 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import {
 	BattleAbility,
@@ -7,13 +7,13 @@ import {
 	BattleMercenary,
 	MercenariesBattleState,
 } from '../../../models/mercenaries/mercenaries-battle-state';
-import { MercenariesReferenceDataService } from '../mercenaries-reference-data.service';
 import {
 	getHeroRole,
 	getMercCardLevel,
 	getMercLevelFromExperience,
+	MercenariesReferenceDataService,
 	normalizeMercenariesCardId,
-} from '../mercenaries-utils';
+} from '@firestone/mercenaries/common';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesHeroUpdatedParser implements MercenariesParser {

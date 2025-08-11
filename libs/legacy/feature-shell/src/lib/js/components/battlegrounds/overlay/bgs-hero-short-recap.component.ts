@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { QuestReward } from '@firestone/game-state';
+import { QuestReward } from '@firestone/battlegrounds/core';
 
 @Component({
 	standalone: false,

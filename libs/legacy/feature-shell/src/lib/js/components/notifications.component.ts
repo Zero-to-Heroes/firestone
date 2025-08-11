@@ -7,8 +7,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { Message, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { NotificationsService as FsNotifications, Message, PreferencesService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import {
 	HorizontalPosition,
 	Notification,
@@ -17,7 +17,6 @@ import {
 	Options,
 	VerticalPosition,
 } from 'angular2-notifications';
-import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
@@ -57,22 +56,20 @@ export class NotificationsComponent implements AfterViewInit {
 	};
 
 	private activeNotifications: ActiveNotification[] = [];
-	private notifications$: Observable<Message>;
 
 	constructor(
 		private readonly notificationService: NotificationsService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly elRef: ElementRef,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly notifs: FsNotifications,
 	) {}
 
 	async ngAfterViewInit() {
 		await waitForReady(this.prefs);
 
-		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
-		this.notifications$
+		this.notifs.notifications$$
 			.pipe(
 				filter((message) => !!message),
 				map((message) => {

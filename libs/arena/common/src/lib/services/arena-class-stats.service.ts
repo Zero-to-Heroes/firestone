@@ -50,15 +50,23 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 					timeFilter === 'all-time'
 						? 'past-20'
 						: timeFilter === 'past-seven'
-						? 'past-7'
-						: timeFilter === 'past-three'
-						? 'past-3'
-						: timeFilter;
+							? 'past-7'
+							: timeFilter === 'past-three'
+								? 'past-3'
+								: timeFilter;
 				const result: ArenaClassStats | null = await this.buildClassStats(timePeriod, modeFilter);
 				console.debug('[arena-class-stats] loaded class stats', result);
 				this.classStats$$.next(result);
 			});
 		});
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.classStats$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.classStats$$, 'ArenaClassStatsService-classStats');
 	}
 
 	public async buildClassStats(timePeriod: string, modeFilter: ArenaModeFilterType): Promise<ArenaClassStats | null> {

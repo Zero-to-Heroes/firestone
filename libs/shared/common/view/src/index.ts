@@ -1,4 +1,6 @@
 export * from './lib/components/card/card-tile.component';
+export * from './lib/components/loading/loading-state.component';
+export * from './lib/components/loading/with-loading.component';
 export * from './lib/components/charts/basic-bar-chart-2.component';
 export * from './lib/components/charts/simple-bar-chart-data';
 export * from './lib/components/charts/stat-cell.component';

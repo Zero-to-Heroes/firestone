@@ -26,17 +26,18 @@ import {
 	ArenaDraftManagerService,
 	ArenaOverlayDraftStatsService,
 } from '@firestone/arena/common';
-import { buildColor } from '@firestone/constructed/common';
+import { buildColor } from '@firestone/constructed/view';
+import { CardsHighlightFacadeService, VisualDeckCard } from '@firestone/game-state';
 import { ArenaModeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { invertDirection, SortCriteria } from '@firestone/shared/common/view';
 import {
 	AbstractSubscriptionComponent,
 	arraysEqual,
 	groupByFunction2,
+	invertDirection,
+	SortCriteria,
 	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
 	BehaviorSubject,
 	combineLatest,
@@ -48,7 +49,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	standalone: false,

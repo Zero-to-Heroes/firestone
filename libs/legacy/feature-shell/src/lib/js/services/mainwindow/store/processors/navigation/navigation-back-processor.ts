@@ -1,5 +1,5 @@
 import { AchievementsNavigationService } from '@firestone/achievements/common';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';

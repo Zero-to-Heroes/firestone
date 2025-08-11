@@ -7,21 +7,20 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
+import { formatClass, normalizeHeroCardId } from '@firestone/game-state';
 import { Card, MemoryMercenary } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
-import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
-import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { MercenariesMemoryCacheService } from '../../services/mercenaries/mercenaries-memory-cache.service';
+import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import {
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
-} from '../../services/mercenaries/mercenaries-reference-data.service';
-import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
+	normalizeMercenariesCardId,
+} from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';

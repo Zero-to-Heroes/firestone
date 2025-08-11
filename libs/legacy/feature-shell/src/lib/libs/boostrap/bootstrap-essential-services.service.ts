@@ -1,11 +1,16 @@
-import { Injectable, Injector } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import {
 	DiskCacheService,
 	GlobalErrorService,
-	OwNotificationsService,
+	NotificationsService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { IndexedDbService, OverwolfService, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
@@ -20,7 +25,7 @@ export class BootstrapEssentialServicesService {
 		private readonly injector: Injector,
 		private readonly debugService: DebugService, // No deps
 		private readonly ow: OverwolfService, // No deps
-		private readonly db: IndexedDbService, // No deps
+		@Inject(DATABASE_SERVICE_TOKEN) private readonly db: IDatabaseService, // No deps
 		private readonly windowManager: WindowManagerService, // OverwolfService
 		private readonly prefs: PreferencesService, // WindowManager
 		private readonly diskCache: DiskCacheService, // Overwolf, Prefs
@@ -35,7 +40,7 @@ export class BootstrapEssentialServicesService {
 		await this.initLocalization();
 
 		// Bootstrap
-		const _notifs = this.injector.get(OwNotificationsService);
+		const _notifs = this.injector.get(NotificationsService);
 		const _globalError = this.injector.get(GlobalErrorService);
 
 		// Wait until all cards are created

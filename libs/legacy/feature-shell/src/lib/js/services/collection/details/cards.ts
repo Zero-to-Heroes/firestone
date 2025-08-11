@@ -1,6 +1,6 @@
 import { Card, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
-import { Events } from '../../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 

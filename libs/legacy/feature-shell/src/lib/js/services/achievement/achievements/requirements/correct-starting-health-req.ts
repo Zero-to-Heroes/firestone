@@ -1,12 +1,15 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class CorrectStartingHealthReq implements Requirement {
 	private isCorrectStartingHealth: boolean;
 	private hasDefChangeOccured: boolean;
 
-	constructor(private readonly targetCardId: string, private readonly targetStartingHealth: number) {}
+	constructor(
+		private readonly targetCardId: string,
+		private readonly targetStartingHealth: number,
+	) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 2) {

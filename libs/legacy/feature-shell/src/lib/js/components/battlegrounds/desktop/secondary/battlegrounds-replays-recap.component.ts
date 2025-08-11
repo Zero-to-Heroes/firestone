@@ -1,11 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { isBattlegrounds } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from '@legacy-import/src/lib/js/services/stats/game/game-stats-provider.service';
 import { Observable, combineLatest } from 'rxjs';
-import { isBattlegrounds, normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
 
 @Component({
 	standalone: false,

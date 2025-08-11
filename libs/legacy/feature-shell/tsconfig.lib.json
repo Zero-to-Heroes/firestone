@@ -6,5 +6,5 @@
 		"declarationMap": true
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "jest.config.ts", "**/*.test.ts"],
-	"include": ["**/*.ts"]
+	"include": ["**/*.ts", "../../game-state/src/lib/services/game-events/event-parser/battlegrounds/timewarp-tavern-ended-parser.ts", "../../game-state/src/lib/services/game-events/event-parser/battlegrounds/timewarp-tavern-started-parser.ts"]
 }

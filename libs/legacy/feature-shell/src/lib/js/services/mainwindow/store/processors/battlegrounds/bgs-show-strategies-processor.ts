@@ -1,10 +1,10 @@
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@legacy-import/src/lib/js/models/mainwindow/main-window-state';
 import { NavigationState } from '@legacy-import/src/lib/js/models/mainwindow/navigation/navigation-state';
-import { Events } from '../../../../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { LocalizationService } from '../../../../localization.service';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsShowStrategiesEvent } from '../../events/battlegrounds/bgs-show-strategies-event';

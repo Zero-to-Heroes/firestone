@@ -1,11 +1,12 @@
 import { NgZone } from '@angular/core';
-import { OverwolfService, ProcessingQueue } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
+import { ProcessingQueue } from '@firestone/shared/framework/core';
 
 export class MindVisionOperationFacade<T> {
 	private processingQueue: ProcessingQueue<InternalCall<T>>;
 
 	constructor(
-		private ow: OverwolfService,
+		private gameStatus: GameStatusService,
 		private serviceName: string,
 		private mindVisionOperation: (forceReset?: boolean, input?: any) => Promise<any>,
 		public emptyCheck: (input: any) => boolean,
@@ -67,7 +68,8 @@ export class MindVisionOperationFacade<T> {
 		input: any = null,
 		timeoutMs = 30000,
 	): Promise<T | null> {
-		if (!(await this.ow.inGame())) {
+		const inGame = await this.gameStatus.inGame();
+		if (!inGame) {
 			return null;
 		}
 		// this.debug('race');

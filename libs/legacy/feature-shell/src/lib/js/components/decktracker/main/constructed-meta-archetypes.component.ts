@@ -1,9 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
-import { ConstructedMetaDecksStateService, buildArchetypeName } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
+import { buildArchetypeName } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	arraysEqual,
+	invertDirection,
+} from '@firestone/shared/framework/common';
 import { getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';

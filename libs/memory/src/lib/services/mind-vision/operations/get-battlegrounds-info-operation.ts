@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { BattlegroundsInfo } from '../../../models/battlegrounds-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetBattlegroundsInfoOperation extends MindVisionOperationFacade<BattlegroundsInfo> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getBattlegroundsInfo',
 			() => mindVision.getBattlegroundsInfo(),
 			(battlegroundsInfo) => battlegroundsInfo.Rating == -1,

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { ArmorAtEndReq } from './armor-at-end-req';
 
 describe('armor-at-end-req', () => {
@@ -41,8 +41,8 @@ describe('armor-at-end-req', () => {
 
 	test('req is intantiated with the correct armor target', () => {
 		const rawReq: RawRequirement = {
-			'type': 'ARMOR_AT_END',
-			'values': ['1'],
+			type: 'ARMOR_AT_END',
+			values: ['1'],
 		};
 
 		const req = ArmorAtEndReq.create(rawReq);

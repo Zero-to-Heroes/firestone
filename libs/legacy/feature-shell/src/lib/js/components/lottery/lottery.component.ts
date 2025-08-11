@@ -4,17 +4,15 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { LotteryFacadeService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, interval, tap } from 'rxjs';
+import { Observable, combineLatest, filter, interval, tap } from 'rxjs';
 import { AdService } from '../../services/ad.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { LotteryTabType } from './lottery-navigation.component';
 
 @Component({
@@ -110,10 +108,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LotteryWidgetComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class LotteryWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	displayAd$: Observable<boolean>;
 	selectedModule$: Observable<LotteryTabType>;
 	trackingOngoing$: Observable<boolean>;
@@ -128,20 +123,19 @@ export class LotteryWidgetComponent
 	closeConfirmationOkText: string;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
-		private readonly renderer: Renderer2,
-		private readonly el: ElementRef,
 		private readonly prefs: PreferencesService,
 		private readonly ads: AdService,
+		private readonly lotteryWidgetController: LotteryWidgetControllerService,
+		private readonly lottery: LotteryFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.ads);
+		await waitForReady(this.prefs, this.ads, this.lotteryWidgetController);
 
 		this.displayAd$ = this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => !hasPremium));
 		this.closeConfirmationText = `
@@ -156,7 +150,7 @@ export class LotteryWidgetComponent
 		this.currentModuleName$ = this.selectedModule$.pipe(
 			this.mapData((module) => this.i18n.translateString(`app.lottery.navigation.${module}`)),
 		);
-		this.trackingOngoing$ = this.store.shouldTrackLottery$().pipe(
+		this.trackingOngoing$ = this.lotteryWidgetController.shouldTrack$$.pipe(
 			tap((info) => console.debug('should track lottery', info)),
 			this.mapData((shouldTrack) => shouldTrack),
 		);
@@ -168,7 +162,7 @@ export class LotteryWidgetComponent
 					: this.i18n.translateString('app.lottery.tracking-not-ongoing-tooltip'),
 			),
 		);
-		this.seasonStartDate$ = this.store.lottery$().pipe(
+		this.seasonStartDate$ = this.lottery.lottery$$.pipe(
 			this.mapData((lottery) =>
 				this.i18n.translateString('app.lottery.lottery.season-duration-end-tooltip', {
 					// Only show the date, not the time
@@ -180,7 +174,10 @@ export class LotteryWidgetComponent
 				}),
 			),
 		);
-		this.seasonDurationEnd$ = combineLatest([interval(1000), this.store.lottery$()]).pipe(
+		this.seasonDurationEnd$ = combineLatest([
+			interval(1000),
+			this.lottery.lottery$$.pipe(filter((lottery) => !!lottery)),
+		]).pipe(
 			this.mapData(([_, lottery]) => {
 				const endDate = lottery?.endDate();
 				const timeLeft = endDate ? endDate.getTime() - Date.now() : 0;
@@ -209,7 +206,7 @@ export class LotteryWidgetComponent
 
 	async close() {
 		// console.log('[lottery] sending close event');
-		this.store.eventBus$$.next({ name: 'lottery-closed' });
+		this.lotteryWidgetController.events$$.next({ name: 'lottery-closed' });
 		this.analytics.trackEvent('lottery-close');
 	}
 
@@ -220,6 +217,6 @@ export class LotteryWidgetComponent
 	}
 
 	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {
-		this.store.eventBus$$.next({ name: 'lottery-visibility-changed', data: { visible } });
+		this.lotteryWidgetController.events$$.next({ name: 'lottery-visibility-changed', data: { visible } });
 	}
 }

@@ -1,0 +1,312 @@
+import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { addGuessInfoToCard } from '../../card-utils';
+import { tutors } from '../../cards/card-tutors';
+import {
+	forceHideInfoWhenDrawnInfluencers,
+	hiddenWhenDrawFromDeck,
+	isCastWhenDrawn,
+	isSummonedWhenDrawn,
+	publicCardInfos,
+	publicTutors,
+	supportedAdditionalData,
+} from '../../hs-utils';
+import { GameEvent } from '../game-event';
+import { EventParser } from './_event-parser';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
+
+const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
+
+export class CardDrawParser implements EventParser {
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
+
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return !!state;
+	}
+
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		console.debug('[card-draw] drawing from deck', cardId, gameEvent);
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
+
+		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId;
+
+		// If the card is drawn by a public tutor, we don't know anymore what is at the top of the deck
+		// so we clear the info to avoid confusion
+		// That's also technically true for the bottom, but we can probably leave it like this for now
+		if (!isPlayer && publicTutors.includes(drawnByCardId as CardIds)) {
+			deck = deck.update({
+				deck: deck.deck.map((c) =>
+					c.update({
+						positionFromTop: undefined,
+						// positionFromBottom: undefined,
+					}),
+				),
+			});
+		}
+
+		const cardsWithMatchingCardId = !!cardId?.length
+			? deck.deck
+					.filter((e) => e.cardId === cardId)
+					.filter((e) =>
+						!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
+							? e.mainAttributeChange! - 1 === gameEvent.additionalData.dataTag1
+							: true,
+					)
+			: [];
+		console.debug('[card-draw] cards with matching card id', cardsWithMatchingCardId);
+		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
+		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
+		// about it. This could change (via a whitelist?) if there are cards that start drawing from
+		// the bottom of the deck
+		// If no cardId is provided, we use the entityId
+		const shouldUseEntityId =
+			// Initially, it was !isPlayer, but I don't understand why. If it's the opponent, we don't want to use the entityId
+			isPlayer &&
+			(!cardId ||
+				cardsWithMatchingCardId.length === 1 ||
+				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
+		const isTutoring = tutors.includes(drawnByCardId as CardIds);
+
+		const useTopOfDeckToIdentifyCard = !isTutoring && !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
+		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(
+			drawnByCardId as CardIds,
+		);
+		const useBottomOfDeckToIdentifyCard =
+			!isPlayer &&
+			!isTutoring &&
+			cardDrawnFromBottom &&
+			deck.deck.some((c) => c.positionFromBottom != null && c.lastAffectedByCardId !== drawnByCardId);
+		console.debug(
+			'[card-draw] useTopOfDeckToIdentifyCard',
+			useTopOfDeckToIdentifyCard,
+			useBottomOfDeckToIdentifyCard,
+			isPlayer,
+			deck.deck.filter((c) => c.positionFromTop != null),
+			deck,
+		);
+		// When drawing "normally", we first try to avoid picking cards that are from the bottom of the deck,
+		// if any
+		const deckToDrawnFromTop = deck.deck.some((c) => c.positionFromBottom == null)
+			? deck.deck.filter((c) => c.positionFromBottom == null)
+			: deck.deck;
+		let card: DeckCard | null | undefined = useTopOfDeckToIdentifyCard
+			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop!)[0]
+			: useBottomOfDeckToIdentifyCard
+				? deck.deck
+						.filter((c) => c.positionFromBottom != null)
+						// Because Finley puts the cards at the bottom before drawing
+						.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
+						.sort((c) => c.positionFromBottom!)[0]
+				: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
+		console.debug(
+			'[card-draw] found card in zone 0',
+			card,
+			deck,
+			cardId,
+			entityId,
+			useTopOfDeckToIdentifyCard,
+			useBottomOfDeckToIdentifyCard,
+		);
+		if (
+			(!card?.entityId || !card?.cardId) &&
+			deck.enchantments.some(
+				(enchantment) => enchantment.cardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
+			)
+		) {
+			card = deck.deck.find((c) => c.entityId === entityId);
+			drawnByCardId = CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
+		}
+		const updatedCardId = useTopOfDeckToIdentifyCard ? card!.cardId : cardId;
+
+		console.debug(
+			'[card-draw] drawing card',
+			isPlayer,
+			card,
+			deck,
+			deck.deck.some((c) => c.positionFromTop),
+			[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop!),
+		);
+
+		// This is more and more spaghetti. TODO: clean this up, my future self!
+		// This has been introduced because some cards leak info in the logs (tradeable cards traded back to deck)
+		// So the C# parser hides some info when emitting the "CARD_DRAW_FROM_DECK" event, but the info isn't removed
+		// from the state in the app.
+		// So we use this flag to know whether we should display something
+		const isDrawnByCardIdPublic = tutors.includes(drawnByCardId as CardIds);
+		console.debug('isDrawnByCardIdPublic', isDrawnByCardIdPublic, drawnByCardId);
+		const lastInfluencedByCardId = gameEvent.additionalData.lastInfluencedByCardId ?? card!.lastAffectedByCardId;
+
+		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
+			gameEvent.additionalData?.lastInfluencedByCardId,
+		);
+		const isCardInfoPublic =
+			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
+			// Southsea Scoundrel) are flagged
+			// Hide the info when card is drawn by Secret Passage? The scenario is:
+			// 1. Add a card revealed when drawn to your deck
+			// 2. Cast Secret Passage: the card is added to your hand, but the "cast when drawn" effect doesn't trigger
+			// (no idea why it behaves like that)
+			// 3. As a result, the card info is considered public, and we show it
+			isPlayer ||
+			useTopOfDeckToIdentifyCard ||
+			useBottomOfDeckToIdentifyCard ||
+			(!isCardDrawnBySecretPassage && isCastWhenDrawn(updatedCardId, this.allCards)) ||
+			(publicCardInfos.includes(lastInfluencedByCardId) &&
+				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
+		const isCreatorPublic =
+			isCardInfoPublic ||
+			// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor
+			// ISSUE: there are some cards that are revealed in the deck, like Start of Game effects. In that
+			// case, if we draw them via a tutor, they will also be flagged
+			// FIX: we remove the "standard tutors" from this check, and they will be only kept for the
+			// creator field
+			// (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
+			// This field is only used to flag "created by", so we should be fine even with tradeable cards
+			// UPDATE 2025-11-06 Use publicCardInfos to avoid info leaks, where we draw a card that was created in deck
+			// and we don't want the info to surface
+			(publicCardInfos.includes(lastInfluencedByCardId) &&
+				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
+		console.debug(
+			'[card-draw] found card in zone',
+			card,
+			deck,
+			updatedCardId,
+			entityId,
+			isCardInfoPublic,
+			isCreatorPublic,
+			isCastWhenDrawn(updatedCardId, this.allCards),
+			this.allCards.getCard(updatedCardId),
+		);
+
+		// When the card should be known (created on top of deck) by we don't know the details (eg Merch Seller, or Dredge),
+		// we still want to surface the information we know
+		const creatorCardId = gameEvent.additionalData?.creatorCardId;
+		const createdIndex = gameEvent.additionalData.createdIndex;
+		const refCard = this.allCards.getCard(card!.cardId);
+		const cardWithCreator = card!.update({
+			entityId: entityId,
+			creatorCardId: isCreatorPublic ? (creatorCardId ?? card!.creatorCardId) : undefined,
+			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
+			cardId: isCardInfoPublic ? card!.cardId : undefined,
+			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
+			lastAffectedByCardId: isCreatorPublic
+				? // Use drawnByCardId first to remove info leak when drawing a card that was created by a public tutor
+					// (eg draw a card with a public tutor that was created by Queen Carnassa)
+					(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
+				: isDrawnByCardIdPublic
+					? drawnByCardId
+					: undefined,
+			lastAffectedByEntityId: isCreatorPublic
+				? (gameEvent.additionalData.drawnByEntityId ?? card!.lastAffectedByEntityId)
+				: isDrawnByCardIdPublic
+					? gameEvent.additionalData.drawnByEntityId
+					: undefined,
+			refManaCost: isCardInfoPublic ? (card!.refManaCost ?? refCard.cost) : null,
+			actualManaCost: isCardInfoPublic ? gameEvent.additionalData.cost : null,
+			rarity: isCardInfoPublic ? (card!.rarity ?? card!.rarity) : null,
+			zone: 'HAND',
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card!.tags,
+		} as DeckCard);
+		// console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
+		const cardWithGuessInfo = addGuessInfoToCard(
+			cardWithCreator,
+			drawnByCardId,
+			gameEvent.additionalData.drawnByEntityId,
+			deck,
+			opponentDeck,
+			currentState,
+			this.allCards,
+		);
+		// console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
+		const previousDeck = deck.deck;
+
+		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
+		// This happens when the top card is not identified, eg when the opponent plays Disarming Elemental
+		const drawFromTop = !useTopOfDeckToIdentifyCard && previousDeck.filter((c) => c.positionFromTop != null);
+		console.debug('[card-draw] drawFromTop', drawFromTop, previousDeck, useTopOfDeckToIdentifyCard);
+		// eslint-disable-next-line prefer-const
+		// const removeFillerCard = !useTopOfDeckToIdentifyCard;
+		// console.debug('[card-draw] removeFillerCard', removeFillerCard, useTopOfDeckToIdentifyCard);
+		let [newDeck, removedCard] = isCardInfoPublic
+			? this.helper.removeSingleCardFromZone(
+					previousDeck,
+					updatedCardId,
+					entityId,
+					deck.deckList.length === 0,
+					true,
+					{
+						cost: gameEvent.additionalData.cost,
+					},
+					useTopOfDeckToIdentifyCard,
+				)
+			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
+		console.debug('[card-draw] newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
+
+		// It can happen that the previous step still removed something (like a filler or created by card)
+		if (drawFromTop && !removedCard) {
+			const topCard = newDeck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop!)[0];
+			const isTopCardUnknown = !topCard?.cardId?.length;
+			console.debug('[card-draw] removing top card from deck?', isTopCardUnknown, topCard, newDeck);
+			if (!!topCard && isTopCardUnknown) {
+				console.debug('[card-draw] removing top card from deck', topCard, newDeck);
+				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
+				console.debug('[card-draw] after removing top card from deck', topCard, newDeck);
+			}
+		}
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!removedCard?.cardId) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardWithGuessInfo.cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
+		console.debug('[card-draw] newDeck', newDeck, isCardInfoPublic, previousDeck);
+		const previousHand = deck.hand;
+		// Summoned when Drawn cards behave a bit weirdly - in the case of Illusions for instance, the card is drawn,
+		// then a minion with another entityId is summoned, which means it never gets removed from hand
+		// So I will try to simply not add the card to hand in that case
+		const newHand: readonly DeckCard[] = isSummonedWhenDrawn(cardWithGuessInfo.cardId, this.allCards)
+			? previousHand
+			: this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
+		// console.debug('[card-draw] added card to hand', newHand);
+		let cardsDrawnByTurn = [...deck.cardsDrawnByTurn];
+		let cardsDrawnThisTurn = deck.cardsDrawnByTurn.find((t) => t.turn === currentState.currentTurn);
+		if (cardsDrawnThisTurn) {
+			cardsDrawnByTurn = cardsDrawnByTurn.map((t) =>
+				t.turn === currentState.currentTurn ? { ...t, value: t.value + 1 } : t,
+			);
+		} else {
+			cardsDrawnByTurn.push({
+				turn: currentState.currentTurn as number,
+				value: 1,
+			});
+		}
+		const newPlayerDeck = deck.update({
+			deck: newDeck,
+			hand: newHand,
+			cardsDrawnByTurn: cardsDrawnByTurn,
+			cardDrawnThisGame:
+				currentState.currentTurn === 'mulligan' || currentState.currentTurn === 0
+					? 0
+					: NOT_REAL_DRAW?.includes(drawnByCardId as CardIds)
+						? deck.cardDrawnThisGame
+						: deck.cardDrawnThisGame + 1,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
+		});
+		// console.debug('new player deck', newPlayerDeck);
+		return Object.assign(new GameState(), currentState, {
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+		});
+	}
+
+	event(): string {
+		return GameEvent.CARD_DRAW_FROM_DECK;
+	}
+}

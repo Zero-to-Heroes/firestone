@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
-import { GameNativeStateStoreService } from '@firestone/app/common';
+import { GameNativeStateStoreService } from '@firestone/app/services';
 import {
 	ArenDeckDetailsService,
 	ArenaCardStatsService,
@@ -17,17 +17,15 @@ import {
 import {
 	BattlegroundsAnomaliesService,
 	BattlegroundsNavigationService,
-	BattlegroundsOfficialLeaderboardService,
 	BattlegroundsQuestsService,
 	BgsCommonBootstrapService,
 	BgsInGameHeroSelectionGuardianService,
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
-	BgsMatchPlayersMmrService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { HearthpwnService, HsGuruService } from '@firestone/collection/common';
 import { CommunityBootstrapService } from '@firestone/communities/common';
@@ -39,7 +37,13 @@ import {
 	ConstructedMulliganGuideService,
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
-import { BootstrapGameStateService } from '@firestone/game-state';
+import {
+	BattlegroundsOfficialLeaderboardService,
+	BgsMatchPlayersMmrService,
+	BootstrapGameStateService,
+	DeckParserFacadeService,
+	GameStateService,
+} from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
@@ -57,12 +61,8 @@ import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/co
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { DeckParserFacadeService } from '../../js/services/decktracker/deck-parser-facade.service';
-import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
-import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
-import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
-import { LotteryService } from '../../js/services/lottery/lottery.service';
+import { LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
 import { MainWindowStateFacadeService } from '../../js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
@@ -70,6 +70,7 @@ import { MercenariesSynergiesHighlightService } from '../../js/services/mercenar
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
+import { GameOverService } from '../../js/services/stats/game/game-over.service';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
@@ -96,6 +97,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_MainWindowStateFacadeService: MainWindowStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateService,
+		private readonly init_GameOverService: GameOverService,
 		private readonly gameNativeState: GameNativeStateStoreService,
 		private readonly mercenariesStore: MercenariesStoreService,
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
@@ -152,8 +154,6 @@ export class BootstrapStoreServicesService {
 		private readonly init_TavernBrawlService: TavernBrawlService,
 		private readonly init_DeckParserFacadeService: DeckParserFacadeService,
 		private readonly init_AccountService: AccountService,
-		// Other dependencies
-		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

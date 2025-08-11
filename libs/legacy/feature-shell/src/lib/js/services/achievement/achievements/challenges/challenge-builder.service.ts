@@ -39,7 +39,7 @@ import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
 import { GameTieReq } from '../requirements/game-tie-req';
 import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
-import { GlobalStatReq } from '../requirements/globalstats/global-stat-req';
+// import { GlobalStatReq } from '../requirements/globalstats/global-stat-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
 import { LastDamageDoneByMinionReq } from '../requirements/last-damage-done-by-minion-req';
 import { MinionAttackReq } from '../requirements/minion-attack-req';
@@ -166,7 +166,7 @@ export class ChallengeBuilderService {
 				return DeckbuildingNumberOfMinionsReq.create(rawReq, this.cards);
 
 			// The global stat reqs
-			case 'GLOBAL_STAT': return GlobalStatReq.create(rawReq);
+			// case 'GLOBAL_STAT': return GlobalStatReq.create(rawReq);
 
 			case 'BATTLEGROUNDS_FINISH': return BattlegroundsFinishReq.create(rawReq);
 			case 'BATTLEGROUNDS_RANK': return BattlegroundsRankReq.create(rawReq, this.memoryInspection);

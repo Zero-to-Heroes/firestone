@@ -44,6 +44,20 @@ export class BgsGame {
 		return Object.assign(new BgsGame(), base);
 	}
 
+	public static createForElectron(base: Partial<NonFunctionProperties<BgsGame>>): BgsGame | undefined {
+		if (!base) {
+			return undefined;
+		}
+		let players: readonly BgsPlayer[] = [];
+		if (base.players) {
+			players = base.players.filter((player) => !!player).map((player) => BgsPlayer.createForElectron(player)!);
+		}
+		return Object.assign(new BgsGame(), {
+			...base,
+			players: players,
+		});
+	}
+
 	public update(base: Partial<NonFunctionProperties<BgsGame>>) {
 		return Object.assign(new BgsGame(), this, base);
 	}

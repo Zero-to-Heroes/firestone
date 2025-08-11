@@ -1,10 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
+import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const DirdraRebelCaptain: GeneratingCard = {
 	cardIds: [CardIds.DirdraRebelCaptain_GDB_117],

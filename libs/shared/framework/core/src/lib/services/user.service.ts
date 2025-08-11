@@ -6,14 +6,14 @@ import { ADS_SERVICE_TOKEN, IAdsService } from './ads-service.interface';
 import { ApiRunner } from './api-runner';
 import { AppInjector } from './app-injector';
 import { OverwolfService } from './overwolf.service';
+import { CurrentUser, IUserService } from './user.service.interface';
 import { WindowManagerService } from './window-manager.service';
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
-// TODO: use Hearthstone user id
 @Injectable()
-export class UserService extends AbstractFacadeService<UserService> {
-	public user$$: SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult | null>;
+export class UserService extends AbstractFacadeService<UserService> implements IUserService {
+	public user$$: SubscriberAwareBehaviorSubject<CurrentUser | null>;
 
 	private ow: OverwolfService;
 	private api: ApiRunner;
@@ -28,7 +28,7 @@ export class UserService extends AbstractFacadeService<UserService> {
 	}
 
 	protected async init() {
-		this.user$$ = new SubscriberAwareBehaviorSubject<overwolf.profile.GetCurrentUserResult | null>(null);
+		this.user$$ = new SubscriberAwareBehaviorSubject<CurrentUser | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
@@ -57,7 +57,7 @@ export class UserService extends AbstractFacadeService<UserService> {
 		});
 	}
 
-	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult | null> {
+	public async getCurrentUser(): Promise<CurrentUser | null> {
 		return await this.user$$.getValueWithInit();
 	}
 
@@ -72,7 +72,7 @@ export class UserService extends AbstractFacadeService<UserService> {
 		return user;
 	}
 
-	private async sendCurrentUser(user: overwolf.profile.GetCurrentUserResult | null, isPremium: boolean) {
+	private async sendCurrentUser(user: CurrentUser | null, isPremium: boolean) {
 		// Don't send anything in dev to allow for impersonation
 		if (process.env['NODE_ENV'] !== 'production') {
 			console.warn('[user-service] not sending user mapping in dev');

@@ -1,8 +1,8 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { BattleAbility, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
-import { getMercCardLevel, isPassiveMercsTreasure } from '../mercenaries-utils';
+import { getMercCardLevel, isPassiveMercsTreasure } from '@firestone/mercenaries/common';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesAbilityUpdatedParser implements MercenariesParser {
@@ -48,7 +48,7 @@ export class MercenariesAbilityUpdatedParser implements MercenariesParser {
 				level: getMercCardLevel(cardId),
 				speed: isPassiveMercsTreasure(cardId, this.allCards)
 					? null
-					: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? 0,
+					: (event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? 0),
 				totalUsed: 0,
 				isTreasure: isTreasure,
 			}),

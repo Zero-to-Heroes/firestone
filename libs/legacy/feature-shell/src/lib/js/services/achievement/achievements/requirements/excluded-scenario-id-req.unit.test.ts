@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { ExcludedScenarioIdReq } from './excluded-scenario-id-req';
 
 describe('excluded-scenario-id-req', () => {
@@ -56,8 +56,8 @@ describe('excluded-scenario-id-req', () => {
 
 test('req is intantiated with the correct format type', () => {
 	const rawReq: RawRequirement = {
-		'type': 'EXCLUDED_SCENARIO_IDS',
-		'values': ['2', '3'],
+		type: 'EXCLUDED_SCENARIO_IDS',
+		values: ['2', '3'],
 	};
 
 	const req = ExcludedScenarioIdReq.create(rawReq);

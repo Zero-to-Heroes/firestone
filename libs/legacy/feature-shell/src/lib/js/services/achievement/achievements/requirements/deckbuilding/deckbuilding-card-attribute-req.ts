@@ -1,6 +1,6 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../../models/game-event';
 import { Requirement } from '../_requirement';
 import { buildCardArraysFromDeck } from './deckbuilding-helper';
 
@@ -55,8 +55,8 @@ export class DeckbuildingCardAttributeReq implements Requirement {
 					this.attributeQualifier === 'AT_LEAST'
 						? parseInt(card[this.targetAttribute]) >= this.targetAttributeValue
 						: this.attributeQualifier === 'AT_MOST'
-						? parseInt(card[this.targetAttribute]) <= this.targetAttributeValue
-						: parseInt(card[this.targetAttribute]) === this.targetAttributeValue,
+							? parseInt(card[this.targetAttribute]) <= this.targetAttributeValue
+							: parseInt(card[this.targetAttribute]) === this.targetAttributeValue,
 				).length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfCards;

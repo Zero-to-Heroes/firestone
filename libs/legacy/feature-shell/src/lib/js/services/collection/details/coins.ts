@@ -3,7 +3,7 @@ import { CoinInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, 
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Coin } from '../../../models/coin';
-import { Events } from '../../events.service';
+import { Events } from '@firestone/shared/common/service';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 

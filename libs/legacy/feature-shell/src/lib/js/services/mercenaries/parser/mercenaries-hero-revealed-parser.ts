@@ -1,5 +1,5 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import {
 	BattleAbility,
@@ -8,13 +8,13 @@ import {
 	MercenariesBattleState,
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
-import { MercenariesReferenceDataService } from '../mercenaries-reference-data.service';
 import {
 	getHeroRole,
 	getMercCardLevel,
 	getMercLevelFromExperience,
+	MercenariesReferenceDataService,
 	normalizeMercenariesCardId,
-} from '../mercenaries-utils';
+} from '@firestone/mercenaries/common';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesHeroRevealedParser implements MercenariesParser {
@@ -59,7 +59,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 					(merc) =>
 						normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) ===
 						normalizedCardId,
-			  )
+				)
 			: null;
 
 		const refMercCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
@@ -110,7 +110,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 						entityId: null,
 						cardId: refMercEquipment.id,
 						level: getMercCardLevel(refMercEquipment.id),
-				  })
+					})
 				: null,
 		});
 

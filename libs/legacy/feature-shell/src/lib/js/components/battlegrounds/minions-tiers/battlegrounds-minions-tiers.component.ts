@@ -9,7 +9,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import {
 	BuildTierGameState,
 	BuildTierOptions,
@@ -23,6 +22,7 @@ import {
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
+import { BgsBoardHighlighterService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
@@ -115,6 +115,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+		await waitForReady(this.gameState);
+		await waitForReady(this.cardRules);
+		await waitForReady(this.strategies);
+		await waitForReady(this.highlighter);
+
 		await waitForReady(this.prefs, this.gameState, this.cardRules, this.strategies, this.highlighter);
 		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 

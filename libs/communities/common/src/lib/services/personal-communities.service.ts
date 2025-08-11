@@ -68,8 +68,17 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 		this.communities$$.next([...(current ?? []), newCommunity]);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('leaveCommunityInternal', (communityId: string) =>
+			this.leaveCommunityInternal(communityId),
+		);
+		this.registerMainProcessMethod('refreshJoinedCommunitiesInternal', () =>
+			this.refreshJoinedCommunitiesInternal(),
+		);
+	}
+
 	public async leaveCommunity(communityId: string) {
-		return this.mainInstance.leaveCommunityInternal(communityId);
+		return this.callOnMainProcess('leaveCommunityInternal', communityId);
 	}
 
 	// public async refreshCurrentCommunity() {
@@ -77,7 +86,7 @@ export class PersonalCommunitiesService extends AbstractFacadeService<PersonalCo
 	// }
 
 	public async refreshJoinedCommunities() {
-		return this.mainInstance.refreshJoinedCommunitiesInternal();
+		return this.callOnMainProcess('refreshJoinedCommunitiesInternal');
 	}
 
 	// private async refreshCurrentCommunityInternal() {

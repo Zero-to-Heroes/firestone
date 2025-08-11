@@ -8,7 +8,6 @@ import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
-import { QuestsState } from './quests/quests-state';
 import { StatsState } from './stats/stats-state';
 import { StreamsState } from './streams/streams-state';
 
@@ -25,7 +24,6 @@ export class MainWindowState {
 	readonly mercenaries: MercenariesState = new MercenariesState();
 	// readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
-	readonly quests: QuestsState = new QuestsState();
 	readonly streams: StreamsState = new StreamsState();
 	// readonly patchConfig: PatchesConfig;
 

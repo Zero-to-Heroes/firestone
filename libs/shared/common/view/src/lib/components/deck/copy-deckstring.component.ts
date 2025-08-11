@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckDefinition, DeckList, decode, encode, FormatType } from '@firestone-hs/deckstrings';
 import { GameFormat, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import { sanitizeDeckDefinition } from '@firestone/shared/common/service';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
 import {
 	AnalyticsService,
@@ -147,22 +148,6 @@ export class CopyDesckstringComponent {
 		}, 2000);
 	}
 }
-
-export const sanitizeDeckstring = (deckstring: string, allCards: CardsFacadeService): string | null => {
-	if (!deckstring?.length) {
-		return null;
-	}
-	const deckDefinition = decode(deckstring);
-	const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, allCards);
-	return encode(updatedDeckDefinition);
-};
-
-export const sanitizeDeckDefinition = (
-	deckDefinition: DeckDefinition,
-	allCards: CardsFacadeService,
-): DeckDefinition => {
-	return deckDefinition;
-};
 
 const buildCurrentDeckstring = (
 	cardsList: readonly string[],

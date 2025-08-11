@@ -1,0 +1,35 @@
+<div class="callback-page">
+	<div class="callback-container">
+		<!-- Loading state -->
+		@if (state === 'loading') {
+			<div class="loading">
+				<div class="spinner"></div>
+				<h2>Signing you in...</h2>
+				<p>Please wait while we verify your account</p>
+			</div>
+		}
+
+		<!-- Success state -->
+		@if (state === 'success') {
+			<div class="success">
+				<div class="checkmark">
+					<svg viewBox="0 0 24 24">
+						<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+					</svg>
+				</div>
+				<h2>Success!</h2>
+				<p>You can now return to the Firestone app</p>
+			</div>
+		}
+
+		<!-- Error state -->
+		@if (state === 'error') {
+			<div class="error">
+				<h2>⚠️ Sign in failed</h2>
+				<p>{{ errorMessage }}</p>
+				<button class="retry-btn" (click)="retryLogin()">Try Again</button>
+			</div>
+		}
+	</div>
+</div>
+

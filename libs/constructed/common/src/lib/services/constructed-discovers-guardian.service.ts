@@ -43,8 +43,14 @@ export class ConstructedDiscoversGuardianService extends AbstractFacadeService<C
 		this.useCountUpdater$$.pipe(debounceTime(500)).subscribe(() => this.updateUseCount());
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeDiscoverStatsSeenInternal', () =>
+			this.acknowledgeDiscoverStatsSeenInternal(),
+		);
+	}
+
 	public acknowledgeDiscoverStatsSeen() {
-		this.mainInstance.acknowledgeDiscoverStatsSeenInternal();
+		void this.callOnMainProcess('acknowledgeDiscoverStatsSeenInternal');
 	}
 
 	private acknowledgeDiscoverStatsSeenInternal() {

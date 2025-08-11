@@ -4,7 +4,7 @@ import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { isPassiveMercsTreasure } from '../../../../services/mercenaries/mercenaries-utils';
+import { isPassiveMercsTreasure } from '@firestone/mercenaries/common';
 import { Ability } from './mercenaries-team-ability.component';
 
 @Component({

@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
+import { QuestReward } from '@firestone/battlegrounds/core';
 import {
 	BgsFaceOffWithSimulation,
 	BgsGame,
 	BgsPostMatchStatsPanel,
 	BgsStatsFilterId,
 	MinionStat,
-	QuestReward,
 } from '@firestone/game-state';
 import { ENABLE_MULTI_GRAPHS, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -207,7 +207,7 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 					cardId: cardId,
 					damageDealt: this.extractDamage(cardId, this._panel.stats?.totalMinionsDamageDealt),
 					damageTaken: this.extractDamage(cardId, this._panel.stats?.totalMinionsDamageTaken),
-				} as MinionStat),
+				}) as MinionStat,
 		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

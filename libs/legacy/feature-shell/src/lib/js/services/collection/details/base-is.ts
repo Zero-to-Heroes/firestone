@@ -2,7 +2,7 @@ import { MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/mem
 import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs';
-import { Events } from '../../events.service';
+import { Events } from '@firestone/shared/common/service';
 
 const THROTTLE_TIME = 30_000;
 

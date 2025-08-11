@@ -7,12 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -64,8 +64,8 @@ export class PlayerHeroPowerWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.store.listenDeckState$(
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
+				(deckState) => isBattlegrounds(deckState?.metadata?.gameType),
+				(deckState) => isMercenaries(deckState?.metadata?.gameType),
 			),
 		]).pipe(
 			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {

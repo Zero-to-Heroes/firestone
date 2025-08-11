@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsReconnectorService } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { auditTime, distinctUntilChanged } from 'rxjs';
-import { BgsReconnectorService } from './bgs-reconnector.service';
 
 @Component({
 	standalone: false,

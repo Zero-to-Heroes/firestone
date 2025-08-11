@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { Tier, TierGroup, TierViewType } from '@firestone/battlegrounds/core';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuid } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';

@@ -1,15 +1,6 @@
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 
 export class BinderState {
-	// readonly collection: readonly Card[] = [];
-	// readonly ownedBgsHeroSkins: readonly number[] = [];
-	// readonly packsFromMemory: readonly PackInfo[] = [];
-	// readonly packStats: readonly PackResult[] = [];
-	// readonly allSets: readonly Set[] = [];
-	// readonly cardBacks: readonly CardBack[] = [];
-	// readonly coins: readonly Coin[] = [];
-	// readonly cardHistory: readonly CardHistory[] = [];
-	// readonly totalHistoryLength: number;
 	readonly isLoading: boolean = false;
 
 	public static create(base: Partial<NonFunctionProperties<BinderState>>): BinderState {

@@ -1,0 +1,88 @@
+import { CardIds } from '@firestone-hs/reference-data';
+import { BoardSecret } from '../../../../models/board-secret';
+import { DeckState } from '../../../../models/deck-state';
+import { GameState } from '../../../../models/game-state';
+import { GameEvent } from '../../game-event';
+import { EventParser } from '../_event-parser';
+import { DeckManipulationHelper } from '../deck-manipulation-helper';
+
+// Flames of Infinity — Secret: When your enemy's turn ends, deal INFINITE damage to their highest Health minion.
+export class TriggerOnTurnEndSecretsParser implements EventParser {
+	private secretsTriggeringOnTurnEnd = [
+		CardIds.RiggedFaireGame,
+		CardIds.PlagiarizeCore,
+		CardIds.Plagiarize,
+		CardIds.HiddenMeaning,
+		CardIds.FlamesOfInfinity_END_024,
+	];
+
+	constructor(private readonly helper: DeckManipulationHelper) {}
+
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.TURN_START;
+	}
+
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		const [, , localPlayer] = gameEvent.parse();
+		const activePlayerId = gameEvent.additionalData.activePlayerId;
+		// Can happen at the very start of the game
+		if (!localPlayer) {
+			return currentState;
+		}
+
+		// The activePlayerId is in fact the other player, because we are using the "turn_start"
+		// as a proxy for the other player's turn_end
+		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
+		const deckWithSecretToCheck = isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
+		const playerWhoseCardsPlayedToCheck = !isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
+
+		const secretsWeCantRuleOut: CardIds[] = [];
+
+		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
+		if (isHandFull) {
+			secretsWeCantRuleOut.push(CardIds.PlagiarizeCore);
+			secretsWeCantRuleOut.push(CardIds.Plagiarize);
+		}
+
+		const hasOpponentPlayedCards = playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn.length > 0;
+		if (!hasOpponentPlayedCards) {
+			secretsWeCantRuleOut.push(CardIds.PlagiarizeCore);
+			secretsWeCantRuleOut.push(CardIds.Plagiarize);
+		}
+
+		const hasHeroTakenDamage = deckWithSecretToCheck.damageTakenThisTurn > 0;
+		if (hasHeroTakenDamage) {
+			secretsWeCantRuleOut.push(CardIds.RiggedFaireGame);
+		}
+
+		const areResourcesFullyUsed = playerWhoseCardsPlayedToCheck.manaLeft === 0;
+		if (!areResourcesFullyUsed) {
+			secretsWeCantRuleOut.push(CardIds.HiddenMeaning);
+		}
+
+		const hasOpponentMinionsOnBoard =
+			playerWhoseCardsPlayedToCheck.board.filter((entity) => !entity.dormant).length > 0;
+		if (!hasOpponentMinionsOnBoard) {
+			secretsWeCantRuleOut.push(CardIds.FlamesOfInfinity_END_024);
+		}
+
+		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnEnd.filter(
+			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
+		);
+
+		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
+		for (const secret of optionsToFlagAsInvalid) {
+			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
+		}
+		const newPlayerDeck = deckWithSecretToCheck.update({
+			secrets: secrets as readonly BoardSecret[],
+		} as DeckState);
+		return Object.assign(new GameState(), currentState, {
+			[isPlayerActive ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+		});
+	}
+
+	event(): string {
+		return 'SECRET_TURN_END';
+	}
+}

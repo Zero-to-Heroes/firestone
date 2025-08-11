@@ -1,6 +1,6 @@
 import { CardIds, Faction, GameTag, Race, ReferenceCard, SpellSchool, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { normalizeMercenariesCardId } from '../mercenaries-utils';
+import { normalizeMercenariesCardId } from '@firestone/mercenaries/common';
 import { HighlightSelector } from './mercenaries-synergies-highlight.service';
 
 export const buildSelector = (cardId: string, allCards: CardsFacadeService): HighlightSelector => {

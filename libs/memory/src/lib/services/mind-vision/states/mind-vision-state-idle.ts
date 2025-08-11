@@ -1,15 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { Action, CurrentState } from '../mind-vision-actions';
-import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionState } from './_mind-vision-state';
 
 export class MindVisionStateIdle implements MindVisionState {
-	constructor(
-		private readonly mindVision: MindVisionFacadeService,
-		private readonly dispatcher: (action: Action) => Promise<void>,
-		private readonly ow: OverwolfService,
-	) {}
+	constructor(private readonly gameStatus: GameStatusService) {}
 
 	stateId = () => CurrentState.IDLE;
 	onEnter = async () => {};
@@ -17,7 +12,7 @@ export class MindVisionStateIdle implements MindVisionState {
 
 	async performAction(action: Action): Promise<Action | null> {
 		if (action === Action.STARTUP) {
-			const inGame = await this.ow.inGame();
+			const inGame = await this.gameStatus.inGame();
 			if (inGame) {
 				return Action.GAME_START;
 			} else {

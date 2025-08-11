@@ -1,0 +1,108 @@
+{
+	"name": "electron-app",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/electron-app/src",
+	"projectType": "application",
+	"targets": {
+		"build-worker": {
+			"executor": "nx:run-commands",
+			"outputs": ["{workspaceRoot}/dist/apps/electron-app/bgs-battle-sim-worker.thread.js"],
+			"options": {
+				"commands": [
+					"tsc --project apps/electron-app/tsconfig.worker.json",
+					"node apps/electron-app/move-worker-file.js"
+				],
+				"parallel": false
+			}
+		},
+		"build": {
+			"executor": "nx-electron:build",
+			"outputs": ["{options.outputPath}"],
+			"dependsOn": ["build-worker"],
+			"options": {
+				"outputPath": "dist/apps/electron-app",
+				"main": "apps/electron-app/src/main.ts",
+				"tsConfig": "apps/electron-app/tsconfig.app.json",
+				"externalDependencies": [
+					"better-sqlite3",
+					"electron-edge-js",
+					"electron"
+				],
+				"assets": [
+					"apps/electron-app/src/assets",
+					{
+						"input": "apps/electron-app/src",
+						"glob": "package.json",
+						"output": "."
+					},
+					{
+						"input": "libs/electron-edge-libs",
+						"glob": "**/*",
+						"output": "electron-edge-libs"
+					},
+					{
+						"input": "overwolf-plugins",
+						"glob": "**/*",
+						"output": "electron-edge-libs"
+					},
+					{
+						"input": "external-libs",
+						"glob": "**/*",
+						"output": "electron-edge-libs"
+					}
+				]
+			},
+			"configurations": {
+				"production": {
+					"optimization": true,
+					"extractLicenses": true,
+					"inspect": false,
+					"fileReplacements": [
+						{
+							"replace": "apps/electron-app/src/environments/environment.ts",
+							"with": "apps/electron-app/src/environments/environment.prod.ts"
+						}
+					]
+				}
+			}
+		},
+		"serve": {
+			"executor": "nx-electron:execute",
+			"options": {
+				"buildTarget": "electron-app:build"
+			}
+		},
+		"package": {
+			"executor": "nx-electron:package",
+			"options": {
+				"name": "electron-app",
+				"frontendProject": "electron-frontend",
+				"sourcePath": "dist/apps",
+				"outputPath": "dist/packages",
+				"prepackageOnly": true
+			}
+		},
+		"make": {
+			"executor": "nx-electron:make",
+			"options": {
+				"name": "electron-app",
+				"frontendProject": "electron-frontend",
+				"sourcePath": "dist/apps",
+				"outputPath": "dist/executables"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint",
+			"options": {
+				"lintFilePatterns": ["apps/electron-app/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "apps/electron-app/jest.config.ts"
+			}
+		}
+	}
+}
