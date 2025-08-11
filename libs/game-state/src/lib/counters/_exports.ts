@@ -93,7 +93,7 @@ export const getAllCounters: (
 	new DragonsInHandCounterDefinitionV2(i18n, allCards),
 	new DragonsSummonedCounterDefinitionV2(i18n),
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
-	new DarkGiftsCounterDefinitionV2(i18n, allCards),
+	// new DarkGiftsCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),
 	new DiscoversCounterDefinitionV2(i18n),
 	new LibramReductionCounterDefinitionV2(i18n),
