@@ -7,14 +7,19 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
+import {
+	CURRENT_EFFECTS_WHITELIST,
+	DeckCard,
+	DeckState,
+	DeckZone,
+	DeckZoneSection,
+	getProcessedCard,
+	PLAGUES,
+	VisualDeckCard,
+} from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil } from 'rxjs';
-import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
-import { CURRENT_EFFECTS_WHITELIST } from '../../../services/hs-utils';
+import { BehaviorSubject, combineLatest, debounceTime, filter, Observable, startWith, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

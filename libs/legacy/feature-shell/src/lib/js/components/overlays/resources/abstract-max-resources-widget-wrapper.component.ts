@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2, ViewRef } from '@angular/core';
 import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
-import { AbstractWidgetWrapperComponent, DeckState, GameState, GameStateFacadeService } from '@firestone/game-state';
+import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
+import { DeckState, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
@@ -92,9 +93,9 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 			this.mapData((gameState) => {
 				const isBg = isBattlegrounds(gameState?.metadata?.gameType);
 				const result: MaxResources = {
-					health: isBg ? null : this.deckExtractor(gameState).hero?.maxHealth ?? 30,
-					mana: isBg ? null : this.deckExtractor(gameState).hero?.maxMana ?? 10,
-					coins: isBg ? this.deckExtractor(gameState).hero?.maxCoins ?? 10 : null,
+					health: isBg ? null : (this.deckExtractor(gameState).hero?.maxHealth ?? 30),
+					mana: isBg ? null : (this.deckExtractor(gameState).hero?.maxMana ?? 10),
+					coins: isBg ? (this.deckExtractor(gameState).hero?.maxCoins ?? 10) : null,
 				};
 				return result;
 			}),

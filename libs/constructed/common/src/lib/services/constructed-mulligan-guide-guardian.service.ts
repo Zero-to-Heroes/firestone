@@ -40,8 +40,22 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 		this.addDevMode();
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(CONSTRUCTED_MULLIGAN_DAILY_FREE_USES);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'constructed-mulligan-guide-guardian-free-uses-left');
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeMulliganAdviceSeenInternal', () =>
+			this.acknowledgeMulliganAdviceSeenInternal(),
+		);
+	}
+
 	public acknowledgeMulliganAdviceSeen() {
-		this.mainInstance.acknowledgeMulliganAdviceSeenInternal();
+		void this.callOnMainProcess('acknowledgeMulliganAdviceSeenInternal');
 	}
 
 	private acknowledgeMulliganAdviceSeenInternal() {
@@ -59,7 +73,7 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 	}
 
 	private addDevMode() {
-		if (process.env['NODE_ENV'] === 'production') {
+		if (process.env['NODE_ENV'] === 'production' || typeof window === 'undefined') {
 			return;
 		}
 

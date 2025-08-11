@@ -11,13 +11,19 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { DeckState, enrichDeck, GameState, GameStateFacadeService, StatsRecap } from '@firestone/game-state';
+import {
+	CardsHighlightFacadeService,
+	DeckState,
+	enrichDeck,
+	GameState,
+	GameStateFacadeService,
+	StatsRecap,
+} from '@firestone/game-state';
 import { AccountService } from '@firestone/profile/common';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
-import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
 	auditTime,
 	combineLatest,
@@ -29,7 +35,6 @@ import {
 	takeUntil,
 } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
@@ -208,7 +213,6 @@ export class DeckTrackerOverlayRootComponent
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStats: GameStatsProviderService,
-		private readonly mainWindowState: MainWindowStateFacadeService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly region: AccountService,
 	) {
@@ -217,14 +221,7 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([
-			this.patchesConfig.isReady(),
-			this.gameState.isReady(),
-			this.prefs.isReady(),
-			this.gameStats.isReady(),
-			this.mainWindowState.isReady(),
-			this.decksProvider.isReady(),
-		]);
+		await waitForReady(this.patchesConfig, this.gameState, this.prefs, this.gameStats, this.decksProvider);
 
 		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showDeckWinrateExtractor(preferences)),
@@ -288,12 +285,6 @@ export class DeckTrackerOverlayRootComponent
 					formatType: gameState?.metadata?.formatType,
 				})),
 			),
-			// this.mainWindowState.mainWindowState$$.pipe(
-			// 	this.mapData((main) => ({
-			// 		timeFilter: 'all-time',
-			// 		rankFilter: 'all',
-			// 	})),
-			// ),
 			this.patchesConfig.currentConstructedMetaPatch$$,
 			gamesForRegion$,
 			this.decksProvider.decks$$,

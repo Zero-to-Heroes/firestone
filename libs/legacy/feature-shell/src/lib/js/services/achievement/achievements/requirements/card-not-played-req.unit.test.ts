@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { CardNotPlayedReq } from './card-not-played-req';
 
 describe('card-not-played-req', () => {
@@ -66,8 +66,8 @@ test('card-not-played-req is completed after reset', () => {
 
 test('card-not-played-req is intantiated with the correct info', () => {
 	const rawReq: RawRequirement = {
-		'type': 'CARD_NOT_PLAYED',
-		'values': ['ULDA_111'],
+		type: 'CARD_NOT_PLAYED',
+		values: ['ULDA_111'],
 	};
 
 	const req = CardNotPlayedReq.create(rawReq);

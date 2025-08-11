@@ -1,8 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 
 import { BgsTrinketStat } from '@firestone-hs/bgs-global-stats';
-import { SortCriteria } from '@firestone/shared/common/view';
-import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
+import { getStandardDeviation, sortByProperties, SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsMetaTrinketStatTier, BgsMetaTrinketStatTierItem, BgsTrinketTier } from './meta-trinket.model';
 

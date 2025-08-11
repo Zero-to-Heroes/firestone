@@ -10,9 +10,8 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.component';
 
@@ -48,7 +47,6 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 	) {
@@ -56,24 +54,25 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,
-			this.store.listen$(
-				// Show from prefs
-				([main, nav, prefs]) => prefs.hsShowQuestsWidget && prefs.enableQuestsWidget,
-				([main, nav, prefs]) => prefs.showQuestsInGame,
-				([main, nav, prefs]) => prefs.hsShowQuestsWidgetOnHub,
-				([main, nav, prefs]) => prefs.hsShowQuestsWidgetOnBg,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					displayFromPrefs: prefs.hsShowQuestsWidget && prefs.enableQuestsWidget,
+					showQuestsInGame: prefs.showQuestsInGame,
+					hsShowQuestsWidgetOnHub: prefs.hsShowQuestsWidgetOnHub,
+					hsShowQuestsWidgetOnBg: prefs.hsShowQuestsWidgetOnBg,
+				})),
 			),
 		]).pipe(
 			this.mapData(
 				([
 					currentScene,
 					lastNonGamePlayScene,
-					[displayFromPrefs, showQuestsInGame, hsShowQuestsWidgetOnHub, hsShowQuestsWidgetOnBg],
+					{ displayFromPrefs, showQuestsInGame, hsShowQuestsWidgetOnHub, hsShowQuestsWidgetOnBg },
 				]) => {
 					if (!displayFromPrefs) {
 						return false;

@@ -87,14 +87,43 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		});
 	}
 
-	// public async getCardStats(timeFilter: ArenaTimeFilterType, classFilter: ArenaClassFilterType, modeFilter: ArenaModeFilterType): Promise<ArenaCombinedCardStats | null> {
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.cardStats$$ = new SubscriberAwareBehaviorSubject<ArenaCombinedCardStats | null | undefined>(null);
+		this.searchString$$ = new BehaviorSubject<string | undefined>(undefined);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.cardStats$$, 'ArenaCardStatsService-cardStats');
+		this.setupElectronSubject(this.searchString$$, 'ArenaCardStatsService-searchString');
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'getStatsForInternal',
+			(cardId: string, playerClass: PlayerClass, modeFilter: ArenaModeFilterType) =>
+				this.getStatsForInternal(cardId, playerClass, modeFilter),
+		);
+		this.registerMainProcessMethod(
+			'buildCardStatsInternal',
+			(context: string, timePeriod: string, modeFilter: ArenaModeFilterType) =>
+				this.buildCardStatsInternal(context, timePeriod, modeFilter),
+		);
+		this.registerMainProcessMethod('newSearchStringInternal', (newText: string | null | undefined) =>
+			this.newSearchStringInternal(newText),
+		);
+	}
 
 	public async getStatsFor(
 		cardId: string,
 		playerClass: PlayerClass,
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStat | null> {
-		return this.mainInstance.getStatsForInternal(cardId, playerClass, modeFilter);
+		return this.callOnMainProcess<ArenaCombinedCardStat | null>(
+			'getStatsForInternal',
+			cardId,
+			playerClass,
+			modeFilter,
+		);
 	}
 
 	private async getStatsForInternal(
@@ -135,7 +164,12 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		timePeriod: string,
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStats | null> {
-		return this.mainInstance.buildCardStatsInternal(context?.toLowerCase(), timePeriod, modeFilter);
+		return this.callOnMainProcess<ArenaCombinedCardStats | null>(
+			'buildCardStatsInternal',
+			context?.toLowerCase(),
+			timePeriod,
+			modeFilter,
+		);
 	}
 
 	private async buildCardStatsInternal(
@@ -197,12 +231,12 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		return result;
 	}
 
-	public newSearchString(newText: string) {
-		this.mainInstance.newSearchStringInternal(newText);
+	public newSearchString(newText: string | null | undefined) {
+		void this.callOnMainProcess('newSearchStringInternal', newText);
 	}
 
-	private async newSearchStringInternal(newText: string) {
-		this.searchString$$.next(newText);
+	private async newSearchStringInternal(newText: string | null | undefined) {
+		this.searchString$$.next(newText ?? undefined);
 	}
 
 	private buildCombinedStats(

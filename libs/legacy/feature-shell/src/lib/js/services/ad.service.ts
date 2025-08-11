@@ -55,8 +55,13 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		});
 	}
 
-	public async goToPremium() {
-		return this.mainInstance.goToPremiumInternal();
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('goToPremiumInternal', () => this.goToPremiumInternal());
+		this.registerMainProcessMethod('shouldDisplayAdsInternal', () => this.shouldDisplayAdsInternal());
+	}
+
+	public async goToPremium(): Promise<void> {
+		await this.callOnMainProcess<void>('goToPremiumInternal');
 	}
 
 	private async goToPremiumInternal() {
@@ -64,7 +69,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	public async shouldDisplayAds(): Promise<boolean> {
-		return this.mainInstance.shouldDisplayAdsInternal();
+		return this.callOnMainProcess<boolean>('shouldDisplayAdsInternal');
 	}
 
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
@@ -76,7 +81,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	private addDevMode() {
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV === 'production' || typeof window === 'undefined') {
 			return;
 		}
 		window['toggleAds'] = () => {

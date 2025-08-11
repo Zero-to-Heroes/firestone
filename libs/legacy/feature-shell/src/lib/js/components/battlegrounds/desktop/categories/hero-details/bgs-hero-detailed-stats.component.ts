@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -71,7 +71,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 								class="my-value"
 								[ngClass]="{
 									positive: stats.playerNetMmr > 0,
-									negative: stats.playerNetMmr < 0
+									negative: stats.playerNetMmr < 0,
 								}"
 							>
 								{{ buildValue(stats.playerNetMmr, 0) }}
@@ -91,7 +91,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 								class="my-value"
 								[ngClass]="{
 									positive: stats.playerAverageMmrGain > 0,
-									negative: stats.playerAverageMmrGain < 0
+									negative: stats.playerAverageMmrGain < 0,
 								}"
 							>
 								{{ buildValue(stats.playerAverageMmrGain, 0) }}
@@ -111,7 +111,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 								class="my-value "
 								[ngClass]="{
 									positive: stats.playerAverageMmrLoss > 0,
-									negative: stats.playerAverageMmrLoss < 0
+									negative: stats.playerAverageMmrLoss < 0,
 								}"
 							>
 								{{ buildValue(stats.playerAverageMmrLoss, 0) }}

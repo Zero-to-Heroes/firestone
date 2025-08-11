@@ -9,14 +9,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
+import { BattlegroundsQuestsService } from '@firestone/battlegrounds/services';
 import { CardOption, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { CardChoicesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 import { buildBasicCardChoiceValue } from './card-choice-values';
 
@@ -94,7 +93,6 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
@@ -107,7 +105,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.quests, this.gameState, this.choices);
+		await waitForReady(this.scene, this.quests, this.gameState, this.choices, this.prefs);
 
 		this.gameMode$ = this.gameState.gameState$$.pipe(
 			this.mapData((state) => {
@@ -145,14 +143,16 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.overlayEnableDiscoverHelp),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.playerDeck?.currentOptions,
-				(deckState) => deckState?.metadata?.gameType,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayEnableDiscoverHelp)),
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					currentOptions: state?.playerDeck?.currentOptions,
+					gameType: state?.metadata?.gameType,
+				})),
 			),
 			this.choices.choicesHidden$$,
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [currentOptions, gameType], hidden]) => {
+			this.mapData(([currentScene, displayFromPrefs, { currentOptions, gameType }, hidden]) => {
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -193,8 +193,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			takeUntil(this.destroyed$),
 		);
 
-		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
-			this.mapData(([[state]]) => {
+		this.options$ = combineLatest([this.gameState.gameState$$.pipe(this.mapData((state) => state))]).pipe(
+			this.mapData(([state]) => {
 				const options = state.playerDeck?.currentOptions;
 				console.debug('[choosing-card-widget] options', options);
 				return options?.map((o) => {

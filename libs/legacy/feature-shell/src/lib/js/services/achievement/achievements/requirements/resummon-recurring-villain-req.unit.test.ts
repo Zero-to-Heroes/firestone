@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { ResummonRecurringVillainRew } from './resummon-recurring-villain-req';
 
 describe('resummon-recurring-villain-req', () => {
@@ -76,8 +76,8 @@ describe('resummon-recurring-villain-req', () => {
 
 	test('req is intantiated with the correct target health', () => {
 		const rawReq: RawRequirement = {
-			'type': 'RESUMMONED_RECURRING_VILLAIN',
-			'values': ['3', 'AT_LEAST'],
+			type: 'RESUMMONED_RECURRING_VILLAIN',
+			values: ['3', 'AT_LEAST'],
 		};
 
 		const req = ResummonRecurringVillainRew.create(rawReq);

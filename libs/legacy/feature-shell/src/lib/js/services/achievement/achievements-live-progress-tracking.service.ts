@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
+import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import {
 	equalHsAchievementInfo,
 	HsAchievementInfo,
@@ -10,8 +11,6 @@ import { GameStatusService, PreferencesService } from '@firestone/shared/common/
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { HEARTHSTONE_GAME_ID, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';
-import { GameEvent } from '../../models/game-event';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
 import { arraysEqual } from '../utils';
 import { buildAchievementHierarchy } from './achievement-utils';
@@ -182,7 +181,7 @@ export class AchievementsLiveProgressTrackingService {
 			const nextStepId = currentAchievement.nextTierId;
 			currentAchievement = !!nextStepId ? refAchievements.find((a) => a.id === nextStepId) : null;
 			currentCompletion = !!nextStepId
-				? achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0
+				? (achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0)
 				: 0;
 			console.debug(
 				'[achievements-live-progress-tracking] currentAchievement',
@@ -217,7 +216,7 @@ export class AchievementsLiveProgressTrackingService {
 						: 0,
 					progressTotal: !!currentProgress
 						? currentProgress.progress
-						: achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0,
+						: (achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0),
 					rewardTrackXp: refAchievement?.rewardTrackXp,
 					hierarchy: buildAchievementHierarchy(id, groupedAchievements)?.categories?.map((c) => c.name),
 				};

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { GameMinTurnsReq } from './game-min-turns-req';
 
 describe('game-min-turns-req', () => {
@@ -40,8 +40,8 @@ describe('game-min-turns-req', () => {
 
 	test('req is intantiated with the correct target number of turns', () => {
 		const rawReq: RawRequirement = {
-			'type': 'GAME_MIN_TURNS',
-			'values': ['4'],
+			type: 'GAME_MIN_TURNS',
+			values: ['4'],
 		};
 
 		const req = GameMinTurnsReq.create(rawReq);

@@ -7,12 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -46,31 +46,30 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(
-				// Show from prefs
-				([main, nav, pref]) => pref.secretsHelper,
-			),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
-				(deckState) => !!deckState?.opponentDeck?.secrets?.length,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.secretsHelper)),
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					gameStarted: state.gameStarted,
+					gameEnded: state.gameEnded,
+					isBgs: isBattlegrounds(state?.metadata?.gameType),
+					isMercs: isMercenaries(state?.metadata?.gameType),
+					hasSecrets: !!state?.opponentDeck?.secrets?.length,
+				})),
 			),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs, hasSecrets]]) => {
+			this.mapData(([currentScene, displayFromPrefs, { gameStarted, gameEnded, isBgs, isMercs, hasSecrets }]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;
 				}

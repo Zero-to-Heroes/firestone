@@ -1,0 +1,171 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+import { Injectable } from '@angular/core';
+import { BgsHeroStatsV2, MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import {
+	BgsMetaHeroStatTierItem,
+	BgsMetaHeroStatsAccessService,
+	buildHeroStats,
+} from '@firestone/battlegrounds/data-access';
+import { Config, equalConfig } from '@firestone/game-state';
+import { BG_USE_ANOMALIES, DiskCacheService, PreferencesService } from '@firestone/shared/common/service';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	CardRulesService,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { distinctUntilChanged, map, shareReplay } from 'rxjs';
+import { DEFAULT_MMR_PERCENTILE } from './bgs-player-hero-stats.service';
+
+@Injectable({ providedIn: 'root' })
+export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroStatsService> {
+	public metaHeroStats$$: SubscriberAwareBehaviorSubject<BgsHeroStatsV2 | null>;
+	public tiers$$: SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null>;
+
+	private diskCache: DiskCacheService;
+	private access: BgsMetaHeroStatsAccessService;
+	private prefs: PreferencesService;
+	private allCards: CardsFacadeService;
+	private cardRules: CardRulesService;
+
+	private internalSubject: SubscriberAwareBehaviorSubject<boolean>;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'BgsMetaHeroStatsService', () => !!this.metaHeroStats$$);
+	}
+
+	protected override assignSubjects() {
+		this.metaHeroStats$$ = this.mainInstance.metaHeroStats$$;
+		this.tiers$$ = this.mainInstance.tiers$$;
+	}
+
+	protected async init() {
+		this.metaHeroStats$$ = new SubscriberAwareBehaviorSubject<BgsHeroStatsV2 | null>(null);
+		this.tiers$$ = new SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null>(null);
+		this.internalSubject = new SubscriberAwareBehaviorSubject<boolean>(false);
+		this.diskCache = AppInjector.get(DiskCacheService);
+		this.access = AppInjector.get(BgsMetaHeroStatsAccessService);
+		this.prefs = AppInjector.get(PreferencesService);
+		this.allCards = AppInjector.get(CardsFacadeService);
+		this.cardRules = AppInjector.get(CardRulesService);
+
+		this.metaHeroStats$$.onFirstSubscribe(() => {
+			this.internalSubject.subscribe();
+		});
+		this.tiers$$.onFirstSubscribe(() => {
+			this.internalSubject.subscribe();
+		});
+
+		this.internalSubject.onFirstSubscribe(async () => {
+			// Load cached values
+			const localStats = await this.diskCache.getItem<BgsHeroStatsV2>(
+				DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_META_HERO_STATS,
+			);
+			console.debug('[bgs-meta-hero] localStats', localStats);
+			if (!!localStats?.heroStats?.length) {
+				this.metaHeroStats$$.next(localStats);
+			}
+
+			const config$ = this.prefs.preferences$$.pipe(
+				map((prefs) => {
+					const config: Config = {
+						rankFilter: prefs.bgsActiveRankFilter === 1 ? 10 : prefs.bgsActiveRankFilter,
+						tribesFilter: prefs.bgsActiveTribesFilter,
+						timeFilter: prefs.bgsActiveTimeFilter,
+						anomaliesFilter: [] as readonly string[], //prefs.bgsActiveAnomaliesFilter,
+						options: {
+							convervativeEstimate: prefs.bgsHeroesUseConservativeEstimate,
+						},
+					} as Config;
+					return config;
+				}),
+				distinctUntilChanged((a, b) => equalConfig(a, b)),
+				map((config) => ({
+					...config,
+					gameMode: 'battlegrounds' as const,
+				})),
+				shareReplay(1),
+			);
+
+			// Load remote info
+			config$.subscribe(async (config) => {
+				console.log('[bgs-meta-hero] loading meta hero stats', config.timeFilter, config.rankFilter);
+				this.metaHeroStats$$.next(null);
+				this.tiers$$.next(null);
+
+				const stats = await this.getStats(config);
+				this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.BATTLEGROUNDS_META_HERO_STATS, stats);
+				this.metaHeroStats$$.next(stats);
+
+				const tiers = await this.getTiers(config, stats);
+				console.debug('[bgs-meta-hero] tiers', tiers);
+				this.tiers$$.next(tiers);
+			});
+		});
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('getStatsInternal', (config: Config) => this.getStatsInternal(config));
+		this.registerMainProcessMethod('getMmrPercentilesInternal', (config: Config) =>
+			this.getMmrPercentilesInternal(config),
+		);
+		this.registerMainProcessMethod('getTiersInternal', (config: Config, inputStats?: BgsHeroStatsV2 | null) =>
+			this.getTiersInternal(config, inputStats),
+		);
+	}
+
+	public async getStats(config: Config): Promise<BgsHeroStatsV2 | null> {
+		return this.callOnMainProcess<BgsHeroStatsV2 | null>('getStatsInternal', config);
+	}
+
+	private async getStatsInternal(config: Config): Promise<BgsHeroStatsV2 | null> {
+		const mmr = config.rankFilter || DEFAULT_MMR_PERCENTILE;
+		const stats = await this.access.loadMetaHeroStats(
+			config.timeFilter,
+			BG_USE_ANOMALIES ? config.anomaliesFilter : null,
+			mmr,
+		);
+		return stats;
+	}
+
+	public async getMmrPercentiles(config: Config): Promise<readonly MmrPercentile[] | null> {
+		return this.callOnMainProcess<readonly MmrPercentile[] | null>('getMmrPercentilesInternal', config);
+	}
+
+	private async getMmrPercentilesInternal(config: Config): Promise<readonly MmrPercentile[] | null> {
+		const stats = await this.access.loadMetaHeroMmrPercentiles(config.timeFilter);
+		return stats;
+	}
+
+	public async getTiers(
+		config: Config,
+		inputStats?: BgsHeroStatsV2 | null,
+	): Promise<readonly BgsMetaHeroStatTierItem[] | null> {
+		return this.callOnMainProcess<readonly BgsMetaHeroStatTierItem[] | null>(
+			'getTiersInternal',
+			config,
+			inputStats,
+		);
+	}
+
+	private async getTiersInternal(
+		config: Config,
+		inputStats?: BgsHeroStatsV2 | null,
+	): Promise<readonly BgsMetaHeroStatTierItem[] | null> {
+		const stats = inputStats ?? (await this.getStats(config));
+		const cardRules = await this.cardRules.rules$$.getValueWithInit();
+		const result: readonly BgsMetaHeroStatTierItem[] | null = !stats?.heroStats
+			? null
+			: buildHeroStats(
+					stats?.heroStats,
+					config.tribesFilter ?? [],
+					!!config.options?.convervativeEstimate,
+					this.allCards,
+					'battlegrounds',
+					cardRules,
+				);
+		return result;
+	}
+}

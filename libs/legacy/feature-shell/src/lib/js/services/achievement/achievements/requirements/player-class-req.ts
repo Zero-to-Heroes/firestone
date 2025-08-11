@@ -1,12 +1,15 @@
+import { GameEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class PlayerClassReq implements Requirement {
 	private isCorrectPlayerClass: boolean;
 
-	constructor(private readonly playerClass: string, private readonly cards: CardsFacadeService) {}
+	constructor(
+		private readonly playerClass: string,
+		private readonly cards: CardsFacadeService,
+	) {}
 
 	public static create(rawReq: RawRequirement, cards: CardsFacadeService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {

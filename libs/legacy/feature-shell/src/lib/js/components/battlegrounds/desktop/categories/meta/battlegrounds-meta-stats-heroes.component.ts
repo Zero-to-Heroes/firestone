@@ -6,13 +6,13 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
+import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsNavigationService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
-} from '@firestone/battlegrounds/common';
-import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+} from '@firestone/battlegrounds/services';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { Config } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';

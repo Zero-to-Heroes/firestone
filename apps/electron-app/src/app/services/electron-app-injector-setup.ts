@@ -1,0 +1,419 @@
+import { GameNativeStateStoreService, QuestsService } from '@firestone/app/services';
+import {
+	ArenaCardStatsService,
+	ArenaClassStatsService,
+	ArenaDeckStatsService,
+	ArenaDraftManagerService,
+	ArenaMulliganGuideService,
+} from '@firestone/arena/common';
+import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+import {
+	BattlegroundsQuestsService,
+	BattlegroundsTrinketsService,
+	BgsBoardHighlighterService,
+	BgsInGameHeroSelectionGuardianService,
+	BgsInGameQuestsGuardianService,
+	BgsInGameQuestsService,
+	BgsInGameTrinketsGuardianService,
+	BgsInGameTrinketsService,
+} from '@firestone/battlegrounds/services';
+import {
+	ConstructedMetaDecksStateService,
+	ConstructedMulliganGuideGuardianService,
+	ConstructedMulliganGuideService,
+	ConstructedNavigationService,
+} from '@firestone/constructed/common';
+import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
+import {
+	AiDeckService,
+	BattlegroundsOfficialLeaderboardService,
+	BgsMatchMemoryInfoService,
+	BgsMatchPlayersMmrService,
+	CardsHighlightFacadeService,
+	CardsHighlightService,
+	ConstructedArchetypeService,
+	ConstructedArchetypeServiceOrchestrator,
+	DeckHandlerService,
+	DeckManipulationHelper,
+	DeckParserFacadeService,
+	DeckParserService,
+	GameEvents,
+	GameEventsEmitterService,
+	GameEventsFacadeService,
+	GameStateFacadeService,
+	GameStateMetaInfoService,
+	GameStateParsersService,
+	GameStateService,
+	GameUniqueIdService,
+	OverlayDisplayService,
+	RealTimeStatsParsersService,
+	RealTimeStatsService,
+	ReviewIdService,
+	SecretConfigService,
+	SecretsParserService,
+} from '@firestone/game-state';
+import {
+	CardChoicesService,
+	CardMousedOverService,
+	MemoryInspectionService,
+	MemoryUpdatesService,
+	MindVisionFacadeService,
+	MindVisionStateMachineService,
+	SceneService,
+} from '@firestone/memory';
+// import { CustomAppearanceService } from '@firestone/settings';
+import {
+	DiskCacheService,
+	GameStatusService,
+	LOG_FILE_BACKEND,
+	LogListenerService,
+	LogUtilsService,
+	PatchesConfigService,
+	PreferencesService,
+	PreferencesStorageService,
+	StandaloneAdService,
+} from '@firestone/shared/common/service';
+import {
+	ADS_SERVICE_TOKEN,
+	ApiRunner,
+	CardsFacadeService,
+	CardsFacadeStandaloneService,
+	DATABASE_SERVICE_TOKEN,
+	IAdsService,
+	IDatabaseService,
+	ILocalizationService,
+	LocalizationStandaloneService,
+	LocalStorageService,
+	OwUtilsService,
+	StandaloneUserService,
+	USER_SERVICE_TOKEN,
+	UserService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
+import { AccountService } from '../../../../../libs/profile/common/src/lib/services/account.service';
+import { ElectronAngularInjector } from './electron-angular-injector';
+import { ElectronDiskCacheService } from './electron-disk-cache.service';
+import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
+import { GameEventsElectronService } from './game-events-electron.service';
+import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
+import { MindVisionElectronService } from './mind-vision-electron.service';
+import { SqliteDatabaseService } from './sqlite-database.service';
+
+export const buildAppInjector = () => {
+	const electronInjector = new ElectronAngularInjector();
+
+	// Create and register services with the injector
+	// FIXME: this instantiate everything, while we might want to have lazy loading
+	const allCardsRaw = new CardsFacadeStandaloneService();
+	const allCards: CardsFacadeService = allCardsRaw as any as CardsFacadeService;
+	electronInjector.register(CardsFacadeStandaloneService, allCardsRaw);
+	electronInjector.register(CardsFacadeService, allCards);
+
+	const windowManager = new WindowManagerService(null);
+	electronInjector.register(WindowManagerService, windowManager);
+
+	const gameStatus = new GameStatusService(windowManager);
+	electronInjector.register(GameStatusService, gameStatus);
+
+	const preferences = new PreferencesService(windowManager);
+	electronInjector.register(PreferencesService, preferences);
+
+	const logFileBackend = new ElectronLogFileBackendService();
+	electronInjector.register(LOG_FILE_BACKEND, logFileBackend);
+
+	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
+	electronInjector.register(LogUtilsService, logUtils);
+
+	const logListener = new LogListenerService(logFileBackend, gameStatus, preferences, logUtils);
+	electronInjector.register(LogListenerService, logListener);
+
+	const localStorage = new ElectronStorageService();
+	electronInjector.register(LocalStorageService, localStorage);
+
+	const sqliteDb = new SqliteDatabaseService();
+	electronInjector.register(DATABASE_SERVICE_TOKEN, sqliteDb as IDatabaseService);
+
+	const api = new ElectronApiRunner();
+	electronInjector.register(ApiRunner, api as any as ApiRunner);
+
+	const preferencesStorage = new PreferencesStorageService(localStorage);
+	electronInjector.register(PreferencesStorageService, preferencesStorage);
+
+	const memoryUpdates = new MemoryUpdatesService(windowManager);
+	electronInjector.register(MemoryUpdatesService, memoryUpdates);
+
+	const mindVisionFacade = new MindVisionElectronService(memoryUpdates);
+	electronInjector.register(MindVisionElectronService, mindVisionFacade);
+
+	const mindVisionStateMachine = new MindVisionStateMachineService(
+		mindVisionFacade as any as MindVisionFacadeService,
+		gameStatus,
+		memoryUpdates,
+		null,
+	);
+	electronInjector.register(MindVisionStateMachineService, mindVisionStateMachine);
+
+	const memoryInspection = new MemoryInspectionService(
+		gameStatus,
+		mindVisionFacade as any as MindVisionFacadeService,
+		mindVisionStateMachine,
+	);
+	electronInjector.register(MemoryInspectionService, memoryInspection);
+
+	const scene = new SceneService(windowManager);
+	electronInjector.register(SceneService, scene);
+
+	const gameEventsEmitter = new GameEventsEmitterService();
+	electronInjector.register(GameEventsEmitterService, gameEventsEmitter);
+
+	const deckHandler = new DeckHandlerService(allCards);
+	electronInjector.register(DeckHandlerService, deckHandler);
+
+	const deckParser = new DeckParserService(
+		gameEventsEmitter,
+		memoryUpdates,
+		memoryInspection,
+		allCards,
+		null, // FIXME: replace OW service with something else
+		deckHandler,
+		api as any as ApiRunner,
+		preferences,
+		gameStatus,
+		scene,
+		logFileBackend,
+	);
+	electronInjector.register(DeckParserService, deckParser);
+
+	const deckParserFacade = new DeckParserFacadeService(windowManager);
+	electronInjector.register(DeckParserFacadeService, deckParserFacade);
+
+	const overlayDisplay = new OverlayDisplayService(windowManager);
+	electronInjector.register(OverlayDisplayService, overlayDisplay);
+
+	const gameEventsElectron = new GameEventsElectronService();
+	electronInjector.register(GameEventsElectronService, gameEventsElectron);
+
+	const gameStateFacade = new GameStateFacadeService(windowManager);
+	electronInjector.register(GameStateFacadeService, gameStateFacade);
+
+	const gameId = new GameUniqueIdService(memoryInspection);
+	electronInjector.register(GameUniqueIdService, gameId);
+
+	const reviewId = new ReviewIdService(gameEventsEmitter);
+	electronInjector.register(ReviewIdService, reviewId);
+
+	const gameEventsFacade = new GameEventsFacadeService();
+	electronInjector.register(GameEventsFacadeService, gameEventsFacade);
+
+	const gameEvents = new GameEvents(
+		gameEventsElectron,
+		gameEventsEmitter,
+		scene,
+		gameStatus,
+		allCards,
+		gameStateFacade,
+		gameId,
+		gameEventsFacade,
+		null,
+	);
+	electronInjector.register(GameEvents, gameEvents);
+
+	const gameStateMetaInfos = new GameStateMetaInfoService();
+	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
+
+	// TODO: translation service
+	const i18n = new LocalizationStandaloneService(allCardsRaw, null);
+	electronInjector.register(LocalizationStandaloneService, i18n);
+	electronInjector.register(ILocalizationService, i18n);
+
+	const helper = new DeckManipulationHelper(allCards, i18n);
+	electronInjector.register(DeckManipulationHelper, helper);
+
+	const secretsParser = new SecretsParserService(helper, allCards);
+	electronInjector.register(SecretsParserService, secretsParser);
+
+	const aiDecks = new AiDeckService(api as any as ApiRunner);
+	electronInjector.register(AiDeckService, aiDecks);
+
+	const secretsConfig = new SecretConfigService(api as any as ApiRunner, allCards);
+	electronInjector.register(SecretConfigService, secretsConfig);
+
+	const patchesConfig = new PatchesConfigService(windowManager);
+	electronInjector.register(PatchesConfigService, patchesConfig);
+
+	// const customAppearance = new CustomAppearanceService(windowManager);
+	// electronInjector.register(CustomAppearanceService, customAppearance);
+
+	const bgsBoardHighlighter = new BgsBoardHighlighterService(windowManager);
+	electronInjector.register(BgsBoardHighlighterService, bgsBoardHighlighter);
+
+	const bgsInGameHeroSelectionGuardian = new BgsInGameHeroSelectionGuardianService(windowManager);
+	electronInjector.register(BgsInGameHeroSelectionGuardianService, bgsInGameHeroSelectionGuardian);
+
+	const bgsInGameQuests = new BgsInGameQuestsService(windowManager);
+	electronInjector.register(BgsInGameQuestsService, bgsInGameQuests);
+
+	const bgsInGameQuestsGuardian = new BgsInGameQuestsGuardianService(windowManager);
+	electronInjector.register(BgsInGameQuestsGuardianService, bgsInGameQuestsGuardian);
+
+	const bgsInGameTrinkets = new BgsInGameTrinketsService(windowManager);
+	electronInjector.register(BgsInGameTrinketsService, bgsInGameTrinkets);
+
+	const bgsInGameTrinketsGuardian = new BgsInGameTrinketsGuardianService(windowManager);
+	electronInjector.register(BgsInGameTrinketsGuardianService, bgsInGameTrinketsGuardian);
+
+	const bgsQuests = new BattlegroundsQuestsService(windowManager);
+	electronInjector.register(BattlegroundsQuestsService, bgsQuests);
+
+	const cardChoices = new CardChoicesService(windowManager);
+	electronInjector.register(CardChoicesService, cardChoices);
+
+	const constructedMetaDecksState = new ConstructedMetaDecksStateService(windowManager);
+	electronInjector.register(ConstructedMetaDecksStateService, constructedMetaDecksState);
+
+	const constructedArchetypeService = new ConstructedArchetypeService(api as any as ApiRunner, allCards);
+	electronInjector.register(ConstructedArchetypeService, constructedArchetypeService);
+
+	const constructedMulliganGuide = new ConstructedMulliganGuideService(windowManager);
+	electronInjector.register(ConstructedMulliganGuideService, constructedMulliganGuide);
+
+	const constructedArchetypes = new ConstructedArchetypeService(api as any as ApiRunner, allCards);
+	electronInjector.register(ConstructedArchetypeService, constructedArchetypes);
+
+	const gameStatsLoader = new GameStatsLoaderService(windowManager);
+	electronInjector.register(GameStatsLoaderService, gameStatsLoader);
+
+	const constructedArchetypesOthestrator = new ConstructedArchetypeServiceOrchestrator(
+		constructedArchetypes,
+		gameEventsEmitter,
+	);
+	electronInjector.register(ConstructedArchetypeServiceOrchestrator, constructedArchetypesOthestrator);
+
+	const arenaDraftManager = new ArenaDraftManagerService(windowManager);
+	electronInjector.register(ArenaDraftManagerService, arenaDraftManager);
+
+	const arenaMulliganGuide = new ArenaMulliganGuideService(windowManager);
+	electronInjector.register(ArenaMulliganGuideService, arenaMulliganGuide);
+
+	const gameNativeStateStore = new GameNativeStateStoreService(windowManager);
+	electronInjector.register(GameNativeStateStoreService, gameNativeStateStore);
+
+	const cardMousedOver = new CardMousedOverService(windowManager);
+	electronInjector.register(CardMousedOverService, cardMousedOver);
+
+	const ads: IAdsService = new StandaloneAdService(windowManager);
+	electronInjector.register(ADS_SERVICE_TOKEN, ads);
+
+	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
+	electronInjector.register(BattlegroundsOfficialLeaderboardService, bgsOfficialLeaderboard);
+
+	// TODO: use a real battle sim service
+	const battleExecutor = new BgsBattleSimulationMockExecutorService();
+	const simulation = new BgsBattleSimulationService(
+		api as any as ApiRunner,
+		allCards,
+		battleExecutor,
+		ads,
+		null, // BugReportService
+		preferences,
+		null, // BgsIntermediateResultsSimGuardianService
+	);
+	electronInjector.register(BgsBattleSimulationService, simulation);
+
+	const owUtils = new LowLevelUtilsElectronService();
+	electronInjector.register(OwUtilsService, owUtils as any as OwUtilsService);
+
+	const gameEventsParser = new GameStateParsersService(
+		helper,
+		allCards,
+		i18n,
+		aiDecks,
+		deckHandler,
+		memoryInspection,
+		owUtils as any as OwUtilsService,
+		preferences,
+		deckParser,
+		secretsConfig,
+		constructedArchetypesOthestrator,
+		gameEventsEmitter,
+		null, // BugReportService
+		null, // LogUploader
+		simulation,
+		ads,
+		gameId,
+		null, // BgsIntermediateResultsSimGuardianService
+		reviewId,
+	);
+
+	const bgsMatchPlayers = new BgsMatchPlayersMmrService(windowManager);
+	electronInjector.register(BgsMatchPlayersMmrService, bgsMatchPlayers);
+
+	const bgsMatchMemoryInfo = new BgsMatchMemoryInfoService(
+		memoryInspection,
+		gameStatus,
+		preferences,
+		bgsMatchPlayers,
+	);
+	electronInjector.register(BgsMatchMemoryInfoService, bgsMatchMemoryInfo);
+
+	const realTimeParsers = new RealTimeStatsParsersService(allCards);
+	electronInjector.register(RealTimeStatsParsersService, realTimeParsers);
+
+	const realTimeStats = new RealTimeStatsService(gameEventsEmitter, scene, realTimeParsers);
+	electronInjector.register(RealTimeStatsService, realTimeStats);
+
+	const gameState = new GameStateService(
+		gameEventsEmitter,
+		gameStateMetaInfos,
+		preferences,
+		null, // OverwolfService
+		secretsParser,
+		gameEventsParser,
+		overlayDisplay,
+		bgsMatchMemoryInfo,
+		realTimeStats,
+		simulation,
+	);
+	electronInjector.register(GameStateService, gameState);
+
+	const constructedMulliganGuardian = new ConstructedMulliganGuideGuardianService(windowManager);
+	electronInjector.register(ConstructedMulliganGuideGuardianService, constructedMulliganGuardian);
+
+	const constructedNavigation = new ConstructedNavigationService(windowManager);
+	electronInjector.register(ConstructedNavigationService, constructedNavigation);
+
+	const bgsTrinkets = new BattlegroundsTrinketsService(windowManager);
+	electronInjector.register(BattlegroundsTrinketsService, bgsTrinkets);
+
+	const userService = new StandaloneUserService(windowManager);
+	electronInjector.register(StandaloneUserService, userService);
+	electronInjector.register(UserService, userService as any as UserService);
+	electronInjector.register(USER_SERVICE_TOKEN, userService);
+
+	const diskCache = new ElectronDiskCacheService(preferences);
+	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
+
+	const arenaCardStats = new ArenaCardStatsService(windowManager);
+	electronInjector.register(ArenaCardStatsService, arenaCardStats);
+
+	const cardsHighlight = new CardsHighlightService(allCards, preferences, gameStateFacade, cardMousedOver);
+	electronInjector.register(CardsHighlightService, cardsHighlight);
+
+	const cardsHighlightFacade = new CardsHighlightFacadeService(cardsHighlight);
+	electronInjector.register(CardsHighlightFacadeService, cardsHighlightFacade);
+
+	const arenaClassStats = new ArenaClassStatsService(windowManager);
+	electronInjector.register(ArenaClassStatsService, arenaClassStats);
+
+	const arenaDeckStats = new ArenaDeckStatsService(windowManager);
+	electronInjector.register(ArenaDeckStatsService, arenaDeckStats);
+
+	const accountService = new AccountService(windowManager);
+	electronInjector.register(AccountService, accountService);
+
+	const questService = new QuestsService(windowManager);
+	electronInjector.register(QuestsService, questService);
+
+	return electronInjector;
+};

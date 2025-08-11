@@ -7,8 +7,14 @@ import {
 	PatchInfo,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { invertDirection, SimpleBarChartData, SortCriteria, SortDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
+import { SimpleBarChartData } from '@firestone/shared/common/view';
+import {
+	AbstractSubscriptionComponent,
+	groupByFunction,
+	invertDirection,
+	SortCriteria,
+	SortDirection,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';

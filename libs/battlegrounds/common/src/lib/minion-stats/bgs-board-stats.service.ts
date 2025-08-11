@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { BgsCardStats } from '@firestone-hs/bgs-global-stats';
+import { BattlegroundsCardsService } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -11,7 +12,6 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
-import { BattlegroundsCardsService } from '../cards/bgs-cards.service';
 
 @Injectable({ providedIn: 'root' })
 export class BgsBoardStatsService extends AbstractFacadeService<BgsBoardStatsService> {

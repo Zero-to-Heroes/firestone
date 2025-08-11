@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { PackInfo } from './pack-info';
+import { PackInfoForCollection as PackInfo } from '@firestone/memory';
 
 @Component({
 	standalone: false,

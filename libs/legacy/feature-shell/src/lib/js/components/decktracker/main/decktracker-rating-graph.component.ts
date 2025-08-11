@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ladderIntRankToString, ladderRankToInt } from '@firestone/game-state';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -11,7 +12,6 @@ import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
@@ -164,7 +164,7 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 			? GameStat.create({
 					...data[data.length - 1],
 					playerRank: data[data.length - 1].newPlayerRank,
-			  } as GameStat)
+				} as GameStat)
 			: null;
 		const dataWithCurrentMmr = fakeMatchWithCurrentMmr ? [...data, fakeMatchWithCurrentMmr] : data;
 		const dataWithTime = dataWithCurrentMmr.filter((stat) =>
@@ -179,7 +179,7 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 							playerRank: '0',
 						} as GameStat),
 						...dataWithTime.slice(1),
-				  ]
+					]
 				: dataWithTime;
 		let values: number[] = [];
 		let labels: readonly string[];

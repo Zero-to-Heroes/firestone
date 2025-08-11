@@ -10,9 +10,8 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -46,7 +45,6 @@ export class MercsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 	) {
@@ -54,18 +52,19 @@ export class MercsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,
-			this.store.listen$(
-				// Show from prefs
-				([main, nav, prefs]) => prefs.mercsShowQuestsWidget && prefs.enableQuestsWidget,
-				([main, nav, prefs]) => prefs.showQuestsInGame,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					displayFromPrefs: prefs.mercsShowQuestsWidget && prefs.enableQuestsWidget,
+					showQuestsInGame: prefs.showQuestsInGame,
+				})),
 			),
 		]).pipe(
-			this.mapData(([currentScene, lastNonGamePlayScene, [displayFromPrefs, showQuestsInGame]]) => {
+			this.mapData(([currentScene, lastNonGamePlayScene, { displayFromPrefs, showQuestsInGame }]) => {
 				if (!displayFromPrefs) {
 					return false;
 				}

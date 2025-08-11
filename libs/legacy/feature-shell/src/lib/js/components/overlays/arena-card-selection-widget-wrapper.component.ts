@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	Inject,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -12,9 +13,8 @@ import { ArenaDraftManagerService } from '@firestone/arena/common';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, mergeMap, of, takeUntil, tap } from 'rxjs';
-import { AdService } from '../../services/ad.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -44,7 +44,7 @@ export class ArenaCardSelectionWidgetWrapperComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly arenaDraftManager: ArenaDraftManagerService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { CorrectStartingHealthReq } from './correct-starting-health-req';
 
 describe('correct-starting-health-req', () => {
@@ -180,8 +180,8 @@ describe('correct-starting-health-req', () => {
 	});
 	test('req is intantiated with the correct format type', () => {
 		const rawReq: RawRequirement = {
-			'type': 'CORRECT_STARTING_HEALTH',
-			'values': ['ULDA_BOSS_39h', '300'],
+			type: 'CORRECT_STARTING_HEALTH',
+			values: ['ULDA_BOSS_39h', '300'],
 		};
 
 		const req = CorrectStartingHealthReq.create(rawReq);

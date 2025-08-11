@@ -1,6 +1,5 @@
+import { DamageGameEvent, GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
-import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { Requirement } from './_requirement';
 
 export class TotalDamageTakenReq implements Requirement {

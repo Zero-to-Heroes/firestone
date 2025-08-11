@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
+import { IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/services';
 import { BgsQuestCardChoiceOption } from '@firestone/game-state';
 import { BGS_QUESTS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import { ILocalizationService } from '@firestone/shared/framework/core';

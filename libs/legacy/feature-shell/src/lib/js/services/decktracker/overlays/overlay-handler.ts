@@ -1,7 +1,6 @@
 import { GameState } from '@firestone/game-state';
+import { GameEvent, GameStateEvent } from '@firestone/game-state';
 import { Preferences } from '@firestone/shared/common/service';
-import { GameStateEvent } from '../../../models/decktracker/game-state-event';
-import { GameEvent } from '../../../models/game-event';
 
 export interface OverlayHandler {
 	processEvent(

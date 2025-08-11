@@ -8,7 +8,6 @@ import { GameState } from '../../models/game-state';
 import { timeRafaamFablePackage } from '../../services/card-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
-import { CheckOffCard, CheckOffCardsListComponent, CheckOffCardsListConfig } from '../check-off-cards-list.component';
 
 export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 	uniqueRafaams: number;
@@ -20,7 +19,7 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [];
 
-	protected override advancedTooltipType = CheckOffCardsListComponent;
+	protected override advancedTooltipType = 'CheckOffCardsListComponent';
 
 	readonly player = {
 		pref: 'playerRafaamTimeCounter' as const,
@@ -94,7 +93,7 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 			const bCard = this.allCards.getCard(b);
 			return (aCard.cost ?? 0) - (bCard.cost ?? 0);
 		});
-		const config: CheckOffCardsListConfig = {
+		const config: any /*CheckOffCardsListConfig*/ = {
 			title: this.i18n.translateString('counters.rafaam-time.title'),
 			text: this.i18n.translateString(`counters.rafaam-time.${side}`, {
 				unique: value?.uniqueRafaams,
@@ -102,12 +101,11 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 			}),
 			cards:
 				sortedRafaams?.map((c) => {
-					const checkOffCard: CheckOffCard = {
+					return {
 						cardId: c,
 						checked: value?.playedRafaams.includes(c) ?? false,
 						quantity: 1,
 					};
-					return checkOffCard;
 				}) ?? [],
 		};
 		return config;

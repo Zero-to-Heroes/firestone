@@ -60,7 +60,9 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 			auditTime(500),
 			this.mapData((gameState) => gameState?.opponentDeck?.hand),
 			this.mapData((hand) =>
-				[...hand].sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION]),
+				hand
+					.map((c) => DeckCard.create(c))
+					.sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION]),
 			),
 			// Might be too expensive to use deepEqual here, as it will compare the whole hand
 			// distinctUntilChanged((a, b) => deepEq(a, b)),

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { TimeFilterOption } from '@firestone/battlegrounds/view';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';

@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { AllCardsService, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../models/deck-card';
-import { GameEvent } from '../../models/game-event';
 import { GameState } from '../../models/game-state';
+import { GameEvent } from '../game-events/game-event';
 import { ActionChainParser, ChainParsingCard } from './_card.type';
 
 export const LadyAzshara: ChainParsingCard = {
@@ -14,7 +14,7 @@ class LadyAzsharaParser implements ActionChainParser {
 	constructor(private readonly allCards: AllCardsService) {}
 
 	public appliesOnEvent(): GameEvent['type'] {
-		return /*GameEvent.SUB_SPELL_END*/ 'SUB_SPELL_END';
+		return GameEvent.SUB_SPELL_END;
 	}
 
 	public async parse(currentState: GameState, events: readonly GameEvent[]): Promise<GameState> {

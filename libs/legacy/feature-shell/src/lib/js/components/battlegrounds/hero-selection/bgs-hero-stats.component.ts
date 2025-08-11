@@ -1,7 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
 	BgsHeroAveragePositionDetails,
@@ -132,7 +132,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 					baseValue: value.averagePositionDetails.baseValue,
 					tribeModifiers: value.averagePositionDetails.tribesModifiers,
 					// anomalyModifiers: value.averagePositionDetails.anomalyModifiers,
-			  };
+				};
 	}
 
 	constructor(

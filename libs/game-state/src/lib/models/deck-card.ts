@@ -74,8 +74,8 @@ export class DeckCard {
 	readonly dredged?: boolean;
 	readonly forged: number = 0;
 	readonly createdByJoust?: boolean;
-	readonly linkedEntityIds?: readonly number[] = [];
-	readonly relatedCardIds?: readonly string[] = [];
+	readonly linkedEntityIds: readonly number[] = [];
+	readonly relatedCardIds: readonly string[] = [];
 	readonly creatorAdditionalInfo?: any;
 	// When an entity is "copied from" another entity, the game logs store the link only one way.
 	// This can be used to store the link in both ways, when we know about it

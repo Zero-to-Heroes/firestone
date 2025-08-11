@@ -1,5 +1,5 @@
+import { DamageGameEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { LotteryState } from '../lottery.model';
 import { LotteryProcessor } from './_processor';
 

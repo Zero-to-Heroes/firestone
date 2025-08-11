@@ -24,13 +24,12 @@ import {
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { GameStateFacadeService, isBattlegroundsScene } from '@firestone/game-state';
 import { BgsSceneService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';

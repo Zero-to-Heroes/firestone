@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { classes } from '@firestone/game-state';
 import { IOption } from '@firestone/shared/common/view';
 import { CollectionCardClassFilterType } from '@models/collection/filter-types';
-import { classes } from '@services/hs-utils';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

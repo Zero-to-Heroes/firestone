@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { TotalDamageTakenReq } from './total-damage-taken-req';
 
 describe('total-damage-taken-req', () => {
@@ -10,7 +10,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -27,7 +27,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 2, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 2, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -48,7 +48,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_01': { 'Damage': 2, 'TargetControllerId': 2 },
+					HERO_01: { Damage: 2, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -63,7 +63,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 2, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 2, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -80,7 +80,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -130,7 +130,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 2, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 2, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -161,7 +161,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 4, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 4, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -184,7 +184,7 @@ describe('total-damage-taken-req', () => {
 			localPlayer: { PlayerId: 2, CardID: 'HERO_07' },
 			additionalData: {
 				targets: {
-					'HERO_07': { 'Damage': 2, 'TargetControllerId': 2 },
+					HERO_07: { Damage: 2, TargetControllerId: 2 },
 				},
 			},
 		} as GameEvent);
@@ -197,8 +197,8 @@ describe('total-damage-taken-req', () => {
 
 	test('req is intantiated with the correct target damage', () => {
 		const rawReq: RawRequirement = {
-			'type': 'DAMAGE_AT_END',
-			'values': ['1'],
+			type: 'DAMAGE_AT_END',
+			values: ['1'],
 		};
 
 		const req = TotalDamageTakenReq.create(rawReq);

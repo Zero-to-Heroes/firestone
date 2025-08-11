@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { boosterIdToSetId } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { dustFor, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Set } from '../../models/set';
-import { dustFor, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';

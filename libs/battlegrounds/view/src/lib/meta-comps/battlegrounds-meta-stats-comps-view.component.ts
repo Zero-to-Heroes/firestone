@@ -13,8 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
-import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, SortCriteria, invertDirection } from '@firestone/shared/framework/common';
 import {
 	AnalyticsService,
 	CardsFacadeService,

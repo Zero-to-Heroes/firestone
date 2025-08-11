@@ -5,11 +5,11 @@ import {
 	buildQuestRewardStats,
 	buildQuestStats,
 } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsQuestsService } from '@firestone/battlegrounds/services';
 import { BgsQuestActiveTabType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { BattlegroundsQuestsService } from '../../services/bgs-quests.service';
 
 @Component({
 	standalone: false,

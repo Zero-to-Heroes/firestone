@@ -7,12 +7,12 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { dustFor } from '@firestone/game-state';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { cardPremiumToCardType } from '../../services/collection/cards-monitor.service';
-import { dustFor } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -105,7 +105,7 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 				this.cardName = history.premium
 					? this.i18n.translateString(`app.collection.card-history.${this.cardType.toLowerCase()}-card`, {
 							cardName: name,
-					  })
+						})
 					: name;
 
 				this.dustValue = dustFor(dbCard.rarity, this.cardType);

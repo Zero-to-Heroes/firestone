@@ -4,7 +4,8 @@ import { CardIds, GameType, TrinketSlot, defaultStartingHp } from '@firestone-hs
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsCardTooltipComponent, buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
+import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
+import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

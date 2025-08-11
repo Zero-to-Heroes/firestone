@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
 import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/game-state';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -103,7 +103,7 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreCo
 									statsForTurn.length > 0
 										? Math.round(
 												(10 * statsForTurn.reduce((a, b) => a + b, 0)) / statsForTurn.length,
-										  ) / 10
+											) / 10
 										: null,
 							};
 						});
@@ -112,7 +112,7 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreCo
 		return {
 			community: heroStat?.combatWinrate
 				?.filter((stat) => stat.turn > 0)
-				?.map((stat) => ({ turn: stat.turn, value: Math.round(10 * stat.winrate) / 10 } as NumericTurnInfo))
+				?.map((stat) => ({ turn: stat.turn, value: Math.round(10 * stat.winrate) / 10 }) as NumericTurnInfo)
 				.filter((stat) => stat)
 				.slice(0, 15),
 			your: your,

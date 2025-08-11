@@ -11,11 +11,10 @@ import {
 	Race,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
+import { VisualDeckCard, dustToCraftFor, getDefaultHeroDbfIdForClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { ConstructedConfigService } from '@legacy-import/src/lib/js/services/decktracker/constructed-config.service';
-import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';

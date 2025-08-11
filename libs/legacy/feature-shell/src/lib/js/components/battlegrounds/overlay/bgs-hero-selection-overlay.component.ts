@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Race, isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { Race, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import {
 	BgsInGameHeroSelectionGuardianService,
 	BgsPlayerHeroStatsService,
 	DEFAULT_MMR_PERCENTILE,
-} from '@firestone/battlegrounds/common';
-import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+} from '@firestone/battlegrounds/services';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
@@ -28,7 +28,7 @@ import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { AdService } from '../../../services/ad.service';
-import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
+import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

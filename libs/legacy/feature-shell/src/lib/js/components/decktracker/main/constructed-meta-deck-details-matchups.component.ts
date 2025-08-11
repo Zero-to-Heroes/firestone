@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
+import { classes } from '@firestone/game-state';
 import { buildPercents } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

@@ -1,11 +1,17 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ConstructedDiscoverCardData } from '@firestone-hs/constructed-deck-stats';
+import { VisualDeckCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, buildPercents, uuidShort } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	buildPercents,
+	invertDirection,
+	uuidShort,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -136,7 +142,7 @@ export class ConstructedMetaDeckDetailsDiscoverStatsComponent
 				showImpact
 					? this.i18n.translateString(
 							'app.decktracker.meta.details.cards.discovered-winrate-impact-header-tooltip',
-					  )
+						)
 					: this.i18n.translateString('app.decktracker.meta.details.cards.discovered-winrate-header-tooltip'),
 			),
 		);

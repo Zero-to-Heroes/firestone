@@ -1,7 +1,7 @@
 import { CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { QualifierType } from './_qualifier.type';
 import { Requirement } from './_requirement';
 

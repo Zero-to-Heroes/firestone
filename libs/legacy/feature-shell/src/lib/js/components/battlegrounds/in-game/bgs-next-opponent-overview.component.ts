@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import {
 	BgsFaceOffWithSimulation,
 	BgsNextOpponentOverviewPanel,

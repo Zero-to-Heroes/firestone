@@ -1,4 +1,4 @@
-import { GameStateEvent } from '../../../models/decktracker/game-state-event';
+import { GameStateEvent } from '@firestone/shared/common/service';
 
 export class ConstructedCloseWindowEvent implements GameStateEvent {
 	public static TYPE = 'CONSTRUCTED_CLOSE_WINDOW';

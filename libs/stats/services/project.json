@@ -1,0 +1,36 @@
+{
+	"name": "stats/services",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/stats/services/src",
+	"prefix": "lib",
+	"projectType": "library",
+	"tags": [],
+	"targets": {
+		"build": {
+			"executor": "@nx/angular:ng-packagr-lite",
+			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+			"options": {
+				"project": "libs/stats/services/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/stats/services/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/stats/services/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/stats/services/jest.config.ts"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint"
+		}
+	}
+}

@@ -2,6 +2,7 @@ import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-par
 import { CardIds, GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { QuestReward } from '@firestone/battlegrounds/core';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
@@ -68,7 +69,7 @@ export class BgsPlayer implements IBgsPlayer {
 				? 1
 				: this.tavernUpgradeHistory[this.tavernUpgradeHistory.length - 1].tavernTier;
 
-		return result;
+		return result ?? 0;
 	}
 
 	public getLastKnownBattleHistory(): BgsBattleHistory | null {
@@ -114,22 +115,15 @@ export class BgsPlayer implements IBgsPlayer {
 	}
 }
 
-export interface QuestReward {
-	readonly cardId: string;
-	readonly completed: boolean;
-	readonly completedTurn: number;
-	readonly isHeroPower: boolean;
-}
-
 export const buildBgsEntities = (
 	logEntities: readonly PlayerBoardEntity[],
 	allCards: CardsFacadeService,
-): (BoardEntity | null)[] => {
+): BoardEntity[] => {
 	if (!logEntities?.length) {
 		return [];
 	}
 
-	return logEntities.map((entity) => buildBgsEntity(entity, allCards));
+	return logEntities.map((entity) => buildBgsEntity(entity, allCards)).filter((entity) => entity !== null);
 };
 
 export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity | null => {

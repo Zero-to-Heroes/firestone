@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
-import { isMercenaries } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
-import { GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
+import {
+	GameEvent,
+	GameEventsEmitterService,
+	GameSettingsEvent,
+	GameStateFacadeService,
+	GameUniqueIdService,
+	HsGameMetaData,
+	ReviewIdService,
+} from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
@@ -20,14 +28,8 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { GameEvent } from '../../models/game-event';
-import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
-import { ReviewIdService } from '../review-id.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
 
@@ -268,7 +270,7 @@ export class EndGameListenerService {
 									bgNewRating: bgNewRating,
 									battlegroundsInfoAfterGameOver: bgMemoryInfo,
 									gameSettings: gameSettings,
-								} as UploadInfo),
+								}) as UploadInfo,
 						),
 						// tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
 						// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
@@ -325,13 +327,13 @@ export class EndGameListenerService {
 			info.battlegroundsInfoAfterGameOver.NewRating !== -1
 				? info.battlegroundsInfoAfterGameOver
 				: isBattlegrounds(info.metadata.GameType)
-				? await this.getBattlegroundsEndGame()
-				: null;
+					? await this.getBattlegroundsEndGame()
+					: null;
 		const newBgInfoWithRating: BattlegroundsInfo = !!newBgInfo
 			? {
 					...newBgInfo,
 					NewRating: bgNewRating ?? newBgInfo.NewRating,
-			  }
+				}
 			: null;
 		const xpForGame = await this.rewards.getXpForGameInfo();
 		console.log('[manastorm-bridge] read memory info');

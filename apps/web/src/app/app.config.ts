@@ -3,7 +3,6 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { CdkOverlayContainer, translationFileVersion } from '@firestone/shared/framework/common';
 import { PLAUSIBLE_DOMAIN } from '@firestone/shared/framework/core';

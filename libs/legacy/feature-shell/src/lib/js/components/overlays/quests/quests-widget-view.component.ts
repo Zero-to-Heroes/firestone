@@ -9,11 +9,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
+import { QuestsService } from '@firestone/app/services';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
 	standalone: false,
@@ -40,7 +40,7 @@ import { MainWindowStateFacadeService } from '../../../services/mainwindow/store
 				[ngClass]="{
 					visible: showQuestsDetails$ | async,
 					right: showRight$ | async,
-					bottom: showBottom$ | async
+					bottom: showBottom$ | async,
 				}"
 				[quests]="quests$ | async"
 				[theme]="theme"
@@ -57,7 +57,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 
 	@Input() rewardsTrackMatcher: (type: RewardTrackType) => boolean;
 	@Input() showPrefsExtractor: (prefs: Preferences) => boolean;
-	@Input() xpBonusExtractor: (state: MainWindowState, type: RewardTrackType) => number;
+	@Input() xpBonusExtractor: (state: QuestsService, type: RewardTrackType) => number;
 
 	quests$: Observable<readonly Quest[]>;
 	showQuests$: Observable<boolean>;
@@ -74,18 +74,23 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly prefs: PreferencesService,
-		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly questsService: QuestsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.prefs.isReady(), this.mainWindowState.isReady()]);
+		console.debug('QuestsWidgetViewComponent ngAfterContentInit');
+		await waitForReady(this.questsService);
+		console.debug('QuestsWidgetViewComponent questsService ready');
+		await waitForReady(this.prefs);
+		console.debug('QuestsWidgetViewComponent prefs ready');
+		await waitForReady(this.prefs, this.questsService);
+		console.debug('QuestsWidgetViewComponent ready');
 
-		this.quests$ = this.mainWindowState.mainWindowState$$.pipe(
-			this.mapData((state) => {
-				const referenceQuests = state.quests.getReferenceQuests();
-				const activeQuests = state.quests.activeQuests;
+		this.quests$ = combineLatest([this.questsService.referenceQuests$$, this.questsService.activeQuests$$]).pipe(
+			this.mapData(([referenceQuests, activeQuests]) => {
+				console.debug('QuestsWidgetViewComponent quests', referenceQuests, activeQuests);
 				return activeQuests?.Quests?.filter((q) => [QuestStatus.NEW, QuestStatus.ACTIVE].includes(q.Status))
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
@@ -98,7 +103,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 						}
 
 						const xpBonus = this.xpBonusExtractor
-							? this.xpBonusExtractor(state, refQuest.rewardTrackType)
+							? this.xpBonusExtractor(this.questsService, refQuest.rewardTrackType)
 							: 0;
 						const result: Quest = {
 							name: refQuest?.name ?? 'Unknown quest',

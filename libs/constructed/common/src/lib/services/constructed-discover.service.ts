@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
+import { ConstructedArchetypeService } from '@firestone/game-state';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { ConstructedArchetypeService } from './constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 
 @Injectable()
@@ -30,13 +30,27 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 		await waitForReady(this.constructedMetaStats);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'getStatsForInternal',
+			(deckstring: string, cardId: string, opponentClass: string, formatFilter: GameFormat) =>
+				this.getStatsForInternal(deckstring, cardId, opponentClass, formatFilter),
+		);
+	}
+
 	public async getStatsFor(
 		deckstring: string,
 		cardId: string,
 		opponentClass: string,
 		formatFilter: GameFormat,
 	): Promise<ConstructedCardStat | null> {
-		return this.mainInstance.getStatsForInternal(deckstring, cardId, opponentClass, formatFilter);
+		return this.callOnMainProcess<ConstructedCardStat | null>(
+			'getStatsForInternal',
+			deckstring,
+			cardId,
+			opponentClass,
+			formatFilter,
+		);
 	}
 
 	private async getStatsForInternal(

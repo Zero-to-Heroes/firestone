@@ -4,7 +4,7 @@ import {
 	BattlegroundsNavigationService,
 	BgsHeroStatsFilterId,
 	BgsPlayerHeroStatsService,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/services';
 import { BgsPlayer } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -101,7 +101,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 							displayedCardId: heroStat.id,
 							heroPowerCardId: heroStat.heroPowerCardId,
 							initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, heroStat.id, this.allCards),
-					  } as BgsPlayer),
+						} as BgsPlayer),
 			),
 		);
 

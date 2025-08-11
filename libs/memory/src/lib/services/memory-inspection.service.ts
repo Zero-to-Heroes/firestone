@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion, Board, SceneMode } from '@firestone-hs/reference-data';
-import { PackInfo } from '@firestone/collection/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { HsAchievementCategory, HsAchievementsInfo } from '../external-models/achievements-info';
 import { ArenaInfo } from '../external-models/arena-info';
 import { Card } from '../external-models/card';
@@ -16,6 +15,7 @@ import { MemoryMercenariesCollectionInfo } from '../models/memory-mercenaries-co
 import { MemoryMercenariesInfo } from '../models/memory-mercenaries-info';
 import { MemoryPlayerProfileInfo } from '../models/memory-profile-info';
 import { MemoryUpdate } from '../models/memory-update';
+import { PackInfoForCollection } from '../models/pack-info';
 import { MemoryQuestsLog } from '../models/quests';
 import { RewardsTrackInfos } from '../models/rewards-track-info';
 import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
@@ -61,58 +61,67 @@ export class MemoryInspectionService {
 	// 	'match_info', // For the GEP game ID
 	// ];
 
-	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVisionFacade, this.ow);
-	private getCollectionOperation = new GetCollectionOperation(this.mindVisionFacade, this.ow);
+	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVisionFacade, this.gameStatus);
+	private getCollectionOperation = new GetCollectionOperation(this.mindVisionFacade, this.gameStatus);
 	private getBattlegroundsOwnedHeroSkinDbfIdsOperation = new GetBattlegroundsOwnedHeroSkinDbfIdsOperation(
 		this.mindVisionFacade,
-		this.ow,
+		this.gameStatus,
 	);
-	private getCardBacksOperation = new GetCardBacksOperation(this.mindVisionFacade, this.ow);
-	private getCoinsOperation = new GetCoinsOperation(this.mindVisionFacade, this.ow);
-	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVisionFacade, this.ow);
-	private getBoardOperation = new GetBoardOperation(this.mindVisionFacade, this.ow);
-	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVisionFacade, this.ow);
-	private getBgsPlayerTeammateBoardOperation = new GetBgsPlayerTeammateBoardOperation(this.mindVisionFacade, this.ow);
-	private getBgsPlayerBoardOperation = new GetBgsPlayerBoardOperation(this.mindVisionFacade, this.ow);
+	private getCardBacksOperation = new GetCardBacksOperation(this.mindVisionFacade, this.gameStatus);
+	private getCoinsOperation = new GetCoinsOperation(this.mindVisionFacade, this.gameStatus);
+	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getBoardOperation = new GetBoardOperation(this.mindVisionFacade, this.gameStatus);
+	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getBgsPlayerTeammateBoardOperation = new GetBgsPlayerTeammateBoardOperation(
+		this.mindVisionFacade,
+		this.gameStatus,
+	);
+	private getBgsPlayerBoardOperation = new GetBgsPlayerBoardOperation(this.mindVisionFacade, this.gameStatus);
 	private getBattlegroundsSelectedModeOperation = new GetBattlegroundsSelectedModeOperation(
 		this.mindVisionFacade,
-		this.ow,
+		this.gameStatus,
 	);
-	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVisionFacade, this.ow);
+	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVisionFacade, this.gameStatus);
 	private getMercenariesCollectionInfoOperation = new GetMercenariesCollectionInfoOperation(
 		this.mindVisionFacade,
-		this.ow,
+		this.gameStatus,
 	);
-	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVisionFacade, this.ow);
-	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVisionFacade, this.ow);
-	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVisionFacade, this.ow);
-	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVisionFacade, this.ow);
-	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.ow);
-	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
-	private getArenaDeckOperation = new GetArenaDeckOperation(this.mindVisionFacade, this.ow);
-	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.ow);
-	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.ow);
-	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVisionFacade, this.ow);
-	private getAchievementCategoriesOperation = new GetAchievementCategoriesOperation(this.mindVisionFacade, this.ow);
+	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(
+		this.mindVisionFacade,
+		this.gameStatus,
+	);
+	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVisionFacade, this.gameStatus);
+	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVisionFacade, this.gameStatus);
+	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVisionFacade, this.gameStatus);
+	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.gameStatus);
+	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getArenaDeckOperation = new GetArenaDeckOperation(this.mindVisionFacade, this.gameStatus);
+	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getAchievementCategoriesOperation = new GetAchievementCategoriesOperation(
+		this.mindVisionFacade,
+		this.gameStatus,
+	);
 	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
 		this.mindVisionFacade,
-		this.ow,
+		this.gameStatus,
 	);
 	private getInGameAchievementsProgressInfoByIndexOperation = new GetInGameAchievementsProgressInfoByIndexOperation(
 		this.mindVisionFacade,
-		this.ow,
+		this.gameStatus,
 	);
-	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.ow);
-	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.ow);
-	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.ow);
-	private getGameUniqueIdOperation = new GetGameUniqueIdOperation(this.mindVisionFacade, this.ow);
-	private getRegionOperation = new GetRegionOperation(this.mindVisionFacade, this.ow);
-	private getAccountInfoOperation = new GetAccountInfoOperation(this.mindVisionFacade, this.ow);
+	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.gameStatus);
+	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.gameStatus);
+	private getProfileInfoOperation = new GetPlayerProfileInfoOperation(this.mindVisionFacade, this.gameStatus);
+	private getGameUniqueIdOperation = new GetGameUniqueIdOperation(this.mindVisionFacade, this.gameStatus);
+	private getRegionOperation = new GetRegionOperation(this.mindVisionFacade, this.gameStatus);
+	private getAccountInfoOperation = new GetAccountInfoOperation(this.mindVisionFacade, this.gameStatus);
 
 	private listenersRegistered: boolean;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
 		private readonly mindVisionFacade: MindVisionFacadeService,
 		private readonly mindVision: MindVisionStateMachineService,
 	) {}
@@ -232,7 +241,7 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getAchievementCategoriesOperation.call());
 	}
 
-	public async getBoostersInfo(): Promise<readonly PackInfo[] | null> {
+	public async getBoostersInfo(): Promise<readonly PackInfoForCollection[] | null> {
 		return this.mindVision.callMindVision(() => this.getBoostersInfoOperation.call());
 	}
 

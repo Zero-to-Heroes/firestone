@@ -1,5 +1,5 @@
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '@legacy-import/src/lib/js/models/mainwindow/main-window-state';

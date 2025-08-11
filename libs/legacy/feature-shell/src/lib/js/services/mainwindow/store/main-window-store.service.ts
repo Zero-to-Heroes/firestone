@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
@@ -103,8 +103,6 @@ import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/merc
 import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
-import { ActiveQuestsUpdatedEvent } from './events/quests/active-quests-updated-event';
-import { ReferenceQuestsLoadedEvent } from './events/quests/reference-quests-loaded-event';
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowReplaysEvent } from './events/replays/show-replays-event';
@@ -209,8 +207,6 @@ import { MercenariesToggleShowHiddenTeamsProcessor } from './processors/mercenar
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
-import { ActiveQuestsUpdatedProcessor } from './processors/quests/active-quests-updated-processor';
-import { ReferenceQuestsLoadedProcessor } from './processors/quests/reference-quests-loaded-processor';
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
@@ -387,12 +383,6 @@ export class MainWindowStoreService {
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(this.mainNavigation)],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
 			[LocalizationUpdateEvent.eventName(), new LocalizationUpdateProcessor(this.prefs, this.translate)],
-			[
-				// Quests
-				ReferenceQuestsLoadedEvent.eventName(),
-				new ReferenceQuestsLoadedProcessor(),
-			],
-			[ActiveQuestsUpdatedEvent.eventName(), new ActiveQuestsUpdatedProcessor(this.memoryReading)],
 			// Collection
 			[CollectionRefreshPacksEvent.eventName(), new CollectionRefreshPacksProcessor(this.packsService)],
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],

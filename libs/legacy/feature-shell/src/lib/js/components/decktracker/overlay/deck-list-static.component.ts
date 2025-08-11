@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
-import { Metadata } from '@firestone/game-state';
+import { CardsHighlightFacadeService, Metadata, VisualDeckCard } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -20,11 +20,19 @@ import {
 	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, map, take, takeUntil } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	map,
+	take,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { SetCard } from '../../../models/set';
 import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
-import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 
 @Component({
 	standalone: false,
@@ -142,6 +150,7 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 			.pipe(
 				filter((deckstring) => !!deckstring?.length),
 				this.mapData((deckstring) => buildCardsFromDeckstring(deckstring, this.allCards)),
+				tap((cards) => console.debug('[deck-list-static] built cards', cards)),
 			)
 			.subscribe(this.cards$$);
 		this.deckstring$$

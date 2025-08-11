@@ -9,15 +9,19 @@ import {
 	Output,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckState, getProcessedCard } from '@firestone/game-state';
+import {
+	cardTutors,
+	DeckState,
+	DeckZone,
+	DeckZoneSection,
+	getProcessedCard,
+	VisualDeckCard,
+} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { SetCard } from '../../../models/set';
-import { cardTutors } from '../../../services/hs-utils';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({

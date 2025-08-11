@@ -1,4 +1,4 @@
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';

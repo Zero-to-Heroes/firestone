@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CARDS_VERSION, isPreReleaseBuild } from '@firestone/game-state';
 import { DiskCacheService, GlobalErrorService, PreferencesService } from '@firestone/shared/common/service';
 import { distinctUntilChanged, map, skip } from 'rxjs';
-import { CARDS_VERSION, isPreReleaseBuild } from './hs-utils';
 
 @Injectable()
 export class CardsInitService {

@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, interval, startWith, Subscription, take } from 'rxjs';
 import { Preferences } from '../models/preferences';
 import { GameStatusService } from './game-status.service';
+import type { LogFileBackend } from './logs/log-file-backend';
+import { LOG_FILE_BACKEND } from './logs/log-file-backend';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()
@@ -12,7 +14,7 @@ export class LogUtilsService {
 	private watcherSub: Subscription;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 	) {
@@ -24,33 +26,42 @@ export class LogUtilsService {
 
 		this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
 			if (inGame) {
+				console.log('[log-utils] game is running, starting watcher');
 				this.watcherSub = interval(1000)
 					// Assume that after some time in game nothing will change
 					.pipe(startWith(0), take(20))
 					.subscribe(async () => {
-						const gameInfo = await this.ow.getRunningGameInfo();
+						const gameInfo = await this.backend.getRunningGameInfo();
 						const prefs = await this.prefs.getPreferences();
-						const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
+						const logsDir = await getLogsDir(this.backend, gameInfo, prefs);
+						console.log('[log-utils] logs dir', logsDir);
 						this.logsDirRoot$$.next(logsDir);
 					});
 			} else {
+				console.log('[log-utils] game is not running, stopping watcher');
 				this.watcherSub?.unsubscribe();
 			}
 		});
 	}
 }
 
+type LogBackendLike = LogFileBackend | OverwolfService;
+
 export const getLogsDir = async (
-	ow: OverwolfService,
+	backend: LogBackendLike,
 	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo | null,
 	prefs: Preferences,
 ): Promise<string | null> => {
 	if (!gameInfo) {
 		return null;
 	}
-	const gameBaseDir = await getGameBaseDir(ow, gameInfo, prefs);
+	const adapter = backend as LogFileBackend;
+	const gameBaseDir = await getGameBaseDir(adapter, gameInfo, prefs);
+	if (!gameBaseDir) {
+		return null;
+	}
 	const logsBaseDir = gameBaseDir + 'Logs';
-	const filesInLogsDir = (await ow.listFilesInDirectory(logsBaseDir))?.data ?? [];
+	const filesInLogsDir = (await adapter.listFilesInDirectory(logsBaseDir))?.data ?? [];
 
 	let latestDir: string | undefined;
 	let latestTimestamp: number | undefined;
@@ -87,14 +98,14 @@ export const getLogsDir = async (
 };
 
 export const getGameBaseDir = async (
-	ow: OverwolfService,
+	backend: LogFileBackend,
 	gameInfo: overwolf.games.GetRunningGameInfoResult | overwolf.games.RunningGameInfo,
 	prefs: Preferences,
 ): Promise<string | undefined> => {
-	gameInfo = gameInfo ?? (await ow.getRunningGameInfo());
+	gameInfo = gameInfo ?? (await backend.getRunningGameInfo());
 	let baseDir: string | undefined = extractBaseDirFromPath(gameInfo?.executionPath);
 	if (!baseDir?.length) {
-		const gameDbInfo = await ow.getGameDbInfo();
+		const gameDbInfo = await backend.getGameDbInfo();
 		baseDir = extractBaseDirFromPath(gameDbInfo?.installedGameInfo?.LauncherPath);
 	}
 	if (!baseDir?.length) {

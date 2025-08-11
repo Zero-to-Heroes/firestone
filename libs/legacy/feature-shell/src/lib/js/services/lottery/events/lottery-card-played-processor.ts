@@ -1,6 +1,6 @@
 import { CardType, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { LotteryState } from '../lottery.model';
 import { LotteryProcessor } from './_processor';
 

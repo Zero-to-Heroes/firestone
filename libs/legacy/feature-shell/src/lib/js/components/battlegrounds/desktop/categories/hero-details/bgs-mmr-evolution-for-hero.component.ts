@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { isBattlegrounds } from '@firestone/game-state';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { ChartData } from 'chart.js';
 import { combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { isBattlegrounds } from '../../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';

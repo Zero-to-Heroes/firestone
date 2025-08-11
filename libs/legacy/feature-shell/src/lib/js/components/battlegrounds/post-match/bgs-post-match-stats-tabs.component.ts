@@ -1,13 +1,17 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { BgsFaceOffWithSimulation, BgsPostMatchStatsPanel, BgsStatsFilterId } from '@firestone/game-state';
+import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
+import {
+	BgsFaceOffWithSimulation,
+	BgsPostMatchStatsPanel,
+	BgsStatsFilterId,
+	isSupportedScenario,
+} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { isSupportedScenario } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

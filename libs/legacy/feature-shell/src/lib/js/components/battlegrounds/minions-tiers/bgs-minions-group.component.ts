@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, TierGroup } from '@firestone/battlegrounds/core';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';

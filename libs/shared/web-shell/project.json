@@ -7,7 +7,7 @@
 	"tags": [],
 	"targets": {
 		"build": {
-			"executor": "@nx/angular:ng-packagr-lite",
+			"executor": "@nx/angular:package",
 			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
 			"options": {
 				"project": "libs/shared/web-shell/ng-package.json"

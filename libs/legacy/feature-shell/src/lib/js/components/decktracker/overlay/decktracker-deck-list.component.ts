@@ -13,12 +13,10 @@ import {
 } from '@angular/core';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, GameFormat } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { DeckCard, DeckState, getDefaultHeroDbfIdForClass, VisualDeckCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
-import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SetCard } from '../../../models/set';
 

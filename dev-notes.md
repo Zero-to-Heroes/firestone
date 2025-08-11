@@ -13,3 +13,10 @@ However, the number doesn't seem to grow (signficantly, if at all), so I guess i
 ## Misc
 
 ngx-color-picker doesn't work with the latest version, you need @14
+
+## `Cannot destructure property 'pos' of 'file.referencedFiles[index]'`
+
+Check for relative imports across libs
+Check the tsconfig, project and package files (use @firestone/memory as a base)
+Check the path matches the package name and project name in tsconfig.base.json
+Might need to simply restart the build if all the above look good

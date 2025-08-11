@@ -1,13 +1,13 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { HsAchievementsInfo } from '../../../external-models/achievements-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
 
 export class GetInGameAchievementsProgressInfoByIndexOperation extends MindVisionOperationFacade<HsAchievementsInfo> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getInGameAchievementsProgressInfo',
 			(forceReset?: boolean, achievementIds?: readonly number[]) =>
 				mindVision.getInGameAchievementsProgressInfoByIndex(achievementIds ?? []),
@@ -20,7 +20,7 @@ export class GetInGameAchievementsProgressInfoByIndexOperation extends MindVisio
 						completed: undefined,
 						index: ach.Index,
 					})),
-				} as HsAchievementsInfo),
+				}) as HsAchievementsInfo,
 			2,
 			1000,
 		);

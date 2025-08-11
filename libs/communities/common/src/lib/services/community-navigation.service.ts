@@ -33,8 +33,14 @@ export class CommunityNavigationService extends AbstractFacadeService<CommunityN
 		await waitForReady(this.joinService);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('changeCategoryInternal', (category: ComunitiesCategory) =>
+			this.changeCategoryInternal(category),
+		);
+	}
+
 	public changeCategory(category: ComunitiesCategory) {
-		this.mainInstance.changeCategoryInternal(category);
+		void this.callOnMainProcess('changeCategoryInternal', category);
 	}
 
 	private changeCategoryInternal(category: ComunitiesCategory) {

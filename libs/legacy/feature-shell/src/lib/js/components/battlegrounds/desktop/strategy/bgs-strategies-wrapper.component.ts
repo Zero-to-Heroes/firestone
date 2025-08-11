@@ -1,13 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { LocalizedBgsHeroCurve, LocalizedBgsHeroCurveStep, Strategy } from '@firestone/battlegrounds/common';
 import {
 	BgsHeroCurveActionExtended,
 	BgsHeroStratTip,
 	BgsMetaHeroStrategiesService,
-	LocalizedBgsHeroCurve,
-	LocalizedBgsHeroCurveStep,
-	Strategy,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/services';
 import {
 	ExpertContributor,
 	ExpertContributorsService,

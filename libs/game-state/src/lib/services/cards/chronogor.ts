@@ -1,10 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
+import { CardIds } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const Chronogor: GeneratingCard = {
 	cardIds: [CardIds.Chronogor_TIME_032],

@@ -12,9 +12,6 @@ import { MarkdownModule } from 'ngx-markdown';
 import { NewVersionNotificationComponent } from './components/new-version-notification.component';
 import { PremiumDesktopComponent } from './premium/premium-desktop.component';
 import { PremiumPackageComponent } from './premium/premium-package.component';
-import { GameNativeStateStoreService } from './services/game-native-state-store.service';
-import { LocalizationLoaderWithCache } from './services/localization-loader.service';
-import { HsLogsWatcherService } from './services/logs/hs-logs-watcher.service';
 
 const components = [NewVersionNotificationComponent, PremiumDesktopComponent, PremiumPackageComponent];
 @NgModule({
@@ -34,6 +31,6 @@ const components = [NewVersionNotificationComponent, PremiumDesktopComponent, Pr
 	],
 	declarations: components,
 	exports: components,
-	providers: [LocalizationLoaderWithCache, HsLogsWatcherService, GameNativeStateStoreService],
+	providers: [],
 })
 export class AppCommonModule {}

@@ -6,7 +6,7 @@ export class BgsNextOpponentOverviewPanel implements BgsPanel {
 	readonly id: BgsPanelId = 'bgs-next-opponent-overview';
 	readonly name: string;
 	readonly icon: string;
-	readonly opponentOverview: BgsOpponentOverview;
+	readonly opponentOverview: BgsOpponentOverview | undefined;
 
 	public static create(base: BgsNextOpponentOverviewPanel): BgsNextOpponentOverviewPanel {
 		return Object.assign(new BgsNextOpponentOverviewPanel(), base);

@@ -13,7 +13,6 @@ import { CurrentAppType, PreferencesService } from '@firestone/shared/common/ser
 import { AnalyticsService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { AdService } from '../services/ad.service';
-import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
@@ -246,7 +245,6 @@ export class MenuSelectionComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly userService: UserService,
 		private readonly ads: AdService,

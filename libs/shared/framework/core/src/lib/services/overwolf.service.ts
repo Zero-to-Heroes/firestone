@@ -43,7 +43,8 @@ export class OverwolfService {
 	}
 
 	public getMainWindow(): any {
-		// When dealing with the website / SPA without overwolf, the main window is simply the current window (since there is only one window)
+		// When dealing with the website, the main window is simply the current window (since there is only one window)
+		// On electron, we don't have a window
 		return this.isOwEnabled() ? overwolf.windows.getMainWindow() : window;
 	}
 
@@ -101,12 +102,18 @@ export class OverwolfService {
 
 	public addGameInfoUpdatedListener(
 		callback: (message: overwolf.games.GameInfoUpdatedEvent) => void,
-	): (message: overwolf.games.GameInfoUpdatedEvent) => void {
+	): ((message: overwolf.games.GameInfoUpdatedEvent) => void) | null {
+		if (!this.isOwEnabled()) {
+			return null;
+		}
 		overwolf.games.onGameInfoUpdated.addListener(callback);
 		return callback;
 	}
 
 	public removeGameInfoUpdatedListener(listener: (message: any) => void): void {
+		if (!this.isOwEnabled()) {
+			return;
+		}
 		overwolf.games.onGameInfoUpdated.removeListener(listener);
 	}
 

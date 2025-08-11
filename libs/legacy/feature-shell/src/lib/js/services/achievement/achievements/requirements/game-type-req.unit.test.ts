@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { GameTypeReq } from './game-type-req';
 
 describe('game-type-req', () => {
@@ -71,8 +71,8 @@ describe('game-type-req', () => {
 
 	test('req is intantiated with the correct cardId', () => {
 		const rawReq: RawRequirement = {
-			'type': 'GAME_TYPE',
-			'values': ['5', '6'],
+			type: 'GAME_TYPE',
+			values: ['5', '6'],
 		};
 
 		const req = GameTypeReq.create(rawReq);

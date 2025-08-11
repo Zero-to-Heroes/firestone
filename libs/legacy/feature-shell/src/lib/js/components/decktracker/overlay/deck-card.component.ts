@@ -5,26 +5,35 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
+	Inject,
 	Input,
 	OnDestroy,
 	Optional,
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
+	CardsHighlightFacadeService,
+	cardTutors,
+	DeckZone,
+	Handler,
+	relatedCardIdsSelectorSort,
+	SelectorOutput,
+	VisualDeckCard,
+} from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
-import { CardsFacadeService, HighlightSide, waitForReady } from '@firestone/shared/framework/core';
-import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
+import {
+	ADS_SERVICE_TOKEN,
+	CardsFacadeService,
+	HighlightSide,
+	IAdsService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { AdService } from '../../../services/ad.service';
-import { relatedCardIdsSelectorSort } from '../../../services/decktracker/card-highlight/card-id-selector-sort';
-import { Handler, SelectorOutput } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
-import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES } from '../../../services/decktracker/card-highlight/merged-highlights';
-import { cardTutors } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -299,7 +308,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
 		private readonly cardMouseOverService: CardMousedOverService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
@@ -522,6 +531,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this._referenceCard?.hideStats || card.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
 		this.cardName = this.buildCardName(card, showStatsChange);
+		// console.debug('updateInfos', this.cardName, this.cardId, this.cards.getCard(this.cardId));
 		this.isUnknownCard = !card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = card.totalQuantity;

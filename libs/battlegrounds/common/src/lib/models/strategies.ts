@@ -1,4 +1,4 @@
-import { BgsHeroCurve, BgsHeroCurveStep } from '../services/bgs-meta-hero-strategies.service';
+import { BgsHeroCurve, BgsHeroCurveStep } from '@firestone/battlegrounds/services';
 
 export interface Strategy {
 	readonly date: string;

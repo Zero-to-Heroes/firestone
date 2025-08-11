@@ -1,12 +1,12 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { HsAchievementsInfo } from '../../../external-models/achievements-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetAchievementsInfoOperation extends MindVisionOperationFacade<HsAchievementsInfo> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getAchievementsInfo',
 			() => mindVision.getAchievementsInfo(),
 			(info: InternalHsAchievementsInfo) => !info?.Achievements?.length,
@@ -17,7 +17,7 @@ export class GetAchievementsInfoOperation extends MindVisionOperationFacade<HsAc
 						progress: ach.Progress,
 						completed: [2, 4].includes(ach.Status),
 					})),
-				} as HsAchievementsInfo),
+				}) as HsAchievementsInfo,
 			5,
 			3000,
 		);

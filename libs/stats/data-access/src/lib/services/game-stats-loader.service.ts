@@ -16,9 +16,12 @@ import {
 	ApiRunner,
 	AppInjector,
 	CardsFacadeService,
-	IndexedDbService,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
+	IUserService,
 	MATCH_HISTORY,
-	OverwolfService,
+	USER_SERVICE_TOKEN,
+	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, filter } from 'rxjs';
@@ -34,15 +37,16 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private patchInfo: PatchInfo;
 
 	private api: ApiRunner;
-	private ow: OverwolfService;
+	// private ow: OverwolfService;
 	private prefs: PreferencesService;
 	private allCards: CardsFacadeService;
 	private diskCache: DiskCacheService;
 	private patchesConfig: PatchesConfigService;
-	private indexedDb: IndexedDbService;
+	private indexedDb: IDatabaseService;
+	private user: IUserService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
+		super(windowManager, 'GameStatsLoaderService', () => !!this.gameStats$$);
 	}
 
 	protected override assignSubjects() {
@@ -52,14 +56,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	protected async init() {
 		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
 		this.api = AppInjector.get(ApiRunner);
-		this.ow = AppInjector.get(OverwolfService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
-		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
+		this.user = AppInjector.get(USER_SERVICE_TOKEN);
 
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.user);
 
 		this.gameStats$$.onFirstSubscribe(async () => {
 			console.debug('[game-stats-loader] first subscriber, loading stats');
@@ -80,6 +84,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			const lastPatch = config.patches[config.patches.length - 1];
 			this.patchInfo = lastPatch;
 		});
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.gameStats$$, 'GameStatsLoaderService-gameStats');
 	}
 
 	public async addGame(game: GameStat) {
@@ -128,10 +140,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		}
 	}
 
-	public async clearGames() {
-		await this.mainInstance.clearGamesInternal();
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('clearGamesInternal', () => this.clearGamesInternal());
+		this.registerMainProcessMethod('fullRefreshInternal', () => this.fullRefreshInternal());
 	}
 
+	public async clearGames() {
+		await this.callOnMainProcess('clearGamesInternal');
+	}
 	private async clearGamesInternal() {
 		console.log('[game-stats-loader] clearing games');
 		await this.saveLocalStats([]);
@@ -140,9 +156,8 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	public async fullRefresh() {
-		await this.mainInstance.fullRefreshInternal();
+		await this.callOnMainProcess('fullRefreshInternal');
 	}
-
 	private async fullRefreshInternal() {
 		console.log('[game-stats-loader] triggering full refresh');
 		const stats = await this.refreshGameStats(true);
@@ -150,7 +165,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	private async refreshGameStats(fullRetrieve: boolean) {
-		const user = await this.ow.getCurrentUser();
+		const user = await this.user.getCurrentUser();
 		const prefs = await this.prefs.getPreferences();
 		const input = {
 			userId: user.userId,

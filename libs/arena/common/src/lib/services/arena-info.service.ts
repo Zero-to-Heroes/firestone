@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isArena, SceneMode } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { ArenaInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { sleep } from '@firestone/shared/framework/common';
-import { BehaviorSubject, filter } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
 
 @Injectable()
 export class ArenaInfoService {
 	public arenaInfo$$ = new BehaviorSubject<ArenaInfo | null>(null);
 
-	constructor(private readonly memory: MemoryInspectionService, private readonly scene: SceneService) {
+	constructor(
+		private readonly memory: MemoryInspectionService,
+		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
+	) {
 		this.init();
 	}
 
@@ -18,6 +23,17 @@ export class ArenaInfoService {
 		this.scene.currentScene$$
 			.pipe(filter((scene) => scene === SceneMode.DRAFT))
 			.subscribe(() => this.triggerArenaInfoRetrieve(false));
+
+		this.gameState.gameState$$
+			.pipe(
+				map((state) => ({ gameType: state?.metadata?.gameType, spectating: state?.spectating })),
+				distinctUntilChanged((a, b) => a.gameType === b.gameType && a.spectating === b.spectating),
+			)
+			.subscribe(({ gameType, spectating }) => {
+				if (isArena(gameType)) {
+					this.triggerArenaInfoRetrieve(spectating);
+				}
+			});
 	}
 
 	public async forceRetrieveArenaInfo(): Promise<ArenaInfo | null> {

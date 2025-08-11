@@ -8,6 +8,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { BattlegroundsCompsService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import { BgsMetaCompStatTierItem, buildCompStats } from '@firestone/battlegrounds/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -22,8 +23,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { BgsMetaCompositionStrategiesService } from '../services/bgs-meta-composition-strategies.service';
-import { BattlegroundsCompsService } from './bgs-comps.service';
 
 @Component({
 	standalone: false,

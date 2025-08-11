@@ -3,7 +3,7 @@ import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-
 import { ReviewMessage } from '@firestone-hs/build-global-stats/dist/review-message';
 import { extractStatsForGame, mergeStats } from '@firestone-hs/build-global-stats/dist/stats-builder';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { GameForUpload } from '@firestone/stats/common';
+import { GameForUpload } from '@firestone/stats/services';
 import { Events } from '../events.service';
 import { GlobalStatsUpdatedEvent } from '../mainwindow/store/events/stats/global/global-stats-updated-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';

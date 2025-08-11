@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { QuestsService } from '@firestone/app/services';
 import { Preferences } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 
 @Component({
 	standalone: false,
@@ -29,6 +29,6 @@ export class HsQuestsWidgetComponent {
 		// type !== RewardTrackType.NONE &&
 		type !== RewardTrackType.BATTLEGROUNDS;
 	showPrefsExtractor: (prefs: Preferences) => boolean = (prefs) => prefs.hsShowQuestsWidget;
-	xpBonusExtractor: (state: MainWindowState, type: RewardTrackType) => number = (state, type) =>
-		type === RewardTrackType.GLOBAL ? state.quests.xpBonus : 0;
+	xpBonusExtractor: (state: QuestsService, type: RewardTrackType) => number = (state, type) =>
+		type === RewardTrackType.GLOBAL ? state.xpBonus : 0;
 }

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { CardDrawnOrReceivedInHandReq } from './card-drawn-or-received-in-hand-req';
 
 describe('card-drawn-or-received-in-hand-req for CARD_DRAW_FROM_DECK event', () => {
@@ -146,8 +146,8 @@ test('card-drawn-or-received-in-hand-req isnt completed after afterAchievementCo
 
 test('card-drawn-or-received-in-hand-req is intantiated with the correct cardId', () => {
 	const rawReq: RawRequirement = {
-		'type': 'CARD_DRAWN_OR_RECEIVED_IN_HAND',
-		'values': ['DALA_701'],
+		type: 'CARD_DRAWN_OR_RECEIVED_IN_HAND',
+		values: ['DALA_701'],
 	};
 
 	const req = CardDrawnOrReceivedInHandReq.create(rawReq);

@@ -8,8 +8,7 @@ import {
 	buildTrinketTiers,
 } from '@firestone/battlegrounds/data-access';
 import { BgsTrinketActiveTabType } from '@firestone/shared/common/service';
-import { SortCriteria } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
 

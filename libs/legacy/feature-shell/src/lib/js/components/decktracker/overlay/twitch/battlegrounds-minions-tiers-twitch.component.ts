@@ -15,6 +15,7 @@ import {
 	BuildTierGameState,
 	BuildTierOptions,
 	MinionInfo,
+	QuestReward,
 	Tier,
 	buildTiers,
 	enhanceTiers,
@@ -22,7 +23,7 @@ import {
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
-import { GameState, QuestReward } from '@firestone/game-state';
+import { GameState } from '@firestone/game-state';
 import {
 	CardRulesService,
 	CardsFacadeService,

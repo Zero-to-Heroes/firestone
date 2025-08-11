@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegrounds, SceneMode } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService, ShopMinion } from '@firestone/battlegrounds/common';
+import { BgsBoardHighlighterService, ShopMinion } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';

@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { classes } from '@firestone/game-state';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { classes } from '../../../../services/hs-utils';
 import { ConstructedDeckbuilderClassSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-class-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -21,7 +21,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 					role="listitem"
 					tabindex="0"
 					*ngFor="
-						let playerClass of classOptions$ | async | slice: row.startIndex:row.startIndex + row.items;
+						let playerClass of classOptions$ | async | slice: row.startIndex : row.startIndex + row.items;
 						trackBy: trackByCardId
 					"
 					(click)="onCardClicked(playerClass)"
@@ -76,7 +76,7 @@ export class ConstructedDeckbuilderClassComponent
 									(c) =>
 										c.toUpperCase() !== CardClass[CardClass.DEMONHUNTER] &&
 										c.toUpperCase() !== CardClass[CardClass.DEATHKNIGHT],
-							  )
+								)
 							: classes;
 					console.debug('valid classes', validClasses, currentFormat);
 					return validClasses.map((playerClass) => {

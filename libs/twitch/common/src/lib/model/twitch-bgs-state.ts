@@ -1,6 +1,7 @@
 import { Race } from '@firestone-hs/reference-data';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { BgsBattleHistory, BgsComposition, BgsTavernUpgrade, BgsTriple, QuestReward } from '@firestone/game-state';
+import { QuestReward } from '@firestone/battlegrounds/core';
+import { BgsBattleHistory, BgsComposition, BgsTavernUpgrade, BgsTriple } from '@firestone/game-state';
 
 export interface TwitchBgsState {
 	readonly leaderboard: readonly TwitchBgsPlayer[];

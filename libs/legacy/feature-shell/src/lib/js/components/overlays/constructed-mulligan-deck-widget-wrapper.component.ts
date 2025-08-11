@@ -10,7 +10,7 @@ import {
 import { ConstructedMulliganGuideService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -61,9 +61,12 @@ export class ConstructedMulliganDeckWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
+		console.debug('[debug] constructed-mulligan-deck-widget-wrapper ngAfterContentInit');
 		await this.mulliganGuide.isReady();
+		console.debug('[debug] constructed-mulligan-deck-widget-wrapper isReady');
 
 		this.showWidget$ = this.mulliganGuide.mulliganAdvice$$.pipe(
+			tap((info) => console.debug('[debug] constructed-mulligan-deck-widget-wrapper mulliganAdvice', info)),
 			this.mapData((advice) => !!advice),
 			this.handleReposition(),
 		);

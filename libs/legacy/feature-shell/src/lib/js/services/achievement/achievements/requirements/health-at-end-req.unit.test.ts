@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { HealthAtEndReq } from './health-at-end-req';
 
 describe('health-at-end-req', () => {
@@ -138,8 +138,8 @@ describe('health-at-end-req', () => {
 
 	test('req is intantiated with the correct info', () => {
 		const rawReq: RawRequirement = {
-			'type': 'HEALTH_AT_END',
-			'values': ['1', 'AT_MOST'],
+			type: 'HEALTH_AT_END',
+			values: ['1', 'AT_MOST'],
 		};
 
 		const req = HealthAtEndReq.create(rawReq);

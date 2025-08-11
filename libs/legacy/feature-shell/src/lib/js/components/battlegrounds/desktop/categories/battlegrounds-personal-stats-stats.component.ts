@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
-import { BgsBestUserStatsService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-best-user-stats.service';
+import { BgsBestUserStatsService } from '@firestone/game-state';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';

@@ -1,0 +1,36 @@
+{
+	"name": "battlegrounds/services",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/battlegrounds/services/src",
+	"prefix": "lib",
+	"projectType": "library",
+	"tags": [],
+	"targets": {
+		"build": {
+			"executor": "@nx/angular:ng-packagr-lite",
+			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+			"options": {
+				"project": "libs/battlegrounds/services/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/battlegrounds/services/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/battlegrounds/services/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/battlegrounds/services/jest.config.ts"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint"
+		}
+	}
+}

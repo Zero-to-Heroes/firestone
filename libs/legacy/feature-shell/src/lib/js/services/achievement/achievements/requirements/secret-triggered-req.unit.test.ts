@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { SecretTriggeredReq } from './secret-triggered-req';
 
 describe('secret-triggered-req', () => {
@@ -44,8 +44,8 @@ describe('secret-triggered-req', () => {
 	});
 	test('req is intantiated with the correct format type', () => {
 		const rawReq: RawRequirement = {
-			'type': 'SECRET_TRIGGER',
-			'values': ['ULDA_045'],
+			type: 'SECRET_TRIGGER',
+			values: ['ULDA_045'],
 			individualRestEvents: ['TURN_START'],
 		};
 

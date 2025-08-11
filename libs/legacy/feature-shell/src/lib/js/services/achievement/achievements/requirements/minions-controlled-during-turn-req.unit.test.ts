@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent, GameState } from '../../../../models/game-event';
 import { MinionsControlledDuringTurnReq } from './minions-controlled-during-turn-req';
 
 describe('minions-controlled-during-turn-req', () => {
@@ -8,11 +8,11 @@ describe('minions-controlled-during-turn-req', () => {
 			const req = new MinionsControlledDuringTurnReq('ULD_703', 3, 'AT_LEAST');
 			const event = Object.assign(new GameEvent(), {
 				type: 'whatever-event-with-gameState',
-				gameState: ({
+				gameState: {
 					Player: {
 						Board: [{ cardId: 'ULD_703' }, { cardId: 'ULD_703' }, { cardId: 'ULD_703' }],
 					},
-				} as unknown) as GameState,
+				} as unknown as GameState,
 			} as GameEvent);
 
 			req.test(event);
@@ -24,11 +24,11 @@ describe('minions-controlled-during-turn-req', () => {
 			const req = new MinionsControlledDuringTurnReq('ULD_703', 1, 'AT_LEAST');
 			const event = Object.assign(new GameEvent(), {
 				type: 'whatever-event-with-gameState',
-				gameState: ({
+				gameState: {
 					Player: {
 						Board: [{ cardId: 'ULD_703' }, { cardId: 'ULD_703' }, { cardId: 'ULD_703' }],
 					},
-				} as unknown) as GameState,
+				} as unknown as GameState,
 			} as GameEvent);
 
 			req.test(event);
@@ -40,11 +40,11 @@ describe('minions-controlled-during-turn-req', () => {
 			const req = new MinionsControlledDuringTurnReq('ULD_703', 3, 'AT_LEAST');
 			const event = Object.assign(new GameEvent(), {
 				type: 'whatever-event-with-gameState',
-				gameState: ({
+				gameState: {
 					Player: {
 						Board: [{ cardId: 'ULD_703' }],
 					},
-				} as unknown) as GameState,
+				} as unknown as GameState,
 			} as GameEvent);
 
 			req.test(event);
@@ -66,8 +66,8 @@ describe('minions-controlled-during-turn-req', () => {
 
 	test('req is intantiated with the correct info', () => {
 		const rawReq: RawRequirement = {
-			'type': 'MINIONS_CONTROLLED_DURING_TURN',
-			'values': ['ULD_703', '1', 'AT_LEAST'],
+			type: 'MINIONS_CONTROLLED_DURING_TURN',
+			values: ['ULD_703', '1', 'AT_LEAST'],
 		};
 
 		const req = MinionsControlledDuringTurnReq.create(rawReq);

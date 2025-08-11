@@ -2,8 +2,7 @@
 
 import { BgsCardStat } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
-import { SortCriteria } from '@firestone/shared/common/view';
-import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
+import { getStandardDeviation, sortByProperties, SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { isBgsTimewarped } from '../card-utils';
 import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';

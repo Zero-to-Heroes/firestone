@@ -6,6 +6,7 @@ import { WindowManagerService } from './window-manager.service';
 
 declare let OverwolfPlugin: any;
 
+// TODO: use facade pattern, though it will only be used for the "capture window" method
 @Injectable()
 export class OwUtilsService {
 	private readonly serviceName = 'ow-utils';
@@ -14,11 +15,13 @@ export class OwUtilsService {
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		this.initFacade();
-		window['showWindowsNotification'] = async () => {
-			await sleep(1000);
-			console.debug('[ow-utils] showing test notification');
-			this.showWindowsNotification('Test', 'This is a test notification');
-		};
+		if (typeof window !== 'undefined') {
+			window['showWindowsNotification'] = async () => {
+				await sleep(1000);
+				console.debug('[ow-utils] showing test notification');
+				this.showWindowsNotification('Test', 'This is a test notification');
+			};
+		}
 	}
 
 	private async initFacade() {
@@ -26,7 +29,9 @@ export class OwUtilsService {
 		if (isMainWindow) {
 			this.internalService = new OwUtilsServiceInternal();
 			this.internalService.initialize();
-			window[this.serviceName] = this.internalService;
+			if (typeof window !== 'undefined') {
+				window[this.serviceName] = this.internalService;
+			}
 		} else {
 			const mainWindow = await this.windowManager.getMainWindow();
 			this.internalService = mainWindow[this.serviceName];

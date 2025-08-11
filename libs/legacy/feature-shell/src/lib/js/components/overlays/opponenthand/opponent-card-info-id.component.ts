@@ -3,6 +3,7 @@ import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '
 import { CardClass, CardIds, GameType } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
 import {
+	cardsMapping,
 	cardsWithCreationSequenceInfo,
 	DeckCard,
 	DeckState,
@@ -10,15 +11,15 @@ import {
 	getDynamicRelatedCardIds,
 	getPossibleForgedCards,
 	GuessedInfo,
+	hasGetRelatedCards,
 	hasOverride,
 	Metadata,
+	publicCardCreators,
 } from '@firestone/game-state';
 import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
-import { cardsMapping, hasGetRelatedCards } from '../../../services/decktracker/card-highlight/global/_registers';
-import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

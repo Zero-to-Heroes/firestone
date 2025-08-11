@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IRemoteAchievementsService } from '@firestone/achievements/common';
+import { ReviewIdService } from '@firestone/game-state';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { ApiRunner, UserService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../../models/achievement';
 import { CompletedAchievement } from '../../../models/completed-achievement';
-import { ReviewIdService } from '../../review-id.service';
 
 const ACHIEVEMENTS_UPDATE_URL = 'https://yl2slri7psjvyzqscikel2cfgi0hlesx.lambda-url.us-west-2.on.aws/';
 const ACHIEVEMENTS_RETRIEVE_URL = 'https://v4sa2mtlxy5y5suuwwmj6p2i6e0epbqt.lambda-url.us-west-2.on.aws/';

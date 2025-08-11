@@ -8,13 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckCard, SecretOption } from '@firestone/game-state';
+import { BoardSecret, DeckCard, SecretOption, VisualDeckCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({

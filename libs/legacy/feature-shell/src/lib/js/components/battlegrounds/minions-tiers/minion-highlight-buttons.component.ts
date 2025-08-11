@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Minion } from './bgs-minion-item.component';
 
@@ -39,7 +39,10 @@ export class BattlegroundsMinionsHighlightButtonsComponent {
 	@Input() minion: Minion;
 	@Input() hideMechanicsHighlight: boolean;
 
-	constructor(private readonly ow: OverwolfService, private readonly highlighter: BgsBoardHighlighterService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly highlighter: BgsBoardHighlighterService,
+	) {}
 
 	highlightMinion(minion: Minion) {
 		this.highlighter.toggleMinionsToHighlight([minion.cardId]);

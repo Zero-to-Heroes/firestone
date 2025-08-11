@@ -1,7 +1,6 @@
+import { GameEvent, isBattlegrounds } from '@firestone/game-state';
 import { BattlegroundsInfo, MemoryInspectionService } from '@firestone/memory';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../../models/game-event';
-import { isBattlegrounds } from '../../../../battlegrounds/bgs-utils';
 import { Requirement } from '../_requirement';
 
 export class BattlegroundsRankReq implements Requirement {
@@ -9,7 +8,10 @@ export class BattlegroundsRankReq implements Requirement {
 	private rankAtReset: number;
 	private isBgs: boolean;
 
-	constructor(private readonly memoryInspection: MemoryInspectionService, private readonly targetRank: number) {}
+	constructor(
+		private readonly memoryInspection: MemoryInspectionService,
+		private readonly targetRank: number,
+	) {}
 
 	public static create(rawReq: RawRequirement, memoryInspection: MemoryInspectionService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {

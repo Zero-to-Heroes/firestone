@@ -52,7 +52,7 @@ export class Si7CounterDefinition implements CounterDefinition<GameState, readon
 	}
 }
 
-export const getSi7Locale = (locale: string): string => {
+const getSi7Locale = (locale: string): string => {
 	switch (locale) {
 		case 'esES':
 		case 'esMX':

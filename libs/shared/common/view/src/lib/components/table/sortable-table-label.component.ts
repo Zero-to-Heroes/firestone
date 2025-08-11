@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { SortCriteria } from '@firestone/shared/framework/common';
 
 @Component({
 	standalone: false,
@@ -10,7 +11,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			[ngClass]="{
 				sortable: isSortable,
 				'active-asc': sort.criteria === criteria && sort.direction === 'asc',
-				'active-desc': sort.criteria === criteria && sort.direction === 'desc'
+				'active-desc': sort.criteria === criteria && sort.direction === 'desc',
 			}"
 			(click)="startSort()"
 		>
@@ -38,21 +39,3 @@ export class SortableLabelComponent<T> {
 		this.sortClick.next(this.criteria);
 	}
 }
-
-export interface SortCriteria<T> {
-	readonly criteria: T;
-	readonly direction: SortDirection;
-}
-
-export type SortDirection = 'asc' | 'desc';
-
-export const invertDirection = (direction: SortDirection): SortDirection => {
-	switch (direction) {
-		case 'asc':
-			return 'desc';
-		case 'desc':
-			return 'asc';
-		default:
-			return 'desc';
-	}
-};

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { BgsPanelId, GameStateFacadeService } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
