@@ -254,6 +254,9 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(4)));
 		case CardIds.AnimatedAvalanche:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
+		case CardIds.AnimatedBerserker_CORE_ICC_238:
+		case CardIds.AnimatedBerserker_ICC_238:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.AnimatedMoonwell_EDR_254:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.AntiqueFlinger_WW_413:
@@ -951,6 +954,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), chooseOne);
 		case CardIds.DiscipleOfGolganneth:
 			return and(side(inputSide), or(inDeck, inHand), overload);
+		case CardIds.DisciplinarianGandling:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.DiscoMaul:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.DisksOfLegendTavernBrawl:
@@ -1008,6 +1013,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), deathrattle, minion, effectiveCostLess(4));
 		case CardIds.DreamboundDisciple_EDR_847:
 			return and(side(inputSide), or(inHand, inDeck), imbue);
+		case CardIds.DreamboundRaptor_EDR_849:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Dreamwarden_EDR_256:
 			return and(side(inputSide), inDeck, notInInitialDeck);
 		case CardIds.Drekthar_AV_100:
@@ -1171,6 +1178,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, fel);
 		case CardIds.IllidanStormrage_FelInside_THD_004p:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
+		case CardIds.IxlidFungalLord:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Felosophy:
 			return and(side(inputSide), or(inHand, inDeck), demon);
 		case CardIds.FelscaleEvoker:
@@ -2187,6 +2196,8 @@ export const cardIdSelector = (
 				and(side(inputSide), minion, or(inHand, inDeck), frenzy),
 				and(side(inputSide), minion, inGraveyard, frenzy),
 			);
+		case CardIds.OverlordsWhip:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.OverseerFrigidaraCore_RLK_224:
 		case CardIds.OverseerFrigidara_LEG_RLK_224:
 		case CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224:
@@ -2514,6 +2525,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 		case CardIds.RingOfRefreshmentTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.RiskySkipper:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.RitualOfTheNewMoon_EDR_461:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RivendareWarrider:
