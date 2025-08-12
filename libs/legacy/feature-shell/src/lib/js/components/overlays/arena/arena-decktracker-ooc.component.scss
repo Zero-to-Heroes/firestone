@@ -21,8 +21,10 @@
 		// height: 100%;
 		width: 100%;
 		min-height: 0;
-		overflow: scroll;
+		// overflow: scroll;
 		padding-right: 10px;
+
+		display: flex;
 	}
 
 	.header {
@@ -32,12 +34,21 @@
 		height: 35px;
 	}
 
+	.decktracker {
+		height: 100%;
+	}
+
+	.decktracker-container {
+		height: auto;
+	}
+
 	.played-cards {
 		position: relative;
 		// left: 10px;
 		display: flex;
 		min-height: 1px;
 		// padding-right: 10px;
+		height: 100%;
 	}
 
 	.deck-list {
@@ -49,6 +60,7 @@
 		// min-width: calc(100% + 20px);
 		position: relative;
 		// left: -10px;
+		overflow: scroll;
 
 		::ng-deep deck-card {
 			.deck-card {

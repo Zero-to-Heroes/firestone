@@ -90,7 +90,12 @@ import {
 								</sortable-table-label>
 							</div>
 							<div class="played-cards">
-								<ng-scrollbar
+								<!-- <ng-scrollbar
+									class="deck-list"
+									*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
+									scrollable
+								> -->
+								<div
 									class="deck-list"
 									*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
 									scrollable
@@ -119,7 +124,8 @@ import {
 											{{ cardInfo.deckWinrateImpact | number: '1.2-2' }}
 										</div>
 									</li>
-								</ng-scrollbar>
+								</div>
+								<!-- </ng-scrollbar> -->
 							</div>
 						</div>
 					</div>
