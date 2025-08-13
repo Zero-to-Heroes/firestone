@@ -22,7 +22,7 @@ import {
 } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -169,20 +169,42 @@ export class ArenaDraftManagerService
 			if (changes.ArenaPackageCardOptions != null) {
 				this.cardPackageOptions$$.next(changes.ArenaPackageCardOptions);
 			}
-			if (changes.ArenaLatestCardPick != null) {
-				console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
-				this.lastPick$$.next(changes.ArenaLatestCardPick);
-			}
 			if (changes.ArenaSessionState != null) {
 				console.debug('[arena-draft-manager] received arena session state', changes.ArenaSessionState);
 				this.sessionState$$.next(changes.ArenaSessionState);
 			}
+			if (changes.ArenaLatestCardPick != null) {
+				if (
+					changes.ArenaLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
+					!arraysEqual(changes.ArenaLatestCardPick.Options, this.lastPick$$?.value?.Options)
+				) {
+					console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
+					this.lastPick$$.next(changes.ArenaLatestCardPick);
+				} else {
+					console.log(
+						'[arena-draft-manager] received latest card pick, but it is the same as the last one, ignoring',
+						changes.ArenaLatestCardPick,
+						this.lastPick$$.value,
+					);
+				}
+			}
 			if (changes.ArenaUndergroundLatestCardPick != null) {
-				console.log(
-					'[arena-draft-manager] received latest underground card pick',
-					changes.ArenaUndergroundLatestCardPick,
-				);
-				this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
+				if (
+					changes.ArenaUndergroundLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
+					!arraysEqual(changes.ArenaUndergroundLatestCardPick.Options, this.lastPick$$?.value?.Options)
+				) {
+					console.log(
+						'[arena-draft-manager] received latest underground card pick',
+						changes.ArenaUndergroundLatestCardPick,
+					);
+					this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
+				} else {
+					console.log(
+						'[arena-draft-manager] received latest underground card pick, but it is the same as the last one, ignoring',
+						changes.ArenaUndergroundLatestCardPick,
+						this.lastPick$$.value,
+					);
+				}
 			}
 		});
 
