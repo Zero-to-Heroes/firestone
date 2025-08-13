@@ -986,7 +986,7 @@ const filterCards = (
 			}
 			const debug = c.id.includes(CardIds.BreathOfSindragosa_ICC_836);
 			debug &&
-				console.log(
+				console.debug(
 					'debug',
 					c.id,
 					!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false,
