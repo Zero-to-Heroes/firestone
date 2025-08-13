@@ -255,7 +255,9 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				const cardsWithStats: CardInfo[] = [];
 				const classWinrate = classStat.totalsWins / classStat.totalGames;
 				for (const card of cards) {
-					const stat = cardStats?.stats?.find((s) => s.cardId === card.cardId);
+					const stat = cardStats?.stats?.find(
+						(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(card.cardId),
+					);
 					const decksWithCard = stat?.matchStats?.stats?.decksWithCard ?? 0;
 					const deckWinrate = !decksWithCard
 						? null
