@@ -11,6 +11,7 @@ import {
 	attackLessThan,
 	aura,
 	baseCostEqual,
+	baseCostLessThan,
 	battlecry,
 	beast,
 	bloodRune,
@@ -2412,7 +2413,7 @@ export const cardIdSelector = (
 		case CardIds.Ravage_SC_004hp:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
 		case CardIds.RavenousFelhunter_EDR_891:
-			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle, effectiveCostLess(5));
+			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle, baseCostLessThan(5));
 		case CardIds.RayllaSandSculptor_VAC_424:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Razorboar:
