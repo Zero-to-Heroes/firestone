@@ -23,9 +23,10 @@ export const MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.DIVINE_SHIELD, tierId: 'DS' },
 	{ mechanic: GameTag.TAUNT, tierId: 'T' },
 	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
-	{ mechanic: GameTag.REBORN, tierId: 'R' },
+	{ mechanic: GameTag.REBORN, tierId: 'Re' },
 	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'C' },
 	{ mechanic: GameTag.MODULAR, tierId: 'M' },
+	{ mechanic: GameTag.BACON_RALLY, tierId: 'Ra' },
 	{ mechanic: GameTag.BACON_BUFFS_TAVERN_SPELL, tierId: 'TS' },
 	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
 	{
@@ -178,22 +179,23 @@ const buildBuddies = (
 	const buddies: readonly ReferenceCard[] = !config?.showBuddiesTier
 		? []
 		: config?.showAllBuddyCards
-		? allBuddies
-				.filter(
-					(b) =>
-						allPlayerBuddiesCardIds.includes(b.id) || !NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds),
-				)
-				.filter(
-					(b) =>
-						!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
-						availableTribes.includes(
-							BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy)?.tribe ?? Race.INVALID,
-						),
-				)
-		: // For tess, only show the buddies of the opponents
-		[CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(heroPowerCardId as CardIds)
-		? allPlayerBuddies
-		: [];
+			? allBuddies
+					.filter(
+						(b) =>
+							allPlayerBuddiesCardIds.includes(b.id) ||
+							!NON_DISCOVERABLE_BUDDIES.includes(b.id as CardIds),
+					)
+					.filter(
+						(b) =>
+							!BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy) ||
+							availableTribes.includes(
+								BUDDIES_TRIBE_REQUIREMENTS.find((req) => b.id === req.buddy)?.tribe ?? Race.INVALID,
+							),
+					)
+			: // For tess, only show the buddies of the opponents
+				[CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(heroPowerCardId as CardIds)
+				? allPlayerBuddies
+				: [];
 	return buddies;
 };
 

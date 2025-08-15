@@ -23,5 +23,18 @@ export interface TierGroup {
 	readonly cards: readonly ExtendedReferenceCard[];
 }
 
-export type TavernTierType = number | 'B' | 'D' | 'DS' | 'T' | 'E' | 'R' | 'S' | 'Bdy' | 'spells' | 'trinkets' | string;
+export type TavernTierType =
+	| number
+	| 'B'
+	| 'D'
+	| 'DS'
+	| 'T'
+	| 'E'
+	| 'Re'
+	| 'S'
+	| 'Ra'
+	| 'Bdy'
+	| 'spells'
+	| 'trinkets'
+	| string;
 export type TierViewType = 'standard' | 'mechanics' | 'tribe' | 'compositions';
