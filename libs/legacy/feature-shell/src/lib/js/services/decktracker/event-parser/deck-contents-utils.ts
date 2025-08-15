@@ -314,14 +314,13 @@ const handleCerathineFleetrunner = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownManaMinionName(Math.max(0, card.getEffectiveManaCost() - 2)),
+				cardName: i18n.getUnknownMinionName(),
 				creatorCardId: CardIds.CerathineFleetrunner,
-				actualManaCost: Math.max(0, card.getEffectiveManaCost() - 2),
+				actualManaCost: undefined,
 				rarity: 'unknown',
 				cardType: 'Minion',
 				relatedCardIds: undefined,
-				cardMatchCondition: (other: ReferenceCard) =>
-					(!other.type || other.type === 'Minion') && other.cost === card.getEffectiveManaCost() - 2,
+				cardMatchCondition: (other: ReferenceCard) => !other.type || other.type === 'Minion',
 			} as DeckCard),
 		deckState,
 		allCards,

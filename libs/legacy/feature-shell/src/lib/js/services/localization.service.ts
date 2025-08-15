@@ -98,7 +98,7 @@ export class LocalizationService {
 		return playerClass
 			? this.translateString('decktracker.unknown-class-card', {
 					playerClass: formatClass(playerClass, i18n),
-			  })
+				})
 			: this.translateString('decktracker.unknown-card');
 	}
 
@@ -112,6 +112,10 @@ export class LocalizationService {
 		return this.translateString('decktracker.unknown-mana-minion', {
 			manaCost: manaCost,
 		});
+	}
+
+	public getUnknownMinionName(): string {
+		return this.translateString('decktracker.unknown-minion');
 	}
 
 	public getUnknownRaceName(info: string): string {
