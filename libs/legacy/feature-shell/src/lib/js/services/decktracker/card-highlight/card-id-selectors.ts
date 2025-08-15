@@ -1330,7 +1330,10 @@ export const cardIdSelector = (
 		case CardIds.GiftwrappedWhelp_TOY_386:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.GladesongSiren_TLC_819:
-			return and(side(inputSide), or(inDeck, inHand), or(holy, shadow), spell);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), holy, spell),
+				and(side(inputSide), or(inDeck, inHand), shadow, spell),
+			);
 		case CardIds.Glaivetar:
 			return and(side(inputSide), inDeck, outcast);
 		case CardIds.GlowflySwarm:
@@ -1914,6 +1917,11 @@ export const cardIdSelector = (
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion),
 				and(side(inputSide), or(inHand, inDeck), spell),
+			);
+		case CardIds.LightmawNetherdrake:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), holy, spell),
+				and(side(inputSide), or(inHand, inDeck), shadow, spell),
 			);
 		case CardIds.Lightray:
 			return and(side(inputSide), or(inHand, inDeck), paladin);
@@ -3210,6 +3218,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TreasureDistributor_TOY_518:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
+		case CardIds.TreasureHunterEudora_VAC_464:
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.TrenchSurveyor_TSC_642:
 			return and(side(inputSide), inDeck, minion, mech);
 		case CardIds.TrialOfTheJormungars_WON_028:
