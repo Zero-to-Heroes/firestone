@@ -1,5 +1,5 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -15,7 +15,7 @@ export const GreySageParrot: GlobalHighlightCard = {
 
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const candidate: ReferenceCard = deckState.cardsPlayedThisMatch
-			.map((card) => allCards.getCard(card.cardId))
+			.map((card) => getProcessedCard(card.cardId, card.entityId, deckState, allCards))
 			.filter((card) => card.type?.toLowerCase() === 'spell')
 			.filter((card) => card.cost >= costThreshold)
 			.pop();

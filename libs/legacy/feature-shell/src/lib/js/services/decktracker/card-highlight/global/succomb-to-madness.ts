@@ -1,5 +1,5 @@
 import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -14,7 +14,9 @@ export const SuccombToMadness: GlobalHighlightCard = {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
 			deckState.minionsDeadThisMatch
-				.filter((e) => hasCorrectTribe(allCards.getCard(e.cardId), Race.DRAGON))
+				.filter((e) =>
+					hasCorrectTribe(getProcessedCard(e.cardId, e.entityId, deckState, allCards), Race.DRAGON),
+				)
 				.map((e) => e.cardId)
 				// distinct
 				.filter((value, index, self) => self.indexOf(value) === index)

@@ -1,5 +1,5 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -14,7 +14,10 @@ export const TwistedWebweaver: GlobalHighlightCard = {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
 			deckState.cardsPlayedThisMatch
-				.filter((e) => allCards.getCard(e.cardId).type === CardType[CardType.MINION])
+				.filter(
+					(e) =>
+						getProcessedCard(e.cardId, e.entityId, deckState, allCards).type === CardType[CardType.MINION],
+				)
 				.map((e) => e.cardId)
 				// distinct
 				.filter((value, index, self) => self.indexOf(value) === index)

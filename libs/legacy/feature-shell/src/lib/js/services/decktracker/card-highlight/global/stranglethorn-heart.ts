@@ -1,5 +1,5 @@
 import { CardIds, GameTag, hasCorrectTribe, hasMechanic, Race } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -13,7 +13,7 @@ export const StranglethornHeart: GlobalHighlightCard = {
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return deckState.minionsDeadThisTurn
-			.map((e) => allCards.getCard(e.cardId))
+			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 			.filter((c) => hasCorrectTribe(c, Race.BEAST) && c.cost >= 5)
 			.map((e) => e.id);
 	},

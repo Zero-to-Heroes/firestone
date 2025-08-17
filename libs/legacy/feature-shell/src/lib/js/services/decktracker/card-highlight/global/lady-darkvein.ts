@@ -1,5 +1,5 @@
 import { CardIds, SpellSchool } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -14,7 +14,7 @@ export const LadyDarkvein: GlobalHighlightCard = {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const candidate: string | undefined = deckState.spellsPlayedThisMatch
 			.filter((card) => {
-				const ref = allCards.getCard(card.cardId);
+				const ref = getProcessedCard(card.cardId, card.entityId, deckState, allCards);
 				return ref.spellSchool === SpellSchool[SpellSchool.SHADOW];
 			})
 			.pop()?.cardId;

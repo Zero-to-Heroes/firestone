@@ -1,5 +1,5 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -13,7 +13,7 @@ export const KragwaTheFrog: GlobalHighlightCard = {
 	) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return deckState.cardsPlayedLastTurn
-			.map((e) => allCards.getCard(e.cardId))
+			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 			.filter((c) => c.type?.toUpperCase() === CardType[CardType.SPELL])
 			.map((e) => e.id);
 	},

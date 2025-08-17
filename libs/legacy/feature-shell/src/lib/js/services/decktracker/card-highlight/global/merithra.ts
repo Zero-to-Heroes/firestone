@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -14,7 +14,9 @@ export const Merithra: GlobalHighlightCard = {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
 			deckState.minionsDeadThisMatch
-				.filter((e) => (e.effectiveCost ?? allCards.getCard(e.cardId).cost) >= 8)
+				.filter(
+					(e) => (e.effectiveCost ?? getProcessedCard(e.cardId, e.entityId, deckState, allCards).cost) >= 8,
+				)
 				.map((e) => e.cardId)
 				// distinct
 				.filter((value, index, self) => self.indexOf(value) === index)
