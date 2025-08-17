@@ -86,7 +86,8 @@ export const getDynamicRelatedCardIds = (
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
-					hasCost(c, '==', 10),
+					hasCost(c, '==', 10) &&
+					canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.WhackAGnoll_MIS_700:
 			return filterCards(
