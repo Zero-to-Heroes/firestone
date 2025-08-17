@@ -9,10 +9,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const BG_USE_QUESTS = false;
-// Temp flag to enable the feature in the desktop app while the overlay is causing issues
-export const BG_USE_QUESTS_IN_DESKTOP = false;
-
 @Injectable()
 export class BgsInGameQuestsGuardianService extends AbstractFacadeService<BgsInGameQuestsGuardianService> {
 	public freeUsesLeft$$: BehaviorSubject<number>;

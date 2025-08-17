@@ -10,7 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BG_USE_QUESTS, BgsInGameQuestsGuardianService, BgsInGameQuestsService } from '@firestone/battlegrounds/common';
+import { BgsInGameQuestsGuardianService, BgsInGameQuestsService } from '@firestone/battlegrounds/common';
 import { BgsQuestCardChoiceOption } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
@@ -87,10 +87,6 @@ export class ChoosingBgsQuestWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		if (!BG_USE_QUESTS) {
-			return;
-		}
-
 		await this.quests.isReady();
 		await this.ads.isReady();
 		await this.guardian.isReady();

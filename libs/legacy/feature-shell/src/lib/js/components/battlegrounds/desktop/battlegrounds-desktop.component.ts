@@ -7,13 +7,7 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
-import {
-	BG_USE_QUESTS,
-	BG_USE_QUESTS_IN_DESKTOP,
-	BG_USE_TRINKETS,
-	BattlegroundsNavigationService,
-	CategoryId,
-} from '@firestone/battlegrounds/common';
+import { BG_USE_TRINKETS, BattlegroundsNavigationService, CategoryId } from '@firestone/battlegrounds/common';
 import { ENABLE_BGS_COMP_STATS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -57,7 +51,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 								top:
 									valueRoot.categoryId !== 'bgs-category-personal-heroes' &&
 									valueRoot.categoryId !== 'bgs-category-meta-heroes' &&
-									valueRoot.categoryId !== 'bgs-category-simulator'
+									valueRoot.categoryId !== 'bgs-category-simulator',
 							}"
 						>
 						</battlegrounds-category-details>
@@ -130,23 +124,21 @@ export class BattlegroundsDesktopComponent
 				? {
 						id: 'bgs-category-meta-comps',
 						name: this.i18n.translateString('app.battlegrounds.menu.comps'),
-				  }
+					}
 				: null,
 			{
 				id: 'bgs-category-meta-cards',
 				name: this.i18n.translateString('app.battlegrounds.menu.cards'),
 			},
-			BG_USE_QUESTS || BG_USE_QUESTS_IN_DESKTOP
-				? {
-						id: 'bgs-category-meta-quests',
-						name: this.i18n.translateString('app.battlegrounds.menu.quests'),
-				  }
-				: null,
+			{
+				id: 'bgs-category-meta-quests',
+				name: this.i18n.translateString('app.battlegrounds.menu.quests'),
+			},
 			BG_USE_TRINKETS
 				? {
 						id: 'bgs-category-meta-trinkets',
 						name: this.i18n.translateString('app.battlegrounds.menu.trinkets'),
-				  }
+					}
 				: null,
 			{
 				id: 'bgs-category-personal-rating',

@@ -30,7 +30,6 @@ import {
 	switchMap,
 	tap,
 } from 'rxjs';
-import { BG_USE_QUESTS } from './bgs-in-game-quests-guardian.service';
 import { BattlegroundsQuestsService } from './bgs-quests.service';
 
 export const IN_GAME_RANK_FILTER = 50;
@@ -66,10 +65,6 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 
 		await Promise.all([this.scene.isReady(), this.prefs.isReady(), this.gameState.isReady()]);
 
-		if (!BG_USE_QUESTS) {
-			return;
-		}
-
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(
@@ -94,7 +89,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			tap((data) => console.debug('[bgs-quest] will show?', data)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
-				if (!displayFromPrefs || !BG_USE_QUESTS) {
+				if (!displayFromPrefs) {
 					return false;
 				}
 				// We explicitely don't check for null, so that if the memory updates are broken
