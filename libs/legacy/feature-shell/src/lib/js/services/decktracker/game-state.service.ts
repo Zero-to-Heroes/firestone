@@ -18,7 +18,7 @@ import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { ProcessingQueue } from '../processing-queue.service';
-import { chunk } from '../utils';
+import { chunk, sleep } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
@@ -504,6 +504,7 @@ export class GameStateService {
 			if (!isTokenValid) {
 				console.log('Twitch token is not valid, removing it');
 				this.prefs.setTwitchAccessToken(undefined);
+				await sleep(2000);
 				await this.twitch.sendExpiredTwitchTokenNotification();
 			} else {
 				result.push((event) => this.twitch.emitDeckEvent(event));

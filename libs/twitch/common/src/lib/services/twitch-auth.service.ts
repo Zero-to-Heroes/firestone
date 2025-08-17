@@ -13,7 +13,7 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { Mutable, NonFunctionProperties } from '@firestone/shared/framework/common';
+import { Mutable, NonFunctionProperties, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -345,6 +345,7 @@ export class TwitchAuthService {
 				}
 			},
 			(error) => {
+				console.debug('error sending message to twitch', error);
 				if (!this.hasLoggedInfoOnce) {
 					this.hasLoggedInfoOnce = true;
 					console.error(
@@ -470,11 +471,19 @@ export class TwitchAuthService {
 	}
 
 	public async sendExpiredTwitchTokenNotification() {
+		if (this.hasLoggedExpiredTokenInfoOnce) {
+			return;
+		}
+
+		while (!this.gameStatus.inGame$$.value) {
+			await sleep(1000);
+		}
+
 		console.log('[twitch-auth] Sending expired token notification');
 		const title = this.i18n.translateString('twitch.could-not-log-error-title');
 		const text = this.i18n.translateString('twitch.could-not-log-error-text');
 		const content = `
-			<div class="achievement-message-container">
+			<div class="general-message-container general-theme">
 				<div class="message">
 					<div class="title">
 						<span>${title}</span>
@@ -493,8 +502,9 @@ export class TwitchAuthService {
 			notificationId: 'expired-token-notif-' + new Date().getTime(),
 			content: content,
 			type: 'expired-token-notif',
-			timeout: 90000,
+			timeout: 120000,
 		} as Message);
+		this.hasLoggedExpiredTokenInfoOnce = true;
 	}
 
 	public async isLoggedIn(): Promise<boolean> {
