@@ -53,6 +53,7 @@ import {
 	freeze,
 	frenzy,
 	fromAnotherClass,
+	fromAnotherClassStrict,
 	frost,
 	generateCorpse,
 	generateSlagclaw,
@@ -745,7 +746,7 @@ export const cardIdSelector = (
 							entityIs({ entityId: lastCardPlayed?.entityId, cardId: lastCardPlayed?.cardId }),
 						),
 					),
-					and(side(inputSide), or(inDeck, inHand), fromAnotherClass),
+					and(side(inputSide), or(inDeck, inHand), fromAnotherClassStrict),
 				)(input);
 			};
 		case CardIds.ConservatorNymph:
@@ -757,7 +758,7 @@ export const cardIdSelector = (
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ContrabandStash:
-			return tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClass));
+			return tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClassStrict));
 		case CardIds.CookiesLadleTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.Commencement:
@@ -3093,7 +3094,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case CardIds.TessGreymane_GIL_598:
 		case CardIds.TessGreymaneCore:
-			return tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClass));
+			return tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClassStrict));
 		case CardIds.The8HandsFromBeyond_GDB_477:
 			return (input: SelectorInput): SelectorOutput => {
 				const orderedByCost = [...input.deckState.deck].sort(

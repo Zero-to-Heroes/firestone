@@ -498,7 +498,8 @@ const createsCardFromAnotherClass = (input: SelectorInput): boolean => {
 export const currentClass = (input: SelectorInput): boolean =>
 	!!input.deckState?.hero?.classes?.length &&
 	input.card?.classes.some((cardClass) => input.deckState.hero.classes.includes(CardClass[cardClass]));
-export const fromAnotherClass = or(and(not(currentClass), not(neutral), not(dream)), createsCardFromAnotherClass);
+export const fromAnotherClassStrict = and(not(currentClass), not(neutral), not(dream));
+export const fromAnotherClass = or(fromAnotherClassStrict, createsCardFromAnotherClass);
 
 export const rarity =
 	(rarity: RarityTYpe) =>
