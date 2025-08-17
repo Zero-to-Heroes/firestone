@@ -22,7 +22,7 @@ import { ArenaClassSummary } from './arena-personal-stats.model';
 			*ngIf="{
 				runSummaries: runSummaries$ | async,
 				total: total$ | async,
-				runs: runs$ | async
+				runs: runs$ | async,
 			} as value"
 		>
 			<section class="arena-personal-stats-overview" [attr.aria-label]="'Arena stats overview'">
@@ -296,16 +296,9 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 					const allGames = runs?.flatMap((r) => r.steps) ?? [];
 					const allGamesWithoutTies = allGames.filter((s) => s.result !== 'tied') ?? [];
 
-					const totalGames = allGames.length;
-					const totalGamesWithoutTies = allGamesWithoutTies.length;
+					const totalGames = runs.map((r) => r.wins + r.losses).reduce((a, b) => a + b, 0);
+					const totalGamesWithoutTies = totalGames;
 					const totalWins = runs?.reduce((a, b) => a + b.wins, 0) ?? 0;
-					const totalGamesFirst = allGamesWithoutTies.filter((s) => s.coinPlay === 'play').length ?? 0;
-					const totalWinsFirst =
-						allGamesWithoutTies.filter((s) => s.coinPlay === 'play' && s.result === 'won').length ?? 0;
-					const totalGamesCoin = allGamesWithoutTies.filter((s) => s.coinPlay === 'coin').length ?? 0;
-					const totalWinsCoin =
-						allGamesWithoutTies.filter((s) => s.coinPlay === 'coin' && s.result === 'won').length ?? 0;
-
 					const winrateStr = showAsPercents
 						? totalGamesWithoutTies > 0
 							? ((100 * totalWins) / totalGamesWithoutTies).toFixed(2) + '%'
@@ -317,6 +310,9 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 							: { wins: null, losses: null }
 						: null;
 
+					const totalGamesFirst = allGamesWithoutTies.filter((s) => s.coinPlay === 'play').length ?? 0;
+					const totalWinsFirst =
+						allGamesWithoutTies.filter((s) => s.coinPlay === 'play' && s.result === 'won').length ?? 0;
 					const winrateFirstStr = showAsPercents
 						? totalGamesFirst > 0
 							? ((100 * totalWinsFirst) / totalGamesFirst).toFixed(2) + '%'
@@ -328,6 +324,9 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 							: { wins: null, losses: null }
 						: null;
 
+					const totalGamesCoin = allGamesWithoutTies.filter((s) => s.coinPlay === 'coin').length ?? 0;
+					const totalWinsCoin =
+						allGamesWithoutTies.filter((s) => s.coinPlay === 'coin' && s.result === 'won').length ?? 0;
 					const winrateCoinStr = showAsPercents
 						? totalGamesCoin > 0
 							? ((100 * totalWinsCoin) / totalGamesCoin).toFixed(2) + '%'
@@ -349,32 +348,32 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 						averageWinsPerRunClass: !totalRuns
 							? null
 							: totalWins / totalRuns >= 4
-							? 'positive'
-							: totalWins / totalRuns <= 3
-							? 'negative'
-							: null,
+								? 'positive'
+								: totalWins / totalRuns <= 3
+									? 'negative'
+									: null,
 						gamesPlayed: totalGames,
 						winrateClass: !totalGamesWithoutTies
 							? null
 							: (100 * totalWins) / totalGamesWithoutTies > 51
-							? 'positive'
-							: (100 * totalWins) / totalGamesWithoutTies < 49
-							? 'negative'
-							: null,
+								? 'positive'
+								: (100 * totalWins) / totalGamesWithoutTies < 49
+									? 'negative'
+									: null,
 						winrateFirstClass: !totalGamesFirst
 							? null
 							: (100 * totalWinsFirst) / totalGamesFirst > 51
-							? 'positive'
-							: (100 * totalWinsFirst) / totalGamesFirst < 49
-							? 'negative'
-							: null,
+								? 'positive'
+								: (100 * totalWinsFirst) / totalGamesFirst < 49
+									? 'negative'
+									: null,
 						winrateCoinClass: !totalGamesCoin
 							? null
 							: (100 * totalWinsCoin) / totalGamesCoin > 51
-							? 'positive'
-							: (100 * totalWinsCoin) / totalGamesCoin < 49
-							? 'negative'
-							: null,
+								? 'positive'
+								: (100 * totalWinsCoin) / totalGamesCoin < 49
+									? 'negative'
+									: null,
 						winrateStr: winrateStr,
 						winrateFirstStr: winrateFirstStr,
 						winrateDetails: winrateDetails,
@@ -458,10 +457,10 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 					averageWinsPerRunClass: !totalRuns
 						? null
 						: totalWins / totalRuns >= 4
-						? 'positive'
-						: totalWins / totalRuns <= 3
-						? 'negative'
-						: null,
+							? 'positive'
+							: totalWins / totalRuns <= 3
+								? 'negative'
+								: null,
 					totalWins: totalWins,
 					totalGamesCoin: totalGamesCoin,
 					totalWinsCoin: totalWinsCoin,
@@ -470,25 +469,25 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 					winrateClass: !totalGames
 						? null
 						: (100 * totalWins) / totalGames > 51
-						? 'positive'
-						: (100 * totalWins) / totalGames < 49
-						? 'negative'
-						: null,
+							? 'positive'
+							: (100 * totalWins) / totalGames < 49
+								? 'negative'
+								: null,
 					winrateDetails: winrateDetails,
 					winrateFirstClass: !totalGamesFirst
 						? null
 						: (100 * totalWinsFirst) / totalGamesFirst > 51
-						? 'positive'
-						: (100 * totalWinsFirst) / totalGamesFirst < 49
-						? 'negative'
-						: null,
+							? 'positive'
+							: (100 * totalWinsFirst) / totalGamesFirst < 49
+								? 'negative'
+								: null,
 					winrateCoinClass: !totalGamesCoin
 						? null
 						: (100 * totalWinsCoin) / totalGamesCoin > 51
-						? 'positive'
-						: (100 * totalWinsCoin) / totalGamesCoin < 49
-						? 'negative'
-						: null,
+							? 'positive'
+							: (100 * totalWinsCoin) / totalGamesCoin < 49
+								? 'negative'
+								: null,
 					winrateStr: winrateStr,
 					winrateFirstStr: winrateFirstStr,
 					winrateFirstDetails: winrateFirstDetails,
