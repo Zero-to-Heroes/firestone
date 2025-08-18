@@ -983,6 +983,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.DraconicDreamTavernBrawl:
 			return and(side(inputSide), dragon);
+		case CardIds.DraeneiTotemcarver_AT_047:
+		case CardIds.DraeneiTotemcarver_CORE_AT_047:
+			return and(side(inputSide), or(inHand, inDeck), totem);
 		case CardIds.DragonAffinityTavernBrawl:
 			return and(side(inputSide), dragon);
 		case CardIds.DragonBreeder:
