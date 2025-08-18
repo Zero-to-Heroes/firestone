@@ -53,9 +53,9 @@ export class BattlegroundsTrinketsService extends AbstractFacadeService<Battlegr
 
 	private async loadTrinketsInternal(timeFilter: BgsActiveTimeFilterType): Promise<BgsTrinketStats | null> {
 		const url = BGS_TRINKETS_URL.replace('%timePeriod%', fixInvalidTimeSuffix(timeFilter ?? 'last-patch'));
-		console.debug('[bgs-quests] loading quests', url);
+		console.debug('[bgs-trinkets] loading quests', url);
 		const quests: BgsTrinketStats | null = await this.api.callGetApi(url);
-		console.debug('[bgs-quests] loaded quests', quests);
+		console.debug('[bgs-trinkets] loaded quests', quests);
 		return quests;
 	}
 }
