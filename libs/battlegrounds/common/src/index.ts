@@ -26,6 +26,7 @@ export * from './lib/components/trinkets/bgs-trinket-stats-info-premium.componen
 export * from './lib/compositions/battlegrounds-composition-details-modal.component';
 export * from './lib/compositions/battlegrounds-meta-stats-comps-info.component';
 export * from './lib/compositions/battlegrounds-meta-stats-comps-tier.component';
+export * from './lib/compositions/battlegrounds-meta-stats-comps-view.component';
 export * from './lib/compositions/battlegrounds-meta-stats-comps.component';
 export * from './lib/compositions/bgs-comps-view-select-dropdown';
 export * from './lib/compositions/bgs-comps.service';

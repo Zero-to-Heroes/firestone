@@ -42,6 +42,7 @@ import { BgsTrinketStatsInfoPremiumComponent } from './components/trinkets/bgs-t
 import { BattlegroundsCompositionDetailsModalComponent } from './compositions/battlegrounds-composition-details-modal.component';
 import { BattlegroundsMetaStatsCompInfoComponent } from './compositions/battlegrounds-meta-stats-comps-info.component';
 import { BattlegroundsMetaStatsCompTierComponent } from './compositions/battlegrounds-meta-stats-comps-tier.component';
+import { BattlegroundsMetaStatsCompsViewComponent } from './compositions/battlegrounds-meta-stats-comps-view.component';
 import { BattlegroundsMetaStatsCompsComponent } from './compositions/battlegrounds-meta-stats-comps.component';
 import { BattlegroundsCompositionsViewSelectDropdownComponent } from './compositions/bgs-comps-view-select-dropdown';
 import { BattlegroundsCompsService } from './compositions/bgs-comps.service';
@@ -95,6 +96,7 @@ const components = [
 	BattlegroundsMetaStatsCardTierComponent,
 	BattlegroundsCompositionDetailsModalComponent,
 	BattlegroundsMetaStatsCompsComponent,
+	BattlegroundsMetaStatsCompsViewComponent,
 	BattlegroundsMetaStatsCompTierComponent,
 	BattlegroundsMetaStatsCompInfoComponent,
 	BgsReconnectorComponent,
