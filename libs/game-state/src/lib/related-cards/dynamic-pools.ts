@@ -23,7 +23,6 @@ import {
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -554,28 +553,29 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 3);
 
 		// Discover a Spell Effects (or spell from class effects such as Peon / Magescribe)
-		case CardIds.Qonzu_EDR_517:
-		case CardIds.RunedOrb_BAR_541:
-		case CardIds.Spellcoiler:
-		case CardIds.VulperaScoundrel:
-		case CardIds.VenomousScorpid:
-		case CardIds.StewardOfScrolls_SCH_245:
-		case CardIds.PrimordialGlyph_CORE_UNG_941:
-		case CardIds.PocketDimension_GDB_133:
-		case CardIds.Kalecgos_CORE_DAL_609:
-		case CardIds.Marshspawn_CORE_BT_115:
-		case CardIds.EtherealLackey:
-		case CardIds.Peon_BAR_022:
-		case CardIds.OnyxMagescribe:
-		case CardIds.SuspiciousAlchemist:
 		case CardIds.AmphibiousElixir_WW_080:
 		case CardIds.Astrobiologist_GDB_874:
-		case CardIds.PlantedEvidence:
-		case CardIds.PlantedEvidence_CORE_REV_313:
-		case CardIds.VoidScripture_YOG_507:
+		case CardIds.EtherealLackey:
 		case CardIds.ExarchHataaru_GDB_136:
 		case CardIds.InfinitizeTheMaxitude:
 		case CardIds.Jettison_GDB_227:
+		case CardIds.Kalecgos_CORE_DAL_609:
+		case CardIds.Marshspawn_CORE_BT_115:
+		case CardIds.OnyxMagescribe:
+		case CardIds.PalmReading:
+		case CardIds.Peon_BAR_022:
+		case CardIds.PlantedEvidence_CORE_REV_313:
+		case CardIds.PlantedEvidence:
+		case CardIds.PocketDimension_GDB_133:
+		case CardIds.PrimordialGlyph_CORE_UNG_941:
+		case CardIds.Qonzu_EDR_517:
+		case CardIds.RunedOrb_BAR_541:
+		case CardIds.Spellcoiler:
+		case CardIds.StewardOfScrolls_SCH_245:
+		case CardIds.SuspiciousAlchemist:
+		case CardIds.VenomousScorpid:
+		case CardIds.VoidScripture_YOG_507:
+		case CardIds.VulperaScoundrel:
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InstructorFireheart:
 			return (c) =>
