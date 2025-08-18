@@ -7,4 +7,15 @@
 		left: 3px;
 		position: relative;
 	}
+
+	&.click-to-watch {
+		&:hover {
+			&.lost {
+				background: linear-gradient(90deg, rgba(255, 71, 71, 0.4) 0%, rgba(255, 71, 71, 0) 100%);
+			}
+			&.won {
+				background: linear-gradient(90deg, rgba(77, 255, 61, 0.4) 0%, rgba(77, 255, 61, 0) 100%);
+			}
+		}
+	}
 }

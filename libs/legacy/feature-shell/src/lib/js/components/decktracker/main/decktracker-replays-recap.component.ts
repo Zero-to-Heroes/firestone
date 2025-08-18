@@ -23,12 +23,13 @@ import { DecksProviderService } from '../../../services/decktracker/main/decks-p
 				[owTranslate]="'app.decktracker.replays-recap.no-replays'"
 			></div>
 			<ul class="list" scrollable>
-				<li *ngFor="let replay of replays">
+				<li *ngFor="let replay of replays; trackBy: trackByFn">
 					<replay-info
 						[replay]="replay"
 						[showStatsLabel]="null"
 						[showReplayLabel]="null"
 						[displayTime]="false"
+						[clickToWatch]="true"
 					></replay-info>
 				</li>
 			</ul>
@@ -61,7 +62,7 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 					.filter((deck) =>
 						selectedDeckstring
 							? deck.deckstring === selectedDeckstring ||
-							  (deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring)
+								(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring)
 							: true,
 					)
 					// .filter(
@@ -81,5 +82,9 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	trackByFn(index: number, replay: GameStat) {
+		return replay.reviewId;
 	}
 }

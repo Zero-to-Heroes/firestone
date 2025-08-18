@@ -30,7 +30,11 @@ import { capitalizeEachWord } from '../../../services/utils';
 		`../../../../css/component/replays/replay-info/replay-info-ranked.component.scss`,
 	],
 	template: `
-		<div class="replay-info ranked {{ visualResult }}">
+		<div
+			class="replay-info ranked {{ visualResult }}"
+			[ngClass]="{ 'click-to-watch': clickToWatch }"
+			(click)="clickToWatch && showReplay()"
+		>
 			<div class="result-color-code {{ visualResult }}"></div>
 
 			<div class="left-info">
@@ -79,6 +83,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
 	@Input() displayTime = true;
+	@Input() clickToWatch = false;
 
 	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
@@ -195,7 +200,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 		const deckName = info.playerDeckName
 			? this.i18n.translateString('app.replays.replay-info.deck-name-tooltip', {
 					value: decodedTeamName,
-			  })
+				})
 			: '';
 		const tooltip = isPlayer ? `${name} ${deckName}` : `${name}`;
 		if (replaysShowClassIcon) {

@@ -20,6 +20,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			[displayCoin]="displayCoin"
 			[displayTime]="displayTime"
 			[replay]="replayInfo"
+			[clickToWatch]="clickToWatch"
 		></replay-info-ranked>
 		<replay-info-battlegrounds
 			*ngIf="
@@ -63,6 +64,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionStoreComponent {
 	@Input() displayTime = true;
 	@Input() displayLoot: boolean;
 	@Input() displayShortLoot: boolean;
+	@Input() clickToWatch: boolean;
 
 	@Input() set replay(value: GameStat) {
 		this.replayInfo = value;
