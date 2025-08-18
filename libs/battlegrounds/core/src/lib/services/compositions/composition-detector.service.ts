@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export interface CompositionMatch {
@@ -61,7 +62,6 @@ export class CompositionDetectorService {
 				// Weight-based minimum requirements
 				// Require either decent confidence (25%+) OR at least one important card (weight >= 20)
 				const hasMinimumRequirement = match.confidence >= 0.25 || match.coreCardsFound.length >= 1; // coreCardsFound now represents weight >= 20 cards
-
 				return match.confidence > 0 && hasMinimumRequirement;
 			})
 			.sort((a, b) => b.confidence - a.confidence);
@@ -161,10 +161,14 @@ export class CompositionDetectorService {
 		cardWeights: Map<string, number>,
 	): CompositionMatch | null {
 		const allCompositionCardIds = composition.cards.map((card) => card.cardId);
-		const allCardsFound = playerCardIds.filter((cardId) => allCompositionCardIds.includes(cardId));
+		const allCardsFound = playerCardIds.filter((cardId) =>
+			allCompositionCardIds.some((compCardId) => isCardOrSubstitute(compCardId, cardId)),
+		);
 
 		// Calculate foreign cards - cards that don't belong to this composition at all
-		const foreignCards = playerCardIds.filter((cardId) => !allCompositionCardIds.includes(cardId));
+		const foreignCards = playerCardIds.filter(
+			(cardId) => !allCompositionCardIds.some((compCardId) => isCardOrSubstitute(compCardId, cardId)),
+		);
 
 		// Return null if no cards found at all
 		if (allCardsFound.length === 0) {
@@ -178,7 +182,7 @@ export class CompositionDetectorService {
 
 		// Calculate weight of found cards
 		const foundCardsWeight = allCardsFound.reduce((sum, cardId) => {
-			const card = composition.cards.find((c) => c.cardId === cardId);
+			const card = composition.cards.find((c) => isCardOrSubstitute(c.cardId, cardId));
 			return sum + (card?.finalBoardWeight || 1);
 		}, 0);
 
@@ -207,7 +211,9 @@ export class CompositionDetectorService {
 
 		// High-importance card bonus
 		const importantCards = composition.cards.filter((card) => (card.finalBoardWeight || 1) >= 20);
-		const importantCardsFound = allCardsFound.filter((cardId) => importantCards.some((c) => c.cardId === cardId));
+		const importantCardsFound = allCardsFound.filter((cardId) =>
+			importantCards.some((c) => isCardOrSubstitute(c.cardId, cardId)),
+		);
 
 		if (importantCardsFound.length > 0) {
 			confidence += 0.1; // Bonus for having important cards
@@ -252,7 +258,7 @@ export class CompositionDetectorService {
 		// Create debugging info combining IDF weights with final board weights
 		const matchCardWeights: { [cardId: string]: number } = {};
 		allCardsFound.forEach((cardId) => {
-			const card = composition.cards.find((c) => c.cardId === cardId);
+			const card = composition.cards.find((c) => isCardOrSubstitute(c.cardId, cardId));
 			const finalBoardWeight = card?.finalBoardWeight || 1;
 			const idfWeight = cardWeights.get(cardId) || 1.0;
 			matchCardWeights[cardId] = finalBoardWeight * idfWeight;
@@ -260,19 +266,26 @@ export class CompositionDetectorService {
 
 		// Legacy compatibility - separate cards into core/addon based on weight
 		const coreCardsFound = allCardsFound.filter((cardId) => {
-			const card = composition.cards.find((c) => c.cardId === cardId);
+			const card = composition.cards.find((c) => isCardOrSubstitute(c.cardId, cardId));
 			return (card?.finalBoardWeight || 1) >= 20; // Consider weight >= 20 as "core"
 		});
 		const addonCardsFound = allCardsFound.filter((cardId) => {
-			const card = composition.cards.find((c) => c.cardId === cardId);
+			const card = composition.cards.find((c) => isCardOrSubstitute(c.cardId, cardId));
 			return (card?.finalBoardWeight || 1) < 20; // Consider weight < 20 as "addon"
 		});
 
 		const missingCoreCards = composition.cards
-			.filter((card) => (card.finalBoardWeight || 1) >= 20 && !playerCardIds.includes(card.cardId))
+			.filter(
+				(card) =>
+					(card.finalBoardWeight || 1) >= 20 &&
+					!playerCardIds.some((c) => isCardOrSubstitute(c, card.cardId)),
+			)
 			.map((card) => card.cardId);
 		const missingAddonCards = composition.cards
-			.filter((card) => (card.finalBoardWeight || 1) < 20 && !playerCardIds.includes(card.cardId))
+			.filter(
+				(card) =>
+					(card.finalBoardWeight || 1) < 20 && !playerCardIds.some((c) => isCardOrSubstitute(c, card.cardId)),
+			)
 			.map((card) => card.cardId);
 
 		return {
@@ -432,3 +445,20 @@ export class CompositionDetectorService {
 		return analysis.sort((a, b) => b.frequency - a.frequency);
 	}
 }
+
+export const isCardOrSubstitute = (compCardId: string, playerCardId: string) => {
+	if (compCardId === playerCardId) {
+		return true;
+	}
+	if (compCardId === CardIds.BrannBronzebeard_BG_LOE_077 || compCardId === CardIds.BrannBronzebeard_TB_BaconUps_045) {
+		return (
+			playerCardId === CardIds.MoiraBronzebeard_BG27_518 || playerCardId === CardIds.MoiraBronzebeard_BG27_518_G
+		);
+	}
+	if (compCardId === CardIds.TitusRivendare_BG25_354 || compCardId === CardIds.TitusRivendare_BG25_354_G) {
+		return (
+			playerCardId === CardIds.MoiraBronzebeard_BG27_518 || playerCardId === CardIds.MoiraBronzebeard_BG27_518_G
+		);
+	}
+	return false;
+};

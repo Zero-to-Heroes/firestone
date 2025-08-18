@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsCompTip } from '@firestone-hs/content-craetor-input';
 import { GameTag, normalizeMinionCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/common';
-import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
+import { ExtendedBgsCompAdvice, ExtendedReferenceCard, isCardOrSubstitute } from '@firestone/battlegrounds/core';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -359,6 +359,6 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	isIncluded(minionsOnBoardAndHand: readonly string[], minionId: string) {
 		const normalizedMinionsOnBoard = minionsOnBoardAndHand?.map((id) => normalizeMinionCardId(id, this.allCards));
 		const normalizedMinionId = normalizeMinionCardId(minionId, this.allCards);
-		return normalizedMinionsOnBoard?.includes(normalizedMinionId);
+		return normalizedMinionsOnBoard?.some((id) => isCardOrSubstitute(normalizedMinionId, id));
 	}
 }
