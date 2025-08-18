@@ -5,6 +5,12 @@ export * from './lib/filters/battlegrounds-anomalies-filter-dropdown-view.compon
 export * from './lib/filters/battlegrounds-rank-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-time-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-tribes-filter-dropdown-view.component';
+export * from './lib/meta-comps/battlegrounds-composition-details-modal.component';
+export * from './lib/meta-comps/battlegrounds-meta-stats-comps-info.component';
+export * from './lib/meta-comps/battlegrounds-meta-stats-comps-tier.component';
+export * from './lib/meta-comps/battlegrounds-meta-stats-comps-view.component';
+export * from './lib/meta-comps/bgs-meta-comp-stats';
+export * from './lib/meta-comps/meta-comp.model';
 export * from './lib/meta-heroes/battlegrounds-hero-average-position-details-tooltip.component';
 export * from './lib/meta-heroes/battlegrounds-hero-search.component';
 export * from './lib/meta-heroes/battlegrounds-meta-stats-hero-info.component';

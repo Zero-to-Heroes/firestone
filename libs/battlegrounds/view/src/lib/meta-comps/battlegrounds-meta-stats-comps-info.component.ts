@@ -93,7 +93,10 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	pickRateHighMmr: string;
 	coreCardArts: string[];
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	onCompositionClick() {
 		this.compositionClick.emit(this._stat);
@@ -103,10 +106,10 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 		return value == null
 			? '-'
 			: value === 0
-			? '0'
-			: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-			  });
+				? '0'
+				: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					});
 	}
 }

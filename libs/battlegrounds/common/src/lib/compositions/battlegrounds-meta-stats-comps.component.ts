@@ -8,6 +8,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { BgsMetaCompStatTierItem, buildCompStats } from '@firestone/battlegrounds/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
@@ -23,18 +24,20 @@ import {
 } from 'rxjs';
 import { BgsMetaCompositionStrategiesService } from '../services/bgs-meta-composition-strategies.service';
 import { BattlegroundsCompsService } from './bgs-comps.service';
-import { buildCompStats } from './bgs-meta-comp-stats';
-import { BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	standalone: false,
 	selector: 'battlegrounds-meta-stats-comps',
-	styleUrls: [`./battlegrounds-meta-stats-comps-columns.scss`, `./battlegrounds-meta-stats-comps.component.scss`],
+	styleUrls: [
+		`../../../../view/src/lib/meta-comps/battlegrounds-meta-stats-comps-columns.scss`,
+		`./battlegrounds-meta-stats-comps.component.scss`,
+	],
 	template: `
 		<battlegrounds-meta-stats-comps-view
 			[stats]="stats$ | async"
 			[loading]="loading$ | async"
 			[lastUpdate]="lastUpdate$ | async"
+			[strategies]="compStrategies.strategies$$.value"
 		></battlegrounds-meta-stats-comps-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +58,7 @@ export class BattlegroundsMetaStatsCompsComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly bgComps: BattlegroundsCompsService,
-		private readonly compStrategies: BgsMetaCompositionStrategiesService,
+		readonly compStrategies: BgsMetaCompositionStrategiesService,
 	) {
 		super(cdr);
 	}

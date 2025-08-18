@@ -12,16 +12,15 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription, combineLatest, filter, takeUntil, tap } from 'rxjs';
-import { BgsMetaCompositionStrategiesService } from '../services/bgs-meta-composition-strategies.service';
 import { BattlegroundsCompositionDetailsModalComponent } from './battlegrounds-composition-details-modal.component';
-import { BattlegroundsCompsService } from './bgs-comps.service';
-import { ColumnSortTypeComp, buildCompTiers } from './bgs-meta-comp-stats';
-import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
+import { buildCompTiers } from './bgs-meta-comp-stats';
+import { BgsMetaCompStatTier, BgsMetaCompStatTierItem, ColumnSortTypeComp } from './meta-comp.model';
 
 @Component({
 	standalone: false,
@@ -187,6 +186,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	@Input() set lastUpdate(value: Date | null) {
 		this.lastUpdate$$.next(value);
 	}
+	@Input() strategies: readonly BgsCompAdvice[] | null;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeComp>>({
 		criteria: 'first',
@@ -205,8 +205,6 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly bgComps: BattlegroundsCompsService,
-		private readonly compStrategies: BgsMetaCompositionStrategiesService,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 	) {
@@ -222,7 +220,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.bgComps, this.prefs, this.compStrategies);
+		await waitForReady(this.prefs);
 
 		this.loading$ = this.loading$$.pipe(this.mapData((loading) => !!loading));
 		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((criteria) => criteria));
@@ -321,8 +319,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		const modalRef: ComponentRef<BattlegroundsCompositionDetailsModalComponent> = this.overlayRef.attach(portal);
 
 		// Find matching composition advice
-		const compositionAdvice =
-			this.compStrategies.strategies$$?.value?.find((advice) => advice.compId === composition.compId) || null;
+		const compositionAdvice = this.strategies?.find((advice) => advice.compId === composition.compId) || null;
 
 		modalRef.instance.composition = composition;
 		modalRef.instance.compositionAdvice = compositionAdvice;

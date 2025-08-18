@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
+import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -11,6 +12,10 @@ import { BattlegroundsAnomaliesFilterDropdownViewComponent } from './filters/bat
 import { BattlegroundsRankFilterDropdownViewComponent } from './filters/battlegrounds-rank-filter-dropdown-view.component';
 import { BattlegroundsTimeFilterDropdownViewComponent } from './filters/battlegrounds-time-filter-dropdown-view.component';
 import { BattlegroundsTribesFilterDropdownViewComponent } from './filters/battlegrounds-tribes-filter-dropdown-view.component';
+import { BattlegroundsCompositionDetailsModalComponent } from './meta-comps/battlegrounds-composition-details-modal.component';
+import { BattlegroundsMetaStatsCompInfoComponent } from './meta-comps/battlegrounds-meta-stats-comps-info.component';
+import { BattlegroundsMetaStatsCompTierComponent } from './meta-comps/battlegrounds-meta-stats-comps-tier.component';
+import { BattlegroundsMetaStatsCompsViewComponent } from './meta-comps/battlegrounds-meta-stats-comps-view.component';
 import { BattlegroundsHeroAveragePositionDetailsTooltipComponent } from './meta-heroes/battlegrounds-hero-average-position-details-tooltip.component';
 import { BattlegroundsHeroSearchComponent } from './meta-heroes/battlegrounds-hero-search.component';
 import { BattlegroundsMetaStatsHeroInfoComponent } from './meta-heroes/battlegrounds-meta-stats-hero-info.component';
@@ -39,6 +44,10 @@ const components = [
 	BattlegroundsMetaStatsQuestRewardsViewComponent,
 	BattlegroundsMetaStatsQuestRewardTierComponent,
 	BattlegroundsMetaStatsQuestRewardInfoComponent,
+	BattlegroundsMetaStatsCompsViewComponent,
+	BattlegroundsMetaStatsCompTierComponent,
+	BattlegroundsMetaStatsCompInfoComponent,
+	BattlegroundsCompositionDetailsModalComponent,
 	BattlegroundsHeroAveragePositionDetailsTooltipComponent,
 	BattlegroundsHeroSearchComponent,
 	BattlegroundsMetaStatsTrinketsViewComponent,
@@ -62,6 +71,8 @@ const components = [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
+
+		ReplayColiseumModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		BattlegroundsCoreModule,

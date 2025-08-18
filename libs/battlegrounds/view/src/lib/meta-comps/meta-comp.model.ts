@@ -30,3 +30,5 @@ export interface BgsMetaCompCard {
 }
 
 export type BgsCompTier = 'S' | 'A' | 'B' | 'C' | 'D' | 'E';
+
+export type ColumnSortTypeComp = 'position' | 'expert-rating' | 'expert-difficulty' | 'first';

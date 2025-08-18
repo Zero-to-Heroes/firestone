@@ -7,7 +7,13 @@ import { BgsRankFilterType } from '@firestone/shared/common/service';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsCompTier, BgsMetaCompCard, BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
+import {
+	BgsCompTier,
+	BgsMetaCompCard,
+	BgsMetaCompStatTier,
+	BgsMetaCompStatTierItem,
+	ColumnSortTypeComp,
+} from './meta-comp.model';
 
 export const buildCompStats = (
 	allStats: readonly BgsCompStat[],
@@ -259,5 +265,3 @@ export const filterCompItems = (
 	// so we just return the filtered results maintaining their order
 	return filteredStats;
 };
-
-export type ColumnSortTypeComp = 'position' | 'expert-rating' | 'expert-difficulty' | 'first';

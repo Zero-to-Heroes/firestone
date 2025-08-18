@@ -171,7 +171,10 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		return !!(this.compositionAdvice && this.compositionAdvice.tips?.length);
 	}
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	closeModal() {
 		if (this.closeHandler) {
@@ -196,10 +199,10 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		return value == null
 			? '-'
 			: value === 0
-			? '0'
-			: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-			  });
+				? '0'
+				: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					});
 	}
 }
