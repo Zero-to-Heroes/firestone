@@ -10,12 +10,13 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BgsCompTier, BgsMetaCompCard, BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 export const buildCompStats = (
-	stats: readonly BgsCompStat[],
+	allStats: readonly BgsCompStat[],
 	rankFilter: BgsRankFilterType,
 	strategies: readonly BgsCompAdvice[],
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly BgsMetaCompStatTierItem[] => {
+	const stats = allStats.filter((s) => strategies.find((strategy) => strategy.compId === s.archetype));
 	const allStatsFirsts = stats
 		.map((s) => {
 			const gamesForFirstDistrib =

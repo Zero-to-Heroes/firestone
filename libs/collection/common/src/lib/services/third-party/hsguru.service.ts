@@ -75,7 +75,7 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 			.reduce((a, b) => a + b, 0);
 		console.log('[hsguru] will sync collection', totalCards);
 		const region = await this.account.getRegion();
-		console.log('[hsguru] region', region, collection);
+		console.log('[hsguru] region', region);
 		const accountInfo = await this.account.getAccountInfo();
 		console.log('[hsguru] account info', accountInfo);
 		if (!region || !accountInfo?.BattleTag) {
