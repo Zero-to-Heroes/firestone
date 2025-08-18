@@ -84,7 +84,7 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 				const element = this.el.nativeElement.querySelector('.scalable');
 				if (!!element) {
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-					this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
+					// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
 				}
 			});
 
