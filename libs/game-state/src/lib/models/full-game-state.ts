@@ -1,3 +1,6 @@
+import { GameTag } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+
 export interface FullGameState {
 	readonly ActivePlayerId: number;
 	readonly Player: PlayerGameState;
@@ -25,6 +28,14 @@ export interface EntityGameState {
 	readonly tags: readonly TagGameState[];
 	readonly enchantments: readonly EnchantmentGameState[];
 }
+export const toReadableEntity = (entity: EntityGameState, allCards?: CardsFacadeService) => ({
+	...entity,
+	name: allCards?.getCard(entity.cardId)?.name ?? entity.cardId,
+	tags: entity.tags.map((t) => ({
+		...t,
+		Name: GameTag[t.Name] ?? t.Name,
+	})),
+});
 
 export interface EnchantmentGameState {
 	readonly entityId: number;

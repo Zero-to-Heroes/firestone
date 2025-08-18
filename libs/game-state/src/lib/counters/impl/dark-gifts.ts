@@ -15,13 +15,14 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 		display: (state: GameState): boolean => state.playerDeck?.hasRelevantCard([CardIds.WallowTheWretched_EDR_487]),
 		value: (state: GameState): readonly string[] | null =>
 			state.fullGameState?.Player?.AllEntities?.filter(
-				(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
+				(e) =>
+					e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1 &&
+					e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL,
 			)
 				.filter((e) => {
 					const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
 					return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
 				})
-				.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL)
 				.map((e) => e.cardId)
 				// Unique - each dark gift is only applied once
 				.filter((e, index, self) => self.indexOf(e) === index) ?? null,
@@ -39,16 +40,25 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 		pref: 'opponentDarkGiftsCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState): readonly string[] | null => {
-			const result =
+			const candidates =
 				state.fullGameState?.Opponent?.AllEntities?.filter(
 					(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
-				)
-					.filter((e) => {
-						const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
-						return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
+				) ?? [];
+			const knownGifts = candidates
+				// Once it has been revealed, it becomes an enchantment
+				.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.ENCHANTMENT)
+				.filter((e) => {
+					const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
+					// return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
+					// So that we only see the ones that are currently in play, or ones attacked to minions that died
+					return zone === Zone.PLAY || zone === Zone.REMOVEDFROMGAME;
+				});
+			const result =
+				knownGifts
+					.map((e) => {
+						const baseEntity = e.tags.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_6)?.Value;
+						return baseEntity ? this.allCards.getCard(baseEntity).id : e.cardId;
 					})
-					.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL)
-					.map((e) => e.cardId)
 					// Unique - each dark gift is only applied once
 					.filter((e, index, self) => self.indexOf(e) === index) ?? null;
 			return !!result?.length ? result : null;
