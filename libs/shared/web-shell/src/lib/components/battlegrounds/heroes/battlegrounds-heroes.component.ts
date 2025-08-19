@@ -3,7 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatsAccessService, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
-import { BattlegroundsViewModule, BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
+import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import { Config } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -23,6 +23,7 @@ import { WebBattlegroundsTimeFilterDropdownComponent } from '../filters/web-batt
 		CommonModule,
 
 		BattlegroundsViewModule,
+
 		WebBattlegroundsFiltersComponent,
 		WebBattlegroundsModeFilterDropdownComponent,
 		WebBattlegroundsRankFilterDropdownComponent,
@@ -32,14 +33,12 @@ import { WebBattlegroundsTimeFilterDropdownComponent } from '../filters/web-batt
 })
 export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly BgsMetaHeroStatTierItem[]>;
-	heroSort$: Observable<BgsHeroSortFilterType>;
 	searchString$: Observable<string>;
 	totalGames$: Observable<number>;
 	lastUpdate$: Observable<Date>;
 
 	readonly defaultDate = new Date();
 
-	private heroSort$$ = new BehaviorSubject<BgsHeroSortFilterType>('tier');
 	private searchString$$ = new BehaviorSubject<string>('');
 
 	constructor(
@@ -54,7 +53,6 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 	async ngAfterContentInit() {
 		await waitForReady(this.metaHeroStatsService, this.prefs);
 
-		this.heroSort$ = this.heroSort$$.asObservable();
 		this.searchString$ = this.searchString$$.asObservable();
 
 		const config$: Observable<Config> = this.prefs.preferences$$.pipe(
