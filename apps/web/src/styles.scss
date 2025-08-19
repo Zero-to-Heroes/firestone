@@ -26,6 +26,10 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+button {
+	border: none;
+}
+
 // Disable text selection on UI elements
 button,
 .nav-item {

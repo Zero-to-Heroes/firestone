@@ -13,6 +13,8 @@
 }
 
 .cards {
+	min-width: 0;
+
 	&.core {
 		width: 250px;
 		margin-right: 20px;

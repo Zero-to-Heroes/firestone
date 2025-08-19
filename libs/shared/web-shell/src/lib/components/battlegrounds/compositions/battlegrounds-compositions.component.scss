@@ -4,4 +4,123 @@
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
+	min-width: 0;
+	max-width: 100%;
+}
+
+battlegrounds-meta-stats-comps-view {
+	flex-grow: 1;
+	display: flex;
+}
+
+::ng-deep battlegrounds-meta-stats-comps-view {
+	.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+		overflow: hidden;
+	}
+}
+
+@media (max-width: 1024px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.addon.addon {
+				display: none;
+			}
+		}
+	}
+}
+
+@media (max-width: 840px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.average-placement.average-placement {
+				display: none;
+			}
+			.expert-notification.expert-notification {
+				.text,
+				.expert-info {
+					width: auto;
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 700px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.first-percent.first-percent {
+				display: none;
+			}
+			.expert-notification.expert-notification {
+				.text,
+				.expert-info {
+					padding: 10px;
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 640px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.data-info.data-info {
+				margin-top: 10px;
+			}
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.expert-notification.expert-notification {
+				flex-direction: column;
+				margin: 0;
+				margin-top: 10px;
+				margin-left: 20px;
+				margin-right: 20px;
+				gap: 0;
+
+				.text {
+					border: none;
+					border-radius: 0;
+				}
+
+				.expert-info {
+					border-radius: 0;
+
+					.expert-details {
+						.expert-links.expert-links.expert-links {
+							display: none;
+						}
+					}
+					.expert-picture.expert-picture.expert-picture {
+						height: 40px;
+						flex-basis: 40px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 550px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.core.core {
+				display: none;
+			}
+		}
+	}
+}
+
+@media (max-width: 400px) {
+	::ng-deep battlegrounds-meta-stats-comps-view {
+		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.name.name {
+				width: 100px;
+			}
+		}
+	}
 }

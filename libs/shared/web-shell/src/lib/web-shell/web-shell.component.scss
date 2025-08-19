@@ -16,12 +16,15 @@
 
 		--tooltip-background-color: var(--color-5);
 		--tooltip-color: var(--color-1);
+		--control-button-color: var(--color-1);
+		--control-button-background-color: var(--color-5);
 	}
 
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
 	overflow: hidden;
+	align-items: center;
 
 	--window-background-image:
 		radial-gradient(30vw at 50% 50%, rgba(90, 63, 35, 0.7) 0%, rgba(26, 15, 8, 0.7) 100%),
@@ -42,6 +45,7 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 	position: relative;
 	z-index: 1000;
+	width: 100%;
 
 	.header-content {
 		display: flex;
@@ -430,6 +434,7 @@
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-top: 10px;
+	width: 100%;
 }
 
 // Responsive Design
@@ -485,7 +490,8 @@
 		// padding: 48px;
 		max-width: 1400px;
 		min-width: 800px;
-		align-self: center;
+		// margin-left: auto;
+		// margin-right: auto;
 	}
 }
 
