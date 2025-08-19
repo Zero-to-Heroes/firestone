@@ -40,11 +40,22 @@
 
 			&:last-child img {
 				clip-path: polygon(43% 0%, 100% 0%, 100% 100%, 37% 100%);
-				mask: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+				mask: linear-gradient(
+					to right,
+					rgba(0, 0, 0, 1) 0%,
+					rgba(0, 0, 0, 1) 60%,
+					rgba(0, 0, 0, 0.4) 70%,
+					rgba(0, 0, 0, 0.1) 80%,
+					rgba(0, 0, 0, 0.05) 90%,
+					rgba(0, 0, 0, 0) 100%
+				);
 				-webkit-mask: linear-gradient(
 					to right,
 					rgba(0, 0, 0, 1) 0%,
-					rgba(0, 0, 0, 1) 70%,
+					rgba(0, 0, 0, 1) 60%,
+					rgba(0, 0, 0, 0.4) 70%,
+					rgba(0, 0, 0, 0.1) 80%,
+					rgba(0, 0, 0, 0.05) 90%,
 					rgba(0, 0, 0, 0) 100%
 				);
 			}
