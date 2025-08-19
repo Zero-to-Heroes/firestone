@@ -19,7 +19,9 @@
 								*ngFor="let section of navigationSections"
 								class="dropdown-item"
 								[class.active]="section.id === currentSection.id"
-								(click)="selectSection(section)"
+								[class.disabled]="section.disabled"
+								(click)="section.disabled ? null : selectSection(section)"
+								[disabled]="section.disabled"
 							>
 								<span class="item-icon" [inlineSVG]="section.icon"></span>
 								<span class="item-label">{{ section.label }}</span>
@@ -32,9 +34,11 @@
 						<button
 							*ngFor="let subItem of getCurrentSubItems()"
 							class="sub-menu-item"
-							[routerLink]="subItem.route"
+							[class.disabled]="subItem.disabled"
+							[routerLink]="subItem.disabled ? null : subItem.route"
 							routerLinkActive="active"
 							[routerLinkActiveOptions]="{ exact: true }"
+							[disabled]="subItem.disabled"
 						>
 							{{ subItem.label }}
 						</button>
@@ -60,10 +64,12 @@
 				<!-- Main Section -->
 				<button
 					class="mobile-nav-item main-section"
-					[routerLink]="section.route"
+					[class.disabled]="section.disabled"
+					[routerLink]="section.disabled ? null : section.route"
 					routerLinkActive="active"
-					(click)="closeMobileMenu()"
+					(click)="section.disabled ? null : closeMobileMenu()"
 					[routerLinkActiveOptions]="{ exact: true }"
+					[disabled]="section.disabled"
 				>
 					<span class="nav-icon" [inlineSVG]="section.icon"></span>
 					<span class="nav-label">{{ section.label }}</span>
@@ -73,10 +79,12 @@
 				<button
 					*ngFor="let subItem of section.subItems"
 					class="mobile-nav-item sub-item"
-					[routerLink]="subItem.route"
+					[class.disabled]="subItem.disabled"
+					[routerLink]="subItem.disabled ? null : subItem.route"
 					routerLinkActive="active"
-					(click)="closeMobileMenu()"
+					(click)="subItem.disabled ? null : closeMobileMenu()"
 					[routerLinkActiveOptions]="{ exact: true }"
+					[disabled]="subItem.disabled"
 				>
 					<span class="nav-label">{{ subItem.label }}</span>
 				</button>

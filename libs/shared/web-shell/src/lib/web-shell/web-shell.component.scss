@@ -203,6 +203,18 @@
 					color: var(--color-1);
 				}
 
+				&.disabled {
+					opacity: 0.5;
+					cursor: not-allowed;
+					color: var(--color-3);
+
+					&:hover,
+					&:focus {
+						background: none;
+						color: var(--color-3);
+					}
+				}
+
 				.item-icon {
 					width: 26px;
 					height: 26px;
@@ -266,6 +278,18 @@
 					height: 2px;
 					background: var(--color-orange);
 					border-radius: 1px;
+				}
+			}
+
+			&.disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+				color: var(--color-3);
+
+				&:hover,
+				&:focus {
+					background: none;
+					color: var(--color-3);
 				}
 			}
 		}
@@ -449,6 +473,28 @@
 				height: 1px;
 				background: rgba(255, 255, 255, 0.2);
 				transform: translateY(-50%);
+			}
+		}
+
+		// Disabled state for all mobile nav items
+		&.disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+			color: var(--color-3);
+
+			&:hover,
+			&:focus {
+				background: none;
+				color: var(--color-3);
+				transform: none;
+			}
+
+			.nav-label {
+				opacity: 0.5;
+			}
+
+			&::after {
+				opacity: 0.3;
 			}
 		}
 	}

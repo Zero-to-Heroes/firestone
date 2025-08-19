@@ -13,12 +13,14 @@ interface NavigationSection {
 	icon: string;
 	route: string;
 	subItems: NavigationSubItem[];
+	disabled?: boolean;
 }
 
 interface NavigationSubItem {
 	id: string;
 	label: string;
 	route: string;
+	disabled?: boolean;
 }
 
 @Component({
@@ -112,6 +114,7 @@ export class WebShellComponent implements OnInit, OnDestroy {
 						id: 'bg-cards',
 						label: this.i18n.translateString('app.battlegrounds.menu.cards'),
 						route: '/battlegrounds/cards',
+						disabled: true,
 					},
 				],
 			},
@@ -125,11 +128,13 @@ export class WebShellComponent implements OnInit, OnDestroy {
 						id: 'arena-stats',
 						label: this.i18n.translateString('website.arena.classes'),
 						route: '/arena/classes',
+						disabled: true,
 					},
 					{
 						id: 'arena-cards',
 						label: this.i18n.translateString('website.arena.cards'),
 						route: '/arena/cards',
+						disabled: true,
 					},
 				],
 			},
@@ -143,11 +148,13 @@ export class WebShellComponent implements OnInit, OnDestroy {
 						id: 'constructed-meta',
 						label: this.i18n.translateString('website.constructed.meta'),
 						route: '/constructed/meta',
+						disabled: true,
 					},
 					{
 						id: 'constructed-decks',
 						label: this.i18n.translateString('website.constructed.decks'),
 						route: '/constructed/decks',
+						disabled: true,
 					},
 				],
 			},
