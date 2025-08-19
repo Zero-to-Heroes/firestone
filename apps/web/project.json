@@ -22,6 +22,12 @@
 						"input": "libs/shared/assets/src/assets",
 						"glob": "**/*",
 						"output": "./assets"
+					},
+					{
+						"input": "apps/web/src",
+						"glob": "*.html",
+						"ignore": ["index.html"],
+						"output": "./"
 					}
 				],
 				"styles": [

@@ -1,0 +1,12 @@
+<body>
+	You will be prompted to open a page in Firestone. Once you accept it, you can go back to the app and you will be logged in to Out of
+	Games
+	<script>
+		(function () {
+			const urlParams = new URLSearchParams(window.location.search);
+			const code = urlParams.get('code');
+			console.log('redirecting', code);
+			window.location.replace(`firestoneapp://outofcards-callback?code=${code}`);
+		})();
+	</script>
+</body>

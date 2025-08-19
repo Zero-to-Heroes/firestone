@@ -3,10 +3,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { BattlegroundsViewModule, RankFilterOption } from '@firestone/battlegrounds/view';
-import { BgsRankFilterType } from '@firestone/shared/common/service';
+import { BgsRankFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { PreferencesService } from 'libs/shared/common/service/src/lib/services/preferences.service';
 import { filter, Observable } from 'rxjs';
 
 @Component({

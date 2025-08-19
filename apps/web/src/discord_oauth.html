@@ -1,0 +1,12 @@
+<body>
+	Hop in Firestone
+	<script>
+		(function () {
+			const urlParams = new URLSearchParams(window.location.search);
+			console.debug('urlParams', urlParams);
+			const code = urlParams.get('code');
+			console.log('redirecting', code);
+			window.location.replace(`firestoneapp://discord_auth?code=${code}`);
+		})();
+	</script>
+</body>

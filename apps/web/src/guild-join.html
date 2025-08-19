@@ -1,0 +1,12 @@
+<body>
+	Please open the link in Firestone if prompted, then head up to the app to view your new guild!
+	<script>
+		(function () {
+			const urlParams = new URLSearchParams(window.location.search);
+			const communityId = urlParams.get('communityId');
+			const joinCode = urlParams.get('joinCode');
+			console.log('redirecting', communityId, joinCode);
+			window.location.replace(`firestoneapp://guilds/join/${communityId}?${joinCode}`);
+		})();
+	</script>
+</body>

@@ -1,0 +1,9 @@
+<body>
+	All done, you can close that window and go back to Firestone.
+	<script>
+		(function () {
+			console.log('redirecting', location.hash, window.location);
+			window.location.replace(`firestoneapp://twitch/${location.hash}`);
+		})();
+	</script>
+</body>
