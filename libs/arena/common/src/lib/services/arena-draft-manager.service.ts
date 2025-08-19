@@ -191,11 +191,15 @@ export class ArenaDraftManagerService
 			if (changes.ArenaUndergroundLatestCardPick != null) {
 				if (
 					changes.ArenaUndergroundLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
-					!arraysEqual(changes.ArenaUndergroundLatestCardPick.Options, this.lastPick$$?.value?.Options)
+					!arraysEqual(
+						changes.ArenaUndergroundLatestCardPick.Options?.map((o) => o.CardId),
+						this.lastPick$$?.value?.Options?.map((o) => o.CardId),
+					)
 				) {
 					console.log(
 						'[arena-draft-manager] received latest underground card pick',
 						changes.ArenaUndergroundLatestCardPick,
+						this.lastPick$$?.value,
 					);
 					this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
 				} else {
