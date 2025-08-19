@@ -123,12 +123,12 @@ export class WebShellComponent implements OnInit, OnDestroy {
 				subItems: [
 					{
 						id: 'arena-stats',
-						label: this.i18n.translateString('app.arena.menu.classes'),
+						label: this.i18n.translateString('website.arena.classes'),
 						route: '/arena/classes',
 					},
 					{
 						id: 'arena-cards',
-						label: this.i18n.translateString('app.arena.menu.cards'),
+						label: this.i18n.translateString('website.arena.cards'),
 						route: '/arena/cards',
 					},
 				],
@@ -141,12 +141,12 @@ export class WebShellComponent implements OnInit, OnDestroy {
 				subItems: [
 					{
 						id: 'constructed-meta',
-						label: this.i18n.translateString('app.constructed.menu.meta'),
+						label: this.i18n.translateString('website.constructed.meta'),
 						route: '/constructed/meta',
 					},
 					{
 						id: 'constructed-decks',
-						label: this.i18n.translateString('app.constructed.menu.decks'),
+						label: this.i18n.translateString('website.constructed.decks'),
 						route: '/constructed/decks',
 					},
 				],

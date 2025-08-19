@@ -335,27 +335,25 @@
 	}
 
 	.mobile-nav-content {
-		padding: 100px 24px 24px;
+		padding: 30px 24px 24px;
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 0; // Remove gap since we're managing spacing with margins on items
 	}
 
 	.mobile-nav-item {
 		background: none;
 		border: none;
-		padding: 20px 24px;
-		height: 80px;
 		color: var(--color-2);
 		display: flex;
 		align-items: center;
-		gap: 16px;
 		cursor: pointer;
 		transition: all 0.3s ease;
 		border-radius: 12px;
 		font-family: inherit;
 		width: 100%;
 		text-align: left;
+		position: relative;
 
 		&:hover,
 		&:focus {
@@ -380,26 +378,78 @@
 			}
 		}
 
-		.nav-icon {
-			font-size: 24px;
-			line-height: 1;
-			width: 32px;
-			height: 32px;
-			flex-shrink: 0;
-			display: flex;
-			align-items: center;
-			justify-content: center;
+		// Main section styling
+		&.main-section {
+			padding: 20px 24px;
+			height: 80px;
+			gap: 16px;
+			margin-bottom: 4px;
+			margin-top: 16px; // Add spacing between section groups
 
-			::ng-deep svg {
-				width: 100%;
-				height: 100%;
-				object-fit: contain;
+			&:first-child {
+				margin-top: 0; // Remove top margin from first section
+			}
+
+			.nav-icon {
+				font-size: 24px;
+				line-height: 1;
+				width: 32px;
+				height: 32px;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				::ng-deep svg {
+					width: 100%;
+					height: 100%;
+					object-fit: contain;
+				}
+			}
+
+			.nav-label {
+				font-size: 18px;
+				font-weight: 600;
 			}
 		}
 
-		.nav-label {
-			font-size: 18px;
-			font-weight: 600;
+		// Sub-item styling
+		&.sub-item {
+			padding: 12px 24px 12px 72px; // Left padding to align with main section text
+			height: 48px;
+			margin-bottom: 2px;
+
+			.nav-label {
+				font-size: 16px;
+				font-weight: 500;
+				opacity: 0.9;
+			}
+
+			&:hover,
+			&:focus {
+				.nav-label {
+					opacity: 1;
+				}
+			}
+
+			&.active {
+				.nav-label {
+					opacity: 1;
+					font-weight: 600;
+				}
+			}
+
+			// Add subtle visual connection to parent
+			&::after {
+				content: '';
+				position: absolute;
+				left: 48px;
+				top: 50%;
+				width: 12px;
+				height: 1px;
+				background: rgba(255, 255, 255, 0.2);
+				transform: translateY(-50%);
+			}
 		}
 	}
 }

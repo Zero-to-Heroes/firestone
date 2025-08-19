@@ -56,17 +56,31 @@
 	<!-- Mobile Navigation Overlay -->
 	<nav class="mobile-nav" [class.open]="isMobileMenuOpen">
 		<div class="mobile-nav-content">
-			<button
-				*ngFor="let section of navigationSections"
-				class="mobile-nav-item"
-				[routerLink]="section.route"
-				routerLinkActive="active"
-				(click)="closeMobileMenu()"
-				[routerLinkActiveOptions]="{ exact: false }"
-			>
-				<span class="nav-icon" [inlineSVG]="section.icon"></span>
-				<span class="nav-label">{{ section.label }}</span>
-			</button>
+			<ng-container *ngFor="let section of navigationSections">
+				<!-- Main Section -->
+				<button
+					class="mobile-nav-item main-section"
+					[routerLink]="section.route"
+					routerLinkActive="active"
+					(click)="closeMobileMenu()"
+					[routerLinkActiveOptions]="{ exact: true }"
+				>
+					<span class="nav-icon" [inlineSVG]="section.icon"></span>
+					<span class="nav-label">{{ section.label }}</span>
+				</button>
+
+				<!-- Sub Items -->
+				<button
+					*ngFor="let subItem of section.subItems"
+					class="mobile-nav-item sub-item"
+					[routerLink]="subItem.route"
+					routerLinkActive="active"
+					(click)="closeMobileMenu()"
+					[routerLinkActiveOptions]="{ exact: true }"
+				>
+					<span class="nav-label">{{ subItem.label }}</span>
+				</button>
+			</ng-container>
 		</div>
 	</nav>
 
