@@ -17,6 +17,11 @@ import {
 	styleUrls: [`./battlegrounds-meta-stats-hero-columns.scss`, `./battlegrounds-meta-stats-hero-info.component.scss`],
 	template: `
 		<div class="info" (click)="seeDetailedHeroStats()">
+			<div class="background">
+				<div class="background-image">
+					<img [src]="backgroundImage" />
+				</div>
+			</div>
 			<bgs-hero-portrait
 				aria-hidden="true"
 				class="portrait"
@@ -127,6 +132,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 
 	@Input() set stat(value: BgsMetaHeroStatTierItem) {
 		this.heroCardId = value.id;
+		this.backgroundImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
 		this.heroPowerCardId = value.heroPowerCardId;
 		this.heroName = this.allCards.getCard(value.id).name;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id, this.allCards);
@@ -197,6 +203,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	placementChartData: SimpleBarChartData[];
 	netMmr: number;
 	averagePositionTooltipInput: BgsHeroAveragePositionDetails;
+	backgroundImage: string;
 
 	tribes: readonly TribeInfo[];
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };

@@ -14,6 +14,34 @@
 	& > * {
 		height: 100%;
 	}
+	.background {
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		left: 60px;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		overflow: hidden;
+		display: flex;
+
+		.background-image {
+			opacity: 0.1;
+			overflow: hidden;
+			position: relative;
+
+			img {
+				margin-top: -85px;
+				mask: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+				-webkit-mask: linear-gradient(
+					to right,
+					rgba(0, 0, 0, 1) 0%,
+					rgba(0, 0, 0, 1) 70%,
+					rgba(0, 0, 0, 0) 100%
+				);
+			}
+		}
+	}
 
 	.portrait {
 		height: 100%;
