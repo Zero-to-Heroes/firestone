@@ -66,7 +66,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 		await Promise.all([this.scene.isReady(), this.prefs.isReady(), this.gameState.isReady()]);
 
 		const showWidget$ = combineLatest([
-			this.scene.currentScene$$,
+			this.scene.currentScene$$.pipe(distinctUntilChanged()),
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.bgsShowQuestStatsOverlay),
 				distinctUntilChanged(),
@@ -78,6 +78,7 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 					(a, b) =>
 						a?.length === b?.length && !!a?.every((option, index) => equalCardOption(option, b?.[index])),
 				),
+				// tap((options) => console.debug('[bgs-quest] current options', options)),
 			),
 			this.gameState.gameState$$.pipe(
 				auditTime(500),
@@ -85,9 +86,9 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 				distinctUntilChanged(),
 			),
 		]).pipe(
-			debounceTime(500),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			tap((data) => console.debug('[bgs-quest] will show?', data)),
+			auditTime(500),
+			// distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			// tap((data) => console.debug('[bgs-quest] will show?', data)),
 			map(([currentScene, displayFromPrefs, currentOptions, gameType]) => {
 				if (!displayFromPrefs) {
 					return false;
