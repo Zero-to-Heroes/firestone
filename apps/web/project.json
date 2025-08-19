@@ -52,7 +52,8 @@
 						}
 					],
 					"sourceMap": false,
-					"outputHashing": "all"
+					"outputHashing": "all",
+					"baseHref": "/"
 				},
 				"development": {
 					"buildOptimizer": false,
@@ -98,6 +99,13 @@
 			"options": {
 				"jestConfig": "apps/web/jest.config.ts",
 				"passWithNoTests": true
+			}
+		},
+		"deploy": {
+			"executor": "nx:run-commands",
+			"dependsOn": ["build"],
+			"options": {
+				"command": "npx tsx ./build-tools/upload-web.ts"
 			}
 		}
 	},

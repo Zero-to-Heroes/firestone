@@ -27,6 +27,8 @@
 		"start-web": "nx serve web",
 		"dev-web": "nx serve web --configuration=development",
 		"build-web": "nx build web --configuration=production",
+		"deploy-web": "nx deploy web",
+		"full-deploy-web": "nx build web --configuration=production && nx deploy web",
 		"start-mobile": "nx serve mobile --port=4201",
 		"dev-mobile": "nx serve mobile --configuration=development --port=4201",
 		"build-mobile": "nx build mobile --configuration=production",
