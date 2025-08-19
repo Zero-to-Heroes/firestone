@@ -448,13 +448,13 @@ export class GameStateService {
 			currentState,
 			gameEvent,
 		);
-		if ((currentState.fullGameState?.Opponent?.Deck?.length ?? 0) !== currentState.opponentDeck.deck.length) {
-			console.warn(
-				'[game-state] deck length mismatch',
-				currentState.fullGameState?.Opponent?.Deck?.length,
-				currentState.opponentDeck.deck.length,
-			);
-		}
+		// if ((currentState.fullGameState?.Opponent?.Deck?.length ?? 0) !== currentState.opponentDeck.deck.length) {
+		// 	console.warn(
+		// 		'[game-state] deck length mismatch',
+		// 		currentState.fullGameState?.Opponent?.Deck?.length,
+		// 		currentState.opponentDeck.deck.length,
+		// 	);
+		// }
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}
