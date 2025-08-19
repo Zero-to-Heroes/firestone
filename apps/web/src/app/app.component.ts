@@ -5,6 +5,7 @@ import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeStandaloneService, ILocalizationService, setAppInjector } from '@firestone/shared/framework/core';
 import { WebShellComponent } from '@firestone/shared/web-shell';
 import { TranslateModule } from '@ngx-translate/core';
+import { AnalyticsService } from '../../../../libs/shared/framework/core/src';
 
 @Component({
 	standalone: true,
@@ -22,6 +23,7 @@ export class AppComponent implements AfterContentInit {
 		private readonly allCards: CardsFacadeStandaloneService,
 		private readonly injector: Injector,
 		private readonly i18n: ILocalizationService,
+		private readonly analytics: AnalyticsService,
 	) {
 		setAppInjector(injector);
 	}

@@ -18,6 +18,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 
+import { PLAUSIBLE_DOMAIN } from '../../../../libs/shared/framework/core/src';
 import { routes } from './routes';
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
@@ -46,6 +47,7 @@ export const appConfig: ApplicationConfig = {
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
+		{ provide: PLAUSIBLE_DOMAIN, useValue: 'www.firestoneapp.com' },
 
 		// CdkOverlayContainer,
 	],
