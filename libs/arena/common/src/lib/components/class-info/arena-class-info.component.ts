@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { ArenaClassInfo } from './model';
 
 @Component({
@@ -10,6 +11,11 @@ import { ArenaClassInfo } from './model';
 	styleUrls: [`./arena-class-tier-list-columns.scss`, `./arena-class-info.component.scss`],
 	template: `
 		<div class="class-info">
+			<div class="background">
+				<div class="background-image">
+					<img [src]="backgroundImage" />
+				</div>
+			</div>
 			<div class="cell portrait">
 				<img class="icon" [src]="icon" />
 			</div>
@@ -51,6 +57,8 @@ export class ArenaClassInfoComponent {
 			})),
 		};
 		this.placementChartData = [globalPlacementChartData];
+		const defaultHero = getDefaultHeroDbfIdForClass(value.playerClass);
+		this.backgroundImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.allCards.getCard(defaultHero).id}.jpg`;
 		// console.debug('setting stat', value, this.placementChartData);
 	}
 
@@ -61,6 +69,10 @@ export class ArenaClassInfoComponent {
 	placementChartData: SimpleBarChartData[];
 	dataTextFormatter = (value: string) =>
 		this.i18n.translateString('app.arena.class-tier-list.graph-placement-tooltip', { value: value })!;
+	backgroundImage: string;
 
-	constructor(private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 }
