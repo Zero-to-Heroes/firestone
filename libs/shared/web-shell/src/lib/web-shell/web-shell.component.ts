@@ -133,13 +133,11 @@ export class WebShellComponent implements OnInit, OnDestroy {
 						id: 'arena-stats',
 						label: this.i18n.translateString('website.arena.classes'),
 						route: '/arena/classes',
-						disabled: true,
 					},
 					{
 						id: 'arena-cards',
 						label: this.i18n.translateString('website.arena.cards'),
 						route: '/arena/cards',
-						disabled: true,
 					},
 				],
 			},

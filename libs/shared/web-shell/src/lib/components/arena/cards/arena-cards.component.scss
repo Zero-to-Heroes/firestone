@@ -1,0 +1,66 @@
+@use '../../shared-styles.scss';
+
+:host {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	max-width: 100%;
+}
+
+@media (max-width: 1200px) {
+	::ng-deep arena-card-stats {
+		.mulligan-winrate.mulligan-winrate.mulligan-winrate {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 850px) {
+	::ng-deep arena-card-stats {
+		.data-info.data-info {
+			margin-top: 10px;
+		}
+		.mulligan-kept.mulligan-kept.mulligan-kept {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 670px) {
+	::ng-deep arena-card-stats {
+		.pickrate-high-wins.pickrate-high-wins.pickrate-high-wins {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 520px) {
+	::ng-deep arena-card-stats {
+		.data-info.data-info.data-info {
+			flex-wrap: wrap;
+		}
+		.card-details.card-details.card-details {
+			width: 170px;
+		}
+	}
+}
+
+@media (max-width: 450px) {
+	::ng-deep arena-card-stats {
+		.deck-winrate.deck-winrate.deck-winrate,
+		.drawn-winrate.drawn-winrate.drawn-winrate {
+			min-width: 100px;
+			width: 100px;
+		}
+	}
+}
+
+@media (max-width: 400px) {
+	::ng-deep arena-card-stats {
+		.deck-winrate.deck-winrate.deck-winrate,
+		.drawn-winrate.drawn-winrate.drawn-winrate {
+			min-width: 70px;
+			width: 70px;
+		}
+	}
+}

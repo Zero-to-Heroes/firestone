@@ -61,4 +61,8 @@ export class CardsFacadeStandaloneService {
 	private getFileName(locale: string) {
 		return `cards_${locale}.gz.json`;
 	}
+
+	public getRootCardId(cardId: string): string {
+		return this.service.getRootCardId(cardId);
+	}
 }

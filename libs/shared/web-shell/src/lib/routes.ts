@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ArenaCardsComponent } from './components/arena/cards/arena-cards.component';
 import { ArenaClassesComponent } from './components/arena/classes/arena-classes.component';
 import { BattlegroundsCardsComponent } from './components/battlegrounds/cards/battlegrounds-cards.component';
 import { BattlegroundsCompositionsComponent } from './components/battlegrounds/compositions/battlegrounds-compositions.component';
@@ -14,5 +15,6 @@ export const routes: Routes = [
 	{ path: 'battlegrounds/cards', component: BattlegroundsCardsComponent },
 	{ path: 'arena', redirectTo: '/arena/classes', pathMatch: 'full' },
 	{ path: 'arena/classes', component: ArenaClassesComponent },
+	{ path: 'arena/cards', component: ArenaCardsComponent },
 	{ path: 'constructed', component: ConstructedComponent },
 ];
