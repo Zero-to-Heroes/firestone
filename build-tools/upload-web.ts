@@ -133,6 +133,7 @@ async function uploadDirectory(dirPath: string, stats: UploadStats, prefix: stri
 	}
 }
 
+<<<<<<< HEAD
 async function invalidateCloudFrontCache(): Promise<void> {
 	if (!CLOUDFRONT_DISTRIBUTION_ID) {
 		console.log('⚠️  CLOUDFRONT_DISTRIBUTION_ID environment variable not set, skipping cache invalidation');
@@ -159,6 +160,27 @@ async function invalidateCloudFrontCache(): Promise<void> {
 	} catch (error) {
 		console.error('❌ CloudFront cache invalidation failed:', error);
 		// Don't throw error here as the upload was successful
+=======
+async function configureS3Website(): Promise<void> {
+	const websiteConfig = {
+		Bucket: BUCKET_NAME,
+		WebsiteConfiguration: {
+			IndexDocument: {
+				Suffix: 'index.html',
+			},
+			ErrorDocument: {
+				Key: 'index.html', // This is crucial for SPA routing
+			},
+		},
+	};
+
+	try {
+		await s3.putBucketWebsite(websiteConfig).promise();
+		console.log('✓ S3 static website hosting configured');
+	} catch (error) {
+		console.error('❌ Failed to configure S3 website hosting:', error);
+		throw error;
+>>>>>>> 51b61d238 (DEV (web): fix config for static hosting)
 	}
 }
 
@@ -182,6 +204,9 @@ async function main(): Promise<void> {
 			console.error(`❌ Cannot access S3 bucket: ${BUCKET_NAME}`, error);
 			throw error;
 		}
+
+		// Configure S3 static website hosting
+		await configureS3Website();
 
 		// Initialize upload stats
 		const stats: UploadStats = { uploaded: 0, skipped: 0, total: 0 };
