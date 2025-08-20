@@ -20,7 +20,9 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 	private async initFacade() {
 		const isMainWindow = await this.windowManager.isMainWindow();
-		if (isMainWindow) {
+		// Check if the service is already initialized, which is useful for single-window apps, like
+		// the website
+		if (isMainWindow && !window[this.serviceName]) {
 			window[this.serviceName] = this;
 			this.mainInstance = this as unknown as T;
 			this.init();

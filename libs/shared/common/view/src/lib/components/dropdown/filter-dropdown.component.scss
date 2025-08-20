@@ -191,6 +191,11 @@ ng-select.disabled {
 	height: 15px;
 	--icon-color: var(--color-1);
 	margin-left: 5px;
+
+	svg {
+		height: 100%;
+		aspect-ratio: 1;
+	}
 }
 
 .info {

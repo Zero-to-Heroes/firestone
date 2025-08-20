@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { CdkOverlayContainer, translationFileVersion } from '@firestone/shared/framework/common';
+import { PLAUSIBLE_DOMAIN } from '@firestone/shared/framework/core';
 
 import {
 	CardsFacadeService,
@@ -18,7 +19,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 
-import { PLAUSIBLE_DOMAIN } from '../../../../libs/shared/framework/core/src';
 import { routes } from './routes';
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
