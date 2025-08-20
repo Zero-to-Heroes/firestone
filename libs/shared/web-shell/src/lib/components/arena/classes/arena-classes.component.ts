@@ -7,13 +7,22 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { filter, tap } from 'rxjs';
 import { WebArenaFiltersComponent } from '../filters/_web-arena-filters.component';
 import { WebArenaModeFilterDropdownComponent } from '../filters/web-arena-mode-filter-dropdown.component';
+import { WebArenaTimeFilterDropdownComponent } from '../filters/web-arena-time-filter-dropdown.component';
 
 @Component({
 	standalone: true,
 	selector: 'arena-classes',
 	templateUrl: './arena-classes.component.html',
 	styleUrls: ['./arena-classes.component.scss'],
-	imports: [CommonModule, ArenaCommonModule, WebArenaFiltersComponent, WebArenaModeFilterDropdownComponent],
+	imports: [
+		CommonModule,
+
+		ArenaCommonModule,
+
+		WebArenaFiltersComponent,
+		WebArenaModeFilterDropdownComponent,
+		WebArenaTimeFilterDropdownComponent,
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaClassesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
