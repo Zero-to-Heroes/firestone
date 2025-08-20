@@ -13,6 +13,12 @@ battlegrounds-meta-stats-heroes-view {
 }
 
 ::ng-deep .hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container.hero-stats-container {
+	.item-container .info {
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+
 	.loading-state {
 		color: var(--default-text-color);
 		.state-container {
