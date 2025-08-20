@@ -674,7 +674,7 @@ export class Preferences implements IPreferences {
 	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
 	// readonly mercenariesOutOfCombatPlayerTeamOverlayPosition: { left: number; top: number };
 
-	readonly arenaActiveMode: ArenaModeFilterType = 'all';
+	readonly arenaActiveMode: ArenaModeFilterType = 'arena-underground';
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
 	readonly arenaActiveCardClassFilter: ArenaCardClassFilterType = 'all';
