@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds';
 import { WebsiteAuthComponent, WebsitePremiumComponent } from '@firestone/website/core';
+import { BattlegroundsCompositionsComponent } from '@firestone/shared/web-shell';
 import {
 	WebsiteProfileArenaComponent,
 	WebsiteProfileBattlegroundsComponent,
@@ -17,6 +18,14 @@ export const appRoutes: Route[] = [
 		path: 'battlegrounds',
 		component: WebsiteBattlegroundsComponent,
 		canActivate: [AuthGuard],
+	},
+	{
+		path: 'battlegrounds/comps',
+		component: BattlegroundsCompositionsComponent,
+	},
+	{
+		path: 'battlegrounds/comps/:compSlug',
+		component: BattlegroundsCompositionsComponent,
 	},
 	{
 		path: 'profile/overview',
