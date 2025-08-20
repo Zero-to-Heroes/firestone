@@ -253,12 +253,12 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 
 		this.totalGames$ = this.totalGames$$.pipe(
 			filter((totalGames) => totalGames != null),
-			this.mapData((totalGames) => totalGames.toLocaleString(this.i18n.formatCurrentLocale())),
+			map((totalGames) => totalGames.toLocaleString(this.i18n.formatCurrentLocale())),
 			takeUntil(this.destroyed$),
 		);
 		this.lastUpdate$ = this.lastUpdate$$.pipe(
 			filter((date) => !!date),
-			this.mapData((date) => {
+			map((date) => {
 				const now = new Date();
 				const diff = now.getTime() - date.getTime();
 				const days = diff / (1000 * 3600 * 24);
@@ -267,10 +267,11 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 				}
 				return date.toLocaleDateString(this.i18n.formatCurrentLocale());
 			}),
+			takeUntil(this.destroyed$),
 		);
 		this.lastUpdateFull$ = this.lastUpdate$$.pipe(
 			filter((date) => !!date),
-			this.mapData((date) => {
+			map((date) => {
 				return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 					year: 'numeric',
 					month: 'numeric',
@@ -280,6 +281,7 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 					second: 'numeric',
 				});
 			}),
+			takeUntil(this.destroyed$),
 		);
 	}
 
