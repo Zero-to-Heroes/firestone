@@ -8,7 +8,7 @@ import { Config } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 import { WebBattlegroundsFiltersComponent } from '../filters/_web-battlegrounds-filters.component';
 import { WebBattlegroundsModeFilterDropdownComponent } from '../filters/web-battlegrounds-mode-filter-dropdown.component';
 import { WebBattlegroundsRankFilterDropdownComponent } from '../filters/web-battlegrounds-rank-filter-dropdown.component';
@@ -94,16 +94,23 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 		);
 		const metaData$ = statsProvider$.pipe(
 			tap((stats) => console.debug('[meta-stats] received stats', stats)),
-			this.mapData((stats) => ({
+			map((stats) => ({
 				totalGames: stats?.dataPoints,
 				lastUpdate: stats?.lastUpdateDate,
 			})),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		this.totalGames$ = metaData$.pipe(this.mapData((data) => data?.totalGames));
+		this.totalGames$ = metaData$.pipe(
+			map((data) => data?.totalGames),
+			tap((totalGames) => console.debug('[meta-stats] total games', totalGames)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		this.lastUpdate$ = metaData$.pipe(
-			this.mapData((data) => (data?.lastUpdate ? new Date(data.lastUpdate) : null)),
+			map((data) => (data?.lastUpdate ? new Date(data.lastUpdate) : null)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.stats$ = combineLatest([config$, statsProvider$]).pipe(
 			switchMap(([config, stats]) => this.metaHeroStatsService.getTiers(config, stats)),
