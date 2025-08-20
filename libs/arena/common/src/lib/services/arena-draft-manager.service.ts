@@ -178,8 +178,10 @@ export class ArenaDraftManagerService
 					changes.ArenaLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
 					!arraysEqual(changes.ArenaLatestCardPick.Options, this.lastPick$$?.value?.Options)
 				) {
-					console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
-					this.lastPick$$.next(changes.ArenaLatestCardPick);
+					if (changes.ArenaLatestCardPick.PickNumber !== 0) {
+						console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
+						this.lastPick$$.next(changes.ArenaLatestCardPick);
+					}
 				} else {
 					console.log(
 						'[arena-draft-manager] received latest card pick, but it is the same as the last one, ignoring',
@@ -196,12 +198,14 @@ export class ArenaDraftManagerService
 						this.lastPick$$?.value?.Options?.map((o) => o.CardId),
 					)
 				) {
-					console.log(
-						'[arena-draft-manager] received latest underground card pick',
-						changes.ArenaUndergroundLatestCardPick,
-						this.lastPick$$?.value,
-					);
-					this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
+					if (changes.ArenaUndergroundLatestCardPick.PickNumber !== 0) {
+						console.log(
+							'[arena-draft-manager] received latest underground card pick',
+							changes.ArenaUndergroundLatestCardPick,
+							this.lastPick$$?.value,
+						);
+						this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
+					}
 				} else {
 					console.log(
 						'[arena-draft-manager] received latest underground card pick, but it is the same as the last one, ignoring',
@@ -281,7 +285,7 @@ export class ArenaDraftManagerService
 				// If cards change, or if we are on DRAFT scene + DRAFT_SLOT_CARD, we get the current state of the arena deck
 				if (changes.ArenaCurrentCardsInDeck || (scene === SceneMode.DRAFT && isDraftingCards)) {
 					const arenaDeck = await this.memory.getArenaDeck();
-					console.debug('[arena-draft-manager] received arena deck', arenaDeck);
+					// console.debug('[arena-draft-manager] received arena deck', arenaDeck);
 					// Force a reemit of options for the initial state
 					if (
 						// this.currentDeck$$.value?.GameType != null &&
@@ -444,11 +448,22 @@ export class ArenaDraftManagerService
 	}
 
 	private async sendDraftPick(pick: DraftPick) {
+		// Check if the pick doesn't exist in the database
+		const existingPick = await this.indexedDb
+			.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS)
+			.where('runId')
+			.equals(pick.runId)
+			.and((p) => p.pickNumber === pick.pickNumber)
+			.first();
+		if (!!existingPick) {
+			console.warn('[arena-draft-manager] draft pick already exists, skipping', existingPick);
+			return;
+		}
 		await Promise.all([
 			this.indexedDb.table<DraftPick, string>(ARENA_CURRENT_DECK_PICKS).put(pick),
 			this.api.callPostApi(SAVE_DRAFT_PICK_URL, pick),
 		]);
-		console.debug('[arena-draft-manager] uploaded draft pick');
+		console.debug('[arena-draft-manager] uploaded draft pick', pick);
 	}
 
 	private deckLength(deck: DeckInfoFromMemory | null): number {
