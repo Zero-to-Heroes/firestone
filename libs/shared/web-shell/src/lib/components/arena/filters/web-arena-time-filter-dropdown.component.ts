@@ -53,11 +53,6 @@ export class WebArenaTimeFilterDropdownComponent extends AbstractSubscriptionCom
 			this.mapData(([patch, seasonPatch, filter]) => {
 				const options: TimeFilterOption[] = [
 					{
-						value: 'all-time',
-						label: this.i18n.translateString('app.arena.filters.time.past-100'),
-						tooltip: this.i18n.translateString('app.global.filters.time.all-time-tooltip'),
-					} as TimeFilterOption,
-					{
 						value: 'last-patch',
 						label: this.i18n.translateString('app.global.filters.time-patch', {
 							value: patch.version,
