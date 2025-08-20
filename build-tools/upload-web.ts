@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as mime from 'mime-types';
 import * as path from 'path';
 
-const BUCKET_NAME = 'www2.firestoneapp.com';
+const BUCKET_NAME = 'www.firestoneapp.com';
 const BUILD_DIR = 'dist/apps/web';
 const batchSize = 25;
 
