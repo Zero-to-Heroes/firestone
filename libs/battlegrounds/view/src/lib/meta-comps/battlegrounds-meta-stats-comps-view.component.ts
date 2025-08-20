@@ -13,7 +13,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
-import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -21,7 +20,6 @@ import {
 	CardsFacadeService,
 	ILocalizationService,
 	getDateAgo,
-	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription, combineLatest, filter, takeUntil, tap } from 'rxjs';
 import { BattlegroundsCompositionDetailsModalComponent } from './battlegrounds-composition-details-modal.component';
@@ -210,7 +208,6 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
-		private readonly prefs: PreferencesService,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly analytics: AnalyticsService,
@@ -227,8 +224,6 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
-
 		this.loading$ = this.loading$$.pipe(this.mapData((loading) => !!loading));
 		this.sortCriteria$ = this.sortCriteria$$.pipe(this.mapData((criteria) => criteria));
 		this.tiers$ = combineLatest([this.stats$$, this.sortCriteria$$]).pipe(

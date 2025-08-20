@@ -6,3 +6,22 @@
 	flex-direction: column;
 	max-width: 100%;
 }
+
+@media (max-width: 660px) {
+	::ng-deep arena-class-tier-list {
+		.placement.placement.placement {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 450px) {
+	::ng-deep arena-class-tier-list {
+		.data-info.data-info {
+			margin-top: 10px;
+		}
+		.class-details.class-details.class-details {
+			width: 130px;
+		}
+	}
+}
