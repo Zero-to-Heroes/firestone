@@ -131,6 +131,28 @@ async function uploadDirectory(dirPath: string, stats: UploadStats, prefix: stri
 	}
 }
 
+async function configureS3Website(): Promise<void> {
+	const websiteConfig = {
+		Bucket: BUCKET_NAME,
+		WebsiteConfiguration: {
+			IndexDocument: {
+				Suffix: 'index.html',
+			},
+			ErrorDocument: {
+				Key: 'index.html', // This is crucial for SPA routing
+			},
+		},
+	};
+
+	try {
+		await s3.putBucketWebsite(websiteConfig).promise();
+		console.log('✓ S3 static website hosting configured');
+	} catch (error) {
+		console.error('❌ Failed to configure S3 website hosting:', error);
+		throw error;
+	}
+}
+
 async function main(): Promise<void> {
 	try {
 		console.log(`🚀 Starting upload to S3 bucket: ${BUCKET_NAME}`);
@@ -151,6 +173,9 @@ async function main(): Promise<void> {
 			console.error(`❌ Cannot access S3 bucket: ${BUCKET_NAME}`, error);
 			throw error;
 		}
+
+		// Configure S3 static website hosting
+		await configureS3Website();
 
 		// Initialize upload stats
 		const stats: UploadStats = { uploaded: 0, skipped: 0, total: 0 };

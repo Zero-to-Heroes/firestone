@@ -17,4 +17,6 @@ export const routes: Routes = [
 	{ path: 'arena/classes', component: ArenaClassesComponent },
 	{ path: 'arena/cards', component: ArenaCardsComponent },
 	{ path: 'constructed', component: ConstructedComponent },
+	// Wildcard route - must be last
+	{ path: '**', redirectTo: '/battlegrounds', pathMatch: 'full' },
 ];
