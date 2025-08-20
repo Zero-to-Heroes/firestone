@@ -162,6 +162,28 @@ async function invalidateCloudFrontCache(): Promise<void> {
 	}
 }
 
+async function configureS3Website(): Promise<void> {
+	const websiteConfig = {
+		Bucket: BUCKET_NAME,
+		WebsiteConfiguration: {
+			IndexDocument: {
+				Suffix: 'index.html',
+			},
+			ErrorDocument: {
+				Key: 'index.html', // This is crucial for SPA routing
+			},
+		},
+	};
+
+	try {
+		await s3.putBucketWebsite(websiteConfig).promise();
+		console.log('✓ S3 static website hosting configured');
+	} catch (error) {
+		console.error('❌ Failed to configure S3 website hosting:', error);
+		throw error;
+	}
+}
+
 async function main(): Promise<void> {
 	try {
 		console.log(`🚀 Starting upload to S3 bucket: ${BUCKET_NAME}`);
@@ -211,28 +233,6 @@ async function main(): Promise<void> {
 	} catch (error) {
 		console.error('❌ Upload failed:', error);
 		process.exit(1);
-	}
-}
-
-async function configureS3Website(): Promise<void> {
-	const websiteConfig = {
-		Bucket: BUCKET_NAME,
-		WebsiteConfiguration: {
-			IndexDocument: {
-				Suffix: 'index.html',
-			},
-			ErrorDocument: {
-				Key: 'index.html', // This is crucial for SPA routing
-			},
-		},
-	};
-
-	try {
-		await s3.putBucketWebsite(websiteConfig).promise();
-		console.log('✓ S3 static website hosting configured');
-	} catch (error) {
-		console.error('❌ Failed to configure S3 website hosting:', error);
-		throw error;
 	}
 }
 
