@@ -7,6 +7,12 @@
 	max-width: 100%;
 }
 
+::ng-deep arena-card-stats {
+	.data-info.data-info {
+		margin-top: 10px;
+	}
+}
+
 @media (max-width: 1200px) {
 	::ng-deep arena-card-stats {
 		.mulligan-winrate.mulligan-winrate.mulligan-winrate {
@@ -17,9 +23,6 @@
 
 @media (max-width: 850px) {
 	::ng-deep arena-card-stats {
-		.data-info.data-info {
-			margin-top: 10px;
-		}
 		.mulligan-kept.mulligan-kept.mulligan-kept {
 			display: none;
 		}

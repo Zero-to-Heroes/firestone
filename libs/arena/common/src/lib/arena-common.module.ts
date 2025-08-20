@@ -14,9 +14,12 @@ import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 
 import { ArenaRewardComponent } from './components/arena-reward.component';
+import { ArenaCardClassFilterDropdownComponent } from './components/card-stats/arena-card-class-filter-dropdown.component';
 import { ArenaCardSearchComponent } from './components/card-stats/arena-card-search.component';
 import { ArenaCardStatItemComponent } from './components/card-stats/arena-card-stat-item.component';
 import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stats.component';
+import { ArenaCardTypeFilterDropdownComponent } from './components/card-stats/arena-card-type-filter-dropdown.component';
+import { ArenaClassFilterDropdownComponent } from './components/card-stats/arena-class-filter-dropdown.component';
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
 import { ArenaClassTierListTierComponent } from './components/class-info/arena-class-tier-list-tier.component';
 import { ArenaClassTierListComponent } from './components/class-info/arena-class-tier-list.component';
@@ -60,6 +63,9 @@ const components = [
 	ArenaCardStatsComponent,
 	ArenaCardStatItemComponent,
 	ArenaCardSearchComponent,
+	ArenaClassFilterDropdownComponent,
+	ArenaCardClassFilterDropdownComponent,
+	ArenaCardTypeFilterDropdownComponent,
 	ArenaHeroSelectionComponent,
 	ArenaHeroOptionComponent,
 	ArenaCardSelectionComponent,

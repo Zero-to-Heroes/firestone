@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { ArenaCardClassFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { classes } from '../../../../services/hs-utils';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
@@ -27,8 +27,8 @@ export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionC
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
@@ -46,7 +46,7 @@ export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionC
 					(option) =>
 						({
 							value: option,
-							label: classes.includes(option)
+							label: ALL_CLASSES.includes(option)
 								? this.i18n.translateString(`global.class.${option?.toLowerCase()}`)
 								: this.i18n.translateString(`app.arena.filters.card-class.${option}`),
 						}) as ClassFilterOption,

@@ -32,7 +32,6 @@ import { ArenaDesktopComponent } from './js/components/arena/desktop/arena-deskt
 import { ArenaEmptyStateComponent } from './js/components/arena/desktop/arena-empty-state.component';
 import { ArenaRunsListComponent } from './js/components/arena/desktop/arena-runs-list.component';
 import { ArenaFiltersComponent } from './js/components/arena/desktop/filters/_arena-filters.component';
-import { ArenaClassFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-class-filter-dropdown.component';
 import { ArenaTimeFilterDropdownComponent } from './js/components/arena/desktop/filters/arena-time-filter-dropdown.component';
 import { BattlegroundsContentComponent } from './js/components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsComponent } from './js/components/battlegrounds/battlegrounds.component';
@@ -269,8 +268,6 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
-import { ArenaCardClassFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-class-filter-dropdown.component';
-import { ArenaCardTypeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-card-type-filter-dropdown.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { ArenaModeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-mode-filter-dropdown.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
@@ -1148,10 +1145,7 @@ try {
 		ArenaFiltersComponent,
 		ArenaTimeFilterDropdownComponent,
 		ArenaModeFilterDropdownComponent,
-		ArenaClassFilterDropdownComponent,
 		ArenaHighWinRunsWinsFilterDropdownComponent,
-		ArenaCardClassFilterDropdownComponent,
-		ArenaCardTypeFilterDropdownComponent,
 
 		MercenariesOpponentTeamComponent,
 		MercenariesTeamRootComponent,

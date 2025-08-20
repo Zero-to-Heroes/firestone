@@ -1,15 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ArenaCardClassFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { ALL_CLASSES } from '@firestone-hs/reference-data';
+import { ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { Observable, combineLatest } from 'rxjs';
+import { formatClass, ILocalizationService } from '@firestone/shared/framework/core';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { classes } from '../../../../services/hs-utils';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
-	selector: 'arena-card-class-filter-dropdown',
+	selector: 'arena-class-filter-dropdown',
 	styleUrls: [],
 	template: `
 		<filter-dropdown
@@ -23,12 +23,12 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
@@ -38,17 +38,15 @@ export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionC
 		await this.prefs.isReady();
 
 		this.filter$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveCardClassFilter)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveClassFilter)),
 		]).pipe(
 			filter(([filter]) => !!filter),
 			this.mapData(([filter]) => {
-				const options = ['all', 'neutral', 'no-neutral'].map(
+				const options = ['all', ...(ALL_CLASSES as ArenaClassFilterType[])].map(
 					(option) =>
 						({
 							value: option,
-							label: classes.includes(option)
-								? this.i18n.translateString(`global.class.${option?.toLowerCase()}`)
-								: this.i18n.translateString(`app.arena.filters.card-class.${option}`),
+							label: formatClass(option, this.i18n),
 						}) as ClassFilterOption,
 				);
 				return {
@@ -56,7 +54,7 @@ export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionC
 					options: options,
 					placeholder:
 						options.find((option) => option.value === filter)?.label ??
-						this.i18n.translateString('app.arena.filters.card-class.all'),
+						this.i18n.translateString('app.arena.filters.hero-class.all'),
 					visible: true,
 				};
 			}),
@@ -68,10 +66,10 @@ export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionC
 	}
 
 	async onSelected(option: IOption) {
-		await this.prefs.updatePrefs('arenaActiveCardClassFilter', option.value as ArenaCardClassFilterType);
+		await this.prefs.updatePrefs('arenaActiveClassFilter', option.value as ArenaClassFilterType);
 	}
 }
 
 interface ClassFilterOption extends IOption {
-	value: ArenaCardClassFilterType;
+	value: ArenaClassFilterType;
 }
