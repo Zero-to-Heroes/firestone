@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { AnalyticsService, ILocalizationService } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -42,6 +42,7 @@ export class WebShellComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly router: Router,
 		private readonly i18n: ILocalizationService,
+		private readonly analytics: AnalyticsService,
 	) {
 		this.navigationSections = this.buildNavigationSections();
 		this.currentSection = this.navigationSections[0];
@@ -53,10 +54,14 @@ export class WebShellComponent implements OnInit, OnDestroy {
 			.pipe(filter((event) => event instanceof NavigationEnd))
 			.subscribe((event: NavigationEnd) => {
 				this.updateCurrentSection(event.url);
+				// Track page view with Plausible
+				this.analytics.trackPageView(event.url);
 			});
 
 		// Set initial section based on current route
 		this.updateCurrentSection(this.router.url);
+		// Track initial page view
+		this.analytics.trackPageView(this.router.url);
 	}
 
 	ngOnDestroy() {

@@ -20,7 +20,7 @@ export class AnalyticsService {
 		if (!currentWindow || currentWindow?.name === OverwolfService.MAIN_WINDOW) {
 			this.plausible = Plausible({
 				domain: this.domain,
-				trackLocalhost: false,
+				trackLocalhost: true,
 				apiHost: 'https://apps.zerotoheroes.com',
 			});
 			window['plausibleInstance'] = this.plausible;

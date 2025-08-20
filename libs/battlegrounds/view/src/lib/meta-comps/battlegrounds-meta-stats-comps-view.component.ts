@@ -16,7 +16,13 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
+import {
+	AnalyticsService,
+	CardsFacadeService,
+	ILocalizationService,
+	getDateAgo,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription, combineLatest, filter, takeUntil, tap } from 'rxjs';
 import { BattlegroundsCompositionDetailsModalComponent } from './battlegrounds-composition-details-modal.component';
 import { buildCompTiers } from './bgs-meta-comp-stats';
@@ -207,6 +213,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		private readonly prefs: PreferencesService,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
+		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
 		this.setupModal();
@@ -296,6 +303,8 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		const slug = this.createSlug(composition.name);
 		const newUrl = `/battlegrounds/comps/${slug}`;
 		window.history.pushState({}, '', newUrl);
+		// Track page view for composition clicks since pushState doesn't trigger router events
+		this.analytics.trackPageView(newUrl);
 	}
 
 	private createSlug(text: string): string {
@@ -359,7 +368,10 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		const currentUrl = window.location.pathname;
 		if (currentUrl.includes('/battlegrounds/comps/') && currentUrl !== '/battlegrounds/comps') {
 			// Navigate back to the compositions list without the specific composition
-			window.history.replaceState({}, '', '/battlegrounds/comps');
+			const newUrl = '/battlegrounds/comps';
+			window.history.replaceState({}, '', newUrl);
+			// Track page view when returning to compositions list
+			this.analytics.trackPageView(newUrl);
 		}
 	}
 

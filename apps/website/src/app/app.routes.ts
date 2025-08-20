@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
+import { BattlegroundsCompositionsComponent } from '@firestone/shared/web-shell';
 import { WebsiteBattlegroundsComponent } from '@firestone/website/battlegrounds';
 import { WebsiteAuthComponent, WebsitePremiumComponent } from '@firestone/website/core';
-import { BattlegroundsCompositionsComponent } from '@firestone/shared/web-shell';
 import {
 	WebsiteProfileArenaComponent,
 	WebsiteProfileBattlegroundsComponent,
