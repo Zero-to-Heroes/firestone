@@ -84,7 +84,7 @@
 		"@ngrx/store": "^19.0.0",
 		"@ngx-translate/core": "^15.0.0",
 		"@ngx-translate/http-loader": "^16.0.1",
-		"@nx/angular": "21.3.7",
+		"@nx/angular": "21.4.0",
 		"@nx/plugin": "21.3.7",
 		"@sebastientromp/ng-select": "19.0.0",
 		"@sebastientromp/ngx-charts": "^20.0.0",
