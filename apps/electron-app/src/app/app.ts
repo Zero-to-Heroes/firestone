@@ -3,7 +3,6 @@ import { join } from 'path';
 import { format } from 'url';
 import { environment } from '../environments/environment';
 import { rendererAppName, rendererAppPort } from './constants';
-import { GameDetectionService } from './services/game-detection.service';
 import { OverlayService } from './services/overlay.service';
 
 export default class App {
@@ -12,7 +11,7 @@ export default class App {
 	static mainWindow: Electron.BrowserWindow;
 	static application: Electron.App;
 	static BrowserWindow;
-	static gameDetection: GameDetectionService;
+	// static gameDetection: GameDetectionService;
 	static overlay: OverlayService;
 
 	public static isDevelopmentMode() {
@@ -22,14 +21,14 @@ export default class App {
 		return isEnvironmentSet ? getFromEnvironment : !environment.production;
 	}
 
-	private static onWindowAllClosed() {
+	private static async onWindowAllClosed() {
 		// Clean up services when app is closing
-		if (App.gameDetection) {
-			App.gameDetection.stopMonitoring();
-		}
+		// if (App.gameDetection) {
+		// 	App.gameDetection.stopMonitoring();
+		// }
 
 		if (App.overlay) {
-			App.overlay.destroyOverlay();
+			await App.overlay.destroyOverlay();
 		}
 
 		if (process.platform !== 'darwin') {
@@ -66,24 +65,31 @@ export default class App {
 	}
 
 	private static initGameDetection() {
-		App.gameDetection = GameDetectionService.getInstance();
+		// App.gameDetection = GameDetectionService.getInstance();
 		App.overlay = OverlayService.getInstance();
 
-		// Set up event listeners
-		App.gameDetection.on('game-launched', async (gameInfo) => {
-			console.log('🎮 Game launched:', gameInfo.displayName);
-			console.log('🎯 Showing Hello World overlay...');
-			await App.overlay.showOverlay();
+		// Wait for overlay to be ready before registering to games
+		App.overlay.on('ready', async () => {
+			console.log('🎯 Overlay service is ready!');
+
+			// Register to monitor Hearthstone
+			await App.overlay.registerToHearthstone();
+
+			// Don't create overlay window yet - wait for game launch event
+			console.log('⏳ Waiting for Hearthstone to launch...');
 		});
 
-		App.gameDetection.on('game-closed', (gameInfo) => {
-			console.log('👋 Game closed:', gameInfo.displayName);
-			console.log('🎯 Hiding overlay...');
-			App.overlay.hideOverlay();
-		});
+		// Keep the old game detection for logging purposes
+		// App.gameDetection.on('game-launched', (gameInfo) => {
+		// 	console.log('🎮 Process detection - Game launched:', gameInfo.displayName);
+		// });
 
-		// Start monitoring
-		App.gameDetection.startMonitoring();
+		// App.gameDetection.on('game-closed', (gameInfo) => {
+		// 	console.log('👋 Process detection - Game closed:', gameInfo.displayName);
+		// });
+
+		// // Start monitoring (both process detection and ow-electron overlay)
+		// App.gameDetection.startMonitoring();
 	}
 
 	private static onActivate() {
