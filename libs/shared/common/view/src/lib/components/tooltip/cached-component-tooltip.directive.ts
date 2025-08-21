@@ -156,17 +156,18 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		// }
 	}
 
-	@HostListener('window:mousewheel')
-	onScroll() {
-		if (!this.tooltipRef?.instance) {
-			return;
-		}
+	// This causes performance issues on Chrome, even with an empty method. So let's ditch it for now
+	// @HostListener('window:mousewheel')
+	// onScroll() {
+	// 	if (!this.tooltipRef?.instance) {
+	// 		return;
+	// 	}
 
-		this.tooltipRef.instance.visible = false;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-	}
+	// 	this.tooltipRef.instance.visible = false;
+	// 	// if (!(this.cdr as ViewRef)?.destroyed) {
+	// 	// 	this.cdr.detectChanges();
+	// 	// }
+	// }
 
 	private buildPositions(): ConnectedPosition[] {
 		switch (this.position) {

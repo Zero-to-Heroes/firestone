@@ -255,17 +255,18 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		}
 	}
 
+	// This causes performance issues on Chrome, even with an empty method. So let's ditch it for now
 	// Hide tooltip if a scroll wheel is detected anywhere
-	@HostListener('window:mousewheel')
-	onMouseWheel() {
-		if (this.overlayRef?.hasAttached()) {
-			this.overlayRef?.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}
-		if (this.tooltipRef) {
-			this.tooltipRef = undefined;
-		}
-	}
+	// @HostListener('window:mousewheel')
+	// onMouseWheel() {
+	// 	if (this.overlayRef?.hasAttached()) {
+	// 		this.overlayRef?.detach();
+	// 		if (!(this.cdr as ViewRef)?.destroyed) {
+	// 			this.cdr.detectChanges();
+	// 		}
+	// 	}
+	// 	if (this.tooltipRef) {
+	// 		this.tooltipRef = undefined;
+	// 	}
+	// }
 }
