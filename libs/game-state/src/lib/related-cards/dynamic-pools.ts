@@ -453,6 +453,10 @@ const getDynamicFilters = (
 
 		// Random Demons
 		case CardIds.Kiljaeden_GDB_145:
+		case CardIds.CallOfTheVoidLegacy:
+		case CardIds.BaneOfDoomLegacy:
+		case CardIds.BaneOfDoomVanilla:
+		case CardIds.BaneOfDoom_WON_323:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 
 		// Random Dragons
@@ -555,6 +559,7 @@ const getDynamicFilters = (
 		// Discover a Spell Effects (or spell from class effects such as Peon / Magescribe)
 		case CardIds.AmphibiousElixir_WW_080:
 		case CardIds.Astrobiologist_GDB_874:
+		case CardIds.ChitteringTunneler:
 		case CardIds.EtherealLackey:
 		case CardIds.ExarchHataaru_GDB_136:
 		case CardIds.InfinitizeTheMaxitude:
@@ -591,6 +596,20 @@ const getDynamicFilters = (
 		case CardIds.KajamiteCreation:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 3) && fromAnotherClass(c, options.currentClass);
+
+		// Discover X Spell School Spell(s)
+		case CardIds.LightningReflexes:
+			return (c) =>
+				hasCorrectSpellSchool(c, SpellSchool.NATURE) &&
+				hasCorrectType(c, CardType.SPELL) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.Scorchreaver_FIR_952:
+		case CardIds.HiveMap_TLC_900:
+		case CardIds.TasteOfChaos:
+			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL);
+		case CardIds.SisterSvalna_VisionOfDarknessToken:
+			return (c) =>
+				canBeDiscoveredByClass(c, options.currentClass) && hasCorrectSpellSchool(c, SpellSchool.SHADOW);
 
 		// Discover a Choose One card
 		case CardIds.RaidNegotiator:
@@ -858,17 +877,6 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				(hasCorrectSpellSchool(c, SpellSchool.SHADOW) || hasCorrectSpellSchool(c, SpellSchool.HOLY));
-
-		// Discover X Spell School Spell(s)
-		case CardIds.LightningReflexes:
-			return (c) =>
-				hasCorrectSpellSchool(c, SpellSchool.NATURE) &&
-				hasCorrectType(c, CardType.SPELL) &&
-				canBeDiscoveredByClass(c, options.currentClass);
-		case CardIds.Scorchreaver_FIR_952:
-		case CardIds.HiveMap_TLC_900:
-		case CardIds.TasteOfChaos:
-			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL);
 
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
