@@ -28,6 +28,7 @@
 		"dev-web": "nx serve web --configuration=development",
 		"build-web": "nx build web --configuration=production",
 		"deploy-web": "nx deploy web --configuration=production",
+		"upload-web": "npx tsx ./build-tools/upload-web.ts",
 		"start-mobile": "nx serve mobile --port=4201",
 		"dev-mobile": "nx serve mobile --configuration=development --port=4201",
 		"build-mobile": "nx build mobile --configuration=production",

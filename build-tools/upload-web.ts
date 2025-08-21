@@ -6,6 +6,7 @@ import * as path from 'path';
 
 const BUCKET_NAME = 'www.firestoneapp.com';
 const BUILD_DIR = 'dist/apps/web';
+const CLOUDFRONT_DISTRIBUTION_ID = process.env.CLOUDFRONT_DISTRIBUTION_ID;
 const batchSize = 25;
 
 // Configure AWS SDK
@@ -14,6 +15,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
+const cloudfront = new AWS.CloudFront();
 
 interface UploadStats {
 	uploaded: number;
@@ -131,6 +133,35 @@ async function uploadDirectory(dirPath: string, stats: UploadStats, prefix: stri
 	}
 }
 
+async function invalidateCloudFrontCache(): Promise<void> {
+	if (!CLOUDFRONT_DISTRIBUTION_ID) {
+		console.log('⚠️  CLOUDFRONT_DISTRIBUTION_ID environment variable not set, skipping cache invalidation');
+		return;
+	}
+
+	try {
+		console.log('🔄 Invalidating CloudFront cache...');
+
+		const params: AWS.CloudFront.CreateInvalidationRequest = {
+			DistributionId: CLOUDFRONT_DISTRIBUTION_ID,
+			InvalidationBatch: {
+				CallerReference: `firestone-deploy-${Date.now()}`,
+				Paths: {
+					Quantity: 1,
+					Items: ['/*'], // Invalidate all paths
+				},
+			},
+		};
+
+		const result = await cloudfront.createInvalidation(params).promise();
+		console.log(`✅ CloudFront cache invalidation initiated: ${result.Invalidation?.Id}`);
+		console.log('📝 Note: Cache invalidation may take 5-10 minutes to complete');
+	} catch (error) {
+		console.error('❌ CloudFront cache invalidation failed:', error);
+		// Don't throw error here as the upload was successful
+	}
+}
+
 async function main(): Promise<void> {
 	try {
 		console.log(`🚀 Starting upload to S3 bucket: ${BUCKET_NAME}`);
@@ -164,6 +195,10 @@ async function main(): Promise<void> {
 		console.log('✅ Upload completed successfully!');
 		console.log(`📈 Summary: ${stats.uploaded} uploaded, ${stats.skipped} skipped, ${stats.total} total files`);
 		console.log(`⏱️  Duration: ${duration}s`);
+
+		// Invalidate CloudFront cache after successful upload
+		await invalidateCloudFrontCache();
+
 		console.log(`🌐 Website should be available at:`);
 		console.log(`   S3 Website: http://${BUCKET_NAME}.s3-website-us-west-2.amazonaws.com/`);
 		console.log(`   S3 HTTPS: https://s3-us-west-2.amazonaws.com/${BUCKET_NAME}/index.html`);
