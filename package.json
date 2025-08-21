@@ -1,6 +1,16 @@
 {
 	"name": "firestone",
+	"productName": "Firestone",
 	"version": "15.22.7",
+	"author": {
+		"name": "Sébastien Tromp",
+		"email": "sebastien@firestoneapp.com"
+	},
+	"overwolf": {
+		"packages": [
+			"overlay"
+		]
+	},
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts && electron-builder install-app-deps",
@@ -34,6 +44,7 @@
 		"build-mobile": "nx build mobile --configuration=production",
 		"start-both": "concurrently \"npm run start-web\" \"npm run start-mobile\"",
 		"build-both": "nx build web --configuration=production && nx build mobile --configuration=production",
+		"c6": "=============== Electron (serve frontend first, then backend) =================",
 		"nxe:build:frontend": "nx build electron-frontend",
 		"nxe:build:backend": "nx build electron-app",
 		"nxe:serve:frontend": "nx serve electron-frontend",
@@ -41,7 +52,9 @@
 		"nxe:test:frontend": "nx test electron-frontend",
 		"nxe:test:backend": "nx test electron-app",
 		"nxe:package:app": "nx run electron-app:make --prepackageOnly",
-		"nxe:make:app": "nx run electron-app:make"
+		"nxe:make:app": "nx run electron-app:make",
+		"start:ow-electron": "ow-electron dist/apps/electron-app",
+		"build:ow-electron": "ow-electron-builder --publish=never"
 	},
 	"private": true,
 	"dependencies": {
@@ -95,6 +108,8 @@
 		"@ngx-translate/http-loader": "^16.0.1",
 		"@nx/angular": "21.3.7",
 		"@nx/plugin": "21.3.7",
+		"@overwolf/ow-electron": "^34.5.7",
+		"@overwolf/ow-electron-packages-types": "^0.0.16",
 		"@sebastientromp/ng-select": "19.0.0",
 		"@sebastientromp/ngx-charts": "^20.0.0",
 		"@sebastientromp/ngx-virtual-scroller": "^19.0.0",
@@ -154,6 +169,7 @@
 		"@nx/web": "21.3.7",
 		"@nx/workspace": "21.3.7",
 		"@overwolf/ow-cli": "0.0.5-0",
+		"@overwolf/ow-electron-builder": "^26.0.12",
 		"@overwolf/types": "^3.24.7",
 		"@schematics/angular": "^19.0.0",
 		"@swc-node/register": "^1.10.10",
