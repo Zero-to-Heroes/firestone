@@ -55,6 +55,7 @@
 		"nxe:package:app": "nx run electron-app:make --prepackageOnly",
 		"nxe:make:app": "nx run electron-app:make",
 		"start:ow-electron": "ow-electron dist/apps/electron-app",
+		"debug:main": "ow-electron --inspect=5858 dist/apps/electron-app",
 		"build:ow-electron": "ow-electron-builder --publish=never"
 	},
 	"private": true,
