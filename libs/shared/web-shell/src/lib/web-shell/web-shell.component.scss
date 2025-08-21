@@ -35,7 +35,7 @@
 	background-repeat: round;
 	background-image: var(--window-background-image);
 	background-attachment: fixed;
-	overflow-y: scroll;
+	overflow-y: auto;
 
 	color: var(--default-text-color);
 }
