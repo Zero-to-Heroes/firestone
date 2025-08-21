@@ -3,6 +3,7 @@ import { join } from 'path';
 import { format } from 'url';
 import { environment } from '../environments/environment';
 import { rendererAppName, rendererAppPort } from './constants';
+import { GameDetectionService } from './services/game-detection.service';
 
 export default class App {
 	// Keep a global reference of the window object, if you don't, the window will
@@ -10,6 +11,7 @@ export default class App {
 	static mainWindow: Electron.BrowserWindow;
 	static application: Electron.App;
 	static BrowserWindow;
+	static gameDetection: GameDetectionService;
 
 	public static isDevelopmentMode() {
 		const isEnvironmentSet: boolean = 'ELECTRON_IS_DEV' in process.env;
@@ -19,6 +21,11 @@ export default class App {
 	}
 
 	private static onWindowAllClosed() {
+		// Stop game detection when app is closing
+		if (App.gameDetection) {
+			App.gameDetection.stopMonitoring();
+		}
+
 		if (process.platform !== 'darwin') {
 			App.application.quit();
 		}
@@ -47,6 +54,27 @@ export default class App {
 			App.initMainWindow();
 			App.loadMainWindow();
 		}
+
+		// Initialize game detection
+		App.initGameDetection();
+	}
+
+	private static initGameDetection() {
+		App.gameDetection = GameDetectionService.getInstance();
+
+		// Set up event listeners
+		App.gameDetection.on('game-launched', (gameInfo) => {
+			console.log('🎮 Game launched:', gameInfo.displayName);
+			// TODO: Show overlay when game is detected
+		});
+
+		App.gameDetection.on('game-closed', (gameInfo) => {
+			console.log('👋 Game closed:', gameInfo.displayName);
+			// TODO: Hide overlay when game closes
+		});
+
+		// Start monitoring
+		App.gameDetection.startMonitoring();
 	}
 
 	private static onActivate() {
@@ -84,6 +112,10 @@ export default class App {
 		// Enable dev tools in development mode
 		if (App.isDevelopmentMode()) {
 			App.mainWindow.webContents.openDevTools();
+
+			// Enable main process debugging
+			console.log('🔧 Main process debugging enabled. Check terminal for main process logs.');
+			console.log('🔧 To debug main process with Chrome DevTools, run: npm run debug:main');
 		}
 
 		// Add keyboard shortcut for dev tools
