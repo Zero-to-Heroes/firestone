@@ -49,6 +49,7 @@
 			"@firestone/shared/framework/common": ["libs/shared/framework/common/src/index.ts"],
 			"@firestone/shared/framework/core": ["libs/shared/framework/core/src/index.ts"],
 			"@firestone/shared/styles": ["libs/shared/styles/src/index.ts"],
+			"@firestone/shared/web-shell": ["libs/shared/web-shell/src/index.ts"],
 			"@firestone/stats/common": ["libs/stats/common/src/index.ts"],
 			"@firestone/stats/data-access": ["libs/stats/data-access/src/index.ts"],
 			"@firestone/twitch/common": ["libs/twitch/common/src/index.ts"],
@@ -65,8 +66,7 @@
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
-			"vm": ["./node_modules/vm-browserify"],
-			"@firestone/shared/web-shell": ["libs/shared/web-shell/src/index.ts"]
+			"vm": ["./node_modules/vm-browserify"]
 		},
 		"strict": false,
 		"noImplicitAny": false,
