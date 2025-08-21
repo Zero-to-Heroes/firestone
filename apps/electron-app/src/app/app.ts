@@ -4,6 +4,7 @@ import { format } from 'url';
 import { environment } from '../environments/environment';
 import { rendererAppName, rendererAppPort } from './constants';
 import { GameDetectionService } from './services/game-detection.service';
+import { OverlayService } from './services/overlay.service';
 
 export default class App {
 	// Keep a global reference of the window object, if you don't, the window will
@@ -12,6 +13,7 @@ export default class App {
 	static application: Electron.App;
 	static BrowserWindow;
 	static gameDetection: GameDetectionService;
+	static overlay: OverlayService;
 
 	public static isDevelopmentMode() {
 		const isEnvironmentSet: boolean = 'ELECTRON_IS_DEV' in process.env;
@@ -21,9 +23,13 @@ export default class App {
 	}
 
 	private static onWindowAllClosed() {
-		// Stop game detection when app is closing
+		// Clean up services when app is closing
 		if (App.gameDetection) {
 			App.gameDetection.stopMonitoring();
+		}
+
+		if (App.overlay) {
+			App.overlay.destroyOverlay();
 		}
 
 		if (process.platform !== 'darwin') {
@@ -61,16 +67,19 @@ export default class App {
 
 	private static initGameDetection() {
 		App.gameDetection = GameDetectionService.getInstance();
+		App.overlay = OverlayService.getInstance();
 
 		// Set up event listeners
-		App.gameDetection.on('game-launched', (gameInfo) => {
+		App.gameDetection.on('game-launched', async (gameInfo) => {
 			console.log('🎮 Game launched:', gameInfo.displayName);
-			// TODO: Show overlay when game is detected
+			console.log('🎯 Showing Hello World overlay...');
+			await App.overlay.showOverlay();
 		});
 
 		App.gameDetection.on('game-closed', (gameInfo) => {
 			console.log('👋 Game closed:', gameInfo.displayName);
-			// TODO: Hide overlay when game closes
+			console.log('🎯 Hiding overlay...');
+			App.overlay.hideOverlay();
 		});
 
 		// Start monitoring
