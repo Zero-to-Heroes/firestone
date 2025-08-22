@@ -153,7 +153,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		// }
 
 		const deck = side === 'opponent' ? this.gameState?.opponentDeck : this.gameState?.playerDeck;
-		const metaData = this.gameState?.metadata;
+		const metaData =
+			this.options?.skipGameState && this.options?.metadata ? this.options.metadata : this.gameState?.metadata;
 		const deckCards = deck?.getAllCardsInDeckWithoutOptions() ?? [];
 		const card =
 			deckCards.find((c) => !!entityId && c.entityId === entityId) ?? deckCards.find((c) => c.cardId === cardId);
@@ -219,7 +220,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					? h.deckCardProvider()
 					: DeckCard.create({
 							cardId: h.referenceCardProvider()?.id,
-					  });
+						});
 			}),
 			hero: {
 				cardId: heroCardId,
@@ -478,6 +479,7 @@ export interface SelectorOptions {
 	readonly skipGameState?: boolean;
 	readonly skipPrefs?: boolean;
 	readonly heroCardId?: string;
+	readonly metadata?: Metadata;
 }
 
 export interface SelectorInput {

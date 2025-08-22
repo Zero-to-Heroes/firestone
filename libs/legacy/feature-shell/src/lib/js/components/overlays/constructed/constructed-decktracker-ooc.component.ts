@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { StatsRecap } from '@firestone/game-state';
+import { GameType } from '@firestone-hs/reference-data';
+import { Metadata, StatsRecap } from '@firestone/game-state';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -33,7 +34,8 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								></decktracker-winrate-recap>
 							</div>
 						</ng-container>
-						<deck-list-static class="played-cards" [deckstring]="deckstring"> </deck-list-static>
+						<deck-list-static class="played-cards" [deckstring]="deckstring" [metadata]="metadata$ | async">
+						</deck-list-static>
 					</div>
 				</div>
 			</ng-container>
@@ -45,6 +47,7 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 	deckstring$: Observable<string>;
 	showDeckWinrate$: Observable<boolean>;
 	deckStatsRecap$: Observable<StatsRecap>;
+	metadata$: Observable<Metadata>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -68,6 +71,16 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 			this.mapData((deck) => deck?.deckstring),
 		);
 		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowDeckWinrate));
+		this.metadata$ = this.deckstring$.pipe(
+			this.mapData((deckstring) => {
+				const decoded = decode(deckstring);
+				return {
+					formatType: decoded.format,
+					gameType: GameType.GT_RANKED,
+					scenarioId: 0,
+				};
+			}),
+		);
 
 		const gamesForDeck$ = combineLatest([
 			this.deckstring$,

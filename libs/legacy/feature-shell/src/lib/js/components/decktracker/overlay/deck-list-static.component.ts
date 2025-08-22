@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { Metadata } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -104,6 +105,15 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 			}
 		}
 		this.normalizedCollection$$.next(normalizedValues);
+	}
+
+	@Input() set metadata(value: Metadata) {
+		this.highglight.init({
+			skipGameState: true,
+			skipPrefs: true,
+			uniqueZone: true,
+			metadata: value,
+		});
 	}
 
 	private deckstring$$ = new BehaviorSubject<string>(null);
