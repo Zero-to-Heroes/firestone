@@ -16,8 +16,19 @@ However, from my understanding, Overwolf and electron differ quite a lot on a fe
 
 - Having a deck tracker overlay working
 
-## Questions
+## Next steps
 
-- What do you think of the idea?
-- Does it look feasible? What will be the main challenges?
-- How do you propose I approach this?
+- Done: basic Hello World overlay injection
+- Next steps: add a decktracker overlay
+
+To do this, we will need:
+
+- To load C# plugins (required for memory reading and logs parsing)
+- To have a fullscreen overlay window that reuses the \_fullscreen-overlays Angular component
+- To communicate between the main window and the overlay window. Today, this is done in various places, but looking at \_full-screen-overlays.component and decktracker-player-widget-wrapper.component should give a good idea of the most useful services to have
+
+What I propose:
+
+- basic prototype of how to integrate C# plugins. mind-vision-facade.service is the class that is doing this in the Overwolf ecosystem
+- basic prototype of an overlay that exposes information from the plugin (ie the plugin emits the current scene, and the overlay shows that)
+- once we're here, we'll refine the next steps (integrate the log reading plugin, share code between the Overwolf app and the electron app, integrate the full overlay UI)
