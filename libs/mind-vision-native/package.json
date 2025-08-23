@@ -1,0 +1,17 @@
+{
+  "name": "mind-vision-native",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "gypfile": true,
+  "description": "",
+  "dependencies": {
+    "nan": "^2.23.0"
+  }
+}
