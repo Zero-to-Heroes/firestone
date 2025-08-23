@@ -21,7 +21,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, filter, pairwise, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, filter, pairwise, switchMap, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
@@ -143,7 +143,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
 				),
 			),
-			tap((stats) => console.log('[arena-card-selection] card stats', stats)),
 		);
 		this.options$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, currentHeroWinrate$]).pipe(
 			this.mapData(
@@ -183,7 +182,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 						return result;
 					}) ?? [],
 			),
-			tap((options) => console.log('[arena-card-selection] options', options)),
 		);
 		this.showing$ = combineLatest([this.options$, this.showingSideBanner$]).pipe(
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
