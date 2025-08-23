@@ -50,6 +50,66 @@ class MindVisionEdgeSimple {
 		}
 	}
 
+	async getCurrentScene() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('getCurrentScene');
+
+			if (result.success) {
+				return result.scene;
+			} else {
+				console.error('[MindVisionEdgeSimple] getCurrentScene error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] getCurrentScene error:', error);
+			throw error;
+		}
+	}
+
+	async isBootstrapped() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('isBootstrapped');
+
+			if (result.success) {
+				return result.bootstrapped;
+			} else {
+				console.error('[MindVisionEdgeSimple] isBootstrapped error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] isBootstrapped error:', error);
+			throw error;
+		}
+	}
+
+	async listenForUpdates() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('listenForUpdates');
+
+			if (result.success) {
+				return result.result;
+			} else {
+				console.error('[MindVisionEdgeSimple] listenForUpdates error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] listenForUpdates error:', error);
+			throw error;
+		}
+	}
+
 	async testCallback() {
 		if (!this.initialized) {
 			throw new Error('Plugin not initialized. Call initialize() first.');

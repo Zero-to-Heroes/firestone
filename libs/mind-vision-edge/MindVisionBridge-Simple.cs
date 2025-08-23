@@ -34,6 +34,15 @@ public class Startup
                 case "testCallback":
                     return await TestCallbackMechanism();
                     
+                case "getCurrentScene":
+                    return await GetCurrentScene();
+                    
+                case "isBootstrapped":
+                    return await IsBootstrapped();
+                    
+                case "listenForUpdates":
+                    return await ListenForUpdates();
+                    
                 default:
                     throw new ArgumentException("Unknown method: " + method);
             }
@@ -121,6 +130,57 @@ public class Startup
         }
     }
 
+    // Properly implemented getCurrentScene with callback handling
+    private async Task<object> GetCurrentScene()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Try to find and call getCurrentScene method
+            MethodInfo method = pluginType.GetMethod("getCurrentScene");
+            if (method == null)
+            {
+                return new { error = "getCurrentScene method not found" };
+            }
+
+            // Create a TaskCompletionSource to handle the async callback
+            var tcs = new TaskCompletionSource<object>();
+            
+            // Create a proper C# Action<object> delegate with error handling
+            Action<object> callback = new Action<object>((result) => {
+                try {
+                    // Set the result when the callback is invoked
+                    tcs.TrySetResult(result);
+                } catch (Exception ex) {
+                    tcs.TrySetException(ex);
+                }
+            });
+
+            // Call the method with the callback
+            method.Invoke(mindVisionPlugin, new object[] { callback });
+            
+            // Wait for the callback to be called with a timeout
+            var timeoutTask = Task.Delay(3000); // 3 second timeout
+            var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+            
+            if (completedTask == timeoutTask)
+            {
+                return new { error = "getCurrentScene timed out after 3 seconds" };
+            }
+            
+            var sceneResult = await tcs.Task;
+            return new { success = true, scene = sceneResult };
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
     // Test if we can create and invoke a simple callback
     private async Task<object> TestCallbackMechanism()
     {
@@ -152,6 +212,106 @@ public class Startup
             {
                 return new { error = "Callback was not invoked" };
             }
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
+    // Check if the plugin is bootstrapped
+    private async Task<object> IsBootstrapped()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Try to find and call isBootstrapped method
+            MethodInfo method = pluginType.GetMethod("isBootstrapped");
+            if (method == null)
+            {
+                return new { error = "isBootstrapped method not found" };
+            }
+
+            // Create a TaskCompletionSource to handle the async callback
+            var tcs = new TaskCompletionSource<object>();
+            
+            // Create a proper C# Action<object> delegate with error handling
+            Action<object> callback = new Action<object>((result) => {
+                try {
+                    tcs.TrySetResult(result);
+                } catch (Exception ex) {
+                    tcs.TrySetException(ex);
+                }
+            });
+
+            // Call the method with true parameter and callback (as per your facade service)
+            method.Invoke(mindVisionPlugin, new object[] { true, callback });
+            
+            // Wait for the callback to be called with a timeout
+            var timeoutTask = Task.Delay(3000); // 3 second timeout
+            var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+            
+            if (completedTask == timeoutTask)
+            {
+                return new { error = "isBootstrapped timed out after 3 seconds" };
+            }
+            
+            var bootstrapResult = await tcs.Task;
+            return new { success = true, bootstrapped = bootstrapResult };
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
+    // Start listening for updates (this might be needed before getCurrentScene works)
+    private async Task<object> ListenForUpdates()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Try to find and call listenForUpdates method
+            MethodInfo method = pluginType.GetMethod("listenForUpdates");
+            if (method == null)
+            {
+                return new { error = "listenForUpdates method not found" };
+            }
+
+            // Create a TaskCompletionSource to handle the async callback
+            var tcs = new TaskCompletionSource<object>();
+            
+            // Create a proper C# Action<object> delegate with error handling
+            Action<object> callback = new Action<object>((result) => {
+                try {
+                    tcs.TrySetResult(result);
+                } catch (Exception ex) {
+                    tcs.TrySetException(ex);
+                }
+            });
+
+            // Call the method with callback
+            method.Invoke(mindVisionPlugin, new object[] { callback });
+            
+            // Wait for the callback to be called with a timeout
+            var timeoutTask = Task.Delay(3000); // 3 second timeout
+            var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+            
+            if (completedTask == timeoutTask)
+            {
+                return new { error = "listenForUpdates timed out after 3 seconds" };
+            }
+            
+            var listenResult = await tcs.Task;
+            return new { success = true, result = listenResult };
         }
         catch (Exception ex)
         {
