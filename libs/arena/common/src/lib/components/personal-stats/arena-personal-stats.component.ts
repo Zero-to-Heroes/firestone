@@ -291,14 +291,14 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 					(run: ArenaRun) => this.allCards.getCard(run.heroCardId).classes?.[0]?.toLowerCase() ?? 'unknown',
 				)(runs!);
 				return ALL_CLASSES.map((playerClass) => {
-					const runs = grouped[playerClass];
-					const totalRuns = runs?.length;
-					const allGames = runs?.flatMap((r) => r.steps) ?? [];
+					const runs = grouped[playerClass] ?? [];
+					const totalRuns = runs.length;
+					const allGames = runs.flatMap((r) => r.steps) ?? [];
 					const allGamesWithoutTies = allGames.filter((s) => s.result !== 'tied') ?? [];
 
-					const totalGames = runs.map((r) => r.wins + r.losses).reduce((a, b) => a + b, 0);
+					const totalGames = runs.map((r) => r.wins + r.losses).reduce((a, b) => a + b, 0) ?? 0;
 					const totalGamesWithoutTies = totalGames;
-					const totalWins = runs?.reduce((a, b) => a + b.wins, 0) ?? 0;
+					const totalWins = runs.reduce((a, b) => a + b.wins, 0) ?? 0;
 					const winrateStr = showAsPercents
 						? totalGamesWithoutTies > 0
 							? ((100 * totalWins) / totalGamesWithoutTies).toFixed(2) + '%'
