@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
-using System.Collections.Generic;
 
 public class Startup
 {
@@ -15,8 +14,7 @@ public class Startup
     {
         try
         {
-            string method = input.method;
-            
+            string method = (string)input.method;
             switch (method)
             {
                 case "initialize":
@@ -25,20 +23,20 @@ public class Startup
                 case "getCurrentScene":
                     return await GetCurrentScene();
                     
-                case "getMemoryChanges":
-                    return await GetMemoryChanges();
-                    
                 case "isBootstrapped":
                     return await IsBootstrapped();
                     
-                case "listMethods":
-                    return ListAvailableMethods();
+                case "getMemoryChanges":
+                    return await GetMemoryChanges();
+                    
+                case "listenForUpdates":
+                    return await ListenForUpdates();
                     
                 case "isInitialized":
                     return isInitialized;
                     
-                            default:
-                throw new ArgumentException("Unknown method: " + method);
+                default:
+                    throw new ArgumentException("Unknown method: " + method);
             }
         }
         catch (Exception ex)
@@ -56,7 +54,6 @@ public class Startup
                 return new { success = true, message = "Already initialized" };
             }
 
-            // Load the OverwolfUnitySpy.dll (the correct plugin DLL)
             string dllPath = Path.Combine(Directory.GetCurrentDirectory(), "overwolf-plugins", "OverwolfUnitySpy.dll");
             
             if (!File.Exists(dllPath))
@@ -64,15 +61,12 @@ public class Startup
                 return new { success = false, error = "DLL not found at: " + dllPath };
             }
 
-            // Load the assembly
             Assembly assembly = Assembly.LoadFrom(dllPath);
             
-            // Get the specific MindVisionPlugin class as defined in the Overwolf manifest
             pluginType = assembly.GetType("OverwolfUnitySpy.MindVisionPlugin");
             
             if (pluginType == null)
             {
-                // If we can't find the specific type, let's list all available types for debugging
                 Type[] types = assembly.GetTypes();
                 string availableTypes = string.Join(", ", Array.ConvertAll(types, t => t.FullName));
                 return new { success = false, error = "Could not find OverwolfUnitySpy.MindVisionPlugin type", availableTypes = availableTypes };
@@ -80,9 +74,16 @@ public class Startup
 
             // Create an instance of the plugin
             mindVisionPlugin = Activator.CreateInstance(pluginType);
+            
+            // Set up the event handlers that the plugin expects
+            SetupEventHandlers();
+            
+            // Start listening for updates like the Overwolf version does
+            StartListeningForUpdates();
+            
             isInitialized = true;
 
-            return new { success = true, message = "Plugin initialized", pluginType = pluginType.Name };
+            return new { success = true, message = "Plugin initialized successfully" };
         }
         catch (Exception ex)
         {
@@ -90,6 +91,77 @@ public class Startup
         }
     }
 
+    // Set up the event handlers that the MindVisionPlugin expects
+    private void SetupEventHandlers()
+    {
+        try
+        {
+            // Create the event handlers
+            Action<object, object> globalEventHandler = (first, second) => {
+                // Handle global events (logging, etc.)
+            };
+
+            Action<object> memoryUpdateHandler = (update) => {
+                // Handle memory updates
+            };
+
+            // Initialize the events by setting the backing fields
+            var onGlobalEventField = pluginType.GetField("onGlobalEvent", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+            if (onGlobalEventField != null)
+            {
+                onGlobalEventField.SetValue(mindVisionPlugin, globalEventHandler);
+            }
+            else
+            {
+                var eventInfo = pluginType.GetEvent("onGlobalEvent");
+                if (eventInfo != null)
+                {
+                    eventInfo.AddEventHandler(mindVisionPlugin, globalEventHandler);
+                }
+            }
+
+            var onMemoryUpdateField = pluginType.GetField("onMemoryUpdate", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+            if (onMemoryUpdateField != null)
+            {
+                onMemoryUpdateField.SetValue(mindVisionPlugin, memoryUpdateHandler);
+            }
+            else
+            {
+                var eventInfo = pluginType.GetEvent("onMemoryUpdate");
+                if (eventInfo != null)
+                {
+                    eventInfo.AddEventHandler(mindVisionPlugin, memoryUpdateHandler);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Failed to setup event handlers: " + ex.Message);
+        }
+    }
+
+    // Start listening for updates like the Overwolf version does
+    private void StartListeningForUpdates()
+    {
+        try
+        {
+            MethodInfo listenMethod = pluginType.GetMethod("listenForUpdates");
+            if (listenMethod != null)
+            {
+                Action<object> listenCallback = (result) => {
+                    // Listening started successfully
+                };
+
+                listenMethod.Invoke(mindVisionPlugin, new object[] { listenCallback });
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Failed to start listening for updates: " + ex.Message);
+        }
+    }
+
+    // Get current scene using the direct approach (bypasses callUnitySpy issues)
     private async Task<object> GetCurrentScene()
     {
         try
@@ -99,42 +171,21 @@ public class Startup
                 return new { error = "Plugin not initialized" };
             }
 
-            // Try to find and call getCurrentScene method
-            MethodInfo method = pluginType.GetMethod("getCurrentScene");
-            if (method == null)
+            // Use direct approach to get scene data
+            var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
+            var mindVisionInstance = mindVisionProperty.GetValue(mindVisionPlugin);
+            
+            if (mindVisionInstance == null)
             {
-                // List available methods for debugging
-                MethodInfo[] methods = pluginType.GetMethods();
-                string availableMethods = string.Join(", ", Array.ConvertAll(methods, m => m.Name));
-                return new { error = "getCurrentScene method not found", availableMethods = availableMethods };
+                return new { success = true, scene = (string)null };
             }
 
-            // Create a TaskCompletionSource to handle the async callback
-            var tcs = new TaskCompletionSource<object>();
+            var getSceneModeMethod = mindVisionInstance.GetType().GetMethod("GetSceneMode");
+            var sceneResult = getSceneModeMethod.Invoke(mindVisionInstance, null);
             
-            // Create a proper C# Action<object> delegate with error handling
-            Action<object> callback = new Action<object>((result) => {
-                try {
-                    tcs.TrySetResult(result);
-                } catch (Exception ex) {
-                    tcs.TrySetException(ex);
-                }
-            });
-
-            // Call the method with the callback
-            method.Invoke(mindVisionPlugin, new object[] { callback });
-            
-            // Wait for the callback to be called with a timeout
-            var timeoutTask = Task.Delay(5000); // 5 second timeout
-            var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
-            
-            if (completedTask == timeoutTask)
-            {
-                return new { error = "getCurrentScene timed out after 5 seconds" };
-            }
-            
-            var sceneResult = await tcs.Task;
-            return new { success = true, scene = sceneResult };
+            // Return the result as a string like the original plugin would
+            string serializedResult = sceneResult != null ? sceneResult.ToString() : null;
+            return new { success = true, scene = serializedResult };
         }
         catch (Exception ex)
         {
@@ -142,43 +193,7 @@ public class Startup
         }
     }
 
-    private async Task<object> GetMemoryChanges()
-    {
-        try
-        {
-            if (!isInitialized || mindVisionPlugin == null)
-            {
-                return new { error = "Plugin not initialized" };
-            }
-
-            // Try to find and call getMemoryChanges method
-            MethodInfo method = pluginType.GetMethod("getMemoryChanges");
-            if (method == null)
-            {
-                return new { error = "getMemoryChanges method not found" };
-            }
-
-            // Create a TaskCompletionSource to handle the async callback
-            var tcs = new TaskCompletionSource<object>();
-            
-            // Create a callback delegate that will be called by the plugin
-            Action<object> callback = (result) => {
-                tcs.SetResult(result);
-            };
-
-            // Call the method with the callback
-            method.Invoke(mindVisionPlugin, new object[] { callback });
-            
-            // Wait for the callback to be called
-            var changesResult = await tcs.Task;
-            return new { success = true, changes = changesResult };
-        }
-        catch (Exception ex)
-        {
-            return new { error = ex.Message, stackTrace = ex.StackTrace };
-        }
-    }
-
+    // Check if the plugin is bootstrapped using direct approach
     private async Task<object> IsBootstrapped()
     {
         try
@@ -188,27 +203,18 @@ public class Startup
                 return new { error = "Plugin not initialized" };
             }
 
-            // Try to find and call isBootstrapped method
-            MethodInfo method = pluginType.GetMethod("isBootstrapped");
-            if (method == null)
+            var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
+            var mindVisionInstance = mindVisionProperty.GetValue(mindVisionPlugin);
+            
+            if (mindVisionInstance == null)
             {
-                return new { error = "isBootstrapped method not found" };
+                return new { success = true, bootstrapped = false };
             }
 
-            // Create a TaskCompletionSource to handle the async callback
-            var tcs = new TaskCompletionSource<object>();
+            var isBootstrappedMethod = mindVisionInstance.GetType().GetMethod("IsBootstrapped");
+            var result = isBootstrappedMethod.Invoke(mindVisionInstance, null);
             
-            // Create a callback delegate that will be called by the plugin
-            Action<object> callback = (result) => {
-                tcs.SetResult(result);
-            };
-
-            // Call the method with true parameter and callback
-            method.Invoke(mindVisionPlugin, new object[] { true, callback });
-            
-            // Wait for the callback to be called
-            var bootstrapResult = await tcs.Task;
-            return new { success = true, bootstrapped = bootstrapResult };
+            return new { success = true, bootstrapped = result };
         }
         catch (Exception ex)
         {
@@ -216,35 +222,60 @@ public class Startup
         }
     }
 
-    private object ListAvailableMethods()
+    // Get memory changes using direct approach
+    private async Task<object> GetMemoryChanges()
     {
         try
         {
-            if (!isInitialized || mindVisionPlugin == null || pluginType == null)
+            if (!isInitialized || mindVisionPlugin == null)
             {
                 return new { error = "Plugin not initialized" };
             }
 
-            MethodInfo[] methods = pluginType.GetMethods();
-            var methodList = new List<object>();
+            var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
+            var mindVisionInstance = mindVisionProperty.GetValue(mindVisionPlugin);
             
-            foreach (MethodInfo method in methods)
+            if (mindVisionInstance == null)
             {
-                var parameters = method.GetParameters();
-                var paramTypes = new string[parameters.Length];
-                for (int i = 0; i < parameters.Length; i++)
-                {
-                    paramTypes[i] = parameters[i].ParameterType.Name;
-                }
-                
-                methodList.Add(new { 
-                    name = method.Name, 
-                    returnType = method.ReturnType.Name,
-                    parameters = paramTypes
-                });
+                return new { success = true, changes = (string)null };
             }
+
+            var getMemoryChangesMethod = mindVisionInstance.GetType().GetMethod("GetMemoryChanges");
+            var result = getMemoryChangesMethod.Invoke(mindVisionInstance, null);
             
-            return new { success = true, methods = methodList.ToArray() };
+            // Serialize the result like the original plugin does
+            string serializedResult = result != null ? result.ToString() : null;
+            return new { success = true, changes = serializedResult };
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
+    // Listen for updates (already started in initialization, but can be called again)
+    private async Task<object> ListenForUpdates()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            MethodInfo listenMethod = pluginType.GetMethod("listenForUpdates");
+            if (listenMethod == null)
+            {
+                return new { error = "listenForUpdates method not found" };
+            }
+
+            Action<object> listenCallback = (result) => {
+                // Updates are being listened to
+            };
+
+            listenMethod.Invoke(mindVisionPlugin, new object[] { listenCallback });
+            
+            return new { success = true, message = "Listening for updates started" };
         }
         catch (Exception ex)
         {
