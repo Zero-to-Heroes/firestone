@@ -6,7 +6,12 @@ class MindVisionEdge {
 		// Create the edge function that will execute our C# code
 		this.edgeFunc = edge.func({
 			source: path.join(__dirname, 'MindVisionBridge.cs'),
-			references: ['System.dll', 'System.Core.dll', 'System.Reflection.dll'],
+			references: [
+				'System.dll',
+				'System.Core.dll',
+				'System.Reflection.dll',
+				path.join(__dirname, 'Newtonsoft.Json.dll'),
+			],
 		});
 
 		this.initialized = false;
@@ -107,6 +112,34 @@ class MindVisionEdge {
 			}
 		} catch (error) {
 			console.error('[MindVisionEdge] listenForUpdates error:', error);
+			throw error;
+		}
+	}
+
+	// Start listening for memory updates with real-time callback
+	async startListeningWithCallback(callback) {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		if (typeof callback !== 'function') {
+			throw new Error('Callback must be a function');
+		}
+
+		try {
+			const result = await this.callMethod('StartListeningWithCallback', {
+				callback: callback,
+			});
+
+			if (result.success) {
+				console.log('[MindVisionEdge] Started listening for memory updates with callback:', result.message);
+				return result.message;
+			} else {
+				console.error('[MindVisionEdge] Failed to start listening:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdge] startListeningWithCallback error:', error);
 			throw error;
 		}
 	}

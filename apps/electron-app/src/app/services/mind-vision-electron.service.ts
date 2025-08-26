@@ -4,7 +4,6 @@ export class MindVisionElectronService {
 	private mindVision: any;
 	private initialized = false;
 	private currentScene: string | null = null;
-	private pollingInterval: NodeJS.Timeout | null = null;
 	private initializationRetries = 0;
 	private maxRetries = 3;
 
@@ -33,7 +32,7 @@ export class MindVisionElectronService {
 				this.initialized = true;
 				console.log('[MindVisionElectron] Plugin initialized successfully!');
 				this.updateOverlayStatus('Connected');
-				this.startPolling();
+				this.startListeningForUpdates();
 			} else {
 				console.error('[MindVisionElectron] Failed to initialize plugin');
 				this.updateOverlayStatus('Failed to initialize');
@@ -54,29 +53,29 @@ export class MindVisionElectronService {
 		}
 	}
 
-	private startPolling() {
-		if (this.pollingInterval) {
-			clearInterval(this.pollingInterval);
-		}
+	private async startListeningForUpdates() {
+		try {
+			console.log('[MindVisionElectron] Starting to listen for memory updates...');
 
-		this.pollingInterval = setInterval(async () => {
-			try {
-				const scene = await this.mindVision.getCurrentScene();
-				if (scene !== this.currentScene) {
-					this.currentScene = scene;
-					console.log('[MindVisionElectron] Scene changed to:', scene);
-
-					// Update the overlay with the new scene
-					this.updateOverlayScene(scene);
+			// Start listening for memory updates with real-time callback
+			await this.mindVision.startListeningWithCallback((updateData: any) => {
+				console.log('[MindVisionElectron] Received real-time memory update:', updateData);
+				
+				if (updateData && updateData.memoryUpdate) {
+					// Display the JSON data in the overlay immediately
+					this.updateOverlayWithJSON(updateData.memoryUpdate, updateData.timestamp || new Date().toLocaleTimeString());
 				}
-			} catch (error) {
-				console.error('[MindVisionElectron] Error getting current scene:', error);
-				this.updateOverlayStatus('Error reading scene');
-			}
-		}, 1000); // Poll every second
+			});
 
-		console.log('[MindVisionElectron] Started polling for scene changes');
+			console.log('[MindVisionElectron] Successfully started listening for memory updates with real-time callback');
+			this.updateOverlayStatus('Listening for real-time memory updates...');
+		} catch (error) {
+			console.error('[MindVisionElectron] Error starting memory update listener:', error);
+			this.updateOverlayStatus('Failed to start listener');
+		}
 	}
+
+	
 
 	public getCurrentScene(): string | null {
 		return this.currentScene;
@@ -86,16 +85,9 @@ export class MindVisionElectronService {
 		return this.initialized;
 	}
 
-	public stopPolling() {
-		if (this.pollingInterval) {
-			clearInterval(this.pollingInterval);
-			this.pollingInterval = null;
-			console.log('[MindVisionElectron] Stopped polling');
-		}
-	}
+
 
 	public destroy() {
-		this.stopPolling();
 		this.initialized = false;
 		this.currentScene = null;
 	}
@@ -112,6 +104,16 @@ export class MindVisionElectronService {
 	private updateOverlayStatus(status: string) {
 		if (App.overlay) {
 			App.overlay.updateSceneDisplay(this.currentScene, status);
+		}
+	}
+
+	private updateOverlayWithJSON(jsonData: string, timestamp?: string) {
+		if (App.overlay) {
+			console.log(`[MindVisionElectron] Updating overlay with JSON data:`, jsonData);
+			// Display the JSON data in the overlay instead of just the scene
+			App.overlay.updateSceneDisplay(jsonData, `Last update: ${timestamp || new Date().toLocaleTimeString()}`);
+		} else {
+			console.log('[MindVisionElectron] Warning: App.overlay not available for JSON update');
 		}
 	}
 }
