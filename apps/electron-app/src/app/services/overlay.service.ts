@@ -283,7 +283,7 @@ export class OverlayService extends EventEmitter {
 						
 						.scene-display {
 							color: #ffffff;
-							font-size: 20px;
+							font-size: 12px;
 							font-weight: bold;
 							margin-bottom: 5px;
 							text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
@@ -292,6 +292,11 @@ export class OverlayService extends EventEmitter {
 							padding: 8px 12px;
 							border-radius: 6px;
 							border: 1px solid rgba(255, 107, 53, 0.3);
+							max-height: 300px;
+							overflow-y: auto;
+							white-space: pre-wrap;
+							word-break: break-all;
+							line-height: 1.4;
 						}
 						
 						.status {
@@ -336,10 +341,25 @@ export class OverlayService extends EventEmitter {
 							const sceneElement = document.getElementById('current-scene');
 							const statusElement = document.getElementById('status');
 							
-							if (sceneElement && sceneElement.textContent !== scene) {
-								sceneElement.textContent = scene || 'Unknown';
-								sceneElement.classList.add('scene-change');
-								setTimeout(() => sceneElement.classList.remove('scene-change'), 300);
+							if (sceneElement) {
+								let displayText = scene || 'Unknown';
+								
+								// Try to format as JSON if it looks like JSON
+								try {
+									if (typeof scene === 'string' && (scene.startsWith('{') || scene.startsWith('['))) {
+										const parsed = JSON.parse(scene);
+										displayText = JSON.stringify(parsed, null, 2);
+									}
+								} catch (e) {
+									// If not valid JSON, use as-is
+									displayText = scene || 'Unknown';
+								}
+								
+								if (sceneElement.textContent !== displayText) {
+									sceneElement.textContent = displayText;
+									sceneElement.classList.add('scene-change');
+									setTimeout(() => sceneElement.classList.remove('scene-change'), 300);
+								}
 							}
 							
 							if (statusElement) {
