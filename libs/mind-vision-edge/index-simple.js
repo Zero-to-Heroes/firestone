@@ -70,6 +70,40 @@ class MindVisionEdgeSimple {
 		}
 	}
 
+	async getCurrentSceneFixed() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('getCurrentSceneFixed');
+
+			if (result.success) {
+				return result.scene;
+			} else {
+				console.error('[MindVisionEdgeSimple] getCurrentSceneFixed error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] getCurrentSceneFixed error:', error);
+			throw error;
+		}
+	}
+
+	async getCurrentSceneDebug() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('getCurrentSceneDebug');
+			return result; // Return full debug result
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] getCurrentSceneDebug error:', error);
+			throw error;
+		}
+	}
+
 	async isBootstrapped() {
 		if (!this.initialized) {
 			throw new Error('Plugin not initialized. Call initialize() first.');
@@ -106,6 +140,48 @@ class MindVisionEdgeSimple {
 			}
 		} catch (error) {
 			console.error('[MindVisionEdgeSimple] listenForUpdates error:', error);
+			throw error;
+		}
+	}
+
+	async testDirectCall() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('testDirectCall');
+			return result;
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] testDirectCall error:', error);
+			throw error;
+		}
+	}
+
+	async testMindVisionAccess() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('testMindVisionAccess');
+			return result;
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] testMindVisionAccess error:', error);
+			throw error;
+		}
+	}
+
+	async testDirectMindVisionCall() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('testDirectMindVisionCall');
+			return result;
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] testDirectMindVisionCall error:', error);
 			throw error;
 		}
 	}
