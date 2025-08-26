@@ -1,4 +1,3 @@
-// Edge.js wrapper for MindVision .NET integration
 const edge = require('edge-js');
 const path = require('path');
 
@@ -21,13 +20,9 @@ class MindVisionEdge {
 			if (result.success) {
 				this.initialized = true;
 				console.log('[MindVisionEdge] Plugin initialized successfully:', result.message);
-				console.log('[MindVisionEdge] Plugin type:', result.pluginType);
 				return true;
 			} else {
 				console.error('[MindVisionEdge] Failed to initialize:', result.error);
-				if (result.availableTypes) {
-					console.log('[MindVisionEdge] Available types:', result.availableTypes);
-				}
 				return false;
 			}
 		} catch (error) {
@@ -48,9 +43,6 @@ class MindVisionEdge {
 				return result.scene;
 			} else {
 				console.error('[MindVisionEdge] getCurrentScene error:', result.error);
-				if (result.availableMethods) {
-					console.log('[MindVisionEdge] Available methods:', result.availableMethods);
-				}
 				throw new Error(result.error);
 			}
 		} catch (error) {
@@ -70,6 +62,7 @@ class MindVisionEdge {
 			if (result.success) {
 				return result.changes;
 			} else {
+				console.error('[MindVisionEdge] getMemoryChanges error:', result.error);
 				throw new Error(result.error);
 			}
 		} catch (error) {
@@ -89,10 +82,31 @@ class MindVisionEdge {
 			if (result.success) {
 				return result.bootstrapped;
 			} else {
+				console.error('[MindVisionEdge] isBootstrapped error:', result.error);
 				throw new Error(result.error);
 			}
 		} catch (error) {
 			console.error('[MindVisionEdge] isBootstrapped error:', error);
+			throw error;
+		}
+	}
+
+	async listenForUpdates() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('listenForUpdates');
+
+			if (result.success) {
+				return result.message;
+			} else {
+				console.error('[MindVisionEdge] listenForUpdates error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdge] listenForUpdates error:', error);
 			throw error;
 		}
 	}
@@ -107,26 +121,6 @@ class MindVisionEdge {
 		}
 	}
 
-	async listMethods() {
-		if (!this.initialized) {
-			throw new Error('Plugin not initialized. Call initialize() first.');
-		}
-
-		try {
-			const result = await this.callMethod('listMethods');
-
-			if (result.success) {
-				return result.methods;
-			} else {
-				throw new Error(result.error);
-			}
-		} catch (error) {
-			console.error('[MindVisionEdge] listMethods error:', error);
-			throw error;
-		}
-	}
-
-	// Private method to call the C# bridge
 	async callMethod(method, params = {}) {
 		return new Promise((resolve, reject) => {
 			this.edgeFunc({ method, ...params }, (error, result) => {
