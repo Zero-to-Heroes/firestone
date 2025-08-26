@@ -1,4 +1,4 @@
-const edge = require('edge-js');
+const edge = require('electron-edge-js');
 const path = require('path');
 
 class MindVisionEdge {
