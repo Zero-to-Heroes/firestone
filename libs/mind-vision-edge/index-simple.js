@@ -70,6 +70,26 @@ class MindVisionEdgeSimple {
 		}
 	}
 
+	async getCurrentSceneWorking() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('getCurrentSceneWorking');
+
+			if (result.success) {
+				return result.scene;
+			} else {
+				console.error('[MindVisionEdgeSimple] getCurrentSceneWorking error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] getCurrentSceneWorking error:', error);
+			throw error;
+		}
+	}
+
 	async getCurrentSceneFixed() {
 		if (!this.initialized) {
 			throw new Error('Plugin not initialized. Call initialize() first.');
@@ -86,6 +106,40 @@ class MindVisionEdgeSimple {
 			}
 		} catch (error) {
 			console.error('[MindVisionEdgeSimple] getCurrentSceneFixed error:', error);
+			throw error;
+		}
+	}
+
+	async getCurrentSceneWithCallUnitySpy() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('getCurrentSceneWithCallUnitySpy');
+			return result; // Return full result with debug info
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] getCurrentSceneWithCallUnitySpy error:', error);
+			throw error;
+		}
+	}
+
+	async getCurrentSceneOverwolfStyle() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('getCurrentSceneOverwolfStyle');
+
+			if (result.success) {
+				return result.scene;
+			} else {
+				console.error('[MindVisionEdgeSimple] getCurrentSceneOverwolfStyle error:', result.error);
+				throw new Error(result.error);
+			}
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] getCurrentSceneOverwolfStyle error:', error);
 			throw error;
 		}
 	}
@@ -182,6 +236,20 @@ class MindVisionEdgeSimple {
 			return result;
 		} catch (error) {
 			console.error('[MindVisionEdgeSimple] testDirectMindVisionCall error:', error);
+			throw error;
+		}
+	}
+
+	async checkEventStatus() {
+		if (!this.initialized) {
+			throw new Error('Plugin not initialized. Call initialize() first.');
+		}
+
+		try {
+			const result = await this.callMethod('checkEventStatus');
+			return result;
+		} catch (error) {
+			console.error('[MindVisionEdgeSimple] checkEventStatus error:', error);
 			throw error;
 		}
 	}
