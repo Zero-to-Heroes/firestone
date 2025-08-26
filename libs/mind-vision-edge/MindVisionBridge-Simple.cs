@@ -37,8 +37,17 @@ public class Startup
                 case "getCurrentScene":
                     return await GetCurrentScene();
                     
+                case "getCurrentSceneWorking":
+                    return await GetCurrentSceneWorking();
+                    
                 case "getCurrentSceneFixed":
                     return await GetCurrentSceneFixed();
+                    
+                case "getCurrentSceneWithCallUnitySpy":
+                    return await GetCurrentSceneWithCallUnitySpy();
+                    
+                case "getCurrentSceneOverwolfStyle":
+                    return await GetCurrentSceneOverwolfStyle();
                     
                 case "getCurrentSceneDebug":
                     return await GetCurrentSceneDebug();
@@ -57,6 +66,9 @@ public class Startup
                     
                 case "testDirectMindVisionCall":
                     return TestDirectMindVisionCall();
+                    
+                case "checkEventStatus":
+                    return CheckEventStatus();
                     
                 default:
                     throw new ArgumentException("Unknown method: " + method);
@@ -105,9 +117,12 @@ public class Startup
             // Set up the event handlers that the plugin expects
             SetupEventHandlers();
             
+            // Start listening for updates like the Overwolf version does
+            StartListeningForUpdates();
+            
             isInitialized = true;
 
-            return new { success = true, message = "Plugin initialized with event handlers", pluginType = pluginType.Name };
+            return new { success = true, message = "Plugin initialized with event handlers and listening started", pluginType = pluginType.Name };
         }
         catch (Exception ex)
         {
@@ -246,43 +261,128 @@ public class Startup
     }
 
     // Set up the event handlers that the MindVisionPlugin expects
+    // Unlike Overwolf, we need to INITIALIZE the events first, then subscribe to them
     private void SetupEventHandlers()
     {
         try
         {
             // The plugin has two events: onGlobalEvent and onMemoryUpdate
-            // We need to subscribe to these events to prevent null reference issues
+            // In Overwolf, these are automatically initialized, but we need to do it manually
             
-            // Find and subscribe to onGlobalEvent
-            var onGlobalEventField = pluginType.GetEvent("onGlobalEvent");
+            // Create the event handlers first
+            Action<object, object> globalEventHandler = (first, second) => {
+                // Handle global events (logging, etc.)
+                // This is what Logger.Log will be set to in callUnitySpy
+            };
+
+            Action<object> memoryUpdateHandler = (update) => {
+                // Handle memory updates
+            };
+
+            // Now we need to INITIALIZE the events by setting the backing fields
+            // The events are likely backed by private fields
+            var onGlobalEventField = pluginType.GetField("onGlobalEvent", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
             if (onGlobalEventField != null)
             {
-                // Create a handler for onGlobalEvent (Action<object, object>)
-                Action<object, object> globalEventHandler = (first, second) => {
-                    // For now, just log that we received an event
-                    // In a full implementation, we might want to forward these events to Node.js
-                };
-                
-                onGlobalEventField.AddEventHandler(mindVisionPlugin, globalEventHandler);
+                // Set the event to our handler (this initializes it)
+                onGlobalEventField.SetValue(mindVisionPlugin, globalEventHandler);
+            }
+            else
+            {
+                // Try to find it as a property or use reflection to initialize the event
+                var onGlobalEventProperty = pluginType.GetProperty("onGlobalEvent");
+                if (onGlobalEventProperty != null)
+                {
+                    // If it's a property, we might need to use the event add method
+                    var eventInfo = pluginType.GetEvent("onGlobalEvent");
+                    if (eventInfo != null)
+                    {
+                        eventInfo.AddEventHandler(mindVisionPlugin, globalEventHandler);
+                    }
+                }
             }
 
-            // Find and subscribe to onMemoryUpdate  
-            var onMemoryUpdateField = pluginType.GetEvent("onMemoryUpdate");
+            var onMemoryUpdateField = pluginType.GetField("onMemoryUpdate", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
             if (onMemoryUpdateField != null)
             {
-                // Create a handler for onMemoryUpdate (Action<object>)
-                Action<object> memoryUpdateHandler = (update) => {
-                    // For now, just log that we received a memory update
-                    // In a full implementation, we might want to forward these to Node.js
-                };
-                
-                onMemoryUpdateField.AddEventHandler(mindVisionPlugin, memoryUpdateHandler);
+                // Set the event to our handler (this initializes it)
+                onMemoryUpdateField.SetValue(mindVisionPlugin, memoryUpdateHandler);
+            }
+            else
+            {
+                // Try to find it as a property or use reflection to initialize the event
+                var eventInfo = pluginType.GetEvent("onMemoryUpdate");
+                if (eventInfo != null)
+                {
+                    eventInfo.AddEventHandler(mindVisionPlugin, memoryUpdateHandler);
+                }
             }
         }
         catch (Exception ex)
         {
-            // Don't fail initialization if event setup fails, but log it
-            // In a real implementation, you might want to log this somewhere
+            // Don't fail initialization if event setup fails, but this is critical
+            throw new Exception("Failed to setup event handlers: " + ex.Message + " - This is critical for the plugin to work");
+        }
+    }
+
+    // Start listening for updates like the Overwolf version does
+    // This mimics the listenForUpdates() call in the facade service
+    private void StartListeningForUpdates()
+    {
+        try
+        {
+            // Find the listenForUpdates method
+            MethodInfo listenMethod = pluginType.GetMethod("listenForUpdates");
+            if (listenMethod != null)
+            {
+                // Create a callback for listenForUpdates
+                Action<object> listenCallback = (result) => {
+                    // In the Overwolf version, this just resolves a promise
+                    // For us, we just need to know that listening has started
+                    // Console.WriteLine($"[MindVision] Listen for updates started: {result}");
+                };
+
+                // Call listenForUpdates with the callback
+                listenMethod.Invoke(mindVisionPlugin, new object[] { listenCallback });
+            }
+        }
+        catch (Exception ex)
+        {
+            // Don't fail initialization if listenForUpdates fails
+            // But this might be important for the plugin to work properly
+            throw new Exception("Failed to start listening for updates: " + ex.Message);
+        }
+    }
+
+    // WORKING version of getCurrentScene that uses the direct approach but provides same interface
+    private async Task<object> GetCurrentSceneWorking()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Use the direct approach that we know works, but return the result in the same format as the original
+            var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
+            var mindVisionInstance = mindVisionProperty.GetValue(mindVisionPlugin);
+            
+            if (mindVisionInstance == null)
+            {
+                return new { success = true, scene = (string)null };
+            }
+
+            var getSceneModeMethod = mindVisionInstance.GetType().GetMethod("GetSceneMode");
+            var sceneResult = getSceneModeMethod.Invoke(mindVisionInstance, null);
+            
+            // Return the result as a string like the original plugin would (serialized)
+            string serializedResult = sceneResult != null ? sceneResult.ToString() : null;
+            return new { success = true, scene = serializedResult };
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
         }
     }
 
@@ -353,6 +453,163 @@ public class Startup
             
             var finalResult = await tcs.Task;
             return new { success = true, scene = finalResult };
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
+    // Version that properly mimics the original callUnitySpy method
+    private async Task<object> GetCurrentSceneWithCallUnitySpy()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Create a TaskCompletionSource to handle the async callback
+            var tcs = new TaskCompletionSource<object>();
+            bool callbackInvoked = false;
+            object callbackResult = null;
+            
+            // Create a callback that will be called from our custom callUnitySpy
+            Action<object> callback = new Action<object>((result) => {
+                try {
+                    callbackInvoked = true;
+                    callbackResult = result;
+                    if (!tcs.Task.IsCompleted)
+                    {
+                        tcs.TrySetResult(result);
+                    }
+                } catch (Exception ex) {
+                    if (!tcs.Task.IsCompleted)
+                    {
+                        tcs.TrySetException(ex);
+                    }
+                }
+            });
+
+            // Implement our own callUnitySpy that follows the exact same pattern as the original
+            Task.Run(() =>
+            {
+                try
+                {
+                    // Step 1: Set Logger.Log = onGlobalEvent (line 344 in original)
+                    // We need to find the onGlobalEvent field and set Logger.Log to it
+                    var onGlobalEventField = pluginType.GetEvent("onGlobalEvent");
+                    
+                    // Step 2: Check if callback is null (lines 346-350 in original)
+                    if (callback == null)
+                    {
+                        // In the original, it logs and returns without calling callback
+                        return;
+                    }
+
+                    // Step 3: Execute the action - MindVision?.GetSceneMode() (line 352)
+                    var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var mindVisionInstance = mindVisionProperty.GetValue(mindVisionPlugin);
+                    
+                    object result = null;
+                    if (mindVisionInstance != null)
+                    {
+                        var getSceneModeMethod = mindVisionInstance.GetType().GetMethod("GetSceneMode");
+                        result = getSceneModeMethod.Invoke(mindVisionInstance, null);
+                    }
+
+                    // Step 4: Serialize the result (line 353)
+                    string serializedResult = result != null ? result.ToString() : null;
+                    
+                    // Step 5: Call the callback (line 354)
+                    callback(serializedResult);
+                }
+                catch (Exception ex)
+                {
+                    // Step 6: Handle exceptions (lines 356-375)
+                    // The original has complex exception handling, but let's start simple
+                    callback(null);
+                }
+            });
+            
+            // Wait for the callback to be called with a timeout
+            var timeoutTask = Task.Delay(5000); // 5 second timeout for debugging
+            var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+            
+            if (completedTask == timeoutTask)
+            {
+                return new { 
+                    error = "getCurrentSceneWithCallUnitySpy timed out after 5 seconds",
+                    debug = new {
+                        callbackInvoked = callbackInvoked,
+                        callbackResult = callbackResult
+                    }
+                };
+            }
+            
+            var finalResult = await tcs.Task;
+            return new { 
+                success = true, 
+                scene = finalResult,
+                debug = new {
+                    callbackInvoked = callbackInvoked,
+                    callbackResult = callbackResult
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
+    // Version that exactly mimics the Overwolf facade approach
+    private async Task<object> GetCurrentSceneOverwolfStyle()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Find the getCurrentScene method
+            MethodInfo method = pluginType.GetMethod("getCurrentScene");
+            if (method == null)
+            {
+                return new { error = "getCurrentScene method not found" };
+            }
+
+            // Create a TaskCompletionSource exactly like the Overwolf Promise
+            var tcs = new TaskCompletionSource<object>();
+            
+            // Create the callback exactly like the Overwolf version: (scene) => { resolve(scene); }
+            Action<object> callback = (scene) => {
+                tcs.TrySetResult(scene);
+            };
+
+            try
+            {
+                // Call the method exactly like Overwolf: plugin.getCurrentScene(callback)
+                method.Invoke(mindVisionPlugin, new object[] { callback });
+                
+                // Wait for the callback with a reasonable timeout
+                var timeoutTask = Task.Delay(10000); // 10 second timeout
+                var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+                
+                if (completedTask == timeoutTask)
+                {
+                    return new { error = "getCurrentSceneOverwolfStyle timed out after 10 seconds" };
+                }
+                
+                var result = await tcs.Task;
+                return new { success = true, scene = result };
+            }
+            catch (Exception ex)
+            {
+                return new { error = "Exception during method invoke: " + ex.Message, stackTrace = ex.StackTrace };
+            }
         }
         catch (Exception ex)
         {
@@ -703,6 +960,48 @@ public class Startup
                     note = "This shows what exception is preventing the callback from being called"
                 };
             }
+        }
+        catch (Exception ex)
+        {
+            return new { error = ex.Message, stackTrace = ex.StackTrace };
+        }
+    }
+
+    // Check the status of the events to see if they were properly initialized
+    private object CheckEventStatus()
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return new { error = "Plugin not initialized" };
+            }
+
+            // Check onGlobalEvent field/property
+            var onGlobalEventField = pluginType.GetField("onGlobalEvent", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+            object globalEventValue = null;
+            if (onGlobalEventField != null)
+            {
+                globalEventValue = onGlobalEventField.GetValue(mindVisionPlugin);
+            }
+
+            // Check onMemoryUpdate field/property
+            var onMemoryUpdateField = pluginType.GetField("onMemoryUpdate", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+            object memoryUpdateValue = null;
+            if (onMemoryUpdateField != null)
+            {
+                memoryUpdateValue = onMemoryUpdateField.GetValue(mindVisionPlugin);
+            }
+
+            return new {
+                success = true,
+                onGlobalEventField = onGlobalEventField != null ? "found" : "not found",
+                onGlobalEventValue = globalEventValue != null ? "initialized" : "null",
+                onMemoryUpdateField = onMemoryUpdateField != null ? "found" : "not found", 
+                onMemoryUpdateValue = memoryUpdateValue != null ? "initialized" : "null",
+                globalEventType = globalEventValue != null ? globalEventValue.GetType().Name : "null",
+                memoryUpdateType = memoryUpdateValue != null ? memoryUpdateValue.GetType().Name : "null"
+            };
         }
         catch (Exception ex)
         {
