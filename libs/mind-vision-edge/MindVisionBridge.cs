@@ -303,25 +303,14 @@ public class Startup
             nodeJsCallback = (Func<object, Task<object>>)input.callback;
             
             // Set up the onMemoryUpdate event handler to capture memory changes
-            Console.WriteLine("[MindVisionBridge] Looking for onMemoryUpdate field...");
-            
-            // List all fields for debugging
-            FieldInfo[] allFields = pluginType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            Console.WriteLine("[MindVisionBridge] Available fields:");
-            foreach (var field in allFields)
-            {
-                Console.WriteLine("[MindVisionBridge]   - " + field.Name + " (" + field.FieldType.Name + ")");
-            }
-            
             FieldInfo onMemoryUpdateField = pluginType.GetField("onMemoryUpdate", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (onMemoryUpdateField != null)
             {
-                Console.WriteLine("[MindVisionBridge] onMemoryUpdate field found!");
                 // Create an Action<object> delegate for the onMemoryUpdate event
                 Action<object> memoryUpdateHandler = (memoryUpdate) => {
                     try
                     {
-                        Console.WriteLine("[MindVisionBridge] Memory update received: " + memoryUpdate);
+                        // Memory update received - forwarding to Node.js
                         
                         // Forward the update to Node.js in real-time
                         if (nodeJsCallback != null)
@@ -346,11 +335,6 @@ public class Startup
                 
                 // Set the onMemoryUpdate event handler
                 onMemoryUpdateField.SetValue(mindVisionPlugin, memoryUpdateHandler);
-                Console.WriteLine("[MindVisionBridge] onMemoryUpdate event handler set up successfully");
-            }
-            else
-            {
-                Console.WriteLine("[MindVisionBridge] ERROR: onMemoryUpdate field not found!");
             }
 
             // Get the MindVision instance and call ListenForChanges directly
@@ -388,21 +372,8 @@ public class Startup
 
                         // Call ListenForChanges with 200ms interval (same as original)
                         listenForChangesMethod.Invoke(mindVisionInstance, new object[] { 200, changesCallback });
-                        Console.WriteLine("[MindVisionBridge] Started ListenForChanges on MindVision instance");
-                    }
-                    else
-                    {
-                        Console.WriteLine("[MindVisionBridge] ListenForChanges method not found on MindVision instance");
                     }
                 }
-                else
-                {
-                    Console.WriteLine("[MindVisionBridge] MindVision instance is null");
-                }
-            }
-            else
-            {
-                Console.WriteLine("[MindVisionBridge] MindVision property not found");
             }
             
             MethodInfo listenMethod = pluginType.GetMethod("listenForUpdates");
@@ -410,15 +381,7 @@ public class Startup
             {
                 // Create a simple callback for listenForUpdates
                 Action<object> listenCallback = (result) => {
-                    try
-                    {
-                        var serializedResult = JsonConvert.SerializeObject(result);
-                        Console.WriteLine("[MindVisionBridge] listenForUpdates callback: " + serializedResult);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error in listenForUpdates callback: " + ex.Message);
-                    }
+                    // listenForUpdates callback - no action needed for memory updates
                 };
 
                 listenMethod.Invoke(mindVisionPlugin, new object[] { listenCallback });

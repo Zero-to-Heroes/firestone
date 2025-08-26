@@ -382,24 +382,17 @@ export class OverlayService extends EventEmitter {
 	 * Update the scene display in the overlay
 	 */
 	public updateSceneDisplay(scene: string | null, status?: string) {
-		console.log(`[OverlayService] updateSceneDisplay called with scene: ${scene}, status: ${status}`);
 		if (this.overlayWindow && this.overlayWindow.window) {
 			try {
-				console.log(`[OverlayService] Executing JavaScript to update overlay`);
 				// Execute JavaScript in the overlay window to update the scene
 				this.overlayWindow.window.webContents.executeJavaScript(`
 					if (window.updateScene) {
-						console.log('Overlay: Updating scene to ${scene || 'Unknown'}');
-						window.updateScene('${scene || 'Unknown'}', '${status || 'Connected'}');
-					} else {
-						console.log('Overlay: window.updateScene not available');
+						window.updateScene('${(scene || 'Unknown').replace(/'/g, "\\'")}', '${(status || 'Connected').replace(/'/g, "\\'")}');
 					}
 				`);
 			} catch (error) {
 				console.error('❌ Error updating scene display:', error);
 			}
-		} else {
-			console.log('[OverlayService] Warning: overlayWindow not ready for scene update');
 		}
 	}
 }
