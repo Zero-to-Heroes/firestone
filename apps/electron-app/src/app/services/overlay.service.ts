@@ -207,7 +207,7 @@ export class OverlayService extends EventEmitter {
 		this.overlayApi.on('game-injected', async (gameInfo) => {
 			console.log('✨ Game injected successfully!', gameInfo.name);
 			console.log('🎯 Now creating overlay window...');
-			
+
 			// Create overlay window AFTER successful injection
 			if (!this.overlayWindow) {
 				await this.createOverlayWindow();
@@ -233,7 +233,7 @@ export class OverlayService extends EventEmitter {
 	}
 
 	/**
-	 * Create the Hello World overlay HTML
+	 * Create the scene display overlay HTML
 	 */
 	private createOverlayHtml(): string {
 		return `
@@ -256,33 +256,48 @@ export class OverlayService extends EventEmitter {
 							width: 100vw;
 							height: 100vh;
 							display: flex;
-							align-items: center;
-							justify-content: center;
+							align-items: flex-start;
+							justify-content: flex-end;
+							padding: 20px;
 						}
 						
 						.overlay-container {
-							background: rgba(0, 0, 0, 0.8);
+							background: rgba(0, 0, 0, 0.9);
 							border: 2px solid #ff6b35;
 							border-radius: 12px;
-							padding: 20px 30px;
+							padding: 15px 20px;
 							text-align: center;
 							box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 							backdrop-filter: blur(5px);
 							animation: fadeIn 0.5s ease-in-out;
+							min-width: 200px;
 						}
 						
 						.title {
 							color: #ff6b35;
-							font-size: 24px;
+							font-size: 18px;
 							font-weight: bold;
-							margin-bottom: 10px;
+							margin-bottom: 8px;
 							text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 						}
 						
-						.subtitle {
+						.scene-display {
 							color: #ffffff;
-							font-size: 16px;
-							opacity: 0.9;
+							font-size: 20px;
+							font-weight: bold;
+							margin-bottom: 5px;
+							text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+							font-family: 'Courier New', monospace;
+							background: rgba(255, 107, 53, 0.1);
+							padding: 8px 12px;
+							border-radius: 6px;
+							border: 1px solid rgba(255, 107, 53, 0.3);
+						}
+						
+						.status {
+							color: #cccccc;
+							font-size: 12px;
+							opacity: 0.8;
 							text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 						}
 						
@@ -297,24 +312,74 @@ export class OverlayService extends EventEmitter {
 							}
 						}
 						
-						.pulse {
-							animation: pulse 2s infinite;
+						.scene-change {
+							animation: sceneChange 0.3s ease-in-out;
 						}
 						
-						@keyframes pulse {
-							0% { transform: scale(1); }
-							50% { transform: scale(1.05); }
-							100% { transform: scale(1); }
+						@keyframes sceneChange {
+							0% { transform: scale(1); background: rgba(255, 107, 53, 0.1); }
+							50% { transform: scale(1.1); background: rgba(255, 107, 53, 0.3); }
+							100% { transform: scale(1); background: rgba(255, 107, 53, 0.1); }
 						}
 					</style>
 				</head>
 				<body>
-					<div class="overlay-container pulse">
-						<div class="title">🔥 Hello World! 🔥</div>
-						<div class="subtitle">True Game Injection!</div>
+					<div class="overlay-container">
+						<div class="title">🔥 Firestone</div>
+						<div class="scene-display" id="current-scene">Loading...</div>
+						<div class="status" id="status">Initializing...</div>
 					</div>
+					
+					<script>
+						// Function to update the scene display
+						function updateScene(scene, status) {
+							const sceneElement = document.getElementById('current-scene');
+							const statusElement = document.getElementById('status');
+							
+							if (sceneElement && sceneElement.textContent !== scene) {
+								sceneElement.textContent = scene || 'Unknown';
+								sceneElement.classList.add('scene-change');
+								setTimeout(() => sceneElement.classList.remove('scene-change'), 300);
+							}
+							
+							if (statusElement) {
+								statusElement.textContent = status || 'Connected';
+							}
+						}
+						
+						// Expose updateScene globally so it can be called from main process
+						window.updateScene = updateScene;
+						
+						// Initial status
+						updateScene('Loading...', 'Connecting to MindVision...');
+					</script>
 				</body>
 			</html>
 		`;
+	}
+
+	/**
+	 * Update the scene display in the overlay
+	 */
+	public updateSceneDisplay(scene: string | null, status?: string) {
+		console.log(`[OverlayService] updateSceneDisplay called with scene: ${scene}, status: ${status}`);
+		if (this.overlayWindow && this.overlayWindow.window) {
+			try {
+				console.log(`[OverlayService] Executing JavaScript to update overlay`);
+				// Execute JavaScript in the overlay window to update the scene
+				this.overlayWindow.window.webContents.executeJavaScript(`
+					if (window.updateScene) {
+						console.log('Overlay: Updating scene to ${scene || 'Unknown'}');
+						window.updateScene('${scene || 'Unknown'}', '${status || 'Connected'}');
+					} else {
+						console.log('Overlay: window.updateScene not available');
+					}
+				`);
+			} catch (error) {
+				console.error('❌ Error updating scene display:', error);
+			}
+		} else {
+			console.log('[OverlayService] Warning: overlayWindow not ready for scene update');
+		}
 	}
 }

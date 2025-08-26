@@ -17,6 +17,11 @@
 						"input": "apps/electron-app/src",
 						"glob": "package.json",
 						"output": "."
+					},
+					{
+						"input": "libs/mind-vision-edge",
+						"glob": "**/*",
+						"output": "mind-vision-edge"
 					}
 				]
 			},

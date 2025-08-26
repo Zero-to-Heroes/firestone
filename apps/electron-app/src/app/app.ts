@@ -3,6 +3,7 @@ import { join } from 'path';
 import { format } from 'url';
 import { environment } from '../environments/environment';
 import { rendererAppName, rendererAppPort } from './constants';
+import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
 
 export default class App {
@@ -13,6 +14,7 @@ export default class App {
 	static BrowserWindow;
 	// static gameDetection: GameDetectionService;
 	static overlay: OverlayService;
+	static mindVision: MindVisionElectronService;
 
 	public static isDevelopmentMode() {
 		const isEnvironmentSet: boolean = 'ELECTRON_IS_DEV' in process.env;
@@ -26,6 +28,10 @@ export default class App {
 		// if (App.gameDetection) {
 		// 	App.gameDetection.stopMonitoring();
 		// }
+
+		if (App.mindVision) {
+			App.mindVision.destroy();
+		}
 
 		if (App.overlay) {
 			await App.overlay.destroyOverlay();
@@ -65,6 +71,9 @@ export default class App {
 	}
 
 	private static initGameDetection() {
+		// Initialize MindVision service for memory reading
+		App.mindVision = new MindVisionElectronService();
+
 		// App.gameDetection = GameDetectionService.getInstance();
 		App.overlay = OverlayService.getInstance();
 
