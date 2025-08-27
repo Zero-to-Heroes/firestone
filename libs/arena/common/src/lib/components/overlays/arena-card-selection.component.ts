@@ -21,7 +21,16 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, filter, pairwise, switchMap, takeUntil } from 'rxjs';
+import {
+	Observable,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	pairwise,
+	shareReplay,
+	switchMap,
+	takeUntil,
+} from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
@@ -151,7 +160,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 						const stat = stats?.stats?.find(
 							(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option),
 						);
-						console.debug('[debug] stat', stat, option, stats);
 						const drawnWinrate = !stat?.matchStats?.stats?.drawn
 							? null
 							: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
@@ -182,6 +190,8 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 						return result;
 					}) ?? [],
 			),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.showing$ = combineLatest([this.options$, this.showingSideBanner$]).pipe(
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
