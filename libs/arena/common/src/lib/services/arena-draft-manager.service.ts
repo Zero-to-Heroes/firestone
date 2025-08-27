@@ -266,11 +266,11 @@ export class ArenaDraftManagerService
 							changes.ArenaCardOptions,
 						);
 					} else {
-						console.debug(
+						console.log(
 							'[arena-draft-manager] received card options',
-							changes.ArenaCardOptions,
-							this.heroOptions$$.getValue(),
-							this.cardOptions$$.getValue(),
+							changes.ArenaCardOptions.map((c) => c.CardId),
+							// this.heroOptions$$.getValue(),
+							// this.cardOptions$$.getValue(),
 						);
 						this.heroOptions$$.next(null);
 						this.cardOptions$$.next(changes.ArenaCardOptions.map((c) => c.CardId));
