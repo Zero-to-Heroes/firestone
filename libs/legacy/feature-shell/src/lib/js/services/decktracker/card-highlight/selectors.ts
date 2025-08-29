@@ -310,7 +310,8 @@ export const combo = hasMechanic(GameTag.COMBO);
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
-export const discover = hasMechanic(GameTag.DISCOVER);
+export const discover =
+	hasMechanic(GameTag.DISCOVER) || (hasMechanic(GameTag.BATTLECRY) && hasReference(GameTag.DISCOVER));
 export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
 export const dredge = hasMechanic(GameTag.DREDGE);
 export const excavate = or(
