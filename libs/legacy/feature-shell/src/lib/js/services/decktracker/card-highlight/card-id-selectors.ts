@@ -1505,6 +1505,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.HatcheryHelper_TLC_233:
 			return and(side(inputSide), or(inDeck, inHand), minion, attackLessThan(3));
+		case CardIds.HawkstriderRancher:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.HealingWave:
 		case CardIds.HealingWave_WON_320:
 			return and(side(inputSide), inDeck, minion);
