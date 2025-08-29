@@ -562,6 +562,7 @@ const getDynamicFilters = (
 		case CardIds.ChitteringTunneler:
 		case CardIds.EtherealLackey:
 		case CardIds.ExarchHataaru_GDB_136:
+		case CardIds.GhostWriter:
 		case CardIds.InfinitizeTheMaxitude:
 		case CardIds.Jettison_GDB_227:
 		case CardIds.Kalecgos_CORE_DAL_609:
