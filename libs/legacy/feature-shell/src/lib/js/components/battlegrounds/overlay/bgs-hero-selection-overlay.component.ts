@@ -115,7 +115,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				const config: ExtendedConfig = {
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
-					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? mmrAtStart ?? 0 : null,
+					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection ? (mmrAtStart ?? 0) : null,
 					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection ? availableRaces : [],
 					anomaliesFilter: [],
@@ -183,7 +183,11 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					};
 					return result;
 				});
-				// console.debug('heroOverviews', heroOverviews, tiers);
+				console.debug(
+					'heroOverviews',
+					heroOverviews,
+					selectionOptions.map((o) => tiers.find((t) => t.items.map((i) => i.baseCardId).includes(o))),
+				);
 				if (heroOverviews.length === 2) {
 					return [null, ...heroOverviews, null];
 				} else if (heroOverviews.length === 1) {

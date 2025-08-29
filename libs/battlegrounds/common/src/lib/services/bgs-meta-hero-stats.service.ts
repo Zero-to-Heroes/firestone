@@ -145,7 +145,8 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 					config.tribesFilter ?? [],
 					!!config.options?.convervativeEstimate,
 					this.allCards,
-			  );
+					'battlegrounds',
+				);
 		return result;
 	}
 }

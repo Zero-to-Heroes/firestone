@@ -143,6 +143,7 @@ export const buildHeroStats = (
 	tribes: readonly Race[],
 	useConservativeEstimate: boolean,
 	allCards: CardsFacadeService,
+	gameMode: 'battlegrounds' | 'battlegrounds-duo',
 	useDebug = false,
 ): readonly BgsMetaHeroStatTierItem[] => {
 	// Files are split by MMR already
@@ -161,7 +162,8 @@ export const buildHeroStats = (
 	return result1
 		.map((stat) => {
 			const shouldDebug = useDebug && stat.heroCardId === 'BG24_HERO_100';
-			const useTribesModifier = !!tribes?.length && tribes.length !== ALL_BG_RACES.length;
+			const useTribesModifier =
+				!!tribes?.length && tribes.length !== ALL_BG_RACES.length && gameMode === 'battlegrounds';
 			const modifiedTribeStats = (stat.tribeStats ?? [])
 				// Remove some incorrect data points
 				.filter((t) => t.dataPoints > stat.dataPoints / 20)
@@ -171,7 +173,7 @@ export const buildHeroStats = (
 					// Use t.averagePosition - t.refAveragePosition to limit the sample size issue with missing tribes
 					// UPdate: since we now restrict to top 10% for overlay stats, we can use the vs missing tribe to
 					// spread out the impacts more
-					impactAveragePosition: t.impactAveragePositionVsMissingTribe,
+					// impactAveragePosition: t.impactAveragePositionVsMissingTribe,
 				}));
 			const tribeStatsToUse = useTribesModifier
 				? modifiedTribeStats.filter((t) => tribes.includes(t.tribe))

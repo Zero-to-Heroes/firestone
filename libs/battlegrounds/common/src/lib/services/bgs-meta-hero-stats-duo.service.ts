@@ -145,8 +145,9 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 					config.tribesFilter ?? [],
 					!!config.options?.convervativeEstimate,
 					this.allCards,
+					'battlegrounds-duo',
 					useDebug,
-			  );
+				);
 		return result;
 	}
 }
