@@ -42,12 +42,15 @@ export class ShockspitterCounterDefinitionV2 extends CounterDefinitionV2<number>
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		const value = this[side]?.value(gameState) ?? 0;
-		return this.i18n.translateString(`counters.hero-attacks.${side}`, { value: value });
+		return this.i18n.translateString(`counters.hero-attacks.${side}`, { times: value });
 	}
 }
