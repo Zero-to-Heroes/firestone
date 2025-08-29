@@ -1967,6 +1967,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.LokenJailerOfYoggSaron:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.LorewalkerChoLegacy:
+		case CardIds.LorewalkerChoVanilla:
+		case CardIds.LorewalkerCho_CORE_EX1_100:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.LorthemarTheron_RLK_593:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.LoveEverlasting:
