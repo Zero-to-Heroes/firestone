@@ -7,23 +7,17 @@ import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import {
 	ArenaClientStateType,
 	ArenaSessionState,
+	CardRarity,
 	DraftMode,
 	DraftSlotType,
 	GameType,
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
-import {
-	ArenaCardOption,
-	ArenaCardPick,
-	DeckInfoFromMemory,
-	MemoryInspectionService,
-	MemoryUpdatesService,
-	SceneService,
-} from '@firestone/memory';
+import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -34,8 +28,8 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import Deque from 'double-ended-queue';
 import {
-	auditTime,
 	BehaviorSubject,
 	combineLatest,
 	debounceTime,
@@ -53,7 +47,6 @@ import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
 import { IArenaDraftManagerService } from './arena-draft-manager.interface';
-import { timeStamp } from 'console';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
 const ARENA_DECK_DETAILS_URL = `https://znumiwhsu7lx2chawhhgzhjol40ygaro.lambda-url.us-west-2.on.aws/%runId%`;
@@ -93,7 +86,14 @@ export class ArenaDraftManagerService
 
 	// For alternate card pick detection
 	private deckForCardPicks: DeckInfoFromMemory | null;
-	private choicesForCardPicks: readonly string[] | null;
+	// A queue of choices for card picks
+	// scenario is:
+	// - pick is made, and new card options (let's call them A) are received from mindvision. So cardOptions$$ === A
+	// - pick is made (more cards in deck)
+	// - before the pick event is processed, new card options (let's call them B) are received from mindvision. So cardOptions$$ === B
+	// - So this means that options === A has been completely squeezed, because the new card options arrived too quickly. Using
+	// a queue should work fine here, so we don't lose anything
+	private choicesForCardPicks: Deque<readonly string[]> = new Deque<readonly string[]>();
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
@@ -255,6 +255,16 @@ export class ArenaDraftManagerService
 					if (changes.ArenaDraftStep != null && changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_CARD) {
 						this.cardOptions$$.next(null);
 					}
+					if (
+						changes.ArenaDraftStep === DraftSlotType.DRAFT_SLOT_HERO ||
+						changes.ArenaDraftStep === DraftSlotType.DRAFT_SLOT_HERO_POWER
+					) {
+						this.deckForCardPicks = this.currentDeck$$.value;
+						console.log(
+							'[arena-draft-manager] received draft step, resetting deck for card picks',
+							this.deckForCardPicks,
+						);
+					}
 				}
 				if (!!changes.ArenaHeroOptions?.length) {
 					console.debug(
@@ -276,8 +286,7 @@ export class ArenaDraftManagerService
 						console.log(
 							'[arena-draft-manager] received card options',
 							changes.ArenaCardOptions.map((c) => c.CardId),
-							// this.heroOptions$$.getValue(),
-							// this.cardOptions$$.getValue(),
+							this.choicesForCardPicks.toArray(),
 						);
 						this.heroOptions$$.next(null);
 						this.cardOptions$$.next(changes.ArenaCardOptions.map((c) => c.CardId));
@@ -301,6 +310,8 @@ export class ArenaDraftManagerService
 					) {
 						console.debug('[arena-draft-manager] game type changed, resetting options');
 						this.cardOptions$$.next([]);
+						this.choicesForCardPicks.clear();
+						this.deckForCardPicks = null;
 					}
 					this.currentDeck$$.next(arenaDeck);
 				}
@@ -351,27 +362,38 @@ export class ArenaDraftManagerService
 			this.scene.currentScene$$.pipe().subscribe((scene) => {
 				// So that we correctly register the options once we're back to the draft screen
 				if (scene === SceneMode.GAMEPLAY) {
-					this.choicesForCardPicks = null;
+					console.log('[arena-draft-manager] scene changed to gameplay, resetting choices for card picks');
+					this.choicesForCardPicks.clear();
 				}
 			});
 			this.cardOptions$$.pipe(filter((options) => !!options?.length)).subscribe((options) => {
+				this.choicesForCardPicks.enqueue(options!);
+				console.debug(
+					'[arena-draft-manager] updated choices for card picks',
+					this.choicesForCardPicks.toArray(),
+				);
 				// Initial setup
-				if (!this.choicesForCardPicks?.length) {
-					this.choicesForCardPicks = options;
-					return;
-				}
+				// if (!this.choicesForCardPicks?.length) {
+				// 	this.choicesForCardPicks = options;
+				// 	return;
+				// }
 			});
 			this.currentDeck$$
 				.pipe(
 					filter((deck) => !!deck?.DeckList?.length),
 					// So that the new options can now be set
-					auditTime(1000),
+					// auditTime(1000),
 				)
 				.subscribe((currentDeck) => {
+					console.debug('[arena-draft-manager] got deck for card picks', currentDeck, this.deckForCardPicks);
 					if (this.deckForCardPicks == null) {
 						this.deckForCardPicks = currentDeck;
-						this.choicesForCardPicks = this.cardOptions$$.value;
-						console.debug('[arena-draft-manager] got first deck for card picks', currentDeck);
+						// this.choicesForCardPicks.enqueue(this.cardOptions$$.value!);
+						console.debug(
+							'[arena-draft-manager] got first deck for card picks',
+							currentDeck,
+							this.choicesForCardPicks.toArray(),
+						);
 						return;
 					}
 					// New card added, we register a new pick
@@ -384,33 +406,68 @@ export class ArenaDraftManagerService
 							currentDeck?.DeckList ?? [],
 							this.deckForCardPicks.DeckList,
 						);
-						if (!this.choicesForCardPicks?.includes(cardsAdded[0])) {
+						const pickNumber =
+							currentDeck!.DeckList?.length! + Math.max(0, 5 * ((currentDeck!.Losses ?? 0) - 1));
+						console.log(
+							'[arena-draft-manager] detected new pick',
+							pickNumber,
+							cardsAdded,
+							this.choicesForCardPicks.toArray(),
+						);
+						let cardAdded: string | undefined = cardsAdded[0];
+						if (cardsAdded.length > 1) {
+							cardAdded = cardsAdded.find((cAdd) => this.choicesForCardPicks.peekFront()?.includes(cAdd));
+							console.log('[arena-draft-manager] detected multiple cards added', cardsAdded, cardAdded);
+						}
+						if (
+							!cardAdded &&
+							cardsAdded.some(
+								(c) =>
+									this.allCards.getCard(c).rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
+							)
+						) {
+							cardAdded = cardsAdded.find(
+								(c) =>
+									this.allCards.getCard(c).rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
+							);
+							console.log('[arena-draft-manager] fallback to legendary card');
+						}
+						if (!cardAdded) {
+							console.error('[arena-draft-manager] no card added');
+							return;
+						}
+						if (!this.choicesForCardPicks.peekFront()?.includes(cardAdded)) {
 							console.warn(
 								'[arena-draft-manager] card not in choices for card picks',
-								cardsAdded[0],
-								this.choicesForCardPicks,
+								cardAdded,
+								this.choicesForCardPicks.toArray(),
 							);
-							if (!this.cardOptions$$.value?.includes(cardsAdded[0])) {
+							// Probably because we added more than one card in the redraft package
+							if (this.cardOptions$$.value?.includes(cardAdded)) {
 								console.log(
 									'[arena-draft-manager] card not in choices for card picks, resetting',
-									cardsAdded[0],
+									cardAdded,
 									this.cardOptions$$.value,
 								);
-								this.choicesForCardPicks = this.cardOptions$$.value;
+								this.choicesForCardPicks.clear();
+								this.choicesForCardPicks.enqueue(this.cardOptions$$.value!);
 							}
 						}
-						const optionsOffered = this.choicesForCardPicks;
+						const optionsOffered = this.choicesForCardPicks.dequeue();
 						const payload: DraftPick = {
 							runId: currentDeck!.Id!,
-							pickNumber:
-								currentDeck!.DeckList?.length! + Math.max(0, 5 * ((currentDeck!.Losses ?? 0) - 1)),
+							pickNumber: pickNumber,
 							options: optionsOffered ?? [],
-							pick: cardsAdded[0],
+							pick: cardAdded,
 							playerClass: this.allCards.getCard(currentDeck!.HeroCardId)?.playerClass?.toUpperCase(),
 						};
-						console.log('[arena-draft-manager] got pick alternative', payload, cardsAdded);
-						this.choicesForCardPicks = this.cardOptions$$.value;
-						console.debug('[arena-draft-manager] got choices for card picks', this.choicesForCardPicks);
+						console.log(
+							'[arena-draft-manager] got pick alternative',
+							payload,
+							cardsAdded,
+							this.choicesForCardPicks.toArray(),
+						);
+						// this.choicesForCardPicks = this.cardOptions$$.value;
 						this.sendDraftPick(payload);
 					}
 					// It's important to set this here, so the deck is updated  after a redraft
