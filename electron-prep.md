@@ -19,16 +19,13 @@ However, from my understanding, Overwolf and electron differ quite a lot on a fe
 ## Next steps
 
 - Done: basic Hello World overlay injection
+- Done: integrating C# plugins from electron (MindVision memory reading)
 - Next steps: add a decktracker overlay
 
 To do this, we will need:
 
-- To load C# plugins (required for memory reading and logs parsing)
+- Start thinking about code sharing between the Overwolf app and the electron app (including dependency injection). Ideally, share as much code as possible with the Overwolf app. Notably game-status.service, log-register.service, game-events.service, etc.
+    - Decide which services need to be abstracted with different implementations for electron vs Overwolf, and which ones could be reused directly
+- Integrate log parsing C# plugin
 - To have a fullscreen overlay window that reuses the \_fullscreen-overlays Angular component
 - To communicate between the main window and the overlay window. Today, this is done in various places, but looking at \_full-screen-overlays.component and decktracker-player-widget-wrapper.component should give a good idea of the most useful services to have
-
-What I propose:
-
-- basic prototype of how to integrate C# plugins. mind-vision-facade.service is the class that is doing this in the Overwolf ecosystem
-- basic prototype of an overlay that exposes information from the plugin (ie the plugin emits the current scene, and the overlay shows that)
-- once we're here, we'll refine the next steps (integrate the log reading plugin, share code between the Overwolf app and the electron app, integrate the full overlay UI)
