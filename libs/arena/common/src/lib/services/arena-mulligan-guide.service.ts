@@ -300,12 +300,14 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 						? matchup.totalsWins / matchup.totalGames
 						: 0
 					: !!classStats?.totalGames
-					? classStats.totalsWins / classStats.totalGames
-					: 0;
+						? classStats.totalsWins / classStats.totalGames
+						: 0;
 				const allDeckCards: readonly MulliganCardAdvice[] =
 					deckCards?.map((refCard) => {
 						const cardData = cardStats?.stats.find(
-							(card) => getBaseCardId(card.cardId) === getBaseCardId(refCard.id),
+							(card) =>
+								this.allCards.getRootCardId(getBaseCardId(card.cardId)) ===
+								this.allCards.getRootCardId(getBaseCardId(refCard.id)),
 						);
 						const matchup = cardData?.matchStats?.matchups?.find(
 							(matchup) => matchup.opponentClass === opponentClass,
