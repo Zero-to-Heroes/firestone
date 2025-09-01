@@ -14,6 +14,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
 import {
+	ArenaCardOption,
 	ArenaCardPick,
 	DeckInfoFromMemory,
 	MemoryInspectionService,
@@ -34,6 +35,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import {
+	auditTime,
 	BehaviorSubject,
 	combineLatest,
 	debounceTime,
@@ -51,6 +53,7 @@ import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
 import { IArenaDraftManagerService } from './arena-draft-manager.interface';
+import { timeStamp } from 'console';
 
 const SAVE_DRAFT_PICK_URL = `https://h7rcpfevgh66es5z2jlnblytdu0wfudj.lambda-url.us-west-2.on.aws/`;
 const ARENA_DECK_DETAILS_URL = `https://znumiwhsu7lx2chawhhgzhjol40ygaro.lambda-url.us-west-2.on.aws/%runId%`;
@@ -72,7 +75,7 @@ export class ArenaDraftManagerService
 	public clientStateType$$: BehaviorSubject<ArenaClientStateType | null>;
 	public sessionState$$: BehaviorSubject<ArenaSessionState | null>;
 	public currentDraftMode$$: BehaviorSubject<DraftMode | null>;
-	public lastPick$$: BehaviorSubject<ArenaCardPick | null>;
+	// public lastPick$$: BehaviorSubject<ArenaCardPick | null>;
 
 	private memoryUpdates: MemoryUpdatesService;
 	private scene: SceneService;
@@ -87,6 +90,10 @@ export class ArenaDraftManagerService
 	private account: AccountService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
+
+	// For alternate card pick detection
+	private deckForCardPicks: DeckInfoFromMemory | null;
+	private choicesForCardPicks: readonly string[] | null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(
@@ -107,7 +114,7 @@ export class ArenaDraftManagerService
 		this.currentDraftMode$$ = this.mainInstance.currentDraftMode$$;
 		this.clientStateType$$ = this.mainInstance.clientStateType$$;
 		this.sessionState$$ = this.mainInstance.sessionState$$;
-		this.lastPick$$ = this.mainInstance.lastPick$$;
+		// this.lastPick$$ = this.mainInstance.lastPick$$;
 		this.internalSubscriber$$ = this.mainInstance.internalSubscriber$$;
 	}
 
@@ -122,7 +129,7 @@ export class ArenaDraftManagerService
 		this.currentDraftMode$$ = new BehaviorSubject<DraftMode | null>(null);
 		this.clientStateType$$ = new BehaviorSubject<ArenaClientStateType | null>(null);
 		this.sessionState$$ = new BehaviorSubject<ArenaSessionState | null>(null);
-		this.lastPick$$ = new BehaviorSubject<ArenaCardPick | null>(null);
+		// this.lastPick$$ = new BehaviorSubject<ArenaCardPick | null>(null);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.scene = AppInjector.get(SceneService);
 		this.memory = AppInjector.get(MemoryInspectionService);
@@ -173,47 +180,47 @@ export class ArenaDraftManagerService
 				console.debug('[arena-draft-manager] received arena session state', changes.ArenaSessionState);
 				this.sessionState$$.next(changes.ArenaSessionState);
 			}
-			if (changes.ArenaLatestCardPick != null) {
-				if (
-					changes.ArenaLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
-					!arraysEqual(changes.ArenaLatestCardPick.Options, this.lastPick$$?.value?.Options)
-				) {
-					if (changes.ArenaLatestCardPick.PickNumber !== 0) {
-						console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
-						this.lastPick$$.next(changes.ArenaLatestCardPick);
-					}
-				} else {
-					console.log(
-						'[arena-draft-manager] received latest card pick, but it is the same as the last one, ignoring',
-						changes.ArenaLatestCardPick,
-						this.lastPick$$.value,
-					);
-				}
-			}
-			if (changes.ArenaUndergroundLatestCardPick != null) {
-				if (
-					changes.ArenaUndergroundLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
-					!arraysEqual(
-						changes.ArenaUndergroundLatestCardPick.Options?.map((o) => o.CardId),
-						this.lastPick$$?.value?.Options?.map((o) => o.CardId),
-					)
-				) {
-					if (changes.ArenaUndergroundLatestCardPick.PickNumber !== 0) {
-						console.log(
-							'[arena-draft-manager] received latest underground card pick',
-							changes.ArenaUndergroundLatestCardPick,
-							this.lastPick$$?.value,
-						);
-						this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
-					}
-				} else {
-					console.log(
-						'[arena-draft-manager] received latest underground card pick, but it is the same as the last one, ignoring',
-						changes.ArenaUndergroundLatestCardPick,
-						this.lastPick$$.value,
-					);
-				}
-			}
+			// if (changes.ArenaLatestCardPick != null) {
+			// 	if (
+			// 		changes.ArenaLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
+			// 		!arraysEqual(changes.ArenaLatestCardPick.Options, this.lastPick$$?.value?.Options)
+			// 	) {
+			// 		if (changes.ArenaLatestCardPick.PickNumber !== 0) {
+			// 			console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
+			// 			this.lastPick$$.next(changes.ArenaLatestCardPick);
+			// 		}
+			// 	} else {
+			// 		console.log(
+			// 			'[arena-draft-manager] received latest card pick, but it is the same as the last one, ignoring',
+			// 			changes.ArenaLatestCardPick,
+			// 			this.lastPick$$.value,
+			// 		);
+			// 	}
+			// }
+			// if (changes.ArenaUndergroundLatestCardPick != null) {
+			// 	if (
+			// 		changes.ArenaUndergroundLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
+			// 		!arraysEqual(
+			// 			changes.ArenaUndergroundLatestCardPick.Options?.map((o) => o.CardId),
+			// 			this.lastPick$$?.value?.Options?.map((o) => o.CardId),
+			// 		)
+			// 	) {
+			// 		if (changes.ArenaUndergroundLatestCardPick.PickNumber !== 0) {
+			// 			console.log(
+			// 				'[arena-draft-manager] received latest underground card pick',
+			// 				changes.ArenaUndergroundLatestCardPick,
+			// 				this.lastPick$$?.value,
+			// 			);
+			// 			this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
+			// 		}
+			// 	} else {
+			// 		console.log(
+			// 			'[arena-draft-manager] received latest underground card pick, but it is the same as the last one, ignoring',
+			// 			changes.ArenaUndergroundLatestCardPick,
+			// 			this.lastPick$$.value,
+			// 		);
+			// 	}
+			// }
 		});
 
 		await waitForReady(this.account);
@@ -327,19 +334,88 @@ export class ArenaDraftManagerService
 			// 		);
 			// 	});
 
-			this.lastPick$$.pipe(filter((pick) => !!pick?.RunId)).subscribe(async (pick) => {
-				const heroRefCard = this.allCards.getCard(pick!.HeroCardId);
-				const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
-				const payload: DraftPick = {
-					runId: pick!.RunId,
-					pickNumber: pick!.PickNumber,
-					options: pick!.Options?.map((option) => option.CardId) ?? [],
-					pick: pick!.CardId,
-					playerClass: playerClass,
-				};
-				console.log('[arena-draft-manager] uploading pick', payload);
-				this.sendDraftPick(payload);
+			// this.lastPick$$.pipe(filter((pick) => !!pick?.RunId)).subscribe(async (pick) => {
+			// 	const heroRefCard = this.allCards.getCard(pick!.HeroCardId);
+			// 	const playerClass = heroRefCard.classes?.[0] ?? heroRefCard.playerClass?.toUpperCase();
+			// 	const payload: DraftPick = {
+			// 		runId: pick!.RunId,
+			// 		pickNumber: pick!.PickNumber,
+			// 		options: pick!.Options?.map((option) => option.CardId) ?? [],
+			// 		pick: pick!.CardId,
+			// 		playerClass: playerClass,
+			// 	};
+			// 	console.log('[arena-draft-manager] uploading pick', payload);
+			// 	this.sendDraftPick(payload);
+			// });
+			// Alternate way to detect the picks
+			this.scene.currentScene$$.pipe().subscribe((scene) => {
+				// So that we correctly register the options once we're back to the draft screen
+				if (scene === SceneMode.GAMEPLAY) {
+					this.choicesForCardPicks = null;
+				}
 			});
+			this.cardOptions$$.pipe(filter((options) => !!options?.length)).subscribe((options) => {
+				// Initial setup
+				if (!this.choicesForCardPicks?.length) {
+					this.choicesForCardPicks = options;
+					return;
+				}
+			});
+			this.currentDeck$$
+				.pipe(
+					filter((deck) => !!deck?.DeckList?.length),
+					// So that the new options can now be set
+					auditTime(1000),
+				)
+				.subscribe((currentDeck) => {
+					if (this.deckForCardPicks == null) {
+						this.deckForCardPicks = currentDeck;
+						this.choicesForCardPicks = this.cardOptions$$.value;
+						console.debug('[arena-draft-manager] got first deck for card picks', currentDeck);
+						return;
+					}
+					// New card added, we register a new pick
+					if (
+						this.deckForCardPicks != currentDeck &&
+						this.deckLength(currentDeck) > this.deckLength(this.deckForCardPicks)
+					) {
+						// Find the card that is in the new deck (careful about duplicates)
+						const cardsAdded: readonly string[] = this.findNewCard(
+							currentDeck?.DeckList ?? [],
+							this.deckForCardPicks.DeckList,
+						);
+						if (!this.choicesForCardPicks?.includes(cardsAdded[0])) {
+							console.warn(
+								'[arena-draft-manager] card not in choices for card picks',
+								cardsAdded[0],
+								this.choicesForCardPicks,
+							);
+							if (!this.cardOptions$$.value?.includes(cardsAdded[0])) {
+								console.log(
+									'[arena-draft-manager] card not in choices for card picks, resetting',
+									cardsAdded[0],
+									this.cardOptions$$.value,
+								);
+								this.choicesForCardPicks = this.cardOptions$$.value;
+							}
+						}
+						const optionsOffered = this.choicesForCardPicks;
+						const payload: DraftPick = {
+							runId: currentDeck!.Id!,
+							pickNumber:
+								currentDeck!.DeckList?.length! + Math.max(0, 5 * ((currentDeck!.Losses ?? 0) - 1)),
+							options: optionsOffered ?? [],
+							pick: cardsAdded[0],
+							playerClass: this.allCards.getCard(currentDeck!.HeroCardId)?.playerClass?.toUpperCase(),
+						};
+						console.log('[arena-draft-manager] got pick alternative', payload, cardsAdded);
+						this.choicesForCardPicks = this.cardOptions$$.value;
+						console.debug('[arena-draft-manager] got choices for card picks', this.choicesForCardPicks);
+						this.sendDraftPick(payload);
+					}
+					// It's important to set this here, so the deck is updated  after a redraft
+					this.deckForCardPicks = currentDeck;
+				});
 
 			// Deck score
 			this.currentDeck$$
@@ -470,5 +546,22 @@ export class ArenaDraftManagerService
 		const heroSize = !!deck?.HeroCardId?.length ? 1 : 0;
 		const deckSize = deck?.DeckList?.length ?? 0;
 		return heroSize + deckSize;
+	}
+
+	private findNewCard(
+		newDeck: readonly (string | number)[],
+		oldDeck: readonly (string | number)[],
+	): readonly string[] {
+		const cardsFromNewDeck = [...newDeck].map((c) => this.allCards.getCard(c).id).sort();
+		const cardsFromOldDeck = [...oldDeck].map((c) => this.allCards.getCard(c).id).sort();
+		const newCards: string[] = [];
+		for (const cardFromNewDeck of cardsFromNewDeck) {
+			if (cardsFromOldDeck.includes(cardFromNewDeck)) {
+				cardsFromOldDeck.splice(cardsFromOldDeck.indexOf(cardFromNewDeck), 1);
+			} else {
+				newCards.push(cardFromNewDeck);
+			}
+		}
+		return newCards;
 	}
 }

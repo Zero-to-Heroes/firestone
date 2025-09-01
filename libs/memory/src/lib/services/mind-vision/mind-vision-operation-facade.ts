@@ -19,20 +19,17 @@ export class MindVisionOperationFacade<T> {
 	) {}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
-		// this.log('processing queue', eventQueue);
 		// Since it's a queue of functions that build promises, we can't simply await the result
 		return new Promise<readonly InternalCall<T>[]>((resolve) => {
 			try {
 				const firstEvent = eventQueue[0];
 				// The idea here is that once we have the result for one event, we resolve all
 				// the pending events with the result from the first event
-				// this.log('resolving first event', eventQueue);
 				// The process is not ideal - we should in fact give the control back to the queue after the
 				// callinternal
 				firstEvent.apply(firstEvent.retriesLeft, (returnValue: T | null | 'reset', retriesLeft: number) => {
 					if (!returnValue && retriesLeft > 0) {
 						// We can still try again!
-						// this.log('\tno result, trying again', event, eventQueue, returnValue, retriesLeft);
 						resolve([
 							// Don't forget to update the number of retry attempts left
 							Object.assign(firstEvent, { retriesLeft: firstEvent.retriesLeft - 1 } as InternalCall<T>),
@@ -43,18 +40,10 @@ export class MindVisionOperationFacade<T> {
 					// We got something, we ping everyone in the queue
 					for (let i = 0; i < eventQueue.length; i++) {
 						const event = eventQueue[i];
-						// this.log(
-						// 	'\tresolving',
-						// 	event,
-						// 	this.transformer,
-						// 	returnValue ? this.transformer(returnValue) : returnValue,
-						// 	returnValue,
-						// );
 						// Already transformed before being passed to the callback
 						event.resolve(returnValue);
 						// Once all the processing is over, we return with an empty queue
 						if (i === eventQueue.length - 1) {
-							// this.log('\tfinal return', i, eventQueue.length, eventQueue);
 							resolve([]);
 						}
 					}
@@ -111,12 +100,6 @@ export class MindVisionOperationFacade<T> {
 		retriesLeft: number,
 		forceReset = false,
 	) {
-		// if (!(await this.ow.inGame())) {
-		// 	this.log('not in game', retriesLeft, forceReset);
-		// 	callback(null, 0);
-		// 	return;
-		// }
-		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation(forceReset, input);
 		// this.debug('result from memory', resultFromMemory);
 		if (retriesLeft <= 0) {
