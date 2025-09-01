@@ -1,5 +1,6 @@
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -414,6 +415,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.BarrensTrapper:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
+		case TempCardIds.BarricadeBasher:
+			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.BartendOBot_WW_408:
 			return and(side(inputSide), inDeck, outcast);
 		case CardIds.Battlepickaxe_WW_347:
@@ -925,6 +928,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.DeviateDreadfang:
 			return and(side(inputSide), or(inDeck, inHand), nature, spell);
+		case TempCardIds.DevilsaurMask:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.DevoutBlessingsTavernBrawlToken:
 			return and(side(inputSide), inGraveyard, minion, deathrattle, minionsDeadSinceLastTurn);
 		case CardIds.DevoutDungeoneer:
@@ -1200,6 +1205,10 @@ export const cardIdSelector = (
 		case CardIds.FinjaTheFlyingStar:
 		case CardIds.FinjaTheFlyingStar_CORE_CFM_344:
 			return and(side(inputSide), inDeck, murloc);
+		case TempCardIds.FireBreath:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
+		case TempCardIds.Firegill:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.FirekeepersIdolTavernBrawl:
 			return and(side(inputSide), spell, fire);
 		case CardIds.FirePlumeHarbinger:
@@ -1505,6 +1514,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.HatcheryHelper_TLC_233:
 			return and(side(inputSide), or(inDeck, inHand), minion, attackLessThan(3));
+		case TempCardIds.HatchingCeremony:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.HawkstriderRancher:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.HealingWave:
@@ -1541,6 +1552,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, nature);
 		case CardIds.HeraldOfShadows:
 			return and(side(inputSide), inDeck, spell, shadow);
+		case TempCardIds.HerbivoreAssistant:
+			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.HighAbbessAlura:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.HighCultistBasaleph:
@@ -1553,8 +1566,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.HoldTheLineTavernBrawl:
 			return and(side(inputSide), taunt);
+		case TempCardIds.HollowDirehorn:
+			return and(side(inputSide), or(inDeck, inHand), generateCorpse);
 		case CardIds.HolyCowboy_WW_335:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
+		case TempCardIds.HolyEggbearer:
+			return and(side(inputSide), or(inHand, inDeck), attackIs(0), minion);
 		case CardIds.HolyGlowsticks_MIS_709:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.Hookfist3000:
@@ -1969,6 +1986,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.LokenJailerOfYoggSaron:
 			return and(side(inputSide), inDeck, minion);
+		case TempCardIds.LongneckEgg:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.LorewalkerChoLegacy:
 		case CardIds.LorewalkerChoVanilla:
 		case CardIds.LorewalkerCho_CORE_EX1_100:
@@ -2231,6 +2250,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), generateCorpse);
 		case CardIds.PalmReading:
 			return and(side(inputSide), or(inHand, inDeck), spell);
+		case TempCardIds.PantherMask:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.ParachuteBrigand:
 		case CardIds.PatchesThePirate_CFM_637:
 			return and(side(inputSide), or(inDeck, inHand), minion, pirate);
@@ -2304,6 +2325,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.PortalmancerSkyla_WORK_063:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case TempCardIds.PossessedAnimancer:
+			return and(side(inputSide), inDeck, beast);
 		case CardIds.PotionOfSparkingTavernBrawl:
 			return and(side(inputSide), minion, rush);
 		case CardIds.PowerSlider:
@@ -2628,6 +2651,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), locationExtended);
 		case CardIds.SeaweedStrike:
 			return and(side(inputSide), or(inHand, inDeck), naga);
+		case TempCardIds.Seismopod:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.SigilOfReckoning:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.SirFinleyMrrgglton_ScalesOfJustice_THD_044p:
@@ -2827,6 +2852,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.SouleatersScythe_BoundSoulToken:
 			return tooltip(and(inOther, minion, lastAffectedByCardId(CardIds.SouleatersScythe)));
+		case TempCardIds.SoulrestCeremony:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.SouthseaDeckhand_CORE_CS2_146:
 		case CardIds.SouthseaDeckhandLegacy:
 		case CardIds.SouthseaDeckhandVanilla:
@@ -3090,6 +3117,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TavishStormpike_BAR_038:
 			return and(side(inputSide), inDeck, minion, beast);
+		case TempCardIds.Techysaurus:
+			return and(side(inputSide), or(inHand, inDeck), notInInitialDeck);
 		case CardIds.TendingDragonkin_FIR_960:
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.TenGallonHat_WW_811:

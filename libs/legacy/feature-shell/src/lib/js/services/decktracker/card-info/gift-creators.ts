@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -1047,4 +1048,10 @@ export const giftCreators = [
 	CardIds.DopEmergencyEnchant2Enchantment_DOP_002e,
 	CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t,
 	CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
+	TempCardIds.StoryOfUmbra,
+	TempCardIds.BeastSpeakerTaka,
+	TempCardIds.HerosWelcome,
+	TempCardIds.RitualOfLife,
+	TempCardIds.CostumeMerchant,
+	TempCardIds.Tortotem,
 ];
