@@ -42,6 +42,8 @@ export const modifyDecksForSpecialCards = (
 				return [handlePrinceLiam(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.AldorAttendant:
 			case CardIds.LordaeronAttendantToken:
+			case CardIds.InterstellarStarslicer_GDB_726:
+			case CardIds.InterstellarWayfarer_GDB_721:
 				return [handleLibram(deckState, allCards, i18n, 1), opponentDeckState];
 			case CardIds.AldorTruthseeker:
 			case CardIds.RadiantLightspawn:
