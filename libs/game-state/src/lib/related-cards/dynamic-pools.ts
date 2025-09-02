@@ -456,6 +456,7 @@ const getDynamicFilters = (
 		// Random Beasts
 		case CardIds.JeweledMacaw:
 		case CardIds.Webspinner_CORE_FP1_011:
+		case CardIds.Webspinner_FP1_011:
 		case CardIds.WildernessPack_MIS_104:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
 		case TempCardIds.Ankylodon:
