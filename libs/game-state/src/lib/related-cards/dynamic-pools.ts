@@ -455,6 +455,7 @@ const getDynamicFilters = (
 
 		// Random Beasts
 		case CardIds.JeweledMacaw:
+		case CardIds.JeweledMacawCore:
 		case CardIds.Webspinner_CORE_FP1_011:
 		case CardIds.Webspinner_FP1_011:
 		case CardIds.WildernessPack_MIS_104:
