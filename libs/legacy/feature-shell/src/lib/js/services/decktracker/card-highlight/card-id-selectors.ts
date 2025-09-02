@@ -3051,6 +3051,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.SurvivalOfTheFittest:
 			return and(side(inputSide), or(inHand, inDeck, inPlay), minion);
+		case CardIds.SwarthySwordshiner_VAC_701:
+			return and(side(inputSide), or(inHand, inDeck), weapon);
 		case CardIds.SwiftscaleTrickster:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.SwinetuskShank:
