@@ -11,7 +11,7 @@ import {
 import { DeckState, getProcessedCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -76,7 +76,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	cardSections$: Observable<readonly DeckZoneSection[]>;
 	open$: Observable<boolean>;
 	zone$: Observable<DeckZone>;
-	side$: Observable<'player' | 'opponent' | 'single'>;
+	side$: Observable<HighlightSide>;
 	showUpdatedCost$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
@@ -99,7 +99,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	@Input() set collection(value: readonly SetCard[]) {
 		this.collection$$.next(value);
 	}
-	@Input() set side(value: 'player' | 'opponent' | 'single') {
+	@Input() set side(value: HighlightSide) {
 		this.side$$.next(value);
 	}
 	@Input() set showUpdatedCost(value: boolean) {
@@ -129,7 +129,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 
 	private zone$$ = new BehaviorSubject<DeckZone>(null);
 	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
-	private side$$ = new BehaviorSubject<'player' | 'opponent' | 'single'>(null);
+	private side$$ = new BehaviorSubject<HighlightSide>(null);
 	private open$$ = new BehaviorSubject<boolean>(true);
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(true);
 	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);

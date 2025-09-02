@@ -11,7 +11,7 @@ import {
 import { ArenaRefService } from '@firestone/arena/common';
 import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard, Metadata } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AppInjector, CardsFacadeService } from '@firestone/shared/framework/core';
+import { AppInjector, CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -72,15 +72,15 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		this.options = { ...this.options, heroCardId: cardId };
 	}
 
-	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'single') {
+	register(_uniqueId: string, handler: Handler, side: HighlightSide) {
 		this.handlers[_uniqueId] = handler;
 	}
 
-	unregister(_uniqueId: string, side: 'player' | 'opponent' | 'single') {
+	unregister(_uniqueId: string, side: HighlightSide) {
 		delete this.handlers[_uniqueId];
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard, context?: 'discover') {
+	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard, context?: 'discover') {
 		// Happens when using the deck-list component outside of a game
 		// console.debug('[cards-highlight] mouse enter', cardId, side, card, this.options);
 		if (!this.options?.skipGameState && !this.gameState) {
@@ -139,7 +139,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	getGlobalRelatedCards(
 		entityId: number,
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		gameTypeOverride: GameType = null,
 	): readonly string[] {
 		const cardImpl = cardsMapping[cardId];
@@ -187,7 +187,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	getHighlightedCards(
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number; highlight: SelectorOutput }[] {
 		// Happens when using the deck-list component outside of a game
@@ -234,7 +234,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	}
 
 	private buildCardsToHighlight(
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		cardId: string,
 		card: DeckCard,
 		playerDeckProvider: () => DeckState,
@@ -247,7 +247,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		const allPlayerCards = this.getAllCards(
 			!!playerDeckProvider ? playerDeckProvider() : null,
-			side === 'single' ? side : 'player',
+			side === 'single' || side === 'arena-draft' ? side : 'player',
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const playerCard of allPlayerCards) {
@@ -262,7 +262,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		const allOpponentCards = this.getAllCards(
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
-			side === 'single' ? side : 'opponent',
+			side === 'single' || side === 'arena-draft' ? side : 'opponent',
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const oppCard of allOpponentCards) {
@@ -288,7 +288,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private getAllCards(deckState: DeckState, side: 'player' | 'opponent' | 'single'): readonly SelectorInput[] {
+	private getAllCards(deckState: DeckState, side: HighlightSide): readonly SelectorInput[] {
 		if (!deckState) {
 			return [];
 		}
@@ -348,12 +348,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		return result;
 	}
 
-	private buildSelector(
-		cardId: string,
-		card: DeckCard,
-		inputSide: 'player' | 'opponent' | 'single',
-		context?: 'discover',
-	): Selector {
+	private buildSelector(cardId: string, card: DeckCard, inputSide: HighlightSide, context?: 'discover'): Selector {
 		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide, context);
 		const cardContextSelector = this.buildCardContextSelector(card);
 		return orWithHighlight(cardIdSelector, cardContextSelector);
@@ -368,7 +363,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	private buildCardIdSelector(
 		cardId: string,
 		card: DeckCard,
-		inputSide: 'player' | 'opponent' | 'single',
+		inputSide: HighlightSide,
 		context?: 'discover',
 	): Selector {
 		// Mechanic-specific highlights
@@ -433,12 +428,6 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				),
 			);
 		}
-		// Reverse kindred
-		if (refCard.races?.length) {
-			selectors.push(
-				and(side(inputSide), or(inDeck, inHand), kindred, raceIn(refCard.races?.map((r) => Race[r] as Race))),
-			);
-		}
 		if (refCard.spellSchool) {
 			selectors.push(
 				and(side(inputSide), or(inDeck, inHand), kindred, spellSchool(SpellSchool[refCard.spellSchool])),
@@ -457,8 +446,18 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			selectors.push(and(side(inputSide), or(inDeck, inHand), barrelOfSludge));
 		}
 		// Specific highlights for draft
-		if (inputSide === 'single' || context === 'discover') {
-			// console.debug('[cards-highlight] building cardId selector for draft', cardId, card, inputSide);
+		if (inputSide === 'single' || inputSide === 'arena-draft') {
+			// Reverse kindred
+			if (refCard.races?.length) {
+				selectors.push(
+					and(
+						side(inputSide),
+						or(inDeck, inHand),
+						kindred,
+						raceIn(refCard.races?.map((r) => Race[r] as Race)),
+					),
+				);
+			}
 		}
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));
@@ -470,7 +469,7 @@ export interface Handler {
 	readonly referenceCardProvider: () => ReferenceCard;
 	readonly deckCardProvider: () => VisualDeckCard;
 	readonly zoneProvider: () => DeckZone;
-	readonly side: () => 'player' | 'opponent' | 'single';
+	readonly side: () => HighlightSide;
 	readonly highlightCallback: (highlight?: SelectorOutput) => void;
 	readonly unhighlightCallback: () => void;
 }
@@ -484,7 +483,7 @@ export interface SelectorOptions {
 }
 
 export interface SelectorInput {
-	side: 'player' | 'opponent' | 'single';
+	side: HighlightSide;
 	entityId: number;
 	internalEntityId: string;
 	cardId: string;

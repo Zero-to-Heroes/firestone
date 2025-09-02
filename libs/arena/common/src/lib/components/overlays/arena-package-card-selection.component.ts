@@ -161,7 +161,7 @@ export class ArenaPackageCardSelectionComponent extends AbstractSubscriptionComp
 	}
 
 	onMouseEnter(cardId: string) {
-		this.cardsHighlightService.onMouseEnter(cardId, 'single');
+		this.cardsHighlightService.onMouseEnter(cardId, 'arena-draft');
 	}
 
 	onMouseLeave(cardId: string) {

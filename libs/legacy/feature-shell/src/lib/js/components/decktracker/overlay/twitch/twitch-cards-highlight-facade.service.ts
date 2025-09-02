@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeckCard } from '@firestone/game-state';
-import { ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
+import { HighlightSide, ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
 import {
 	Handler,
 	SelectorOptions,
@@ -9,7 +9,10 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 
 @Injectable()
 export class TwitchCardsHighlightFacadeService implements ICardsHighlightService {
-	constructor(private readonly ow: OverwolfService, private readonly service: CardsHighlightStandaloneService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly service: CardsHighlightStandaloneService,
+	) {}
 
 	public async init(options?: SelectorOptions) {
 		this.service.init(options);
@@ -23,21 +26,21 @@ export class TwitchCardsHighlightFacadeService implements ICardsHighlightService
 		});
 	}
 
-	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'single') {
+	register(_uniqueId: string, handler: Handler, side: HighlightSide) {
 		this.service.register(_uniqueId, handler, side);
 	}
 
-	unregister(_uniqueId: string, side: 'player' | 'opponent' | 'single') {
+	unregister(_uniqueId: string, side: HighlightSide) {
 		this.service.unregister(_uniqueId, side);
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard) {
+	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard) {
 		this.service.onMouseEnter(cardId, side, card);
 	}
 
 	getHighlightedCards(
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
 		return this.service.getHighlightedCards(cardId, side, card);
@@ -49,7 +52,7 @@ export class TwitchCardsHighlightFacadeService implements ICardsHighlightService
 
 	getCardsForTooltip(
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
 		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');

@@ -9,7 +9,7 @@ import {
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -62,7 +62,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() removeDuplicatesInTooltip: boolean;
-	@Input() side: 'player' | 'opponent' | 'single';
+	@Input() side: HighlightSide;
 
 	@Input() set showGlobalEffectsZone(value: boolean) {
 		this.showGlobalEffectsZone$$.next(value);

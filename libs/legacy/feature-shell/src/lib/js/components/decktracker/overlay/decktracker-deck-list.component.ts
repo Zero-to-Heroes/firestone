@@ -16,7 +16,7 @@ import { CardClass, GameFormat } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -118,7 +118,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showTopCardsSeparately: boolean;
 	@Input() showDkRunes: boolean;
 	@Input() showTotalCardsInZone: boolean;
-	@Input() side: 'player' | 'opponent' | 'single';
+	@Input() side: HighlightSide;
 	@Input() collection: readonly SetCard[];
 
 	@Input() set deckState(deckState: DeckState) {

@@ -1,16 +1,11 @@
 import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GameState, getProcessedCard } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const ArchdruidOfThorns: GlobalHighlightCard = {
 	cardIds: [CardIds.ArchdruidOfThorns_EDR_491],
-	getRelatedCards: (
-		entityId: number,
-		side: 'player' | 'opponent' | 'single',
-		gameState: GameState,
-		allCards: CardsFacadeService,
-	) => {
+	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
 			deckState.minionsDeadThisTurn

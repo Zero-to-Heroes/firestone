@@ -1,16 +1,11 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GameState, getProcessedCard } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const TidepoolPupil: GlobalHighlightCard = {
 	cardIds: [CardIds.TidepoolPupil_VAC_304],
-	getRelatedCards: (
-		entityId: number,
-		side: 'player' | 'opponent' | 'single',
-		gameState: GameState,
-		allCards: CardsFacadeService,
-	) => {
+	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		// For player, things are handled more accurately
 		if (side !== 'opponent') {
 			return null;

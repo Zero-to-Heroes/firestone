@@ -16,7 +16,7 @@ import { CardClass, CardIds, GameType, ReferenceCard } from '@firestone-hs/refer
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
@@ -47,7 +47,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				'color-class-cards': _colorClassCards,
 				missing: _isMissing,
 				'linked-card': linkedCardHighlight,
-				'old-style': !useNewCardTileStyle
+				'old-style': !useNewCardTileStyle,
 			}"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="'auto'"
@@ -236,7 +236,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
-	@Input() set side(value: 'player' | 'opponent' | 'single') {
+	@Input() set side(value: HighlightSide) {
 		this._side = value;
 		this.registerHighlight();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -280,7 +280,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	mouseOverRight = 0;
 	_showUnknownCards = true;
 	isUnknownCard: boolean;
-	_side: 'player' | 'opponent' | 'single';
+	_side: HighlightSide;
 
 	useNewCardTileStyle = false;
 	cardImageError = false;
@@ -535,7 +535,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 					refManaCost: this.cards.getCard(card.transformedInto)?.cost,
 					cardName: this.cards.getCard(card.transformedInto)?.name,
 					rarity: this.cards.getCard(card.transformedInto)?.rarity?.toLowerCase(),
-			  })
+				})
 			: null;
 		this._isMissing = card.isMissing;
 		this.isStolen = card.stolenFromOpponent;

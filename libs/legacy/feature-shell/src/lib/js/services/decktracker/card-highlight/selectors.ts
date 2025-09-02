@@ -12,6 +12,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard } from '@firestone/game-state';
+import { HighlightSide } from '@firestone/shared/framework/core';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
@@ -92,19 +93,19 @@ export const inPlay = (input: SelectorInput): boolean =>
 	!!and(inOther, not(inGraveyard))(input);
 
 export const side =
-	(side: 'player' | 'opponent' | 'single') =>
+	(side: HighlightSide) =>
 	(input: SelectorInput): boolean => {
 		return input.side === side;
 	};
 
 export const opposingSide =
-	(side: 'player' | 'opponent' | 'single') =>
+	(side: HighlightSide) =>
 	(input: SelectorInput): boolean => {
 		return side === 'player'
 			? input.side === 'opponent'
 			: side === 'opponent'
 				? input.side === 'player'
-				: input.side === 'single';
+				: input.side === 'single' || input.side === 'arena-draft';
 	};
 
 export const hasMultipleCopies = (input: SelectorInput): boolean =>

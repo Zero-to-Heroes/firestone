@@ -2,7 +2,7 @@ import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@fires
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
 	and,
@@ -147,7 +147,7 @@ import {
 export const cardIdSelector = (
 	cardId: string,
 	card: DeckCard | undefined,
-	inputSide: 'player' | 'opponent' | 'single',
+	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
 ): Selector => {
 	switch (cardId) {

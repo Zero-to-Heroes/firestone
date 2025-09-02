@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
+import { HighlightSide, ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
 
 import { GameType } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
@@ -37,21 +37,21 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		this.service.forceHeroCardId(cardId);
 	}
 
-	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'single') {
+	register(_uniqueId: string, handler: Handler, side: HighlightSide) {
 		this.service.register(_uniqueId, handler, side);
 	}
 
-	unregister(_uniqueId: string, side: 'player' | 'opponent' | 'single') {
+	unregister(_uniqueId: string, side: HighlightSide) {
 		this.service.unregister(_uniqueId, side);
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'single', card?: DeckCard, context?: 'discover') {
+	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard, context?: 'discover') {
 		this.service.onMouseEnter(cardId, side, card, context);
 	}
 
 	getHighlightedCards(
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
 		return this.service.getHighlightedCards(cardId, side, card);
@@ -59,7 +59,7 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 
 	getCardsForTooltip(
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
 		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
@@ -68,7 +68,7 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 	getGlobalRelatedCards(
 		entityId,
 		cardId: string,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		gameTypeOverride: GameType = null,
 	): readonly string[] {
 		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride);

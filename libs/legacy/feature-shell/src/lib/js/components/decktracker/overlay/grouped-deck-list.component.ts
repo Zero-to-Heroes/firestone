@@ -11,7 +11,7 @@ import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-li
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
@@ -66,7 +66,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	@Input() showUpdatedCost: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() removeDuplicatesInTooltip: boolean;
-	@Input() side: 'player' | 'opponent' | 'single';
+	@Input() side: HighlightSide;
 	@Input() collection: readonly SetCard[];
 
 	@Input() set deckState(deckState: DeckState) {

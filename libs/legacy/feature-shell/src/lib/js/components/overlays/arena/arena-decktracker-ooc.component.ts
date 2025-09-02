@@ -113,7 +113,7 @@ import {
 											[card]="cardInfo.card"
 											[colorManaCost]="value.colorManaCost"
 											[showRelatedCards]="true"
-											[side]="'single'"
+											[side]="'arena-draft'"
 											[gameTypeOverride]="gameType"
 										></deck-card>
 										<div

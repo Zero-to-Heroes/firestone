@@ -1,5 +1,5 @@
 import { GameState } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { Archimonde } from './archimonde';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
@@ -25,6 +25,7 @@ import { MurozondTheInfinite } from './murozond-the-infinite';
 import { NineLives } from './nine-lives';
 import { NzothGodOfTheDeep } from './nzoth-god-of-the-deep';
 import { NZothTheCorruptor } from './nzoth-the-corruptor';
+import { OverlordSaurfang } from './overlord-saurfang';
 import { ParrotMascot } from './parrot-mascot';
 import { PetParrot } from './pet-parrot';
 import { RaiseDead } from './raise-dead';
@@ -32,6 +33,7 @@ import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
 import { Ressucitate } from './ressucitate';
 import { ReturnPolicy } from './return-policy';
+import { StranglethornHeart } from './stranglethorn-heart';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TidepoolPupil } from './tidepool-pupil';
 import { TramHeist } from './tram-heist';
@@ -42,8 +44,6 @@ import { VanessaVanCleef } from './vanessa-van-cleef';
 import { WakenerOfSouls } from './wakener-of-souls';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { Zuljin } from './zul-jin';
-import { OverlordSaurfang } from './overlord-saurfang';
-import { StranglethornHeart } from './stranglethorn-heart';
 
 const cards = [
 	Archimonde,
@@ -107,7 +107,7 @@ export interface Card {
 export interface GlobalHighlightCard extends Card {
 	getRelatedCards: (
 		entityId: number,
-		side: 'player' | 'opponent' | 'single',
+		side: HighlightSide,
 		gameState: GameState,
 		allCards: CardsFacadeService,
 	) => readonly string[] | null;
