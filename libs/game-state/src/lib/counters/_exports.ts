@@ -16,8 +16,6 @@ import { ElementalPowersBuffCounterDefinitionV2 } from './impl/battlegrounds/ele
 import { ElementalTavernBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-tavern-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
-import { MagnetizedCounterDefinitionV2 } from './impl/battlegrounds/magnetized';
-import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
@@ -163,9 +161,9 @@ export const getAllCounters: (
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
-	new MagnetizedCounterDefinitionV2(i18n),
+	// new MagnetizedCounterDefinitionV2(i18n),
 	new FreeRefreshCounterDefinitionV2(i18n),
-	new SpellsPlayedCounterDefinitionV2(i18n),
+	// new SpellsPlayedCounterDefinitionV2(i18n),
 	new GoldNextTurnCounterDefinitionV2(i18n, allCards),
 	new BgsBloodGemCounterDefinitionV2(i18n, allCards),
 	new BgsSouthseaStrongarmCounterDefinitionV2(i18n, allCards),
