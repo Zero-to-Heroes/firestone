@@ -387,8 +387,11 @@ const getDynamicFilters = (
 		// Random Outcast
 		case CardIds.FelerinTheForgotten:
 		case CardIds.WretchedExile:
-		case CardIds.ShockHopper_YOG_524:
 			return (c) => hasMechanic(c, GameTag.OUTCAST);
+
+		// Random Overload
+		case CardIds.ShockHopper_YOG_524:
+			return (c) => hasMechanic(c, GameTag.OVERLOAD);
 
 		// Random Taunt
 		case TempCardIds.Atlasaurus:
@@ -427,7 +430,7 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.TAUNT) &&
-				fromAnotherClass(c, options.currentClass);
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Random Secret
 		case CardIds.RuniTimeExplorer_TheNightholdToken_WON_053t4:
