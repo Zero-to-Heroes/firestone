@@ -15,8 +15,9 @@ export class BgsCombatStartParser implements EventParser {
 		return currentState.update({
 			bgState: currentState.bgState.update({
 				currentGame: newGame,
-				duoPendingBoards: [],
-				playerTeams: null,
+				// TODO: if we do this too early, we will remove info that is needed for the sim
+				// duoPendingBoards: [],
+				// playerTeams: null,
 			}),
 		});
 	}

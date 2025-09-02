@@ -443,8 +443,7 @@ export class GameStateService {
 			gameEvent.type,
 			gameEvent.cardId,
 			gameEvent.entityId,
-			currentState.fullGameState?.Opponent?.Deck?.length,
-			currentState.opponentDeck.deck.length,
+			currentState.bgState.duoPendingBoards,
 			currentState,
 			gameEvent,
 		);

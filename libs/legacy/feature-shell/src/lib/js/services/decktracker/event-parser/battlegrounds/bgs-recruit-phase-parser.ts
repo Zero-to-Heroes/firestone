@@ -33,6 +33,8 @@ export class BgsRecruitPhaseParser implements EventParser {
 		return currentState.update({
 			bgState: currentState.bgState.update({
 				currentGame: newGame,
+				duoPendingBoards: [],
+				playerTeams: null,
 			}),
 		});
 	}

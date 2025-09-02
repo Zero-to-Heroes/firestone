@@ -49,6 +49,7 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		console.debug('[bgs-player-board-parser] parsing game event', gameEvent, currentState.bgState);
 		const { playerBoard, opponentBoard } = buildPlayerBoards(gameEvent);
 		// TODO: how to get the duos info
 		// Snapshots of the boards when an opponent swap occurs
