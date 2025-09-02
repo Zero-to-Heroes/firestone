@@ -99,6 +99,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			this.options?.skipGameState
 				? this.buildFakeDeckStateFromRegisteredHandlers(this.options.heroCardId)
 				: this.gameState.playerDeck;
+		console.debug('[cards-highlight] playerDeckProvider', playerDeckProvider(), this.options);
 		const opponentDeckProvider = () => (this.options?.skipGameState ? null : this.gameState.opponentDeck);
 
 		const cardsToHighlight = this.buildCardsToHighlight(
