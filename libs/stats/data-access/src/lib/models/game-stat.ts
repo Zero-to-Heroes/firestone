@@ -235,6 +235,7 @@ export class GameStat {
 			return null;
 		}
 
+		console.debug('[game-stat] encoding finalComp', finalComp);
 		const compressedStats = deflate(JSON.stringify(finalComp));
 		const base64data = Buffer.from(compressedStats).toString('base64');
 		return base64data;
@@ -245,8 +246,8 @@ export class GameStat {
 			return null;
 		}
 
-		const compressedStats = Buffer.from(finalComp, 'base64').toString('utf8');
-		const stats = inflate(compressedStats, { to: 'string' });
+		const compressedStats = Buffer.from(finalComp, 'base64');
+		const stats = inflate(new Uint8Array(compressedStats), { to: 'string' });
 		return JSON.parse(stats);
 	}
 }
