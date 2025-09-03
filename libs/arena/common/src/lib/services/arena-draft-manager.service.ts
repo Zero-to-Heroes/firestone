@@ -609,8 +609,9 @@ export class ArenaDraftManagerService
 		newDeck: readonly (string | number)[],
 		oldDeck: readonly (string | number)[],
 	): readonly string[] {
-		const cardsFromNewDeck = [...newDeck].map((c) => this.allCards.getCard(c).id).sort();
-		const cardsFromOldDeck = [...oldDeck].map((c) => this.allCards.getCard(c).id).sort();
+		// Fallback for when the cards database is not updated
+		const cardsFromNewDeck = [...newDeck].map((c) => this.allCards.getCard(c).id ?? (c as string)).sort();
+		const cardsFromOldDeck = [...oldDeck].map((c) => this.allCards.getCard(c).id ?? (c as string)).sort();
 		const newCards: string[] = [];
 		for (const cardFromNewDeck of cardsFromNewDeck) {
 			if (cardsFromOldDeck.includes(cardFromNewDeck)) {
