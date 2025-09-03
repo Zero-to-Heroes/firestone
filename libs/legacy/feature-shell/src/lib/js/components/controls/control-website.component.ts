@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	],
 	template: `
 		<a
-			href="https://www.firestoneapp.gg"
+			href="https://www.firestoneapp.com?utm_souce=firestone-app"
 			target="_blank"
 			(mousedown)="preventMiddleClick($event)"
 			(click)="preventMiddleClick($event)"
