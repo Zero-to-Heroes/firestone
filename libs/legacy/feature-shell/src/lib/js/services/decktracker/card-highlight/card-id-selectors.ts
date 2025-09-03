@@ -1013,6 +1013,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.DragonTurtle_FIR_956:
 			return and(side(inputSide), or(inDeck, inHand), darkGift);
+		case CardIds.DrakkariEmbalmer_RLK_119:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.DrakonidOperative:
 		case CardIds.DrakonidOperativeCore:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
