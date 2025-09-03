@@ -7,6 +7,7 @@ import {
 	hiddenWhenDrawFromDeck,
 	isCastWhenDrawn,
 	publicCardInfos,
+	publicTutors,
 	supportedAdditionalData,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -31,7 +32,23 @@ export class CardDrawParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId;
+
+		// If the card is drawn by a public tutor, we don't know anymore what is at the top of the deck
+		// so we clear the info to avoid confusion
+		// That's also technically true for the bottom, but we can probably leave it like this for now
+		if (!isPlayer && publicTutors.includes(drawnByCardId as CardIds)) {
+			deck = deck.update({
+				deck: deck.deck.map((c) =>
+					c.update({
+						positionFromTop: undefined,
+						// positionFromBottom: undefined,
+					}),
+				),
+			});
+		}
 
 		const cardsWithMatchingCardId = deck.deck
 			.filter((e) => e.cardId === cardId)
@@ -41,7 +58,6 @@ export class CardDrawParser implements EventParser {
 					: true,
 			);
 		console.debug('cards with matching card id', cardsWithMatchingCardId);
-		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId;
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
@@ -77,12 +93,12 @@ export class CardDrawParser implements EventParser {
 		let card = useTopOfDeckToIdentifyCard
 			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: useBottomOfDeckToIdentifyCard
-			? deck.deck
-					.filter((c) => c.positionFromBottom != null)
-					// Because Finley puts the cards at the bottom before drawing
-					.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
-					.sort((c) => c.positionFromBottom)[0]
-			: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
+				? deck.deck
+						.filter((c) => c.positionFromBottom != null)
+						// Because Finley puts the cards at the bottom before drawing
+						.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
+						.sort((c) => c.positionFromBottom)[0]
+				: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
 		console.debug(
 			'[card-draw] found card in zone',
 			card,
@@ -157,23 +173,23 @@ export class CardDrawParser implements EventParser {
 		const refCard = this.allCards.getCard(card?.cardId);
 		const cardWithCreator = card.update({
 			entityId: entityId,
-			creatorCardId: isCreatorPublic ? creatorCardId ?? card.creatorCardId : undefined,
+			creatorCardId: isCreatorPublic ? (creatorCardId ?? card.creatorCardId) : undefined,
 			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
-			cardName: isCardInfoPublic ? refCard.name ?? card?.cardName : undefined,
+			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
 			lastAffectedByCardId: isCreatorPublic
-				? lastInfluencedByCardId ?? card.lastAffectedByCardId ?? drawnByCardId
+				? (lastInfluencedByCardId ?? card.lastAffectedByCardId ?? drawnByCardId)
 				: isDrawnByCardIdPublic
-				? drawnByCardId
-				: undefined,
+					? drawnByCardId
+					: undefined,
 			lastAffectedByEntityId: isCreatorPublic
-				? gameEvent.additionalData.drawnByEntityId ?? card.lastAffectedByEntityId
+				? (gameEvent.additionalData.drawnByEntityId ?? card.lastAffectedByEntityId)
 				: isDrawnByCardIdPublic
-				? gameEvent.additionalData.drawnByEntityId
-				: undefined,
-			refManaCost: isCardInfoPublic ? card.refManaCost ?? refCard.cost : null,
+					? gameEvent.additionalData.drawnByEntityId
+					: undefined,
+			refManaCost: isCardInfoPublic ? (card.refManaCost ?? refCard.cost) : null,
 			actualManaCost: isCardInfoPublic ? gameEvent.additionalData.cost : null,
-			rarity: isCardInfoPublic ? card.rarity ?? card.rarity : null,
+			rarity: isCardInfoPublic ? (card.rarity ?? card.rarity) : null,
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card.tags,
 		} as DeckCard);
@@ -202,7 +218,7 @@ export class CardDrawParser implements EventParser {
 					{
 						cost: gameEvent.additionalData.cost,
 					},
-			  )
+				)
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
 		console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
 
@@ -228,8 +244,8 @@ export class CardDrawParser implements EventParser {
 				currentState.currentTurn === 'mulligan' || currentState.currentTurn === 0
 					? 0
 					: NOT_REAL_DRAW?.includes(drawnByCardId as CardIds)
-					? deck.cardDrawnThisGame
-					: deck.cardDrawnThisGame + 1,
+						? deck.cardDrawnThisGame
+						: deck.cardDrawnThisGame + 1,
 		});
 		console.debug('new player deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
