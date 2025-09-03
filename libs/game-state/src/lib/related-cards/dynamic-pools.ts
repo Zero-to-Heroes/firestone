@@ -20,7 +20,6 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 
-import { TempCardIds } from '@firestone/shared/common/service';
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
@@ -55,7 +54,7 @@ export const getDynamicRelatedCardIds = (
 		case CardIds.DreamplannerZephrys_HecticTourToken_WORK_027t3:
 		case CardIds.DreamplannerZephrys_ModestTourToken_WORK_027t1:
 		case CardIds.HopefulDryad_EDR_001:
-		case TempCardIds.CostumeMerchant:
+		case CardIds.CostumeMerchant_DINO_427:
 			return allCards.getCard(cardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId).id) ?? [];
 		case CardIds.BitterbloomKnight_EDR_852:
 		case CardIds.FlutterwingGuardian_EDR_800:
@@ -394,9 +393,9 @@ const getDynamicFilters = (
 			return (c) => hasMechanic(c, GameTag.OVERLOAD);
 
 		// Random Taunt
-		case TempCardIds.Atlasaurus:
+		case CardIds.Atlasaurus_DINO_431:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasMechanic(c, GameTag.TAUNT) && hasCost(c, '>=', 5);
-		case TempCardIds.GuardDuty:
+		case CardIds.GuardDuty_DINO_433:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.TAUNT) &&
@@ -411,7 +410,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.StoryOfUmbra:
+		case CardIds.StoryOfUmbra_DINO_415:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
@@ -463,7 +462,7 @@ const getDynamicFilters = (
 		case CardIds.Webspinner_FP1_011:
 		case CardIds.WildernessPack_MIS_104:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
-		case TempCardIds.Ankylodon:
+		case CardIds.Ankylodon_DINO_422:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && hasCost(c, '==', 3);
 		case CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t:
 			return (c) =>
@@ -490,7 +489,7 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
 
 		// Random Minions (other)
-		case TempCardIds.Tortotem:
+		case CardIds.Tortotem_DINO_412:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				(c.races?.includes(Race[Race.ALL]) || (c?.races?.length ?? 0) >= 2);
@@ -520,7 +519,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
 				canBeDiscoveredByClass(c, options.currentClass);
-		case TempCardIds.BeastSpeakerTaka:
+		case CardIds.BeastSpeakerTaka_DINO_430:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
 
 		// Discover a Pirate
@@ -662,7 +661,7 @@ const getDynamicFilters = (
 		// Discover a Legendary Minion Effects
 		case CardIds.TreacherousTormentor_EDR_102:
 		case CardIds.SuspiciousUsher_CORE_REV_002:
-		case TempCardIds.HerosWelcome:
+		case CardIds.HerosWelcome_DINO_424:
 		case CardIds.Paparazzi:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -696,7 +695,7 @@ const getDynamicFilters = (
 				hasCost(c, '==', 1) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.CreatureOfMadness_EDR_105:
-		case TempCardIds.RitualOfLife:
+		case CardIds.RitualOfLife_DINO_426:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', 3) &&
@@ -901,7 +900,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '>=', 8) &&
 				!c.classes?.includes(CardClass[CardClass.NEUTRAL]);
-		case TempCardIds.RaptorNestNurse:
+		case CardIds.RaptorNestNurse_DINO_434:
 			return (c) =>
 				(hasCorrectType(c, CardType.MINION) || hasCorrectType(c, CardType.SPELL)) && hasCost(c, '==', 1);
 
