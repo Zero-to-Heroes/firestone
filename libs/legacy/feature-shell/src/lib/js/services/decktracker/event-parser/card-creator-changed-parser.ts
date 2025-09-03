@@ -39,7 +39,7 @@ export class CardCreatorChangedParser implements EventParser {
 						: cardInHand.creatorEntityId,
 					lastAffectedByCardId: null,
 					guessedInfo: isCardInfoPublic ? cardInHand.guessedInfo : {},
-			  })
+				})
 			: null;
 		const newCardInDeck = cardInDeck
 			? cardInDeck.update({
@@ -48,7 +48,7 @@ export class CardCreatorChangedParser implements EventParser {
 					lastAffectedByCardId: null,
 					// So that we keep information added by the creator card, like the card type
 					guessedInfo: cardInDeck.guessedInfo,
-			  })
+				})
 			: null;
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;

@@ -139,7 +139,7 @@ export class CardPlayedByEffectParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,
-			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeckAfterSpecialCaseUpdate,
+			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeck,
 		});
 	}
 

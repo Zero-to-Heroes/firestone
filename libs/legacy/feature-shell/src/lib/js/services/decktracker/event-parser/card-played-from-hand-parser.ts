@@ -20,6 +20,7 @@ import {
 	hasRace,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { revealCard } from '../game-state/card-reveal';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -168,16 +169,16 @@ export class CardPlayedFromHandParser implements EventParser {
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
-				  cardWithInfo.update({
+					cardWithInfo.update({
 						entityId: undefined,
-				  } as DeckCard)
+					} as DeckCard)
 				: cardWithInfo.update({
 						relatedCardIds:
 							// Reset the related card IDs once you play it, so that the info will be reset if you bounce it back to hand
 							CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED.includes(cardWithInfo.cardId as CardIds)
 								? []
 								: cardWithInfo.relatedCardIds,
-				  });
+					});
 
 		const newBoard: readonly DeckCard[] =
 			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardToAdd) : deck.board;
@@ -267,7 +268,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				: ([
 						...playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch,
 						newCardPlayedThisMatch,
-				  ] as readonly ShortCardWithTurn[]),
+					] as readonly ShortCardWithTurn[]),
 			anachronosTurnsPlayed:
 				cardId === CardIds.Anachronos || cardId === CardIds.Anachronos_CORE_RLK_919
 					? [...playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed, currentState.gameTagTurnNumber]
@@ -275,13 +276,25 @@ export class CardPlayedFromHandParser implements EventParser {
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 
-		return currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: finalPlayerDeck,
-			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeckAfterSpecialCaseUpdate,
-			cardsPlayedThisMatch: isCardCountered
-				? currentState.cardsPlayedThisMatch
-				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
-		});
+		console.debug('[card-reveal] ready to reveal', cardWithZone?.cardName, finalPlayerDeck, opponentDeck);
+		if (isPlayer) {
+			return currentState.update({
+				playerDeck: finalPlayerDeck,
+				opponentDeck: opponentDeckAfterSpecialCaseUpdate,
+				cardsPlayedThisMatch: isCardCountered
+					? currentState.cardsPlayedThisMatch
+					: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
+			});
+		} else {
+			const afterCardRevealed = revealCard(finalPlayerDeck, cardWithZone);
+			return currentState.update({
+				playerDeck: opponentDeckAfterSpecialCaseUpdate,
+				opponentDeck: afterCardRevealed,
+				cardsPlayedThisMatch: isCardCountered
+					? currentState.cardsPlayedThisMatch
+					: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
+			});
+		}
 	}
 
 	private isWatchpost(refCard: ReferenceCard) {
@@ -471,7 +484,7 @@ const updateMistahVistah = (
 				c.entityId === scenicVista.entityId
 					? scenicVista.update({ relatedCardIds: relatedCardIdsForGlobalEffect })
 					: c,
-		  )
+			)
 		: newOtherZone;
 
 	const scenicVistaGlobalEffect = deck.globalEffects.find(
@@ -482,7 +495,7 @@ const updateMistahVistah = (
 				c.cardId === scenicVistaGlobalEffect.cardId
 					? scenicVistaGlobalEffect.update({ relatedCardIds: relatedCardIdsForGlobalEffect })
 					: c,
-		  )
+			)
 		: deck.globalEffects;
 	return deck.update({
 		board: newBoard,

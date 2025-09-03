@@ -650,6 +650,7 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_CREATOR_CHANGED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
 					}),
 				);
 				break;
