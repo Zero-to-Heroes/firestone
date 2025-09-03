@@ -39,7 +39,7 @@ export abstract class AbstractCollectionInternalService<T, U = T> {
 	private async init() {
 		this.collection$$.onFirstSubscribe(async () => {
 			console.log('[collection-manager] init', this.type());
-			console.debug('[collection-manager] init', this.type(), new Error().stack);
+			// console.debug('[collection-manager] init', this.type(), new Error().stack);
 			// await this.scene.isReady();
 
 			// So that the protected methods are initialized in the child class
