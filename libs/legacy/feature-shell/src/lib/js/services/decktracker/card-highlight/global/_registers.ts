@@ -3,6 +3,7 @@ import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/c
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { Archimonde } from './archimonde';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
+import { Bonecaller } from './bonecaller';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
 import { CatrinaMuerte } from './catrina-muerte';
@@ -47,6 +48,7 @@ import { Zuljin } from './zul-jin';
 
 const cards = [
 	Archimonde,
+	Bonecaller,
 	StranglethornHeart,
 	WakenerOfSouls,
 	OverlordSaurfang,
