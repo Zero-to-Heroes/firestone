@@ -499,13 +499,14 @@ const getDynamicFilters = (
 		case CardIds.AzureExplorer:
 		case CardIds.BronzeExplorer:
 		case CardIds.BronzeExplorerCore:
-		case CardIds.DraconicLackey:
-		case CardIds.EmeraldExplorer_DRG_313:
-		case CardIds.PrimordialExplorer:
 		case CardIds.Darkrider_EDR_456:
+		case CardIds.DraconicLackey:
 		case CardIds.DraconicStudies:
+		case CardIds.EmeraldExplorer_DRG_313:
+		case CardIds.FlightOfTheBronze:
 		case CardIds.NetherspiteHistorian:
 		case CardIds.NetherspiteHistorian_CORE_KAR_062:
+		case CardIds.PrimordialExplorer:
 		case CardIds.Rheastrasza_WW_824:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -911,6 +912,8 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FEL);
 		case CardIds.Pyrotechnician:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FIRE);
+		case CardIds.UmbralGeist:
+			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.SHADOW);
 		case CardIds.TwilightMender_TLC_814:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
