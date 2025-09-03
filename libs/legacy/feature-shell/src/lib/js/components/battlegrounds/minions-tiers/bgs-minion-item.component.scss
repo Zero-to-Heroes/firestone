@@ -2,6 +2,18 @@
 	display: flex;
 }
 
+.card-info.card-info.card-info {
+	z-index: 0;
+	background: transparent;
+
+	.card-image-container {
+		// So that the missing part at the right of some of the tiles is not visible
+		// position: relative;
+		// left: 15px;
+		width: 90px;
+	}
+}
+
 .minion {
 	width: 100%;
 	height: 26px;
@@ -54,27 +66,27 @@
 		margin-right: -2px;
 	}
 
-	.tile-icon {
-		aspect-ratio: 2.5;
-		object-fit: cover;
-		object-position: top right;
-		width: 60%;
-		// So that the missing part at the right of some of the tiles is not visible
-		position: relative;
-		left: 30px;
+	// .tile-icon {
+	// 	aspect-ratio: 2.5;
+	// 	object-fit: cover;
+	// 	object-position: top right;
+	// 	width: 60%;
+	// 	// So that the missing part at the right of some of the tiles is not visible
+	// 	position: relative;
+	// 	left: 30px;
 
-		&.fallback {
-			width: 60%;
-			object-position: center center;
-			position: relative;
-			left: 10%;
-		}
-	}
+	// 	&.fallback {
+	// 		width: 60%;
+	// 		object-position: center center;
+	// 		position: relative;
+	// 		left: 10%;
+	// 	}
+	// }
 
 	.name {
 		font-family: Open Sans;
-		color: var(--default-text-color);
-		background: linear-gradient(90deg, #090a0d 65%, rgba(9, 10, 13, 0) 100%);
+		color: var(--default-text-color-bright);
+		// background: linear-gradient(90deg, #090a0d 65%, rgba(9, 10, 13, 0) 100%);
 		width: 100%;
 		white-space: nowrap;
 		overflow: hidden;
@@ -87,6 +99,21 @@
 		padding-left: 11px;
 		display: flex;
 		align-items: center;
+		--card-name-outline: #181818;
+		--card-name-outline-size: 1px;
+
+		.name-text {
+			text-shadow:
+				calc(var(--card-name-outline-size) * -1) calc(var(--card-name-outline-size) * -1) 0
+					var(--card-name-outline),
+				0 calc(var(--card-name-outline-size) * -1) 0 var(--card-name-outline),
+				calc(var(--card-name-outline-size)) calc(var(--card-name-outline-size) * -1) 0 var(--card-name-outline),
+				calc(var(--card-name-outline-size) * -1) 0 0 var(--card-name-outline),
+				calc(var(--card-name-outline-size)) 0 0 var(--card-name-outline),
+				calc(var(--card-name-outline-size) * -1) calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
+				0 calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
+				calc(var(--card-name-outline-size)) calc(var(--card-name-outline-size)) 0 var(--card-name-outline);
+		}
 	}
 
 	.tavern-tier {

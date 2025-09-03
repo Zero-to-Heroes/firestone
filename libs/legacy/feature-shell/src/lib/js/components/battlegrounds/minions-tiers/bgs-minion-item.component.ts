@@ -3,9 +3,10 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable } from 'rxjs';
 import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
@@ -13,30 +14,41 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 @Component({
 	standalone: false,
 	selector: 'bgs-minion-item',
-	styleUrls: [`../../../../css/global/cdk-overlay.scss`, './bgs-minion-item.component.scss'],
+	styleUrls: [
+		`../../../../css/global/cdk-overlay.scss`,
+		'../../../../../../../../shared/common/view/src/lib/components/card/card-tile-background.scss',
+		'./bgs-minion-item.component.scss',
+	],
+	// For now keep the old style
 	template: `
 		<div
-			class="minion"
+			class="minion card-info"
 			*ngIf="minion$ | async as minion"
-			[ngClass]="{ banned: minion.banned, locked: minion.trinketLocked, faded: minion.faded }"
+			[ngClass]="{
+				banned: minion.banned,
+				locked: minion.trinketLocked,
+				faded: minion.faded,
+				'old-style': true || !useNewCardTileStyle,
+			}"
 			[cardTooltip]="minion.displayedCardIds"
 			[cardTooltipRelatedCardIds]="minion.relatedCardIds"
 			[cardTooltipBgs]="true"
 			(contextmenu)="highlightMinion(minion, $event)"
 		>
-			<img
-				class="icon tile-icon"
-				*ngIf="hasTile"
-				[src]="minion.image"
-				[cardTooltip]="minion.cardId"
-				(error)="onImageError($event)"
-			/>
-			<img
-				class="icon tile-icon fallback"
-				*ngIf="!hasTile"
-				[src]="minion.fallbackImage"
-				[cardTooltip]="minion.cardId"
-			/>
+			<div class="card-info">
+				<div class="gradiant-container">
+					<div class="gradiant-image" [style.--card-image-url]="'url(' + minion.image + ')'"></div>
+				</div>
+				<div class="card-image-container">
+					<img
+						[src]="minion.image"
+						class="card-image"
+						(error)="onCardImageError()"
+						*ngIf="minion.cardId && !cardImageError"
+					/>
+					<div class="card-image-overlay"></div>
+				</div>
+			</div>
 			<div class="name" [ngStyle]="leftPadding != null ? { 'padding-left.px': leftPadding } : {}">
 				<div class="tavern-tier" *ngIf="minion.techLevel != null && showTavernTierIcon">
 					<tavern-level-icon [level]="minion.techLevel" class="tavern"></tavern-level-icon>
@@ -111,7 +123,8 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 	@Input() showTavernTierIcon: boolean;
 	@Input() leftPadding = null;
 
-	hasTile = true;
+	useNewCardTileStyle = false;
+	cardImageError = false;
 
 	private minion$$ = new BehaviorSubject<ExtendedReferenceCard | null>(null);
 	private showGoldenCards$$ = new BehaviorSubject<boolean>(true);
@@ -128,11 +141,26 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.prefs.preferences$$
+			.pipe(
+				this.mapData((prefs) => prefs.useNewCardTileStyle),
+				distinctUntilChanged(),
+			)
+			.subscribe((useNewCardTileStyle) => {
+				this.useNewCardTileStyle = useNewCardTileStyle;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+
 		this.minion$ = combineLatest([
 			this.minion$$,
 			this.showGoldenCards$$,
@@ -179,10 +207,10 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 								? this.i18n.translateString(
 										'battlegrounds.in-game.minions-list.unhighlight-mechanics',
 										{ value: mechanicsName },
-								  )
+									)
 								: this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
 										value: mechanicsName,
-								  }),
+									}),
 						};
 						return result;
 					});
@@ -197,7 +225,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 						highlighted: highlightedMinions.includes(card.id),
 						banned: card.banned,
 						bannedReason: card.bannedReason,
-						goldCost: isBgsSpell(card) || isBgsTrinket(card) ? card.cost ?? 0 : null,
+						goldCost: isBgsSpell(card) || isBgsTrinket(card) ? (card.cost ?? 0) : null,
 						techLevel: card.techLevel,
 
 						trinketLocked: card.trinketLocked,
@@ -220,6 +248,10 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		this.showTips$ = combineLatest([this.minion$$, this.showTrinketTips$$]).pipe(
 			this.mapData(([card, showTrinketTips]) => showTrinketTips && isBgsTrinket(card)),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByFn(index: number, minion: Minion) {
@@ -235,9 +267,9 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		this.highlighter.toggleMinionsToHighlight([minion.cardId]);
 	}
 
-	onImageError(event: Event) {
-		this.hasTile = false;
-		if (!(this.cdr as ViewRef).destroyed) {
+	onCardImageError() {
+		this.cardImageError = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
