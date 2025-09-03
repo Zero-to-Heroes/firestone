@@ -669,7 +669,8 @@ const getDynamicFilters = (
 				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 
-		// Random Mage Spell Effects
+		// Random Spells
+		// Random Class Spells
 		case CardIds.BabblingBookCore:
 		case CardIds.BabblingBookcase_CORE_EDR_001:
 		case CardIds.WandThief_SCH_350:
@@ -679,6 +680,11 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCorrectSpellSchool(c, SpellSchool.FIRE) &&
 				(hasCorrectClass(c, CardClass.MAGE) || hasCorrectClass(c, CardClass.WARLOCK));
+
+		// Random X-Cost Spells
+		case CardIds.PettyTheft_VAC_335:
+			return (c) =>
+				hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', 1) && fromAnotherClass(c, options.currentClass);
 
 		// Discover an X cost card
 		case CardIds.DarkPeddler_CORE_WON_096:
