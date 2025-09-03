@@ -276,25 +276,13 @@ export class CardPlayedFromHandParser implements EventParser {
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 
-		console.debug('[card-reveal] ready to reveal', cardWithZone?.cardName, finalPlayerDeck, opponentDeck);
-		if (isPlayer) {
-			return currentState.update({
-				playerDeck: finalPlayerDeck,
-				opponentDeck: opponentDeckAfterSpecialCaseUpdate,
-				cardsPlayedThisMatch: isCardCountered
-					? currentState.cardsPlayedThisMatch
-					: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
-			});
-		} else {
-			const afterCardRevealed = revealCard(finalPlayerDeck, cardWithZone);
-			return currentState.update({
-				playerDeck: opponentDeckAfterSpecialCaseUpdate,
-				opponentDeck: afterCardRevealed,
-				cardsPlayedThisMatch: isCardCountered
-					? currentState.cardsPlayedThisMatch
-					: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
-			});
-		}
+		return currentState.update({
+			playerDeck: isPlayer ? finalPlayerDeck : opponentDeckAfterSpecialCaseUpdate,
+			opponentDeck: isPlayer ? opponentDeckAfterSpecialCaseUpdate : revealCard(finalPlayerDeck, cardWithZone),
+			cardsPlayedThisMatch: isCardCountered
+				? currentState.cardsPlayedThisMatch
+				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
+		});
 	}
 
 	private isWatchpost(refCard: ReferenceCard) {

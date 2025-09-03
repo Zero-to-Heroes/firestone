@@ -9,6 +9,7 @@ import {
 	globalEffectCards,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { revealCard } from '../game-state/card-reveal';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -137,9 +138,11 @@ export class CardPlayedByEffectParser implements EventParser {
 			this.i18n,
 		);
 
-		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,
-			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeck,
+		return currentState.update({
+			playerDeck: isPlayer ? playerDeckAfterSpecialCaseUpdate : opponentDeckAfterSpecialCaseUpdate,
+			opponentDeck: isPlayer
+				? opponentDeckAfterSpecialCaseUpdate
+				: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone),
 		});
 	}
 

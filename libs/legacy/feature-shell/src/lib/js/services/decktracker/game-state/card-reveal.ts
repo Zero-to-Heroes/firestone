@@ -12,13 +12,9 @@ export const revealCard = (deck: DeckState, card: DeckCard) => {
 
 	switch (creatorCardId) {
 		case CardIds.Triangulate_GDB_451:
-			console.debug(
-				'[card-reveal] revealCard Triangulate_GDB_451',
-				card.cardName,
-				card,
-				deck,
-				updateCardsInDeckAsCopies(deck, card, creatorEntityId, creatorCardId),
-			);
+		case CardIds.MarinTheManager_TolinsGobletToken_VAC_702t2:
+		// case CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4:
+		case CardIds.BobTheBartender_BG31_BOB:
 			return updateCardsInDeckAsCopies(deck, card, creatorEntityId, creatorCardId);
 		default:
 			return deck;
@@ -39,7 +35,7 @@ const updateCardsInZoneAsCopies = (
 	creatorCardId: string,
 ) => {
 	return zone.map((c) =>
-		c.creatorEntityId === creatorEntityId
+		(c.creatorEntityId || c.lastAffectedByEntityId) === creatorEntityId
 			? c.update({
 					cardId: card.cardId,
 					cardName: card.cardName,
