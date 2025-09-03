@@ -145,6 +145,10 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			this.gameState.gameState$$.pipe(
 				auditTime(500),
 				map((state) => state?.playerDeck?.currentOptions),
+				distinctUntilChanged(
+					(a, b) =>
+						a?.length === b?.length && !!a?.every((option, index) => equalCardOption(option, b?.[index])),
+				),
 			),
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.bgsShowQuestStatsOverlay),
