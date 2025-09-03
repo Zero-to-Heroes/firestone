@@ -3484,6 +3484,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.WebOfDeception_EDR_523:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.Whirlweaver:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.WickedWitchdoctor:
 		case CardIds.WickedWitchdoctor_WON_083:
 			return and(side(inputSide), or(inDeck, inHand), spell);
