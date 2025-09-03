@@ -187,7 +187,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
 			}
 
-			const dynamicPool = getDynamicRelatedCardIds(this.cardId, this.allCards.getService(), {
+			const dynamicPool = getDynamicRelatedCardIds(this.cardId, this.card.entityId, this.allCards.getService(), {
 				format: metadata.formatType,
 				gameType: metadata.gameType,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],

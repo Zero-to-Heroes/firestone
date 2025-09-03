@@ -34,6 +34,7 @@ const IMBUED_HERO_POWERS = [
 
 export const getDynamicRelatedCardIds = (
 	cardId: string,
+	entityId: number,
 	allCards: AllCardsService,
 	inputOptions: {
 		format: GameFormat;
@@ -162,7 +163,7 @@ export const getDynamicRelatedCardIds = (
 			);
 	}
 
-	const filters = getDynamicFilters(cardId, allCards, options);
+	const filters = getDynamicFilters(cardId, entityId, allCards, options);
 	if (filters == null) {
 		return [];
 	}
@@ -176,6 +177,7 @@ export const getDynamicRelatedCardIds = (
 
 const getDynamicFilters = (
 	cardId: string,
+	entityId: number,
 	allCards: AllCardsService,
 	options: {
 		format: GameFormat;
@@ -514,14 +516,38 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Discover a Beast
-		// TODO: Update Raptor Herald if it changes after EDR
 		case CardIds.RaptorHerald_CORE_EDR_004:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
 				canBeDiscoveredByClass(c, options.currentClass);
+		// TODO: maybe move this to the other dynamic pool method
 		case CardIds.BeastSpeakerTaka_DINO_430:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
+			// Scope the variables
+			if (true) {
+				const fullEntity =
+					options?.gameState?.fullGameState?.Opponent?.AllEntities?.find((e) => e.entityId === entityId) ??
+					options?.gameState?.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === entityId) ??
+					null;
+				console.debug('[BeastSpeakerTaka_DINO_430] fullEntity', fullEntity);
+				if (fullEntity) {
+					const enchantment = fullEntity.enchantments?.find(
+						(e) => e.cardId === CardIds.BeastSpeakerTaka_LegendaryMountEnchantment_DINO_430e,
+					);
+					const gainedAttack = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]?.Value ?? 0;
+					const gainedHealth = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2]?.Value ?? 0;
+					console.debug('[BeastSpeakerTaka_DINO_430] gainedHealth', gainedHealth, enchantment);
+					if (gainedHealth) {
+						return (c) =>
+							hasCorrectType(c, CardType.MINION) &&
+							hasCorrectTribe(c, Race.BEAST) &&
+							hasAttack(c, '==', gainedAttack) &&
+							hasHealth(c, '==', gainedHealth);
+					}
+				}
+				return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
+			}
+			return (c) => false;
 
 		// Discover a Pirate
 		case CardIds.BloodsailRecruiter_VAC_430:
@@ -1157,6 +1183,38 @@ const hasCost = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>' =
 			return cost > value;
 		default:
 			return false;
+	}
+};
+
+const hasAttack = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>' = '==', value: number): boolean => {
+	const attack = card?.attack ?? 0;
+	switch (operator) {
+		case '==':
+			return attack === value;
+		case '<=':
+			return attack <= value;
+		case '>=':
+			return attack >= value;
+		case '<':
+			return attack < value;
+		case '>':
+			return attack > value;
+	}
+};
+
+const hasHealth = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>' = '==', value: number): boolean => {
+	const health = card?.health ?? 0;
+	switch (operator) {
+		case '==':
+			return health === value;
+		case '<=':
+			return health <= value;
+		case '>=':
+			return health >= value;
+		case '<':
+			return health < value;
+		case '>':
+			return health > value;
 	}
 };
 

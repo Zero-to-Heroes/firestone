@@ -175,6 +175,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				: metaData;
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
+			entityId,
 			card?.relatedCardIds,
 			deck,
 			updatedMetadata,

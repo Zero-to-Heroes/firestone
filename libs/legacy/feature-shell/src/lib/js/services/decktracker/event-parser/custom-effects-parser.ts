@@ -38,7 +38,10 @@ const SUPPORTED_EFFECTS = [
 ];
 
 export class CustomEffectsParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -83,6 +86,7 @@ export class CustomEffectsParser implements EventParser {
 		const deck = currentState.opponentDeck;
 		const dynamicPool = getDynamicRelatedCardIds(
 			CardIds.BroodQueen_LarvaToken_SC_003t,
+			entityId,
 			this.allCards.getService(),
 			{
 				format: currentState.metadata.formatType,
