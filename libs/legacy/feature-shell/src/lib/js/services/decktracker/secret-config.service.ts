@@ -29,7 +29,10 @@ export class SecretConfigService {
 
 	private stonebrewSecrets: readonly string[];
 
-	constructor(private readonly http: HttpClient, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly http: HttpClient,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	public async getValidSecrets(
 		metadata: Metadata,
@@ -110,6 +113,7 @@ export class SecretConfigService {
 				);
 			case CardIds.Supernova_GDB_301:
 			case CardIds.FyrakkTheBlazing_FIR_959:
+			case CardIds.FiddlefireImp:
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
 				);
