@@ -21,19 +21,17 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 	standalone: false,
 	selector: 'secrets-helper-list',
 	styleUrls: [
-		`../../../css/global/scrollbar-decktracker-overlay.scss`,
-		'../../../css/global/scrollbar-cards-list.scss',
 		'../../../css/component/decktracker/overlay/dim-overlay.scss',
 		'../../../css/component/secrets-helper/secrets-helper-list.component.scss',
 	],
 	template: `
-		<ng-scrollbar class="secrets-helper-list" [ngClass]="{ active: isScroll }">
+		<div class="secrets-helper-list" [ngClass]="{ active: isScroll }">
 			<ul class="card-list" scrollable>
 				<li *ngFor="let card of cards; trackBy: trackCard">
 					<deck-card [card]="card" [colorManaCost]="colorManaCost" [colorClassCards]="true"></deck-card>
 				</li>
 			</ul>
-		</ng-scrollbar>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
