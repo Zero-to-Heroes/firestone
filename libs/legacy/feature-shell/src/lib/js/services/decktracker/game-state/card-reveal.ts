@@ -44,6 +44,7 @@ export const revealCard = (deck: DeckState, card: DeckCard) => {
 		case CardIds.ShadowflameStalker_FIR_924:
 		case CardIds.SearingReflection_FIR_941:
 		case CardIds.RitualOfLife_DINO_426:
+		case CardIds.SoulSearching_WORK_070:
 			return updateCardsInDeckAsCopies(deck, card, creatorEntityId, creatorCardId);
 		default:
 			return deck;
