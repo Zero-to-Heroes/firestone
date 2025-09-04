@@ -529,23 +529,25 @@ const getDynamicFilters = (
 					options?.gameState?.fullGameState?.Opponent?.AllEntities?.find((e) => e.entityId === entityId) ??
 					options?.gameState?.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === entityId) ??
 					null;
-				console.debug('[BeastSpeakerTaka_DINO_430] fullEntity', fullEntity);
 				if (fullEntity) {
 					const enchantment = fullEntity.enchantments?.find(
 						(e) => e.cardId === CardIds.BeastSpeakerTaka_LegendaryMountEnchantment_DINO_430e,
 					);
 					const gainedAttack = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]?.Value ?? 0;
 					const gainedHealth = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2]?.Value ?? 0;
-					console.debug('[BeastSpeakerTaka_DINO_430] gainedHealth', gainedHealth, enchantment);
 					if (gainedHealth) {
 						return (c) =>
 							hasCorrectType(c, CardType.MINION) &&
 							hasCorrectTribe(c, Race.BEAST) &&
+							hasCorrectRarity(c, CardRarity.LEGENDARY) &&
 							hasAttack(c, '==', gainedAttack) &&
 							hasHealth(c, '==', gainedHealth);
 					}
 				}
-				return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
+				return (c) =>
+					hasCorrectType(c, CardType.MINION) &&
+					hasCorrectTribe(c, Race.BEAST) &&
+					hasCorrectRarity(c, CardRarity.LEGENDARY);
 			}
 			return (c) => false;
 
