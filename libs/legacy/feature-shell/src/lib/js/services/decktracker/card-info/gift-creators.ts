@@ -1054,4 +1054,5 @@ export const giftCreators = [
 	CardIds.RitualOfLife_DINO_426,
 	CardIds.CostumeMerchant_DINO_427,
 	CardIds.Tortotem_DINO_412,
+	CardIds.AvantGardening_EDR_488,
 ];
