@@ -69,7 +69,7 @@ export class GameEvents {
 				console.log('[game-events] init game events monitor');
 				this.initPlugin();
 				this.scene.currentScene$$.subscribe((scene) => {
-					console.log('emitting new scene event', scene);
+					console.log('[game-events] emitting new scene event', scene);
 					this.doEventDispatch(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.SCENE_CHANGED_MINDVISION,
@@ -218,7 +218,7 @@ export class GameEvents {
 		const start = Date.now();
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
@@ -231,7 +231,7 @@ export class GameEvents {
 				this.doEventDispatch(event);
 				break;
 			case 'GAME_SETTINGS':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				const gameSettingsEvent = Object.assign(new GameSettingsEvent(), {
 					type: GameEvent.GAME_SETTINGS,
 					additionalData: {
@@ -251,7 +251,7 @@ export class GameEvents {
 				this.doEventDispatch(gameSettingsEvent);
 				break;
 			case 'MATCH_METADATA':
-				console.log(gameEvent.Type + ' event', gameEvent.Value);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent.Value);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
@@ -263,9 +263,9 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER':
-				console.log(gameEvent.Type + ' event');
+				console.log('[game-events]', gameEvent.Type + ' event');
 				const localPlayer: GameEventPlayer = gameEvent.Value;
-				console.log('sending LOCAL_PLAYER info', localPlayer);
+				console.log('[game-events]', 'sending LOCAL_PLAYER info', localPlayer);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER,
@@ -274,13 +274,13 @@ export class GameEvents {
 				);
 				break;
 			case 'OPPONENT_PLAYER':
-				console.log(gameEvent.Type + ' event');
+				console.log('[game-events]', gameEvent.Type + ' event');
 				const opponentPlayer: GameEventPlayer = Object.assign(
 					{},
 					gameEvent.Value.OpponentPlayer,
 					{} as GameEventPlayer,
 				);
-				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
+				console.log('[game-events]', 'sending OPPONENT_PLAYER info', opponentPlayer);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.OPPONENT,
@@ -379,7 +379,7 @@ export class GameEvents {
 				);
 				break;
 			case 'DUNGEON_RUN_STEP':
-				console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
@@ -390,7 +390,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MONSTER_HUNT_STEP':
-				console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
@@ -805,7 +805,7 @@ export class GameEvents {
 				);
 				break;
 			case 'GAME_RUNNING':
-				console.log(gameEvent.Type + ' event', gameEvent.Value);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent.Value);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.GAME_RUNNING, gameEvent, {
 						playerDeckCount: gameEvent.Value.AdditionalProps.PlayerDeckCount,
@@ -885,7 +885,7 @@ export class GameEvents {
 				this.doEventDispatch(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
-				console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.doEventDispatch(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
@@ -1016,7 +1016,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MAX_RESOURCES_UPDATED':
-				console.debug(gameEvent.Type + ' event', gameEvent.Value);
+				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.MAX_RESOURCES_UPDATED, gameEvent, {
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
@@ -1154,7 +1154,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTION':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_HERO_SELECTION,
@@ -1165,11 +1165,11 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_HERO_REROLL':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_REROLL, gameEvent));
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTED':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_SELECTED, gameEvent, {
 						// These are set after a reconnect, and usually not present when the match starts
@@ -1184,7 +1184,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TRINKET_SELECTION':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TRINKET_SELECTION,
@@ -1195,7 +1195,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TRINKET_SELECTED':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_TRINKET_SELECTED, gameEvent, {
 						heroCardId: gameEvent.Value.AdditionalProps.HeroCardId,
@@ -1255,7 +1255,12 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.Opponent, gameEvent.Value.Result);
+				console.log(
+					'[game-events]',
+					gameEvent.Type + ' event',
+					gameEvent.Value.Opponent,
+					gameEvent.Value.Result,
+				);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
@@ -1269,7 +1274,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
-				console.log(gameEvent.Type + ' event', gameEvent.Value);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent.Value);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
@@ -1322,6 +1327,7 @@ export class GameEvents {
 				console.debug('[game-events] receiving ' + gameEvent.Type, gameEvent, eventName);
 				const playerBoardEvent = this.buildBattlegroundsPlayerBoardEvent(eventName, gameEvent);
 				console.log(
+					'[game-events]',
 					eventName,
 					playerBoardEvent.additionalData.playerBoard.board.map((b) => b.CardId),
 					playerBoardEvent.additionalData.opponentBoard.board.map((b) => b.CardId),
@@ -1366,7 +1372,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_REWARD_REVEALED':
-				console.debug(gameEvent.Type + ' event', gameEvent);
+				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_REVEALED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
@@ -1376,7 +1382,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_REWARD_GAINED':
-				console.debug(gameEvent.Type + ' event', gameEvent);
+				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_GAINED, gameEvent, {
 						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
@@ -1404,7 +1410,7 @@ export class GameEvents {
 				);
 				break;
 			case 'WINNER':
-				console.log(gameEvent.Type + ' event', { ...gameEvent.Value.Winner, Tags: null });
+				console.log('[game-events]', gameEvent.Type + ' event', { ...gameEvent.Value.Winner, Tags: null });
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.WINNER,
@@ -1417,7 +1423,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TIE':
-				console.log(gameEvent.Type + ' event');
+				console.log('[game-events]', gameEvent.Type + ' event');
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TIE,
@@ -1425,7 +1431,7 @@ export class GameEvents {
 				);
 				break;
 			case 'GAME_END':
-				console.log(gameEvent.Type + ' event');
+				console.log('[game-events]', gameEvent.Type + ' event');
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.GAME_END,
@@ -1513,15 +1519,15 @@ export class GameEvents {
 				);
 				break;
 			case 'RECONNECT_START':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_START }));
 				break;
 			case 'RECONNECT_OVER':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_OVER }));
 				break;
 			case 'SPECTATING':
-				console.log(gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.SPECTATING,
@@ -1592,6 +1598,7 @@ export class GameEvents {
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
 							tags: gameEvent.Value.AdditionalProps.Tags,
 						}
 					: null;
@@ -1721,7 +1728,7 @@ export class GameEvents {
 			case 'MERCENARIES_UNSELECTED_TARGET':
 				break;
 			default:
-				console.warn('unsupported game event', gameEvent);
+				console.warn('[game-events]', 'unsupported game event', gameEvent);
 		}
 		const timeSpent = Date.now() - start;
 		this.totalTime += timeSpent;
@@ -1745,10 +1752,10 @@ export class GameEvents {
 			return;
 		}
 		if (data.includes('Begin Spectating') || data.includes('Start Spectator')) {
-			console.log('begin spectating', data);
+			console.log('[game-events]', 'begin spectating', data);
 		}
 		if (data.includes('End Spectator')) {
-			console.log('end spectating', data);
+			console.log('[game-events]', 'end spectating', data);
 		}
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
@@ -1930,7 +1937,7 @@ export class GameEvents {
 						this.dispatchGameEvent(events);
 					}
 				} catch (e) {
-					console.error('Error while parsing game event', gameEvent, e);
+					console.error('[game-events]', 'Error while parsing game event', gameEvent, e);
 				}
 			});
 			this.plugin.initRealtimeLogConversion(() => {
