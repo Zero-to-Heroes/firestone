@@ -3,6 +3,7 @@ import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { revealCard } from '../game-state/card-reveal';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -19,7 +20,8 @@ export class MinionSummonedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
+		const creatorCardId = gameEvent.additionalData?.creatorCardId;
+		const creatorEntityId = gameEvent.additionalData?.creatorEntityId;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -33,7 +35,7 @@ export class MinionSummonedParser implements EventParser {
 			actualManaCost: costFromTags ?? dbCard.cost,
 			rarity: dbCard.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,
-			creatorEntityId: gameEvent.additionalData.creatorEntityId,
+			creatorEntityId: creatorEntityId,
 			zone: 'PLAY',
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
@@ -46,8 +48,18 @@ export class MinionSummonedParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
 		} as DeckState);
+
+		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
+		const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
+
+		// return currentState.update({
+		// 	playerDeck: playerDeckAfterReveal,
+		// 	opponentDeck: opponentDeckAfterReveal,
+		// });
+
 		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			playerDeck: isPlayer ? newPlayerDeck : currentState.playerDeck,
+			opponentDeck: isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card),
 		});
 	}
 

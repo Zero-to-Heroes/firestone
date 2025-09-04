@@ -138,11 +138,14 @@ export class CardPlayedByEffectParser implements EventParser {
 			this.i18n,
 		);
 
+		const playerDeckAfterReveal = isPlayer ? playerDeckAfterSpecialCaseUpdate : opponentDeckAfterSpecialCaseUpdate;
+		const opponentDeckAfterReveal = isPlayer
+			? opponentDeckAfterSpecialCaseUpdate
+			: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone);
+
 		return currentState.update({
-			playerDeck: isPlayer ? playerDeckAfterSpecialCaseUpdate : opponentDeckAfterSpecialCaseUpdate,
-			opponentDeck: isPlayer
-				? opponentDeckAfterSpecialCaseUpdate
-				: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone),
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 		});
 	}
 

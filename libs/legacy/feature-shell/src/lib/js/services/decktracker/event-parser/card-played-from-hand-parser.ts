@@ -276,9 +276,14 @@ export class CardPlayedFromHandParser implements EventParser {
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 
+		const playerDeckAfterReveal = isPlayer ? finalPlayerDeck : opponentDeckAfterSpecialCaseUpdate;
+		const opponentDeckAfterReveal = isPlayer
+			? opponentDeckAfterSpecialCaseUpdate
+			: revealCard(finalPlayerDeck, cardWithZone);
+
 		return currentState.update({
-			playerDeck: isPlayer ? finalPlayerDeck : opponentDeckAfterSpecialCaseUpdate,
-			opponentDeck: isPlayer ? opponentDeckAfterSpecialCaseUpdate : revealCard(finalPlayerDeck, cardWithZone),
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 			cardsPlayedThisMatch: isCardCountered
 				? currentState.cardsPlayedThisMatch
 				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
