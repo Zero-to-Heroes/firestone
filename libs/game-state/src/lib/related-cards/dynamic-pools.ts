@@ -530,18 +530,29 @@ const getDynamicFilters = (
 					options?.gameState?.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === entityId) ??
 					null;
 				if (fullEntity) {
-					const enchantment = fullEntity.enchantments?.find(
+					const enchantments = fullEntity.enchantments?.filter(
 						(e) => e.cardId === CardIds.BeastSpeakerTaka_LegendaryMountEnchantment_DINO_430e,
 					);
-					const gainedAttack = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]?.Value ?? 0;
-					const gainedHealth = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2]?.Value ?? 0;
-					if (gainedHealth) {
+					const allAttacks: number[] = [];
+					const allHealths: number[] = [];
+					for (const enchantment of enchantments) {
+						const gainedAttack = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]?.Value ?? 0;
+						const gainedHealth = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2]?.Value ?? 0;
+						if (gainedHealth) {
+							allHealths.push(gainedHealth);
+							allAttacks.push(gainedAttack);
+						}
+					}
+					if (allHealths.length > 0) {
+						const numberOfSummons = allHealths.length;
+						// We return all the cards that match the attack/health for each summon
 						return (c) =>
 							hasCorrectType(c, CardType.MINION) &&
 							hasCorrectTribe(c, Race.BEAST) &&
 							hasCorrectRarity(c, CardRarity.LEGENDARY) &&
-							hasAttack(c, '==', gainedAttack) &&
-							hasHealth(c, '==', gainedHealth);
+							Array.from({ length: numberOfSummons }).some(
+								(_, i) => hasAttack(c, '==', allAttacks[i]) && hasHealth(c, '==', allHealths[i]),
+							);
 					}
 				}
 				return (c) =>
