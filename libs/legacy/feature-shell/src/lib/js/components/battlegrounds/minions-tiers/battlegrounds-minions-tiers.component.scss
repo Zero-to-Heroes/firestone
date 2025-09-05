@@ -28,6 +28,7 @@ battlegrounds-minions-tiers-view {
 }
 
 .scalable {
+	transform: scale(var(--bgs-minions-list-scale, 1));
 	transform-origin: top right;
 	// max-height: calc(90vh / var(--scale, 1));
 	// This is not perfect - it means the scrollbar will be linked to the full widget, instead of the list itself

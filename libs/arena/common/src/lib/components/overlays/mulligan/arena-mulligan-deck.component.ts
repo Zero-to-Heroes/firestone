@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -16,7 +15,7 @@ import { GameNativeStateStoreService } from '@firestone/app/common';
 import { MulliganDeckData, buildColor } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -59,10 +58,7 @@ import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guid
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaMulliganDeckComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	allDeckMulliganInfo$: Observable<MulliganDeckData | null>;
 	showMulliganOverview$: Observable<boolean | null>;
 	sampleSize$: Observable<string>;
@@ -210,25 +206,6 @@ export class ArenaMulliganDeckComponent
 		}
 	}
 
-	async ngAfterViewInit() {
-		await this.prefs.isReady();
-
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const elements = await this.getScalableElements();
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-			});
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	cycleOpponent = async () => {
 		const prefs = await this.prefs.getPreferences();
 		const currentOpponent = prefs.decktrackerMulliganOpponent;
@@ -252,15 +229,4 @@ export class ArenaMulliganDeckComponent
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};
-
-	private async getScalableElements(): Promise<HTMLElement[]> {
-		let elements = this.el.nativeElement.querySelectorAll('.scalable');
-		let retriesLeft = 10;
-		while (retriesLeft >= 0 && elements?.length < 3) {
-			await sleep(100);
-			elements = this.el.nativeElement.querySelectorAll('.scalable');
-			retriesLeft--;
-		}
-		return elements;
-	}
 }

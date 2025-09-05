@@ -15,6 +15,7 @@
 }
 
 .scalable {
+	transform: scale(var(--arena-draft-overlay-scale, 1));
 	transform-origin: top center;
 	position: relative;
 }

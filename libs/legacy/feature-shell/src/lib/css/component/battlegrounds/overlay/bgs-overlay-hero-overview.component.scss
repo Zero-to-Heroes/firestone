@@ -18,6 +18,10 @@
 	}
 }
 
+.scalable {
+	transform: scale(var(--bgs-hero-overview-scale, 1));
+}
+
 .bgs-hero-overview-tooltip {
 	position: relative;
 	top: -1px;

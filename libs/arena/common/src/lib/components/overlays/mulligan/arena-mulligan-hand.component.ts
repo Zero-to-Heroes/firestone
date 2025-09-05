@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -16,7 +15,7 @@ import { getBaseCardId } from '@firestone-hs/reference-data';
 import { buildColor } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { ARENA_MULLIGAN_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -56,10 +55,7 @@ import { ArenaMulliganGuideService } from '../../../services/arena-mulligan-guid
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaMulliganHandComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
-{
+export class ArenaMulliganHandComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
 	showHandInfo$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
@@ -104,9 +100,7 @@ export class ArenaMulliganHandComponent
 			)
 			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
-		this.showHandInfo$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.arenaShowMulliganCardImpact),
-		);
+		this.showHandInfo$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowMulliganCardImpact));
 		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => {
@@ -140,8 +134,8 @@ export class ArenaMulliganHandComponent
 						keepRate: noData
 							? null
 							: advice?.keepRate == null
-							? '-'
-							: `${(100 * advice.keepRate).toFixed(1)}%`,
+								? '-'
+								: `${(100 * advice.keepRate).toFixed(1)}%`,
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',
@@ -159,41 +153,11 @@ export class ArenaMulliganHandComponent
 		}
 	}
 
-	async ngAfterViewInit() {
-		await this.prefs.isReady();
-
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const elements = await this.getScalableElements();
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-			});
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	override ngOnDestroy(): void {
 		super.ngOnDestroy();
 		if (!this.showPremiumBanner$$.value && !this.noData$$.value) {
 			this.guardian.acknowledgeMulliganAdviceSeen();
 		}
-	}
-
-	private async getScalableElements(): Promise<HTMLElement[]> {
-		let elements = this.el.nativeElement.querySelectorAll('.scalable');
-		let retriesLeft = 10;
-		while (retriesLeft >= 0 && elements?.length < 3) {
-			await sleep(100);
-			elements = this.el.nativeElement.querySelectorAll('.scalable');
-			retriesLeft--;
-		}
-		return elements;
 	}
 }
 

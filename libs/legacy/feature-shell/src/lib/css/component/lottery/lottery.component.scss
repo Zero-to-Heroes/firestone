@@ -9,7 +9,7 @@
 	min-width: 400px;
 
 	&.scalable {
-		transform: scale(1);
+		transform: scale(var(--lottery-scale, 1));
 		transform-origin: bottom left;
 		transition-property: transform, opacity;
 		transition-duration: 0.2s;

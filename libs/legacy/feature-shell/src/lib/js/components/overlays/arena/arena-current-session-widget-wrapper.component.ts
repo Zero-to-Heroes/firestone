@@ -12,7 +12,7 @@ import { AbstractWidgetWrapperComponent, GameStateFacadeService } from '@firesto
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, filter, Observable, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 
 const refBounds = {
 	left: -50,
@@ -83,33 +83,6 @@ export class ArenaCurrentSessionWidgetWrapperComponent
 			),
 			this.handleReposition(),
 		);
-
-		this.showWidget$
-			.pipe(
-				filter((show) => show),
-				switchMap(() =>
-					combineLatest([
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaSessionWidgetScale ?? 100)),
-					]),
-				),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-
-				const boundsScale = 1 / newScale;
-				this.bounds = {
-					left: refBounds.left * boundsScale,
-					right: refBounds.right * boundsScale,
-					top: refBounds.top * boundsScale,
-					bottom: refBounds.bottom * boundsScale,
-				};
-			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -10,18 +10,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import {
-	BehaviorSubject,
-	Observable,
-	combineLatest,
-	debounceTime,
-	filter,
-	shareReplay,
-	switchMap,
-	takeUntil,
-} from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, debounceTime, shareReplay, takeUntil } from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
 import { ArenaDraftGuardianService } from '../../services/arena-draft-guardian.service';
 import { ArenaDraftManagerService } from '../../services/arena-draft-manager.service';
@@ -33,11 +24,7 @@ import { ArenaCardOption } from './model';
 	styleUrls: ['./arena-card-option.component.scss'],
 	template: `
 		<ng-container *ngIf="widgetActive$ | async">
-			<div
-				class="option "
-				*ngIf="{ showWidget: showWidget$ | async } as value"
-				[ngClass]="{ hidden: !scaleApplied }"
-			>
+			<div class="option " *ngIf="{ showWidget: showWidget$ | async } as value">
 				<arena-card-option-view
 					class="info-view"
 					[card]="card"
@@ -72,8 +59,6 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 	pickRateHighWins: string;
 	drawnImpactTooltip: string | null;
 	deckImpactTooltip: string | null;
-
-	scaleApplied: boolean;
 
 	pickRateHighWinsLabel = this.i18n.translateString(`app.arena.card-stats.header-pickrate-high-wins-short`, {
 		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
@@ -123,40 +108,9 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 			const runId = deck.Id;
 			this.guardian.acknowledgeRunUsed(runId);
 		});
-		combineLatest([this.showWidget$, this.widgetActive$])
-			.pipe(
-				filter(([showWidget, widgetActive]) => showWidget && widgetActive),
-				switchMap(() =>
-					combineLatest([
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
-					]),
-				),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = await this.getScalable();
-				if (!!element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-				this.scaleApplied = true;
-				// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
-			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private async getScalable(): Promise<ElementRef<HTMLElement>> {
-		let element = this.el.nativeElement.querySelector('.scalable');
-		let retriesLeft = 10;
-		while (!element && retriesLeft > 0) {
-			await sleep(200);
-			element = this.el.nativeElement.querySelector('.scalable');
-			retriesLeft--;
-		}
-		return element;
 	}
 }

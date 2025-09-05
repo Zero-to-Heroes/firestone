@@ -9,7 +9,7 @@
 }
 
 .scalable {
-	transform: scale(1);
+	transform: scale(var(--bgs-quests-overlay-scale, 1));
 	position: relative;
 	opacity: 1;
 	transition-property: transform, opacity;

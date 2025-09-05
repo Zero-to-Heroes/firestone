@@ -11,9 +11,9 @@ import {
 } from '@angular/core';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BGS_HERO_SELECTION_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, takeUntil } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
 import { BgsHeroSelectionTooltipComponent } from '../hero-selection/bgs-hero-selection-tooltip.component';
@@ -121,7 +121,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.pickrate = value?.pickrate == null ? '-' : (value.pickrate * 100).toFixed(1) + '%';
 		const tribesImpactValue = !value?.tribesFilter?.length
 			? null
-			: value?.tribeStats?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0;
+			: (value?.tribeStats?.map((t) => t.impactAveragePosition).reduce((a, b) => a + b, 0) ?? 0);
 		this.tribesImpact = tribesImpactValue == null ? '-' : tribesImpactValue.toFixed(2);
 		this.tribesImpactCss = tribesImpactValue == null ? '' : tribesImpactValue < 0 ? 'better' : 'worse';
 		// Build the tooltip that shows the impact of each tribe
@@ -179,25 +179,6 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.showAchievementsOverlay$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements),
 		);
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsHeroSelectionOverlayScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				let element = this.el.nativeElement.querySelector('.scalable');
-				let retriesLeft = 10;
-				while (!element && retriesLeft > 0) {
-					await sleep(100);
-					retriesLeft--;
-					element = this.el.nativeElement.querySelector('.scalable');
-				}
-				if (!element) {
-					return;
-				}
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

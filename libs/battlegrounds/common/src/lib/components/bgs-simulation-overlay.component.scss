@@ -58,6 +58,10 @@
 	border-image-source: linear-gradient(to bottom right, rgba(255, 185, 72, 0) 0%, #ffb948 100%);
 }
 
+.scalable {
+	transform: scale(var(--bgs-simulator-scale, 1));
+}
+
 .title {
 	font-family: Open Sans;
 	font-style: normal;

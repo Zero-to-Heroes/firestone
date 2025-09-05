@@ -14,7 +14,7 @@ import {
 import { getBaseCardId } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { CONSTRUCTED_MULLIGAN_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -30,7 +30,6 @@ import {
 	distinctUntilChanged,
 	filter,
 	shareReplay,
-	switchMap,
 	takeUntil,
 } from 'rxjs';
 import { MulliganChartData } from '../models/mulligan-advice';
@@ -146,8 +145,8 @@ export class ConstructedMulliganHandComponent
 						keepRate: noData
 							? null
 							: advice?.keepRate == null
-							? '-'
-							: `${(100 * advice.keepRate).toFixed(1)}%`,
+								? '-'
+								: `${(100 * advice.keepRate).toFixed(1)}%`,
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',
@@ -162,23 +161,6 @@ export class ConstructedMulliganHandComponent
 			takeUntil(this.destroyed$),
 		);
 
-		this.cardsInHandInfo$
-			.pipe(
-				filter((info) => !!info?.length),
-				switchMap(() =>
-					combineLatest([
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
-					]),
-				),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const elements = await this.getScalableElements();
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-			});
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -189,16 +171,5 @@ export class ConstructedMulliganHandComponent
 		if (!this.showPremiumBanner$$.value && !this.noData$$.value && !this.againstAi$$.value) {
 			this.guardian.acknowledgeMulliganAdviceSeen();
 		}
-	}
-
-	private async getScalableElements(): Promise<HTMLElement[]> {
-		let elements = this.el.nativeElement.querySelectorAll('.scalable');
-		let retriesLeft = 10;
-		while (retriesLeft >= 0 && elements?.length < 3) {
-			await sleep(100);
-			elements = this.el.nativeElement.querySelectorAll('.scalable');
-			retriesLeft--;
-		}
-		return elements;
 	}
 }

@@ -18,6 +18,7 @@
 }
 
 .scalable {
+	transform: scale(var(--bgs-hero-selection-overlay-scale, 1));
 	transform-origin: top center;
 }
 

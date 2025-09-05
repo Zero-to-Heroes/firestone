@@ -15,7 +15,7 @@ import { BgsTrinketCardChoiceOption } from '@firestone/game-state';
 import { BGS_TRINKETS_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { combineLatest, Observable, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 
 // TODO: sample size
 @Component({
@@ -203,16 +203,6 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
 
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsQuestsOverlayScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const elements = this.el.nativeElement.querySelectorAll('.scalable');
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-			});
 		this.showTips$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsShowTrinketTipsOverlay && prefs.bgsFullToggle),
 		);

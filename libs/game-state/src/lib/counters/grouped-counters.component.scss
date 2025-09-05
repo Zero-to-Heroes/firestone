@@ -7,6 +7,10 @@
 	background: var(--color-7);
 	border-radius: 10px;
 
+	&.scalable {
+		transform: scale(var(--grouped-counters-scale, 1));
+	}
+
 	.header {
 		display: flex;
 		align-items: center;

@@ -13,7 +13,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, filter, switchMap, takeUntil } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { isBattlegroundsScene } from '../../services/battlegrounds/bgs-utils';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -92,40 +92,6 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
 			),
 		);
-
-		this.showWidget$
-			.pipe(
-				filter((show) => show),
-				switchMap(() =>
-					combineLatest([
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.sessionWidgetScale ?? 100)),
-					]),
-				),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-
-				const boundsScale = 1 / newScale;
-				this.bounds = {
-					left: refBounds.left * boundsScale,
-					right: refBounds.right * boundsScale,
-					top: refBounds.top * boundsScale,
-					bottom: refBounds.bottom * boundsScale,
-				};
-				console.debug(
-					'CurrentSessionWidgetWrapperComponent scaling to',
-					newScale,
-					this.bounds,
-					globalScale,
-					scale,
-				);
-			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

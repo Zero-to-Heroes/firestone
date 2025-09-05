@@ -29,7 +29,7 @@ import { LotteryTabType } from './lottery-navigation.component';
 					<div
 						class="tracking-indicator"
 						*ngIf="{
-							trackingOngoing: trackingOngoing$ | async
+							trackingOngoing: trackingOngoing$ | async,
 						} as value"
 						[helpTooltip]="trackingTooltip$ | async"
 						[helpTooltipClasses]="'general-theme'"
@@ -197,19 +197,6 @@ export class LotteryWidgetComponent
 				});
 			}),
 		);
-
-		combineLatest([
-			this.ads.hasPremiumSub$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.lotteryScale ?? 100)),
-		]).subscribe(([premium, globalScale, scale]) => {
-			const newScaleIntent = (globalScale / 100) * (scale / 100);
-			const newScale = premium ? newScaleIntent : 1;
-			const element = this.el.nativeElement.querySelector('.scalable');
-			if (!!element) {
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-			}
-		});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

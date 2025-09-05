@@ -13,7 +13,7 @@
 }
 
 .scalable {
-	transform: scale(1);
+	transform: scale(var(--decktracker-mulligan-scale, 1));
 	position: relative;
 	opacity: 1;
 	transition-property: transform, opacity;

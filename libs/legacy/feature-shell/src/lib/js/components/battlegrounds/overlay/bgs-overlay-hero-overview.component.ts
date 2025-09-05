@@ -12,7 +12,6 @@ import {
 import { BgsPlayer } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { combineLatest, takeUntil } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -87,24 +86,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 	private async init() {
 		await this.prefs.isReady();
 
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentBoardScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				try {
-					// Use this trick to avoid having the component flicker when appearing
-					this.scale = newScale;
-					const element = this.el.nativeElement.querySelector('.scalable');
-					if (!!element) {
-						this.renderer.setStyle(element, 'transform', `scale(${this.scale})`);
-					}
-				} catch (e) {
-					// Do nothing
-				}
-			});
+		// Maybe remove this as well?
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((pref) => {
 			try {
 				const element = this.el.nativeElement.querySelector('.scalable');

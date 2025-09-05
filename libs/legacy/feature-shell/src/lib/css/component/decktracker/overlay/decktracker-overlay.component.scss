@@ -26,7 +26,6 @@
 
 	&:not(.active) {
 		.scalable {
-			// display: none;
 			transform: scaleX(0) scaleY(0) !important;
 			opacity: 0;
 			transition-property: transform, opacity;

@@ -3,16 +3,13 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	Inject,
 	Input,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
-import { combineLatest, filter, Observable, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ArenaHeroOption } from './model';
 
 @Component({
@@ -53,9 +50,6 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
-		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
@@ -67,26 +61,6 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 			this.mapData((info) => info),
 			tap((info) => console.debug('[arena-hero-option] showWidget', info)),
 		);
-		this.showWidget$
-			.pipe(
-				// Recompute the scale whenever the widget is shown
-				filter((show) => show),
-				switchMap((show) =>
-					combineLatest([
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
-					]),
-				),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (!!element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-					// this.renderer.setStyle(element, 'top', `calc(${newScale} * 1.5vh)`);
-				}
-			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

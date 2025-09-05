@@ -12,7 +12,7 @@ import { BoardSecret, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, filter, Observable, switchMap, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -80,27 +80,6 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 		this.cardsGoToBottom$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.secretsHelperCardsGoToBottom),
 		);
-
-		this.active$
-			.pipe(
-				filter((active) => active),
-				switchMap((show) =>
-					combineLatest([
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-						this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.secretsHelperScale ?? 100)),
-					]),
-				),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				this.el.nativeElement.style.setProperty('--secrets-helper-scale', newScale);
-				this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (!!element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

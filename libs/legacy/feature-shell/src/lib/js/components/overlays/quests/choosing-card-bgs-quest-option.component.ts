@@ -1,19 +1,8 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { IN_GAME_RANK_FILTER } from '@firestone/battlegrounds/common';
 import { BgsQuestCardChoiceOption } from '@firestone/game-state';
-import { BGS_QUESTS_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BGS_QUESTS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { combineLatest, takeUntil } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -112,60 +101,60 @@ import { combineLatest, takeUntil } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ChoosingCardBgsQuestOptionComponent {
 	@Input() set option(value: BgsQuestCardChoiceOption) {
 		const loc = this.i18n.formatCurrentLocale();
 		this.rewardAveragePositionGlobal = value.reward.averagePosition
 			? value.reward.averagePosition.toLocaleString(loc, {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2,
-			  })
+				})
 			: '-';
 		this.rewardAveragePositionForHero = value.reward.averagePositionForHero
 			? value.reward.averagePositionForHero.toLocaleString(loc, {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2,
-			  })
+				})
 			: '-';
 		this.rewardHeroCss =
 			!value.reward.averagePositionForHero || value.reward.averagePositionForHero === value.reward.averagePosition
 				? ''
 				: value.reward.averagePositionForHero < value.reward.averagePosition
-				? 'better'
-				: 'worse';
+					? 'better'
+					: 'worse';
 
 		this.questTurnsToCompleteGlobal = value.quest.averageTurnsToComplete
 			? value.quest.averageTurnsToComplete.toLocaleString(loc, {
 					minimumFractionDigits: 1,
 					maximumFractionDigits: 1,
-			  })
+				})
 			: '-';
 		this.questTurnsToCompleteForDifficulty = value.quest.averageTurnsToCompleteForDifficulty
 			? value.quest.averageTurnsToCompleteForDifficulty.toLocaleString(loc, {
 					minimumFractionDigits: 1,
 					maximumFractionDigits: 1,
-			  })
+				})
 			: '-';
 		this.questDifficultyCss =
 			!value.quest.averageTurnsToCompleteForDifficulty ||
 			value.quest.averageTurnsToCompleteForDifficulty === value.quest.averageTurnsToComplete
 				? ''
 				: value.quest.averageTurnsToCompleteForDifficulty < value.quest.averageTurnsToComplete
-				? 'better'
-				: 'worse';
+					? 'better'
+					: 'worse';
 		this.questTurnsToCompleteForHero = value.quest.averageTurnsToCompleteForHero
 			? value.quest.averageTurnsToCompleteForHero.toLocaleString(loc, {
 					minimumFractionDigits: 1,
 					maximumFractionDigits: 1,
-			  })
+				})
 			: '-';
 		this.questHeroCss =
 			!value.quest.averageTurnsToCompleteForHero ||
 			value.quest.averageTurnsToCompleteForHero === value.quest.averageTurnsToComplete
 				? ''
 				: value.quest.averageTurnsToCompleteForHero < value.quest.averageTurnsToComplete
-				? 'better'
-				: 'worse';
+					? 'better'
+					: 'worse';
 		this.rewardDataPoints = value.reward.dataPoints.toLocaleString(loc);
 		this.questDataPoints = value.quest.dataPoints.toLocaleString(loc);
 
@@ -235,31 +224,7 @@ export class ChoosingCardBgsQuestOptionComponent extends AbstractSubscriptionCom
 	freeUsesText: string;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly prefs: PreferencesService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
-	) {
-		super(cdr);
-	}
-
-	async ngAfterContentInit() {
-		await this.prefs.isReady();
-
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsQuestsOverlayScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const elements = this.el.nativeElement.querySelectorAll('.scalable');
-				elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-			});
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 }

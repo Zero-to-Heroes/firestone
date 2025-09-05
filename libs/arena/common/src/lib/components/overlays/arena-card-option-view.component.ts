@@ -1,17 +1,5 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { combineLatest, takeUntil } from 'rxjs';
 import { ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD } from '../../services/arena-card-stats.service';
 import { ArenaCardOption } from './model';
 
@@ -47,7 +35,7 @@ import { ArenaCardOption } from './model';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaCardOptionViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ArenaCardOptionViewComponent {
 	@Input() set card(value: ArenaCardOption | null) {
 		this.drawnWinrate = value?.drawnWinrate == null ? '-' : (100 * value.drawnWinrate).toFixed(1) + '%';
 		this.deckWinrate = value?.deckWinrate == null ? '-' : (100 * value.deckWinrate).toFixed(1) + '%';
@@ -83,43 +71,5 @@ export class ArenaCardOptionViewComponent extends AbstractSubscriptionComponent 
 		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
 	});
 
-	constructor(
-		protected override readonly cdr: ChangeDetectorRef,
-		private readonly i18n: ILocalizationService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
-		private readonly prefs: PreferencesService,
-	) {
-		super(cdr);
-	}
-
-	async ngAfterContentInit() {
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaDraftOverlayScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(async ([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = await this.getScalable();
-				if (!!element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-			});
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private async getScalable(): Promise<ElementRef<HTMLElement>> {
-		let element = this.el.nativeElement.querySelector('.scalable');
-		let retriesLeft = 10;
-		while (!element && retriesLeft > 0) {
-			await sleep(200);
-			element = this.el.nativeElement.querySelector('.scalable');
-			retriesLeft--;
-		}
-		return element;
-	}
+	constructor(private readonly i18n: ILocalizationService) {}
 }

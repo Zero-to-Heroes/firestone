@@ -64,16 +64,6 @@ export class GroupedCountersComponent extends AbstractSubscriptionComponent impl
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$
-			.pipe(
-				this.mapData((prefs) => ((prefs.globalWidgetScale ?? 100) / 100) * (prefs.groupedCountersScale / 100)),
-			)
-			.subscribe((newScale) => {
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-			});
 		this.isBattlegrounds$ = this.gameState.gameState$$.pipe(
 			auditTime(1000),
 			this.mapData((state) => isBattlegrounds(state.metadata?.gameType)),

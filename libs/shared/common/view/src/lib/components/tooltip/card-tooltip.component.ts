@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, groupByFunction, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
@@ -500,17 +500,6 @@ export class CardTooltipComponent
 			this.ngAfterContentInit();
 			setTimeout(() => this.ngAfterViewInit(), 50);
 		}, 50);
-	}
-
-	private async getScalableElements(): Promise<HTMLElement[]> {
-		let elements = this.el.nativeElement.querySelectorAll('.scalable');
-		let retriesLeft = 10;
-		while (retriesLeft >= 0 && !elements?.length) {
-			await sleep(100);
-			elements = this.el.nativeElement.querySelectorAll('.scalable');
-			retriesLeft--;
-		}
-		return elements ?? [];
 	}
 }
 

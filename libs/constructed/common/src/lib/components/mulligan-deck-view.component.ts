@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -17,7 +16,7 @@ import { GameFormatString } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -25,7 +24,7 @@ import {
 	ILocalizationService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { MulliganChartDataCard, MulliganDeckData } from '../models/mulligan-advice';
 import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
 import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
@@ -133,10 +132,7 @@ import { ConstructedMulliganGuideService } from '../services/constructed-mulliga
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MulliganDeckViewComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class MulliganDeckViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	sortedDeckMulliganInfo$: Observable<readonly MulliganChartDataCard[] | null>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	deckstring$: Observable<string | null>;
@@ -213,27 +209,6 @@ export class MulliganDeckViewComponent
 		}
 	}
 
-	async ngAfterViewInit() {
-		await this.prefs.isReady();
-
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(async ([globalScale, scale]) => {
-				if (this.allowResize) {
-					const newScale = (globalScale / 100) * (scale / 100);
-					const elements = await this.getScalableElements();
-					elements.forEach((element) => this.renderer.setStyle(element, 'transform', `scale(${newScale})`));
-				}
-			});
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	onSortClick(rawCriteria: string) {
 		const criteria: ColumnSortType = rawCriteria as ColumnSortType;
 		this.sortCriteria$$.next({
@@ -278,17 +253,6 @@ export class MulliganDeckViewComponent
 		const aData = a.keepRate ?? 0;
 		const bData = b.keepRate ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
-	}
-
-	private async getScalableElements(): Promise<HTMLElement[]> {
-		let elements = this.el.nativeElement.querySelectorAll('.scalable');
-		let retriesLeft = 10;
-		while (retriesLeft >= 0 && elements?.length === 0) {
-			await sleep(100);
-			elements = this.el.nativeElement.querySelectorAll('.scalable');
-			retriesLeft--;
-		}
-		return elements;
 	}
 }
 

@@ -20,6 +20,10 @@
 	max-width: 347px;
 }
 
+.scalable {
+	transform: scale(var(--decktracker-mulligan-scale, 1));
+}
+
 .widget-header {
 	padding: 10px;
 	display: flex;

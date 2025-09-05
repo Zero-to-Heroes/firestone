@@ -17,5 +17,6 @@
 }
 
 .scalable {
+	transform: scale(var(--arena-session-widget-scale, 1));
 	transform-origin: left top;
 }
