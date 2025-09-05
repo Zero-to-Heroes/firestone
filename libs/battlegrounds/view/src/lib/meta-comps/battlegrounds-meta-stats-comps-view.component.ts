@@ -193,7 +193,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	@Input() strategies: readonly BgsCompAdvice[] | null;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeComp>>({
-		criteria: 'first',
+		criteria: 'expert-rating',
 		direction: 'desc',
 	});
 	private loading$$ = new BehaviorSubject<boolean | null>(true);
