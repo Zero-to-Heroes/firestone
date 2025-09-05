@@ -7,14 +7,15 @@
 	font-weight: 400;
 }
 
-battlegrounds-minions-tiers-view {
-	max-height: 80%;
-	max-height: 100%;
-	display: flex;
-	position: relative;
-	min-height: 0;
-	height: 100%;
-	width: 100%;
+.scalable {
+	transform: scale(var(--bgs-minions-list-scale, 1));
+	transform-origin: top right;
+	max-height: calc(90vh / var(--bgs-minions-list-scale, 1));
+	// This is not perfect - it means the scrollbar will be linked to the full widget, instead of the list itself
+	// However I don't have a good solution to handle this if I move the scroll down to the list
+	height: fit-content;
+	// overflow: scroll;
+	// min-height: 0;
 }
 
 .battlegrounds-minions-tiers {
@@ -27,13 +28,11 @@ battlegrounds-minions-tiers-view {
 	width: calc(max(305px, 10vw));
 }
 
-.scalable {
-	transform: scale(var(--bgs-minions-list-scale, 1));
-	transform-origin: top right;
-	// max-height: calc(90vh / var(--scale, 1));
-	// This is not perfect - it means the scrollbar will be linked to the full widget, instead of the list itself
-	// However I don't have a good solution to handle this if I move the scroll down to the list
-	height: fit-content;
-	// overflow: scroll;
-	// min-height: 0;
+battlegrounds-minions-tiers-view {
+	display: flex;
+	position: relative;
+	min-height: 0;
+	height: 100%;
+	width: 100%;
+	max-height: inherit;
 }

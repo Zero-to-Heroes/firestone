@@ -5,7 +5,7 @@
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
-	max-height: 100%;
+	max-height: inherit;
 }
 
 .battlegrounds-minions-tiers-view {
@@ -15,7 +15,7 @@
 	justify-content: center;
 	align-items: flex-start;
 	position: relative;
-	max-height: 100%;
+	max-height: inherit;
 	min-height: 0;
 }
 
@@ -29,7 +29,7 @@
 		255,
 		0.01
 	); // So that it's not transparent and mouse doesn't leave the element when navigating
-	max-height: 100%;
+	max-height: inherit;
 	width: 100%;
 	pointer-events: all;
 }
@@ -67,8 +67,13 @@
 		font-weight: 700;
 		font-size: 15px;
 		color: white;
-		text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
-			-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+		text-shadow:
+			-1px -1px 0 var(--color-7),
+			0px -1px 0 var(--color-7),
+			1px -1px 0 var(--color-7),
+			-1px 1px 0 var(--color-7),
+			0px 1px 0 var(--color-7),
+			1px 1px 0 var(--color-7);
 		display: flex;
 		align-items: center;
 	}
