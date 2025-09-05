@@ -121,15 +121,9 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	}
 
 	private updatePositionStrategy() {
-		if (this.positionStrategy) {
-			this.positionStrategy.detach?.();
-			this.positionStrategy.dispose();
-			this.positionStrategy = null;
-		}
-		if (this.overlayRef) {
-			this.overlayRef.detach();
-			this.overlayRef.dispose();
-		}
+		// Clean up existing overlay and position strategy
+		this.destroyOverlay();
+
 		if (this._position === 'none') {
 			return;
 		}
@@ -143,12 +137,20 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		this.overlayRef = this.overlay.create({
 			positionStrategy: this.positionStrategy,
 		});
+		if (this.overlayRef) {
+			const overlayElement = this.overlayRef.overlayElement;
+			overlayElement.setAttribute('data-tooltip-source', this.constructor.name);
+			overlayElement.setAttribute('data-created-at', new Date().toISOString());
+			overlayElement.setAttribute('data-element-id', this.elementRef.nativeElement.id || 'no-id');
+			overlayElement.setAttribute('data-element-class', this.elementRef.nativeElement.className || 'no-class');
+		}
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.onMouseLeave(null, true);
 		this.mouseOverSub?.unsubscribe();
+		this.destroyOverlay();
 	}
 
 	@HostListener('mouseenter', ['$event'])
@@ -240,7 +242,11 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		this.positionStrategyDirty = true;
 
 		if (this.overlayRef) {
-			this.overlayRef.detach();
+			try {
+				this.overlayRef.detach();
+			} catch (error) {
+				console.warn('Error detaching overlay:', error);
+			}
 			// This can cause the "destroyed of null" error if not guarded when component is destroyed
 			if (!willBeDestroyed) {
 				// The guard is not necessary with markForCheck(), but this doesn't work well
@@ -268,6 +274,35 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 			previousTooltipLeft = tooltipRect.left;
 			previousTooltipTop = tooltipRect.top;
 			await sleep(5);
+		}
+	}
+
+	private destroyOverlay(): void {
+		// Clean up tooltip reference
+		this.tooltipRef = null;
+
+		// Clean up overlay
+		if (this.overlayRef) {
+			try {
+				if (this.overlayRef.hasAttached()) {
+					this.overlayRef.detach();
+				}
+				this.overlayRef.dispose();
+			} catch (error) {
+				console.warn('Error disposing overlay:', error);
+			}
+			this.overlayRef = null;
+		}
+
+		// Clean up position strategy
+		if (this.positionStrategy) {
+			try {
+				this.positionStrategy.detach?.();
+				this.positionStrategy.dispose?.();
+			} catch (error) {
+				console.warn('Error disposing position strategy:', error);
+			}
+			this.positionStrategy = null;
 		}
 	}
 

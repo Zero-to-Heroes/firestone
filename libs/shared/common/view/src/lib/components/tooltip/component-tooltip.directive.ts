@@ -104,10 +104,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		if (!this.viewInit) {
 			return;
 		}
-		if (this.overlayRef) {
-			this.overlayRef.detach();
-			this.overlayRef.dispose();
-		}
+		this.destroyOverlay();
 		const positions: ConnectedPosition[] = this.buildPositions();
 
 		if (this._position === 'global-top-center') {
@@ -130,6 +127,13 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 			backdropClass: this.componentTooltipBackdropClass,
 			hasBackdrop: !!this.componentTooltipBackdropClass,
 		});
+		if (this.overlayRef) {
+			const overlayElement = this.overlayRef.overlayElement;
+			overlayElement.setAttribute('data-tooltip-source', this.constructor.name);
+			overlayElement.setAttribute('data-created-at', new Date().toISOString());
+			overlayElement.setAttribute('data-element-id', this.elementRef.nativeElement.id || 'no-id');
+			overlayElement.setAttribute('data-element-class', this.elementRef.nativeElement.className || 'no-class');
+		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -140,6 +144,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	ngOnDestroy() {
 		this.onMouseLeave(null, true);
 		this.tooltipLeaveSub?.unsubscribe();
+		this.destroyOverlay();
 	}
 
 	@HostListener('mouseenter', ['$event'])
@@ -221,6 +226,35 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 					this.cdr.detectChanges();
 				}
 			}
+		}
+	}
+
+	private destroyOverlay(): void {
+		// Clean up tooltip reference
+		// this.tooltipRef = null;
+
+		// Clean up overlay
+		if (this.overlayRef) {
+			try {
+				if (this.overlayRef.hasAttached()) {
+					this.overlayRef.detach();
+				}
+				this.overlayRef.dispose();
+			} catch (error) {
+				console.warn('Error disposing overlay:', error);
+			}
+			this.overlayRef = null;
+		}
+
+		// Clean up position strategy
+		if (this.positionStrategy) {
+			try {
+				this.positionStrategy.detach?.();
+				this.positionStrategy.dispose?.();
+			} catch (error) {
+				console.warn('Error disposing position strategy:', error);
+			}
+			this.positionStrategy = null;
 		}
 	}
 

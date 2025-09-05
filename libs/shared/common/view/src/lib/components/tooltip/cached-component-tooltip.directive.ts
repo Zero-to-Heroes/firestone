@@ -74,15 +74,8 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			console.warn('not ready yet', this.viewInit, this._componentInput, this._componentType);
 			return;
 		}
-		if (this.positionStrategy) {
-			this.positionStrategy.detach?.();
-			this.positionStrategy.dispose();
-			this.positionStrategy = null;
-		}
-		if (this.overlayRef) {
-			this.overlayRef.detach();
-			this.overlayRef.dispose();
-		}
+
+		this.destroyOverlay();
 
 		if (this.position === 'fixed-top-center') {
 			this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().top('2vh');
@@ -97,6 +90,13 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
+		if (this.overlayRef) {
+			const overlayElement = this.overlayRef.overlayElement;
+			overlayElement.setAttribute('data-tooltip-source', this.constructor.name);
+			overlayElement.setAttribute('data-created-at', new Date().toISOString());
+			overlayElement.setAttribute('data-element-id', this.elementRef.nativeElement.id || 'no-id');
+			overlayElement.setAttribute('data-element-class', this.elementRef.nativeElement.className || 'no-class');
+		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -105,10 +105,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.tooltipRef = null;
-		if (this.overlayRef) {
-			this.overlayRef.detach();
-		}
+		this.destroyOverlay();
 	}
 
 	private tooltipRef: ComponentRef<any> | null;
@@ -223,6 +220,35 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 						overlayY: 'center',
 					},
 				];
+		}
+	}
+
+	private destroyOverlay(): void {
+		// Clean up tooltip reference
+		this.tooltipRef = null;
+
+		// Clean up overlay
+		if (this.overlayRef) {
+			try {
+				if (this.overlayRef.hasAttached()) {
+					this.overlayRef.detach();
+				}
+				this.overlayRef.dispose();
+			} catch (error) {
+				console.warn('Error disposing overlay:', error);
+			}
+			this.overlayRef = null;
+		}
+
+		// Clean up position strategy
+		if (this.positionStrategy) {
+			try {
+				this.positionStrategy.detach?.();
+				this.positionStrategy.dispose?.();
+			} catch (error) {
+				console.warn('Error disposing position strategy:', error);
+			}
+			this.positionStrategy = null;
 		}
 	}
 }

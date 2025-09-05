@@ -27,7 +27,6 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 
 @Component({
@@ -384,7 +383,7 @@ export class CardTooltipComponent
 			this.additionalClass$$,
 			this.buffs$$,
 			this.createdBy$$,
-			highRes$.pipe(tap((data) => console.debug('card$ highRes$', data))),
+			highRes$,
 			// this.prefs.preferences$$.pipe(
 			// 	tap((data) => console.debug('card$ prefs.preferences$$', data)),
 			// 	this.mapData((prefs) => ({

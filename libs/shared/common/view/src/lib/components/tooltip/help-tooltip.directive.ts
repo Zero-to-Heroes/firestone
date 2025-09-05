@@ -9,7 +9,6 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	OnInit,
 	Optional,
 	Renderer2,
 	ViewRef,
@@ -23,7 +22,7 @@ import { HelpTooltipComponent } from './help-tooltip.component';
 	selector: '[helpTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class HelpTooltipDirective implements OnInit, OnDestroy {
+export class HelpTooltipDirective implements OnDestroy {
 	_text = '';
 
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'bottom-left' = 'bottom';
@@ -65,7 +64,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		private readonly renderer: Renderer2,
 	) {}
 
-	ngOnInit() {
+	private initOverlay() {
 		this.target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
 
 		const positionArrays: ConnectedPosition[] =
@@ -137,6 +136,13 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			positionStrategy: this.positionStrategy,
 			scrollStrategy: this.overlay.scrollStrategies.reposition(),
 		});
+		if (this.overlayRef) {
+			const overlayElement = this.overlayRef.overlayElement;
+			overlayElement.setAttribute('data-tooltip-source', this.constructor.name);
+			overlayElement.setAttribute('data-created-at', new Date().toISOString());
+			overlayElement.setAttribute('data-element-id', this.elementRef.nativeElement.id || 'no-id');
+			overlayElement.setAttribute('data-element-class', this.elementRef.nativeElement.className || 'no-class');
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -147,9 +153,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		if (this.overlayRef) {
-			this.overlayRef?.detach();
-		}
+		this.destroyOverlay();
 	}
 
 	@HostListener('mouseenter')
@@ -158,9 +162,8 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			return;
 		}
 
-		if (this.overlayRef) {
-			this.overlayRef?.detach();
-		}
+		this.destroyOverlay();
+		this.initOverlay();
 
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
@@ -228,15 +231,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			return;
 		}
 
-		if (this.overlayRef?.hasAttached()) {
-			this.overlayRef?.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}
-		if (this.tooltipRef) {
-			this.tooltipRef = undefined;
-		}
+		this.destroyOverlay();
 	}
 
 	@HostListener('mouseleave')
@@ -244,14 +239,35 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (this.onlyShowOnClick && !override) {
 			return;
 		}
-		if (this.overlayRef?.hasAttached()) {
-			this.overlayRef?.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+		this.destroyOverlay();
+	}
+
+	private destroyOverlay(): void {
+		// Clean up tooltip reference
+		this.tooltipRef = null;
+
+		// Clean up overlay
+		if (this.overlayRef) {
+			try {
+				if (this.overlayRef.hasAttached()) {
+					this.overlayRef.detach();
+				}
+				this.overlayRef.dispose();
+			} catch (error) {
+				console.warn('Error disposing overlay:', error);
 			}
+			this.overlayRef = null;
 		}
-		if (this.tooltipRef) {
-			this.tooltipRef = undefined;
+
+		// Clean up position strategy
+		if (this.positionStrategy) {
+			try {
+				this.positionStrategy.detach?.();
+				this.positionStrategy.dispose?.();
+			} catch (error) {
+				console.warn('Error disposing position strategy:', error);
+			}
+			this.positionStrategy = null;
 		}
 	}
 

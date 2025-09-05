@@ -202,6 +202,13 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.tooltip = this.i18n.translateString('battlegrounds.sim.simulate-button-tooltip');
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
+		if (this.overlayRef) {
+			const overlayElement = this.overlayRef.overlayElement;
+			overlayElement.setAttribute('data-tooltip-source', this.constructor.name);
+			overlayElement.setAttribute('data-created-at', new Date().toISOString());
+			overlayElement.setAttribute('data-element-id', 'bg-simulator');
+			overlayElement.setAttribute('data-element-class', 'bg-simulator');
+		}
 		this.sub$$ = this.overlayRef.backdropClick().subscribe(() => {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -632,6 +639,13 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 	private createModal<T extends SimulatorModal>(type: ComponentType<T>): ComponentRef<T> {
 		const portal = new ComponentPortal(type);
 		const modalRef = this.overlayRef.attach(portal);
+		if (this.overlayRef) {
+			const overlayElement = this.overlayRef.overlayElement;
+			overlayElement.setAttribute('data-tooltip-source', this.constructor.name);
+			overlayElement.setAttribute('data-created-at', new Date().toISOString());
+			overlayElement.setAttribute('data-element-id', 'bg-simulator');
+			overlayElement.setAttribute('data-element-class', 'bg-simulator');
+		}
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
 			// if (!(this.cdr as ViewRef)?.destroyed) {
