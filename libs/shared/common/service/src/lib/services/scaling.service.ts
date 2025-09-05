@@ -1,7 +1,8 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { Preferences } from '../models/preferences';
+import { PreferencesService } from './preferences.service';
 
 @Injectable({ providedIn: 'root' })
 export class ScalingService {
