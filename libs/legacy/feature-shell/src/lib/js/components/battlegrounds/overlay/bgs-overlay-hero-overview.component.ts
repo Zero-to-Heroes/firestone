@@ -23,7 +23,6 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 	template: `
 		<div class="battlegrounds-theme bgs-hero-overview-tooltip scalable">
 			<bgs-opponent-overview-big
-				*ngIf="scale"
 				[opponent]="_opponent"
 				[enableSimulation]="false"
 				[maxBoardHeight]="-1"
@@ -68,7 +67,6 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 	_opponent: BgsPlayer;
 	currentTurn: number;
 	isLastOpponent: boolean;
-	scale: number;
 
 	buddiesEnabled: boolean;
 	questsEnabled: boolean;
