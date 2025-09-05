@@ -60,7 +60,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					中国大陆用户：如果您打算使用支付宝付款，请使用“旧版”订阅，因为此付款方式与新的 Tebex
 					系统兼容不佳。我们预计问题需要几个月才能解决。感谢您的理解。
 				</div>
-				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
+				<!-- <div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
 					{{ discountBannerText }}
 					<pre
 						class="code"
@@ -69,7 +69,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div>
+				</div> -->
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
 						class="plan"
