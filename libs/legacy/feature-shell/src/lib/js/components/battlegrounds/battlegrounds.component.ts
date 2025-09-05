@@ -7,7 +7,7 @@ import {
 	HostListener,
 	ViewEncapsulation,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -61,11 +61,12 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 	private hotkey;
 
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly debug: DebugService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly init_ScalingService: ScalingService,
 	) {
 		super(store, cdr);
 		this.init();

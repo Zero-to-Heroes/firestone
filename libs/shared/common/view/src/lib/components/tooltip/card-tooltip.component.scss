@@ -13,6 +13,7 @@
 .scalable {
 	transform-origin: top right;
 	position: relative;
+	transform: scale(var(--card-tooltip-scale, 1));
 }
 
 // Because automatic tooltip positioning doesn't always work very well and sometimes
@@ -142,7 +143,13 @@
 		line-height: normal;
 		font-size: 18px;
 		color: white;
-		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+		text-shadow:
+			-1px -1px 0 #000,
+			0px -1px 0 #000,
+			1px -1px 0 #000,
+			-1px 1px 0 #000,
+			0px 1px 0 #000,
+			1px 1px 0 #000;
 	}
 
 	.buffs {

@@ -18,7 +18,17 @@ import { SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
+	map,
+	shareReplay,
+	takeUntil,
+	tap,
+} from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -32,14 +42,12 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 				relatedCards: relatedCards$ | async,
 				relativePosition: relativePosition$ | async,
 				displayBuffs: displayBuffs$ | async,
-				opacity: opacity$ | async
 			} as value"
 		>
 			<div
 				*ngFor="let card of value.cards; trackBy: trackByFn"
-				class="card-tooltip   {{ card.additionalClass }}"
+				class="card-tooltip {{ card.additionalClass }}"
 				[ngClass]="{ hidden: !value.relativePosition }"
-				[ngStyle]="{ opacity: value.opacity }"
 			>
 				<div *ngIf="card.createdBy" class="created-by">Created by</div>
 				<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
@@ -62,9 +70,8 @@ import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filte
 				*ngIf="value.relatedCards?.length"
 				[ngClass]="{
 					left: value.relativePosition === 'left',
-					hidden: !value.relativePosition
+					hidden: !value.relativePosition,
 				}"
-				[ngStyle]="{ opacity: value.opacity }"
 			>
 				<div class="related-cards-container" [ngClass]="{ wide: (value.relatedCards?.length ?? 0) > 6 }">
 					<div class="header" *ngIf="relatedCardIdsHeader">{{ relatedCardIdsHeader }}</div>
@@ -129,13 +136,18 @@ export class CardTooltipComponent
 	relatedCards$: Observable<readonly InternalCard[]>;
 	relativePosition$: Observable<'left' | 'right'>;
 	displayBuffs$: Observable<boolean>;
-	opacity$: Observable<number>;
 	additionalInfo$: Observable<CardTooltipAdditionalInfo | null | undefined>;
 
 	hasScrollbar: boolean;
 
+	cardIdToShow: any;
+
 	@Input() set cardId(value: string | null | undefined) {
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
+		this.cardIdToShow = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 	@Input() relatedCardIdsHeader: string;
 	@Input() set relatedCardIds(value: readonly string[]) {
@@ -162,9 +174,6 @@ export class CardTooltipComponent
 	@Input() set additionalInfo(value: CardTooltipAdditionalInfo) {
 		this.additionalInfo$$.next(value);
 	}
-	// @Input() set opacity(value: number) {
-	// 	this.opacity$$.next(value);
-	// }
 	@Input() set cardTooltipCard(value: {
 		cardId: string;
 		buffCardIds?: readonly string[];
@@ -199,7 +208,6 @@ export class CardTooltipComponent
 	private additionalClass$$ = new BehaviorSubject<string | null | undefined>(null);
 	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
 	private createdBy$$ = new BehaviorSubject<boolean>(false);
-	private opacity$$ = new BehaviorSubject<number>(0);
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 	private additionalInfo$$ = new BehaviorSubject<CardTooltipAdditionalInfo | null>(null);
 
@@ -261,15 +269,6 @@ export class CardTooltipComponent
 	async ngAfterViewInit() {
 		await this.prefs.isReady();
 
-		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.cardTooltipScale)).subscribe(async (scale) => {
-			const newScale = (scale ?? 100) / 100;
-			const elements = await this.getScalableElements();
-			elements.forEach((element) => {
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				this.renderer.setStyle(element, 'opacity', `1`);
-			});
-		});
-
 		if (!this.resizeObserver) {
 			let i = 0;
 			this.resizeObserver = new ResizeObserver((entries) => {
@@ -308,9 +307,8 @@ export class CardTooltipComponent
 		await this.prefs.isReady();
 		// console.debug('ngAfterContentInit');
 
-		this.relativePosition$ = this.relativePosition$$.asObservable();
-		this.displayBuffs$ = this.displayBuffs$$.asObservable();
-		this.opacity$ = this.opacity$$;
+		this.relativePosition$ = this.relativePosition$$;
+		this.displayBuffs$ = this.displayBuffs$$;
 		this.keepInBound$$
 			.pipe(
 				filter((trigger) => !!trigger),
@@ -336,14 +334,16 @@ export class CardTooltipComponent
 			)
 			.subscribe((bounds) => this.keepInBounds(bounds.top, bounds.left, bounds.height, bounds.width));
 		const highRes$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => {
+			map((prefs) => {
 				return prefs.collectionUseHighResImages || prefs.cardTooltipScale > 100;
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.relatedCards$ = combineLatest([
-			this.relatedCardIds$$.asObservable(),
-			this.localized$$.asObservable(),
-			this.isBgs$$.asObservable(),
+			this.relatedCardIds$$,
+			this.localized$$,
+			this.isBgs$$,
 			highRes$,
 			this.prefs.preferences$$.pipe(
 				this.mapData(
@@ -351,87 +351,82 @@ export class CardTooltipComponent
 				),
 			),
 		]).pipe(
-			this.mapData(
-				([relatedCardIds, localized, isBgs, highRes, locale]) => {
-					return (
-						relatedCardIds
-							// Remove entity ids (eg in Fizzle's Snapshot card)
-							.filter((cardId) => isNaN(parseInt(cardId)))
-							.map((cardId) => {
-								const image = !!cardId
-									? localized
-										? this.i18n.getCardImage(cardId, {
-												isBgs: isBgs,
-												isHighRes: highRes,
-										  })
-										: this.i18n.getNonLocalizedCardImage(cardId)
-									: null;
-								const result: InternalCard = {
-									cardId: cardId,
-									image: image,
-									cardType: 'NORMAL',
-								};
-								return result;
-							})
-					);
-				},
-				null,
-				0,
-			),
+			map(([relatedCardIds, localized, isBgs, highRes, locale]) => {
+				return (
+					relatedCardIds
+						// Remove entity ids (eg in Fizzle's Snapshot card)
+						.filter((cardId) => isNaN(parseInt(cardId)))
+						.map((cardId) => {
+							const image = !!cardId
+								? localized
+									? this.i18n.getCardImage(cardId, {
+											isBgs: isBgs,
+											isHighRes: highRes,
+										})
+									: this.i18n.getNonLocalizedCardImage(cardId)
+								: null;
+							const result: InternalCard = {
+								cardId: cardId,
+								image: image,
+								cardType: 'NORMAL',
+							};
+							return result;
+						})
+				);
+			}),
+			takeUntil(this.destroyed$),
 		);
 		this.cards$ = combineLatest([
-			this.cardIds$$.asObservable(),
-			this.localized$$.asObservable(),
-			this.isBgs$$.asObservable(),
-			this.cardType$$.asObservable(),
-			this.additionalClass$$.asObservable(),
-			this.buffs$$.asObservable(),
-			this.createdBy$$.asObservable(),
-			highRes$,
-			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
-				})),
-			),
+			this.cardIds$$,
+			this.localized$$,
+			this.isBgs$$,
+			this.cardType$$,
+			this.additionalClass$$,
+			this.buffs$$,
+			this.createdBy$$,
+			highRes$.pipe(tap((data) => console.debug('card$ highRes$', data))),
+			// this.prefs.preferences$$.pipe(
+			// 	tap((data) => console.debug('card$ prefs.preferences$$', data)),
+			// 	this.mapData((prefs) => ({
+			// 		locale: prefs.locale, // We don't use it, but we want to rebuild images when it changes
+			// 	})),
+			// ),
 		]).pipe(
-			this.mapData(
-				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, highRes, { locale }]) => {
-					return (
-						[...(cardIds ?? [])]
-							// Empty card IDs are necessary when showing buff only
-							// .filter((cardId) => cardId)
-							.reverse()
-							.map((cardId) => {
-								const card = this.allCards.getCard(cardId);
-								const adjustedCardType =
-									cardId?.endsWith('_golden') || !!card.premium ? 'GOLDEN' : cardType;
-								const realCardId = cardId?.split('_golden')[0];
-								const image = !!realCardId
-									? localized
-										? this.i18n.getCardImage(realCardId, {
-												isBgs: isBgs,
-												cardType: adjustedCardType,
-												isHighRes: highRes,
-										  })
-										: this.i18n.getNonLocalizedCardImage(realCardId)
-									: null;
-								const result: InternalCard = {
-									cardId: realCardId,
-									image: image,
-									// For now there are no cases where we have multiple card IDs, and different buffs for
-									// each one. If the case arises, we'll have to handle this differently
-									buffs: buffs,
-									cardType: adjustedCardType,
-									createdBy: createdBy,
-									additionalClass: additionalClass ?? undefined,
-								};
-								return result;
-							})
-					);
-				},
-				null,
-				0,
-			),
+			map(([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, highRes]) => {
+				return (
+					[...(cardIds ?? [])]
+						// Empty card IDs are necessary when showing buff only
+						// .filter((cardId) => cardId)
+						.reverse()
+						.map((cardId) => {
+							const card = this.allCards.getCard(cardId);
+							const adjustedCardType =
+								cardId?.endsWith('_golden') || !!card.premium ? 'GOLDEN' : cardType;
+							const realCardId = cardId?.split('_golden')[0];
+							const image = !!realCardId
+								? localized
+									? this.i18n.getCardImage(realCardId, {
+											isBgs: isBgs,
+											cardType: adjustedCardType,
+											isHighRes: highRes,
+										})
+									: this.i18n.getNonLocalizedCardImage(realCardId)
+								: null;
+							const result: InternalCard = {
+								cardId: realCardId,
+								image: image,
+								// For now there are no cases where we have multiple card IDs, and different buffs for
+								// each one. If the case arises, we'll have to handle this differently
+								buffs: buffs,
+								cardType: adjustedCardType,
+								createdBy: createdBy,
+								additionalClass: additionalClass ?? undefined,
+							};
+							return result;
+						})
+				);
+			}),
+			takeUntil(this.destroyed$),
 		);
 		this.additionalInfo$ = this.additionalInfo$$.pipe(
 			filter((info) => !!info),
@@ -458,7 +453,6 @@ export class CardTooltipComponent
 		// console.debug('keeping in bounds', top, left, height, width);
 		const gameInfo = await this.ow?.getRunningGameInfo();
 		if (!gameInfo) {
-			this.opacity$$.next(1);
 			return;
 		}
 
@@ -485,7 +479,6 @@ export class CardTooltipComponent
 			// );
 		}
 		// console.debug('showing tooltip');
-		this.opacity$$.next(1);
 
 		const element = this.relatedCards?.nativeElement;
 		this.hasScrollbar = !!element && element.scrollHeight > element.clientHeight;

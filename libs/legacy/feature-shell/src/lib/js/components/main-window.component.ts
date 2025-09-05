@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
+import { CurrentAppType, PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AnalyticsService, OverwolfService, OwUtilsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AdService } from '../services/ad.service';
@@ -141,6 +141,7 @@ export class MainWindowComponent
 		private readonly analytics: AnalyticsService,
 		private readonly nav: MainWindowNavigationService,
 		private readonly ads: AdService,
+		private readonly init_ScalingService: ScalingService,
 	) {
 		super(store, cdr);
 	}

@@ -54,8 +54,8 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 			const relatedCards = !shouldShowRelatedCards
 				? []
 				: this._cardTooltipRelatedCardIds?.length
-				? this._cardTooltipRelatedCardIds
-				: this.relatedCardIds;
+					? this._cardTooltipRelatedCardIds
+					: this.relatedCardIds;
 			this.tooltipRef.instance.relatedCardIds = relatedCards;
 		}
 	}
@@ -168,8 +168,8 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		const relatedCards = !shouldShowRelatedCards
 			? []
 			: this._cardTooltipRelatedCardIds?.length
-			? this._cardTooltipRelatedCardIds
-			: this.relatedCardIds;
+				? this._cardTooltipRelatedCardIds
+				: this.relatedCardIds;
 
 		if (forced && !relatedCards?.length && isGuessedInfoEmpty(this.cardTooltipAdditionalInfo)) {
 			console.debug('[card-tooltip] forced mouse over but no related cards, not showing tooltip');

@@ -15,7 +15,7 @@ import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
@@ -177,6 +177,7 @@ export class FullScreenOverlaysComponent
 		private readonly customStyles: CustomAppearanceService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly init_ScalingService: ScalingService,
 	) {
 		super(cdr);
 	}
