@@ -165,7 +165,6 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 				return options?.every((o) => isBgQuestDiscover(o.source)) ?? false;
 			}),
 			map(([options, bgsShowQuestStatsOverlay, quests, mainPlayerCardId]) => {
-				console.debug('[bgs-quest] building options', options);
 				if (!bgsShowQuestStatsOverlay) {
 					return [];
 				}
