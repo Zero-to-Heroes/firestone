@@ -14,7 +14,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
@@ -100,7 +100,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 					exceptionCards && exceptionCards.length > 0
 						? this.i18n.translateString('battlegrounds.banned-tribes.exceptions', {
 								value: exceptionCards.join(', '),
-						  })
+							})
 						: '';
 				const tooltip = this.i18n.translateString('battlegrounds.banned-tribes.exceptions-tooltip', {
 					tribeNames: tribeNames,
@@ -112,18 +112,6 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 		this.orientation$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => (prefs.bgsBannedTribesShowVertically ? 'column' : 'row') as 'row' | 'column'),
 		);
-		combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsBannedTribeScale ?? 100)),
-		])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(([globalScale, scale]) => {
-				const newScale = (globalScale / 100) * (scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				if (!!element) {
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				}
-			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
