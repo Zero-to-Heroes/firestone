@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { BattlegroundsCompsService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
@@ -59,8 +59,8 @@ export class BattlegroundsCompositionsComponent extends AbstractSubscriptionComp
 		private readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
-		private readonly route: ActivatedRoute,
-		private readonly router: Router,
+		@Optional() private readonly route: ActivatedRoute,
+		@Optional() private readonly router: Router,
 	) {
 		super(cdr);
 	}
@@ -95,7 +95,7 @@ export class BattlegroundsCompositionsComponent extends AbstractSubscriptionComp
 		this.lastUpdate$ = baseStats$.pipe(this.mapData((stats) => (stats ? new Date(stats.lastUpdateDate) : null)));
 
 		// Handle URL-based composition modal opening
-		this.route.params
+		this.route?.params
 			.pipe(
 				this.mapData((params) => params['compSlug']),
 				distinctUntilChanged(),
@@ -131,7 +131,7 @@ export class BattlegroundsCompositionsComponent extends AbstractSubscriptionComp
 					}
 				} else {
 					// If composition not found, redirect to compositions list
-					this.router.navigate(['/battlegrounds/comps'], { replaceUrl: true });
+					this.router?.navigate(['/battlegrounds/comps'], { replaceUrl: true });
 				}
 			});
 	}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
@@ -47,8 +47,8 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 		private readonly prefs: PreferencesService,
 		private readonly metaHeroStats: BgsMetaHeroStatsAccessService,
 		private readonly metaHeroStatsService: BgsMetaHeroStatsService,
-		private readonly route: ActivatedRoute,
-		private readonly router: Router,
+		@Optional() private readonly route: ActivatedRoute,
+		@Optional() private readonly router: Router,
 	) {
 		super(cdr);
 	}
@@ -142,7 +142,7 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 	}
 
 	private initializeSearchFromUrlParams(): void {
-		this.route.queryParams.pipe(take(1)).subscribe((params) => {
+		this.route?.queryParams.pipe(take(1)).subscribe((params) => {
 			const searchParam = params['bgsHeroSearch'];
 			if (searchParam && typeof searchParam === 'string') {
 				this.searchString$$.next(searchParam);
@@ -156,6 +156,9 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 	}
 
 	private updateSearchUrlParam(searchString: string): void {
+		if (!this.route || !this.router) {
+			return;
+		}
 		const queryParams: any = {};
 
 		// Add parameter if it has content, or set to null to remove it

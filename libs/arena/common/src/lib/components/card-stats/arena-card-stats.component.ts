@@ -396,6 +396,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 						!searchTokens.length ||
 						searchTokens.some((token) =>
 							this.allCards.getCard(stat.cardId)?.name?.toLowerCase().replace(',', '').includes(token),
+						) ||
+						searchTokens.some((token) =>
+							this.allCards.getCard(stat.cardId)?.id?.toLowerCase().replace(',', '').includes(token),
 						),
 				)
 				.map((stat) => this.buildCardStat(stat))

@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	Optional,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
@@ -24,9 +31,9 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 
 	constructor(
 		private readonly cardsService: ArenaCardStatsService,
-		private readonly route: ActivatedRoute,
-		private readonly router: Router,
 		private readonly cdr: ChangeDetectorRef,
+		@Optional() private readonly route: ActivatedRoute,
+		@Optional() private readonly router: Router,
 	) {}
 
 	ngAfterViewInit() {
@@ -49,7 +56,7 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private initializeFromUrlParams(): void {
-		this.route.queryParams.pipe(take(1)).subscribe((params) => {
+		this.route?.queryParams.pipe(take(1)).subscribe((params) => {
 			const searchParam = params['arenaCardSearch'];
 			if (searchParam && typeof searchParam === 'string') {
 				this.currentSearchString = searchParam;
@@ -63,6 +70,9 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 	private setupUrlParamSync(): void {
 		// Watch for search string changes from the service and update URL
 		this.cardsService.searchString$$.pipe(takeUntil(this.destroyed$)).subscribe((searchString) => {
+			if (!this.route || !this.router) {
+				return;
+			}
 			if (searchString !== this.currentSearchString) {
 				this.currentSearchString = searchString || '';
 				this.updateUrlParam(this.currentSearchString);
@@ -72,6 +82,9 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private updateUrlParam(searchString: string): void {
+		if (!this.route || !this.router) {
+			return;
+		}
 		const queryParams: any = {};
 
 		// Add parameter if it has content, or set to null to remove it

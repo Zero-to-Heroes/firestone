@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -38,8 +45,8 @@ export class ArenaClassFilterDropdownComponent
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		protected override readonly route: ActivatedRoute,
-		protected override readonly router: Router,
+		@Optional() protected override readonly route: ActivatedRoute,
+		@Optional() protected override readonly router: Router,
 		protected override readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
 	) {

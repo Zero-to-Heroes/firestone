@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { AbstractSubscriptionComponent } from './abstract-subscription.component';
@@ -21,8 +21,8 @@ export abstract class BaseFilterWithUrlComponent<T, TPrefs = any> extends Abstra
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		protected readonly prefs: PreferencesServiceLike<TPrefs>,
-		protected readonly route: ActivatedRoute,
-		protected readonly router: Router,
+		@Optional() protected readonly route: ActivatedRoute,
+		@Optional() protected readonly router: Router,
 		protected readonly defaultPrefs: TPrefs,
 	) {
 		super(cdr);
@@ -37,7 +37,7 @@ export abstract class BaseFilterWithUrlComponent<T, TPrefs = any> extends Abstra
 	}
 
 	private initializeFromUrlParams(): void {
-		this.route.queryParams.pipe(take(1)).subscribe(async (params) => {
+		this.route?.queryParams.pipe(take(1)).subscribe(async (params) => {
 			const paramValue = params[this.filterConfig.paramName];
 			if (paramValue) {
 				const typedValue = paramValue as T;
@@ -64,6 +64,9 @@ export abstract class BaseFilterWithUrlComponent<T, TPrefs = any> extends Abstra
 	}
 
 	private updateUrlParam(value: T): void {
+		if (!this.route || !this.router) {
+			return;
+		}
 		const defaultValue =
 			this.filterConfig.defaultValue ?? (this.defaultPrefs[this.filterConfig.preferencePath] as T);
 
