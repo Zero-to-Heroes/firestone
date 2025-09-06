@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { BattlegroundsViewModule, RankFilterOption } from '@firestone/battlegrounds/view';
-import { BgsRankFilterType, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BgsRankFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { filter, Observable } from 'rxjs';
 
@@ -25,22 +26,33 @@ import { filter, Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebBattlegroundsRankFilterDropdownComponent
-	extends AbstractSubscriptionComponent
+	extends BaseFilterWithUrlComponent<BgsRankFilterType, Preferences>
 	implements AfterContentInit
 {
 	mmrPercentiles$: Observable<readonly MmrPercentile[]>;
 	currentFilter$: Observable<number>;
 
+	protected filterConfig: FilterUrlConfig<BgsRankFilterType, Preferences> = {
+		paramName: 'bgsActiveRankFilter',
+		preferencePath: 'bgsActiveRankFilter',
+		// Note: validValues not specified since rank values are dynamic based on MMR percentiles
+	};
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
+		protected override readonly route: ActivatedRoute,
+		protected override readonly router: Router,
+		protected override readonly prefs: PreferencesService,
 		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
-		super(cdr);
+		super(cdr, prefs, route, router, new Preferences());
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.metaHeroStats, this.prefs);
+
+		// Initialize URL synchronization
+		this.initializeUrlSync();
 
 		this.mmrPercentiles$ = this.metaHeroStats.metaHeroStats$$.pipe(
 			this.mapData((stats) => stats?.mmrPercentiles),

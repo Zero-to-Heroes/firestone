@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption, SharedCommonViewModule } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, Observable } from 'rxjs';
 
@@ -26,22 +27,33 @@ import { distinctUntilChanged, Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WebBattlegroundsModeFilterDropdownComponent
-	extends AbstractSubscriptionComponent
+	extends BaseFilterWithUrlComponent<'battlegrounds' | 'battlegrounds-duo', Preferences>
 	implements AfterContentInit
 {
 	options: IOption[];
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
+	protected filterConfig: FilterUrlConfig<'battlegrounds' | 'battlegrounds-duo', Preferences> = {
+		paramName: 'bgsActiveGameMode',
+		preferencePath: 'bgsActiveGameMode',
+		validValues: ['battlegrounds', 'battlegrounds-duo'],
+	};
+
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
+		protected override readonly route: ActivatedRoute,
+		protected override readonly router: Router,
+		protected override readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
 	) {
-		super(cdr);
+		super(cdr, prefs, route, router, new Preferences());
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
+
+		// Initialize URL synchronization
+		this.initializeUrlSync();
 
 		this.options = [
 			{
