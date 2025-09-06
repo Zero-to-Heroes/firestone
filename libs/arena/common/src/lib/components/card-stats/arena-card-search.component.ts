@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 
 @Component({
@@ -7,6 +9,7 @@ import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 	styleUrls: [`./arena-card-search.component.scss`],
 	template: `
 		<fs-text-input
+			[value]="currentSearchString"
 			(fsModelUpdate)="onTextChanged($event)"
 			[placeholder]="'app.collection.card-search.search-box-placeholder' | fsTranslate"
 			[tooltip]="'app.arena.card-search-tooltip' | fsTranslate"
@@ -15,10 +18,77 @@ import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaCardSearchComponent {
-	constructor(private readonly cardsService: ArenaCardStatsService) {}
+export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
+	currentSearchString = '';
+	private destroyed$ = new Subject<void>();
+
+	constructor(
+		private readonly cardsService: ArenaCardStatsService,
+		private readonly route: ActivatedRoute,
+		private readonly router: Router,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	ngAfterViewInit() {
+		// Initialize from URL parameters
+		this.initializeFromUrlParams();
+
+		// Set up URL parameter synchronization
+		this.setupUrlParamSync();
+	}
+
+	ngOnDestroy() {
+		this.destroyed$.next();
+		this.destroyed$.complete();
+	}
 
 	onTextChanged(newText: string) {
+		this.currentSearchString = newText;
 		this.cardsService.newSearchString(newText);
+		this.updateUrlParam(newText);
+	}
+
+	private initializeFromUrlParams(): void {
+		this.route.queryParams.pipe(take(1)).subscribe((params) => {
+			const searchParam = params['arenaCardSearch'];
+			if (searchParam && typeof searchParam === 'string') {
+				this.currentSearchString = searchParam;
+				this.cardsService.newSearchString(searchParam);
+				this.cdr.detectChanges();
+				console.debug('[arena-card-search] initialized from URL:', searchParam);
+			}
+		});
+	}
+
+	private setupUrlParamSync(): void {
+		// Watch for search string changes from the service and update URL
+		this.cardsService.searchString$$.pipe(takeUntil(this.destroyed$)).subscribe((searchString) => {
+			if (searchString !== this.currentSearchString) {
+				this.currentSearchString = searchString || '';
+				this.updateUrlParam(this.currentSearchString);
+				this.cdr.detectChanges();
+			}
+		});
+	}
+
+	private updateUrlParam(searchString: string): void {
+		const queryParams: any = {};
+
+		// Add parameter if it has content, or set to null to remove it
+		if (searchString && searchString.trim().length > 0) {
+			queryParams.arenaCardSearch = searchString.trim();
+		} else {
+			queryParams.arenaCardSearch = null;
+		}
+
+		// Update URL without triggering navigation
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams,
+			queryParamsHandling: 'merge',
+			replaceUrl: true,
+		});
+
+		console.debug('[arena-card-search] updated URL param:', queryParams);
 	}
 }
