@@ -56,13 +56,14 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 	async ngAfterContentInit() {
 		await waitForReady(this.metaHeroStatsService, this.prefs);
 
+		// Set up the search string observable
+		this.searchString$ = this.searchString$$.asObservable();
+
 		// Initialize search from URL parameters
 		this.initializeSearchFromUrlParams();
 
 		// Set up URL parameter synchronization for search
 		this.setupSearchUrlParamSync();
-
-		this.searchString$ = this.searchString$$.asObservable();
 
 		const config$: Observable<Config> = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => {
@@ -145,23 +146,18 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 			const searchParam = params['bgsHeroSearch'];
 			if (searchParam && typeof searchParam === 'string') {
 				this.searchString$$.next(searchParam);
-				console.debug('[battlegrounds-heroes] initialized search from URL:', searchParam);
 			}
 		});
 	}
 
 	private setupSearchUrlParamSync(): void {
-		// Watch for search string changes and update URL
-		this.searchString$$
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe((searchString) => {
-				this.updateSearchUrlParam(searchString);
-			});
+		// URL sync is handled in onSearchStringChange method to avoid feedback loops
+		// This method is kept for consistency but doesn't need to do anything
 	}
 
 	private updateSearchUrlParam(searchString: string): void {
 		const queryParams: any = {};
-		
+
 		// Add parameter if it has content, or set to null to remove it
 		if (searchString && searchString.trim().length > 0) {
 			queryParams.bgsHeroSearch = searchString.trim();

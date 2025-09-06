@@ -168,6 +168,11 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 	}
 
 	ngAfterContentInit() {
+		this.searchString$ = this.searchString$$.pipe(
+			map((value) => value || ''),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		this.sortCriteria$ = this.sortCriteria$$.pipe(
 			distinctUntilChanged((a, b) => a.criteria === b.criteria && a.direction === b.direction),
 			shareReplay(1),

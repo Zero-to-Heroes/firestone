@@ -25,7 +25,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 				<input
 					[formControl]="searchForm"
 					(mousedown)="onMouseDown($event)"
-					[(ngModel)]="searchString"
 					[placeholder]="'app.duels.search.hero.placeholder' | fsTranslate"
 				/>
 			</label>
@@ -39,9 +38,20 @@ export class BattlegroundsHeroSearchComponent
 {
 	@Output() searchStringChange = new EventEmitter<string>();
 
-	@Input() searchString: string;
+	@Input() set searchString(value: string) {
+		this._searchString = value || '';
+		// Update the form control when the input changes
+		if (this.searchForm && this.searchForm.value !== value) {
+			this.searchForm.setValue(value || '', { emitEvent: false });
+			this.cdr.detectChanges();
+		}
+	}
+	get searchString(): string {
+		return this._searchString;
+	}
+	private _searchString: string = '';
 
-	searchForm = new FormControl();
+	searchForm = new FormControl('');
 
 	private searchFormSub$$: Subscription;
 
@@ -50,10 +60,16 @@ export class BattlegroundsHeroSearchComponent
 	}
 
 	ngAfterViewInit() {
+		// Initialize the form control with the current search string value
+		if (this._searchString) {
+			this.searchForm.setValue(this._searchString, { emitEvent: false });
+		}
+
 		this.searchFormSub$$ = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
-			.subscribe((data) => {
+			.subscribe((searchValue) => {
+				this._searchString = searchValue || '';
 				this.onSearchStringChange();
 			});
 	}
@@ -65,7 +81,7 @@ export class BattlegroundsHeroSearchComponent
 	}
 
 	onSearchStringChange() {
-		this.searchStringChange.next(this.searchString);
+		this.searchStringChange.next(this._searchString);
 	}
 
 	onMouseDown(event: Event) {
