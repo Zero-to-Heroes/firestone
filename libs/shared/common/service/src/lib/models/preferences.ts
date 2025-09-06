@@ -676,7 +676,7 @@ export class Preferences implements IPreferences {
 
 	readonly arenaActiveMode: ArenaModeFilterType = 'arena-underground';
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
-	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
+	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'last-patch';
 	readonly arenaActiveCardClassFilter: ArenaCardClassFilterType = 'all';
 	readonly arenaActiveCardTypeFilter: ArenaCardTypeFilterType = 'all';
 	readonly arenaActiveWinsFilter: number = 10;
