@@ -7,7 +7,7 @@ import {
 	Optional,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 
 @Component({
@@ -62,23 +62,13 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 				this.currentSearchString = searchParam;
 				this.cardsService.newSearchString(searchParam);
 				this.cdr.detectChanges();
-				console.debug('[arena-card-search] initialized from URL:', searchParam);
 			}
 		});
 	}
 
 	private setupUrlParamSync(): void {
-		// Watch for search string changes from the service and update URL
-		this.cardsService.searchString$$.pipe(takeUntil(this.destroyed$)).subscribe((searchString) => {
-			if (!this.route || !this.router) {
-				return;
-			}
-			if (searchString !== this.currentSearchString) {
-				this.currentSearchString = searchString || '';
-				this.updateUrlParam(this.currentSearchString);
-				this.cdr.detectChanges();
-			}
-		});
+		// No need to sync from service back to component since user input drives both
+		// the service and URL updates directly in onTextChanged()
 	}
 
 	private updateUrlParam(searchString: string): void {
@@ -101,7 +91,5 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 			queryParamsHandling: 'merge',
 			replaceUrl: true,
 		});
-
-		console.debug('[arena-card-search] updated URL param:', queryParams);
 	}
 }
