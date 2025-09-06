@@ -66,10 +66,10 @@
 		"@firestone-hs/constructed-deck-stats": "^0.0.17",
 		"@firestone-hs/content-craetor-input": "^0.0.13",
 		"@firestone-hs/deckstrings": "^2.2.8",
-		"@firestone-hs/hs-replay-xml-parser": "^0.0.158",
+		"@firestone-hs/hs-replay-xml-parser": "^0.0.159",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^2.0.150",
+		"@firestone-hs/reference-data": "^2.0.151",
 		"@firestone-hs/replay-metadata": "^0.0.81",
 		"@firestone-hs/replay-parser": "^1.2.57",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
@@ -183,8 +183,8 @@
 		"typescript": "~5.6.0"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^2.0.150",
-		"@firestone-hs/hs-replay-xml-parser": "^0.0.158",
+		"@firestone-hs/reference-data": "^2.0.151",
+		"@firestone-hs/hs-replay-xml-parser": "^0.0.159",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
 		"rxjs": "^7.8.0"
