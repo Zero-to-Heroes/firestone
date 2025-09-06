@@ -1,5 +1,6 @@
 export * from './lib/components/abstract-subscription-store.component';
 export * from './lib/components/abstract-subscription.component';
+export * from './lib/components/base-filter-with-url.component';
 export * from './lib/libs/promise-extension';
 export * from './lib/libs/subscriber-aware-behavior-subject';
 export * from './lib/libs/translation-file-version';

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ArenaModeFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption, SharedCommonViewModule } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, filter, Observable } from 'rxjs';
 
@@ -24,19 +25,33 @@ import { combineLatest, filter, Observable } from 'rxjs';
 	imports: [CommonModule, SharedCommonViewModule],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WebArenaModeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class WebArenaModeFilterDropdownComponent
+	extends BaseFilterWithUrlComponent<ArenaModeFilterType, Preferences>
+	implements AfterContentInit
+{
 	filter$: Observable<{ filter: string; options: readonly FilterOption[]; placeholder: string }>;
+
+	protected filterConfig: FilterUrlConfig<ArenaModeFilterType, Preferences> = {
+		paramName: 'arenaActiveMode',
+		preferencePath: 'arenaActiveMode',
+		validValues: ['arena', 'arena-underground'],
+	};
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
+		protected override readonly prefs: PreferencesService,
+		protected override readonly route: ActivatedRoute,
+		protected override readonly router: Router,
 		private readonly i18n: ILocalizationService,
 	) {
-		super(cdr);
+		super(cdr, prefs, route, router, new Preferences());
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
+
+		// Initialize URL synchronization
+		this.initializeUrlSync();
 
 		const options: FilterOption[] = ['arena-underground', 'arena'].map(
 			(value) =>
