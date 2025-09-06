@@ -37,7 +37,7 @@
 							[class.disabled]="subItem.disabled"
 							[routerLink]="subItem.disabled ? null : subItem.route"
 							routerLinkActive="active"
-							[routerLinkActiveOptions]="{ exact: true }"
+							[routerLinkActiveOptions]="{ exact: false }"
 							[disabled]="subItem.disabled"
 						>
 							{{ subItem.label }}
@@ -83,7 +83,7 @@
 					[routerLink]="subItem.disabled ? null : subItem.route"
 					routerLinkActive="active"
 					(click)="subItem.disabled ? null : closeMobileMenu()"
-					[routerLinkActiveOptions]="{ exact: true }"
+					[routerLinkActiveOptions]="{ exact: false }"
 					[disabled]="subItem.disabled"
 				>
 					<span class="nav-label">{{ subItem.label }}</span>
