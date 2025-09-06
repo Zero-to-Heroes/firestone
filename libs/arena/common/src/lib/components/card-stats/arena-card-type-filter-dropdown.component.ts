@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ArenaCardTypeFilterType, ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ArenaCardTypeFilterType, ArenaClassFilterType, PreferencesService, Preferences } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -22,19 +23,30 @@ import { filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaCardTypeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ArenaCardTypeFilterDropdownComponent extends BaseFilterWithUrlComponent<ArenaCardTypeFilterType, Preferences> implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
+
+	protected filterConfig: FilterUrlConfig<ArenaCardTypeFilterType, Preferences> = {
+		paramName: 'arenaActiveCardTypeFilter',
+		preferencePath: 'arenaActiveCardTypeFilter',
+		validValues: ['all', 'legendary', 'treasure', 'other'],
+	};
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
+		protected override readonly route: ActivatedRoute,
+		protected override readonly router: Router,
+		protected override readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
-		private readonly prefs: PreferencesService,
 	) {
-		super(cdr);
+		super(cdr, prefs, route, router, new Preferences());
 	}
 
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
+
+		// Initialize URL synchronization
+		this.initializeUrlSync();
 
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveCardTypeFilter)),

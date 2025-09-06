@@ -1,8 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ALL_CLASSES } from '@firestone-hs/reference-data';
-import { ArenaClassFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaClassFilterType, PreferencesService, Preferences } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { formatClass, ILocalizationService } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -23,19 +24,30 @@ import { filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ArenaClassFilterDropdownComponent extends BaseFilterWithUrlComponent<ArenaClassFilterType, Preferences> implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
+
+	protected filterConfig: FilterUrlConfig<ArenaClassFilterType, Preferences> = {
+		paramName: 'arenaActiveClassFilter',
+		preferencePath: 'arenaActiveClassFilter',
+		// Note: validValues not specified since ALL_CLASSES is dynamic
+	};
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
+		protected override readonly route: ActivatedRoute,
+		protected override readonly router: Router,
+		protected override readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
-		private readonly prefs: PreferencesService,
 	) {
-		super(cdr);
+		super(cdr, prefs, route, router, new Preferences());
 	}
 
 	async ngAfterContentInit() {
 		await this.prefs.isReady();
+
+		// Initialize URL synchronization
+		this.initializeUrlSync();
 
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaActiveClassFilter)),

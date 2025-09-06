@@ -1,10 +1,15 @@
+<!--
+	WARNING: All filter components below have been updated to handle URL parameter synchronization.
+	If you add a new filter component here, make sure it extends BaseFilterWithUrlComponent
+	and implements URL parameter handling. See existing filter components for examples.
+-->
 <web-arena-filters>
 	<web-arena-mode-filter-dropdown></web-arena-mode-filter-dropdown>
 	<web-arena-time-filter-dropdown></web-arena-time-filter-dropdown>
 	<arena-class-filter-dropdown></arena-class-filter-dropdown>
 	<arena-card-class-filter-dropdown></arena-card-class-filter-dropdown>
 	<arena-card-type-filter-dropdown></arena-card-type-filter-dropdown>
-	<arena-card-search></arena-card-search>
+	<arena-card-search></arena-card-search> <!-- Note: Search component uses service, not preferences -->
 </web-arena-filters>
 
 <arena-card-stats> </arena-card-stats>
