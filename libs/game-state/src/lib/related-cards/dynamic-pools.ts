@@ -663,6 +663,7 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SchoolTeacher:
 		case CardIds.TidePools_VAC_522:
+		case CardIds.VastWisdom:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '<=', 3) &&
@@ -710,6 +711,7 @@ const getDynamicFilters = (
 
 		// Random Spells
 		// Random Class Spells
+		case CardIds.BabblingBook:
 		case CardIds.BabblingBookCore:
 		case CardIds.BabblingBookcase_CORE_EDR_001:
 		case CardIds.WandThief_SCH_350:
