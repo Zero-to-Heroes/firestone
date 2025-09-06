@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BgsHeroStatsV2 } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatsAccessService, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
@@ -8,7 +9,7 @@ import { Config } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, take, takeUntil, tap } from 'rxjs';
 import { WebBattlegroundsFiltersComponent } from '../filters/_web-battlegrounds-filters.component';
 import { WebBattlegroundsModeFilterDropdownComponent } from '../filters/web-battlegrounds-mode-filter-dropdown.component';
 import { WebBattlegroundsRankFilterDropdownComponent } from '../filters/web-battlegrounds-rank-filter-dropdown.component';
@@ -46,12 +47,20 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 		private readonly prefs: PreferencesService,
 		private readonly metaHeroStats: BgsMetaHeroStatsAccessService,
 		private readonly metaHeroStatsService: BgsMetaHeroStatsService,
+		private readonly route: ActivatedRoute,
+		private readonly router: Router,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.metaHeroStatsService, this.prefs);
+
+		// Initialize search from URL parameters
+		this.initializeSearchFromUrlParams();
+
+		// Set up URL parameter synchronization for search
+		this.setupSearchUrlParamSync();
 
 		this.searchString$ = this.searchString$$.asObservable();
 
@@ -128,5 +137,46 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 
 	onSearchStringChange(searchString: string) {
 		this.searchString$$.next(searchString);
+		this.updateSearchUrlParam(searchString);
+	}
+
+	private initializeSearchFromUrlParams(): void {
+		this.route.queryParams.pipe(take(1)).subscribe((params) => {
+			const searchParam = params['bgsHeroSearch'];
+			if (searchParam && typeof searchParam === 'string') {
+				this.searchString$$.next(searchParam);
+				console.debug('[battlegrounds-heroes] initialized search from URL:', searchParam);
+			}
+		});
+	}
+
+	private setupSearchUrlParamSync(): void {
+		// Watch for search string changes and update URL
+		this.searchString$$
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe((searchString) => {
+				this.updateSearchUrlParam(searchString);
+			});
+	}
+
+	private updateSearchUrlParam(searchString: string): void {
+		const queryParams: any = {};
+		
+		// Add parameter if it has content, or set to null to remove it
+		if (searchString && searchString.trim().length > 0) {
+			queryParams.bgsHeroSearch = searchString.trim();
+		} else {
+			queryParams.bgsHeroSearch = null;
+		}
+
+		// Update URL without triggering navigation
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams,
+			queryParamsHandling: 'merge',
+			replaceUrl: true,
+		});
+
+		console.debug('[battlegrounds-heroes] updated search URL param:', queryParams);
 	}
 }
