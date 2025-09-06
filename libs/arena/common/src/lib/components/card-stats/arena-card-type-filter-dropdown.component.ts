@@ -1,6 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArenaCardTypeFilterType, ArenaClassFilterType, PreferencesService, Preferences } from '@firestone/shared/common/service';
+import {
+	ArenaCardTypeFilterType,
+	ArenaClassFilterType,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
@@ -23,13 +28,16 @@ import { filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaCardTypeFilterDropdownComponent extends BaseFilterWithUrlComponent<ArenaCardTypeFilterType, Preferences> implements AfterContentInit {
+export class ArenaCardTypeFilterDropdownComponent
+	extends BaseFilterWithUrlComponent<ArenaCardTypeFilterType, Preferences>
+	implements AfterContentInit
+{
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	protected filterConfig: FilterUrlConfig<ArenaCardTypeFilterType, Preferences> = {
 		paramName: 'arenaActiveCardTypeFilter',
 		preferencePath: 'arenaActiveCardTypeFilter',
-		validValues: ['all', 'legendary', 'treasure', 'other'],
+		validValues: ['all', 'legendary', 'other'],
 	};
 
 	constructor(
