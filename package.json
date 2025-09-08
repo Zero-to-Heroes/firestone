@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "15.24.0",
+	"version": "15.24.1",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -66,7 +66,7 @@
 		"@firestone-hs/constructed-deck-stats": "^0.0.17",
 		"@firestone-hs/content-craetor-input": "^0.0.13",
 		"@firestone-hs/deckstrings": "^2.2.8",
-		"@firestone-hs/hs-replay-xml-parser": "^0.0.159",
+		"@firestone-hs/hs-replay-xml-parser": "^0.0.160",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
 		"@firestone-hs/reference-data": "^2.0.151",
@@ -184,7 +184,7 @@
 	},
 	"overrides": {
 		"@firestone-hs/reference-data": "^2.0.151",
-		"@firestone-hs/hs-replay-xml-parser": "^0.0.159",
+		"@firestone-hs/hs-replay-xml-parser": "^0.0.160",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
 		"rxjs": "^7.8.0"
