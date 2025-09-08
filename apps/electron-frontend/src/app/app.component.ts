@@ -1,13 +1,23 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
 
 @Component({
-	imports: [NxWelcomeComponent, RouterModule],
+	imports: [RouterModule],
 	selector: 'app-root',
-	templateUrl: './app.component.html',
-	styleUrl: './app.component.scss',
+	template: `
+		<div class="electron-overlay-app">
+			<router-outlet></router-outlet>
+		</div>
+	`,
+	styles: [`
+		.electron-overlay-app {
+			width: 100vw;
+			height: 100vh;
+			background: transparent;
+			overflow: hidden;
+		}
+	`],
 })
 export class AppComponent {
-	title = 'electron-frontend';
+	title = 'electron-overlay';
 }

@@ -119,19 +119,23 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
 
-		// Load our Hello World HTML using the correct method from the sample
-		const overlayHtml = this.createOverlayHtml();
-
 		try {
-			// Use the window property like in the official sample
-			await this.overlayWindow.window.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(overlayHtml)}`);
+			// Load the Angular frontend instead of plain HTML
+			// TODO: In production, we should serve this from a local file server or build
+			const frontendUrl = 'http://localhost:4200/overlay';
+
+			console.log('🚀 Loading Angular overlay from:', frontendUrl);
+			await this.overlayWindow.window.loadURL(frontendUrl);
 
 			// Show the window (like in the sample)
 			this.overlayWindow.window.show();
 
-			console.log('✨ Overlay window created and shown successfully!');
+			console.log('✨ Angular overlay window created and shown successfully!');
 		} catch (error) {
-			console.error('❌ Error loading HTML into overlay window:', error);
+			console.error('❌ Error loading Angular overlay:', error);
+			console.error('❌ Make sure Angular frontend is running on http://localhost:4200');
+			// Don't create fallback window - just fail gracefully
+			throw error;
 		}
 	}
 
@@ -326,16 +330,176 @@ export class OverlayService extends EventEmitter {
 							50% { transform: scale(1.1); background: rgba(255, 107, 53, 0.3); }
 							100% { transform: scale(1); background: rgba(255, 107, 53, 0.1); }
 						}
+
+						/* Decktracker Widget Styles */
+						.decktracker-widget {
+							position: fixed;
+							top: 20px;
+							left: 20px;
+							width: 250px;
+							background: rgba(0, 0, 0, 0.9);
+							border: 1px solid #444;
+							border-radius: 6px;
+							font-size: 12px;
+							color: #fff;
+							backdrop-filter: blur(5px);
+							pointer-events: auto;
+							z-index: 1000;
+						}
+
+						.decktracker-widget.hidden {
+							display: none;
+						}
+
+						.widget-title-bar {
+							background: rgba(255, 255, 255, 0.1);
+							padding: 8px 12px;
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							border-bottom: 1px solid #444;
+							cursor: move;
+						}
+
+						.widget-title {
+							font-weight: bold;
+							font-size: 13px;
+						}
+
+						.toggle-btn {
+							background: none;
+							border: none;
+							color: #fff;
+							cursor: pointer;
+							font-size: 16px;
+							padding: 0;
+							width: 20px;
+							height: 20px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+
+						.toggle-btn:hover {
+							background: rgba(255, 255, 255, 0.1);
+							border-radius: 3px;
+						}
+
+						.widget-content {
+							padding: 12px;
+							max-height: 400px;
+							overflow-y: auto;
+						}
+
+						.deck-info {
+							margin-bottom: 12px;
+						}
+
+						.deck-name {
+							margin: 0 0 6px 0;
+							font-size: 14px;
+							color: #ffd700;
+						}
+
+						.deck-stats {
+							display: flex;
+							gap: 8px;
+							font-size: 11px;
+						}
+
+						.wins { color: #4caf50; }
+						.losses { color: #f44336; }
+						.winrate { color: #2196f3; }
+
+						.card-list {
+							display: flex;
+							flex-direction: column;
+							gap: 2px;
+						}
+
+						.card-item {
+							display: flex;
+							justify-content: space-between;
+							padding: 3px 6px;
+							border-radius: 3px;
+							transition: background-color 0.2s ease;
+						}
+
+						.card-item.remaining {
+							background: rgba(76, 175, 80, 0.1);
+						}
+
+						.card-item.used {
+							background: rgba(255, 255, 255, 0.05);
+							opacity: 0.6;
+						}
+
+						.card-name {
+							flex: 1;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
+
+						.card-count {
+							font-weight: bold;
+							min-width: 30px;
+							text-align: right;
+						}
+
+						.card-item.remaining .card-count {
+							color: #4caf50;
+						}
+
+						.card-item.used .card-count {
+							color: #f44336;
+						}
+
+						.no-deck {
+							text-align: center;
+							padding: 20px;
+							color: #999;
+						}
 					</style>
 				</head>
 				<body>
+					<!-- Debug Info Widget -->
 					<div class="overlay-container">
 						<div class="title">🔥 Firestone</div>
 						<div class="scene-display" id="current-scene">Loading...</div>
 						<div class="status" id="status">Initializing...</div>
 					</div>
+
+					<!-- Decktracker Widget -->
+					<div class="decktracker-widget" id="decktracker-widget">
+						<div class="widget-title-bar">
+							<span class="widget-title">Deck Tracker</span>
+							<button class="toggle-btn" onclick="toggleDecktracker()" aria-label="Toggle visibility">−</button>
+						</div>
+						
+						<div class="widget-content" id="widget-content">
+							<div class="deck-info" id="deck-info" style="display: none;">
+								<h3 class="deck-name" id="deck-name">Current Deck</h3>
+								<div class="deck-stats">
+									<span class="wins" id="deck-wins">0W</span>
+									<span class="losses" id="deck-losses">0L</span>
+									<span class="winrate" id="deck-winrate">0%</span>
+								</div>
+							</div>
+							
+							<div class="card-list" id="card-list"></div>
+							
+							<div class="no-deck" id="no-deck">
+								<p>No deck detected</p>
+								<p>Waiting for game data...</p>
+							</div>
+						</div>
+					</div>
 					
 					<script>
+						let decktrackerVisible = true;
+						let currentDeckData = null;
+
 						// Function to update the scene display
 						function updateScene(scene, status) {
 							const sceneElement = document.getElementById('current-scene');
@@ -367,11 +531,88 @@ export class OverlayService extends EventEmitter {
 							}
 						}
 						
-						// Expose updateScene globally so it can be called from main process
+						// Function to toggle decktracker visibility
+						function toggleDecktracker() {
+							const content = document.getElementById('widget-content');
+							const button = document.querySelector('.toggle-btn');
+							
+							decktrackerVisible = !decktrackerVisible;
+							
+							if (decktrackerVisible) {
+								content.style.display = 'block';
+								button.textContent = '−';
+							} else {
+								content.style.display = 'none';
+								button.textContent = '+';
+							}
+						}
+
+						// Function to update deck data
+						function updateDeckData(deckData) {
+							currentDeckData = deckData;
+							
+							const deckInfo = document.getElementById('deck-info');
+							const cardList = document.getElementById('card-list');
+							const noDeck = document.getElementById('no-deck');
+							
+							if (deckData && deckData.cards && deckData.cards.length > 0) {
+								// Show deck info
+								noDeck.style.display = 'none';
+								deckInfo.style.display = 'block';
+								
+								// Update deck name and stats
+								document.getElementById('deck-name').textContent = deckData.name || 'Current Deck';
+								document.getElementById('deck-wins').textContent = (deckData.wins || 0) + 'W';
+								document.getElementById('deck-losses').textContent = (deckData.losses || 0) + 'L';
+								
+								const total = (deckData.wins || 0) + (deckData.losses || 0);
+								const winrate = total > 0 ? Math.round((deckData.wins || 0) / total * 100) : 0;
+								document.getElementById('deck-winrate').textContent = winrate + '%';
+								
+								// Update card list
+								cardList.innerHTML = '';
+								deckData.cards.forEach(card => {
+									const cardElement = document.createElement('div');
+									cardElement.className = 'card-item ' + (card.remaining > 0 ? 'remaining' : 'used');
+									cardElement.innerHTML = \`
+										<span class="card-name">\${card.name}</span>
+										<span class="card-count">\${card.remaining}/\${card.total}</span>
+									\`;
+									cardList.appendChild(cardElement);
+								});
+							} else {
+								// No deck detected
+								deckInfo.style.display = 'none';
+								cardList.innerHTML = '';
+								noDeck.style.display = 'block';
+							}
+						}
+
+						// Expose functions globally so they can be called from main process
 						window.updateScene = updateScene;
+						window.updateDeckData = updateDeckData;
+						window.toggleDecktracker = toggleDecktracker;
 						
 						// Initial status
 						updateScene('Loading...', 'Connecting to MindVision...');
+
+						// Initialize with mock data for testing
+						setTimeout(() => {
+							updateDeckData({
+								name: 'Test Mage Deck',
+								wins: 5,
+								losses: 2,
+								cards: [
+									{ name: 'Fireball', total: 2, remaining: 1 },
+									{ name: 'Frostbolt', total: 2, remaining: 2 },
+									{ name: 'Arcane Intellect', total: 2, remaining: 0 },
+									{ name: 'Polymorph', total: 1, remaining: 1 },
+									{ name: 'Flamestrike', total: 1, remaining: 1 },
+									{ name: 'Water Elemental', total: 2, remaining: 1 },
+									{ name: 'Mana Wyrm', total: 2, remaining: 0 }
+								]
+							});
+						}, 3000);
 					</script>
 				</body>
 			</html>
@@ -392,6 +633,25 @@ export class OverlayService extends EventEmitter {
 				`);
 			} catch (error) {
 				console.error('❌ Error updating scene display:', error);
+			}
+		}
+	}
+
+	/**
+	 * Update the decktracker widget with new deck data
+	 */
+	public updateDeckData(deckData: any) {
+		if (this.overlayWindow && this.overlayWindow.window) {
+			try {
+				// Execute JavaScript in the overlay window to update the deck data
+				const deckDataJson = JSON.stringify(deckData).replace(/'/g, "\\'");
+				this.overlayWindow.window.webContents.executeJavaScript(`
+					if (window.updateDeckData) {
+						window.updateDeckData(${deckDataJson});
+					}
+				`);
+			} catch (error) {
+				console.error('❌ Error updating deck data:', error);
 			}
 		}
 	}

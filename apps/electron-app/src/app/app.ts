@@ -61,10 +61,13 @@ export default class App {
 		// This method will be called when Electron has finished
 		// initialization and is ready to create browser windows.
 		// Some APIs can only be used after this event occurs.
-		if (rendererAppName) {
-			App.initMainWindow();
-			App.loadMainWindow();
-		}
+
+		// Skip main window creation for overlay-only mode
+		console.log('🚫 Skipping main window creation (overlay-only mode)');
+		// if (rendererAppName) {
+		// 	App.initMainWindow();
+		// 	App.loadMainWindow();
+		// }
 
 		// Initialize game detection
 		App.initGameDetection();
@@ -104,9 +107,11 @@ export default class App {
 	private static onActivate() {
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
-		if (App.mainWindow === null) {
-			App.onReady();
-		}
+		// Skip for overlay-only mode
+		console.log('🚫 App activation - skipping main window recreation (overlay-only mode)');
+		// if (App.mainWindow === null) {
+		// 	App.onReady();
+		// }
 	}
 
 	private static initMainWindow() {
@@ -130,12 +135,14 @@ export default class App {
 
 		// if main window is ready to show, close the splash window and show the main window
 		App.mainWindow.once('ready-to-show', () => {
-			App.mainWindow.show();
+			// Don't show main window for overlay-only mode
+			// App.mainWindow.show();
+			console.log('🚫 Main window ready but not showing (overlay-only mode)');
 		});
 
-		// Enable dev tools in development mode
+		// Don't open dev tools for main window in overlay-only mode
 		if (App.isDevelopmentMode()) {
-			App.mainWindow.webContents.openDevTools();
+			// App.mainWindow.webContents.openDevTools(); // Disabled for overlay-only mode
 
 			// Enable main process debugging
 			console.log('🔧 Main process debugging enabled. Check terminal for main process logs.');
