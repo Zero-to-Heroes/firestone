@@ -130,6 +130,23 @@ export class OverlayService extends EventEmitter {
 			// Show the window (like in the sample)
 			this.overlayWindow.window.show();
 
+			// Open dev tools for debugging in development mode
+			if (process.env['NODE_ENV'] === 'development' || !app.isPackaged) {
+				this.overlayWindow.window.webContents.openDevTools({
+					mode: 'detach', // Open in separate window
+					activate: true, // Bring to front
+				});
+				console.log('🔧 Overlay dev tools opened for debugging (detached window)');
+			}
+
+			// Add keyboard shortcut to manually open dev tools
+			this.overlayWindow.window.webContents.on('before-input-event', (event, input) => {
+				if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
+					this.overlayWindow.window.webContents.toggleDevTools();
+					console.log('🔧 Dev tools toggled manually');
+				}
+			});
+
 			console.log('✨ Angular overlay window created and shown successfully!');
 		} catch (error) {
 			console.error('❌ Error loading Angular overlay:', error);
