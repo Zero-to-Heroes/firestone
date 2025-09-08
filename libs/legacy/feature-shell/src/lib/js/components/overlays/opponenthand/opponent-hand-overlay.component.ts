@@ -11,7 +11,7 @@ import { DeckCard, DeckState, GameState, GameStateFacadeService, Metadata } from
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { auditTime, Observable } from 'rxjs';
+import { auditTime, Observable, tap } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -35,7 +35,12 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
 	displayBuff$: Observable<boolean>;
-	context$: Observable<{ deck: DeckState; gameState: GameState; metadata: Metadata; currentTurn: number | 'mulligan' }>;
+	context$: Observable<{
+		deck: DeckState;
+		gameState: GameState;
+		metadata: Metadata;
+		currentTurn: number | 'mulligan';
+	}>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -55,6 +60,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 			this.mapData((hand) =>
 				[...hand].sort((a, b) => a.tags[GameTag.ZONE_POSITION] - b.tags[GameTag.ZONE_POSITION]),
 			),
+			tap((hand) => console.debug('[opponent-hand-overlay] hand', hand)),
 			// Might be too expensive to use deepEqual here, as it will compare the whole hand
 			// distinctUntilChanged((a, b) => deepEq(a, b)),
 		);

@@ -117,6 +117,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	}
 
 	private buildInfo(context: DeckState, metadata: Metadata, currentTurn: number, card: DeckCard): void {
+		console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
 		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
@@ -187,7 +188,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
 			}
 
-			const dynamicPool = getDynamicRelatedCardIds(this.cardId, this.card.entityId, this.allCards.getService(), {
+			const dynamicPool = getDynamicRelatedCardIds(this.cardId, this.card?.entityId, this.allCards.getService(), {
 				format: metadata.formatType,
 				gameType: metadata.gameType,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
