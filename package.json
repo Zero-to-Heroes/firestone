@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "15.23.7",
+	"version": "15.24.0",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts",
@@ -18,12 +18,12 @@
 		"c3": "=============== Coliseum scripts =================",
 		"dev-coliseum": "nx build coliseum --source-map=true --watch",
 		"upload-coliseum": "npx tsx ./build-tools/upload-coliseum.ts",
-		"build-coliseum": "rm -rf node_modules/.cache/nx && rm -rf dist/apps/coliseum && nx build coliseum --configuration=production && npm run upload-coliseum",
+		"build-coliseum": "rm -rf dist/apps/coliseum && nx build coliseum --configuration=production && npm run upload-coliseum",
 		"c4": "=============== Twitch scripts =================",
 		"dev-twitch": "set IS_TWITCH=true && nx build twitch-extension --configuration=development --watch",
 		"build-twitch-watch": "nx build twitch-extension --configuration=production --watch",
-		"build-twitch": "rm -rf node_modules/.cache/nx && nx build twitch-extension --configuration=production",
-		"c5": "=============== New Web & Mobile Apps =================",
+		"build-twitch": "nx build twitch-extension --configuration=production",
+		"c5": "=============== Web & Mobile Apps =================",
 		"start-web": "nx serve web",
 		"dev-web": "nx serve web --configuration=development",
 		"build-web": "nx build web --configuration=production",
