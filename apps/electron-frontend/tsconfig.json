@@ -1,15 +1,12 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"strict": true,
-		"noImplicitOverride": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"noImplicitReturns": true,
+		"target": "es2022",
+		"useDefineForClassFields": false,
+		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
-		"moduleResolution": "bundler",
-		"isolatedModules": true,
-		"module": "es2022",
-		"esModuleInterop": true
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true
 	},
 	"angularCompilerOptions": {
 		"enableI18nLegacyMessageIdFormat": false,

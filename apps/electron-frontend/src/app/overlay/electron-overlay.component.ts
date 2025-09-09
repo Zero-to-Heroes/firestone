@@ -1,10 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'electron-overlay',
-	standalone: true,
-	imports: [CommonModule],
+	standalone: false,
 	template: `
 		<div class="electron-overlay-container">
 			<!-- For now, just a placeholder that shows we're running Angular -->
@@ -14,8 +12,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 				<p>Ready to integrate full-screen overlays</p>
 			</div>
 
-			<!-- TODO: Add the actual full-screen-overlays component here -->
-			<!-- <full-screen-overlays></full-screen-overlays> -->
+			<!-- TODO: Add the constructed decktracker widget -->
+			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 		</div>
 	`,
 	styles: [

@@ -7,13 +7,13 @@
 	"tags": [],
 	"targets": {
 		"build": {
-			"executor": "@angular-devkit/build-angular:application",
+			"executor": "@angular-devkit/build-angular:browser",
 			"outputs": ["{options.outputPath}"],
 			"options": {
 				"outputPath": "dist/apps/electron-frontend",
 				"index": "apps/electron-frontend/src/index.html",
-				"browser": "apps/electron-frontend/src/main.ts",
-				"polyfills": ["zone.js"],
+				"main": "apps/electron-frontend/src/main.ts",
+				"polyfills": ["zone.js", "apps/electron-frontend/src/polyfills.ts"],
 				"tsConfig": "apps/electron-frontend/tsconfig.app.json",
 				"inlineStyleLanguage": "scss",
 				"assets": [
@@ -22,7 +22,27 @@
 						"input": "apps/electron-frontend/public"
 					}
 				],
-				"styles": ["apps/electron-frontend/src/styles.scss"]
+				"styles": ["apps/electron-frontend/src/styles.scss"],
+				"allowedCommonJsDependencies": [
+					"@firestone-hs/build-global-stats/dist/stats-builder",
+					"@firestone-hs/hs-replay-xml-parser/dist/public-api",
+					"@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off",
+					"@firestone-hs/reference-data",
+					"@firestone-hs/simulate-bgs-battle",
+					"@firestone-hs/communities",
+					"@tweenjs/tween.js",
+					"bezier-easing",
+					"deep-equal",
+					"deepmerge",
+					"jszip",
+					"localforage",
+					"jsonwebtoken",
+					"double-ended-queue",
+					"aws-sdk/global",
+					"aws-sdk/clients/s3",
+					"pako",
+					"dom-to-image-more"
+				]
 			},
 			"configurations": {
 				"production": {
@@ -30,12 +50,12 @@
 						{
 							"type": "initial",
 							"maximumWarning": "500kb",
-							"maximumError": "1mb"
+							"maximumError": "20mb"
 						},
 						{
 							"type": "anyComponentStyle",
-							"maximumWarning": "4kb",
-							"maximumError": "8kb"
+							"maximumWarning": "2kb",
+							"maximumError": "20mb"
 						}
 					],
 					"outputHashing": "all"

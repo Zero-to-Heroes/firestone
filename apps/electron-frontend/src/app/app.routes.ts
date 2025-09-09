@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 
 export const appRoutes: Route[] = [
 	{
@@ -8,6 +9,6 @@ export const appRoutes: Route[] = [
 	},
 	{
 		path: 'overlay',
-		loadComponent: () => import('./overlay/electron-overlay.component').then(m => m.ElectronOverlayComponent),
+		component: ElectronOverlayComponent,
 	},
 ];
