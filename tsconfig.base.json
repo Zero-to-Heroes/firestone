@@ -33,6 +33,7 @@
 			"@firestone/communities/common": ["libs/communities/common/src/index.ts"],
 			"@firestone/constructed/common": ["libs/constructed/common/src/index.ts"],
 			"@firestone/discord": ["libs/discord/src/index.ts"],
+			"@firestone/electron/common": ["libs/electron/common/src/index.ts"],
 			"@firestone/game-state": ["libs/game-state/src/index.ts"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/mainwindow/common": ["libs/mainwindow/common/src/index.ts"],
@@ -64,6 +65,7 @@
 			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
+			"common": ["libs/electron/common/src/index.ts"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
 			"vm": ["./node_modules/vm-browserify"]

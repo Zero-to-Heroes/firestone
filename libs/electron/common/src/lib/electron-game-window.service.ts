@@ -1,0 +1,219 @@
+import { ipcMain } from 'electron';
+
+export interface GameWindowInfo {
+	success: boolean;
+	isInFocus: boolean;
+	gameIsInFocus: boolean;
+	isRunning: boolean;
+	title: string;
+	displayName: string;
+	shortTitle: string;
+	id: number;
+	classId: number;
+	width: number;
+	height: number;
+	logicalWidth: number;
+	logicalHeight: number;
+	executionPath: string;
+	windowHandle: { value: number };
+	monitorHandle: { value: number };
+	processId: number;
+}
+
+export class ElectronGameWindowService {
+	private static instance: ElectronGameWindowService;
+	private currentGameInfo: GameWindowInfo | null = null;
+	private overlayService: any; // Will be injected from the app
+
+	private constructor() {
+		this.setupIpcHandlers();
+	}
+
+	public static getInstance(): ElectronGameWindowService {
+		if (!ElectronGameWindowService.instance) {
+			ElectronGameWindowService.instance = new ElectronGameWindowService();
+		}
+		return ElectronGameWindowService.instance;
+	}
+
+	/**
+	 * Initialize the service with the overlay service dependency
+	 */
+	public initialize(overlayService: any): void {
+		this.overlayService = overlayService;
+		this.listenToGameEvents();
+	}
+
+	/**
+	 * Get current game info (for use in main process)
+	 */
+	public getCurrentGameInfo(): GameWindowInfo | null {
+		return this.currentGameInfo;
+	}
+
+	/**
+	 * Setup IPC handlers for renderer processes
+	 */
+	private setupIpcHandlers(): void {
+		// Handle requests for game info from renderer processes
+		ipcMain.handle('get-running-game-info', async () => {
+			console.log('[ElectronGameWindowService] IPC request for game info:', this.currentGameInfo);
+			return this.currentGameInfo;
+		});
+
+		console.log('[ElectronGameWindowService] IPC handlers registered');
+	}
+
+	/**
+	 * Listen to game events from overlay service and update stored info
+	 */
+	private listenToGameEvents(): void {
+		if (!this.overlayService) {
+			console.warn('[ElectronGameWindowService] No overlay service provided, cannot listen to game events');
+			return;
+		}
+
+		// Wait for overlay service to be ready
+		this.overlayService.on('ready', () => {
+			console.log('[ElectronGameWindowService] Overlay service ready, setting up game event listeners');
+			this.setupGameEventListeners();
+		});
+	}
+
+	private setupGameEventListeners(): void {
+		const overlayApi = this.overlayService.overlayApi;
+		if (!overlayApi) {
+			console.warn('[ElectronGameWindowService] No overlay API available');
+			return;
+		}
+
+		// Listen for game launches
+		overlayApi.on('game-launched', (event: any, gameInfo: any) => {
+			if (Math.round(gameInfo.id / 10) === 9898) {
+				// Hearthstone
+				console.log('[ElectronGameWindowService] Hearthstone launched, updating game info');
+				this.updateGameInfo(gameInfo);
+			}
+		});
+
+		// Listen for game focus changes
+		overlayApi.on('game-focus-changed', (window: any, game: any, focus: boolean) => {
+			if (game.classId === 9898) {
+				// Hearthstone
+				console.log('[ElectronGameWindowService] Hearthstone focus changed:', focus);
+				this.updateGameInfoFromActiveGame();
+			}
+		});
+
+		// Listen for game window changes
+		overlayApi.on('game-window-changed', (window: any, game: any, reason: any) => {
+			if (game.classId === 9898) {
+				// Hearthstone
+				console.log('[ElectronGameWindowService] Hearthstone window changed:', reason);
+				this.updateGameInfoFromActiveGame();
+			}
+		});
+
+		console.log('[ElectronGameWindowService] Game event listeners setup complete');
+	}
+
+	/**
+	 * Update stored game info from game launch event
+	 */
+	private updateGameInfo(gameInfo: any): void {
+		try {
+			this.currentGameInfo = {
+				success: true,
+				isInFocus: true, // Will be updated by focus events
+				gameIsInFocus: true,
+				isRunning: true,
+				title: gameInfo.name || 'Hearthstone',
+				displayName: gameInfo.name || 'Hearthstone: Heroes of Warcraft',
+				shortTitle: 'Hearthstone',
+				id: gameInfo.id,
+				classId: gameInfo.classId || 9898,
+				width: 1920, // Will be updated by window events
+				height: 1080,
+				logicalWidth: 1920,
+				logicalHeight: 1080,
+				executionPath: gameInfo.processInfo?.fullPath || '',
+				windowHandle: { value: gameInfo.processInfo?.window_handle || 0 },
+				monitorHandle: { value: 0 },
+				processId: gameInfo.processInfo?.pid || 0,
+			};
+
+			console.log('[ElectronGameWindowService] Game info updated from launch event:', this.currentGameInfo);
+		} catch (error) {
+			console.error('[ElectronGameWindowService] Error updating game info from launch event:', error);
+		}
+	}
+
+	/**
+	 * Update stored game info from active game (with window dimensions)
+	 */
+	private updateGameInfoFromActiveGame(): void {
+		try {
+			const activeGame = this.overlayService.overlayApi?.getActiveGameInfo();
+			if (!activeGame) {
+				console.log('[ElectronGameWindowService] No active game info available');
+				return;
+			}
+
+			// Extract window dimensions
+			let gameWidth = 1920;
+			let gameHeight = 1080;
+
+			if (activeGame.gameWindowInfo?.size) {
+				gameWidth = activeGame.gameWindowInfo.size.width;
+				gameHeight = activeGame.gameWindowInfo.size.height;
+			} else {
+				const gameAny = activeGame as any;
+				if (gameAny.size) {
+					gameWidth = gameAny.size.width;
+					gameHeight = gameAny.size.height;
+				} else if (gameAny.width && gameAny.height) {
+					gameWidth = gameAny.width;
+					gameHeight = gameAny.height;
+				}
+			}
+
+			// Update existing game info or create new one
+			if (this.currentGameInfo) {
+				this.currentGameInfo.width = gameWidth;
+				this.currentGameInfo.height = gameHeight;
+				this.currentGameInfo.logicalWidth = gameWidth;
+				this.currentGameInfo.logicalHeight = gameHeight;
+				this.currentGameInfo.isInFocus = activeGame.gameWindowInfo?.focused || false;
+				this.currentGameInfo.gameIsInFocus = activeGame.gameWindowInfo?.focused || false;
+			} else {
+				// Create new game info if none exists
+				this.currentGameInfo = {
+					success: true,
+					isInFocus: activeGame.gameWindowInfo?.focused || false,
+					gameIsInFocus: activeGame.gameWindowInfo?.focused || false,
+					isRunning: true,
+					title: 'Hearthstone',
+					displayName: 'Hearthstone: Heroes of Warcraft',
+					shortTitle: 'Hearthstone',
+					id: activeGame.gameInfo?.id || 98981,
+					classId: activeGame.gameInfo?.classId || 9898,
+					width: gameWidth,
+					height: gameHeight,
+					logicalWidth: gameWidth,
+					logicalHeight: gameHeight,
+					executionPath: activeGame.gameInfo?.processInfo?.fullPath || '',
+					windowHandle: { value: activeGame.gameWindowInfo?.nativeHandle || 0 },
+					monitorHandle: { value: 0 },
+					processId: activeGame.gameInfo?.processInfo?.pid || 0,
+				};
+			}
+
+			console.log('[ElectronGameWindowService] Game info updated from active game:', {
+				dimensions: `${gameWidth}x${gameHeight}`,
+				focused: this.currentGameInfo.isInFocus,
+			});
+		} catch (error) {
+			console.error('[ElectronGameWindowService] Error updating game info from active game:', error);
+		}
+	}
+}

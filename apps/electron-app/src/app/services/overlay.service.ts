@@ -1,3 +1,4 @@
+import { ElectronGameWindowService } from '@firestone/electron/common';
 import { overwolf } from '@overwolf/ow-electron';
 import {
 	GamesFilter,
@@ -7,6 +8,7 @@ import {
 } from '@overwolf/ow-electron-packages-types';
 import { app as electronApp } from 'electron';
 import EventEmitter from 'events';
+import { join } from 'path';
 
 const app = electronApp as overwolf.OverwolfApp;
 
@@ -14,6 +16,7 @@ export class OverlayService extends EventEmitter {
 	private static instance: OverlayService;
 	private isOverlayReady = false;
 	private overlayWindow: OverlayBrowserWindow | null = null;
+	private gameWindowService: ElectronGameWindowService;
 
 	public get overlayApi(): IOverwolfOverlayApi {
 		// Do not let the application access the overlay before it is ready
@@ -25,6 +28,7 @@ export class OverlayService extends EventEmitter {
 
 	private constructor() {
 		super();
+		this.gameWindowService = ElectronGameWindowService.getInstance();
 		this.startOverlayWhenPackageReady();
 	}
 
@@ -99,33 +103,17 @@ export class OverlayService extends EventEmitter {
 			return;
 		}
 
-		// Get current game window information
-		const activeGame = this.overlayApi.getActiveGameInfo();
-		console.log(`🎯 Resizing - Active game object:`, activeGame);
+		// Get current game info from centralized service
+		const gameInfo = this.gameWindowService.getCurrentGameInfo();
+		console.log(`🎯 Resizing - Game info from service:`, gameInfo);
 
-		let gameWidth = 1920;
-		let gameHeight = 1080;
-
-		if (activeGame) {
-			const gameAny = activeGame as any;
-
-			if (activeGame.gameWindowInfo?.size) {
-				gameWidth = activeGame.gameWindowInfo.size.width;
-				gameHeight = activeGame.gameWindowInfo.size.height;
-				console.log(`🎯 Resizing to gameWindowInfo.size: ${gameWidth}x${gameHeight}`);
-			} else if (gameAny.size) {
-				gameWidth = gameAny.size.width;
-				gameHeight = gameAny.size.height;
-				console.log(`🎯 Resizing to activeGame.size: ${gameWidth}x${gameHeight}`);
-			} else if (gameAny.width && gameAny.height) {
-				gameWidth = gameAny.width;
-				gameHeight = gameAny.height;
-				console.log(`🎯 Resizing to activeGame width/height: ${gameWidth}x${gameHeight}`);
-			} else {
-				console.log(`🎯 No size info found for resize, keeping current size`);
-				return; // Don't resize if we can't get size info
-			}
+		if (!gameInfo) {
+			console.log(`🎯 No game info available for resize, keeping current size`);
+			return;
 		}
+
+		const gameWidth = gameInfo.width;
+		const gameHeight = gameInfo.height;
 
 		// Resize the existing window
 		try {
@@ -142,42 +130,27 @@ export class OverlayService extends EventEmitter {
 	 * Create the Hello World overlay window
 	 */
 	private async createOverlayWindow(): Promise<void> {
-		// Get the game window information to match its size
-		const activeGame = this.overlayApi.getActiveGameInfo();
+		// Get game window information from centralized service
+		const gameInfo = this.gameWindowService.getCurrentGameInfo();
+		console.log(`🎯 Creating overlay - Game info from service:`, gameInfo);
 
-		// Log everything to understand the structure
-		console.log(`🎯 Active game object:`, activeGame);
-		console.log(`🎯 Active game keys:`, activeGame ? Object.keys(activeGame) : 'No active game');
-
-		const gameWindowInfo = activeGame?.gameWindowInfo;
-		console.log(`🎯 Game window info:`, gameWindowInfo);
-
-		// Try different possible property names for size information
+		// Use game dimensions or fallback to defaults
 		let gameWidth = 1920;
 		let gameHeight = 1080;
 
-		if (activeGame) {
-			// Check various possible properties (using any to explore unknown structure)
-			const gameAny = activeGame as any;
-
-			if (activeGame.gameWindowInfo?.size) {
-				gameWidth = activeGame.gameWindowInfo.size.width;
-				gameHeight = activeGame.gameWindowInfo.size.height;
-				console.log(`🎯 Using gameWindowInfo.size: ${gameWidth}x${gameHeight}`);
-			} else if (gameAny.size) {
-				gameWidth = gameAny.size.width;
-				gameHeight = gameAny.size.height;
-				console.log(`🎯 Using activeGame.size: ${gameWidth}x${gameHeight}`);
-			} else if (gameAny.width && gameAny.height) {
-				gameWidth = gameAny.width;
-				gameHeight = gameAny.height;
-				console.log(`🎯 Using activeGame width/height: ${gameWidth}x${gameHeight}`);
-			} else {
-				console.log(`🎯 No size info found in ow-electron API, using defaults: ${gameWidth}x${gameHeight}`);
-			}
+		if (gameInfo) {
+			gameWidth = gameInfo.width;
+			gameHeight = gameInfo.height;
+			console.log(`🎯 Using game dimensions from service: ${gameWidth}x${gameHeight}`);
+		} else {
+			console.log(`🎯 No game info available, using defaults: ${gameWidth}x${gameHeight}`);
 		}
 
 		console.log(`🎯 Final overlay dimensions: ${gameWidth}x${gameHeight}`);
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		console.log('🔧 Preload script path:', preloadPath);
+		console.log('🔧 Current __dirname:', __dirname);
 
 		const options: OverlayWindowOptions = {
 			name: 'firestone-overlay-' + Math.floor(Math.random() * 1000),
@@ -190,11 +163,14 @@ export class OverlayService extends EventEmitter {
 				devTools: true,
 				nodeIntegration: true,
 				contextIsolation: false,
+				preload: preloadPath,
 			},
 			// Position at top-left to cover entire game window
 			x: 0,
 			y: 0,
 		};
+
+		console.log('🔧 Overlay window options:', JSON.stringify(options, null, 2));
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
 
