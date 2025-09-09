@@ -26,6 +26,10 @@ However, from my understanding, Overwolf and electron differ quite a lot on a fe
     - dependency injection
         - AppInjector could be made generic to work in both contexts?
 
+Notes:
+
+- don't recreate an electron-overwolf service. The goal will probably be to have various services get their share of the work of the current Overwolf service.
+
 ### Later
 
 - Make SceneService fully available and functional, both within the NodeJS environment and in a renderer (for decktracker-ooc component)

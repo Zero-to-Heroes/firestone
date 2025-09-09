@@ -1,4 +1,4 @@
-import { ElectronGameWindowService } from '@firestone/electron/common';
+import { ElectronGameStatusService, ElectronGameWindowService } from '@firestone/electron/common';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
@@ -16,6 +16,7 @@ export default class App {
 	// static gameDetection: GameDetectionService;
 	static overlay: OverlayService;
 	static gameWindow: ElectronGameWindowService;
+	static gameStatus: ElectronGameStatusService;
 	static mindVision: MindVisionElectronService;
 
 	public static isDevelopmentMode() {
@@ -79,9 +80,10 @@ export default class App {
 		// Initialize MindVision service for memory reading
 		App.mindVision = new MindVisionElectronService();
 
-		// App.gameDetection = GameDetectionService.getInstance();
+		// Initialize game services
 		App.overlay = OverlayService.getInstance();
 		App.gameWindow = ElectronGameWindowService.getInstance();
+		App.gameStatus = ElectronGameStatusService.getInstance();
 		App.gameWindow.initialize(App.overlay);
 
 		// Wait for overlay to be ready before registering to games

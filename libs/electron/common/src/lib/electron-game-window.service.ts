@@ -24,6 +24,7 @@ export class ElectronGameWindowService {
 	private static instance: ElectronGameWindowService;
 	private currentGameInfo: GameWindowInfo | null = null;
 	private overlayService: any; // Will be injected from the app
+	private gameInfoChangeListeners: ((gameInfo: GameWindowInfo | null) => void)[] = [];
 
 	private constructor() {
 		this.setupIpcHandlers();
@@ -49,6 +50,14 @@ export class ElectronGameWindowService {
 	 */
 	public getCurrentGameInfo(): GameWindowInfo | null {
 		return this.currentGameInfo;
+	}
+
+	public onGameInfoChanged(callback: (gameInfo: GameWindowInfo | null) => void): void {
+		this.gameInfoChangeListeners.push(callback);
+	}
+
+	private notifyGameInfoChanged(): void {
+		this.gameInfoChangeListeners.forEach(callback => callback(this.currentGameInfo));
 	}
 
 	/**
@@ -143,6 +152,9 @@ export class ElectronGameWindowService {
 			};
 
 			console.log('[ElectronGameWindowService] Game info updated from launch event:', this.currentGameInfo);
+
+			// Notify listeners of the change
+			this.notifyGameInfoChanged();
 		} catch (error) {
 			console.error('[ElectronGameWindowService] Error updating game info from launch event:', error);
 		}
@@ -212,6 +224,9 @@ export class ElectronGameWindowService {
 				dimensions: `${gameWidth}x${gameHeight}`,
 				focused: this.currentGameInfo.isInFocus,
 			});
+
+			// Notify listeners of the change
+			this.notifyGameInfoChanged();
 		} catch (error) {
 			console.error('[ElectronGameWindowService] Error updating game info from active game:', error);
 		}

@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { GameStatusService } from '@firestone/shared/common/service';
+import { Subscription } from 'rxjs';
 
 declare const window: any;
 
@@ -7,17 +9,25 @@ declare const window: any;
 	standalone: false,
 	template: `
 		<div class="electron-overlay-container">
-			<!-- Game Info Test -->
+			<!-- Game Status Test -->
 			<div class="debug-info">
 				<h2>🔥 Firestone Electron Overlay</h2>
 				<p>Angular renderer process running</p>
 
+				<div class="game-status-section">
+					<h3>🎮 Game Status Service Test</h3>
+					<p><strong>Service Ready:</strong> {{ gameStatusReady ? '✅' : '❌' }}</p>
+					<p><strong>In Game:</strong> {{ inGame !== null ? (inGame ? '✅' : '❌') : '⏳' }}</p>
+					<p><strong>Context:</strong> {{ isElectronContext ? 'Electron' : 'Unknown' }}</p>
+				</div>
+
 				<div *ngIf="gameInfo" class="game-info-section">
-					<h3>🎮 Game Info Test</h3>
+					<h3>🎮 Game Info Details</h3>
 					<p><strong>Game:</strong> {{ gameInfo.displayName }}</p>
 					<p><strong>Size:</strong> {{ gameInfo.width }}x{{ gameInfo.height }}</p>
 					<p><strong>Focused:</strong> {{ gameInfo.isInFocus ? '✅' : '❌' }}</p>
 					<p><strong>Running:</strong> {{ gameInfo.isRunning ? '✅' : '❌' }}</p>
+					<p><strong>Execution Path:</strong> {{ gameInfo.executionPath || 'N/A' }}</p>
 				</div>
 
 				<div *ngIf="!gameInfo && tested" class="error-section">
@@ -68,6 +78,17 @@ declare const window: any;
 				font-size: 14px;
 			}
 
+			.game-status-section {
+				margin-top: 15px;
+				padding-top: 15px;
+				border-top: 1px solid #ff6b35;
+			}
+
+			.game-status-section h3 {
+				margin: 0 0 10px 0;
+				color: #4caf50;
+			}
+
 			.game-info-section {
 				margin-top: 15px;
 				padding-top: 15px;
@@ -93,23 +114,52 @@ declare const window: any;
 	],
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class ElectronOverlayComponent implements OnInit {
+export class ElectronOverlayComponent implements OnInit, OnDestroy {
 	gameInfo: any = null;
 	tested = false;
 	hasElectronAPI = false;
 	hasGameInfoMethod = false;
 
-	constructor() {
+	// GameStatusService properties
+	gameStatusReady = false;
+	inGame: boolean | null = null;
+	isElectronContext = false;
+
+	private subscriptions: Subscription[] = [];
+
+	constructor(private readonly gameStatusService: GameStatusService) {
 		console.log('[ElectronOverlay] Angular overlay component initialized');
 	}
 
 	async ngOnInit() {
-		console.log('[ElectronOverlay] Testing ElectronAPI...');
-		console.log('[ElectronOverlay] window:', window);
+		console.log('[ElectronOverlay] Initializing...');
+
+		// Detect electron context
+		this.isElectronContext =
+			typeof window !== 'undefined' &&
+			((window as any).electronAPI !== undefined ||
+				(typeof process !== 'undefined' && process.versions?.electron !== undefined));
+
+		console.log('[ElectronOverlay] Electron context:', this.isElectronContext);
+
+		// Test legacy ElectronAPI for comparison
+		await this.testLegacyElectronAPI();
+
+		// Initialize GameStatusService
+		await this.initGameStatusService();
+
+		// Set up periodic updates
+		this.setupPeriodicUpdates();
+	}
+
+	ngOnDestroy() {
+		this.subscriptions.forEach((sub) => sub.unsubscribe());
+	}
+
+	private async testLegacyElectronAPI() {
+		console.log('[ElectronOverlay] Testing legacy ElectronAPI...');
 		console.log('[ElectronOverlay] window.electronAPI:', window.electronAPI);
-		console.log('[ElectronOverlay] window.electron:', window.electron);
 		console.log('[ElectronOverlay] window.require:', window.require);
-		console.log('[ElectronOverlay] Available window properties:', Object.keys(window));
 
 		this.hasElectronAPI = !!window.electronAPI;
 		this.hasGameInfoMethod = !!window.electronAPI?.getRunningGameInfo;
@@ -118,9 +168,9 @@ export class ElectronOverlayComponent implements OnInit {
 		if (this.hasGameInfoMethod) {
 			try {
 				this.gameInfo = await window.electronAPI.getRunningGameInfo();
-				console.log('[ElectronOverlay] ElectronAPI result:', this.gameInfo);
+				console.log('[ElectronOverlay] Legacy ElectronAPI result:', this.gameInfo);
 			} catch (error) {
-				console.error('[ElectronOverlay] ElectronAPI error:', error);
+				console.error('[ElectronOverlay] Legacy ElectronAPI error:', error);
 			}
 		}
 		// Fallback to direct IPC if nodeIntegration is enabled
@@ -137,8 +187,34 @@ export class ElectronOverlayComponent implements OnInit {
 		}
 
 		this.tested = true;
+	}
 
-		// Refresh every 5 seconds to see updates
+	private async initGameStatusService() {
+		console.log('[ElectronOverlay] Initializing GameStatusService...');
+
+		try {
+			// Wait for service to be ready
+			await this.gameStatusService.isReady();
+			this.gameStatusReady = true;
+			console.log('[ElectronOverlay] GameStatusService is ready');
+
+			// Get initial game status
+			this.inGame = await this.gameStatusService.inGame();
+			console.log('[ElectronOverlay] Initial game status:', this.inGame);
+
+			// Subscribe to game status changes
+			const subscription = this.gameStatusService.inGame$$.subscribe((inGame) => {
+				console.log('[ElectronOverlay] Game status changed:', inGame);
+				this.inGame = inGame;
+			});
+			this.subscriptions.push(subscription);
+		} catch (error) {
+			console.error('[ElectronOverlay] GameStatusService initialization error:', error);
+		}
+	}
+
+	private setupPeriodicUpdates() {
+		// Refresh legacy API every 5 seconds for comparison
 		if (this.hasGameInfoMethod || window.require) {
 			setInterval(async () => {
 				try {
