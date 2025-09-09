@@ -24,8 +24,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 				width: 100vw;
 				height: 100vh;
 				background: transparent;
-				position: relative;
+				position: fixed;
+				top: 0;
+				left: 0;
 				pointer-events: none;
+				z-index: 1000;
 			}
 
 			.debug-info {
@@ -39,6 +42,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 				border: 2px solid #ff6b35;
 				font-family: 'Segoe UI', sans-serif;
 				pointer-events: auto;
+				z-index: 1001;
 			}
 
 			.debug-info h2 {

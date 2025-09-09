@@ -91,13 +91,98 @@ export class OverlayService extends EventEmitter {
 	}
 
 	/**
+	 * Resize existing overlay window to match current game size
+	 */
+	private async resizeOverlayToGame(): Promise<void> {
+		if (!this.overlayWindow) {
+			console.log('⚠️ No overlay window to resize');
+			return;
+		}
+
+		// Get current game window information
+		const activeGame = this.overlayApi.getActiveGameInfo();
+		console.log(`🎯 Resizing - Active game object:`, activeGame);
+
+		let gameWidth = 1920;
+		let gameHeight = 1080;
+
+		if (activeGame) {
+			const gameAny = activeGame as any;
+
+			if (activeGame.gameWindowInfo?.size) {
+				gameWidth = activeGame.gameWindowInfo.size.width;
+				gameHeight = activeGame.gameWindowInfo.size.height;
+				console.log(`🎯 Resizing to gameWindowInfo.size: ${gameWidth}x${gameHeight}`);
+			} else if (gameAny.size) {
+				gameWidth = gameAny.size.width;
+				gameHeight = gameAny.size.height;
+				console.log(`🎯 Resizing to activeGame.size: ${gameWidth}x${gameHeight}`);
+			} else if (gameAny.width && gameAny.height) {
+				gameWidth = gameAny.width;
+				gameHeight = gameAny.height;
+				console.log(`🎯 Resizing to activeGame width/height: ${gameWidth}x${gameHeight}`);
+			} else {
+				console.log(`🎯 No size info found for resize, keeping current size`);
+				return; // Don't resize if we can't get size info
+			}
+		}
+
+		// Resize the existing window
+		try {
+			this.overlayWindow.window.setSize(gameWidth, gameHeight);
+			this.overlayWindow.window.setPosition(0, 0);
+			this.overlayWindow.window.show(); // Make sure it's visible
+			console.log(`🎯 Overlay resized to: ${gameWidth}x${gameHeight}`);
+		} catch (error) {
+			console.error('❌ Failed to resize overlay window:', error);
+		}
+	}
+
+	/**
 	 * Create the Hello World overlay window
 	 */
 	private async createOverlayWindow(): Promise<void> {
+		// Get the game window information to match its size
+		const activeGame = this.overlayApi.getActiveGameInfo();
+
+		// Log everything to understand the structure
+		console.log(`🎯 Active game object:`, activeGame);
+		console.log(`🎯 Active game keys:`, activeGame ? Object.keys(activeGame) : 'No active game');
+
+		const gameWindowInfo = activeGame?.gameWindowInfo;
+		console.log(`🎯 Game window info:`, gameWindowInfo);
+
+		// Try different possible property names for size information
+		let gameWidth = 1920;
+		let gameHeight = 1080;
+
+		if (activeGame) {
+			// Check various possible properties (using any to explore unknown structure)
+			const gameAny = activeGame as any;
+
+			if (activeGame.gameWindowInfo?.size) {
+				gameWidth = activeGame.gameWindowInfo.size.width;
+				gameHeight = activeGame.gameWindowInfo.size.height;
+				console.log(`🎯 Using gameWindowInfo.size: ${gameWidth}x${gameHeight}`);
+			} else if (gameAny.size) {
+				gameWidth = gameAny.size.width;
+				gameHeight = gameAny.size.height;
+				console.log(`🎯 Using activeGame.size: ${gameWidth}x${gameHeight}`);
+			} else if (gameAny.width && gameAny.height) {
+				gameWidth = gameAny.width;
+				gameHeight = gameAny.height;
+				console.log(`🎯 Using activeGame width/height: ${gameWidth}x${gameHeight}`);
+			} else {
+				console.log(`🎯 No size info found in ow-electron API, using defaults: ${gameWidth}x${gameHeight}`);
+			}
+		}
+
+		console.log(`🎯 Final overlay dimensions: ${gameWidth}x${gameHeight}`);
+
 		const options: OverlayWindowOptions = {
-			name: 'firestone-hello-world-' + Math.floor(Math.random() * 1000),
-			height: 200,
-			width: 400,
+			name: 'firestone-overlay-' + Math.floor(Math.random() * 1000),
+			height: gameHeight,
+			width: gameWidth,
 			show: true,
 			transparent: true,
 			resizable: false,
@@ -106,16 +191,10 @@ export class OverlayService extends EventEmitter {
 				nodeIntegration: true,
 				contextIsolation: false,
 			},
-			// Position at top-left area
-			x: 100,
-			y: 100,
+			// Position at top-left to cover entire game window
+			x: 0,
+			y: 0,
 		};
-
-		const activeGame = this.overlayApi.getActiveGameInfo();
-		const gameWindowInfo = activeGame?.gameWindowInfo;
-		const screenWidth = gameWindowInfo?.size.width || 500;
-		options.x = Math.floor(Math.random() * (screenWidth - options.width));
-		options.y = 10;
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
 
@@ -127,8 +206,17 @@ export class OverlayService extends EventEmitter {
 			console.log('🚀 Loading Angular overlay from:', frontendUrl);
 			await this.overlayWindow.window.loadURL(frontendUrl);
 
-			// Show the window (like in the sample)
-			this.overlayWindow.window.show();
+			// Wait for DOM to be ready, then show and focus
+			this.overlayWindow.window.webContents.once('dom-ready', () => {
+				console.log('🎯 Angular DOM ready, showing overlay...');
+				this.overlayWindow.window.show();
+				this.overlayWindow.window.focus();
+				this.overlayWindow.window.setAlwaysOnTop(true);
+				setTimeout(() => {
+					this.overlayWindow.window.setAlwaysOnTop(false); // Reset to normal after a moment
+				}, 100);
+				console.log('🎯 Overlay window shown and focused after Angular DOM ready');
+			});
 
 			// Open dev tools for debugging in development mode
 			if (process.env['NODE_ENV'] === 'development' || !app.isPackaged) {
@@ -147,7 +235,7 @@ export class OverlayService extends EventEmitter {
 				}
 			});
 
-			console.log('✨ Angular overlay window created and shown successfully!');
+			console.log('✨ Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {
 			console.error('❌ Error loading Angular overlay:', error);
 			console.error('❌ Make sure Angular frontend is running on http://localhost:4200');
@@ -227,21 +315,41 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayApi.on('game-injected', async (gameInfo) => {
 			console.log('✨ Game injected successfully!', gameInfo.name);
-			console.log('🎯 Now creating overlay window...');
+			console.log('🎯 Waiting for game to get focus before creating overlay...');
+		});
 
-			// Create overlay window AFTER successful injection
-			if (!this.overlayWindow) {
-				await this.createOverlayWindow();
-				console.log('🎯 Overlay window created after injection - should be visible in game!');
+		this.overlayApi.on('game-focus-changed', async (window, game, focus) => {
+			console.log('🔍 Game focus changed:', game.name, focus ? 'focused' : 'unfocused');
+
+			if (game.classId === 9898) {
+				if (focus) {
+					// Game focused - create or resize overlay
+					if (!this.overlayWindow) {
+						console.log('🎯 Hearthstone focused! Creating overlay window...');
+						await this.createOverlayWindow();
+						console.log('🎯 Overlay window created when game got focus!');
+					} else {
+						console.log('🎯 Hearthstone focused! Resizing existing overlay...');
+						await this.resizeOverlayToGame();
+						console.log('🎯 Overlay window resized to match current game size!');
+					}
+				} else {
+					// Game unfocused - hide overlay but keep it alive
+					// if (this.overlayWindow) {
+					// 	console.log('🎯 Hearthstone unfocused! Hiding overlay...');
+					// 	this.overlayWindow.window.hide();
+					// }
+				}
 			}
 		});
 
-		this.overlayApi.on('game-focus-changed', (window, game, focus) => {
-			console.log('🔍 Game focus changed:', game.name, focus ? 'focused' : 'unfocused');
-		});
-
-		this.overlayApi.on('game-window-changed', (window, game, reason) => {
+		this.overlayApi.on('game-window-changed', async (window, game, reason) => {
 			console.log('📐 Game window changed:', reason, game.name);
+
+			if (game.classId === 9898 && this.overlayWindow) {
+				console.log('🎯 Hearthstone window changed! Resizing overlay...');
+				await this.resizeOverlayToGame();
+			}
 		});
 
 		this.overlayApi.on('game-input-interception-changed', (info) => {
