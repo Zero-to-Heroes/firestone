@@ -18,14 +18,22 @@ However, from my understanding, Overwolf and electron differ quite a lot on a fe
 
 ## Next steps
 
-- Done: basic Hello World overlay injection
-- Done: integrating C# plugins from electron (MindVision memory reading)
-- Next steps: add a decktracker overlay
+- Make GameStatusService available in both contexts
+    - in electron, delegate to a pure electron service, as the current implementation relies strongly on Overwolf
+    - So we need to have the service in the electron lib, and have gameStatusService delegate to that status when we're in an electron context
+    - facade pattern
+        - expose the main service in the "main" process, which is outside of Angular, and serialize the data between it and the renderer process
+    - dependency injection
+        - AppInjector could be made generic to work in both contexts?
 
-To do this, we will need:
+### Later
 
-- Start thinking about code sharing between the Overwolf app and the electron app (including dependency injection). Ideally, share as much code as possible with the Overwolf app. Notably game-status.service, log-register.service, game-events.service, etc.
-    - Decide which services need to be abstracted with different implementations for electron vs Overwolf, and which ones could be reused directly
-- Integrate log parsing C# plugin
-- To have a fullscreen overlay window that reuses the \_fullscreen-overlays Angular component
-- To communicate between the main window and the overlay window. Today, this is done in various places, but looking at \_full-screen-overlays.component and decktracker-player-widget-wrapper.component should give a good idea of the most useful services to have
+- Make SceneService fully available and functional, both within the NodeJS environment and in a renderer (for decktracker-ooc component)
+    - MindVision needs to remove its dependency on OverwolfService (only gameStatus?)
+    - MindVisionFacade looks a lot like the mind-vision-electron service, so maybe use a common interface?
+    - StateMachine needs to remove the dependency on OW service (only gameStatus?). Also GlobalError, but maybe we can comment that out for now
+    - memoryUpdate needs to be fed memory updates (from the mind-vision-electron service?)
+    - dependency injection
+        - AppInjector could be made generic to work in both contexts?
+    - facade pattern
+        - expose the main service in the "main" process, which is outside of Angular, and serialize the data between it and the renderer process
