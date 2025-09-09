@@ -11,7 +11,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -51,6 +51,7 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly gameInfoService: GameInfoService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
@@ -128,7 +129,7 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	}
 
 	protected async doResize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfoService.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}

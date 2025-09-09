@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
@@ -48,6 +48,7 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly gameInfoService: GameInfoService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
@@ -73,7 +74,7 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 	}
 
 	protected async doResize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.gameInfoService.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}

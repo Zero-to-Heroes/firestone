@@ -19,7 +19,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, shareReplay, takeUntil } from 'rxjs';
+import { Observable, combineLatest, shareReplay, takeUntil, tap } from 'rxjs';
 import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
@@ -120,11 +120,13 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		);
 
 		const canShowWidget$ = combineLatest([this.scene.currentScene$$, this.deck.currentDeck$$]).pipe(
+			tap((info) => console.debug('[debug] constructed-decktracker-ooc-widget-wrapper canShowWidget$ 1', info)),
 			this.mapData(([currentScene, deck]) => {
 				const result =
 					[SceneMode.TOURNAMENT, SceneMode.FRIENDLY].includes(currentScene) && deck?.deckstring?.length > 0;
 				return result;
 			}),
+			tap((info) => console.debug('[debug] constructed-decktracker-ooc-widget-wrapper canShowWidget$ 2', info)),
 		);
 
 		this.showWidgetListOnly$ = combineLatest([

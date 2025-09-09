@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2, ViewRef } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { AppInjector, GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, UnaryFunction, pipe } from 'rxjs';
 import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -29,6 +29,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected debug = false;
 
 	private repositioning: boolean;
+	private gameInfoService: GameInfoService;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -38,6 +39,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		protected readonly renderer: Renderer2,
 	) {
 		super(cdr);
+		this.gameInfoService = AppInjector.get(GameInfoService);
 		this.init();
 	}
 
@@ -72,9 +74,11 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			return null;
 		}
 		this.repositioning = true;
-		const gameInfo = await this.ow.getRunningGameInfo();
+		console.debug(this.constructor.name, 'repositioning');
+		const gameInfo = await this.gameInfoService.getRunningGameInfo();
+		console.debug(this.constructor.name, 'got game info', gameInfo);
 		if (!gameInfo) {
-			console.warn('missing game info', gameInfo);
+			console.warn(this.constructor.name, 'missing game info', gameInfo);
 			this.repositioning = false;
 			return null;
 		}
