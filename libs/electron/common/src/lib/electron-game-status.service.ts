@@ -83,7 +83,7 @@ export class ElectronGameStatusService {
 				this.gameInfoListeners.forEach((callback) => callback(event));
 
 				// Broadcast to all renderer processes
-				this.broadcastToRenderers('electron-game-info-updated', event);
+				// this.broadcastToRenderers('electron-game-info-updated', event);
 			}
 		});
 	}
@@ -123,10 +123,10 @@ export class ElectronGameStatusService {
 		}
 	}
 
-	private async inGameInternal(): Promise<boolean> {
-		const gameInfo = this.gameWindowService.getCurrentGameInfo();
-		return this.isHearthstoneRunning(gameInfo);
-	}
+	// private async inGameInternal(): Promise<boolean> {
+	// 	const gameInfo = this.gameWindowService.getCurrentGameInfo();
+	// 	return this.isHearthstoneRunning(gameInfo);
+	// }
 
 	public exitGame(gameInfoResult: GameInfoUpdatedEvent): boolean {
 		return (
