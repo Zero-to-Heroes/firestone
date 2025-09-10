@@ -1,17 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
-import { GameWindowInfo } from '@firestone/electron/common';
 import { OverwolfService } from './overwolf.service';
 
 declare const window: any;
-
-// HEARTHSTONE_GAME_ID is already exported from overwolf.service.ts
 
 @Injectable({ providedIn: 'root' })
 export class GameInfoService {
 	constructor(private readonly ow: OverwolfService) {}
 
-	public async getRunningGameInfo(): Promise<GameWindowInfo | null> {
+	public async getRunningGameInfo(): Promise<any | null> {
 		// First, try Overwolf if available
 		if (this.ow?.isOwEnabled()) {
 			const owResult = await this.ow.getRunningGameInfo();
@@ -39,10 +36,10 @@ export class GameInfoService {
 			}
 
 			// If we have direct access to electron (in development)
-			if (window?.require) {
-				const { ipcRenderer } = window.require('electron');
-				return await ipcRenderer.invoke('get-running-game-info');
-			}
+			// if (window?.require) {
+			// 	const { ipcRenderer } = window.require('electron');
+			// 	return await ipcRenderer.invoke('get-running-game-info');
+			// }
 
 			// No direct access available, return null
 			// Real game info should come through electronAPI or IPC
@@ -78,4 +75,24 @@ export class GameInfoService {
 			processId: owResult.processId,
 		};
 	}
+}
+
+export interface GameWindowInfo {
+	success: boolean;
+	isInFocus: boolean;
+	gameIsInFocus: boolean;
+	isRunning: boolean;
+	title: string;
+	displayName: string;
+	shortTitle: string;
+	id: number;
+	classId: number;
+	width: number;
+	height: number;
+	logicalWidth: number;
+	logicalHeight: number;
+	executionPath: string;
+	windowHandle: { value: number };
+	monitorHandle: { value: number };
+	processId: number;
 }

@@ -1,7 +1,8 @@
 // Hearthstone game ID constant (avoiding circular dependency)
 const HEARTHSTONE_GAME_ID = 9898;
+import { GameWindowInfo } from '@firestone/shared/framework/core';
 import { BrowserWindow, ipcMain, ipcRenderer } from 'electron';
-import { ElectronGameWindowService, GameWindowInfo } from './electron-game-window.service';
+import { ElectronGameWindowService } from './electron-game-window.service';
 
 export interface GameInfoUpdatedEvent {
 	gameInfo?: {

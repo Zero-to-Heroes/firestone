@@ -22,30 +22,30 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 	private async initFacade() {
 		const isMainWindow = await this.windowManager.isMainWindow();
-		this.isElectronContext =
-			(typeof window !== 'undefined' && (window as any).electronAPI !== undefined) ||
-			(typeof process !== 'undefined' && process.versions?.electron !== undefined);
+		// this.isElectronContext =
+		// 	(typeof window !== 'undefined' && (window as any).electronAPI !== undefined) ||
+		// 	(typeof process !== 'undefined' && process.versions?.electron !== undefined);
 		// Check if the service is already initialized, which is useful for single-window apps, like
 		// the website
 		if (isMainWindow && !window[this.serviceName]) {
 			window[this.serviceName] = this;
 			this.mainInstance = this as unknown as T;
 			this.init();
-		} else if (this.isElectronContext) {
-			// In Electron context, we need to handle main vs renderer process differently
-			const isMainProcess =
-				typeof process !== 'undefined' && (process.type === undefined || process.type === 'browser');
+			// } else if (this.isElectronContext) {
+			// 	// In Electron context, we need to handle main vs renderer process differently
+			// 	const isMainProcess =
+			// 		typeof process !== 'undefined' && (process.type === undefined || process.type === 'browser');
 
-			if (isMainProcess) {
-				// We're in the main process, initialize normally like a main window
-				window[this.serviceName] = this;
-				this.mainInstance = this as unknown as T;
-				this.init();
-			} else {
-				// We're in a renderer process, create IPC proxy
-				this.mainInstance = this as unknown as T;
-				this.createElectronProxy();
-			}
+			// 	if (isMainProcess) {
+			// 		// We're in the main process, initialize normally like a main window
+			// 		window[this.serviceName] = this;
+			// 		this.mainInstance = this as unknown as T;
+			// 		this.init();
+			// 	} else {
+			// 		// We're in a renderer process, create IPC proxy
+			// 		this.mainInstance = this as unknown as T;
+			// 		this.createElectronProxy();
+			// 	}
 		} else {
 			const mainWindow = await this.windowManager.getMainWindow();
 			this.mainInstance = mainWindow[this.serviceName];

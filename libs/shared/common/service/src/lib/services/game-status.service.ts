@@ -3,6 +3,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import {
 	AbstractFacadeService,
 	AppInjector,
+	GameWindowInfo,
 	HEARTHSTONE_GAME_ID,
 	OverwolfService,
 	WindowManagerService,
@@ -51,6 +52,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		if (this.isElectronContext) {
 			// Dynamically import ElectronGameWindowService to avoid issues in browser environments
 			// const { ElectronGameWindowService } = await import('@firestone/electron/common');
+			// const { ElectronGameWindowService } = require('@firestone/electron/common');
 			// const gameWindowService = ElectronGameWindowService.getInstance();
 			// gameWindowService.onGameInfoChanged((gameInfo: any) => {
 			// 	if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
@@ -82,18 +84,15 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	protected override async createElectronProxy() {
 		// In renderer process, create proxy subjects that communicate with main process via IPC
-		this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
-		this.prefs = AppInjector.get(PreferencesService);
-
-		console.debug('[game-status] creating Electron proxy in renderer process');
-
-		// Load initial value from main process via IPC
-		this.inGame$$.onFirstSubscribe(async () => {
-			const inGame = await this.inGameViaIPC();
-			this.inGame$$.next(inGame);
-		});
-
-		// Listen for game status changes from main process
+		// this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
+		// this.prefs = AppInjector.get(PreferencesService);
+		// console.debug('[game-status] creating Electron proxy in renderer process');
+		// // Load initial value from main process via IPC
+		// this.inGame$$.onFirstSubscribe(async () => {
+		// 	const inGame = await this.inGameViaIPC();
+		// 	this.inGame$$.next(inGame);
+		// });
+		// // Listen for game status changes from main process
 		// const { ipcRenderer } = await import('electron');
 		// if (ipcRenderer) {
 		// 	ipcRenderer.on('game-status-changed', (_, inGame: boolean | null) => {
@@ -104,6 +103,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	private async getElectronGameInfo(): Promise<any> {
 		// const { ElectronGameWindowService } = await import('@firestone/electron/common');
+		// const { ElectronGameWindowService } = require('@firestone/electron/common');
 		// const gameWindowService = ElectronGameWindowService.getInstance();
 		// return gameWindowService.getCurrentGameInfo();
 	}
@@ -135,14 +135,14 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	// Here we are always in the main process
 	private async getElectronInGame(): Promise<boolean> {
-		// const { ElectronGameWindowService } = await import('@firestone/electron/common');
+		// const { ElectronGameWindowService } = require('@firestone/electron/common');
 		// const gameWindowService = ElectronGameWindowService.getInstance();
 		// const gameInfo = gameWindowService.getCurrentGameInfo();
 		// return this.isHearthstoneRunning(gameInfo);
 		return false;
 	}
 
-	private isHearthstoneRunning(gameInfo: any /*GameWindowInfo*/ | null): boolean {
+	private isHearthstoneRunning(gameInfo: GameWindowInfo | null): boolean {
 		return !!(gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID);
 	}
 
@@ -173,13 +173,12 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		// ipcMain.handle('game-status-in-game', async () => {
 		// 	return this.inGameInternal();
 		// });
-
-		// Broadcast game status changes to all renderer processes
-		const originalNext = this.inGame$$.next.bind(this.inGame$$);
-		this.inGame$$.next = (value: boolean | null) => {
-			originalNext(value);
-			this.broadcastToRenderers('game-status-changed', value);
-		};
+		// // Broadcast game status changes to all renderer processes
+		// const originalNext = this.inGame$$.next.bind(this.inGame$$);
+		// this.inGame$$.next = (value: boolean | null) => {
+		// 	originalNext(value);
+		// 	this.broadcastToRenderers('game-status-changed', value);
+		// };
 	}
 
 	private async inGameViaIPC(): Promise<boolean | null> {
@@ -192,15 +191,15 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	private broadcastToRenderers(channel: string, data: any): void {
 		// Import BrowserWindow dynamically to avoid issues in renderer process
-		try {
-			const { BrowserWindow } = require('electron');
-			BrowserWindow.getAllWindows().forEach((window: any) => {
-				if (!window.isDestroyed()) {
-					window.webContents.send(channel, data);
-				}
-			});
-		} catch (error) {
-			console.debug('[game-status] Could not broadcast to renderers:', error);
-		}
+		// try {
+		// 	const { BrowserWindow } = require('electron');
+		// 	BrowserWindow.getAllWindows().forEach((window: any) => {
+		// 		if (!window.isDestroyed()) {
+		// 			window.webContents.send(channel, data);
+		// 		}
+		// 	});
+		// } catch (error) {
+		// 	console.debug('[game-status] Could not broadcast to renderers:', error);
+		// }
 	}
 }

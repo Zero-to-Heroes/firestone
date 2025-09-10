@@ -1,24 +1,5 @@
+import { GameWindowInfo } from '@firestone/shared/framework/core';
 import { ipcMain } from 'electron';
-
-export interface GameWindowInfo {
-	success: boolean;
-	isInFocus: boolean;
-	gameIsInFocus: boolean;
-	isRunning: boolean;
-	title: string;
-	displayName: string;
-	shortTitle: string;
-	id: number;
-	classId: number;
-	width: number;
-	height: number;
-	logicalWidth: number;
-	logicalHeight: number;
-	executionPath: string;
-	windowHandle: { value: number };
-	monitorHandle: { value: number };
-	processId: number;
-}
 
 export class ElectronGameWindowService {
 	private static instance: ElectronGameWindowService;
@@ -57,7 +38,7 @@ export class ElectronGameWindowService {
 	}
 
 	private notifyGameInfoChanged(): void {
-		this.gameInfoChangeListeners.forEach(callback => callback(this.currentGameInfo));
+		this.gameInfoChangeListeners.forEach((callback) => callback(this.currentGameInfo));
 	}
 
 	/**
