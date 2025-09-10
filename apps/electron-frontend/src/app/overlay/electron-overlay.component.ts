@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { GameStatusService } from '@firestone/shared/common/service';
+import { isElectronContext } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 
 declare const window: any;
@@ -135,11 +136,7 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		console.log('[ElectronOverlay] Initializing...');
 
 		// Detect electron context
-		this.isElectronContext =
-			typeof window !== 'undefined' &&
-			((window as any).electronAPI !== undefined ||
-				(typeof process !== 'undefined' && process.versions?.electron !== undefined));
-
+		this.isElectronContext = isElectronContext();
 		console.log('[ElectronOverlay] Electron context:', this.isElectronContext);
 
 		// Test legacy ElectronAPI for comparison

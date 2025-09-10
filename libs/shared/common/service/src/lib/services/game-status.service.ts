@@ -80,6 +80,10 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 			});
 		}
 
+		const inGame = await this.inGameInternal();
+		console.debug('[game-status] inGame at launch', inGame);
+		this.inGame$$.next(inGame);
+
 		const gameInfo = this.isElectronContext ? await this.getElectronGameInfo() : await this.ow.getRunningGameInfo();
 		this.updateExecutionPathInPrefs(gameInfo?.executionPath);
 	}
@@ -96,6 +100,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 			const inGame = await this.inGameViaIPC();
 			this.inGame$$.next(inGame);
 		});
+
 		// Listen for game status changes from main process
 		const { ipcRenderer } = window.require('electron');
 		if (ipcRenderer) {
@@ -125,7 +130,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	public async inGame(): Promise<boolean | null> {
 		await this.isReady();
-		return this.inGameInternal();
+		return this.inGame$$.getValueWithInit();
 	}
 
 	private async inGameInternal(): Promise<boolean> {
@@ -175,7 +180,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		const { ipcMain } = window.require('electron');
 		// Handle IPC requests from renderer processes
 		ipcMain.handle('game-status-in-game', async () => {
-			return this.inGameInternal();
+			return this.inGame$$.getValueWithInit();
 		});
 		// Broadcast game status changes to all renderer processes
 		const originalNext = this.inGame$$.next.bind(this.inGame$$);
@@ -198,6 +203,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		try {
 			const { BrowserWindow } = window.require('electron');
 			BrowserWindow.getAllWindows().forEach((window: any) => {
+				console.debug('[game-status] broadcasting to renderer', channel, data, window);
 				if (!window.isDestroyed()) {
 					window.webContents.send(channel, data);
 				}
