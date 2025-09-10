@@ -1,5 +1,9 @@
+// Import Angular compiler FIRST to enable JIT compilation fallback for decorated services
+import '@angular/compiler';
 import { ElectronGameWindowService } from '@firestone/electron/common';
 // import '@overwolf/types';
+import { GameStatusService } from '@firestone/shared/common/service';
+import { WindowManagerService } from '@firestone/shared/framework/core';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
@@ -82,8 +86,8 @@ export default class App {
 		App.mindVision = new MindVisionElectronService();
 
 		// TODO: how to use a dependency injection system for this?
-		// const windowManager = new WindowManagerService(null);
-		// const gameStatusService = new GameStatusService(windowManager);
+		const windowManager = new WindowManagerService(null);
+		const gameStatusService = new GameStatusService(windowManager);
 
 		// Initialize game services
 		App.overlay = OverlayService.getInstance();

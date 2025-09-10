@@ -1,3 +1,5 @@
+// Import Angular compiler FIRST to enable JIT compilation fallback
+import '@angular/compiler';
 import { app, BrowserWindow } from 'electron';
 import App from './app/app';
 import ElectronEvents from './app/events/electron.events';
