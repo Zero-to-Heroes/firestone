@@ -28,6 +28,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		this.inGame$$ = this.mainInstance.inGame$$;
 	}
 
+	// This only executes in the main process (in case of electron), not in the renderer
 	protected async init() {
 		this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
 		this.prefs = AppInjector.get(PreferencesService);
@@ -35,11 +36,11 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		console.debug('[game-status] isElectronContext', this.isElectronContext);
 
 		// Setup Electron IPC handlers if we're in main process
-		if (this.isElectronContext) {
-			// const { ipcMain } = await import('electron');
-			// if (typeof ipcMain !== 'undefined') {
-			// 	this.setupElectronMainProcessHandlers();
-			// }
+		if (this.isElectronContext && window?.require) {
+			const { ipcMain } = window.require('electron');
+			if (typeof ipcMain !== 'undefined') {
+				this.setupElectronMainProcessHandlers();
+			}
 		}
 
 		// Load initial value
@@ -50,17 +51,18 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 		// Listen to game status changes
 		if (this.isElectronContext) {
+			// if (isElectronContext() && isMainProcess()) {
 			// Dynamically import ElectronGameWindowService to avoid issues in browser environments
-			// const { ElectronGameWindowService } = await import('@firestone/electron/common');
-			// const { ElectronGameWindowService } = require('@firestone/electron/common');
-			// const gameWindowService = ElectronGameWindowService.getInstance();
-			// gameWindowService.onGameInfoChanged((gameInfo: any) => {
-			// 	if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
-			// 		this.inGame$$.next(true);
-			// 		this.startListeners.forEach((cb: any) => cb(gameInfo));
-			// 		this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
-			// 	}
-			// });
+			const { ElectronGameWindowService } = window.require('@firestone/electron/common');
+			const gameWindowService = ElectronGameWindowService.getInstance();
+			gameWindowService.onGameInfoChanged((gameInfo: any) => {
+				if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
+					this.inGame$$.next(true);
+					this.startListeners.forEach((cb: any) => cb(gameInfo));
+					this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
+				}
+			});
+			// }
 		} else {
 			this.ow = AppInjector.get(OverwolfService);
 			this.ow.addGameInfoUpdatedListener(async (res) => {
@@ -82,30 +84,32 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		this.updateExecutionPathInPrefs(gameInfo?.executionPath);
 	}
 
+	// In renderer process
 	protected override async createElectronProxy() {
 		// In renderer process, create proxy subjects that communicate with main process via IPC
-		// this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
-		// this.prefs = AppInjector.get(PreferencesService);
-		// console.debug('[game-status] creating Electron proxy in renderer process');
-		// // Load initial value from main process via IPC
-		// this.inGame$$.onFirstSubscribe(async () => {
-		// 	const inGame = await this.inGameViaIPC();
-		// 	this.inGame$$.next(inGame);
-		// });
-		// // Listen for game status changes from main process
-		// const { ipcRenderer } = await import('electron');
-		// if (ipcRenderer) {
-		// 	ipcRenderer.on('game-status-changed', (_, inGame: boolean | null) => {
-		// 		this.inGame$$.next(inGame);
-		// 	});
-		// }
+		this.inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(null);
+		this.prefs = AppInjector.get(PreferencesService);
+
+		console.debug('[game-status] creating Electron proxy in renderer process');
+		// Load initial value from main process via IPC
+		this.inGame$$.onFirstSubscribe(async () => {
+			const inGame = await this.inGameViaIPC();
+			this.inGame$$.next(inGame);
+		});
+		// Listen for game status changes from main process
+		const { ipcRenderer } = window.require('electron');
+		if (ipcRenderer) {
+			ipcRenderer.on('game-status-changed', (_, inGame: boolean | null) => {
+				this.inGame$$.next(inGame);
+			});
+		}
 	}
 
 	private async getElectronGameInfo(): Promise<any> {
 		// const { ElectronGameWindowService } = await import('@firestone/electron/common');
-		// const { ElectronGameWindowService } = require('@firestone/electron/common');
-		// const gameWindowService = ElectronGameWindowService.getInstance();
-		// return gameWindowService.getCurrentGameInfo();
+		const { ElectronGameWindowService } = window.require('@firestone/electron/common');
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		return gameWindowService.getCurrentGameInfo();
 	}
 
 	public async onGameStart(callback: any) {
@@ -135,11 +139,11 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	// Here we are always in the main process
 	private async getElectronInGame(): Promise<boolean> {
-		// const { ElectronGameWindowService } = require('@firestone/electron/common');
-		// const gameWindowService = ElectronGameWindowService.getInstance();
-		// const gameInfo = gameWindowService.getCurrentGameInfo();
-		// return this.isHearthstoneRunning(gameInfo);
-		return false;
+		const { ElectronGameWindowService } = window.require('@firestone/electron/common');
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		const gameInfo = gameWindowService.getCurrentGameInfo();
+		return this.isHearthstoneRunning(gameInfo);
+		// return false;
 	}
 
 	private isHearthstoneRunning(gameInfo: GameWindowInfo | null): boolean {
@@ -168,38 +172,38 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	private async setupElectronMainProcessHandlers() {
-		// const { ipcMain } = await import('electron');
-		// // Handle IPC requests from renderer processes
-		// ipcMain.handle('game-status-in-game', async () => {
-		// 	return this.inGameInternal();
-		// });
-		// // Broadcast game status changes to all renderer processes
-		// const originalNext = this.inGame$$.next.bind(this.inGame$$);
-		// this.inGame$$.next = (value: boolean | null) => {
-		// 	originalNext(value);
-		// 	this.broadcastToRenderers('game-status-changed', value);
-		// };
+		const { ipcMain } = window.require('electron');
+		// Handle IPC requests from renderer processes
+		ipcMain.handle('game-status-in-game', async () => {
+			return this.inGameInternal();
+		});
+		// Broadcast game status changes to all renderer processes
+		const originalNext = this.inGame$$.next.bind(this.inGame$$);
+		this.inGame$$.next = (value: boolean | null) => {
+			originalNext(value);
+			this.broadcastToRenderers('game-status-changed', value);
+		};
 	}
 
 	private async inGameViaIPC(): Promise<boolean | null> {
-		// const { ipcRenderer } = await import('electron');
-		// if (ipcRenderer) {
-		// 	return ipcRenderer.invoke('game-status-in-game');
-		// }
+		const { ipcRenderer } = window.require('electron');
+		if (ipcRenderer) {
+			return ipcRenderer.invoke('game-status-in-game');
+		}
 		return null;
 	}
 
 	private broadcastToRenderers(channel: string, data: any): void {
 		// Import BrowserWindow dynamically to avoid issues in renderer process
-		// try {
-		// 	const { BrowserWindow } = require('electron');
-		// 	BrowserWindow.getAllWindows().forEach((window: any) => {
-		// 		if (!window.isDestroyed()) {
-		// 			window.webContents.send(channel, data);
-		// 		}
-		// 	});
-		// } catch (error) {
-		// 	console.debug('[game-status] Could not broadcast to renderers:', error);
-		// }
+		try {
+			const { BrowserWindow } = window.require('electron');
+			BrowserWindow.getAllWindows().forEach((window: any) => {
+				if (!window.isDestroyed()) {
+					window.webContents.send(channel, data);
+				}
+			});
+		} catch (error) {
+			console.debug('[game-status] Could not broadcast to renderers:', error);
+		}
 	}
 }

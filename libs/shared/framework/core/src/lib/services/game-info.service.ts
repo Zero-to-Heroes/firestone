@@ -36,10 +36,10 @@ export class GameInfoService {
 			}
 
 			// If we have direct access to electron (in development)
-			// if (window?.require) {
-			// 	const { ipcRenderer } = window.require('electron');
-			// 	return await ipcRenderer.invoke('get-running-game-info');
-			// }
+			if (window?.require) {
+				const { ipcRenderer } = window.require('electron');
+				return await ipcRenderer.invoke('get-running-game-info');
+			}
 
 			// No direct access available, return null
 			// Real game info should come through electronAPI or IPC
