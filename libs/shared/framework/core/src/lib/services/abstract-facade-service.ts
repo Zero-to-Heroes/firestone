@@ -32,15 +32,30 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 			this.mainInstance = this as unknown as T;
 			this.init();
 		} else if (this.isElectronContext) {
-			// Here is the harder part:
-			// - The implementing services all declare properties that need to be synchronized from the main process, in the assignSubjects method
-			// - However, they are currently defined assuming we are in an Overwolf context, where we can share object instances
-			// - When we're in an electron context, we can't share object instances, so we need to find a way to synchronize the data
+			// In Electron context, we need to handle main vs renderer process differently
+			const isMainProcess =
+				typeof process !== 'undefined' && (process.type === undefined || process.type === 'browser');
+
+			if (isMainProcess) {
+				// We're in the main process, initialize normally like a main window
+				window[this.serviceName] = this;
+				this.mainInstance = this as unknown as T;
+				this.init();
+			} else {
+				// We're in a renderer process, create IPC proxy
+				this.mainInstance = this as unknown as T;
+				this.createElectronProxy();
+			}
 		} else {
 			const mainWindow = await this.windowManager.getMainWindow();
 			this.mainInstance = mainWindow[this.serviceName];
 			this.assignSubjects();
 		}
+	}
+
+	protected createElectronProxy(): void | Promise<void> {
+		// Do nothing by default
+		console.warn(this.constructor.name, 'createElectronProxy not implemented');
 	}
 
 	protected abstract assignSubjects(): void;

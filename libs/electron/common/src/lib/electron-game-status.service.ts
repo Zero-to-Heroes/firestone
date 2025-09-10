@@ -13,6 +13,8 @@ export interface GameInfoUpdatedEvent {
 	runningChanged?: boolean;
 }
 
+// TODO: delete this
+
 /**
  * Electron-specific implementation of game status functionality.
  * This service handles the game detection and status management in the main process,
@@ -45,13 +47,13 @@ export class ElectronGameStatusService {
 
 	private setupMainProcessHandlers(): void {
 		// Handle IPC requests from renderer processes
-		ipcMain.handle('electron-game-status-in-game', async () => {
-			return this.inGameInternal();
-		});
+		// ipcMain.handle('electron-game-status-in-game', async () => {
+		// 	return this.inGameInternal();
+		// });
 
-		ipcMain.handle('electron-game-status-get-running-game-info', async () => {
-			return this.getRunningGameInfoInternal();
-		});
+		// ipcMain.handle('electron-game-status-get-running-game-info', async () => {
+		// 	return this.getRunningGameInfoInternal();
+		// });
 
 		// Listen to game events from ElectronGameWindowService
 		this.gameWindowService.onGameInfoChanged((gameInfo: GameWindowInfo | null) => {
@@ -115,8 +117,9 @@ export class ElectronGameStatusService {
 	}
 
 	public async inGame(): Promise<boolean> {
+		return false;
 		if (this.isMainProcess) {
-			return this.inGameInternal();
+			// return this.inGameInternal();
 		} else {
 			// Delegate to main process via IPC
 			return ipcRenderer.invoke('electron-game-status-in-game');

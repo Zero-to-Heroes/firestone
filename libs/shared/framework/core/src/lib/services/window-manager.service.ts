@@ -14,9 +14,9 @@ export class WindowManagerService {
 			(typeof window !== 'undefined' && (window as any).electronAPI !== undefined) ||
 			(typeof process !== 'undefined' && process.versions?.electron !== undefined);
 		if (isElectronContext) {
-			const { ipcMain } = await import('electron');
-			const isMainProcess = typeof ipcMain !== 'undefined';
-			return isMainProcess;
+			// const { ipcMain } = await import('electron');
+			// const isMainProcess = typeof ipcMain !== 'undefined';
+			// return isMainProcess;
 		}
 		const currentWindow = await this.ow?.getCurrentWindow();
 		return !this.ow || !currentWindow || currentWindow?.name === OverwolfService.MAIN_WINDOW;
