@@ -1,4 +1,5 @@
 import { ElectronGameWindowService } from '@firestone/electron/common';
+// import '@overwolf/types';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
@@ -16,7 +17,7 @@ export default class App {
 	// static gameDetection: GameDetectionService;
 	static overlay: OverlayService;
 	static gameWindow: ElectronGameWindowService;
-	// static gameStatus: ElectronGameStatusService;
+	// static gameStatusService: GameStatusService;
 	static mindVision: MindVisionElectronService;
 
 	public static isDevelopmentMode() {
@@ -79,6 +80,10 @@ export default class App {
 	private static initGameDetection() {
 		// Initialize MindVision service for memory reading
 		App.mindVision = new MindVisionElectronService();
+
+		// TODO: how to use a dependency injection system for this?
+		// const windowManager = new WindowManagerService(null);
+		// const gameStatusService = new GameStatusService(windowManager);
 
 		// Initialize game services
 		App.overlay = OverlayService.getInstance();

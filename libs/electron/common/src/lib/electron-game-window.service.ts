@@ -132,7 +132,7 @@ export class ElectronGameWindowService {
 				processId: gameInfo.processInfo?.pid || 0,
 			};
 
-			console.log('[ElectronGameWindowService] Game info updated from launch event:', this.currentGameInfo);
+			console.log('[ElectronGameWindowService] Game info updated from launch event');
 
 			// Notify listeners of the change
 			this.notifyGameInfoChanged();

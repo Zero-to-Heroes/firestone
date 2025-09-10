@@ -76,6 +76,7 @@
 		"strictPropertyInitialization": false,
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
+		"useDefineForClassFields": false,
 		"noPropertyAccessFromIndexSignature": false
 	},
 	"exclude": ["node_modules", "tmp"]

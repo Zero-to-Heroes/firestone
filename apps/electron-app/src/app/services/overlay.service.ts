@@ -195,6 +195,10 @@ export class OverlayService extends EventEmitter {
 			});
 
 			// Open dev tools for debugging in development mode
+			this.overlayWindow.window.webContents.openDevTools({
+				mode: 'detach', // Open in separate window
+				activate: true, // Bring to front
+			});
 			if (process.env['NODE_ENV'] === 'development' || !app.isPackaged) {
 				this.overlayWindow.window.webContents.openDevTools({
 					mode: 'detach', // Open in separate window
@@ -259,8 +263,8 @@ export class OverlayService extends EventEmitter {
 		this.overlayApi.on('game-launched', async (event, gameInfo) => {
 			console.log('🎮 Game launched:', gameInfo.name);
 			console.log('🔍 Game ID:', gameInfo.id, '(looking for 9898 for Hearthstone)');
-			console.log('🔍 Process info:', JSON.stringify(gameInfo.processInfo, null, 2));
-			console.log('🔍 Window info:', JSON.stringify(gameInfo, null, 2));
+			// console.log('🔍 Process info:', JSON.stringify(gameInfo.processInfo, null, 2));
+			// console.log('🔍 Window info:', JSON.stringify(gameInfo, null, 2));
 
 			// Check if this is Hearthstone (ID 9898)
 			if (Math.round(gameInfo.id / 10) === 9898) {
