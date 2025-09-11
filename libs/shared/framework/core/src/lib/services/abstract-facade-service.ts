@@ -1,4 +1,5 @@
-import { sleep } from '@firestone/shared/framework/common';
+import { sleep, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { BehaviorSubject } from 'rxjs';
 import { isElectronContext, isMainProcess } from './electron-utils';
 import { WindowManagerService } from './window-manager.service';
 
@@ -35,20 +36,15 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				// window[this.serviceName] = this;
 				this.mainInstance = this as unknown as T;
 				this.init();
-
-				// Use eval to prevent bundler from trying to include electron in frontend builds
-				const { ipcMain } = eval('require')('electron');
-				if (typeof ipcMain !== 'undefined') {
-					this.setupElectronMainProcessHandlers();
-				}
-
 				this.initElectronMainProcess();
 			} else {
 				console.debug('[abstract-facade-service] isRendererProcess');
 				// We're in a renderer process, create IPC proxy
 				this.mainInstance = this as unknown as T;
-				this.createElectronProxy();
+				const { ipcRenderer } = (window as any).require('electron');
+				this.createElectronProxy(ipcRenderer);
 			}
+			this.initElectronSubjects();
 		} else {
 			if (isMainWindow && !window[this.serviceName]) {
 				window[this.serviceName] = this;
@@ -62,12 +58,9 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		}
 	}
 
-	protected createElectronProxy(): void | Promise<void> {
+	protected createElectronProxy(ipcRenderer: any): void | Promise<void> {
 		// Do nothing by default
 		console.warn(this.constructor.name, 'createElectronProxy not implemented');
-	}
-	protected async setupElectronMainProcessHandlers() {
-		console.warn(this.constructor.name, 'setupElectronMainProcessHandlers not implemented');
 	}
 	protected async initElectronMainProcess() {
 		console.warn(this.constructor.name, 'initElectronMainProcess not implemented');
@@ -88,6 +81,37 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 			});
 		} catch (error) {
 			console.debug('[game-status] Could not broadcast to renderers:', error);
+		}
+	}
+
+	protected initElectronSubjects() {
+		console.warn(this.constructor.name, 'initElectron not implemented');
+	}
+
+	protected setupElectronSubject<T>(obs: BehaviorSubject<T>, eventName: string) {
+		if (isMainProcess()) {
+			const { ipcMain } = eval('require')('electron');
+			if (typeof ipcMain !== 'undefined') {
+				ipcMain.handle(eventName, async () => {
+					if (obs instanceof SubscriberAwareBehaviorSubject) {
+						return await obs.getValueWithInit();
+					} else {
+						return await obs.getValue();
+					}
+				});
+				const originalNext = obs.next.bind(obs);
+				obs.next = (value: T) => {
+					originalNext(value);
+					this.broadcastToRenderers(eventName, value);
+				};
+			}
+		} else {
+			const { ipcRenderer } = (window as any).require('electron');
+			if (typeof ipcRenderer !== 'undefined') {
+				ipcRenderer.on(eventName, (_, value: T) => {
+					obs.next(value);
+				});
+			}
 		}
 	}
 }

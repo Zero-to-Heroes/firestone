@@ -26,33 +26,13 @@ export class MemoryUpdatesService extends AbstractFacadeService<MemoryUpdatesSer
 		this.memoryUpdates$$.next(changes);
 	}
 
-	protected override async setupElectronMainProcessHandlers() {
-		// Use eval to prevent bundler from trying to include electron in frontend builds
-		const { ipcMain } = eval('require')('electron');
-		// Handle IPC requests from renderer processes
-		ipcMain.handle(eventName, async () => {
-			return this.memoryUpdates$$.getValue();
-		});
-		// Broadcast changes to all renderer processes
-		const originalNext = this.memoryUpdates$$.next.bind(this.memoryUpdates$$);
-		this.memoryUpdates$$.next = (value: MemoryUpdate) => {
-			originalNext(value);
-			this.broadcastToRenderers(eventName, value);
-		};
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.memoryUpdates$$, eventName);
 	}
 
 	// In renderer process
-	protected override async createElectronProxy() {
+	protected override async createElectronProxy(ipcRenderer: any) {
 		// In renderer process, create proxy subjects that communicate with main process via IPC
 		this.memoryUpdates$$ = new BehaviorSubject<MemoryUpdate>({} as MemoryUpdate);
-
-		console.debug('[memory-updates] creating Electron proxy in renderer process');
-		// Listen for game status changes from main process
-		const { ipcRenderer } = (window as any).require('electron');
-		if (ipcRenderer) {
-			ipcRenderer.on(eventName, (_, update: MemoryUpdate) => {
-				this.memoryUpdates$$.next(update);
-			});
-		}
 	}
 }
