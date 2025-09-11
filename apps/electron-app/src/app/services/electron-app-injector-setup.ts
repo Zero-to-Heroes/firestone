@@ -1,4 +1,5 @@
 import { ElectronStorageService } from '@firestone/electron/common';
+import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService, PreferencesService, PreferencesStorageService } from '@firestone/shared/common/service';
 import { LocalStorageService, WindowManagerService } from '@firestone/shared/framework/core';
 import { ElectronAngularInjector } from './electron-angular-injector';
@@ -12,6 +13,7 @@ export const buildAppInjector = () => {
 	const preferencesService = new PreferencesService(windowManager);
 	const localStorageService = new ElectronStorageService();
 	const preferencesStorageService = new PreferencesStorageService(localStorageService);
+	const memoryUpdates = new MemoryUpdatesService();
 
 	// Register services in the injector
 	electronInjector.register(WindowManagerService, windowManager);
@@ -19,6 +21,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(PreferencesService, preferencesService);
 	electronInjector.register(PreferencesStorageService, preferencesStorageService);
 	electronInjector.register(LocalStorageService, localStorageService);
+	electronInjector.register(MemoryUpdatesService, memoryUpdates);
 
 	return electronInjector;
 };

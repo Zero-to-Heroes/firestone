@@ -1,12 +1,13 @@
 import { PackInfo } from '@firestone/collection/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { BoostersInfo } from '../../../models/boosters-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
+
 export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly PackInfo[]> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getBoostersInfo',
 			() => mindVision.getBoostersInfo(),
 			(boostersInfo: BoostersInfo) => !boostersInfo?.Boosters?.length,
@@ -17,7 +18,7 @@ export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly
 							packType: booster.BoosterId,
 							totalObtained: booster.EverGrantedCount,
 							unopened: booster.Count,
-						} as PackInfo),
+						}) as PackInfo,
 				) as readonly PackInfo[];
 			},
 		);

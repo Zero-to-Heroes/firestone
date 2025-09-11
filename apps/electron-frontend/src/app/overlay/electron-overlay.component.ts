@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
-import { isElectronContext } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 
 declare const window: any;
@@ -16,10 +18,8 @@ declare const window: any;
 				<p>Angular renderer process running</p>
 
 				<div class="game-status-section">
-					<h3>🎮 Game Status Service Test</h3>
-					<p><strong>Service Ready:</strong> {{ gameStatusReady ? '✅' : '❌' }}</p>
 					<p><strong>In Game:</strong> {{ inGame !== null ? (inGame ? '✅' : '❌') : '⏳' }}</p>
-					<p><strong>Context:</strong> {{ isElectronContext ? 'Electron' : 'Unknown' }}</p>
+					<p><strong>Scene:</strong> {{ scene !== null ? scene : '⏳' }}</p>
 				</div>
 
 				<div *ngIf="gameInfo" class="game-info-section">
@@ -121,29 +121,41 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 	hasElectronAPI = false;
 	hasGameInfoMethod = false;
 
-	// GameStatusService properties
-	gameStatusReady = false;
 	inGame: boolean | null = null;
-	isElectronContext = false;
+	scene: string | null = null;
 
 	private subscriptions: Subscription[] = [];
 
-	constructor(private readonly gameStatusService: GameStatusService) {
-		console.log('[ElectronOverlay] Angular overlay component initialized');
-	}
+	constructor(
+		private readonly gameStatusService: GameStatusService,
+		private readonly sceneService: SceneService,
+	) {}
 
 	async ngOnInit() {
 		console.log('[ElectronOverlay] Initializing...');
-
-		// Detect electron context
-		this.isElectronContext = isElectronContext();
-		console.log('[ElectronOverlay] Electron context:', this.isElectronContext);
+		await waitForReady(this.sceneService, this.gameStatusService);
 
 		// Test legacy ElectronAPI for comparison
 		await this.testLegacyElectronAPI();
 
-		// Initialize GameStatusService
-		await this.initGameStatusService();
+		// GameStatusService
+		this.inGame = await this.gameStatusService.inGame();
+		console.log('[ElectronOverlay] Initial game status:', this.inGame);
+		const subscription = this.gameStatusService.inGame$$.subscribe((inGame) => {
+			console.log('[ElectronOverlay] Game status changed:', inGame);
+			this.inGame = inGame;
+		});
+		this.subscriptions.push(subscription);
+
+		// SceneService
+		const sceneEnum = await this.sceneService.currentScene$$.getValueWithInit();
+		this.scene = sceneEnum ? SceneMode[sceneEnum] : null;
+		console.log('[ElectronOverlay] Initial scene:', this.scene);
+		const sceneSubscription = this.sceneService.currentScene$$.subscribe((scene) => {
+			console.log('[ElectronOverlay] Scene changed:', scene);
+			this.scene = scene ? SceneMode[scene] : null;
+		});
+		this.subscriptions.push(sceneSubscription);
 
 		// Set up periodic updates
 		this.setupPeriodicUpdates();
@@ -184,30 +196,6 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		}
 
 		this.tested = true;
-	}
-
-	private async initGameStatusService() {
-		console.log('[ElectronOverlay] Initializing GameStatusService...');
-
-		try {
-			// Wait for service to be ready
-			await this.gameStatusService.isReady();
-			this.gameStatusReady = true;
-			console.log('[ElectronOverlay] GameStatusService is ready');
-
-			// Get initial game status
-			this.inGame = await this.gameStatusService.inGame();
-			console.log('[ElectronOverlay] Initial game status:', this.inGame);
-
-			// Subscribe to game status changes
-			const subscription = this.gameStatusService.inGame$$.subscribe((inGame) => {
-				console.log('[ElectronOverlay] Game status changed:', inGame);
-				this.inGame = inGame;
-			});
-			this.subscriptions.push(subscription);
-		} catch (error) {
-			console.error('[ElectronOverlay] GameStatusService initialization error:', error);
-		}
 	}
 
 	private setupPeriodicUpdates() {

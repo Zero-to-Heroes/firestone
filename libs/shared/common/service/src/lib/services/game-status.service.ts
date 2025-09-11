@@ -217,19 +217,4 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		}
 		return null;
 	}
-
-	private broadcastToRenderers(channel: string, data: any): void {
-		// Import BrowserWindow dynamically to avoid issues in renderer process
-		try {
-			// Use eval to prevent bundler from trying to include electron in frontend builds
-			const { BrowserWindow } = eval('require')('electron');
-			BrowserWindow.getAllWindows().forEach((window: any) => {
-				if (!window.isDestroyed()) {
-					window.webContents.send(channel, data);
-				}
-			});
-		} catch (error) {
-			console.debug('[game-status] Could not broadcast to renderers:', error);
-		}
-	}
 }
