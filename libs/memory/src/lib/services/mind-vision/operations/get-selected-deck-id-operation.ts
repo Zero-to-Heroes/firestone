@@ -1,11 +1,11 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
 export class GetSelectedDeckIdOperation extends MindVisionOperationFacade<number> {
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getSelectedDeckId',
 			(forceReset?: boolean) => mindVision.getSelectedDeckId(forceReset ?? false),
 			(deck) => !deck,

@@ -35,6 +35,14 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				// window[this.serviceName] = this;
 				this.mainInstance = this as unknown as T;
 				this.init();
+
+				// Use eval to prevent bundler from trying to include electron in frontend builds
+				const { ipcMain } = eval('require')('electron');
+				if (typeof ipcMain !== 'undefined') {
+					this.setupElectronMainProcessHandlers();
+				}
+
+				this.initElectronMainProcess();
 			} else {
 				console.debug('[abstract-facade-service] isRendererProcess');
 				// We're in a renderer process, create IPC proxy
@@ -58,9 +66,30 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		// Do nothing by default
 		console.warn(this.constructor.name, 'createElectronProxy not implemented');
 	}
+	protected async setupElectronMainProcessHandlers() {
+		console.warn(this.constructor.name, 'setupElectronMainProcessHandlers not implemented');
+	}
+	protected async initElectronMainProcess() {
+		console.warn(this.constructor.name, 'initElectronMainProcess not implemented');
+	}
 
 	protected abstract assignSubjects(): void;
 	protected abstract init(): void | Promise<void>;
+
+	protected broadcastToRenderers(channel: string, data: any): void {
+		// Import BrowserWindow dynamically to avoid issues in renderer process
+		try {
+			// Use eval to prevent bundler from trying to include electron in frontend builds
+			const { BrowserWindow } = eval('require')('electron');
+			BrowserWindow.getAllWindows().forEach((window: any) => {
+				if (!window.isDestroyed()) {
+					window.webContents.send(channel, data);
+				}
+			});
+		} catch (error) {
+			console.debug('[game-status] Could not broadcast to renderers:', error);
+		}
+	}
 }
 
 export const waitForReady = async (...services: HasIsReady[]) => {

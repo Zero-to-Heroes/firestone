@@ -1,4 +1,4 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { Card } from '../../../external-models/card';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
@@ -6,9 +6,9 @@ import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 export class GetCollectionOperation extends MindVisionOperationFacade<readonly Card[]> {
 	private basicCards;
 
-	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
-			ow,
+			gameStatus,
 			'getCollection',
 			() => mindVision.getCollection(),
 			(memoryCollection: any[]) =>
@@ -23,7 +23,7 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 							premiumCount: memoryCard.PremiumCount,
 							diamondCount: memoryCard.DiamondCount,
 							signatureCount: memoryCard.SignatureCount,
-						} as Card),
+						}) as Card,
 				),
 			20,
 			5000,
