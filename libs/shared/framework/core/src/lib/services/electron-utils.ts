@@ -1,9 +1,18 @@
 export const isElectronContext = () => {
-	return (
-		typeof window !== 'undefined' &&
-		((window as any).electronAPI !== undefined ||
-			(typeof process !== 'undefined' && process.versions?.electron !== undefined))
+	// The most reliable way to detect Electron is checking for process.versions.electron
+	// This works in both main process and renderer process
+	const hasElectronVersion = typeof process !== 'undefined' && process.versions?.electron !== undefined;
+
+	console.debug(
+		'isElectronContext',
+		hasElectronVersion,
+		typeof window,
+		typeof window !== 'undefined' && (window as any).electronAPI,
+		typeof process,
+		process.versions?.electron,
 	);
+
+	return hasElectronVersion;
 };
 
 // In Electron, detect main process vs renderer process

@@ -31,6 +31,11 @@ export class WindowManagerService {
 	}
 
 	private async init() {
+		// In case of electron, there is no window object
+		if (isElectronContext()) {
+			return;
+		}
+
 		const currentWindow = await this.ow?.getCurrentWindow();
 		if (!this.ow || !currentWindow || currentWindow?.name === OverwolfService.MAIN_WINDOW) {
 			this.mainWindow = window;

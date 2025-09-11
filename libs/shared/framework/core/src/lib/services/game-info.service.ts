@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+import { isElectronContext } from './electron-utils';
 import { OverwolfService } from './overwolf.service';
 
 declare const window: any;
@@ -16,16 +17,12 @@ export class GameInfoService {
 		}
 
 		// Second, try Electron if available
-		if (this.isElectronEnvironment()) {
+		if (isElectronContext()) {
 			return this.getElectronGameInfo();
 		}
 
 		// Fallback for web/other environments
 		return null;
-	}
-
-	private isElectronEnvironment(): boolean {
-		return !!(window?.electronAPI || window?.require || window?.process?.versions?.electron);
 	}
 
 	private async getElectronGameInfo(): Promise<GameWindowInfo | null> {

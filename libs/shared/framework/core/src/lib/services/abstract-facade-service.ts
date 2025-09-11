@@ -26,15 +26,11 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		this.isElectronContext = isElectronContext();
 		// Check if the service is already initialized, which is useful for single-window apps, like
 		// the website
-		if (isMainWindow && !window[this.serviceName]) {
-			window[this.serviceName] = this;
-			this.mainInstance = this as unknown as T;
-			this.init();
-		} else if (this.isElectronContext) {
+		if (this.isElectronContext) {
 			// In Electron context, we need to handle main vs renderer process differently
 			if (isMainProcess()) {
 				// We're in the main process, initialize normally like a main window
-				window[this.serviceName] = this;
+				// window[this.serviceName] = this;
 				this.mainInstance = this as unknown as T;
 				this.init();
 			} else {
@@ -43,9 +39,15 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				this.createElectronProxy();
 			}
 		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.mainInstance = mainWindow[this.serviceName];
-			this.assignSubjects();
+			if (isMainWindow && !window[this.serviceName]) {
+				window[this.serviceName] = this;
+				this.mainInstance = this as unknown as T;
+				this.init();
+			} else {
+				const mainWindow = await this.windowManager.getMainWindow();
+				this.mainInstance = mainWindow[this.serviceName];
+				this.assignSubjects();
+			}
 		}
 	}
 
