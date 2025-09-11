@@ -2,13 +2,14 @@
 import '@angular/compiler';
 import { ElectronGameWindowService } from '@firestone/electron/common';
 // import '@overwolf/types';
-import { GameStatusService } from '@firestone/shared/common/service';
-import { WindowManagerService } from '@firestone/shared/framework/core';
+import { setAppInjector } from '@firestone/shared/framework/core';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
 import { environment } from '../environments/environment';
 import { rendererAppName, rendererAppPort } from './constants';
+import { electronAppInjector } from './services/electron-app-injector';
+import { buildAppInjector } from './services/electron-app-injector-setup';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
 
@@ -85,15 +86,17 @@ export default class App {
 		// Initialize MindVision service for memory reading
 		App.mindVision = new MindVisionElectronService();
 
-		// TODO: how to use a dependency injection system for this?
-		const windowManager = new WindowManagerService(null);
-		const gameStatusService = new GameStatusService(windowManager);
+		// Initialize dependency injection system
+		const electronInjector = buildAppInjector();
+		setAppInjector(electronInjector);
 
 		// Initialize game services
 		App.overlay = OverlayService.getInstance();
 		App.gameWindow = ElectronGameWindowService.getInstance();
 		// App.gameStatus = ElectronGameStatusService.getInstance();
 		App.gameWindow.initialize(App.overlay);
+
+		console.log('🔧 Registered services:', electronAppInjector.getRegisteredServices());
 
 		// Wait for overlay to be ready before registering to games
 		App.overlay.on('ready', async () => {
