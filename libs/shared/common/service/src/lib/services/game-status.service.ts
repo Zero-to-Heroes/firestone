@@ -59,6 +59,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 				const gameWindowService = ElectronGameWindowService.getInstance();
 				gameWindowService.onGameInfoChanged((gameInfo: any) => {
 					if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
+						console.debug('[game-status] game launched', gameInfo);
 						this.inGame$$.next(true);
 						this.startListeners.forEach((cb: any) => cb(gameInfo));
 						this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
@@ -223,7 +224,6 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 			// Use eval to prevent bundler from trying to include electron in frontend builds
 			const { BrowserWindow } = eval('require')('electron');
 			BrowserWindow.getAllWindows().forEach((window: any) => {
-				console.debug('[game-status] broadcasting to renderer', channel, data);
 				if (!window.isDestroyed()) {
 					window.webContents.send(channel, data);
 				}

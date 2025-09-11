@@ -24,16 +24,19 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 	private async initFacade() {
 		const isMainWindow = await this.windowManager.isMainWindow();
 		this.isElectronContext = isElectronContext();
+		console.debug('[abstract-facade-service] isElectronContext', this.isElectronContext);
 		// Check if the service is already initialized, which is useful for single-window apps, like
 		// the website
 		if (this.isElectronContext) {
 			// In Electron context, we need to handle main vs renderer process differently
 			if (isMainProcess()) {
+				console.debug('[abstract-facade-service] isMainProcess');
 				// We're in the main process, initialize normally like a main window
 				// window[this.serviceName] = this;
 				this.mainInstance = this as unknown as T;
 				this.init();
 			} else {
+				console.debug('[abstract-facade-service] isRendererProcess');
 				// We're in a renderer process, create IPC proxy
 				this.mainInstance = this as unknown as T;
 				this.createElectronProxy();

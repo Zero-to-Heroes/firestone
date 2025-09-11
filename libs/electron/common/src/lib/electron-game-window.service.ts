@@ -1,8 +1,10 @@
 import { GameWindowInfo } from '@firestone/shared/framework/core';
 import { ipcMain } from 'electron';
 
+// Global key for storing the singleton across different module loading contexts
+const GLOBAL_SINGLETON_KEY = '__FIRESTONE_ELECTRON_GAME_WINDOW_SERVICE__';
+
 export class ElectronGameWindowService {
-	private static instance: ElectronGameWindowService;
 	private currentGameInfo: GameWindowInfo | null = null;
 	private overlayService: any; // Will be injected from the app
 	private gameInfoChangeListeners: ((gameInfo: GameWindowInfo | null) => void)[] = [];
@@ -12,10 +14,14 @@ export class ElectronGameWindowService {
 	}
 
 	public static getInstance(): ElectronGameWindowService {
-		if (!ElectronGameWindowService.instance) {
-			ElectronGameWindowService.instance = new ElectronGameWindowService();
+		// Use global object to store singleton across different module loading contexts
+		// This works in both Node.js (global) and browser (window) environments
+		const globalObj = (typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : {}) as any;
+
+		if (!globalObj[GLOBAL_SINGLETON_KEY]) {
+			globalObj[GLOBAL_SINGLETON_KEY] = new ElectronGameWindowService();
 		}
-		return ElectronGameWindowService.instance;
+		return globalObj[GLOBAL_SINGLETON_KEY];
 	}
 
 	/**
