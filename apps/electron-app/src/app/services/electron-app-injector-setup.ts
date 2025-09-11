@@ -16,7 +16,7 @@ export const buildAppInjector = () => {
 	const preferencesService = new PreferencesService(windowManager);
 	const localStorageService = new ElectronStorageService();
 	const preferencesStorageService = new PreferencesStorageService(localStorageService);
-	const memoryUpdates = new MemoryUpdatesService();
+	const memoryUpdates = new MemoryUpdatesService(windowManager);
 	const mindVisionFacade = new MindVisionElectronService(memoryUpdates);
 	const mindVisionStateMachine = new MindVisionStateMachineService(
 		mindVisionFacade as any as MindVisionFacadeService,

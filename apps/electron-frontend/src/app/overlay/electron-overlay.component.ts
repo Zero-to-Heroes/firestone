@@ -135,7 +135,7 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 	async ngOnInit() {
 		console.log('[ElectronOverlay] Initializing...');
-		await waitForReady(this.gameStatusService);
+		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
 		// Test legacy ElectronAPI for comparison
 		await this.testLegacyElectronAPI();
@@ -150,7 +150,6 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(subscription);
 
 		// MemoryUpdatesService
-		console.log('[ElectronOverlay] Initial memory updates:', this.memoryUpdates);
 		const memoryUpdatesSubscription = this.memoryUpdateService.memoryUpdates$$.subscribe((memoryUpdates) => {
 			console.log('[ElectronOverlay] Memory updates changed:', memoryUpdates);
 			this.memoryUpdates = JSON.stringify(memoryUpdates);
