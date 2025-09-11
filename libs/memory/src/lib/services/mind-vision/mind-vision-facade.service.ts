@@ -15,6 +15,7 @@ import { MemoryPlayerProfileInfo } from '../../models/memory-profile-info';
 import { MemoryUpdate } from '../../models/memory-update';
 import { MemoryQuestsLog } from '../../models/quests';
 import { RewardsTrackInfos } from '../../models/rewards-track-info';
+import { IMindVisionFacade } from './mind-vision-facade.interface';
 import { InternalHsAchievementsCategory } from './operations/get-achievements-categories-operation';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 
@@ -23,7 +24,7 @@ declare let OverwolfPlugin: any;
 // Should not be called from outside its package.
 // Use MindVisionStateMachine instead
 @Injectable()
-export class MindVisionFacadeService {
+export class MindVisionFacadeService implements IMindVisionFacade {
 	public globalEventListener: (first: string, second: string) => Promise<void>;
 	public memoryUpdateListener: (changes: string | 'reset') => Promise<void>;
 
