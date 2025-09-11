@@ -1,5 +1,10 @@
 import { ElectronStorageService } from '@firestone/electron/common';
-import { MemoryInspectionService, MemoryUpdatesService, MindVisionStateMachineService } from '@firestone/memory';
+import {
+	MemoryInspectionService,
+	MemoryUpdatesService,
+	MindVisionStateMachineService,
+	SceneService,
+} from '@firestone/memory';
 import { GameStatusService, PreferencesService, PreferencesStorageService } from '@firestone/shared/common/service';
 import { LocalStorageService, WindowManagerService } from '@firestone/shared/framework/core';
 import { MindVisionFacadeService } from 'libs/memory/src/lib/services/mind-vision/mind-vision-facade.service';
@@ -29,6 +34,7 @@ export const buildAppInjector = () => {
 		mindVisionFacade as any as MindVisionFacadeService,
 		mindVisionStateMachine,
 	);
+	const sceneService = new SceneService(windowManager);
 
 	// Register services in the injector
 	electronInjector.register(WindowManagerService, windowManager);
@@ -40,6 +46,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(MindVisionElectronService, mindVisionFacade);
 	electronInjector.register(MindVisionStateMachineService, mindVisionStateMachine);
 	electronInjector.register(MemoryInspectionService, mindVisionInspection);
+	electronInjector.register(SceneService, sceneService);
 
 	return electronInjector;
 };

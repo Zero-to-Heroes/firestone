@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { MemoryUpdatesService } from '@firestone/memory';
+import { SceneMode } from '@firestone-hs/reference-data';
+import { MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
@@ -129,7 +130,7 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private readonly gameStatusService: GameStatusService,
-		// private readonly sceneService: SceneService,
+		private readonly sceneService: SceneService,
 		private readonly memoryUpdateService: MemoryUpdatesService,
 	) {}
 
@@ -157,14 +158,14 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(memoryUpdatesSubscription);
 
 		// SceneService
-		// const sceneEnum = await this.sceneService.currentScene$$.getValueWithInit();
-		// this.scene = sceneEnum ? SceneMode[sceneEnum] : null;
-		// console.log('[ElectronOverlay] Initial scene:', this.scene);
-		// const sceneSubscription = this.sceneService.currentScene$$.subscribe((scene) => {
-		// 	console.log('[ElectronOverlay] Scene changed:', scene);
-		// 	this.scene = scene ? SceneMode[scene] : null;
-		// });
-		// this.subscriptions.push(sceneSubscription);
+		const sceneEnum = this.sceneService.currentScene$$.getValue();
+		this.scene = sceneEnum ? SceneMode[sceneEnum] : null;
+		console.log('[ElectronOverlay] Initial scene:', this.scene);
+		const sceneSubscription = this.sceneService.currentScene$$.subscribe((scene) => {
+			console.log('[ElectronOverlay] Scene changed:', scene);
+			this.scene = scene ? SceneMode[scene] : null;
+		});
+		this.subscriptions.push(sceneSubscription);
 
 		// Set up periodic updates
 		this.setupPeriodicUpdates();

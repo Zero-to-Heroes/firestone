@@ -52,7 +52,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 						this.exitListeners.forEach((cb: any) => cb(res));
 					} else if ((await this.ow.inGame()) && (res.gameChanged || res.runningChanged)) {
 						this.inGame$$.next(true);
-						console.debug('[game-status] game launched', res);
+						// console.debug('[game-status] game launched', res);
 						this.startListeners.forEach((cb: any) => cb(res));
 						this.updateExecutionPathInPrefs(res.gameInfo?.executionPath ?? '');
 					}
@@ -74,7 +74,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		gameWindowService.onGameInfoChanged((gameInfo: any) => {
 			if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
-				console.debug('[game-status] game launched', gameInfo);
+				// console.debug('[game-status] game launched', gameInfo);
 				this.inGame$$.next(true);
 				this.startListeners.forEach((cb: any) => cb(gameInfo));
 				this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
