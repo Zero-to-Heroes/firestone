@@ -105,10 +105,10 @@ export class OverlayService extends EventEmitter {
 
 		// Get current game info from centralized service
 		const gameInfo = this.gameWindowService.getCurrentGameInfo();
-		console.log(`🎯 Resizing - Game info from service:`, gameInfo);
+		console.log(`Resizing - Game info from service:`, gameInfo);
 
 		if (!gameInfo) {
-			console.log(`🎯 No game info available for resize, keeping current size`);
+			console.log(`No game info available for resize, keeping current size`);
 			return;
 		}
 
@@ -120,7 +120,7 @@ export class OverlayService extends EventEmitter {
 			this.overlayWindow.window.setSize(gameWidth, gameHeight);
 			this.overlayWindow.window.setPosition(0, 0);
 			this.overlayWindow.window.show(); // Make sure it's visible
-			console.log(`🎯 Overlay resized to: ${gameWidth}x${gameHeight}`);
+			console.log(`Overlay resized to: ${gameWidth}x${gameHeight}`);
 		} catch (error) {
 			console.error('❌ Failed to resize overlay window:', error);
 		}
@@ -132,7 +132,7 @@ export class OverlayService extends EventEmitter {
 	private async createOverlayWindow(): Promise<void> {
 		// Get game window information from centralized service
 		const gameInfo = this.gameWindowService.getCurrentGameInfo();
-		console.log(`🎯 Creating overlay - Game info from service:`, gameInfo);
+		console.log(`Creating overlay - Game info from service:`, gameInfo);
 
 		// Use game dimensions or fallback to defaults
 		let gameWidth = 1920;
@@ -141,12 +141,12 @@ export class OverlayService extends EventEmitter {
 		if (gameInfo) {
 			gameWidth = gameInfo.width;
 			gameHeight = gameInfo.height;
-			console.log(`🎯 Using game dimensions from service: ${gameWidth}x${gameHeight}`);
+			console.log(`Using game dimensions from service: ${gameWidth}x${gameHeight}`);
 		} else {
-			console.log(`🎯 No game info available, using defaults: ${gameWidth}x${gameHeight}`);
+			console.log(`No game info available, using defaults: ${gameWidth}x${gameHeight}`);
 		}
 
-		console.log(`🎯 Final overlay dimensions: ${gameWidth}x${gameHeight}`);
+		console.log(`Final overlay dimensions: ${gameWidth}x${gameHeight}`);
 
 		const preloadPath = join(__dirname, 'main.preload.js');
 		console.log('🔧 Preload script path:', preloadPath);
@@ -184,14 +184,14 @@ export class OverlayService extends EventEmitter {
 
 			// Wait for DOM to be ready, then show and focus
 			this.overlayWindow.window.webContents.once('dom-ready', () => {
-				console.log('🎯 Angular DOM ready, showing overlay...');
+				console.log('Angular DOM ready, showing overlay...');
 				this.overlayWindow.window.show();
 				this.overlayWindow.window.focus();
 				this.overlayWindow.window.setAlwaysOnTop(true);
 				setTimeout(() => {
 					this.overlayWindow.window.setAlwaysOnTop(false); // Reset to normal after a moment
 				}, 100);
-				console.log('🎯 Overlay window shown and focused after Angular DOM ready');
+				console.log('Overlay window shown and focused after Angular DOM ready');
 			});
 
 			// Open dev tools for debugging in development mode
@@ -246,7 +246,7 @@ export class OverlayService extends EventEmitter {
 			throw new Error('Attempting to access overlay before available');
 		}
 
-		console.log(`🎯 Overlay package is ready: ${version}`);
+		console.log(`Overlay package is ready: ${version}`);
 		this.registerOverlayEvents();
 		this.emit('ready');
 	}
@@ -268,7 +268,7 @@ export class OverlayService extends EventEmitter {
 
 			// Check if this is Hearthstone (ID 9898)
 			if (Math.round(gameInfo.id / 10) === 9898) {
-				console.log('🎯 Hearthstone detected! Injecting first...');
+				console.log('Hearthstone detected! Injecting first...');
 
 				// Check for elevation issues
 				if (gameInfo.processInfo.isElevated) {
@@ -294,29 +294,29 @@ export class OverlayService extends EventEmitter {
 		});
 
 		this.overlayApi.on('game-injected', async (gameInfo) => {
-			console.log('✨ Game injected successfully!', gameInfo.name);
-			console.log('🎯 Waiting for game to get focus before creating overlay...');
+			console.log('Game injected successfully!', gameInfo.name);
+			console.log('Waiting for game to get focus before creating overlay...');
 		});
 
 		this.overlayApi.on('game-focus-changed', async (window, game, focus) => {
-			console.log('🔍 Game focus changed:', game.name, focus ? 'focused' : 'unfocused');
+			// console.log('🔍 Game focus changed:', game.name, focus ? 'focused' : 'unfocused');
 
 			if (game.classId === 9898) {
 				if (focus) {
 					// Game focused - create or resize overlay
 					if (!this.overlayWindow) {
-						console.log('🎯 Hearthstone focused! Creating overlay window...');
+						console.log('Hearthstone focused! Creating overlay window...');
 						await this.createOverlayWindow();
-						console.log('🎯 Overlay window created when game got focus!');
+						console.log('Overlay window created when game got focus!');
 					} else {
-						console.log('🎯 Hearthstone focused! Resizing existing overlay...');
+						// console.log('Hearthstone focused! Resizing existing overlay...');
 						await this.resizeOverlayToGame();
-						console.log('🎯 Overlay window resized to match current game size!');
+						// console.log('Overlay window resized to match current game size!');
 					}
 				} else {
 					// Game unfocused - hide overlay but keep it alive
 					// if (this.overlayWindow) {
-					// 	console.log('🎯 Hearthstone unfocused! Hiding overlay...');
+					// 	console.log('Hearthstone unfocused! Hiding overlay...');
 					// 	this.overlayWindow.window.hide();
 					// }
 				}
@@ -324,10 +324,10 @@ export class OverlayService extends EventEmitter {
 		});
 
 		this.overlayApi.on('game-window-changed', async (window, game, reason) => {
-			console.log('📐 Game window changed:', reason, game.name);
+			console.log('Game window changed:', reason, game.name);
 
 			if (game.classId === 9898 && this.overlayWindow) {
-				console.log('🎯 Hearthstone window changed! Resizing overlay...');
+				console.log('Hearthstone window changed! Resizing overlay...');
 				await this.resizeOverlayToGame();
 			}
 		});
@@ -339,407 +339,6 @@ export class OverlayService extends EventEmitter {
 		this.overlayApi.on('game-input-exclusive-mode-changed', (info) => {
 			console.log('🎮 Input exclusive mode changed:', info);
 		});
-	}
-
-	/**
-	 * Create the scene display overlay HTML
-	 */
-	private createOverlayHtml(): string {
-		return `
-			<!DOCTYPE html>
-			<html>
-				<head>
-					<meta charset="utf-8">
-					<title>Firestone Overlay</title>
-					<style>
-						* {
-							margin: 0;
-							padding: 0;
-							box-sizing: border-box;
-						}
-						
-						body {
-							font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-							background: transparent;
-							overflow: hidden;
-							width: 100vw;
-							height: 100vh;
-							display: flex;
-							align-items: flex-start;
-							justify-content: flex-end;
-							padding: 20px;
-						}
-						
-						.overlay-container {
-							background: rgba(0, 0, 0, 0.9);
-							border: 2px solid #ff6b35;
-							border-radius: 12px;
-							padding: 15px 20px;
-							text-align: center;
-							box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-							backdrop-filter: blur(5px);
-							animation: fadeIn 0.5s ease-in-out;
-							min-width: 200px;
-						}
-						
-						.title {
-							color: #ff6b35;
-							font-size: 18px;
-							font-weight: bold;
-							margin-bottom: 8px;
-							text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-						}
-						
-						.scene-display {
-							color: #ffffff;
-							font-size: 12px;
-							font-weight: bold;
-							margin-bottom: 5px;
-							text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-							font-family: 'Courier New', monospace;
-							background: rgba(255, 107, 53, 0.1);
-							padding: 8px 12px;
-							border-radius: 6px;
-							border: 1px solid rgba(255, 107, 53, 0.3);
-							max-height: 300px;
-							overflow-y: auto;
-							white-space: pre-wrap;
-							word-break: break-all;
-							line-height: 1.4;
-						}
-						
-						.status {
-							color: #cccccc;
-							font-size: 12px;
-							opacity: 0.8;
-							text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-						}
-						
-						@keyframes fadeIn {
-							from {
-								opacity: 0;
-								transform: translateY(-20px);
-							}
-							to {
-								opacity: 1;
-								transform: translateY(0);
-							}
-						}
-						
-						.scene-change {
-							animation: sceneChange 0.3s ease-in-out;
-						}
-						
-						@keyframes sceneChange {
-							0% { transform: scale(1); background: rgba(255, 107, 53, 0.1); }
-							50% { transform: scale(1.1); background: rgba(255, 107, 53, 0.3); }
-							100% { transform: scale(1); background: rgba(255, 107, 53, 0.1); }
-						}
-
-						/* Decktracker Widget Styles */
-						.decktracker-widget {
-							position: fixed;
-							top: 20px;
-							left: 20px;
-							width: 250px;
-							background: rgba(0, 0, 0, 0.9);
-							border: 1px solid #444;
-							border-radius: 6px;
-							font-size: 12px;
-							color: #fff;
-							backdrop-filter: blur(5px);
-							pointer-events: auto;
-							z-index: 1000;
-						}
-
-						.decktracker-widget.hidden {
-							display: none;
-						}
-
-						.widget-title-bar {
-							background: rgba(255, 255, 255, 0.1);
-							padding: 8px 12px;
-							display: flex;
-							justify-content: space-between;
-							align-items: center;
-							border-bottom: 1px solid #444;
-							cursor: move;
-						}
-
-						.widget-title {
-							font-weight: bold;
-							font-size: 13px;
-						}
-
-						.toggle-btn {
-							background: none;
-							border: none;
-							color: #fff;
-							cursor: pointer;
-							font-size: 16px;
-							padding: 0;
-							width: 20px;
-							height: 20px;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-						}
-
-						.toggle-btn:hover {
-							background: rgba(255, 255, 255, 0.1);
-							border-radius: 3px;
-						}
-
-						.widget-content {
-							padding: 12px;
-							max-height: 400px;
-							overflow-y: auto;
-						}
-
-						.deck-info {
-							margin-bottom: 12px;
-						}
-
-						.deck-name {
-							margin: 0 0 6px 0;
-							font-size: 14px;
-							color: #ffd700;
-						}
-
-						.deck-stats {
-							display: flex;
-							gap: 8px;
-							font-size: 11px;
-						}
-
-						.wins { color: #4caf50; }
-						.losses { color: #f44336; }
-						.winrate { color: #2196f3; }
-
-						.card-list {
-							display: flex;
-							flex-direction: column;
-							gap: 2px;
-						}
-
-						.card-item {
-							display: flex;
-							justify-content: space-between;
-							padding: 3px 6px;
-							border-radius: 3px;
-							transition: background-color 0.2s ease;
-						}
-
-						.card-item.remaining {
-							background: rgba(76, 175, 80, 0.1);
-						}
-
-						.card-item.used {
-							background: rgba(255, 255, 255, 0.05);
-							opacity: 0.6;
-						}
-
-						.card-name {
-							flex: 1;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							white-space: nowrap;
-						}
-
-						.card-count {
-							font-weight: bold;
-							min-width: 30px;
-							text-align: right;
-						}
-
-						.card-item.remaining .card-count {
-							color: #4caf50;
-						}
-
-						.card-item.used .card-count {
-							color: #f44336;
-						}
-
-						.no-deck {
-							text-align: center;
-							padding: 20px;
-							color: #999;
-						}
-					</style>
-				</head>
-				<body>
-					<!-- Debug Info Widget -->
-					<div class="overlay-container">
-						<div class="title">🔥 Firestone</div>
-						<div class="scene-display" id="current-scene">Loading...</div>
-						<div class="status" id="status">Initializing...</div>
-					</div>
-
-					<!-- Decktracker Widget -->
-					<div class="decktracker-widget" id="decktracker-widget">
-						<div class="widget-title-bar">
-							<span class="widget-title">Deck Tracker</span>
-							<button class="toggle-btn" onclick="toggleDecktracker()" aria-label="Toggle visibility">−</button>
-						</div>
-						
-						<div class="widget-content" id="widget-content">
-							<div class="deck-info" id="deck-info" style="display: none;">
-								<h3 class="deck-name" id="deck-name">Current Deck</h3>
-								<div class="deck-stats">
-									<span class="wins" id="deck-wins">0W</span>
-									<span class="losses" id="deck-losses">0L</span>
-									<span class="winrate" id="deck-winrate">0%</span>
-								</div>
-							</div>
-							
-							<div class="card-list" id="card-list"></div>
-							
-							<div class="no-deck" id="no-deck">
-								<p>No deck detected</p>
-								<p>Waiting for game data...</p>
-							</div>
-						</div>
-					</div>
-					
-					<script>
-						let decktrackerVisible = true;
-						let currentDeckData = null;
-
-						// Function to update the scene display
-						function updateScene(scene, status) {
-							const sceneElement = document.getElementById('current-scene');
-							const statusElement = document.getElementById('status');
-							
-							if (sceneElement) {
-								let displayText = scene || 'Unknown';
-								
-								// Try to format as JSON if it looks like JSON
-								try {
-									if (typeof scene === 'string' && (scene.startsWith('{') || scene.startsWith('['))) {
-										const parsed = JSON.parse(scene);
-										displayText = JSON.stringify(parsed, null, 2);
-									}
-								} catch (e) {
-									// If not valid JSON, use as-is
-									displayText = scene || 'Unknown';
-								}
-								
-								if (sceneElement.textContent !== displayText) {
-									sceneElement.textContent = displayText;
-									sceneElement.classList.add('scene-change');
-									setTimeout(() => sceneElement.classList.remove('scene-change'), 300);
-								}
-							}
-							
-							if (statusElement) {
-								statusElement.textContent = status || 'Connected';
-							}
-						}
-						
-						// Function to toggle decktracker visibility
-						function toggleDecktracker() {
-							const content = document.getElementById('widget-content');
-							const button = document.querySelector('.toggle-btn');
-							
-							decktrackerVisible = !decktrackerVisible;
-							
-							if (decktrackerVisible) {
-								content.style.display = 'block';
-								button.textContent = '−';
-							} else {
-								content.style.display = 'none';
-								button.textContent = '+';
-							}
-						}
-
-						// Function to update deck data
-						function updateDeckData(deckData) {
-							currentDeckData = deckData;
-							
-							const deckInfo = document.getElementById('deck-info');
-							const cardList = document.getElementById('card-list');
-							const noDeck = document.getElementById('no-deck');
-							
-							if (deckData && deckData.cards && deckData.cards.length > 0) {
-								// Show deck info
-								noDeck.style.display = 'none';
-								deckInfo.style.display = 'block';
-								
-								// Update deck name and stats
-								document.getElementById('deck-name').textContent = deckData.name || 'Current Deck';
-								document.getElementById('deck-wins').textContent = (deckData.wins || 0) + 'W';
-								document.getElementById('deck-losses').textContent = (deckData.losses || 0) + 'L';
-								
-								const total = (deckData.wins || 0) + (deckData.losses || 0);
-								const winrate = total > 0 ? Math.round((deckData.wins || 0) / total * 100) : 0;
-								document.getElementById('deck-winrate').textContent = winrate + '%';
-								
-								// Update card list
-								cardList.innerHTML = '';
-								deckData.cards.forEach(card => {
-									const cardElement = document.createElement('div');
-									cardElement.className = 'card-item ' + (card.remaining > 0 ? 'remaining' : 'used');
-									cardElement.innerHTML = \`
-										<span class="card-name">\${card.name}</span>
-										<span class="card-count">\${card.remaining}/\${card.total}</span>
-									\`;
-									cardList.appendChild(cardElement);
-								});
-							} else {
-								// No deck detected
-								deckInfo.style.display = 'none';
-								cardList.innerHTML = '';
-								noDeck.style.display = 'block';
-							}
-						}
-
-						// Expose functions globally so they can be called from main process
-						window.updateScene = updateScene;
-						window.updateDeckData = updateDeckData;
-						window.toggleDecktracker = toggleDecktracker;
-						
-						// Initial status
-						updateScene('Loading...', 'Connecting to MindVision...');
-
-						// Initialize with mock data for testing
-						setTimeout(() => {
-							updateDeckData({
-								name: 'Test Mage Deck',
-								wins: 5,
-								losses: 2,
-								cards: [
-									{ name: 'Fireball', total: 2, remaining: 1 },
-									{ name: 'Frostbolt', total: 2, remaining: 2 },
-									{ name: 'Arcane Intellect', total: 2, remaining: 0 },
-									{ name: 'Polymorph', total: 1, remaining: 1 },
-									{ name: 'Flamestrike', total: 1, remaining: 1 },
-									{ name: 'Water Elemental', total: 2, remaining: 1 },
-									{ name: 'Mana Wyrm', total: 2, remaining: 0 }
-								]
-							});
-						}, 3000);
-					</script>
-				</body>
-			</html>
-		`;
-	}
-
-	/**
-	 * Update the scene display in the overlay
-	 */
-	public updateSceneDisplay(scene: string | null, status?: string) {
-		if (this.overlayWindow && this.overlayWindow.window) {
-			try {
-				// Execute JavaScript in the overlay window to update the scene
-				this.overlayWindow.window.webContents.executeJavaScript(`
-					if (window.updateScene) {
-						window.updateScene('${(scene || 'Unknown').replace(/'/g, "\\'")}', '${(status || 'Connected').replace(/'/g, "\\'")}');
-					}
-				`);
-			} catch (error) {
-				console.error('❌ Error updating scene display:', error);
-			}
-		}
 	}
 
 	/**

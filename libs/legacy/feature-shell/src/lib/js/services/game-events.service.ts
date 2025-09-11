@@ -1856,7 +1856,11 @@ export class GameEvents {
 		);
 		// If we're in a game, we want to ignore the past time restriction, as it's not a reconnect but
 		// rather the user launching the app once the game is running
-		const scene = await this.scene.currentScene$$.getValueWithInit(null, 500, 100);
+		let scene = this.scene.currentScene$$.getValue();
+		while (!scene) {
+			await sleep(500);
+			scene = this.scene.currentScene$$.getValue();
+		}
 		if (
 			lastLineTimestamp &&
 			Date.now() - lastLineTimestamp > 5 * 60 * 1000 &&

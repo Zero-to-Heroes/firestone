@@ -91,12 +91,7 @@ export class MindVisionElectronService implements IMindVisionFacade {
 			await this.mindVision.startListeningWithCallback((updateData: any) => {
 				if (updateData && updateData.memoryUpdate) {
 					console.debug('[MindVisionElectron] Memory update received:', updateData.memoryUpdate);
-					this.memoryUpdates.newUpdate(updateData.memoryUpdate);
-					// Display the JSON data in the overlay immediately
-					// this.updateOverlayWithJSON(
-					// 	updateData.memoryUpdate,
-					// 	updateData.timestamp || new Date().toLocaleTimeString(),
-					// );
+					this.memoryUpdates.newUpdate(JSON.parse(updateData.memoryUpdate));
 				}
 			});
 
@@ -118,25 +113,9 @@ export class MindVisionElectronService implements IMindVisionFacade {
 		this.initialized = false;
 	}
 
-	private updateOverlayScene(scene: string | null) {
-		if (App.overlay) {
-			console.log(`[MindVisionElectron] Updating overlay with scene: ${scene}`);
-			App.overlay.updateSceneDisplay(scene, 'Connected');
-		} else {
-			console.log('[MindVisionElectron] Warning: App.overlay not available for scene update');
-		}
-	}
-
 	private updateOverlayStatus(status: string) {
 		if (App.overlay) {
 			// App.overlay.updateSceneDisplay(this.currentScene, status);
-		}
-	}
-
-	private updateOverlayWithJSON(jsonData: string, timestamp?: string) {
-		if (App.overlay) {
-			// Display the JSON data in the overlay instead of just the scene
-			App.overlay.updateSceneDisplay(jsonData, `Last update: ${timestamp || new Date().toLocaleTimeString()}`);
 		}
 	}
 
