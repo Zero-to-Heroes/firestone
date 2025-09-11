@@ -5,6 +5,7 @@ import {
 	AppInjector,
 	GameWindowInfo,
 	HEARTHSTONE_GAME_ID,
+	isMainProcess,
 	OverwolfService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -36,8 +37,9 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		console.debug('[game-status] isElectronContext', this.isElectronContext);
 
 		// Setup Electron IPC handlers if we're in main process
-		if (this.isElectronContext && window?.require) {
-			const { ipcMain } = window.require('electron');
+		if (this.isElectronContext && isMainProcess()) {
+			// Use eval to prevent bundler from trying to include electron in frontend builds
+			const { ipcMain } = eval('require')('electron');
 			if (typeof ipcMain !== 'undefined') {
 				this.setupElectronMainProcessHandlers();
 			}
@@ -51,18 +53,19 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 		// Listen to game status changes
 		if (this.isElectronContext) {
-			// if (isElectronContext() && isMainProcess()) {
-			// Dynamically import ElectronGameWindowService to avoid issues in browser environments
-			const { ElectronGameWindowService } = window.require('@firestone/electron/common');
-			const gameWindowService = ElectronGameWindowService.getInstance();
-			gameWindowService.onGameInfoChanged((gameInfo: any) => {
-				if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
-					this.inGame$$.next(true);
-					this.startListeners.forEach((cb: any) => cb(gameInfo));
-					this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
-				}
-			});
-			// }
+			if (isMainProcess()) {
+				// In main process, use eval require with relative path to prevent bundler issues
+				const { ElectronGameWindowService } = eval('require')('../../libs/electron/common/src/index.js');
+				const gameWindowService = ElectronGameWindowService.getInstance();
+				gameWindowService.onGameInfoChanged((gameInfo: any) => {
+					if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
+						this.inGame$$.next(true);
+						this.startListeners.forEach((cb: any) => cb(gameInfo));
+						this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
+					}
+				});
+			}
+			// Note: In renderer process, game info changes will come via IPC
 		} else {
 			this.ow = AppInjector.get(OverwolfService);
 			this.ow.addGameInfoUpdatedListener(async (res) => {
@@ -111,10 +114,17 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	private async getElectronGameInfo(): Promise<any> {
-		// const { ElectronGameWindowService } = await import('@firestone/electron/common');
-		const { ElectronGameWindowService } = window.require('@firestone/electron/common');
-		const gameWindowService = ElectronGameWindowService.getInstance();
-		return gameWindowService.getCurrentGameInfo();
+		if (isMainProcess()) {
+			// In main process, use eval require with relative path to prevent bundler issues
+			const { ElectronGameWindowService } = eval('require')('../../libs/electron/common/src/index.js');
+			const gameWindowService = ElectronGameWindowService.getInstance();
+			return gameWindowService.getCurrentGameInfo();
+		} else {
+			// In renderer process, use window.require
+			const { ElectronGameWindowService } = window.require('@firestone/electron/common');
+			const gameWindowService = ElectronGameWindowService.getInstance();
+			return gameWindowService.getCurrentGameInfo();
+		}
 	}
 
 	public async onGameStart(callback: any) {
@@ -144,11 +154,19 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	// Here we are always in the main process
 	private async getElectronInGame(): Promise<boolean> {
-		const { ElectronGameWindowService } = window.require('@firestone/electron/common');
-		const gameWindowService = ElectronGameWindowService.getInstance();
-		const gameInfo = gameWindowService.getCurrentGameInfo();
-		return this.isHearthstoneRunning(gameInfo);
-		// return false;
+		if (isMainProcess()) {
+			// In main process, use eval require with relative path to prevent bundler issues
+			const { ElectronGameWindowService } = eval('require')('../../libs/electron/common/src/index.js');
+			const gameWindowService = ElectronGameWindowService.getInstance();
+			const gameInfo = gameWindowService.getCurrentGameInfo();
+			return this.isHearthstoneRunning(gameInfo);
+		} else {
+			// In renderer process, use window.require
+			const { ElectronGameWindowService } = window.require('@firestone/electron/common');
+			const gameWindowService = ElectronGameWindowService.getInstance();
+			const gameInfo = gameWindowService.getCurrentGameInfo();
+			return this.isHearthstoneRunning(gameInfo);
+		}
 	}
 
 	private isHearthstoneRunning(gameInfo: GameWindowInfo | null): boolean {
@@ -177,7 +195,8 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	private async setupElectronMainProcessHandlers() {
-		const { ipcMain } = window.require('electron');
+		// Use eval to prevent bundler from trying to include electron in frontend builds
+		const { ipcMain } = eval('require')('electron');
 		// Handle IPC requests from renderer processes
 		ipcMain.handle('game-status-in-game', async () => {
 			return this.inGame$$.getValueWithInit();
@@ -201,9 +220,10 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	private broadcastToRenderers(channel: string, data: any): void {
 		// Import BrowserWindow dynamically to avoid issues in renderer process
 		try {
-			const { BrowserWindow } = window.require('electron');
+			// Use eval to prevent bundler from trying to include electron in frontend builds
+			const { BrowserWindow } = eval('require')('electron');
 			BrowserWindow.getAllWindows().forEach((window: any) => {
-				console.debug('[game-status] broadcasting to renderer', channel, data, window);
+				console.debug('[game-status] broadcasting to renderer', channel, data);
 				if (!window.isDestroyed()) {
 					window.webContents.send(channel, data);
 				}

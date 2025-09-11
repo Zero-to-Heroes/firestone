@@ -45,7 +45,8 @@ export class LocalStorageService {
 	public static LOCAL_STORAGE_CUSTOM_APPEARANCE = 'CUSTOM_APPEARANCE';
 	public static CURRENT_SUB_PLAN = 'CURRENT_SUB_PLAN';
 
-	private cache = {};
+	// Optional so that there is no conflict with the Electron implementation
+	private cache?: any = {};
 
 	public setItem(key: string, value: any): void {
 		this.cache[key] = value;

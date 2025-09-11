@@ -3,15 +3,6 @@ export const isElectronContext = () => {
 	// This works in both main process and renderer process
 	const hasElectronVersion = typeof process !== 'undefined' && process.versions?.electron !== undefined;
 
-	console.debug(
-		'isElectronContext',
-		hasElectronVersion,
-		typeof window,
-		typeof window !== 'undefined' && (window as any).electronAPI,
-		typeof process,
-		process.versions?.electron,
-	);
-
 	return hasElectronVersion;
 };
 

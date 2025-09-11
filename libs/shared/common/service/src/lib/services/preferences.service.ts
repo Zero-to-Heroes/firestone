@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, sampleTime, tap } from 'rxjs';
+import { BehaviorSubject, sampleTime } from 'rxjs';
 import {
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
@@ -53,13 +53,10 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 
 		this.preferences$$
 			.pipe(
-				tap((prefs) => console.debug('[preferences] prefs updated', prefs)),
+				// tap((prefs) => console.debug('[preferences] prefs updated', prefs)),
 				sampleTime(1500),
 			)
 			.subscribe((prefs) => this.storage.saveUserPreferences(prefs));
-		window['prefsObservers'] = () => {
-			console.log(this.preferences$$.observers);
-		};
 		this.preferences$$.next(this.storage.getUserPreferences());
 	}
 

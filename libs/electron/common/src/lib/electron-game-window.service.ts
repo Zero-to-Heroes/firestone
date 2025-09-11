@@ -47,7 +47,7 @@ export class ElectronGameWindowService {
 	private setupIpcHandlers(): void {
 		// Handle requests for game info from renderer processes
 		ipcMain.handle('get-running-game-info', async () => {
-			console.log('[ElectronGameWindowService] IPC request for game info:', this.currentGameInfo);
+			// console.log('[ElectronGameWindowService] IPC request for game info:', this.currentGameInfo);
 			return this.currentGameInfo;
 		});
 
