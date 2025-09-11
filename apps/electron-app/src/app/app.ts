@@ -83,12 +83,12 @@ export default class App {
 	}
 
 	private static initGameDetection() {
-		// Initialize MindVision service for memory reading
-		App.mindVision = new MindVisionElectronService();
-
 		// Initialize dependency injection system
 		const electronInjector = buildAppInjector();
 		setAppInjector(electronInjector);
+
+		// Initialize MindVision service for memory reading
+		App.mindVision = electronInjector.get(MindVisionElectronService);
 
 		// Initialize game services
 		App.overlay = OverlayService.getInstance();

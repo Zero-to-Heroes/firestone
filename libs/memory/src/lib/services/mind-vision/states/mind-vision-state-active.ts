@@ -1,15 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { Action, CurrentState } from '../mind-vision-actions';
-import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionState } from './_mind-vision-state';
 
 export class MindVisionStateActive implements MindVisionState {
-	constructor(
-		private readonly mindVision: MindVisionFacadeService,
-		private readonly dispatcher: (action: Action) => Promise<void>,
-		private readonly ow: OverwolfService,
-	) {}
+	constructor(private readonly dispatcher: (action: Action) => Promise<void>) {}
 
 	stateId = () => CurrentState.ACTIVE;
 

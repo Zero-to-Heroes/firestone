@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
-import { SceneService } from '@firestone/memory';
+import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
@@ -20,6 +19,7 @@ declare const window: any;
 				<div class="game-status-section">
 					<p><strong>In Game:</strong> {{ inGame !== null ? (inGame ? '✅' : '❌') : '⏳' }}</p>
 					<p><strong>Scene:</strong> {{ scene !== null ? scene : '⏳' }}</p>
+					<p><strong>Memory Updates:</strong> {{ memoryUpdates !== null ? memoryUpdates : '⏳' }}</p>
 				</div>
 
 				<div *ngIf="gameInfo" class="game-info-section">
@@ -123,17 +123,19 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 	inGame: boolean | null = null;
 	scene: string | null = null;
+	memoryUpdates: string | null = null;
 
 	private subscriptions: Subscription[] = [];
 
 	constructor(
 		private readonly gameStatusService: GameStatusService,
-		private readonly sceneService: SceneService,
+		// private readonly sceneService: SceneService,
+		private readonly memoryUpdateService: MemoryUpdatesService,
 	) {}
 
 	async ngOnInit() {
 		console.log('[ElectronOverlay] Initializing...');
-		await waitForReady(this.sceneService, this.gameStatusService);
+		await waitForReady(this.gameStatusService);
 
 		// Test legacy ElectronAPI for comparison
 		await this.testLegacyElectronAPI();
@@ -147,15 +149,23 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		});
 		this.subscriptions.push(subscription);
 
-		// SceneService
-		const sceneEnum = await this.sceneService.currentScene$$.getValueWithInit();
-		this.scene = sceneEnum ? SceneMode[sceneEnum] : null;
-		console.log('[ElectronOverlay] Initial scene:', this.scene);
-		const sceneSubscription = this.sceneService.currentScene$$.subscribe((scene) => {
-			console.log('[ElectronOverlay] Scene changed:', scene);
-			this.scene = scene ? SceneMode[scene] : null;
+		// MemoryUpdatesService
+		console.log('[ElectronOverlay] Initial memory updates:', this.memoryUpdates);
+		const memoryUpdatesSubscription = this.memoryUpdateService.memoryUpdates$$.subscribe((memoryUpdates) => {
+			console.log('[ElectronOverlay] Memory updates changed:', memoryUpdates);
+			this.memoryUpdates = JSON.stringify(memoryUpdates);
 		});
-		this.subscriptions.push(sceneSubscription);
+		this.subscriptions.push(memoryUpdatesSubscription);
+
+		// SceneService
+		// const sceneEnum = await this.sceneService.currentScene$$.getValueWithInit();
+		// this.scene = sceneEnum ? SceneMode[sceneEnum] : null;
+		// console.log('[ElectronOverlay] Initial scene:', this.scene);
+		// const sceneSubscription = this.sceneService.currentScene$$.subscribe((scene) => {
+		// 	console.log('[ElectronOverlay] Scene changed:', scene);
+		// 	this.scene = scene ? SceneMode[scene] : null;
+		// });
+		// this.subscriptions.push(sceneSubscription);
 
 		// Set up periodic updates
 		this.setupPeriodicUpdates();
