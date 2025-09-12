@@ -1,19 +1,9 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { CounterInstance, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { auditTime, Observable } from 'rxjs';
-import { GameStateFacadeService } from '../services/game-state-facade.service';
-import { CounterInstance } from './_counter-definition-v2';
 
 @Component({
 	standalone: false,
@@ -53,8 +43,6 @@ export class GroupedCountersComponent extends AbstractSubscriptionComponent impl
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateFacadeService,
 	) {

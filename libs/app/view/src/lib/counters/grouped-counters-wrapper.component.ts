@@ -9,12 +9,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CounterInstance, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, Observable, takeUntil } from 'rxjs';
-import { GameStateFacadeService } from '../services/game-state-facade.service';
-import { CounterInstance } from './_counter-definition-v2';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
 @Component({

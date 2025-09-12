@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CounterInstance } from './_counter-definition-v2';
+import { CounterInstance } from '@firestone/game-state';
 
 @Component({
 	standalone: false,

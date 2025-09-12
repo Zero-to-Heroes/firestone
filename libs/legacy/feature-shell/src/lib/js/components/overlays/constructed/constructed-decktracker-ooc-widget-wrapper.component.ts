@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { AbstractWidgetWrapperComponent } from '@firestone/game-state';
+import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
