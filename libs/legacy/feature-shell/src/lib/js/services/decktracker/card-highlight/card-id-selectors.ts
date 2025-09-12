@@ -295,7 +295,7 @@ export const cardIdSelector = (
 		case CardIds.ArcaneLuminary:
 			return and(side(inputSide), inDeck, notInInitialDeck);
 		case CardIds.ArcaneQuiver_RLK_817:
-			return and(side(inputSide), inDeck, arcane);
+			return highlightConditions(and(side(inputSide), inDeck, arcane), and(side(inputSide), inDeck, spell));
 		case CardIds.ArcaniteCrystalTavernBrawl:
 			return and(side(inputSide), spell, arcane);
 		case CardIds.Arcanologist:
@@ -904,6 +904,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
 				and(side(inputSide), inGraveyard, minion, deathrattle),
 			);
+		case CardIds.DeadAir:
+			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.DeadRinger:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.DealWithADevil:
@@ -1748,6 +1750,8 @@ export const cardIdSelector = (
 				tooltip(and(side(inputSide), spellPlayedThisMatch, spellSchool(SpellSchool.FEL))),
 				and(side(inputSide), or(inDeck, inHand), spell, fel),
 			);
+		case CardIds.JazzBass:
+			return and(side(inputSide), or(inDeck, inHand), overload);
 		case CardIds.JepettoJoybuzz:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.JerryRigCarpenter:
@@ -2108,6 +2112,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.MeekMasteryTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, neutral);
+		case CardIds.Melomania:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.MeltedMaker:
 			return and(side(inputSide), or(inDeck, inHand), forge);
 		case CardIds.MenagerieJug_WON_142:
@@ -2199,6 +2205,8 @@ export const cardIdSelector = (
 		case CardIds.NostalgicInitiate_TOY_340:
 		case CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.NoxiousInfiltrator:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NydusWorm_SC_015:
 			return and(side(inputSide), inDeck, zerg);
 		case CardIds.NzothGodOfTheDeep:
