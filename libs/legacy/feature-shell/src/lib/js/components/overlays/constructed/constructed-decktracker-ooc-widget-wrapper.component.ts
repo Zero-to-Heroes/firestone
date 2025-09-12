@@ -108,7 +108,17 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
+		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit', this.ads);
+		await waitForReady(this.scene);
+		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - scene');
+		await waitForReady(this.prefs);
+		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - prefs');
+		await waitForReady(this.ads);
+		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - ads');
+		await waitForReady(this.deck);
+		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - deck');
 		await waitForReady(this.scene, this.prefs, this.deck, this.ads);
+		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - ready');
 
 		this.hasPremium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
 		this.toggleButtonTooltip$ = this.ads.enablePremiumFeatures$$.pipe(

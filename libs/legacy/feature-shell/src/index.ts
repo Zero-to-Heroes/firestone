@@ -8,5 +8,7 @@ export * from './lib/js/components/overlays/_full-screen-overlays.component';
 export * from './lib/js/components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 export * from './lib/js/components/settings/settings.component';
 export * from './lib/js/components/third-party/out-of-cards-callback.component';
+export * from './lib/js/services/decktracker/deck-parser-facade.service';
+export * from './lib/js/services/decktracker/deck-parser.service';
 export * from './lib/legacy-feature-shell.module';
 export * from './lib/libs/boostrap/daemon.component';
