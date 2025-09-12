@@ -110,6 +110,7 @@ import {
 	quickdraw,
 	race,
 	reborn,
+	relic,
 	restoreHealth,
 	restoreHealthToMinion,
 	rush,
@@ -206,6 +207,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), libram);
 		case CardIds.AlienEncounters_GDB_237:
 			return and(side(inputSide), or(inDeck, inHand), discover);
+		case CardIds.AllFelBreaksLoose:
+		case CardIds.AllFelBreaksLoose_CORE_MAW_012:
+		case CardIds.AllFelBreaksLoose_AllFelBreaksLooseToken:
+			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.AllianceBannerman:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.AllShallServeTavernBrawl:
@@ -2491,6 +2496,10 @@ export const cardIdSelector = (
 			return highlightConditions(and(side(inputSide), inDeck, spell), and(side(inputSide), inDeck, minion));
 		case CardIds.RefreshingSpringWater:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.RelicVault_CORE_REV_942:
+		case CardIds.RelicVault_REV_797:
+		case CardIds.RelicVault_REV_942:
+			return and(side(inputSide), or(inDeck, inHand), relic);
 		case CardIds.ReliquaryResearcher_WW_432:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		// case CardIds.DeepminerBrann_DEEP_020:
@@ -3413,9 +3422,9 @@ export const cardIdSelector = (
 		case CardIds.VeteranWarmedic:
 			return and(side(inputSide), or(inHand, inDeck), holy, spell);
 		case CardIds.VengefulSpirit_BAR_328:
-			return and(side(inputSide), or(inHand, inDeck), outcast);
-		case CardIds.VengefulWalloper:
 			return and(side(inputSide), inDeck, minion, deathrattle);
+		case CardIds.VengefulWalloper:
+			return and(side(inputSide), or(inHand, inDeck), outcast);
 		case CardIds.Vexallus:
 			return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 		case CardIds.ViciousBloodworm_RLK_711:

@@ -9,6 +9,7 @@ import {
 	Locale,
 	Race,
 	RarityTYpe,
+	RELIC_IDS,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard } from '@firestone/game-state';
@@ -366,6 +367,8 @@ export const isSi7 = (input: SelectorInput): boolean =>
 export const summonsTreant = (input: SelectorInput): boolean =>
 	input.card.relatedCardDbfIds?.some((c) => input.allCards.getCard(c)?.isTreant);
 export const isTreant = (input: SelectorInput): boolean => input.card?.isTreant;
+
+export const relic = cardIs(...RELIC_IDS);
 
 const PLAGUE_GENERATORS = [CardIds.DistressedKvaldir, CardIds.DownWithTheShip, CardIds.Helya, CardIds.StaffOfThePrimus];
 export const generatesPlague = (input: SelectorInput): boolean => PLAGUE_GENERATORS.includes(input.cardId as CardIds);
