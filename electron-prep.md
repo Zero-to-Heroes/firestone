@@ -41,3 +41,7 @@ Notes:
         - AppInjector could be made generic to work in both contexts?
     - facade pattern
         - expose the main service in the "main" process, which is outside of Angular, and serialize the data between it and the renderer process
+
+TODO now:
+
+- electron-app-injector-setup: importing legacy feature shell doesn't work, as we're also importing a ton of stuff that is browser-only. So we probably need to move the services into dedicated modules, at least gradually as we need them

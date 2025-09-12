@@ -1,6 +1,6 @@
 import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import { DeckHandlerService } from '@firestone/game-state';
-import { DeckParserFacadeService, DeckParserService } from '@firestone/legacy/feature-shell';
+// import { DeckParserFacadeService, DeckParserService } from '@firestone/legacy/feature-shell';
 import {
 	MemoryInspectionService,
 	MemoryUpdatesService,
@@ -16,7 +16,7 @@ import {
 	LocalStorageService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { GameEventsEmitterService } from '@legacy-import/src/lib/js/services/game-events-emitter.service';
+// import { GameEventsEmitterService } from '@legacy-import/src/lib/js/services/game-events-emitter.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 
@@ -46,21 +46,21 @@ export const buildAppInjector = () => {
 		mindVisionStateMachine,
 	);
 	const scene = new SceneService(windowManager);
-	const deckParserFacade = new DeckParserFacadeService(windowManager);
-	const gameEventsEmitter = new GameEventsEmitterService();
+	// const deckParserFacade = new DeckParserFacadeService(windowManager);
+	// const gameEventsEmitter = new GameEventsEmitterService();
 	const deckHandler = new DeckHandlerService(allCards as any as CardsFacadeService);
-	const deckParser = new DeckParserService(
-		gameEventsEmitter,
-		memoryUpdates,
-		mindVisionInspection,
-		allCards as any as CardsFacadeService,
-		null, // FIXME: replace OW service with something else
-		deckHandler,
-		api as any as ApiRunner,
-		preferences,
-		gameStatus,
-		scene,
-	);
+	// const deckParser = new DeckParserService(
+	// 	gameEventsEmitter,
+	// 	memoryUpdates,
+	// 	mindVisionInspection,
+	// 	allCards as any as CardsFacadeService,
+	// 	null, // FIXME: replace OW service with something else
+	// 	deckHandler,
+	// 	api as any as ApiRunner,
+	// 	preferences,
+	// 	gameStatus,
+	// 	scene,
+	// );
 
 	// Register services in the injector
 	electronInjector.register(WindowManagerService, windowManager);
@@ -73,9 +73,9 @@ export const buildAppInjector = () => {
 	electronInjector.register(MindVisionStateMachineService, mindVisionStateMachine);
 	electronInjector.register(MemoryInspectionService, mindVisionInspection);
 	electronInjector.register(SceneService, scene);
-	electronInjector.register(DeckParserFacadeService, deckParserFacade);
-	electronInjector.register(DeckParserService, deckParser);
-	electronInjector.register(GameEventsEmitterService, gameEventsEmitter);
+	// electronInjector.register(DeckParserFacadeService, deckParserFacade);
+	// electronInjector.register(DeckParserService, deckParser);
+	// electronInjector.register(GameEventsEmitterService, gameEventsEmitter);
 	electronInjector.register(CardsFacadeStandaloneService, allCards);
 	electronInjector.register(CardsFacadeService, allCards as any as CardsFacadeService);
 	electronInjector.register(DeckHandlerService, deckHandler);
