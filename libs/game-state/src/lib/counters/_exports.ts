@@ -52,6 +52,7 @@ import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
 import { ImbueCounterDefinitionV2 } from './impl/imbue';
 import { JadeGolemCounterDefinitionV2 } from './impl/jade-golem';
+import { KiljaedenCounterDefinitionV2 } from './impl/kiljaeden';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { LightrayCounterDefinitionV2 } from './impl/lightray';
@@ -93,6 +94,7 @@ export const getAllCounters: (
 	new DragonsPlayedCounterDefinitionV2(i18n, allCards),
 	new DarkGiftsCounterDefinitionV2(i18n, allCards),
 	new CeaselessExpanseCounterDefinitionV2(i18n),
+	new KiljaedenCounterDefinitionV2(i18n, allCards),
 	new DiscoversCounterDefinitionV2(i18n),
 	new LibramReductionCounterDefinitionV2(i18n),
 	new CardsDrawnCounterDefinitionV2(i18n),
@@ -248,6 +250,7 @@ export type CounterType =
 	| 'heroPowerDamage'
 	| 'shockspitter'
 	| 'multicaster'
+	| 'kiljaeden'
 	| 'si7Counter'
 	| 'elwynnBoar'
 	| 'volatileSkeleton'
