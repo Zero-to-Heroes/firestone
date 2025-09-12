@@ -618,6 +618,7 @@ import { SystemTrayService } from './js/services/system-tray.service';
 import { TipService } from './js/services/tip.service';
 import { AppUiStoreFacadeService } from './js/services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from './js/services/ui-store/app-ui-store.service';
+import { AppViewModule } from '@firestone/app/view';
 import { AppBootstrapService } from './libs/boostrap/app-bootstrap.service';
 import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
@@ -680,6 +681,7 @@ try {
 		DiscordModule,
 		MemoryModule,
 		GameStateModule,
+		AppViewModule,
 		StatsCommonModule,
 		ConstructedCommonModule,
 		CommunitiesCommonModule,

@@ -11,15 +11,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { BattlegroundsState, CounterInstance, GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { BattlegroundsState } from '../models/_barrel';
-import { GameState } from '../models/game-state';
-import { GameStateFacadeService } from '../services/game-state-facade.service';
-import { CounterInstance } from './_counter-definition-v2';
 import { CountersPositionerComponent } from './counters-positioner.component';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
@@ -82,7 +79,6 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 		protected override readonly prefs: PreferencesService,
 		protected override readonly renderer: Renderer2,
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly gameState: GameStateFacadeService,
 		@Optional() @Host() private readonly parent: CountersPositionerComponent, // Inject the parent
 	) {
 		super(cdr, ow, el, prefs, renderer);
