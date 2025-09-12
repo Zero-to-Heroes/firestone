@@ -1130,6 +1130,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.EnduranceTrainingTavernBrawl:
 			return and(side(inputSide), minion, taunt);
+		case CardIds.EnergyShaper:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.EnvoyOfTheGlade_EDR_873:
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.EscapeTheUnderfel_TLC_446:
@@ -2587,7 +2589,7 @@ export const cardIdSelector = (
 		case CardIds.RevivePet:
 			return tooltip(and(side(inputSide), inGraveyard, minion, beast));
 		case CardIds.Rewind_ETC_532:
-			return tooltip(and(side(inputSide), spellPlayedThisMatch, not(cardIs(CardIds.Rewind_ETC_532))));
+			return and(side(inputSide), or(inHand, inDeck), not(cardIs(CardIds.Rewind_ETC_532)));
 		case CardIds.RhoninsScryingOrbTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RhymeSpinner:

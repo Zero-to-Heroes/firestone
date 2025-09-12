@@ -35,6 +35,7 @@ import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
 import { Ressucitate } from './ressucitate';
 import { ReturnPolicy } from './return-policy';
+import { Rewind } from './rewind';
 import { StranglethornHeart } from './stranglethorn-heart';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TidepoolPupil } from './tidepool-pupil';
@@ -59,6 +60,7 @@ const cards = [
 	CreatureOfTheSacredCave,
 	CatrinaMuerte,
 	JimRaynor,
+	Rewind,
 	CarryOnSuitcase,
 	WallowTheWretched,
 	Hadronox,
