@@ -14,7 +14,7 @@ import {
 import { DeckHandlerService, explodeDecklist, Metadata, normalizeWithDbfIds } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
-import { ApiRunner, CardsFacadeService, GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -48,15 +48,16 @@ export class DeckParserService {
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
-		private readonly gameInfoService: GameInfoService,
 	) {
 		this.init();
-		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
-			this.retrieveCurrentDeck(false, {
-				gameType: gameType ?? GameType.GT_PVPDR,
-				formatType: formatType ?? GameFormat.FT_WILD,
-				scenarioId: ScenarioId._314_ARENA_SEASON,
-			});
+		if (typeof window !== 'undefined') {
+			window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
+				this.retrieveCurrentDeck(false, {
+					gameType: gameType ?? GameType.GT_PVPDR,
+					formatType: formatType ?? GameFormat.FT_WILD,
+					scenarioId: ScenarioId._314_ARENA_SEASON,
+				});
+		}
 	}
 
 	public async getCurrentDeck(timeout?: number): Promise<DeckInfo> {
@@ -459,6 +460,10 @@ export class DeckParserService {
 
 	private async readAllLogLines(): Promise<readonly string[]> {
 		const fileName = 'Decks.log';
+		if (!this.ow) {
+			console.error('missing OW service in deckparser');
+			return [];
+		}
 		const gameInfo = await this.ow.getRunningGameInfo();
 		const prefs = await this.prefs.getPreferences();
 		const logsDir = await getLogsDir(this.ow, gameInfo, prefs);

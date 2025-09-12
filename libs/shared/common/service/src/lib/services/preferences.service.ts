@@ -58,12 +58,22 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 			)
 			.subscribe((prefs) => this.storage.saveUserPreferences(prefs));
 		this.preferences$$.next(this.storage.getUserPreferences());
+
+		console.log('[preferences] completely ready');
 	}
 
 	public async getPreferences(): Promise<Preferences> {
 		await this.isReady();
 		return this.preferences$$.getValue();
 		// this.storage.getUserPreferences();
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.preferences$$, 'preferences');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void {
+		this.preferences$$ = new BehaviorSubject<Preferences>(new Preferences());
 	}
 
 	public async updatePrefs<K extends keyof Preferences>(key: K, value: Preferences[K]) {

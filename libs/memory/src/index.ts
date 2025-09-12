@@ -7,6 +7,7 @@ export * from './lib/services/card-moused-over.service';
 export * from './lib/services/memory-inspection.service';
 export * from './lib/services/memory-updates.service';
 export * from './lib/services/mind-vision/mind-vision-facade.interface';
+export * from './lib/services/mind-vision/mind-vision-facade.service';
 export * from './lib/services/mind-vision/mind-vision-state-machine.service';
 export * from './lib/services/mind-vision/operations/get-achievements-categories-operation';
 export * from './lib/services/mind-vision/operations/get-achievements-info-operation';

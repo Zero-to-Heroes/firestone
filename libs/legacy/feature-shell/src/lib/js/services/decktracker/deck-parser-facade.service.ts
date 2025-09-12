@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 import { DeckInfo, DeckParserService } from './deck-parser.service';
 
+const eventName = 'current-deck-facade';
 @Injectable()
 export class DeckParserFacadeService extends AbstractFacadeService<DeckParserFacadeService> {
-	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfo | null>;
+	public currentDeck$$: BehaviorSubject<DeckInfo | null>;
 
 	private deckParser: DeckParserService;
 
@@ -18,11 +19,19 @@ export class DeckParserFacadeService extends AbstractFacadeService<DeckParserFac
 	}
 
 	protected async init() {
-		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfo | null>(null);
+		this.currentDeck$$ = new BehaviorSubject<DeckInfo | null>(null);
 		this.deckParser = AppInjector.get(DeckParserService);
 
-		this.currentDeck$$.onFirstSubscribe(async () => {
-			this.deckParser.currentDeck$$.subscribe(this.currentDeck$$);
-		});
+		this.deckParser.currentDeck$$.subscribe(this.currentDeck$$);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.currentDeck$$, eventName);
+	}
+
+	// In renderer process
+	protected override async createElectronProxy(ipcRenderer: any) {
+		// In renderer process, create proxy subjects that communicate with main process via IPC
+		this.currentDeck$$ = new BehaviorSubject<DeckInfo | null>(null);
 	}
 }
