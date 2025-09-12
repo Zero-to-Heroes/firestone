@@ -422,7 +422,7 @@ export const createLocation = cardIs(
 	CardIds.CruiseCaptainLora_VAC_506,
 );
 export const locationExtended = or(location, createLocation);
-export const givesHeroAttack = or(weapon);
+export const givesHeroAttack = or(weapon, hasMechanicStr('GIVES_HERO_ATTACK'));
 export const givesArmor = (Input: SelectorInput): boolean => {
 	return false; // TODO: Implement this
 };

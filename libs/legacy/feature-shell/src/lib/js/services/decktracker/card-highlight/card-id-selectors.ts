@@ -258,7 +258,7 @@ export const cardIdSelector = (
 		case CardIds.AnimaExtractor_CORE_REV_332:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.AnimateDead:
-			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(4)));
+			return and(side(inputSide), inGraveyard, minion, effectiveCostLess(4));
 		case CardIds.AnimatedAvalanche:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.AnimatedBerserker_CORE_ICC_238:
@@ -2739,6 +2739,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.ShadowVisions:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.ShadowWordUndeath:
+			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.ShadyDealer:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.Shaladrassil_EDR_846:
