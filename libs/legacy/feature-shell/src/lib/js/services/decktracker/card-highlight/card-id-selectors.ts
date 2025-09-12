@@ -486,6 +486,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.Bonecaller:
 			return and(side(inputSide), inGraveyard, minion, undead);
+		case CardIds.BoneFlinger:
+			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.BonecrusherTavernBrawlToken:
 			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 		case CardIds.Boneshredder:
@@ -1208,6 +1210,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.FieldContact:
 			return and(side(inputSide), or(inHand, inDeck), or(battlecry, combo));
+		case CardIds.FierceOutsider:
+			return and(side(inputSide), or(inHand, inDeck), outcast);
 		case CardIds.FinjaTheFlyingStar:
 		case CardIds.FinjaTheFlyingStar_CORE_CFM_344:
 			return and(side(inputSide), inDeck, murloc);
@@ -2353,7 +2357,10 @@ export const cardIdSelector = (
 		case CardIds.PreparationVanilla:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Prescience:
-			return and(side(inputSide), inDeck, minion);
+			return highlightConditions(
+				and(side(inputSide), inDeck, minion, costMore(4)),
+				and(side(inputSide), inDeck, minion),
+			);
 		case CardIds.PressurePoints_GDB_881:
 			return and(side(inputSide), or(inHand, inDeck), combo);
 		case CardIds.PriestessValishj:
@@ -3340,6 +3347,8 @@ export const cardIdSelector = (
 		// case CardIds.UnleashTheColossus:
 		// case CardIds.GorishiColossus:
 		// 	return and(side(inputSide), or(inDeck, inHand), canDealExactDamage(2));
+		case CardIds.UnlivingChampion:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.UnlockedPotential:
 			return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 		case CardIds.UnluckyPowderman_WW_367:
