@@ -640,6 +640,7 @@ const getDynamicFilters = (
 		case CardIds.Jettison_GDB_227:
 		case CardIds.Kalecgos_CORE_DAL_609:
 		case CardIds.Marshspawn_CORE_BT_115:
+		case CardIds.NerubianVizier:
 		case CardIds.OnyxMagescribe:
 		case CardIds.PalmReading:
 		case CardIds.Peon_BAR_022:

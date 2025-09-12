@@ -1,5 +1,6 @@
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { AnimateDead } from './animate-dead';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { Archimonde } from './archimonde';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
@@ -50,6 +51,7 @@ const cards = [
 	Archimonde,
 	Bonecaller,
 	StranglethornHeart,
+	AnimateDead,
 	WakenerOfSouls,
 	OverlordSaurfang,
 	Ressucitate,
