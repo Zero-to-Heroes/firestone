@@ -108,6 +108,7 @@ export class SecretConfigService {
 		switch (creatorCardId) {
 			case CardIds.SweetenedSnowflurry_TOY_307:
 			case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
+			case CardIds.RemixedDispenseOBot_ChillingDispenseOBotToken:
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
 				);
