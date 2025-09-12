@@ -304,6 +304,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, secret);
 		case CardIds.ArchdruidOfThorns_EDR_491:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle, minion);
+		case CardIds.Archimonde_GDB_128:
+			return and(side(inputSide), or(inDeck, inHand, inGraveyard), demon, notInInitialDeck);
 		case CardIds.ArchmageAntonidas:
 		case CardIds.ArchmageAntonidasLegacy:
 		case CardIds.ArchmageAntonidas_CORE_EX1_559:
@@ -318,10 +320,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.ArmsDealer_RLK_824:
 			return and(side(inputSide), or(inDeck, inHand), undead);
-		case CardIds.Archimonde_GDB_128:
-			return and(side(inputSide), or(inDeck, inHand, inGraveyard), demon, notInInitialDeck);
 		case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.ArrowSmith:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Artanis_SC_754:
 			return and(side(inputSide), or(inHand, inDeck), protoss, minion);
 		case CardIds.AshleafPixie_FIR_961:
@@ -394,6 +396,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
 		case CardIds.Banjosaur:
 			return and(side(inputSide), inDeck, beast, minion);
+		case CardIds.Banshee_RLK_957:
+			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.BarakKodobane_BAR_551:
 		case CardIds.BarakKodobane_CORE_BAR_551:
 			return and(
@@ -1816,6 +1820,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.KhadgarsScryingOrb:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.KeeneyeSpotter:
+			return and(side(inputSide), or(inDeck, inHand), givesHeroAttack);
 		case CardIds.KeeperOfFlame_FIR_928:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.KeepersStrength_YOG_509:
@@ -2804,6 +2810,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ShiveringSorceress:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.Shockspitter:
+			return and(side(inputSide), or(inDeck, inHand), givesHeroAttack);
 		case CardIds.ShoplifterGoldbeard_TOY_511:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ShroudOfConcealment:
