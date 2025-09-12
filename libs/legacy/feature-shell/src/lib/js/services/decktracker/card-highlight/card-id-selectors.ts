@@ -88,6 +88,7 @@ import {
 	libram,
 	libramDiscount,
 	lifesteal,
+	location,
 	locationExtended,
 	magnetic,
 	mech,
@@ -266,6 +267,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.AnimatedMoonwell_EDR_254:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.AnonymousInformant:
+		case CardIds.AnonymousInformant_CORE_REV_841:
+			return and(side(inputSide), or(inDeck, inHand), secret);
 		case CardIds.AntiqueFlinger_WW_413:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.Anubrekhan_RLK_659:
@@ -973,6 +977,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.DisksOfLegendTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
+		case CardIds.DispossessedSoul:
+		case CardIds.DispossessedSoul_CORE_REV_901:
+			return and(side(inputSide), or(inDeck, inHand), location);
 		case CardIds.DiveTheGolakkaDepths_TLC_426:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.DivineIlluminationTavernBrawl:
@@ -1279,6 +1286,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, mech);
 		case CardIds.PeacefulPiper_FriendlyFace:
 			return and(side(inputSide), inDeck, beast);
+		case CardIds.Pelagos_CORE_REV_250:
+		case CardIds.Pelagos_REV_250:
+		case CardIds.Pelagos_REV_781:
+			return and(side(inputSide), or(inHand, inDeck), spell, canTargetFriendlyCharacter);
 		case CardIds.FrizzKindleroost:
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.FrostburnMatriarch_FIR_901:
@@ -1395,6 +1406,8 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck));
 		case CardIds.GraveDefiler:
 			return and(side(inputSide), inDeck, spell, fel);
+		case CardIds.GraveDigging:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.GreedyPartner_WW_901:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(2));
 		case CardIds.GreedyGainsTavernBrawl:
