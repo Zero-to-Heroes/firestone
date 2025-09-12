@@ -7,7 +7,7 @@ import {
 	Optional,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 	styleUrls: [`./arena-card-search.component.scss`],
 	template: `
 		<fs-text-input
-			[value]="currentSearchString"
+			[value]="initialSearchValue"
 			(fsModelUpdate)="onTextChanged($event)"
 			[placeholder]="'app.collection.card-search.search-box-placeholder' | fsTranslate"
 			[tooltip]="'app.arena.card-search-tooltip' | fsTranslate"
@@ -26,8 +26,9 @@ import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
-	currentSearchString = '';
+	initialSearchValue: string | null = null;
 	private destroyed$ = new Subject<void>();
+	private searchSubject$ = new Subject<string>();
 
 	constructor(
 		private readonly cardsService: ArenaCardStatsService,
@@ -50,16 +51,19 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onTextChanged(newText: string) {
-		this.currentSearchString = newText;
+		// Clear the initial value after first user interaction to prevent future conflicts
+		if (this.initialSearchValue !== null) {
+			this.initialSearchValue = null;
+		}
 		this.cardsService.newSearchString(newText);
-		this.updateUrlParam(newText);
+		this.searchSubject$.next(newText);
 	}
 
 	private initializeFromUrlParams(): void {
 		this.route?.queryParams.pipe(take(1)).subscribe((params) => {
 			const searchParam = params['arenaCardSearch'];
 			if (searchParam && typeof searchParam === 'string') {
-				this.currentSearchString = searchParam;
+				this.initialSearchValue = searchParam;
 				this.cardsService.newSearchString(searchParam);
 				this.cdr.detectChanges();
 			}
@@ -67,8 +71,9 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private setupUrlParamSync(): void {
-		// No need to sync from service back to component since user input drives both
-		// the service and URL updates directly in onTextChanged()
+		this.searchSubject$.pipe(takeUntil(this.destroyed$)).subscribe((searchString) => {
+			this.updateUrlParam(searchString);
+		});
 	}
 
 	private updateUrlParam(searchString: string): void {
