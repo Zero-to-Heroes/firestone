@@ -57,8 +57,8 @@ export class CardMousedOverService extends AbstractFacadeService<CardMousedOverS
 							mousedOverCard.Side === Side.FRIENDLY
 								? 'player'
 								: mousedOverCard.Side === Side.OPPOSING
-								? 'opponent'
-								: 'single',
+									? 'opponent'
+									: 'single',
 						);
 					}
 				});
