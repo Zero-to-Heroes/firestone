@@ -10,11 +10,11 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
-import { CardOption, DeckCard, GameState, GameStateFacadeService } from '@firestone/game-state';
+import { CardOption, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { CardChoicesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
@@ -217,15 +217,10 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			case CardIds.MurlocHolmes_REV_770:
 				switch (option.context?.DataNum1) {
 					case 1:
-						const isInStartingHand = state.opponentDeck
-							.getAllCardsInDeck()
-							.filter((c) => c.cardId === option.cardId)
-							.filter((c) => !!(c as DeckCard).metaInfo)
-							.some(
-								(c) =>
-									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
-									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
-							);
+						const isInStartingHand =
+							state.opponentDeck.cardsInStartingHand
+								?.map((c) => c.cardId ?? state.opponentDeck.findCard(c.entityId)?.card?.cardId)
+								.filter((c) => c === option.cardId).length > 0;
 						return isInStartingHand ? 'flag' : null;
 					case 2:
 						const isInHand = !!state.opponentDeck.hand.filter((c) => c.cardId === option.cardId).length;

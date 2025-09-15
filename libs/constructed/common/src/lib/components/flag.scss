@@ -1,0 +1,19 @@
+.flag-container {
+	position: absolute;
+	height: 3vh;
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	left: -2.5vh;
+	top: 0;
+
+	.flag {
+		height: 100%;
+
+		::ng-deep svg {
+			height: 100%;
+			filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+		}
+	}
+}

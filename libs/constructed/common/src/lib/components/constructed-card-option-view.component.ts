@@ -6,9 +6,12 @@ import { ConstructedCardStat } from '../services/constructed-discover.service';
 @Component({
 	standalone: false,
 	selector: 'constructed-card-option-view',
-	styleUrls: ['./constructed-card-option-view.component.scss'],
+	styleUrls: ['./constructed-card-option-view.component.scss', './flag.scss'],
 	template: `
 		<div class="info-container scalable">
+			<div class="flag-container" *ngIf="showFlag === 'flag'">
+				<div class="flag" [inlineSVG]="'assets/svg/new_record.svg'"></div>
+			</div>
 			<div class="stats impact">
 				<div class="stat winrate discover" *ngIf="impact !== '-'" [helpTooltip]="tooltip">
 					<span
@@ -46,6 +49,7 @@ export class ConstructedCardOptionViewComponent {
 					value: value?.dataPoints ?? 0,
 				});
 	}
+	@Input() showFlag: string;
 
 	impact: string;
 	winrateClass: string;
