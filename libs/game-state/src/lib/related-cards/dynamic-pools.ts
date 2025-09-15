@@ -2,6 +2,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	AllCardsService,
+	arenaSets,
 	CardClass,
 	CardIds,
 	CardRarity,
@@ -171,7 +172,8 @@ export const getDynamicRelatedCardIds = (
 		const result = filterCards(allCards, options, cardId, ...filters);
 		return result;
 	} else {
-		return filterCards(allCards, options, cardId, filters);
+		const result = filterCards(allCards, options, cardId, filters);
+		return result;
 	}
 };
 
@@ -1076,7 +1078,7 @@ const filterCards = (
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
 				if (options.validArenaPool.length > 0) {
 					return options.validArenaPool.includes(c.id);
-				} else {
+				} else if (!arenaSets?.length) {
 					// Default to ranked wild otherwise
 					gameType = GameType.GT_RANKED;
 					format = GameFormat.FT_WILD;
