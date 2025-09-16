@@ -52,7 +52,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	}
 
 	private tooltipPortal;
-	private overlayRef: OverlayRef;
+	private overlayRef: OverlayRef | null;
 	private positionStrategy: PositionStrategy | null;
 
 	private positionDirty = true;

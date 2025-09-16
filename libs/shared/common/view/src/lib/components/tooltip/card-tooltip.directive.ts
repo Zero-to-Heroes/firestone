@@ -93,7 +93,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 
 	private _position: CardTooltipPositionType = 'auto';
 	private tooltipPortal;
-	private overlayRef: OverlayRef;
+	private overlayRef: OverlayRef | null;
 	private tooltipRef: ComponentRef<CardTooltipComponent> | null;
 	private positionStrategy: PositionStrategy | null;
 
@@ -187,7 +187,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 
 		// Attach tooltip portal to overlay
-		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+		this.tooltipRef = this.overlayRef?.attach(this.tooltipPortal);
 		if (!this.tooltipRef) {
 			console.warn('[card-tooltip] tooltipRef is null, not showing tooltip');
 			return;
@@ -268,7 +268,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 			const targetRect = this.elementRef.nativeElement.getBoundingClientRect();
 			const relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';
 			tooltipRef.instance.relativePosition = relativePosition;
-			this.overlayRef.updatePosition();
+			this.overlayRef?.updatePosition();
 
 			positionUpdated = previousTooltipLeft !== tooltipRect.left || previousTooltipTop !== tooltipRect.top;
 			previousTooltipLeft = tooltipRect.left;

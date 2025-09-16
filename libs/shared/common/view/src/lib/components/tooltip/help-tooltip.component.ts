@@ -65,10 +65,14 @@ export class HelpTooltipComponent {
 	private arrowElement;
 	private element;
 
-	constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer, private elRef: ElementRef) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private sanitizer: DomSanitizer,
+		private elRef: ElementRef,
+	) {}
 
-	public setTarget(target: ElementRef) {
-		if (!this._showArrow) {
+	public setTarget(target: ElementRef | null) {
+		if (!this._showArrow || !target) {
 			return;
 		}
 

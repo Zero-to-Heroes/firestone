@@ -80,8 +80,8 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		| 'global-bottom-left'
 		| 'auto' = 'right';
 	private tooltipPortal;
-	private overlayRef: OverlayRef;
-	private positionStrategy: PositionStrategy;
+	private overlayRef: OverlayRef | null;
+	private positionStrategy: PositionStrategy | null;
 
 	private tooltipLeaveSub: Subscription;
 
@@ -157,7 +157,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 			return;
 		}
 		// Typically the case when mousing over the tooltip
-		if (this.overlayRef.hasAttached()) {
+		if (!this.overlayRef || this.overlayRef.hasAttached()) {
 			return;
 		}
 		if (this.forceHide) {
@@ -183,7 +183,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		tooltipRef.instance.cssClass = this.componentTooltipCssClass;
 		tooltipRef.instance.visible = true;
 
-		this.positionStrategy.apply();
+		this.positionStrategy?.apply();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

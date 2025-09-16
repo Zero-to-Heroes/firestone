@@ -50,9 +50,9 @@ export class HelpTooltipDirective implements OnDestroy {
 	@Input('helpTooltipClickTimeout') clickTimeout = 2000;
 
 	private tooltipPortal: ComponentPortal<any>;
-	private overlayRef: OverlayRef;
-	private positionStrategy: PositionStrategy;
-	private tooltipRef: ComponentRef<HelpTooltipComponent> | undefined;
+	private overlayRef: OverlayRef | null;
+	private positionStrategy: PositionStrategy | null;
+	private tooltipRef: ComponentRef<HelpTooltipComponent> | null;
 	private target: ElementRef;
 
 	constructor(
@@ -124,6 +124,7 @@ export class HelpTooltipDirective implements OnDestroy {
 										overlayY: 'center',
 									},
 								];
+
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.target)
@@ -165,6 +166,10 @@ export class HelpTooltipDirective implements OnDestroy {
 		this.destroyOverlay();
 		this.initOverlay();
 
+		if (!this.overlayRef) {
+			return;
+		}
+
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
 
@@ -176,6 +181,10 @@ export class HelpTooltipDirective implements OnDestroy {
 			this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 		}
 
+		if (!this.tooltipRef) {
+			return;
+		}
+
 		// Pass content to tooltip component instance
 		this.tooltipRef.instance.text = this._text;
 		this.tooltipRef.instance.showArrow = this.showArrow;
@@ -183,7 +192,7 @@ export class HelpTooltipDirective implements OnDestroy {
 		this.tooltipRef.instance.width = this.helpTooltipWidth;
 		this.tooltipRef.instance.setTarget(this.target);
 
-		this.positionStrategy.apply();
+		this.positionStrategy?.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -194,7 +203,7 @@ export class HelpTooltipDirective implements OnDestroy {
 		if (this.bindTooltipToGameWindow && this.ow?.isOwEnabled()) {
 			const window = await this.ow.getCurrentWindow();
 			const gameInfo = await this.ow.getRunningGameInfo();
-			if (this.tooltipRef) {
+			if (this.tooltipRef && this.overlayRef) {
 				const tooltipLeft =
 					window.left +
 					(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
