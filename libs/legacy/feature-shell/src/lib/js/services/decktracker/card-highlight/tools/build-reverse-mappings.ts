@@ -1,0 +1,336 @@
+#!/usr/bin/env node
+/**
+ * Build-time script to analyze existing selectors and generate reverse mappings
+ * Run this during development to update reverse selector mappings
+ *
+ * Usage: ts-node build-reverse-mappings.ts
+ *
+ * This script analyzes card-id-selectors.ts to find common patterns and automatically
+ * generates reverse selector code that gets injected into the main selector files.
+ */
+
+import * as fs from 'fs';
+import * as path from 'path';
+
+interface ReverseMappings {
+	// Race -> [cards that want this race]
+	races: { [race: string]: string[] };
+	// Spell school -> [cards that want this spell school]
+	spellSchools: { [school: string]: string[] };
+	// Card type -> [cards that want this card type]
+	cardTypes: { [type: string]: string[] };
+	// Mechanic -> [cards that want this mechanic]
+	mechanics: { [mechanic: string]: string[] };
+}
+
+// Pattern matchers to identify selector patterns
+const PATTERNS = {
+	// Tribal patterns - look for specific function calls
+	beast: /\bbeast\b/i,
+	dragon: /\bdragon\b/i,
+	murloc: /\bmurloc\b/i,
+	pirate: /\bpirate\b/i,
+	mech: /\bmech\b/i,
+	demon: /\bdemon\b/i,
+	elemental: /\belemental\b/i,
+	undead: /\bundead\b/i,
+	naga: /\bnaga\b/i,
+	totem: /\btotem\b/i,
+
+	// Spell schools
+	arcane: /\barcane\b/i,
+	fire: /\bfire\b/i,
+	frost: /\bfrost\b/i,
+	nature: /\bnature\b/i,
+	holy: /\bholy\b/i,
+	shadow: /\bshadow\b/i,
+	fel: /\bfel\b/i,
+
+	// Card types
+	minion: /\bminion\b/i,
+	spell: /\bspell\b/i,
+	weapon: /\bweapon\b/i,
+
+	// Common mechanics
+	deathrattle: /\bdeathrattle\b/i,
+	battlecry: /\bbattlecry\b/i,
+	secret: /\bsecret\b/i,
+	taunt: /\btaunt\b/i,
+};
+
+function analyzeCardSelector(cardId: string, selectorCode: string): string[] {
+	const foundPatterns: string[] = [];
+
+	// Skip very complex selectors or ones with specific conditions
+	if (
+		selectorCode.includes('highlightConditions') ||
+		selectorCode.includes('input: SelectorInput') ||
+		selectorCode.includes('tooltip') ||
+		selectorCode.length > 500
+	) {
+		return foundPatterns;
+	}
+
+	// Look for simple patterns
+	for (const [pattern, regex] of Object.entries(PATTERNS)) {
+		if (regex.test(selectorCode)) {
+			foundPatterns.push(pattern);
+		}
+	}
+
+	return foundPatterns;
+}
+
+function extractCardSelectors(): { [cardId: string]: string } {
+	const selectorsFilePath = path.join(__dirname, '..', 'card-id-selectors.ts');
+	const content = fs.readFileSync(selectorsFilePath, 'utf8');
+
+	const selectors: { [cardId: string]: string } = {};
+
+	// Extract all case statements
+	const casePattern = /case CardIds\.([^:]+):\s*([\s\S]*?)(?=case CardIds\.|default:|^\t})/gm;
+	let match;
+
+	while ((match = casePattern.exec(content)) !== null) {
+		const cardIdSuffix = match[1];
+		const selectorCode = match[2].trim();
+
+		// Clean up the selector code
+		const cleanCode = selectorCode
+			.replace(/^\s*\/\/.*$/gm, '') // Remove comments
+			.replace(/\n\s*\n/g, '\n') // Remove empty lines
+			.trim();
+
+		if (cleanCode && cleanCode !== 'break;') {
+			selectors[cardIdSuffix] = cleanCode;
+		}
+	}
+
+	return selectors;
+}
+
+function buildReverseMappings(): ReverseMappings {
+	const mappings: ReverseMappings = {
+		races: {},
+		spellSchools: {},
+		cardTypes: {},
+		mechanics: {},
+	};
+
+	const selectors = extractCardSelectors();
+	console.log(`Found ${Object.keys(selectors).length} card selectors to analyze`);
+
+	for (const [cardIdSuffix, selectorCode] of Object.entries(selectors)) {
+		const patterns = analyzeCardSelector(cardIdSuffix, selectorCode);
+
+		for (const pattern of patterns) {
+			// Categorize patterns
+			if (
+				[
+					'beast',
+					'dragon',
+					'murloc',
+					'pirate',
+					'mech',
+					'demon',
+					'elemental',
+					'undead',
+					'naga',
+					'totem',
+				].includes(pattern)
+			) {
+				if (!mappings.races[pattern]) {
+					mappings.races[pattern] = [];
+				}
+				mappings.races[pattern].push(cardIdSuffix);
+			} else if (['arcane', 'fire', 'frost', 'nature', 'holy', 'shadow', 'fel'].includes(pattern)) {
+				if (!mappings.spellSchools[pattern]) {
+					mappings.spellSchools[pattern] = [];
+				}
+				mappings.spellSchools[pattern].push(cardIdSuffix);
+			} else if (['minion', 'spell', 'weapon'].includes(pattern)) {
+				if (!mappings.cardTypes[pattern]) {
+					mappings.cardTypes[pattern] = [];
+				}
+				mappings.cardTypes[pattern].push(cardIdSuffix);
+			} else {
+				if (!mappings.mechanics[pattern]) {
+					mappings.mechanics[pattern] = [];
+				}
+				mappings.mechanics[pattern].push(cardIdSuffix);
+			}
+		}
+	}
+
+	// Clean up and deduplicate
+	for (const category of Object.values(mappings)) {
+		for (const key in category) {
+			category[key] = [...new Set(category[key])].sort();
+		}
+	}
+
+	return mappings;
+}
+
+function generateReverseSelectorsFile(mappings: ReverseMappings): string {
+	const lines: string[] = [];
+
+	// File header
+	lines.push('/**');
+	lines.push(' * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY');
+	lines.push(' * Generated by build-reverse-mappings.ts');
+	lines.push(' * Run: npx tsx build-reverse-mappings.ts to update');
+	lines.push(' */');
+	lines.push('');
+
+	// Imports
+	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
+	lines.push("import { DeckCard } from '@firestone/game-state';");
+	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
+	lines.push("import { Selector } from '../cards-highlight-common.service';");
+	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
+	lines.push('');
+
+	// Main function
+	lines.push('export const reverseCardIdSelector = (');
+	lines.push('	cardId: string,');
+	lines.push('	card: DeckCard | undefined,');
+	lines.push('	inputSide: HighlightSide,');
+	lines.push('	allCards: CardsFacadeService,');
+	lines.push('): Selector => {');
+	lines.push('	const refCard = allCards.getCard(cardId);');
+	lines.push('	if (!refCard) return null;');
+	lines.push('');
+
+	// Race-based reverse selectors
+	lines.push('	// Race-based reverse synergies');
+	lines.push('	if (refCard.races?.length) {');
+	for (const [race, cardIds] of Object.entries(mappings.races)) {
+		if (cardIds.length >= 5) {
+			// Only include races with significant synergies - include ALL cards
+			const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+			lines.push(`		if (refCard.races.map(r => r.toUpperCase()).includes('${race.toUpperCase()}')) {`);
+			lines.push(`			return and(side(inputSide), or(inDeck, inHand), cardIs(`);
+			lines.push(`				${cardsList}`);
+			lines.push(`			));`);
+			lines.push('		}');
+		}
+	}
+	lines.push('	}');
+	lines.push('');
+
+	// Spell school reverse selectors
+	lines.push('	// Spell school reverse synergies');
+	lines.push("	if (refCard.spellSchool && refCard.type?.toUpperCase() === 'SPELL') {");
+	for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
+		if (cardIds.length >= 3) {
+			// Only include schools with decent synergies - include ALL cards
+			const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+			lines.push(`		if (refCard.spellSchool?.toUpperCase() === '${school.toUpperCase()}') {`);
+			lines.push(`			return and(side(inputSide), or(inDeck, inHand), cardIs(`);
+			lines.push(`				${cardsList}`);
+			lines.push(`			));`);
+			lines.push('		}');
+		}
+	}
+	lines.push('	}');
+	lines.push('');
+
+	// Card type reverse selectors
+	lines.push('	// Card type reverse synergies');
+	for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
+		if (cardIds.length >= 5) {
+			// Only include card types with significant synergies - include ALL cards
+			const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+			lines.push(`	if (refCard.type?.toUpperCase() === '${type.toUpperCase()}') {`);
+			lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
+			lines.push(`			${cardsList}`);
+			lines.push(`		));`);
+			lines.push('	}');
+		}
+	}
+	lines.push('');
+
+	lines.push('	return null;');
+	lines.push('};');
+	lines.push('');
+
+	// Add summary comment
+	lines.push('/**');
+	lines.push(' * Reverse mapping summary:');
+	lines.push(' * Races:');
+	for (const [race, cardIds] of Object.entries(mappings.races)) {
+		lines.push(` *   ${race}: ${cardIds.length} cards want this`);
+	}
+	lines.push(' * Spell Schools:');
+	for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
+		lines.push(` *   ${school}: ${cardIds.length} cards want this`);
+	}
+	lines.push(' * Card Types:');
+	for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
+		lines.push(` *   ${type}: ${cardIds.length} cards want this`);
+	}
+	lines.push(' * Mechanics:');
+	for (const [mechanic, cardIds] of Object.entries(mappings.mechanics)) {
+		lines.push(` *   ${mechanic}: ${cardIds.length} cards want this`);
+	}
+	lines.push(' */');
+
+	return lines.join('\n');
+}
+
+function writeReverseSelectorsFile(mappings: ReverseMappings): void {
+	const reverseCode = generateReverseSelectorsFile(mappings);
+
+	// Write the generated file to the parent directory (with the other selectors)
+	const outputPath = path.join(__dirname, '.', 'reverse-card-id-selectors.ts');
+	fs.writeFileSync(outputPath, reverseCode, 'utf8');
+	console.log('✅ Generated reverse selectors file: reverse-card-id-selectors.ts');
+}
+
+// Main execution
+async function main() {
+	console.log('🔍 Analyzing existing card selectors...');
+
+	try {
+		const mappings = buildReverseMappings();
+
+		// Print summary
+		console.log('\n📊 Analysis Summary:');
+		console.log('Races:');
+		for (const [race, cardIds] of Object.entries(mappings.races)) {
+			console.log(`  ${race}: ${cardIds.length} cards`);
+		}
+		console.log('Spell Schools:');
+		for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
+			console.log(`  ${school}: ${cardIds.length} cards`);
+		}
+		console.log('Card Types:');
+		for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
+			console.log(`  ${type}: ${cardIds.length} cards`);
+		}
+		console.log('Mechanics:');
+		for (const [mechanic, cardIds] of Object.entries(mappings.mechanics)) {
+			console.log(`  ${mechanic}: ${cardIds.length} cards`);
+		}
+
+		// Generate reverse selectors file
+		console.log('\n🔧 Generating reverse synergy code...');
+		writeReverseSelectorsFile(mappings);
+
+		// Write analysis report
+		const reportPath = path.join(__dirname, 'reverse-mappings-analysis.json');
+		fs.writeFileSync(reportPath, JSON.stringify(mappings, null, 2), 'utf8');
+		console.log(`📝 Analysis report saved to: ${reportPath}`);
+
+		console.log('\n✅ Reverse synergies generation complete!');
+		console.log('💡 The reverse synergies have been automatically injected into the highlight system.');
+	} catch (error) {
+		console.error('❌ Failed to build reverse mappings:', error);
+		process.exit(1);
+	}
+}
+
+if (require.main === module) {
+	main();
+}

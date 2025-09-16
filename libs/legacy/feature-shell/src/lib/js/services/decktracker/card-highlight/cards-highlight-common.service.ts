@@ -15,6 +15,7 @@ import { AppInjector, CardsFacadeService, HighlightSide } from '@firestone/share
 import { Observable } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { getSelectorsForArenaDraft } from './arena-draft';
 import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
 import { cardsMapping, hasGetRelatedCards } from './global/_registers';
@@ -250,10 +251,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			!!playerDeckProvider ? playerDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'player',
 		);
-		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
+		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector, allPlayerCards);
 		for (const playerCard of allPlayerCards) {
-			// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card);
 			const selectorOutput = selector(playerCard);
+			// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card, selectorOutput);
 			playerCard.highlight = selectorOutput;
 			if (selectorOutput) {
 				// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
@@ -369,10 +370,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	): Selector {
 		// Mechanic-specific highlights
 		const selectors: Selector[] = [];
+
+		// Forward synergies - what does this card want?
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
 		if (!!selector) {
 			selectors.push(selector);
-			// return selector;
 		}
 
 		const refCard = this.allCards.getCard(cardId);
@@ -459,6 +461,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					),
 				);
 			}
+		}
+		if (inputSide === 'arena-draft' || inputSide === 'single') {
+			const draftSelectors = getSelectorsForArenaDraft(cardId, card, this.allCards);
+			selectors.push(...draftSelectors);
 		}
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));
