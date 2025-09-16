@@ -7,7 +7,7 @@ export const StranglethornHeart: GlobalHighlightCard = {
 	cardIds: [CardIds.StranglethornHeart],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		return deckState.minionsDeadThisTurn
+		return deckState.minionsDeadThisMatch
 			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 			.filter((c) => hasCorrectTribe(c, Race.BEAST) && c.cost >= 5)
 			.map((e) => e.id);
