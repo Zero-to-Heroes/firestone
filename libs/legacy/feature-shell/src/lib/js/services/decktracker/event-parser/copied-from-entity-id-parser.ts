@@ -92,6 +92,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			// Adding the info directly to the forcedHiddenCardCreators would prevent the card to be flagged when WE play the Suspicious
 			// cards
 			shouldObfuscate ||
+			// Works for all "Suspicious" cards
 			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment)
 				? copiedCard?.cardId
 				: updatedCardId;
