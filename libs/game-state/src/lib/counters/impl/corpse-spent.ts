@@ -39,10 +39,10 @@ export class CorpseSpentCounterDefinitionV2 extends CounterDefinitionV2<number> 
 
 			const entityIdsPlayed = state.opponentDeck.cardsPlayedThisMatch.map((c) => Math.abs(c.entityId));
 			const cardsPlayedThisMatch = state.opponentDeck
-				.getAllCardsInDeck()
+				.getAllCardsInDeckWithoutOptions()
 				.filter((c) => entityIdsPlayed.includes(Math.abs(c.entityId)));
 			const costs = cardsPlayedThisMatch
-				.filter((c) => !!c.cardId)
+				.filter((c) => !!c.cardId && !c.creatorCardId && !c.creatorEntityId)
 				.map((c) => this.allCards.getCard(c.cardId))
 				.filter((c) => !!c.additionalCosts)
 				.map((c) => c.additionalCosts!);
@@ -67,7 +67,10 @@ export class CorpseSpentCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
