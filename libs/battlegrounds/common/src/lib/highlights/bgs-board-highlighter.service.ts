@@ -249,10 +249,12 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		combineLatest([
 			this.ads.enablePremiumFeatures$$,
 			this.prefs.preferences$$.pipe(
+				auditTime(500),
 				map((prefs) => prefs.bgsEnableMinionAutoHighlight),
 				distinctUntilChanged(),
 			),
 			this.prefs.preferences$$.pipe(
+				auditTime(500),
 				map((prefs) => prefs.bgsEnableTribeAutoHighlight),
 				distinctUntilChanged(),
 			),
@@ -300,6 +302,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 						return;
 					}
 
+					// Minions
 					const minionsFromHp: readonly string[] = this.buildMinionToHighlightFromHeroPower(heroPowerCardId);
 					if (!!minionsFromHp?.length && minionAuto) {
 						const existingHighlights = this.highlightedMinions$$.value;
@@ -314,6 +317,14 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 						this.highlightedMinions$$.next(newHighlights);
 					}
 
+					const cardsFromBoard: readonly string[] = this.buildCardsToHighlightFromBoard(trinkets);
+					if (!!cardsFromBoard?.length && minionAuto) {
+						const existingHighlights = this.highlightedMinions$$.value;
+						const newHighlights = [...existingHighlights, ...cardsFromBoard];
+						this.highlightedMinions$$.next(newHighlights);
+					}
+
+					// Tribes
 					const tribeToHighlight: readonly Race[] | null = this.buildTribesToHighlight(
 						heroPowerCardId,
 						tavernTier,
@@ -324,6 +335,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 						this.highlightedTribes$$?.next(newHighlights);
 					}
 
+					// Mechanics
 					const mechanicsToHighlight: readonly GameTag[] = this.buildMechanicsToHighlightFromBoard(board);
 					if (!!mechanicsToHighlight?.length && minionAuto) {
 						const existingHighlights = this.highlightedMechanics$$.value;
@@ -332,6 +344,20 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 					}
 				},
 			);
+	}
+
+	private buildCardsToHighlightFromBoard(board: readonly string[] | undefined): readonly CardIds[] {
+		return (
+			board?.flatMap((cardId) => {
+				switch (cardId) {
+					case CardIds.WizenedCaptain_BG33_826:
+					case CardIds.WizenedCaptain_BG33_826_G:
+						return [CardIds.TavernCoin_BG28_810];
+					default:
+						return [];
+				}
+			}) ?? []
+		);
 	}
 
 	private buildMechanicsToHighlightFromBoard(board: readonly string[] | undefined): readonly GameTag[] {
