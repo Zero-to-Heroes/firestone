@@ -79,17 +79,19 @@ export class CreateCardInDeckParser implements EventParser {
 		);
 		// console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
-		const creatorEntityId =
+		const shouldHideCreator =
 			// In this case, the card is removed from the deck then put back, so we're actually putting back the original
 			// card
-			gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444
-				? null
-				: gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId
+			gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444 ||
+			// And here we're putting back the original card
+			gameEvent.additionalData.creatorCardId === CardIds.AdaptiveAmalgam_VAC_958;
+		const creatorEntityId =
+			(gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId)
 				? +(gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId)
 				: null;
 		const creatorEntity = creatorEntityId
 			? // Because sometimes the entityId is reversed in the Other zone
-			  deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card
+				(deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card)
 			: null;
 		// console.debug(
 		// 	'[create-card-in-deck]',
@@ -117,16 +119,12 @@ export class CreateCardInDeckParser implements EventParser {
 				actualManaCost:
 					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
 				rarity: cardData?.rarity?.toLowerCase(),
-				creatorCardId:
-					gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444
-						? null
-						: creatorEntity?.cardId ??
-						  gameEvent.additionalData.creatorCardId ??
-						  gameEvent.additionalData.influencedByEntityId,
-				creatorEntityId:
-					gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444
-						? null
-						: gameEvent.additionalData.creatorEntityId,
+				creatorCardId: shouldHideCreator
+					? null
+					: (creatorEntity?.cardId ??
+						gameEvent.additionalData.creatorCardId ??
+						gameEvent.additionalData.influencedByEntityId),
+				creatorEntityId: shouldHideCreator ? null : gameEvent.additionalData.creatorEntityId,
 				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
@@ -271,10 +269,16 @@ export const buildPositionFromTop = (
 };
 
 const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number => {
+	// if (!creatorCard) {
+	// 	return null;
+	// }
 	// console.debug('building attribute change', card);
 	// If the card is played by an effect (eg Manaling), it's possible that the creatorCard
 	// doesn't have the correct id
 	if (isCorrectCardId(creatorCard, newCardId, CardIds.Ignite)) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
+	}
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.AdaptiveAmalgam_VAC_958)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
 	if (isCorrectCardId(creatorCard, newCardId, CardIds.FloppyHydra_TOY_897)) {
