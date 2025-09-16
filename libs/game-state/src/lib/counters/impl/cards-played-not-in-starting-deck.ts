@@ -8,7 +8,7 @@ import { CounterType } from '../_exports';
 export class GiftsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'giftsPlayed';
 	public override image = CardIds.ManaGiant;
-	public override cards: readonly CardIds[] = [CardIds.ManaGiant];
+	public override cards: readonly CardIds[] = [CardIds.ManaGiant, CardIds.Techysaurus_DINO_409];
 
 	readonly opponent = undefined;
 	readonly player = {
@@ -35,7 +35,7 @@ export class GiftsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> 
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		return this.i18n.translateString(`counters.gifts-played.${side}`, {
-			value: side === 'player' ? this.player.value(gameState) ?? 0 : null,
+			value: side === 'player' ? (this.player.value(gameState) ?? 0) : null,
 		});
 	}
 }
