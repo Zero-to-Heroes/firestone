@@ -41,6 +41,7 @@ import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
 import { EarthenGolemCounterDefinitionV2 } from './impl/earthen-golem';
 import { ElementalCounterDefinitionV2 } from './impl/elemental';
 import { ElementalStreakCounterDefinitionV2 } from './impl/elemental-streak';
+import { ElizaGorebladeCounterDefinitionV2 } from './impl/eliza-goreblade';
 import { ElwynnBoarCounterDefinitionV2 } from './impl/elwynn-boar';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { FatigueCounterDefinitionV2 } from './impl/fatigue';
@@ -162,6 +163,7 @@ export const getAllCounters: (
 	new RenferalTheMalignantCounterDefinitionV2(i18n, allCards),
 	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
 	new UndeadDiedLastTurnCounterDefinitionV2(i18n, allCards),
+	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -187,6 +189,7 @@ export type CounterType =
 	| 'diveTheGolakkaDepths'
 	| 'darkGifts'
 	| 'galakrond'
+	| 'elizaGoreblade'
 	| 'renferalTheMalignant'
 	| 'cardsShuffledIntoDeck'
 	| 'ysondre'
