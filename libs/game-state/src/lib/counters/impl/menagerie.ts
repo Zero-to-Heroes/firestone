@@ -34,7 +34,10 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 	};
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
@@ -60,11 +63,41 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 		if (!value) {
 			return null;
 		}
-		const allPlayedCards = value.map((c) => this.allCards.getCard(c.cardId));
-		const uniqueTribes = extractUniqueTribes(allPlayedCards)
-			.map((tribe) => this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`))
-			.sort();
-		const tribeText = countersUseExpandedView ? '<br/>' + uniqueTribes?.join('<br/>') : uniqueTribes.join(', ');
+		const allPlayedCards = value.map((c) => this.allCards.getCard(c.cardId)).filter((c) => !!c.races?.length);
+		const uniqueSingleTribes = allPlayedCards
+			.filter((c) => c.races!.length === 1)
+			.sort()
+			// unique
+			.filter((c, index, self) => index === self.findIndex((t) => t.races?.every((r) => c.races?.includes(r))));
+		const uniqueTribes = extractUniqueTribes(allPlayedCards);
+		console.debug(
+			'[menagerie] uniqueTribes',
+			uniqueTribes.map((tribe) => Race[tribe]),
+			allPlayedCards.map((c) => c.races),
+		);
+		// If we have played a murloc/pirate minion, we want to show murloc/pirate, so that we know we can still play either
+		// If we have played a murloc/pirate and a pirate, we want to show murloc and pirate, as both are taken
+		const unusedMultiTribes = allPlayedCards.filter(
+			(c) => c.races!.length > 1 && c.races?.some((r: string) => !uniqueSingleTribes.includes(Race[r])),
+		);
+		console.debug(
+			'[menagerie] unusedMultiTribes',
+			unusedMultiTribes.map((c) => c.races),
+		);
+		const unusedUniqueTribes = uniqueTribes.filter(
+			(tribe) => !unusedMultiTribes.some((c) => c.races?.includes(Race[tribe])),
+		);
+		console.debug('[menagerie] unusedUniqueTribes', unusedUniqueTribes);
+
+		const tribesStr = [
+			...unusedUniqueTribes.map((tribe) =>
+				this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`),
+			),
+			...unusedMultiTribes.map((c) =>
+				c.races?.map((r) => this.i18n.translateString(`global.tribe.${r.toLowerCase()}`)).join('/'),
+			),
+		].sort();
+		const tribeText = countersUseExpandedView ? '<br/>' + tribesStr?.join('<br/>') : tribesStr.join(', ');
 		const tooltip = this.i18n.translateString(`counters.menagerie.${side}`, {
 			value: tribeText,
 		});
@@ -72,7 +105,11 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 	}
 }
 
-export const extractUniqueTribes = (allPlayedCards: readonly ReferenceCard[]) => {
+// Send the number of unique tribes for minions we have played. For instance:
+// - If a minion has only a single tribe, we return that tribe
+// - If a minion has multiple tribes and some of them are already in the "single" tribe pool, we return the ones that are not present
+// - Let's say we have played minions with these tribes: ["ALL", "BEAST", "MURLOC/PIRATE", "MURLOC/UNDEAD", "MURLOC/UNDEAD", "TOTEM"]. It should return 6 unique tribes: ["ALL", "BEAST", "MURLOC", "PIRATE", "UNDEAD", "TOTEM"]
+export const extractUniqueTribes = (allPlayedCards: readonly ReferenceCard[]): Race[] => {
 	const minionsPlayedWithTribes = allPlayedCards.filter((c) => c.type === 'Minion').filter((c) => !!c.races?.length);
 	const minionsToProcess: Mutable<ReferenceCard & { picked?: boolean }>[] = [
 		...minionsPlayedWithTribes
@@ -112,7 +149,7 @@ export const extractUniqueTribes = (allPlayedCards: readonly ReferenceCard[]) =>
 			.flatMap((m) => m.races!)
 			.map((r: string) => Race[r]),
 	);
-	return uniqueTribes;
+	return uniqueTribes.sort();
 };
 
 type Mutable<T> = {
