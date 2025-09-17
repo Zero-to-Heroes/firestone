@@ -10,8 +10,9 @@ import {
 	ScenarioId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { Metadata } from '@firestone/game-state';
+import { GameState, Metadata } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { cardsMapping, hasGetRelatedCards } from './card-highlight/global/_registers';
 import { ALL_HANDS } from './event-parser/special-cases/stonebrew/stonebrew';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
@@ -37,7 +38,9 @@ export class SecretConfigService {
 	public async getValidSecrets(
 		metadata: Metadata,
 		playerClass: string,
+		gameState: GameState,
 		creatorCardId?: string,
+		creatorEntityId?: number,
 	): Promise<readonly string[]> {
 		const staticList = this.getStaticSecrets(creatorCardId, metadata, playerClass);
 		if (staticList?.length) {
@@ -65,7 +68,8 @@ export class SecretConfigService {
 				return true;
 			})
 			.map((secret) => secret.cardId)
-			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId));
+			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
+			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
 		return result;
 	}
 
@@ -127,6 +131,22 @@ export class SecretConfigService {
 			default:
 				return true;
 		}
+	}
+
+	private canBeCreatedByDynamic(
+		secretCardId: string,
+		creatorCardId: string,
+		creatorEntityId: number,
+		gameState: GameState,
+	): boolean {
+		const cardImpl = cardsMapping[creatorCardId];
+		if (hasGetRelatedCards(cardImpl)) {
+			const result = cardImpl.getRelatedCards(creatorEntityId, 'opponent', gameState, this.allCards);
+			if (result?.length) {
+				return result.includes(secretCardId);
+			}
+		}
+		return true;
 	}
 
 	private getMode(metadata: Metadata, creatorCardId: string): string {

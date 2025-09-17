@@ -51,7 +51,13 @@ export class SecretPlayedFromDeckParser implements EventParser {
 			cardWithZone,
 			this.allCards,
 		);
-		const secretsConfig = await this.secretConfig.getValidSecrets(currentState.metadata, secretClass);
+		const secretsConfig = await this.secretConfig.getValidSecrets(
+			currentState.metadata,
+			secretClass,
+			currentState,
+			creatorCardId,
+			entityId,
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			otherZone: newOtherZone,

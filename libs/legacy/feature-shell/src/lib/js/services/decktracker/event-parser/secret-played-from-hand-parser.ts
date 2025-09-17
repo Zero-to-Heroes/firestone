@@ -89,7 +89,9 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
 			secretClass,
+			currentState,
 			creatorCardId || card.creatorCardId,
+			card.creatorEntityId,
 		);
 		const newPlayerDeck = deck
 			.update({

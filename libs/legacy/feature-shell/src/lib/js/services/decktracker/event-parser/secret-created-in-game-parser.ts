@@ -59,7 +59,9 @@ export class SecretCreatedInGameParser implements EventParser {
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
 			secretClass,
+			currentState,
 			creatorCardId,
+			entityId,
 		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOtherZone,
