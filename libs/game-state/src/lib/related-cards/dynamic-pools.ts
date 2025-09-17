@@ -386,6 +386,9 @@ const getDynamicFilters = (
 		case CardIds.Transmogrifier:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
 
+		// Random Weapons
+		case CardIds.WorgenRoadie_InstrumentCaseToken:
+			return (c) => hasCorrectType(c, CardType.WEAPON);
 		// Random X Mechanic
 		// Random Outcast
 		case CardIds.CalamitysGrasp:
@@ -702,6 +705,12 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.WEAPON) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.NefersetWeaponsmith_TLC_516:
 			return (c) => hasCorrectType(c, CardType.WEAPON) && fromAnotherClass(c, options.currentClass);
+
+		// Discover a Class Card
+		// Paladin
+		case CardIds.MuckbornServant:
+		case CardIds.MuckbornServant_CORE_REV_947:
+			return (c) => hasCorrectClass(c, CardClass.PALADIN);
 
 		// Discover a Legendary Minion Effects
 		case CardIds.TreacherousTormentor_EDR_102:
