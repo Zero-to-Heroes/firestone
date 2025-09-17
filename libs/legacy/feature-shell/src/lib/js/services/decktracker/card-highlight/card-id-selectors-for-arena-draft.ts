@@ -8,7 +8,9 @@ export const cardIdSelectorForArenaDraft = (
 	allCards: CardsFacadeService,
 ): Selector => {
 	const inputSide = 'arena-draft';
+
 	switch (cardId) {
 	}
+
 	return null;
 };
