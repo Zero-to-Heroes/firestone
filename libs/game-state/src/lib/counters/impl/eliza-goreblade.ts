@@ -17,7 +17,7 @@ export class ElizaGorebladeCounterDefinitionV2 extends CounterDefinitionV2<numbe
 				(e) => e.cardId === CardIds.ElizaGoreblade_VitalityShiftEnchantment_VAC_426e,
 			);
 			const buff = enchantments.map((e) => e.tags?.[GameTag.SPAWN_TIME_COUNT] ?? 0).reduce((a, b) => a + b, 0);
-			return buff;
+			return buff || null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -39,7 +39,7 @@ export class ElizaGorebladeCounterDefinitionV2 extends CounterDefinitionV2<numbe
 				(e) => e.cardId === CardIds.ElizaGoreblade_VitalityShiftEnchantment_VAC_426e,
 			);
 			const buff = enchantments.map((e) => e.tags?.[GameTag.SPAWN_TIME_COUNT] ?? 0).reduce((a, b) => a + b, 0);
-			return buff;
+			return buff || null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
