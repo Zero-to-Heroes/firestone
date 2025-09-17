@@ -2589,7 +2589,7 @@ export const cardIdSelector = (
 		case CardIds.RevivePet:
 			return tooltip(and(side(inputSide), inGraveyard, minion, beast));
 		case CardIds.Rewind_ETC_532:
-			return and(side(inputSide), or(inHand, inDeck), not(cardIs(CardIds.Rewind_ETC_532)));
+			return and(side(inputSide), or(inHand, inDeck), spell, not(cardIs(CardIds.Rewind_ETC_532)));
 		case CardIds.RhoninsScryingOrbTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RhymeSpinner:
