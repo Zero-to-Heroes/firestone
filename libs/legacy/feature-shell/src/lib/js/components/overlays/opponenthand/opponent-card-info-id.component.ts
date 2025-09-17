@@ -16,6 +16,7 @@ import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
+import { cardsMapping, hasGetRelatedCards } from '../../../services/decktracker/card-highlight/global/_registers';
 import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -66,7 +67,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	forged: boolean;
 	hasBuffs: boolean;
 	guessedInfo: GuessedInfo;
-	possibleCards: readonly string[] | null;
+	possibleCards: string[] | null = [];
 	_card: DeckCard;
 
 	@Input() displayGuess: boolean;
@@ -106,7 +107,13 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			.pipe(
 				filter(([context, card]) => !!context?.deck && !!context?.metadata && !!card),
 				this.mapData(([context, card]) =>
-					this.buildInfo(context!.deck, context!.metadata, context!.currentTurn as number, card),
+					this.buildInfo(
+						context!.deck,
+						context!.metadata,
+						context!.currentTurn as number,
+						card,
+						context!.gameState,
+					),
 				),
 			)
 			.subscribe();
@@ -116,7 +123,13 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		console.warn('missing image', this.cardId, this.cardUrl, this.createdBy, this.drawnBy);
 	}
 
-	private buildInfo(context: DeckState, metadata: Metadata, currentTurn: number, card: DeckCard): void {
+	private buildInfo(
+		context: DeckState,
+		metadata: Metadata,
+		currentTurn: number,
+		card: DeckCard,
+		gameState: GameState,
+	): void {
 		console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
@@ -151,7 +164,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		});
 		this.guessedInfo = isGuessedInfoEmpty(enhancedGuessInfo) ? null : enhancedGuessInfo;
 		if (enhancedGuessInfo?.possibleCards) {
-			this.possibleCards = enhancedGuessInfo.possibleCards;
+			this.possibleCards = [...(enhancedGuessInfo.possibleCards ?? [])];
 		} else if (this.forged) {
 			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
 			// and the hero classes
@@ -177,7 +190,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				allClasses,
 				this.allCards,
 			);
-			this.possibleCards = possibleForgedCards;
+			this.possibleCards = [...(possibleForgedCards ?? [])];
 		}
 		if (!this.possibleCards?.length) {
 			let validArenaPool: readonly string[] = [];
@@ -188,7 +201,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
 			}
 
-			const dynamicPool = getDynamicRelatedCardIds(this.cardId, this.card?.entityId, this.allCards.getService(), {
+			const dynamicPool = getDynamicRelatedCardIds(this.cardId, card?.entityId, this.allCards.getService(), {
 				format: metadata.formatType,
 				gameType: metadata.gameType,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
@@ -198,7 +211,20 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			});
 			const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
 			if (!!pool?.length) {
-				this.possibleCards = pool;
+				this.possibleCards = [...(pool ?? [])];
+			}
+		}
+
+		console.debug('[opponent-card-info-id] considering creator card', card, card?.creatorEntityId);
+		if (card?.creatorEntityId) {
+			const cardImpl = cardsMapping[card?.creatorCardId];
+			console.debug('[opponent-card-info-id] cardImpl', cardImpl);
+			if (hasGetRelatedCards(cardImpl)) {
+				const result = cardImpl.getRelatedCards(card?.creatorEntityId, 'opponent', gameState, this.allCards);
+				console.debug('[opponent-card-info-id] result', result);
+				if (result != null) {
+					this.possibleCards.push(...result);
+				}
 			}
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
