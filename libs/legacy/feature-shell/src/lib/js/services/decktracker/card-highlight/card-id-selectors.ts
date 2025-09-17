@@ -1783,6 +1783,8 @@ export const cardIdSelector = (
 					and(side(inputSide), or(inHand, inDeck), starshipExtended),
 				)(input);
 			};
+		case CardIds.Jitterbug:
+			return and(side(inputSide), or(inHand, inDeck), divineShield);
 		case CardIds.JotunTheEternal:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.JoymancerJepetto_TOY_960:

@@ -314,7 +314,8 @@ export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
 export const discover =
 	hasMechanic(GameTag.DISCOVER) || (hasMechanic(GameTag.BATTLECRY) && hasReference(GameTag.DISCOVER));
-export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
+export const givesDivineShield = hasMechanicStr('GIVES_DIVINE_SHIELD');
+export const divineShield = or(hasMechanic(GameTag.DIVINE_SHIELD), givesDivineShield);
 export const dredge = hasMechanic(GameTag.DREDGE);
 export const excavate = or(
 	hasMechanic(GameTag.EXCAVATE),
