@@ -26,9 +26,10 @@ export class MindrenderIlluciaParser implements EventParser {
 			deckList: secondDeck.deckList,
 			// dynamicZones: secondDeck.dynamicZones,
 			hand: secondDeck.hand,
+			additionalKnownCardsInHand: [],
 			unknownRealCardsInDeck: secondDeck.unknownRealCardsInDeck,
 			deckstring: secondDeck.deckstring,
-		} as DeckState);
+		});
 	}
 
 	event(): string {

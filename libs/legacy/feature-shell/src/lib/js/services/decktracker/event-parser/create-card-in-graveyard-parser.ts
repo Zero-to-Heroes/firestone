@@ -40,8 +40,10 @@ export class CreateCardInGraveyardParser implements EventParser {
 			board = this.helper.removeSingleCardFromZone(board ?? [], existingCard.cardId, existingCard.entityId)[0];
 		}
 		let hand = deck.hand;
+		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
 		if (!!existingCard && existingZone === 'hand') {
 			hand = this.helper.removeSingleCardFromZone(hand ?? [], existingCard.cardId, existingCard.entityId)[0];
+			additionalKnownCardsInHand = additionalKnownCardsInHand.filter((c) => c !== existingCard.cardId);
 		}
 
 		const cardWithDefault = DeckCard.create({
@@ -69,6 +71,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 			deck: newDeck,
 			board: board,
 			hand: hand,
+			additionalKnownCardsInHand: additionalKnownCardsInHand,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

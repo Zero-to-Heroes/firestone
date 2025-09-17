@@ -1,11 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { CARDS_THAT_IMPROVE_WHEN_TRADED } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export class CardTradedParser implements EventParser {
 	constructor(
@@ -94,7 +94,8 @@ export class CardTradedParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: deckWithResetPositions,
 			hand: newHand,
-		} as DeckState);
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

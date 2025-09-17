@@ -66,6 +66,10 @@ export class CardBackToDeckParser implements EventParser {
 		}
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
+		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
+		if (!!card && initialZone === 'HAND') {
+			additionalKnownCardsInHand = additionalKnownCardsInHand.filter((c) => c !== card.cardId);
+		}
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
 		const newOther: readonly DeckCard[] = this.buildNewOther(initialZone, deck.otherZone, card);
 		const previousDeck = deck.deck;
@@ -116,12 +120,12 @@ export class CardBackToDeckParser implements EventParser {
 		const cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
 			? cardWithInfluenceBack.update({
 					positionFromBottom: DeckCard.deckIndexFromBottom++,
-			  })
+				})
 			: CARD_SENDING_TO_TOP.includes(gameEvent.additionalData.influencedByCardId)
-			? cardWithInfluenceBack.update({
-					positionFromTop: DeckCard.deckIndexFromTop--,
-			  })
-			: cardWithInfluenceBack;
+				? cardWithInfluenceBack.update({
+						positionFromTop: DeckCard.deckIndexFromTop--,
+					})
+				: cardWithInfluenceBack;
 		// if (
 		// 	gameEvent.additionalData.influencedByCardId === CardIds.DarkGiftToken_EDR_102t &&
 		// 	initialZone === 'HAND' &&
@@ -144,6 +148,7 @@ export class CardBackToDeckParser implements EventParser {
 			hand: newHand,
 			board: newBoard,
 			otherZone: newOther,
+			additionalKnownCardsInHand: additionalKnownCardsInHand,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

@@ -7,7 +7,10 @@ import { EventParser } from './event-parser';
 
 const CARD_IS_NOT_DESTROYED = [CardIds.Ursol_EDR_259];
 export class CardRemovedFromHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -43,6 +46,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		const isDestroyed = !CARD_IS_NOT_DESTROYED.includes(gameEvent.additionalData.removedByCardId as CardIds);
 		const newPlayerDeck = deck.update({
 			hand: newHand,
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
 			otherZone: newOtherZone,
 			deck: newDeck,
 			destroyedCardsInDeck: isDestroyed

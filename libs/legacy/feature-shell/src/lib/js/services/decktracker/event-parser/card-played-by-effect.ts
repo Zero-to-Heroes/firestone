@@ -76,8 +76,10 @@ export class CardPlayedByEffectParser implements EventParser {
 		const cardFromHand = deck.hand.find((card) => card.entityId === entityId);
 		// console.debug('card from hand', cardFromHand, deck.hand, cardId, entityId, gameEvent, currentState);
 		let newHand = deck.hand;
+		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
 		if (!!cardFromHand) {
 			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
+			additionalKnownCardsInHand = additionalKnownCardsInHand.filter((c) => c !== cardFromHand.cardId);
 		}
 		const cardWithZone = DeckCard.create({
 			entityId: entityId,
@@ -122,6 +124,7 @@ export class CardPlayedByEffectParser implements EventParser {
 		}
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
+			additionalKnownCardsInHand: additionalKnownCardsInHand,
 			board: newBoard,
 			otherZone: newOtherZone,
 			globalEffects: newGlobalEffects,

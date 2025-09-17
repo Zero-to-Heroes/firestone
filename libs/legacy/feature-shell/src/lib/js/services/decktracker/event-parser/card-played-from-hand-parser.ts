@@ -216,6 +216,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const newPlayerDeck1 = deck
 			.update({
 				hand: hardAfterGuessedInfo,
+				additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
 				board: newBoard,
 				deck: newDeck,
 				otherZone: newOtherZone,
@@ -286,6 +287,9 @@ export class CardPlayedFromHandParser implements EventParser {
 							},
 						]
 					: playerDeckAfterSpecialCaseUpdate.anachronos,
+			additionalKnownCardsInHand: playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInHand.filter(
+				(c) => c !== cardToAdd.cardId,
+			),
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 

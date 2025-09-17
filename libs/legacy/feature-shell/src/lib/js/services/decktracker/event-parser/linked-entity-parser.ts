@@ -24,12 +24,10 @@ export class LinkedEntityParser implements EventParser {
 			return currentState;
 		}
 
-		const linkedEntityControllerId = gameEvent.additionalData.linkedEntityControllerId;
-
+		// The new card (that is usually being added to deck or hand)
 		let isPlayerForFind = controllerId === localPlayer.PlayerId;
 		console.debug('[linked-entity-parser] isPlayerForFind', cardId, isPlayerForFind, gameEvent);
 		let deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
-
 		let newCard = deckInWhichToFindTheCard.findCard(entityId)?.card;
 		// let revert = false;
 		console.debug('[linked-entity-parser] newCard', newCard, entityId, isPlayerForFind, deckInWhichToFindTheCard);
@@ -60,31 +58,67 @@ export class LinkedEntityParser implements EventParser {
 			}
 		}
 
-		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId)?.card;
+		currentState = currentState.update({
+			playerDeck: isPlayerForFind ? deckInWhichToFindTheCard : currentState.playerDeck,
+			opponentDeck: isPlayerForFind ? currentState.opponentDeck : deckInWhichToFindTheCard,
+		});
+
+		// The card that the new card is copied from
+		const linkedEntityControllerId = gameEvent.additionalData.linkedEntityControllerId;
+		const isPlayerForCardModification = linkedEntityControllerId === localPlayer.PlayerId;
+		console.debug(
+			'[linked-entity-parser] isPlayerForCardModification',
+			isPlayerForCardModification,
+			linkedEntityControllerId,
+			localPlayer.PlayerId,
+		);
+		const deckInWhichToModifyTheCard = isPlayerForCardModification
+			? currentState.playerDeck
+			: currentState.opponentDeck;
+		const originalCardInfo = deckInWhichToModifyTheCard.findCard(gameEvent.additionalData.linkedEntityId);
+		const originalCard = originalCardInfo?.card;
+		const originalZone = originalCardInfo?.zone;
 		console.debug(
 			'[linked-entity-parser] originalCard',
 			originalCard,
+			originalZone,
 			newCard,
 			gameEvent.additionalData.linkedEntityId,
-			deckInWhichToFindTheCard,
+			deckInWhichToModifyTheCard,
 		);
 		let newPlayerDeck: DeckState;
-
-		const isPlayerForAdd = linkedEntityControllerId === localPlayer.PlayerId;
-		const deckInWhichToAddTheCard = isPlayerForAdd ? currentState.playerDeck : currentState.opponentDeck;
 		if (originalCard) {
-			const updatedCard = originalCard.update({
-				cardId: newCard.cardId,
-				cardName: this.allCards.getCard(cardId).name,
-				// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
-				// even ones who already had a position previously
-				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
-				// When the card is in the setaside zone, we don't want to override the temporaryCard, because it is very likely a temp card
-				temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
-			} as DeckCard);
-			console.debug('[linked-entity-parser] updating card', isPlayerForAdd, updatedCard, newCard, originalCard);
-			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard, isPlayerForAdd, true);
-			console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
+			if (isPlayerForCardModification || originalZone !== 'hand') {
+				const updatedCard = originalCard.update({
+					cardId: newCard.cardId,
+					cardName: this.allCards.getCard(cardId).name,
+					// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
+					// even ones who already had a position previously
+					positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
+					// When the card is in the setaside zone, we don't want to override the temporaryCard, because it is very likely a temp card
+					temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
+				} as DeckCard);
+				console.debug(
+					'[linked-entity-parser] updating card',
+					isPlayerForCardModification,
+					updatedCard,
+					newCard,
+					originalCard,
+				);
+				newPlayerDeck = this.helper.updateCardInDeck(
+					deckInWhichToModifyTheCard,
+					updatedCard,
+					isPlayerForCardModification,
+					true,
+				);
+				console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
+			}
+			// When linking to a card in the opponent's hand, we need to be extra careful to limit info leaks
+			else {
+				newPlayerDeck = deckInWhichToModifyTheCard.update({
+					additionalKnownCardsInHand: [...deckInWhichToModifyTheCard.additionalKnownCardsInHand, cardId],
+				});
+			}
 		} else {
 			// Can happen for BG heroes
 			if (gameEvent.additionalData.linkedEntityZone !== Zone.DECK) {
@@ -97,13 +131,13 @@ export class LinkedEntityParser implements EventParser {
 				// Avoid info leak where we add a card in the opponent's deck and link it to the entity id
 				// (if we have that link, we will update the decklist in real time, and possibly even
 				// flag the card in)
-				entityId: isPlayerForAdd ? gameEvent.additionalData.linkedEntityId : null,
+				entityId: isPlayerForCardModification ? gameEvent.additionalData.linkedEntityId : null,
 				zone: undefined,
 				temporaryCard: undefined,
 			} as DeckCard);
-			console.debug('[linked-entity-parser] adding card', isPlayerForAdd, updatedCard);
+			console.debug('[linked-entity-parser] adding card', isPlayerForCardModification, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
-				deckInWhichToAddTheCard.deck,
+				deckInWhichToModifyTheCard.deck,
 				updatedCard.cardId,
 				updatedCard.entityId ?? gameEvent.additionalData.linkedEntityId, // To catch the card that has been added before
 				true,
@@ -114,12 +148,14 @@ export class LinkedEntityParser implements EventParser {
 				},
 			)[0];
 			const newDeck = this.helper.addSingleCardToZone(intermediaryDeck, updatedCard);
-			newPlayerDeck = deckInWhichToAddTheCard.update({
+			newPlayerDeck = deckInWhichToModifyTheCard.update({
 				deck: newDeck,
 			} as DeckState);
 		}
-		return Object.assign(new GameState(), currentState, {
-			[isPlayerForAdd ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+
+		return currentState.update({
+			playerDeck: isPlayerForCardModification ? newPlayerDeck : currentState.playerDeck,
+			opponentDeck: isPlayerForCardModification ? currentState.opponentDeck : newPlayerDeck,
 		});
 	}
 

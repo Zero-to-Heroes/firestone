@@ -127,6 +127,7 @@ export class DeckState {
 	// cards)
 	// readonly graveyard: ReadonlyArray<DeckCard> = [];
 	readonly hand: readonly DeckCard[] = [];
+	readonly additionalKnownCardsInHand: readonly string[] = [];
 	readonly deck: readonly DeckCard[] = [];
 	readonly board: readonly DeckCard[] = [];
 	readonly otherZone: readonly DeckCard[] = [];

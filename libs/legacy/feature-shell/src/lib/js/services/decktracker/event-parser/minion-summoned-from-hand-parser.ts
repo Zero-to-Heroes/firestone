@@ -1,4 +1,4 @@
-import { DeckCard, DeckState, GameState, toTagsObject } from '@firestone/game-state';
+import { DeckCard, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -78,13 +78,14 @@ export class MinionSummonedFromHandParser implements EventParser {
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToOtherZone(deck.otherZone, cardWithZone, this.allCards);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			hand: newHand,
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,
 			// cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
-		} as DeckState);
+		});
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

@@ -119,8 +119,11 @@ export interface GuessedInfo {
 }
 
 export const toTagsObject = (inputTags: readonly { Name: number; Value: number }[]): { [Name in GameTag]?: number } => {
-	return (inputTags ?? []).reduce((acc, tag) => {
-		acc[tag.Name] = tag.Value;
-		return acc;
-	}, {} as { [Name in GameTag]?: number });
+	return (inputTags ?? []).reduce(
+		(acc, tag) => {
+			acc[tag.Name] = tag.Value;
+			return acc;
+		},
+		{} as { [Name in GameTag]?: number },
+	);
 };

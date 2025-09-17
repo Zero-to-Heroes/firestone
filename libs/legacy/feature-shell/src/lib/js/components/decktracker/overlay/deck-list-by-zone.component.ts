@@ -260,9 +260,30 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		);
 
 		// Hand
+		let cardsForHand = deckState.hand;
+		if (deckState.additionalKnownCardsInHand.length > 0) {
+			// Remove "placeholder" cards from the hand
+			let newHand = deckState.hand;
+			for (let i = 0; i < deckState.additionalKnownCardsInHand.length; i++) {
+				const placeholder = newHand.find((c) => !c.cardId && !c.creatorCardId);
+				if (placeholder) {
+					newHand = newHand.filter((c) => c !== placeholder);
+				}
+			}
+			cardsForHand = [
+				...newHand,
+				...deckState.additionalKnownCardsInHand.map((c) =>
+					DeckCard.create({
+						cardId: c,
+						entityId: null,
+					}),
+				),
+			];
+		}
+
 		zones.push(
 			this.buildZone(
-				deckState.hand,
+				cardsForHand,
 				null,
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
