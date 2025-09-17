@@ -1221,7 +1221,10 @@ export const cardIdSelector = (
 		case CardIds.Felosophy:
 			return and(side(inputSide), or(inHand, inDeck), demon);
 		case CardIds.FelscaleEvoker:
-			return and(side(inputSide), inDeck, demon, not(cardIs(CardIds.FelscaleEvoker)));
+			return highlightConditions(
+				and(side(inputSide), inDeck, demon, not(cardIs(CardIds.FelscaleEvoker))),
+				and(side(inputSide), or(inDeck, inHand), spell),
+			);
 		case CardIds.Fetch_TOY_352:
 			return highlightConditions(
 				and(side(inputSide), inDeck, beast),
