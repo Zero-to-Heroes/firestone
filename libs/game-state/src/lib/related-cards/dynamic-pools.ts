@@ -388,6 +388,7 @@ const getDynamicFilters = (
 
 		// Random X Mechanic
 		// Random Outcast
+		case CardIds.CalamitysGrasp:
 		case CardIds.FelerinTheForgotten:
 		case CardIds.WretchedExile:
 			return (c) => hasMechanic(c, GameTag.OUTCAST);
