@@ -4,7 +4,6 @@ import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/f
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
-	CONCOCTION_GENERATORS,
 	and,
 	arcane,
 	attackGreaterThan,
@@ -152,10 +151,6 @@ export const cardIdSelector = (
 	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
 ): Selector => {
-	if (CONCOCTION_GENERATORS.includes(cardId as CardIds)) {
-		return and(side(inputSide), or(inHand, inDeck), cardIs(...CONCOCTION_GENERATORS));
-	}
-
 	switch (cardId) {
 		case CardIds.AbsorbentParasite:
 			return and(side(inputSide), or(inDeck, inHand), minion, or(mech, beast));

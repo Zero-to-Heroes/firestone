@@ -1,5 +1,6 @@
 import {
 	CardClass,
+	CardIds,
 	CardType,
 	GameFormat,
 	GameTag,
@@ -22,6 +23,8 @@ import { cardsMapping, hasGetRelatedCards } from './global/_registers';
 import {
 	and,
 	barrelOfSludge,
+	cardIs,
+	CONCOCTION_GENERATORS,
 	damage,
 	excavate,
 	givesAbyssalCurse,
@@ -383,6 +386,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (refCard.mechanics?.includes(GameTag[GameTag.SPELLPOWER])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spell, damage));
+			selectors.push(and(side(inputSide), or(inDeck, inHand), cardIs(CardIds.EversongPortal)));
 		}
 		if (refCard.mechanics?.includes(GameTag[GameTag.SPELLBURST])) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), spell));
@@ -466,6 +470,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			const draftSelectors = getSelectorsForArenaDraft(cardId, card, this.allCards);
 			selectors.push(...draftSelectors);
 		}
+
+		if (CONCOCTION_GENERATORS.includes(cardId as CardIds)) {
+			selectors.push(and(side(inputSide), or(inHand, inDeck), cardIs(...CONCOCTION_GENERATORS)));
+		}
+
 		if (selectors.filter((s) => !!s).length) {
 			return highlightConditions(...selectors.filter((s) => !!s));
 		}
