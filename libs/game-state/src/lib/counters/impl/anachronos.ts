@@ -2,13 +2,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
 const relevantCardIds = [CardIds.Anachronos, CardIds.Anachronos_CORE_RLK_919];
 
-export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<number> {
+export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<{
+	entityId: number;
+	cardId: string;
+	turn: number;
+	playerEntities: readonly number[];
+	opponentEntities: readonly number[];
+}> {
 	public override id: CounterType = 'anachronos';
 	public override image = CardIds.Anachronos;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
@@ -18,19 +25,22 @@ export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'playerAnachronosCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			const lastAnachronosTurn =
-				state.playerDeck.anachronosTurnsPlayed[state.playerDeck.anachronosTurnsPlayed.length - 1];
-			if (!lastAnachronosTurn) {
+			// This won't work with multiple Anachronos, but it's a rather fringe case
+			const allAnachronos = [...state.playerDeck.anachronos, ...state.opponentDeck.anachronos];
+			const anachronos = allAnachronos[allAnachronos.length - 1];
+			if (!anachronos) {
 				return null;
 			}
-
+			const lastAnachronosTurn = anachronos.turn;
 			const delta = 4 - (state.gameTagTurnNumber - lastAnachronosTurn);
 			if (delta <= 0) {
 				return null;
 			}
 
-			const value = Math.ceil(delta / 2);
-			return value;
+			return {
+				...anachronos,
+				turn: Math.ceil(delta / 2),
+			};
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -43,19 +53,22 @@ export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentAnachronosCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			const lastAnachronosTurn =
-				state.opponentDeck.anachronosTurnsPlayed[state.opponentDeck.anachronosTurnsPlayed.length - 1];
-			if (!lastAnachronosTurn) {
+			// This won't work with multiple Anachronos, but it's a rather fringe case
+			const allAnachronos = [...state.playerDeck.anachronos, ...state.opponentDeck.anachronos];
+			const anachronos = allAnachronos[allAnachronos.length - 1];
+			if (!anachronos) {
 				return null;
 			}
-
+			const lastAnachronosTurn = anachronos.turn;
 			const delta = 4 - (state.gameTagTurnNumber - lastAnachronosTurn);
 			if (delta <= 0) {
 				return null;
 			}
 
-			const value = Math.ceil(delta / 2);
-			return value;
+			return {
+				...anachronos,
+				turn: Math.ceil(delta / 2),
+			};
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -65,12 +78,62 @@ export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
+	protected override formatValue(
+		value:
+			| {
+					entityId: number;
+					cardId: string;
+					turn: number;
+					playerEntities: readonly number[];
+					opponentEntities: readonly number[];
+			  }
+			| null
+			| undefined,
+	): null | undefined | number | string {
+		if (!value) {
+			return null;
+		}
+		return value.turn;
+	}
+
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const value = this[side]?.value(gameState) ?? 0;
+		const value = this[side]?.value(gameState)?.turn ?? 0;
 		return this.i18n.translateString(`counters.anachronos.player`, { value: value });
+	}
+
+	protected override cardTooltip(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		bgState: BattlegroundsState,
+		value:
+			| {
+					entityId: number;
+					cardId: string;
+					turn: number;
+					playerEntities: readonly number[];
+					opponentEntities: readonly number[];
+			  }
+			| null
+			| undefined,
+	): readonly string[] | undefined {
+		if (!value) {
+			return undefined;
+		}
+		const entities = side === 'player' ? value.playerEntities : value.opponentEntities;
+		if (!entities?.length) {
+			return undefined;
+		}
+
+		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return entities
+			.map((entity) => deckState.findCard(entity)?.card?.cardId)
+			.filter((cardId) => cardId) as readonly string[];
 	}
 }

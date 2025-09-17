@@ -105,7 +105,13 @@ export class DeckState {
 	readonly minionsDeadThisTurn: readonly ShortCard[] = [];
 	readonly minionsDeadThisMatch: readonly ShortCard[] = [];
 	readonly lastDeathrattleMinionDead: ShortCard;
-	readonly anachronosTurnsPlayed: readonly number[] = [];
+	readonly anachronos: readonly {
+		entityId: number;
+		cardId: string;
+		turn: number;
+		playerEntities: readonly number[];
+		opponentEntities: readonly number[];
+	}[] = [];
 	readonly bonelordFrostwhisperFirstTurnTrigger: number | null = null;
 	readonly locationsUsed: number = 0;
 	readonly plaguesShuffledIntoEnemyDeck: number = 0;

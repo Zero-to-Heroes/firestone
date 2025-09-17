@@ -269,10 +269,23 @@ export class CardPlayedFromHandParser implements EventParser {
 						...playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch,
 						newCardPlayedThisMatch,
 					] as readonly ShortCardWithTurn[]),
-			anachronosTurnsPlayed:
+			anachronos:
 				cardId === CardIds.Anachronos || cardId === CardIds.Anachronos_CORE_RLK_919
-					? [...playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed, currentState.gameTagTurnNumber]
-					: playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed,
+					? [
+							...playerDeckAfterSpecialCaseUpdate.anachronos,
+							{
+								entityId: entityId,
+								cardId: cardId,
+								turn: currentState.gameTagTurnNumber,
+								playerEntities: playerDeckAfterSpecialCaseUpdate.board
+									?.map((e) => e.entityId)
+									.filter((e) => e !== entityId),
+								opponentEntities: opponentDeckAfterSpecialCaseUpdate.board
+									?.map((e) => e.entityId)
+									.filter((e) => e !== entityId),
+							},
+						]
+					: playerDeckAfterSpecialCaseUpdate.anachronos,
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 
