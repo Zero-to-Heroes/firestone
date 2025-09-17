@@ -54,6 +54,7 @@ export const getProcessedCard = (
 		updatedRefCard.cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
 		return updatedRefCard;
 	}
+
 	return refCard;
 };
 
@@ -69,6 +70,52 @@ export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFac
 		return cost;
 	}
 	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost;
+};
+
+export const getCardType = (
+	cardId: string,
+	entityId: number,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+): CardType | null => {
+	const refCard = getProcessedCard(cardId, entityId, deckState, allCards);
+	if (refCard?.type) {
+		return CardType[refCard.type.toUpperCase()];
+	}
+
+	if (refCard.tags?.[GameTag.CARDTYPE]) {
+		return refCard.tags[GameTag.CARDTYPE];
+	}
+
+	const cardFromDeck = deckState.findCard(entityId)?.card;
+	if (cardFromDeck?.cardType) {
+		return CardType[cardFromDeck.cardType.toUpperCase()];
+	}
+
+	if (cardFromDeck?.tags?.[GameTag.CARDTYPE]) {
+		return cardFromDeck.tags[GameTag.CARDTYPE];
+	}
+
+	return null;
+};
+
+export const getCardId = (
+	cardId: string,
+	entityId: number,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+): string | null => {
+	const refCard = getProcessedCard(cardId, entityId, deckState, allCards);
+	if (refCard?.id) {
+		return refCard.id;
+	}
+
+	const cardFromDeck = deckState.findCard(entityId)?.card;
+	if (cardFromDeck?.cardId) {
+		return cardFromDeck.cardId;
+	}
+
+	return null;
 };
 
 export const storeInformationOnCardPlayed = (
@@ -128,7 +175,7 @@ export const addGuessInfoToDrawnCard = (
 							...card.guessedInfo,
 							...guessedInfo,
 						},
-				  })
+					})
 				: card;
 	}
 };
@@ -155,7 +202,7 @@ export const addGuessInfoToCardInHand = (
 							...card.guessedInfo,
 							...guessedInfo,
 						},
-				  })
+					})
 				: card;
 	}
 };

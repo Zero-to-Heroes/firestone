@@ -1,5 +1,5 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { GameState, getProcessedCard } from '@firestone/game-state';
+import { GameState, getCardId, getCardType } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
@@ -25,13 +25,9 @@ export const TidepoolPupil: GlobalHighlightCard = {
 
 		return deckState.cardsPlayedThisMatch
 			.filter((c) => c.turn >= (turnAtWhichEnteredHand as number))
-			.filter(
-				(c) =>
-					getProcessedCard(c.cardId, c.entityId, deckState, allCards)?.type?.toUpperCase() ===
-					CardType[CardType.SPELL],
-			)
+			.filter((c) => getCardType(c.cardId, c.entityId, deckState, allCards) === CardType.SPELL)
 			.sort((a, b) => a.turn - b.turn)
 			.slice(0, 3)
-			.map((c) => c.cardId);
+			.map((c) => getCardId(c.cardId, c.entityId, deckState, allCards));
 	},
 };

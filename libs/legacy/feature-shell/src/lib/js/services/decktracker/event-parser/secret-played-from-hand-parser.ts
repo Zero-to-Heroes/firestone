@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -56,7 +56,15 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: !isCardCountered ? 'SECRET' : 'SETASIDE',
 			countered: isCardCountered,
-		} as DeckCard);
+			guessedInfo: {
+				...card.guessedInfo,
+			},
+			tags: {
+				...card.tags,
+				[GameTag.SECRET]: 1,
+				[GameTag.CARDTYPE]: CardType.SPELL,
+			},
+		});
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
 		const handAfterCardsRemembered = rememberCardsInHand(
@@ -71,9 +79,9 @@ export class SecretPlayedFromHandParser implements EventParser {
 			deck.otherZone,
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
-				  cardWithZone.update({
+					cardWithZone.update({
 						entityId: undefined,
-				  } as DeckCard)
+					} as DeckCard)
 				: cardWithZone,
 			this.allCards,
 		);
@@ -92,7 +100,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 					: ([
 							...deck.secrets,
 							BoardSecret.create(entityId, cardId, secretsConfig),
-					  ] as readonly BoardSecret[]),
+						] as readonly BoardSecret[]),
 				cardsPlayedThisTurn:
 					isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
 						? deck.cardsPlayedThisTurn
@@ -121,7 +129,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 						...newPlayerDeck.cardsPlayedThisMatch,
 						newCardPlayedThisMatch,
 					] as readonly ShortCardWithTurn[],
-			  });
+				});
 
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			cardWithZone.cardId,

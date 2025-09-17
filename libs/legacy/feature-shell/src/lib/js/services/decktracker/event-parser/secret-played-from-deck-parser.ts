@@ -1,3 +1,4 @@
+import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -36,7 +37,15 @@ export class SecretPlayedFromDeckParser implements EventParser {
 			zone: 'SECRET',
 			creatorCardId: creatorCardId ?? card.creatorCardId,
 			putIntoPlay: true,
-		} as DeckCard);
+			guessedInfo: {
+				...card.guessedInfo,
+			},
+			tags: {
+				...card.tags,
+				[GameTag.SECRET]: 1,
+				[GameTag.CARDTYPE]: CardType.SPELL,
+			},
+		});
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,
 			cardWithZone,

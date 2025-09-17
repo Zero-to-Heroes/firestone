@@ -416,7 +416,7 @@ export class GameStateParsersService {
 				new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
-			[GameEvent.SECRET_TRIGGERED]: [new SecretTriggeredParser(this.helper)],
+			[GameEvent.SECRET_TRIGGERED]: [new SecretTriggeredParser(this.helper, this.allCards)],
 			[GameEvent.SECRET_WILL_TRIGGER]: [new SecretWillTriggerParser(this.helper)],
 			[GameEvent.SHUFFLE_DECK]: [new ShuffleDeckParser()],
 			[GameEvent.SPAWN_TIME_COUNT_CHANGED]: [new SpawnTimeCountChangedParser()],

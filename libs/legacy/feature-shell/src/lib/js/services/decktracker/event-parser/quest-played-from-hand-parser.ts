@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { COUNTERSPELLS } from '@services/hs-utils';
@@ -8,7 +8,10 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class QuestPlayedFromHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -46,6 +49,14 @@ export class QuestPlayedFromHandParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'SECRET',
 			countered: isCardCountered,
+			guessedInfo: {
+				...card.guessedInfo,
+			},
+			tags: {
+				...card.tags,
+				[GameTag.QUEST]: 1,
+				[GameTag.CARDTYPE]: CardType.SPELL,
+			},
 		} as DeckCard);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
@@ -61,9 +72,9 @@ export class QuestPlayedFromHandParser implements EventParser {
 			deck.otherZone,
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
-				  cardWithZone.update({
+					cardWithZone.update({
 						entityId: undefined,
-				  } as DeckCard)
+					} as DeckCard)
 				: cardWithZone,
 			this.allCards,
 		);
@@ -98,7 +109,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 						...newPlayerDeck.cardsPlayedThisMatch,
 						newCardPlayedThisMatch,
 					] as readonly ShortCardWithTurn[],
-			  });
+				});
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,

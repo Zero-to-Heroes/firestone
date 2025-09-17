@@ -1,10 +1,14 @@
 import { BoardSecret, DeckCard, GameState, ShortCardWithTurn } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class SecretTriggeredParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -21,6 +25,10 @@ export class SecretTriggeredParser implements EventParser {
 		const secret = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
 		const newSecret = secret?.update({
 			zone: 'REMOVEDFROMGAME',
+			cardId: cardId,
+			cardName: this.allCards.getCard(cardId).name,
+			refManaCost: this.allCards.getCard(cardId).cost,
+			rarity: this.allCards.getCard(cardId).rarity,
 		});
 		const newOther: readonly DeckCard[] = this.helper.updateCardInZone(deck.otherZone, entityId, cardId, newSecret);
 
