@@ -109,6 +109,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
+				console.debug(
+					'[mulligan-guide] showWidget',
+					currentScene,
+					displayFromPrefs,
+					gameStarted,
+					gameEnded,
+					mulliganOver,
+				);
 
 				if (!gameStarted || mulliganOver || !displayFromPrefs) {
 					return false;
@@ -174,7 +182,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 										formatOverride ?? gameState?.metadata.formatType ?? GameFormatEnum.FT_STANDARD,
 								),
 								distinctUntilChanged(),
-						  )
+							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
 			shareReplay(1),
@@ -195,7 +203,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 										playCoinOverride ?? (gameState.playerDeck.hand?.length > 4 ? 'coin' : 'play'),
 								),
 								distinctUntilChanged(),
-						  )
+							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
 			shareReplay(1),
@@ -208,7 +216,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 								debounceTime(500),
 								map((gameState) => gameState?.metadata.gameType),
 								distinctUntilChanged(),
-						  )
+							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
 			shareReplay(1),
@@ -366,7 +374,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 									return cardsInHand.length > 0 ? cardsInHand : null;
 								}),
 								distinctUntilChanged((a, b) => arraysEqual(a, b)),
-						  )
+							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
 			shareReplay(1),
@@ -392,7 +400,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 								}),
 								distinctUntilChanged((a, b) => arraysEqual(a, b)),
 								tap((deckCards) => console.debug('[mulligan-guide] deckCards', deckCards)),
-						  )
+							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
 			shareReplay(1),
@@ -458,16 +466,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						playCoin === 'coin'
 							? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 							: playCoin === 'play'
-							? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'play')
-							: archetype;
+								? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'play')
+								: archetype;
 					const aMatchupInfo: readonly ConstructedMatchupInfo[] =
 						archetype?.matchupInfo.map((matchup) => {
 							const derivedStat =
 								playCoin === 'coin'
 									? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 									: playCoin === 'play'
-									? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
-									: matchup;
+										? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+										: matchup;
 							const result: ConstructedMatchupInfo = {
 								...matchup,
 								winrate: derivedStat?.winrate ?? matchup.winrate,
@@ -482,16 +490,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						playCoin === 'coin'
 							? deckDetails?.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 							: playCoin === 'play'
-							? deckDetails?.coinPlayInfo.find((s) => s.coinPlay === 'play')
-							: deckDetails;
+								? deckDetails?.coinPlayInfo.find((s) => s.coinPlay === 'play')
+								: deckDetails;
 					const dMatchupInfo: readonly ConstructedMatchupInfo[] =
 						deckDetails?.matchupInfo.map((matchup) => {
 							const derivedStat =
 								playCoin === 'coin'
 									? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 									: playCoin === 'play'
-									? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
-									: matchup;
+										? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+										: matchup;
 							const result: ConstructedMatchupInfo = {
 								...matchup,
 								winrate: derivedStat?.winrate ?? matchup.winrate,
@@ -513,16 +521,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 							: dMatchupInfo.find((info) => info.opponentClass === opponentClass);
 					const archetypeWinrate =
 						opponentClass === 'all'
-							? aStatToUse?.winrate ?? dStatToUse?.winrate ?? 0
-							: archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0;
+							? (aStatToUse?.winrate ?? dStatToUse?.winrate ?? 0)
+							: (archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0);
 					const cardsData =
 						opponentClass === 'all'
-							? aStatToUse?.cardsData ?? dStatToUse?.cardsData ?? []
-							: archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? [];
+							? (aStatToUse?.cardsData ?? dStatToUse?.cardsData ?? [])
+							: (archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? []);
 					const sampleSize =
 						opponentClass === 'all'
-							? aStatToUse?.totalGames ?? dStatToUse?.totalGames ?? 0
-							: archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0;
+							? (aStatToUse?.totalGames ?? dStatToUse?.totalGames ?? 0)
+							: (archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0);
 					const allDeckCards: readonly MulliganCardAdvice[] =
 						deckCards?.map((refCard) => {
 							const cardData =
@@ -591,7 +599,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			map((prefs) =>
 				options?.useDeckFormat
 					? (deckDefinition.format as GameFormatEnum)
-					: prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD,
+					: (prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
 			),
 			distinctUntilChanged(),
 		);
@@ -742,16 +750,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			playCoin === 'coin'
 				? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 				: playCoin === 'play'
-				? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'play')
-				: archetype;
+					? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'play')
+					: archetype;
 		const aMatchupInfo: readonly ConstructedMatchupInfo[] =
 			archetype?.matchupInfo.map((matchup) => {
 				const derivedStat =
 					playCoin === 'coin'
 						? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 						: playCoin === 'play'
-						? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
-						: matchup;
+							? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+							: matchup;
 				const result: ConstructedMatchupInfo = {
 					...matchup,
 					winrate: derivedStat?.winrate ?? matchup.winrate,
@@ -766,16 +774,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			playCoin === 'coin'
 				? deckDetails?.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 				: playCoin === 'play'
-				? deckDetails?.coinPlayInfo.find((s) => s.coinPlay === 'play')
-				: deckDetails;
+					? deckDetails?.coinPlayInfo.find((s) => s.coinPlay === 'play')
+					: deckDetails;
 		const dMatchupInfo: readonly ConstructedMatchupInfo[] =
 			deckDetails?.matchupInfo.map((matchup) => {
 				const derivedStat =
 					playCoin === 'coin'
 						? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 						: playCoin === 'play'
-						? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
-						: matchup;
+							? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+							: matchup;
 				const result: ConstructedMatchupInfo = {
 					...matchup,
 					winrate: derivedStat?.winrate ?? matchup.winrate,
@@ -793,16 +801,16 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			opponentClass === 'all' ? null : dMatchupInfo.find((info) => info.opponentClass === opponentClass);
 		const archetypeWinrate =
 			opponentClass === 'all'
-				? aStatToUse?.winrate ?? dStatToUse?.winrate ?? 0
-				: archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0;
+				? (aStatToUse?.winrate ?? dStatToUse?.winrate ?? 0)
+				: (archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0);
 		const cardsData =
 			opponentClass === 'all'
-				? aStatToUse?.cardsData ?? dStatToUse?.cardsData ?? []
-				: archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? [];
+				? (aStatToUse?.cardsData ?? dStatToUse?.cardsData ?? [])
+				: (archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? []);
 		const sampleSize =
 			opponentClass === 'all'
-				? aStatToUse?.totalGames ?? dStatToUse?.totalGames ?? 0
-				: archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0;
+				? (aStatToUse?.totalGames ?? dStatToUse?.totalGames ?? 0)
+				: (archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0);
 		const allDeckCards: readonly MulliganCardAdvice[] =
 			cardsToGetStatsFor?.map((cardId) => {
 				const cardData =

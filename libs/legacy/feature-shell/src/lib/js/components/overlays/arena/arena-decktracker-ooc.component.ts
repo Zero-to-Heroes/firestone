@@ -302,7 +302,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		this.cardsHighlight.initForSingle();
 		this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId)).subscribe((heroCardId) => {
 			this.cardsHighlight.forceHeroCardId(heroCardId);
-			console.debug('[arena-decktracker-ooc] forceHeroCardId', heroCardId);
+			console.log('[arena-decktracker-ooc] forceHeroCardId', heroCardId);
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
