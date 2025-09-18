@@ -27,6 +27,8 @@ export * from './lib/meta-quests/rewards/battlegrounds-meta-stats-quest-rewards-
 export * from './lib/meta-trinkets/battlegrounds-meta-stats-trinket-info.component';
 export * from './lib/meta-trinkets/battlegrounds-meta-stats-trinket-tier.component';
 export * from './lib/meta-trinkets/battlegrounds-meta-stats-trinkets-view.component';
+export * from './lib/overlay/bgs-action-count-widget-wrapper.component';
+export * from './lib/overlay/bgs-action-count.component';
 export * from './lib/personal-stats/battlegrounds-desktop-your-stats.component';
 export * from './lib/personal-stats/battlegrounds-personal-stats-info.component';
 export * from './lib/personal-stats/your-stats.model';

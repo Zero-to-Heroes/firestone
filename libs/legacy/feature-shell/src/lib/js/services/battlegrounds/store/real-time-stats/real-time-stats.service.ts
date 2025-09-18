@@ -4,7 +4,6 @@ import { RealTimeStatsState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { filter, take } from 'rxjs';
 import { GameEvent } from '../../../../models/game-event';
-import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
 import { EventParser } from './event-parsers/_event-parser';
@@ -25,7 +24,6 @@ export class RealTimeStatsService {
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly events: Events,
 		private readonly scene: SceneService,
 		private readonly parsers: RealTimeStatsParsersService,
 	) {
@@ -45,7 +43,7 @@ export class RealTimeStatsService {
 
 		this.scene.currentScene$$
 			.pipe(
-				filter((scene) => scene === SceneMode.BACON),
+				filter((scene) => scene === SceneMode.BACON || scene === SceneMode.GAMEPLAY),
 				take(1),
 			)
 			.subscribe(() => this.init());

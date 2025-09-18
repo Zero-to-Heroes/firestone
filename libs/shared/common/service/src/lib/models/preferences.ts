@@ -600,6 +600,10 @@ export class Preferences implements IPreferences {
 	readonly bgsReconnectorAutoReconnect: boolean = false;
 	readonly bgsReconnectorAutoReconnectWaitAfterBoards: boolean = false;
 	readonly bgsReconnectorWidgetPosition: { left: number; top: number };
+	readonly bgsActionCountEnabled: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsActionCountScale = 100;
+	readonly bgsActionCountWidgetPosition: { left: number; top: number };
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 100;

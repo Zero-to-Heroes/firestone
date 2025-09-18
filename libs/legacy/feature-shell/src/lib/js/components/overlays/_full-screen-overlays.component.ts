@@ -99,6 +99,7 @@ import { DebugService } from '../../services/debug.service';
 			<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
 			<current-session-widget-wrapper></current-session-widget-wrapper>
 			<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
+			<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>

@@ -26,6 +26,7 @@ export class ScalingService {
 		this._multiScale('bgsHeroSelectionOverlayScale', '--bgs-hero-selection-overlay-scale');
 		this._multiScale('bgsOpponentBoardScale', '--bgs-opponent-board-scale');
 		this._multiScale('bgsQuestsOverlayScale', '--bgs-quests-overlay-scale');
+		this._multiScale('bgsActionCountScale', '--bgs-action-count-scale');
 
 		this._multiScale('arenaDraftOverlayScale', '--arena-card-options-scale');
 		this._multiScale('arenaDraftOverlayScale', '--arena-draft-overlay-scale');

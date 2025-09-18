@@ -138,6 +138,32 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 				],
 			},
 			{
+				id: 'actions-counter',
+				title: context.i18n.translateString('settings.battlegrounds.overlay.actions-counter.title'),
+				settings: [
+					{
+						type: 'toggle',
+						field: 'bgsActionCountEnabled',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.actions-counter.enable-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.actions-counter.enable-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
+					},
+					{
+						type: 'slider',
+						field: 'bgsActionCountScale',
+						label: context.i18n.translateString('settings.global.widget-size-label'),
+						tooltip: null,
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsActionCountEnabled,
+						sliderConfig: {
+							min: 80,
+							max: 150,
+							snapSensitivity: 3,
+							knobs: sizeKnobs(context),
+						},
+					},
+				],
+			},
+			{
 				id: 'battlegrounds-counters',
 				title: context.i18n.translateString('settings.battlegrounds.overlay.counters-title'),
 				settings: counters(context).map((counter) => toSetting(counter)),

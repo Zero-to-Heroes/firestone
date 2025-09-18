@@ -9,6 +9,7 @@ import {
 	ValueHeroInfo,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameType } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BgsBoard } from './in-game/bgs-board';
 import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
 import { BgsTriple } from './in-game/bgs-triple';
@@ -47,6 +48,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[] = [];
 	readonly minionsPlayedOverTurn: readonly NumericTurnInfo[] = [];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[] = [];
+	readonly spellsPlayedOverTurn: readonly NumericTurnInfo[] = [];
 	readonly luckFactor: number = 0;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly faceOffs: readonly BgsFaceOff[] = [];
@@ -65,7 +67,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 		return Object.assign(new RealTimeStatsState(), base);
 	}
 
-	public update(base: RealTimeStatsState): RealTimeStatsState {
+	public update(base: Partial<NonFunctionProperties<RealTimeStatsState>>): RealTimeStatsState {
 		return Object.assign(new RealTimeStatsState(), this, base);
 	}
 }

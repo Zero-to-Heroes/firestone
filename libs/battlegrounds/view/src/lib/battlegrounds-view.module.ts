@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,8 @@ import { BattlegroundsMetaStatsQuestRewardsViewComponent } from './meta-quests/r
 import { BattlegroundsMetaStatsTrinketInfoComponent } from './meta-trinkets/battlegrounds-meta-stats-trinket-info.component';
 import { BattlegroundsMetaStatsTrinketTierComponent } from './meta-trinkets/battlegrounds-meta-stats-trinket-tier.component';
 import { BattlegroundsMetaStatsTrinketsViewComponent } from './meta-trinkets/battlegrounds-meta-stats-trinkets-view.component';
+import { BgsActionCountWidgetWrapperComponent } from './overlay/bgs-action-count-widget-wrapper.component';
+import { ActionCountComponent } from './overlay/bgs-action-count.component';
 import { BattlegroundsDesktopYourStatsComponent } from './personal-stats/battlegrounds-desktop-your-stats.component';
 import { BattlegroundsPersonalStatsInfoComponent } from './personal-stats/battlegrounds-personal-stats-info.component';
 
@@ -57,6 +60,9 @@ const components = [
 	BattlegroundsPersonalStatsInfoComponent,
 	BgsHeroPortraitComponent,
 
+	BgsActionCountWidgetWrapperComponent,
+	ActionCountComponent,
+
 	CircularProgressComponent,
 	BattlegroundsEmptyStateComponent,
 
@@ -71,6 +77,7 @@ const components = [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
+		DragDropModule,
 
 		ReplayColiseumModule,
 		SharedCommonViewModule,

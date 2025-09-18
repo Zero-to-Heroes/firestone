@@ -16,6 +16,7 @@ import { RTStatBgsMinionsPlayedParser } from './event-parsers/battlegrounds/rtst
 import { RTStatBgsMinionsSoldParser } from './event-parsers/battlegrounds/rtstats-bgs-minions-sold-parser';
 import { RTStatsBgsOpponentRevealedParser } from './event-parsers/battlegrounds/rtstats-bgs-opponent-revealed-parser';
 import { RTStatsBgsRerollsParser } from './event-parsers/battlegrounds/rtstats-bgs-rerolls-parser';
+import { RTStatBgsSpellsPlayedParser } from './event-parsers/battlegrounds/rtstats-bgs-spells-played-parser';
 import { RTStatsBgsTriplesCreatedParser } from './event-parsers/battlegrounds/rtstats-bgs-triples-created-parser';
 import { RTStatBgsTurnStartParser } from './event-parsers/battlegrounds/rtstats-bgs-turn-start-parser';
 import { RTStatsGameStartParser } from './event-parsers/rtstats-game-start-parser';
@@ -53,7 +54,10 @@ export class RealTimeStatsParsersService {
 			[GameEvent.BATTLEGROUNDS_RECRUIT_PHASE]: [new RTStatBgsTurnStartParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_REROLL]: [new RTStatsBgsRerollsParser()],
 			[GameEvent.BATTLEGROUNDS_TRIPLE]: [new RTStatsBgsTriplesCreatedParser(this.allCards)],
-			[GameEvent.CARD_PLAYED]: [new RTStatBgsMinionsPlayedParser(this.allCards)],
+			[GameEvent.CARD_PLAYED]: [
+				new RTStatBgsMinionsPlayedParser(this.allCards),
+				new RTStatBgsSpellsPlayedParser(this.allCards),
+			],
 			[GameEvent.DAMAGE]: [
 				new RTStatsTotalDamageDealtByMinionsParser(this.allCards),
 				new RTStatsTotalDamageTakenByMinionsParser(this.allCards),
