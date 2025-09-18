@@ -478,6 +478,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.Blink_SC_761:
 			return and(side(inputSide), inDeck, protoss, minion);
+		case CardIds.Bloodbloom:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.BloodCrusader:
 			return and(side(inputSide), or(inDeck, inHand), paladin, minion);
 		case CardIds.BloodMoonTavernBrawl:
