@@ -8,15 +8,14 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
 	selector: 'confirmation',
-	styleUrls: [`../../../css/component/tooltip/confirmation.component.scss`],
+	styleUrls: [`./confirmation.component.scss`],
 	template: `
 		<div class="confirmation">
 			<div class="title" *ngIf="confirmationTitle$ | async as title" [innerHTML]="title"></div>
@@ -37,7 +36,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmationComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ConfirmationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 	@Output() onCancel: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -83,11 +82,10 @@ export class ConfirmationComponent extends AbstractSubscriptionStoreComponent im
 	@Input() switchButtonStyles: boolean;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		protected readonly store: AppUiStoreFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		// FIXME: For some reason, lifecycle methods are not called systematically when using overlayref
 		setTimeout(() => this.ngAfterContentInit(), 50);
 	}

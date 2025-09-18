@@ -31,11 +31,13 @@ import { PreferenceSliderComponent } from './components/slider/preference-slider
 import { SortableLabelComponent } from './components/table/sortable-table-label.component';
 import { PreferenceToggleComponent } from './components/toggle/preference-toggle.component';
 import { ToggleViewComponent } from './components/toggle/toggle-view.component';
+import { AskConfirmationDirective } from './components/tooltip/ask-confirmation.directive';
 import { BuffInfoComponent } from './components/tooltip/buff-info.component';
 import { CachedComponentTooltipDirective } from './components/tooltip/cached-component-tooltip.directive';
 import { CardTooltipComponent } from './components/tooltip/card-tooltip.component';
 import { CardTooltipDirective } from './components/tooltip/card-tooltip.directive';
 import { ComponentTooltipDirective } from './components/tooltip/component-tooltip.directive';
+import { ConfirmationComponent } from './components/tooltip/confirmation.component';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
 import { PremiumSettingDirective } from './directives/premium-setting.directive';
@@ -53,6 +55,7 @@ const components = [
 	CardTileComponent,
 	CopyDesckstringComponent,
 	DeckListBasicComponent,
+	ConfirmationComponent,
 
 	FilterDropdownComponent,
 	FilterDropdownMultiselectComponent,
@@ -79,6 +82,7 @@ const components = [
 
 	ScrollableDirective,
 	PremiumSettingDirective,
+	AskConfirmationDirective,
 
 	ShortDatePipe,
 	SafeHtmlPipe,

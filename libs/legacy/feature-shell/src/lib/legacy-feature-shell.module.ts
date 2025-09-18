@@ -506,11 +506,9 @@ import { SocialShareModalComponent } from './js/components/sharing/social-share-
 import { SocialSharesComponent } from './js/components/sharing/social-shares.component';
 import { TwitterShareButtonComponent } from './js/components/sharing/twitter/twitter-share-button.component';
 import { TwitterShareModalComponent } from './js/components/sharing/twitter/twitter-share-modal.component';
-import { ConfirmationComponent } from './js/components/tooltip/confirmation.component';
 import { VersionComponent } from './js/components/version.component';
 import { WindowWrapperComponent } from './js/components/window-wrapper.component';
 import { ActiveThemeDirective } from './js/directives/active-theme.directive';
-import { AskConfirmationDirective } from './js/directives/ask-confirmation.directive';
 import { BindCssVariableDirective } from './js/directives/bind-css-variable-directive';
 import { DoubleClickDirective } from './js/directives/exclusive-double-click.directive';
 import { GrowOnClickDirective } from './js/directives/grow-on-click.directive';
@@ -724,11 +722,8 @@ try {
 		HotkeyComponent,
 		VersionComponent,
 
-		ConfirmationComponent,
-
 		ActiveThemeDirective,
 		PulseDirective,
-		AskConfirmationDirective,
 		BindCssVariableDirective,
 		GrowOnClickDirective,
 		RippleOnClickDirective,
@@ -825,19 +820,6 @@ try {
 
 		HotkeyComponent,
 		VersionComponent,
-
-		ConfirmationComponent,
-
-		ActiveThemeDirective,
-		PulseDirective,
-		AskConfirmationDirective,
-		BindCssVariableDirective,
-		GrowOnClickDirective,
-		RippleOnClickDirective,
-		NgxCacheIfDirective,
-		RotateOnMouseOverDirective,
-		DoubleClickDirective,
-		OwTranslateDirective,
 
 		FilterComponent,
 		OwTranslatePipe,
@@ -1437,14 +1419,6 @@ try {
 		LotteryService,
 		LotteryWidgetControllerService,
 	],
-	// entryComponents: [
-	// 	ConfirmationComponent,
-	// 	BgsHeroSelectionTooltipComponent,
-	// 	BgsHeroStrategyTipsTooltipComponent,
-	// 	TwitterShareModalComponent,
-	// 	RedditShareModalComponent,
-	// 	BgsOverlayHeroOverviewComponent,
-	// ],
 	exports: [
 		DaemonComponent,
 		MainWindowComponent,

@@ -12,10 +12,9 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { ConfirmationComponent } from '../components/tooltip/confirmation.component';
-import { Events } from '../services/events.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardTooltipPositionType } from './card-tooltip-position.type';
+import { ConfirmationComponent } from './confirmation.component';
 
 @Directive({
 	standalone: false,
@@ -52,8 +51,7 @@ export class AskConfirmationDirective implements OnDestroy {
 		private readonly elementRef: ElementRef,
 		private readonly overlay: Overlay,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly events: Events,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	// eslint-disable-next-line @angular-eslint/use-lifecycle-interface
