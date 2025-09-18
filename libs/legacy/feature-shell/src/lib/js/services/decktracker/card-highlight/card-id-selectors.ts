@@ -970,7 +970,10 @@ export const cardIdSelector = (
 		case CardIds.DimensionalRipper:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.DinnerPerformer:
-			return and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana);
+			return highlightConditions(
+				and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana),
+				and(side(inputSide), inDeck, minion),
+			);
 		case CardIds.Dinositter_TLC_822:
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.DirgeOfDespair:
