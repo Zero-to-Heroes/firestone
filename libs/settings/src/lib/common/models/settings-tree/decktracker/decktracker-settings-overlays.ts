@@ -15,6 +15,12 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 				settings: [
 					{
 						type: 'toggle',
+						field: 'overlaySortHandByZoneOrder',
+						label: context.i18n.translateString('settings.decktracker.global.hand-sort-by-zone-order'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.hand-sort-by-zone-order-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'overlayEnableDiscoverHelp',
 						label: context.i18n.translateString('settings.decktracker.global.discover-help'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.discover-help-tooltip'),

@@ -92,6 +92,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 								[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 								[showTotalCardsInZone]="showTotalCardsInZone$ | async"
+								[sortHandByZoneOrder]="sortHandByZoneOrder$ | async"
 								[showDkRunes]="showDkRunes$ | async"
 								[side]="player"
 								*ngIf="showDecklist$ | async"
@@ -164,6 +165,7 @@ export class DeckTrackerOverlayRootComponent
 	showTopCardsSeparately$: Observable<boolean>;
 	showDkRunes$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
+	sortHandByZoneOrder$: Observable<boolean>;
 	showDecklist$: Observable<boolean>;
 	hideOpponentName$: Observable<boolean>;
 
@@ -248,6 +250,9 @@ export class DeckTrackerOverlayRootComponent
 			});
 		this.showTotalCardsInZone$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => this.showTotalCardsInZoneExtractor(gameState.currentTurn !== 'mulligan')),
+		);
+		this.sortHandByZoneOrder$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlaySortHandByZoneOrder),
 		);
 		// const gamesForRegion$ = combineLatest([this.gameStats.gameStats$$, this.region.region$$]).pipe(
 		// 	filter(([gameStats, region]) => !!gameStats?.length),

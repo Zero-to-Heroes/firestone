@@ -59,6 +59,7 @@ import { SetCard } from '../../../models/set';
 					[darkenUsedCards]="darkenUsedCards"
 					[showTotalCardsInZone]="showTotalCardsInZone"
 					[removeDuplicatesInTooltip]="removeDuplicatesInTooltip"
+					[sortHandByZoneOrder]="sortHandByZoneOrder"
 					[side]="side"
 				>
 				</deck-list-by-zone>
@@ -120,6 +121,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showTotalCardsInZone: boolean;
 	@Input() side: HighlightSide;
 	@Input() collection: readonly SetCard[];
+	@Input() sortHandByZoneOrder: boolean;
 
 	@Input() set deckState(deckState: DeckState) {
 		this.deckState$$.next(deckState);

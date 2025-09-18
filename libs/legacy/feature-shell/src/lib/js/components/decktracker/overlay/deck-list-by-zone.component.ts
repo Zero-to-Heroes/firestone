@@ -6,7 +6,7 @@ import {
 	Input,
 	OnDestroy,
 } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
@@ -100,6 +100,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showDiscoveryZone$$.next(value);
 	}
 
+	@Input() set sortHandByZoneOrder(value: boolean) {
+		this.sortHandByZoneOrder$$.next(value);
+	}
+
 	@Input() set deckState(value: DeckState) {
 		this.deckState$$.next(value);
 	}
@@ -117,6 +121,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showBoardCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
 	private showDiscoveryZone$$ = new BehaviorSubject<boolean>(true);
 	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(true);
+	private sortHandByZoneOrder$$ = new BehaviorSubject<boolean>(false);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
@@ -147,6 +152,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showGeneratedCardsInSeparateZone$$,
 			this.showBoardCardsInSeparateZone$$,
 			this.showPlaguesOnTop$$,
+			this.sortHandByZoneOrder$$,
 			this.showDiscoveryZone$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
@@ -163,6 +169,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					showGeneratedCardsInSeparateZone,
 					showBoardCardsInSeparateZone,
 					showPlaguesOnTop,
+					sortHandByZoneOrder,
 					showDiscoveryZone,
 				]) =>
 					this.buildZones(
@@ -175,6 +182,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showBoardCardsInSeparateZone,
 						showPlaguesOnTop,
 						showDiscoveryZone,
+						sortHandByZoneOrder,
 						deckState,
 					),
 			),
@@ -193,6 +201,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showBoardCardsInSeparateZone: boolean,
 		showPlaguesOnTop: boolean,
 		showDiscoveryZone: boolean,
+		sortHandByZoneOrder: boolean,
 		deckState: DeckState,
 	): readonly DeckZone[] {
 		if (!deckState) {
@@ -281,13 +290,17 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			];
 		}
 
+		const handSortingFunction = sortHandByZoneOrder
+			? (a: VisualDeckCard, b: VisualDeckCard) =>
+					(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0)
+			: null;
 		zones.push(
 			this.buildZone(
 				cardsForHand,
 				null,
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
-				null,
+				handSortingFunction,
 				deckState.hand.length,
 				null,
 				'in-hand',
