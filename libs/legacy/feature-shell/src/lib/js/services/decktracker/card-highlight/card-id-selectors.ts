@@ -3545,6 +3545,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.Whirlweaver:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.Wither:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.WickedWitchdoctor:
 		case CardIds.WickedWitchdoctor_WON_083:
 			return and(side(inputSide), or(inDeck, inHand), spell);
