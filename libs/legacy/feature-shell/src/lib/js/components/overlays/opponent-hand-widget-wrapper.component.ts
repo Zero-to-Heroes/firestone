@@ -12,7 +12,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -59,29 +59,29 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		const currentScene$$ = this.scene.currentScene$$.pipe(
-			tap((scene) => console.log('[opponent-hand-widget-wrapper] current scene', scene)),
+			// tap((scene) => console.log('[opponent-hand-widget-wrapper] current scene', scene)),
 			this.mapData((scene) => scene),
 		);
 		const displayFromPrefs$$ = this.prefs.preferences$$.pipe(
-			tap((prefs) =>
-				console.log(
-					'[opponent-hand-widget-wrapper] display from prefs',
-					prefs.dectrackerShowOpponentGuess,
-					prefs.dectrackerShowOpponentTurnDraw,
-				),
-			),
+			// tap((prefs) =>
+			// 	console.log(
+			// 		'[opponent-hand-widget-wrapper] display from prefs',
+			// 		prefs.dectrackerShowOpponentGuess,
+			// 		prefs.dectrackerShowOpponentTurnDraw,
+			// 	),
+			// ),
 			this.mapData((prefs) => prefs.dectrackerShowOpponentGuess || prefs.dectrackerShowOpponentTurnDraw),
 		);
 		const gameState$$ = this.gameState.gameState$$.pipe(
-			tap((state) =>
-				console.log(
-					'[opponent-hand-widget-wrapper] game state',
-					state.gameStarted,
-					state.gameEnded,
-					state.isBattlegrounds(),
-					state.isMercenaries(),
-				),
-			),
+			// tap((state) =>
+			// 	console.log(
+			// 		'[opponent-hand-widget-wrapper] game state',
+			// 		state.gameStarted,
+			// 		state.gameEnded,
+			// 		state.isBattlegrounds(),
+			// 		state.isMercenaries(),
+			// 	),
+			// ),
 			this.mapData((state) => ({
 				gameStarted: state.gameStarted,
 				gameEnded: state.gameEnded,
