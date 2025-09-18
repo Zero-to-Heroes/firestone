@@ -14,12 +14,6 @@ export const collectionGeneralSettings = (context: SettingContext): SettingNode 
 				settings: [
 					{
 						type: 'toggle',
-						field: 'collectionUseHighResImages',
-						label: context.i18n.translateString('settings.collection.general.high-resolution-images-label'),
-						tooltip: null,
-					},
-					{
-						type: 'toggle',
 						field: 'collectionShowRelatedCards',
 						label: context.i18n.translateString('settings.collection.general.show-related-cards-label'),
 						tooltip: context.i18n.translateString('settings.collection.general.show-related-cards-tooltip'),

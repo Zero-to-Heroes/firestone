@@ -1,7 +1,6 @@
 import { SettingContext, SettingNode } from '../../settings.types';
 import { generalAccessibilitySettings } from './general-settings-accessibility';
 import { generalAdminSettings } from './general-settings-admin';
-import { generalAppearanceSettings } from './general-settings-appearance';
 import { generalDataSettings } from './general-settings-data';
 import { generalLaunchSettings } from './general-settings-launch';
 import { generalLocalizationSettings } from './general-settings-localization';
@@ -19,7 +18,6 @@ export const applicationSettings = (context: SettingContext): SettingNode => {
 			generalNotificationsSettings(context),
 			generalDataSettings(context),
 			generalAccessibilitySettings(context),
-			generalAppearanceSettings(context),
 		],
 	};
 };
