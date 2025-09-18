@@ -146,11 +146,14 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		side: HighlightSide,
 		gameTypeOverride: GameType = null,
 	): readonly string[] {
-		const cardImpl = cardsMapping[cardId];
-		if (hasGetRelatedCards(cardImpl)) {
-			const result = cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
-			if (result != null) {
-				return result;
+		// These don't work in a draft environment, as they rely on stuff that happen during the game
+		if (side === 'player' || side === 'opponent') {
+			const cardImpl = cardsMapping[cardId];
+			if (hasGetRelatedCards(cardImpl)) {
+				const result = cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
+				if (result != null) {
+					return result;
+				}
 			}
 		}
 		// if (!this.gameState) {
