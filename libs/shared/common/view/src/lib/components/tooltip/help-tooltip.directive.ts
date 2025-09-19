@@ -2,6 +2,7 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
+	AfterViewInit,
 	ChangeDetectorRef,
 	ComponentRef,
 	Directive,
@@ -22,7 +23,7 @@ import { HelpTooltipComponent } from './help-tooltip.component';
 	selector: '[helpTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class HelpTooltipDirective implements OnDestroy {
+export class HelpTooltipDirective implements OnDestroy, AfterViewInit {
 	_text = '';
 
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'bottom-left' = 'bottom';
@@ -63,6 +64,12 @@ export class HelpTooltipDirective implements OnDestroy {
 		@Optional() private readonly ow: OverwolfService,
 		private readonly renderer: Renderer2,
 	) {}
+
+	ngAfterViewInit(): void {
+		if (this.helpTooltipVisibleBeforeHover) {
+			this.onMouseEnter();
+		}
+	}
 
 	private initOverlay() {
 		this.target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
@@ -146,9 +153,6 @@ export class HelpTooltipDirective implements OnDestroy {
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
-		}
-		if (this.helpTooltipVisibleBeforeHover) {
-			this.onMouseEnter();
 		}
 	}
 
