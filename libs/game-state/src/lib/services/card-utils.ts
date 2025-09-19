@@ -24,6 +24,7 @@ export const getProcessedCard = (
 	entityId: number,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
+	debug = false,
 ): ReferenceCard => {
 	const refCard = allCards.getCard(cardId);
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
@@ -31,11 +32,18 @@ export const getProcessedCard = (
 		const sideboard = deckState.sideboards?.find((s) => s.keyCardId.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330));
 		// Remove the cosmetic module
 		const modules = sideboard?.cards?.map((c) => allCards.getCard(c)).filter((c) => c.health) ?? [];
-		updatedRefCard.mechanics = [...(updatedRefCard.mechanics ?? [])];
-		updatedRefCard.mechanics.push(...modules.flatMap((m) => m.mechanics ?? []));
-		updatedRefCard.attack = modules.reduce((a, b) => a + (b.attack ?? 0), 0);
-		updatedRefCard.health = modules.reduce((a, b) => a + (b.health ?? 0), 0);
-		updatedRefCard.cost = modules.reduce((a, b) => a + (b.cost ?? 0), 0);
+		if (modules.length > 0) {
+			updatedRefCard.mechanics = [...(updatedRefCard.mechanics ?? [])];
+			updatedRefCard.mechanics.push(...modules.flatMap((m) => m.mechanics ?? []));
+			updatedRefCard.attack = modules.reduce((a, b) => a + (b.attack ?? 0), 0);
+			updatedRefCard.health = modules.reduce((a, b) => a + (b.health ?? 0), 0);
+			updatedRefCard.cost = modules.reduce((a, b) => a + (b.cost ?? 0), 0);
+		} else {
+			const cardInDeck = deckState.findCard(entityId)?.card;
+			updatedRefCard.attack = cardInDeck?.tags?.[GameTag.ATK] ?? updatedRefCard.attack;
+			updatedRefCard.health = cardInDeck?.tags?.[GameTag.HEALTH] ?? updatedRefCard.health;
+			updatedRefCard.cost = cardInDeck?.tags?.[GameTag.COST] ?? updatedRefCard.cost;
+		}
 		return updatedRefCard;
 	}
 	const isStarship = refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]);

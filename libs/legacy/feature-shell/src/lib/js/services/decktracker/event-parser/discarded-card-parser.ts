@@ -1,4 +1,5 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { GameTag } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -22,6 +23,7 @@ export class DiscardedCardParser implements EventParser {
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
+		// console.debug('[discarded-card] removedCard', removedCard);
 
 		// See card-played-from-hand
 		let newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
@@ -34,6 +36,7 @@ export class DiscardedCardParser implements EventParser {
 				entityId,
 				deck.deckList.length === 0,
 			);
+			// console.debug('[discarded-card] removedCardFromDeck', removedCardFromDeck);
 
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
@@ -51,10 +54,17 @@ export class DiscardedCardParser implements EventParser {
 			board = !newOriginCard ? board : this.helper.replaceCardInZone(board, newOriginCard);
 		}
 
-		const refCard = this.allCards.getCard(cardId);
+		const refCard = getProcessedCard(cardId, entityId, deck, this.allCards, true);
+		// console.debug(
+		// 	'[discarded-card] refCard',
+		// 	refCard,
+		// 	card.refManaCost,
+		// 	refCard.cost,
+		// 	removedCard?.tags?.[GameTag.COST],
+		// );
 		const cardWithZone = card.update({
 			zone: 'DISCARD',
-			refManaCost: card.refManaCost ?? refCard.cost,
+			refManaCost: card.refManaCost ?? refCard.cost ?? removedCard?.tags?.[GameTag.COST],
 		} as DeckCard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,
