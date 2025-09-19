@@ -698,6 +698,7 @@ export class Preferences implements IPreferences {
 	readonly arenaShowOocTracker: boolean = true;
 	readonly arenaOocTrackerShowPickRate: boolean = true;
 	readonly arenaOocTrackerShowImpact: boolean = true;
+	readonly arenaOocTrackerShowCurrentOptions: boolean = true;
 	readonly arenaOocTrackerImpactOnlyOnRedraft: boolean = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly arenaOocTrackerScale: number = 100;

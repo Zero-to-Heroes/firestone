@@ -97,4 +97,14 @@
 		min-width: 220px;
 		width: 220px;
 	}
+
+	.current-options {
+		display: flex;
+		flex-direction: column;
+
+		.header {
+			align-items: center;
+			justify-content: center;
+		}
+	}
 }

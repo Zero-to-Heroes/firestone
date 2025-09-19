@@ -39,6 +39,7 @@ import {
 	switchMap,
 	takeUntil,
 } from 'rxjs';
+import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	standalone: false,
@@ -90,11 +91,6 @@ import {
 								</sortable-table-label>
 							</div>
 							<div class="played-cards">
-								<!-- <ng-scrollbar
-									class="deck-list"
-									*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
-									scrollable
-								> -->
 								<div
 									class="deck-list"
 									*ngIf="{ colorManaCost: colorManaCost$ | async } as value"
@@ -124,8 +120,43 @@ import {
 											{{ cardInfo.deckWinrateImpact | number: '1.2-2' }}
 										</div>
 									</li>
+
+									<ng-container *ngIf="showCurrentOptions$ | async">
+										<div class="current-options" *ngIf="currentOptions$ | async as currentOptions">
+											<div
+												class="header"
+												[fsTranslate]="'app.arena.card-stats.header-current-options'"
+											></div>
+											<li
+												class="card-container"
+												*ngFor="let cardInfo of currentOptions; trackBy: trackByCardId"
+											>
+												<div
+													class="cell pick-rate"
+													*ngIf="showPickRate$ | async"
+													[style.color]="cardInfo.pickedColor"
+												>
+													{{ cardInfo.pickrate | percent: '1.1' }}
+												</div>
+												<deck-card
+													class="cell card name"
+													[card]="cardInfo.card"
+													[colorManaCost]="value.colorManaCost"
+													[showRelatedCards]="true"
+													[side]="'arena-draft'"
+													[gameTypeOverride]="gameType"
+												></deck-card>
+												<div
+													class="cell deck-wr"
+													*ngIf="showImpact$ | async"
+													[style.color]="cardInfo.impactColor"
+												>
+													{{ cardInfo.deckWinrateImpact | number: '1.2-2' }}
+												</div>
+											</li>
+										</div>
+									</ng-container>
 								</div>
-								<!-- </ng-scrollbar> -->
 							</div>
 						</div>
 					</div>
@@ -138,9 +169,11 @@ import {
 export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	cards$: Observable<readonly CardInfo[]>;
+	currentOptions$: Observable<readonly CardInfo[]>;
 	colorManaCost$: Observable<boolean>;
 	showPickRate$: Observable<boolean>;
 	showImpact$: Observable<boolean>;
+	showCurrentOptions$: Observable<boolean>;
 
 	headerPickrateTooltip = this.i18n.translateString(
 		'app.arena.card-stats.header-pickrate-high-wins-variable-tooltip',
@@ -281,6 +314,49 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		this.cards$ = combineLatest([cardsWithStats$, this.sortCriteria$$]).pipe(
 			this.mapData(([cards, sort]) => {
 				return cards.sort((a, b) => this.sortCards(a, b, sort));
+			}),
+		);
+
+		this.showCurrentOptions$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.arenaOocTrackerShowCurrentOptions),
+		);
+
+		this.currentOptions$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, classStat$]).pipe(
+			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
+			this.mapData(([cards, cardStats, classStat]) => {
+				const cardsWithStats: CardInfo[] = [];
+				const classWinrate = classStat.totalsWins / classStat.totalGames;
+				for (const card of cards) {
+					const refCard = this.allCards.getCard(card);
+					const internalEntityId = uuidShort();
+					const deckCard = VisualDeckCard.create({
+						cardId: card,
+						cardName: refCard.name,
+						refManaCost: refCard.cost,
+						rarity: refCard.rarity,
+						totalQuantity: 1,
+						internalEntityId: internalEntityId,
+						internalEntityIds: [internalEntityId],
+					});
+					const stat = cardStats?.stats?.find(
+						(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(deckCard.cardId),
+					);
+					const decksWithCard = stat?.matchStats?.stats?.decksWithCard ?? 0;
+					const deckWinrate = !decksWithCard
+						? null
+						: (stat.matchStats?.stats?.decksWithCardThenWin ?? 0) / decksWithCard;
+					const deckImpact = deckWinrate == null ? null : 100 * (deckWinrate - classWinrate);
+					const pickrate = stat?.draftStats?.pickRateHighWins ?? stat?.draftStats?.pickRate ?? null;
+					const cardInfo: CardInfo = {
+						card: deckCard,
+						deckWinrateImpact: deckImpact,
+						pickrate: pickrate,
+						pickedColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', pickrate ?? 0, 0.7, 0.3),
+						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', deckImpact ?? 0, 1, -1),
+					};
+					cardsWithStats.push(cardInfo);
+				}
+				return cardsWithStats;
 			}),
 		);
 
