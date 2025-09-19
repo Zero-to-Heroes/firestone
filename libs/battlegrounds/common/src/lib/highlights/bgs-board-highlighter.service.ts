@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { CardIds, CardType, GameTag, Race } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -203,6 +203,37 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			return false;
 		}
 		const card = this.allCards.getCard(minion.cardId);
+		const otherCard = card.premium
+			? this.allCards.getCard(card.battlegroundsNormalDbfId || 0)
+			: this.allCards.getCard(card.battlegroundsPremiumDbfId || 0);
+		return (
+			this.isCardHighlighted(
+				card,
+				highlightedTribes,
+				highlightedMinions,
+				highlightedMechanics,
+				anomalies,
+				enableAutoHighlight,
+			) ||
+			this.isCardHighlighted(
+				otherCard,
+				highlightedTribes,
+				highlightedMinions,
+				highlightedMechanics,
+				anomalies,
+				enableAutoHighlight,
+			)
+		);
+	}
+
+	private isCardHighlighted(
+		card: ReferenceCard,
+		highlightedTribes: readonly Race[],
+		highlightedMinions: readonly string[],
+		highlightedMechanics: readonly GameTag[],
+		anomalies: readonly string[],
+		enableAutoHighlight: boolean,
+	): boolean {
 		const highlightedFromMechanics = card?.mechanics?.some((m) => highlightedMechanics.includes(GameTag[m]));
 		if (highlightedFromMechanics) {
 			return true;

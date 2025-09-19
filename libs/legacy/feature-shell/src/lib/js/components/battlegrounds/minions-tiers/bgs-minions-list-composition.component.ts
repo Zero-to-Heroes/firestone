@@ -357,8 +357,14 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	}
 
 	isIncluded(minionsOnBoardAndHand: readonly string[], minionId: string) {
-		const normalizedMinionsOnBoard = minionsOnBoardAndHand?.map((id) => normalizeMinionCardId(id, this.allCards));
-		const normalizedMinionId = normalizeMinionCardId(minionId, this.allCards);
+		const getBaseCard = (cardId: string) => {
+			const card = this.allCards.getCard(cardId);
+			return card.premium ? this.allCards.getCard(card.battlegroundsNormalDbfId || 0) : card;
+		};
+		const normalizedMinionId = normalizeMinionCardId(getBaseCard(minionId).id, this.allCards);
+		const normalizedMinionsOnBoard = minionsOnBoardAndHand?.map((id) =>
+			normalizeMinionCardId(getBaseCard(id).id, this.allCards),
+		);
 		return normalizedMinionsOnBoard?.some((id) => isCardOrSubstitute(normalizedMinionId, id));
 	}
 }
