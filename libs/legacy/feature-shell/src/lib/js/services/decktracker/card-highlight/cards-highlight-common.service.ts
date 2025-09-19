@@ -146,23 +146,26 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		side: HighlightSide,
 		gameTypeOverride: GameType = null,
 	): readonly string[] {
+		let gameState = this.gameState;
+		if (this.options?.skipGameState) {
+			gameState = gameState.update({
+				playerDeck: this.buildFakeDeckStateFromRegisteredHandlers(this.options.heroCardId),
+			});
+		}
 		// These don't work in a draft environment, as they rely on stuff that happen during the game
 		if (side === 'player' || side === 'opponent') {
 			const cardImpl = cardsMapping[cardId];
 			if (hasGetRelatedCards(cardImpl)) {
-				const result = cardImpl.getRelatedCards(entityId, side, this.gameState, this.allCards);
+				const result = cardImpl.getRelatedCards(entityId, side, gameState, this.allCards);
 				if (result != null) {
 					return result;
 				}
 			}
 		}
-		// if (!this.gameState) {
-		// 	return [];
-		// }
 
-		const deck = side === 'opponent' ? this.gameState?.opponentDeck : this.gameState?.playerDeck;
+		const deck = side === 'opponent' ? gameState?.opponentDeck : gameState?.playerDeck;
 		const metaData =
-			this.options?.skipGameState && this.options?.metadata ? this.options.metadata : this.gameState?.metadata;
+			this.options?.skipGameState && this.options?.metadata ? this.options.metadata : gameState?.metadata;
 		const deckCards = deck?.getAllCardsInDeckWithoutOptions() ?? [];
 		const card =
 			deckCards.find((c) => !!entityId && c.entityId === entityId) ?? deckCards.find((c) => c.cardId === cardId);
@@ -187,7 +190,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			deck,
 			updatedMetadata,
 			this.allCards,
-			this.gameState,
+			gameState,
 			validArenaPool,
 		);
 		return relatedCardIds?.length ? relatedCardIds : [];
