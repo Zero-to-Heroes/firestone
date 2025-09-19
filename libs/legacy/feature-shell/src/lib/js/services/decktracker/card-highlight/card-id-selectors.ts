@@ -2160,6 +2160,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.MonstrousMosquito_EDR_816:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.MoshPit:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Muckmorpher:
 			return and(side(inputSide), inDeck, minion, not(cardIs(CardIds.Muckmorpher)));
 		case CardIds.MulchMadnessTavernBrawl:
