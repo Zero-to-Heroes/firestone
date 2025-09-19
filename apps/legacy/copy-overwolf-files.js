@@ -54,7 +54,7 @@ function copyOverwolfFiles() {
 	// Copy overwolf files to root
 	copyDirectory(overwolfDir, outputDir, 'overwolf');
 
-	// Copy overwolf-plugins to Files/plugins
+	// Copy overwolf-plugins to plugins
 	copyDirectory(pluginsDir, pluginsOutputDir, 'overwolf-plugins');
 
 	console.log('[Pre-build] All overwolf files processed successfully');
