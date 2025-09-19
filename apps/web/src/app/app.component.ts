@@ -37,7 +37,6 @@ export class AppComponent implements AfterContentInit {
 	private async i18nReady() {
 		while (this.i18n.translateString('app.battlegrounds.tier-list.tier') == 'app.battlegrounds.tier-list.tier') {
 			await sleep(100);
-			console.debug('[debug] waiting for i18n');
 		}
 	}
 }

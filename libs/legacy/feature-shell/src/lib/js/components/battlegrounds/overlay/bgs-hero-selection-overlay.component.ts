@@ -207,7 +207,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			filter(([heroOverviews, achievements, showAchievements]) => !!heroOverviews?.length),
 			this.mapData(([heroOverviews, achievements, showAchievements]) => {
 				if (!achievements || !showAchievements) {
-					console.debug('[debug] no achievements yet', heroOverviews, achievements, showAchievements);
 					return heroOverviews;
 				}
 
