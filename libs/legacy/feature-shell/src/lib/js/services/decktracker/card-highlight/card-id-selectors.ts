@@ -1749,6 +1749,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), spell, holy);
 		case CardIds.InvigoratingSermon:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.Invincible:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.Inzah:
 			return and(side(inputSide), or(inDeck, inHand), overload);
 		case CardIds.IronRootsTavernBrawl:
