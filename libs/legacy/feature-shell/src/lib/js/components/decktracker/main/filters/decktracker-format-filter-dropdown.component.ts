@@ -66,6 +66,7 @@ export class DecktrackerFormatFilterDropdownComponent
 					{
 						value: 'all',
 						label: this.i18n.translateString('app.decktracker.filters.format-filter.all-formats'),
+						tooltip: this.i18n.translateString('app.decktracker.filters.format-filter.all-formats-tooltip'),
 					} as FormatFilterOption,
 					{
 						value: 'standard',
@@ -86,6 +87,10 @@ export class DecktrackerFormatFilterDropdownComponent
 					{
 						value: 'tavern-brawl' as any,
 						label: this.i18n.translateString('app.replays.filters.game-mode.tavern-brawl'),
+					} as FormatFilterOption,
+					{
+						value: 'casual' as any,
+						label: this.i18n.translateString('app.replays.filters.game-mode.casual'),
 					} as FormatFilterOption,
 				];
 				return {

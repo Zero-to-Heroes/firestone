@@ -18,7 +18,7 @@ import {
 	StatGameModeType,
 } from '@firestone/stats/data-access';
 import { combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay, take } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -67,6 +67,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			const stats$ = this.gameStats.gameStats$$.pipe(
 				distinctUntilChanged((a, b) => a?.length === b?.length),
 				shareReplay(1),
+				tap((stats) => console.debug('[decks-provider] stats', stats)),
 			);
 			const filters$ = this.mainWindowState.mainWindowState$$.pipe(
 				map((state) => state.decktracker.filters),
@@ -169,14 +170,15 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 	): readonly DeckSummary[] {
 		const filters: DeckFilters = {
 			...inputFilters,
-			gameFormat:
-				(inputFilters.gameFormat as StatGameFormatTypeExtended) === 'tavern-brawl'
-					? 'wild'
-					: inputFilters.gameFormat,
+			gameFormat: ['tavern-brawl', 'casual'].includes(inputFilters.gameFormat as StatGameFormatTypeExtended)
+				? 'wild'
+				: inputFilters.gameFormat,
 			gameMode:
 				(inputFilters.gameFormat as StatGameFormatTypeExtended) === 'tavern-brawl'
 					? 'tavern-brawl'
-					: inputFilters.gameMode,
+					: (inputFilters.gameFormat as StatGameFormatTypeExtended) === 'casual'
+						? 'casual'
+						: inputFilters.gameMode,
 		};
 
 		// console.debug('[decks-provider] building state', stats?.length, filters, patch, personalDecks?.length);
@@ -189,7 +191,8 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			.filter(
 				(stat) =>
 					stat.gameMode === 'ranked' ||
-					(filters.gameMode === 'tavern-brawl' && stat.gameMode === 'tavern-brawl'),
+					(filters.gameMode === 'tavern-brawl' && stat.gameMode === 'tavern-brawl') ||
+					(filters.gameMode === 'casual' && stat.gameMode === 'casual'),
 			)
 			.filter((stat) => !!stat.playerDecklist);
 		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
@@ -302,10 +305,10 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			format: versions.some((v) => v.format === 'classic')
 				? 'classic'
 				: versions.some((v) => v.format === 'twist')
-				? 'twist'
-				: versions.some((v) => v.format === 'wild')
-				? 'wild'
-				: 'standard',
+					? 'twist'
+					: versions.some((v) => v.format === 'wild')
+						? 'wild'
+						: 'standard',
 			replays: replays,
 			allVersions: this.buildVersions(versions),
 		} as DeckSummary;
@@ -366,7 +369,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 						...DecksProviderService.replaysForSeason(
 							statsWithReset.filter((stat) => stat.gameFormat === 'twist'),
 						),
-				  ]
+					]
 				: statsWithReset;
 		const hiddenDeckCodes = desktopDeckHiddenDeckCodes ?? [];
 		const result = replaysForSeasons
@@ -492,8 +495,8 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		const lastUsed = validStats.filter((stat) => stat.creationTimestamp)?.length
 			? validStats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
 			: stats.filter((stat) => stat.creationTimestamp)?.length
-			? stats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
-			: undefined;
+				? stats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
+				: undefined;
 		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(validStats);
 		let decodedDeckName: string = null;
 		try {
@@ -650,6 +653,6 @@ export const buildDefaultMatchupStats = () => {
 			({
 				opponentClass: oppClass,
 				totalGames: 0,
-			} as MatchupStat),
+			}) as MatchupStat,
 	);
 };
