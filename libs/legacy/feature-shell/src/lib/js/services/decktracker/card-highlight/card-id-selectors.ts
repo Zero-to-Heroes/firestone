@@ -211,7 +211,10 @@ export const cardIdSelector = (
 		case CardIds.AllFelBreaksLoose:
 		case CardIds.AllFelBreaksLoose_CORE_MAW_012:
 		case CardIds.AllFelBreaksLoose_AllFelBreaksLooseToken:
-			return and(side(inputSide), or(inDeck, inHand), demon);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), demon),
+				and(side(inputSide), inGraveyard, demon),
+			);
 		case CardIds.AllianceBannerman:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.AllShallServeTavernBrawl:

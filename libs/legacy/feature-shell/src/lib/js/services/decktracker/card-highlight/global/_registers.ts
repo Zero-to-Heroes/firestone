@@ -1,5 +1,6 @@
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { AllFelBreaksLoose } from './all-fel-breaks-loose';
 import { AnimateDead } from './animate-dead';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { Archimonde } from './archimonde';
@@ -56,6 +57,7 @@ const cards = [
 	WakenerOfSouls,
 	OverlordSaurfang,
 	Ressucitate,
+	AllFelBreaksLoose,
 	RaiseDead,
 	CreatureOfTheSacredCave,
 	CatrinaMuerte,
