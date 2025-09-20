@@ -1800,6 +1800,8 @@ export const cardIdSelector = (
 			};
 		case CardIds.Jitterbug:
 			return and(side(inputSide), or(inHand, inDeck), divineShield);
+		case CardIds.JobShadower_WORK_032:
+			return and(side(inputSide), or(inHand, inDeck), selfDamageHero);
 		case CardIds.JotunTheEternal:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.JoymancerJepetto_TOY_960:
