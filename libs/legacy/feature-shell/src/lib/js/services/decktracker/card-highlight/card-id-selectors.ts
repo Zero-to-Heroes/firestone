@@ -498,7 +498,7 @@ export const cardIdSelector = (
 		case CardIds.Bolster:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.Bonecaller:
-			return and(side(inputSide), inGraveyard, minion, undead);
+			return and(side(inputSide), inGraveyard, undead);
 		case CardIds.BoneFlinger:
 			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.BonecrusherTavernBrawlToken:
@@ -1265,7 +1265,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.FleshBehemoth_RLK_830:
 		case CardIds.FleshBehemoth_RLK_Prologue_RLK_830:
-			return and(side(inputSide), inDeck, minion, undead, not(cardIs(CardIds.FleshBehemoth_RLK_830)));
+			return and(side(inputSide), inDeck, undead, not(cardIs(CardIds.FleshBehemoth_RLK_830)));
 		case CardIds.FlickeringLightbot_MIS_918:
 		case CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
@@ -1392,9 +1392,9 @@ export const cardIdSelector = (
 		case CardIds.GlowflySwarm:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GluthSicleTavernBrawl:
-			return and(side(inputSide), inDeck, minion, undead);
+			return and(side(inputSide), inDeck, undead);
 		case CardIds.GluthTavernBrawl_PVPDR_Sai_T1:
-			return and(side(inputSide), or(inDeck, inHand), minion, undead);
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.GlacialAdvance_RLK_512:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GlacialDownpourTavernBrawl:
@@ -1729,6 +1729,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.InspiringPresenceTavernBrawl:
 			return and(side(inputSide), minion, legendary);
+		case CardIds.InstrumentSmasher:
+			return and(side(inputSide), inDeck, weapon);
 		case CardIds.InstrumentTech:
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.InterstellarResearcher_GDB_728:
@@ -2195,7 +2197,7 @@ export const cardIdSelector = (
 		case CardIds.NaturalForceTavernBrawl:
 			return and(side(inputSide), spell, nature, dealsDamage);
 		case CardIds.NerubianVizier:
-			return and(side(inputSide), or(inDeck, inHand), minion, undead);
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NecriumApothecary:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.NecriumBlade:
@@ -2437,7 +2439,7 @@ export const cardIdSelector = (
 		case CardIds.ProstheticHand_DEEP_015:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion, mech),
-				and(side(inputSide), or(inDeck, inHand), minion, undead),
+				and(side(inputSide), or(inDeck, inHand), undead),
 			);
 		case CardIds.ProvingGrounds:
 			return and(side(inputSide), inDeck, minion);
@@ -2674,7 +2676,7 @@ export const cardIdSelector = (
 		case CardIds.RottenRodent:
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.RottingNecromancer:
-			return and(side(inputSide), inDeck, minion, undead);
+			return and(side(inputSide), inDeck, undead);
 		case CardIds.RowdyPartner_WW_906:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(4));
 		case CardIds.RoyalGreatswordTavernBrawlToken:
@@ -3392,7 +3394,7 @@ export const cardIdSelector = (
 		case CardIds.UnderTheSea_VAC_431:
 			return and(side(inputSide), inDeck, spell, not(cardIs(CardIds.UnderTheSea_VAC_431)));
 		case CardIds.UndyingAllies:
-			return and(side(inputSide), or(inDeck, inHand), minion, undead);
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.UnearthedArtifacts_TLC_462:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.UnearthedRaptor:
