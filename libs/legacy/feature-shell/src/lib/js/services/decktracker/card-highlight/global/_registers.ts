@@ -35,6 +35,7 @@ import { RaiseDead } from './raise-dead';
 import { RavenousFelhunter } from './ravenous-felhunter';
 import { RazaTheResealed } from './raza-the-resealed';
 import { Ressucitate } from './ressucitate';
+import { RestInPeace } from './rest-in-peace';
 import { ReturnPolicy } from './return-policy';
 import { Rewind } from './rewind';
 import { StranglethornHeart } from './stranglethorn-heart';
@@ -52,6 +53,7 @@ import { Zuljin } from './zul-jin';
 const cards = [
 	Archimonde,
 	Bonecaller,
+	RestInPeace,
 	StranglethornHeart,
 	AnimateDead,
 	WakenerOfSouls,
