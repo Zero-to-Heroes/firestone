@@ -22,8 +22,8 @@ export class CardChoicesService extends AbstractFacadeService<CardChoicesService
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 
 		this.memoryUpdates.memoryUpdates$$.subscribe((changes) => {
-			const mousedOverCard = changes.CardChoicesHidden;
-			this.choicesHidden$$.next(mousedOverCard);
+			const areChoicesHidden = changes.CardChoicesHidden;
+			this.choicesHidden$$.next(areChoicesHidden);
 		});
 	}
 }
