@@ -2589,7 +2589,7 @@ export const cardIdSelector = (
 				const targets = input.deckState.minionsDeadThisMatch
 					.filter((c) => (c.effectiveCost ?? allCards.getCard(c.cardId).cost) === highestDeadMinionCost)
 					.map((c) => ({ entityId: c.entityId, cardId: c.cardId }));
-				return tooltip(and(side(inputSide), entityIs(...targets)))(input);
+				return and(side(inputSide), entityIs(...targets))(input);
 			};
 		case CardIds.Resuscitate_TLC_818:
 			return highlightConditions(
@@ -2708,6 +2708,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.Scaleworm:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.ScuttlebuttGhoul:
+		case CardIds.ScuttlebuttGhoul_CORE_REV_900:
+			return and(side(inputSide), or(inHand, inDeck), secret);
 		case CardIds.Scv_SC_401:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.SeaShill_VAC_332:
