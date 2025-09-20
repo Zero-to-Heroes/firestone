@@ -2659,6 +2659,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RocketBackpacksTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, not(rush));
+		case CardIds.RockMasterVoone_ETC_121:
+			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 		case CardIds.RollingStone:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(1));
 		case CardIds.RoostingGargoyle:
