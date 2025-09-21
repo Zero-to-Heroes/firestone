@@ -1,4 +1,5 @@
-import { DeckCard, GameState, toTagsObject } from '@firestone/game-state';
+import { GameTag } from '@firestone-hs/reference-data';
+import { DeckCard, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -50,7 +51,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 		}
 
 		// Only minions end up on the board
-		const refCard = this.allCards.getCard(cardId);
+		const refCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 		const isOnBoard = refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		const cardWithZone =
 			card?.update({
@@ -59,6 +60,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				putIntoPlay: isOnBoard ? true : null,
 				tags: toTagsObject(gameEvent.additionalData.tags),
+				refManaCost: card?.refManaCost ?? refCard.cost ?? removedCard?.tags?.[GameTag.COST],
 			}) ||
 			DeckCard.create({
 				entityId: entityId,
