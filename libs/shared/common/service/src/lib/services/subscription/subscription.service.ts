@@ -122,7 +122,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 				? {
 						...currentPlan,
 						expireAt: currentPlan.expireAt ? new Date(currentPlan.expireAt) : null,
-				  }
+					}
 				: null,
 		);
 		this.localStorage.setItem(LocalStorageService.CURRENT_SUB_PLAN, currentPlan);
@@ -182,5 +182,5 @@ export interface OwSub {
 	readonly state: number;
 }
 
-export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual';
-export const premiumPlanIds = ['legacy', 'premium', 'premium-annual'] as PremiumPlanId[];
+export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual' | 'premium-six-months';
+export const premiumPlanIds = ['legacy', 'premium', 'premium-annual', 'premium-six-months'] as PremiumPlanId[];

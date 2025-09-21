@@ -47,6 +47,14 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 							<div class="text" [fsTranslate]="'app.premium.billing.monthly'"></div>
 						</div>
 						<div
+							class="element six-month"
+							[ngClass]="{ selected: billing === 'six-month' }"
+							(click)="changePeriodicity('six-month')"
+						>
+							<div class="text" [fsTranslate]="'app.premium.billing.six-month'"></div>
+							<div class="sub-text">{{ sixMonthSubtext }}</div>
+						</div>
+						<div
 							class="element yearly"
 							[ngClass]="{ selected: billing === 'yearly' }"
 							(click)="changePeriodicity('yearly')"
@@ -61,7 +69,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					系统兼容不佳。我们预计问题需要几个月才能解决。感谢您的理解。
 				</div>
 				<!-- <div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
-					{{ discountBannerText }}
+					{{ discountBannerTextYearly }}
 					<pre
 						class="code"
 						[helpTooltip]="'app.premium.billing.click-to-copy-code' | fsTranslate"
@@ -69,7 +77,19 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div> -->
+				</div> 
+				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'six-month'">
+					{{ discountBannerTextSixMonths }}
+					<pre
+						class="code"
+						[helpTooltip]="'app.premium.billing.click-to-copy-code' | fsTranslate"
+						(click)="copyCode()"
+					>
+						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
+					</pre>
+				</div>				
+				-->
+
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
 						class="plan"
@@ -135,19 +155,24 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	showLegacyPlan$: Observable<boolean>;
 	showConfirmationPopUp$: Observable<UnsubscribeModel | null>;
 	showPreSubscribeModal$: Observable<PresubscribeModel | null>;
-	billingPeriodicity$: Observable<'monthly' | 'yearly'>;
+	billingPeriodicity$: Observable<'monthly' | 'yearly' | 'six-month'>;
 	possibleChineseUser$: Observable<boolean>;
 
 	yearlySubtext: string;
+	sixMonthSubtext: string;
 	couponCode = '6B74-BY6Z-XZ2G';
-	discountBannerText = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
+	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
+		endDate: new Date('2025-09-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
+		reduction: '20%',
+	});
+	discountBannerTextSixMonths = this.i18n.translateString('app.premium.billing.six-months-coupon-text', {
 		endDate: new Date('2025-09-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
 		reduction: '20%',
 	});
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);
 	private showPreSubscribeModal$$ = new BehaviorSubject<PresubscribeModel | null>(null);
-	private billingPeriodicity$$ = new BehaviorSubject<'monthly' | 'yearly'>('monthly');
+	private billingPeriodicity$$ = new BehaviorSubject<'monthly' | 'yearly' | 'six-month'>('monthly');
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -181,20 +206,32 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 				const refPlan = 'premium';
 				const monthlyPackage = packages!.find((p) => p.name === refPlan);
 				const yearlyPackage = packages!.find((p) => p.name === `${refPlan}-annual`);
+				const sixMonthPackage = packages!.find((p) => p.name === `${refPlan}-six-months`);
 				const monthlyCost = monthlyPackage?.total_price;
 				if (!monthlyCost) {
 					console.error('Could not find monthly cost', packages);
 					return;
 				}
-				const monthlyTotalCost = monthlyCost * 12;
+				const monthlyTotalCostForYear = monthlyCost * 12;
 				const yearlyTotalCost = yearlyPackage?.total_price;
 				if (!yearlyTotalCost) {
 					console.error('Could not find yearly cost', packages);
 					return;
 				}
-				const reduction = ((monthlyTotalCost - yearlyTotalCost) / monthlyTotalCost) * 100;
+				const monthlyTotalCostForSixMonths = monthlyCost * 6;
+				const sixMonthTotalCost = sixMonthPackage?.total_price;
+				if (!sixMonthTotalCost) {
+					console.error('Could not find six month cost', packages);
+					return;
+				}
+				const yearlyReduction = ((monthlyTotalCostForYear - yearlyTotalCost) / monthlyTotalCostForYear) * 100;
 				this.yearlySubtext = this.i18n.translateString('app.premium.billing.yearly-subtext', {
-					value: Math.floor(reduction),
+					value: Math.floor(yearlyReduction),
+				});
+				const sixMonthReduction =
+					((monthlyTotalCostForSixMonths - sixMonthTotalCost) / monthlyTotalCostForSixMonths) * 100;
+				this.sixMonthSubtext = this.i18n.translateString('app.premium.billing.six-month-subtext', {
+					value: Math.floor(sixMonthReduction),
 				});
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
@@ -207,34 +244,32 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		]).pipe(
 			filter(([allPackages, billingPeriodicity, currentPlanSub]) => !!allPackages?.length),
 			this.mapData(([allPackages, billingPeriodicity, currentPlanSub]) => {
-				const plans = billingPeriodicity === 'monthly' ? ALL_PLANS : ALL_PLANS_YEARLY;
-				// const packages =
-				// 	billingPeriodicity === 'yearly'
-				// 		? allPackages!.filter((p) => p.name.includes('annual'))
-				// 		: allPackages!.filter((p) => !p.name.includes('annual'));
+				const plans =
+					billingPeriodicity === 'monthly'
+						? ALL_PLANS
+						: billingPeriodicity === 'six-month'
+							? ALL_PLANS_SIX_MONTH
+							: ALL_PLANS_YEARLY;
 				console.debug('building plans', plans, allPackages, billingPeriodicity, currentPlanSub);
-				return (
-					plans
-						// .filter((plan) => currentPlanSub?.id === 'legacy' || plan.id !== 'legacy')
-						.map((plan) => {
-							// const nameInPackage = billingPeriodicity === 'yearly' ? `${plan.id} annual` : plan.id;
-							const packageForPlan = allPackages?.find((p) => p.name.toLowerCase() === plan.id);
-							const rawPrice = packageForPlan?.total_price ?? plan.price;
-							const price =
-								rawPrice == null
-									? '-'
-									: billingPeriodicity === 'yearly'
-										? (rawPrice / 12).toFixed(2)
-										: rawPrice;
-							const result: PremiumPlan = {
-								...plan,
-								price: price,
-								activePlan: currentPlanSub,
-								periodicity: billingPeriodicity,
-							} as PremiumPlan;
-							return result;
-						})
-				);
+				return plans.map((plan) => {
+					const packageForPlan = allPackages?.find((p) => p.name.toLowerCase() === plan.id);
+					const rawPrice = packageForPlan?.total_price ?? plan.price;
+					const price =
+						rawPrice == null
+							? '-'
+							: billingPeriodicity === 'six-month'
+								? (rawPrice / 6).toFixed(2)
+								: billingPeriodicity === 'yearly'
+									? (rawPrice / 12).toFixed(2)
+									: rawPrice;
+					const result: PremiumPlan = {
+						...plan,
+						price: price,
+						activePlan: currentPlanSub,
+						periodicity: billingPeriodicity,
+					} as PremiumPlan;
+					return result;
+				});
 			}),
 			tap((plans) => console.debug('built plans', plans)),
 			shareReplay(1),
@@ -308,7 +343,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		this.showPreSubscribeModal$$.next(null);
 	}
 
-	changePeriodicity(periodicity: 'monthly' | 'yearly') {
+	changePeriodicity(periodicity: 'monthly' | 'yearly' | 'six-month') {
 		if (this.billingPeriodicity$$.getValue() === periodicity) {
 			return;
 		}
@@ -353,14 +388,6 @@ const ALL_PLANS: readonly Partial<PremiumPlan>[] = [
 	},
 ];
 const ALL_PLANS_YEARLY: readonly Partial<PremiumPlan>[] = [
-	// {
-	// 	id: 'friend',
-	// 	features: {
-	// 		supportFirestone: true,
-	// 		discordRole: 'friend',
-	// 		yearlyDiscount: true,
-	// 	},
-	// },
 	{
 		id: 'premium-annual',
 		features: {
@@ -371,17 +398,17 @@ const ALL_PLANS_YEARLY: readonly Partial<PremiumPlan>[] = [
 			yearlyDiscount: true,
 		},
 	},
-	// {
-	// 	id: 'epic',
-	// 	features: {
-	// 		supportFirestone: true,
-	// 		discordRole: 'epic',
-	// 		removeAds: true,
-	// 		premiumFeatures: true,
-	// 		prioritySupport: true,
-	// 		yearlyDiscount: true,
-	// 	},
-	// },
+];
+const ALL_PLANS_SIX_MONTH: readonly Partial<PremiumPlan>[] = [
+	{
+		id: 'premium-six-months',
+		features: {
+			supportFirestone: true,
+			discordRole: 'premium',
+			removeAds: true,
+			premiumFeatures: true,
+		},
+	},
 ];
 
 export interface PremiumPlan {
