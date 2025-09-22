@@ -46,6 +46,7 @@ export const buildAppInjector = () => {
 		mindVisionStateMachine,
 	);
 	const scene = new SceneService(windowManager);
+	// TODO: uncomment this, and split components vs server dependencies for electron
 	// const deckParserFacade = new DeckParserFacadeService(windowManager);
 	// const gameEventsEmitter = new GameEventsEmitterService();
 	const deckHandler = new DeckHandlerService(allCards as any as CardsFacadeService);
