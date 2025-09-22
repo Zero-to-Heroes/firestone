@@ -357,8 +357,14 @@ function parseOtherConditions(selectorCode: string, result: ParsedSelector): voi
 	];
 
 	for (const condition of otherPatterns) {
+		// Check for regular condition
 		if (new RegExp(`\\b${condition}\\b`).test(selectorCode)) {
 			result.otherConditions.push(condition);
+		}
+
+		// Check for negated condition (not(condition))
+		if (new RegExp(`\\bnot\\(${condition}\\)`).test(selectorCode)) {
+			result.otherConditions.push(`not_${condition}`);
 		}
 	}
 }
