@@ -16,6 +16,7 @@ export const getSelectorsForArenaDraft = (cardId: string, card: DeckCard, allCar
 
 	// Reverse synergies - what wants this card?
 	const reverseSelector = reverseCardIdSelector(cardId, card, 'arena-draft', allCards);
+	console.debug('[debug] reverseSelector', cardId, reverseSelector);
 	if (!!reverseSelector) {
 		selectors.push(reverseSelector);
 	}

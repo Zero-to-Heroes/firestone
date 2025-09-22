@@ -875,12 +875,8 @@ export const cardIdSelector = (
 				or(inDeck, inHand),
 				cardIs(CardIds.Cthun_WON_135, CardIds.Cthun_OG_279, CardIds.Cthun_OG_280),
 			);
-		// case CardIds.Cultivate:
-		// 	return and(side(inputSide), inDeck, spell);
 		case CardIds.Cultivation:
 			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
-		// case CardIds.CursedCatacombs_TLC_451:
-		// 	return and(side(inputSide), inDeck, minion);
 		case CardIds.CustomsEnforcer_VAC_440:
 			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.CutlassCourier:
@@ -1777,27 +1773,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), minion, inGraveyard, deathrattle);
 		case CardIds.JimRaynor_SC_400:
 		case CardIds.Thor_ThorExplosivePayloadToken_SC_414t:
-			return (input: SelectorInput): SelectorOutput => {
-				// const starships = input.deckState
-				// 	.getAllCardsInDeckWithoutOptions()
-				// 	.filter((c) => input.allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-				// 	.filter((c) => !c.tags?.some((t) => t.Name === GameTag.LAUNCHPAD && t.Value === 1));
-				// const entityIds = starships.flatMap((c) => [
-				// 	{ cardId: c.cardId, entityId: c.entityId },
-				// 	...(c.storedInformation?.cards
-				// 		.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
-				// 		?.map((c) => ({ cardId: c.cardId, entityId: c.entityId })) ?? []),
-				// ]);
-				return highlightConditions(
-					// tooltip(
-					// 	and(
-					// 		side(inputSide),
-					// 		entityIs(...entityIds.map((c) => ({ entityId: c.entityId, cardId: c.cardId }))),
-					// 	),
-					// ),
-					and(side(inputSide), or(inHand, inDeck), starshipExtended),
-				)(input);
-			};
+			return highlightConditions(and(side(inputSide), or(inHand, inDeck), starshipExtended));
 		case CardIds.Jitterbug:
 			return and(side(inputSide), or(inHand, inDeck), divineShield);
 		case CardIds.JobShadower_WORK_032:
@@ -2556,9 +2532,6 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), relic);
 		case CardIds.ReliquaryResearcher_WW_432:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
-		// case CardIds.DeepminerBrann_DEEP_020:
-		// case CardIds.RenoLoneRanger_WW_0700:
-		// case CardIds.TheldurinTheLost_WW_815:
 		case CardIds.DinotamerBrann_ULD_156:
 		case CardIds.EliseTheEnlightened:
 		case CardIds.EliseTheTrailblazer:
@@ -3402,9 +3375,6 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), inGraveyard, minion, effectiveCostLess(3)));
 		case CardIds.UngoroBrochure_WORK_050:
 			return and(side(inputSide), inDeck, minion);
-		// case CardIds.UnleashTheColossus:
-		// case CardIds.GorishiColossus:
-		// 	return and(side(inputSide), or(inDeck, inHand), canDealExactDamage(2));
 		case CardIds.UnlivingChampion:
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.UnlockedPotential:
@@ -3690,7 +3660,6 @@ export const cardIdSelector = (
 		case CardIds.GrimscaleOracleLegacy:
 		case CardIds.GrimscaleOracleVanilla:
 		case CardIds.GrimscaleChum:
-		// case CardIds.MurlocTidecaller:
 		case CardIds.MurlocTidecallerCore:
 		case CardIds.MurlocTidecallerVanilla:
 		case CardIds.MurlocTidecallerLegacy:

@@ -1,820 +1,600 @@
-#!/usr/bin/env node
 /**
- * Build-time script to analyze existing selectors and generate reverse mappings
- * Run this during development to update reverse selector mappings
+ * Reverse synergy mapping generator - NEW APPROACH
+ * This script analyzes the existing card-id-selectors.ts file case by case
+ * and generates reverse synergy mappings by expanding selector conditions.
  *
- * Usage: ts-node build-reverse-mappings.ts
+ * Process:
+ * 1. Extract each card case and expand OR conditions into individual mappings
+ * 2. Create flat mapping: condition -> [cards]
+ * 3. Group identical conditions and generate reverse selector files
  *
- * This script analyzes card-id-selectors.ts to find common patterns and automatically
- * generates reverse selector code that gets injected into the main selector files.
+ * Run: npx tsx build-reverse-mappings-v2.ts
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 
-interface ReverseMappings {
-	// Race -> [cards that want this race]
-	races: { [race: string]: string[] };
-	// Spell school -> [cards that want this spell school]
-	spellSchools: { [school: string]: string[] };
-	// Card type -> [cards that want this card type]
-	cardTypes: { [type: string]: string[] };
-	// Mechanic -> [cards that want this mechanic]
-	mechanics: { [mechanic: string]: string[] };
-	// Cost conditions -> [cards that want this cost condition]
-	costs: { [condition: string]: string[] };
-	// Attack conditions -> [cards that want this attack condition]
-	attacks: { [condition: string]: string[] };
-	// Health conditions -> [cards that want this health condition]
-	healths: { [condition: string]: string[] };
-	// Other conditions -> [cards that want this condition]
-	others: { [condition: string]: string[] };
-	// Complex compound conditions -> [cards that want this combination]
-	compounds: { [key: string]: { cards: string[]; condition: string } };
+// Step 1: Extract card cases and expand conditions
+interface ConditionMapping {
+	cardId: string;
+	conditions: string[];
 }
 
-// Selector hierarchy - from most generic to most specific
-const SELECTOR_HIERARCHY = {
-	// Generic selectors to ignore
-	generic: [
-		'side',
-		'inputSide',
-		'inDeck',
-		'inHand',
-		'inGraveyard',
-		'inPlay',
-		'inOther',
-		'inStartingHand',
-		'inInitialDeck',
-		'or',
-		'and',
-	],
-
-	// Card types (generic)
-	cardTypes: ['minion', 'spell', 'weapon', 'location'],
-
-	// Tribes (specific characterizations of minions)
-	tribes: ['beast', 'dragon', 'murloc', 'pirate', 'mech', 'demon', 'elemental', 'undead', 'naga', 'totem'],
-
-	// Spell schools (specific characterizations of spells)
-	spellSchools: ['arcane', 'fire', 'frost', 'nature', 'holy', 'shadow', 'fel'],
-
-	// Mechanics (can apply to various card types)
-	mechanics: [
-		'deathrattle',
-		'battlecry',
-		'secret',
-		'taunt',
-		'rush',
-		'charge',
-		'windfury',
-		'divineShield',
-		'lifesteal',
-		'reborn',
-		'magnetic',
-		'discover',
-		'overload',
-		'combo',
-		'outcast',
-		'frenzy',
-		'corrupt',
-		'corrupted',
-		'infuse',
-		'forge',
-		'excavate',
-		'quickdraw',
-		'tradeable',
-		'legendary',
-		'chooseOne',
-	],
-
-	// Filters (most specific)
-	filters: [
-		'effectiveCostEqual',
-		'effectiveCostMore',
-		'effectiveCostLess',
-		'baseCostEqual',
-		'baseCostMore',
-		'baseCostLess',
-		'attackGreaterThan',
-		'attackLessThan',
-		'attackIs',
-		'healthLessThan',
-		'healthIs',
-		'healthBiggerThanAttack',
-		'not',
-		'tribeless',
-		'neutral',
-		'fromAnotherClass',
-		'notInInitialDeck',
-		'hasMultipleCopies',
-		'costMore',
-		'costLess',
-		'currentClass',
-	],
-};
-
-interface ParsedSelector {
-	cardType?: string;
-	tribe?: string;
-	spellSchool?: string;
-	mechanics: string[];
-	filters: string[];
-	conditions: string;
-	// For compound conditions
-	isCompound: boolean;
-	compoundKey?: string;
-	// Additional parsed data
-	costConditions: string[];
-	attackConditions: string[];
-	healthConditions: string[];
-	locationConditions: string[];
-	otherConditions: string[];
-	// Complexity level
-	complexityLevel: 'simple' | 'medium' | 'complex';
-}
-
-function parseSelector(selectorCode: string): ParsedSelector {
-	const result: ParsedSelector = {
-		mechanics: [],
-		filters: [],
-		conditions: selectorCode,
-		isCompound: false,
-		costConditions: [],
-		attackConditions: [],
-		healthConditions: [],
-		locationConditions: [],
-		otherConditions: [],
-		complexityLevel: 'simple',
-	};
-
-	// Determine complexity level first
-	if (
-		selectorCode.includes('highlightConditions') ||
-		selectorCode.includes('input: SelectorInput') ||
-		selectorCode.includes('tooltip') ||
-		selectorCode.length > 800
-	) {
-		result.complexityLevel = 'complex';
-	} else if (
-		selectorCode.includes('cardIs(') ||
-		selectorCode.includes('entityIs(') ||
-		selectorCode.includes('or(') ||
-		selectorCode.includes('not(') ||
-		selectorCode.length > 200
-	) {
-		result.complexityLevel = 'medium';
-	}
-
-	// Find card type (most generic)
-	// Check for direct function calls first (more specific)
-	if (/\bspell\b/.test(selectorCode)) {
-		result.cardType = 'spell';
-	} else if (/\bminion\b/.test(selectorCode)) {
-		result.cardType = 'minion';
-	} else if (/\bweapon\b/.test(selectorCode)) {
-		result.cardType = 'weapon';
-	} else if (/\blocation\b/.test(selectorCode)) {
-		result.cardType = 'location';
-	} else {
-		// Fall back to generic cardType checks
-		for (const cardType of SELECTOR_HIERARCHY.cardTypes) {
-			if (new RegExp(`\\b${cardType}\\b`, 'i').test(selectorCode)) {
-				result.cardType = cardType;
-				break; // Take the first match
-			}
-		}
-	}
-
-	// Find tribe (specific characterization)
-	for (const tribe of SELECTOR_HIERARCHY.tribes) {
-		if (new RegExp(`\\b${tribe}\\b`, 'i').test(selectorCode)) {
-			result.tribe = tribe;
-			break; // Take the first match
-		}
-	}
-
-	// Find spell school (specific characterization)
-	// Check for direct spell school function calls first
-	if (/\bholy\b/.test(selectorCode)) {
-		result.spellSchool = 'holy';
-	} else if (/\bfrost\b/.test(selectorCode)) {
-		result.spellSchool = 'frost';
-	} else if (/\bfire\b/.test(selectorCode)) {
-		result.spellSchool = 'fire';
-	} else if (/\bnature\b/.test(selectorCode)) {
-		result.spellSchool = 'nature';
-	} else if (/\bshadow\b/.test(selectorCode)) {
-		result.spellSchool = 'shadow';
-	} else if (/\bfel\b/.test(selectorCode)) {
-		result.spellSchool = 'fel';
-	} else if (/\barcane\b/.test(selectorCode)) {
-		result.spellSchool = 'arcane';
-	} else {
-		// Fall back to generic spell school checks
-		for (const spellSchool of SELECTOR_HIERARCHY.spellSchools) {
-			if (new RegExp(`\\b${spellSchool}\\b`, 'i').test(selectorCode)) {
-				result.spellSchool = spellSchool;
-				break; // Take the first match
-			}
-		}
-	}
-
-	// Find mechanics
-	for (const mechanic of SELECTOR_HIERARCHY.mechanics) {
-		if (new RegExp(`\\b${mechanic}\\b`, 'i').test(selectorCode)) {
-			result.mechanics.push(mechanic);
-		}
-	}
-
-	// Find filters
-	for (const filter of SELECTOR_HIERARCHY.filters) {
-		if (new RegExp(`\\b${filter}\\b`, 'i').test(selectorCode)) {
-			result.filters.push(filter);
-		}
-	}
-
-	// Parse specific condition types
-	parseCostConditions(selectorCode, result);
-	parseAttackConditions(selectorCode, result);
-	parseHealthConditions(selectorCode, result);
-	parseLocationConditions(selectorCode, result);
-	parseOtherConditions(selectorCode, result);
-
-	// Determine if this is a compound condition and build a key
-	const hasMultipleSpecificSelectors =
-		(result.tribe ? 1 : 0) + (result.spellSchool ? 1 : 0) + result.mechanics.length > 1;
-
-	if (hasMultipleSpecificSelectors) {
-		result.isCompound = true;
-		// Build a compound key from the most specific selectors
-		const keyParts: string[] = [];
-		if (result.tribe) keyParts.push(result.tribe);
-		if (result.spellSchool) keyParts.push(result.spellSchool);
-		keyParts.push(...result.mechanics.sort());
-		result.compoundKey = keyParts.join('+');
-	}
-
-	return result;
-}
-
-function parseCostConditions(selectorCode: string, result: ParsedSelector): void {
-	// Extract cost-related conditions
-	const costPatterns = [
-		{ pattern: /effectiveCostEqual\((\d+)\)/, type: 'equal' },
-		{ pattern: /effectiveCostMore\((\d+)\)/, type: 'more' },
-		{ pattern: /effectiveCostLess\((\d+)\)/, type: 'less' },
-		{ pattern: /baseCostEqual\((\d+)\)/, type: 'baseEqual' },
-		{ pattern: /baseCostMore\((\d+)\)/, type: 'baseMore' },
-		{ pattern: /baseCostLess\((\d+)\)/, type: 'baseLess' },
-		{ pattern: /costMore\((\d+)\)/, type: 'costMore' },
-		{ pattern: /costLess\((\d+)\)/, type: 'costLess' },
-	];
-
-	for (const { pattern, type } of costPatterns) {
-		const match = selectorCode.match(pattern);
-		if (match) {
-			result.costConditions.push(`${type}:${match[1]}`);
-		}
-	}
-}
-
-function parseAttackConditions(selectorCode: string, result: ParsedSelector): void {
-	// Extract attack-related conditions
-	const attackPatterns = [
-		{ pattern: /attackGreaterThan\((\d+)\)/, type: 'greater' },
-		{ pattern: /attackLessThan\((\d+)\)/, type: 'less' },
-		{ pattern: /attackIs\((\d+)\)/, type: 'equal' },
-	];
-
-	for (const { pattern, type } of attackPatterns) {
-		const match = selectorCode.match(pattern);
-		if (match) {
-			result.attackConditions.push(`${type}:${match[1]}`);
-		}
-	}
-}
-
-function parseHealthConditions(selectorCode: string, result: ParsedSelector): void {
-	// Extract health-related conditions
-	const healthPatterns = [
-		{ pattern: /healthLessThan\((\d+)\)/, type: 'less' },
-		{ pattern: /healthIs\((\d+)\)/, type: 'equal' },
-		{ pattern: /healthBiggerThanAttack/, type: 'biggerThanAttack' },
-	];
-
-	for (const { pattern, type } of healthPatterns) {
-		const match = selectorCode.match(pattern);
-		if (match) {
-			if (type === 'biggerThanAttack') {
-				result.healthConditions.push('biggerThanAttack');
-			} else {
-				result.healthConditions.push(`${type}:${match[1]}`);
-			}
-		}
-	}
-}
-
-function parseLocationConditions(selectorCode: string, result: ParsedSelector): void {
-	// Extract location-related conditions
-	const locationPatterns = [
-		'inDeck',
-		'inHand',
-		'inGraveyard',
-		'inPlay',
-		'inOther',
-		'inStartingHand',
-		'inInitialDeck',
-		'notInInitialDeck',
-	];
-
-	for (const location of locationPatterns) {
-		if (new RegExp(`\\b${location}\\b`).test(selectorCode)) {
-			result.locationConditions.push(location);
-		}
-	}
-}
-
-function parseOtherConditions(selectorCode: string, result: ParsedSelector): void {
-	// Extract other special conditions
-	const otherPatterns = [
-		'legendary',
-		'neutral',
-		'fromAnotherClass',
-		'fromAnotherClassStrict',
-		'tribeless',
-		'hasMultipleCopies',
-		'currentClass',
-		'notInInitialDeck',
-		'generatesTemporaryCard',
-		'hasSpellSchool',
-		'dealsDamage',
-		'restoreHealth',
-		'givesArmor',
-		'givesHeroAttack',
-		'canTargetFriendlyCharacter',
-		'canTargetFriendlyMinion',
-	];
-
-	for (const condition of otherPatterns) {
-		// Check for regular condition
-		if (new RegExp(`\\b${condition}\\b`).test(selectorCode)) {
-			result.otherConditions.push(condition);
-		}
-
-		// Check for negated condition (not(condition))
-		if (new RegExp(`\\bnot\\(${condition}\\)`).test(selectorCode)) {
-			result.otherConditions.push(`not_${condition}`);
-		}
-	}
-}
-
-function buildReverseCondition(parsed: ParsedSelector): string | null {
-	// Skip the most complex selectors for now
-	if (parsed.complexityLevel === 'complex') {
-		return null;
-	}
-
-	const conditions: string[] = [];
-
-	// Build base type conditions
-	if (parsed.cardType) {
-		conditions.push(`refCard.type?.toUpperCase() === '${parsed.cardType.toUpperCase()}'`);
-	}
-
-	// Add tribe conditions
-	if (parsed.tribe) {
-		conditions.push(`refCard.races?.map(r => r.toUpperCase()).includes('${parsed.tribe.toUpperCase()}')`);
-	}
-
-	// Add spell school conditions
-	if (parsed.spellSchool) {
-		conditions.push(`refCard.spellSchool?.toUpperCase() === '${parsed.spellSchool.toUpperCase()}'`);
-		// Ensure it's a spell if we have a spell school but no card type specified
-		if (!parsed.cardType) {
-			conditions.push(`refCard.type?.toUpperCase() === 'SPELL'`);
-		}
-	}
-
-	// Add cost conditions
-	for (const costCondition of parsed.costConditions) {
-		const [type, value] = costCondition.split(':');
-		switch (type) {
-			case 'equal':
-				conditions.push(`refCard.cost === ${value}`);
-				break;
-			case 'more':
-				conditions.push(`refCard.cost > ${value}`);
-				break;
-			case 'less':
-				conditions.push(`refCard.cost < ${value}`);
-				break;
-			case 'baseEqual':
-				conditions.push(`refCard.cost === ${value}`); // Approximation
-				break;
-			case 'baseMore':
-				conditions.push(`refCard.cost > ${value}`); // Approximation
-				break;
-			case 'baseLess':
-				conditions.push(`refCard.cost < ${value}`); // Approximation
-				break;
-		}
-	}
-
-	// Add attack conditions
-	for (const attackCondition of parsed.attackConditions) {
-		const [type, value] = attackCondition.split(':');
-		switch (type) {
-			case 'greater':
-				conditions.push(`refCard.attack > ${value}`);
-				break;
-			case 'less':
-				conditions.push(`refCard.attack < ${value}`);
-				break;
-			case 'equal':
-				conditions.push(`refCard.attack === ${value}`);
-				break;
-		}
-	}
-
-	// Add health conditions
-	for (const healthCondition of parsed.healthConditions) {
-		if (healthCondition === 'biggerThanAttack') {
-			conditions.push(`refCard.health > refCard.attack`);
-		} else {
-			const [type, value] = healthCondition.split(':');
-			switch (type) {
-				case 'less':
-					conditions.push(`refCard.health < ${value}`);
-					break;
-				case 'equal':
-					conditions.push(`refCard.health === ${value}`);
-					break;
-			}
-		}
-	}
-
-	// Add mechanics conditions (basic ones we can handle)
-	for (const mechanic of parsed.mechanics) {
-		switch (mechanic) {
-			case 'legendary':
-				conditions.push(`refCard.rarity?.toUpperCase() === 'LEGENDARY'`);
-				break;
-			case 'secret':
-				conditions.push(`refCard.mechanics?.includes('SECRET')`);
-				break;
-			case 'deathrattle':
-				conditions.push(`refCard.mechanics?.includes('DEATHRATTLE')`);
-				break;
-			case 'battlecry':
-				conditions.push(`refCard.mechanics?.includes('BATTLECRY')`);
-				break;
-			case 'taunt':
-				conditions.push(`refCard.mechanics?.includes('TAUNT')`);
-				break;
-			case 'rush':
-				conditions.push(`refCard.mechanics?.includes('RUSH')`);
-				break;
-			case 'charge':
-				conditions.push(`refCard.mechanics?.includes('CHARGE')`);
-				break;
-			case 'windfury':
-				conditions.push(`refCard.mechanics?.includes('WINDFURY')`);
-				break;
-			case 'divineShield':
-				conditions.push(`refCard.mechanics?.includes('DIVINE_SHIELD')`);
-				break;
-			case 'lifesteal':
-				conditions.push(`refCard.mechanics?.includes('LIFESTEAL')`);
-				break;
-			// Add more mechanics as needed
-		}
-	}
-
-	// Add other conditions
-	for (const otherCondition of parsed.otherConditions) {
-		switch (otherCondition) {
-			case 'neutral':
-				conditions.push(`refCard.classes?.includes('NEUTRAL')`);
-				break;
-			case 'tribeless':
-				conditions.push(`!refCard.races || refCard.races.length === 0`);
-				break;
-			case 'hasSpellSchool':
-				conditions.push(`!!refCard.spellSchool`);
-				break;
-			case 'dealsDamage':
-				// This is complex to determine, skip for now
-				break;
-		}
-	}
-
-	// Return null if we don't have meaningful conditions
-	if (conditions.length === 0) {
-		return null;
-	}
-
-	// Don't create reverse conditions that are too generic
-	if (
-		conditions.length === 1 &&
-		parsed.cardType &&
-		!parsed.tribe &&
-		!parsed.spellSchool &&
-		parsed.mechanics.length === 0 &&
-		parsed.costConditions.length === 0 &&
-		parsed.attackConditions.length === 0 &&
-		parsed.healthConditions.length === 0
-	) {
-		// Only card type, too generic unless it's a specific type with low count
-		if (['location'].includes(parsed.cardType)) {
-			return conditions.join(' && ');
-		}
-		return null;
-	}
-
-	return conditions.join(' && ');
-}
-
-function extractCardSelectors(): { [cardId: string]: string } {
+function extractCardConditions(): ConditionMapping[] {
 	const selectorsFilePath = path.join(__dirname, '..', 'card-id-selectors.ts');
 	const content = fs.readFileSync(selectorsFilePath, 'utf8');
 
-	const selectors: { [cardId: string]: string } = {};
+	// Find the switch statement and extract each case
+	const switchMatch = content.match(/switch\s*\([^)]+\)\s*\{([\s\S]*)\}/);
+	if (!switchMatch) {
+		console.log('❌ Could not find switch statement');
+		// Try to find any switch statement
+		const anySwitch = content.match(/switch/g);
+		console.log(`Found ${anySwitch ? anySwitch.length : 0} 'switch' keywords in file`);
+		throw new Error('Could not find switch statement in card-id-selectors.ts');
+	}
 
-	// Extract all case statements
-	const casePattern = /case CardIds\.([^:]+):\s*([\s\S]*?)(?=case CardIds\.|default:|^\t})/gm;
-	let match;
+	const switchBody = switchMatch[1];
+	console.log(`📏 Switch body length: ${switchBody.length} characters`);
+	console.log(`🔍 First 200 chars of switch body: ${switchBody.substring(0, 200)}`);
 
-	while ((match = casePattern.exec(content)) !== null) {
-		const cardIdSuffix = match[1];
-		const selectorCode = match[2].trim();
+	const cases = switchBody.match(/case\s+CardIds\.([^:]+):[\s\S]*?(?=case\s+CardIds\.|default:|$)/g);
 
-		// Clean up the selector code
-		const cleanCode = selectorCode
-			.replace(/^\s*\/\/.*$/gm, '') // Remove comments
-			.replace(/\n\s*\n/g, '\n') // Remove empty lines
-			.trim();
+	if (!cases) {
+		console.log('❌ Could not extract cases from switch statement');
+		// Try a simpler pattern
+		const simpleCases = switchBody.match(/case\s+CardIds\./g);
+		console.log(`Found ${simpleCases ? simpleCases.length : 0} 'case CardIds.' patterns`);
+		throw new Error('Could not extract cases from switch statement');
+	}
 
-		if (cleanCode && cleanCode !== 'break;') {
-			selectors[cardIdSuffix] = cleanCode;
+	const mappings: ConditionMapping[] = [];
+	let totalCases = 0;
+	let skippedComplex = 0;
+	let skippedNoConditions = 0;
+	let processedFallthroughs = 0;
+
+	// Process cases and handle fallthroughs
+	for (let i = 0; i < cases.length; i++) {
+		const caseMatch = cases[i];
+		totalCases++;
+
+		const cardIdMatches = caseMatch.match(/case\s+CardIds\.([^:]+):/g);
+		const returnMatch = caseMatch.match(/return\s+(.*?);/s);
+
+		if (cardIdMatches && returnMatch) {
+			// This case has a return statement
+			const selectorCode = returnMatch[1].replace(/\s+/g, ' ').trim();
+
+			// Handle tooltip by removing it (treat as 'and')
+			let cleanedSelectorCode = selectorCode;
+			if (selectorCode.includes('tooltip:')) {
+				// Remove tooltip parts but keep the rest
+				cleanedSelectorCode = selectorCode
+					.replace(/tooltip:\s*[^,)]+/g, '')
+					.replace(/,\s*,/g, ',')
+					.replace(/^\s*,|,\s*$/g, '');
+			}
+
+			// Skip complex input parameter selectors entirely
+			if (selectorCode.includes('input:') || selectorCode.includes('(input: SelectorInput)')) {
+				skippedComplex++;
+				continue;
+			}
+
+			// Handle highlightConditions as 'or' - support both array and function call syntax
+			if (selectorCode.includes('highlightConditions')) {
+				// Try array syntax first: highlightConditions: [...]
+				const arrayMatch = selectorCode.match(/highlightConditions:\s*\[([\s\S]*?)\]/);
+				if (arrayMatch) {
+					const conditionsContent = arrayMatch[1];
+					cleanedSelectorCode = `or(${conditionsContent})`;
+				} else {
+					// Try function call syntax: highlightConditions(arg1, arg2, ...)
+					const functionMatch = selectorCode.match(/highlightConditions\(([\s\S]*)\)/);
+					if (functionMatch) {
+						const conditionsContent = functionMatch[1];
+						cleanedSelectorCode = `or(${conditionsContent})`;
+					}
+				}
+			}
+
+			// Skip remaining complex cases
+			if (cleanedSelectorCode.length > 800) {
+				skippedComplex++;
+				continue;
+			}
+
+			const conditions = expandSelectorConditions(cleanedSelectorCode);
+
+			// Apply conditions to all card IDs in this case block (including fallthroughs)
+			for (const cardIdMatch of cardIdMatches) {
+				const cardIdSuffix = cardIdMatch.match(/case\s+CardIds\.([^:]+):/)?.[1];
+				if (cardIdSuffix && conditions.length > 0) {
+					mappings.push({
+						cardId: cardIdSuffix,
+						conditions: conditions,
+					});
+				}
+			}
+
+			if (cardIdMatches.length > 1) {
+				processedFallthroughs += cardIdMatches.length - 1;
+			}
+		} else if (cardIdMatches) {
+			// This is a fallthrough case - find the next case with a return statement
+			let foundReturn = false;
+			for (let j = i + 1; j < cases.length && !foundReturn; j++) {
+				const nextCase = cases[j];
+				const nextReturnMatch = nextCase.match(/return\s+(.*?);/s);
+
+				if (nextReturnMatch) {
+					foundReturn = true;
+					const selectorCode = nextReturnMatch[1].replace(/\s+/g, ' ').trim();
+
+					// Skip complex input parameter selectors entirely
+					if (selectorCode.includes('input:') || selectorCode.includes('(input: SelectorInput)')) {
+						break; // Don't process this fallthrough
+					}
+
+					// Handle tooltip by removing it
+					let cleanedSelectorCode = selectorCode;
+					if (selectorCode.includes('tooltip:')) {
+						cleanedSelectorCode = selectorCode
+							.replace(/tooltip:\s*[^,)]+/g, '')
+							.replace(/,\s*,/g, ',')
+							.replace(/^\s*,|,\s*$/g, '');
+					}
+
+					// Handle highlightConditions as 'or' - support both array and function call syntax
+					if (selectorCode.includes('highlightConditions')) {
+						// Try array syntax first: highlightConditions: [...]
+						const arrayMatch = selectorCode.match(/highlightConditions:\s*\[([\s\S]*?)\]/);
+						if (arrayMatch) {
+							const conditionsContent = arrayMatch[1];
+							cleanedSelectorCode = `or(${conditionsContent})`;
+						} else {
+							// Try function call syntax: highlightConditions(arg1, arg2, ...)
+							const functionMatch = selectorCode.match(/highlightConditions\(([\s\S]*)\)/);
+							if (functionMatch) {
+								const conditionsContent = functionMatch[1];
+								cleanedSelectorCode = `or(${conditionsContent})`;
+							}
+						}
+					}
+
+					// Skip remaining complex cases
+					if (cleanedSelectorCode.length > 800) {
+						break; // Don't process this fallthrough
+					}
+
+					const conditions = expandSelectorConditions(cleanedSelectorCode);
+
+					// Apply to all fallthrough card IDs
+					for (const cardIdMatch of cardIdMatches) {
+						const cardIdSuffix = cardIdMatch.match(/case\s+CardIds\.([^:]+):/)?.[1];
+						if (cardIdSuffix && conditions.length > 0) {
+							mappings.push({
+								cardId: cardIdSuffix,
+								conditions: conditions,
+							});
+							processedFallthroughs++;
+						}
+					}
+				}
+			}
+
+			if (!foundReturn) {
+				skippedNoConditions++;
+			}
 		}
 	}
 
-	return selectors;
-}
-
-function buildReverseMappings(): ReverseMappings {
-	const mappings: ReverseMappings = {
-		races: {},
-		spellSchools: {},
-		cardTypes: {},
-		mechanics: {},
-		costs: {},
-		attacks: {},
-		healths: {},
-		others: {},
-		compounds: {},
-	};
-
-	const selectors = extractCardSelectors();
-	console.log(`Found ${Object.keys(selectors).length} card selectors to analyze`);
-
-	for (const [cardIdSuffix, selectorCode] of Object.entries(selectors)) {
-		const parsed = parseSelector(selectorCode);
-
-		// Skip if we can't build a reverse condition
-		const reverseCondition = buildReverseCondition(parsed);
-		if (!reverseCondition) {
-			continue;
-		}
-
-		// Categorize by the most specific selector or create compound condition
-		let categorized = false;
-
-		// Create a compound key for complex conditions
-		const keyParts: string[] = [];
-		if (parsed.tribe) keyParts.push(`tribe:${parsed.tribe}`);
-		if (parsed.spellSchool) keyParts.push(`school:${parsed.spellSchool}`);
-		if (parsed.cardType) keyParts.push(`type:${parsed.cardType}`);
-		if (parsed.mechanics.length > 0) keyParts.push(`mechanics:${parsed.mechanics.sort().join(',')}`);
-		if (parsed.costConditions.length > 0) keyParts.push(`cost:${parsed.costConditions.sort().join(',')}`);
-		if (parsed.attackConditions.length > 0) keyParts.push(`attack:${parsed.attackConditions.sort().join(',')}`);
-		if (parsed.healthConditions.length > 0) keyParts.push(`health:${parsed.healthConditions.sort().join(',')}`);
-		if (parsed.otherConditions.length > 0) keyParts.push(`other:${parsed.otherConditions.sort().join(',')}`);
-
-		// If we have multiple specific conditions, create a compound
-		if (
-			keyParts.length > 1 ||
-			parsed.costConditions.length > 0 ||
-			parsed.attackConditions.length > 0 ||
-			parsed.healthConditions.length > 0 ||
-			parsed.mechanics.length > 0
-		) {
-			const compoundKey = keyParts.join('+');
-			if (!mappings.compounds[compoundKey]) {
-				mappings.compounds[compoundKey] = {
-					cards: [],
-					condition: reverseCondition,
-				};
-			}
-			mappings.compounds[compoundKey].cards.push(cardIdSuffix);
-			categorized = true;
-		}
-
-		// If not categorized as compound, try simple categories
-		if (!categorized) {
-			// Prioritize spell school + spell combinations for simple categorization
-			if (
-				parsed.spellSchool &&
-				parsed.cardType === 'spell' &&
-				parsed.mechanics.length === 0 &&
-				parsed.costConditions.length === 0
-			) {
-				if (!mappings.spellSchools[parsed.spellSchool]) {
-					mappings.spellSchools[parsed.spellSchool] = [];
-				}
-				mappings.spellSchools[parsed.spellSchool].push(cardIdSuffix);
-				categorized = true;
-			} else if (
-				parsed.tribe &&
-				!parsed.spellSchool &&
-				parsed.mechanics.length === 0 &&
-				parsed.costConditions.length === 0
-			) {
-				if (!mappings.races[parsed.tribe]) {
-					mappings.races[parsed.tribe] = [];
-				}
-				mappings.races[parsed.tribe].push(cardIdSuffix);
-				categorized = true;
-			} else if (
-				parsed.cardType &&
-				parsed.mechanics.length === 0 &&
-				!parsed.tribe &&
-				!parsed.spellSchool &&
-				parsed.costConditions.length === 0
-			) {
-				// Only include card types without mechanics, tribes, or spell schools
-				if (!mappings.cardTypes[parsed.cardType]) {
-					mappings.cardTypes[parsed.cardType] = [];
-				}
-				mappings.cardTypes[parsed.cardType].push(cardIdSuffix);
-				categorized = true;
-			}
-		}
-	}
-
-	// Clean up and deduplicate
-	for (const [categoryName, category] of Object.entries(mappings)) {
-		if (categoryName === 'compounds') {
-			// Handle compounds differently
-			for (const key in category) {
-				category[key].cards = [...new Set(category[key].cards)].sort();
-			}
-		} else {
-			// Handle regular arrays
-			for (const key in category) {
-				category[key] = [...new Set(category[key])].sort();
-			}
-		}
-	}
+	console.log(
+		`📊 Processing stats: ${totalCases} total cases, ${skippedComplex} skipped (complex), ${skippedNoConditions} skipped (no conditions), ${mappings.length} processed, ${processedFallthroughs} fallthroughs handled`,
+	);
 
 	return mappings;
 }
 
-function generateReverseSelectorsFile(mappings: ReverseMappings): { [filename: string]: string } {
-	const lines: string[] = [];
+function expandSelectorConditions(selectorCode: string): string[] {
+	// Remove generic selectors that we don't care about for reverse mapping
+	const genericSelectors = [
+		'side(inputSide)',
+		'not(side(inputSide))',
+		'inDeck',
+		'inHand',
+		'inGraveyard',
+		'inPlay',
+		'inOther',
+		'or(inDeck, inHand)',
+		'or(inHand, inDeck)',
+	];
 
-	// File header
-	lines.push('/**');
-	lines.push(' * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY');
-	lines.push(' * Generated by build-reverse-mappings.ts');
-	lines.push(' * Run: npx tsx build-reverse-mappings.ts to update');
-	lines.push(' */');
-	lines.push('');
-
-	// Imports
-	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '@firestone/game-state';");
-	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
-	lines.push("import { Selector } from '../cards-highlight-common.service';");
-	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
-	lines.push('');
-
-	// Main function
-	lines.push('export const reverseCardIdSelector = (');
-	lines.push('	cardId: string,');
-	lines.push('	card: DeckCard | undefined,');
-	lines.push('	inputSide: HighlightSide,');
-	lines.push('	allCards: CardsFacadeService,');
-	lines.push('): Selector => {');
-	lines.push('	const refCard = allCards.getCard(cardId);');
-	lines.push('	if (!refCard) return null;');
-	lines.push('');
-
-	// Race-based reverse selectors
-	lines.push('	// Race-based reverse synergies');
-	lines.push('	if (refCard.races?.length) {');
-	for (const [race, cardIds] of Object.entries(mappings.races)) {
-		const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`		if (refCard.races.map(r => r.toUpperCase()).includes('${race.toUpperCase()}')) {`);
-		lines.push(`			return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`				${cardsList}`);
-		lines.push(`			));`);
-		lines.push('		}');
-	}
-	lines.push('	}');
-	lines.push('');
-
-	// Spell school reverse selectors
-	lines.push('	// Spell school reverse synergies');
-	lines.push("	if (refCard.spellSchool && refCard.type?.toUpperCase() === 'SPELL') {");
-	for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
-		const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`		if (refCard.spellSchool?.toUpperCase() === '${school.toUpperCase()}') {`);
-		lines.push(`			return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`				${cardsList}`);
-		lines.push(`			));`);
-		lines.push('		}');
-	}
-	lines.push('	}');
-	lines.push('');
-
-	// Card type reverse selectors
-	lines.push('	// Card type reverse synergies');
-	for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
-		const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`	if (refCard.type?.toUpperCase() === '${type.toUpperCase()}') {`);
-		lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`			${cardsList}`);
-		lines.push(`		));`);
-		lines.push('	}');
-	}
-	lines.push('');
-
-	// Compound conditions
-	lines.push('	// Complex condition reverse synergies');
-	for (const [compoundKey, compoundData] of Object.entries(mappings.compounds)) {
-		const cardsList = compoundData.cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`	// ${compoundKey} (${compoundData.cards.length} card${compoundData.cards.length > 1 ? 's' : ''})`);
-		lines.push(`	if (${compoundData.condition}) {`);
-		lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`			${cardsList}`);
-		lines.push(`		));`);
-		lines.push('	}');
-		lines.push('');
+	let cleanedCode = selectorCode;
+	for (const generic of genericSelectors) {
+		cleanedCode = cleanedCode.replace(new RegExp(generic.replace(/[()]/g, '\\$&'), 'g'), '').trim();
 	}
 
-	lines.push('	return null;');
-	lines.push('};');
-	lines.push('');
+	// Clean up extra commas and whitespace
+	cleanedCode = cleanedCode
+		.replace(/,\s*,/g, ',')
+		.replace(/^,|,$/g, '')
+		.replace(/and\(\s*,/g, 'and(')
+		.replace(/,\s*\)/g, ')');
 
-	// Add summary comment
-	lines.push('/**');
-	lines.push(' * Reverse mapping summary:');
-	lines.push(' * Races:');
-	for (const [race, cardIds] of Object.entries(mappings.races)) {
-		lines.push(` *   ${race}: ${cardIds.length} cards want this`);
-	}
-	lines.push(' * Spell Schools:');
-	for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
-		lines.push(` *   ${school}: ${cardIds.length} cards want this`);
-	}
-	lines.push(' * Card Types:');
-	for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
-		lines.push(` *   ${type}: ${cardIds.length} cards want this`);
-	}
-	lines.push(' * Mechanics:');
-	for (const [mechanic, cardIds] of Object.entries(mappings.mechanics)) {
-		lines.push(` *   ${mechanic}: ${cardIds.length} cards want this`);
-	}
-	lines.push(' * Complex Conditions:');
-	for (const [compoundKey, compoundData] of Object.entries(mappings.compounds)) {
-		lines.push(` *   ${compoundKey}: ${compoundData.cards.length} cards want this`);
-	}
-	lines.push(' */');
+	// Handle nested and() wrappers - extract content from and(...) calls
+	cleanedCode = cleanedCode.replace(/and\(\s*([^)]+)\s*\)/g, '$1');
 
-	// Generate multiple specialized files
-	const files: { [filename: string]: string } = {};
-
-	// Generate specialized files
-	files['reverse-minion-selectors.ts'] = generateMinionSelectorsFile(mappings);
-	files['reverse-spell-selectors.ts'] = generateSpellSelectorsFile(mappings);
-	files['reverse-general-selectors.ts'] = generateGeneralSelectorsFile(mappings);
-
-	// Generate main entry point that delegates to specialized files
-	files['reverse-card-id-selectors.ts'] = generateMainEntryFile();
-
-	return files;
+	// Handle simple cases first
+	const conditions = extractConditionsFromCleanedCode(cleanedCode);
+	return conditions.filter((c) => c.length > 0);
 }
 
-function generateMinionSelectorsFile(mappings: ReverseMappings): string {
+function extractConditionsFromCleanedCode(code: string): string[] {
+	// Handle basic patterns
+	const conditions: string[] = [];
+
+	// Remove outer 'and(' wrapper if present
+	if (code.startsWith('and(') && code.endsWith(')')) {
+		code = code.slice(4, -1);
+	}
+
+	// Split by commas but respect nested parentheses
+	const parts = smartSplit(code, ',');
+
+	// Separate OR conditions from regular conditions
+	const regularConditions: string[] = [];
+	const orConditions: string[] = [];
+
+	for (const part of parts) {
+		const trimmed = part.trim();
+		if (trimmed.startsWith('or(') && trimmed.endsWith(')')) {
+			orConditions.push(trimmed);
+		} else {
+			const condition = convertToConditionString(trimmed);
+			if (condition) {
+				regularConditions.push(condition);
+			}
+		}
+	}
+
+	// Expand OR conditions
+	const expandedOrConditions = expandOrConditions(orConditions);
+
+	// Combine regular conditions with each expanded OR condition
+	if (expandedOrConditions.length === 0) {
+		// No OR conditions, just return regular conditions
+		return regularConditions.length > 0 ? [regularConditions.sort().join(' + ')] : [];
+	} else {
+		// Combine each OR expansion with regular conditions
+		const results: string[] = [];
+		for (const orExpansion of expandedOrConditions) {
+			const combined = [...regularConditions, orExpansion].sort().join(' + ');
+			results.push(combined);
+		}
+		return results;
+	}
+}
+
+function smartSplit(str: string, delimiter: string): string[] {
+	const parts: string[] = [];
+	let current = '';
+	let depth = 0;
+
+	for (let i = 0; i < str.length; i++) {
+		const char = str[i];
+		if (char === '(') depth++;
+		else if (char === ')') depth--;
+		else if (char === delimiter && depth === 0) {
+			if (current.trim()) parts.push(current.trim());
+			current = '';
+			continue;
+		}
+		current += char;
+	}
+
+	if (current.trim()) parts.push(current.trim());
+	return parts;
+}
+
+function convertToConditionString(part: string): string | null {
+	// Map function calls to condition strings
+	const mappings: { [key: string]: string } = {
+		minion: 'MINION',
+		spell: 'SPELL',
+		weapon: 'WEAPON',
+		location: 'LOCATION',
+		beast: 'BEAST',
+		mech: 'MECH',
+		dragon: 'DRAGON',
+		murloc: 'MURLOC',
+		pirate: 'PIRATE',
+		demon: 'DEMON',
+		elemental: 'ELEMENTAL',
+		undead: 'UNDEAD',
+		naga: 'NAGA',
+		totem: 'TOTEM',
+		holy: 'HOLY',
+		frost: 'FROST',
+		fire: 'FIRE',
+		nature: 'NATURE',
+		shadow: 'SHADOW',
+		fel: 'FEL',
+		arcane: 'ARCANE',
+		deathrattle: 'DEATHRATTLE',
+		battlecry: 'BATTLECRY',
+		taunt: 'TAUNT',
+		rush: 'RUSH',
+		charge: 'CHARGE',
+		windfury: 'WINDFURY',
+		divineShield: 'DIVINE_SHIELD',
+		lifesteal: 'LIFESTEAL',
+		reborn: 'REBORN',
+		magnetic: 'MAGNETIC',
+		discover: 'DISCOVER',
+		overload: 'OVERLOAD',
+		combo: 'COMBO',
+		outcast: 'OUTCAST',
+		frenzy: 'FRENZY',
+		corrupt: 'CORRUPT',
+		corrupted: 'CORRUPTED',
+		infuse: 'INFUSE',
+		forge: 'FORGE',
+		excavate: 'EXCAVATE',
+		quickdraw: 'QUICKDRAW',
+		tradeable: 'TRADEABLE',
+		chooseOne: 'CHOOSE_ONE',
+		secret: 'SECRET',
+		legendary: 'LEGENDARY',
+		tribeless: 'TRIBELESS',
+		neutral: 'NEUTRAL',
+		fromAnotherClass: 'FROM_ANOTHER_CLASS',
+		hasMultipleCopies: 'HAS_MULTIPLE_COPIES',
+		currentClass: 'CURRENT_CLASS',
+		notInInitialDeck: 'NOT_IN_INITIAL_DECK',
+		// Custom game-specific functions
+		summonsTreant: 'SUMMONS_TREANT',
+		isTreant: 'IS_TREANT',
+		draenei: 'DRAENEI',
+		spellDamage: 'SPELL_DAMAGE',
+		stealth: 'STEALTH',
+		poisonous: 'POISONOUS',
+		immune: 'IMMUNE',
+		cantAttack: 'CANT_ATTACK',
+		cantBeTargetedBySpells: 'CANT_BE_TARGETED_BY_SPELLS',
+		cantBeTargetedByHeroPowers: 'CANT_BE_TARGETED_BY_HERO_POWERS',
+		adjacentBuff: 'ADJACENT_BUFF',
+		inspire: 'INSPIRE',
+		adapt: 'ADAPT',
+		echo: 'ECHO',
+		twinspell: 'TWINSPELL',
+		lackey: 'LACKEY',
+		invoke: 'INVOKE',
+		spellburst: 'SPELLBURST',
+		dormant: 'DORMANT',
+		questline: 'QUESTLINE',
+		questReward: 'QUEST_REWARD',
+		sidequest: 'SIDEQUEST',
+		galakrond: 'GALAKROND',
+		cthun: 'CTHUN',
+		jade: 'JADE',
+		highlander: 'HIGHLANDER',
+		evenCost: 'EVEN_COST',
+		oddCost: 'ODD_COST',
+		handbuff: 'HANDBUFF',
+		recruit: 'RECRUIT',
+		spell_school: 'SPELL_SCHOOL',
+		aura: 'AURA',
+		token: 'TOKEN',
+		generated: 'GENERATED',
+		collectible: 'COLLECTIBLE',
+		// Race-specific
+		all: 'ALL_RACES',
+		// Mechanics
+		silence: 'SILENCE',
+		freeze: 'FREEZE',
+		burn: 'BURN',
+		mill: 'MILL',
+		draw: 'DRAW',
+		discard: 'DISCARD',
+		transform: 'TRANSFORM',
+		copy: 'COPY',
+		shuffle: 'SHUFFLE',
+		// Keywords that might appear
+		keyword: 'KEYWORD',
+		tribal: 'TRIBAL',
+		synergy: 'SYNERGY',
+		// Additional custom functions seen in warnings
+		libram: 'LIBRAM',
+		protoss: 'PROTOSS',
+		zerg: 'ZERG',
+		terran: 'TERRAN',
+		templar: 'TEMPLAR',
+		restoreHealth: 'RESTORE_HEALTH',
+		dealsDamage: 'DEALS_DAMAGE',
+		givesArmor: 'GIVES_ARMOR',
+		givesHeroAttack: 'GIVES_HERO_ATTACK',
+		starshipExtended: 'STARSHIP_EXTENDED',
+		locationExtended: 'LOCATION_EXTENDED',
+		darkGift: 'DARK_GIFT',
+		imbue: 'IMBUE',
+		dredge: 'DREDGE',
+		generateCorpse: 'GENERATE_CORPSE',
+		spendCorpse: 'SPEND_CORPSE',
+		generatesPlague: 'GENERATES_PLAGUE',
+		isPlague: 'IS_PLAGUE',
+		generatesTemporaryCard: 'GENERATES_TEMPORARY_CARD',
+		selfDamageHero: 'SELF_DAMAGE_HERO',
+		canTargetFriendlyCharacter: 'CAN_TARGET_FRIENDLY_CHARACTER',
+		canTargetFriendlyMinion: 'CAN_TARGET_FRIENDLY_MINION',
+		shufflesCardIntoDeck: 'SHUFFLES_CARD_INTO_DECK',
+		hasSpellSchool: 'HAS_SPELL_SCHOOL',
+		paladin: 'PALADIN',
+		imp: 'IMP',
+		whelp: 'WHELP',
+		relic: 'RELIC',
+		kindred: 'KINDRED',
+		isSi7: 'IS_SI7',
+		generateSlagclaw: 'GENERATE_SLAGCLAW',
+		libramDiscount: 'LIBRAM_DISCOUNT',
+		damage: 'DAMAGE',
+	};
+
+	// Handle not() wrapper
+	if (part.startsWith('not(') && part.endsWith(')')) {
+		const inner = part.slice(4, -1);
+		const innerCondition = mappings[inner];
+		if (innerCondition) {
+			return `NOT_${innerCondition}`;
+		}
+	}
+
+	// Direct mapping
+	if (mappings[part]) {
+		return mappings[part];
+	}
+
+	// Handle cost conditions
+	if (part.includes('effectiveCostMore(')) {
+		const match = part.match(/effectiveCostMore\((\d+)\)/);
+		if (match) return `COST_MORE_${match[1]}`;
+	}
+	if (part.includes('effectiveCostLess(')) {
+		const match = part.match(/effectiveCostLess\((\d+)\)/);
+		if (match) return `COST_LESS_${match[1]}`;
+	}
+	if (part.includes('effectiveCostEqual(')) {
+		const match = part.match(/effectiveCostEqual\((\d+)\)/);
+		if (match) return `COST_EQUAL_${match[1]}`;
+	}
+
+	// Handle attack conditions
+	if (part.includes('attackGreaterThan(')) {
+		const match = part.match(/attackGreaterThan\((\d+)\)/);
+		if (match) return `ATTACK_MORE_${match[1]}`;
+	}
+	if (part.includes('attackLessThan(')) {
+		const match = part.match(/attackLessThan\((\d+)\)/);
+		if (match) return `ATTACK_LESS_${match[1]}`;
+	}
+	if (part.includes('attackEqual(')) {
+		const match = part.match(/attackEqual\((\d+)\)/);
+		if (match) return `ATTACK_EQUAL_${match[1]}`;
+	}
+
+	// Handle health conditions
+	if (part.includes('healthGreaterThan(')) {
+		const match = part.match(/healthGreaterThan\((\d+)\)/);
+		if (match) return `HEALTH_MORE_${match[1]}`;
+	}
+	if (part.includes('healthLessThan(')) {
+		const match = part.match(/healthLessThan\((\d+)\)/);
+		if (match) return `HEALTH_LESS_${match[1]}`;
+	}
+	if (part.includes('healthEqual(')) {
+		const match = part.match(/healthEqual\((\d+)\)/);
+		if (match) return `HEALTH_EQUAL_${match[1]}`;
+	}
+
+	// Handle special card IDs or functions that we might not recognize yet
+	if (part.includes('CardIds.') || part.includes('cardIs(')) {
+		// Skip specific card ID references for now
+		return null;
+	}
+
+	// Log unknown conditions for debugging
+	if (part.length > 0 && !part.match(/^\s*$/)) {
+		console.log(`⚠️  Unknown condition: "${part}"`);
+	}
+
+	// Skip unknown conditions for now
+	return null;
+}
+
+function expandOrConditions(orConditions: string[]): string[] {
+	const results: string[] = [];
+
+	for (const orCondition of orConditions) {
+		// Extract content from or(...)
+		if (orCondition.startsWith('or(') && orCondition.endsWith(')')) {
+			const content = orCondition.slice(3, -1);
+			const orParts = smartSplit(content, ',');
+
+			for (const orPart of orParts) {
+				const condition = convertToConditionString(orPart.trim());
+				if (condition) {
+					results.push(condition);
+				}
+			}
+		}
+	}
+
+	return results;
+}
+
+// Step 2: Create flat mapping and save to file
+function createFlatMapping(conditionMappings: ConditionMapping[]): void {
+	const flatMappings: { [condition: string]: string[] } = {};
+
+	for (const mapping of conditionMappings) {
+		for (const condition of mapping.conditions) {
+			if (!flatMappings[condition]) {
+				flatMappings[condition] = [];
+			}
+			flatMappings[condition].push(mapping.cardId);
+		}
+	}
+
+	// Sort and deduplicate
+	for (const condition in flatMappings) {
+		flatMappings[condition] = [...new Set(flatMappings[condition])].sort();
+	}
+
+	// Save to file
+	const outputPath = path.join(__dirname, 'flat-condition-mappings.json');
+	fs.writeFileSync(outputPath, JSON.stringify(flatMappings, null, 2), 'utf8');
+
+	console.log(`📁 Flat mappings saved to: ${outputPath}`);
+	console.log(`📊 Found ${Object.keys(flatMappings).length} unique conditions`);
+
+	// Print summary
+	console.log('\n📋 Condition Summary:');
+	for (const [condition, cards] of Object.entries(flatMappings)) {
+		console.log(`  ${condition}: ${cards.length} cards`);
+	}
+}
+
+// Step 3: Generate reverse selector files
+function generateReverseFiles(flatMappings: { [condition: string]: string[] }): void {
+	const files: { [filename: string]: string } = {};
+
+	// Generate minion file
+	files['reverse-minion-selectors.ts'] = generateMinionFile(flatMappings);
+
+	// Generate spell file
+	files['reverse-spell-selectors.ts'] = generateSpellFile(flatMappings);
+
+	// Generate general file
+	files['reverse-general-selectors.ts'] = generateGeneralFile(flatMappings);
+
+	// Generate main entry file
+	files['reverse-card-id-selectors.ts'] = generateMainFile();
+
+	// Write all files
+	for (const [filename, content] of Object.entries(files)) {
+		const outputPath = path.join(__dirname, filename);
+		fs.writeFileSync(outputPath, content, 'utf8');
+		console.log(`✅ Generated: ${filename}`);
+	}
+}
+
+function generateMinionFile(flatMappings: { [condition: string]: string[] }): string {
 	const lines: string[] = [];
 
-	// File header
 	lines.push('/**');
 	lines.push(' * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY');
 	lines.push(' * Generated by build-reverse-mappings.ts');
-	lines.push(' * Run: npm run build:reverse-synergies to update');
 	lines.push(' * MINION-SPECIFIC REVERSE SYNERGIES');
 	lines.push(' */');
 	lines.push('');
@@ -834,41 +614,67 @@ function generateMinionSelectorsFile(mappings: ReverseMappings): string {
 	lines.push('	if (!refCard) return null;');
 	lines.push('');
 
-	// Race-based reverse selectors (for minions)
-	lines.push('	// Race-based reverse synergies');
-	lines.push('	if (refCard.races?.length) {');
-	for (const [race, cardIds] of Object.entries(mappings.races)) {
-		const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`		if (refCard.races.map(r => r.toUpperCase()).includes('${race.toUpperCase()}')) {`);
-		lines.push(`			return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`				${cardsList}`);
-		lines.push(`			));`);
-		lines.push('		}');
-	}
-	lines.push('	}');
+	// Generate conditions for minion-related mappings, ordered by specificity (most specific first)
+	const minionConditions = Object.entries(flatMappings)
+		.filter(
+			([condition]) =>
+				condition.includes('MINION') ||
+				condition.includes('BEAST') ||
+				condition.includes('MECH') ||
+				condition.includes('DRAGON') ||
+				condition.includes('MURLOC') ||
+				condition.includes('PIRATE') ||
+				condition.includes('DEMON') ||
+				condition.includes('ELEMENTAL') ||
+				condition.includes('UNDEAD') ||
+				condition.includes('NAGA') ||
+				condition.includes('TOTEM') ||
+				condition.includes('ATTACK') ||
+				condition.includes('NOT_TRIBELESS'),
+		)
+		.sort(([a], [b]) => {
+			// Sort by specificity: more conditions = more specific = should come first
+			const aConditionCount = a.split(' + ').length;
+			const bConditionCount = b.split(' + ').length;
+
+			// More specific conditions (more parts) come first
+			if (aConditionCount !== bConditionCount) {
+				return bConditionCount - aConditionCount;
+			}
+
+			// If same number of conditions, prioritize non-generic ones
+			const aIsGeneric = a === 'MINION';
+			const bIsGeneric = b === 'MINION';
+
+			if (aIsGeneric && !bIsGeneric) return 1; // b comes first
+			if (!aIsGeneric && bIsGeneric) return -1; // a comes first
+
+			// Otherwise alphabetical
+			return a.localeCompare(b);
+		});
+
+	// Collect all matching card IDs from all applicable conditions
+	lines.push('	const matchingCardIds: CardIds[] = [];');
 	lines.push('');
 
-	// Minion-specific compound conditions
-	lines.push('	// Minion-specific complex conditions');
-	for (const [compoundKey, compoundData] of Object.entries(mappings.compounds)) {
-		if (
-			compoundKey.includes('type:minion') ||
-			compoundKey.includes('tribe:') ||
-			compoundKey.includes('attack:') ||
-			compoundKey.includes('health:')
-		) {
-			const cardsList = compoundData.cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-			lines.push(
-				`	// ${compoundKey} (${compoundData.cards.length} card${compoundData.cards.length > 1 ? 's' : ''})`,
-			);
-			lines.push(`	if (${compoundData.condition}) {`);
-			lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
+	for (const [condition, cards] of minionConditions) {
+		const reverseCondition = buildReverseCondition(condition);
+		if (reverseCondition && cards.length > 0) {
+			const cardsList = cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+			lines.push(`	// ${condition} (${cards.length} cards)`);
+			lines.push(`	if (${reverseCondition}) {`);
+			lines.push(`		matchingCardIds.push(`);
 			lines.push(`			${cardsList}`);
-			lines.push(`		));`);
+			lines.push(`		);`);
 			lines.push('	}');
 			lines.push('');
 		}
 	}
+
+	lines.push('	// Return combined selector if any matches found');
+	lines.push('	if (matchingCardIds.length > 0) {');
+	lines.push('		return and(side(inputSide), or(inDeck, inHand), cardIs(...matchingCardIds));');
+	lines.push('	}');
 
 	lines.push('	return null;');
 	lines.push('};');
@@ -876,14 +682,12 @@ function generateMinionSelectorsFile(mappings: ReverseMappings): string {
 	return lines.join('\n');
 }
 
-function generateSpellSelectorsFile(mappings: ReverseMappings): string {
+function generateSpellFile(flatMappings: { [condition: string]: string[] }): string {
 	const lines: string[] = [];
 
-	// File header
 	lines.push('/**');
 	lines.push(' * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY');
 	lines.push(' * Generated by build-reverse-mappings.ts');
-	lines.push(' * Run: npm run build:reverse-synergies to update');
 	lines.push(' * SPELL-SPECIFIC REVERSE SYNERGIES');
 	lines.push(' */');
 	lines.push('');
@@ -903,36 +707,63 @@ function generateSpellSelectorsFile(mappings: ReverseMappings): string {
 	lines.push('	if (!refCard) return null;');
 	lines.push('');
 
-	// Spell school reverse selectors
-	lines.push('	// Spell school reverse synergies');
-	lines.push("	if (refCard.spellSchool && refCard.type?.toUpperCase() === 'SPELL') {");
-	for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
-		const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`		if (refCard.spellSchool?.toUpperCase() === '${school.toUpperCase()}') {`);
-		lines.push(`			return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`				${cardsList}`);
-		lines.push(`			));`);
-		lines.push('		}');
-	}
-	lines.push('	}');
+	// Generate conditions for spell-related mappings, ordered by specificity (most specific first)
+	const spellConditions = Object.entries(flatMappings)
+		.filter(
+			([condition]) =>
+				condition.includes('SPELL') ||
+				condition.includes('HOLY') ||
+				condition.includes('FROST') ||
+				condition.includes('FIRE') ||
+				condition.includes('NATURE') ||
+				condition.includes('SHADOW') ||
+				condition.includes('FEL') ||
+				condition.includes('ARCANE') ||
+				condition.includes('SECRET'),
+		)
+		.sort(([a], [b]) => {
+			// Sort by specificity: more conditions = more specific = should come first
+			const aConditionCount = a.split(' + ').length;
+			const bConditionCount = b.split(' + ').length;
+
+			// More specific conditions (more parts) come first
+			if (aConditionCount !== bConditionCount) {
+				return bConditionCount - aConditionCount;
+			}
+
+			// If same number of conditions, prioritize non-generic ones
+			const aIsGeneric = a === 'SPELL';
+			const bIsGeneric = b === 'SPELL';
+
+			if (aIsGeneric && !bIsGeneric) return 1; // b comes first
+			if (!aIsGeneric && bIsGeneric) return -1; // a comes first
+
+			// Otherwise alphabetical
+			return a.localeCompare(b);
+		});
+
+	// Collect all matching card IDs from all applicable conditions
+	lines.push('	const matchingCardIds: CardIds[] = [];');
 	lines.push('');
 
-	// Spell-specific compound conditions
-	lines.push('	// Spell-specific complex conditions');
-	for (const [compoundKey, compoundData] of Object.entries(mappings.compounds)) {
-		if (compoundKey.includes('type:spell') || compoundKey.includes('school:')) {
-			const cardsList = compoundData.cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-			lines.push(
-				`	// ${compoundKey} (${compoundData.cards.length} card${compoundData.cards.length > 1 ? 's' : ''})`,
-			);
-			lines.push(`	if (${compoundData.condition}) {`);
-			lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
+	for (const [condition, cards] of spellConditions) {
+		const reverseCondition = buildReverseCondition(condition);
+		if (reverseCondition && cards.length > 0) {
+			const cardsList = cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+			lines.push(`	// ${condition} (${cards.length} cards)`);
+			lines.push(`	if (${reverseCondition}) {`);
+			lines.push(`		matchingCardIds.push(`);
 			lines.push(`			${cardsList}`);
-			lines.push(`		));`);
+			lines.push(`		);`);
 			lines.push('	}');
 			lines.push('');
 		}
 	}
+
+	lines.push('	// Return combined selector if any matches found');
+	lines.push('	if (matchingCardIds.length > 0) {');
+	lines.push('		return and(side(inputSide), or(inDeck, inHand), cardIs(...matchingCardIds));');
+	lines.push('	}');
 
 	lines.push('	return null;');
 	lines.push('};');
@@ -940,15 +771,13 @@ function generateSpellSelectorsFile(mappings: ReverseMappings): string {
 	return lines.join('\n');
 }
 
-function generateGeneralSelectorsFile(mappings: ReverseMappings): string {
+function generateGeneralFile(flatMappings: { [condition: string]: string[] }): string {
 	const lines: string[] = [];
 
-	// File header
 	lines.push('/**');
 	lines.push(' * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY');
 	lines.push(' * Generated by build-reverse-mappings.ts');
-	lines.push(' * Run: npm run build:reverse-synergies to update');
-	lines.push(' * GENERAL REVERSE SYNERGIES (weapons, locations, mechanics, etc.)');
+	lines.push(' * GENERAL REVERSE SYNERGIES');
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
@@ -967,39 +796,56 @@ function generateGeneralSelectorsFile(mappings: ReverseMappings): string {
 	lines.push('	if (!refCard) return null;');
 	lines.push('');
 
-	// Card type reverse selectors (weapons, locations)
-	lines.push('	// Card type reverse synergies');
-	for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
-		const cardsList = cardIds.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-		lines.push(`	if (refCard.type?.toUpperCase() === '${type.toUpperCase()}') {`);
-		lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
-		lines.push(`			${cardsList}`);
-		lines.push(`		));`);
-		lines.push('	}');
-	}
+	// Generate conditions for general mappings, ordered by specificity (most specific first)
+	const generalConditions = Object.entries(flatMappings)
+		.filter(
+			([condition]) =>
+				condition.includes('WEAPON') ||
+				condition.includes('LOCATION') ||
+				condition.includes('COST_') ||
+				condition.includes('LEGENDARY') ||
+				condition.includes('NEUTRAL') ||
+				condition.includes('DEATHRATTLE') ||
+				condition.includes('BATTLECRY') ||
+				condition.includes('TAUNT') ||
+				condition.includes('RUSH'),
+		)
+		.sort(([a], [b]) => {
+			// Sort by specificity: more conditions = more specific = should come first
+			const aConditionCount = a.split(' + ').length;
+			const bConditionCount = b.split(' + ').length;
+
+			// More specific conditions (more parts) come first
+			if (aConditionCount !== bConditionCount) {
+				return bConditionCount - aConditionCount;
+			}
+
+			// Otherwise alphabetical
+			return a.localeCompare(b);
+		});
+
+	// Collect all matching card IDs from all applicable conditions
+	lines.push('	const matchingCardIds: CardIds[] = [];');
 	lines.push('');
 
-	// General compound conditions (mechanics, costs, etc.)
-	lines.push('	// General complex conditions');
-	for (const [compoundKey, compoundData] of Object.entries(mappings.compounds)) {
-		if (
-			!compoundKey.includes('type:minion') &&
-			!compoundKey.includes('type:spell') &&
-			!compoundKey.includes('school:') &&
-			!compoundKey.includes('tribe:')
-		) {
-			const cardsList = compoundData.cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-			lines.push(
-				`	// ${compoundKey} (${compoundData.cards.length} card${compoundData.cards.length > 1 ? 's' : ''})`,
-			);
-			lines.push(`	if (${compoundData.condition}) {`);
-			lines.push(`		return and(side(inputSide), or(inDeck, inHand), cardIs(`);
+	for (const [condition, cards] of generalConditions) {
+		const reverseCondition = buildReverseCondition(condition);
+		if (reverseCondition && cards.length > 0) {
+			const cardsList = cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+			lines.push(`	// ${condition} (${cards.length} cards)`);
+			lines.push(`	if (${reverseCondition}) {`);
+			lines.push(`		matchingCardIds.push(`);
 			lines.push(`			${cardsList}`);
-			lines.push(`		));`);
+			lines.push(`		);`);
 			lines.push('	}');
 			lines.push('');
 		}
 	}
+
+	lines.push('	// Return combined selector if any matches found');
+	lines.push('	if (matchingCardIds.length > 0) {');
+	lines.push('		return and(side(inputSide), or(inDeck, inHand), cardIs(...matchingCardIds));');
+	lines.push('	}');
 
 	lines.push('	return null;');
 	lines.push('};');
@@ -1007,15 +853,13 @@ function generateGeneralSelectorsFile(mappings: ReverseMappings): string {
 	return lines.join('\n');
 }
 
-function generateMainEntryFile(): string {
+function generateMainFile(): string {
 	const lines: string[] = [];
 
-	// File header
 	lines.push('/**');
 	lines.push(' * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY');
 	lines.push(' * Generated by build-reverse-mappings.ts');
-	lines.push(' * Run: npm run build:reverse-synergies to update');
-	lines.push(' * MAIN ENTRY POINT FOR REVERSE SYNERGIES - delegates to specialized files');
+	lines.push(' * MAIN ENTRY POINT FOR REVERSE SYNERGIES');
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { DeckCard } from '@firestone/game-state';");
@@ -1046,7 +890,7 @@ function generateMainEntryFile(): string {
 	lines.push('		if (spellResult) return spellResult;');
 	lines.push('	}');
 	lines.push('');
-	lines.push('	// Try general selectors (weapons, locations, mechanics)');
+	lines.push('	// Try general selectors');
 	lines.push('	const generalResult = reverseGeneralSelector(cardId, card, inputSide, allCards);');
 	lines.push('	if (generalResult) return generalResult;');
 	lines.push('');
@@ -1056,64 +900,272 @@ function generateMainEntryFile(): string {
 	return lines.join('\n');
 }
 
-function writeReverseSelectorsFile(mappings: ReverseMappings): void {
-	const files = generateReverseSelectorsFile(mappings);
+function buildReverseCondition(condition: string): string | null {
+	const parts = condition.split(' + ').map((p) => p.trim());
+	const conditions: string[] = [];
 
-	// Write all generated files to the parent directory (with the other selectors)
-	for (const [filename, content] of Object.entries(files)) {
-		const outputPath = path.join(__dirname, '.', filename);
-		fs.writeFileSync(outputPath, content, 'utf8');
-		console.log(`✅ Generated file: ${filename}`);
+	for (const part of parts) {
+		switch (part) {
+			case 'MINION':
+				conditions.push("refCard.type?.toUpperCase() === 'MINION'");
+				break;
+			case 'SPELL':
+				conditions.push("refCard.type?.toUpperCase() === 'SPELL'");
+				break;
+			case 'WEAPON':
+				conditions.push("refCard.type?.toUpperCase() === 'WEAPON'");
+				break;
+			case 'LOCATION':
+				conditions.push("refCard.type?.toUpperCase() === 'LOCATION'");
+				break;
+			case 'BEAST':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('BEAST')");
+				break;
+			case 'MECH':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('MECH')");
+				break;
+			case 'DRAGON':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')");
+				break;
+			case 'MURLOC':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('MURLOC')");
+				break;
+			case 'PIRATE':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('PIRATE')");
+				break;
+			case 'DEMON':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('DEMON')");
+				break;
+			case 'ELEMENTAL':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL')");
+				break;
+			case 'UNDEAD':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')");
+				break;
+			case 'NAGA':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('NAGA')");
+				break;
+			case 'TOTEM':
+				conditions.push("refCard.races?.map(r => r.toUpperCase()).includes('TOTEM')");
+				break;
+			case 'HOLY':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'HOLY'");
+				break;
+			case 'FROST':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'FROST'");
+				break;
+			case 'FIRE':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'FIRE'");
+				break;
+			case 'NATURE':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'NATURE'");
+				break;
+			case 'SHADOW':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'SHADOW'");
+				break;
+			case 'FEL':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'FEL'");
+				break;
+			case 'ARCANE':
+				conditions.push("refCard.spellSchool?.toUpperCase() === 'ARCANE'");
+				break;
+			case 'NOT_TRIBELESS':
+				conditions.push('refCard.races && refCard.races.length > 0');
+				break;
+			case 'LEGENDARY':
+				conditions.push("refCard.rarity?.toUpperCase() === 'LEGENDARY'");
+				break;
+			case 'NEUTRAL':
+				conditions.push("refCard.classes?.includes('NEUTRAL')");
+				break;
+			default:
+				if (part.startsWith('COST_MORE_')) {
+					const value = part.replace('COST_MORE_', '');
+					conditions.push(`refCard.cost > ${value}`);
+				} else if (part.startsWith('COST_LESS_')) {
+					const value = part.replace('COST_LESS_', '');
+					conditions.push(`refCard.cost < ${value}`);
+				} else if (part.startsWith('COST_EQUAL_')) {
+					const value = part.replace('COST_EQUAL_', '');
+					conditions.push(`refCard.cost === ${value}`);
+				} else if (part.startsWith('ATTACK_MORE_')) {
+					const value = part.replace('ATTACK_MORE_', '');
+					conditions.push(`refCard.attack > ${value}`);
+				} else {
+					// Skip unknown conditions
+					return null;
+				}
+				break;
+		}
+	}
+
+	return conditions.length > 0 ? conditions.join(' && ') : null;
+}
+
+// Function to get all card IDs from the original file
+function getAllOriginalCardIds(): string[] {
+	const selectorsFilePath = path.join(__dirname, '..', 'card-id-selectors.ts');
+	const content = fs.readFileSync(selectorsFilePath, 'utf8');
+
+	// Find all case statements
+	const caseMatches = content.match(/case\s+CardIds\.([^:]+):/g);
+	if (!caseMatches) {
+		return [];
+	}
+
+	return caseMatches
+		.map((match) => {
+			const cardIdMatch = match.match(/case\s+CardIds\.([^:]+):/);
+			return cardIdMatch ? cardIdMatch[1] : '';
+		})
+		.filter((id) => id.length > 0);
+}
+
+// Function to analyze missing cards
+function analyzeMissingCards(conditionMappings: ConditionMapping[]): void {
+	const allOriginalCards = getAllOriginalCardIds();
+	const processedCards = new Set(conditionMappings.map((m) => m.cardId));
+	const missingCards = allOriginalCards.filter((cardId) => !processedCards.has(cardId));
+
+	console.log(`\n🔍 Missing Cards Analysis:`);
+	console.log(`📊 Total cards in original file: ${allOriginalCards.length}`);
+	console.log(`✅ Cards processed successfully: ${processedCards.size}`);
+	console.log(`❌ Cards missing: ${missingCards.length}`);
+
+	if (missingCards.length > 0) {
+		console.log(`\n📋 Missing cards (first 20):`);
+		for (const cardId of missingCards.slice(0, 20)) {
+			console.log(`  - ${cardId}`);
+		}
+		if (missingCards.length > 20) {
+			console.log(`  ... and ${missingCards.length - 20} more`);
+		}
+
+		// Analyze reasons for missing cards
+		analyzeMissingReasons(missingCards);
+
+		// Save missing cards to file
+		const missingCardsData = {
+			totalOriginal: allOriginalCards.length,
+			totalProcessed: processedCards.size,
+			totalMissing: missingCards.length,
+			missingCards: missingCards,
+			analysisDate: new Date().toISOString(),
+		};
+
+		const outputPath = path.join(__dirname, 'missing-cards-analysis.json');
+		fs.writeFileSync(outputPath, JSON.stringify(missingCardsData, null, 2), 'utf8');
+		console.log(`\n📁 Missing cards analysis saved to: ${outputPath}`);
+	}
+}
+
+// Function to analyze reasons why cards are missing
+function analyzeMissingReasons(missingCards: string[]): void {
+	const selectorsFilePath = path.join(__dirname, '..', 'card-id-selectors.ts');
+	const content = fs.readFileSync(selectorsFilePath, 'utf8');
+
+	const reasons = {
+		complex: [] as string[],
+		noReturn: [] as string[],
+		highlightConditions: [] as string[],
+		inputParameter: [] as string[],
+		tooltip: [] as string[],
+		tooLong: [] as string[],
+		other: [] as string[],
+	};
+
+	for (const cardId of missingCards.slice(0, 50)) {
+		// Analyze first 50 missing cards
+		// Find the case for this card
+		const caseRegex = new RegExp(
+			`case\\s+CardIds\\.${cardId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}:[\\s\\S]*?(?=case\\s+CardIds\\.|default:|$)`,
+			'g',
+		);
+		const caseMatch = content.match(caseRegex);
+
+		if (caseMatch && caseMatch[0]) {
+			const caseContent = caseMatch[0];
+			const returnMatch = caseContent.match(/return\s+(.*?);/s);
+
+			if (!returnMatch) {
+				reasons.noReturn.push(cardId);
+			} else {
+				const selectorCode = returnMatch[1].replace(/\s+/g, ' ').trim();
+
+				if (selectorCode.includes('input:') || selectorCode.includes('(input: SelectorInput)')) {
+					reasons.inputParameter.push(cardId);
+				} else if (selectorCode.includes('highlightConditions')) {
+					reasons.highlightConditions.push(cardId);
+				} else if (selectorCode.includes('tooltip')) {
+					reasons.tooltip.push(cardId);
+				} else if (selectorCode.length > 800) {
+					reasons.tooLong.push(cardId);
+				} else {
+					reasons.other.push(cardId);
+				}
+			}
+		} else {
+			reasons.other.push(cardId);
+		}
+	}
+
+	console.log(`\n🔍 Reasons for missing cards (sample of ${Math.min(50, missingCards.length)}):`);
+	if (reasons.inputParameter.length > 0) {
+		console.log(
+			`  🚫 Complex input parameter selectors: ${reasons.inputParameter.length} cards (excluded by design)`,
+		);
+		console.log(`    Examples: ${reasons.inputParameter.slice(0, 3).join(', ')}`);
+	}
+	if (reasons.highlightConditions.length > 0) {
+		console.log(
+			`  📋 Uses highlightConditions: ${reasons.highlightConditions.length} cards (should be processable)`,
+		);
+		console.log(`    Examples: ${reasons.highlightConditions.slice(0, 3).join(', ')}`);
+	}
+	if (reasons.tooltip.length > 0) {
+		console.log(`  📋 Uses tooltip: ${reasons.tooltip.length} cards`);
+		console.log(`    Examples: ${reasons.tooltip.slice(0, 3).join(', ')}`);
+	}
+	if (reasons.tooLong.length > 0) {
+		console.log(`  📋 Too long (>800 chars): ${reasons.tooLong.length} cards`);
+		console.log(`    Examples: ${reasons.tooLong.slice(0, 3).join(', ')}`);
+	}
+	if (reasons.noReturn.length > 0) {
+		console.log(`  📋 No return statement: ${reasons.noReturn.length} cards`);
+		console.log(`    Examples: ${reasons.noReturn.slice(0, 3).join(', ')}`);
+	}
+	if (reasons.other.length > 0) {
+		console.log(`  📋 Other reasons: ${reasons.other.length} cards`);
+		console.log(`    Examples: ${reasons.other.slice(0, 3).join(', ')}`);
 	}
 }
 
 // Main execution
 async function main() {
-	console.log('🔍 Analyzing existing card selectors...');
+	console.log('🔍 Step 1: Extracting card conditions...');
+	const conditionMappings = extractCardConditions();
+	console.log(`📊 Extracted conditions for ${conditionMappings.length} cards`);
 
-	try {
-		const mappings = buildReverseMappings();
-
-		// Print summary
-		console.log('\n📊 Analysis Summary:');
-		console.log('Races:');
-		for (const [race, cardIds] of Object.entries(mappings.races)) {
-			console.log(`  ${race}: ${cardIds.length} cards`);
-		}
-		console.log('Spell Schools:');
-		for (const [school, cardIds] of Object.entries(mappings.spellSchools)) {
-			console.log(`  ${school}: ${cardIds.length} cards`);
-		}
-		console.log('Card Types:');
-		for (const [type, cardIds] of Object.entries(mappings.cardTypes)) {
-			console.log(`  ${type}: ${cardIds.length} cards`);
-		}
-		console.log('Mechanics:');
-		for (const [mechanic, cardIds] of Object.entries(mappings.mechanics)) {
-			console.log(`  ${mechanic}: ${cardIds.length} cards`);
-		}
-		console.log('Complex Conditions:');
-		for (const [compoundKey, compoundData] of Object.entries(mappings.compounds)) {
-			console.log(`  ${compoundKey}: ${compoundData.cards.length} cards`);
-		}
-
-		// Generate reverse selectors file
-		console.log('\n🔧 Generating reverse synergy code...');
-		writeReverseSelectorsFile(mappings);
-
-		// Write analysis report
-		const reportPath = path.join(__dirname, 'reverse-mappings-analysis.json');
-		fs.writeFileSync(reportPath, JSON.stringify(mappings, null, 2), 'utf8');
-		console.log(`📝 Analysis report saved to: ${reportPath}`);
-
-		console.log('\n✅ Reverse synergies generation complete!');
-		console.log('💡 The reverse synergies have been automatically injected into the highlight system.');
-	} catch (error) {
-		console.error('❌ Failed to build reverse mappings:', error);
-		process.exit(1);
+	// Debug: show first few examples
+	console.log('\n🔍 Debug: First 5 extracted conditions:');
+	for (const mapping of conditionMappings.slice(0, 5)) {
+		console.log(`  ${mapping.cardId}: ${mapping.conditions.join(', ')}`);
 	}
+
+	// Analyze missing cards
+	analyzeMissingCards(conditionMappings);
+
+	console.log('\n📁 Step 2: Creating flat mapping...');
+	createFlatMapping(conditionMappings);
+
+	console.log('\n🔧 Step 3: Generating reverse selector files...');
+	const flatMappingsPath = path.join(__dirname, 'flat-condition-mappings.json');
+	const flatMappings = JSON.parse(fs.readFileSync(flatMappingsPath, 'utf8'));
+	generateReverseFiles(flatMappings);
+
+	console.log('\n✅ Reverse synergies generation complete!');
 }
 
 if (require.main === module) {
-	main();
+	main().catch(console.error);
 }
