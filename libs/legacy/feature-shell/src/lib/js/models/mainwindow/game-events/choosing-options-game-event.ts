@@ -1,4 +1,4 @@
-import { GameEvent } from '../../game-event';
+import { GameEvent } from '@firestone/shared/common/service';
 
 export class ChoosingOptionsGameEvent extends GameEvent {
 	readonly additionalData: {

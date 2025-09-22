@@ -1,7 +1,7 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { SecretConfigService } from '../secret-config.service';

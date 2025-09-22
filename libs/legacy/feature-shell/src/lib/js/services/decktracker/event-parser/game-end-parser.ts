@@ -1,11 +1,14 @@
 import { GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { EventParser } from './event-parser';
 
 export class GameEndParser implements EventParser {
-	constructor(private readonly prefs: PreferencesService, private readonly owUtils: OwUtilsService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly owUtils: OwUtilsService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (

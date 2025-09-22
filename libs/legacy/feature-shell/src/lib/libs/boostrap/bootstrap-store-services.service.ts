@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
-import { GameNativeStateStoreService } from '@firestone/app/common';
+import { DeckParserFacadeService, GameNativeStateStoreService } from '@firestone/app/common';
 import {
 	ArenDeckDetailsService,
 	ArenaCardStatsService,
@@ -58,7 +58,6 @@ import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/co
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { DeckParserFacadeService } from '../../js/services/decktracker/deck-parser-facade.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';

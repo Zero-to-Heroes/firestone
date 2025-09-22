@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ALL_CLASSES, GameFormat, getBaseCardId } from '@firestone-hs/reference-data';
+import { DeckParserFacadeService } from '@firestone/app/common';
 import {
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
@@ -29,7 +30,6 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
-import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
 	standalone: false,
@@ -207,7 +207,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 					? this.i18n.translateString(`app.decktracker.filters.rank-bracket.competitive-tooltip`)
 					: this.i18n.translateString(
 							`app.decktracker.filters.rank-bracket.${prefs.decktrackerMulliganRankBracket}`,
-					  ),
+						),
 			),
 			this.mapData(
 				(rankInfo) =>

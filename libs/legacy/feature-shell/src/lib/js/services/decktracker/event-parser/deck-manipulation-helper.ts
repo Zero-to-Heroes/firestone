@@ -12,12 +12,15 @@ import {
 } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 
 @Injectable()
 export class DeckManipulationHelper {
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public removeSingleCardFromZone(
 		zone: readonly DeckCard[],
@@ -317,7 +320,7 @@ export class DeckManipulationHelper {
 						entityId: hideEntityId ? null : entityId,
 						cardId: cardId,
 						cardName: this.allCards.getCard(cardId).name,
-				  } as DeckCard),
+					} as DeckCard),
 		);
 	}
 

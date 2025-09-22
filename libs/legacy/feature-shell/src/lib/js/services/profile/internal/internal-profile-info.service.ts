@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
 import { CardClass, GameType, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import { GameEventsEmitterService } from '@firestone/app/common';
 import { MemoryInspectionService, MemoryPlayerRecord } from '@firestone/memory';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
-import { GameEvent } from '../../../models/game-event';
-import { GameEventsEmitterService } from '../../game-events-emitter.service';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 
 class HeroSkinAchievements {
 	readonly Golden500Win: number;
@@ -170,8 +170,8 @@ export class InternalProfileInfoService {
 					mode === 'constructed'
 						? r.RecordType === GameType.GT_RANKED
 						: mode === 'arena'
-						? r.RecordType === GameType.GT_ARENA || r.RecordType === GameType.GT_UNDERGROUND_ARENA
-						: r.RecordType === GameType.GT_PVPDR || r.RecordType === GameType.GT_PVPDR_PAID,
+							? r.RecordType === GameType.GT_ARENA || r.RecordType === GameType.GT_UNDERGROUND_ARENA
+							: r.RecordType === GameType.GT_PVPDR || r.RecordType === GameType.GT_PVPDR_PAID,
 				);
 				const result: ProfileWinsForMode = {
 					mode: mode,

@@ -152,7 +152,7 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 			gameLocation = gameLocation.substring(0, gameLocation.length - 1);
 		}
 		const prefs = await this.prefs.getPreferences();
-		console.debug('[game-status] updating install path?', prefs.gameInstallPath, gameLocation);
+		// console.debug('[game-status] updating install path?', prefs.gameInstallPath, gameLocation);
 		if (prefs.gameInstallPath !== gameLocation) {
 			const newPrefs = {
 				...prefs,

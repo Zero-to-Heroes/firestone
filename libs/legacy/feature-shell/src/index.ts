@@ -1,3 +1,5 @@
+export * from '../../../app/common/src/lib/services/deck/deck-parser-facade.service';
+export * from '../../../app/common/src/lib/services/deck/deck-parser.service';
 export * from './lib/js/components/battlegrounds/battlegrounds.component';
 export * from './lib/js/components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 export * from './lib/js/components/loading/loading.component';
@@ -8,7 +10,5 @@ export * from './lib/js/components/overlays/_full-screen-overlays.component';
 export * from './lib/js/components/overlays/constructed/constructed-decktracker-ooc-widget-wrapper.component';
 export * from './lib/js/components/settings/settings.component';
 export * from './lib/js/components/third-party/out-of-cards-callback.component';
-export * from './lib/js/services/decktracker/deck-parser-facade.service';
-export * from './lib/js/services/decktracker/deck-parser.service';
 export * from './lib/legacy-feature-shell.module';
 export * from './lib/libs/boostrap/daemon.component';

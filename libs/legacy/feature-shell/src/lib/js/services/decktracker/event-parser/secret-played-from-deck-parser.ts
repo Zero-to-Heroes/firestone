@@ -1,7 +1,7 @@
 import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { SecretConfigService } from '../secret-config.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';

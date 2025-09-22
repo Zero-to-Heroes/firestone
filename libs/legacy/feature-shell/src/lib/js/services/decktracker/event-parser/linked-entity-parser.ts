@@ -1,7 +1,7 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

@@ -96,7 +96,7 @@ export class ElectronGameWindowService {
 		overlayApi.on('game-focus-changed', (window: any, game: any, focus: boolean) => {
 			if (game.classId === 9898) {
 				// Hearthstone
-				console.log('[ElectronGameWindowService] Hearthstone focus changed:', focus);
+				// console.log('[ElectronGameWindowService] Hearthstone focus changed:', focus);
 				this.updateGameInfoFromActiveGame();
 			}
 		});
@@ -105,7 +105,7 @@ export class ElectronGameWindowService {
 		overlayApi.on('game-window-changed', (window: any, game: any, reason: any) => {
 			if (game.classId === 9898) {
 				// Hearthstone
-				console.log('[ElectronGameWindowService] Hearthstone window changed:', reason);
+				// console.log('[ElectronGameWindowService] Hearthstone window changed:', reason);
 				this.updateGameInfoFromActiveGame();
 			}
 		});
@@ -207,10 +207,10 @@ export class ElectronGameWindowService {
 				};
 			}
 
-			console.log('[ElectronGameWindowService] Game info updated from active game:', {
-				dimensions: `${gameWidth}x${gameHeight}`,
-				focused: this.currentGameInfo.isInFocus,
-			});
+			// console.log('[ElectronGameWindowService] Game info updated from active game:', {
+			// 	dimensions: `${gameWidth}x${gameHeight}`,
+			// 	focused: this.currentGameInfo.isInFocus,
+			// });
 
 			// Notify listeners of the change
 			this.notifyGameInfoChanged();

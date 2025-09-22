@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { GameEvent } from '@firestone/app/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { Events } from '../../../events.service';
 import { EventParser } from './event-parsers/_event-parser';
 import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';

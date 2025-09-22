@@ -5,6 +5,8 @@ import {
 	CardClass,
 	GameFormat,
 	GameType,
+	getDefaultHeroDbfIdForClass,
+	normalizeDeckHeroDbfId,
 	PRACTICE_ALL,
 	SCENARIO_WITHOUT_RESTART,
 	ScenarioId,
@@ -16,9 +18,8 @@ import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, Scen
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { GameEvent } from '../../models/game-event';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
+import { GameEvent } from '../game-events/game-event';
+import { GameEventsEmitterService } from '../game-events/game-events-emitter.service';
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.gz.json`;
 const OPEN_BRAWL_LISTS_URL = `https://static.zerotoheroes.com/hearthstone/data/brawl_lists`;
@@ -29,11 +30,9 @@ export class DeckParserService {
 
 	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
-	private spectating: boolean;
-	private selectedDeckId: number;
-	// private currentNonGamePlayScene: SceneMode;
-	// private currentScene: SceneMode;
-	private currentDeck: DeckInfo;
+	private spectating: boolean = false;
+	private selectedDeckId: number = 0;
+	private currentDeck: DeckInfo | null;
 
 	private deckTemplates: readonly DeckTemplate[];
 
@@ -60,12 +59,12 @@ export class DeckParserService {
 		}
 	}
 
-	public async getCurrentDeck(timeout?: number): Promise<DeckInfo> {
+	public async getCurrentDeck(timeout?: number): Promise<DeckInfo | null> {
 		if (!timeout) {
 			return this.currentDeck;
 		}
 		return Promise.race([
-			new Promise<DeckInfo>((resolve) => {
+			new Promise<DeckInfo | null>((resolve) => {
 				const interval = setInterval(() => {
 					if (this.currentDeck) {
 						clearInterval(interval);
@@ -73,7 +72,7 @@ export class DeckParserService {
 					}
 				}, 1000);
 			}),
-			new Promise<DeckInfo>((resolve) => {
+			new Promise<DeckInfo | null>((resolve) => {
 				setTimeout(() => {
 					resolve(null);
 				}, timeout);
@@ -81,7 +80,10 @@ export class DeckParserService {
 		]);
 	}
 
-	public async retrieveCurrentDeck(usePreviousDeckIfSameScenarioId: boolean, metadata: Metadata): Promise<DeckInfo> {
+	public async retrieveCurrentDeck(
+		usePreviousDeckIfSameScenarioId: boolean,
+		metadata: Metadata,
+	): Promise<DeckInfo | null> {
 		console.log(
 			'[deck-parser] retrieving current deck',
 			this.currentDeck,
@@ -130,7 +132,7 @@ export class DeckParserService {
 			metadata.scenarioId,
 			this.scene.currentScene$$.value,
 		);
-		let deckInfo: DeckInfo;
+		let deckInfo: DeckInfo | null;
 
 		// The only case where we want to reuse cached deck is when we have Restart option
 		const shouldUseCachedDeck =
@@ -172,7 +174,7 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	public async getOpenDecklist(heroCardId: string, metadata: Metadata): Promise<string> {
+	public async getOpenDecklist(heroCardId: string, metadata: Metadata): Promise<string | null> {
 		if (metadata.gameType === GameType.GT_TAVERNBRAWL) {
 			console.log('[deck-parser] trying to read open tavern brawl decklist', metadata.scenarioId, heroCardId);
 			const brawlInfo: any = await this.api.callGetApi(`${OPEN_BRAWL_LISTS_URL}/${metadata.scenarioId}.json`);
@@ -186,18 +188,18 @@ export class DeckParserService {
 
 	public async getTemplateDeck(
 		deckId: number,
-		scenarioId: number,
-		gameType: GameType,
-		gameFormat: GameFormat,
-	): Promise<DeckInfo> {
+		scenarioId: number | null,
+		gameType: GameType | null,
+		gameFormat: GameFormat | null,
+	): Promise<DeckInfo | null> {
 		if (this.spectating) {
 			console.log('[deck-parser] spectating, not returning Whizbang deck');
-			return;
+			return null;
 		}
 
 		// Templates are negative
 		const deckTemplates = await this.getDeckTemplates();
-		const deck = deckTemplates.find((deck) => +deck.DeckId === deckId || +deck.TemplateId === -deckId);
+		const deck = deckTemplates.find((deck) => +(deck.DeckId ?? 0) === deckId || +deck.TemplateId === -deckId);
 		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
@@ -211,7 +213,7 @@ export class DeckParserService {
 
 	private async getDeckTemplates(): Promise<readonly DeckTemplate[]> {
 		if (!this.deckTemplates?.length) {
-			const templatesFromRemote: readonly DeckTemplate[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
+			const templatesFromRemote: readonly DeckTemplate[] | null = await this.api.callGetApi(DECK_TEMPLATES_URL);
 			this.deckTemplates = (templatesFromRemote ?? [])
 				.filter((template) => template.DeckList?.length)
 				.map(
@@ -238,7 +240,7 @@ export class DeckParserService {
 			} else if (event.type === GameEvent.GAME_END) {
 				if (
 					this.currentDeck?.gameType !== GameType.GT_VS_AI ||
-					SCENARIO_WITHOUT_RESTART.includes(this.currentDeck?.scenarioId)
+					SCENARIO_WITHOUT_RESTART.includes(this.currentDeck?.scenarioId ?? 0)
 				) {
 					console.log(
 						'[deck-parser] game end on a non-restart scenario, resetting deck',
@@ -249,7 +251,7 @@ export class DeckParserService {
 					// In some cases, the "selected deck" memory event is not fired when switching decks (I don't know why though)
 					// So it's probably safer to reset the selected deck id, since normally the event is also fired when the
 					// deck is not changed
-					this.selectedDeckId = null;
+					this.selectedDeckId = 0;
 				}
 			}
 		});
@@ -304,7 +306,7 @@ export class DeckParserService {
 						// we can safely reset
 						scene !== SceneMode.LOGIN
 					) {
-						this.selectedDeckId = null;
+						this.selectedDeckId = 0;
 						// Reset the cached deck, as it should only be used when restarting the match
 						this.setCurrentDeck(null);
 					}
@@ -314,11 +316,11 @@ export class DeckParserService {
 
 		// Init fields that are normally populated from memory reading events
 		if (await this.gameStatus.inGame()) {
-			this.selectedDeckId = await this.memory.getSelectedDeckId();
+			this.selectedDeckId = (await this.memory.getSelectedDeckId()) ?? 0;
 		}
 	}
 
-	private setCurrentDeck(deck: DeckInfo) {
+	private setCurrentDeck(deck: DeckInfo | null) {
 		this.currentDeck = deck;
 		this.currentDeck$$.next(deck);
 		if (this.currentDeck) {
@@ -328,14 +330,14 @@ export class DeckParserService {
 
 	private updateDeckFromMemory(
 		deckFromMemory: DeckInfoFromMemory,
-		scenarioId: number,
-		gameType: GameType,
-		gameFormat?: GameFormat,
-	) {
+		scenarioId: number | null,
+		gameType: GameType | null,
+		gameFormat?: GameFormat | null,
+	): DeckInfo | null {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
 		if (!deckFromMemory) {
 			console.error('[deck-parser] no deck to update');
-			return;
+			return null;
 		}
 
 		const decklist: readonly number[] = normalizeWithDbfIds(deckFromMemory.DeckList, this.allCards);
@@ -345,12 +347,17 @@ export class DeckParserService {
 			cards: explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
-				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, this.allCards)]
+				? [
+						normalizeDeckHeroDbfId(
+							this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7,
+							this.allCards.getService(),
+						),
+					]
 				: deckFromMemory.HeroClass
 					? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 					: [7],
 			sideboards: !deckFromMemory.Sideboards?.length
-				? null
+				? undefined
 				: deckFromMemory.Sideboards.map((sideboard) => {
 						return {
 							keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
@@ -404,8 +411,8 @@ export class DeckParserService {
 	private async readDeckFromLogFile(
 		scenarioId: number,
 		gameType: GameType,
-		targetDeckNames: readonly string[] = null,
-	): Promise<DeckInfo> {
+		targetDeckNames: readonly string[] | null = null,
+	): Promise<DeckInfo | null> {
 		const lines: readonly string[] = await this.readAllLogLines();
 
 		// const debugDeckstring = 'AAEBAf0EBMABvqQDiKgDx7IEDfcN67oCh70Cj9MC9KsDkeED558ExqAEo+QE/uwEvO0E/5IF4MMFAAA=';
@@ -426,7 +433,7 @@ export class DeckParserService {
 			!lines.some((line) => line.includes('Starting Arena Game With Deck'))
 		) {
 			console.log('[deck-parser] ignoring deck log lines because there is no "finding game with deck"');
-			return;
+			return null;
 		}
 
 		if (lines.length >= 4) {
@@ -435,12 +442,12 @@ export class DeckParserService {
 			console.log('[deck-parser] deckName', deckNameLogLine);
 			const deckstringLogLine = lines[lines.length - 1];
 			console.log('[deck-parser] deckstring', deckstringLogLine);
-			let match: RegExpExecArray;
+			let match: RegExpExecArray | null;
 			const deckName = (match = this.deckNameRegex.exec(deckNameLogLine)) ? match[1] : undefined;
 			const deckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
 				? this.handler.normalizeDeckstring(match[1])
 				: undefined;
-			if (!!targetDeckNames?.length && !targetDeckNames.includes(deckName)) {
+			if (!!targetDeckNames?.length && (!deckName || !targetDeckNames.includes(deckName))) {
 				console.log('[deck-parser] deck name does not match', deckName, targetDeckNames);
 				return null;
 			}
@@ -456,6 +463,8 @@ export class DeckParserService {
 				deck: !!deckstring ? decode(deckstring) : undefined,
 			} as DeckInfo;
 		}
+
+		return null;
 	}
 
 	private async readAllLogLines(): Promise<readonly string[]> {
@@ -481,11 +490,11 @@ export class DeckParserService {
 }
 
 export interface DeckInfo {
-	scenarioId: number;
+	scenarioId: number | null;
 	name: string;
-	deckstring: string;
-	deck: DeckDefinition;
-	gameType: GameType;
+	deckstring: string | null;
+	deck: DeckDefinition | null;
+	gameType: GameType | null;
 }
 
 export interface DeckTemplate extends DeckInfoFromMemory {

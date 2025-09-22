@@ -1,11 +1,10 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { GameEvent, GameEventsEmitterService } from '@firestone/app/common';
 import { BgsGame, GameState } from '@firestone/game-state';
 import { BugReportService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { checkIntegrity } from '@legacy-import/src/lib/js/models/battlegrounds/face-off-check';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { Events } from '../../../events.service';
-import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { GameEvents } from '../../../game-events.service';
 import { EventParser } from '../event-parser';
 

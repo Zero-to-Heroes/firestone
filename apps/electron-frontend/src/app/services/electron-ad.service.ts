@@ -21,6 +21,18 @@ export class ElectronAdService extends AbstractFacadeService<ElectronAdService> 
 		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(true);
 	}
 
+	protected override initElectronSubjects() {
+		console.debug('[electron-ad] initElectronSubjects');
+		this.setupElectronSubject(this.enablePremiumFeatures$$, 'enablePremiumFeatures');
+		this.setupElectronSubject(this.hasPremiumSub$$, 'hasPremiumSub');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any) {
+		console.debug('[electron-ad] createElectronProxy');
+		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(true);
+		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(true);
+	}
+
 	public async goToPremium() {
 		return;
 	}

@@ -1,12 +1,15 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { LocalizationFacadeService } from '../../../localization-facade.service';
 import { EventParser } from '../event-parser';
 
 export class BgsRewardDestroyedParser implements EventParser {
-	constructor(private readonly cards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly cards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state && isBattlegrounds(state.metadata?.gameType);

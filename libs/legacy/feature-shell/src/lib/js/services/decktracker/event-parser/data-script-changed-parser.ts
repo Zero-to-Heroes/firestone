@@ -2,13 +2,16 @@ import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckState, GameState } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 
 export class DataScriptChangedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -54,7 +57,7 @@ export class DataScriptChangedParser implements EventParser {
 								!!update.DataNum1 && update.DataNum1 !== -1
 									? update.DataNum1
 									: cardWithAdditionalAttributes.mainAttributeChange + 1,
-						  )
+							)
 						: deck.abyssalCurseHighestValue;
 				continue;
 			}

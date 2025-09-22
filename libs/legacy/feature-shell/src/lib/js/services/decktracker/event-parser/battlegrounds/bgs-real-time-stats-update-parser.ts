@@ -1,8 +1,8 @@
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { GameEvent } from '@firestone/app/common';
 import { BgsPanel, BgsPostMatchStatsPanel, GameState, RealTimeStatsState } from '@firestone/game-state';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { EventParser } from '../event-parser';
 
 export class BgsRealTimeStatsUpdateParser implements EventParser {

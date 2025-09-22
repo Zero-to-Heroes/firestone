@@ -434,6 +434,7 @@ import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-bra
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
+import { AppViewModule } from '@firestone/app/view';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -553,8 +554,6 @@ import { CardsHighlightService } from './js/services/decktracker/card-highlight/
 import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
-import { DeckParserFacadeService } from './js/services/decktracker/deck-parser-facade.service';
-import { DeckParserService } from './js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
 import { DeckManipulationHelper } from './js/services/decktracker/event-parser/deck-manipulation-helper';
 import { SecretsParserService } from './js/services/decktracker/event-parser/secrets/secrets-parser.service';
@@ -569,7 +568,6 @@ import { SecretConfigService } from './js/services/decktracker/secret-config.ser
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
 import { Events } from './js/services/events.service';
-import { GameEventsEmitterService } from './js/services/game-events-emitter.service';
 import { GameEvents } from './js/services/game-events.service';
 import { GameModeDataService } from './js/services/game-mode-data.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
@@ -616,7 +614,6 @@ import { SystemTrayService } from './js/services/system-tray.service';
 import { TipService } from './js/services/tip.service';
 import { AppUiStoreFacadeService } from './js/services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from './js/services/ui-store/app-ui-store.service';
-import { AppViewModule } from '@firestone/app/view';
 import { AppBootstrapService } from './libs/boostrap/app-bootstrap.service';
 import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
@@ -1332,7 +1329,6 @@ try {
 
 		DevService,
 		GameEvents,
-		GameEventsEmitterService,
 		GameEventsPluginService,
 		GameModeDataService,
 		LogListenerService,
@@ -1393,8 +1389,6 @@ try {
 
 		OverlayDisplayService,
 		DeckCardService,
-		DeckParserService,
-		DeckParserFacadeService,
 		ReviewIdService,
 		GameStateService,
 		DynamicZoneHelperService,

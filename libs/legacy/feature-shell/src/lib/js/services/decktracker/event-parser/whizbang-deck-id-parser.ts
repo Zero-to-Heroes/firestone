@@ -1,12 +1,14 @@
 import { DeckHandlerService, GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../models/game-event';
-import { DeckParserService } from '../deck-parser.service';
+import { DeckParserService, GameEvent } from '@firestone/shared/common/service';
 import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
 import { DeckstringOverrideParser } from './deckstring-override-parser';
 import { EventParser } from './event-parser';
 
 export class WhizbangDeckParser implements EventParser {
-	constructor(private readonly deckParser: DeckParserService, private readonly deckHandler: DeckHandlerService) {}
+	constructor(
+		private readonly deckParser: DeckParserService,
+		private readonly deckHandler: DeckHandlerService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;

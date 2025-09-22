@@ -1,5 +1,5 @@
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -68,7 +68,7 @@ export const handleSingleCardBuffInHand = (
 					buffingEntityCardId,
 				] as readonly string[],
 				buffCardIds: [...(cardToBuff.buffCardIds || []), buffCardId] as readonly string[],
-		  } as DeckCard)
+			} as DeckCard)
 		: null;
 
 	const newHand = newCardInHand ? helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;

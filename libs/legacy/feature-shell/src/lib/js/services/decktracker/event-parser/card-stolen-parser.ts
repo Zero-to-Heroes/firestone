@@ -1,7 +1,7 @@
 import { Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -94,7 +94,7 @@ export class CardStolenParser implements EventParser {
 							positionFromTop: undefined,
 							zone: 'HAND',
 						} as DeckCard),
-				  )
+					)
 				: stealingToDeck.hand;
 
 		const stealingBoard =
@@ -109,7 +109,7 @@ export class CardStolenParser implements EventParser {
 							positionFromBottom: undefined,
 							positionFromTop: undefined,
 						} as DeckCard),
-				  )
+					)
 				: stealingToDeck.board;
 		const stealingDeck =
 			zone === Zone.DECK
@@ -123,7 +123,7 @@ export class CardStolenParser implements EventParser {
 							positionFromBottom: undefined,
 							positionFromTop: undefined,
 						} as DeckCard),
-				  )
+					)
 				: stealingToDeck.deck;
 
 		const stealingSecrets = secret ? [...stealingToDeck.secrets, secret] : stealingToDeck.secrets;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { GameEventsEmitterService } from '@firestone/app/common';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { DeckCard, DeckHandlerService, DeckState, GameState } from '@firestone/game-state';
@@ -14,7 +15,6 @@ import { CollectionCardType } from '../models/collection/collection-card-type.ty
 import { CardNotificationsService } from './collection/card-notifications.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
-import { GameEventsEmitterService } from './game-events-emitter.service';
 import { GameEvents } from './game-events.service';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';

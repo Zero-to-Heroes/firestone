@@ -47,7 +47,7 @@
 		"build-mobile": "nx build mobile --configuration=production",
 		"start-both": "concurrently \"npm run start-web\" \"npm run start-mobile\"",
 		"build-both": "nx build web --configuration=production && nx build mobile --configuration=production",
-		"c6": "=============== Electron (serve frontend first, then backend) =================",
+		"c6": "=============== Electron (serve frontend first, then start:ow-electron) =================",
 		"nxe:build:frontend": "nx build electron-frontend",
 		"nxe:build:backend": "nx build electron-app",
 		"nxe:serve:frontend": "nx serve electron-frontend",

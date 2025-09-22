@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameEventsEmitterService } from '@firestone/app/common';
 import {
 	HsAchievementCategory,
 	HsAchievementInfo,
@@ -7,9 +8,8 @@ import {
 } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { Events } from '../../events.service';
-import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { AchievementsStorageService } from '../achievements-storage.service';
 
 @Injectable()

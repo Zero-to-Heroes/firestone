@@ -1,5 +1,5 @@
 import { DEFAULT_CTHUN_ATK, DEFAULT_CTHUN_HEALTH, GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { EventParser } from '../event-parser';
 
 export class CthunParser implements EventParser {

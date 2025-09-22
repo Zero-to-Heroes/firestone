@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameEvent } from '../models/game-event';
+import { GameEvent } from './game-event';
 
 @Injectable()
 export class GameEventsEmitterService {

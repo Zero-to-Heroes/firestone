@@ -1,7 +1,7 @@
 import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
 import { RealTimeStatsState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { isBattlegrounds } from '../../../../bgs-utils';
 import { EventParser } from '../_event-parser';
 

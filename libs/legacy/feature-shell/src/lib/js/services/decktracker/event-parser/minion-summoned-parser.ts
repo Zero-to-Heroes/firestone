@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { revealCard } from '../game-state/card-reveal';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

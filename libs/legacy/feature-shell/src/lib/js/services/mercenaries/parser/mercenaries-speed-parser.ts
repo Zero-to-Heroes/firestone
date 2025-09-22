@@ -1,5 +1,5 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { BattleAbility, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesParser } from './_mercenaries-parser';
 

@@ -1,5 +1,5 @@
 import { GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
 import { EventParser } from './event-parser';
 
@@ -15,7 +15,7 @@ export class ReconnectStartParser implements EventParser {
 		const newOpponentState = currentState.isBattlegrounds()
 			? currentState.opponentDeck.update({
 					board: [],
-			  })
+				})
 			: currentState.opponentDeck;
 		const newBgState = currentState.bgState?.update({
 			duoPendingBoards: [],

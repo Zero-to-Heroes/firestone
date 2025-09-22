@@ -15,7 +15,7 @@ import {
 	GameState,
 } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 import { BgsNextOpponentParser } from './bgs-next-opponent-parser';
@@ -91,7 +91,7 @@ export class BgsHeroSelectedCardParser implements EventParser {
 						gameEvent.additionalData?.tavernLevel,
 						currentState.currentTurnNumeric,
 					),
-			  })
+				})
 			: BgsPlayer.create({
 					cardId: normalizedCardId,
 					playerId: playerId,
@@ -107,9 +107,9 @@ export class BgsHeroSelectedCardParser implements EventParser {
 					tavernUpgradeHistory: gameEvent.additionalData?.tavernLevel
 						? ([
 								{ turn: undefined, tavernTier: gameEvent.additionalData?.tavernLevel },
-						  ] as readonly BgsTavernUpgrade[])
+							] as readonly BgsTavernUpgrade[])
 						: [],
-			  } as BgsPlayer);
+				} as BgsPlayer);
 		console.debug('[bgs-hero-selected] new player', newPlayer, currentState.reconnectOngoing);
 		const newGame = currentState.bgState.currentGame.update({
 			players: [
@@ -125,7 +125,7 @@ export class BgsHeroSelectedCardParser implements EventParser {
 					panel.id === 'bgs-hero-selection-overview'
 						? (panel as BgsHeroSelectionOverviewPanel).update({
 								selectedHeroCardId: cardId,
-						  } as BgsHeroSelectionOverviewPanel)
+							} as BgsHeroSelectionOverviewPanel)
 						: panel,
 				) as readonly BgsPanel[],
 			}),
@@ -172,9 +172,9 @@ export class BgsHeroSelectedCardParser implements EventParser {
 		return hasAlreadyRegisteredUpgrade
 			? tavernUpgradeHistory
 			: // We're not absolutely sure that the turn is the right now, however this is what makes the most sense
-			  ([
+				([
 					...tavernUpgradeHistory,
 					{ turn: currentTurn, tavernTier: tavernLevel },
-			  ] as readonly BgsTavernUpgrade[]);
+				] as readonly BgsTavernUpgrade[]);
 	}
 }

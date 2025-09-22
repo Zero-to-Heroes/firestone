@@ -8,7 +8,7 @@ import {
 	toTagsObject,
 } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import {
 	cardsConsideredPublic,
 	forcedHiddenCardCreators,
@@ -106,14 +106,14 @@ export class ReceiveCardInHandParser implements EventParser {
 				? otherCard?.update({
 						creatorCardId: creatorCardId,
 						creatorEntityId: creatorEntityId,
-				  })
+					})
 				: otherCard.update({
 						creatorCardId: undefined,
 						creatorEntityId: undefined,
 						cardId: undefined,
 						cardName: undefined,
 						lastAffectedByCardId: undefined,
-				  } as DeckCard);
+					} as DeckCard);
 
 		const newBoard = boardCard
 			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
@@ -156,7 +156,7 @@ export class ReceiveCardInHandParser implements EventParser {
 						cardName: this.allCards.getCard(newCardId).name,
 						refManaCost: this.allCards.getCard(newCardId).cost,
 						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
-				  });
+					});
 		const cardWithZone = cardWithKnownInfo.update({
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardWithKnownInfo.tags,
@@ -178,7 +178,7 @@ export class ReceiveCardInHandParser implements EventParser {
 							buffingEntityCardId,
 						] as readonly string[],
 						buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
-				  } as DeckCard)
+					} as DeckCard)
 				: cardWithZone;
 		const cardWithGuessedInfo = addGuessInfoToDrawnCard(
 			otherCardWithBuffs,
@@ -248,7 +248,7 @@ export class ReceiveCardInHandParser implements EventParser {
 							!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
 								? gameEvent.additionalData.dataNum1
 								: cardWithAdditionalAttributes.mainAttributeChange + 1,
-					  )
+						)
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
 		// console.debug('[receive-card-in-hand] deckState', newPlayerDeck);
@@ -307,7 +307,7 @@ export const addAdditionalAttribuesInHand = (
 				mainAttributeChange:
 					!!dataNum1 && dataNum1 !== -1
 						? // dataNum1 is the base value, while we start our count at 0
-						  dataNum1 - 1
+							dataNum1 - 1
 						: highestAttribute + 1,
 			});
 		case CardIds.SchoolTeacher_NagalingToken:
@@ -325,7 +325,7 @@ export const addAdditionalAttribuesInHand = (
 			return gameEvent.additionalData?.referencedCardIds?.length
 				? card.update({
 						relatedCardIds: gameEvent.additionalData.referencedCardIds,
-				  })
+					})
 				: card;
 	}
 	return card;

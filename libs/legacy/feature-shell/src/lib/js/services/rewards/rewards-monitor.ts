@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { GameEventsEmitterService } from '@firestone/app/common';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { XpForGameInfo } from '@firestone/stats/common';
 import { BehaviorSubject, filter, take } from 'rxjs';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
 
 @Injectable()
 export class RewardMonitorService {

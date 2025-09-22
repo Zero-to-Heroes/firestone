@@ -2,7 +2,7 @@ import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { COUNTERSPELLS } from '@services/hs-utils';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';

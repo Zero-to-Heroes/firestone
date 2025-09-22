@@ -1,6 +1,7 @@
 import { GameState } from '@firestone/game-state';
-import { GameStateEvent } from '../../../../models/decktracker/game-state-event';
-import { GameEvent } from '../../../../models/game-event';
+
+import { GameStateEvent } from '@firestone/app/common';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { ConstructedAchievementsProgressionEvent } from '../../event/constructed-achievements-progression-event';
 import { EventParser } from '../event-parser';
 

@@ -1,7 +1,7 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -67,14 +67,14 @@ export class ZonePositionChangedParser implements EventParser {
 					? playerDeck.update({
 							hand: playerDeck.hand,
 							board: playerDeck.board,
-					  })
+						})
 					: playerDeck,
 			opponentDeck:
 				opponentBoardDirty || opponentHandDirty
 					? opponentDeck.update({
 							hand: opponentDeck.hand,
 							board: opponentDeck.board,
-					  })
+						})
 					: opponentDeck,
 		});
 	}

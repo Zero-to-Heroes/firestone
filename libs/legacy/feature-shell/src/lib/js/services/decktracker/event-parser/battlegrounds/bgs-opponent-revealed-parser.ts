@@ -6,9 +6,9 @@ import {
 	isBattlegrounds,
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
+import { GameEvent } from '@firestone/app/common';
 import { BgsPlayer, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { EventParser } from '../event-parser';
 
 export class BgsOpponentRevealedParser implements EventParser {
@@ -39,7 +39,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 						heroPowerCardId: getHeroPower(cardId, this.allCards.getService()),
 						name: this.allCards.getCard(cardId).name,
 						initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, normalizedCardId, this.allCards),
-				  } as BgsPlayer);
+					} as BgsPlayer);
 		const updatedPlayer = newPlayer.update({
 			leaderboardPlace: leaderboardPlace === -1 ? null : leaderboardPlace,
 			currentArmor: armor,

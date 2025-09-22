@@ -1,9 +1,8 @@
 import { buildRegion } from '@firestone-hs/hs-replay-xml-parser';
 import { CardClass } from '@firestone-hs/reference-data';
 import { DeckHandlerService, GameState, HeroCard } from '@firestone/game-state';
+import { DeckParserService, GameEvent } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
-import { DeckParserService } from '../deck-parser.service';
 import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
 import { DeckstringOverrideParser } from './deckstring-override-parser';
 import { EventParser } from './event-parser';

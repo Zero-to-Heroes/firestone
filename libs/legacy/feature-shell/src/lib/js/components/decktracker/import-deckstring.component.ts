@@ -1,9 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Optional } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
+import { GameEvent, GameStateEvent } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { GameStateEvent } from '../../models/decktracker/game-state-event';
-import { GameEvent } from '../../models/game-event';
 import { DeckstringOverrideEvent } from '../../services/decktracker/event/deckstring-override-event';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -51,7 +50,10 @@ export class ImportDeckstringComponent implements AfterViewInit {
 
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent>;
 
-	constructor(private readonly i18n: LocalizationFacadeService, @Optional() private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		@Optional() private readonly ow: OverwolfService,
+	) {}
 
 	ngAfterViewInit() {
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
@@ -75,7 +77,7 @@ export class ImportDeckstringComponent implements AfterViewInit {
 			this.confirmationText = this.deckName
 				? this.i18n.translateString('decktracker.import.use-deck-text', {
 						value: this.deckName,
-				  })
+					})
 				: this.i18n.translateString('decktracker.import.use-deck-text-default');
 			this.validButtonText = this.i18n.translateString('decktracker.import.button-text');
 			this.cancelButtonText = this.i18n.translateString('decktracker.import.cancel-text');

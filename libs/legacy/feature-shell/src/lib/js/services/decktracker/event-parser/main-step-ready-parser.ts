@@ -1,7 +1,7 @@
 import { isCoin } from '@firestone-hs/reference-data';
 import { DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { EventParser } from './event-parser';
 import { buildTurnTimings } from './new-turn-parser';
 
@@ -35,13 +35,13 @@ export class MainStepReadyParser implements EventParser {
 			playerDeck: currentState.playerDeck.update({
 				turnTimings: playerTurnTimings,
 				cardsInStartingHand: currentState.playerDeck.hand
-					.map((card) => ({ ...card } as DeckCard))
+					.map((card) => ({ ...card }) as DeckCard)
 					.filter((card) => !isCoin(card.cardId, this.allCards)),
 			}),
 			opponentDeck: currentState.opponentDeck.update({
 				turnTimings: opponentTurnTimings,
 				cardsInStartingHand: currentState.opponentDeck.hand
-					.map((card) => ({ ...card } as DeckCard))
+					.map((card) => ({ ...card }) as DeckCard)
 					.filter((card) => !isCoin(card.cardId, this.allCards)),
 			}),
 		} as GameState);

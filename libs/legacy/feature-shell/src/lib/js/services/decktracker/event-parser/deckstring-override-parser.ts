@@ -1,5 +1,5 @@
 import { DeckCard, DeckHandlerService, DeckSideboard, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
 import { EventParser } from './event-parser';
 

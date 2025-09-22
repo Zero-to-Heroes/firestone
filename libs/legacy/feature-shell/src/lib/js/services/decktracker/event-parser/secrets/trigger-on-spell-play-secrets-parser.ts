@@ -1,7 +1,7 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { COUNTERSPELLS } from '../../../hs-utils';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
@@ -34,7 +34,10 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		reactingToEntityId: number;
 	};
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (

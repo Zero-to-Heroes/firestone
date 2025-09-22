@@ -11,7 +11,7 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
 import { SceneService } from '@firestone/memory';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { DeckParserFacadeService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	IAdsService,
@@ -20,7 +20,6 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, shareReplay, takeUntil, tap } from 'rxjs';
-import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 
 @Component({
 	standalone: false,
@@ -108,17 +107,7 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit', this.ads);
-		await waitForReady(this.scene);
-		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - scene');
-		await waitForReady(this.prefs);
-		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - prefs');
-		await waitForReady(this.ads);
-		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - ads');
-		await waitForReady(this.deck);
-		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - deck');
 		await waitForReady(this.scene, this.prefs, this.deck, this.ads);
-		console.debug('[debug] constructed-decktracker-ooc-widget-wrapper ngAfterContentInit - ready');
 
 		this.hasPremium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
 		this.toggleButtonTooltip$ = this.ads.enablePremiumFeatures$$.pipe(
@@ -146,6 +135,9 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			canShowWidget$,
 			this.ads.enablePremiumFeatures$$,
 		]).pipe(
+			tap((info) =>
+				console.debug('[debug] constructed-decktracker-ooc-widget-wrapper showWidgetListOnly$ 1', info),
+			),
 			this.mapData(
 				([{ ooc, displayList }, canShowWidget, premium]) => canShowWidget && ooc && (displayList || !premium),
 			),
@@ -157,6 +149,9 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			canShowWidget$,
 			this.ads.enablePremiumFeatures$$,
 		]).pipe(
+			tap((info) =>
+				console.debug('[debug] constructed-decktracker-ooc-widget-wrapper showWidgetExtended$ 1', info),
+			),
 			this.mapData(([displayFromPrefs, canShowWidget, premium]) => canShowWidget && premium && displayFromPrefs),
 			shareReplay(1),
 			this.handleReposition(),

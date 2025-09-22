@@ -1,5 +1,5 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesAction, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { sortByProperties } from '../../utils';
@@ -40,7 +40,7 @@ export class MercenariesAbilityQueuedParser implements MercenariesParser {
 					ownerCardId: ownerCardId,
 					ownerEntityId: entityId,
 					speed: abilitySpeed,
-			  };
+				};
 		const actionQueue: readonly MercenariesAction[] =
 			// No "unqueue" event is emitted when we simply change the chosen action
 			[...battleState.actionQueue.filter((a) => a.ownerEntityId !== entityId), action]

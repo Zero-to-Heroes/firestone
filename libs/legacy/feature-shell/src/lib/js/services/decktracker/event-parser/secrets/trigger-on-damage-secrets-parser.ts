@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
@@ -15,7 +15,10 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		CardIds.Evasion,
 	];
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.DAMAGE;
@@ -88,7 +91,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		const heroTarget = gameEvent.additionalData.targets
 			? Object.values(gameEvent.additionalData.targets).find(
 					(target) => target.TargetEntityId === enemyHeroEntityId,
-			  )
+				)
 			: null;
 		if (!heroTarget) {
 			secretsWeCantRuleOut.push(CardIds.EyeForAnEyeLegacy);

@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { LotteryState } from '../lottery.model';
 import { LotteryProcessor } from './_processor';
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
@@ -23,7 +23,10 @@ import { TriggerOnWeaponPlaySecretsParser } from './trigger-on-weapon-play-secre
 export class SecretsParserService {
 	private secretParsers = this.buildSecretParsers();
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	// In case there is only one secret in play, we can tick the options off based
 	// on pure conditions logic

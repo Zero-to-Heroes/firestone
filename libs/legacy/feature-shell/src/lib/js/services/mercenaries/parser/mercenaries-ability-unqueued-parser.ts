@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesAction, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesParser } from './_mercenaries-parser';

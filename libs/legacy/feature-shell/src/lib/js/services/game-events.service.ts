@@ -2,19 +2,23 @@ import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEventsFacadeService, GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
+import {
+	GameEvent,
+	GameEventPlayer,
+	GameEventsEmitterService,
+	GameStatusService,
+	GlobalErrorService,
+} from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
-import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { ChoosingOptionsGameEvent } from '../models/mainwindow/game-events/choosing-options-game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
 import { Events } from './events.service';
-import { GameEventsEmitterService } from './game-events-emitter.service';
 import { HsGameMetaData } from './game-mode-data.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { ProcessingQueue } from './processing-queue.service';

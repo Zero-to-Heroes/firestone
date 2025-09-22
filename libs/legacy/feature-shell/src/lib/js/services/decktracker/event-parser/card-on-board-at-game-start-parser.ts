@@ -1,13 +1,16 @@
 import { CardType } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 // Needed to not show the shrine as part of the deck
 export class CardOnBoardAtGameStart implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		// If we had a reconnect, this means we are not at "game start" anymore

@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { GameType } from '@firestone-hs/reference-data';
+import { DeckParserFacadeService } from '@firestone/app/common';
 import { Metadata, StatsRecap } from '@firestone/game-state';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
@@ -8,7 +9,6 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { toFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, tap } from 'rxjs';
-import { DeckParserFacadeService } from '../../../services/decktracker/deck-parser-facade.service';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 

@@ -1,5 +1,5 @@
+import { GameEvent } from '@firestone/shared/common/service';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
 import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { Requirement } from './_requirement';
 

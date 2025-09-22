@@ -1,7 +1,7 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -91,7 +91,7 @@ export class CardDredgedParser implements EventParser {
 				return hasRace(this.allCards.getCard(card.cardId), Race.BEAST)
 					? card.update({
 							actualManaCost: Math.max(0, card.getEffectiveManaCost() - 3),
-					  })
+						})
 					: card;
 		}
 		return card;

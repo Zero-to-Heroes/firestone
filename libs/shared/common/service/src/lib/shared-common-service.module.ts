@@ -5,8 +5,11 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { AdvancedSettingDirective } from './directives/advanced-setting.directive';
 import { AppNavigationService } from './services/app-navigation.service';
 import { BugReportService } from './services/bug-report.service';
+import { DeckParserFacadeService } from './services/deck/deck-parser-facade.service';
+import { DeckParserService } from './services/deck/deck-parser.service';
 import { DiskCacheService } from './services/disk-cache.service';
 import { ExpertContributorsService } from './services/expert-contributors.service';
+import { GameEventsEmitterService } from './services/game-events/game-events-emitter.service';
 import { GameStatusService } from './services/game-status.service';
 import { LogUtilsService } from './services/log-utils.service';
 import { LogsUploaderService } from './services/logs-uploader.service';
@@ -43,6 +46,9 @@ const components = [AdvancedSettingDirective];
 		OwLegacyPremiumService,
 		PremiumDeeplinkService,
 		AppNavigationService,
+		DeckParserService,
+		DeckParserFacadeService,
+		GameEventsEmitterService,
 	],
 	declarations: components,
 	exports: components,

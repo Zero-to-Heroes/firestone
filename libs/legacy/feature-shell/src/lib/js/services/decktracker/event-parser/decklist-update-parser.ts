@@ -1,7 +1,7 @@
 import { DeckHandlerService, DeckSideboard, DeckState, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { AiDeckService } from '../ai-deck-service.service';
 import { EventParser } from './event-parser';
 

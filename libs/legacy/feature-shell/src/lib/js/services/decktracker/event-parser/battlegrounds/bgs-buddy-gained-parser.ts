@@ -1,12 +1,15 @@
 import { isBaconGhost, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { GameEvent } from '@firestone/app/common';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { GameEvents } from '../../../game-events.service';
 import { EventParser } from '../event-parser';
 
 export class BgsBuddyGainedParser implements EventParser {
-	constructor(private readonly gameEventsService: GameEvents, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly gameEventsService: GameEvents,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state && isBattlegrounds(state.metadata?.gameType);

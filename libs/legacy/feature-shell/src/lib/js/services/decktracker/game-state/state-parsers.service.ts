@@ -3,17 +3,21 @@ import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@f
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import { DeckHandlerService, GameUniqueIdService } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	BugReportService,
+	DeckParserService,
+	GameEvent,
+	GameEventsEmitterService,
+	LogsUploaderService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { CardsFacadeService, OwUtilsService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
 import { AdService } from '../../ad.service';
-import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { GameEvents } from '../../game-events.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { ReviewIdService } from '../../review-id.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
-import { DeckParserService } from '../deck-parser.service';
 import { AnomalyRevealedParser } from '../event-parser/anomaly-revealed-parser';
 import {
 	ArchetypeCategorizationEvent,

@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { globalEffectPowers, globalEffectPowersAlsoOpponent } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -9,7 +9,10 @@ import { EventParser } from './event-parser';
 const SPECIAL_CARD_POWERS = [CardIds.LorekeeperPolkelt, CardIds.OrderInTheCourt, ...globalEffectPowers];
 
 export class SpecialCardPowerTriggeredParser implements EventParser {
-	constructor(private readonly allCards: CardsFacadeService, private readonly helper: DeckManipulationHelper) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly helper: DeckManipulationHelper,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;

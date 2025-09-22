@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';

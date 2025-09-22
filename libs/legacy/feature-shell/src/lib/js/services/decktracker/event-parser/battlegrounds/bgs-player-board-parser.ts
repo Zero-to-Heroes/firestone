@@ -10,6 +10,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { GameEvent } from '@firestone/app/common';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
 	BgsBoard,
@@ -24,7 +25,6 @@ import {
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { Map } from 'immutable';
 import { AdService } from '../../../ad.service';
 import { isSupportedScenario } from '../../../battlegrounds/bgs-utils';

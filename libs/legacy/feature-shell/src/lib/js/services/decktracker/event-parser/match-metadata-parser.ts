@@ -19,13 +19,17 @@ import {
 	Metadata,
 } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import {
+	DeckInfo,
+	DeckParserService,
+	GameEvent,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
-import { DeckInfo, DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
 
 export class MatchMetadataParser implements EventParser {

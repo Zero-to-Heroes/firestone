@@ -1,7 +1,7 @@
 import { CardClass } from '@firestone-hs/reference-data';
 import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { EventParser } from './event-parser';
 
 export class HeroChangedParser implements EventParser {
@@ -22,8 +22,8 @@ export class HeroChangedParser implements EventParser {
 			initialClasses: !!deck.hero.initialClasses?.length
 				? deck.hero.initialClasses
 				: !!deck.hero.classes?.length
-				? deck.hero.classes
-				: [],
+					? deck.hero.classes
+					: [],
 			classes: dbCard.classes?.map((c) => CardClass[c]),
 		});
 

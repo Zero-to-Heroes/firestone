@@ -1,11 +1,9 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { GameEvent, GameEventsEmitterService, GameStateEvent } from '@firestone/app/common';
 import { BattlegroundsState, BgsHeroSelectionOverviewPanel, BgsPanel, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
-import { GameStateEvent } from '@legacy-import/src/lib/js/models/decktracker/game-state-event';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
-import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { EventParser } from '../event-parser';
 
 export class BgsHeroSelectionParser implements EventParser {

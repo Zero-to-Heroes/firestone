@@ -1,4 +1,5 @@
 import { ALL_BG_RACES, isBattlegrounds, Race } from '@firestone-hs/reference-data';
+import { GameEvent } from '@firestone/app/common';
 import {
 	BattlegroundsState,
 	BgsBattleHistory,
@@ -10,7 +11,6 @@ import {
 } from '@firestone/game-state';
 import { BattlegroundsInfo, MemoryBgGame, MemoryBgPlayer } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
 import { EventParser } from '../event-parser';
 
 export class BgsGlobalInfoUpdateParser implements EventParser {
@@ -87,7 +87,7 @@ export class BgsGlobalInfoUpdateParser implements EventParser {
 			availableRaces:
 				availableRaces && availableRaces.length > 0
 					? availableRaces
-					: currentState.bgState?.currentGame?.availableRaces ?? [],
+					: (currentState.bgState?.currentGame?.availableRaces ?? []),
 		});
 		const newPostMatchPanel: BgsPostMatchStatsPanel = this.addTribeInfoToPostMatchPanel(
 			currentState.bgState,

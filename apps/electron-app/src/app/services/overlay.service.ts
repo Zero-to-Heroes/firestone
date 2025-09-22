@@ -105,7 +105,7 @@ export class OverlayService extends EventEmitter {
 
 		// Get current game info from centralized service
 		const gameInfo = this.gameWindowService.getCurrentGameInfo();
-		console.log(`Resizing - Game info from service:`, gameInfo);
+		// console.log(`Resizing - Game info from service:`, gameInfo);
 
 		if (!gameInfo) {
 			console.log(`No game info available for resize, keeping current size`);
@@ -120,7 +120,7 @@ export class OverlayService extends EventEmitter {
 			this.overlayWindow.window.setSize(gameWidth, gameHeight);
 			this.overlayWindow.window.setPosition(0, 0);
 			this.overlayWindow.window.show(); // Make sure it's visible
-			console.log(`Overlay resized to: ${gameWidth}x${gameHeight}`);
+			// console.log(`Overlay resized to: ${gameWidth}x${gameHeight}`);
 		} catch (error) {
 			console.error('❌ Failed to resize overlay window:', error);
 		}

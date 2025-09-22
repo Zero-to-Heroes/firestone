@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isMercenaries } from '@firestone-hs/reference-data';
+import { GameEventsEmitterService } from '@firestone/app/common';
 import { ArenaInfoService } from '@firestone/arena/common';
 import { GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
@@ -20,10 +21,9 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { GameEvent } from '../../models/game-event';
+import { GameEvent } from '../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
@@ -268,7 +268,7 @@ export class EndGameListenerService {
 									bgNewRating: bgNewRating,
 									battlegroundsInfoAfterGameOver: bgMemoryInfo,
 									gameSettings: gameSettings,
-								} as UploadInfo),
+								}) as UploadInfo,
 						),
 						// tap((info) => console.debug('[manastorm-bridge] triggering final observable', info)),
 						// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
@@ -325,13 +325,13 @@ export class EndGameListenerService {
 			info.battlegroundsInfoAfterGameOver.NewRating !== -1
 				? info.battlegroundsInfoAfterGameOver
 				: isBattlegrounds(info.metadata.GameType)
-				? await this.getBattlegroundsEndGame()
-				: null;
+					? await this.getBattlegroundsEndGame()
+					: null;
 		const newBgInfoWithRating: BattlegroundsInfo = !!newBgInfo
 			? {
 					...newBgInfo,
 					NewRating: bgNewRating ?? newBgInfo.NewRating,
-			  }
+				}
 			: null;
 		const xpForGame = await this.rewards.getXpForGameInfo();
 		console.log('[manastorm-bridge] read memory info');

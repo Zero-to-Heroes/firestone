@@ -1,5 +1,5 @@
 import { AttackOnBoard, GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../models/game-event';
+import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { EventParser } from './event-parser';
 
 export class AttackOnBoardParser implements EventParser {
@@ -16,7 +16,7 @@ export class AttackOnBoardParser implements EventParser {
 						board: attackOnBoard.Player.Board,
 						hero: attackOnBoard.Player.Hero,
 					},
-			  });
+				});
 		const newOpponentDeck = areEqual(attackOnBoard.Opponent, currentState.opponentDeck.totalAttackOnBoard)
 			? currentState.opponentDeck
 			: currentState.opponentDeck.update({
@@ -24,13 +24,13 @@ export class AttackOnBoardParser implements EventParser {
 						board: attackOnBoard.Opponent.Board,
 						hero: attackOnBoard.Opponent.Hero,
 					},
-			  });
+				});
 		return newPlayerDeck === currentState.playerDeck && newOpponentDeck === currentState.opponentDeck
 			? currentState
 			: currentState.update({
 					playerDeck: newPlayerDeck,
 					opponentDeck: newOpponentDeck,
-			  });
+				});
 	}
 
 	event(): string {

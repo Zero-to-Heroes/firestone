@@ -1,5 +1,5 @@
+import { GameStateEvent } from '@firestone/app/common';
 import { ConstructedTab } from '../../../models/constructed/constructed-tab.type';
-import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 
 export class ConstructedChangeTabEvent implements GameStateEvent {
 	public static EVENT_NAME = 'CONSTRUCTED_CHANGE_TAB';
