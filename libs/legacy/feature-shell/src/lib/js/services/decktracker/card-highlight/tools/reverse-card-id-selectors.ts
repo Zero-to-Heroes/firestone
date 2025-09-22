@@ -21,12 +21,42 @@ export const reverseCardIdSelector = (
 
 	// Race-based reverse synergies
 	if (refCard.races?.length) {
+		if (refCard.races.map(r => r.toUpperCase()).includes('UNDEAD')) {
+			return and(side(inputSide), or(inDeck, inHand), cardIs(
+				CardIds.AcolyteOfDeath_CORE_RLK_121,
+			CardIds.AmateurPuppeteer_AmateurPuppeteerToken_TOY_828t,
+			CardIds.ArmsDealer_RLK_824,
+			CardIds.Banshee_RLK_957,
+			CardIds.BoneFlinger,
+			CardIds.Bonecaller,
+			CardIds.DeadAir,
+			CardIds.DrakkariEmbalmer_RLK_119,
+			CardIds.ElderNadox,
+			CardIds.FleshBehemoth_RLK_Prologue_RLK_830,
+			CardIds.GluthSicleTavernBrawl,
+			CardIds.GluthTavernBrawl_PVPDR_Sai_T1,
+			CardIds.GraveDigging,
+			CardIds.Invincible,
+			CardIds.LesserSpinelSpellstone_GreaterSpinelSpellstoneToken_TOY_825t2,
+			CardIds.NecroticMortician_CORE_RLK_116,
+			CardIds.NerubianVizier,
+			CardIds.NoxiousInfiltrator,
+			CardIds.PoisonBreath_CORE_EDR_002,
+			CardIds.RottingNecromancer,
+			CardIds.ShadowWordUndeath,
+			CardIds.SicklyGrimewalker_YOG_512,
+			CardIds.SkeletalSidekickCore_RLK_958,
+			CardIds.SoulburnerVaria_YOG_520,
+			CardIds.TwistedTether,
+			CardIds.UndyingAllies,
+			CardIds.UnlivingChampion,
+			CardIds.Wither
+			));
+		}
 		if (refCard.races.map(r => r.toUpperCase()).includes('BEAST')) {
 			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.AbsorbentParasite,
-			CardIds.AddledGrizzly_WON_009,
+				CardIds.AddledGrizzly_WON_009,
 			CardIds.AzsharanSaber_SunkenSaberToken,
-			CardIds.Banjosaur,
 			CardIds.BigDreams,
 			CardIds.BunnyStomper_WW_435,
 			CardIds.ButchTavernBrawl,
@@ -70,46 +100,12 @@ export const reverseCardIdSelector = (
 			CardIds.SupremeDinomancy_TLC_828,
 			CardIds.TavishStormpike_BAR_038,
 			CardIds.TendingDragonkin_FIR_960,
-			CardIds.TheCurator_CORE_KAR_061,
 			CardIds.ThornmantleMusician,
 			CardIds.Thunderbringer_WW_440,
 			CardIds.VirmenSensei_WON_300,
 			CardIds.WarsongWrangler,
 			CardIds.WingCommanderIchman_AV_336,
 			CardIds.WitchingHour
-			));
-		}
-		if (refCard.races.map(r => r.toUpperCase()).includes('UNDEAD')) {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.AcolyteOfDeath_CORE_RLK_121,
-			CardIds.AmateurPuppeteer_AmateurPuppeteerToken_TOY_828t,
-			CardIds.AmorphousSlime,
-			CardIds.ArmsDealer_RLK_824,
-			CardIds.Banshee_RLK_957,
-			CardIds.BoneFlinger,
-			CardIds.Bonecaller,
-			CardIds.DeadAir,
-			CardIds.DrakkariEmbalmer_RLK_119,
-			CardIds.ElderNadox,
-			CardIds.GluthSicleTavernBrawl,
-			CardIds.GluthTavernBrawl_PVPDR_Sai_T1,
-			CardIds.GraveDigging,
-			CardIds.Invincible,
-			CardIds.LesserSpinelSpellstone_GreaterSpinelSpellstoneToken_TOY_825t2,
-			CardIds.NecroticMortician_CORE_RLK_116,
-			CardIds.NerubianVizier,
-			CardIds.NoxiousInfiltrator,
-			CardIds.PoisonBreath_CORE_EDR_002,
-			CardIds.RottingNecromancer,
-			CardIds.ShadowWordUndeath,
-			CardIds.SicklyGrimewalker_YOG_512,
-			CardIds.SinisterSoulcage_YOG_513,
-			CardIds.SkeletalSidekickCore_RLK_958,
-			CardIds.SoulburnerVaria_YOG_520,
-			CardIds.TwistedTether,
-			CardIds.UndyingAllies,
-			CardIds.UnlivingChampion,
-			CardIds.Wither
 			));
 		}
 		if (refCard.races.map(r => r.toUpperCase()).includes('PIRATE')) {
@@ -142,11 +138,9 @@ export const reverseCardIdSelector = (
 			CardIds.CariaFelsoul,
 			CardIds.CraneGame_TOY_884,
 			CardIds.Demonfuse_DarkFusionEnchantment,
-			CardIds.DirgeOfDespair,
 			CardIds.Felosophy,
 			CardIds.GameMasterNemsy_TOY_524,
 			CardIds.InfernalStratagem_GDB_122,
-			CardIds.KanrethadEbonlocke_KanrethadPrimeToken,
 			CardIds.Malganis_GVG_021,
 			CardIds.PitCommander,
 			CardIds.RagingFelscreamer_BT_416,
@@ -167,7 +161,6 @@ export const reverseCardIdSelector = (
 			CardIds.Chillmaw_CORE_AT_123,
 			CardIds.CloudSerpent_TLC_888,
 			CardIds.ClutchOfCorruption_EDR_454,
-			CardIds.CollectorsIreTavernBrawlToken,
 			CardIds.DaringDrake,
 			CardIds.Darkrider_EDR_456,
 			CardIds.DesertNestmatron_WW_826,
@@ -180,7 +173,6 @@ export const reverseCardIdSelector = (
 			CardIds.DragonboneRitualTavernBrawl,
 			CardIds.Dragoncaster,
 			CardIds.DrakonidOperativeCore,
-			CardIds.DrocomurchanicasTavernBrawlToken,
 			CardIds.FlyOffTheShelves_TOY_714,
 			CardIds.FrizzKindleroost,
 			CardIds.FutureEmissary_WON_140,
@@ -276,7 +268,6 @@ export const reverseCardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), cardIs(
 				CardIds.BarbedNets,
 			CardIds.CoilCastingTavernBrawl,
-			CardIds.ConchsCall,
 			CardIds.NagasPride,
 			CardIds.OasisOutlaws_WW_404,
 			CardIds.Predation,
@@ -320,43 +311,327 @@ export const reverseCardIdSelector = (
 			CardIds.Gigantotem,
 			CardIds.SplittingAxe,
 			CardIds.TheStonewright,
-			CardIds.ThingFromBelowCore,
-			CardIds.TotemicSurge
+			CardIds.ThingFromBelowCore
 			));
 		}
 	}
 
 	// Spell school reverse synergies
 	if (refCard.spellSchool && refCard.type?.toUpperCase() === 'SPELL') {
-		if (refCard.spellSchool?.toUpperCase() === 'ARCANE') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.ArcaneFluxTavernBrawl,
-			CardIds.ArcaniteCrystalTavernBrawl,
-			CardIds.HalduronBrightwing,
-			CardIds.MagistersApprentice,
-			CardIds.SilvermoonFarstrider_RLK_826,
-			CardIds.StarlightReactor_GDB_108,
-			CardIds.UnstableMagicTavernBrawl,
-			CardIds.Vexallus
-			));
-		}
-		if (refCard.spellSchool?.toUpperCase() === 'FROST') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.BitterColdTavernBrawl,
-			CardIds.GlacialDownpourTavernBrawl,
-			CardIds.HarbingerOfWinterCore_RLK_511,
-			CardIds.HeraldOfLokholar,
-			CardIds.IceRevenant,
-			CardIds.LadyDeathwhisper_RLK_713,
-			CardIds.RambunctiousStuffy_TOY_821,
-			CardIds.Rimetongue,
-			CardIds.WatercolorArtist_TOY_376
-			));
-		}
-		if (refCard.spellSchool?.toUpperCase() === 'HOLY') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.CarielRoame_BAR_902,
-			CardIds.DivineIlluminationTavernBrawl,
+	}
+
+	// Card type reverse synergies
+	if (refCard.type?.toUpperCase() === 'LOCATION') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.DispossessedSoul_CORE_REV_901
+		));
+	}
+
+	// Complex condition reverse synergies
+	// tribe:beast+type:minion (3 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('BEAST')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AbsorbentParasite,
+			CardIds.Banjosaur,
+			CardIds.TheCurator_CORE_KAR_061
+		));
+	}
+
+	// type:minion+mechanics:rush (9 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('RUSH')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AkaliTheRhino,
+			CardIds.ClearTheWay,
+			CardIds.DivingGryphon,
+			CardIds.PotionOfSparkingTavernBrawl,
+			CardIds.RocketBackpacksTavernBrawl,
+			CardIds.RushTheStage,
+			CardIds.SpecialDeliveryTavernBrawl,
+			CardIds.StageDive_StageDive,
+			CardIds.TownCrier_CORE_GIL_580
+		));
+	}
+
+	// mechanics:battlecry+cost:more:2 (1 card)
+	if (refCard.cost > 2 && refCard.mechanics?.includes('BATTLECRY')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AllTogetherNowTavernBrawl
+		));
+	}
+
+	// type:minion+other:tribeless (11 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && !refCard.races || refCard.races.length === 0) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AllYouCanEat_VAC_528,
+			CardIds.AmalgamOfTheDeep,
+			CardIds.FlightOfTheFirehawk_TLC_222,
+			CardIds.MenagerieMug_CORE_WON_141,
+			CardIds.PartyAnimal,
+			CardIds.RoaringApplause,
+			CardIds.RockMasterVoone_ETC_121,
+			CardIds.SpiritOfTheMountain_TLC_229,
+			CardIds.ThePurator,
+			CardIds.TortollanStoryteller_TLC_254,
+			CardIds.TrustyCompanion_WW_027
+		));
+	}
+
+	// tribe:undead+type:minion (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AmorphousSlime,
+			CardIds.SinisterSoulcage_YOG_513
+		));
+	}
+
+	// type:minion+mechanics:deathrattle (35 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AmuletOfUndying,
+			CardIds.ArchdruidOfThorns_EDR_491,
+			CardIds.AwakenTheMakers,
+			CardIds.BrittleboneBuccaneer_VAC_436,
+			CardIds.CarrionStudies,
+			CardIds.DeadRinger,
+			CardIds.DeathBlossomWhomper,
+			CardIds.DeathGrowl,
+			CardIds.DeathlyDeathTavernBrawl,
+			CardIds.DeathstriderTavernBrawl,
+			CardIds.DevoutBlessingsTavernBrawlToken,
+			CardIds.ExpeditedBurialTavernBrawl,
+			CardIds.FelfireBonfire_VAC_952,
+			CardIds.ForsakenLieutenant_AV_601,
+			CardIds.HedgeMaze_REV_792,
+			CardIds.HighCultistHerenn_TLC_810,
+			CardIds.JewelOfNzoth,
+			CardIds.MummyMagic,
+			CardIds.NecriumApothecary,
+			CardIds.NineLives,
+			CardIds.NzothTheCorruptor,
+			CardIds.NzothTheCorruptor_DarkMachinations_THD_039p,
+			CardIds.PrincessTavernBrawl,
+			CardIds.RavenousFelhunter_EDR_891,
+			CardIds.ScourgeIllusionist,
+			CardIds.Shattershambler,
+			CardIds.TamsinsPhylactery,
+			CardIds.TerrorscaleStalker_CORE_UNG_800,
+			CardIds.TombLurker_ICC_098,
+			CardIds.Tuskpiercer_CORE_BAR_330,
+			CardIds.TwilightsCall,
+			CardIds.UnearthedRaptor,
+			CardIds.VengefulSpirit_BAR_328,
+			CardIds.XyrellaTheDevout,
+			CardIds.YellingYodeler
+		));
+	}
+
+	// mechanics:secret (17 cards)
+	if (refCard.mechanics?.includes('SECRET')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AncientMysteries,
+			CardIds.AnonymousInformant_CORE_REV_841,
+			CardIds.Arcanologist,
+			CardIds.ArcanologistCore,
+			CardIds.ChattyBartender,
+			CardIds.CostumedSinger,
+			CardIds.DunBaldarBunker,
+			CardIds.EaglehornBowVanilla,
+			CardIds.GhastlyGravedigger,
+			CardIds.KabalCrystalRunner_WON_308,
+			CardIds.MadScientist,
+			CardIds.MysteriousChallenger_WON_334,
+			CardIds.PrivateEye,
+			CardIds.ScuttlebuttGhoul_CORE_REV_900,
+			CardIds.SecretStudiesTavernBrawl,
+			CardIds.SpringTheTrap,
+			CardIds.Zuljin_WarriorsOfAmani_THD_010p
+		));
+	}
+
+	// type:minion+cost:less:4 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AnimateDead
+		));
+	}
+
+	// type:minion+cost:equal:1 (5 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.ApothecarysCaravan,
+			CardIds.BoogieDown,
+			CardIds.K90tron,
+			CardIds.SonyaWaterdancer_TOY_515,
+			CardIds.TrustyFishingRod_VAC_960
+		));
+	}
+
+	// type:spell+cost:equal:7 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 7) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.ArcaneBrilliance
+		));
+	}
+
+	// tribe:demon+other:notInInitialDeck (2 cards)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('DEMON')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Archimonde_GDB_128,
+			CardIds.ForebodingFlame_GDB_121
+		));
+	}
+
+	// type:spell+cost:more:4 (3 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AshleafPixie_FIR_961,
+			CardIds.Groundskeeper,
+			CardIds.HagathaTheFabled_TOY_504
+		));
+	}
+
+	// type:minion+mechanics:battlecry (7 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('BATTLECRY')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AuctionhouseGavel,
+			CardIds.BrannBronzebeard_BrannsSaddle_THD_042p,
+			CardIds.FairyTaleForest_TOY_507,
+			CardIds.Murmur_GDB_448,
+			CardIds.ParrotSanctuary_VAC_409,
+			CardIds.Snapdragon,
+			CardIds.Turbulus_WORK_013
+		));
+	}
+
+	// type:minion+cost:less:3 (3 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 3) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BandOfBeesTavernBrawl,
+			CardIds.CallToArms,
+			CardIds.OracleOfElune
+		));
+	}
+
+	// type:spell+cost:equal:1 (3 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_CORE_BAR_551,
+			CardIds.Gazlowe,
+			CardIds.TrinketTracker
+		));
+	}
+
+	// mechanics:deathrattle (12 cards)
+	if (refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BaronRivendare_CORE_FP1_031,
+			CardIds.BarrensTrapper,
+			CardIds.NecriumBlade,
+			CardIds.NecriumVial,
+			CardIds.PlayDead_CORE_ICC_052,
+			CardIds.ReturnPolicy_MIS_102,
+			CardIds.RollTheBones_CORE_ICC_201,
+			CardIds.RottenRodent,
+			CardIds.ShallowGrave,
+			CardIds.Smokescreen,
+			CardIds.SummonerDarkmarrow_VAC_503,
+			CardIds.TotemOfTheDead_LOOTA_845
+		));
+	}
+
+	// type:minion+mechanics:taunt (12 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('TAUNT')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Battlepickaxe_WW_347,
+			CardIds.Bolster,
+			CardIds.BulkUp,
+			CardIds.DetonationJuggernaut_WW_329,
+			CardIds.EnduranceTrainingTavernBrawl,
+			CardIds.FirePlumesHeart,
+			CardIds.IntoTheFray,
+			CardIds.QualityAssurance_TOY_605,
+			CardIds.RazormaneBattleguard,
+			CardIds.TortollanTraveler_VAC_518,
+			CardIds.UnluckyPowderman_WW_367,
+			CardIds.ValstannStaghelm_WON_345
+		));
+	}
+
+	// mechanics:battlecry (7 cards)
+	if (refCard.mechanics?.includes('BATTLECRY')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BattleTotem_LOOTA_846,
+			CardIds.BrannBronzebeard_LOE_077,
+			CardIds.BrilliantMacaw,
+			CardIds.CorruptTheWaters,
+			CardIds.MurmuringElemental,
+			CardIds.RallyTheTroopsTavernBrawl,
+			CardIds.Shudderblock_ShudderblockToken_TOY_501t
+		));
+	}
+
+	// mechanics:legendary+other:legendary (1 card)
+	if (refCard.rarity?.toUpperCase() === 'LEGENDARY') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p
+		));
+	}
+
+	// school:frost+other:dealsDamage (1 card)
+	if (refCard.spellSchool?.toUpperCase() === 'FROST' && refCard.type?.toUpperCase() === 'SPELL') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BitterColdTavernBrawl
+		));
+	}
+
+	// tribe:mech+mechanics:deathrattle (1 card)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('MECH') && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BoomWrench_BoomWrenchToken_TOY_604t
+		));
+	}
+
+	// mechanics:excavate,legendary,quickdraw,tradeable+other:legendary (1 card)
+	if (refCard.rarity?.toUpperCase() === 'LEGENDARY') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BountyBoard_WW_003
+		));
+	}
+
+	// mechanics:lifesteal+other:restoreHealth (1 card)
+	if (refCard.mechanics?.includes('LIFESTEAL')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BrittleboneDestroyer
+		));
+	}
+
+	// type:spell+cost:costMore:4 (3 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BumblingBellhop_VAC_521,
+			CardIds.FaeTrickster_EDR_571,
+			CardIds.WeaverOfTheCycle_EDR_472
+		));
+	}
+
+	// type:minion+attack:equal:1 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.attack === 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BusyBot_WORK_002
+		));
+	}
+
+	// type:minion+cost:more:4 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.CaricatureArtist_TOY_391
+		));
+	}
+
+	// school:holy+type:spell (15 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'HOLY') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.CarielRoame_BAR_902,
 			CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t,
 			CardIds.GuardianLightTavernBrawl,
 			CardIds.HeraldOfLight,
@@ -371,12 +646,49 @@ export const reverseCardIdSelector = (
 			CardIds.StarlightGroove,
 			CardIds.TheGardensGrace,
 			CardIds.VeteranWarmedic
-			));
-		}
-		if (refCard.spellSchool?.toUpperCase() === 'NATURE') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.ChampionOfStorms,
-			CardIds.CrashOfThunder,
+		));
+	}
+
+	// type:minion+attack:greater:4 (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.attack > 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.ClimbingHook_VAC_932,
+			CardIds.GiantAnaconda
+		));
+	}
+
+	// tribe:dragon+type:minion (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.CollectorsIreTavernBrawlToken,
+			CardIds.DrocomurchanicasTavernBrawlToken
+		));
+	}
+
+	// tribe:naga+type:spell (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.races?.map(r => r.toUpperCase()).includes('NAGA')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.ConchsCall
+		));
+	}
+
+	// type:minion+attack:greater:0,less:2 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.attack > 0 && refCard.attack < 2) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Crystology
+		));
+	}
+
+	// type:minion+mechanics:deathrattle+cost:less:6 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 6 && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.DeathSpeakerBlackthorn_BAR_329
+		));
+	}
+
+	// school:nature+type:spell (11 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'NATURE') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.DeviateDreadfang,
 			CardIds.GroveShaper_EDR_271,
 			CardIds.GuffRunetotem_BAR_720,
@@ -384,32 +696,42 @@ export const reverseCardIdSelector = (
 			CardIds.IronRootsTavernBrawl,
 			CardIds.LadyAnacondra_WC_006,
 			CardIds.MendingPoolsTavernBrawl,
-			CardIds.NaturalForceTavernBrawl,
 			CardIds.SpreadingSaplingsTavernBrawl,
 			CardIds.ToadOfTheWilds,
 			CardIds.TopiorTheShrubbagazzor,
 			CardIds.WidowbloomSeedsman
-			));
-		}
-		if (refCard.spellSchool?.toUpperCase() === 'FEL') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.CorruptedFelstoneTavernBrawl,
-			CardIds.FelfireBlaze_FIR_904,
-			CardIds.Felgorger_SW_043,
-			CardIds.FossilFanatic,
-			CardIds.GraveDefiler,
-			CardIds.HeraldOfChaos,
-			CardIds.IllidanStormrage_FelInside_THD_004p,
-			CardIds.ImpCredibleTrousersTavernBrawl,
-			CardIds.PopgarThePutrid_WW_091,
-			CardIds.Scorchreaver_FIR_952,
-			CardIds.WitherTheWeakTavernBrawl
-			));
-		}
-		if (refCard.spellSchool?.toUpperCase() === 'SHADOW') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.CrystalsmithCultist,
-			CardIds.Darkbomb_WON_095,
+		));
+	}
+
+	// tribe:demon+type:minion (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('DEMON')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.DirgeOfDespair,
+			CardIds.KanrethadEbonlocke_KanrethadPrimeToken
+		));
+	}
+
+	// type:minion+mechanics:legendary+other:legendary (4 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.rarity?.toUpperCase() === 'LEGENDARY') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.DisksOfLegendTavernBrawl,
+			CardIds.InspiringPresenceTavernBrawl,
+			CardIds.RingOfPhaseshiftingTavernBrawl,
+			CardIds.RoyalGreatswordTavernBrawlToken
+		));
+	}
+
+	// type:minion+mechanics:deathrattle+cost:less:4 (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4 && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.DreadRaptor_TLC_432,
+			CardIds.Razorboar
+		));
+	}
+
+	// school:shadow+type:spell (10 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'SHADOW') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.EerieStoneTavernBrawl,
 			CardIds.HeraldOfShadows,
 			CardIds.KaraTheDarkStar_GDB_127,
@@ -420,399 +742,442 @@ export const reverseCardIdSelector = (
 			CardIds.SketchArtist_TOY_916,
 			CardIds.StaffOfPainTavernBrawl,
 			CardIds.TwilightDeceptor
-			));
-		}
-		if (refCard.spellSchool?.toUpperCase() === 'FIRE') {
-			return and(side(inputSide), or(inDeck, inHand), cardIs(
-				CardIds.FirekeepersIdolTavernBrawl,
+		));
+	}
+
+	// tribe:elemental+mechanics:legendary+other:legendary (1 card)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL') && refCard.rarity?.toUpperCase() === 'LEGENDARY') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.AlakirTheWindlord_ElementalEvocation_THD_026p
+		));
+	}
+
+	// type:minion+mechanics:divineShield (3 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('DIVINE_SHIELD')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.FancyPackaging_TOY_881,
+			CardIds.Funkfin,
+			CardIds.RighteousReservesTavernBrawl
+		));
+	}
+
+	// school:fel+type:spell (10 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FEL') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.FelfireBlaze_FIR_904,
+			CardIds.Felgorger_SW_043,
+			CardIds.FossilFanatic,
+			CardIds.GraveDefiler,
+			CardIds.HeraldOfChaos,
+			CardIds.IllidanStormrage_FelInside_THD_004p,
+			CardIds.ImpCredibleTrousersTavernBrawl,
+			CardIds.PopgarThePutrid_WW_091,
+			CardIds.Scorchreaver_FIR_952,
+			CardIds.WitherTheWeakTavernBrawl
+		));
+	}
+
+	// type:minion+mechanics:deathrattle+cost:more:4 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.FerociousFelbat_EDR_892
+		));
+	}
+
+	// mechanics:battlecry,combo (1 card)
+	if (refCard.mechanics?.includes('BATTLECRY')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.FieldContact
+		));
+	}
+
+	// school:fire+type:spell (11 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FIRE') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.FirekeepersIdolTavernBrawl,
 			CardIds.FlameWavesTavernBrawl,
 			CardIds.FlamesOfTheKirinTorTavernBrawl,
 			CardIds.HotStreak,
 			CardIds.InfernoHerald_FIR_913,
-			CardIds.KindlingFlameTavernBrawl,
 			CardIds.LivingFlame_FIR_929,
 			CardIds.MechanizedMagma_TLC_224,
 			CardIds.ScorchingWinds_FIR_910,
 			CardIds.SunfuryChampion,
 			CardIds.Thoribelore,
 			CardIds.VolcanicThrasher_TLC_223
-			));
-		}
-	}
-
-	// Card type reverse synergies
-	if (refCard.type?.toUpperCase() === 'WEAPON') {
-		return and(side(inputSide), or(inDeck, inHand), cardIs(
-			CardIds.AbyssalBassist,
-			CardIds.AirGuitarist,
-			CardIds.AxeBerserker,
-			CardIds.BlackscaleBrute,
-			CardIds.CagematchCustodian,
-			CardIds.CorsairCache,
-			CardIds.FogsailFreebooterCore,
-			CardIds.ForgedInFlame,
-			CardIds.GrimtotemBuzzkill,
-			CardIds.GrommashsArmguardsTavernBrawl,
-			CardIds.InstrumentSmasher,
-			CardIds.InstrumentTech,
-			CardIds.Khazgoroth_TitanforgeToken,
-			CardIds.LadyAshvane_Story_11_LadyAshvane,
-			CardIds.ManAtArms,
-			CardIds.PillageTheFallenTavernBrawl,
-			CardIds.Plunder,
-			CardIds.RatchetPrivateer,
-			CardIds.Runeforging_LEG_RLK_715,
-			CardIds.SelflessSidekick,
-			CardIds.ShadestoneSkulker_DEEP_012,
-			CardIds.SharpShipment_WORK_005,
-			CardIds.SmallTimeBuccaneer_WON_351,
-			CardIds.SouthseaDeckhandVanilla,
-			CardIds.SpacePirate_GDB_333,
-			CardIds.SwarthySwordshiner_VAC_701,
-			CardIds.VulperaToxinblade,
-			CardIds.WeaponsExpert
 		));
 	}
+
+	// cost:more:7 (1 card)
+	if (refCard.cost > 7) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.FlamesOfTheFirelord_FIR_923
+		));
+	}
+
+	// school:frost+type:spell (8 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FROST') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.GlacialDownpourTavernBrawl,
+			CardIds.HarbingerOfWinterCore_RLK_511,
+			CardIds.HeraldOfLokholar,
+			CardIds.IceRevenant,
+			CardIds.LadyDeathwhisper_RLK_713,
+			CardIds.RambunctiousStuffy_TOY_821,
+			CardIds.Rimetongue,
+			CardIds.WatercolorArtist_TOY_376
+		));
+	}
+
+	// tribe:mech+type:minion (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.GorillabotA3Core
+		));
+	}
+
+	// cost:equal:2 (1 card)
+	if (refCard.cost === 2) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.GreedyPartner_WW_901
+		));
+	}
+
+	// type:spell+cost:more:5 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 5) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.GreySageParrot
+		));
+	}
+
+	// type:minion+cost:less:5 (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 5) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.GrizzledGuardian,
+			CardIds.OakenSummons_CORE_LOOT_309
+		));
+	}
+
+	// tribe:beast+cost:less:6 (2 cards)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 6) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.GuardianAnimals,
+			CardIds.PetCollector
+		));
+	}
+
+	// school:arcane+type:spell (7 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'ARCANE') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.HalduronBrightwing,
+			CardIds.MagistersApprentice,
+			CardIds.SilvermoonFarstrider_RLK_826,
+			CardIds.Stargazing_WW_425,
+			CardIds.StarlightReactor_GDB_108,
+			CardIds.UnstableMagicTavernBrawl,
+			CardIds.Vexallus
+		));
+	}
+
+	// type:minion+attack:less:3 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.attack < 3) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.HatcheryHelper_TLC_233
+		));
+	}
+
+	// cost:more:3 (1 card)
+	if (refCard.cost > 3) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.HemetJungleHunter
+		));
+	}
+
+	// mechanics:taunt (3 cards)
+	if (refCard.mechanics?.includes('TAUNT')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.HoldTheLineTavernBrawl,
+			CardIds.LastStand,
+			CardIds.StolenGoods_WON_110
+		));
+	}
+
+	// type:minion+attack:equal:0 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.attack === 0) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.HolyEggbearer_DINO_411
+		));
+	}
+
+	// type:minion+cost:less:5,more:0 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 0 && refCard.cost < 5) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Hybridization_TLC_236
+		));
+	}
+
+	// type:spell+other:hasSpellSchool (2 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && !!refCard.spellSchool) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.MagisterDawngrasp_AV_200,
+			CardIds.RazzleDazzler_VAC_301
+		));
+	}
+
+	// type:spell+mechanics:chooseOne (1 card)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
-			CardIds.AdvancedTargetingMonocle,
-			CardIds.AncientKrakenbane,
-			CardIds.AnimatedMoonwell_EDR_254,
-			CardIds.ArcaneArtificerCore,
-			CardIds.ArchmageAntonidas_CORE_EX1_559,
-			CardIds.ArchmageVargoth,
-			CardIds.ArkoniteRevelation_GDB_852,
-			CardIds.ArrowSmith,
-			CardIds.AudioSplitter,
-			CardIds.BabaNaga,
-			CardIds.BalindaStonehearth,
-			CardIds.BarbaricSorceress,
-			CardIds.BenevolentBanker_WW_384,
-			CardIds.Bioluminescence,
-			CardIds.Bloodbloom,
-			CardIds.BookOfSpecters,
-			CardIds.BrollBearmantle_EDR_853,
-			CardIds.CactusCutter_WW_327,
-			CardIds.CardGrader_TOY_054,
-			CardIds.CelestialShot_YOG_082,
-			CardIds.ChiaDrake_Cultivate_TOY_801a,
-			CardIds.ChiaDrake_SeedlingGrowth_TOY_801b,
-			CardIds.ClearancePromoter_TOY_390,
-			CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5,
-			CardIds.CoilskarCommander,
-			CardIds.Colossus_SC_758,
-			CardIds.CommanderSivara_TSC_087,
-			CardIds.Conductivity_YOG_522,
-			CardIds.ConjuredBookkeeper_TLC_226,
-			CardIds.ContaminatedLasher_YOG_528,
-			CardIds.CosmicKeyboard,
-			CardIds.Cosmonaut_GDB_443,
-			CardIds.DarkmoonMagician_MIS_303,
-			CardIds.Deathchiller_CORE_RLK_083,
-			CardIds.DeckOfLunacy,
-			CardIds.DeepwaterEvoker,
-			CardIds.DevoutPupil,
-			CardIds.DoorOfShadows_DoorOfShadowsToken,
-			CardIds.DoubleTime,
-			CardIds.DozingKelpkeeper,
-			CardIds.DragonsFury,
-			CardIds.DryscaleDeputy_WW_383,
-			CardIds.EnergyShaper,
-			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
-			CardIds.FarseerNobundo_GDB_447,
-			CardIds.GlacialAdvance_RLK_512,
-			CardIds.GlowflySwarm,
-			CardIds.GreenThumbGardener,
-			CardIds.HallazealTheAscended_WON_336,
-			CardIds.Handmaiden,
-			CardIds.HarnessTheElementsTavernBrawl,
-			CardIds.HedraTheHeretic_TSC_658,
-			CardIds.HighAbbessAlura,
-			CardIds.Hullbreaker,
-			CardIds.IcebloodTower,
-			CardIds.IdolsOfEluneTavernBrawl,
-			CardIds.Illuminate,
-			CardIds.IncantersFlow,
-			CardIds.JotunTheEternal,
-			CardIds.JungleJammer,
-			CardIds.KhadgarsScryingOrb,
-			CardIds.Kindle_ULDA_911,
-			CardIds.KingTide_VAC_524,
-			CardIds.KolkarPackRunner,
-			CardIds.LadyStheno_TSC_218,
-			CardIds.LadyVashj_VashjPrimeToken,
-			CardIds.LearnDraconic,
-			CardIds.LifebindersGrowth,
-			CardIds.Lifeguard_VAC_919,
-			CardIds.LinaShopManager_TOY_531,
-			CardIds.LockAndLoad_WON_023,
-			CardIds.LorewalkerCho_CORE_EX1_100,
-			CardIds.LoveEverlasting,
-			CardIds.MagathaBaneOfMusic,
-			CardIds.MagisterDawngrasp_AV_200,
-			CardIds.MagisterUnchainedTavernBrawlToken,
-			CardIds.MalygosTheSpellweaverCore,
-			CardIds.ManaCyclone,
-			CardIds.MantleShaper_DEEP_004,
-			CardIds.MaroonedArchmage_VAC_435,
-			CardIds.MarshlandThresher_TLC_256,
-			CardIds.Marshspawn_CORE_BT_115,
-			CardIds.MeddlesomeServant_YOG_518,
-			CardIds.MistahVistah_VAC_519,
-			CardIds.MurkwaterScribe,
-			CardIds.Myrmidon,
-			CardIds.NagaGiant,
-			CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1,
-			CardIds.OopsAllSpellsTavernBrawl,
-			CardIds.Owlonius_TOY_807,
-			CardIds.PalmReading,
-			CardIds.ParchedDesperado_WW_407,
-			CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08,
-			CardIds.Pelagos_REV_781,
-			CardIds.PortalmancerSkyla_WORK_063,
-			CardIds.PowerWordFortitude,
-			CardIds.PreparationVanilla,
-			CardIds.PriestessValishj,
-			CardIds.PrimordialProtector_BAR_042,
-			CardIds.PrisonBreaker_YOG_411,
-			CardIds.Pyrotechnician,
-			CardIds.QueenAzshara_TSC_641,
-			CardIds.Queensguard,
-			CardIds.RaidTheSkyTemple,
-			CardIds.RajNazjan,
-			CardIds.RayllaSandSculptor_VAC_424,
-			CardIds.Reforestation_AidOfTheForest_EDR_843a,
-			CardIds.RefreshingSpringWater,
-			CardIds.RhoninsScryingOrbTavernBrawl,
-			CardIds.RimefangSword_LEG_RLK_710,
-			CardIds.RimescaleSiren,
-			CardIds.RingOfRefreshmentTavernBrawl,
-			CardIds.RitualOfTheNewMoon_EDR_461,
-			CardIds.RobeOfTheApprenticeTavernBrawl,
-			CardIds.RobeOfTheMagi,
-			CardIds.RobesOfShrinkingTavernBrawl,
-			CardIds.RuleModifier_SpreadOfCorruptionToken_TTN_002t45,
-			CardIds.RuneDagger,
-			CardIds.SaroniteShambler_YOG_521,
-			CardIds.ScrollSavvy,
-			CardIds.ShadowOfDemise,
-			CardIds.ShadowVisions,
-			CardIds.ShatariCloakfield_GDB_103,
-			CardIds.SheldrasMoontree,
-			CardIds.ShieldBattery_SC_759,
-			CardIds.ShirvallahTheTiger,
-			CardIds.ShiveringSorceress,
-			CardIds.SlitheringDeathscale,
-			CardIds.SpectralTrainee,
-			CardIds.Spellcoiler,
-			CardIds.SpitefulSummoner,
-			CardIds.Starscryer,
-			CardIds.SunstridersCrownTavernBrawl,
-			CardIds.Surfalopod_VAC_443,
-			CardIds.SwiftscaleTrickster,
-			CardIds.TalentedArcanist,
-			CardIds.TangledWrath,
-			CardIds.TheFistOfRaDen,
-			CardIds.TheStoneOfJordanTavernBrawlToken,
-			CardIds.TheUpperHand,
-			CardIds.ThriveInTheShadowsCore,
-			CardIds.TidePools_VAC_522,
-			CardIds.TidepoolPupil_VAC_304,
-			CardIds.TortollanPilgrim,
-			CardIds.TrolleyProblem_WW_436,
-			CardIds.TwinbowTerrorcoil,
-			CardIds.Tyrande_EDR_464,
-			CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
-			CardIds.UrchinSpines,
-			CardIds.Ursol_EDR_259,
-			CardIds.VelensChosen,
-			CardIds.ViciousSlitherspear_CORE_TSC_827,
-			CardIds.VoidFlayer,
-			CardIds.VolumeUp,
-			CardIds.Whirlweaver,
-			CardIds.WickedWitchdoctor_WON_083,
-			CardIds.WildPyromancerVanilla,
-			CardIds.WishOfTheNewMoon_EDR_460,
-			CardIds.YoggSaronMasterOfFate,
-			CardIds.Zuljin
-		));
-	}
-	if (refCard.type?.toUpperCase() === 'MINION') {
-		return and(side(inputSide), or(inDeck, inHand), cardIs(
-			CardIds.AegwynnTheGuardian_LEG_CS3_001,
-			CardIds.AlarmedSecuritybot_YOG_510,
-			CardIds.AllianceBannerman,
-			CardIds.AlwaysABiggerJormungar,
-			CardIds.AmitusThePeacekeeper,
-			CardIds.AmitusThePeacekeeper_ReinforcedToken,
-			CardIds.AncestorsCall,
-			CardIds.AnimaExtractor_CORE_REV_332,
-			CardIds.AnimatedBerserker_ICC_238,
-			CardIds.Anubrekhan_RLK_659,
-			CardIds.ApexisBlast,
-			CardIds.Artanis_SC_754,
-			CardIds.Assembly_Assembly,
-			CardIds.Aviana_WON_012,
-			CardIds.AzsharanGardens_SunkenGardensToken,
-			CardIds.BackstageBouncer,
-			CardIds.BanelingBarrage_SC_001,
-			CardIds.Barnes,
-			CardIds.BeanstalkBrute_EDR_230,
-			CardIds.Birdwatching_VAC_408,
-			CardIds.BlackrockNRoll,
-			CardIds.BladeOfTheBurningSun,
-			CardIds.Blink_SC_761,
-			CardIds.BloodCrusader,
-			CardIds.BloodMoonTavernBrawl,
-			CardIds.BloodOfGhuun,
-			CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4,
-			CardIds.Breakdance,
-			CardIds.BronzeSignetTavernBrawl,
-			CardIds.CapturedFlag,
-			CardIds.CarnivorousCube,
-			CardIds.CarnivorousCubicle_WORK_042,
-			CardIds.CharredChameleon_FIR_908,
-			CardIds.ChemicalSpill_TOY_602,
-			CardIds.ChorusRiff,
-			CardIds.ClawMachine,
-			CardIds.CliffDive_VAC_926,
-			CardIds.ColiferoTheArtist_TOY_703,
-			CardIds.Commencement,
-			CardIds.CowardlyGrunt,
-			CardIds.CreationProtocol_CreationProtocolToken,
-			CardIds.CreepTumor_SC_011,
-			CardIds.DealWithADevil,
-			CardIds.DeckOfChaos,
-			CardIds.DevilsaurMask_DINO_403,
-			CardIds.DimensionalRipper,
-			CardIds.DisciplinarianGandling,
-			CardIds.DiscoMaul,
-			CardIds.DivineStar_GDB_460,
-			CardIds.DreamboundRaptor_EDR_849,
-			CardIds.EchoOfMedivh,
-			CardIds.EliseBadlandsSavior_WW_392,
-			CardIds.ElixirOfVigorTavernBrawl,
-			CardIds.ElvenMinstrelCore,
-			CardIds.Embiggen,
-			CardIds.Ensmallen_TOY_805,
-			CardIds.EternalServitude_ICC_213,
-			CardIds.Eureka,
-			CardIds.FeldoreiWarband,
-			CardIds.Firegill_DINO_404,
-			CardIds.FlashSale_TOY_716,
-			CardIds.FoodFight_EntréeToken_VAC_533t,
-			CardIds.FrontLines_Story_11_FrontLines,
-			CardIds.FungalFortunes,
-			CardIds.GatherYourParty,
-			CardIds.GreedyGainsTavernBrawl,
-			CardIds.GrimestreetOutfitterCore,
-			CardIds.GrimyGadgeteer,
-			CardIds.HabeasCorpses,
-			CardIds.HagathasEmbraceTavernBrawl,
-			CardIds.Hallucination_SC_757,
-			CardIds.HarmonicMetal_DissonantMetalToken,
-			CardIds.HatchingCeremony_DINO_405,
-			CardIds.HawkstriderRancher,
-			CardIds.HealingWave_WON_320,
-			CardIds.Hellion_HellbatToken_SC_412t,
-			CardIds.HopeOfQuelthalas,
-			CardIds.ImpendingCatastrophe,
-			CardIds.ImployeeOfTheMonth_WORK_009,
-			CardIds.ImprisonedScrapImp,
-			CardIds.Infestor_SC_002,
-			CardIds.Insight_InsightToken,
-			CardIds.InvigoratingSermon,
-			CardIds.IxlidFungalLord,
-			CardIds.JalTheSharpshot,
-			CardIds.JepettoJoybuzz,
-			CardIds.JimRaynor_Stimpack_SC_400p,
-			CardIds.KabalTalonpriest,
-			CardIds.KeeperOfFlame_FIR_928,
-			CardIds.KeepersStrength_YOG_509,
-			CardIds.LadyInWhite,
-			CardIds.Lightspeed_GDB_457,
-			CardIds.LivingGarden_EDR_518,
-			CardIds.LohTheLivingLegend_TLC_257,
-			CardIds.LokenJailerOfYoggSaron,
-			CardIds.LongneckEgg_DINO_130,
-			CardIds.LorthemarTheron_RLK_593,
-			CardIds.Malfunction_MIS_107,
-			CardIds.ManufacturingError_TOY_371,
-			CardIds.MaskedReveler,
-			CardIds.MasterJouster,
-			CardIds.MaximaBlastenheimer,
-			CardIds.MeatGrinder_RLK_120,
-			CardIds.Melomania,
-			CardIds.MoatLurker,
-			CardIds.MonstrousMosquito_EDR_816,
-			CardIds.MoshPit,
-			CardIds.MuscleOTron_YOG_525,
-			CardIds.MutatingInjection_NAX11_04,
-			CardIds.NightmareLordXavius_EDR_856,
-			CardIds.OldMilitiaHorn_VeteransMilitiaHornTavernBrawl,
-			CardIds.OrbitalHalo_GDB_439,
-			CardIds.OrbitalMoon_GDB_475,
-			CardIds.OutfitTailor,
-			CardIds.OverlordsWhip,
-			CardIds.PaintersVirtue_TOY_810,
-			CardIds.PantherMask_DINO_432,
-			CardIds.PendantOfEarth_DEEP_026,
-			CardIds.PhotonCannon_SC_753,
-			CardIds.PileOnHeroic,
-			CardIds.PowerChordSynchronize,
-			CardIds.ProvingGrounds,
-			CardIds.Psychopomp,
-			CardIds.PuppetmasterDorian_MIS_026,
-			CardIds.RaidBossOnyxia_ONY_004,
-			CardIds.Ravage_SC_004hp,
-			CardIds.Reforestation_Fertilize_EDR_843b,
-			CardIds.RiskySkipper,
-			CardIds.Roach_SC_012,
-			CardIds.RunningWild_RunningWild,
-			CardIds.SeafloorSavior_TSC_083,
-			CardIds.Seismopod_DINO_421,
-			CardIds.Sentry_SC_764,
-			CardIds.SesselieOfTheFaeCourt_REV_782,
-			CardIds.ShadowEssence_ICC_235,
-			CardIds.Shadowcaster,
-			CardIds.Shadowcasting101TavernBrawl,
-			CardIds.ShadowstepVanilla,
-			CardIds.ShroudOfConcealment,
-			CardIds.SilvermoonBrochure_WORK_017,
-			CardIds.SilvermoonPortal_WON_309,
-			CardIds.SmolderingStrength_FIR_914,
-			CardIds.SoulrestCeremony_DINO_417,
-			CardIds.SowTheSeedsTavernBrawl,
-			CardIds.SpawningPool_SC_000,
-			CardIds.SpiritOfTheBadlands_MirageToken_WW_337t,
-			CardIds.SpiritPeddler_WORK_015,
-			CardIds.SpotTheDifference_TOY_374,
-			CardIds.SrExcavatorTavernBrawl,
-			CardIds.StrengthInNumbers,
-			CardIds.SuperchargeTavernBrawl,
-			CardIds.SurvivalOfTheFittest,
-			CardIds.Switcheroo,
-			CardIds.TenGallonHat_WW_811,
-			CardIds.TheBoomReaver,
-			CardIds.TheBoomship,
-			CardIds.TheDarkPortal_BT_302,
-			CardIds.TheLichKing_ArmyOfTheFrozenThroneToken,
-			CardIds.TogwagglesScheme,
-			CardIds.TravelmasterDungar_WORK_043,
-			CardIds.UngoroBrochure_WORK_050,
-			CardIds.VarianWrynn_AT_072,
-			CardIds.ViciousBloodworm_RLK_711,
-			CardIds.Viper_SC_018,
-			CardIds.VitalitySurge,
-			CardIds.WarpGate_SC_751,
-			CardIds.WebOfDeception_EDR_523,
-			CardIds.YoggInTheBox_TOY_372,
-			CardIds.YouthfulBrewmasterVanilla,
-			CardIds.YshaarjRageUnbound
+			CardIds.JerryRigCarpenter
 		));
 	}
 
-	// Compound condition reverse synergies
+	// mechanics:divineShield (2 cards)
+	if (refCard.mechanics?.includes('DIVINE_SHIELD')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Jitterbug,
+			CardIds.TorethTheUnbreaking_EDR_258
+		));
+	}
+
+	// type:minion+cost:equal:7 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 7) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.JuicyPsychmelon
+		));
+	}
+
+	// school:fire+type:spell+other:dealsDamage (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FIRE') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.KindlingFlameTavernBrawl
+		));
+	}
+
+	// type:minion+attack:less:4 (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.attack < 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.LeadDancer,
+			CardIds.WarsongCommanderVanilla
+		));
+	}
+
+	// cost:equal:3 (1 card)
+	if (refCard.cost === 3) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.LinedancePartner_WW_433
+		));
+	}
+
+	// type:minion+mechanics:combo (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.LuckyComet_GDB_873
+		));
+	}
+
+	// type:minion+cost:costMore:7 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Merithra_EDR_238
+		));
+	}
+
+	// type:minion+other:neutral (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.classes?.includes('NEUTRAL')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.MeekMasteryTavernBrawl,
+			CardIds.MulchMadnessTavernBrawl
+		));
+	}
+
+	// school:nature+type:spell+other:dealsDamage (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'NATURE') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.NaturalForceTavernBrawl
+		));
+	}
+
+	// tribe:mech+mechanics:magnetic (1 card)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.OptimizedPolarityTavernBrawl
+		));
+	}
+
+	// type:spell+mechanics:discover+cost:more:2 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 2) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.OrbOfRevelationTavernBrawl
+		));
+	}
+
+	// cost:equal:1 (4 cards)
+	if (refCard.cost === 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.PipThePotent_WW_394,
+			CardIds.PrinceLiam,
+			CardIds.RollingStone,
+			CardIds.ThirstyDrifter_WW_387
+		));
+	}
+
+	// type:spell+cost:more:1 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.PlaguebringerTavernBrawl
+		));
+	}
+
+	// mechanics:rush (1 card)
+	if (refCard.mechanics?.includes('RUSH')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.PluckyPaintfin_TOY_517
+		));
+	}
+
+	// type:minion+cost:less:4,more:0 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 0 && refCard.cost < 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Rally
+		));
+	}
+
+	// type:minion+mechanics:deathrattle+cost:less:5 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.RazorfenBeastmaster
+		));
+	}
+
+	// type:minion+cost:costMore:6 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION') {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.RotheartDryad_EDR_485
+		));
+	}
+
+	// cost:equal:4 (1 card)
+	if (refCard.cost === 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.RowdyPartner_WW_906
+		));
+	}
+
+	// type:minion+health:less:2 (2 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.health < 2) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SalhetsPride,
+			CardIds.StewardOfDarkshire_WON_310
+		));
+	}
+
+	// type:minion+cost:more:5 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 5) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.ScepterOfSummoning
+		));
+	}
+
+	// type:minion+cost:equal:8 (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 8) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SilverVanguard
+		));
+	}
+
+	// mechanics:deathrattle+cost:less:5 (1 card)
+	if (refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SketchyInformation
+		));
+	}
+
+	// type:spell+cost:baseEqual:1 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SkulkingGeist_ICC_701
+		));
+	}
+
+	// type:spell+mechanics:secret (3 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.mechanics?.includes('SECRET')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SecretkeeperLegacy,
+			CardIds.SrTombDiverTavernBrawl,
+			CardIds.SwordOfTheFallen
+		));
+	}
+
+	// type:spell+cost:less:4 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost < 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.StonehearthVindicator
+		));
+	}
+
+	// cost:more:5 (1 card)
+	if (refCard.cost > 5) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SummerFlowerchild
+		));
+	}
+
+	// type:spell+cost:less:3 (2 cards)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.cost < 3) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.SunsapperLynessa_VAC_507,
+			CardIds.VioletTreasuregill_TLC_438
+		));
+	}
+
+	// cost:more:1+other:notInInitialDeck (1 card)
+	if (refCard.cost > 1) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.TaethelanBloodwatcher_WW_430
+		));
+	}
+
+	// school:shadow+type:spell+cost:more:0 (1 card)
+	if (refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.cost > 0) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.TamsinRoame_BAR_918
+		));
+	}
+
+	// cost:more:4 (1 card)
+	if (refCard.cost > 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.TimberTambourine
+		));
+	}
+
+	// tribe:totem+type:minion (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('TOTEM')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.TotemicSurge
+		));
+	}
+
+	// tribe:beast+cost:less:4 (1 card)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.TrialOfTheJormungars_WON_028
+		));
+	}
+
+	// type:minion+health:biggerThanAttack (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.health > refCard.attack) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.UnlockedPotential
+		));
+	}
+
+	// type:minion+cost:less:4+other:neutral (1 card)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4 && refCard.classes?.includes('NEUTRAL')) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.WarCommandsTavernBrawl
+		));
+	}
 
 	return null;
 };
@@ -820,31 +1185,111 @@ export const reverseCardIdSelector = (
 /**
  * Reverse mapping summary:
  * Races:
- *   beast: 54 cards want this
- *   undead: 29 cards want this
+ *   undead: 28 cards want this
+ *   beast: 51 cards want this
  *   pirate: 18 cards want this
- *   demon: 19 cards want this
- *   dragon: 51 cards want this
+ *   demon: 17 cards want this
+ *   dragon: 49 cards want this
  *   elemental: 37 cards want this
  *   murloc: 15 cards want this
- *   naga: 8 cards want this
+ *   naga: 7 cards want this
  *   mech: 26 cards want this
- *   totem: 6 cards want this
+ *   totem: 5 cards want this
  * Spell Schools:
- *   arcane: 8 cards want this
- *   frost: 9 cards want this
- *   holy: 16 cards want this
- *   nature: 14 cards want this
- *   fel: 11 cards want this
- *   shadow: 12 cards want this
- *   fire: 12 cards want this
  * Card Types:
- *   weapon: 28 cards want this
- *   spell: 160 cards want this
- *   minion: 170 cards want this
  *   location: 1 cards want this
  * Mechanics:
- * Compound Conditions:
- *   mech+deathrattle: 1 cards want this
- *   elemental+legendary: 1 cards want this
+ * Complex Conditions:
+ *   tribe:beast+type:minion: 3 cards want this
+ *   type:minion+mechanics:rush: 9 cards want this
+ *   mechanics:battlecry+cost:more:2: 1 cards want this
+ *   type:minion+other:tribeless: 11 cards want this
+ *   tribe:undead+type:minion: 2 cards want this
+ *   type:minion+mechanics:deathrattle: 35 cards want this
+ *   mechanics:secret: 17 cards want this
+ *   type:minion+cost:less:4: 1 cards want this
+ *   type:minion+cost:equal:1: 5 cards want this
+ *   type:spell+cost:equal:7: 1 cards want this
+ *   tribe:demon+other:notInInitialDeck: 2 cards want this
+ *   type:spell+cost:more:4: 3 cards want this
+ *   type:minion+mechanics:battlecry: 7 cards want this
+ *   type:minion+cost:less:3: 3 cards want this
+ *   type:spell+cost:equal:1: 3 cards want this
+ *   mechanics:deathrattle: 12 cards want this
+ *   type:minion+mechanics:taunt: 12 cards want this
+ *   mechanics:battlecry: 7 cards want this
+ *   mechanics:legendary+other:legendary: 1 cards want this
+ *   school:frost+other:dealsDamage: 1 cards want this
+ *   tribe:mech+mechanics:deathrattle: 1 cards want this
+ *   mechanics:excavate,legendary,quickdraw,tradeable+other:legendary: 1 cards want this
+ *   mechanics:lifesteal+other:restoreHealth: 1 cards want this
+ *   type:spell+cost:costMore:4: 3 cards want this
+ *   type:minion+attack:equal:1: 1 cards want this
+ *   type:minion+cost:more:4: 1 cards want this
+ *   school:holy+type:spell: 15 cards want this
+ *   type:minion+attack:greater:4: 2 cards want this
+ *   tribe:dragon+type:minion: 2 cards want this
+ *   tribe:naga+type:spell: 1 cards want this
+ *   type:minion+attack:greater:0,less:2: 1 cards want this
+ *   type:minion+mechanics:deathrattle+cost:less:6: 1 cards want this
+ *   school:nature+type:spell: 11 cards want this
+ *   tribe:demon+type:minion: 2 cards want this
+ *   type:minion+mechanics:legendary+other:legendary: 4 cards want this
+ *   type:minion+mechanics:deathrattle+cost:less:4: 2 cards want this
+ *   school:shadow+type:spell: 10 cards want this
+ *   tribe:elemental+mechanics:legendary+other:legendary: 1 cards want this
+ *   type:minion+mechanics:divineShield: 3 cards want this
+ *   school:fel+type:spell: 10 cards want this
+ *   type:minion+mechanics:deathrattle+cost:more:4: 1 cards want this
+ *   mechanics:battlecry,combo: 1 cards want this
+ *   school:fire+type:spell: 11 cards want this
+ *   cost:more:7: 1 cards want this
+ *   school:frost+type:spell: 8 cards want this
+ *   tribe:mech+type:minion: 1 cards want this
+ *   cost:equal:2: 1 cards want this
+ *   type:spell+cost:more:5: 1 cards want this
+ *   type:minion+cost:less:5: 2 cards want this
+ *   tribe:beast+cost:less:6: 2 cards want this
+ *   school:arcane+type:spell: 7 cards want this
+ *   type:minion+attack:less:3: 1 cards want this
+ *   cost:more:3: 1 cards want this
+ *   mechanics:taunt: 3 cards want this
+ *   type:minion+attack:equal:0: 1 cards want this
+ *   type:minion+cost:less:5,more:0: 1 cards want this
+ *   type:spell+other:hasSpellSchool: 2 cards want this
+ *   type:spell+mechanics:chooseOne: 1 cards want this
+ *   mechanics:divineShield: 2 cards want this
+ *   type:minion+cost:equal:7: 1 cards want this
+ *   school:fire+type:spell+other:dealsDamage: 1 cards want this
+ *   type:minion+attack:less:4: 2 cards want this
+ *   cost:equal:3: 1 cards want this
+ *   type:minion+mechanics:combo: 1 cards want this
+ *   type:minion+cost:costMore:7: 1 cards want this
+ *   type:minion+other:neutral: 2 cards want this
+ *   school:nature+type:spell+other:dealsDamage: 1 cards want this
+ *   tribe:mech+mechanics:magnetic: 1 cards want this
+ *   type:spell+mechanics:discover+cost:more:2: 1 cards want this
+ *   cost:equal:1: 4 cards want this
+ *   type:spell+cost:more:1: 1 cards want this
+ *   mechanics:rush: 1 cards want this
+ *   type:minion+cost:less:4,more:0: 1 cards want this
+ *   type:minion+mechanics:deathrattle+cost:less:5: 1 cards want this
+ *   type:minion+cost:costMore:6: 1 cards want this
+ *   cost:equal:4: 1 cards want this
+ *   type:minion+health:less:2: 2 cards want this
+ *   type:minion+cost:more:5: 1 cards want this
+ *   type:minion+cost:equal:8: 1 cards want this
+ *   mechanics:deathrattle+cost:less:5: 1 cards want this
+ *   type:spell+cost:baseEqual:1: 1 cards want this
+ *   type:spell+mechanics:secret: 3 cards want this
+ *   type:spell+cost:less:4: 1 cards want this
+ *   cost:more:5: 1 cards want this
+ *   type:spell+cost:less:3: 2 cards want this
+ *   cost:more:1+other:notInInitialDeck: 1 cards want this
+ *   school:shadow+type:spell+cost:more:0: 1 cards want this
+ *   cost:more:4: 1 cards want this
+ *   tribe:totem+type:minion: 1 cards want this
+ *   tribe:beast+cost:less:4: 1 cards want this
+ *   type:minion+health:biggerThanAttack: 1 cards want this
+ *   type:minion+cost:less:4+other:neutral: 1 cards want this
  */
