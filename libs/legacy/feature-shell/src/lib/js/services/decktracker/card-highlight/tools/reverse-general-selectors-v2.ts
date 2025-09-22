@@ -19,7 +19,7 @@ export const reverseGeneralSelector = (
 	const refCard = allCards.getCard(cardId);
 	if (!refCard) return null;
 
-	// WEAPON (27 cards)
+	// WEAPON (33 cards)
 	if (refCard.type?.toUpperCase() === 'WEAPON') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.AbyssalBassist,
@@ -33,18 +33,24 @@ export const reverseGeneralSelector = (
 			CardIds.GrommashsArmguardsTavernBrawl,
 			CardIds.InstrumentSmasher,
 			CardIds.InstrumentTech,
+			CardIds.Khazgoroth,
 			CardIds.Khazgoroth_TitanforgeToken,
 			CardIds.LadyAshvane_Story_11_LadyAshvane,
+			CardIds.LadyAshvane_TSC_943,
 			CardIds.ManAtArms,
 			CardIds.PillageTheFallenTavernBrawl,
 			CardIds.Plunder,
 			CardIds.RatchetPrivateer,
+			CardIds.RuneforgingCore,
 			CardIds.Runeforging_LEG_RLK_715,
 			CardIds.SelflessSidekick,
 			CardIds.ShadestoneSkulker_DEEP_012,
 			CardIds.SharpShipment_WORK_005,
+			CardIds.SmallTimeBuccaneer,
 			CardIds.SmallTimeBuccaneer_WON_351,
+			CardIds.SouthseaDeckhandLegacy,
 			CardIds.SouthseaDeckhandVanilla,
+			CardIds.SouthseaDeckhand_CORE_CS2_146,
 			CardIds.SpacePirate_GDB_333,
 			CardIds.SwarthySwordshiner_VAC_701,
 			CardIds.VulperaToxinblade,
@@ -116,25 +122,28 @@ export const reverseGeneralSelector = (
 		));
 	}
 
-	// COST_EQUAL_1 + SPELL (3 cards)
+	// COST_EQUAL_1 + SPELL (4 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_BAR_551,
 			CardIds.BarakKodobane_CORE_BAR_551,
 			CardIds.Gazlowe,
 			CardIds.TrinketTracker
 		));
 	}
 
-	// COST_EQUAL_2 + SPELL (1 cards)
+	// COST_EQUAL_2 + SPELL (2 cards)
 	if (refCard.cost === 2 && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_BAR_551,
 			CardIds.BarakKodobane_CORE_BAR_551
 		));
 	}
 
-	// COST_EQUAL_3 + SPELL (1 cards)
+	// COST_EQUAL_3 + SPELL (2 cards)
 	if (refCard.cost === 3 && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_BAR_551,
 			CardIds.BarakKodobane_CORE_BAR_551
 		));
 	}
@@ -174,9 +183,10 @@ export const reverseGeneralSelector = (
 		));
 	}
 
-	// LOCATION (1 cards)
+	// LOCATION (2 cards)
 	if (refCard.type?.toUpperCase() === 'LOCATION') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.DispossessedSoul,
 			CardIds.DispossessedSoul_CORE_REV_901
 		));
 	}
@@ -209,10 +219,11 @@ export const reverseGeneralSelector = (
 		));
 	}
 
-	// COST_LESS_5 + MINION (2 cards)
+	// COST_LESS_5 + MINION (3 cards)
 	if (refCard.cost < 5 && refCard.type?.toUpperCase() === 'MINION') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.GrizzledGuardian,
+			CardIds.OakenSummons,
 			CardIds.OakenSummons_CORE_LOOT_309
 		));
 	}
@@ -236,6 +247,15 @@ export const reverseGeneralSelector = (
 	if (refCard.cost > 0 && refCard.type?.toUpperCase() === 'MINION') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.Hybridization_TLC_236
+		));
+	}
+
+	// COST_MORE_4 (3 cards)
+	if (refCard.cost > 4) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.InventorBoom_TOY_607,
+			CardIds.StranglethornHeart,
+			CardIds.TimberTambourine
 		));
 	}
 
@@ -283,20 +303,21 @@ export const reverseGeneralSelector = (
 		));
 	}
 
-	// COST_MORE_2 (1 cards)
-	if (refCard.cost > 2) {
-		return and(side(inputSide), or(inDeck, inHand), cardIs(
-			CardIds.OrbOfRevelationTavernBrawl
-		));
-	}
-
-	// COST_EQUAL_1 (4 cards)
+	// COST_EQUAL_1 (5 cards)
 	if (refCard.cost === 1) {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.PipThePotent_WW_394,
 			CardIds.PrinceLiam,
 			CardIds.RollingStone,
 			CardIds.ThirstyDrifter_WW_387
+		));
+	}
+
+	// COST_MORE_2 (1 cards)
+	if (refCard.cost > 2) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.OrbOfRevelationTavernBrawl
 		));
 	}
 
@@ -311,6 +332,13 @@ export const reverseGeneralSelector = (
 	if (refCard.cost < 4 && refCard.cost > 0 && refCard.type?.toUpperCase() === 'MINION') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.Rally
+		));
+	}
+
+	// COST_MORE_0 (1 cards)
+	if (refCard.cost > 0) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.Resuscitate_TLC_818
 		));
 	}
 
@@ -357,17 +385,17 @@ export const reverseGeneralSelector = (
 		));
 	}
 
-	// COST_MORE_4 (1 cards)
-	if (refCard.cost > 4) {
-		return and(side(inputSide), or(inDeck, inHand), cardIs(
-			CardIds.TimberTambourine
-		));
-	}
-
 	// BEAST + COST_LESS_4 (1 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4) {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.TrialOfTheJormungars_WON_028
+		));
+	}
+
+	// COST_LESS_3 (1 cards)
+	if (refCard.cost < 3) {
+		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.UnendingSwarm
 		));
 	}
 

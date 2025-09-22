@@ -19,13 +19,16 @@ export const reverseSpellSelector = (
 	const refCard = allCards.getCard(cardId);
 	if (!refCard) return null;
 
-	// SPELL (171 cards)
+	// SPELL (206 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.AdvancedTargetingMonocle,
 			CardIds.AncientKrakenbane,
 			CardIds.AnimatedMoonwell_EDR_254,
+			CardIds.ArcaneArtificer,
 			CardIds.ArcaneArtificerCore,
+			CardIds.ArchmageAntonidas,
+			CardIds.ArchmageAntonidasLegacy,
 			CardIds.ArchmageAntonidas_CORE_EX1_559,
 			CardIds.ArchmageVargoth,
 			CardIds.ArkoniteRevelation_GDB_852,
@@ -46,7 +49,10 @@ export const reverseSpellSelector = (
 			CardIds.ChiaDrake_Cultivate_TOY_801a,
 			CardIds.ChiaDrake_SeedlingGrowth_TOY_801b,
 			CardIds.ClearancePromoter_TOY_390,
+			CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48,
 			CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5,
+			CardIds.ClockworkAssistant_GILA_907,
+			CardIds.ClockworkAssistant_ONY_005ta11,
 			CardIds.CoilskarCommander,
 			CardIds.Colossus_SC_758,
 			CardIds.CommanderSivara_TSC_087,
@@ -54,19 +60,24 @@ export const reverseSpellSelector = (
 			CardIds.Conductivity_YOG_522,
 			CardIds.ConjuredBookkeeper_TLC_226,
 			CardIds.ContaminatedLasher_YOG_528,
+			CardIds.CoralKeeper,
 			CardIds.CosmicKeyboard,
 			CardIds.Cosmonaut_GDB_443,
 			CardIds.Cultivate,
 			CardIds.DarkmoonMagician_MIS_303,
 			CardIds.Deathchiller_CORE_RLK_083,
+			CardIds.Deathchiller_RLK_083,
 			CardIds.DeckOfLunacy,
 			CardIds.DeepwaterEvoker,
 			CardIds.DevoutPupil,
+			CardIds.DiscoveryOfMagic,
+			CardIds.DoorOfShadows,
 			CardIds.DoorOfShadows_DoorOfShadowsToken,
 			CardIds.DoubleTime,
 			CardIds.DozingKelpkeeper,
 			CardIds.DragonsFury,
 			CardIds.DryscaleDeputy_WW_383,
+			CardIds.ElementalInspiration,
 			CardIds.EnergyShaper,
 			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
 			CardIds.FaeTrickster_EDR_571,
@@ -75,6 +86,7 @@ export const reverseSpellSelector = (
 			CardIds.GlowflySwarm,
 			CardIds.GreenThumbGardener,
 			CardIds.GuffRunetotem_BAR_720,
+			CardIds.HallazealTheAscended,
 			CardIds.HallazealTheAscended_WON_336,
 			CardIds.Handmaiden,
 			CardIds.HarnessTheElementsTavernBrawl,
@@ -85,9 +97,11 @@ export const reverseSpellSelector = (
 			CardIds.IdolsOfEluneTavernBrawl,
 			CardIds.Illuminate,
 			CardIds.IncantersFlow,
+			CardIds.InquisitiveCreation,
 			CardIds.JotunTheEternal,
 			CardIds.JungleJammer,
 			CardIds.KhadgarsScryingOrb,
+			CardIds.Kindle_DALA_911,
 			CardIds.Kindle_ULDA_911,
 			CardIds.KingTide_VAC_524,
 			CardIds.KnightOfAnointment,
@@ -96,10 +110,15 @@ export const reverseSpellSelector = (
 			CardIds.LadyStheno_TSC_218,
 			CardIds.LadyVashj_VashjPrimeToken,
 			CardIds.LearnDraconic,
+			CardIds.LifebindersGift,
 			CardIds.LifebindersGrowth,
 			CardIds.Lifeguard_VAC_919,
 			CardIds.LinaShopManager_TOY_531,
+			CardIds.LockAndLoad_AT_061,
+			CardIds.LockAndLoad_CORE_AT_061,
 			CardIds.LockAndLoad_WON_023,
+			CardIds.LorewalkerChoLegacy,
+			CardIds.LorewalkerChoVanilla,
 			CardIds.LorewalkerCho_CORE_EX1_100,
 			CardIds.LoveEverlasting,
 			CardIds.MagathaBaneOfMusic,
@@ -110,20 +129,27 @@ export const reverseSpellSelector = (
 			CardIds.MantleShaper_DEEP_004,
 			CardIds.MaroonedArchmage_VAC_435,
 			CardIds.MarshlandThresher_TLC_256,
+			CardIds.Marshspawn_BT_115,
 			CardIds.Marshspawn_CORE_BT_115,
 			CardIds.MeddlesomeServant_YOG_518,
 			CardIds.MistahVistah_VAC_519,
+			CardIds.Multicaster,
 			CardIds.MurkwaterScribe,
 			CardIds.Myrmidon,
 			CardIds.NagaGiant,
 			CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1,
+			CardIds.NostalgicInitiate_TOY_340,
 			CardIds.OopsAllSpellsTavernBrawl,
 			CardIds.PalmReading,
 			CardIds.ParchedDesperado_WW_407,
 			CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08,
+			CardIds.Pelagos_CORE_REV_250,
+			CardIds.Pelagos_REV_250,
 			CardIds.Pelagos_REV_781,
 			CardIds.PortalmancerSkyla_WORK_063,
 			CardIds.PowerWordFortitude,
+			CardIds.PreparationCore,
+			CardIds.PreparationLegacy,
 			CardIds.PreparationVanilla,
 			CardIds.PriestessValishj,
 			CardIds.PrimordialProtector_BAR_042,
@@ -139,6 +165,7 @@ export const reverseSpellSelector = (
 			CardIds.RefreshingSpringWater,
 			CardIds.Rewind_ETC_532,
 			CardIds.RhoninsScryingOrbTavernBrawl,
+			CardIds.RimefangSwordCore,
 			CardIds.RimefangSword_LEG_RLK_710,
 			CardIds.RimescaleSiren,
 			CardIds.RingOfRefreshmentTavernBrawl,
@@ -157,6 +184,8 @@ export const reverseSpellSelector = (
 			CardIds.ShieldBattery_SC_759,
 			CardIds.ShirvallahTheTiger,
 			CardIds.ShiveringSorceress,
+			CardIds.Sif,
+			CardIds.SkulkingGeist_CORE_ICC_701,
 			CardIds.SkulkingGeist_ICC_701,
 			CardIds.SlitheringDeathscale,
 			CardIds.SpectralTrainee,
@@ -185,13 +214,19 @@ export const reverseSpellSelector = (
 			CardIds.Ursol_EDR_259,
 			CardIds.VelensChosen,
 			CardIds.ViciousSlitherspear_CORE_TSC_827,
+			CardIds.ViciousSlitherspear_TSC_827,
 			CardIds.VoidFlayer,
 			CardIds.VolumeUp,
 			CardIds.WeaverOfTheCycle_EDR_472,
 			CardIds.Whirlweaver,
+			CardIds.WickedWitchdoctor,
 			CardIds.WickedWitchdoctor_WON_083,
+			CardIds.WildPyromancerCore,
+			CardIds.WildPyromancerLegacy,
 			CardIds.WildPyromancerVanilla,
+			CardIds.WisdomOfNorgannon,
 			CardIds.WishOfTheNewMoon_EDR_460,
+			CardIds.YoggSaronHopesEnd_OG_134,
 			CardIds.YoggSaronMasterOfFate
 		));
 	}
@@ -241,25 +276,28 @@ export const reverseSpellSelector = (
 		));
 	}
 
-	// COST_EQUAL_1 + SPELL (3 cards)
+	// COST_EQUAL_1 + SPELL (4 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_BAR_551,
 			CardIds.BarakKodobane_CORE_BAR_551,
 			CardIds.Gazlowe,
 			CardIds.TrinketTracker
 		));
 	}
 
-	// COST_EQUAL_2 + SPELL (1 cards)
+	// COST_EQUAL_2 + SPELL (2 cards)
 	if (refCard.cost === 2 && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_BAR_551,
 			CardIds.BarakKodobane_CORE_BAR_551
 		));
 	}
 
-	// COST_EQUAL_3 + SPELL (1 cards)
+	// COST_EQUAL_3 + SPELL (2 cards)
 	if (refCard.cost === 3 && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
+			CardIds.BarakKodobane_BAR_551,
 			CardIds.BarakKodobane_CORE_BAR_551
 		));
 	}
@@ -271,11 +309,12 @@ export const reverseSpellSelector = (
 		));
 	}
 
-	// HOLY + SPELL (14 cards)
+	// HOLY + SPELL (15 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'HOLY' && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.CarielRoame_BAR_902,
 			CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t,
+			CardIds.FlickeringLightbot_MIS_918,
 			CardIds.GuardianLightTavernBrawl,
 			CardIds.HeraldOfLight,
 			CardIds.HiHoSilverwing_WW_344,
@@ -306,10 +345,11 @@ export const reverseSpellSelector = (
 		));
 	}
 
-	// SHADOW (2 cards)
+	// SHADOW (3 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'SHADOW') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.CrystalsmithCultist,
+			CardIds.Darkbomb,
 			CardIds.Darkbomb_WON_095
 		));
 	}
@@ -337,12 +377,13 @@ export const reverseSpellSelector = (
 		));
 	}
 
-	// SHADOW + SPELL (10 cards)
+	// SHADOW + SPELL (11 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
 		return and(side(inputSide), or(inDeck, inHand), cardIs(
 			CardIds.EerieStoneTavernBrawl,
 			CardIds.HeraldOfShadows,
 			CardIds.KaraTheDarkStar_GDB_127,
+			CardIds.LadyDarkvein,
 			CardIds.LadyDarkvein_CORE_REV_373,
 			CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
 			CardIds.Shadowborn,

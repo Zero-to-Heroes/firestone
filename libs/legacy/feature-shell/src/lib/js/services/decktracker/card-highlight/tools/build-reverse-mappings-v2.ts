@@ -52,41 +52,124 @@ function extractCardConditions(): ConditionMapping[] {
 	let totalCases = 0;
 	let skippedComplex = 0;
 	let skippedNoConditions = 0;
+	let processedFallthroughs = 0;
 
-	for (const caseMatch of cases) {
+	// Process cases and handle fallthroughs
+	for (let i = 0; i < cases.length; i++) {
+		const caseMatch = cases[i];
 		totalCases++;
-		const cardIdMatch = caseMatch.match(/case\s+CardIds\.([^:]+):/);
+
+		const cardIdMatches = caseMatch.match(/case\s+CardIds\.([^:]+):/g);
 		const returnMatch = caseMatch.match(/return\s+(.*?);/s);
 
-		if (cardIdMatch && returnMatch) {
-			const cardIdSuffix = cardIdMatch[1];
+		if (cardIdMatches && returnMatch) {
+			// This case has a return statement
 			const selectorCode = returnMatch[1].replace(/\s+/g, ' ').trim();
 
-			// Skip only the most complex cases
+			// Handle tooltip by removing it (treat as 'and')
+			let cleanedSelectorCode = selectorCode;
+			if (selectorCode.includes('tooltip:')) {
+				// Remove tooltip parts but keep the rest
+				cleanedSelectorCode = selectorCode
+					.replace(/tooltip:\s*[^,)]+/g, '')
+					.replace(/,\s*,/g, ',')
+					.replace(/^\s*,|,\s*$/g, '');
+			}
+
+			// Handle highlightConditions as 'or'
+			if (selectorCode.includes('highlightConditions')) {
+				// Extract highlightConditions and treat as or() conditions
+				const highlightMatch = selectorCode.match(/highlightConditions:\s*\[([\s\S]*?)\]/);
+				if (highlightMatch) {
+					const conditionsContent = highlightMatch[1];
+					// Convert to or() format for processing
+					cleanedSelectorCode = `or(${conditionsContent})`;
+				}
+			}
+
+			// Skip only the most complex cases (but not highlightConditions anymore)
 			if (
-				selectorCode.includes('highlightConditions') ||
 				selectorCode.includes('input:') ||
-				selectorCode.includes('tooltip') ||
-				selectorCode.length > 500
+				cleanedSelectorCode.length > 800 // Increased threshold since we handle more cases now
 			) {
 				skippedComplex++;
 				continue;
 			}
 
-			const conditions = expandSelectorConditions(selectorCode);
-			if (conditions.length > 0) {
-				mappings.push({
-					cardId: cardIdSuffix,
-					conditions: conditions,
-				});
-			} else {
+			const conditions = expandSelectorConditions(cleanedSelectorCode);
+
+			// Apply conditions to all card IDs in this case block (including fallthroughs)
+			for (const cardIdMatch of cardIdMatches) {
+				const cardIdSuffix = cardIdMatch.match(/case\s+CardIds\.([^:]+):/)?.[1];
+				if (cardIdSuffix && conditions.length > 0) {
+					mappings.push({
+						cardId: cardIdSuffix,
+						conditions: conditions,
+					});
+				}
+			}
+
+			if (cardIdMatches.length > 1) {
+				processedFallthroughs += cardIdMatches.length - 1;
+			}
+		} else if (cardIdMatches) {
+			// This is a fallthrough case - find the next case with a return statement
+			let foundReturn = false;
+			for (let j = i + 1; j < cases.length && !foundReturn; j++) {
+				const nextCase = cases[j];
+				const nextReturnMatch = nextCase.match(/return\s+(.*?);/s);
+
+				if (nextReturnMatch) {
+					foundReturn = true;
+					const selectorCode = nextReturnMatch[1].replace(/\s+/g, ' ').trim();
+
+					// Handle tooltip by removing it
+					let cleanedSelectorCode = selectorCode;
+					if (selectorCode.includes('tooltip:')) {
+						cleanedSelectorCode = selectorCode
+							.replace(/tooltip:\s*[^,)]+/g, '')
+							.replace(/,\s*,/g, ',')
+							.replace(/^\s*,|,\s*$/g, '');
+					}
+
+					// Handle highlightConditions as 'or'
+					if (selectorCode.includes('highlightConditions')) {
+						const highlightMatch = selectorCode.match(/highlightConditions:\s*\[([\s\S]*?)\]/);
+						if (highlightMatch) {
+							const conditionsContent = highlightMatch[1];
+							cleanedSelectorCode = `or(${conditionsContent})`;
+						}
+					}
+
+					// Skip complex cases
+					if (selectorCode.includes('input:') || cleanedSelectorCode.length > 800) {
+						break; // Don't process this fallthrough
+					}
+
+					const conditions = expandSelectorConditions(cleanedSelectorCode);
+
+					// Apply to all fallthrough card IDs
+					for (const cardIdMatch of cardIdMatches) {
+						const cardIdSuffix = cardIdMatch.match(/case\s+CardIds\.([^:]+):/)?.[1];
+						if (cardIdSuffix && conditions.length > 0) {
+							mappings.push({
+								cardId: cardIdSuffix,
+								conditions: conditions,
+							});
+							processedFallthroughs++;
+						}
+					}
+				}
+			}
+
+			if (!foundReturn) {
 				skippedNoConditions++;
 			}
 		}
 	}
 
 	console.log(
-		`📊 Processing stats: ${totalCases} total cases, ${skippedComplex} skipped (complex), ${skippedNoConditions} skipped (no conditions), ${mappings.length} processed`,
+		`📊 Processing stats: ${totalCases} total cases, ${skippedComplex} skipped (complex), ${skippedNoConditions} skipped (no conditions), ${mappings.length} processed, ${processedFallthroughs} fallthroughs handled`,
 	);
 
 	return mappings;
@@ -245,6 +328,58 @@ function convertToConditionString(part: string): string | null {
 		hasMultipleCopies: 'HAS_MULTIPLE_COPIES',
 		currentClass: 'CURRENT_CLASS',
 		notInInitialDeck: 'NOT_IN_INITIAL_DECK',
+		// Custom game-specific functions
+		summonsTreant: 'SUMMONS_TREANT',
+		isTreant: 'IS_TREANT',
+		draenei: 'DRAENEI',
+		spellDamage: 'SPELL_DAMAGE',
+		stealth: 'STEALTH',
+		poisonous: 'POISONOUS',
+		immune: 'IMMUNE',
+		cantAttack: 'CANT_ATTACK',
+		cantBeTargetedBySpells: 'CANT_BE_TARGETED_BY_SPELLS',
+		cantBeTargetedByHeroPowers: 'CANT_BE_TARGETED_BY_HERO_POWERS',
+		adjacentBuff: 'ADJACENT_BUFF',
+		inspire: 'INSPIRE',
+		adapt: 'ADAPT',
+		echo: 'ECHO',
+		twinspell: 'TWINSPELL',
+		lackey: 'LACKEY',
+		invoke: 'INVOKE',
+		spellburst: 'SPELLBURST',
+		dormant: 'DORMANT',
+		questline: 'QUESTLINE',
+		questReward: 'QUEST_REWARD',
+		sidequest: 'SIDEQUEST',
+		galakrond: 'GALAKROND',
+		cthun: 'CTHUN',
+		jade: 'JADE',
+		highlander: 'HIGHLANDER',
+		evenCost: 'EVEN_COST',
+		oddCost: 'ODD_COST',
+		handbuff: 'HANDBUFF',
+		recruit: 'RECRUIT',
+		spell_school: 'SPELL_SCHOOL',
+		aura: 'AURA',
+		token: 'TOKEN',
+		generated: 'GENERATED',
+		collectible: 'COLLECTIBLE',
+		// Race-specific
+		all: 'ALL_RACES',
+		// Mechanics
+		silence: 'SILENCE',
+		freeze: 'FREEZE',
+		burn: 'BURN',
+		mill: 'MILL',
+		draw: 'DRAW',
+		discard: 'DISCARD',
+		transform: 'TRANSFORM',
+		copy: 'COPY',
+		shuffle: 'SHUFFLE',
+		// Keywords that might appear
+		keyword: 'KEYWORD',
+		tribal: 'TRIBAL',
+		synergy: 'SYNERGY',
 	};
 
 	// Handle not() wrapper
@@ -279,6 +414,39 @@ function convertToConditionString(part: string): string | null {
 	if (part.includes('attackGreaterThan(')) {
 		const match = part.match(/attackGreaterThan\((\d+)\)/);
 		if (match) return `ATTACK_MORE_${match[1]}`;
+	}
+	if (part.includes('attackLessThan(')) {
+		const match = part.match(/attackLessThan\((\d+)\)/);
+		if (match) return `ATTACK_LESS_${match[1]}`;
+	}
+	if (part.includes('attackEqual(')) {
+		const match = part.match(/attackEqual\((\d+)\)/);
+		if (match) return `ATTACK_EQUAL_${match[1]}`;
+	}
+
+	// Handle health conditions
+	if (part.includes('healthGreaterThan(')) {
+		const match = part.match(/healthGreaterThan\((\d+)\)/);
+		if (match) return `HEALTH_MORE_${match[1]}`;
+	}
+	if (part.includes('healthLessThan(')) {
+		const match = part.match(/healthLessThan\((\d+)\)/);
+		if (match) return `HEALTH_LESS_${match[1]}`;
+	}
+	if (part.includes('healthEqual(')) {
+		const match = part.match(/healthEqual\((\d+)\)/);
+		if (match) return `HEALTH_EQUAL_${match[1]}`;
+	}
+
+	// Handle special card IDs or functions that we might not recognize yet
+	if (part.includes('CardIds.') || part.includes('cardIs(')) {
+		// Skip specific card ID references for now
+		return null;
+	}
+
+	// Log unknown conditions for debugging
+	if (part.length > 0 && !part.match(/^\s*$/)) {
+		console.log(`⚠️  Unknown condition: "${part}"`);
 	}
 
 	// Skip unknown conditions for now
