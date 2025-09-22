@@ -85,8 +85,6 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 
 				const rerollsThisTurn =
 					liveStats.rerollsOverTurn.find((reroll) => reroll.turn === state.currentTurn)?.value ?? 0;
-				const freezesThisTurn =
-					liveStats.freezesOverTurn.find((freeze) => freeze.turn === state.currentTurn)?.value ?? 0;
 				const buysThisTurn =
 					liveStats.minionsBoughtOverTurn.find((buy) => buy.turn === state.currentTurn)?.value ?? 0;
 				const sellsThisTurn =
@@ -112,7 +110,6 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 					0;
 				const totalActions =
 					rerollsThisTurn +
-					freezesThisTurn +
 					buysThisTurn +
 					sellsThisTurn +
 					minionsThisTurn +
