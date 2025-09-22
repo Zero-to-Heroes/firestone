@@ -106,7 +106,6 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	}
 
 	private initHighlights() {
-		// console.debug('[bgs-board-highlighter] init highlights');
 		const enableAutoHighlight$ = combineLatest([
 			this.ads.enablePremiumFeatures$$,
 			this.prefs.preferences$$.pipe(
@@ -185,7 +184,6 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			),
 		);
 		minionsToHighlight$.subscribe((minions) => {
-			// console.debug('[bgs-board-highlighter] new minions', minions);
 			this.shopMinions$$.next(minions);
 		});
 	}
@@ -203,26 +201,13 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			return false;
 		}
 		const card = this.allCards.getCard(minion.cardId);
-		const otherCard = card.premium
-			? this.allCards.getCard(card.battlegroundsNormalDbfId || 0)
-			: this.allCards.getCard(card.battlegroundsPremiumDbfId || 0);
-		return (
-			this.isCardHighlighted(
-				card,
-				highlightedTribes,
-				highlightedMinions,
-				highlightedMechanics,
-				anomalies,
-				enableAutoHighlight,
-			) ||
-			this.isCardHighlighted(
-				otherCard,
-				highlightedTribes,
-				highlightedMinions,
-				highlightedMechanics,
-				anomalies,
-				enableAutoHighlight,
-			)
+		return this.isCardHighlighted(
+			card,
+			highlightedTribes,
+			highlightedMinions,
+			highlightedMechanics,
+			anomalies,
+			enableAutoHighlight,
 		);
 	}
 
@@ -270,7 +255,6 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	}
 
 	private initPremiumHighlights() {
-		// console.debug('[bgs-board-highlighter] init premium highlights');
 		const board$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
 			map((state) => state?.playerDeck.board?.map((entity) => entity.cardId)),
