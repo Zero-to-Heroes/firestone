@@ -10,7 +10,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { auditTime, distinctUntilChanged, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
+import { auditTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 import { AdService } from '../../../services/ad.service';
 
 @Component({
@@ -24,7 +24,7 @@ import { AdService } from '../../../services/ad.service';
 				showNextOpponentRecapSeparately: showNextOpponentRecapSeparately$ | async,
 				opponents: opponents$ | async,
 				buddiesEnabled: buddiesEnabled$ | async,
-				questsEnabled: questsEnabled$ | async
+				questsEnabled: questsEnabled$ | async,
 			} as value2"
 			[ngClass]="{ 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
 		>
@@ -32,7 +32,7 @@ import { AdService } from '../../../services/ad.service';
 				<ng-container
 					*ngIf="{
 						currentTurn: currentTurn$ | async,
-						lastOpponentPlayerId: lastOpponentPlayerId$ | async
+						lastOpponentPlayerId: lastOpponentPlayerId$ | async,
 					} as value"
 				>
 					<bgs-opponent-overview-big
@@ -131,7 +131,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				([state, panelId]) =>
 					state.bgState.panels?.find((panel) => panel.id === panelId) as BgsNextOpponentOverviewPanel,
 			),
-			tap((info) => console.debug('[bgs-next-opponent-overview] currentPanel', info)),
 		);
 		this.lastOpponentPlayerId$ = this.state.gameState$$.pipe(
 			this.mapData((state) => state.bgState.currentGame?.lastOpponentPlayerId),
@@ -186,7 +185,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			this.mapData(([nextOpponentCardId, opponents]) =>
 				opponents.find((opp) => opp.cardId === nextOpponentCardId),
 			),
-			tap((info) => console.debug('[bgs-next-opponent-overview] nextOpponent', info)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
