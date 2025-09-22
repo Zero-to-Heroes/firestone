@@ -123,10 +123,14 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 									<ng-container *ngIf="showCurrentOptions$ | async">
 										<div class="current-options" *ngIf="currentOptions$ | async as currentOptions">
-											<div
-												class="header"
-												[fsTranslate]="'app.arena.card-stats.header-current-options'"
-											></div>
+											<div class="header">
+												<div class="cell pick-rate" *ngIf="showPickRate$ | async"></div>
+												<div
+													class="cell card name"
+													[fsTranslate]="'app.arena.card-stats.header-current-options'"
+												></div>
+												<div class="cell deck-wr" *ngIf="showImpact$ | async"></div>
+											</div>
 											<li
 												class="card-container"
 												*ngFor="let cardInfo of currentOptions; trackBy: trackByCardId"
