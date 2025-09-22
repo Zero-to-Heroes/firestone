@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardWithSideboard } from '@components/decktracker/overlay/deck-list-static.component';
-import { ArenaClientStateType, ArenaSessionState, GameType } from '@firestone-hs/reference-data';
+import { ArenaClientStateType, ArenaSessionState, DraftMode, GameType } from '@firestone-hs/reference-data';
 import {
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK,
@@ -321,9 +321,11 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			}),
 		);
 
-		this.showCurrentOptions$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.arenaOocTrackerShowCurrentOptions),
-		);
+		const currentDraftMode$ = this.draftManager.currentDraftMode$$.pipe(this.mapData((mode) => mode));
+		this.showCurrentOptions$ = combineLatest([
+			currentDraftMode$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerShowCurrentOptions)),
+		]).pipe(this.mapData(([mode, showCurrentOptions]) => mode === DraftMode.DRAFTING && showCurrentOptions));
 
 		this.currentOptions$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, classStat$]).pipe(
 			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
