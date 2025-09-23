@@ -24,6 +24,11 @@
 						"output": "mind-vision-edge"
 					},
 					{
+						"input": "overwolf-plugins",
+						"glob": "**/*",
+						"output": "mind-vision-edge"
+					},
+					{
 						"input": "external-libs",
 						"glob": "**/*",
 						"output": "mind-vision-edge"

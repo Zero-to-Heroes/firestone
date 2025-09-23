@@ -61,10 +61,10 @@
 		"debug:main": "ow-electron --inspect=5858 dist/apps/electron-app",
 		"build:ow-electron": "ow-electron-builder --publish=never",
 		"c6-1": "=============== MindVision Edge.js =================",
+		"build:mindvision": "node libs/mind-vision-edge/build.js",
 		"build:mindvision:rebuild": "electron-rebuild --only=electron-edge-js --force",
 		"build:mindvision:copy": "nx build electron-app",
 		"build:mindvision:clean": "rm -rf node_modules/electron-edge-js/build && npm run build:mindvision",
-		"build:mindvision": "node libs/mind-vision-edge/build.js",
 		"restart:mindvision": "npm run build:mindvision && npm run start:ow-electron"
 	},
 	"private": true,

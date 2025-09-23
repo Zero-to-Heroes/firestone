@@ -62,6 +62,28 @@ export class MindVisionElectronService implements IMindVisionFacade {
 			const MindVisionEdge = eval('require')(mindVisionPath);
 			this.mindVision = new MindVisionEdge();
 
+			// Set up memory update callback before initialization
+			this.mindVision.setMemoryUpdateCallback((updateData: any) => {
+				if (updateData && updateData.memoryUpdate) {
+					console.debug('[MindVisionElectron] Memory update received:', updateData.memoryUpdate);
+
+					// Handle both string and object formats
+					let parsedUpdate;
+					if (typeof updateData.memoryUpdate === 'string') {
+						try {
+							parsedUpdate = JSON.parse(updateData.memoryUpdate);
+						} catch (e) {
+							console.warn('[MindVisionElectron] Failed to parse memory update:', e);
+							return;
+						}
+					} else {
+						parsedUpdate = updateData.memoryUpdate;
+					}
+
+					this.memoryUpdates.newUpdate(parsedUpdate);
+				}
+			});
+
 			console.log('[MindVisionElectron] Initializing plugin...');
 			const success = await this.mindVision.initialize();
 
@@ -95,13 +117,8 @@ export class MindVisionElectronService implements IMindVisionFacade {
 		try {
 			console.log('[MindVisionElectron] Starting to listen for memory updates...');
 
-			// Start listening for memory updates with real-time callback
-			await this.mindVision.startListeningWithCallback((updateData: any) => {
-				if (updateData && updateData.memoryUpdate) {
-					console.debug('[MindVisionElectron] Memory update received:', updateData.memoryUpdate);
-					this.memoryUpdates.newUpdate(JSON.parse(updateData.memoryUpdate));
-				}
-			});
+			// Start listening for memory updates (callback was already set during initialization)
+			await this.mindVision.listenForUpdates();
 
 			console.log(
 				'[MindVisionElectron] Successfully started listening for memory updates with real-time callback',
