@@ -1,7 +1,8 @@
 import { CardClass, getWhizbangHeroesTemplateDeckId, isKnownTwistList } from '@firestone-hs/reference-data';
 import { DeckCard, DeckHandlerService, DeckState, GameState, HeroCard } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { DeckParserService, GameEvent, PreferencesService } from '@firestone/shared/common/service';
+import { DeckParserService, GameEvent } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AiDeckService } from '../ai-deck-service.service';

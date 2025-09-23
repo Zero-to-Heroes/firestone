@@ -1,6 +1,6 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { QualifierType } from '../_qualifier.type';
 import { Requirement } from '../_requirement';

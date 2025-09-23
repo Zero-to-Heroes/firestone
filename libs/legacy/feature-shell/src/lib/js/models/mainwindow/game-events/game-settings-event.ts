@@ -1,4 +1,4 @@
-import { GameEvent } from '@firestone/shared/common/service';
+import { GameEvent } from '@firestone/game-state';
 
 export class GameSettingsEvent extends GameEvent {
 	readonly additionalData: {

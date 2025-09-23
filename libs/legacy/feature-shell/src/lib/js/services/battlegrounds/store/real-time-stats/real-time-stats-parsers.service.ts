@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameEvent } from '@firestone/app/common';
+import { GameEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Events } from '../../../events.service';
 import { EventParser } from './event-parsers/_event-parser';

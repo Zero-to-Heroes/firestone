@@ -2,7 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { publicCardCreators, shouldKeepOriginalCost } from '@services/hs-utils';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

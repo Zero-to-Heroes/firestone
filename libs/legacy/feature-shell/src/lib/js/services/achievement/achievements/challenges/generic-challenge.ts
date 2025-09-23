@@ -1,4 +1,4 @@
-import { GameEvent } from '@firestone/shared/common/service';
+import { GameEvent } from '@firestone/game-state';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 

@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckState, GameState } from '@firestone/game-state';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { forcedHiddenCardCreators } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';

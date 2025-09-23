@@ -1,8 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameStateEvent } from '@firestone/app/common';
 import { ConstructedArchetypeService } from '@firestone/constructed/common';
+import { GameEvent, GameStateEvent } from '@firestone/game-state';
 import { sleep } from '@firestone/shared/framework/common';
-import { GameEvent } from '../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { ArchetypeCategorizationEvent } from './event-parser/archetype-categorization-parser';
 
 @Injectable()

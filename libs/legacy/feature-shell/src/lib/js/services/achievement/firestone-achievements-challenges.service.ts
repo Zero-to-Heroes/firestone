@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-	GameEvent,
-	GameEventsEmitterService,
-	GameStatusService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { Achievement } from '../../models/achievement';

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { GameEventsEmitterService } from '@firestone/app/common';
+import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
-import { GameEvent } from '../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';

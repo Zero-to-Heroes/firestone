@@ -1,5 +1,5 @@
 import { GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 

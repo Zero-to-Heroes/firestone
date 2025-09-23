@@ -8,7 +8,7 @@ import {
 } from '@firestone/game-state';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';

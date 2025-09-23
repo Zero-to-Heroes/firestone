@@ -10,8 +10,9 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
+import { DeckParserFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { DeckParserFacadeService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	IAdsService,

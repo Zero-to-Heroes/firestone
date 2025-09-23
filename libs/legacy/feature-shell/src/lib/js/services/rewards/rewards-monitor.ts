@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService } from '@firestone/app/common';
+import { GameEventsEmitterService } from '@firestone/game-state';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';

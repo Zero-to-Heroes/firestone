@@ -2,7 +2,7 @@ import { CardType, isBattlegrounds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DamageGameEvent } from '@legacy-import/src/lib/js/models/mainwindow/game-events/damage-game-event';
-import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { EventParser } from '../event-parser';
 
 export class BgsDamageDealtParser implements EventParser {

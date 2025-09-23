@@ -1,4 +1,4 @@
-import { GameEvent } from '@firestone/shared/common/service';
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { AbstractRequirement } from './_abstract-requirement';

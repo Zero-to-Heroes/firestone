@@ -3,7 +3,7 @@ import { DeckCard, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckManipulationHelper } from '@legacy-import/src/lib/js/services/decktracker/event-parser/deck-manipulation-helper';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { deathrattleGlobalEffectCards } from '../../hs-utils';
 import { EventParser } from './event-parser';
 

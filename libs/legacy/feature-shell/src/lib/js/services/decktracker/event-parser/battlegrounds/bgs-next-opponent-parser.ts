@@ -1,6 +1,6 @@
 import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { defaultStartingHp, GameType, isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/app/common';
+import { GameEvent } from '@firestone/game-state';
 import {
 	BgsFaceOffWithSimulation,
 	BgsNextOpponentOverviewPanel,

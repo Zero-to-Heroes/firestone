@@ -1,5 +1,5 @@
 import { ALL_BG_RACES, isBattlegrounds, Race } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/app/common';
+import { GameEvent } from '@firestone/game-state';
 import {
 	BattlegroundsState,
 	BgsBattleHistory,

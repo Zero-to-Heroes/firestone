@@ -1,7 +1,7 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, GameState, ShortCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MinionsDiedEvent } from '../../../models/mainwindow/game-events/minions-died-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';

@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/app/common';
+import { GameEvent } from '@firestone/game-state';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { DeckManipulationHelper } from '@services/decktracker/event-parser/deck-manipulation-helper';
 import { EventParser } from '../event-parser';

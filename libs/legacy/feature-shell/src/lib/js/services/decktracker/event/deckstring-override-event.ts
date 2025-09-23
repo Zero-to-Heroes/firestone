@@ -1,5 +1,4 @@
-import { GameStateEvent } from '@firestone/app/common';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent, GameStateEvent } from '@firestone/game-state';
 
 export class DeckstringOverrideEvent implements GameStateEvent {
 	readonly type: string = GameEvent.DECKSTRING_OVERRIDE;

@@ -13,11 +13,13 @@ import {
 	SceneMode,
 	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
-import { DeckHandlerService, explodeDecklist, Metadata, normalizeWithDbfIds } from '@firestone/game-state';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { Metadata } from '../../models/metadata';
+import { DeckHandlerService } from '../deck-handler.service';
+import { explodeDecklist, normalizeWithDbfIds } from '../deck-utils';
 import { GameEvent } from '../game-events/game-event';
 import { GameEventsEmitterService } from '../game-events/game-events-emitter.service';
 

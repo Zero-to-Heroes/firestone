@@ -1,16 +1,24 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService, GameStateEvent } from '@firestone/app/common';
 import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
-import { DeckCard, DeckState, GameState, HeroCard, PlayerGameState, RealTimeStatsState } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckState,
+	GameEvent,
+	GameEventsEmitterService,
+	GameState,
+	GameStateEvent,
+	HeroCard,
+	PlayerGameState,
+	RealTimeStatsState,
+} from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { hasTag } from '@services/decktracker/attack-on-board.service';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { GameEvent } from '../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { BgsBestUserStatsService } from '../battlegrounds/bgs-best-user-stats.service';
 import { RealTimeStatsService } from '../battlegrounds/store/real-time-stats/real-time-stats.service';

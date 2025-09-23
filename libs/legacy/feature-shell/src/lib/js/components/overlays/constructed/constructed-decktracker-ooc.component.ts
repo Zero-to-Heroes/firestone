@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { GameType } from '@firestone-hs/reference-data';
-import { DeckParserFacadeService } from '@firestone/app/common';
-import { Metadata, StatsRecap } from '@firestone/game-state';
+import { DeckParserFacadeService, Metadata, StatsRecap } from '@firestone/game-state';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';

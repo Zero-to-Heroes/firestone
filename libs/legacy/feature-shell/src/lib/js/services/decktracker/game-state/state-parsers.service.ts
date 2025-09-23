@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
-import { DeckHandlerService, GameUniqueIdService } from '@firestone/game-state';
-import { MemoryInspectionService } from '@firestone/memory';
 import {
-	BugReportService,
+	DeckHandlerService,
 	DeckParserService,
 	GameEvent,
 	GameEventsEmitterService,
-	LogsUploaderService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+	GameUniqueIdService,
+} from '@firestone/game-state';
+import { MemoryInspectionService } from '@firestone/memory';
+import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OwUtilsService } from '@firestone/shared/framework/core';
 import { AdService } from '../../ad.service';
 import { GameEvents } from '../../game-events.service';

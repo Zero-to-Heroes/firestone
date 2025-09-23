@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
+import { DeckParserService, GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { DeckParserService, GameEvent, GameEventsEmitterService } from '@firestone/shared/common/service';
 import { filter } from 'rxjs/operators';
 import { sleep } from './utils';
 

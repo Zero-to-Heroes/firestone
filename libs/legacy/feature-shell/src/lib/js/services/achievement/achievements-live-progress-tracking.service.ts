@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
+import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import {
 	equalHsAchievementInfo,
 	HsAchievementInfo,
 	HsAchievementsInfo,
 	MemoryInspectionService,
 } from '@firestone/memory';
-import {
-	GameEvent,
-	GameEventsEmitterService,
-	GameStatusService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { HEARTHSTONE_GAME_ID, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';

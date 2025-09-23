@@ -1,9 +1,7 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService } from '@firestone/app/common';
-import { GameState } from '@firestone/game-state';
+import { GameEvent, GameEventsEmitterService, GameState, GameStateEvent } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 
-import { GameEvent, GameStateEvent } from '@firestone/app/common';
 import { EventParser } from '../event-parser';
 
 export class BgsActivePlayerBoardTriggerParser implements EventParser {

@@ -1,7 +1,7 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../../localization-facade.service';
 import { EventParser } from '../event-parser';
 

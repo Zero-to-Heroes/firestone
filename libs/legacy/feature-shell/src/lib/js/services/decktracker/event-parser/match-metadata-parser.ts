@@ -12,20 +12,17 @@ import {
 	BgsPostMatchStatsPanel,
 	DeckCard,
 	DeckHandlerService,
+	DeckInfo,
+	DeckParserService,
 	DeckSideboard,
 	DeckState,
+	GameEvent,
 	GameState,
 	HeroCard,
 	Metadata,
 } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import {
-	DeckInfo,
-	DeckParserService,
-	GameEvent,
-	Preferences,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';

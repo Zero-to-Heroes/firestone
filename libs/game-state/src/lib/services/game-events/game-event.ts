@@ -1,5 +1,5 @@
-import { FullGameState } from '@firestone/game-state';
 import { Rank } from '@firestone/memory';
+import { FullGameState } from '../../models/full-game-state';
 import { DeckInfo } from '../deck/deck-parser.service';
 import { GameStateEvent } from './game-state-event';
 

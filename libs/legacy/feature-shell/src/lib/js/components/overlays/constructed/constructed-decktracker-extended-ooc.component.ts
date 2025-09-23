@@ -11,7 +11,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ALL_CLASSES, GameFormat, getBaseCardId } from '@firestone-hs/reference-data';
-import { DeckParserFacadeService } from '@firestone/app/common';
 import {
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
@@ -19,7 +18,7 @@ import {
 	MulliganDeckStats,
 	buildColor,
 } from '@firestone/constructed/common';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { DeckParserFacadeService, GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {

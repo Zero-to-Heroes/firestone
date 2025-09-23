@@ -1,6 +1,13 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent, GameEventsEmitterService, GameStateEvent } from '@firestone/app/common';
-import { BattlegroundsState, BgsHeroSelectionOverviewPanel, BgsPanel, GameState } from '@firestone/game-state';
+import {
+	BattlegroundsState,
+	BgsHeroSelectionOverviewPanel,
+	BgsPanel,
+	GameEvent,
+	GameEventsEmitterService,
+	GameState,
+	GameStateEvent,
+} from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';

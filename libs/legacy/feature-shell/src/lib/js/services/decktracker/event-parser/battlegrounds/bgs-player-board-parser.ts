@@ -10,7 +10,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { GameEvent } from '@firestone/app/common';
+import { GameEvent } from '@firestone/game-state';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
 	BgsBoard,

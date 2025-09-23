@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { LotteryState } from '../lottery.model';
 
 export interface LotteryProcessor {

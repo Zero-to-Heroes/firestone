@@ -1,4 +1,4 @@
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';

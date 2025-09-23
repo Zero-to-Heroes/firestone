@@ -1,4 +1,4 @@
-import { GameStateEvent } from '@firestone/app/common';
+import { GameStateEvent } from '@firestone/shared/common/service';
 import { ConstructedTab } from '../../../models/constructed/constructed-tab.type';
 
 export class ConstructedChangeTabEvent implements GameStateEvent {

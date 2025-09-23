@@ -1,9 +1,7 @@
-import { GameEventsEmitterService } from '@firestone/app/common';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameEventsEmitterService, GameState } from '@firestone/game-state';
 
-import { GameStateEvent } from '@firestone/app/common';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent, GameStateEvent } from '@firestone/game-state';
 import { ReviewIdService } from '../../review-id.service';
 import { EventParser } from './event-parser';
 

@@ -1,7 +1,7 @@
 import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService } from '@firestone/app/common';
+import { GameEventsEmitterService } from '@firestone/game-state';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';

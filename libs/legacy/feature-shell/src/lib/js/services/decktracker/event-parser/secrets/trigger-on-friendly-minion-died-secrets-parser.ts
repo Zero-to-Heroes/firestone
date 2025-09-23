@@ -1,6 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { MinionsDiedEvent } from '../../../../models/mainwindow/game-events/minions-died-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';

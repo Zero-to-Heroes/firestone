@@ -1,5 +1,3 @@
-export * from '../../../app/common/src/lib/services/deck/deck-parser-facade.service';
-export * from '../../../app/common/src/lib/services/deck/deck-parser.service';
 export * from './lib/js/components/battlegrounds/battlegrounds.component';
 export * from './lib/js/components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 export * from './lib/js/components/loading/loading.component';

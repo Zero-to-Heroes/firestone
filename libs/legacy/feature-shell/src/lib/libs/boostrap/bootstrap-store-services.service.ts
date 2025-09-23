@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
-import { DeckParserFacadeService, GameNativeStateStoreService } from '@firestone/app/common';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import {
 	ArenDeckDetailsService,
 	ArenaCardStatsService,
@@ -39,7 +39,7 @@ import {
 	ConstructedMulliganGuideService,
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
-import { BootstrapGameStateService } from '@firestone/game-state';
+import { BootstrapGameStateService, DeckParserFacadeService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { ModsConfigService } from '@firestone/mods/common';

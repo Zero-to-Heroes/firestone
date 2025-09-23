@@ -1,4 +1,4 @@
-import { GameEvent } from '@firestone/shared/common/service';
+import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameTieReq } from './game-tie-req';
 

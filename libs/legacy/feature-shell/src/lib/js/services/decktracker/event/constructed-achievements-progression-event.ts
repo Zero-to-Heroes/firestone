@@ -1,5 +1,4 @@
-import { GameStateEvent } from '@firestone/app/common';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent, GameStateEvent } from '@firestone/game-state';
 import { AchievementsProgress } from '../../../models/achievement/achievement-progress';
 
 export class ConstructedAchievementsProgressionEvent implements GameStateEvent {

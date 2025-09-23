@@ -1,5 +1,10 @@
 import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
-import { DeckHandlerService } from '@firestone/game-state';
+import {
+	DeckHandlerService,
+	DeckParserFacadeService,
+	DeckParserService,
+	GameEventsEmitterService,
+} from '@firestone/game-state';
 import {
 	MemoryInspectionService,
 	MemoryUpdatesService,
@@ -7,14 +12,7 @@ import {
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
-import {
-	DeckParserFacadeService,
-	DeckParserService,
-	GameEventsEmitterService,
-	GameStatusService,
-	PreferencesService,
-	PreferencesStorageService,
-} from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService, PreferencesStorageService } from '@firestone/shared/common/service';
 import {
 	ApiRunner,
 	CardsFacadeService,

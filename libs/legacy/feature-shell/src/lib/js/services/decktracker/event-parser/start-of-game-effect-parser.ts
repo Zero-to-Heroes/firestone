@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
+import { GameEvent } from '@firestone/game-state';
 import { globalEffectCards } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDeckForSpecialCardEffects } from './deck-contents-utils';

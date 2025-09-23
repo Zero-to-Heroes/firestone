@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService } from '@firestone/app/common';
-import { RealTimeStatsState } from '@firestone/game-state';
+import { GameEvent, GameEventsEmitterService, RealTimeStatsState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { filter, take } from 'rxjs';
-import { GameEvent } from '../../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { ProcessingQueue } from '../../../processing-queue.service';
 import { EventParser } from './event-parsers/_event-parser';
 import { RealTimeStatsParsersService } from './real-time-stats-parsers.service';

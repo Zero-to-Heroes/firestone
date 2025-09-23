@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { isMercenaries } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService } from '@firestone/app/common';
 import { ArenaInfoService } from '@firestone/arena/common';
-import { GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
+import {
+	GameEvent,
+	GameEventsEmitterService,
+	GameStateFacadeService,
+	GameUniqueIdService,
+} from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sanitizeDeckstring } from '@firestone/shared/common/view';
@@ -21,7 +25,6 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { GameEvent } from '../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { HsGameMetaData } from '../game-mode-data.service';

@@ -1,9 +1,7 @@
 import { GameState } from '@firestone/game-state';
+import { GameEvent, GameStateEvent } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-
-import { GameStateEvent } from '@firestone/app/common';
-import { GameEvent } from '../../../../../../../../app/common/src/lib/services/game-events/game-event';
 import { isWindowClosed } from '../../utils';
 import { OverlayHandler } from './overlay-handler';
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameEventsEmitterService } from '@firestone/app/common';
-import { IReviewIdService } from '@firestone/game-state';
+import { GameEventsEmitterService, IReviewIdService } from '@firestone/game-state';
 import { uuid } from '@firestone/shared/framework/common';
 import { BehaviorSubject } from 'rxjs';
 import { Events } from './events.service';

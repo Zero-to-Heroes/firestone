@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { GameEvent, PreferencesService } from '@firestone/shared/common/service';
+import { GameEvent } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
