@@ -36,124 +36,204 @@ class MindVisionEdge {
 		}
 	}
 
-	async getCurrentScene() {
-		if (!this.initialized) {
+	// Generic method wrapper that handles initialization checks and error handling
+	async callPluginMethod(methodName, params = {}, options = {}) {
+		const { requiresInit = true, returnProperty = null, logErrors = true } = options;
+
+		if (requiresInit && !this.initialized) {
 			throw new Error('Plugin not initialized. Call initialize() first.');
 		}
 
 		try {
-			const result = await this.callMethod('getCurrentScene');
+			const result = await this.callMethod(methodName, params);
 
 			if (result.success) {
-				return result.scene;
-			} else {
-				console.error('[MindVisionEdge] getCurrentScene error:', result.error);
+				return returnProperty ? result[returnProperty] : result;
+			} else if (result.error) {
+				if (logErrors) {
+					console.error(`[MindVisionEdge] ${methodName} error:`, result.error);
+				}
 				throw new Error(result.error);
+			} else {
+				// Some methods might return data directly without success/error structure
+				return result;
 			}
 		} catch (error) {
-			console.error('[MindVisionEdge] getCurrentScene error:', error);
+			if (logErrors) {
+				console.error(`[MindVisionEdge] ${methodName} error:`, error);
+			}
 			throw error;
 		}
+	}
+
+	// Core plugin methods
+	async getCurrentScene() {
+		return this.callPluginMethod('getCurrentScene', {}, { returnProperty: 'scene' });
 	}
 
 	async getMemoryChanges() {
-		if (!this.initialized) {
-			throw new Error('Plugin not initialized. Call initialize() first.');
-		}
-
-		try {
-			const result = await this.callMethod('getMemoryChanges');
-
-			if (result.success) {
-				return result.changes;
-			} else {
-				console.error('[MindVisionEdge] getMemoryChanges error:', result.error);
-				throw new Error(result.error);
-			}
-		} catch (error) {
-			console.error('[MindVisionEdge] getMemoryChanges error:', error);
-			throw error;
-		}
+		return this.callPluginMethod('getMemoryChanges', {}, { returnProperty: 'changes' });
 	}
 
 	async isBootstrapped() {
-		if (!this.initialized) {
-			throw new Error('Plugin not initialized. Call initialize() first.');
-		}
-
-		try {
-			const result = await this.callMethod('isBootstrapped');
-
-			if (result.success) {
-				return result.bootstrapped;
-			} else {
-				console.error('[MindVisionEdge] isBootstrapped error:', result.error);
-				throw new Error(result.error);
-			}
-		} catch (error) {
-			console.error('[MindVisionEdge] isBootstrapped error:', error);
-			throw error;
-		}
+		return this.callPluginMethod('isBootstrapped', {}, { returnProperty: 'bootstrapped' });
 	}
 
 	async listenForUpdates() {
-		if (!this.initialized) {
-			throw new Error('Plugin not initialized. Call initialize() first.');
-		}
-
-		try {
-			const result = await this.callMethod('listenForUpdates');
-
-			if (result.success) {
-				return result.message;
-			} else {
-				console.error('[MindVisionEdge] listenForUpdates error:', result.error);
-				throw new Error(result.error);
-			}
-		} catch (error) {
-			console.error('[MindVisionEdge] listenForUpdates error:', error);
-			throw error;
-		}
+		return this.callPluginMethod('listenForUpdates', {}, { returnProperty: 'message' });
 	}
 
-	// Start listening for memory updates with real-time callback
 	async startListeningWithCallback(callback) {
-		if (!this.initialized) {
-			throw new Error('Plugin not initialized. Call initialize() first.');
-		}
-
 		if (typeof callback !== 'function') {
 			throw new Error('Callback must be a function');
 		}
 
-		try {
-			const result = await this.callMethod('StartListeningWithCallback', {
-				callback: callback,
-			});
-
-			if (result.success) {
-				console.log('[MindVisionEdge] Started listening for memory updates with callback:', result.message);
-				return result.message;
-			} else {
-				console.error('[MindVisionEdge] Failed to start listening:', result.error);
-				throw new Error(result.error);
-			}
-		} catch (error) {
-			console.error('[MindVisionEdge] startListeningWithCallback error:', error);
-			throw error;
-		}
+		const result = await this.callPluginMethod('StartListeningWithCallback', { callback });
+		console.log('[MindVisionEdge] Started listening for memory updates with callback:', result.message);
+		return result.message;
 	}
 
 	async isInitialized() {
-		try {
-			const result = await this.callMethod('isInitialized');
-			return result;
-		} catch (error) {
-			console.error('[MindVisionEdge] isInitialized error:', error);
-			return false;
-		}
+		return this.callPluginMethod('isInitialized', {}, { requiresInit: false, logErrors: false });
 	}
 
+	// Collection methods
+	async getCollection(throwException = false, debug = false) {
+		return this.callPluginMethod('getCollection', { throwException, debug });
+	}
+
+	async getCollectionSize(throwException = false, debug = false) {
+		return this.callPluginMethod('getCollectionSize', { throwException, debug });
+	}
+
+	async getBattlegroundsOwnedHeroSkinDbfIds() {
+		return this.callPluginMethod('getBattlegroundsOwnedHeroSkinDbfIds');
+	}
+
+	async getCardBacks() {
+		return this.callPluginMethod('getCardBacks');
+	}
+
+	async getCoins() {
+		return this.callPluginMethod('getCoins');
+	}
+
+	// Match and game state methods
+	async getMatchInfo() {
+		return this.callPluginMethod('getMatchInfo');
+	}
+
+	async getCurrentBoard() {
+		return this.callPluginMethod('getCurrentBoard');
+	}
+
+	async getGameUniqueId() {
+		return this.callPluginMethod('getGameUniqueId');
+	}
+
+	async getRegion() {
+		return this.callPluginMethod('getRegion');
+	}
+
+	// Battlegrounds methods
+	async getBgsPlayerTeammateBoard() {
+		return this.callPluginMethod('getBgsPlayerTeammateBoard');
+	}
+
+	async getBgsPlayerBoard() {
+		return this.callPluginMethod('getBgsPlayerBoard');
+	}
+
+	async getBattlegroundsInfo(forceReset = false) {
+		return this.callPluginMethod('getBattlegroundsInfo', { forceReset });
+	}
+
+	async getBattlegroundsSelectedMode(forceReset = false) {
+		return this.callPluginMethod('getBattlegroundsSelectedMode', { forceReset });
+	}
+
+	// Mercenaries methods
+	async getMercenariesInfo(forceReset = false) {
+		return this.callPluginMethod('getMercenariesInfo', { forceReset });
+	}
+
+	async getMercenariesCollectionInfo(forceReset = false) {
+		return this.callPluginMethod('getMercenariesCollectionInfo', { forceReset });
+	}
+
+	// Arena methods
+	async getArenaInfo() {
+		return this.callPluginMethod('getArenaInfo');
+	}
+
+	async getArenaDeck() {
+		return this.callPluginMethod('getArenaDeck');
+	}
+
+	// Deck methods
+	async getActiveDeck(selectedDeckId, forceReset = false) {
+		return this.callPluginMethod('getActiveDeck', { selectedDeckId, forceReset });
+	}
+
+	async getSelectedDeckId(forceReset) {
+		return this.callPluginMethod('getSelectedDeckId', { forceReset });
+	}
+
+	async getWhizbangDeck(deckId) {
+		return this.callPluginMethod('getWhizbangDeck', { deckId });
+	}
+
+	// Rewards and progression methods
+	async getRewardsTrackInfo() {
+		return this.callPluginMethod('getRewardsTrackInfo');
+	}
+
+	async getBoostersInfo() {
+		return this.callPluginMethod('getBoostersInfo');
+	}
+
+	async getActiveQuests() {
+		return this.callPluginMethod('getActiveQuests');
+	}
+
+	// Achievements methods
+	async getAchievementsInfo(forceReset = false) {
+		return this.callPluginMethod('getAchievementsInfo', { forceReset });
+	}
+
+	async getAchievementCategories(forceReset = false) {
+		return this.callPluginMethod('getAchievementCategories', { forceReset });
+	}
+
+	async getInGameAchievementsProgressInfo(achievementIds) {
+		return this.callPluginMethod('getInGameAchievementsProgressInfo', { achievementIds });
+	}
+
+	async getInGameAchievementsProgressInfoByIndex(achievementIds) {
+		return this.callPluginMethod('getInGameAchievementsProgressInfoByIndex', { achievementIds });
+	}
+
+	// Player info methods
+	async getPlayerProfileInfo() {
+		return this.callPluginMethod('getPlayerProfileInfo');
+	}
+
+	async getAccountInfo() {
+		return this.callPluginMethod('getAccountInfo');
+	}
+
+	// Plugin lifecycle methods
+	async reset() {
+		return this.callPluginMethod('reset');
+	}
+
+	async tearDown() {
+		const result = await this.callPluginMethod('tearDown');
+		this.initialized = false;
+		return result;
+	}
+
+	// Low-level method for direct C# calls
 	async callMethod(method, params = {}) {
 		return new Promise((resolve, reject) => {
 			this.edgeFunc({ method, ...params }, (error, result) => {

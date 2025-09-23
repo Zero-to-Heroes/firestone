@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 public class Startup
 {
+    // Build timestamp to force recompilation: 2025-09-23T08:25:00.000Z
     // Static instance to maintain state across calls
     private static object mindVisionPlugin = null;
     private static Type pluginType = null;
@@ -40,6 +41,88 @@ public class Startup
                     
                 case "isInitialized":
                     return isInitialized;
+
+                // Collection methods
+                case "getCollection":
+                    return await CallPluginMethod("getCollection", input);
+                case "getCollectionSize":
+                    return await CallPluginMethod("getCollectionSize", input);
+                case "getBattlegroundsOwnedHeroSkinDbfIds":
+                    return await CallPluginMethod("getBattlegroundsOwnedHeroSkinDbfIds", input);
+                case "getCardBacks":
+                    return await CallPluginMethod("getCardBacks", input);
+                case "getCoins":
+                    return await CallPluginMethod("getCoins", input);
+
+                // Match and game state methods
+                case "getMatchInfo":
+                    return await CallPluginMethod("getMatchInfo", input);
+                case "getCurrentBoard":
+                    return await CallPluginMethod("getCurrentBoard", input);
+                case "getGameUniqueId":
+                    return await CallPluginMethod("getGameUniqueId", input);
+                case "getRegion":
+                    return await CallPluginMethod("getRegion", input);
+
+                // Battlegrounds methods
+                case "getBgsPlayerTeammateBoard":
+                    return await CallPluginMethod("getBgsPlayerTeammateBoard", input);
+                case "getBgsPlayerBoard":
+                    return await CallPluginMethod("getBgsPlayerBoard", input);
+                case "getBattlegroundsInfo":
+                    return await CallPluginMethod("getBattlegroundsInfo", input);
+                case "getBattlegroundsSelectedMode":
+                    return await CallPluginMethod("getBattlegroundsSelectedMode", input);
+
+                // Mercenaries methods
+                case "getMercenariesInfo":
+                    return await CallPluginMethod("getMercenariesInfo", input);
+                case "getMercenariesCollectionInfo":
+                    return await CallPluginMethod("getMercenariesCollectionInfo", input);
+
+                // Arena methods
+                case "getArenaInfo":
+                    return await CallPluginMethod("getArenaInfo", input);
+                case "getArenaDeck":
+                    return await CallPluginMethod("getArenaDeck", input);
+
+                // Deck methods
+                case "getActiveDeck":
+                    return await CallPluginMethod("getActiveDeck", input);
+                case "getSelectedDeckId":
+                    return await CallPluginMethod("getSelectedDeckId", input);
+                case "getWhizbangDeck":
+                    return await CallPluginMethod("getWhizbangDeck", input);
+
+                // Rewards and progression methods
+                case "getRewardsTrackInfo":
+                    return await CallPluginMethod("getRewardsTrackInfo", input);
+                case "getBoostersInfo":
+                    return await CallPluginMethod("getBoostersInfo", input);
+                case "getActiveQuests":
+                    return await CallPluginMethod("getActiveQuests", input);
+
+                // Achievements methods
+                case "getAchievementsInfo":
+                    return await CallPluginMethod("getAchievementsInfo", input);
+                case "getAchievementCategories":
+                    return await CallPluginMethod("getAchievementCategories", input);
+                case "getInGameAchievementsProgressInfo":
+                    return await CallPluginMethod("getInGameAchievementsProgressInfo", input);
+                case "getInGameAchievementsProgressInfoByIndex":
+                    return await CallPluginMethod("getInGameAchievementsProgressInfoByIndex", input);
+
+                // Player info methods
+                case "getPlayerProfileInfo":
+                    return await CallPluginMethod("getPlayerProfileInfo", input);
+                case "getAccountInfo":
+                    return await CallPluginMethod("getAccountInfo", input);
+
+                // Plugin lifecycle methods
+                case "reset":
+                    return await CallPluginMethod("reset", input);
+                case "tearDown":
+                    return await CallPluginMethod("tearDown", input);
                     
                 default:
                     throw new ArgumentException("Unknown method: " + method);
@@ -51,20 +134,20 @@ public class Startup
         }
     }
 
-    private async Task<object> InitializePlugin()
+    private Task<object> InitializePlugin()
     {
         try
         {
             if (isInitialized)
             {
-                return new { success = true, message = "Already initialized" };
+                return Task.FromResult<object>(new { success = true, message = "Already initialized" });
             }
 
             string dllPath = Path.Combine(Directory.GetCurrentDirectory(), "overwolf-plugins", "OverwolfUnitySpy.dll");
             
             if (!File.Exists(dllPath))
             {
-                return new { success = false, error = "DLL not found at: " + dllPath };
+                return Task.FromResult<object>(new { success = false, error = "DLL not found at: " + dllPath });
             }
 
             Assembly assembly = Assembly.LoadFrom(dllPath);
@@ -75,7 +158,7 @@ public class Startup
             {
                 Type[] types = assembly.GetTypes();
                 string availableTypes = string.Join(", ", Array.ConvertAll(types, t => t.FullName));
-                return new { success = false, error = "Could not find OverwolfUnitySpy.MindVisionPlugin type", availableTypes = availableTypes };
+                return Task.FromResult<object>(new { success = false, error = "Could not find OverwolfUnitySpy.MindVisionPlugin type", availableTypes = availableTypes });
             }
 
             // Create an instance of the plugin
@@ -89,11 +172,11 @@ public class Startup
             
             isInitialized = true;
 
-            return new { success = true, message = "Plugin initialized successfully" };
+            return Task.FromResult<object>(new { success = true, message = "Plugin initialized successfully" });
         }
         catch (Exception ex)
         {
-            return new { success = false, error = ex.Message, stackTrace = ex.StackTrace };
+            return Task.FromResult<object>(new { success = false, error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 
@@ -168,13 +251,13 @@ public class Startup
     }
 
     // Get current scene using the direct approach (bypasses callUnitySpy issues)
-    private async Task<object> GetCurrentScene()
+    private Task<object> GetCurrentScene()
     {
         try
         {
             if (!isInitialized || mindVisionPlugin == null)
             {
-                return new { error = "Plugin not initialized" };
+                return Task.FromResult<object>(new { error = "Plugin not initialized" });
             }
 
             // Use direct approach to get scene data
@@ -183,7 +266,7 @@ public class Startup
             
             if (mindVisionInstance == null)
             {
-                return new { success = true, scene = (string)null };
+                return Task.FromResult<object>(new { success = true, scene = (string)null });
             }
 
             var getSceneModeMethod = mindVisionInstance.GetType().GetMethod("GetSceneMode");
@@ -191,22 +274,22 @@ public class Startup
             
             // Return the result as a string like the original plugin would
             string serializedResult = sceneResult != null ? sceneResult.ToString() : null;
-            return new { success = true, scene = serializedResult };
+            return Task.FromResult<object>(new { success = true, scene = serializedResult });
         }
         catch (Exception ex)
         {
-            return new { error = ex.Message, stackTrace = ex.StackTrace };
+            return Task.FromResult<object>(new { error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 
     // Check if the plugin is bootstrapped using direct approach
-    private async Task<object> IsBootstrapped()
+    private Task<object> IsBootstrapped()
     {
         try
         {
             if (!isInitialized || mindVisionPlugin == null)
             {
-                return new { error = "Plugin not initialized" };
+                return Task.FromResult<object>(new { error = "Plugin not initialized" });
             }
 
             var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -214,28 +297,28 @@ public class Startup
             
             if (mindVisionInstance == null)
             {
-                return new { success = true, bootstrapped = false };
+                return Task.FromResult<object>(new { success = true, bootstrapped = false });
             }
 
             var isBootstrappedMethod = mindVisionInstance.GetType().GetMethod("IsBootstrapped");
             var result = isBootstrappedMethod.Invoke(mindVisionInstance, null);
             
-            return new { success = true, bootstrapped = result };
+            return Task.FromResult<object>(new { success = true, bootstrapped = result });
         }
         catch (Exception ex)
         {
-            return new { error = ex.Message, stackTrace = ex.StackTrace };
+            return Task.FromResult<object>(new { error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 
     // Get memory changes using direct approach
-    private async Task<object> GetMemoryChanges()
+    private Task<object> GetMemoryChanges()
     {
         try
         {
             if (!isInitialized || mindVisionPlugin == null)
             {
-                return new { error = "Plugin not initialized" };
+                return Task.FromResult<object>(new { error = "Plugin not initialized" });
             }
 
             var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -243,7 +326,7 @@ public class Startup
             
             if (mindVisionInstance == null)
             {
-                return new { success = true, changes = (string)null };
+                return Task.FromResult<object>(new { success = true, changes = (string)null });
             }
 
             var getMemoryChangesMethod = mindVisionInstance.GetType().GetMethod("GetMemoryChanges");
@@ -251,28 +334,28 @@ public class Startup
             
             // Serialize the result like the original plugin does
             string serializedResult = result != null ? result.ToString() : null;
-            return new { success = true, changes = serializedResult };
+            return Task.FromResult<object>(new { success = true, changes = serializedResult });
         }
         catch (Exception ex)
         {
-            return new { error = ex.Message, stackTrace = ex.StackTrace };
+            return Task.FromResult<object>(new { error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 
     // Listen for updates (already started in initialization, but can be called again)
-    private async Task<object> ListenForUpdates()
+    private Task<object> ListenForUpdates()
     {
         try
         {
             if (!isInitialized || mindVisionPlugin == null)
             {
-                return new { error = "Plugin not initialized" };
+                return Task.FromResult<object>(new { error = "Plugin not initialized" });
             }
 
             MethodInfo listenMethod = pluginType.GetMethod("listenForUpdates");
             if (listenMethod == null)
             {
-                return new { error = "listenForUpdates method not found" };
+                return Task.FromResult<object>(new { error = "listenForUpdates method not found" });
             }
 
             Action<object> listenCallback = (result) => {
@@ -281,11 +364,11 @@ public class Startup
 
             listenMethod.Invoke(mindVisionPlugin, new object[] { listenCallback });
             
-            return new { success = true, message = "Listening for updates started" };
+            return Task.FromResult<object>(new { success = true, message = "Listening for updates started" });
         }
         catch (Exception ex)
         {
-            return new { error = ex.Message, stackTrace = ex.StackTrace };
+            return Task.FromResult<object>(new { error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 
@@ -296,7 +379,7 @@ public class Startup
         {
             if (!isInitialized || mindVisionPlugin == null)
             {
-                return new { error = "Plugin not initialized" };
+                return Task.FromResult<object>(new { error = "Plugin not initialized" });
             }
 
             // Store the Node.js callback function
@@ -385,16 +468,63 @@ public class Startup
                 };
 
                 listenMethod.Invoke(mindVisionPlugin, new object[] { listenCallback });
-                return new { success = true, message = "Started listening for memory updates with real-time callback" };
+                return Task.FromResult<object>(new { success = true, message = "Started listening for memory updates with real-time callback" });
             }
             else
             {
-                return new { error = "listenForUpdates method not found" };
+                return Task.FromResult<object>(new { error = "listenForUpdates method not found" });
             }
         }
         catch (Exception ex)
         {
-            return new { error = "Failed to start listening: " + ex.Message };
+            return Task.FromResult<object>(new { error = "Failed to start listening: " + ex.Message });
+        }
+    }
+
+    // Generic method to call any plugin method through reflection
+    private Task<object> CallPluginMethod(string methodName, dynamic input)
+    {
+        try
+        {
+            if (!isInitialized || mindVisionPlugin == null)
+            {
+                return Task.FromResult<object>(new { error = "Plugin not initialized" });
+            }
+
+            // Try to find the method directly on the plugin
+            MethodInfo directMethod = pluginType.GetMethod(methodName);
+            if (directMethod != null)
+            {
+                // Call the method directly
+                var result = directMethod.Invoke(mindVisionPlugin, new object[] { });
+                return Task.FromResult<object>(new { success = true, data = result });
+            }
+
+            // If not found directly, try to find it on the MindVision instance
+            var mindVisionProperty = pluginType.GetProperty("MindVision", BindingFlags.NonPublic | BindingFlags.Instance);
+            object mindVisionInstance = null;
+            if (mindVisionProperty != null)
+            {
+                mindVisionInstance = mindVisionProperty.GetValue(mindVisionPlugin);
+            }
+            
+            if (mindVisionInstance != null)
+            {
+                var mindVisionType = mindVisionInstance.GetType();
+                MethodInfo mindVisionMethod = mindVisionType.GetMethod(methodName);
+                
+                if (mindVisionMethod != null)
+                {
+                    var result = mindVisionMethod.Invoke(mindVisionInstance, new object[] { });
+                    return Task.FromResult<object>(new { success = true, data = result });
+                }
+            }
+
+            return Task.FromResult<object>(new { error = "Method '" + methodName + "' not found" });
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult<object>(new { error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 

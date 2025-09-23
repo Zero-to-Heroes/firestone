@@ -51,6 +51,13 @@ export class MindVisionElectronService implements IMindVisionFacade {
 			const mindVisionPath = path.join(__dirname, 'mind-vision-edge');
 			console.log('[MindVisionElectron] Looking for module at:', mindVisionPath);
 
+			// Clear module cache to ensure we get the latest version
+			const indexPath = path.join(mindVisionPath, 'index.js');
+			if (eval('require').cache[indexPath]) {
+				console.log('[MindVisionElectron] Clearing cached module...');
+				delete eval('require').cache[indexPath];
+			}
+
 			// Use eval to bypass webpack's module resolution
 			const MindVisionEdge = eval('require')(mindVisionPath);
 			this.mindVision = new MindVisionEdge();
@@ -79,6 +86,7 @@ export class MindVisionElectronService implements IMindVisionFacade {
 			} else {
 				console.error('[MindVisionElectron] Max retries reached. MindVision will not be available.');
 				this.updateOverlayStatus('Failed to load MindVision plugin');
+				throw new Error('Failed to load MindVision plugin');
 			}
 		}
 	}
