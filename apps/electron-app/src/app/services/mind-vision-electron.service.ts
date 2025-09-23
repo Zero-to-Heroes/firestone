@@ -83,6 +83,9 @@ export class MindVisionElectronService implements IMindVisionFacade {
 					this.memoryUpdates.newUpdate(parsedUpdate);
 				}
 			});
+			this.mindVision.setLogger((log1, log2) => {
+				console.log('[MindVisionElectron]', log1, log2);
+			});
 
 			console.log('[MindVisionElectron] Initializing plugin...');
 			const success = await this.mindVision.initialize();
@@ -91,7 +94,7 @@ export class MindVisionElectronService implements IMindVisionFacade {
 				this.initialized = true;
 				console.log('[MindVisionElectron] Plugin initialized successfully!');
 				this.updateOverlayStatus('Connected');
-				this.startListeningForUpdates();
+				// this.startListeningForUpdates();
 			} else {
 				console.error('[MindVisionElectron] Failed to initialize plugin');
 				this.updateOverlayStatus('Failed to initialize');

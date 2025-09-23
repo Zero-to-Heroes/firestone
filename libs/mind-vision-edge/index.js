@@ -21,10 +21,10 @@ class MindVisionEdge {
 
 	// Set the memory update callback before initialization
 	setMemoryUpdateCallback(callback) {
-		if (typeof callback !== 'function') {
-			throw new Error('Callback must be a function');
-		}
 		this.memoryUpdateCallback = callback;
+	}
+	setLogger(logger) {
+		this.logger = logger;
 	}
 
 	// Get or create cached edge function for a specific method
@@ -47,6 +47,16 @@ class MindVisionEdge {
 	async initialize() {
 		try {
 			console.log('[MindVisionEdge] Initializing plugin...');
+
+			if (this.logger) {
+				console.log('[MindVisionEdge] Setting up logger...');
+				await this.callPluginMethod('setLogger', (log1, log2) => {
+					if (this.logger) {
+						this.logger(log1, log2);
+					}
+				});
+				console.log('[MindVisionEdge] Logger setup complete');
+			}
 
 			// Set up memory update callback if we have one
 			if (this.memoryUpdateCallback) {
@@ -238,7 +248,7 @@ class MindVisionEdge {
 	// Helper method to call plugin methods with proper error handling
 	async callPluginMethod(methodName, params = {}) {
 		console.debug('[MindVisionEdge] [debug] Calling plugin method:', methodName);
-		if (!this.initialized && methodName !== 'setMemoryUpdateCallback') {
+		if (!this.initialized && methodName !== 'setMemoryUpdateCallback' && methodName !== 'setLogger') {
 			throw new Error('Plugin not initialized');
 		}
 
@@ -247,11 +257,11 @@ class MindVisionEdge {
 				// Get cached edge function for this method
 				console.debug('[MindVisionEdge] [debug] Getting edge function for:', methodName);
 				const edgeFunc = this.getEdgeFunction(methodName);
-				console.debug('[MindVisionEdge] [debug] Got edge function:');
+				console.debug('[MindVisionEdge] [debug]', methodName, 'Got edge function:');
 
 				// All methods now follow the same pattern: async Task<object> MethodName(dynamic input)
 				edgeFunc(params, (error, result) => {
-					console.debug('[MindVisionEdge] [debug] Edge function result:', result);
+					console.debug('[MindVisionEdge] [debug]', methodName, 'Edge function result:', result);
 					if (error) {
 						reject(error);
 					} else {

@@ -188,6 +188,12 @@ export class MindVisionStateMachineService {
 
 	private async setState(newState: MindVisionState) {
 		if (newState?.stateId() != this.currentState?.stateId()) {
+			console.debug(
+				'[mind-vision] setting state',
+				CurrentState[this.currentState?.stateId()],
+				'to',
+				CurrentState[newState?.stateId()],
+			);
 			await this.currentState.onExit();
 			this.currentState = newState;
 			await this.currentState.onEnter();
