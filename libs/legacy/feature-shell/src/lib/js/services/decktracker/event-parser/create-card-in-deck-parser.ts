@@ -79,12 +79,6 @@ export class CreateCardInDeckParser implements EventParser {
 		);
 		// console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
-		const shouldHideCreator =
-			// In this case, the card is removed from the deck then put back, so we're actually putting back the original
-			// card
-			gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444 ||
-			// And here we're putting back the original card
-			gameEvent.additionalData.creatorCardId === CardIds.AdaptiveAmalgam_VAC_958;
 		const creatorEntityId =
 			(gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId)
 				? +(gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId)
@@ -93,6 +87,13 @@ export class CreateCardInDeckParser implements EventParser {
 			? // Because sometimes the entityId is reversed in the Other zone
 				(deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card)
 			: null;
+		const shouldHideCreator =
+			// In this case, the card is removed from the deck then put back, so we're actually putting back the original
+			// card
+			gameEvent.additionalData.influencedByCardId === CardIds.Overplanner_VAC_444 ||
+			// And here we're putting back the original card, but only if it itself was not "created by"
+			(gameEvent.additionalData.creatorCardId === CardIds.AdaptiveAmalgam_VAC_958 &&
+				!creatorEntity?.creatorCardId);
 		// console.debug(
 		// 	'[create-card-in-deck]',
 		// 	'creatorEntity',
