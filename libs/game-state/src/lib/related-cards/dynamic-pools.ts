@@ -175,17 +175,26 @@ export const getDynamicRelatedCardIds = (
 			);
 	}
 
-	const filters = getDynamicFilters(cardId, entityId, allCards, options);
+	let filters = getDynamicFilters(cardId, entityId, allCards, options);
 	if (filters == null) {
 		return [];
 	}
-	if (Array.isArray(filters)) {
-		const result = filterCards(allCards, options, cardId, ...filters);
-		return result;
-	} else {
-		const result = filterCards(allCards, options, cardId, filters);
-		return result;
+
+	let result: string[] = Array.isArray(filters)
+		? filterCards(allCards, options, cardId, ...filters)
+		: filterCards(allCards, options, cardId, filters);
+	if (result.length === 0) {
+		// If the pool is empty, remove "canBeDiscoveredByClass" requirement
+		const newOptions = {
+			...options,
+			currentClass: '',
+		};
+		filters = getDynamicFilters(cardId, entityId, allCards, newOptions)!;
+		result = Array.isArray(filters)
+			? filterCards(allCards, options, cardId, ...filters)
+			: filterCards(allCards, options, cardId, filters);
 	}
+	return result;
 };
 
 const getDynamicFilters = (
@@ -1099,7 +1108,7 @@ const filterCards = (
 	}
 	let gameType = options.gameType;
 	let format = options.format;
-	return baseCards
+	const baseCardsExtended = baseCards
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, allCards))
 		.filter((c) => {
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
@@ -1111,21 +1120,10 @@ const filterCards = (
 					format = GameFormat.FT_WILD;
 				}
 			}
-			const debug = c.id.includes(CardIds.BreathOfSindragosa_ICC_836);
-			debug &&
-				console.debug(
-					'debug',
-					c.id,
-					!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false,
-					c,
-					format,
-					gameType,
-				);
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
-		.filter((c) => filters.every((f) => f(c)))
-		.filter((c) => !sourceCardId || c.id !== sourceCardId)
-		.map((c) => c.id);
+		.filter((c) => !sourceCardId || c.id !== sourceCardId);
+	return baseCardsExtended.filter((c) => filters.every((f) => f(c))).map((c) => c.id);
 };
 
 // TODO: Move these to the hs-reference-data repo so it's all in the same place.
