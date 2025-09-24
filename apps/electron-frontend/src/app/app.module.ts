@@ -9,6 +9,7 @@ import {
 	ILocalizationService,
 	LocalizationStandaloneService,
 } from '@firestone/shared/framework/core';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
@@ -20,6 +21,7 @@ import { ElectronAdService } from './services/electron-ad.service';
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
+		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: ElectronAdService },
 
 		ElectronAdService,

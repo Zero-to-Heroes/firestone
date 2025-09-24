@@ -11,6 +11,8 @@ import { distinctUntilChanged, pairwise } from 'rxjs';
 import { MousedOverCard, Side } from '../models/memory-update';
 import { MemoryUpdatesService } from './memory-updates.service';
 
+const eventName = 'moused-over-card-changed';
+
 @Injectable()
 export class CardMousedOverService extends AbstractFacadeService<CardMousedOverService> {
 	public mousedOverCard$$: SubscriberAwareBehaviorSubject<MousedOverCard | null>;
@@ -63,5 +65,13 @@ export class CardMousedOverService extends AbstractFacadeService<CardMousedOverS
 					}
 				});
 		}
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.mousedOverCard$$, eventName);
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.mousedOverCard$$ = new SubscriberAwareBehaviorSubject<MousedOverCard | null>(null);
 	}
 }
