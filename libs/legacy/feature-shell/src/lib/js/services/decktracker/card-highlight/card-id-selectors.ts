@@ -3288,6 +3288,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 		case CardIds.TortollanTraveler_VAC_518:
 			return and(side(inputSide), inDeck, minion, taunt, not(cardIs(CardIds.TortollanTraveler_VAC_518)));
+		case CardIds.TotemicEvidence:
+		case CardIds.TotemicEvidence_CORE_MAW_003:
+			return and(side(inputSide), or(inDeck, inHand), totem);
 		case CardIds.TotemicMightLegacy:
 		case CardIds.TotemicMightVanilla:
 		case CardIds.TotemicSurge:
