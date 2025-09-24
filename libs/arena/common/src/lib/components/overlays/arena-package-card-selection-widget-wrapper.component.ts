@@ -12,7 +12,7 @@ import { AbstractWidgetWrapperComponent } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, mergeMap, of, takeUntil, tap } from 'rxjs';
+import { Observable, mergeMap, of, takeUntil } from 'rxjs';
 import { ArenaDraftManagerService } from '../../services/arena-draft-manager.service';
 
 @Component({
@@ -57,7 +57,6 @@ export class ArenaPackageCardSelectionWidgetWrapperComponent
 					return of(false);
 				}
 				return this.arenaDraftManager.cardPackageOptions$$.pipe(
-					tap((info) => console.debug('[arena-package-card-selection-widget-wrapper] showing?', info)),
 					this.mapData((cardPackageOptions) => !!cardPackageOptions?.length),
 				);
 			}),

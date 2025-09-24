@@ -12,7 +12,7 @@ import { ArenaDraftManagerService } from '@firestone/arena/common';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, mergeMap, of, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, mergeMap, of, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -79,9 +79,6 @@ export class ArenaDecktrackerOocWidgetWrapperComponent
 					return of(false);
 				}
 				return combineLatest([this.draftManager.cardOptions$$, this.draftManager.currentDeck$$]).pipe(
-					tap(([cardOptions, deck]) =>
-						console.debug('[debug][arena-decktracker-ooc-widget-wrapper] cardOptions', cardOptions, deck),
-					),
 					this.mapData(([cardOptions, deck]) => cardOptions?.length > 0 || deck?.DeckList?.length > 0),
 				);
 			}),
