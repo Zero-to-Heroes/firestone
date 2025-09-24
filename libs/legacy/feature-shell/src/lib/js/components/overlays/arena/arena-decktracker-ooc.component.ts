@@ -266,9 +266,11 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
 				const cardIds = deck.DeckList as readonly string[];
-				const groupedByCardId = groupByFunction2(cardIds, (cardId: string) => cardId);
+				const groupedByCardId = groupByFunction2(cardIds, (cardId: string) =>
+					this.allCards.getRootCardId(cardId),
+				);
 				const cards = Object.values(groupedByCardId).flatMap((cardIds) => {
-					const refCard = this.allCards.getCard(cardIds[0]);
+					const refCard = this.allCards.getCard(this.allCards.getRootCardId(cardIds[0]));
 					const internalEntityId = uuidShort();
 					const card = CardWithSideboard.create({
 						cardId: refCard.id,
