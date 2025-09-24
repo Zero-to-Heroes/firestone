@@ -88,7 +88,6 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 
 			// Make sure we refresh when game stats are updated
 			combineLatest([config$, gameStats$]).subscribe(async ([config]) => {
-				console.debug('[bgs-2] refreshing meta hero stats', config);
 				this.tiersWithPlayerData$$.next(null);
 				const finalStats = await this.buildFinalStats(config, undefined, true);
 				this.tiersWithPlayerData$$.next(finalStats?.stats);
@@ -126,7 +125,6 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 	> {
 		// TODO: add a cache of some sort? Or add a facade based on observables that is able to properly centralize
 		// the requests of multiple widgets?
-		console.debug('[bgs-2] rebuilding meta hero stats', inputConfig, mmrFilter);
 		const mmrPercentiles: readonly MmrPercentile[] | null =
 			inputConfig.gameMode === 'battlegrounds-duo'
 				? await this.metaStatsDuo.getMmrPercentiles(inputConfig)

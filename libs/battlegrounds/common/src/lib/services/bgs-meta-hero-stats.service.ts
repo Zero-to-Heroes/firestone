@@ -12,6 +12,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import {
 	AbstractFacadeService,
 	AppInjector,
+	CardRulesService,
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -27,6 +28,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 	private access: BgsMetaHeroStatsAccessService;
 	private prefs: PreferencesService;
 	private allCards: CardsFacadeService;
+	private cardRules: CardRulesService;
 
 	private internalSubject: SubscriberAwareBehaviorSubject<boolean>;
 
@@ -47,6 +49,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 		this.access = AppInjector.get(BgsMetaHeroStatsAccessService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.allCards = AppInjector.get(CardsFacadeService);
+		this.cardRules = AppInjector.get(CardRulesService);
 
 		this.metaHeroStats$$.onFirstSubscribe(() => {
 			this.internalSubject.subscribe();
@@ -138,6 +141,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 		inputStats?: BgsHeroStatsV2 | null,
 	): Promise<readonly BgsMetaHeroStatTierItem[] | null> {
 		const stats = inputStats ?? (await this.getStats(config));
+		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 		const result: readonly BgsMetaHeroStatTierItem[] | null = !stats?.heroStats
 			? null
 			: buildHeroStats(
@@ -146,6 +150,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 					!!config.options?.convervativeEstimate,
 					this.allCards,
 					'battlegrounds',
+					cardRules,
 				);
 		return result;
 	}

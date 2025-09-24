@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { BgsGlobalHeroStat, WithMmrAndTimePeriod } from '@firestone-hs/bgs-global-stats';
-import { ALL_BG_RACES, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, CardRules, Race, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { getStandardDeviation, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -144,21 +144,31 @@ export const buildHeroStats = (
 	useConservativeEstimate: boolean,
 	allCards: CardsFacadeService,
 	gameMode: 'battlegrounds' | 'battlegrounds-duo',
+	cardRules: CardRules | null | undefined,
 	useDebug = false,
 ): readonly BgsMetaHeroStatTierItem[] => {
 	// Files are split by MMR already
 	const statsForMmr = stats ?? [];
 	const result1 = statsForMmr.filter((stat) => {
-		// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
-		// that stat
-		// We can still have some leftover stats in the data, but that it very likely something bogus
-		const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints);
-		const isIn =
-			!overlyDominentTribes.length ||
-			!tribes?.length ||
-			overlyDominentTribes.every((t) => tribes.includes(t.tribe));
-		return isIn;
+		if (!tribes?.length || tribes.length === ALL_BG_RACES.length || !cardRules) {
+			return true;
+		}
+		const cardId = normalizeHeroCardId(stat.heroCardId, allCards);
+		const cardRule = cardRules[cardId];
+		const requiredTribes = cardRule?.bgsMinionTypesRules?.needTypesInLobby ?? [];
+		return requiredTribes.every((tribe) => tribes.includes(Race[tribe]));
 	});
+	// .filter((stat) => {
+	// 	// If the hero has one big dominant tribe, and the tribes list doesn't include it, filter out
+	// 	// that stat
+	// 	// We can still have some leftover stats in the data, but that it very likely something bogus
+	// 	const overlyDominentTribes = stat.tribeStats.filter((t) => t.dataPoints > (4 / 5) * stat.dataPoints);
+	// 	const isIn =
+	// 		!overlyDominentTribes.length ||
+	// 		!tribes?.length ||
+	// 		overlyDominentTribes.every((t) => tribes.includes(t.tribe));
+	// 	return isIn;
+	// });
 	return result1
 		.map((stat) => {
 			const shouldDebug = useDebug && stat.heroCardId === 'BG24_HERO_100';

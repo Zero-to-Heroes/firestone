@@ -134,7 +134,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		this.tribeDetailsTooltipInput = {
 			tribeImpacts: allTribes,
 		};
-		console.debug('[bgs-hero-selection-overlay-info] setting hero', value, this.tribeDetailsTooltipInput);
+		// console.debug('[bgs-hero-selection-overlay-info] setting hero', value, this.tribeDetailsTooltipInput);
 	}
 
 	@Input() set achievements(value: readonly VisualAchievement[]) {

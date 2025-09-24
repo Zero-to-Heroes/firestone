@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/main-window-store-event';
-import { Observable, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, shareReplay, switchMap, takeUntil } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -97,7 +97,6 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 			takeUntil(this.destroyed$),
 		);
 		const metaData$ = statsProvider$.pipe(
-			tap((stats) => console.debug('[meta-stats] received stats', stats)),
 			this.mapData((stats) => ({
 				totalGames: stats?.dataPoints,
 				lastUpdate: stats?.lastUpdateDate,
