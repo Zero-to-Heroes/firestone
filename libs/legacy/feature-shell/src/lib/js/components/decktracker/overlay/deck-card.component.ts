@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	EventEmitter,
 	HostListener,
 	Input,
@@ -298,7 +297,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
-		private readonly el: ElementRef,
 		private readonly cardMouseOverService: CardMousedOverService,
 		private readonly ads: AdService,
 		private readonly prefs: PreferencesService,

@@ -2093,7 +2093,10 @@ export const cardIdSelector = (
 		case CardIds.Marshspawn_CORE_BT_115:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.MaskedReveler:
-			return and(side(inputSide), inDeck, minion);
+			return highlightConditions(
+				and(side(inputSide), inDeck, minion, deathrattle),
+				and(side(inputSide), inDeck, minion),
+			);
 		case CardIds.MassResurrection_DAL_724:
 			return tooltip(and(side(inputSide), inGraveyard, minion));
 		case CardIds.MastersCall:

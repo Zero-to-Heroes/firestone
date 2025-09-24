@@ -120,20 +120,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				// Discovers don't have deck card providers
 				h.deckCardProvider()?.internalEntityIds?.includes(card.internalEntityId),
 			);
-			// console.debug(
-			// 	'[cards-highlight] handler',
-			// 	handler,
-			// 	card.internalEntityId,
-			// 	card.cardId,
-			// 	card.card?.name,
-			// 	this.handlers,
-			// 	Object.values(this.handlers)[0]?.deckCardProvider(),
-			// 	Object.values(this.handlers).map(
-			// 		(h) =>
-			// 			// Discovers don't have deck card providers
-			// 			h.deckCardProvider()?.internalEntityIds,
-			// 	),
-			// );
+			// console.debug('[cards-highlight] handler', card.card?.name, card.highlight);
 			if (!!handler) {
 				handler.highlightCallback(card.highlight);
 			}
@@ -382,6 +369,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		// Forward synergies - what does this card want?
 		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
+		// console.debug('cardIdSelector', selector);
 		if (!!selector) {
 			selectors.push(selector);
 		}
@@ -471,9 +459,9 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 					),
 				);
 			}
-		}
-		if (inputSide === 'arena-draft' || inputSide === 'single') {
+
 			const draftSelectors = getSelectorsForArenaDraft(cardId, card, this.allCards);
+			// console.debug('draftSelectors', draftSelectors);
 			selectors.push(...draftSelectors);
 		}
 
@@ -516,6 +504,7 @@ export interface SelectorInput {
 	deckCard: DeckCard;
 	allCards: CardsFacadeService;
 	highlight?: SelectorOutput;
+	depth?: number;
 }
 export type SelectorOutput = boolean | number | 'tooltip';
 export type Selector = (info: SelectorInput) => SelectorOutput;
