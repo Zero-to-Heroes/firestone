@@ -44,13 +44,16 @@ export class CardsShuffledIntoDeckCounterDefinitionV2 extends CounterDefinitionV
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.cards-shuffled-into-your-deck-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.cards-shuffled-into-your-deck-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.cards-shuffled-into-your-deck-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.cards-shuffled-into-your-deck-tooltip'),
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
