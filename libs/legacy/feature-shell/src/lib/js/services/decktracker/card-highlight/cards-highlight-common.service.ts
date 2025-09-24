@@ -260,13 +260,13 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			!!playerDeckProvider ? playerDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'player',
 		);
-		console.debug('[cards-highlight] [debug] all player cards', card, cardId, side, selector, allPlayerCards);
+		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector, allPlayerCards);
 		for (const playerCard of allPlayerCards) {
 			const selectorOutput = selector(playerCard);
-			console.debug('\t', '[debug] considering', playerCard.card?.name, playerCard, card, selectorOutput);
+			// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card, selectorOutput);
 			playerCard.highlight = selectorOutput;
 			if (selectorOutput) {
-				console.debug('\t', '[debug] highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
+				// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
 				result.push(playerCard);
 			}
 		}
@@ -482,7 +482,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 
 		if (selectors.filter((s) => !!s).length) {
-			console.debug('[debug] building card id selector', cardId, selectors);
+			// console.debug('building card id selector', cardId, selectors);
 			return highlightConditions(...selectors.filter((s) => !!s));
 		}
 	}
