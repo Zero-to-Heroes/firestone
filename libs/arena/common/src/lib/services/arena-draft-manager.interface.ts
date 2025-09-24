@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { DraftSlotType, GameType } from '@firestone-hs/reference-data';
-import { DeckInfoFromMemory } from '@firestone/memory';
+import { ArenaCardOption, DeckInfoFromMemory } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,7 +12,7 @@ export interface IArenaDraftManagerService {
 
 	currentStep$$: SubscriberAwareBehaviorSubject<DraftSlotType | null>;
 	heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
-	cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	cardOptions$$: SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>;
 	currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 	currentMode$$: BehaviorSubject<GameType | null>;
 }

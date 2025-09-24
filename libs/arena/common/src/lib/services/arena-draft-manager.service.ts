@@ -14,7 +14,13 @@ import {
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
-import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import {
+	ArenaCardOption,
+	DeckInfoFromMemory,
+	MemoryInspectionService,
+	MemoryUpdatesService,
+	SceneService,
+} from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -60,7 +66,7 @@ export class ArenaDraftManagerService
 {
 	public currentStep$$: SubscriberAwareBehaviorSubject<DraftSlotType | null>;
 	public heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
-	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>;
 	public cardPackageOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 	public draftScreenHidden$$: BehaviorSubject<boolean | null>;
@@ -121,7 +127,7 @@ export class ArenaDraftManagerService
 	protected async init() {
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
-		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>(null);
 		this.cardPackageOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
 		this.draftScreenHidden$$ = new BehaviorSubject<boolean | null>(null);
@@ -289,7 +295,7 @@ export class ArenaDraftManagerService
 							this.choicesForCardPicks.toArray(),
 						);
 						this.heroOptions$$.next(null);
-						this.cardOptions$$.next(changes.ArenaCardOptions.map((c) => c.CardId));
+						this.cardOptions$$.next(changes.ArenaCardOptions);
 					}
 				}
 
@@ -367,7 +373,7 @@ export class ArenaDraftManagerService
 				}
 			});
 			this.cardOptions$$.pipe(filter((options) => !!options?.length)).subscribe((options) => {
-				this.choicesForCardPicks.enqueue(options!);
+				this.choicesForCardPicks.enqueue(options!.map((o) => o.CardId));
 				console.debug(
 					'[arena-draft-manager] updated choices for card picks',
 					this.choicesForCardPicks.toArray(),
@@ -443,14 +449,14 @@ export class ArenaDraftManagerService
 								this.choicesForCardPicks.toArray(),
 							);
 							// Probably because we added more than one card in the redraft package
-							if (this.cardOptions$$.value?.includes(cardAdded)) {
+							if (this.cardOptions$$.value?.some((c) => c.CardId === cardAdded)) {
 								console.log(
 									'[arena-draft-manager] card not in choices for card picks, resetting',
 									cardAdded,
 									this.cardOptions$$.value,
 								);
 								this.choicesForCardPicks.clear();
-								this.choicesForCardPicks.enqueue(this.cardOptions$$.value!);
+								this.choicesForCardPicks.enqueue(this.cardOptions$$.value!.map((c) => c.CardId));
 							}
 						}
 						const optionsOffered = this.choicesForCardPicks.dequeue();
