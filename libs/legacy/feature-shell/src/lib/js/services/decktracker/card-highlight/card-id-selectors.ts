@@ -1055,6 +1055,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Dreamwarden_EDR_256:
 			return and(side(inputSide), inDeck, notInInitialDeck);
+		case CardIds.DredgerStaff:
+		case CardIds.DredgerStaff_CORE_REV_338:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Drekthar_AV_100:
 			return !card ? null : and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 		case CardIds.DrocomurchanicasTavernBrawlToken:
