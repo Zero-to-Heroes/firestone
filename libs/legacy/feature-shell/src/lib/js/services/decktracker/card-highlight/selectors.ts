@@ -61,15 +61,20 @@ export const highlightConditions = (...filters: Selector[]): Selector => {
 		if (!validFilters.length) {
 			return false;
 		}
-		for (let i = 0; i < validFilters.length; i++) {
-			const output = validFilters[i](input);
+		// Here we need to expand the highlightConditions, so that highlightConditions(filter1, highlightConditions(filter2, filter3))
+		// becomes highlightConditions(filter1, filter2, filter3)
+		input.depth = input.depth ?? 0;
+		// for (let i = 0; i < validFilters.length; i++) {
+		for (const filter of validFilters) {
+			const output = filter(input);
+			input.depth = input.depth + 1;
 			if (!(typeof output === 'boolean') && !isNaN(+output)) {
 				return output;
 			}
 			if (output === 'tooltip') {
 				return 'tooltip';
 			} else if (output) {
-				return i + 1; // Avoid returning 0 (because in JS 0 is falsy)
+				return input.depth; // Avoid returning 0 (because in JS 0 is falsy)
 			}
 		}
 		return false;
