@@ -262,10 +262,9 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			takeUntil(this.destroyed$),
 		);
 		const cardsList$ = this.draftManager.currentDeck$$.pipe(
-			filter((deck) => !!deck),
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
-				const cardIds = deck.DeckList as readonly string[];
+				const cardIds = (deck?.DeckList as readonly string[]) ?? [];
 				const groupedByCardId = groupByFunction2(cardIds, (cardId: string) =>
 					this.allCards.getRootCardId(cardId),
 				);
