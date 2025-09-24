@@ -339,7 +339,12 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		this.showCurrentOptions$ = combineLatest([
 			currentDraftMode$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaOocTrackerShowCurrentOptions)),
-		]).pipe(this.mapData(([mode, showCurrentOptions]) => mode === DraftMode.DRAFTING && showCurrentOptions));
+		]).pipe(
+			this.mapData(
+				([mode, showCurrentOptions]) =>
+					[DraftMode.DRAFTING, DraftMode.REDRAFTING].includes(mode) && showCurrentOptions,
+			),
+		);
 
 		this.currentOptions$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, classStat$]).pipe(
 			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
