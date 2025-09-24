@@ -466,6 +466,10 @@ const getDynamicFilters = (
 		case CardIds.HuddleUp_WORK_012:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.NAGA);
 
+		// Random Mech
+		case CardIds.RemixedDispenseOBot_MerchDispenseOBotToken:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MECH);
+
 		// Random Murlocs
 		case CardIds.GnawingGreenfin_EDR_999:
 		case CardIds.Howdyfin_WW_333:
@@ -985,6 +989,8 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FIRE);
 		case CardIds.UmbralGeist:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.SHADOW);
+		case CardIds.RemixedDispenseOBot_ChillingDispenseOBotToken:
+			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FROST);
 		case CardIds.TwilightMender_TLC_814:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
