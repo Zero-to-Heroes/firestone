@@ -498,7 +498,10 @@ export const cardIdSelector = (
 		case CardIds.Bolster:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.Bonecaller:
-			return and(side(inputSide), inGraveyard, undead);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), undead),
+				and(side(inputSide), inGraveyard, undead),
+			);
 		case CardIds.BoneFlinger:
 			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.BonecrusherTavernBrawlToken:
@@ -1272,6 +1275,9 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, spell),
 				and(side(inputSide), or(inDeck, inHand), overload),
 			);
+		case CardIds.FlusteredLibrarian:
+		case CardIds.FlusteredLibrarian_CORE_REV_242:
+			return and(side(inputSide), or(inHand, inDeck), imp);
 		case CardIds.FlyOffTheShelves_TOY_714:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.Foamrender_MIS_101:
@@ -2580,7 +2586,10 @@ export const cardIdSelector = (
 		case CardIds.RevivePet:
 			return tooltip(and(side(inputSide), inGraveyard, beast));
 		case CardIds.Rewind_ETC_532:
-			return and(side(inputSide), or(inHand, inDeck), spell, not(cardIs(CardIds.Rewind_ETC_532)));
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spell, not(cardIs(CardIds.Rewind_ETC_532))),
+				and(side(inputSide), inOther, spell, not(cardIs(CardIds.Rewind_ETC_532))),
+			);
 		case CardIds.RhoninsScryingOrbTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.RhymeSpinner:
