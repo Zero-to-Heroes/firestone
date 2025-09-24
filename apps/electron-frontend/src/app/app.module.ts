@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -16,7 +17,7 @@ import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 import { ElectronAdService } from './services/electron-ad.service';
 
 @NgModule({
-	imports: [CommonModule, LegacyFeatureShellModule, RouterModule.forRoot(appRoutes)],
+	imports: [CommonModule, DragDropModule, LegacyFeatureShellModule, RouterModule.forRoot(appRoutes)],
 	declarations: [AppComponent, ElectronOverlayComponent],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },

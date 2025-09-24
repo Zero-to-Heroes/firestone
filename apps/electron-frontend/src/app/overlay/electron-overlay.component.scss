@@ -1,0 +1,116 @@
+.electron-overlay-container {
+	width: 100%;
+	height: 100%;
+	font-family: 'Open Sans', sans-serif;
+
+	& > * {
+		position: absolute;
+		display: flex;
+		z-index: 1;
+	}
+
+	.widget {
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: absolute;
+		display: flex;
+		z-index: 1;
+		cursor: move;
+
+		// Basic styling
+		border-radius: 4px;
+
+		// Optimize for fast mouse tracking
+		touch-action: none; // Prevent touch scrolling interference
+
+		&.cdk-drag-dragging {
+			cursor: grabbing;
+			// Ensure high z-index during drag
+			z-index: 1000;
+			// Optimize rendering during drag
+			transform: translateZ(0);
+			will-change: transform;
+		}
+
+		&.cdk-drag-preview {
+			// Make the preview more responsive
+			transform: translateZ(0);
+			will-change: transform;
+			// Reduce visual lag
+			transition: none !important;
+		}
+	}
+}
+
+// Global optimization during drag operations
+body.cdk-global-drag-disabled {
+	// Prevent any interference during drag
+	user-select: none !important;
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+
+	// Optimize pointer events
+	pointer-events: none !important;
+
+	// Prevent scrolling
+	overflow: hidden !important;
+}
+
+.debug-info {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	background: rgba(0, 0, 0, 0.8);
+	color: white;
+	padding: 15px;
+	border-radius: 8px;
+	border: 2px solid #ff6b35;
+	font-family: 'Segoe UI', sans-serif;
+	pointer-events: auto;
+	z-index: 1001;
+
+	h2 {
+		margin: 0 0 10px 0;
+		color: #ff6b35;
+	}
+
+	p {
+		margin: 5px 0;
+		font-size: 14px;
+	}
+
+	.game-status-section {
+		margin-top: 15px;
+		padding-top: 15px;
+		border-top: 1px solid #ff6b35;
+	}
+
+	.game-status-section h3 {
+		margin: 0 0 10px 0;
+		color: #4caf50;
+	}
+
+	.game-info-section {
+		margin-top: 15px;
+		padding-top: 15px;
+		border-top: 1px solid #ff6b35;
+	}
+
+	.game-info-section h3 {
+		margin: 0 0 10px 0;
+		color: #4caf50;
+	}
+
+	.error-section {
+		margin-top: 15px;
+		padding-top: 15px;
+		border-top: 1px solid #ff6b35;
+	}
+
+	.error-section h3 {
+		margin: 0 0 10px 0;
+		color: #f44336;
+	}
+}
