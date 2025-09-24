@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeStandaloneService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 
 declare const window: any;
@@ -132,10 +132,23 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		private readonly gameStatusService: GameStatusService,
 		private readonly sceneService: SceneService,
 		private readonly memoryUpdateService: MemoryUpdatesService,
+		private readonly allCards: CardsFacadeStandaloneService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	async ngOnInit() {
 		console.log('[ElectronOverlay] Initializing...');
+
+		console.log('[ElectronOverlay] Initializing cards...');
+		const service = new AllCardsService();
+		await service.initializeCardsDb();
+		await this.allCards.init(service, 'enUS');
+		console.log('[ElectronOverlay] Cards initialized...');
+
+		console.log('[ElectronOverlay] Initializing localization...');
+		await this.i18n.setLocale('enUS');
+		console.log('[ElectronOverlay] Localization initialized...');
+
 		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
 		// Test legacy ElectronAPI for comparison

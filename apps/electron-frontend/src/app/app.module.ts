@@ -2,7 +2,13 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
-import { ADS_SERVICE_TOKEN, CardsFacadeService, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	CardsFacadeService,
+	CardsFacadeStandaloneService,
+	ILocalizationService,
+	LocalizationStandaloneService,
+} from '@firestone/shared/framework/core';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
@@ -13,6 +19,7 @@ import { ElectronAdService } from './services/electron-ad.service';
 	declarations: [AppComponent, ElectronOverlayComponent],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
+		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: ElectronAdService },
 
 		ElectronAdService,

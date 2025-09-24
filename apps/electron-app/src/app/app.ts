@@ -2,7 +2,8 @@
 import '@angular/compiler';
 import { ElectronGameWindowService } from '@firestone/electron/common';
 // import '@overwolf/types';
-import { setAppInjector } from '@firestone/shared/framework/core';
+import { AllCardsService } from '@firestone-hs/reference-data';
+import { CardsFacadeStandaloneService, setAppInjector } from '@firestone/shared/framework/core';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
@@ -19,11 +20,8 @@ export default class App {
 	static mainWindow: Electron.BrowserWindow;
 	static application: Electron.App;
 	static BrowserWindow;
-	// static gameDetection: GameDetectionService;
 	static overlay: OverlayService;
 	static gameWindow: ElectronGameWindowService;
-	// static gameStatusService: GameStatusService;
-	static mindVision: MindVisionElectronService;
 
 	public static isDevelopmentMode() {
 		const isEnvironmentSet: boolean = 'ELECTRON_IS_DEV' in process.env;
@@ -33,15 +31,6 @@ export default class App {
 	}
 
 	private static async onWindowAllClosed() {
-		// Clean up services when app is closing
-		// if (App.gameDetection) {
-		// 	App.gameDetection.stopMonitoring();
-		// }
-
-		if (App.mindVision) {
-			App.mindVision.destroy();
-		}
-
 		if (App.overlay) {
 			await App.overlay.destroyOverlay();
 		}
@@ -82,18 +71,14 @@ export default class App {
 		App.initGameDetection();
 	}
 
-	private static initGameDetection() {
+	private static async initGameDetection() {
 		// Initialize dependency injection system
 		const electronInjector = buildAppInjector();
 		setAppInjector(electronInjector);
 
-		// Initialize MindVision service for memory reading
-		App.mindVision = electronInjector.get(MindVisionElectronService);
-
 		// Initialize game services
-		App.overlay = OverlayService.getInstance();
 		App.gameWindow = ElectronGameWindowService.getInstance();
-		// App.gameStatus = ElectronGameStatusService.getInstance();
+		App.overlay = OverlayService.getInstance();
 		App.gameWindow.initialize(App.overlay);
 
 		console.log('🔧 Registered services:', electronAppInjector.getRegisteredServices());
@@ -108,6 +93,16 @@ export default class App {
 			// Don't create overlay window yet - wait for game launch event
 			console.log('⏳ Waiting for Hearthstone to launch...');
 		});
+
+		// Initialize MindVision service for memory reading
+		const mindVision = electronInjector.get(MindVisionElectronService);
+		const allCards = electronInjector.get(CardsFacadeStandaloneService);
+		console.log('[app] allCards', allCards);
+		allCards.init(new AllCardsService(), 'enUS');
+		const service = allCards.getService();
+		console.log('[app] service', service);
+		await service.initializeCardsDb(undefined, 'enUS');
+		console.log('[app] allCards initialized', allCards.getCards()?.length ?? 'null');
 
 		// Keep the old game detection for logging purposes
 		// App.gameDetection.on('game-launched', (gameInfo) => {

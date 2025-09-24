@@ -29,6 +29,7 @@ export class LocalizationFacadeService implements ILocalizationService {
 			return;
 		}
 
+		console.debug('init', new Error().stack);
 		this.service = this.ow.getMainWindow().localizationService;
 		while (!this.service) {
 			if (attempts > 0 && attempts % 50 === 0) {

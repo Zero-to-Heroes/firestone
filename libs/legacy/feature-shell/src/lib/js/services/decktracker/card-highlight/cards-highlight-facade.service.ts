@@ -12,21 +12,26 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 	private service: CardsHighlightService;
 
 	constructor(private readonly ow: OverwolfService) {
+		return;
 		this.initService();
 	}
 
 	private async initService() {
+		const mainWindow = this.ow.getMainWindow();
+		console.log('[cards-highlight-facade] mainWindow', mainWindow);
 		while (!this.service) {
-			this.service = this.ow.getMainWindow().cardsHighlightService;
+			this.service = mainWindow.cardsHighlightService;
 			await sleep(500);
 		}
 	}
 
 	public async init(options?: SelectorOptions) {
+		return;
 		this.service.init(options);
 	}
 
 	public async initForSingle() {
+		return;
 		this.service.init({
 			skipGameState: true,
 			skipPrefs: true,
@@ -34,18 +39,22 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		});
 	}
 	public forceHeroCardId(cardId: string) {
+		return;
 		this.service.forceHeroCardId(cardId);
 	}
 
 	register(_uniqueId: string, handler: Handler, side: HighlightSide) {
+		return;
 		this.service.register(_uniqueId, handler, side);
 	}
 
 	unregister(_uniqueId: string, side: HighlightSide) {
+		return;
 		this.service.unregister(_uniqueId, side);
 	}
 
 	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard, context?: 'discover') {
+		return;
 		this.service.onMouseEnter(cardId, side, card, context);
 	}
 
@@ -54,6 +63,7 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
+		return;
 		return this.service.getHighlightedCards(cardId, side, card);
 	}
 
@@ -62,6 +72,7 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
+		return;
 		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
 	}
 
@@ -71,10 +82,12 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		side: HighlightSide,
 		gameTypeOverride: GameType = null,
 	): readonly string[] {
+		return;
 		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride);
 	}
 
 	onMouseLeave(cardId: string) {
+		return;
 		this.service.onMouseLeave(cardId);
 	}
 }

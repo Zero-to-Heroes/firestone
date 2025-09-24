@@ -29,6 +29,8 @@ import { MainWindowStateFacadeService } from '../../mainwindow/store/main-window
 import { GameStatsProviderService } from '../../stats/game/game-stats-provider.service';
 import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
+const eventName = 'decks-changed';
+
 @Injectable()
 export class DecksProviderService extends AbstractFacadeService<DecksProviderService> {
 	public decks$$: SubscriberAwareBehaviorSubject<readonly DeckSummary[]>;
@@ -155,6 +157,16 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				}));
 				await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
 			});
+	}
+
+	protected override async initElectronSubjects() {
+		console.log('[decks-provider] initElectronSubjects');
+		this.setupElectronSubject(this.decks$$, eventName);
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		console.log('[decks-provider] createElectronProxy');
+		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
 	}
 
 	private buildState(

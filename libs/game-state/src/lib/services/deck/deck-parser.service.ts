@@ -343,6 +343,7 @@ export class DeckParserService {
 		}
 
 		const decklist: readonly number[] = normalizeWithDbfIds(deckFromMemory.DeckList, this.allCards);
+		console.log('[deck-parser] checking allCards', this.allCards?.getCards()?.length ?? 'null');
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		const deckDefinition: DeckDefinition = {
 			format: deckFromMemory.FormatType || gameFormat || GameFormat.FT_WILD,
