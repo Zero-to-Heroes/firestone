@@ -1393,7 +1393,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), shadow, spell),
 			);
 		case CardIds.Glaivetar:
-			return and(side(inputSide), inDeck, outcast);
+			return and(side(inputSide), or(inHand, inDeck), outcast);
 		case CardIds.GlowflySwarm:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GluthSicleTavernBrawl:
