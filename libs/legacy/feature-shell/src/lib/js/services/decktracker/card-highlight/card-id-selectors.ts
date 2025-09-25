@@ -434,6 +434,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.BartendOBot_WW_408:
 			return and(side(inputSide), inDeck, outcast);
+		case CardIds.BatMask_DINO_402:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.Battlepickaxe_WW_347:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.BattleTotem_LOOTA_846:
