@@ -18,7 +18,7 @@ const getHighestCostMinions = (deckState: DeckState, allCards: CardsFacadeServic
 	const deadCards = deckState.minionsDeadThisMatch
 		.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 		.filter((c) => c.cost != null);
-	const highestCost = deadCards.sort((a, b) => b.cost - a.cost).pop()?.cost;
+	const highestCost = deadCards.sort((a, b) => a.cost - b.cost).pop()?.cost;
 	if (highestCost == null) {
 		return [];
 	}
