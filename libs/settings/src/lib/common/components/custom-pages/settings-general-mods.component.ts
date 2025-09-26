@@ -1,23 +1,8 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ViewRef,
-} from '@angular/core';
-import {
-	ModConfig,
-	ModData,
-	ModsConfig,
-	ModsConfigService,
-	ModsManagerService,
-	ModsUtilsService,
-	toModVersion,
-} from '@firestone/mods/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ModData, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
-import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, filter } from 'rxjs';
 
 @Component({
@@ -76,13 +61,13 @@ import { Observable, filter } from 'rxjs';
 						(mousedown)="enableMods()"
 						[fsTranslate]="'settings.general.mods.enable-mods'"
 					></button>
-					<button
+					<!-- <button
 						*ngIf="areModsInstalled"
 						(mousedown)="refreshEngine()"
 						[helpTooltip]="'settings.general.mods.refresh-engine-tooltip' | fsTranslate"
 					>
 						{{ refreshEngineTitle }}
-					</button>
+					</button> -->
 					<button
 						*ngIf="areModsInstalled"
 						(mousedown)="disableMods()"
@@ -90,58 +75,56 @@ import { Observable, filter } from 'rxjs';
 					></button>
 				</div>
 			</div>
-			<div class="section" [ngClass]="{ disabled: !modsChecked || !areModsInstalled }">
-				<h3 class="section-title" [fsTranslate]="'settings.general.mods.add-mods-title'"></h3>
-				<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
-				<p class="description" [fsTranslate]="'settings.general.mods.installed-mods-description'"></p>
+			<ng-container *ngIf="{ inGame: inGame$ | async } as value">
+				<div class="section" [ngClass]="{ disabled: !modsChecked || !areModsInstalled || value.inGame }">
+					<h3 class="section-title" [fsTranslate]="'settings.general.mods.add-mods-title'"></h3>
+					<p class="warning" *ngIf="value.inGame" [innerHTML]="needToCloseGameWarning | safe"></p>
+					<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
+					<p class="description" [innerHTML]="installedModsDescription | safe"></p>
 
-				<button
-					class="check-updates-button"
-					*ngIf="areModsInstalled && !!installedMods?.length"
-					[ngClass]="{ disabled: checkForUpdatesButtonDisabled }"
-					(mousedown)="checkForUpdates()"
-					[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | fsTranslate"
-				>
-					{{ checkForUpdatesLabel }}
-				</button>
+					<button
+						class="check-updates-button"
+						*ngIf="areModsInstalled && !!installedMods?.length"
+						[ngClass]="{ disabled: checkForUpdatesButtonDisabled }"
+						(mousedown)="checkForUpdates()"
+						[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | fsTranslate"
+					>
+						{{ checkForUpdatesLabel }}
+					</button>
 
-				<div class="installed-mods" *ngIf="{ inGame: inGame$ | async } as value">
-					<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
-						<div
-							class="update-available"
-							*ngIf="!!mod.updateAvailableVersion && !value.inGame"
-							inlineSVG="assets/svg/restore.svg"
-							[helpTooltip]="'settings.general.mods.update-available' | fsTranslate"
-							(click)="updateMod(mod)"
-						></div>
-						<div
-							class="update-available disabled"
-							*ngIf="!!mod.updateAvailableVersion && value.inGame"
-							inlineSVG="assets/svg/restore.svg"
-							[helpTooltip]="'settings.general.mods.update-disabled' | fsTranslate"
-						></div>
-						<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
-						<a class="mod-name" *ngIf="mod.DownloadLink" href="{{ mod.DownloadLink }}" target="_blank">{{
-							mod.Name
-						}}</a>
-						<div class="mod-version" *ngIf="mod.Version">v{{ mod.Version }}</div>
-						<fs-toggle-view
-							class="toggle-button"
-							[value]="mod.Registered"
-							[toggleFunction]="toggleMod(mod.AssemblyName)"
-						></fs-toggle-view>
+					<div class="installed-mods">
+						<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
+							<div
+								class="update-available"
+								*ngIf="!!mod.updateAvailableVersion"
+								inlineSVG="assets/svg/restore.svg"
+								[helpTooltip]="'settings.general.mods.update-available' | fsTranslate"
+								(click)="updateMod(mod)"
+							></div>
+							<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
+							<a
+								class="mod-name"
+								*ngIf="mod.DownloadLink"
+								href="{{ mod.DownloadLink }}"
+								target="_blank"
+								>{{ mod.Name }}</a
+							>
+							<div class="mod-version" *ngIf="mod.Version">v{{ mod.Version }}</div>
+							<fs-toggle-view
+								class="toggle-button"
+								[value]="mod.Registered"
+								[toggleFunction]="toggleMod(mod.AssemblyName)"
+							></fs-toggle-view>
+						</div>
 					</div>
 				</div>
-			</div>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: add more feedback on what is happening
-export class SettingsGeneralModsComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	modsInstallStatus$: Observable<string | null>;
 	inGame$: Observable<boolean>;
 
@@ -161,28 +144,29 @@ export class SettingsGeneralModsComponent
 	addModsDescriptions = this.i18n.translateString('settings.general.mods.add-mods-description', {
 		link: `<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">${this.linkTitle}</a>`,
 	});
+	installedModsDescription = this.i18n.translateString('settings.general.mods.installed-mods-description-2', {
+		path: 'BepInEx/plugins',
+	});
+	needToCloseGameWarning = this.i18n.translateString('settings.general.mods.need-to-close-game-warning');
 
 	refreshEngineTitle = this.i18n.translateString('settings.general.mods.refresh-engine');
 
 	checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.check-for-updates');
 	checkForUpdatesButtonDisabled: boolean;
 
-	private modsManager: ModsManagerService;
-
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly modUtils: ModsUtilsService,
 		private readonly prefs: PreferencesService,
-		private readonly modsConfig: ModsConfigService,
-		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
+		// private readonly modsConfig: ModsConfigService,
+		private readonly modsManager: ModsManagerService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.modsManager = this.ow.getMainWindow().modsManager;
+		await waitForReady(this.modsManager, this.gameStatus, this.prefs);
 
 		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(this.mapData((info) => info ?? false));
 		this.modsManager.modsData$$
@@ -197,12 +181,10 @@ export class SettingsGeneralModsComponent
 					this.cdr.detectChanges();
 				}
 			});
-		this.modsInstallStatus$ = this.modUtils.currentModsStatus$$
+		this.modsInstallStatus$ = this.modsManager.currentModsStatus$$
 			.asObservable()
 			.pipe(this.mapData((status) => status));
-	}
 
-	async ngAfterViewInit() {
 		const prefs = await this.prefs.getPreferences();
 		this.gameLocation = prefs.gameInstallPath;
 		if (this.gameLocation) {
@@ -215,13 +197,13 @@ export class SettingsGeneralModsComponent
 
 	async checkMods() {
 		console.debug('checking mods', this.gameLocation);
-		const checkStatus = await this.modUtils.checkMods(this.gameLocation);
+		const checkStatus = await this.modsManager.checkMods(this.gameLocation);
 		if (checkStatus !== 'wrong-path') {
 			this.modsChecked = true;
 		}
 		this.areModsInstalled = checkStatus === 'installed';
 		if (this.areModsInstalled) {
-			this.installedMods = await this.modUtils.installedMods(this.gameLocation);
+			this.installedMods = await this.modsManager.installedMods(this.gameLocation);
 			console.debug('installedMods', this.installedMods);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -232,7 +214,7 @@ export class SettingsGeneralModsComponent
 	async enableMods() {
 		this.installOngoing = true;
 		console.debug('enabling mods');
-		const status = await this.modUtils.enableMods(this.gameLocation);
+		const status = await this.modsManager.enableMods(this.gameLocation);
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -241,55 +223,38 @@ export class SettingsGeneralModsComponent
 			return;
 		}
 		this.areModsInstalled = status === 'installed';
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = { ...prefs, modsEnabled: this.areModsInstalled };
-		await this.prefs.savePreferences(newPrefs);
+		await this.prefs.updatePrefs('modsEnabled', this.areModsInstalled);
 		this.installOngoing = false;
-		this.installedMods = await this.modUtils.installedMods(this.gameLocation);
+		this.installedMods = await this.modsManager.installedMods(this.gameLocation);
 		console.debug('installedMods 2', this.installedMods);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	async refreshEngine() {
-		console.debug('refreshing engine');
-		this.refreshEngineTitle = this.i18n.translateString('settings.general.mods.refreshing-engine');
-		// Because otherwise it's too quick and we think nothing happened
-		await sleep(500);
-		const status = await this.modUtils.refreshEngine(this.gameLocation);
-		this.refreshEngineTitle = this.i18n.translateString('settings.general.mods.refresh-engine');
-		if (status === 'game-running') {
-			this.showGameRunningError = true;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			return;
-		}
-		this.areModsInstalled = status === 'installed';
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	// async refreshEngine() {
+	// 	console.debug('refreshing engine');
+	// 	this.refreshEngineTitle = this.i18n.translateString('settings.general.mods.refreshing-engine');
+	// 	// Because otherwise it's too quick and we think nothing happened
+	// 	await sleep(1000);
+	// 	const status = await this.modsManager.refreshEngine(this.gameLocation);
+	// 	this.refreshEngineTitle = this.i18n.translateString('settings.general.mods.refresh-engine');
+	// 	if (status === 'game-running') {
+	// 		this.showGameRunningError = true;
+	// 		if (!(this.cdr as ViewRef)?.destroyed) {
+	// 			this.cdr.detectChanges();
+	// 		}
+	// 		return;
+	// 	}
+	// 	this.areModsInstalled = status === 'installed';
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
 	toggleMod(modName) {
 		return async (_: boolean) => {
-			const config: ModsConfig = this.modsConfig.getConfig();
-			// const modNameForPrefs = modName.replace(/ /g, '');
-			const existingConfigForMod = config[modName] ?? ({} as ModConfig);
-			const existingToggle = existingConfigForMod.enabled ?? true;
-			const newToggle = !existingToggle;
-			const newConf: ModsConfig = {
-				...config,
-				[modName]: {
-					...existingConfigForMod,
-					enabled: newToggle,
-				},
-			};
-			console.debug('updating mods conf', newConf, config);
-			// Make sure the prefs are saved first, so that we can use the pref value in the callback
-			this.modsConfig.updateConf(newConf);
-			await this.modsManager.toggleMods([modName]);
+			this.modsManager.toggleMods([modName]);
 		};
 	}
 
@@ -300,7 +265,7 @@ export class SettingsGeneralModsComponent
 
 	async disableMods() {
 		console.debug('disabling mods');
-		const status = await this.modUtils.disableMods(this.gameLocation);
+		const status = await this.modsManager.disableMods(this.gameLocation);
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -336,21 +301,6 @@ export class SettingsGeneralModsComponent
 			}
 			const newAvailableVersion = await this.modsManager.hasUpdates(mod);
 			console.debug('newAvailableVersion', newAvailableVersion);
-			if (!newAvailableVersion) {
-				continue;
-			}
-			const existingConf = this.modsConfig.getConfig();
-			const confForMod = existingConf[mod.AssemblyName];
-			const newConfForMod: ModConfig = {
-				...confForMod,
-				updateAvailableVersion: toModVersion(newAvailableVersion) ?? undefined,
-			};
-			const newConf: ModsConfig = {
-				...existingConf,
-				[mod.AssemblyName]: newConfForMod,
-			};
-			console.debug('updateConf', newConf);
-			this.modsConfig.updateConf(newConf);
 		}
 
 		this.checkForUpdatesButtonDisabled = false;
@@ -361,7 +311,7 @@ export class SettingsGeneralModsComponent
 	}
 
 	async updateMod(mod: ModData): Promise<void> {
-		await this.modUtils.updateMod(mod);
+		await this.modsManager.updateMod(mod);
 	}
 
 	preventDrag(event: MouseEvent) {

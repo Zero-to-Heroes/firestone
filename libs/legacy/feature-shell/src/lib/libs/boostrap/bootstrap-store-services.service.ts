@@ -42,7 +42,6 @@ import {
 import { BootstrapGameStateService } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
-import { ModsConfigService } from '@firestone/mods/common';
 import { AccountService } from '@firestone/profile/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings';
 import {
@@ -104,7 +103,6 @@ export class BootstrapStoreServicesService {
 		private readonly mails: MailsService,
 		private readonly decksProviderService: DecksProviderService,
 		private readonly gameStatsProviderService: GameStatsProviderService,
-		private readonly modsConfig: ModsConfigService,
 		private readonly ini_LotterService: LotteryService,
 		private readonly achievementsMonitor: AchievementsLiveProgressTrackingService,
 		private readonly collectionBootstrapService: CollectionBootstrapService,

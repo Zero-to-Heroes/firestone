@@ -91,6 +91,5 @@ export class BootstrapOtherServicesService {
 
 	public async bootstrapServices(): Promise<void> {
 		this.modsBootstrap.init();
-		this.modsManager.init();
 	}
 }
