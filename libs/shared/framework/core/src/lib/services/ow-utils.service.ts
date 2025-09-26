@@ -61,6 +61,10 @@ export class OwUtilsService {
 		return this.internalService.copyFile(sourcePath, destinationDirectory);
 	}
 
+	public async renameFile(sourcePath: string, newName: string): Promise<boolean> {
+		return this.internalService.renameFile(sourcePath, newName);
+	}
+
 	public async copyFiles(sourceDirectory: string, destinationDirectory: string): Promise<void> {
 		return this.internalService.copyFiles(sourceDirectory, destinationDirectory);
 	}
@@ -195,6 +199,22 @@ class OwUtilsServiceInternal {
 		});
 	}
 
+	public async renameFile(sourcePath: string, newName: string): Promise<boolean> {
+		return new Promise<boolean>(async (resolve, reject) => {
+			console.log('[ow-utils] renameFile', sourcePath, newName);
+			const plugin = await this.get();
+			try {
+				plugin.renameFile(sourcePath, newName, (msg, success) => {
+					console.log('[ow-utils] renamedFile', sourcePath, newName);
+					resolve(!!success);
+				});
+			} catch (e) {
+				console.warn('[ow-utils] could not renameFile', sourcePath, newName, e);
+				resolve(false);
+			}
+		});
+	}
+
 	public async copyFiles(sourceDirectory: string, destinationDirectory: string): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			console.log('[ow-utils] copyFiles', sourceDirectory, destinationDirectory);
@@ -233,12 +253,12 @@ class OwUtilsServiceInternal {
 
 	public async downloadFileTo(fileUrl: string, path: string, targetFileName): Promise<boolean> {
 		return new Promise<boolean>(async (resolve, reject) => {
-			console.log('[ow-utils] downloadFileTo-ing', path);
+			console.log('[ow-utils] downloadFileTo-ing', fileUrl, path, targetFileName);
 			const plugin = await this.get();
 			try {
 				plugin.downloadFileTo(fileUrl, path, targetFileName, (status, message) => {
 					if (status) {
-						console.log('[ow-utils] downloadFileTod', path);
+						console.log('[ow-utils] downloadFileTod', status, path);
 						resolve(true);
 					} else {
 						console.log('[ow-utils] downloadFileTo message', message);

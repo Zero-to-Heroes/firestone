@@ -1,8 +1,11 @@
-import { sleep } from '@firestone/shared/framework/common';
+import { sleep, uuid } from '@firestone/shared/framework/common';
 import { WindowManagerService } from './window-manager.service';
 
 export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> {
 	protected mainInstance: T;
+
+	protected debug = false;
+	private id = uuid();
 
 	constructor(
 		protected readonly windowManager: WindowManagerService,

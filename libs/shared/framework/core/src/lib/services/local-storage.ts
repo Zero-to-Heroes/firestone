@@ -25,7 +25,6 @@ export class LocalStorageService {
 	public static BGS_QUESTS_DATA = 'bgs-quests-data';
 	public static USER_GLOBAL_STATS = 'user-global-stats';
 	public static MERCENARIES_GLOBAL_STATS = 'mercenaries-global-stats';
-	public static MODS_CONFIG = 'mods-config';
 	public static TAVERN_BRAWL_STATS = 'tavern-brawl-stats';
 	public static CONSTRUCTED_META_DECK_STATS = 'constructed-meta-deck-stats';
 	public static LOCAL_DISK_CACHE_SHOULD_REBUILD = 'local-disk-cache-should-rebuild';
