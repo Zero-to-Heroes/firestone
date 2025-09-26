@@ -13,7 +13,7 @@ declare const window: any;
 	template: `
 		<div class="electron-overlay-container">
 			<!-- Game Status Test -->
-			<div class="debug-info">
+			<!-- <div class="debug-info">
 				<h2>🔥 Firestone Electron Overlay</h2>
 				<p>Angular renderer process running</p>
 
@@ -37,83 +37,13 @@ declare const window: any;
 					<p><strong>ElectronAPI:</strong> {{ hasElectronAPI ? '✅' : '❌' }}</p>
 					<p><strong>getRunningGameInfo:</strong> {{ hasGameInfoMethod ? '✅' : '❌' }}</p>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- TODO: Add the constructed decktracker widget -->
 			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 		</div>
 	`,
-	styles: [
-		`
-			.electron-overlay-container {
-				width: 100vw;
-				height: 100vh;
-				background: transparent;
-				position: fixed;
-				top: 0;
-				left: 0;
-				pointer-events: none;
-				z-index: 1000;
-			}
-
-			.debug-info {
-				position: fixed;
-				top: 20px;
-				right: 20px;
-				background: rgba(0, 0, 0, 0.8);
-				color: white;
-				padding: 15px;
-				border-radius: 8px;
-				border: 2px solid #ff6b35;
-				font-family: 'Segoe UI', sans-serif;
-				pointer-events: auto;
-				z-index: 1001;
-			}
-
-			.debug-info h2 {
-				margin: 0 0 10px 0;
-				color: #ff6b35;
-			}
-
-			.debug-info p {
-				margin: 5px 0;
-				font-size: 14px;
-			}
-
-			.game-status-section {
-				margin-top: 15px;
-				padding-top: 15px;
-				border-top: 1px solid #ff6b35;
-			}
-
-			.game-status-section h3 {
-				margin: 0 0 10px 0;
-				color: #4caf50;
-			}
-
-			.game-info-section {
-				margin-top: 15px;
-				padding-top: 15px;
-				border-top: 1px solid #ff6b35;
-			}
-
-			.game-info-section h3 {
-				margin: 0 0 10px 0;
-				color: #4caf50;
-			}
-
-			.error-section {
-				margin-top: 15px;
-				padding-top: 15px;
-				border-top: 1px solid #ff6b35;
-			}
-
-			.error-section h3 {
-				margin: 0 0 10px 0;
-				color: #f44336;
-			}
-		`,
-	],
+	styleUrls: ['./electron-overlay.component.scss'],
 	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ElectronOverlayComponent implements OnInit, OnDestroy {
