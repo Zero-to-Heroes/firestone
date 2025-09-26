@@ -33,7 +33,7 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			achievementsSettings(context),
 			integrationsSettings(context),
 			troubleshootingSettings(context),
-			context.isBeta ? modsSettings(context) : null,
+			modsSettings(context),
 		].filter((c) => !!c) as SettingNode[],
 	};
 };

@@ -9,6 +9,7 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { AppearanceCustomizationPageComponent } from './common/components/custom-pages/appearance-customization.component';
 import { SettingsBroadcastComponent } from './common/components/custom-pages/settings-broadcast';
@@ -58,6 +59,7 @@ const components = [
 		ReactiveFormsModule,
 
 		ColorPickerModule,
+		InlineSVGModule,
 
 		SharedFrameworkCommonModule,
 		SharedFrameworkCoreModule,
