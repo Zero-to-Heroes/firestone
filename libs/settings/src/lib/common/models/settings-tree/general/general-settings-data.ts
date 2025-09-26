@@ -3,6 +3,7 @@ import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
 import { DropdownOption, SettingContext, SettingNode } from '../../settings.types';
 
 const isRefreshingGames$$ = new BehaviorSubject<boolean>(false);
+const settingImportStatus$$ = new BehaviorSubject<'done' | 'working' | 'showing-confirmation'>('done');
 // const isRefreshingPacks$$ = new BehaviorSubject<boolean>(false);
 // const isRefreshingAchievements$$ = new BehaviorSubject<boolean>(false);
 // const isRefreshingArenaRewards$$ = new BehaviorSubject<boolean>(false);
@@ -119,12 +120,17 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 					},
 					{
 						label: context.i18n.translateString('settings.general.data.import-settings-button-label'),
-						text: context.i18n.translateString('settings.general.data.import-settings-button-label'),
+						text: importingSettingsButtonText$(context),
 						tooltip: context.i18n.translateString('settings.general.data.import-settings-button-tooltip'),
 						action: async () => {
 							const selectedFilePath = await context.ow.openAppFilePicker();
 							if (selectedFilePath != null) {
+								settingImportStatus$$.next('working');
 								await context.services.settingsController.importSettings(selectedFilePath);
+								await sleep(1000);
+								settingImportStatus$$.next('showing-confirmation');
+								await sleep(8000);
+								settingImportStatus$$.next('done');
 							}
 						},
 					},
@@ -177,6 +183,18 @@ const refreshGamesButtonText$ = (context: SettingContext): Observable<string> =>
 
 const clearCacheButtonText$ = (context: SettingContext): Observable<string> => {
 	return isClearingLocalCache$$.pipe(map((isRefreshing) => (isRefreshing ? context.i18n.translateString('settings.general.data.refresh-progress-button-label') : context.i18n.translateString('settings.general.data.refresh-button-label'))));
+};
+
+const importingSettingsButtonText$ = (context: SettingContext): Observable<string> => {
+	return settingImportStatus$$.pipe(
+		map((status) =>
+			status === 'done'
+				? context.i18n.translateString('settings.general.data.import-settings-button-label')
+				: status === 'working'
+					? context.i18n.translateString('settings.general.data.refresh-progress-button-label')
+					: context.i18n.translateString('settings.general.data.import-settings-button-confirmed-label'),
+		),
+	);
 };
 
 // const refreshPacksButtonText$ = (context: SettingContext): Observable<string> => {
