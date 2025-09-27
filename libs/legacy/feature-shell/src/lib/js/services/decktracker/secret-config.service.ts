@@ -119,6 +119,7 @@ export class SecretConfigService {
 			case CardIds.Supernova_GDB_301:
 			case CardIds.FyrakkTheBlazing_FIR_959:
 			case CardIds.FiddlefireImp:
+			case CardIds.Pyrotechnician:
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FIRE]) ?? false
 				);
