@@ -882,6 +882,10 @@ export const cardIdSelector = (
 			);
 		case CardIds.Cultivation:
 			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
+		case CardIds.CupOMuscle_VAC_338:
+		case CardIds.CupOMuscle_CupOMuscleToken_VAC_338t:
+		case CardIds.CupOMuscle_CupOMuscleToken_VAC_338t2:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.CustomsEnforcer_VAC_440:
 			return and(not(side(inputSide)), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.CutlassCourier:
