@@ -17,7 +17,7 @@ export class GiftsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		value: (state: GameState): number => {
 			const cardsPlayed = state.playerDeck?.cardsPlayedThisMatch
 				.map((c) => state.playerDeck.findCard(c.entityId)?.card)
-				.filter((c) => c?.creatorCardId != null || c?.stolenFromOpponent)
+				.filter((c) => c?.creatorCardId != null || c?.creatorEntityId != null || c?.stolenFromOpponent)
 				.map((c) => c!.cardId);
 			return cardsPlayed.length;
 		},
