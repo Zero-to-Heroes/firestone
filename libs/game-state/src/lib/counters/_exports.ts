@@ -186,6 +186,7 @@ export const getAllCounters: (
 export type CounterType =
 	| '__fatigue'
 	| '_ceaselessExpanse'
+	| 'outcast'
 	| 'diveTheGolakkaDepths'
 	| 'darkGifts'
 	| 'galakrond'
