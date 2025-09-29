@@ -14,6 +14,7 @@ import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
 import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
+import { HabeasCorpses } from './habeas-corpses';
 import { Hadronox } from './hadronox';
 import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
@@ -100,6 +101,7 @@ const cards = [
 	ReturnPolicy,
 	BrilliantMacaw,
 	TwistedWebweaver,
+	HabeasCorpses,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};

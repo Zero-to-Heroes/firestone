@@ -1526,7 +1526,10 @@ export const cardIdSelector = (
 		case CardIds.Gyreworm:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.HabeasCorpses:
-			return and(side(inputSide), inGraveyard, minion);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion),
+				and(side(inputSide), inGraveyard, minion),
+			);
 		case CardIds.HagathasEmbrace:
 		case CardIds.HagathasEmbraceTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
