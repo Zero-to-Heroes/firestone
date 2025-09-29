@@ -9,7 +9,7 @@ import {
 	hasMechanic,
 } from '@firestone-hs/reference-data';
 import { CardOption, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
-import { CardsFacadeService } from 'libs/shared/framework/core/src/lib/services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { ChoosingOptionsGameEvent } from '../../../models/mainwindow/game-events/choosing-options-game-event';
 import { EventParser } from './event-parser';
@@ -201,6 +201,12 @@ const willBeActive = (
 		// All minions in deck share the same tribe
 		case CardIds.CityChiefEsho_TLC_110:
 			return false;
+		// if you took 5 or more damage on your opponent's turn
+		// Stormpike Marshal -
+		// If you've taken damage this turn:
+		// hot coals, job shadower, fearless flamejuggler, healthstone, shadowblade stinger, darkglare, duskbat, nethersoul buster, deathweb spider,
+		//  if your hero was healed this turn
+		// Death Metal Knight, Protect the Innocent, Happy Ghoul, cleric/priest of an'she, xyrella
 		default:
 			return false;
 	}

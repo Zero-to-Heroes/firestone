@@ -16,6 +16,7 @@ import {
 	BgsPlayer,
 	BoardSecret,
 	buildBgsEntities,
+	buildBgsEntity,
 	GameState,
 	GameUniqueIdService,
 	PlayerBoard,
@@ -50,7 +51,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		console.debug('[bgs-player-board-parser] parsing game event', gameEvent, currentState.bgState);
-		const { playerBoard, opponentBoard } = buildPlayerBoards(gameEvent);
+		const { playerBoard, opponentBoard } = buildPlayerBoards(gameEvent, this.allCards);
 		// TODO: how to get the duos info
 		// Snapshots of the boards when an opponent swap occurs
 		const duoPendingBoards: readonly { playerBoard: PlayerBoard; opponentBoard: PlayerBoard }[] =
@@ -495,10 +496,6 @@ export class BgsPlayerBoardParser implements EventParser {
 			hand: opponentBoard.hand,
 			heroCardId: opponentBoard.heroCardId ?? teammatePlayer?.cardId,
 			heroPowers: opponentBoard.heroPowers,
-			// heroPowerCardId: opponentBoard.heroPowerCardId ?? teammatePlayer?.heroPowerCardId,
-			// heroPowerInfo: opponentBoard.heroPowerInfo,
-			// heroPowerInfo2: opponentBoard.heroPowerInfo2,
-			// heroPowerUsed: opponentBoard.heroPowerUsed,
 			playerId:
 				opponentBoard.hero.Tags?.find((t) => t.Name === GameTag.PLAYER_ID)?.Value ?? teammatePlayer?.playerId,
 			secrets: opponentBoard.secrets,
@@ -577,10 +574,6 @@ export class BgsPlayerBoardParser implements EventParser {
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				entityId: playerBoard.hero.Entity,
 				heroPowers: playerBoard.heroPowers,
-				// heroPowerId: playerBoard.heroPowerCardId,
-				// heroPowerUsed: playerBoard.heroPowerUsed,
-				// heroPowerInfo: playerBoard.heroPowerInfo,
-				// heroPowerInfo2: playerBoard.heroPowerInfo2,
 				questRewards: [...(playerBoard.questRewards ?? [])],
 				questRewardEntities: [...playerBoard.questRewardEntities],
 				questEntities: [...(playerBoard.questEntities ?? [])],
@@ -667,7 +660,10 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 }
 
-const buildPlayerBoards = (gameEvent: GameEvent): { playerBoard: PlayerBoard; opponentBoard: PlayerBoard } => {
+const buildPlayerBoards = (
+	gameEvent: GameEvent,
+	allCards: CardsFacadeService,
+): { playerBoard: PlayerBoard; opponentBoard: PlayerBoard } => {
 	return {
 		playerBoard: {
 			heroCardId: gameEvent.additionalData.playerBoard.cardId,
@@ -681,8 +677,9 @@ const buildPlayerBoards = (gameEvent: GameEvent): { playerBoard: PlayerBoard; op
 				cardId: heroPower.cardId,
 				entityId: heroPower.entityId,
 				used: heroPower.used,
-				info: heroPower.info,
+				info: heroPower.info?.Tags ? buildBgsEntity(heroPower.info, allCards) : heroPower.info,
 				info2: heroPower.info2,
+				locked: heroPower.locked,
 			})),
 			questRewards: gameEvent.additionalData.playerBoard.questRewards,
 			questRewardEntities: gameEvent.additionalData.playerBoard.questRewardEntities,
@@ -701,8 +698,9 @@ const buildPlayerBoards = (gameEvent: GameEvent): { playerBoard: PlayerBoard; op
 				cardId: heroPower.cardId,
 				entityId: heroPower.entityId,
 				used: heroPower.used,
-				info: heroPower.info,
+				info: heroPower.info?.Tags ? buildBgsEntity(heroPower.info, allCards) : heroPower.info,
 				info2: heroPower.info2,
+				locked: heroPower.locked,
 			})),
 			questRewards: gameEvent.additionalData.opponentBoard.questRewards,
 			questRewardEntities: gameEvent.additionalData.opponentBoard.questRewardEntities,
