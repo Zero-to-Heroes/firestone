@@ -133,6 +133,20 @@ export const getDynamicRelatedCardIds = (
 					hasCorrectRarity(c, CardRarity.LEGENDARY),
 			);
 
+		// We do it here so we don't recompute the data for every card
+		case CardIds.JungleJammer:
+			const fullGameState = options.deckState?.isOpponent
+				? options.gameState?.fullGameState?.Opponent
+				: options.gameState?.fullGameState?.Player;
+			const entity = fullGameState?.AllEntities.find((e) => e.entityId === entityId);
+			const tagValue = entity?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 1;
+			return filterCards(
+				allCards,
+				options,
+				cardId,
+				(c) => c?.cost === tagValue && c.races?.includes(Race[Race.BEAST]),
+			);
+
 		case CardIds.Botface_TOY_906:
 			// TODO: Fix these minis not showing up properly (are minis tagged properly?)
 			// TODO: Confirm if Botface can generate Boom Wrench - if not, add minion tag
