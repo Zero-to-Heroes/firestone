@@ -17,7 +17,8 @@
 // 	pointer-events: none;
 // }
 
-.choosing-card-container {
+.choosing-card-container,
+.additional-info {
 	display: flex;
 	width: 100%;
 	height: 100%;
@@ -44,4 +45,14 @@
 	&.items-4 {
 		grid-template-columns: 1fr 1fr 1fr 1fr;
 	}
+}
+
+.additional-info {
+	position: absolute;
+	left: 4vh;
+	top: 66vh;
+	width: 130vh;
+	height: 5vh;
+	pointer-events: none;
+	display: flex;
 }

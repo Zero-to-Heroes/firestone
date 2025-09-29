@@ -14,7 +14,7 @@ import { CardOption, GameState, GameStateFacadeService } from '@firestone/game-s
 import { CardChoicesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
@@ -55,6 +55,18 @@ import { buildBasicCardChoiceValue } from './card-choice-values';
 						></choosing-card-option>
 					</ng-container>
 				</ng-container>
+			</div>
+		</div>
+		<div class="additional-info">
+			<div
+				class="choosing-card-container items-{{ value.options?.length }}"
+				*ngIf="{ options: options$ | async } as value"
+			>
+				<choosing-card-additional-info
+					class="info-container"
+					*ngFor="let option of value.options"
+					[option]="option"
+				></choosing-card-additional-info>
 			</div>
 		</div>
 	`,
@@ -193,6 +205,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 						isTallCard: isTallCard,
 						flag: this.buildFlag(o, state),
 						value: buildBasicCardChoiceValue(o, state, this.allCards, this.i18n),
+						willBeActive: o.willBeActive,
 					};
 					return result;
 				});
@@ -248,6 +261,7 @@ export interface CardChoiceOption {
 	readonly isTallCard: boolean;
 	readonly flag?: CardOptionFlag;
 	readonly value?: string;
+	readonly willBeActive?: boolean;
 }
 export const equalCardChoiceOption = (
 	a: CardChoiceOption | null | undefined,
@@ -272,6 +286,9 @@ export const equalCardChoiceOption = (
 		return false;
 	}
 	if (a.value !== b.value) {
+		return false;
+	}
+	if (a.willBeActive !== b.willBeActive) {
 		return false;
 	}
 	return true;

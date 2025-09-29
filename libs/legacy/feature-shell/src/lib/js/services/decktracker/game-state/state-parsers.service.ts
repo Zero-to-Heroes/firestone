@@ -286,7 +286,7 @@ export class GameStateParsersService {
 			[GameEvent.CARD_REVEALED]: [new CardRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_STOLEN]: [new CardStolenParser(this.helper, this.i18n, this.allCards)],
 			[GameEvent.CARDS_SHUFFLED_INTO_DECK]: [new CardsShuffledIntoDeckParser()],
-			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser()],
+			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser(this.allCards)],
 			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.i18n, this.allCards)],
 			[GameEvent.CORPSES_CHANGED]: [new CorpsesParser()],
 			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],

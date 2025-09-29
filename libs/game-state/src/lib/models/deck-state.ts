@@ -456,6 +456,7 @@ export interface CardOption {
 		readonly EntityId: number;
 		readonly CardId: string;
 	};
+	readonly willBeActive?: boolean;
 }
 export const equalCardOption = (a: CardOption | null | undefined, b: CardOption | null | undefined): boolean => {
 	if (!a && !b) {

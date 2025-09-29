@@ -434,6 +434,7 @@ import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-bra
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
+import { ChoosingCardAdditionalInfoComponent } from '@components/overlays/card-choice/choosing-card-additional-info.component';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -1194,6 +1195,7 @@ try {
 		MercsQuestsWidgetWrapperComponent,
 		ChoosingCardWidgetWrapperComponent,
 		ChoosingCardOptionComponent,
+		ChoosingCardAdditionalInfoComponent,
 		ChoosingCardOptionArenaComponent,
 		ChoosingCardOptionConstructedComponent,
 		ChoosingBgsQuestWidgetWrapperComponent,

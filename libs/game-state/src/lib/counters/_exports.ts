@@ -81,7 +81,6 @@ import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TreantCounterDefinitionV2 } from './impl/treant';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
-import { UndeadDiedLastTurnCounterDefinitionV2 } from './impl/undead-died-last-turn';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
@@ -162,7 +161,6 @@ export const getAllCounters: (
 	new ImbueCounterDefinitionV2(i18n, allCards),
 	new RenferalTheMalignantCounterDefinitionV2(i18n, allCards),
 	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
-	new UndeadDiedLastTurnCounterDefinitionV2(i18n, allCards),
 	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
@@ -196,7 +194,6 @@ export type CounterType =
 	| 'ysondre'
 	| 'dragonsInHand'
 	| 'imbue'
-	| 'undeadDiedLastTurn'
 	| 'tableFlip'
 	| 'heroPowerUse'
 	| 'tyrande'

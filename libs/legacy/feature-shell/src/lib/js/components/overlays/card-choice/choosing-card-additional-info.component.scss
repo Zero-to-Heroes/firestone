@@ -1,0 +1,13 @@
+:host {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.additional-info {
+	padding: 5px 10px;
+	background: var(--default-title-color);
+	color: var(--color-common-2-dark);
+	border-radius: 10px;
+	pointer-events: all;
+}
