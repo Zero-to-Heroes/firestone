@@ -1,5 +1,14 @@
-import { CardIds, CardType, Race, hasCorrectTribe } from '@firestone-hs/reference-data';
-import { CardOption, DeckState, GameState } from '@firestone/game-state';
+import {
+	CardClass,
+	CardIds,
+	CardType,
+	GameTag,
+	Race,
+	SpellSchool,
+	hasCorrectTribe,
+	hasMechanic,
+} from '@firestone-hs/reference-data';
+import { CardOption, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from 'libs/shared/framework/core/src/lib/services/cards-facade.service';
 import { GameEvent } from '../../../models/game-event';
 import { ChoosingOptionsGameEvent } from '../../../models/mainwindow/game-events/choosing-options-game-event';
@@ -26,7 +35,13 @@ export class ChoosingOptionsParser implements EventParser {
 					context: gameEvent.additionalData.context,
 					questDifficulty: o.QuestDifficulty,
 					questReward: o.QuestReward,
-					willBeActive: willBeActive(o.CardId, deck, this.allCards),
+					willBeActive: willBeActive(
+						o.CardId,
+						o.EntityId,
+						deck,
+						currentState.currentTurn === 'mulligan' ? 0 : currentState.currentTurn,
+						this.allCards,
+					),
 				};
 				return result;
 			}),
@@ -43,18 +58,40 @@ export class ChoosingOptionsParser implements EventParser {
 	}
 }
 
-const willBeActive = (cardId: string, playerDeck: DeckState, allCards: CardsFacadeService): boolean => {
+const willBeActive = (
+	cardId: string,
+	entityId: number,
+	playerDeck: DeckState,
+	currentTurn: number,
+	allCards: CardsFacadeService,
+): boolean => {
 	if (!playerDeck?.isActivePlayer) {
 		return false;
 	}
 
+	const refCard = getProcessedCard(cardId, entityId, playerDeck, allCards);
+	if (hasMechanic(refCard, GameTag.KINDRED)) {
+		const tribes = refCard.races ?? [];
+		for (const tribe of tribes) {
+			if (
+				playerDeck.minionsDeadSinceLastTurn.filter((c) =>
+					hasCorrectTribe(allCards.getCard(c.cardId), Race[tribe]),
+				).length > 0
+			) {
+				return true;
+			}
+		}
+	}
+
 	switch (cardId) {
+		// Friendly Undead died since last turn
 		case CardIds.BoneFlinger:
 		case CardIds.GraveDigging:
 		case CardIds.NecroticMortician_CORE_RLK_116:
 		case CardIds.NecroticMortician:
 		case CardIds.NerubianFlyer:
 		case CardIds.NerubianVizier:
+		case CardIds.NoxiousInfiltrator:
 		case CardIds.ShadowWordUndeath:
 		case CardIds.UnlivingChampion:
 			return (
@@ -62,6 +99,7 @@ const willBeActive = (cardId: string, playerDeck: DeckState, allCards: CardsFaca
 					hasCorrectTribe(allCards.getCard(c.cardId), Race.UNDEAD),
 				).length > 0
 			);
+		// Played an Elemental last turn
 		case CardIds.AnimatedAvalanche:
 		case CardIds.Arcanosaur:
 		case CardIds.AridStormer:
@@ -79,6 +117,7 @@ const willBeActive = (cardId: string, playerDeck: DeckState, allCards: CardsFaca
 		case CardIds.LivingPrairie_WW_024:
 		case CardIds.MinecartCruiser_WW_326:
 		case CardIds.ServantOfKalimos_UNG_816:
+		case CardIds.Scorch:
 		case CardIds.ShaleSpider_DEEP_034:
 		case CardIds.SpontaneousCombustion_GDB_456:
 		case CardIds.SteamSurger:
@@ -87,11 +126,81 @@ const willBeActive = (cardId: string, playerDeck: DeckState, allCards: CardsFaca
 		case CardIds.ThunderLizard:
 		case CardIds.TolvirStoneshaper:
 			return playerDeck.elementalsPlayedLastTurn > 0;
+		// Played 2 spells this turn
 		case CardIds.Wartbringer:
 			return (
 				playerDeck.cardsPlayedThisTurn.filter((c) => c.cardType?.toUpperCase() === CardType[CardType.SPELL])
 					.length >= 2
 			);
+		// Cast a spell last turn
+		case CardIds.Marshspawn_BT_115:
+		case CardIds.Marshspawn_CORE_BT_115:
+		case CardIds.Whirlweaver:
+		case CardIds.ShatteredRumbler:
+		case CardIds.Aftershocks_DEEP_010:
+		case CardIds.Torrent:
+			return playerDeck.cardsPlayedLastTurn.some((c) => c.cardType?.toUpperCase() === CardType[CardType.SPELL]);
+		// Spells cast this game
+		case CardIds.MeddlesomeServant_YOG_518:
+			return (
+				playerDeck.cardsPlayedThisMatch.filter(
+					(c) => allCards.getCard(c.cardId).type?.toUpperCase() === CardType[CardType.SPELL],
+				).length >= 5
+			);
+		// Spell schools this turn
+		case CardIds.GladesongSiren_TLC_819:
+			return (
+				playerDeck.cardsPlayedThisTurn.some(
+					(c) => allCards.getCard(c.cardId).spellSchool === SpellSchool[SpellSchool.HOLY],
+				) &&
+				playerDeck.cardsPlayedThisTurn.some(
+					(c) => allCards.getCard(c.cardId).spellSchool === SpellSchool[SpellSchool.SHADOW],
+				)
+			);
+		// Spell schools over the last X turns
+		case CardIds.GrandMagusAntonidas:
+			return (
+				playerDeck.cardsPlayedThisMatch
+					.filter((c) => c.turn === currentTurn - 1)
+					.some((c) => allCards.getCard(c.cardId).spellSchool === SpellSchool[SpellSchool.FIRE]) &&
+				playerDeck.cardsPlayedThisMatch
+					.filter((c) => c.turn === currentTurn - 2)
+					.some((c) => allCards.getCard(c.cardId).spellSchool === SpellSchool[SpellSchool.FIRE]) &&
+				playerDeck.cardsPlayedThisMatch
+					.filter((c) => c.turn === currentTurn - 3)
+					.some((c) => allCards.getCard(c.cardId).spellSchool === SpellSchool[SpellSchool.FIRE])
+			);
+		// Discovered this turn (not technically exact - you could discover without playing a discover card)
+		// Will fix when needed, by making the discoversThisGame also track the turns of each discover
+		case CardIds.UnearthedArtifacts_TLC_462:
+		case CardIds.StorageScuffle_TLC_365:
+			return playerDeck.cardsPlayedThisTurn.some((c) =>
+				allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.DISCOVER]),
+			);
+		// Card played from another class this turn
+		case CardIds.Ransack:
+			return playerDeck.cardsPlayedThisTurn.some(
+				(c) =>
+					playerDeck.hero.classes?.[0] !== CardClass.NEUTRAL &&
+					!!allCards.getCard(c.cardId).classes?.length &&
+					allCards
+						.getCard(c.cardId)
+						.classes.every((cardClass) => CardClass[cardClass] !== playerDeck.hero.classes?.[0]),
+			);
+
+		// =============
+		// Not supported yet
+		// =============
+		// Restored X health this game
+		case CardIds.ZandalariTemplar: // 10
+		case CardIds.CrystalStag: // 5
+			return false;
+		// Discarded a card this game
+		case CardIds.PlagueEruption:
+			return false;
+		// All minions in deck share the same tribe
+		case CardIds.CityChiefEsho_TLC_110:
+			return false;
 		default:
 			return false;
 	}
