@@ -107,6 +107,7 @@ export interface StoredInformation {
 	// easier to work with
 	tagScriptValues?: (number | null)[];
 	cards?: readonly { cardId: string; entityId: number }[];
+	manaLeftWhenPlayed?: number | null;
 }
 
 export interface GuessedInfo {

@@ -146,6 +146,21 @@ export const getDynamicRelatedCardIds = (
 				cardId,
 				(c) => c?.cost === tagValue && c.races?.includes(Race[Race.BEAST]),
 			);
+		case CardIds.ScrappyScavenger_TLC_461:
+			const card = inputOptions.deckState.findCard(entityId)?.card;
+			if (!card) {
+				return [];
+			}
+			const hasBeenPlayed = card.storedInformation?.manaLeftWhenPlayed != null;
+			const targetCost = hasBeenPlayed
+				? (card.storedInformation.manaLeftWhenPlayed ?? 0)
+				: Math.min(10, Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)));
+			return filterCards(
+				allCards,
+				options,
+				cardId,
+				(c) => hasCost(c, '==', targetCost) && canBeDiscoveredByClass(c, options.currentClass),
+			);
 
 		case CardIds.Botface_TOY_906:
 			// TODO: Fix these minis not showing up properly (are minis tagged properly?)
@@ -876,21 +891,6 @@ const getDynamicFilters = (
 						Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)),
 					),
 				);
-		case CardIds.ScrappyScavenger_TLC_461:
-			// TODO: Not supported yet
-			// More generally, we should remember the amount of mana left when the card is played
-			if (options.deckState.isOpponent) {
-				return undefined;
-			}
-			return (c) =>
-				hasCost(
-					c,
-					'==',
-					Math.min(
-						10,
-						Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)),
-					),
-				) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Alarashi_EDR_493:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 		case CardIds.Jumpscare_EDR_882:

@@ -129,6 +129,9 @@ export const getCardId = (
 export const storeInformationOnCardPlayed = (
 	cardId: string,
 	tags: readonly { Name: GameTag; Value: number }[],
+	options?: {
+		manaLeft?: number | null;
+	},
 ): StoredInformation | null => {
 	switch (cardId) {
 		case CardIds.Robocaller_WORK_006:
@@ -138,6 +141,10 @@ export const storeInformationOnCardPlayed = (
 					tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value ?? null,
 					tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_3)?.Value ?? null,
 				],
+			};
+		case CardIds.ScrappyScavenger_TLC_461:
+			return {
+				manaLeftWhenPlayed: options?.manaLeft,
 			};
 		default:
 			return null;

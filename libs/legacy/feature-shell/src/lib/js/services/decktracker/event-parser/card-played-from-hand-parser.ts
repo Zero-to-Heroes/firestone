@@ -162,7 +162,9 @@ export class CardPlayedFromHandParser implements EventParser {
 			// avoid info leaks, so if the info is present in the event, we add it
 			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
 			creatorEntityId: cardWithZone?.creatorEntityId ?? gameEvent.additionalData.creatorEntityId,
-			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags),
+			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags, {
+				manaLeft: deck.manaLeft,
+			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});
 		// console.debug('cardWithInfo', cardWithInfo, gameEvent);
