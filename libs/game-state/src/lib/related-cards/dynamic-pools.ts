@@ -877,6 +877,11 @@ const getDynamicFilters = (
 					),
 				);
 		case CardIds.ScrappyScavenger_TLC_461:
+			// TODO: Not supported yet
+			// More generally, we should remember the amount of mana left when the card is played
+			if (options.deckState.isOpponent) {
+				return undefined;
+			}
 			return (c) =>
 				hasCost(
 					c,
