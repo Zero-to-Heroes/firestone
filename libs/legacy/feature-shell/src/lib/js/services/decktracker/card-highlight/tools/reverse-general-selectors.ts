@@ -28,6 +28,13 @@ export const reverseGeneralSelector = (
 		);
 	}
 
+	// COST_MORE_0 + SHADOW + SPELL (1 cards)
+	if (refCard.cost > 0 && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.TamsinRoame_BAR_918
+		);
+	}
+
 	// BEAST + COST_LESS_4 (1 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4) {
 		matchingCardIds.push(
@@ -53,9 +60,10 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_EQUAL_1 + SPELL (1 cards)
+	// COST_EQUAL_1 + SPELL (2 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
+			CardIds.Gazlowe,
 			CardIds.TrinketTracker
 		);
 	}
@@ -83,17 +91,19 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_LESS_3 + MINION (2 cards)
+	// COST_LESS_3 + MINION (3 cards)
 	if (refCard.cost < 3 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.BandOfBeesTavernBrawl,
 			CardIds.CallToArms,
 			CardIds.OracleOfElune
 		);
 	}
 
-	// COST_LESS_3 + SPELL (1 cards)
+	// COST_LESS_3 + SPELL (2 cards)
 	if (refCard.cost < 3 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
+			CardIds.SunsapperLynessa_VAC_507,
 			CardIds.VioletTreasuregill_TLC_438
 		);
 	}
@@ -112,10 +122,11 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_LESS_5 + MINION (3 cards)
+	// COST_LESS_5 + MINION (4 cards)
 	if (refCard.cost < 5 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.GrizzledGuardian,
+			CardIds.Hybridization_TLC_236,
 			CardIds.OakenSummons,
 			CardIds.OakenSummons_CORE_LOOT_309
 		);
@@ -142,37 +153,61 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 + SPELL (1 cards)
+	// COST_MORE_4 + SPELL (3 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
+			CardIds.AshleafPixie_FIR_961,
+			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504
 		);
 	}
 
-	// LEGENDARY + MINION (2 cards)
+	// COST_MORE_5 + MINION (1 cards)
+	if (refCard.cost > 5 && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.ScepterOfSummoning
+		);
+	}
+
+	// COST_MORE_5 + SPELL (1 cards)
+	if (refCard.cost > 5 && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.GreySageParrot
+		);
+	}
+
+	// ELEMENTAL + LEGENDARY (1 cards)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL') && refCard.rarity?.toUpperCase() === 'LEGENDARY') {
+		matchingCardIds.push(
+			CardIds.AlakirTheWindlord_ElementalEvocation_THD_026p
+		);
+	}
+
+	// LEGENDARY + MINION (4 cards)
 	if (refCard.rarity?.toUpperCase() === 'LEGENDARY' && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.DisksOfLegendTavernBrawl,
 			CardIds.InspiringPresenceTavernBrawl,
+			CardIds.RingOfPhaseshiftingTavernBrawl,
 			CardIds.RoyalGreatswordTavernBrawlToken
 		);
 	}
 
-	// MINION + NEUTRAL (1 cards)
+	// MINION + NEUTRAL (2 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.classes?.includes('NEUTRAL')) {
 		matchingCardIds.push(
+			CardIds.MeekMasteryTavernBrawl,
 			CardIds.MulchMadnessTavernBrawl
 		);
 	}
 
-	// COST_EQUAL_1 (7 cards)
+	// COST_EQUAL_1 (5 cards)
 	if (refCard.cost === 1) {
 		matchingCardIds.push(
-			CardIds.Gazlowe,
 			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.PipThePotent_WW_394,
 			CardIds.PrinceLiam,
 			CardIds.RollingStone,
-			CardIds.SonyaWaterdancer_TOY_515,
 			CardIds.ThirstyDrifter_WW_387
 		);
 	}
@@ -198,51 +233,23 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_LESS_3 (3 cards)
+	// COST_LESS_3 (1 cards)
 	if (refCard.cost < 3) {
 		matchingCardIds.push(
-			CardIds.BandOfBeesTavernBrawl,
-			CardIds.SunsapperLynessa_VAC_507,
 			CardIds.UnendingSwarm
 		);
 	}
 
-	// COST_LESS_4 (3 cards)
+	// COST_LESS_4 (1 cards)
 	if (refCard.cost < 4) {
 		matchingCardIds.push(
-			CardIds.DreadRaptor_TLC_432,
-			CardIds.Razorboar,
 			CardIds.Resuscitate_TLC_818
 		);
 	}
 
-	// COST_LESS_5 (2 cards)
-	if (refCard.cost < 5) {
-		matchingCardIds.push(
-			CardIds.Hybridization_TLC_236,
-			CardIds.RazorfenBeastmaster
-		);
-	}
-
-	// COST_MORE_0 (2 cards)
-	if (refCard.cost > 0) {
-		matchingCardIds.push(
-			CardIds.Resuscitate_TLC_818,
-			CardIds.TamsinRoame_BAR_918
-		);
-	}
-
-	// COST_MORE_1 (1 cards)
-	if (refCard.cost > 1) {
-		matchingCardIds.push(
-			CardIds.TaethelanBloodwatcher_WW_430
-		);
-	}
-
-	// COST_MORE_2 (2 cards)
+	// COST_MORE_2 (1 cards)
 	if (refCard.cost > 2) {
 		matchingCardIds.push(
-			CardIds.AllTogetherNowTavernBrawl,
 			CardIds.OrbOfRevelationTavernBrawl
 		);
 	}
@@ -254,23 +261,18 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 (6 cards)
+	// COST_MORE_4 (3 cards)
 	if (refCard.cost > 4) {
 		matchingCardIds.push(
-			CardIds.AshleafPixie_FIR_961,
-			CardIds.FerociousFelbat_EDR_892,
-			CardIds.Groundskeeper,
 			CardIds.InventorBoom_TOY_607,
 			CardIds.StranglethornHeart,
 			CardIds.TimberTambourine
 		);
 	}
 
-	// COST_MORE_5 (3 cards)
+	// COST_MORE_5 (1 cards)
 	if (refCard.cost > 5) {
 		matchingCardIds.push(
-			CardIds.GreySageParrot,
-			CardIds.ScepterOfSummoning,
 			CardIds.SummerFlowerchild
 		);
 	}
@@ -282,13 +284,11 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// LEGENDARY (4 cards)
+	// LEGENDARY (2 cards)
 	if (refCard.rarity?.toUpperCase() === 'LEGENDARY') {
 		matchingCardIds.push(
-			CardIds.AlakirTheWindlord_ElementalEvocation_THD_026p,
 			CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p,
-			CardIds.DisksOfLegendTavernBrawl,
-			CardIds.RingOfPhaseshiftingTavernBrawl
+			CardIds.BountyBoard_WW_003
 		);
 	}
 
@@ -300,18 +300,17 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// NEUTRAL (5 cards)
+	// NEUTRAL (4 cards)
 	if (refCard.classes?.includes('NEUTRAL')) {
 		matchingCardIds.push(
 			CardIds.ClassActionLawyer,
 			CardIds.EnvoyOfTheGlade_EDR_873,
-			CardIds.MeekMasteryTavernBrawl,
 			CardIds.TheCountess,
 			CardIds.WyrmrestPurifier
 		);
 	}
 
-	// WEAPON (38 cards)
+	// WEAPON (41 cards)
 	if (refCard.type?.toUpperCase() === 'WEAPON') {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
@@ -331,11 +330,14 @@ export const reverseGeneralSelector = (
 			CardIds.Khazgoroth_TitanforgeToken,
 			CardIds.LadyAshvane_Story_11_LadyAshvane,
 			CardIds.LadyAshvane_TSC_943,
+			CardIds.LoadTheChamber_WW_409,
 			CardIds.ManAtArms,
 			CardIds.Obsidiansmith,
 			CardIds.PillageTheFallenTavernBrawl,
 			CardIds.Plunder,
 			CardIds.RaidTheDocks,
+			CardIds.RaidingParty,
+			CardIds.RaidingParty_CORE_TRL_124,
 			CardIds.RatchetPrivateer,
 			CardIds.RuneforgingCore,
 			CardIds.Runeforging_LEG_RLK_715,

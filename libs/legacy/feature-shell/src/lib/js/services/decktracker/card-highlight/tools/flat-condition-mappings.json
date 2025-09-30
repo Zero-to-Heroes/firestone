@@ -1,325 +1,16 @@
 {
-  "MINION": [
+  "MECH + MINION": [
     "AbsorbentParasite",
-    "AegwynnTheGuardianCore",
-    "AegwynnTheGuardian_LEG_CS3_001",
-    "AlakirTheWindsOfTime_WON_092h",
-    "AlarmedSecuritybot_YOG_510",
-    "AllianceBannerman",
-    "AlwaysABiggerJormungar",
-    "AmalgamOfTheDeep",
-    "AmitusThePeacekeeper",
-    "AmitusThePeacekeeper_ReinforcedToken",
-    "AmorphousSlime",
-    "AncestorsCall",
-    "AnimaExtractor",
-    "AnimaExtractor_CORE_REV_332",
-    "AnimatedBerserker_CORE_ICC_238",
-    "AnimatedBerserker_ICC_238",
-    "Anubrekhan_RLK_659",
-    "ApexisBlast",
-    "ArchdruidOfThorns_EDR_491",
-    "Artanis_SC_754",
-    "Assembly",
-    "Assembly_Assembly",
-    "AuctionhouseGavel",
-    "Aviana",
-    "Aviana_WON_012",
-    "AwakenTheMakers",
-    "AzsharanGardens_SunkenGardensToken",
-    "BackstageBouncer",
-    "BandOfBeesTavernBrawl",
-    "BanelingBarrage_SC_001",
-    "BargainBin_MIS_105",
-    "Barnes",
-    "Battlepickaxe_WW_347",
-    "BeanstalkBrute_EDR_230",
-    "Birdwatching_VAC_408",
-    "BlackrockNRoll",
-    "BladeOfTheBurningSun",
-    "BloodCrusader",
-    "BloodMoonTavernBrawl",
-    "BloodOfGhuun",
-    "BobTheBartender_BG31_BOB",
-    "BobTheBartender_FindATripleToken_BG31_BOBt4",
-    "Bolster",
-    "Boneshredder",
-    "BrannBronzebeard_BrannsSaddle_THD_042p",
-    "Breakdance",
-    "BrittleboneBuccaneer_VAC_436",
-    "BronzeSignetTavernBrawl",
-    "BulkUp",
-    "BusyBot_WORK_002",
-    "CapturedFlag",
-    "CarnivorousCube",
-    "CarnivorousCubicle_WORK_042",
-    "CatrinaMuerte",
-    "CatrinaMuerteCore",
-    "CharredChameleon_FIR_908",
-    "ChemicalSpill_TOY_602",
-    "ChorusRiff",
-    "ClawMachine",
-    "ClearTheWay",
-    "CliffDive_VAC_926",
-    "ClimbingHook_VAC_932",
-    "ColiferoTheArtist_TOY_703",
-    "Commencement",
-    "CowardlyGrunt",
-    "CreationProtocol",
-    "CreationProtocol_CreationProtocolToken",
-    "CreepTumor_SC_011",
-    "DaUndatakah",
-    "DealWithADevil",
-    "DeathGrowl",
-    "DeathstriderTavernBrawl",
-    "DeckOfChaos",
-    "DetonationJuggernaut_WW_329",
-    "DevilsaurMask_DINO_403",
-    "DigForTreasure_TOY_510",
-    "DimensionalRipper",
-    "DinnerPerformer",
-    "DisciplinarianGandling",
-    "DiscoMaul",
-    "DisksOfLegendTavernBrawl",
-    "DivineStar_GDB_460",
-    "DreadRaptor_TLC_432",
-    "DreamboundRaptor_EDR_849",
-    "EchoOfMedivh",
-    "EliseBadlandsSavior_WW_392",
-    "ElixirOfVigorTavernBrawl",
-    "ElvenMinstrel",
-    "ElvenMinstrelCore",
-    "Embiggen",
-    "EndbringerUmbra_TLC_106",
-    "Ensmallen_TOY_805",
-    "EternalServitude_CORE_ICC_213",
-    "EternalServitude_ICC_213",
-    "Eureka",
-    "FancyPackaging_TOY_881",
-    "FeldoreiWarband",
-    "FelfireBonfire_VAC_952",
-    "FerociousFelbat_EDR_892",
-    "Fetch_TOY_352",
-    "FindTheImposter",
-    "FindTheImposter_LearnTheTruthToken",
-    "FindTheImposter_MarkedATraitorToken",
-    "FirePlumesHeart",
-    "Firegill_DINO_404",
-    "FlashSale_TOY_716",
-    "FoodFight_EntréeToken_VAC_533t",
-    "FoodFight_VAC_533",
-    "ForsakenLieutenant_AV_601",
-    "FrontLines_Story_11_FrontLines",
-    "FrontLines_TID_949",
-    "FungalFortunes",
-    "Funkfin",
-    "GatherYourParty",
-    "GiantAnaconda",
+    "CollectorsIreTavernBrawlToken",
+    "DrocomurchanicasTavernBrawlToken",
     "GorillabotA3",
-    "GorillabotA3Core",
-    "GreedyGainsTavernBrawl",
-    "GrimestreetOutfitter",
-    "GrimestreetOutfitterCore",
-    "GrimyGadgeteer",
-    "GuitarSoloist",
-    "HabeasCorpses",
-    "Hadronox_CORE_ICC_835",
-    "Hadronox_ICC_835",
-    "HagathasEmbrace",
-    "HagathasEmbraceTavernBrawl",
-    "Hallucination_SC_757",
-    "HarmonicMetal",
-    "HarmonicMetal_DissonantMetalToken",
-    "HatcheryHelper_TLC_233",
-    "HatchingCeremony_DINO_405",
-    "HawkstriderRancher",
-    "HealingWave",
-    "HealingWave_WON_320",
-    "Hellion_HellbatToken_SC_412t",
-    "HolyEggbearer_DINO_411",
-    "HopeOfQuelthalas",
-    "Hybridization_TLC_236",
-    "ImpKingRafaam_ImpKingRafaamToken",
-    "ImpKingRafaam_REV_789",
-    "ImpKingRafaam_REV_835",
-    "ImpendingCatastrophe",
-    "ImployeeOfTheMonth_WORK_009",
-    "ImprisonedScrapImp",
-    "Infestor_SC_002",
-    "Insight",
-    "Insight_InsightToken",
-    "IntoTheFray",
-    "InvigoratingSermon",
-    "IxlidFungalLord",
-    "JalTheSharpshot",
-    "JepettoJoybuzz",
-    "JimRaynor_Stimpack_SC_400p",
-    "KabalTalonpriest",
-    "Kazakus_IchorOfUndeathToken_CFM_621t37",
-    "Kazakus_IchorOfUndeathToken_CFM_621t38",
-    "Kazakus_IchorOfUndeathToken_CFM_621t39",
-    "KeeperOfFlame_FIR_928",
-    "KeepersStrength_YOG_509",
-    "LadyInWhite",
-    "LesserDiamondSpellstone",
-    "LesserDiamondSpellstone_CORE_LOOT_507",
-    "LesserDiamondSpellstone_DiamondSpellstoneToken",
-    "LesserDiamondSpellstone_GreaterDiamondSpellstoneToken",
-    "LibramOfClarity_GDB_137",
-    "Lightspeed_GDB_457",
-    "LivingGarden_EDR_518",
-    "LohTheLivingLegend_TLC_257",
-    "LokenJailerOfYoggSaron",
-    "LongneckEgg_DINO_130",
-    "LorthemarTheron_RLK_593",
-    "LuckyComet_GDB_873",
-    "Malfunction_MIS_107",
-    "ManufacturingError_TOY_371",
-    "MaskedReveler",
-    "MasterJouster",
-    "MastersCall",
-    "MastersCall_CORE_TRL_339",
-    "MaximaBlastenheimer",
-    "MeatGrinder_RLK_120",
-    "MeekMasteryTavernBrawl",
-    "Melomania",
-    "MenagerieJug_CORE_WON_142",
-    "MenagerieJug_WON_142",
-    "MenagerieMug_CORE_WON_141",
-    "MenagerieMug_WON_141",
-    "Merithra_EDR_238",
-    "MoatLurker",
-    "MonstrousMosquito_EDR_816",
-    "MoshPit",
-    "Muckmorpher",
-    "MummyMagic",
-    "Murmur_GDB_448",
-    "MuscleOTron_YOG_525",
-    "MutatingInjection_NAX11_04",
-    "NightmareLordXavius_EDR_856",
-    "NineLives",
-    "NzothGodOfTheDeep",
-    "NzothTheCorruptor",
-    "NzothTheCorruptor_DarkMachinations_THD_039p",
-    "Obsidiansmith",
-    "OldMilitiaHornTavernBrawl",
-    "OldMilitiaHorn_MilitiaHornTavernBrawl",
-    "OldMilitiaHorn_VeteransMilitiaHornTavernBrawl",
-    "OrbitalHalo_GDB_439",
-    "OrbitalMoon_GDB_475",
-    "OutfitTailor",
-    "OverlordSaurfang_BAR_334",
-    "OverlordsWhip",
-    "PaintersVirtue_TOY_810",
-    "PantherMask_DINO_432",
-    "ParrotSanctuary_VAC_409",
-    "PartyAnimal",
-    "PendantOfEarth_DEEP_026",
-    "PhotonCannon_SC_753",
-    "PileOnHeroic",
-    "PowerChordSynchronize",
-    "Prescience",
-    "ProvingGrounds",
-    "Psychopomp",
-    "PuppetmasterDorian_MIS_026",
-    "RaidBossOnyxia_ONY_004",
-    "RaiseDead_SCH_514",
-    "Ravage_SC_004hp",
-    "RavenousFelhunter_EDR_891",
-    "Razorboar",
-    "RazorfenBeastmaster",
-    "RazormaneBattleguard",
-    "Reforestation_EDR_843",
-    "Reforestation_Fertilize_EDR_843b",
-    "Reforestation_ReforestationToken_EDR_843t1",
-    "Resurrect_BRM_017",
-    "Resuscitate_TLC_818",
-    "RighteousReservesTavernBrawl",
-    "RingOfPhaseshiftingTavernBrawl",
-    "RiskySkipper",
-    "Roach_SC_012",
-    "RoaringApplause",
-    "RockMasterVoone_ETC_121",
-    "RocketBackpacksTavernBrawl",
-    "RotheartDryad_EDR_485",
-    "RunningWild",
-    "RunningWild_RunningWild",
-    "ScepterOfSummoning",
-    "SeafloorSavior_TSC_083",
-    "Seismopod_DINO_421",
-    "Sentry_SC_764",
-    "SesselieOfTheFaeCourt_REV_319",
-    "SesselieOfTheFaeCourt_REV_782",
-    "ShadowEssence_CORE_ICC_235",
-    "ShadowEssence_ICC_235",
-    "Shadowcaster",
-    "Shadowcasting101TavernBrawl",
-    "ShadowstepCore",
-    "ShadowstepLegacy",
-    "ShadowstepVanilla",
-    "Shattershambler",
-    "ShroudOfConcealment",
-    "Si7Assassin",
-    "Si7Informant",
-    "Si7Smuggler",
-    "SilvermoonBrochure_WORK_017",
-    "SilvermoonPortal",
-    "SilvermoonPortal_WON_309",
-    "SinisterSoulcage_YOG_513",
-    "SmolderingStrength_FIR_914",
-    "SonyaWaterdancer_TOY_515",
-    "SoulrestCeremony_DINO_417",
-    "SowTheSeedsTavernBrawl",
-    "SpawningPool_SC_000",
-    "SpecialDeliveryTavernBrawl",
-    "SpiritOfTheBadlands_MirageToken_WW_337t",
-    "SpiritOfTheBadlands_WW_337",
-    "SpiritOfTheMountain_TLC_229",
-    "SpiritPeddler_WORK_015",
-    "SpotTheDifference_TOY_374",
-    "SrExcavatorTavernBrawl",
-    "StewardOfDarkshire_OG_310",
-    "StewardOfDarkshire_WON_310",
-    "StrengthInNumbers",
-    "SuperchargeTavernBrawl",
-    "SurvivalOfTheFittest",
-    "Switcheroo",
-    "TenGallonHat_WW_811",
-    "TerrorscaleStalker",
-    "TerrorscaleStalker_CORE_UNG_800",
-    "TheBoomReaver",
-    "TheBoomship",
-    "TheDarkPortal_BT_302",
-    "TheLichKing_ArmyOfTheFrozenThroneToken",
-    "TogwagglesScheme",
-    "TortollanStoryteller_TLC_254",
-    "TotemicMightLegacy",
-    "TotemicMightVanilla",
-    "TotemicSurge",
-    "TravelmasterDungar_WORK_043",
-    "Turbulus_WORK_013",
-    "UnearthedRaptor",
-    "UngoroBrochure_WORK_050",
-    "UnlockedPotential",
-    "UnluckyPowderman_WW_367",
-    "VarianWrynn_AT_072",
-    "Vectus",
-    "ViciousBloodworm_RLK_711",
-    "Viper_SC_018",
-    "VitalitySurge",
-    "WakenerOfSouls_GDB_468",
-    "WarpGate_SC_751",
-    "WarsongCommanderLegacy",
-    "WarsongCommanderVanilla",
-    "WarsongCommander_CORE_EX1_084",
-    "WebOfDeception_EDR_523",
-    "YellingYodeler",
-    "YoggInTheBox_TOY_372",
-    "YouthfulBrewmaster",
-    "YouthfulBrewmasterCore",
-    "YouthfulBrewmasterLegacy",
-    "YouthfulBrewmasterVanilla",
-    "YshaarjRageUnbound"
+    "GorillabotA3Core"
+  ],
+  "BEAST + MINION": [
+    "AbsorbentParasite",
+    "Banjosaur",
+    "TheCurator_CORE_KAR_061",
+    "TheCurator_KAR_061"
   ],
   "WEAPON": [
     "AbyssalBassist",
@@ -339,11 +30,14 @@
     "Khazgoroth_TitanforgeToken",
     "LadyAshvane_Story_11_LadyAshvane",
     "LadyAshvane_TSC_943",
+    "LoadTheChamber_WW_409",
     "ManAtArms",
     "Obsidiansmith",
     "PillageTheFallenTavernBrawl",
     "Plunder",
     "RaidTheDocks",
+    "RaidingParty",
+    "RaidingParty_CORE_TRL_124",
     "RatchetPrivateer",
     "RuneforgingCore",
     "Runeforging_LEG_RLK_715",
@@ -380,7 +74,6 @@
     "AcolyteOfDeath_CORE_RLK_121",
     "AmateurPuppeteer_AmateurPuppeteerToken_TOY_828t",
     "AmateurPuppeteer_TOY_828",
-    "AmorphousSlime",
     "ArmsDealer_RLK_824",
     "Banshee_RLK_957",
     "BoneFlinger",
@@ -405,10 +98,10 @@
     "NerubianVizier",
     "NoxiousInfiltrator",
     "PoisonBreath_CORE_EDR_002",
+    "ProstheticHand_DEEP_015",
     "RottingNecromancer",
     "ShadowWordUndeath",
     "SicklyGrimewalker_YOG_512",
-    "SinisterSoulcage_YOG_513",
     "SkeletalSidekickCore_RLK_958",
     "SoulburnerVaria_YOG_520",
     "TwistedTether",
@@ -439,6 +132,7 @@
     "HerbivoreAssistant_DINO_419",
     "JungleGym_TOY_359",
     "KathrenaWinterwisp",
+    "KingKrush_KingsDecree_THD_012p",
     "KingOfBeasts",
     "KingOfBeasts_WON_162",
     "KnightOfTheWild",
@@ -479,6 +173,7 @@
     "SupremeDinomancy_TLC_828",
     "TavishStormpike_BAR_038",
     "TendingDragonkin_FIR_960",
+    "TheFoodChain_TLC_830",
     "ThornmantleMusician",
     "Thunderbringer_WW_440",
     "VirmenSensei_CFM_816",
@@ -504,6 +199,8 @@
     "PatchesThePirate_LockedAndLoaded_THD_025p",
     "PirateAdmiralHooktusk",
     "RaidTheDocks",
+    "RaidingParty",
+    "RaidingParty_CORE_TRL_124",
     "RingmasterWhatley",
     "SailboatCaptain_VAC_937",
     "ShadyDealer",
@@ -521,10 +218,8 @@
     "AdvancedTargetingMonocle",
     "AncientKrakenbane",
     "AnimatedMoonwell_EDR_254",
-    "ApexisSmuggler",
     "ArcaneArtificer",
     "ArcaneArtificerCore",
-    "ArcaneFlakmage",
     "ArcaneQuiver_RLK_817",
     "ArchmageAntonidas",
     "ArchmageAntonidasLegacy",
@@ -532,58 +227,44 @@
     "ArchmageVargoth",
     "ArkoniteRevelation_GDB_852",
     "ArrowSmith",
-    "AshleafPixie_FIR_961",
     "AudioSplitter",
     "BabaNaga",
     "BalindaStonehearth",
     "BarbaricSorceress",
     "BargainBin_MIS_105",
     "BenevolentBanker_WW_384",
-    "Bioluminescence",
-    "BlackjackStunner",
+    "BlindeyeSharpshooter_WW_402",
     "Bloodbloom",
     "BookOfSpecters",
     "BrollBearmantle_EDR_853",
     "BumblingBellhop_VAC_521",
     "CactusCutter_WW_327",
-    "CannonmasterSmythe_BAR_879",
     "CardGrader_TOY_054",
-    "CarielRoame_BAR_902",
-    "CelestialShot_YOG_082",
     "ChiaDrake_ChiaDrakeToken_TOY_801t",
     "ChiaDrake_Cultivate_TOY_801a",
-    "ChiaDrake_SeedlingGrowth_TOY_801b",
     "ChiaDrake_TOY_801",
     "ClearancePromoter_TOY_390",
     "ClericOfAnshe",
     "ClericOfScales",
-    "CloakedHuntress_CORE_KAR_006",
-    "CloakedHuntress_KAR_006",
     "ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48",
     "ClockworkAssistantTavernBrawl_PVPDR_Toki_T5",
     "ClockworkAssistant_GILA_907",
     "ClockworkAssistant_ONY_005ta11",
     "CoilskarCommander",
-    "Colossus_SC_758",
-    "CommanderRhyssa",
     "CommanderSivara_TSC_087",
     "ConchsCall",
     "Conductivity_YOG_522",
     "ConjuredBookkeeper_TLC_226",
     "ContaminatedLasher_YOG_528",
-    "ContractConjurer",
-    "CoralKeeper",
     "CosmicKeyboard",
     "Cosmonaut_GDB_443",
+    "CrushclawEnforcer",
     "DarkmoonMagician_MIS_303",
     "Deathchiller_CORE_RLK_083",
     "Deathchiller_RLK_083",
     "DeckOfLunacy",
     "DeepwaterEvoker",
-    "DeviateDreadfang",
     "DevoutDungeoneer",
-    "DevoutPupil",
-    "DiscoveryOfMagic",
     "DoorOfShadows",
     "DoorOfShadows_DoorOfShadowsToken",
     "DoubleTime",
@@ -592,81 +273,55 @@
     "DragonscaleArmaments_EDR_251",
     "DryscaleDeputy_WW_383",
     "ElementalAllies",
-    "ElementalInspiration",
     "EnergyShaper",
     "EtherealOracle_GDB_310",
     "ExarchHataaru_TheGalaxysLensToken_GDB_136t",
     "FaeTrickster_EDR_571",
     "FarseerNobundo_GDB_447",
-    "FelfireBlaze_FIR_904",
     "FelfireInTheHole",
+    "FelscaleEvoker",
     "Fetch_TOY_352",
-    "FlameWavesTavernBrawl",
-    "FlamesOfTheKirinTorTavernBrawl",
-    "FlickeringLightbot_FlickeringLightbotToken_MIS_918t",
-    "FlickeringLightbot_MIS_918",
     "Flowrider",
     "FrostweaveDungeoneer",
-    "Gazlowe",
     "GlacialAdvance_RLK_512",
-    "GlacialDownpourTavernBrawl",
+    "GladesongSiren_TLC_819",
     "GlowflySwarm",
+    "GolgannethTheThunderer",
     "GreenThumbGardener",
-    "GreySageParrot",
-    "Groundskeeper",
-    "GroveShaper_EDR_271",
-    "GuardianLightTavernBrawl",
     "GuffRunetotem_BAR_720",
+    "GuidingFigure_GDB_106",
     "GuitarSoloist",
-    "Halkias",
     "HallazealTheAscended",
     "HallazealTheAscended_WON_336",
     "HamuulRunetotem_EDR_845",
     "Handmaiden",
     "HarnessTheElementsTavernBrawl",
     "HedraTheHeretic_TSC_658",
-    "HeraldOfChaos",
-    "HeraldOfLight",
-    "HeraldOfNature",
-    "HiHoSilverwing_WW_344",
     "HighAbbessAlura",
-    "HolyCowboy_WW_335",
-    "HolyGlowsticks_MIS_709",
-    "HotStreak",
     "Hullbreaker",
     "IcebloodTower",
     "IdolsOfEluneTavernBrawl",
-    "IllidanStormrage_FelInside_THD_004p",
     "Illuminate",
-    "ImpCredibleTrousersTavernBrawl",
     "IncantersFlow",
-    "InconspicuousRider",
-    "InfernoHerald_FIR_913",
-    "InquisitiveCreation",
-    "IronRootsTavernBrawl",
+    "JaceDarkweaver",
     "JotunTheEternal",
     "JungleJammer",
-    "KaraTheDarkStar_GDB_127",
     "KhadgarsScryingOrb",
     "Kindle_DALA_911",
     "Kindle_ULDA_911",
+    "KingKrush_KingsDecree_THD_012p",
     "KingTide_VAC_524",
     "KnightOfAnointment",
     "KolkarPackRunner",
-    "KureTheLightBeyond_GDB_442",
     "LadyAnacondra_WC_006",
-    "LadyDarkvein",
-    "LadyDarkvein_CORE_REV_373",
-    "LadyDeathwhisper_RLK_713",
+    "LadyNazjar_TID_709",
     "LadyStheno_TSC_218",
     "LadyVashj_VashjPrimeToken",
     "LearnDraconic",
-    "LesserEmeraldSpellstone",
-    "LesserEmeraldSpellstone_EmeraldSpellstoneToken",
-    "LesserEmeraldSpellstone_GreaterEmeraldSpellstoneToken",
     "LifebindersGift",
     "LifebindersGrowth",
-    "Lifeguard_VAC_919",
+    "LightOfTheNewMoon_FIR_918",
+    "LightmawNetherdrake",
     "LinaShopManager_TOY_531",
     "LockAndLoad_AT_061",
     "LockAndLoad_CORE_AT_061",
@@ -684,30 +339,22 @@
     "MarshlandThresher_TLC_256",
     "Marshspawn_BT_115",
     "Marshspawn_CORE_BT_115",
-    "MechanizedMagma_TLC_224",
     "MeddlesomeServant_YOG_518",
-    "MedivhsValet",
     "MistahVistah_VAC_519",
-    "Multicaster",
     "MurkwaterScribe",
-    "Myrmidon",
     "NagaGiant",
+    "NiriOfTheCrater_TLC_836",
+    "NorthernNavigation",
     "NostalgicInitiate_NostalgicInitiateToken_TOY_340t1",
     "NostalgicInitiate_TOY_340",
     "OopsAllSpellsTavernBrawl",
-    "OrionMansionManager",
+    "Overheat_FIR_906",
     "OverseerFrigidaraCore_RLK_224",
     "OverseerFrigidaraCore_RLK_Prologue_RLK_224",
     "OverseerFrigidara_LEG_RLK_224",
     "PalmReading",
     "ParchedDesperado_WW_407",
     "PartyPortalTavernBrawl_PVPDR_SCH_Active08",
-    "Pelagos_CORE_REV_250",
-    "Pelagos_REV_250",
-    "Pelagos_REV_781",
-    "PettingZoo",
-    "PhaseStalker",
-    "PopgarThePutrid_WW_091",
     "PortalmancerSkyla_WORK_063",
     "PowerWordFortitude",
     "PreparationCore",
@@ -717,18 +364,14 @@
     "PrimalDungeoneer",
     "PrimordialProtector_BAR_042",
     "PrisonBreaker_YOG_411",
-    "ProfessorPutricide_CORE_ICC_204",
-    "ProfessorPutricide_ICC_204",
     "Pyrotechnician",
     "QueenAzshara_TSC_641",
     "Queensguard",
+    "RadianceOfAzshara_TSC_635",
     "RaidTheSkyTemple",
     "RajNazjan",
-    "RambunctiousStuffy_TOY_821",
     "RayllaSandSculptor_VAC_424",
-    "RazzleDazzler_VAC_301",
-    "ReachEquilibrium_CleanseTheShadowToken_TLC_817t",
-    "ReachEquilibrium_CorruptTheLightToken_TLC_817t2",
+    "ReachEquilibrium_TLC_817",
     "Reforestation_AidOfTheForest_EDR_843a",
     "Reforestation_EDR_843",
     "Reforestation_ReforestationToken_EDR_843t1",
@@ -738,67 +381,41 @@
     "RimefangSwordCore",
     "RimefangSword_LEG_RLK_710",
     "RimescaleSiren",
-    "Rimetongue",
     "RingOfRefreshmentTavernBrawl",
     "RitualOfTheNewMoon_EDR_461",
-    "RobeOfTheApprenticeTavernBrawl",
-    "RobeOfTheMagi",
     "RobesOfShrinkingTavernBrawl",
     "RuleModifier_SpreadOfCorruptionToken_TTN_002t45",
-    "RuneDagger",
     "SaroniteShambler_YOG_521",
-    "SaygeSeerOfDarkmoon",
-    "ScorchingWinds_FIR_910",
-    "Scorchreaver_FIR_952",
+    "Saruun_GDB_304",
     "ScrollSavvy",
-    "SecretkeeperLegacy",
-    "SecretkeeperVanilla",
     "ShadowOfDemise",
     "ShadowVisions",
-    "Shadowborn",
-    "ShadowclothNeedle",
     "ShatariCloakfield_GDB_103",
     "SheldrasMoontree",
-    "ShieldBattery_SC_759",
-    "ShimmeringSunfish",
     "ShirvallahTheTiger",
     "ShiveringSorceress",
-    "Sif",
-    "SilvermoonFarstrider_RLK_826",
     "SkulkingGeist_CORE_ICC_701",
     "SkulkingGeist_ICC_701",
     "SlitheringDeathscale",
-    "SparkjoyCheat",
+    "SorcerersGambit",
     "SpectralTrainee",
     "Spellcoiler",
     "SpiritGuide",
     "SpiritGuide_CORE_AV_328",
     "SpitefulSummoner",
-    "SpreadingSaplingsTavernBrawl",
-    "StaffOfPainTavernBrawl",
-    "StarlightGroove",
-    "StarlightReactor_GDB_108",
+    "SpitelashSiren",
     "Starscryer",
-    "StarstrungBow",
     "SteamGuardian",
-    "SunfuryChampion",
-    "SunsapperLynessa_VAC_507",
     "SunstridersCrownTavernBrawl",
     "Surfalopod_VAC_443",
     "SwiftscaleTrickster",
-    "TalentedArcanist",
-    "TamsinRoame_BAR_918",
     "TangledWrath",
     "TheFistOfRaDen",
-    "TheGardensGrace",
     "TheStoneOfJordanTavernBrawlToken",
     "TheUpperHand",
-    "Thoribelore",
     "ThriveInTheShadowsCore",
     "TidePools_VAC_522",
     "TidepoolPupil_VAC_304",
-    "ToadOfTheWilds",
-    "TopiorTheShrubbagazzor",
     "TortollanPilgrim",
     "Triangulate_GDB_451",
     "TrolleyProblem_WW_436",
@@ -806,12 +423,7 @@
     "Tyrande_EDR_464",
     "UnderTheSea_VAC_431",
     "UngoroBrochure_DalaranBrochureToken_WORK_050t",
-    "UnstableMagicTavernBrawl",
-    "UrchinSpines",
     "Ursol_EDR_259",
-    "VelensChosen",
-    "VeteranWarmedic",
-    "Vexallus",
     "ViciousSlitherspear_CORE_TSC_827",
     "ViciousSlitherspear_TSC_827",
     "VoidFlayer",
@@ -823,11 +435,272 @@
     "WildPyromancerCore",
     "WildPyromancerLegacy",
     "WildPyromancerVanilla",
-    "WisdomOfNorgannon",
     "WishOfTheNewMoon_EDR_460",
-    "WitherTheWeakTavernBrawl",
+    "WrathspineEnchanter",
     "YoggSaronHopesEnd_OG_134",
     "YoggSaronMasterOfFate"
+  ],
+  "MINION": [
+    "AegwynnTheGuardianCore",
+    "AegwynnTheGuardian_LEG_CS3_001",
+    "AlakirTheWindsOfTime_WON_092h",
+    "AlarmedSecuritybot_YOG_510",
+    "AllianceBannerman",
+    "AlwaysABiggerJormungar",
+    "AmitusThePeacekeeper",
+    "AmitusThePeacekeeper_ReinforcedToken",
+    "AncestorsCall",
+    "Anchorite_GDB_441",
+    "AnimaExtractor",
+    "AnimaExtractor_CORE_REV_332",
+    "AnimatedBerserker_CORE_ICC_238",
+    "AnimatedBerserker_ICC_238",
+    "Anubrekhan_RLK_659",
+    "ApexisBlast",
+    "Assembly",
+    "Assembly_Assembly",
+    "AuchenaiDeathSpeaker_GDB_469",
+    "Aviana",
+    "Aviana_WON_012",
+    "AzsharanGardens_SunkenGardensToken",
+    "BackstageBouncer",
+    "BargainBin_MIS_105",
+    "Barnes",
+    "BatMask_DINO_402",
+    "BeanstalkBrute_EDR_230",
+    "Birdwatching_VAC_408",
+    "BlackrockNRoll",
+    "BladeOfTheBurningSun",
+    "BloodMoonTavernBrawl",
+    "BloodOfGhuun",
+    "BobTheBartender_BG31_BOB",
+    "BobTheBartender_FindATripleToken_BG31_BOBt4",
+    "Boneshredder",
+    "Breakdance",
+    "BronzeSignetTavernBrawl",
+    "BusyBot_WORK_002",
+    "CapturedFlag",
+    "CarnivorousCube",
+    "CarnivorousCubicle_WORK_042",
+    "CatrinaMuerte",
+    "CatrinaMuerteCore",
+    "CharredChameleon_FIR_908",
+    "ChemicalSpill_TOY_602",
+    "ChorusRiff",
+    "ClawMachine",
+    "CliffDive_VAC_926",
+    "ColiferoTheArtist_TOY_703",
+    "Commencement",
+    "CowardlyGrunt",
+    "CreationProtocol",
+    "CreationProtocol_CreationProtocolToken",
+    "CupOMuscle_CupOMuscleToken_VAC_338t",
+    "CupOMuscle_CupOMuscleToken_VAC_338t2",
+    "CupOMuscle_VAC_338",
+    "DaUndatakah",
+    "DealWithADevil",
+    "DeckOfChaos",
+    "DevilsaurMask_DINO_403",
+    "DigForTreasure_TOY_510",
+    "DimensionalRipper",
+    "DinnerPerformer",
+    "DisciplinarianGandling",
+    "DiscoMaul",
+    "DivineStar_GDB_460",
+    "DreamboundRaptor_EDR_849",
+    "DredgerStaff",
+    "DredgerStaff_CORE_REV_338",
+    "EchoOfMedivh",
+    "EliseBadlandsSavior_WW_392",
+    "ElixirOfVigorTavernBrawl",
+    "ElvenMinstrel",
+    "ElvenMinstrelCore",
+    "Embiggen",
+    "EndbringerUmbra_TLC_106",
+    "Ensmallen_TOY_805",
+    "EternalServitude_CORE_ICC_213",
+    "EternalServitude_ICC_213",
+    "Eureka",
+    "EvolutionChamber_SC_021",
+    "FeldoreiWarband",
+    "Fetch_TOY_352",
+    "Firegill_DINO_404",
+    "FlashSale_TOY_716",
+    "FoodFight_EntréeToken_VAC_533t",
+    "FoodFight_VAC_533",
+    "FreeAdmission",
+    "FrontLines_Story_11_FrontLines",
+    "FrontLines_TID_949",
+    "FungalFortunes",
+    "GatherYourParty",
+    "GreedyGainsTavernBrawl",
+    "GrimestreetOutfitter",
+    "GrimestreetOutfitterCore",
+    "GrimyGadgeteer",
+    "GuidingFigure_GDB_106",
+    "GuitarSoloist",
+    "HabeasCorpses",
+    "Hadronox_CORE_ICC_835",
+    "Hadronox_ICC_835",
+    "HagathasEmbrace",
+    "HagathasEmbraceTavernBrawl",
+    "HarmonicMetal",
+    "HarmonicMetal_DissonantMetalToken",
+    "HatchingCeremony_DINO_405",
+    "HawkstriderRancher",
+    "HealingWave",
+    "HealingWave_WON_320",
+    "Hellion_HellbatToken_SC_412t",
+    "Hellion_SC_412",
+    "HopeOfQuelthalas",
+    "ImpKingRafaam_ImpKingRafaamToken",
+    "ImpKingRafaam_REV_789",
+    "ImpKingRafaam_REV_835",
+    "ImployeeOfTheMonth_WORK_009",
+    "ImprisonedScrapImp",
+    "Insight",
+    "Insight_InsightToken",
+    "InvigoratingSermon",
+    "IxlidFungalLord",
+    "JepettoJoybuzz",
+    "KabalTalonpriest",
+    "Kazakus_IchorOfUndeathToken_CFM_621t37",
+    "Kazakus_IchorOfUndeathToken_CFM_621t38",
+    "Kazakus_IchorOfUndeathToken_CFM_621t39",
+    "KeeperOfFlame_FIR_928",
+    "KeepersStrength_YOG_509",
+    "LadyInWhite",
+    "LesserDiamondSpellstone",
+    "LesserDiamondSpellstone_CORE_LOOT_507",
+    "LesserDiamondSpellstone_DiamondSpellstoneToken",
+    "LesserDiamondSpellstone_GreaterDiamondSpellstoneToken",
+    "LibramOfClarity_GDB_137",
+    "LightOfTheNewMoon_FIR_918",
+    "Lightspeed_GDB_457",
+    "LivingGarden_EDR_518",
+    "LohTheLivingLegend_TLC_257",
+    "LokenJailerOfYoggSaron",
+    "LongneckEgg_DINO_130",
+    "LorthemarTheron_RLK_593",
+    "Lurker_SC_009",
+    "Malfunction_MIS_107",
+    "ManufacturingError_TOY_371",
+    "MarkOfTheSpikeshell",
+    "MaskedReveler",
+    "MasterJouster",
+    "MastersCall",
+    "MastersCall_CORE_TRL_339",
+    "MaximaBlastenheimer",
+    "MeatGrinder_RLK_120",
+    "Melomania",
+    "Merithra_EDR_238",
+    "MoatLurker",
+    "MonstrousMosquito_EDR_816",
+    "MoshPit",
+    "Muckmorpher",
+    "MuscleOTron_YOG_525",
+    "MutatingInjection_NAX11_04",
+    "NightmareLordXavius_EDR_856",
+    "NiriOfTheCrater_TLC_836",
+    "NzothGodOfTheDeep",
+    "Obsidiansmith",
+    "OldMilitiaHornTavernBrawl",
+    "OldMilitiaHorn_MilitiaHornTavernBrawl",
+    "OldMilitiaHorn_VeteransMilitiaHornTavernBrawl",
+    "OrbitalHalo_GDB_439",
+    "OrbitalMoon_GDB_475",
+    "OutfitTailor",
+    "Overheat_FIR_906",
+    "OverlordSaurfang_BAR_334",
+    "OverlordsWhip",
+    "PaintersVirtue_TOY_810",
+    "PantherMask_DINO_432",
+    "PendantOfEarth_DEEP_026",
+    "PileOnHeroic",
+    "PowerChordSynchronize",
+    "PowerSlider",
+    "Prescience",
+    "ProvingGrounds",
+    "Psychopomp",
+    "PuppetmasterDorian_MIS_026",
+    "RaiseDead_SCH_514",
+    "Reforestation_EDR_843",
+    "Reforestation_Fertilize_EDR_843b",
+    "Reforestation_ReforestationToken_EDR_843t1",
+    "Resurrect_BRM_017",
+    "Resuscitate_TLC_818",
+    "RiskySkipper",
+    "RotheartDryad_EDR_485",
+    "RunningWild",
+    "RunningWild_RunningWild",
+    "SeafloorSavior_TSC_083",
+    "Seismopod_DINO_421",
+    "SesselieOfTheFaeCourt_REV_319",
+    "SesselieOfTheFaeCourt_REV_782",
+    "ShadowEssence_CORE_ICC_235",
+    "ShadowEssence_ICC_235",
+    "Shadowcaster",
+    "Shadowcasting101TavernBrawl",
+    "ShadowstepCore",
+    "ShadowstepLegacy",
+    "ShadowstepVanilla",
+    "ShroudOfConcealment",
+    "SilvermoonBrochure_WORK_017",
+    "SilvermoonPortal",
+    "SilvermoonPortal_WON_309",
+    "SmolderingStrength_FIR_914",
+    "SoulrestCeremony_DINO_417",
+    "SowTheSeedsTavernBrawl",
+    "SpiritOfTheBadlands_MirageToken_WW_337t",
+    "SpiritOfTheBadlands_WW_337",
+    "SpiritPeddler_WORK_015",
+    "SpotTheDifference_TOY_374",
+    "SrExcavatorTavernBrawl",
+    "StoryOfBarnabus_TLC_231",
+    "StrengthInNumbers",
+    "SuperchargeTavernBrawl",
+    "SurvivalOfTheFittest",
+    "Switcheroo",
+    "TenGallonHat_WW_811",
+    "TheBoomReaver",
+    "TheBoomship",
+    "TheDarkPortal_BT_302",
+    "TheLichKing_ArmyOfTheFrozenThroneToken",
+    "TheOneAmalgamBand",
+    "TogwagglesScheme",
+    "TravelmasterDungar_WORK_043",
+    "TyrsTears",
+    "TyrsTears_TyrsTearsToken",
+    "UngoroBrochure_WORK_050",
+    "UnlockedPotential",
+    "VarianWrynn_AT_072",
+    "Vectus",
+    "ViciousBloodworm_RLK_711",
+    "VitalitySurge",
+    "WakenerOfSouls_GDB_468",
+    "WebOfDeception_EDR_523",
+    "YoggInTheBox_TOY_372",
+    "YouthfulBrewmaster",
+    "YouthfulBrewmasterCore",
+    "YouthfulBrewmasterLegacy",
+    "YouthfulBrewmasterVanilla",
+    "YshaarjRageUnbound"
+  ],
+  "SUMMONS_TREANT": [
+    "Aeroponics",
+    "AncientOfGrowth",
+    "AncientOfGrowth_AncientGrowth",
+    "ConservatorNymph",
+    "Cultivation",
+    "ForestWardenOmu_RapidGrowth_THD_007p",
+    "OvergrownBeanstalk_MIS_301"
+  ],
+  "IS_TREANT": [
+    "Aeroponics",
+    "AncientOfGrowth",
+    "AncientOfGrowth_AncientGrowth",
+    "ConservatorNymph",
+    "Cultivation"
   ],
   "INFUSE": [
     "AfterlifeAttendant",
@@ -835,9 +708,11 @@
   ],
   "MINION + RUSH": [
     "AkaliTheRhino",
+    "ClearTheWay",
     "DivingGryphon",
     "PotionOfSparkingTavernBrawl",
     "RushTheStage",
+    "SpecialDeliveryTavernBrawl",
     "StageDive",
     "StageDive_StageDive",
     "TownCrier_CORE_GIL_580",
@@ -848,31 +723,21 @@
   ],
   "DIVINE_SHIELD": [
     "AlakirTheWindsOfTime_WON_092h",
-    "FancyPackaging_TOY_881",
-    "Funkfin",
     "Jitterbug",
     "PipsiPainthoof_TOY_812",
-    "RighteousReservesTavernBrawl",
     "TorethTheUnbreaking_EDR_258",
     "VarianKingOfStormwind"
   ],
   "TAUNT": [
     "AlakirTheWindsOfTime_WON_092h",
-    "Battlepickaxe_WW_347",
-    "Bolster",
-    "BulkUp",
-    "DetonationJuggernaut_WW_329",
-    "FirePlumesHeart",
     "Hadronox_CORE_ICC_835",
     "Hadronox_ICC_835",
     "HoldTheLineTavernBrawl",
-    "IntoTheFray",
     "LastStand",
+    "MarkOfTheSpikeshell",
     "PipsiPainthoof_TOY_812",
-    "RazormaneBattleguard",
     "StolenGoods",
     "StolenGoods_WON_110",
-    "UnluckyPowderman_WW_367",
     "VarianKingOfStormwind"
   ],
   "WINDFURY": [
@@ -888,6 +753,7 @@
   "DISCOVER": [
     "AlienEncounters_GDB_237",
     "OpenTheDoorwaysTavernBrawl",
+    "OrbOfRevelationTavernBrawl",
     "ParallaxCannon_GDB_843",
     "RangariScout_GDB_841",
     "StakingAClaimTavernBrawl",
@@ -902,7 +768,6 @@
     "AllFelBreaksLoose_AllFelBreaksLooseToken",
     "AllFelBreaksLoose_CORE_MAW_012",
     "AllShallServeTavernBrawl",
-    "Archimonde_GDB_128",
     "BlackHole_GDB_126",
     "BloodreaverGuldan_CORE_ICC_831",
     "BloodreaverGuldan_ICC_831",
@@ -913,7 +778,7 @@
     "Demonfuse_WON_093",
     "Felosophy",
     "FelscaleEvoker",
-    "ForebodingFlame_GDB_121",
+    "FreeAdmission",
     "GameMasterNemsy_TOY_524",
     "InfernalStratagem_GDB_122",
     "MalganisCore",
@@ -929,54 +794,34 @@
     "Voidcaller",
     "VoidcallerCore"
   ],
-  "BATTLECRY": [
-    "AllTogetherNowTavernBrawl",
-    "AuctionhouseGavel",
-    "BattleTotem_LOOTA_846",
-    "BrannBronzebeard_BrannsSaddle_THD_042p",
-    "BrannBronzebeard_CORE_LOE_077",
-    "BrannBronzebeard_LOE_077",
-    "BrilliantMacaw",
-    "CorruptTheWaters",
-    "Murmur_GDB_448",
-    "MurmuringElemental",
-    "ParrotSanctuary_VAC_409",
-    "RallyTheTroopsTavernBrawl",
-    "Shudderblock_ShudderblockToken_TOY_501t",
-    "Shudderblock_TOY_501",
-    "Turbulus_WORK_013"
-  ],
-  "COST_MORE_2": [
-    "AllTogetherNowTavernBrawl",
-    "OrbOfRevelationTavernBrawl"
+  "BATTLECRY + COST_MORE_2": [
+    "AllTogetherNowTavernBrawl"
   ],
   "MINION + NOT_TRIBELESS": [
     "AllYouCanEat_VAC_528",
+    "AmalgamOfTheDeep",
     "FlightOfTheFirehawk_TLC_222",
+    "MenagerieJug_CORE_WON_142",
+    "MenagerieJug_WON_142",
+    "MenagerieMug_CORE_WON_141",
+    "MenagerieMug_WON_141",
+    "PartyAnimal",
+    "RoaringApplause",
+    "RockMasterVoone_ETC_121",
+    "SpiritOfTheMountain_TLC_229",
     "ThePurator",
+    "TortollanStoryteller_TLC_254",
     "TrustyCompanion_WW_027"
   ],
   "OVERLOAD": [
     "AlteredChord",
     "DiscipleOfGolganneth",
+    "Flowrider",
     "GolgannethTheThunderer",
     "InvestmentOpportunity",
     "Inzah",
     "JazzBass",
     "PebblyPage_WON_090"
-  ],
-  "NOT_TRIBELESS": [
-    "AmalgamOfTheDeep",
-    "MenagerieJug_CORE_WON_142",
-    "MenagerieJug_WON_142",
-    "MenagerieMug_CORE_WON_141",
-    "MenagerieMug_WON_141",
-    "NzothGodOfTheDeep",
-    "PartyAnimal",
-    "RoaringApplause",
-    "RockMasterVoone_ETC_121",
-    "SpiritOfTheMountain_TLC_229",
-    "TortollanStoryteller_TLC_254"
   ],
   "DRAGON": [
     "AlexstraszasChampion",
@@ -991,6 +836,8 @@
     "Chillmaw",
     "Chillmaw_CORE_AT_123",
     "Chronobreaker",
+    "ClericOfScales",
+    "CloudSerpent_TLC_888",
     "ClutchOfCorruption_EDR_454",
     "CorrosiveBreath",
     "CrazedNetherwing",
@@ -1052,89 +899,89 @@
     "WingCommander",
     "WyrmrestAgent"
   ],
+  "MINION + UNDEAD": [
+    "AmorphousSlime",
+    "SinisterSoulcage_YOG_513"
+  ],
   "DEATHRATTLE + MINION": [
     "AmuletOfUndying",
+    "ArchdruidOfThorns_EDR_491",
+    "AwakenTheMakers",
+    "BrittleboneBuccaneer_VAC_436",
     "CarrionStudies",
     "DeadRinger",
     "DeathBlossomWhomper",
+    "DeathGrowl",
     "DeathlyDeathTavernBrawl",
+    "DeathstriderTavernBrawl",
     "DevoutBlessingsTavernBrawlToken",
     "ExpeditedBurialTavernBrawl",
+    "FelfireBonfire_VAC_952",
+    "ForsakenLieutenant_AV_601",
     "HedgeMaze_REV_333",
     "HedgeMaze_REV_792",
     "HighCultistHerenn_TLC_810",
     "JewelOfNzoth",
+    "MummyMagic",
     "NecriumApothecary",
+    "NineLives",
+    "NzothTheCorruptor",
+    "NzothTheCorruptor_DarkMachinations_THD_039p",
     "PrincessTavernBrawl",
+    "RavenousFelhunter_EDR_891",
     "ScourgeIllusionist",
+    "Shattershambler",
     "TamsinsPhylactery",
+    "TerrorscaleStalker",
+    "TerrorscaleStalker_CORE_UNG_800",
     "TombLurker_CORE_ICC_098",
     "TombLurker_ICC_098",
     "Tuskpiercer",
     "Tuskpiercer_CORE_BAR_330",
     "TwilightsCall",
+    "UnearthedRaptor",
     "VengefulSpirit_BAR_328",
-    "XyrellaTheDevout"
+    "XyrellaTheDevout",
+    "YellingYodeler"
   ],
   "SECRET": [
     "AncientMysteries",
     "AnonymousInformant",
     "AnonymousInformant_CORE_REV_841",
-    "ApexisSmuggler",
-    "ArcaneFlakmage",
     "Arcanologist",
     "ArcanologistCore",
-    "BlackjackStunner",
-    "CannonmasterSmythe_BAR_879",
     "ChattyBartender",
-    "CloakedHuntress_CORE_KAR_006",
-    "CloakedHuntress_KAR_006",
-    "CommanderRhyssa",
-    "ContractConjurer",
     "CostumedSinger",
     "DunBaldarBunker",
     "EaglehornBowLegacy",
     "EaglehornBowVanilla",
     "GhastlyGravedigger",
-    "Halkias",
-    "InconspicuousRider",
     "KabalCrystalRunner",
     "KabalCrystalRunner_WON_308",
-    "LesserEmeraldSpellstone",
-    "LesserEmeraldSpellstone_EmeraldSpellstoneToken",
-    "LesserEmeraldSpellstone_GreaterEmeraldSpellstoneToken",
     "MadScientist",
-    "MedivhsValet",
     "MysteriousChallenger",
     "MysteriousChallenger_WON_334",
-    "OrionMansionManager",
-    "PettingZoo",
-    "PhaseStalker",
     "PrivateEye",
-    "ProfessorPutricide_CORE_ICC_204",
-    "ProfessorPutricide_ICC_204",
-    "SaygeSeerOfDarkmoon",
+    "Product9_MIS_914",
     "ScuttlebuttGhoul",
     "ScuttlebuttGhoul_CORE_REV_900",
     "SecretStudiesTavernBrawl",
-    "SecretkeeperLegacy",
-    "SecretkeeperVanilla",
-    "SparkjoyCheat",
-    "SpringTheTrap",
-    "StarstrungBow"
+    "SpringTheTrap"
   ],
   "COST_LESS_4 + MINION": [
     "AnimateDead"
   ],
   "ELEMENTAL": [
-    "AlakirTheWindlord_ElementalEvocation_THD_026p",
     "AnimatedAvalanche",
     "AquaArchivist",
     "AridStormer",
     "AzeriteGiant_WW_025",
     "Blazecaller",
+    "BlazingAccretion_GDB_302",
     "BralmaSearstone_TLC_228",
+    "CloudSerpent_TLC_888",
     "DangBlastedElemental_WW_397",
+    "ElementalAllies",
     "ElementalEvocation",
     "ElementaryReaction",
     "ErodedSediment_WW_428",
@@ -1157,6 +1004,7 @@
     "OverflowSurger_WW_424",
     "PrimalDungeoneer",
     "Sandbinder",
+    "Saruun_GDB_304",
     "ShaleSpider_DEEP_034",
     "SkarrTheCatastrophe_WW_026",
     "SolarFlare_GDB_305",
@@ -1174,6 +1022,7 @@
   "EXCAVATE": [
     "AntiqueFlinger_WW_413",
     "BadlandsBrawler_WW_349",
+    "BountyBoard_WW_003",
     "HarrowingOx_WW_356",
     "PileOfBones_WW_324",
     "ReliquaryResearcher_WW_432",
@@ -1193,17 +1042,13 @@
     "ArcaneFluxTavernBrawl",
     "ArcaneQuiver_RLK_817",
     "ArcaniteCrystalTavernBrawl",
-    "SilvermoonFarstrider_RLK_826",
-    "StarlightReactor_GDB_108",
-    "UnstableMagicTavernBrawl",
-    "Vexallus"
+    "LadyNazjar_TID_709",
+    "SorcerersGambit"
   ],
   "NOT_IN_INITIAL_DECK": [
     "ArcaneLuminary",
-    "Archimonde_GDB_128",
     "DragonscaleArmaments_EDR_251",
     "Dreamwarden_EDR_256",
-    "ForebodingFlame_GDB_121",
     "KaelthasSunstrider_FelFueled_THD_043p",
     "LeylineManipulator",
     "ManaGiant",
@@ -1212,89 +1057,54 @@
     "Steamcleaner_CORE_REV_946",
     "StickyFingersTavernBrawl",
     "StoryOfTheWaygate_TLC_364",
-    "TaethelanBloodwatcher_WW_430",
     "Techysaurus_DINO_409",
     "WayOfTheShell_TLC_513hp"
   ],
-  "DEATHRATTLE": [
-    "ArchdruidOfThorns_EDR_491",
-    "AwakenTheMakers",
-    "BaronRivendare_CORE_FP1_031",
-    "BaronRivendare_FP1_031",
-    "BarrensTrapper",
-    "Boneshredder",
-    "BoomWrench_BoomWrenchToken_TOY_604t",
-    "BoomWrench_TOY_604",
-    "BrittleboneBuccaneer_VAC_436",
-    "CountessAshmore",
-    "DaUndatakah",
-    "DeathGrowl",
-    "DeathstriderTavernBrawl",
-    "DreadRaptor_TLC_432",
-    "EndbringerUmbra_TLC_106",
-    "FelfireBonfire_VAC_952",
-    "FerociousFelbat_EDR_892",
-    "ForsakenLieutenant_AV_601",
-    "MummyMagic",
-    "NecriumBlade",
-    "NecriumVial",
-    "NineLives",
-    "NzothTheCorruptor",
-    "NzothTheCorruptor_DarkMachinations_THD_039p",
-    "PlayDead_CORE_ICC_052",
-    "PlayDead_ICC_052",
-    "RavenousFelhunter_EDR_891",
-    "Razorboar",
-    "RazorfenBeastmaster",
-    "ReturnPolicy_MIS_102",
-    "RollTheBones_CORE_ICC_201",
-    "RollTheBones_ICC_201",
-    "RottenRodent",
-    "ShallowGrave",
-    "Shattershambler",
-    "Smokescreen",
-    "SummonerDarkmarrow_VAC_503",
-    "TerrorscaleStalker",
-    "TerrorscaleStalker_CORE_UNG_800",
-    "TotemOfTheDead_LOOTA_845",
-    "UnearthedRaptor",
-    "Vectus",
-    "WakenerOfSouls_GDB_468",
-    "YellingYodeler"
+  "DEMON + NOT_IN_INITIAL_DECK": [
+    "Archimonde_GDB_128",
+    "ForebodingFlame_GDB_121"
   ],
   "FREEZE": [
     "ArcticArmorTavernBrawl",
     "RingOfBlackIceTavernBrawl",
     "SlipperySlope_VAC_513"
   ],
-  "PROTOSS": [
+  "MINION + PROTOSS": [
     "Artanis_SC_754",
-    "ChronoBoost_SC_750",
-    "Colossus_SC_758",
-    "ConstructPylons_SC_755",
+    "Blink_SC_761",
     "Hallucination_SC_757",
     "PhotonCannon_SC_753",
     "Sentry_SC_764",
-    "ShieldBattery_SC_759",
     "WarpGate_SC_751"
   ],
-  "COST_MORE_4": [
+  "COST_MORE_4 + SPELL": [
     "AshleafPixie_FIR_961",
-    "FerociousFelbat_EDR_892",
     "Groundskeeper",
-    "InventorBoom_TOY_607",
-    "StranglethornHeart",
-    "TimberTambourine"
+    "HagathaTheFabled_TOY_504"
   ],
   "RESTORE_HEALTH": [
     "AuchenaiPhantasm",
     "AuchenaiSoulpriestLegacy",
     "AuchenaiSoulpriestVanilla",
+    "BrittleboneDestroyer",
+    "ClericOfAnshe",
     "CrystalStag",
     "DeathMetalKnight",
     "DeathMetalKnight_CORE_ETC_523",
     "ShadowtouchedKvaldir_YOG_300",
     "Xyrella_BAR_735"
+  ],
+  "REBORN": [
+    "AuchenaiDeathSpeaker_GDB_469"
+  ],
+  "BATTLECRY + MINION": [
+    "AuctionhouseGavel",
+    "BrannBronzebeard_BrannsSaddle_THD_042p",
+    "FairyTaleForest_TOY_507",
+    "Murmur_GDB_448",
+    "ParrotSanctuary_VAC_409",
+    "Snapdragon",
+    "Turbulus_WORK_013"
   ],
   "MURLOC": [
     "AzsharanScavenger_SunkenScavengerToken",
@@ -1346,6 +1156,8 @@
     "CrystalWelder_GDB_130",
     "ExarchOthaar_GDB_856",
     "Ghost_SC_408",
+    "Hellion_SC_412",
+    "JimRaynor_SC_400",
     "LaserBarrage_GDB_845",
     "LockOn_SC_407",
     "Scv_SC_401",
@@ -1356,26 +1168,19 @@
     "Thor_ThorExplosivePayloadToken_SC_414t",
     "WarpDrive_GDB_474"
   ],
-  "COST_LESS_3": [
+  "COST_LESS_3 + MINION": [
     "BandOfBeesTavernBrawl",
-    "SunsapperLynessa_VAC_507",
-    "UnendingSwarm"
+    "CallToArms",
+    "OracleOfElune"
   ],
-  "ZERG": [
+  "MINION + ZERG": [
     "BanelingBarrage_SC_001",
     "CreepTumor_SC_011",
-    "Hydralisk_SC_008",
     "Infestor_SC_002",
-    "NydusWorm_SC_015",
     "Ravage_SC_004hp",
     "Roach_SC_012",
     "SpawningPool_SC_000",
     "Viper_SC_018"
-  ],
-  "BEAST + MINION": [
-    "Banjosaur",
-    "TheCurator_CORE_KAR_061",
-    "TheCurator_KAR_061"
   ],
   "COST_EQUAL_2 + SPELL": [
     "BarakKodobane_BAR_551",
@@ -1383,14 +1188,42 @@
   ],
   "NAGA": [
     "BarbedNets",
+    "BlindeyeSharpshooter_WW_402",
     "CoilCastingTavernBrawl",
     "ConchsCall",
     "CrushclawEnforcer",
+    "LoadTheChamber_WW_409",
     "NagasPride",
     "OasisOutlaws_WW_404",
     "Predation",
     "SeaweedStrike",
-    "SerpentWig_TSC_215"
+    "SerpentWig_TSC_215",
+    "SpitelashSiren"
+  ],
+  "DEATHRATTLE": [
+    "BaronRivendare_CORE_FP1_031",
+    "BaronRivendare_FP1_031",
+    "BarrensTrapper",
+    "Boneshredder",
+    "CountessAshmore",
+    "DaUndatakah",
+    "EndbringerUmbra_TLC_106",
+    "GuidingFigure_GDB_106",
+    "MaskedReveler",
+    "NecriumBlade",
+    "NecriumVial",
+    "PlayDead_CORE_ICC_052",
+    "PlayDead_ICC_052",
+    "ReturnPolicy_MIS_102",
+    "RollTheBones_CORE_ICC_201",
+    "RollTheBones_ICC_201",
+    "RottenRodent",
+    "ShallowGrave",
+    "Smokescreen",
+    "SummonerDarkmarrow_VAC_503",
+    "TotemOfTheDead_LOOTA_845",
+    "Vectus",
+    "WakenerOfSouls_GDB_468"
   ],
   "GIVES_ARMOR": [
     "BarricadeBasher_DINO_400",
@@ -1410,18 +1243,41 @@
     "VengefulWalloper",
     "WretchedExile"
   ],
-  "LEGENDARY": [
-    "AlakirTheWindlord_ElementalEvocation_THD_026p",
-    "ArchVillainRafaam_BeholdMyStuff_THD_032p",
-    "DisksOfLegendTavernBrawl",
-    "RingOfPhaseshiftingTavernBrawl"
+  "MINION + TAUNT": [
+    "Battlepickaxe_WW_347",
+    "Bolster",
+    "BulkUp",
+    "DetonationJuggernaut_WW_329",
+    "EnduranceTrainingTavernBrawl",
+    "FirePlumesHeart",
+    "IntoTheFray",
+    "QualityAssurance_TOY_605",
+    "RazormaneBattleguard",
+    "TortollanTraveler_VAC_518",
+    "UnluckyPowderman_WW_367",
+    "ValstannStaghelm_WON_345"
   ],
-  "DEALS_DAMAGE": [
+  "BATTLECRY": [
+    "BattleTotem_LOOTA_846",
+    "BrannBronzebeard_CORE_LOE_077",
+    "BrannBronzebeard_LOE_077",
+    "BrilliantMacaw",
+    "CorruptTheWaters",
+    "FieldContact",
+    "MurmuringElemental",
+    "RallyTheTroopsTavernBrawl",
+    "Shudderblock_ShudderblockToken_TOY_501t",
+    "Shudderblock_TOY_501",
+    "Shudderwock_GIL_820"
+  ],
+  "LEGENDARY": [
+    "ArchVillainRafaam_BeholdMyStuff_THD_032p",
+    "BountyBoard_WW_003"
+  ],
+  "DEALS_DAMAGE + SPELL": [
     "Bioluminescence",
     "CelestialShot_YOG_082",
-    "ChiaDrake_ChiaDrakeToken_TOY_801t",
     "ChiaDrake_SeedlingGrowth_TOY_801b",
-    "ChiaDrake_TOY_801",
     "Lifeguard_VAC_919",
     "RobeOfTheApprenticeTavernBrawl",
     "RobeOfTheMagi",
@@ -1432,17 +1288,19 @@
   "DEALS_DAMAGE + FROST": [
     "BitterColdTavernBrawl"
   ],
-  "MINION + PROTOSS": [
-    "Blink_SC_761"
+  "FIRE": [
+    "BlazingAccretion_GDB_302",
+    "LadyNazjar_TID_709",
+    "RadianceOfAzshara_TSC_635",
+    "Saruun_GDB_304",
+    "SorcerersGambit",
+    "SteamGuardian",
+    "WrathspineEnchanter"
   ],
-  "PALADIN": [
-    "BloodCrusader",
-    "ElitistSnob",
-    "Lightray"
+  "MINION + PALADIN": [
+    "BloodCrusader"
   ],
   "MECH": [
-    "BoomWrench_BoomWrenchToken_TOY_604t",
-    "BoomWrench_TOY_604",
     "Bubblebot_TSC_059",
     "ClickClocker",
     "ClockworkKnight",
@@ -1453,15 +1311,14 @@
     "FrequencyOscillator",
     "GaiaTheTechtonic_TSC_029",
     "GoboglideTech",
-    "GorillabotA3",
-    "GorillabotA3Core",
     "IniStormcoil_TSC_649",
+    "InventorBoom_TOY_607",
     "InventorsAura",
     "KangorsEndlessArmy",
     "MechaShark_TSC_054",
     "MimironTheMastermind",
-    "OptimizedPolarityTavernBrawl",
     "PitStop",
+    "ProstheticHand_DEEP_015",
     "RadarDetector_TSC_079",
     "RingmasterWhatley",
     "SeafloorGateway_TSC_055",
@@ -1476,10 +1333,24 @@
     "Ursatron",
     "WreckemAndDeckem_TOY_603"
   ],
+  "DEATHRATTLE + MECH": [
+    "BoomWrench_BoomWrenchToken_TOY_604t",
+    "BoomWrench_TOY_604"
+  ],
   "SPELL_DAMAGE": [
     "BottomlessToyChest_TOY_851",
     "SorcerousSubstitute",
     "WoodlandWonders_TOY_804"
+  ],
+  "QUICKDRAW": [
+    "BountyBoard_WW_003"
+  ],
+  "TRADEABLE": [
+    "BountyBoard_WW_003"
+  ],
+  "LIFESTEAL": [
+    "BrittleboneDestroyer",
+    "CountessAshmore"
   ],
   "LOCATION_EXTENDED": [
     "BusyPeon_WORK_041",
@@ -1493,15 +1364,7 @@
   "HAS_SPELL_SCHOOL": [
     "Buttons_VAC_437",
     "CabaretHeadliner_VAC_954",
-    "CarressCabaretStar_VAC_449",
-    "CoralKeeper",
-    "DiscoveryOfMagic",
-    "ElementalInspiration",
-    "InquisitiveCreation",
-    "Multicaster",
-    "RazzleDazzler_VAC_301",
-    "Sif",
-    "WisdomOfNorgannon"
+    "CarressCabaretStar_VAC_449"
   ],
   "SPEND_CORPSE": [
     "CadaverCollectorTavernBrawl",
@@ -1511,17 +1374,11 @@
     "ReanimateTheTerror_TLC_433",
     "StitchedGiantCore_RLK_744"
   ],
-  "COST_LESS_3 + MINION": [
-    "CallToArms",
-    "OracleOfElune"
-  ],
   "COST_MORE_4 + MINION": [
     "CaricatureArtist_TOY_391"
   ],
-  "HOLY": [
+  "HOLY + SPELL": [
     "CarielRoame_BAR_902",
-    "DevoutDungeoneer",
-    "DivineIlluminationTavernBrawl",
     "FlickeringLightbot_FlickeringLightbotToken_MIS_918t",
     "FlickeringLightbot_MIS_918",
     "GuardianLightTavernBrawl",
@@ -1529,11 +1386,10 @@
     "HiHoSilverwing_WW_344",
     "HolyCowboy_WW_335",
     "HolyGlowsticks_MIS_709",
+    "InvigoratingLightTavernBrawl",
     "KureTheLightBeyond_GDB_442",
     "ReachEquilibrium_CleanseTheShadowToken_TLC_817t",
     "ShimmeringSunfish",
-    "SpiritGuide",
-    "SpiritGuide_CORE_AV_328",
     "StarlightGroove",
     "TheGardensGrace",
     "VeteranWarmedic"
@@ -1555,15 +1411,19 @@
   "NATURE": [
     "ChampionOfStorms",
     "CrashOfThunder",
-    "DeviateDreadfang",
-    "GroveShaper_EDR_271",
     "HamuulRunetotem_EDR_845",
-    "HeraldOfNature",
-    "IronRootsTavernBrawl",
+    "Overheat_FIR_906",
     "PrimalDungeoneer",
-    "SpreadingSaplingsTavernBrawl",
-    "ToadOfTheWilds",
-    "TopiorTheShrubbagazzor"
+    "RadianceOfAzshara_TSC_635",
+    "WrathspineEnchanter"
+  ],
+  "DEALS_DAMAGE": [
+    "ChiaDrake_ChiaDrakeToken_TOY_801t",
+    "ChiaDrake_TOY_801"
+  ],
+  "PROTOSS": [
+    "ChronoBoost_SC_750",
+    "ConstructPylons_SC_755"
   ],
   "DARK_GIFT": [
     "Cindersword_FIR_922",
@@ -1575,22 +1435,12 @@
   "NEUTRAL": [
     "ClassActionLawyer",
     "EnvoyOfTheGlade_EDR_873",
-    "MeekMasteryTavernBrawl",
     "TheCountess",
     "WyrmrestPurifier"
   ],
-  "RUSH": [
-    "ClearTheWay",
-    "CountessAshmore",
-    "PipsiPainthoof_TOY_812",
-    "PluckyPaintfin_TOY_517",
-    "SpecialDeliveryTavernBrawl",
-    "VarianKingOfStormwind"
-  ],
-  "ATTACK_MORE_4": [
+  "ATTACK_MORE_4 + MINION": [
     "ClimbingHook_VAC_932",
-    "GiantAnaconda",
-    "StoryOfBarnabus_TLC_231"
+    "GiantAnaconda"
   ],
   "DRAGON + MINION": [
     "CollectorsIreTavernBrawlToken",
@@ -1601,9 +1451,9 @@
   "MINION + PIRATE": [
     "CollectorsIreTavernBrawlToken"
   ],
-  "MECH + MINION": [
-    "CollectorsIreTavernBrawlToken",
-    "DrocomurchanicasTavernBrawlToken"
+  "PROTOSS + SPELL": [
+    "Colossus_SC_758",
+    "ShieldBattery_SC_759"
   ],
   "FROM_ANOTHER_CLASS": [
     "Concierge_VAC_463",
@@ -1616,35 +1466,44 @@
   ],
   "FEL": [
     "CorruptedFelstoneTavernBrawl",
-    "FelfireBlaze_FIR_904",
     "FelfireInTheHole",
-    "HeraldOfChaos",
-    "IllidanStormrage_FelInside_THD_004p",
-    "ImpCredibleTrousersTavernBrawl",
-    "PopgarThePutrid_WW_091",
-    "Scorchreaver_FIR_952",
-    "WitherTheWeakTavernBrawl"
+    "JaceDarkweaver"
   ],
-  "LIFESTEAL": [
-    "CountessAshmore"
+  "RUSH": [
+    "CountessAshmore",
+    "PipsiPainthoof_TOY_812",
+    "PluckyPaintfin_TOY_517",
+    "VarianKingOfStormwind"
+  ],
+  "HOLY": [
+    "CreatureOfTheSacredCave_TLC_430",
+    "DevoutDungeoneer",
+    "DivineIlluminationTavernBrawl",
+    "GladesongSiren_TLC_819",
+    "LightmawNetherdrake",
+    "ReachEquilibrium_TLC_817",
+    "SpiritGuide",
+    "SpiritGuide_CORE_AV_328"
   ],
   "SHADOW": [
     "CrystalsmithCultist",
     "Darkbomb",
     "Darkbomb_WON_095",
-    "KaraTheDarkStar_GDB_127",
-    "LadyDarkvein",
-    "LadyDarkvein_CORE_REV_373",
-    "ReachEquilibrium_CorruptTheLightToken_TLC_817t2",
-    "Shadowborn",
-    "ShadowclothNeedle",
+    "GladesongSiren_TLC_819",
+    "LightmawNetherdrake",
+    "ReachEquilibrium_TLC_817",
     "SpiritGuide",
-    "SpiritGuide_CORE_AV_328",
-    "StaffOfPainTavernBrawl",
-    "TamsinRoame_BAR_918"
+    "SpiritGuide_CORE_AV_328"
   ],
   "ATTACK_MORE_0 + MINION": [
     "Crystology"
+  ],
+  "CORRUPT": [
+    "DarkInquisitorXanesh"
+  ],
+  "CORRUPTED": [
+    "DarkInquisitorXanesh",
+    "YshaarjTheDefiler"
   ],
   "TEMPLAR": [
     "DarkTemplar_SC_752",
@@ -1653,7 +1512,18 @@
   "COST_LESS_6 + DEATHRATTLE + MINION": [
     "DeathSpeakerBlackthorn_BAR_329"
   ],
-  "CAN_TARGET_FRIENDLY_CHARACTER": [
+  "NATURE + SPELL": [
+    "DeviateDreadfang",
+    "GroveShaper_EDR_271",
+    "HeraldOfNature",
+    "IronRootsTavernBrawl",
+    "MendingPoolsTavernBrawl",
+    "SpreadingSaplingsTavernBrawl",
+    "ToadOfTheWilds",
+    "TopiorTheShrubbagazzor",
+    "WidowbloomSeedsman"
+  ],
+  "CAN_TARGET_FRIENDLY_CHARACTER + SPELL": [
     "DevoutPupil",
     "Pelagos_CORE_REV_250",
     "Pelagos_REV_250",
@@ -1662,6 +1532,12 @@
   "DEMON + MINION": [
     "DirgeOfDespair",
     "KanrethadEbonlocke_KanrethadPrimeToken"
+  ],
+  "LEGENDARY + MINION": [
+    "DisksOfLegendTavernBrawl",
+    "InspiringPresenceTavernBrawl",
+    "RingOfPhaseshiftingTavernBrawl",
+    "RoyalGreatswordTavernBrawlToken"
   ],
   "LOCATION": [
     "DispossessedSoul",
@@ -1675,14 +1551,12 @@
     "TheStonewright",
     "ThingFromBelow",
     "ThingFromBelowCore",
-    "TotemicMightLegacy",
-    "TotemicMightVanilla",
-    "TotemicSurge"
+    "TotemicEvidence",
+    "TotemicEvidence_CORE_MAW_003"
   ],
-  "COST_LESS_4": [
+  "COST_LESS_4 + DEATHRATTLE + MINION": [
     "DreadRaptor_TLC_432",
-    "Razorboar",
-    "Resuscitate_TLC_818"
+    "Razorboar"
   ],
   "IMBUE": [
     "DreamboundDisciple_EDR_847",
@@ -1701,18 +1575,26 @@
   "SHADOW + SPELL": [
     "EerieStoneTavernBrawl",
     "HeraldOfShadows",
+    "KaraTheDarkStar_GDB_127",
+    "LadyDarkvein",
+    "LadyDarkvein_CORE_REV_373",
+    "ReachEquilibrium_CorruptTheLightToken_TLC_817t2",
+    "Shadowborn",
+    "ShadowclothNeedle",
     "SketchArtist_TOY_916",
+    "StaffOfPainTavernBrawl",
     "TwilightDeceptor"
+  ],
+  "ELEMENTAL + LEGENDARY": [
+    "AlakirTheWindlord_ElementalEvocation_THD_026p"
+  ],
+  "PALADIN": [
+    "ElitistSnob",
+    "Lightray"
   ],
   "SELF_DAMAGE_HERO": [
     "EmberrootDestroyer_FIR_955",
     "JobShadower_WORK_032"
-  ],
-  "MINION + TAUNT": [
-    "EnduranceTrainingTavernBrawl",
-    "QualityAssurance_TOY_605",
-    "TortollanTraveler_VAC_518",
-    "ValstannStaghelm_WON_345"
   ],
   "GENERATES_TEMPORARY_CARD": [
     "EscapeTheUnderfel_TLC_446",
@@ -1726,72 +1608,102 @@
     "Paleomancy_TLC_434",
     "ReanimatedPterrordax_TLC_436"
   ],
-  "BATTLECRY + MINION": [
-    "FairyTaleForest_TOY_507",
-    "Snapdragon"
+  "DAMAGE": [
+    "EtherealOracle_GDB_310",
+    "Saruun_GDB_304"
+  ],
+  "ZERG": [
+    "EvolutionChamber_SC_021",
+    "Hydralisk_SC_008",
+    "Lurker_SC_009",
+    "NydusWorm_SC_015"
+  ],
+  "DIVINE_SHIELD + MINION": [
+    "FancyPackaging_TOY_881",
+    "Funkfin",
+    "RighteousReservesTavernBrawl"
   ],
   "FEL + SPELL": [
+    "FelfireBlaze_FIR_904",
     "Felgorger_SW_043",
     "FossilFanatic",
-    "GraveDefiler"
+    "GraveDefiler",
+    "HeraldOfChaos",
+    "IllidanStormrage_FelInside_THD_004p",
+    "ImpCredibleTrousersTavernBrawl",
+    "PopgarThePutrid_WW_091",
+    "Scorchreaver_FIR_952",
+    "WitherTheWeakTavernBrawl"
   ],
-  "FIRE + SPELL": [
-    "FirekeepersIdolTavernBrawl",
-    "LivingFlame_FIR_929",
-    "VolcanicThrasher_TLC_223"
-  ],
-  "COST_MORE_7": [
-    "FlamesOfTheFirelord_FIR_923"
-  ],
-  "FIRE": [
-    "FlameWavesTavernBrawl",
-    "FlamesOfTheKirinTorTavernBrawl",
-    "HotStreak",
-    "InfernoHerald_FIR_913",
-    "MechanizedMagma_TLC_224",
-    "ScorchingWinds_FIR_910",
-    "SteamGuardian",
-    "SunfuryChampion",
-    "Thoribelore"
+  "COST_MORE_4 + DEATHRATTLE + MINION": [
+    "FerociousFelbat_EDR_892"
   ],
   "COMBO": [
+    "FieldContact",
     "FoxyFraud",
     "FoxyFraud_CORE_DMF_511",
-    "LuckyComet_GDB_873",
     "PressurePoints_GDB_881",
     "RecordScratcher",
     "RhymeSpinner",
     "SpacerockCollector_GDB_875"
   ],
+  "FIRE + SPELL": [
+    "FirekeepersIdolTavernBrawl",
+    "FlameWavesTavernBrawl",
+    "FlamesOfTheKirinTorTavernBrawl",
+    "HotStreak",
+    "InfernoHerald_FIR_913",
+    "LivingFlame_FIR_929",
+    "MechanizedMagma_TLC_224",
+    "ScorchingWinds_FIR_910",
+    "SunfuryChampion",
+    "Thoribelore",
+    "VolcanicThrasher_TLC_223"
+  ],
+  "COST_MORE_7": [
+    "FlamesOfTheFirelord_FIR_923"
+  ],
+  "IMP": [
+    "FlusteredLibrarian",
+    "FlusteredLibrarian_CORE_REV_242",
+    "ImpKingRafaam_ImpKingRafaamToken",
+    "ImpKingRafaam_REV_789",
+    "ImpKingRafaam_REV_835"
+  ],
   "FROST": [
     "FrostweaveDungeoneer",
-    "GlacialDownpourTavernBrawl",
-    "LadyDeathwhisper_RLK_713",
+    "LadyNazjar_TID_709",
+    "NorthernNavigation",
     "OverseerFrigidaraCore_RLK_224",
     "OverseerFrigidaraCore_RLK_Prologue_RLK_224",
     "OverseerFrigidara_LEG_RLK_224",
-    "RambunctiousStuffy_TOY_821",
-    "Rimetongue"
+    "RadianceOfAzshara_TSC_635",
+    "SorcerersGambit",
+    "WrathspineEnchanter"
   ],
-  "COST_EQUAL_1": [
+  "COST_EQUAL_1 + SPELL": [
     "Gazlowe",
-    "NiriOfTheCrater_TLC_836",
-    "PipThePotent_WW_394",
-    "PrinceLiam",
-    "RollingStone",
-    "SonyaWaterdancer_TOY_515",
-    "ThirstyDrifter_WW_387"
+    "TrinketTracker"
+  ],
+  "FROST + SPELL": [
+    "GlacialDownpourTavernBrawl",
+    "HarbingerOfWinterCore_RLK_511",
+    "HeraldOfLokholar",
+    "IceRevenant",
+    "LadyDeathwhisper_RLK_713",
+    "RambunctiousStuffy_TOY_821",
+    "Rimetongue",
+    "WatercolorArtist_TOY_376"
   ],
   "COST_EQUAL_2": [
     "GreedyPartner_WW_901"
   ],
-  "COST_MORE_5": [
-    "GreySageParrot",
-    "ScepterOfSummoning",
-    "SummerFlowerchild"
+  "COST_MORE_5 + SPELL": [
+    "GreySageParrot"
   ],
   "COST_LESS_5 + MINION": [
     "GrizzledGuardian",
+    "Hybridization_TLC_236",
     "OakenSummons",
     "OakenSummons_CORE_LOOT_309"
   ],
@@ -1799,24 +1711,19 @@
     "GuardianAnimals",
     "PetCollector"
   ],
-  "COST_MORE_4 + SPELL": [
-    "HagathaTheFabled_TOY_504"
-  ],
   "ARCANE + SPELL": [
     "HalduronBrightwing",
     "MagistersApprentice",
-    "Stargazing_WW_425"
+    "SilvermoonFarstrider_RLK_826",
+    "Stargazing_WW_425",
+    "StarlightReactor_GDB_108",
+    "UnstableMagicTavernBrawl",
+    "Vexallus"
   ],
   "NOT_NATURE": [
     "HamuulRunetotem_EDR_845"
   ],
-  "FROST + SPELL": [
-    "HarbingerOfWinterCore_RLK_511",
-    "HeraldOfLokholar",
-    "IceRevenant",
-    "WatercolorArtist_TOY_376"
-  ],
-  "ATTACK_LESS_3": [
+  "ATTACK_LESS_3 + MINION": [
     "HatcheryHelper_TLC_233"
   ],
   "COST_MORE_3": [
@@ -1832,20 +1739,25 @@
     "Shockspitter",
     "SockPuppetSlitherspear_MIS_710"
   ],
-  "COST_LESS_5": [
-    "Hybridization_TLC_236",
-    "RazorfenBeastmaster"
-  ],
   "FORGE": [
     "IgnisTheEternalFlame",
     "MeltedMaker"
   ],
-  "LEGENDARY + MINION": [
-    "InspiringPresenceTavernBrawl",
-    "RoyalGreatswordTavernBrawlToken"
+  "HAS_SPELL_SCHOOL + SPELL": [
+    "CoralKeeper",
+    "DiscoveryOfMagic",
+    "ElementalInspiration",
+    "InquisitiveCreation",
+    "MagisterDawngrasp_AV_200",
+    "Multicaster",
+    "RazzleDazzler_VAC_301",
+    "Sif",
+    "WisdomOfNorgannon"
   ],
-  "HOLY + SPELL": [
-    "InvigoratingLightTavernBrawl"
+  "COST_MORE_4": [
+    "InventorBoom_TOY_607",
+    "StranglethornHeart",
+    "TimberTambourine"
   ],
   "CHOOSE_ONE + SPELL": [
     "JerryRigCarpenter"
@@ -1862,7 +1774,10 @@
     "UnderbrushTracker_TLC_520"
   ],
   "ATTACK_LESS_4 + MINION": [
-    "LeadDancer"
+    "LeadDancer",
+    "WarsongCommanderLegacy",
+    "WarsongCommanderVanilla",
+    "WarsongCommander_CORE_EX1_084"
   ],
   "LIBRAM_DISCOUNT": [
     "LibramOfClarity_GDB_137",
@@ -1874,37 +1789,44 @@
     "LibramOfWisdom_BT_025"
   ],
   "TERRAN": [
-    "JimRaynor_Stimpack_SC_400p",
     "LiftOff_SC_410"
   ],
   "COST_EQUAL_3": [
     "LinedancePartner_WW_433"
   ],
-  "HAS_SPELL_SCHOOL + SPELL": [
-    "MagisterDawngrasp_AV_200"
+  "COMBO + MINION": [
+    "LuckyComet_GDB_873"
   ],
   "NOT_MINION": [
     "MarkOfScorn"
   ],
-  "NATURE + SPELL": [
-    "MendingPoolsTavernBrawl",
-    "WidowbloomSeedsman"
-  ],
   "MINION + NEUTRAL": [
+    "MeekMasteryTavernBrawl",
     "MulchMadnessTavernBrawl"
   ],
-  "CAN_TARGET_FRIENDLY_MINION": [
+  "CAN_TARGET_FRIENDLY_MINION + SPELL": [
     "Myrmidon"
   ],
   "DEALS_DAMAGE + NATURE + SPELL": [
     "NaturalForceTavernBrawl"
   ],
-  "NOT_MAGNETIC": [
+  "COST_EQUAL_1": [
+    "NiriOfTheCrater_TLC_836",
+    "PipThePotent_WW_394",
+    "PrinceLiam",
+    "RollingStone",
+    "ThirstyDrifter_WW_387"
+  ],
+  "NOT_TRIBELESS": [
+    "NzothGodOfTheDeep",
+    "PowerSlider",
+    "TheOneAmalgamBand"
+  ],
+  "MECH + NOT_MAGNETIC": [
     "OptimizedPolarityTavernBrawl"
   ],
-  "SUMMONS_TREANT": [
-    "ForestWardenOmu_RapidGrowth_THD_007p",
-    "OvergrownBeanstalk_MIS_301"
+  "COST_MORE_2": [
+    "OrbOfRevelationTavernBrawl"
   ],
   "FRENZY": [
     "OverlordSaurfang_BAR_334"
@@ -1916,17 +1838,17 @@
     "PrimalfinChallenger_TLC_251",
     "Torga_TLC_102"
   ],
-  "IMP": [
-    "ImpKingRafaam_ImpKingRafaamToken",
-    "ImpKingRafaam_REV_789",
-    "ImpKingRafaam_REV_835",
+  "IMP + MINION": [
     "ImpendingCatastrophe"
   ],
-  "WHELP": [
+  "MINION + WHELP": [
     "RaidBossOnyxia_ONY_004"
   ],
   "COST_MORE_0 + MINION": [
     "Rally"
+  ],
+  "COST_LESS_5 + DEATHRATTLE + MINION": [
+    "RazorfenBeastmaster"
   ],
   "RELIC": [
     "RelicVault_CORE_REV_942",
@@ -1944,23 +1866,27 @@
     "RenoTheRelicologist",
     "ZephrysTheGreat_ULD_003"
   ],
-  "COST_MORE_0": [
-    "Resuscitate_TLC_818",
-    "TamsinRoame_BAR_918"
+  "COST_LESS_4": [
+    "Resuscitate_TLC_818"
   ],
-  "NOT_RUSH": [
+  "MINION + NOT_RUSH": [
     "RocketBackpacksTavernBrawl"
   ],
   "COST_EQUAL_4": [
     "RowdyPartner_WW_906"
   ],
   "HEALTH_LESS_2 + MINION": [
-    "SalhetsPride"
+    "SalhetsPride",
+    "StewardOfDarkshire_OG_310",
+    "StewardOfDarkshire_WON_310"
+  ],
+  "COST_MORE_5 + MINION": [
+    "ScepterOfSummoning"
   ],
   "NOT_NEUTRAL": [
     "ServiceBell"
   ],
-  "IS_SI7": [
+  "IS_SI7 + MINION": [
     "FindTheImposter",
     "FindTheImposter_LearnTheTruthToken",
     "FindTheImposter_MarkedATraitorToken",
@@ -1975,21 +1901,62 @@
   "GENERATE_SLAGCLAW": [
     "Slagclaw_TLC_482"
   ],
-  "HEALTH_LESS_2": [
-    "StewardOfDarkshire_OG_310",
-    "StewardOfDarkshire_WON_310"
+  "MINION + TERRAN": [
+    "JimRaynor_Stimpack_SC_400p"
   ],
   "COST_LESS_4 + SPELL": [
     "StonehearthVindicator"
   ],
+  "ATTACK_MORE_4": [
+    "StoryOfBarnabus_TLC_231"
+  ],
+  "COST_MORE_5": [
+    "SummerFlowerchild"
+  ],
+  "COST_LESS_3 + SPELL": [
+    "SunsapperLynessa_VAC_507",
+    "VioletTreasuregill_TLC_438"
+  ],
   "SECRET + SPELL": [
+    "ApexisSmuggler",
+    "ArcaneFlakmage",
+    "BlackjackStunner",
+    "CannonmasterSmythe_BAR_879",
+    "CloakedHuntress_CORE_KAR_006",
+    "CloakedHuntress_KAR_006",
+    "CommanderRhyssa",
+    "ContractConjurer",
+    "Halkias",
+    "InconspicuousRider",
+    "LesserEmeraldSpellstone",
+    "LesserEmeraldSpellstone_EmeraldSpellstoneToken",
+    "LesserEmeraldSpellstone_GreaterEmeraldSpellstoneToken",
+    "MedivhsValet",
+    "OrionMansionManager",
+    "PettingZoo",
+    "PhaseStalker",
+    "ProfessorPutricide_CORE_ICC_204",
+    "ProfessorPutricide_ICC_204",
+    "SaygeSeerOfDarkmoon",
+    "SecretkeeperLegacy",
+    "SecretkeeperVanilla",
+    "SparkjoyCheat",
+    "StarstrungBow",
     "SwordOfTheFallen"
   ],
-  "COST_MORE_1": [
+  "COST_MORE_1 + NOT_IN_INITIAL_DECK": [
     "TaethelanBloodwatcher_WW_430"
+  ],
+  "COST_MORE_0 + SHADOW + SPELL": [
+    "TamsinRoame_BAR_918"
   ],
   "IS_PLAGUE": [
     "TombTraitor"
+  ],
+  "MINION + TOTEM": [
+    "TotemicMightLegacy",
+    "TotemicMightVanilla",
+    "TotemicSurge"
   ],
   "BEAST + COST_LESS_4": [
     "TrialOfTheJormungars_WON_028"
@@ -1997,27 +1964,20 @@
   "AURA": [
     "TrinketArtist_TOY_882"
   ],
-  "COST_EQUAL_1 + SPELL": [
-    "TrinketTracker"
-  ],
   "ATTACK_LESS_5": [
     "Tyr"
   ],
-  "DAMAGE": [
-    "VelensChosen"
+  "CURRENT_CLASS": [
+    "TyrsTears",
+    "TyrsTears_TyrsTearsToken"
   ],
-  "COST_LESS_3 + SPELL": [
-    "VioletTreasuregill_TLC_438"
+  "COST_LESS_3": [
+    "UnendingSwarm"
+  ],
+  "DAMAGE + SPELL": [
+    "VelensChosen"
   ],
   "COST_LESS_4 + MINION + NEUTRAL": [
     "WarCommandsTavernBrawl"
-  ],
-  "ATTACK_LESS_4": [
-    "WarsongCommanderLegacy",
-    "WarsongCommanderVanilla",
-    "WarsongCommander_CORE_EX1_084"
-  ],
-  "CORRUPTED": [
-    "YshaarjTheDefiler"
   ]
 }

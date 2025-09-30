@@ -212,19 +212,33 @@ function expandSelectorConditions(selectorCode: string): string[] {
 	];
 
 	let cleanedCode = selectorCode;
+
 	for (const generic of genericSelectors) {
 		cleanedCode = cleanedCode.replace(new RegExp(generic.replace(/[()]/g, '\\$&'), 'g'), '').trim();
 	}
 
-	// Clean up extra commas and whitespace
+	// Clean up extra commas and whitespace more thoroughly
 	cleanedCode = cleanedCode
-		.replace(/,\s*,/g, ',')
-		.replace(/^,|,$/g, '')
-		.replace(/and\(\s*,/g, 'and(')
-		.replace(/,\s*\)/g, ')');
+		.replace(/,\s*,+/g, ',') // Multiple consecutive commas
+		.replace(/^\s*,+|,+\s*$/g, '') // Leading/trailing commas
+		.replace(/and\(\s*,+/g, 'and(') // Comma after and(
+		.replace(/,+\s*\)/g, ')') // Comma before )
+		.replace(/\(\s*,+/g, '(') // Comma after (
+		.replace(/,+\s*,+/g, ',') // Multiple commas again
+		.replace(/or\(\s*,*\s*\)/g, '') // Remove empty or() clauses
+		.replace(/and\(\s*,*\s*\)/g, '') // Remove empty and() clauses
+		.trim();
 
 	// Handle nested and() wrappers - extract content from and(...) calls
 	cleanedCode = cleanedCode.replace(/and\(\s*([^)]+)\s*\)/g, '$1');
+
+	// Final cleanup after and() removal
+	cleanedCode = cleanedCode
+		.replace(/^\s*,+|,+\s*$/g, '') // Remove leading/trailing commas again
+		.replace(/,\s*,+/g, ',') // Clean up any remaining multiple commas
+		.replace(/or\(\s*,*\s*\)/g, '') // Remove empty or() clauses again
+		.replace(/and\(\s*,*\s*\)/g, '') // Remove empty and() clauses again
+		.trim();
 
 	// Handle simple cases first
 	const conditions = extractConditionsFromCleanedCode(cleanedCode);
@@ -265,7 +279,9 @@ function extractConditionsFromCleanedCode(code: string): string[] {
 	// Combine regular conditions with each expanded OR condition
 	if (expandedOrConditions.length === 0) {
 		// No OR conditions, just return regular conditions
-		return regularConditions.length > 0 ? [regularConditions.sort().join(' + ')] : [];
+		const result = regularConditions.length > 0 ? [regularConditions.sort().join(' + ')] : [];
+
+		return result;
 	} else {
 		// Combine each OR expansion with regular conditions
 		const results: string[] = [];
@@ -273,6 +289,7 @@ function extractConditionsFromCleanedCode(code: string): string[] {
 			const combined = [...regularConditions, orExpansion].sort().join(' + ');
 			results.push(combined);
 		}
+
 		return results;
 	}
 }
@@ -660,14 +677,33 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	for (const [condition, cards] of minionConditions) {
 		const reverseCondition = buildReverseCondition(condition);
 		if (reverseCondition && cards.length > 0) {
-			const cardsList = cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-			lines.push(`	// ${condition} (${cards.length} cards)`);
-			lines.push(`	if (${reverseCondition}) {`);
-			lines.push(`		matchingCardIds.push(`);
-			lines.push(`			${cardsList}`);
-			lines.push(`		);`);
-			lines.push('	}');
-			lines.push('');
+			// For generic MINION condition, exclude cards that have more specific conditions
+			let filteredCards = cards;
+			if (condition === 'MINION') {
+				// Get all cards that appear in more specific conditions
+				const cardsInSpecificConditions = new Set<string>();
+				for (const [otherCondition, otherCards] of minionConditions) {
+					if (otherCondition !== 'MINION' && otherCondition.includes('MINION')) {
+						// This is a more specific minion condition
+						for (const cardId of otherCards) {
+							cardsInSpecificConditions.add(cardId);
+						}
+					}
+				}
+				// Filter out cards that appear in more specific conditions
+				filteredCards = cards.filter((cardId) => !cardsInSpecificConditions.has(cardId));
+			}
+
+			if (filteredCards.length > 0) {
+				const cardsList = filteredCards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+				lines.push(`	// ${condition} (${filteredCards.length} cards)`);
+				lines.push(`	if (${reverseCondition}) {`);
+				lines.push(`		matchingCardIds.push(`);
+				lines.push(`			${cardsList}`);
+				lines.push(`		);`);
+				lines.push('	}');
+				lines.push('');
+			}
 		}
 	}
 
@@ -749,14 +785,33 @@ function generateSpellFile(flatMappings: { [condition: string]: string[] }): str
 	for (const [condition, cards] of spellConditions) {
 		const reverseCondition = buildReverseCondition(condition);
 		if (reverseCondition && cards.length > 0) {
-			const cardsList = cards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
-			lines.push(`	// ${condition} (${cards.length} cards)`);
-			lines.push(`	if (${reverseCondition}) {`);
-			lines.push(`		matchingCardIds.push(`);
-			lines.push(`			${cardsList}`);
-			lines.push(`		);`);
-			lines.push('	}');
-			lines.push('');
+			// For generic SPELL condition, exclude cards that have more specific conditions
+			let filteredCards = cards;
+			if (condition === 'SPELL') {
+				// Get all cards that appear in more specific conditions
+				const cardsInSpecificConditions = new Set<string>();
+				for (const [otherCondition, otherCards] of spellConditions) {
+					if (otherCondition !== 'SPELL' && otherCondition.includes('SPELL')) {
+						// This is a more specific spell condition
+						for (const cardId of otherCards) {
+							cardsInSpecificConditions.add(cardId);
+						}
+					}
+				}
+				// Filter out cards that appear in more specific conditions
+				filteredCards = cards.filter((cardId) => !cardsInSpecificConditions.has(cardId));
+			}
+
+			if (filteredCards.length > 0) {
+				const cardsList = filteredCards.map((id) => `CardIds.${id}`).join(',\n\t\t\t');
+				lines.push(`	// ${condition} (${filteredCards.length} cards)`);
+				lines.push(`	if (${reverseCondition}) {`);
+				lines.push(`		matchingCardIds.push(`);
+				lines.push(`			${cardsList}`);
+				lines.push(`		);`);
+				lines.push('	}');
+				lines.push('');
+			}
 		}
 	}
 
