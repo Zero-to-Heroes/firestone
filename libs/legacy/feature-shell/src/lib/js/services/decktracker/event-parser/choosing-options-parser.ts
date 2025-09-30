@@ -74,9 +74,8 @@ const willBeActive = (
 		const tribes = refCard.races ?? [];
 		for (const tribe of tribes) {
 			if (
-				playerDeck.minionsDeadSinceLastTurn.filter((c) =>
-					hasCorrectTribe(allCards.getCard(c.cardId), Race[tribe]),
-				).length > 0
+				playerDeck.cardsPlayedLastTurn.filter((c) => hasCorrectTribe(allCards.getCard(c.cardId), Race[tribe]))
+					.length > 0
 			) {
 				return true;
 			}
@@ -207,6 +206,11 @@ const willBeActive = (
 		// hot coals, job shadower, fearless flamejuggler, healthstone, shadowblade stinger, darkglare, duskbat, nethersoul buster, deathweb spider,
 		//  if your hero was healed this turn
 		// Death Metal Knight, Protect the Innocent, Happy Ghoul, cleric/priest of an'she, xyrella
+		// If you've gained X armor:
+		// Captain galvangar
+		// If your armor changed this turn:
+		// Stoneskin armorer
+
 		default:
 			return false;
 	}
