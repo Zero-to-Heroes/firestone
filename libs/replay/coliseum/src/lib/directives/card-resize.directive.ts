@@ -4,8 +4,15 @@ import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostListener, 
 	standalone: false,
 	selector: '[cardResize]',
 })
+// I don't like this approach, as it generates a lot of events and text resizes whenever you mouse over anything
+// Resize events should only be sent for the component that appears when mousing over, and whenver
+// the window is resized
+// See cardElementResize
 export class CardResizeDirective implements AfterViewInit {
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private el: ElementRef,
+		private cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		// We use opacity to avoid flickering

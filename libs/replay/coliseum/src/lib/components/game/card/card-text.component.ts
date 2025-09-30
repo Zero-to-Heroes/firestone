@@ -108,13 +108,12 @@ export class CardTextComponent {
 
 	private async resizeText() {
 		const element = this.el.nativeElement.querySelector('.text');
-		console.debug('[card-text] resizeText', element);
 		if (!element) {
 			return;
 		}
 		const textSize = Math.max(20, this.text?.toString().length || 0);
-		const textSizeRatio = 13 / textSize;
-		const fontSize = textSizeRatio * element.clientWidth;
+		const textSizeRatio = 20 / textSize;
+		const fontSize = Math.min(14, textSizeRatio * element.clientWidth);
 		element.style.fontSize = `${fontSize}px`;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
