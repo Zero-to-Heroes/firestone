@@ -4,6 +4,7 @@ export const CARDS_HIGHLIGHT_SERVICE_TOKEN = new InjectionToken<ICardsHighlightS
 export interface ICardsHighlightService {
 	init(options?: any /*SelectorOptions */);
 	initForSingle();
+	forceHeroCardId(cardId: string);
 	register(_uniqueId: string, handler: any /*Handler*/, side: HighlightSide);
 	unregister(_uniqueId: string, side: HighlightSide);
 	onMouseEnter(cardId: string, side: HighlightSide, card?: any /*DeckCard*/);

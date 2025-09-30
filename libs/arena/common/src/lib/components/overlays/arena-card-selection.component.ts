@@ -197,8 +197,6 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
 		);
 
-		this.cardsHighlightService.initForSingle();
-
 		this.mouseOverService.mousedOverCard$$
 			.pipe(
 				distinctUntilChanged(

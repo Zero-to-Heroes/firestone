@@ -26,6 +26,10 @@ export class TwitchCardsHighlightFacadeService implements ICardsHighlightService
 		});
 	}
 
+	public forceHeroCardId(cardId: string) {
+		this.service.forceHeroCardId(cardId);
+	}
+
 	register(_uniqueId: string, handler: Handler, side: HighlightSide) {
 		this.service.register(_uniqueId, handler, side);
 	}
