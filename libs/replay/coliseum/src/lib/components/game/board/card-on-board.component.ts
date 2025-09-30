@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
@@ -50,14 +49,14 @@ import { ColiseumDebugService } from '../../../services/coliseum-debug.service';
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger('fadeInOut', [
-			transition(':enter', [style({ width: 0 }), animate(150, style({ width: '100%' }))]),
-			transition(':leave', [style({ width: '100%' }), animate(150, style({ width: 0 }))]),
-		]),
-	],
-	// eslint-disable-next-line @angular-eslint/no-host-metadata-property
-	host: { '[@fadeInOut]': 'in' },
+	// animations: [
+	// 	trigger('fadeInOut', [
+	// 		transition(':enter', [style({ width: 0 }), animate(150, style({ width: '100%' }))]),
+	// 		transition(':leave', [style({ width: '100%' }), animate(150, style({ width: 0 }))]),
+	// 	]),
+	// ],
+	// // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+	// host: { '[@fadeInOut]': 'in' },
 })
 export class CardOnBoardComponent {
 	debug = false;
@@ -84,7 +83,10 @@ export class CardOnBoardComponent {
 	sleeping: boolean;
 	tavernTier: number;
 
-	constructor(private cards: AllCardsService, private readonly debugService: ColiseumDebugService) {
+	constructor(
+		private cards: AllCardsService,
+		private readonly debugService: ColiseumDebugService,
+	) {
 		this.debug = debugService.active;
 	}
 

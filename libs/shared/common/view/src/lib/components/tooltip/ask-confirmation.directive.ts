@@ -44,7 +44,7 @@ export class AskConfirmationDirective implements OnDestroy {
 	private _confirmationPosition: CardTooltipPositionType;
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
-	private positionStrategy: PositionStrategy;
+	private positionStrategy: PositionStrategy | null;
 
 	constructor(
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
@@ -121,8 +121,8 @@ export class AskConfirmationDirective implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		if (this.overlayRef) {
-			this.positionStrategy.detach();
+		if (this.overlayRef && this.positionStrategy) {
+			this.positionStrategy.detach?.();
 		}
 	}
 
@@ -151,7 +151,7 @@ export class AskConfirmationDirective implements OnDestroy {
 
 		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
 		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
-		this.positionStrategy.apply();
+		this.positionStrategy?.apply();
 		// setTimeout(() => {
 		// 	if (!(this.cdr as ViewRef)?.destroyed) {
 		// 		this.cdr.detectChanges();

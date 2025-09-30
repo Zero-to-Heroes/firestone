@@ -108,6 +108,7 @@ export class CardTextComponent {
 
 	private async resizeText() {
 		const element = this.el.nativeElement.querySelector('.text');
+		console.debug('[card-text] resizeText', element);
 		if (!element) {
 			return;
 		}

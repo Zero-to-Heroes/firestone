@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
@@ -17,14 +16,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			</div>
 		</div>
 	`,
-	animations: [
-		trigger('fadeInOut', [
-			transition(':enter', [style({ width: 0 }), animate(300, style({ width: '100%' }))]),
-			transition(':leave', [style({ width: '100%' }), animate(300, style({ width: 0 }))]),
-		]),
-	],
-	// eslint-disable-next-line @angular-eslint/no-host-metadata-property
-	host: { '[@fadeInOut]': 'in' },
+	// animations: [
+	// 	trigger('fadeInOut', [
+	// 		transition(':enter', [style({ width: 0 }), animate(300, style({ width: '100%' }))]),
+	// 		transition(':leave', [style({ width: '100%' }), animate(300, style({ width: 0 }))]),
+	// 	]),
+	// ],
+	// // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+	// host: { '[@fadeInOut]': 'in' },
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VisualBoardStateChangeComponent {
