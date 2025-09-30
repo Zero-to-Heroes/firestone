@@ -70,7 +70,7 @@ const willBeActive = (
 	}
 
 	const refCard = getProcessedCard(cardId, entityId, playerDeck, allCards);
-	if (hasMechanic(refCard, GameTag.KINDRED)) {
+	if (refCard.type?.toUpperCase() === CardType[CardType.MINION] && hasMechanic(refCard, GameTag.KINDRED)) {
 		const tribes = refCard.races ?? [];
 		for (const tribe of tribes) {
 			if (
@@ -79,6 +79,15 @@ const willBeActive = (
 			) {
 				return true;
 			}
+		}
+	}
+	if (refCard.type?.toUpperCase() === CardType[CardType.SPELL] && hasMechanic(refCard, GameTag.KINDRED)) {
+		const spellSchool = refCard.spellSchool;
+		if (
+			playerDeck.cardsPlayedLastTurn.filter((c) => allCards.getCard(c.cardId).spellSchool === spellSchool)
+				.length > 0
+		) {
+			return true;
 		}
 	}
 
