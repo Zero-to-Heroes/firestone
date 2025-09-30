@@ -464,6 +464,10 @@ export class BgsPlayerBoardParser implements EventParser {
 						)?.Value === 1,
 					info: -1, // We don't have this info yet
 					info2: -1, // We don't have this info yet
+					info3: -1, // We don't have this info yet
+					info4: -1, // We don't have this info yet
+					info5: -1, // We don't have this info yet
+					info6: -1, // We don't have this info yet
 				},
 			],
 			globalInfo: null, // We don't have this info yet
@@ -679,6 +683,10 @@ const buildPlayerBoards = (
 				used: heroPower.used,
 				info: heroPower.info?.Tags ? buildBgsEntity(heroPower.info, allCards) : heroPower.info,
 				info2: heroPower.info2,
+				info3: heroPower.info3,
+				info4: heroPower.info4,
+				info5: heroPower.info5,
+				info6: heroPower.info6,
 				locked: heroPower.locked,
 			})),
 			questRewards: gameEvent.additionalData.playerBoard.questRewards,
@@ -700,6 +708,10 @@ const buildPlayerBoards = (
 				used: heroPower.used,
 				info: heroPower.info?.Tags ? buildBgsEntity(heroPower.info, allCards) : heroPower.info,
 				info2: heroPower.info2,
+				info3: heroPower.info3,
+				info4: heroPower.info4,
+				info5: heroPower.info5,
+				info6: heroPower.info6,
 				locked: heroPower.locked,
 			})),
 			questRewards: gameEvent.additionalData.opponentBoard.questRewards,
