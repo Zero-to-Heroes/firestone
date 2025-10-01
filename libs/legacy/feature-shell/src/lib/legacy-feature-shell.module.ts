@@ -434,6 +434,7 @@ import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-bra
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
+import { ConstructedPersonalDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-personal-deck-card-search.component';
 import { ChoosingCardAdditionalInfoComponent } from '@components/overlays/card-choice/choosing-card-additional-info.component';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
@@ -1059,6 +1060,7 @@ try {
 		DecktrackerPlayerClassFilterDropdownComponent,
 		ConstructedPlayerArchetypeFilterDropdownComponent,
 		ConstructedMetaDeckCardSearchComponent,
+		ConstructedPersonalDeckCardSearchComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

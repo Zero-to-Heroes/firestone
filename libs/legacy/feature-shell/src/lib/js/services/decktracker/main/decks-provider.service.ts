@@ -17,7 +17,7 @@ import {
 	StatGameFormatTypeExtended,
 	StatGameModeType,
 } from '@firestone/stats/data-access';
-import { combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
@@ -32,6 +32,8 @@ import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 @Injectable()
 export class DecksProviderService extends AbstractFacadeService<DecksProviderService> {
 	public decks$$: SubscriberAwareBehaviorSubject<readonly DeckSummary[]>;
+	public allCardsInDecks$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	public cardSearch$$: BehaviorSubject<readonly string[] | null>;
 
 	private allCards: CardsFacadeService;
 	private patchesConfig: PatchesConfigService;
@@ -46,10 +48,14 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 
 	protected override assignSubjects() {
 		this.decks$$ = this.mainInstance.decks$$;
+		this.allCardsInDecks$$ = this.mainInstance.allCardsInDecks$$;
+		this.cardSearch$$ = this.mainInstance.cardSearch$$;
 	}
 
 	protected async init() {
 		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
+		this.allCardsInDecks$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
 		this.constructedPersonalDecks = AppInjector.get(ConstructedPersonalDecksService);
@@ -136,6 +142,23 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				.subscribe(this.decks$$);
 		});
 
+		this.allCardsInDecks$$.onFirstSubscribe(async () => {
+			this.decks$$
+				.pipe(
+					map((decks) => {
+						const allDecks = decks.flatMap((d) => d.allVersions.flatMap((v) => v.deckstring));
+						const allCards = allDecks.flatMap((d) =>
+							decode(d).cards.map((c) => this.allCards.getCard(c[0]).id),
+						);
+						const uniqueCards = [...new Set(allCards)].sort((a, b) =>
+							this.allCards.getCard(a).name.localeCompare(this.allCards.getCard(b).name),
+						);
+						return uniqueCards;
+					}),
+				)
+				.subscribe(this.allCardsInDecks$$);
+		});
+
 		// Keep the versions clean (remove unused deckstrings)
 		this.gameStats.gameStats$$
 			.pipe(
@@ -155,6 +178,14 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				}));
 				await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
 			});
+	}
+
+	public newCardSearch(search: readonly string[]) {
+		this.mainInstance.newCardSearchInternal(search);
+	}
+
+	private newCardSearchInternal(search: readonly string[]) {
+		this.cardSearch$$.next(search);
 	}
 
 	private buildState(
@@ -290,6 +321,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		} catch (e) {
 			console.error('Could not decode deck name', lastReplay.playerDeckName, e);
 		}
+		const allVersions = this.buildVersions(versions);
 		return {
 			class: lastReplay.playerClass,
 			deckArchetype: lastReplay.playerArchetypeId,
@@ -310,7 +342,10 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 						? 'wild'
 						: 'standard',
 			replays: replays,
-			allVersions: this.buildVersions(versions),
+			allVersions: allVersions,
+			allCardsInDeck: [...new Set(allVersions.flatMap((v) => v.allCardsInDeck))].sort((a, b) =>
+				this.allCards.getCard(a).name.localeCompare(this.allCards.getCard(b).name),
+			),
 		} as DeckSummary;
 	}
 
@@ -583,6 +618,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 					backgroundImage: `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this.pickRandomCard(
 						fullyUniqueCards,
 					)}.png)`,
+					allCardsInDeck: fullyUniqueCards,
 				};
 			})
 			.sort((a, b) => b.lastUsedTimestamp - a.lastUsedTimestamp);

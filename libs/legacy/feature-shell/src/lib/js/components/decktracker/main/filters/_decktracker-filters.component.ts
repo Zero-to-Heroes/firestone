@@ -52,6 +52,10 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			<constructed-play-coin-filter-dropdown class="filter"></constructed-play-coin-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
+			<constructed-personal-deck-card-search
+				class="filter search"
+				*ngIf="showPersonalDeckCardSearch$ | async"
+			></constructed-personal-deck-card-search>
 			<constructed-meta-deck-card-search
 				class="filter search"
 				*ngIf="showMetaDeckCardSearch$ | async"
@@ -89,6 +93,7 @@ export class DecktrackerFiltersComponent
 	showHiddenDecksLink$: Observable<boolean>;
 	showUseConservativeWinrateLink$: Observable<boolean>;
 	showMetaDeckCardSearch$: Observable<boolean>;
+	showPersonalDeckCardSearch$: Observable<boolean>;
 	showUseClassCardIcon$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
@@ -118,6 +123,10 @@ export class DecktrackerFiltersComponent
 		this.showMetaDeckCardSearch$ = this.nav.currentView$$.pipe(
 			filter((currentView) => !!currentView),
 			this.mapData((currentView) => ['constructed-meta-decks'].includes(currentView)),
+		);
+		this.showPersonalDeckCardSearch$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => ['decks'].includes(currentView)),
 		);
 		this.showHiddenDecksLink$ = combineLatest([
 			this.nav.currentView$$,

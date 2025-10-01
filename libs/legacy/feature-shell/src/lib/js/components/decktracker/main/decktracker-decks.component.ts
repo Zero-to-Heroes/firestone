@@ -11,7 +11,7 @@ import {
 import { DeckSummary } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
@@ -40,7 +40,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 						'merging-source': deck.isMergingSource,
 						'valid-merging-target': deck.isValidMergingTarget,
 						'invalid-merging-target': deck.isInvalidMergingTarget,
-						'current-merging-target': deck.isCurrentMergingTarget
+						'current-merging-target': deck.isCurrentMergingTarget,
 					}"
 				>
 					<decktracker-deck-summary
@@ -94,17 +94,19 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 		private readonly deckService: DecksProviderService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.deckService.isReady(), this.prefs.isReady()]);
+		await waitForReady(this.deckService, this.prefs);
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		const deckSource$: Observable<readonly DeckSummary[]> = combineLatest([
 			this.deckService.decks$$,
+			this.deckService.cardSearch$$,
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					sort: prefs.desktopDeckFilters?.sort,
@@ -116,7 +118,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 				),
 			),
 		]).pipe(
-			this.mapData(([decks, { sort, search, playerClass }]) => {
+			this.mapData(([decks, cardSearch, { sort, search, playerClass }]) => {
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter((deck) => !playerClass?.length || playerClass.includes(deck.class))
 					.filter(
@@ -125,6 +127,9 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 							deck.deckName?.toLowerCase()?.includes(search) ||
 							deck.class?.toLowerCase()?.includes(search) ||
 							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(search),
+					)
+					.filter(
+						(deck) => !cardSearch?.length || cardSearch.every((card) => deck.allCardsInDeck.includes(card)),
 					)
 					.sort(this.getSortFunction(sort));
 				return result;
@@ -165,7 +170,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 									!!currentMergeSourceDeck &&
 									currentMergeSourceDeck.deckstring !== deck.deckstring &&
 									currentMergeSourceDeck.class !== deck.class,
-							} as InternalDeckSummary),
+							}) as InternalDeckSummary,
 					);
 				},
 				null,
@@ -198,7 +203,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 						? this.i18n.translateString('app.decktracker.decks.drag-to-merge-default')
 						: this.i18n.translateString('app.decktracker.decks.drag-to-merge', {
 								deckName: deck.deckName,
-						  }),
+							}),
 				null,
 				0,
 			),

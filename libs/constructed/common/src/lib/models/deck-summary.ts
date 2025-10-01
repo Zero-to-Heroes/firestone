@@ -17,6 +17,7 @@ export interface DeckSummary {
 	readonly replays: readonly GameStat[];
 	readonly isPersonalDeck?: boolean;
 	readonly allVersions: readonly DeckSummaryVersion[];
+	readonly allCardsInDeck: readonly string[];
 }
 
 export interface DeckSummaryVersion extends DeckSummary {
