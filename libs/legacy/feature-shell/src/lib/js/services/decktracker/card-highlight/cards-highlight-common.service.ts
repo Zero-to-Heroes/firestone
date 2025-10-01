@@ -36,6 +36,7 @@ import {
 	kindred,
 	mech,
 	minion,
+	not,
 	or,
 	orWithHighlight,
 	raceIn,
@@ -47,6 +48,7 @@ import {
 	spellSchool,
 	starshipExtended,
 	tooltip,
+	tribeless,
 } from './selectors';
 
 export abstract class CardsHighlightCommonService extends AbstractSubscriptionComponent {
@@ -419,15 +421,26 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), riff));
 		}
-		if (refCard.mechanics?.includes(GameTag[GameTag.KINDRED])) {
+		if (
+			refCard.type?.toUpperCase() === CardType[CardType.SPELL] &&
+			refCard.mechanics?.includes(GameTag[GameTag.KINDRED])
+		) {
 			const cardSpellSchool: SpellSchool = refCard.spellSchool ? SpellSchool[refCard.spellSchool] : null;
-			selectors.push(
-				and(
-					side(inputSide),
-					or(inDeck, inHand),
-					or(spellSchool(cardSpellSchool), raceIn(refCard.races?.map((r) => Race[r] as Race))),
-				),
-			);
+			selectors.push(and(side(inputSide), or(inDeck, inHand), spellSchool(cardSpellSchool)));
+		}
+		if (
+			refCard.type?.toUpperCase() === CardType[CardType.MINION] &&
+			refCard.mechanics?.includes(GameTag[GameTag.KINDRED])
+		) {
+			if (refCard.races?.length) {
+				if (refCard.races.includes(Race[Race.ALL])) {
+					selectors.push(and(side(inputSide), or(inDeck, inHand), not(tribeless)));
+				} else {
+					selectors.push(
+						and(side(inputSide), or(inDeck, inHand), raceIn(refCard.races?.map((r) => Race[r] as Race))),
+					);
+				}
+			}
 		}
 		if (refCard.spellSchool) {
 			selectors.push(
