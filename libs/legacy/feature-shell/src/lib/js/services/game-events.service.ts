@@ -1766,6 +1766,10 @@ export class GameEvents {
 			console.log('[game-events] received tag=PLAYSTATE value=WON log', data);
 		}
 
+		if (data.indexOf('tag=TAG_PLAYER_CONCEDED_OR_DISCONNECTED value=1') !== -1) {
+			console.log('[game-events] received tag=TAG_PLAYER_CONCEDED_OR_DISCONNECTED value=1 log', data);
+		}
+
 		if (data.indexOf('tag=STATE value=COMPLETE') !== -1) {
 			console.log('[game-events] received tag=STATE value=COMPLETE log', data);
 		}
@@ -1832,9 +1836,20 @@ export class GameEvents {
 		if (existingLine.indexOf('tag=PLAYSTATE value=WON') !== -1) {
 			console.log('[game-events] [existing] received tag=PLAYSTATE value=WON log', existingLine);
 		}
+
+		if (existingLine.indexOf('tag=TAG_PLAYER_CONCEDED_OR_DISCONNECTED value=1') !== -1) {
+			console.log(
+				'[game-events] [existing] received tag=TAG_PLAYER_CONCEDED_OR_DISCONNECTED value=1 log',
+				existingLine,
+			);
+		}
 		this.existingLogLines.push(existingLine);
 
-		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1 || existingLine.includes('End Spectator Mode')) {
+		if (
+			existingLine.includes('tag=STATE value=COMPLETE') ||
+			existingLine.includes('End Spectator Mode') ||
+			existingLine.includes('tag=TAG_PLAYER_CONCEDED_OR_DISCONNECTED value=1')
+		) {
 			// Complete game, we don't handle it
 			console.log('[game-events] [existing] complete game, trashing all logs');
 			this.existingLogLines.clear();
