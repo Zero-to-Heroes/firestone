@@ -108,7 +108,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	@Input() set currentHeroPower(heroPowerCardId: string | null) {
 		this.currentHeroId = heroPowerCardId;
 		if (!!heroPowerCardId) {
-			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
+			this.heroIcon = this.i18n.getCardImage(heroPowerCardId, { isBgs: true });
 			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
 		} else {
@@ -192,7 +192,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 						.map((card) => this.allCards.getCard(card))
 						.map((card) => ({
 							id: card.id,
-							icon: this.i18n.getCardImage(card.id)!,
+							icon: this.i18n.getCardImage(card.id, { isBgs: true })!,
 							name: card.name,
 							text: this.sanitizeText(card.text),
 						}))
