@@ -3,14 +3,14 @@ import { DeckCard, DeckState } from '@firestone/game-state';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
 export const revealCard = (deck: DeckState, card: DeckCard) => {
-	console.debug('[card-reveal]', card.cardName, card, deck);
+	// console.debug('[card-reveal]', card.cardName, card, deck);
 	const creatorEntityId = card.creatorEntityId || card.lastAffectedByEntityId;
 	const creatorCardId = card.creatorCardId || card.lastAffectedByCardId;
 	if (!creatorEntityId || !creatorCardId) {
 		return deck;
 	}
 
-	console.debug('[card-reveal] creatorCardId', creatorCardId);
+	// console.debug('[card-reveal] creatorCardId', creatorCardId);
 	switch (creatorCardId) {
 		// case CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4:
 		case CardIds.ArchmageArugal:
@@ -66,13 +66,13 @@ const updateCardsInZoneAsCopies = (
 	creatorCardId: string,
 ) => {
 	return zone.map((c) => {
-		console.debug(
-			'[card-reveal] updateCardsInZoneAsCopies',
-			c.cardName,
-			c.creatorEntityId,
-			c.lastAffectedByEntityId,
-			creatorEntityId,
-		);
+		// console.debug(
+		// 	'[card-reveal] updateCardsInZoneAsCopies',
+		// 	c.cardName,
+		// 	c.creatorEntityId,
+		// 	c.lastAffectedByEntityId,
+		// 	creatorEntityId,
+		// );
 		if ((c.creatorEntityId || c.lastAffectedByEntityId) === creatorEntityId) {
 			const result = c.update({
 				cardId: card.cardId,
@@ -81,7 +81,7 @@ const updateCardsInZoneAsCopies = (
 				refManaCost: card.refManaCost,
 				cardType: card.cardType,
 			});
-			console.debug('[card-reveal] updating card', c.cardName, result);
+			// console.debug('[card-reveal] updating card', c.cardName, result);
 			return result;
 		} else {
 			return c;

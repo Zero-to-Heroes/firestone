@@ -109,14 +109,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
-				console.debug(
-					'[mulligan-guide] showWidget',
-					currentScene,
-					displayFromPrefs,
-					gameStarted,
-					gameEnded,
-					mulliganOver,
-				);
+				// console.debug(
+				// 	'[mulligan-guide] showWidget',
+				// 	currentScene,
+				// 	displayFromPrefs,
+				// 	gameStarted,
+				// 	gameEnded,
+				// 	mulliganOver,
+				// );
 
 				if (!gameStarted || mulliganOver || !displayFromPrefs) {
 					return false;
