@@ -36,6 +36,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MAYBE_DUNGEON_INFO_PICK = 'MAYBE_DUNGEON_INFO_PICK';
 	public static readonly GAME_START = 'GAME_START';
 	public static readonly GAME_SETTINGS = 'GAME_SETTINGS';
+	public static readonly GAME_RESET = 'GAME_RESET';
 	public static readonly NEW_LOG_LINE = 'NEW_LOG_LINE';
 	public static readonly WINNER = 'WINNER';
 	public static readonly TIE = 'TIE';
@@ -215,12 +216,12 @@ export class GameEvent implements GameStateEvent {
 	public static build(type: string, gameEvent: any, additionalProps?: any): GameEvent {
 		return Object.assign(new GameEvent(), {
 			type: type,
-			cardId: gameEvent.Value.CardId,
-			controllerId: gameEvent.Value.ControllerId,
-			localPlayer: gameEvent.Value.LocalPlayer ?? {},
-			opponentPlayer: gameEvent.Value.OpponentPlayer ?? {},
-			entityId: parseInt(gameEvent.Value.EntityId || 0),
-			gameState: gameEvent.Value.GameState,
+			cardId: gameEvent.Value?.CardId,
+			controllerId: gameEvent.Value?.ControllerId,
+			localPlayer: gameEvent.Value?.LocalPlayer ?? {},
+			opponentPlayer: gameEvent.Value?.OpponentPlayer ?? {},
+			entityId: parseInt(gameEvent.Value?.EntityId || 0),
+			gameState: gameEvent.Value?.GameState,
 			additionalData: additionalProps,
 		} as GameEvent);
 	}

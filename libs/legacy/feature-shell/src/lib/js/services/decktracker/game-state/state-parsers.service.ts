@@ -102,6 +102,7 @@ import { ExcavateTierParser } from '../event-parser/excavate-tier-parser';
 import { FatigueParser } from '../event-parser/fatigue-parser';
 import { FirstPlayerParser } from '../event-parser/first-player-parser';
 import { GameEndParser } from '../event-parser/game-end-parser';
+import { GameResetParser } from '../event-parser/game-reset-parser';
 import { GameRunningParser } from '../event-parser/game-running-parser';
 import { GameSettingsParser } from '../event-parser/game-settings-parser';
 import { GameStartParser } from '../event-parser/game-start-parser';
@@ -324,6 +325,7 @@ export class GameStateParsersService {
 			[GameEvent.FIRST_PLAYER]: [new FirstPlayerParser()],
 			[GameEvent.GALAKROND_INVOKED]: [new GalakrondInvokedParser()],
 			[GameEvent.GAME_END]: [new GameEndParser(this.prefs, this.owUtils)],
+			[GameEvent.GAME_RESET]: [new GameResetParser()],
 			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
 			[GameEvent.GAME_STATE_UPDATE]: [new GameStateUpdateParser()],
 			[GameEvent.GAME_START]: [new GameStartParser(this.reviewIdService, this.nav)],
