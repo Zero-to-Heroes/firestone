@@ -99,7 +99,7 @@ export class BgsSimulatorTrinketSelectionComponent
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(trinketCardId)?.text);
 		} else {
 			this.heroIcon = null;
-			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-trinket-placeholder');
 			this.heroPowerText = null;
 		}
 
