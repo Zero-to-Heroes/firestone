@@ -2192,6 +2192,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NaturalForceTavernBrawl:
 			return and(side(inputSide), spell, nature, dealsDamage);
+		case CardIds.NerubianFlyer:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NerubianVizier:
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NecriumApothecary:
