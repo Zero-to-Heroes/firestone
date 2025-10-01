@@ -21,6 +21,7 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const SPECIAL_STATUS_TOKENS = [CardIds.AvatarOfNzoth_FishOfNzothToken, CardIds.Menagerist_AmalgamToken];
+
 @Component({
 	standalone: false,
 	selector: 'bgs-simulator-minion-selection',
@@ -249,13 +250,16 @@ export class BgsSimulatorMinionSelectionComponent
 				this.mapData(([searchString, { tribeFilter, tierFilter }, showBuddies]) => {
 					const result = this.allCards
 						.getCards()
-						.filter((card) => card.isBaconPool || SPECIAL_STATUS_TOKENS.includes(card.id as CardIds))
+						.filter(
+							(card) =>
+								!card.premium &&
+								(card.isBaconPool ||
+									SPECIAL_STATUS_TOKENS.includes(card.id as CardIds) ||
+									(showBuddies && card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))),
+						)
 						.filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
 						// .filter((card) => card.battlegroundsPremiumDbfId || TOKEN_CARD_IDS.includes(card.id as CardIds))
 						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
-						.filter((card) =>
-							showBuddies ? true : !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]),
-						)
 						.filter(
 							(card) =>
 								!tribeFilter ||
@@ -330,11 +334,11 @@ export class BgsSimulatorMinionSelectionComponent
 			this.cardId = this.ref.battlegroundsNormalDbfId
 				? this.ref.id
 				: // Default when the card doesn't have a golden version
-				  this.allCards.getCard(this.ref.battlegroundsPremiumDbfId!).id ?? this.cardId;
+					(this.allCards.getCard(this.ref.battlegroundsPremiumDbfId!).id ?? this.cardId);
 		} else {
 			this.cardId = this.ref.battlegroundsPremiumDbfId
 				? this.ref.id
-				: this.allCards.getCard(this.ref.battlegroundsNormalDbfId!).id ?? this.cardId;
+				: (this.allCards.getCard(this.ref.battlegroundsNormalDbfId!).id ?? this.cardId);
 		}
 		// Check if the user changed the stats of the base card. If not, we just use the stats
 		// from the premium card instead
@@ -482,7 +486,7 @@ export class BgsSimulatorMinionSelectionComponent
 				...(this.sneeds > 0
 					? [...Array(this.sneeds).keys()].map((i) => ({
 							cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
-					  }))
+						}))
 					: []),
 				...(this._entity?.enchantments ?? []).filter((e) =>
 					this.summonMechs
@@ -546,7 +550,7 @@ export class BgsSimulatorMinionSelectionComponent
 						[GameTag[GameTag.HEALTH]]: this.health ?? 0,
 						[GameTag[GameTag.PREMIUM]]: this.premium ? 1 : 0,
 					},
-			  } as EntityAsJS);
+				} as EntityAsJS);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
