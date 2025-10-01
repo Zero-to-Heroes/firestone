@@ -15,9 +15,10 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { ExtendedArenaRunInfo, ExtendedHighWinRunsInfo, InternalNotableCard } from '../models/arena-high-wins-runs';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 
-const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json?v=5`;
+const RUNS_OVERVIEW_URL = `https://static.zerotoheroes.com/api/arena/stats/decks/%timePeriod%/overview.gz.json`;
 
 const EXPECTED_NOTABLE_CARDS_LENGTH = 1;
+
 @Injectable()
 export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWinsRunsService> {
 	public runs$$: SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>;
