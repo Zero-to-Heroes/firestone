@@ -57,7 +57,7 @@ import { buildBasicCardChoiceValue } from './card-choice-values';
 				</ng-container>
 			</div>
 		</div>
-		<div class="additional-info">
+		<div class="additional-info" *ngIf="showWidget$ | async">
 			<div
 				class="choosing-card-container items-{{ value.options?.length }}"
 				*ngIf="{ options: options$ | async } as value"
@@ -142,6 +142,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			),
 			shareReplay(1),
 		);
+
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.store.listen$(([main, nav, prefs]) => prefs.overlayEnableDiscoverHelp),
@@ -188,6 +189,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				return true;
 			}),
 			this.handleReposition(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 
 		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
