@@ -576,6 +576,8 @@ const getDynamicFilters = (
 
 		// Discover a Beast
 		case CardIds.RaptorHerald_CORE_EDR_004:
+		case CardIds.PeacefulPiper:
+		case CardIds.PeacefulPiper_HappyHippie:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
@@ -770,6 +772,8 @@ const getDynamicFilters = (
 		case CardIds.SuspiciousUsher_CORE_REV_002:
 		case CardIds.HerosWelcome_DINO_424:
 		case CardIds.Paparazzi:
+		case CardIds.ZarogsCrown:
+		case CardIds.MarinTheManager_ZarogsCrownToken_VAC_702t:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
