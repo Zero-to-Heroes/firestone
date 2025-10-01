@@ -205,6 +205,14 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
 					class="input"
+					[label]="'battlegrounds.sim.goldSpentThisGame' | fsTranslate"
+					[value]="goldSpentThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="goldSpentThisGame = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
 					[label]="'battlegrounds.sim.friendly-minions-dead-last-combat' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.friendly-minions-dead-last-combat-tooltip' | fsTranslate"
 					[value]="friendlyMinionsDeadLastCombat"
@@ -247,6 +255,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.tavernSpellHealthBuff = value?.TavernSpellHealthBuff ?? 0;
 		this.tavernSpellAttackBuff = value?.TavernSpellAttackBuff ?? 0;
 		this.battlecriesTriggeredThisGame = value?.BattlecriesTriggeredThisGame ?? 0;
+		this.goldSpentThisGame = value?.GoldSpentThisGame ?? 0;
 		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -274,6 +283,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	tavernSpellHealthBuff: number;
 	tavernSpellAttackBuff: number;
 	battlecriesTriggeredThisGame: number;
+	goldSpentThisGame: number;
 	friendlyMinionsDeadLastCombat: number;
 
 	private inputGlobalInfo: BgsPlayerGlobalInfo | undefined | null;
@@ -367,6 +377,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			TavernSpellHealthBuff: this.tavernSpellHealthBuff,
 			TavernSpellAttackBuff: this.tavernSpellAttackBuff,
 			BattlecriesTriggeredThisGame: this.battlecriesTriggeredThisGame,
+			GoldSpentThisGame: this.goldSpentThisGame,
 			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
 		};
 		// TODO: once hand is implemented, add the hand total stats to the Mrrrgl bonus
