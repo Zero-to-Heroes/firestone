@@ -163,8 +163,19 @@ export class CopiedFromEntityIdParser implements EventParser {
 		);
 		console.debug('[copied-from-entity] copiedDeckWithSecrets', copiedDeckWithSecrets);
 
+		let copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets;
+		if (copiedCardZone === Zone.HAND && !isCopiedPlayer) {
+			// Be cautious in case of leaks
+			// Maybe we'll need to add a whitelist. FromDeOtherSide should be there
+			const cardIdToAdd = cardId;
+			copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
+				additionalKnownCardsInHand: [...copiedDeckWithSecrets.additionalKnownCardsInHand, cardIdToAdd],
+			});
+			console.debug('[debug] added known card', cardIdToAdd, copiedDeckWithKnownCardsInHand);
+		}
+
 		return Object.assign(new GameState(), currentState, {
-			[isCopiedPlayer ? 'playerDeck' : 'opponentDeck']: copiedDeckWithSecrets,
+			[isCopiedPlayer ? 'playerDeck' : 'opponentDeck']: copiedDeckWithKnownCardsInHand,
 		});
 	}
 
