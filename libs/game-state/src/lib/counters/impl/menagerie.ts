@@ -63,38 +63,14 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 			return null;
 		}
 		const allPlayedCards = value.map((c) => this.allCards.getCard(c.cardId)).filter((c) => !!c.races?.length);
-		const uniqueSingleTribes = allPlayedCards
-			.filter((c) => c.races!.length === 1)
-			.sort()
-			// unique
-			.filter((c, index, self) => index === self.findIndex((t) => t.races?.every((r) => c.races?.includes(r))));
-		const uniqueTribes = extractUniqueTribes(allPlayedCards);
-		console.debug(
-			'[menagerie] uniqueTribes',
-			uniqueTribes.map((tribe) => Race[tribe]),
-			allPlayedCards.map((c) => c.races),
-		);
-		// If we have played a murloc/pirate minion, we want to show murloc/pirate, so that we know we can still play either
-		// If we have played a murloc/pirate and a pirate, we want to show murloc and pirate, as both are taken
-		const unusedMultiTribes = allPlayedCards.filter(
-			(c) => c.races!.length > 1 && c.races?.some((r: string) => !uniqueSingleTribes.includes(Race[r])),
-		);
-		console.debug(
-			'[menagerie] unusedMultiTribes',
-			unusedMultiTribes.map((c) => c.races),
-		);
-		const unusedUniqueTribes = uniqueTribes.filter(
-			(tribe) => !unusedMultiTribes.some((c) => c.races?.includes(Race[tribe])),
-		);
-		console.debug('[menagerie] unusedUniqueTribes', unusedUniqueTribes);
+
+		const tooltipData = analyzeTooltipTribes(allPlayedCards);
 
 		const tribesStr = [
-			...unusedUniqueTribes.map((tribe) =>
-				this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`),
+			...tooltipData.securedTribes.map((tribe) =>
+				this.i18n.translateString(`global.tribe.${tribe.toLowerCase()}`),
 			),
-			...unusedMultiTribes.map((c) =>
-				c.races?.map((r) => this.i18n.translateString(`global.tribe.${r.toLowerCase()}`)).join('/'),
-			),
+			...tooltipData.flexibleOptions,
 		].sort();
 		const tribeText = countersUseExpandedView ? '<br/>' + tribesStr?.join('<br/>') : tribesStr.join(', ');
 		const tooltip = this.i18n.translateString(`counters.menagerie.${side}`, {
@@ -164,6 +140,38 @@ export const extractUniqueTribes = (allPlayedCards: readonly ReferenceCard[]): R
 	);
 	return uniqueTribes.filter((tribe) => tribe).sort();
 };
+
+// Analyze tooltip tribes - extracted for testability
+export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): {
+	uniqueTribes: Race[];
+	securedTribes: string[];
+	flexibleOptions: string[];
+} {
+	const uniqueTribes = extractUniqueTribes(allPlayedCards);
+
+	// Get the tribes that were actually assigned by the optimization algorithm
+	const assignedTribes = new Set(uniqueTribes.map((tribe) => Race[tribe]));
+
+	// Multi-tribe minions that still have unused potential (tribes not yet assigned)
+	const unusedMultiTribes = allPlayedCards
+		.filter((c) => c.races!.length > 1 && !c.races!.includes('ALL'))
+		.map((c) => ({
+			...c,
+			availableRaces: c.races!.filter((raceStr) => !assignedTribes.has(raceStr)),
+		}))
+		.filter((c) => c.availableRaces.length > 0);
+
+	// Tribes that are definitively secured (no multi-tribe minion can still contribute them)
+	const unusedUniqueTribes = uniqueTribes.filter(
+		(tribe) => !unusedMultiTribes.some((c) => c.availableRaces.includes(Race[tribe])),
+	);
+
+	return {
+		uniqueTribes,
+		securedTribes: unusedUniqueTribes.map((tribe) => Race[tribe].toLowerCase()),
+		flexibleOptions: unusedMultiTribes.map((c) => c.availableRaces.map((r) => r.toLowerCase()).join('/')),
+	};
+}
 
 type Mutable<T> = {
 	-readonly [key in keyof T]: T[key];

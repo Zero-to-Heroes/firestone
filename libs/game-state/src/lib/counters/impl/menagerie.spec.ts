@@ -113,6 +113,20 @@ const testCases: TestCase[] = [
 		expected: 6,
 		description: 'Should return ALL, BEAST, MURLOC, PIRATE, UNDEAD, TOTEM',
 	},
+	{
+		name: 'complex multi-tribes 3',
+		minions: [
+			createMinionWithTribes(['ELEMENTAL'], 'Elemental1'),
+			createMinionWithTribes(['UNDEAD', 'MURLOC'], 'MurlocUndead1'),
+			createMinionWithTribes(['MURLOC', 'UNDEAD'], 'MurlocUndead2'),
+			createMinionWithTribes(['MURLOC', 'UNDEAD'], 'MurlocUndead3'),
+			createMinionWithTribes(['PIRATE', 'UNDEAD'], 'PirateUndead1'),
+			createMinionWithTribes(['PIRATE', 'UNDEAD'], 'PirateUndead2'),
+		],
+		expected: 4,
+		description:
+			'Should return ELEMENTAL, MURLOC, PIRATE, UNDEAD. There is no need to return double tribes here, as there are nothing we can play (from the already played tribes or double tribes) that would increase the number of tribes',
+	},
 ];
 
 // Run the tests
