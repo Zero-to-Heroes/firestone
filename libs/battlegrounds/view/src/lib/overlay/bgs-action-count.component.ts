@@ -6,6 +6,9 @@ import { ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	auditTime,
 	BehaviorSubject,
+	combineLatest,
+	distinctUntilChanged,
+	filter,
 	interval,
 	map,
 	Observable,
@@ -13,6 +16,7 @@ import {
 	startWith,
 	switchMap,
 	takeUntil,
+	tap,
 } from 'rxjs';
 
 interface ActionSample {
@@ -30,9 +34,17 @@ interface ActionSample {
 				<div class="header" [fsTranslate]="'battlegrounds.in-game.action-count.actions-title'"></div>
 				<div class="value">{{ actionsThisTurn$ | async }}</div>
 			</div>
-			<div class="section apm" [helpTooltip]="apmTooltip">
-				<div class="header" [fsTranslate]="'battlegrounds.in-game.action-count.apm-title'"></div>
-				<div class="value">{{ apm$ | async | number: '1.1-1' }}</div>
+			<div class="section apm peak-apm" [helpTooltip]="peakApmTooltip">
+				<div class="header" [fsTranslate]="'battlegrounds.in-game.action-count.peak-apm-title'"></div>
+				<div class="value">
+					{{ maxApm | number: '1.1-1' }}
+				</div>
+			</div>
+			<div class="section apm avg-apm" [helpTooltip]="avgApmTooltip">
+				<div class="header" [fsTranslate]="'battlegrounds.in-game.action-count.avg-apm-title'"></div>
+				<div class="value">
+					{{ avgApm | number: '1.1-1' }}
+				</div>
 			</div>
 			<div
 				class="close-button"
@@ -53,6 +65,8 @@ interface ActionSample {
 export class ActionCountComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	actionsThisTurn$: Observable<number | null>;
 	apm$: Observable<number | null>;
+	avgApm: number = 0;
+	maxApm: number = 0;
 
 	private actionSamples$ = new BehaviorSubject<ActionSample[]>([]);
 	private readonly APM_WINDOW_SECONDS = 4; // Calculate APM over the last N seconds
@@ -61,6 +75,8 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 	apmTooltip = this.i18n.translateString('battlegrounds.in-game.action-count.apm-tooltip', {
 		value: this.APM_WINDOW_SECONDS,
 	});
+	avgApmTooltip = this.i18n.translateString('battlegrounds.in-game.action-count.avg-apm-tooltip');
+	peakApmTooltip = this.i18n.translateString('battlegrounds.in-game.action-count.peak-apm-tooltip');
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -74,8 +90,19 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 	async ngAfterContentInit() {
 		await Promise.all([this.prefs.isReady, this.gameState.isReady()]);
 
+		const turnStartTimestamp$ = this.gameState.gameState$$.pipe(
+			auditTime(this.SAMPLE_INTERVAL_MS),
+			filter((state) => state.bgState?.currentGame?.phase === 'recruit'),
+			this.mapData((state) => state?.currentTurn),
+			distinctUntilChanged(),
+			this.mapData((turn) => new Date().getTime()),
+			tap((turnStartTimestamp) => console.debug('[debug] turnStartTimestamp', turnStartTimestamp)),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		this.actionsThisTurn$ = this.gameState.gameState$$.pipe(
 			auditTime(this.SAMPLE_INTERVAL_MS),
+			filter((state) => state.bgState?.currentGame?.phase === 'recruit'),
 			this.mapData((state) => {
 				const liveStats = state?.bgState.currentGame?.liveStats;
 				const mainPlayer = state?.bgState.currentGame?.getMainPlayer();
@@ -180,6 +207,41 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 			}),
 			takeUntil(this.destroyed$),
 		);
+
+		interval(this.SAMPLE_INTERVAL_MS)
+			.pipe(
+				switchMap(() =>
+					combineLatest([this.gameState.gameState$$, turnStartTimestamp$, this.actionsThisTurn$]),
+				),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(([state, turnStartTimestamp, actionsThisTurn]) => {
+				if (state.bgState?.currentGame?.phase !== 'recruit') {
+					return;
+				}
+				const turnDurationInSeconds = (new Date().getTime() - turnStartTimestamp) / 1000;
+				const avgApm = (60 * actionsThisTurn) / turnDurationInSeconds;
+				console.debug(
+					'avgApm',
+					actionsThisTurn,
+					turnDurationInSeconds,
+					avgApm,
+					turnStartTimestamp,
+					state.bgState?.currentGame?.phase,
+				);
+				this.avgApm = avgApm;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+
+		this.apm$.pipe(takeUntil(this.destroyed$)).subscribe((apm) => (this.maxApm = Math.max(this.maxApm, apm)));
+		turnStartTimestamp$.pipe(takeUntil(this.destroyed$)).subscribe((turnStartTimestamp) => {
+			this.maxApm = 0;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -19,29 +19,33 @@
 	padding: 10px;
 	border-radius: 15px;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 10px;
+	grid-template-rows: 1fr 1fr 1fr;
+	gap: 7px;
 
 	.section {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		// display: flex;
+		// flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		background: rgba(255, 255, 255, 0.08);
-		padding: 5px;
+		padding: 5px 10px;
+		gap: 10px;
 
 		.header {
 			text-transform: uppercase;
 			opacity: 0.8;
-			text-align: center;
+			text-align: left;
 			margin-bottom: 4px;
-			font-size: 0.85rem;
+			font-size: 0.85em;
 		}
 
 		.value {
 			color: var(--default-title-color);
-			font-size: 1.75rem;
+			font-size: 1.75em;
 			font-weight: 600;
+			text-align: center;
 		}
 	}
 
