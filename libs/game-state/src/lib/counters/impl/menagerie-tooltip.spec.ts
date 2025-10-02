@@ -41,9 +41,9 @@ const tooltipTestCases: TooltipTestCase[] = [
 			createMinionWithTribes(['BEAST'], 'Beast1'),
 			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
 		],
-		expectedSecuredTribes: ['Murloc', 'Beast'],
-		expectedFlexibleOptions: ['Pirate'],
-		description: 'Beast + Murloc secured by algorithm, Pirate still available from dual minion',
+		expectedSecuredTribes: ['Beast'],
+		expectedFlexibleOptions: ['Murloc/Pirate'],
+		description: 'Algorithm secures Beast, Murloc/Pirate still shows as flexible for strategic planning',
 	},
 	{
 		name: 'Multi-tribe becomes redundant',
@@ -55,7 +55,7 @@ const tooltipTestCases: TooltipTestCase[] = [
 		],
 		expectedSecuredTribes: ['Beast', 'Murloc', 'Pirate'],
 		expectedFlexibleOptions: [],
-		description: 'All tribes secured by singles, multi-tribe has no unused potential',
+		description: 'All tribes secured by singles, multi-tribe becomes completely redundant',
 	},
 	{
 		name: 'Partially constrained multi-tribe',
@@ -64,9 +64,9 @@ const tooltipTestCases: TooltipTestCase[] = [
 			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
 			createMinionWithTribes(['MURLOC', 'UNDEAD'], 'MurlocUndead1'),
 		],
-		expectedSecuredTribes: ['Undead', 'Murloc', 'Pirate'],
+		expectedSecuredTribes: ['Murloc', 'Pirate', 'Undead'],
 		expectedFlexibleOptions: [],
-		description: 'Algorithm optimally assigns all tribes, no unused potential remains',
+		description: 'Murloc secured by single, multi-tribes forced to use other tribes (all secured)',
 	},
 	{
 		name: 'Complex optimization scenario',
@@ -79,7 +79,7 @@ const tooltipTestCases: TooltipTestCase[] = [
 		],
 		expectedSecuredTribes: ['Undead', 'Murloc', 'Beast', 'Totem', 'Pirate'],
 		expectedFlexibleOptions: [],
-		description: 'Algorithm optimally assigns all multi-tribes, all tribes become secured',
+		description: 'Algorithm secures all 5 tribes, multi-tribes are all forced',
 	},
 	{
 		name: 'All multi-tribes exhausted',
@@ -91,9 +91,9 @@ const tooltipTestCases: TooltipTestCase[] = [
 			createMinionWithTribes(['PIRATE', 'UNDEAD'], 'PirateUndead1'),
 			createMinionWithTribes(['PIRATE', 'UNDEAD'], 'PirateUndead2'),
 		],
-		expectedSecuredTribes: ['Elemental', 'Undead', 'Murloc', 'Pirate'],
+		expectedSecuredTribes: ['Undead', 'Murloc', 'Elemental', 'Pirate'],
 		expectedFlexibleOptions: [],
-		description: 'All multi-tribe potential exhausted, everything becomes secured',
+		description: 'Algorithm secures all 4 tribes, multi-tribes are all forced',
 	},
 	{
 		name: 'complex multi-tribes',
@@ -109,6 +109,66 @@ const tooltipTestCases: TooltipTestCase[] = [
 		expectedFlexibleOptions: [],
 		description:
 			'There is no need to return double tribes here, as there are nothing we can play (from the already played tribes or double tribes) that would increase the number of tribes',
+	},
+	{
+		name: 'Partial redundancy test',
+		minions: [
+			createMinionWithTribes(['MURLOC'], 'Murloc1'),
+			createMinionWithTribes(['PIRATE'], 'Pirate1'),
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
+			createMinionWithTribes(['MURLOC', 'UNDEAD'], 'MurlocUndead1'),
+			createMinionWithTribes(['BEAST', 'ELEMENTAL'], 'MurlocUndead1'),
+		],
+		expectedSecuredTribes: ['Murloc', 'Pirate', 'Undead'],
+		expectedFlexibleOptions: ['Beast/Elemental'],
+		description: 'MURLOC/PIRATE becomes redundant, and MURLOC/UNDEAD is forced to UNDEAD',
+	},
+	{
+		name: 'Multi-tribes not fully resolved',
+		minions: [
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
+			createMinionWithTribes(['MURLOC', 'UNDEAD'], 'MurlocUndead1'),
+			createMinionWithTribes(['UNDEAD', 'ELEMENTAL'], 'MurlocUndead1'),
+		],
+		expectedSecuredTribes: [],
+		expectedFlexibleOptions: ['Murloc/Pirate', 'Murloc/Undead', 'Undead/Elemental'],
+		description:
+			'Nothing is forced, as there are several ways this could go: (Murloc, Undead, Elemental) or (Pirate, Undead, Elemental) or (Pirate, Murloc, Undead/Elemental)',
+	},
+	{
+		name: 'Multi-tribes not fully resolved 2',
+		minions: [
+			createMinionWithTribes(['BEAST', 'DRAGON'], 'BeastDragon1'),
+			createMinionWithTribes(['ELEMENTAL', 'DRAGON'], 'ElementalDragon1'),
+			createMinionWithTribes(['MECH', 'BEAST'], 'MechBeast1'),
+		],
+		expectedSecuredTribes: [],
+		expectedFlexibleOptions: ['Beast/Dragon', 'Elemental/Dragon', 'Mech/Beast'],
+		description: 'Nothing is forced, as there are several ways this could go',
+	},
+	{
+		name: 'Multi-tribes not fully resolved 3',
+		minions: [
+			createMinionWithTribes(['ALL'], 'All1'),
+			createMinionWithTribes(['MECH', 'BEAST'], 'MechBeast1'),
+			createMinionWithTribes(['UNDEAD', 'BEAST'], 'UndeadBeast1'),
+		],
+		expectedSecuredTribes: ['All'],
+		expectedFlexibleOptions: ['Mech/Beast', 'Undead/Beast'],
+		description:
+			'Nothing is forced, as there are several ways this could go: (All, Mech, Undead) or (All, Undead, Beast) or (All, Beast, Undead)',
+	},
+	{
+		name: 'Multi-tribes fully resolved',
+		minions: [
+			createMinionWithTribes(['BEAST', 'DRAGON'], 'BeastDragon1'),
+			createMinionWithTribes(['ELEMENTAL', 'DRAGON'], 'ElementalDragon1'),
+			createMinionWithTribes(['MECH', 'BEAST'], 'MechBeast1'),
+			createMinionWithTribes(['ELEMENTAL', 'BEAST'], 'ElementalBeast1'),
+		],
+		expectedSecuredTribes: ['Beast', 'Dragon', 'Elemental', 'Mech'],
+		expectedFlexibleOptions: [],
+		description: 'All multi-tribes are forced',
 	},
 ];
 

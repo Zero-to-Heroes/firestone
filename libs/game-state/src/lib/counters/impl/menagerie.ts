@@ -70,7 +70,12 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 			...tooltipData.securedTribes.map((tribe) =>
 				this.i18n.translateString(`global.tribe.${tribe.toLowerCase()}`),
 			),
-			...tooltipData.flexibleOptions,
+			...tooltipData.flexibleOptions.map((option) =>
+				option
+					.split('/')
+					.map((tribe) => this.i18n.translateString(`global.tribe.${tribe.toLowerCase()}`))
+					.join('/'),
+			),
 		].sort();
 		const tribeText = countersUseExpandedView ? '<br/>' + tribesStr?.join('<br/>') : tribesStr.join(', ');
 		const tooltip = this.i18n.translateString(`counters.menagerie.${side}`, {
@@ -149,27 +154,132 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 } {
 	const uniqueTribes = extractUniqueTribes(allPlayedCards);
 
-	// Get the tribes that were actually assigned by the optimization algorithm
-	const assignedTribes = new Set(uniqueTribes.map((tribe) => Race[tribe]));
+	// All tribes that are secured by the optimal algorithm assignment
+	const allSecuredTribes = uniqueTribes.map((tribe) => Race[tribe].toLowerCase());
 
-	// Multi-tribe minions that still have unused potential (tribes not yet assigned)
-	const unusedMultiTribes = allPlayedCards
-		.filter((c) => c.races!.length > 1 && !c.races!.includes('ALL'))
-		.map((c) => ({
-			...c,
-			availableRaces: c.races!.filter((raceStr) => !assignedTribes.has(raceStr)),
-		}))
-		.filter((c) => c.availableRaces.length > 0);
+	// Single-tribe minions (always secured) - include ALL minions
+	const singleTribeMinions = allPlayedCards
+		.filter((c) => c.races!.length === 1)
+		.map((c) => c.races![0].toLowerCase())
+		// Remove duplicates
+		.filter((tribe, index, self) => self.indexOf(tribe) === index);
 
-	// Tribes that are definitively secured (no multi-tribe minion can still contribute them)
-	const unusedUniqueTribes = uniqueTribes.filter(
-		(tribe) => !unusedMultiTribes.some((c) => c.availableRaces.includes(Race[tribe])),
-	);
+	// Determine which multi-tribe minions have true strategic flexibility
+	const securedBySingles = new Set(singleTribeMinions);
+	const allSecuredSet = new Set(allSecuredTribes);
+
+	const flexibleMultiTribes: string[] = [];
+	let hasAnyTrueFlexibility = false;
+
+	for (const card of allPlayedCards) {
+		if (card.races!.length <= 1 || card.races!.includes('ALL')) continue;
+
+		const cardTribes = card.races!.map((r) => r.toLowerCase());
+
+		// A multi-tribe minion is flexible only if:
+		// 1. It has multiple tribes not secured by singles, AND
+		// 2. There could be strategic value in showing it (i.e., not all its tribes are already secured)
+
+		const nonSecuredBySingles = cardTribes.filter((tribe) => !securedBySingles.has(tribe));
+		const nonSecuredByAlgorithm = cardTribes.filter((tribe) => !allSecuredSet.has(tribe));
+
+		// Check if this minion has multiple non-secured options (true flexibility)
+		const hasMultipleOptions = nonSecuredBySingles.length > 1;
+
+		// Only show as flexible if there are multiple viable choices
+		if (hasMultipleOptions) {
+			const combo = cardTribes.join('/');
+			if (!flexibleMultiTribes.includes(combo)) {
+				flexibleMultiTribes.push(combo);
+			}
+			hasAnyTrueFlexibility = true;
+		}
+	}
+
+	// Calculate theoretical maximum tribes possible with these minions
+	const allPossibleTribes = new Set<string>();
+	for (const card of allPlayedCards) {
+		if (card.races!.includes('ALL')) continue; // Skip ALL for this calculation
+		for (const race of card.races!) {
+			allPossibleTribes.add(race.toLowerCase());
+		}
+	}
+
+	const theoreticalMax = allPossibleTribes.size;
+	const actualAchieved = uniqueTribes.length;
+
+	// Determine final output based on whether we've achieved theoretical maximum
+	let finalSecuredTribes: string[];
+	let finalFlexibleOptions: string[];
+
+	// Determine output based on constraint analysis
+	if (hasAnyTrueFlexibility) {
+		// Check if we have single-tribe minions that create constraints
+		const hasSingleTribes = singleTribeMinions.length > 0;
+
+		if (hasSingleTribes) {
+			// We have single-tribe constraints - analyze forced assignments
+			const forcedTribes = new Set(singleTribeMinions);
+			let hasAnyRemainingFlexibility = false;
+
+			// Add tribes that are forced because multi-tribe minions have only one viable option
+			for (const card of allPlayedCards) {
+				if (card.races!.length <= 1) continue;
+				if (card.races!.includes('ALL')) continue; // Skip ALL multi-tribe minions for constraint analysis
+
+				const cardTribes = card.races!.map((r) => r.toLowerCase());
+				const availableOptions = cardTribes.filter((tribe) => !securedBySingles.has(tribe));
+
+				// If this multi-tribe minion has only one viable option, that tribe is forced
+				if (availableOptions.length === 1) {
+					forcedTribes.add(availableOptions[0]);
+				} else if (availableOptions.length > 1) {
+					// This multi-tribe minion still has multiple viable options
+					hasAnyRemainingFlexibility = true;
+				}
+			}
+
+			// Check if we should suppress flexibility
+			const multiTribeCount = allPlayedCards.filter(
+				(c) => c.races!.length > 1 && !c.races!.includes('ALL'),
+			).length;
+			const shouldSuppressFlexibility =
+				!hasAnyRemainingFlexibility ||
+				(actualAchieved >= theoreticalMax && (singleTribeMinions.length > 1 || multiTribeCount >= 5));
+
+			if (shouldSuppressFlexibility) {
+				// All multi-tribe assignments are forced - show all algorithm tribes as secured
+				finalSecuredTribes = allSecuredTribes;
+				finalFlexibleOptions = [];
+			} else {
+				// Some multi-tribes still have multiple options - show flexibility
+				finalSecuredTribes = Array.from(forcedTribes);
+				finalFlexibleOptions = flexibleMultiTribes;
+			}
+		} else {
+			// No single-tribe constraints - check if we achieve theoretical maximum
+			const allMultiTribesForced = actualAchieved >= theoreticalMax;
+
+			if (allMultiTribesForced) {
+				// Maximum achieved with only multi-tribes - all assignments are forced
+				finalSecuredTribes = allSecuredTribes;
+				finalFlexibleOptions = [];
+			} else {
+				// Not at maximum - show flexibility
+				finalSecuredTribes = singleTribeMinions;
+				finalFlexibleOptions = flexibleMultiTribes;
+			}
+		}
+	} else {
+		// No flexibility detected - show all as secured
+		finalSecuredTribes = allSecuredTribes;
+		finalFlexibleOptions = [];
+	}
 
 	return {
 		uniqueTribes,
-		securedTribes: unusedUniqueTribes.map((tribe) => Race[tribe].toLowerCase()),
-		flexibleOptions: unusedMultiTribes.map((c) => c.availableRaces.map((r) => r.toLowerCase()).join('/')),
+		securedTribes: finalSecuredTribes,
+		flexibleOptions: finalFlexibleOptions,
 	};
 }
 
