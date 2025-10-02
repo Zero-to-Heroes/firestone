@@ -6,6 +6,7 @@ import { EventParser } from './event-parsers/_event-parser';
 import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';
 import { RTStatsBgsBattleHistoryUpdatedParser } from './event-parsers/battlegrounds/rtstats-bgs-battle-history-updated-parser';
 import { RTStatsBgsBoardStatsParser } from './event-parsers/battlegrounds/rtstats-bgs-board-stats-parser';
+import { RTStatBgsDiscoversParser } from './event-parsers/battlegrounds/rtstats-bgs-discovers-parser';
 import { RTStatBgsEnemyHeroKilledParser } from './event-parsers/battlegrounds/rtstats-bgs-enemy-hero-killed-parser';
 import { RTStatsBgsFaceOffParser } from './event-parsers/battlegrounds/rtstats-bgs-face-offs-parser';
 import { RTStatsBgsFreezeParser } from './event-parsers/battlegrounds/rtstats-bgs-freeze-parser';
@@ -64,6 +65,7 @@ export class RealTimeStatsParsersService {
 				new RTStatsTotalDamageDealtByHeroesParser(this.allCards),
 				// new RTStatsTotalDamageTakenByHeroesParser(this.allCards),
 			],
+			[GameEvent.ENTITY_CHOSEN]: [new RTStatBgsDiscoversParser(this.allCards)],
 			[GameEvent.GAME_START]: [new RTStatsGameStartParser()],
 			[GameEvent.HERO_POWER_USED]: [new RTStatHeroPowerUsedParser()],
 			[GameEvent.MATCH_METADATA]: [new RTStatsMetadataParser()],

@@ -120,6 +120,8 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 					liveStats.minionsPlayedOverTurn.find((play) => play.turn === state.currentTurn)?.value ?? 0;
 				const spellsThisTurn =
 					liveStats.spellsPlayedOverTurn.find((spell) => spell.turn === state.currentTurn)?.value ?? 0;
+				const discoversThisTurn =
+					liveStats.discoversOverTurn.find((spell) => spell.turn === state.currentTurn)?.value ?? 0;
 				const upgradesThisTurn = mainPlayer.tavernUpgradeHistory.find(
 					(upgrade) => upgrade.turn === state.currentTurn,
 				)
@@ -142,6 +144,7 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 					minionsThisTurn +
 					spellsThisTurn +
 					upgradesThisTurn +
+					discoversThisTurn +
 					heroPowersThisTurn;
 				return totalActions;
 			}),
