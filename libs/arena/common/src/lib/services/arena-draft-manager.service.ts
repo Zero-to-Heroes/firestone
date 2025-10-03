@@ -23,7 +23,7 @@ import {
 } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -314,7 +314,7 @@ export class ArenaDraftManagerService
 						this.currentDeck$$.value?.GameType !== arenaDeck?.GameType &&
 						this.cardOptions$$.value == null
 					) {
-						console.debug('[arena-draft-manager] game type changed, resetting options');
+						console.log('[arena-draft-manager] game type changed, resetting options');
 						this.cardOptions$$.next([]);
 						this.choicesForCardPicks.clear();
 						this.deckForCardPicks = null;
@@ -373,11 +373,17 @@ export class ArenaDraftManagerService
 				}
 			});
 			this.cardOptions$$.pipe(filter((options) => !!options?.length)).subscribe((options) => {
-				this.choicesForCardPicks.enqueue(options!.map((o) => o.CardId));
-				console.debug(
-					'[arena-draft-manager] updated choices for card picks',
-					this.choicesForCardPicks.toArray(),
-				);
+				const flatOptions = options!.map((o) => o.CardId);
+				if (
+					this.choicesForCardPicks
+						.toArray()
+						.some((existingOptions) => arraysEqual(existingOptions, flatOptions))
+				) {
+					console.warn('[arena-draft-manager] choices for card picks already exist, skipping', flatOptions);
+					return;
+				}
+				this.choicesForCardPicks.enqueue(flatOptions);
+				console.log('[arena-draft-manager] updated choices for card picks', this.choicesForCardPicks.toArray());
 				// Initial setup
 				// if (!this.choicesForCardPicks?.length) {
 				// 	this.choicesForCardPicks = options;
