@@ -1,5 +1,5 @@
-import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
 export const revealCard = (deck: DeckState, card: DeckCard) => {
@@ -52,6 +52,45 @@ export const revealCard = (deck: DeckState, card: DeckCard) => {
 	}
 };
 
+export const revealCardInOpponentDeck = (
+	deck: DeckState,
+	card: DeckCard,
+	otherDeck: DeckState,
+	gameState: GameState,
+) => {
+	console.debug('[debug] [card-reveal]', card.cardName, card, deck);
+	const creatorEntityId = card.creatorEntityId || card.lastAffectedByEntityId;
+	const creatorCardId = card.creatorCardId || card.lastAffectedByCardId;
+	if (!creatorEntityId || !creatorCardId) {
+		return deck;
+	}
+
+	// console.debug('[card-reveal] creatorCardId', creatorCardId);
+	switch (creatorCardId) {
+		// When we guess the card, we flag it in the opponent's hand
+		case CardIds.SuspiciousAlchemist_AMysteryEnchantment:
+			console.debug('[debug] [card-reveal] suspicious alchemist', card, deck, otherDeck);
+			const enchantment = gameState.fullGameState?.Opponent?.AllEntities?.find(
+				(e) => e.entityId === creatorEntityId,
+			);
+			console.debug('[debug] [card-reveal] enchantment', enchantment);
+			if (enchantment) {
+				const suspiciousCard = otherDeck.findCard(
+					enchantment.tags?.find((t) => t.Name === GameTag.CREATOR)?.Value,
+				)?.card;
+				console.debug('[debug] [card-reveal] suspiciousCard', suspiciousCard);
+				if (!!suspiciousCard) {
+					return otherDeck.update({
+						hand: updateCardsInZoneAsCopies(otherDeck.hand, card, suspiciousCard.entityId, creatorCardId),
+					});
+				}
+			}
+			return otherDeck;
+		default:
+			return otherDeck;
+	}
+};
+
 const updateCardsInDeckAsCopies = (deck: DeckState, card: DeckCard, creatorEntityId: number, creatorCardId: string) => {
 	return deck.update({
 		deck: updateCardsInZoneAsCopies(deck.deck, card, creatorEntityId, creatorCardId),
@@ -64,6 +103,7 @@ const updateCardsInZoneAsCopies = (
 	card: DeckCard,
 	creatorEntityId: number,
 	creatorCardId: string,
+	debug = false,
 ) => {
 	return zone.map((c) => {
 		// console.debug(
@@ -81,7 +121,7 @@ const updateCardsInZoneAsCopies = (
 				refManaCost: card.refManaCost,
 				cardType: card.cardType,
 			});
-			// console.debug('[card-reveal] updating card', c.cardName, result);
+			debug && console.debug('[debug] [card-reveal] updating card', c.cardName, result);
 			return result;
 		} else {
 			return c;

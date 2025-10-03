@@ -49,8 +49,8 @@ export class MinionSummonedParser implements EventParser {
 			board: newBoard,
 		} as DeckState);
 
-		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
-		const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
+		// const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
+		// const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
 
 		// return currentState.update({
 		// 	playerDeck: playerDeckAfterReveal,
