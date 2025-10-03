@@ -105,7 +105,7 @@ export class LotteryWidgetControllerService {
 		combineLatest([
 			adVisible$,
 			this.prefs.preferences$$.pipe(
-				map((prefs) => prefs.lotteryShowHiddenWindowNotification),
+				map((prefs) => prefs.showLottery),
 				distinctUntilChanged(),
 			),
 			this.prefs.preferences$$.pipe(

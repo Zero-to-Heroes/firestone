@@ -25,6 +25,12 @@ export const generalLotterySettings = (context: SettingContext): SettingNode => 
 						label: context.i18n.translateString('settings.general.premium.lottery-button-text'),
 						tooltip: null,
 					},
+					{
+						type: 'toggle',
+						field: 'lotteryOverlay',
+						label: context.i18n.translateString('app.lottery.overlay-toggle-label'),
+						tooltip: context.i18n.translateString('app.lottery.overlay-toggle-tooltip'),
+					},
 				],
 			},
 			{
