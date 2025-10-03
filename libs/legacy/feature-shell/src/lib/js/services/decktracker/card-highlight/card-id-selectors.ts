@@ -1613,7 +1613,10 @@ export const cardIdSelector = (
 		case CardIds.HighAbbessAlura:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.HighCultistBasaleph:
-			return tooltip(and(side(inputSide), minionsDeadSinceLastTurn, undead));
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), undead),
+				and(side(inputSide), minionsDeadSinceLastTurn, undead),
+			);
 		case CardIds.HighCultistHerenn_TLC_810:
 			return and(side(inputSide), inDeck, deathrattle, minion);
 		case CardIds.HighTemplar_SC_765:

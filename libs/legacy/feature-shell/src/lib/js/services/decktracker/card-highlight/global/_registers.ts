@@ -16,6 +16,7 @@ import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { HabeasCorpses } from './habeas-corpses';
 import { Hadronox } from './hadronox';
+import { HighCultistBasaleph } from './high-cultist-basaleph';
 import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
 import { ImpKingRafaam } from './imp-king-rafaam';
@@ -102,6 +103,7 @@ const cards = [
 	BrilliantMacaw,
 	TwistedWebweaver,
 	HabeasCorpses,
+	HighCultistBasaleph,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
