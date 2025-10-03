@@ -30,6 +30,7 @@ import {
 	shareReplay,
 	switchMap,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
@@ -190,6 +191,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 						return result;
 					}) ?? [],
 			),
+			tap((options) => console.log('[arena-card-selection] options', options)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

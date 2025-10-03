@@ -45,6 +45,7 @@ import {
 	shareReplay,
 	switchMap,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
@@ -367,6 +368,8 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				}
 				return cardsWithStats;
 			}),
+			tap((options) => console.log('[arena-decktracker-ooc] options', options)),
+			takeUntil(this.destroyed$),
 		);
 
 		combineLatest([
