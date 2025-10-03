@@ -74,7 +74,9 @@ export class ArenaCurrentSessionWidgetWrapperComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs, this.gameState);
 
-		const currentGameType$ = this.gameState.gameState$$.pipe(this.mapData((state) => state?.metadata?.gameType));
+		const currentGameType$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => (state.gameEnded || !state.gameStarted ? null : state?.metadata?.gameType)),
+		);
 		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
 			this.mapData(
 				([gameType, currentScene, prefs]) =>
