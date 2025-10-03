@@ -1047,6 +1047,8 @@ export const giftCreators = [
 	CardIds.DopEmergencyEnchant2Enchantment_DOP_002e,
 	CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t,
 	CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
+	CardIds.ReachEquilibrium_SoletosLifesBreathToken_TLC_817t3,
+	CardIds.ReachEquilibrium_SoletosDeathsTouchToken_TLC_817t4,
 	CardIds.TheForbiddenSequence_TLC_460,
 	CardIds.StoryOfUmbra_DINO_415,
 	CardIds.BeastSpeakerTaka_DINO_430,
