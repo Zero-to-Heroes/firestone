@@ -426,7 +426,7 @@ export const cardType =
 export const location = cardType(CardType.LOCATION);
 export const minion = cardType(CardType.MINION);
 export const spell = and(cardType(CardType.SPELL), not(passive));
-export const givesWeapon = cardIs(CardIds.DoctorHollidae_WW_010);
+export const givesWeapon = hasMechanicStr('EQUIPS_WEAPON');
 export const weapon = or(cardType(CardType.WEAPON), givesWeapon);
 
 export const createLocation = cardIs(
