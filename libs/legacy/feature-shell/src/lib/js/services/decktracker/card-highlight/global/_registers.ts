@@ -40,6 +40,7 @@ import { Ressucitate } from './ressucitate';
 import { RestInPeace } from './rest-in-peace';
 import { ReturnPolicy } from './return-policy';
 import { Rewind } from './rewind';
+import { StarlightWhelp } from './starlight-whelp';
 import { StranglethornHeart } from './stranglethorn-heart';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TidepoolPupil } from './tidepool-pupil';
@@ -104,6 +105,7 @@ const cards = [
 	TwistedWebweaver,
 	HabeasCorpses,
 	HighCultistBasaleph,
+	StarlightWhelp,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};

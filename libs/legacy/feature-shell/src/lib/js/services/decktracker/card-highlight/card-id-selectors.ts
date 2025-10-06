@@ -3046,10 +3046,7 @@ export const cardIdSelector = (
 		case CardIds.StarlightWanderer_GDB_720:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.StarlightWhelp:
-			return highlightConditions(
-				tooltip(and(side(inputSide), inStartingHand)),
-				and(side(inputSide), inStartingHand),
-			);
+			return and(side(inputSide), inStartingHand);
 		case CardIds.Starscryer:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.StarvingTavernBrawl:
