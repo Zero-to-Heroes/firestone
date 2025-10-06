@@ -171,7 +171,6 @@ export class CopiedFromEntityIdParser implements EventParser {
 			copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 				additionalKnownCardsInHand: [...copiedDeckWithSecrets.additionalKnownCardsInHand, cardIdToAdd],
 			});
-			console.debug('[debug] added known card', cardIdToAdd, copiedDeckWithKnownCardsInHand);
 		}
 
 		return Object.assign(new GameState(), currentState, {

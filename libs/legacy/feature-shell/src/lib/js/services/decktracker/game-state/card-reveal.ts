@@ -58,7 +58,7 @@ export const revealCardInOpponentDeck = (
 	otherDeck: DeckState,
 	gameState: GameState,
 ) => {
-	// console.debug('[debug] [card-reveal]', card.cardName, card, deck);
+	// console.debug('[card-reveal]', card.cardName, card, deck);
 	const creatorEntityId = card.creatorEntityId || card.lastAffectedByEntityId;
 	const creatorCardId = card.creatorCardId || card.lastAffectedByCardId;
 	if (!creatorEntityId || !creatorCardId) {
@@ -69,16 +69,16 @@ export const revealCardInOpponentDeck = (
 	switch (creatorCardId) {
 		// When we guess the card, we flag it in the opponent's hand
 		case CardIds.SuspiciousAlchemist_AMysteryEnchantment:
-			// console.debug('[debug] [card-reveal] suspicious alchemist', card, deck, otherDeck);
+			// console.debug('[card-reveal] suspicious alchemist', card, deck, otherDeck);
 			const enchantment = gameState.fullGameState?.Opponent?.AllEntities?.find(
 				(e) => e.entityId === creatorEntityId,
 			);
-			// console.debug('[debug] [card-reveal] enchantment', enchantment);
+			// console.debug('[card-reveal] enchantment', enchantment);
 			if (enchantment) {
 				const suspiciousCard = otherDeck.findCard(
 					enchantment.tags?.find((t) => t.Name === GameTag.CREATOR)?.Value,
 				)?.card;
-				// console.debug('[debug] [card-reveal] suspiciousCard', suspiciousCard);
+				// console.debug('[card-reveal] suspiciousCard', suspiciousCard);
 				if (!!suspiciousCard) {
 					return otherDeck.update({
 						hand: updateCardsInZoneAsCopies(otherDeck.hand, card, suspiciousCard.entityId, creatorCardId),
@@ -121,7 +121,6 @@ const updateCardsInZoneAsCopies = (
 				refManaCost: card.refManaCost,
 				cardType: card.cardType,
 			});
-			debug && console.debug('[debug] [card-reveal] updating card', c.cardName, result);
 			return result;
 		} else {
 			return c;

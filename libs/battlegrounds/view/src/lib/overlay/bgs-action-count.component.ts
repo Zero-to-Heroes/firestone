@@ -16,7 +16,6 @@ import {
 	startWith,
 	switchMap,
 	takeUntil,
-	tap,
 } from 'rxjs';
 
 interface ActionSample {
@@ -96,7 +95,6 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 			this.mapData((state) => state?.currentTurn),
 			distinctUntilChanged(),
 			this.mapData((turn) => new Date().getTime()),
-			tap((turnStartTimestamp) => console.debug('[debug] turnStartTimestamp', turnStartTimestamp)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
