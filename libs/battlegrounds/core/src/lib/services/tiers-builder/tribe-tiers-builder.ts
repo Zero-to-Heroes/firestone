@@ -70,8 +70,8 @@ export const buildTribeTiers = (
 			a.tavernTierData === Race.BLANK
 				? 1
 				: b.tavernTierData === Race.BLANK
-				? -1
-				: a.tooltip.localeCompare(b.tooltip),
+					? -1
+					: a.tooltip.localeCompare(b.tooltip),
 		),
 		...scTribeTiers,
 	].filter((t) => !!t);
@@ -141,7 +141,9 @@ const buildSpellsTier = (
 	config?: TierBuilderConfig,
 ): Tier => {
 	const cardsForSpells = cardsToInclude.filter(
-		(card) => card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL],
+		(card) =>
+			card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL] ||
+			card.mechanics?.includes('GENERATES_SPELL'),
 	);
 	const spellGroups: readonly TierGroup[] = buildTribeTierGroups(cardsForSpells, tiersToInclude, i18n, config);
 	const result: Tier = {
