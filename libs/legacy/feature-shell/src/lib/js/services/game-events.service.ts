@@ -230,10 +230,6 @@ export class GameEvents {
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.doEventDispatch(event);
 				break;
-			case 'GAME_RESET':
-				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
-				this.doEventDispatch(GameEvent.build(GameEvent.GAME_RESET, gameEvent));
-				break;
 			case 'GAME_SETTINGS':
 				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				const gameSettingsEvent = Object.assign(new GameSettingsEvent(), {
