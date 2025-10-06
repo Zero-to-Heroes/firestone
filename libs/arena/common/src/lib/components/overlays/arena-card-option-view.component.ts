@@ -21,6 +21,10 @@ import { ArenaCardOption } from './model';
 					<span class="value {{ deckWinrateClass }}" [helpTooltip]="deckImpactTooltip">{{ deckImpact }}</span>
 				</div>
 			</div>
+			<!-- Putting it at the top messes the layout because of the first-child selector -->
+			<div class="low-data-icon" *ngIf="lowData" [helpTooltip]="lowDataTooltip">
+				<div inlineSVG="assets/svg/attention.svg"></div>
+			</div>
 			<div class="stats pick">
 				<div class="stat pickrate">
 					<span class="label" [fsTranslate]="'app.arena.card-stats.header-pickrate'"></span>
@@ -51,6 +55,10 @@ export class ArenaCardOptionViewComponent {
 		this.deckImpactTooltip = this.i18n.translateString(`app.arena.draft.card-deck-impact-tooltip`, {
 			deckWinrate: this.deckWinrate,
 		});
+		this.lowData = value?.dataPoints == null || value.dataPoints < 1000;
+		this.lowDataTooltip = this.i18n.translateString('app.arena.card-stats.low-data-text', {
+			value: value?.dataPoints ?? 0,
+		});
 	}
 
 	drawnWinrate: string;
@@ -63,6 +71,8 @@ export class ArenaCardOptionViewComponent {
 	pickRateHighWins: string;
 	drawnImpactTooltip: string | null;
 	deckImpactTooltip: string | null;
+	lowData: boolean;
+	lowDataTooltip: string;
 
 	pickRateHighWinsLabel = this.i18n.translateString(`app.arena.card-stats.header-pickrate-high-wins-short`, {
 		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,

@@ -12,4 +12,5 @@ export interface ArenaCardOption {
 	readonly pickRate: number | null | undefined;
 	readonly pickRateDelta: number | null | undefined;
 	readonly pickRateHighWins: number | null | undefined;
+	readonly dataPoints: number | null | undefined;
 }

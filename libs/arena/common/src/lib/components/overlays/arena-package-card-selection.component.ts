@@ -123,6 +123,7 @@ export class ArenaPackageCardSelectionComponent extends AbstractSubscriptionComp
 							pickRate: pickRate,
 							pickRateDelta: pickRateDelta,
 							pickRateHighWins: pickRateHighWins,
+							dataPoints: stat?.matchStats?.stats?.inStartingDeck ?? null,
 						};
 						return result;
 					}) ?? [],
