@@ -499,6 +499,11 @@ const getDynamicFilters = (
 		// Random Elementals
 		case CardIds.MenacingNimbusCore:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.ELEMENTAL);
+		case CardIds.Synthesize:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.ELEMENTAL) &&
+				(hasCost(c, '==', 1) || hasCost(c, '==', 2) || hasCost(c, '==', 3));
 
 		// Random Naga
 		case CardIds.HuddleUp_WORK_012:
@@ -981,6 +986,10 @@ const getDynamicFilters = (
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
 		case CardIds.TwilightInfluence_EDR_463:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
+		case CardIds.CrystalBroker:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', (options?.deckState?.hero?.maxMana ?? 0) >= 10 ? 8 : 3);
 		case CardIds.IronforgePortal:
 		case CardIds.IronforgePortal_WON_337:
 		case CardIds.ThreshridersBlessing_TLC_477:
