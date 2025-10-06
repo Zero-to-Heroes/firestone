@@ -130,7 +130,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		card: DeckCard,
 		gameState: GameState,
 	): void {
-		console.debug('[opponent-card-info-id] buildInfo', card);
+		// console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
 		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
@@ -215,13 +215,13 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			}
 		}
 
-		console.debug('[opponent-card-info-id] considering creator card', card, card?.creatorEntityId);
+		// console.debug('[opponent-card-info-id] considering creator card', card, card?.creatorEntityId);
 		if (card?.creatorEntityId) {
 			const cardImpl = cardsMapping[card?.creatorCardId];
-			console.debug('[opponent-card-info-id] cardImpl', cardImpl);
+			// console.debug('[opponent-card-info-id] cardImpl', cardImpl);
 			if (hasGetRelatedCards(cardImpl)) {
 				const result = cardImpl.getRelatedCards(card?.creatorEntityId, 'opponent', gameState, this.allCards);
-				console.debug('[opponent-card-info-id] result', result);
+				// console.debug('[opponent-card-info-id] result', result);
 				if (result != null) {
 					this.possibleCards.push(...result);
 				}
