@@ -1302,6 +1302,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.ForgedInFlame:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
+		case CardIds.ForgeOfSouls_CORE_ICC_281:
+		case CardIds.ForgeOfSouls_ICC_281:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.FossilFanatic:
 			return and(side(inputSide), inDeck, spell, fel);
 		case CardIds.FoxyFraud:
