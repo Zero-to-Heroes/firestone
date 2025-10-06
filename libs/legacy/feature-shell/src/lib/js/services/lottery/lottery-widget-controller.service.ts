@@ -104,8 +104,13 @@ export class LotteryWidgetControllerService {
 
 		combineLatest([
 			adVisible$,
+			this.ads.hasPremiumSub$$,
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.showLottery),
+				distinctUntilChanged(),
+			),
+			this.prefs.preferences$$.pipe(
+				map((prefs) => prefs.lotteryShowHiddenWindowNotification),
 				distinctUntilChanged(),
 			),
 			this.prefs.preferences$$.pipe(
@@ -117,8 +122,8 @@ export class LotteryWidgetControllerService {
 				distinctUntilChanged(),
 				debounceTime(2000),
 				filter(
-					([adVisible, showNotification, lotteryOverlay]) =>
-						!adVisible && showNotification && !lotteryOverlay,
+					([adVisible, premium, showLottery, showNotification, lotteryOverlay]) =>
+						!adVisible && !premium && showLottery && showNotification && !lotteryOverlay,
 				),
 			)
 			.subscribe(() => {
