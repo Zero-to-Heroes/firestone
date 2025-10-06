@@ -111,6 +111,9 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	@Input() set groupSameCardsTogether(value: boolean) {
 		this.groupSameCardsTogether$$.next(value);
 	}
+	@Input() set sortByZoneOrder(value: boolean) {
+		this.sortByZoneOrder$$.next(value);
+	}
 	@Input() set showStatsChange(value: boolean) {
 		this.showStatsChange$$.next(value);
 	}
@@ -134,6 +137,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(true);
 	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
+	private sortByZoneOrder$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(true);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
@@ -170,6 +174,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 			this.showStatsChange$,
 			this.showGiftsSeparately$$.asObservable(),
 			this.groupSameCardsTogether$$.asObservable(),
+			this.sortByZoneOrder$$.asObservable(),
 			this.showBottomCardsSeparately$$.asObservable(),
 			this.showTopCardsSeparately$$.asObservable(),
 			this.deckState$$.asObservable(),
@@ -182,6 +187,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 					showStatsChange,
 					showGiftsSeparately,
 					groupSameCardsTogether,
+					sortByZoneOrder,
 					showBottomCardsSeparately,
 					showTopCardsSeparately,
 					deckState,
@@ -193,6 +199,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 						showStatsChange,
 						showGiftsSeparately,
 						groupSameCardsTogether,
+						sortByZoneOrder,
 						showBottomCardsSeparately,
 						showTopCardsSeparately,
 						deckState,
@@ -234,6 +241,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		showStatsChange: boolean,
 		showGiftsSeparately: boolean,
 		groupSameCardsTogether: boolean,
+		sortByZoneOrder: boolean,
 		showBottomCardsSeparately: boolean,
 		showTopCardsSeparately: boolean,
 		deckState: DeckState,
@@ -251,6 +259,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 					showStatsChange,
 					showGiftsSeparately,
 					groupSameCardsTogether,
+					sortByZoneOrder,
 					showBottomCardsSeparately,
 					showTopCardsSeparately,
 					collection,
@@ -308,12 +317,16 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		showStatsChange: boolean,
 		showGiftsSeparately: boolean,
 		groupSameCardsTogether: boolean,
+		sortByZoneOrder: boolean,
 		showBottomCardsSeparately: boolean,
 		showTopCardsSeparately: boolean,
 		collection: readonly SetCard[],
 	): string {
 		const refCard = this.allCards.getCard(card.cardId);
-		const cardIdForGrouping = !!card.cardId ? (refCard?.counterpartCards?.[0] ?? card.cardId) : '';
+		let cardIdForGrouping = !!card.cardId ? (refCard?.counterpartCards?.[0] ?? card.cardId) : '';
+		if (sortByZoneOrder) {
+			cardIdForGrouping = cardIdForGrouping + '-' + card.entityId;
+		}
 		const keyWithBonus =
 			!groupSameCardsTogether && showStatsChange
 				? cardIdForGrouping + '_' + (card.mainAttributeChange || 0) + '_' + (card.turnsUntilImmolate || 0)

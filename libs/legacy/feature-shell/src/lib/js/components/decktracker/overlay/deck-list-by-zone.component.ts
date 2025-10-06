@@ -32,7 +32,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
-					[groupSameCardsTogether]="groupSameCardsTogether"
+					[groupSameCardsTogether]="zone.groupSameCardsTogether"
+					[sortByZoneOrder]="zone.sortByZoneOrder"
 					[showStatsChange]="showStatsChange"
 					[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 					[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
@@ -58,7 +59,6 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	@Input() showUpdatedCost: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showGiftsSeparately: boolean;
-	@Input() groupSameCardsTogether: boolean;
 	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() removeDuplicatesInTooltip: boolean;
@@ -100,6 +100,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showDiscoveryZone$$.next(value);
 	}
 
+	@Input() set groupSameCardsTogether(value: boolean) {
+		this.groupSameCardsTogether$$.next(value);
+	}
+
 	@Input() set sortHandByZoneOrder(value: boolean) {
 		this.sortHandByZoneOrder$$.next(value);
 	}
@@ -122,6 +126,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showDiscoveryZone$$ = new BehaviorSubject<boolean>(true);
 	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(true);
 	private sortHandByZoneOrder$$ = new BehaviorSubject<boolean>(false);
+	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
@@ -152,6 +157,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showGeneratedCardsInSeparateZone$$,
 			this.showBoardCardsInSeparateZone$$,
 			this.showPlaguesOnTop$$,
+			this.groupSameCardsTogether$$,
 			this.sortHandByZoneOrder$$,
 			this.showDiscoveryZone$$,
 		]).pipe(
@@ -169,6 +175,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					showGeneratedCardsInSeparateZone,
 					showBoardCardsInSeparateZone,
 					showPlaguesOnTop,
+					groupSameCardsTogether,
 					sortHandByZoneOrder,
 					showDiscoveryZone,
 				]) =>
@@ -182,6 +189,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showBoardCardsInSeparateZone,
 						showPlaguesOnTop,
 						showDiscoveryZone,
+						groupSameCardsTogether,
 						sortHandByZoneOrder,
 						deckState,
 					),
@@ -201,6 +209,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showBoardCardsInSeparateZone: boolean,
 		showPlaguesOnTop: boolean,
 		showDiscoveryZone: boolean,
+		groupSameCardsTogether: boolean,
 		sortHandByZoneOrder: boolean,
 		deckState: DeckState,
 	): readonly DeckZone[] {
@@ -215,6 +224,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.buildZone(
 					deckState.globalEffects,
 					null,
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
 					'global-effects',
 					this.i18n.translateString('decktracker.zones.global-effects'),
 					null,
@@ -257,6 +269,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.buildZone(
 					null,
 					deckSections.sort((a, b) => a.order - b.order),
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
 					'deck',
 					this.i18n.translateString('decktracker.zones.in-deck'),
 					null,
@@ -298,6 +313,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.buildZone(
 				cardsForHand,
 				null,
+				{
+					groupSameCardsTogether: !sortHandByZoneOrder && groupSameCardsTogether,
+					sortByZoneOrder: sortHandByZoneOrder,
+				},
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
 				handSortingFunction,
@@ -318,6 +337,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.buildZone(
 					boardZone,
 					null,
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
 					'board',
 					this.i18n.translateString('decktracker.zones.board'),
 					sortCardsByManaCostInOtherZone
@@ -345,6 +367,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.buildZone(
 					discoveryCards,
 					null,
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
 					'discovery',
 					this.i18n.translateString('decktracker.zones.discovery'),
 					(a, b) => 0, // Keep initial order
@@ -380,6 +405,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.buildZone(
 				otherZone,
 				null,
+				{
+					groupSameCardsTogether: groupSameCardsTogether,
+				},
 				'other',
 				this.i18n.translateString('decktracker.zones.other'),
 				sortCardsByManaCostInOtherZone
@@ -416,6 +444,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.buildZone(
 					otherGeneratedZone,
 					null,
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
 					'other-generated',
 					this.i18n.translateString('decktracker.zones.other-generated'),
 					sortCardsByManaCostInOtherZone
@@ -435,6 +466,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private buildZone(
 		cards: readonly DeckCard[],
 		zones: readonly InternalDeckZoneSection[],
+		options: {
+			groupSameCardsTogether?: boolean;
+			sortByZoneOrder?: boolean;
+		},
 		id: string,
 		name: string,
 		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
@@ -476,20 +511,14 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				sortingFunction: zone.sortingFunction,
 			}));
 		}
-		if (numberOfCards !== null && numberOfCards !== sections.flatMap((section) => section.cards).length) {
-			// console.warn(
-			// 	'incorrect number of cards in zone',
-			// 	name,
-			// 	numberOfCards,
-			// 	sections.flatMap((section) => section.cards).length,
-			// );
-		}
 		return {
 			id: id,
 			name: name,
 			numberOfCards: numberOfCards != null ? numberOfCards : sections.flatMap((section) => section.cards).length,
 			sections: sections,
-		} as DeckZone;
+			groupSameCardsTogether: options.groupSameCardsTogether,
+			sortByZoneOrder: options.sortByZoneOrder,
+		};
 	}
 
 	private sortByIcon(a: VisualDeckCard, b: VisualDeckCard): number {

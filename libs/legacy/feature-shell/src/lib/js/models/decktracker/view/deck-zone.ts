@@ -7,6 +7,8 @@ export interface DeckZone {
 	readonly sections: readonly DeckZoneSection[];
 	readonly numberOfCards: number;
 	readonly showWarning?: boolean;
+	readonly groupSameCardsTogether?: boolean;
+	readonly sortByZoneOrder?: boolean;
 }
 
 export interface DeckZoneSection {
