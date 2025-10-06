@@ -26,6 +26,7 @@ import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
 import { Merithra } from './merithra';
 import { MonstrousParrot } from './monstrous-parrot';
+import { MurlocHolmes } from './murloc-holmes';
 import { MurozondTheInfinite } from './murozond-the-infinite';
 import { NineLives } from './nine-lives';
 import { NzothGodOfTheDeep } from './nzoth-god-of-the-deep';
@@ -106,6 +107,7 @@ const cards = [
 	HabeasCorpses,
 	HighCultistBasaleph,
 	StarlightWhelp,
+	MurlocHolmes,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
