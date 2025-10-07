@@ -1,7 +1,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ALL_BG_RACES, GameType, defaultStartingHp, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
+import {
+	ALL_BG_RACES,
+	CardIds,
+	GameType,
+	defaultStartingHp,
+	getBuddy,
+	getTribeIcon,
+	getTribeName,
+} from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
@@ -31,18 +39,30 @@ import {
 				[health]="heroStartingHealth"
 			></bgs-hero-portrait>
 			<div class="hero-details">
-				<div class="name">{{ heroName }}</div>
-				<div class="data-points">
-					<div class="global">
-						{{ dataPoints }}
+				<div class="main-hero-info">
+					<div class="name">{{ heroName }}</div>
+					<div class="data-points">
+						<div class="global">
+							{{ dataPoints }}
+						</div>
+						<div
+							class="player"
+							*ngIf="playerDataPoints"
+							[helpTooltip]="'app.battlegrounds.tier-list.player-data-points-tooltip' | fsTranslate"
+						>
+							(<span class="value">{{ playerDataPoints }}</span
+							>)
+						</div>
 					</div>
-					<div
-						class="player"
-						*ngIf="playerDataPoints"
-						[helpTooltip]="'app.battlegrounds.tier-list.player-data-points-tooltip' | fsTranslate"
-					>
-						(<span class="value">{{ playerDataPoints }}</span
-						>)
+				</div>
+				<div class="secondary-hero-info">
+					<div class="buddy">
+						<img
+							[src]="buddyImgUrl"
+							[cardTooltip]="buddyCardId"
+							[cardTooltipBgs]="true"
+							[cardTooltipPosition]="'right'"
+						/>
 					</div>
 				</div>
 			</div>
@@ -139,6 +159,12 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});
+		const buddyCardId = getBuddy(this.heroCardId as CardIds, this.allCards.getService());
+		const goldenBuddyCardId = this.allCards.getCard(
+			this.allCards.getCard(buddyCardId).battlegroundsPremiumDbfId,
+		).id;
+		this.buddyCardId = [goldenBuddyCardId, buddyCardId].join(',');
+		this.buddyImgUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${buddyCardId}.jpg`;
 
 		const showPlayerData = !value.tribesFilter?.length || value.tribesFilter.length === ALL_BG_RACES.length;
 		// && value.anomaliesFilter?.length === 0;
@@ -204,6 +230,8 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 	netMmr: number;
 	averagePositionTooltipInput: BgsHeroAveragePositionDetails;
 	backgroundImage: string;
+	buddyCardId: string;
+	buddyImgUrl: string;
 
 	tribes: readonly TribeInfo[];
 	// winrateContainer: { id: string; combatWinrate: readonly { turn: number; winrate: number }[] };

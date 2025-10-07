@@ -33,6 +33,7 @@
 
 			img {
 				margin-top: -85px;
+				margin-left: -20px;
 				mask: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
 				-webkit-mask: linear-gradient(
 					to right,
@@ -59,8 +60,31 @@
 
 	.hero-details {
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
+
+		.main-hero-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			flex-grow: 1;
+		}
+
+		.secondary-hero-info {
+			width: 40px;
+			height: 100%;
+
+			.buddy {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				img {
+					height: 130%;
+					clip-path: ellipse(34% 34% at 50% 50%);
+					position: relative;
+				}
+			}
+		}
 
 		.name {
 			color: var(--default-title-color);
