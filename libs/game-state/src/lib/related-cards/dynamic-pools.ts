@@ -1132,7 +1132,6 @@ const filterCards = (
 					!hasMechanic(c, GameTag.QUESTLINE) &&
 					!hasMechanic(c, GameTag.QUESTLINE_PART),
 			)
-			.filter((c) => !hasMechanic(c, GameTag.COLOSSAL))
 			.filter((c) => !hasThreeRunes(c))
 			.sort(
 				(a, b) =>
@@ -1143,7 +1142,9 @@ const filterCards = (
 	}
 	let gameType = options.gameType;
 	let format = options.format;
+	const summonsInPlay = doesSummonInPlay(sourceCardId);
 	const baseCardsExtended = baseCards
+		.filter((c) => (summonsInPlay ? !hasMechanic(c, GameTag.COLOSSAL) : true))
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, allCards))
 		.filter((c) => {
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
@@ -1335,4 +1336,79 @@ const hasFactionInDecklist = (decklist: readonly string[], faction: GameTag, all
 		}
 	}
 	return false;
+};
+
+const doesSummonInPlay = (sourceCardId: string): boolean => {
+	switch (sourceCardId) {
+		// Portal cards that summon minions directly
+		case CardIds.FirelandsPortal:
+		case CardIds.FirelandsPortalCore:
+		case CardIds.MaelstromPortal_CORE_KAR_073:
+		case CardIds.SilvermoonPortal_CORE_KAR_077:
+		case CardIds.IronforgePortal:
+		case CardIds.IronforgePortal_WON_337:
+		case CardIds.MoongladePortal_KAR_075:
+		case CardIds.SerpentshrinePortal_BT_100:
+			return true;
+
+		// Cards that summon specific minions directly
+		case CardIds.BigBadArchmage:
+		case CardIds.JandiceBarov_SCH_351:
+		case CardIds.PlaguedProtodrake:
+		case CardIds.ContainmentUnit:
+		case CardIds.SunsetVolley_WW_427:
+		case CardIds.ChaosCreation_DEEP_031:
+		case CardIds.WardOfEarth_EDR_060:
+		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
+			return true;
+
+		// Cards that summon multiple minions
+		case CardIds.FirstDayOfSchool:
+		case CardIds.MazeGuide_CORE_REV_308:
+		case CardIds.MazeGuide:
+		case CardIds.ShimmerShot_DEEP_003:
+		case CardIds.ShriekingShroom:
+		case CardIds.TunnelTerror_TLC_469:
+		case CardIds.FacelessLackey:
+		case CardIds.HarbingerOfTheBlighted_EDR_781:
+		case CardIds.HiddenMeaning:
+		case CardIds.KureTheLightBeyond_GDB_442:
+		case CardIds.LinedancePartner_WW_433:
+		case CardIds.TwilightInfluence_EDR_463:
+		case CardIds.ThreshridersBlessing_TLC_477:
+		case CardIds.GravedawnVoidbulb_TLC_815:
+		case CardIds.UnearthedArtifacts_TLC_462:
+			return true;
+
+		// Cards that summon based on cost
+		case CardIds.RayllaSandSculptor_VAC_424:
+		case CardIds.AegisOfLight_EDR_264:
+		case CardIds.BuildingBlockGolem_MIS_314:
+		case CardIds.DistressSignal_GDB_883:
+		case CardIds.DwarfPlanet_GDB_233:
+		case CardIds.FirstContact_GDB_864:
+			return true;
+
+		// Cards that summon tokens or specific creatures
+		case CardIds.CrystalBroker: // Summons minions based on mana
+		case CardIds.RaptorNestNurse_DINO_434: // Summons 1-cost minions/spells
+			return true;
+
+		// Cards that fill the board or summon multiple
+		case CardIds.InFormation: // Summons Taunt minions
+		case CardIds.StandardizedPack_MIS_705: // Summons Taunt minions
+			return true;
+
+		// Specific summoning effects
+		case CardIds.Cremate_FIR_900: // Summons minions
+		case CardIds.InfernoHerald_FIR_913: // Summons Elementals
+			return true;
+
+		// Cards that summon based on game state
+		case CardIds.TravelSecurity_WORK_010: // Summons 8-cost minions
+			return true;
+
+		default:
+			return false;
+	}
 };
