@@ -28,7 +28,7 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 			<div class="cell first-percent">{{ firstPercent | number: '1.1-1' }}</div>
 			<div class="cell average-placement">{{ averagePlacement }}</div>
 			<div class="cell expert-rating {{ expertRating?.toLowerCase() }}">{{ expertRating }}</div>
-			<div class="cell expert-difficulty {{ expertDifficulty?.toLowerCase() }}">{{ expertDifficulty }}</div>
+			<div class="cell expert-difficulty {{ expertDifficulty }}">{{ expertDifficultyStr }}</div>
 			<div class="cell cards core">
 				<div class="card-container" *ngFor="let card of coreCards">
 					<card-on-board
@@ -64,7 +64,10 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 		this.compName = value.name;
 		this.firstPercent = value.firstPercent * 100;
 		this.expertRating = capitalizeFirstLetter(value.expertRating);
-		this.expertDifficulty = capitalizeFirstLetter(value.expertDifficulty);
+		this.expertDifficulty = value.expertDifficulty?.toLowerCase();
+		this.expertDifficultyStr = this.i18n.translateString(
+			`battlegrounds.in-game.minions-list.compositions.difficulty.${this.expertDifficulty}`,
+		);
 		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
 		});
@@ -83,6 +86,7 @@ export class BattlegroundsMetaStatsCompInfoComponent {
 	firstPercent: number;
 	expertRating: string | null;
 	expertDifficulty: string | null;
+	expertDifficultyStr: string | null;
 	coreCards: readonly BgsMetaCompCard[];
 	addonCards: readonly BgsMetaCompCard[];
 	impactValue: number;
