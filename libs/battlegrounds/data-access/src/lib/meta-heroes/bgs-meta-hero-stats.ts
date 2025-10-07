@@ -171,7 +171,7 @@ export const buildHeroStats = (
 	// });
 	return result1
 		.map((stat) => {
-			const shouldDebug = useDebug && stat.heroCardId === 'BG24_HERO_100';
+			const shouldDebug = false; // useDebug && stat.heroCardId === 'BG24_HERO_100';
 			const useTribesModifier =
 				!!tribes?.length && tribes.length !== ALL_BG_RACES.length && gameMode === 'battlegrounds';
 			const modifiedTribeStats = (stat.tribeStats ?? [])
@@ -217,13 +217,6 @@ export const buildHeroStats = (
 			const averagePositionBaseValue = useConservativeEstimate
 				? stat.conservativePositionEstimate
 				: stat.averagePosition;
-			shouldDebug &&
-				console.debug(
-					'[bgs-2] averagePositionBaseValue',
-					averagePositionBaseValue,
-					useConservativeEstimate,
-					stat,
-				);
 			const dataPoints = Math.min(
 				stat.dataPoints,
 				useTribesModifier ? tribeStatsToUse.map((t) => t.dataPoints).reduce((a, b) => a + b, 0) : 999_999_999,
@@ -259,6 +252,15 @@ export const buildHeroStats = (
 					.map((p) => p.percentage)
 					.reduce((a, b) => a + b, 0),
 			};
+			shouldDebug &&
+				console.debug(
+					'[bgs-2] averagePositionBaseValue',
+					averagePositionBaseValue,
+					useConservativeEstimate,
+					tribesModifier,
+					stat,
+					result,
+				);
 			return result;
 		})
 		.filter((s) => !!s)

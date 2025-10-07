@@ -74,6 +74,9 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 							tribesFilter: prefs.bgsActiveTribesFilter,
 							anomaliesFilter: [] as readonly string[], // prefs.bgsActiveAnomaliesFilter,
 							timeFilter: prefs.bgsActiveTimeFilter,
+							options: {
+								convervativeEstimate: prefs.bgsHeroesUseConservativeEstimate,
+							},
 						} as Config;
 						return config;
 					}),
