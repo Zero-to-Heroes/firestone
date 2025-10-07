@@ -89,6 +89,12 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'toggle',
+						field: 'overlaySortHandByZoneOrder',
+						label: context.i18n.translateString('settings.decktracker.global.hand-sort-by-zone-order'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.hand-sort-by-zone-order-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'decktrackerNoDeckMode',
 						label: context.i18n.translateString('settings.decktracker.your-deck.ignore-decklist-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.your-deck.ignore-decklist-tooltip'),

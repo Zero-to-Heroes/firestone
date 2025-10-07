@@ -324,7 +324,8 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 	): string {
 		const refCard = this.allCards.getCard(card.cardId);
 		let cardIdForGrouping = !!card.cardId ? (refCard?.counterpartCards?.[0] ?? card.cardId) : '';
-		if (sortByZoneOrder && !!card.cardId) {
+		// Don't group cards when sorting by zone order
+		if (sortByZoneOrder) {
 			cardIdForGrouping = cardIdForGrouping + '-' + card.entityId;
 		}
 		const keyWithBonus =

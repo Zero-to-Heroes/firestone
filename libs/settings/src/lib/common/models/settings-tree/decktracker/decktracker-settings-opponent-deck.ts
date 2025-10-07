@@ -80,6 +80,12 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					},
 					{
 						type: 'toggle',
+						field: 'opponentOverlaySortHandByZoneOrder',
+						label: context.i18n.translateString('settings.decktracker.global.hand-sort-by-zone-order'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.hand-sort-by-zone-order-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'opponentOverlayShowTopCardsSeparately',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.show-top-cards-separately-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.show-top-cards-separately-tooltip'),

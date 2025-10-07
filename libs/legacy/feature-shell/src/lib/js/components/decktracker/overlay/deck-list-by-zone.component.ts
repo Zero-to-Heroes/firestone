@@ -314,7 +314,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				cardsForHand,
 				null,
 				{
-					groupSameCardsTogether: !sortHandByZoneOrder && groupSameCardsTogether,
+					groupSameCardsTogether: groupSameCardsTogether,
 					sortByZoneOrder: sortHandByZoneOrder,
 				},
 				'hand',

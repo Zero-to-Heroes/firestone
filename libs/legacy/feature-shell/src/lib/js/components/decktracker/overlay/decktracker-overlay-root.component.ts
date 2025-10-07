@@ -129,6 +129,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showDkRunesExtractor: (prefs: Preferences) => boolean;
 	@Input() hideOpponentNameExtractor: (prefs: Preferences) => boolean;
+	@Input() sortHandByZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() showTotalCardsInZoneExtractor: (computedValue: boolean) => boolean = (computedValue) => computedValue;
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
@@ -252,7 +253,9 @@ export class DeckTrackerOverlayRootComponent
 			this.mapData((gameState) => this.showTotalCardsInZoneExtractor(gameState.currentTurn !== 'mulligan')),
 		);
 		this.sortHandByZoneOrder$ = this.prefs.preferences$$.pipe(
-			this.mapData((preferences) => preferences.overlaySortHandByZoneOrder),
+			this.mapData((preferences) =>
+				!!this.sortHandByZoneExtractor ? this.sortHandByZoneExtractor(preferences) : false,
+			),
 		);
 		// const gamesForRegion$ = combineLatest([this.gameStats.gameStats$$, this.region.region$$]).pipe(
 		// 	filter(([gameStats, region]) => !!gameStats?.length),
