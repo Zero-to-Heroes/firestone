@@ -233,7 +233,7 @@ export class MindVisionStateMachineService {
 	}
 
 	private hasRootMemoryReadingError(message: string): boolean {
-		return !!message && message.includes('ReadProcessMemory') && message.includes('WriteProcessMemory');
+		return !!message && message.includes?.('ReadProcessMemory') && message.includes('WriteProcessMemory');
 	}
 
 	private async waitForActiveState() {

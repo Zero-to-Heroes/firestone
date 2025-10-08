@@ -4,6 +4,8 @@ export * from './lib/counters/impl/cthun';
 export * from './lib/counters/impl/next-starship-launch';
 export * from './lib/counters/impl/starships-launched';
 export * from './lib/game-state.module';
+export * from './lib/logs/game-events-plugin.interface';
+export * from './lib/logs/game-events-plugin.service';
 export * from './lib/models/_barrel';
 export * from './lib/related-cards/dynamic-pools';
 export * from './lib/related-cards/related-cards';

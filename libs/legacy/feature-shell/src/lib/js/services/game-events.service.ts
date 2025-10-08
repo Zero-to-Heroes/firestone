@@ -11,6 +11,7 @@ import {
 	GameSettingsEvent,
 	GameStateFacadeService,
 	GameUniqueIdService,
+	IGameEventsPlugin,
 	MinionsDiedEvent,
 } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -21,13 +22,10 @@ import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
 
 import { HsGameMetaData } from './game-mode-data.service';
-import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { chunk, freeRegexp } from './utils';
 
 @Injectable()
 export class GameEvents {
-	private plugin;
-
 	private processingQueue = new ProcessingQueue<string>(
 		(eventQueue) => this.processQueue(eventQueue),
 		500,
@@ -41,7 +39,7 @@ export class GameEvents {
 	// private receivedLastGameStateUpdate = true;
 
 	constructor(
-		private readonly gameEventsPlugin: GameEventsPluginService,
+		private readonly gameEventsPlugin: IGameEventsPlugin,
 		// private readonly events: Events,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly scene: SceneService,
@@ -69,7 +67,7 @@ export class GameEvents {
 			)
 			.subscribe(async () => {
 				console.log('[game-events] init game events monitor');
-				this.initPlugin();
+				this.gameEventsPlugin.init((gameEvent) => this.dispatchGameEvent(gameEvent));
 				this.scene.currentScene$$.subscribe((scene) => {
 					console.log('[game-events] emitting new scene event', scene);
 					this.doEventDispatch(
@@ -129,7 +127,7 @@ export class GameEvents {
 				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
 					// console.debug('[game-events] [game-state] asking for game state update', timeSinceLastLog);
 					this.gameStateUpdateInProgress = true;
-					this.plugin.askForGameStateUpdate();
+					this.gameEventsPlugin.askForGameStateUpdate();
 				} else {
 					// console.debug(
 					// 	'[game-events] [game-state] not asking for game state update, timeSinceLastGameStateUpdate',
@@ -149,7 +147,7 @@ export class GameEvents {
 		if (eventQueue.some((data) => data.includes('CREATE_GAME'))) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
-		await this.initPlugin();
+		await this.gameEventsPlugin.isReady();
 		const hasProcessed = await this.processLogs(eventQueue);
 		return hasProcessed ? [] : eventQueue;
 	}
@@ -163,7 +161,7 @@ export class GameEvents {
 			console.warn("[game-events] can't process logs without a game seed", eventQueue[eventQueue.length - 1]);
 			return false;
 		}
-		await this.waitForPluginReady();
+		await this.gameEventsPlugin.isReady();
 
 		const chunkSize = 1000; // Maximum number of lines per chunk
 		const chunks = chunk(eventQueue, chunkSize);
@@ -172,14 +170,7 @@ export class GameEvents {
 			const start = Date.now();
 			// console.debug('[game-events] dispatching game events chunk', chunk.length);
 			await new Promise<void>((resolve) => {
-				this.plugin.realtimeLogProcessing(chunk, () => {
-					// console.debug(
-					// 	'[game-events] finished dispatching chunk',
-					// 	chunk.length,
-					// 	'game events after',
-					// 	Date.now() - start,
-					// 	'ms',
-					// );
+				this.gameEventsPlugin.realtimeLogProcessing(chunk, () => {
 					resolve();
 				});
 			});
@@ -1787,7 +1778,6 @@ export class GameEvents {
 	private pendingLogLines: Deque<string> = new Deque<string>();
 	private existingLogLines: Deque<string> = new Deque<string>();
 	private catchingUp: boolean;
-	private pluginBeingInitialized: boolean;
 
 	public isCatchingUpLogLines(): boolean {
 		return this.catchingUp;
@@ -1909,45 +1899,6 @@ export class GameEvents {
 			return dateWithMillis.getTime();
 		}
 		freeRegexp();
-	}
-
-	private async initPlugin() {
-		if (this.plugin || this.pluginBeingInitialized) {
-			return;
-		}
-
-		this.pluginBeingInitialized = true;
-		console.log('[game-events] init log listener plugin');
-		this.plugin = await this.gameEventsPlugin.get();
-		if (this.plugin) {
-			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
-				console.log('[game-events] received global event', first, second);
-			});
-			this.plugin.onGameEvent.addListener((gameEvent) => {
-				try {
-					const events: any | readonly any[] = JSON.parse(gameEvent);
-					if (!!(events as readonly any[]).length) {
-						for (const event of events as readonly any[]) {
-							this.dispatchGameEvent(event);
-						}
-					} else {
-						this.dispatchGameEvent(events);
-					}
-				} catch (e) {
-					console.error('[game-events]', 'Error while parsing game event', gameEvent, e);
-				}
-			});
-			this.plugin.initRealtimeLogConversion(() => {
-				console.log('[game-events] real-time log processing ready to go');
-			});
-		}
-		this.pluginBeingInitialized = false;
-	}
-
-	private async waitForPluginReady() {
-		while (!this.plugin || this.pluginBeingInitialized) {
-			await sleep(100);
-		}
 	}
 
 	private buildBattlegroundsPlayerBoardEvent(eventName: string, gameEvent: any) {

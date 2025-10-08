@@ -394,7 +394,12 @@ import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { DiscordModule } from '@firestone/discord';
-import { GameStateModule, REVIEW_ID_SERVICE_TOKEN } from '@firestone/game-state';
+import {
+	GameEventsPluginService,
+	GameStateModule,
+	IGameEventsPlugin,
+	REVIEW_ID_SERVICE_TOKEN,
+} from '@firestone/game-state';
 import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule } from '@firestone/mercenaries/common';
@@ -592,7 +597,6 @@ import { MercenariesMemoryCacheService } from './js/services/mercenaries/mercena
 import { MercenariesReferenceDataService } from './js/services/mercenaries/mercenaries-reference-data.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { GameEventsPluginService } from './js/services/plugins/game-events-plugin.service';
 import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
@@ -1313,6 +1317,7 @@ try {
 		{ provide: Store, useClass: AppUiStoreFacadeService },
 		AppUiStoreFacadeService,
 		{ provide: ILocalizationService, useClass: LocalizationFacadeService },
+		{ provide: IGameEventsPlugin, useExisting: GameEventsPluginService },
 		LocalizationFacadeService,
 
 		LocalizationService,
@@ -1324,7 +1329,6 @@ try {
 
 		DevService,
 		GameEvents,
-		GameEventsPluginService,
 		GameModeDataService,
 		LogListenerService,
 		CardsMonitorService,
